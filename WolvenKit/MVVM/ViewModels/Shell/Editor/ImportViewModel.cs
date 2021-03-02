@@ -232,11 +232,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         using (var writer = new BinaryWriter(fs))
                         {
                             cr2w.Write(writer);
-                            MainController.LogString($"Succesfully imported file {fullpath}.", Logtype.Success);
+                            MainController.LogString($"Succesfully imported {fullpath}.", Logtype.Success);
                         }
                     }
                     else
-                        MainController.LogString($"Could not import file {fullpath}.", Logtype.Error);
+                        MainController.LogString($"Failed to import {fullpath}.", Logtype.Error);
                 }
                 else
                 {
@@ -350,7 +350,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             // check if not a power of 2
             if (height % 2 != 0)
             {
-                MainController.LogString("Height is not a power of 2. Please resize your image.", Logtype.Error);
+                MainController.LogString("Texture dimensions not a power of 2. Please resize appropriately.", Logtype.Error);
                 return null;
             }
 
@@ -432,7 +432,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     case EFormat.R8G8B8A8_UNORM:
                     case EFormat.BC7_UNORM:
                     default:
-                        throw new MissingFormatException($"Missing Format: {_textureformat}");
+                        throw new MissingFormatException($"Missing format: {_textureformat}");
                 }
             }
         }

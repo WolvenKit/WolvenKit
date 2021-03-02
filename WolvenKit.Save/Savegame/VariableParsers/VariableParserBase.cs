@@ -423,7 +423,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
                         }
                         else
                         {
-                            Debug.WriteLine("Unknown type '{0}' bytes left to read {1}", type, size);
+                            Debug.WriteLine("Unknown type '{0}', {1} bytes left to read", type, size);
                             byte[] unknown = reader.ReadBytes(size);
                             size = 0;
                             return VariableValue<byte[]>.Create(unknown);

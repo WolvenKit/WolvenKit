@@ -217,7 +217,7 @@ namespace WolvenKit.Functionality.Services
                 var projectManager = _serviceLocator.ResolveType<IProjectManager>();
                 if (projectManager == null)
                 {
-                    const string error = "Failed to resolve project manager";
+                    const string error = "Failed to resolve project manager.";
                     Log.Error(error);
                     throw new Exception(error);
                 }

@@ -51,19 +51,19 @@ namespace WolvenKit.Wwise
                     var wav = args[1];
                     if (string.IsNullOrEmpty(wav))
                     {
-                        Console.WriteLine("Invalid wem file");
+                        Console.WriteLine("Invalid .wem file");
                         Environment.Exit(0);
                     }
 
                     Console.WriteLine("Reading WAVE...");
                     var wavinput = new WemFile();
                     wavinput.LoadFromFile(wav, WwAudioFileType.Wav);
-                    Console.WriteLine("Done!\n");
+                    Console.WriteLine("Done.\n");
                     Console.WriteLine("Preparing WAVE...");
                     wavinput.Generate();
                     wavinput.Calculate_Riff_Size();
                     wavinput.WriteToFile(wav + ".cued");
-                    Console.WriteLine("Done!");
+                    Console.WriteLine("Done.");
 
                 }
                 else if (argc != 2)
@@ -85,33 +85,33 @@ namespace WolvenKit.Wwise
                 input.LoadFromFile(of, WwAudioFileType.Wem);
                 var output = new WemFile();
                 output.LoadFromFile(mf, WwAudioFileType.Wem);
-                Console.WriteLine("Files loaded!");
+                Console.WriteLine("Files loaded.");
 
                 output.merge_headers(input);
                 output.Merge_Datas(input);
                 output.Calculate_Riff_Size();
                 output.WriteToFile(mf + ".wkitmerge");
-                Console.WriteLine("Merging completed!");
-            } 
+                Console.WriteLine("Merging complete.");
+            }
             else if (args[0] == "--music")
             {
                 mode = Soundbank.MODE_BUILD_MUSIC;
-                Console.WriteLine("Entering mode : Build music");
+                Console.WriteLine("Entering mode: Build music");
                 wem = args[2];
                 if (string.IsNullOrEmpty(wem))
                 {
-                    Console.WriteLine("Invalid wem file");
+                    Console.WriteLine("Invalid .wem file.");
                     Environment.Exit(0);
                 }
             }
             else if (args[0] == "--add-new-music")
             {
                 mode = Soundbank.MODE_ADD_NEW_MUSIC;
-                Console.WriteLine("Entering mode : Add new music");
+                Console.WriteLine("Entering mode: Add new music");
                 wem = args[2];
                 if (string.IsNullOrEmpty(wem))
                 {
-                    Console.WriteLine("Invalid wem file");
+                    Console.WriteLine("Invalid .wem file.");
                     Environment.Exit(0);
                 }
             }
@@ -121,7 +121,7 @@ namespace WolvenKit.Wwise
                 Console.WriteLine("Entering mode : Playlist from track");
                 if (!int.TryParse(args[2], out wid))
                 {
-                    Console.WriteLine("ID is not an integer");
+                    Console.WriteLine("ID not an integer.");
                     Environment.Exit(0);
                 }
             }
@@ -131,24 +131,24 @@ namespace WolvenKit.Wwise
                 Console.WriteLine("Entering mode : Export playlist");
                 if (!int.TryParse(args[2], out playlist_id))
                 {
-                    Console.WriteLine("Playlist ID is not an integer");
+                    Console.WriteLine("Playlist ID not an integer.");
                     Environment.Exit(0);
                 }
             }
             else if (args[0] == "--reimport-playlist")
             {
                 mode = Soundbank.MODE_REIMPORT_PLAYLIST;
-                Console.WriteLine("Entering mode : Reimport playlist");
+                Console.WriteLine("Entering mode: Reimport playlist");
                 if (!int.TryParse(args[2], out playlist_id))
                 {
-                    Console.WriteLine("Playlist ID is not an integer");
+                    Console.WriteLine("Playlist ID not an integer.");
                     Environment.Exit(0);
                 }
             }
             else if (args[0] == "--debug")
             {
                 mode = Soundbank.MODE_DEBUG;
-                Console.WriteLine("Entering mode : Debug mode");
+                Console.WriteLine("Entering mode: Debug mode");
             }
             else
             {
@@ -159,16 +159,16 @@ namespace WolvenKit.Wwise
 
             if (String.IsNullOrEmpty(bnk))
             {
-                Console.WriteLine("Invalid bnk file");
+                Console.WriteLine("Invalid .bnk file.");
                 Environment.Exit(0);
             }
-            Console.WriteLine("Sound bank file is : " + bnk);
+            Console.WriteLine("Sound bank file is: " + bnk);
 
-            Console.WriteLine("Reading soundbank started");
+            Console.WriteLine("Began reading sound bank.");
             Console.WriteLine("----------------------------------");
             Soundbank bank = new Soundbank(bnk);
             bank.readFile();
-            Console.WriteLine("Reading soundbank done");
+            Console.WriteLine("Reading sound bank done.");
 
             if (mode == Soundbank.MODE_DEBUG)
             {
@@ -204,7 +204,7 @@ namespace WolvenKit.Wwise
                 {
                     Console.WriteLine("Exporting playlist...");
                     bank.export_playlist((uint)playlist_id);
-                    Console.WriteLine("Done!");
+                    Console.WriteLine("Done.");
                 }
             }
             else if (mode == Soundbank.MODE_REIMPORT_PLAYLIST)
@@ -214,14 +214,14 @@ namespace WolvenKit.Wwise
                     Console.WriteLine("Reimporting playlist...");
                     bank.reimport_playlist((uint)playlist_id);
                     bank.build_bnk(bnk + ".rebuilt");
-                    Console.WriteLine("Done!");
+                    Console.WriteLine("Done.");
                 }
             }
             else
             {
                 if (bank._dataIndex == null || !bank._dataIndex._isSet)
                 {
-                    Console.WriteLine("Soundbank does not contains embedded files");
+                    Console.WriteLine("Sound bank does not contain embedded files.");
                 }
                 Console.WriteLine("Rebuilding sounds...");
                 bank.read_wems(folder);
@@ -229,7 +229,7 @@ namespace WolvenKit.Wwise
                 if(File.Exists(bnk + ".rebuilt"))
                     File.Delete(bnk + ".rebuilt");
                 bank.build_bnk(bnk + ".rebuilt");
-                Console.WriteLine("Done!");
+                Console.WriteLine("Done.");
             }
         }
     }

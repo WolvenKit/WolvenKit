@@ -17,7 +17,7 @@
                     <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
                         <StackPanel>
                             <Grid Margin="5">
-                                <TextBlock Text="Automatically install mods after creation" VerticalAlignment="Center" Margin="0,0,50,0" />
+                                <TextBlock Text="Auto-install mods upon creation" VerticalAlignment="Center" Margin="0,0,50,0"/>
                                 <StackPanel  Orientation="Horizontal">
                                     <ToggleButton Margin="250,0,0,0" BorderThickness="0" IsEnabled="True"  VerticalAlignment="Center"  HorizontalAlignment="Left" Style="{StaticResource ToggleButtonFlip}">
                                         <hc:StatusSwitchElement.CheckedElement>
@@ -33,7 +33,7 @@
                             </Grid>
 
                             <Grid Margin="5">
-                                <TextBlock Text="Project Autosaving" VerticalAlignment="Center" Margin="0,0,50,0" />
+                                <TextBlock Text="Project auto-saving" VerticalAlignment="Center" Margin="0,0,50,0"/>
                                 <StackPanel Margin="250,0,0,0" Orientation="Horizontal">
                                     <CheckBox VerticalAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" Content="AutoSave Project" IsChecked="True" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="{DynamicResource MahApps.Brushes.Accent3}" />
                                     <hc:Divider VerticalAlignment="Center" Orientation="Vertical" Height="15" LineStrokeThickness="2" LineStroke="{DynamicResource MahApps.Brushes.Accent3}" />
@@ -44,12 +44,13 @@
                             </Grid>
 
                             <Grid Margin="5">
-                                <TextBlock Text="Default Project folder" VerticalAlignment="Center" Margin="0,0,50,0" />
+                                <TextBlock Text="Default project folder" VerticalAlignment="Center" Margin="0,0,50,0"/>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBox Margin="250,0,0,0" Width="250" Text="" />
                                 </StackPanel>
                             </Grid>
                         </StackPanel>
+
                     </Border>
                 </StackPanel>
             </hc:ScrollViewer>

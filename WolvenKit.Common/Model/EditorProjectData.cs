@@ -358,16 +358,16 @@ namespace WolvenKit.Common.Model
         public string Name { get; set; }
 
         [Category("About")]
-        [Description("The name of your mod.")]
+        [Description("The name of the mod author.")]
         public string Author { get; set; }
 
         [Category("About")]
-        [Description("The name of your mod.")]
+        [Description("An e-mail address to contact the author with.")]
         public string Email { get; set; }
 
         [Browsable(false)]
         [Category("About")]
-        [Description("The version of your mod. It's a string so 0.1-ALPHA and such is possible.")]
+        [Description("The mod version. Alphanumeric values (0.1-alpha etc.) are possible.")]
         public string Version { get; set; } = "0.62";
 
         public abstract string GetDlcName();

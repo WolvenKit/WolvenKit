@@ -30,7 +30,7 @@ namespace WolvenKit.Cache
         public string ArchiveAbsolutePath { get; set; }
 
 
-        
+
         //The images packed into these Texture cache files
         public List<TextureCacheItem> Files;
         private List<string> Names;
@@ -38,7 +38,7 @@ namespace WolvenKit.Cache
 
         // Footer
         private ulong Crc;
-        private uint UsedPages;            // used pages for the compressed files (excluding info tables in the cache)         
+        private uint UsedPages;            // used pages for the compressed files (excluding info tables in the cache)
         private uint EntryCount;
         private uint StringTableSize;
         private uint MipTableEntryCount;   // number of entries in the mipOffsetTable
@@ -92,11 +92,11 @@ namespace WolvenKit.Cache
                     MipTableEntryCount = br.ReadUInt32();
                     var magic = br.ReadUInt32();
                     if (magic != MagicInt)
-                        throw new Exception("Invalid file!");
+                        throw new Exception("Invalid file.");
                     Version = br.ReadUInt32();
                     #endregion
 
-                    
+
                     // JMP to the top of the info table:
                     // 32 is the the size of the stuff we read so far.
                     // + Every entry has 52 bytes of info
@@ -154,7 +154,7 @@ namespace WolvenKit.Cache
                             IsCube = br.ReadByte(),
                             Unk1 = br.ReadByte()
 
-                            
+
                         };
                         ti.Format = CommonImageTools.GetEFormatFromREDEngineByte(ti.Type1);
                         Files.Add(ti);
@@ -196,12 +196,12 @@ namespace WolvenKit.Cache
         #endregion
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="inputfolder"></param>
         public void LoadFiles(string inputfolder, ILoggerService logger = null)
         {
-            
+
 
             var di = new DirectoryInfo(inputfolder);
             if (!di.Exists)
@@ -220,7 +220,7 @@ namespace WolvenKit.Cache
             foreach (var filename in inputfiles)
             {
                 var ext = Path.GetExtension(filename);
-                
+
 
                 switch (ext)
                 {
@@ -278,7 +278,7 @@ namespace WolvenKit.Cache
                             {
                                 Name = relativepath,
                                 FullName = filename,
-                                
+
                                 Hash = relativepath.HashStringKey(),
 
                                 /*------------- TextureCache Data ---------------*/
@@ -320,17 +320,17 @@ namespace WolvenKit.Cache
                 }
             }
 
-            logger?.LogString($"[TextureCache] Caching sucessful.", Logtype.Success);
+            logger?.LogString($"[TextureCache] Caching successful.", Logtype.Success);
         }
-        
+
         #region Write
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="outpath"></param>
         public void Write(string outpath, ILoggerService logger = null)
         {
-            logger?.LogString($"[TextureCache] Begin writing.", Logtype.Important);
+            logger?.LogString($"[TextureCache] Writing begun.", Logtype.Important);
             logger?.LogString($"[TextureCache] Found {Files.Count} files.", Logtype.Important);
             int page = 0;
 
@@ -365,13 +365,13 @@ namespace WolvenKit.Cache
 
                     // check for alignment
                     if (cacheFileStream.Position % 4096 != 0)
-                        throw new CacheWritingException($"{ti.Name} Improperly aligned (pos: {cacheFileStream.Position}).");
+                        throw new CacheWritingException($"{ti.Name} improperly aligned (pos: {cacheFileStream.Position}).");
 
                     // cubemaps
                     if (ti.IsCube != 0)
                     {
                         // dds cube textures are structured in 6 faces (each with mipmaps)
-                        // files in the texture cache are structured by mipmaps (each with 6 faces) 
+                        // files in the texture cache are structured by mipmaps (each with 6 faces)
                         // sigh...
                         using (var file = MemoryMappedFile.CreateFromFile(ddsfile, FileMode.Open))
                         {
@@ -380,7 +380,7 @@ namespace WolvenKit.Cache
                             var imgsize = DDSUtils.CalculateMipMapSize(ti.BaseWidth, ti.BaseHeight, ti.Format);
                             ti.PageOffset = (uint)(cacheFileStream.Position / 4096);
 
-                            // all faces and mipmaps get compressed at once 
+                            // all faces and mipmaps get compressed at once
                             using (var allfacesms = new MemoryStream())
                             {
                                 for (int i = 0; i < 6; i++)
@@ -399,7 +399,7 @@ namespace WolvenKit.Cache
                             }
                             #endregion
 
-                            #region MipMaps 
+                            #region MipMaps
                             // no mipmaps means NumMipOffsets is 0
                             var totalmipmapsizeuptonow = 0;
                             for (int i = 0; i < ti.NumMipOffsets; i++)
@@ -412,15 +412,15 @@ namespace WolvenKit.Cache
                                 if (mipWidth == 32)
                                     mipsize = 696;
                                 byte idx = (byte)(ti.NumMipOffsets - 1 - i);
-                                
 
-                                // all faces and mipmaps get compressed at once 
+
+                                // all faces and mipmaps get compressed at once
                                 using (var allmips = new MemoryStream())
                                 {
                                     for (int j = 0; j < 6; j++)
                                     {
                                         // find correct mip: divide dds by 6 + the main size + the size of all mips before the current one
-                                        
+
                                         var mipoffset = (ddssize / 6 * j) + (ti.Size / 6) + (totalmipmapsizeuptonow);
                                         using (var vs = file.CreateViewStream(mipoffset, mipsize,
                                             MemoryMappedFileAccess.Read))
@@ -460,7 +460,7 @@ namespace WolvenKit.Cache
                             }
                             #endregion
 
-                            #region MipMaps 
+                            #region MipMaps
                             // no mipmaps means NumMipOffsets is 0
                             for (int i = 0; i < ti.NumMipOffsets; i++)
                             {
@@ -525,7 +525,7 @@ namespace WolvenKit.Cache
                 {
                     // mipmaptable
                     var startpos = ms.Position;
-                    
+
                     var endpos = ms.Position;
 
                     // string table
@@ -558,12 +558,12 @@ namespace WolvenKit.Cache
                 // write footer
                 WriteFooter(cacheWriter);
 
-                logger?.LogString($"[TextureCache] Writing sucessful.", Logtype.Success);
+                logger?.LogString($"[TextureCache] Writing successful.", Logtype.Success);
             }
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="bw"></param>
         private void WriteFooter(BinaryWriter bw)
@@ -581,7 +581,7 @@ namespace WolvenKit.Cache
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="inStream"></param>
         /// <param name="outWriter"></param>
@@ -615,7 +615,7 @@ namespace WolvenKit.Cache
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="bytes"></param>
         /// <returns></returns>
@@ -634,7 +634,7 @@ namespace WolvenKit.Cache
 
         public ulong DBG_crc => CalculateMyChecksum();
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         private ulong CalculateMyChecksum()
@@ -673,7 +673,7 @@ namespace WolvenKit.Cache
         #endregion
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void DumpInfo()
         {
@@ -757,6 +757,6 @@ namespace WolvenKit.Cache
             }
         }
 
-        
+
     }
 }

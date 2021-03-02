@@ -126,7 +126,7 @@ namespace WolvenKit.Common.DDS
 
             if (filepath.Length > 255)
             {
-                logger.LogString($"{filepath} - Filepath exceedds 255 characters. Please move the archive to extract to a shorter path.", Logtype.Error);
+                logger.LogString($"{filepath} - Path length exceeds 255 chars. Please move the archive to a directory with a shorter path.", Logtype.Error);
                 return "";
             }
 
@@ -172,8 +172,7 @@ namespace WolvenKit.Common.DDS
             }
         }
 
-        
+
     }
 
 }
-

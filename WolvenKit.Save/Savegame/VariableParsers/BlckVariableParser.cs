@@ -10,7 +10,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
         private const string FullMagicNumber = "BLCK";
 
         private readonly VariableParser _parser;
-        
+
         public BlckVariableParser(VariableParser parser)
         {
             _parser = parser;
@@ -43,7 +43,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
                 debugLastVariable = variable;
                 debugIndex++;
             }
-            
+
             return new BlckVariable
             {
                 Name = name,
@@ -59,7 +59,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
             {
                 throw new ParseVariableException(
                     string.Format(
-                    "Expeced BLCK but read {0} at {1}",
+                    "Expected BLCK but read {0} at {1}",
                     magicNumber,
                     reader.BaseStream.Position - 4));
             }

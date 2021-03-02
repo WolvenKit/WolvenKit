@@ -53,7 +53,7 @@ namespace WolvenKit.Functionality.Commands
                     {
                         Filter = "Cyberpunk 2077 Project | *.cpmodproj|Witcher 3 Project (*.w3modproj)|*.w3modproj",
                         IsMultiSelect = false,
-                        Title = "Please select the Wolvenkit project you would like to open"
+                        Title = "Please select the WolvenKit project you would like to open."
                     });
 
                     if (result.Result)

@@ -253,7 +253,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             if (opts.Extension != null)
                 files = MainController.Get().ActiveMod.Files.Where(_ => Path.GetExtension(_).Contains(opts.Extension)).ToList();
 
-            Logger.LogString($"Starting Bulk edit. Found {files.Count} files to edit. \r\n", Logtype.Success);
+            Logger.LogString($"Starting bulk edit. Found {files.Count} files to edit. \r\n", Logtype.Success);
             ProgressReport.Max = files.Count;
             ProgressReport.Min = 0;
             ProgressReport.Value = 0;
@@ -445,7 +445,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogString($"Some error occored: {ex.Message}.\r\n", Logtype.Error);
+                        Logger.LogString($"An error occurred: {ex.Message}.\r\n", Logtype.Error);
                     }
                 }
             }

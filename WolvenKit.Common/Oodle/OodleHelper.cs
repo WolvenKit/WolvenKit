@@ -217,7 +217,7 @@ namespace WolvenKit.Common.Oodle
                     if (unpackedSize != size)
                     {
                         throw new DecompressionException(
-                            $"Unpacked size {unpackedSize} doesn't match real size {size}");
+                            $"Unpacked size {unpackedSize} doesn't match real size {size}.");
                     }
 
                     outStream.Write(outputBuffer);

@@ -184,14 +184,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             {
                 MainController.LogString(
                     "Git was not found in your PATH environmental variables, it may not be installed on your machine. " +
-                    "Please install git to use the backup feature for WolvenKit.", Logtype.Error);
+                    "Please install Git to use the backup feature for WolvenKit.", Logtype.Error);
             }
 
             // check if git version errors
             var trygetgit = await ProcessHelper.RunCommandLineAsync(Logger, "", "git --version");
             if (trygetgit != 0)
             {
-                MainController.LogString($"Git is not installed, or is installed improperly. Aborting.", Common.Services.Logtype.Error);
+                MainController.LogString($"Git is not properly installed. Aborting.", Common.Services.Logtype.Error);
                 return;
             }
 
@@ -212,7 +212,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             {
                 MainController.Get().ProjectStatus = EProjectStatus.Ready;
                 MainController.Get().StatusProgress = 100;
-                MainController.LogString($"Error creating git repository for project {ActiveMod.Name}.", Common.Services.Logtype.Error);
+                MainController.LogString($"Error creating Git repository for project {ActiveMod.Name}.", Common.Services.Logtype.Error);
                 return;
             }
 
@@ -222,12 +222,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             string archivePath = Path.Combine(ActiveMod.BackupDirectory, archiveName);
 
             // commit new files
-            MainController.LogString($"Running git commit command...", Common.Services.Logtype.Important);
+            MainController.LogString($"Running Git commit command...", Common.Services.Logtype.Important);
             var resultCommit = await GitHelper.Commit(Logger, ActiveMod.ProjectDirectory, commitMessage);
             if (resultCommit)
             {
                 MainController.Get().StatusProgress = 50;
-                MainController.LogString($"Successfully commited git repo for project {ActiveMod.Name}.",
+                MainController.LogString($"Successfully committed Git repo for project {ActiveMod.Name}.",
                     Common.Services.Logtype.Success);
             }
             else
@@ -239,7 +239,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
 
             // git archive zip to ./_backups
-            MainController.LogString($"Running git archive command...", Common.Services.Logtype.Important);
+            MainController.LogString($"Running Git archive command...", Common.Services.Logtype.Important);
             var resultArchive = await GitHelper.Archive(Logger, ActiveMod.ProjectDirectory, archivePath);
             if (resultArchive)
             {
@@ -251,7 +251,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             {
                 MainController.Get().StatusProgress = 100;
                 MainController.Get().ProjectStatus = EProjectStatus.Ready;
-                MainController.LogString($"Error creating git archive for project {ActiveMod.Name}.", Common.Services.Logtype.Error);
+                MainController.LogString($"Error creating Git archive for project {ActiveMod.Name}.", Common.Services.Logtype.Error);
                 return;
             }
         }
@@ -445,7 +445,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 //Copy and log the files.
                 if (!Directory.Exists(Path.Combine(ActiveMod.ProjectDirectory, "packed")))
                 {
-                    Logger.LogString("Failed to install the mod! The packed directory doesn't exist! You forgot to tick any of the packing options?", Logtype.Important);
+                    Logger.LogString("Failed to install mod. Packed directory does not exist. Check packing options.", Logtype.Important);
                     return;
                 }
 
@@ -484,7 +484,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
             if (_packer != null && (_packer.Status == TaskStatus.Running || _packer.Status == TaskStatus.WaitingToRun || _packer.Status == TaskStatus.WaitingForActivation))
             {
-                m_windowFactory.ShowMessageBox("Packing task already running. Please wait!", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                m_windowFactory.ShowMessageBox("Packing task already running, please wait.", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
                 _packer = PackAndInstallMod();
@@ -501,7 +501,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 return false;
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
-                Logger.LogString("Please close The Witcher 3 before tinkering with the files!", Logtype.Error);
+                Logger.LogString("Please ensure the game is not running before trying to edit its files.", Logtype.Error);
                 return false;
             }
 
@@ -526,7 +526,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 bool initialDlcCheck = true;
                 if (ActiveMod.DLCFiles.Any() && string.IsNullOrEmpty(ActiveMod.GetDlcName()))
                 {
-                    Logger.LogString("Files in your dlc directory need to have the following structure: dlc\\DLCNAME\\files. Dlc will not be packed.", Logtype.Error);
+                    Logger.LogString("Files in your DLC directory need to have the following structure: dlc\\DLCNAME\\files. DLC will not be packed.", Logtype.Error);
                     initialDlcCheck = false;
                 }
 
@@ -567,7 +567,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
                             if (statusanalyzedlc == 0)
                             {
-                                Logger.LogString("Analyzing dlc failed, creating fallback seedfiles. \n", Logtype.Error);
+                                Logger.LogString("Analyzing DLC failed, creating fallback seedfiles. \n", Logtype.Error);
                                 WccHelper.CreateFallBackSeedFile(seedfile);
                             }
                         }
@@ -623,7 +623,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
                             if (File.Exists(newpath))
                             {
-                                Logger.LogString($"Duplicate cooked file found {newpath}. Overwriting. \n", Logtype.Important);
+                                Logger.LogString($"Duplicate cooked file found in {newpath}. Overwriting. \n", Logtype.Important);
                                 File.Delete(newpath);
                             }
 
@@ -633,7 +633,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     }
                     catch (Exception)
                     {
-                        Logger.LogString("Copying cooked mod files finished with errors. \n", Logtype.Error);
+                        Logger.LogString("Copying cooked mod files with errors. \n", Logtype.Error);
                     }
                     finally
                     {
@@ -657,7 +657,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
                             if (File.Exists(newpath))
                             {
-                                Logger.LogString($"Duplicate cooked file found {newpath}. Overwriting. \n", Logtype.Important);
+                                Logger.LogString($"Duplicate cooked file found in {newpath}. Overwriting. \n", Logtype.Important);
                                 File.Delete(newpath);
                             }
 
@@ -667,7 +667,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     }
                     catch (Exception)
                     {
-                        Logger.LogString("Copying cooked dlc files finished with errors. \n", Logtype.Error);
+                        Logger.LogString("Copying cooked DLC files with errors. \n", Logtype.Error);
                     }
                     finally
                     {
@@ -726,10 +726,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                             //Logger.LogString($"Creating metadata ended with status: {statusMetaData}", Logtype.Important);
                         });
                         if (statusMetaData == 0)
-                            Logger.LogString("Creating metadata finished with errors. \n", Logtype.Error);
+                            Logger.LogString("Generating metadata with errors. \n", Logtype.Error);
                     }
                     else
-                        Logger.LogString("Packing bundles failed. No metadata will be created!\n", Logtype.Error);
+                        Logger.LogString("Packing bundles failed. No metadata will be generated.\n", Logtype.Error);
                 }
 
                 #endregion Metadata
@@ -755,7 +755,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         //Logger.LogString($"Building collision cache ended with status: {statusCol}", Logtype.Important);
                     });
                     if (statusCol == 0)
-                        Logger.LogString("Building collision cache finished with errors. \n", Logtype.Error);
+                        Logger.LogString("Collision cache built with errors. \n", Logtype.Error);
                 }
 
                 //Handle texture caching
@@ -768,7 +768,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         //Logger.LogString($"Building texture cache ended with status: {statusTex}", Logtype.Important);
                     });
                     if (statusTex == 0)
-                        Logger.LogString("Building texture cache finished with errors. \n", Logtype.Error);
+                        Logger.LogString("Texture cache built with errors. \n", Logtype.Error);
                 }
 
                 //Handle sound caching
@@ -794,7 +794,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                                         //TODO: Fix this somehow
                                         //var bytes = MainController.ImportFile(bnk.Path, MainController.Get().SoundManager);
                                         //File.WriteAllBytes(Path.Combine(soundmoddir, bnk.Path), bytes[0].ToArray());
-                                        MainController.Get().Logger.LogString("Imported " + bnk.Path + " for rebuilding with the modded wem files!");
+                                        MainController.Get().Logger.LogString("Imported " + bnk.Path + " for rebuilding with modded wem files.");
                                     }
                                     break;
                                 }
@@ -824,11 +824,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                                     .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk"))
                                     .ToList().Select(x => x.FullName).ToList(),
                                     Path.Combine(ActiveMod.PackedModDirectory, @"soundspc.cache"));
-                            Logger.LogString("Mod soundcache generated!\n", Logtype.Important);
+                            Logger.LogString("Modded sound cache generated.\n", Logtype.Important);
                         }
                         else
                         {
-                            Logger.LogString("Mod soundcache wasn't generated!\n", Logtype.Important);
+                            Logger.LogString("Modded soundcache not generated.\n", Logtype.Important);
                         }
                     }
 
@@ -845,11 +845,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                                     .GetFiles("*.*", SearchOption.AllDirectories)
                                     .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).ToList().Select(x => x.FullName).ToList(),
                                 Path.Combine(ActiveMod.PackedDlcDirectory, @"soundspc.cache"));
-                            Logger.LogString("DLC soundcache generated!\n", Logtype.Important);
+                            Logger.LogString("DLC sound cache generated.\n", Logtype.Important);
                         }
                         else
                         {
-                            Logger.LogString("DLC soundcache wasn't generated!\n", Logtype.Important);
+                            Logger.LogString("DLC sound cache not generated.\n", Logtype.Important);
                         }
                     }
                 }
@@ -1172,7 +1172,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     return true;
                 }
                 else
-                    Logger.LogString($"Could not uncook {filename}, trying to extract file instead of uncooking.", Logtype.Important);
+                    Logger.LogString($"Could not uncook {filename}, will try to extract instead.", Logtype.Important);
 
                 return false;
             }
@@ -1202,9 +1202,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             bool saveall;
             switch (m_windowFactory.ShowMessageBox(
-                "This will close all open documents. You will loose any unsaved progress in open files. " +
-                "Press Yes to save all open documents or No to continue without saving.",
-                "Save Open Documents",
+                "This will close all open documents. Any unsaved changes will be lost. " +
+                "Click on 'Yes' to save all open documents or 'No' to proceed without saving.",
+                "Save open documents",
                 MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
             {
                 default:
@@ -1284,7 +1284,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             {
                 d.SaveFile();
             }
-            Logger.LogString("All files saved!\n", Logtype.Success);
+            Logger.LogString("All files saved.\n", Logtype.Success);
             MainController.Get().ProjectStatus = EProjectStatus.Ready;
             MainController.Get().ProjectUnsaved = false;
         }

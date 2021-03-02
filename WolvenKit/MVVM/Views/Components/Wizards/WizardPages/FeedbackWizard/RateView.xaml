@@ -122,7 +122,9 @@
                         </Border>
                     </Grid>
 
-                        <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,-40" Width="150" Content="Send Review" />
+
+                        <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,-40" Width="150" Content="Send review"/>
+
                 </Grid>
             </Grid>
         </Grid>

@@ -204,10 +204,10 @@
                                     <StackPanel>
                                         <TextBlock Margin="10" HorizontalAlignment="Center" Text="Convert"></TextBlock>
                                         <hc:Divider Margin="5"></hc:Divider>
-                                        <TextBlock HorizontalAlignment="Center" Margin="10" TextAlignment="Center">
-                                            <Run Text="To convert your audiofile to .wav ,"></Run>
-                                            <LineBreak />
-                                            <Run Text="It is recommended to use the following converter."></Run>
+                                        <TextBlock HorizontalAlignment="Center" Margin="10" TextAlignment="Center" >
+                                            <Run Text="To convert an audio file to .wav,"></Run>
+                                            <LineBreak/>
+                                            <Run Text="It's recommended to use the following converter."></Run>
                                         </TextBlock>
                                     </StackPanel>
                                     <Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="35" Height="30" Background="{DynamicResource MahApps.Brushes.Accent3}"  Style="{StaticResource ButtonPrimary}">
@@ -243,12 +243,12 @@
                                     <StackPanel>
                                         <TextBlock Margin="10" HorizontalAlignment="Center" Text="Edit"></TextBlock>
                                         <hc:Divider Margin="5"></hc:Divider>
-                                        <TextBlock HorizontalAlignment="Center" Margin="10" TextAlignment="Center">
-                                            <Run Text="1. Open your file in Wwise."></Run>
-                                            <LineBreak />
+                                        <TextBlock HorizontalAlignment="Center" Margin="10" TextAlignment="Center" >
+                                            <Run Text="1. Open the file in Wwise."></Run>
+                                            <LineBreak/>
                                             <Run Text="2. Set the project setting to high Vorbis."></Run>
-                                            <LineBreak />
-                                            <Run Text="3. Right click the file and convert it."></Run>
+                                            <LineBreak/>
+                                            <Run Text="3. Right click on the file and convert it."></Run>
                                         </TextBlock>
                                     </StackPanel>
                                 </Grid>
@@ -259,10 +259,10 @@
                                     <StackPanel>
                                         <TextBlock Margin="10" HorizontalAlignment="Center" Text="Replace"></TextBlock>
                                         <hc:Divider Margin="5"></hc:Divider>
-                                        <TextBlock HorizontalAlignment="Center" Margin="10" TextAlignment="Center">
-                                            <Run Text="Replace the file with the file converted in Wwise."></Run>
-                                            <LineBreak />
-                                            <Run Text="It is recommended to use the following converter."></Run>
+                                        <TextBlock HorizontalAlignment="Center" Margin="10" TextAlignment="Center" >
+                                            <Run Text="Replace the file with the one converted in Wwise."></Run>
+                                            <LineBreak/>
+                                            <Run Text="It's recommended to use the following converter."></Run>
                                         </TextBlock>
                                     </StackPanel>
                                     <Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="35" Height="30" Background="{DynamicResource MahApps.Brushes.Accent3}"  Style="{StaticResource ButtonPrimary}">

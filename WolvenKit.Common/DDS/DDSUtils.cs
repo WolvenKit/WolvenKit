@@ -24,7 +24,7 @@ namespace WolvenKit.Common.DDS
         const uint DDSD_LINEARSIZE = 0x00080000;
         const uint DDSD_DEPTH = 0x00800000;
 
-        const uint DDS_HEADER_FLAGS_TEXTURE = 0x00001007;  // DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT 
+        const uint DDS_HEADER_FLAGS_TEXTURE = 0x00001007;  // DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT
 
         // dwCaps
         const uint DDSCAPS_COMPLEX = 0x00000008;
@@ -64,7 +64,7 @@ namespace WolvenKit.Common.DDS
             pfmt.dwABitMask = masks[4];
         }
 
-        #region DDS_PIXELFORMAT 
+        #region DDS_PIXELFORMAT
         // dwSize
         const uint PIXELFORMAT_SIZE = 32;
         // dwFlags
@@ -150,7 +150,7 @@ namespace WolvenKit.Common.DDS
 
             var dx10header = new DDS_HEADER_DXT10()
             {
-                dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM, 
+                dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM,
                 resourceDimension = D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE2D,
                 miscFlag = 0,
                 arraySize = metadata.Slicecount,
@@ -202,10 +202,10 @@ namespace WolvenKit.Common.DDS
                         case EFormat.BC7_UNORM:
                             dxt10 = true; break;
                         default:
-                            throw new MissingFormatException($"Missing Format: {format}");
+                            throw new MissingFormatException($"Missing format: {format}");
                     }
                 }
-                
+
                 // dwflags
                 if (ddspf.dwABitMask != 0) // check this
                     ddspf.dwFlags |= DDPF_ALPHAPIXELS;
@@ -256,7 +256,7 @@ namespace WolvenKit.Common.DDS
                     header.dwFlags |= DDSD_LINEARSIZE;
                     break;
                 default:
-                    throw new MissingFormatException($"Missing Format: {format}");
+                    throw new MissingFormatException($"Missing format: {format}");
             }
             // unused R8G8_B8G8, G8R8_G8B8, legacy UYVY-packed, and legacy YUY2-packed formats,
             // header.dwPitchOrLinearSize = ((width + 1) >> 1) * 4;
@@ -286,7 +286,7 @@ namespace WolvenKit.Common.DDS
 
             // DXT10
             if (dxt10)
-            {   
+            {
                 // dxgiFormat
                 switch (format)
                 {
@@ -308,7 +308,7 @@ namespace WolvenKit.Common.DDS
                     case EFormat.BC5_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM; break;
                     default:
                     {
-                        throw new MissingFormatException($"Missing Format: {format}");
+                        throw new MissingFormatException($"Missing format: {format}");
                     }
                 }
                 // resourceDimension
@@ -344,7 +344,7 @@ namespace WolvenKit.Common.DDS
             var metadata = new DDSMetadata();
             using var fs = new FileStream(ddsfile, FileMode.Open, FileAccess.Read);
             using var reader = new BinaryReader(fs);
-            
+
             if (fs.Length < 128) return metadata;
 
             // check if DDS file
@@ -360,11 +360,11 @@ namespace WolvenKit.Common.DDS
         public static uint CalculateMipMapSize(uint width, uint height, EFormat format)
         {
             //TODO: dword align, check if sizes are not pow2
-            
+
 
             switch (format)
             {
-                case EFormat.R8G8B8A8_UNORM: 
+                case EFormat.R8G8B8A8_UNORM:
                     return width * height * 4; //(width * bpp + 7) / 8;
                 case EFormat.BC1_UNORM:
                 case EFormat.BC4_UNORM:

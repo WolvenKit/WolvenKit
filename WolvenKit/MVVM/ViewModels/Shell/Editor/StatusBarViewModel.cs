@@ -111,12 +111,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             var checkForUpdates = _updateService.CheckForUpdates;
             if (!_updateService.IsUpdateSystemAvailable || !checkForUpdates)
             {
-                updateInfo = "Automatic updates are disabled";
+                updateInfo = "Automatic updates disabled.";
             }
             else
             {
                 var channel = _updateService.CurrentChannel.Name;
-                updateInfo = string.Format("Automatic updates are enabled for {0} versions", channel.ToLower());
+                updateInfo = string.Format("Automatic updates enabled for {0} versions.", channel.ToLower());
             }
 
             ReceivingAutomaticUpdates = updateInfo;

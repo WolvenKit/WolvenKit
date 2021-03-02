@@ -35,7 +35,7 @@ namespace WolvenKit.Bundles
         {
             Console.WriteLine("Dumping object: " + obj.GetType().Name);
             Console.WriteLine(ObjectDumper.Dump(obj));
-            Console.WriteLine("Br is at: " + br.BaseStream.Position + "[0x"+ br.BaseStream.Position.ToString("X") + "] left: " + ((int)br.BaseStream.Length-br.BaseStream.Position) + "[0x" + ((int)br.BaseStream.Length-br.BaseStream.Position).ToString("X") + "]");
+            Console.WriteLine("Binary reader is at: " + br.BaseStream.Position + "[0x"+ br.BaseStream.Position.ToString("X") + "] left: " + ((int)br.BaseStream.Length-br.BaseStream.Position) + "[0x" + ((int)br.BaseStream.Length-br.BaseStream.Position).ToString("X") + "]");
             Console.WriteLine();
 
         }
@@ -70,7 +70,7 @@ namespace WolvenKit.Bundles
             using (var br = new BinaryReader(new FileStream(filepath, FileMode.Open)))
             {
                 if (!br.ReadBytes(4).SequenceEqual(IDString))
-                    throw new InvalidDataException("Wrong Magic when reading the metadata.store file!");
+                    throw new InvalidDataException("Wrong magic when reading the metadata.store file.);
                 Version = br.ReadInt32();
                 MaxFileSizeInBundle = br.ReadInt32();
                 MaxFileSizeInMemory = br.ReadInt32();
@@ -80,10 +80,10 @@ namespace WolvenKit.Bundles
                  empty line => ""
                 <everything>
                 empty line => ""
-                parts so stuff like 
-                bundles\\buffers.bundle is here split 
-                by the \\ for the non bundles this is 
-                basically if you would 
+                parts so stuff like
+                bundles\\buffers.bundle is here split
+                by the \\ for the non bundles this is
+                basically if you would
                 do a virtual tree inside the bundles
                 one more empty line at the end=> ""
                  */
@@ -92,7 +92,7 @@ namespace WolvenKit.Bundles
                 //Read the file infos
                 fileInfoList = new TDynArray<UFileInfo>();
                 fileInfoList.Deserialize(br);
-                
+
 
                 using (var ms = new MemoryStream(FileStringTable))
                 {
@@ -109,7 +109,7 @@ namespace WolvenKit.Bundles
                 //Read the file entry infos
                 fileEntryInfoList = new TDynArray<UFileEntryInfo>();
                 fileEntryInfoList.Deserialize(br);
-                
+
                 //Read the Archive Infos
                 bundleInfoList = new TDynArray<UBundleInfo>();
                 bundleInfoList.Deserialize(br);
@@ -123,7 +123,7 @@ namespace WolvenKit.Bundles
                         Buffers.Add(br.ReadInt32());
                     }
                 }
-         
+
                 //Read dir initialization infos
                 dirInitInfoList = new TDynArray<UDirInitInfo>();
                 dirInitInfoList.Deserialize(br);
@@ -138,12 +138,12 @@ namespace WolvenKit.Bundles
 
                 if(br.BaseStream.Position == br.BaseStream.Length)
                 {
-                    Console.WriteLine("Succesfully read everything!");
+                    Console.WriteLine("Succesfully read everything.");
 
                 }
                 else
                 {
-                    Console.WriteLine($"Reader is at {br.BaseStream.Position} bytes. The length of the file is { br.BaseStream.Length} bytes.\n{ br.BaseStream.Length-br.BaseStream.Position} bytes wasn't read.");
+                    Console.WriteLine($"Reader is at {br.BaseStream.Position} bytes. File length is { br.BaseStream.Length} bytes.\n{ br.BaseStream.Length-br.BaseStream.Position} bytes weren't read.");
                 }
             }
         }
@@ -245,7 +245,7 @@ namespace WolvenKit.Bundles
                 writer.WriteLine(h.Hash+ ";" + h.Unk2);
 
 
-            Console.WriteLine("Succesfully wrote csv dump!");
+            Console.WriteLine("Succesfully wrote CSV dump.");
         }
 
         public void DeserializeFromCsv(StreamReader reader)

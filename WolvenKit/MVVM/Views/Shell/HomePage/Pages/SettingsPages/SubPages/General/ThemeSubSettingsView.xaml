@@ -26,13 +26,13 @@
                         <StackPanel>
 
                             <Grid Margin="5">
-                                <TextBlock Text="Application Theme" VerticalAlignment="Center" />
-                                <ComboBox HorizontalAlignment="Right" VerticalAlignment="Center" Width="250" Text="" />
+                                <TextBlock Text="Application theme" VerticalAlignment="Center"/>
+                                <ComboBox HorizontalAlignment="Right" VerticalAlignment="Center" Width="250" Text=""/>
                             </Grid>
 
                             <Grid Margin="5">
-                                <TextBlock Text="Create A Theme" VerticalAlignment="Center" />
-                                <Button Command="{catel:CommandManagerBinding Application.ThemeWizard}"  Margin="0" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <TextBlock Text="Create a theme" VerticalAlignment="Center"/>
+                                <Button Command="{catel:CommandManagerBinding Application.ThemeWizard}"  Margin="0" HorizontalAlignment="Right" VerticalAlignment="Center" >
                                     <Grid Margin="0">
                                         <iconPacks:PackIconBootstrapIcons Kind="BoxArrowUpRight" />
                                         <TextBlock Margin="25,0,0,0" Text="Theme Creator" />

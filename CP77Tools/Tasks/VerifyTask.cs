@@ -21,12 +21,12 @@ namespace CP77Tools.Tasks
 
         public static int VerifyTask(string[] path, ulong[] hashes)
         {
-            
+
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
             var CP77_DIR = System.Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
             var gameDirectory = new DirectoryInfo(CP77_DIR);
             var gameArchiveDir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "archive", "pc", "content"));
-            
+
             if (path != null)
                 foreach (var s in path)
                 {
@@ -34,9 +34,9 @@ namespace CP77Tools.Tasks
 
                     using var fs = new FileStream(s, FileMode.Open, FileAccess.Read);
                     if (VerifyFile(fs, s))
-                        logger.LogString($"{s} - No problems found", Logtype.Success);
+                        logger.LogString($"{s} - No problems found.", Logtype.Success);
                     else
-                        logger.LogString($"{s} - Failed", Logtype.Error);
+                        logger.LogString($"{s} - Verification failed, files not binary equal.", Logtype.Error);
                 }
 
             if (hashes != null)
@@ -56,9 +56,9 @@ namespace CP77Tools.Tasks
                         using var ms = new MemoryStream();
                         ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
                         if (VerifyFile(ms))
-                            logger.LogString($"{fileEntry.NameOrHash} - No problems found", Logtype.Success);
+                            logger.LogString($"{fileEntry.NameOrHash} - No errors found.", Logtype.Success);
                         else
-                            logger.LogString($"{fileEntry.NameOrHash} - Failed", Logtype.Error);
+                            logger.LogString($"{fileEntry.NameOrHash} - Verification failed, files not binary equal.", Logtype.Error);
                     }
                 }
             }
@@ -70,7 +70,7 @@ namespace CP77Tools.Tasks
                 var originalbytes = StreamExtensions.ToByteArray(ms);
                 ms.Seek(0, SeekOrigin.Begin);
                 var readResult = c.Read(ms);
-                
+
 
                 switch (readResult)
                 {

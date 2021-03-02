@@ -40,7 +40,7 @@ namespace WolvenKit.Functionality.Controllers
             var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
-            _logger.LogString("Loading Bundle Manager ... ", Logtype.Important);
+            _logger.LogString("Loading bundle manager... ", Logtype.Important);
             try
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.BundleManager)))
@@ -78,7 +78,7 @@ namespace WolvenKit.Functionality.Controllers
                 bundleManager = new BundleManager();
                 bundleManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
             }
-            _logger.LogString("Finished loading Bundle Manager.", Logtype.Success);
+            _logger.LogString("Finished loading bundle manager.", Logtype.Success);
             return bundleManager;
         }
 
@@ -87,7 +87,7 @@ namespace WolvenKit.Functionality.Controllers
             var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
-            _logger.LogString("Loading Strings Manager ... ", Logtype.Important);
+            _logger.LogString("Loading strings manager ... ", Logtype.Important);
             try
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.W3StringManager)) && new FileInfo(Tw3Controller.GetManagerPath(EManagerType.W3StringManager)).Length > 0)
@@ -117,7 +117,7 @@ namespace WolvenKit.Functionality.Controllers
                 w3StringManager = new W3StringManager();
                 w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.W3ExecutablePath));
             }
-            _logger.LogString("Finished loading Strings Manager.", Logtype.Success);
+            _logger.LogString("Finished loading strings manager.", Logtype.Success);
             return w3StringManager;
         }
 
@@ -126,7 +126,7 @@ namespace WolvenKit.Functionality.Controllers
             var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
-            _logger.LogString("Loading Texture Manager ... ", Logtype.Important);
+            _logger.LogString("Loading texture manager... ", Logtype.Important);
             try
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
@@ -160,7 +160,7 @@ namespace WolvenKit.Functionality.Controllers
                 textureManager = new TextureManager();
                 textureManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
             }
-            _logger.LogString("Finished loading Texture Manager.", Logtype.Success);
+            _logger.LogString("Finished loading texture manager.", Logtype.Success);
 
             return textureManager;
         }
@@ -170,7 +170,7 @@ namespace WolvenKit.Functionality.Controllers
             var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
-            _logger.LogString("Loading Collision Manager ... ", Logtype.Important);
+            _logger.LogString("Loading collision manager... ", Logtype.Important);
             try
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.CollisionManager)))
@@ -204,7 +204,7 @@ namespace WolvenKit.Functionality.Controllers
                 collisionManager = new CollisionManager();
                 collisionManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
             }
-            _logger.LogString("Finished loading Collision Manager.", Logtype.Success);
+            _logger.LogString("Finished loading collision manager.", Logtype.Success);
 
             return collisionManager;
         }
@@ -214,7 +214,7 @@ namespace WolvenKit.Functionality.Controllers
             var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
-            _logger.LogString("Loading Sound Manager ... ", Logtype.Important);
+            _logger.LogString("Loading sound manager... ", Logtype.Important);
             try
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.SoundManager)))
@@ -248,7 +248,7 @@ namespace WolvenKit.Functionality.Controllers
                 soundManager = new SoundManager();
                 soundManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
             }
-            _logger.LogString("Finished loading Sound Manager.", Logtype.Success);
+            _logger.LogString("Finished loading sound manager.", Logtype.Success);
 
             return soundManager;
         }
@@ -258,10 +258,10 @@ namespace WolvenKit.Functionality.Controllers
             var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
-            _logger.LogString("Loading Speech Manager ... ", Logtype.Important);
+            _logger.LogString("Loading speech manager ... ", Logtype.Important);
             speechManager = new SpeechManager();
             speechManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
-            _logger.LogString("Finished loading Speech Manager.", Logtype.Success);
+            _logger.LogString("Finished loading speech manager.", Logtype.Success);
 
             return speechManager;
         }
@@ -306,7 +306,7 @@ namespace WolvenKit.Functionality.Controllers
                 return false;
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
-                _logger.LogString("Please close The Witcher 3 before tinkering with the files!", Logtype.Error);
+                _logger.LogString("Please ensure the game is not running before editing the files.", Logtype.Error);
                 return false;
             }
 
@@ -331,7 +331,7 @@ namespace WolvenKit.Functionality.Controllers
                 bool initialDlcCheck = true;
                 if (ActiveMod.DLCFiles.Any() && string.IsNullOrEmpty(ActiveMod.GetDlcName()))
                 {
-                    _logger.LogString("Files in your dlc directory need to have the following structure: dlc\\DLCNAME\\files. Dlc will not be packed.", Logtype.Error);
+                    _logger.LogString("Files in your DLC directory must be structured as such: dlc\\DLCNAME\\files. DLC will not be packed.", Logtype.Error);
                     initialDlcCheck = false;
                 }
 
@@ -358,7 +358,7 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     if (Directory.GetFiles(ActiveMod.DlcDirectory, "*", SearchOption.AllDirectories).Any())
                     {
-                        _logger.LogString($"======== Analyzing dlc files ======== \n", Logtype.Important);
+                        _logger.LogString($"======== Analyzing DLC files ======== \n", Logtype.Important);
                         if (Directory.GetFiles(ActiveMod.DlcDirectory, "*.reddlc", SearchOption.AllDirectories).Any())
                         {
                             var reddlcfile = Directory.GetFiles(ActiveMod.DlcDirectory, "*.reddlc", SearchOption.AllDirectories).FirstOrDefault();
@@ -372,7 +372,7 @@ namespace WolvenKit.Functionality.Controllers
 
                             if (statusanalyzedlc == 0)
                             {
-                                _logger.LogString("Analyzing dlc failed, creating fallback seedfiles. \n", Logtype.Error);
+                                _logger.LogString("DLC analysis failed, creating fallback seedfiles. \n", Logtype.Error);
                                 WccHelper.CreateFallBackSeedFile(seedfile);
                             }
                         }
@@ -428,7 +428,7 @@ namespace WolvenKit.Functionality.Controllers
 
                             if (File.Exists(newpath))
                             {
-                                _logger.LogString($"Duplicate cooked file found {newpath}. Overwriting. \n", Logtype.Important);
+                                _logger.LogString($"Duplicate cooked file found in {newpath}. Overwriting. \n", Logtype.Important);
                                 File.Delete(newpath);
                             }
 
@@ -449,7 +449,7 @@ namespace WolvenKit.Functionality.Controllers
                 // copy dlc files from Archive (cooked files) to \cooked
                 if (Directory.GetFiles(ActiveMod.DlcCookedDirectory, "*", SearchOption.AllDirectories).Any())
                 {
-                    _logger.LogString($"======== Adding cooked dlc files ======== \n", Logtype.Important);
+                    _logger.LogString($"======== Adding cooked DLC files ======== \n", Logtype.Important);
                     try
                     {
                         var di = new DirectoryInfo(ActiveMod.DlcCookedDirectory);
@@ -472,7 +472,7 @@ namespace WolvenKit.Functionality.Controllers
                     }
                     catch (Exception)
                     {
-                        _logger.LogString("Copying cooked dlc files finished with errors. \n", Logtype.Error);
+                        _logger.LogString("Copying cooked DLC files finished with errors. \n", Logtype.Error);
                     }
                     finally
                     {
@@ -532,10 +532,10 @@ namespace WolvenKit.Functionality.Controllers
                             //Logger.LogString($"Creating metadata ended with status: {statusMetaData}", Logtype.Important);
                         });
                         if (statusMetaData == 0)
-                            _logger.LogString("Creating metadata finished with errors. \n", Logtype.Error);
+                            _logger.LogString("Generating metadata finished with errors. \n", Logtype.Error);
                     }
                     else
-                        _logger.LogString("Packing bundles failed. No metadata will be created!\n", Logtype.Error);
+                        _logger.LogString("Packing bundles failed. No metadata will be generated.\n", Logtype.Error);
                 }
 
                 #endregion Metadata
@@ -562,7 +562,7 @@ namespace WolvenKit.Functionality.Controllers
                         //Logger.LogString($"Building collision cache ended with status: {statusCol}", Logtype.Important);
                     });
                     if (statusCol == 0)
-                        _logger.LogString("Building collision cache finished with errors. \n", Logtype.Error);
+                        _logger.LogString("Collision cache built with errors. \n", Logtype.Error);
                 }
 
                 //Handle texture caching
@@ -575,7 +575,7 @@ namespace WolvenKit.Functionality.Controllers
                         //Logger.LogString($"Building texture cache ended with status: {statusTex}", Logtype.Important);
                     });
                     if (statusTex == 0)
-                        _logger.LogString("Building texture cache finished with errors. \n", Logtype.Error);
+                        _logger.LogString("Texture cache built with errors. \n", Logtype.Error);
                 }
 
                 //Handle sound caching
@@ -616,7 +616,7 @@ namespace WolvenKit.Functionality.Controllers
                             bank.rebuild_data();
                             File.Delete(bnk);
                             bank.build_bnk(bnk);
-                            _logger.LogString("Rebuilt modded bnk " + bnk, Logtype.Success);
+                            _logger.LogString("Rebuilt modded bnk" + bnk, Logtype.Success);
                         }
 
                         //Create mod soundspc.cache
@@ -631,11 +631,11 @@ namespace WolvenKit.Functionality.Controllers
                                     .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk"))
                                     .ToList().Select(x => x.FullName).ToList(),
                                     Path.Combine(ActiveMod.PackedModDirectory, @"soundspc.cache"));
-                            _logger.LogString("Mod soundcache generated!\n", Logtype.Important);
+                            _logger.LogString("Modded sound cache generated.\n", Logtype.Important);
                         }
                         else
                         {
-                            _logger.LogString("Mod soundcache wasn't generated!\n", Logtype.Important);
+                            _logger.LogString("Modded sound cache not generated.\n", Logtype.Important);
                         }
                     }
 
@@ -652,11 +652,11 @@ namespace WolvenKit.Functionality.Controllers
                                     .GetFiles("*.*", SearchOption.AllDirectories)
                                     .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).ToList().Select(x => x.FullName).ToList(),
                                 Path.Combine(ActiveMod.PackedDlcDirectory, @"soundspc.cache"));
-                            _logger.LogString("DLC soundcache generated!\n", Logtype.Important);
+                            _logger.LogString("DLC sound cache generated.\n", Logtype.Important);
                         }
                         else
                         {
-                            _logger.LogString("DLC soundcache wasn't generated!\n", Logtype.Important);
+                            _logger.LogString("DLC sound cache not generated.\n", Logtype.Important);
                         }
                     }
                 }
@@ -796,7 +796,7 @@ namespace WolvenKit.Functionality.Controllers
                 //Copy and log the files.
                 if (!Directory.Exists(Path.Combine(ActiveMod.ProjectDirectory, "packed")))
                 {
-                    _logger.LogString("Failed to install the mod! The packed directory doesn't exist! You forgot to tick any of the packing options?", Logtype.Important);
+                    _logger.LogString("Failed to install mod. Packed directory does not exist! Check packing options.", Logtype.Important);
                     return;
                 }
 

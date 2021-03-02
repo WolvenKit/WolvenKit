@@ -217,12 +217,12 @@ namespace WolvenKit.CR2W
             }
             else if (targetchunk.Count > 1)
             {
-                logger?.LogString($"More than one chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}", Logtype.Error);
+                logger?.LogString($"More than one chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}.", Logtype.Error);
                 return null;
             }
             else
             {
-                logger?.LogString($"No chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}", Logtype.Error);
+                logger?.LogString($"No chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}.", Logtype.Error);
                 return null;
             }
         }

@@ -25,7 +25,7 @@
                     <!--Application Language-->
                     <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
                         <Grid>
-                            <TextBlock Text="Receive Desktop Notifications" VerticalAlignment="Center" Margin="0,0,50,0" />
+                            <TextBlock Text="Receive desktop notifications" VerticalAlignment="Center" Margin="0,0,50,0"/>
 
                             <ToggleButton HorizontalAlignment="Right" BorderThickness="0" IsEnabled="True"  VerticalAlignment="Center"   Style="{StaticResource ToggleButtonFlip}">
                                 <hc:StatusSwitchElement.CheckedElement>

@@ -24,7 +24,7 @@
                         <StackPanel>
 
                             <Grid Margin="5">
-                                <TextBlock Text="Automatically Update WolvenKit" VerticalAlignment="Center" Margin="0,0,50,0" />
+                                <TextBlock Text="Auto-update WolvenKit" VerticalAlignment="Center" Margin="0,0,50,0"/>
                                 <ToggleButton HorizontalAlignment="Right" BorderThickness="0" IsEnabled="True"  VerticalAlignment="Center"   Style="{StaticResource ToggleButtonFlip}">
                                     <hc:StatusSwitchElement.CheckedElement>
                                         <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
@@ -38,8 +38,8 @@
                             </Grid>
 
                             <Grid Margin="5">
-                                <TextBlock Text="Update Channel" VerticalAlignment="Center" Margin="0,0,50,0" />
-                                <ComboBox HorizontalAlignment="Right" VerticalAlignment="Center" Width="250" Text="" />
+                                <TextBlock Text="Update channel" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                                <ComboBox HorizontalAlignment="Right" VerticalAlignment="Center" Width="250" Text=""/>
                             </Grid>
                         </StackPanel>
                     </Border>

@@ -23,7 +23,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
             string type = Names[typeIndex - 1];
 
             size -= 2 * sizeof(short);
-            
+
             int valueSize = reader.ReadInt32();
             size -= sizeof(int);
 
@@ -48,7 +48,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
             {
                 throw new ParseVariableException(
                     string.Format(
-                    "Expeced PORP but read {0} at {1}",
+                    "Expected PORP but read {0} at {1}",
                     magicNumber,
                     reader.BaseStream.Position - 4));
             }

@@ -51,7 +51,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
         {
             //TODO: I am not sure how to do this until we have packing
 
-            Logger.Write("Packing Witcher 3 mod completed!", LogLevel.Info);
+            Logger.Write("Packing Witcher 3 mod complete.", LogLevel.Info);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
         {
             //TODO: I am not sure how to do this until we have packing
 
-            Logger.Write("Packing Cyberpunk 2077 mod completed!", LogLevel.Info);
+            Logger.Write("Packing Cyberpunk 2077 mod complete.", LogLevel.Info);
         }
     }
 }

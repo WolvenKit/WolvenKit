@@ -132,7 +132,7 @@
                         <iconPacks:PackIconCodicons  Grid.Row="0"   Kind="Hubot" Spin="False" SpinAutoReverse="False" Height="50" Width="50" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
                     </Grid>
                     <StackPanel  VerticalAlignment="Center" Orientation="Vertical">
-                        <TextBlock Text="Welcome to WolvenKit!"  FontSize="20" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,0"></TextBlock>
+                        <TextBlock Text="Welcome to WolvenKit"  FontSize="20" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,0"></TextBlock>
                         <hc:Divider  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,5,0,0"></hc:Divider>
                     </StackPanel>
                 </StackPanel>

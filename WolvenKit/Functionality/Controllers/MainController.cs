@@ -214,8 +214,7 @@ namespace WolvenKit.Functionality.Controllers
                 //multithread these
                 s_gameController.HandleStartup();
 
-                loadStatus = "Loading depot manager!";
-
+                loadStatus = "Loading depot manager...";
                 #region Load depot manager
 
                 // check if r4depot exists
@@ -223,7 +222,7 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     DirectoryInfo wccDir = new FileInfo(Configuration.WccLite).Directory.Parent.Parent;
                     if (!wccDir.Exists)
-                        throw new Exception("Wcc_lite is not specified.");
+                        throw new Exception("wcc_lite directory not specified.");
 
                     string wcc_r4data = Path.Combine(wccDir.FullName, "r4data");
                     if (!Directory.Exists(wcc_r4data))
@@ -236,8 +235,7 @@ namespace WolvenKit.Functionality.Controllers
 
                 #endregion Load depot manager
 
-                loadStatus = "Loading path hashes!";
-
+                loadStatus = "Loading path hashes...";
                 #region PathHasManager
 
                 //TODO: Figure out something for this! Probably should be inside the bundle manager

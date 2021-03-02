@@ -34,7 +34,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
             {
                 throw new ParseVariableException();
             }
-            
+
             return new ManuVariable
             {
                 Strings = strings
@@ -49,7 +49,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
             {
                 throw new ParseVariableException(
                     string.Format(
-                    "Expeced MANU but read {0} at {1}",
+                    "Expected MANU but read {0} at {1}",
                     magicNumber,
                     reader.BaseStream.Position - 4));
             }

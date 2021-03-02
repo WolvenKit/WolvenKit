@@ -75,7 +75,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
             //TODO: handle this case!
             if (!TryCopyOodleLib())
             {
-                loggerService.LogString($"The oodle dll was not found!");
+                loggerService.LogString($"Oodle DLL not found.");
             }
         }
 
@@ -165,7 +165,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
         {
             var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext
             {
-                Title = "Select Cyberpunk 2077 Executable.",
+                Title = "Select Cyberpunk 2077 executable.",
                 Filter = "*.exe|*.exe",
                 IsMultiSelect = false
             });
@@ -180,7 +180,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
         {
             var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext
             {
-                Title = "Select Witcher 3 Executable.",
+                Title = "Select Witcher 3 executable.",
                 Filter = "witcher3.exe|witcher3.exe",
                 IsMultiSelect = false
             });

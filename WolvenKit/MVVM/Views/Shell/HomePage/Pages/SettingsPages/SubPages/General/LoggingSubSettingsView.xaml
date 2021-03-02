@@ -34,7 +34,7 @@
                             </Grid>
 
                             <Grid Margin="5">
-                                <TextBlock Text="Open Logs" VerticalAlignment="Center" />
+                                <TextBlock Text="View logs" VerticalAlignment="Center"/>
                                 <Button HorizontalAlignment="Right"  VerticalAlignment="Center">
                                     <Grid>
                                         <iconPacks:PackIconBootstrapIcons Kind="BoxArrowUpRight" />

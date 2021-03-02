@@ -57,7 +57,7 @@ namespace WolvenKit.Functionality.Commands
             catch (Exception ex)
             {
                 _loggerService.LogString(ex.Message, Logtype.Error);
-                _loggerService.LogString("Failed to create a new project!", Logtype.Error);
+                _loggerService.LogString("Failed to create new project.", Logtype.Error);
             }
         }
     }

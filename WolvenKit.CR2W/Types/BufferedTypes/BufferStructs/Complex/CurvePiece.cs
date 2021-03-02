@@ -13,7 +13,7 @@ using FastMember;
 
 namespace WolvenKit.CR2W.Types
 {
-   
+
 
 
 
@@ -49,7 +49,7 @@ namespace WolvenKit.CR2W.Types
 
             if (valueCount.val > 16)
             {
-                Debug.Print("Read: curve piece value count " + valueCount.val + " exceeds limit " + values.Count);
+                Debug.Print("Read: curve piece value count " + valueCount.val + " exceeds limit " + values.Count + ".");
             }
 
             values.Read(file, size, valueCount.val);
@@ -61,7 +61,7 @@ namespace WolvenKit.CR2W.Types
 
             if (writtenCount != valueCount.val)
             {
-                Debug.Print("Write: curve piece value count " + valueCount.val + " exceeds limit " + values.Count);
+                Debug.Print("Write: curve piece value count " + valueCount.val + " exceeds limit " + values.Count + ".");
             }
 
             file.Write(writtenCount);
