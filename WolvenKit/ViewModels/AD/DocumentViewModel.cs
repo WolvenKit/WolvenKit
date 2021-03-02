@@ -19,7 +19,7 @@ using WolvenKit.Commands;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.CR2W.SRT;
-using WolvenKit.Extensions;
+using WolvenKit.Functionality.Extensions;
 using WolvenKit.Model;
 
 namespace WolvenKit.ViewModels

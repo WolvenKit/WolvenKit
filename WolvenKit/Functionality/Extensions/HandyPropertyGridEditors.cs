@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using HandyControl.Controls;
 
-namespace WolvenKit.Extensions
+namespace WolvenKit.Functionality.Extensions
 {
     public class IListPropertyEditor : PropertyEditorBase
     {

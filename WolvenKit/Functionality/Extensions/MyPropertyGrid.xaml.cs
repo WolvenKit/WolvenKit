@@ -17,7 +17,7 @@ using HandyControl.Controls;
 using DatePicker = HandyControl.Controls.DatePicker;
 using TimePicker = HandyControl.Controls.TimePicker;
 
-namespace WolvenKit.Extensions
+namespace WolvenKit.Functionality.Extensions
 {
     /// <summary>
     /// Interaction logic for MyPropertyGrid.xaml

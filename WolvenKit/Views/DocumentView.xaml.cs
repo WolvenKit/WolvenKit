@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using HandyControl.Controls;
-using WolvenKit.Extensions;
+using WolvenKit.Functionality.Extensions;
 using WolvenKit.ViewModels;
 
 namespace WolvenKit.Views
