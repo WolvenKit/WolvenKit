@@ -58,7 +58,7 @@ namespace WolvenKit.ViewModels
         protected override async Task InitializeAsync()
         {
             await base.InitializeAsync();
-            AppHelper.GlobalStatusBar = this;
+            StaticReferences.GlobalStatusBar = this;
             _configurationService.ConfigurationChanged += OnConfigurationChanged;
             _updateService.UpdateInstalled += OnUpdateInstalled;
             _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;

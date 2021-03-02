@@ -26,7 +26,7 @@ namespace WolvenKit.Views
 
             ribbon.AddAboutButton();
 
-            WKitGlobal.AppHelper.RibbonViewInstance = this;
+            WKitGlobal.StaticReferences.RibbonViewInstance = this;
            
         }
 
@@ -113,7 +113,7 @@ namespace WolvenKit.Views
 
 
 
-            WKitGlobal.AppHelper.GlobalShell.DragMove();
+            WKitGlobal.StaticReferences.GlobalShell.DragMove();
         }
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -143,8 +143,8 @@ namespace WolvenKit.Views
         {
 
 
-            WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
-            WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
+            WKitGlobal.StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
+            WKitGlobal.StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
         }
 
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)

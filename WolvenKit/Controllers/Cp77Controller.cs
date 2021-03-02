@@ -94,7 +94,7 @@ namespace WolvenKit.Controllers
             }
             logger.LogString("Finished loading archive manager.", Logtype.Success);
             //start LOAD INDICATOR
-            AppHelper.GlobalStatusBar.LoadingString = "loading";
+            StaticReferences.GlobalStatusBar.LoadingString = "loading";
             // init asset browser here after the manager has loaded
             var assetBrowserViewModel = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
             assetBrowserViewModel.ReInit();

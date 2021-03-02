@@ -34,7 +34,7 @@ namespace WolvenKit.WKitGlobal
         {
             if (DiscordRPCEnabled == true)
             {
-                if (AppHelper.RibbonViewInstance.IsLoaded && AppHelper.RibbonViewInstance.IsInitialized)
+                if (StaticReferences.RibbonViewInstance.IsLoaded && StaticReferences.RibbonViewInstance.IsInitialized)
                 {
                     try
                     {

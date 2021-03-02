@@ -33,7 +33,7 @@ namespace WolvenKit.Views
             var path = Path.GetFullPath(AvalonDockConfigPath);
             LayoutLoader = new LayoutLoader(AvalonDockConfigPath);
 
-            WKitGlobal.AppHelper.MainView = this;
+            WKitGlobal.StaticReferences.MainView = this;
         }
 
         /// <summary>

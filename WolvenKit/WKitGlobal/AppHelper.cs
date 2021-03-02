@@ -92,10 +92,7 @@ namespace WolvenKit.WKitGlobal
 
     public static class AppHelper
     {
-        public static RibbonView RibbonViewInstance;
-        public static ShellWindow GlobalShell;
-        public static MainView MainView;
-        public static StatusBarViewModel GlobalStatusBar;
+       
 
         public static async Task InitializeMVVM()
         {
@@ -236,7 +233,7 @@ namespace WolvenKit.WKitGlobal
             var shellService = serviceLocator.ResolveType<IShellService>();
             await shellService.CreateAsync<ShellWindow>();
             ShellWindow sh = (ShellWindow)shellService.Shell;
-            GlobalShell = sh;
+            StaticReferences.GlobalShell = sh;
             sh.MinWidth = 1;
             sh.MinHeight = 1;
             sh.Height = 830;
@@ -246,8 +243,8 @@ namespace WolvenKit.WKitGlobal
 
 
 
-            GlobalShell.SetCurrentValue(MahApps.Metro.Controls.MetroWindow.TitleBarHeightProperty, 25);
-            GlobalShell.SetCurrentValue(Window.TitleProperty, "");
+            StaticReferences.GlobalShell.SetCurrentValue(MahApps.Metro.Controls.MetroWindow.TitleBarHeightProperty, 25);
+            StaticReferences.GlobalShell.SetCurrentValue(Window.TitleProperty, "");
 
             var color = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DF2935"));
             ThemeManager.Current.AddTheme(new Theme("CustomLightRed", "CustomLightRed", "Dark", "Red", (Color)ColorConverter.ConvertFromString("#DF2935"), color, true, false));

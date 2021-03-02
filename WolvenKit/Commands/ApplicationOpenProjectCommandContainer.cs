@@ -74,13 +74,13 @@ namespace WolvenKit
                     using (_pleaseWaitService.PushInScope())
                     {
                         await _projectManager.LoadAsync(location);
-                        var btn = (AppHelper.GlobalShell.FindName("ProjectNameDisplay") as System.Windows.Controls.Button);
+                        var btn = (StaticReferences.GlobalShell.FindName("ProjectNameDisplay") as System.Windows.Controls.Button);
                         btn?.SetCurrentValue(ContentControl.ContentProperty, Path.GetFileNameWithoutExtension(location)); ;
                     }
                 }
 
-                WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.StartScreen.ShownProperty, false);
-                WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
+                WKitGlobal.StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.StartScreen.ShownProperty, false);
+                WKitGlobal.StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
             }
             catch (Exception)
             {

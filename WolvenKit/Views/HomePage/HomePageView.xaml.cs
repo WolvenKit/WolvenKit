@@ -302,7 +302,7 @@ namespace WolvenKit.Views.HomePage
 
 
 
-            WKitGlobal.AppHelper.GlobalShell.DragMove();
+            WKitGlobal.StaticReferences.GlobalShell.DragMove();
         }
 
         private void Grid_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -312,7 +312,7 @@ namespace WolvenKit.Views.HomePage
 
 
 
-            WKitGlobal.AppHelper.GlobalShell.DragMove();
+            WKitGlobal.StaticReferences.GlobalShell.DragMove();
 
             // Begin dragging the window
         }
@@ -342,14 +342,14 @@ namespace WolvenKit.Views.HomePage
             {
                 if (this.IsMouseOver)
                 {
-                    if (WKitGlobal.AppHelper.GlobalShell.WindowState == WindowState.Maximized)
+                    if (WKitGlobal.StaticReferences.GlobalShell.WindowState == WindowState.Maximized)
                     {
-                        WKitGlobal.AppHelper.GlobalShell.SetCurrentValue(System.Windows.Window.WindowStateProperty, WindowState.Normal);
+                        WKitGlobal.StaticReferences.GlobalShell.SetCurrentValue(System.Windows.Window.WindowStateProperty, WindowState.Normal);
 
                     }
                     else
                     {
-                        WKitGlobal.AppHelper.GlobalShell.SetCurrentValue(System.Windows.Window.WindowStateProperty, WindowState.Maximized);
+                        WKitGlobal.StaticReferences.GlobalShell.SetCurrentValue(System.Windows.Window.WindowStateProperty, WindowState.Maximized);
 
                     }
                 }
@@ -361,7 +361,7 @@ namespace WolvenKit.Views.HomePage
 
 
 
-                WKitGlobal.AppHelper.GlobalShell.DragMove();
+                WKitGlobal.StaticReferences.GlobalShell.DragMove();
             }
         }
 
@@ -376,8 +376,8 @@ namespace WolvenKit.Views.HomePage
 
         private void Image_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
-            WKitGlobal.AppHelper.RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, false);
+            WKitGlobal.StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
+            WKitGlobal.StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, false);
         }
     }
 }
