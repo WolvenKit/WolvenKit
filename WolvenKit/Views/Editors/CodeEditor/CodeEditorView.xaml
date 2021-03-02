@@ -6,7 +6,7 @@
                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" 
                   xmlns:hc="https://handyorg.github.io/handycontrol"   
                   xmlns:aeditCmd="clr-namespace:ICSharpCode.AvalonEdit;assembly=ICSharpCode.AvalonEdit"
-                  xmlns:behav="clr-namespace:WolvenKit.Behavior"
+                  xmlns:behav="clr-namespace:WolvenKit.Functionality.Behavior"
                   BorderBrush="{x:Null}" 
                 
                   IsVisibleChanged="DataWindow_IsVisibleChanged">

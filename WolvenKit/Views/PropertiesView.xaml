@@ -8,7 +8,7 @@
              xmlns:viewModels="clr-namespace:WolvenKit.ViewModels"
              xmlns:model="clr-namespace:WolvenKit.Model"
              xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:behavior="clr-namespace:WolvenKit.Behavior" xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:behavior="clr-namespace:WolvenKit.Functionality.Behavior" xmlns:hc="https://handyorg.github.io/handycontrol"
                    mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" IsVisibleChanged="UserControl_IsVisibleChanged">
 

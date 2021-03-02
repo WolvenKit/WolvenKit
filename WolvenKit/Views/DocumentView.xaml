@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:WolvenKit.Views.Dialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:behavior="clr-namespace:WolvenKit.Behavior"
+    xmlns:behavior="clr-namespace:WolvenKit.Functionality.Behavior"
     xmlns:catel="http://schemas.catelproject.com"
     xmlns:model="clr-namespace:WolvenKit.Model"
     xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"

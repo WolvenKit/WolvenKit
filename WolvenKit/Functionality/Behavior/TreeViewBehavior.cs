@@ -1,8 +1,8 @@
-﻿using Microsoft.Xaml.Behaviors;
+using Microsoft.Xaml.Behaviors;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace WolvenKit.Behavior
+namespace WolvenKit.Functionality.Behavior
 {
     public class TreeViewBehavior : Behavior<TreeView>
     {
