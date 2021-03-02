@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace WolvenKit.Commands
+namespace WolvenKit.Functionality.Commands
 {
     /// <summary>
     /// Defines an asynchronous command.

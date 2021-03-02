@@ -13,7 +13,7 @@ using Orc.ProjectManagement;
 using WolvenKit.Functionality.Services;
 using Settings = Orc.Squirrel.Settings;
 
-namespace WolvenKit
+namespace WolvenKit.Functionality.Commands
 {
     using Model;
     using Common;

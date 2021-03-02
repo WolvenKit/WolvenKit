@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Catel.MVVM;
 using WolvenKit.Views.HomePage;
 
-namespace WolvenKit.Commands
+namespace WolvenKit.Functionality.Commands
 {
     class ApplicationOpenLinkCommandContainer : Catel.MVVM.CommandContainerBase
     {

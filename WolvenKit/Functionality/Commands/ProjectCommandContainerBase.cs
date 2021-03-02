@@ -10,7 +10,7 @@ using Catel.IoC;
 using Catel.Services;
 using WolvenKit.Functionality.Services;
 
-namespace WolvenKit
+namespace WolvenKit.Functionality.Commands
 {
     using Model;
     using Common.Services;

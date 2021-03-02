@@ -4,7 +4,7 @@ using System.IO;
 using System.Xml.Serialization;
 using Catel.IoC;
 using Catel.MVVM;
-using WolvenKit.Commands;
+using WolvenKit.Functionality.Commands;
 using Catel.Data;
 using System.Collections.Generic;
 using Newtonsoft.Json;

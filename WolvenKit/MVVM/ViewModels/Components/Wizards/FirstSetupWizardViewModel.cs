@@ -9,7 +9,7 @@ using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
 using Orc.Squirrel;
-using WolvenKit.Commands;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 

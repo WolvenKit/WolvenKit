@@ -15,7 +15,7 @@ using HandyControl.Controls;
 using Orc.ProjectManagement;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
-using WolvenKit.Commands;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.CR2W.SRT;

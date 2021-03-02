@@ -19,7 +19,7 @@ using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 
-namespace WolvenKit.Commands
+namespace WolvenKit.Functionality.Commands
 {
     public class ApplicationDeleteProjectCommandContainer : Catel.MVVM.CommandContainerBase
     {

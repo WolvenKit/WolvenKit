@@ -11,7 +11,7 @@ using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.ViewModels
 {
-    using Commands;
+    using Functionality.Commands;
     using Common;
     using Common.Services;
     using CR2W;

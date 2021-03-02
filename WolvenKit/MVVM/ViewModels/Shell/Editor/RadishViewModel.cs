@@ -13,7 +13,7 @@ using System.Windows.Media;
 
 namespace WolvenKit.ViewModels
 {
-    using Commands;
+    using Functionality.Commands;
     using Common;
     using Common.Services;
     using Radish.Model;

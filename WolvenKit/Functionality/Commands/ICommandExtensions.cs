@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace WolvenKit.Commands
+namespace WolvenKit.Functionality.Commands
 {
     public static class ICommandExtensions
     {

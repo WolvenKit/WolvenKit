@@ -17,7 +17,7 @@ using Catel.Threading;
 using Orc.FileSystem;
 using Orc.ProjectManagement;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Commands;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Model;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;

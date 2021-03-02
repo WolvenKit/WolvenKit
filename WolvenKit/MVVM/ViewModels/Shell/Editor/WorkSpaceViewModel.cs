@@ -18,7 +18,7 @@ using Orc.ProjectManagement;
 using WolvenKit.Views.Wizards;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 using WolvenKit.Model;
-using WolvenKit.Commands;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
 using WolvenKit.Views;

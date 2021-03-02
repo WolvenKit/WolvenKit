@@ -12,7 +12,7 @@ using Orchestra.Services;
 using Orchestra.Views;
 using WolvenKit.Functionality.Services;
 
-namespace WolvenKit
+namespace WolvenKit.Functionality.Commands
 {
     using Catel.IoC;
     using Common.Services;

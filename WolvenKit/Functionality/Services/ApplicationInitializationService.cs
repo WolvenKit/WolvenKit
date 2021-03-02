@@ -11,7 +11,7 @@ using Orc.ProjectManagement;
 using WolvenKit.Common.Services;
 using WolvenKit.Model.ProjectManagement;
 using System.Windows.Media;
-using WolvenKit.Commands;
+using WolvenKit.Functionality.Commands;
 
 namespace WolvenKit.Functionality.Services
 {

@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace WolvenKit.ViewModels
 {
-    using Commands;
+    using Functionality.Commands;
     using Model;
     using Common;
     using Common.Model;

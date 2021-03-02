@@ -9,7 +9,7 @@ using AvalonDock.Layout.Serialization;
 using Catel.Data;
 using Catel.IoC;
 using Catel.MVVM;
-using WolvenKit.Commands;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.ViewModels;
 using WolvenKit.Layout.MLib;
 

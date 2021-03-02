@@ -5,7 +5,7 @@ using Catel.Services;
 using Orc.ProjectManagement;
 using WolvenKit.Functionality.Services;
 
-namespace WolvenKit
+namespace WolvenKit.Functionality.Commands
 {
     using Common.Services;
     using WolvenKit.Views.Wizards;

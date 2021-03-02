@@ -14,7 +14,7 @@ using System.Windows.Media;
 
 namespace WolvenKit.ViewModels
 {
-    using Commands;
+    using Functionality.Commands;
     using Common;
     using Common.Services;
     using Common.Wcc;
@@ -32,7 +32,7 @@ namespace WolvenKit.ViewModels
             Logger = MainController.Get().Logger;
             
 
-            RunCommand = new Commands.RelayCommand(Run, CanRun);
+            RunCommand = new Functionality.Commands.RelayCommand(Run, CanRun);
 
             List<Type> x = typeof(Common.Wcc.Wcc_lite).GetNestedTypes().ToList();//.Cast<WCC_Command>().ToList();
             foreach (var item in x)

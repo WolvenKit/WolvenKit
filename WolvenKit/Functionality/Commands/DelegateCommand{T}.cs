@@ -1,30 +1,31 @@
 ﻿using System;
 
-namespace WolvenKit.Commands
+namespace WolvenKit.Functionality.Commands
 {
     /// <summary>
-    /// Defines an ICommand that delegates implementation to an <see cref="Action{T}(Object)"/> and <see cref="Predicate{T}(Object)"/>.
+    /// Defines an ICommand that delegates implementation to an <see cref="Action{T}"/> and <see cref="Predicate{T}"/>.
     /// </summary>
-    public class DelegateCommand : Command
+    /// <typeparam name="T">The command parameter type.</typeparam>
+    public class DelegateCommand<T> : Command
     {
-        private readonly Action<object> _execute;
-        private readonly Predicate<object> _canExecute;
+        private readonly Action<T> _execute;
+        private readonly Predicate<T> _canExecute;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DelegateCommand"/> class.
+        /// Initializes a new instance of the <see cref="DelegateCommand{T}"/> class.
         /// </summary>
         /// <param name="execute">The method used to execute the command.</param>
-        public DelegateCommand(Action<object> execute)
+        public DelegateCommand(Action<T> execute)
             : this(execute, null)
         {
 
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="DelegateCommand"/> class.
+        /// Initializes a new instance of the <see cref="DelegateCommand{T}"/> class.
         /// </summary>
         /// <param name="execute">The method used to execute the command.</param>
         /// <param name="canExecute">The method used to check if the command can be executed.</param>
-        public DelegateCommand(Action<object> execute, Predicate<object> canExecute)
+        public DelegateCommand(Action<T> execute, Predicate<T> canExecute)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
@@ -42,7 +43,7 @@ namespace WolvenKit.Commands
             {
                 return true;
             }
-            return _canExecute(parameter);
+            return _canExecute((T)parameter);
         }
         /// <summary>
         /// Execute the command
@@ -50,7 +51,7 @@ namespace WolvenKit.Commands
         /// <param name="parameter">The command parameter</param>
         public override void Execute(object parameter)
         {
-            _execute(parameter);
+            _execute((T)parameter);
         }
         #endregion
     }

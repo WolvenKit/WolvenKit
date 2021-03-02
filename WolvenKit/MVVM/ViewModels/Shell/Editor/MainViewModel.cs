@@ -29,7 +29,7 @@ namespace WolvenKit.ViewModels
     using Wwise.Wwise;
     using Common.WinFormsEnums;
     using Model;
-    using Commands;
+    using Functionality.Commands;
     using CR2W.Reflection;
     using CR2W.Types;
     using Wwise;

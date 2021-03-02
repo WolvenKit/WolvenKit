@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace WolvenKit.Model
 {
-    using Commands;
+    using Functionality.Commands;
     using Common;
     public class SearchParameters : ObservableObject, INotifyPropertyChanged, INotifyPropertyChanging
     {

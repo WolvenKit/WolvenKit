@@ -13,7 +13,7 @@ using Catel.MVVM;
 using Catel.Reflection;
 using Catel.Services;
 
-namespace WolvenKit.Commands
+namespace WolvenKit.Functionality.Commands
 {
     using System.Threading;
     using ViewModels;

@@ -1,7 +1,7 @@
 using Catel.MVVM;
 using WolvenKit.Views.HomePage;
 
-namespace WolvenKit.Commands
+namespace WolvenKit.Functionality.Commands
 {
     class ApplicationShowAboutCommandContainer : Catel.MVVM.CommandContainerBase
     {

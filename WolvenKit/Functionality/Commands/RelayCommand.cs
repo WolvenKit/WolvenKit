@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WolvenKit.Commands
+namespace WolvenKit.Functionality.Commands
 {
     /// <summary>
     /// Defines an ICommand that delegates implementation to an <see cref="Action"/> and <see cref="Func{TResult}(bool)"/>.

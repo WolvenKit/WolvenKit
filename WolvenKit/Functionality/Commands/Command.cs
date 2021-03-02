@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace WolvenKit.Commands
+namespace WolvenKit.Functionality.Commands
 {
     /// <summary>
     /// Base abstract class for all commands

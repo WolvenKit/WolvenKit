@@ -15,7 +15,7 @@ using WolvenKit.Common.DDS;
 
 namespace WolvenKit.ViewModels
 {
-    using Commands;
+    using Functionality.Commands;
     using Model;
     using Common;
     using Common.Extensions;

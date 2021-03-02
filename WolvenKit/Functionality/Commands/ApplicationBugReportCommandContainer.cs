@@ -14,7 +14,7 @@ using Catel;
 using WolvenKit.Functionality.Services;
 using Orchestra.Services;
 
-namespace WolvenKit.Commands
+namespace WolvenKit.Functionality.Commands
 {
     public class ApplicationBugReportCommandContainer : Catel.MVVM.CommandContainerBase
     {
