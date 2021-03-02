@@ -237,8 +237,8 @@ namespace WolvenKit.WKitGlobal
             await shellService.CreateAsync<ShellWindow>();
             ShellWindow sh = (ShellWindow)shellService.Shell;
             GlobalShell = sh;
-            sh.MinWidth = 1081;
-            sh.MinHeight = 830;
+            sh.MinWidth = 1;
+            sh.MinHeight = 1;
             sh.Height = 830;
             sh.Width = 1081;
             sh.WindowState = WindowState.Normal;
@@ -254,8 +254,8 @@ namespace WolvenKit.WKitGlobal
             ThemeManager.Current.AddTheme(RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", Colors.Red));
             ThemeManager.Current.ChangeTheme(Application.Current, "CustomLightRed");
 
-            GlobalShell.SetCurrentValue(FrameworkElement.MinHeightProperty, (double)810);
-            GlobalShell.SetCurrentValue(FrameworkElement.MinWidthProperty, (double)1060);
+          //  GlobalShell.SetCurrentValue(FrameworkElement.MinHeightProperty, (double)810);
+          //  GlobalShell.SetCurrentValue(FrameworkElement.MinWidthProperty, (double)1060);
         }
 
 
