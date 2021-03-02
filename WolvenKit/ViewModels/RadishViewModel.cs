@@ -17,6 +17,8 @@ namespace WolvenKit.ViewModels
     using Common;
     using Common.Services;
     using Radish.Model;
+    using WolvenKit.Functionality.Controllers;
+
     public class RadishViewModel : ViewModel
     {
         public class FileWrapper

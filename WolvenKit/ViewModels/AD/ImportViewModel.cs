@@ -1,4 +1,4 @@
-﻿using CsvHelper;
+using CsvHelper;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,6 +28,8 @@ namespace WolvenKit.ViewModels
     using CR2W.Types;
     using static CR2W.Types.Enums;
     using static TexconvWrapper;
+    using WolvenKit.Functionality.Controllers;
+
     public class ImportViewModel : ToolViewModel
     {
 

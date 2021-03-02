@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -16,6 +16,7 @@ namespace WolvenKit.ViewModels
     using CR2W.SRT;
     using CR2W.Types;
     using Radish.Model;
+    using WolvenKit.Functionality.Controllers;
 
     public class CommonDocumentViewModel : CloseableViewModel, Old_IDocumentViewModel
     {

@@ -15,6 +15,8 @@ namespace WolvenKit.Model
     using Common.Services;
     using Common.Wcc;
     using CR2W;
+    using WolvenKit.Functionality.Controllers;
+
     public static class WccHelper
     {
         private static LoggerService Logger => MainController.Get().Logger;

@@ -15,7 +15,7 @@ using Catel;
 using Catel.MVVM;
 using HandyControl.Data;
 using WolvenKit.Commands;
-using WolvenKit.Controllers;
+using WolvenKit.Functionality.Controllers;
 using System.Windows;
 using System.Windows.Threading;
 using HandyControl.Controls;

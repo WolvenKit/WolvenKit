@@ -18,7 +18,7 @@ using ControlzEx.Theming;
 namespace WolvenKit.Views
 {
     using Common.Services;
-    using Extensions;
+    using Functionality.Extensions;
     using MahApps.Metro.Controls;
 
     /// <summary>

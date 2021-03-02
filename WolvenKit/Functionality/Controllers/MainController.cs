@@ -7,7 +7,7 @@ using Catel.IoC;
 using Orc.ProjectManagement;
 using WolvenKit.Model;
 
-namespace WolvenKit
+namespace WolvenKit.Functionality.Controllers
 {
     using Controllers;
     using Services;

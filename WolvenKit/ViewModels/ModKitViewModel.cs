@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,6 +21,7 @@ namespace WolvenKit.ViewModels
     using CR2W;
     using CR2W.Types;
     using Radish.Model;
+    using WolvenKit.Functionality.Controllers;
 
     public class ModkitViewModel : ViewModel
     {

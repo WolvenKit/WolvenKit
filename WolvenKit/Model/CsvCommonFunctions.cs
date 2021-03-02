@@ -1,4 +1,4 @@
-﻿using CsvHelper;
+using CsvHelper;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -11,6 +11,7 @@ namespace WolvenKit.Model
     using Common.Services;
     using CR2W.Types;
     using WolvenKit.Common.Model.Cr2w;
+    using WolvenKit.Functionality.Controllers;
 
     public static class CsvCommonFunctions
     {

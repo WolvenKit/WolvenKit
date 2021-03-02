@@ -18,7 +18,7 @@ using WolvenKit.Model;
 using WolvenKit.Wwise;
 using WolvenKit.Wwise.Wwise;
 
-namespace WolvenKit.Controllers
+namespace WolvenKit.Functionality.Controllers
 {
     using Services;
     using Bundles;

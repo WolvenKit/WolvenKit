@@ -26,6 +26,7 @@ using WolvenKit.Common.Wcc;
 using WolvenKit.CR2W;
 using WolvenKit.Model.ProjectManagement;
 using Open.ChannelExtensions;
+using WolvenKit.Functionality.Controllers;
 
 namespace WolvenKit.ViewModels
 {

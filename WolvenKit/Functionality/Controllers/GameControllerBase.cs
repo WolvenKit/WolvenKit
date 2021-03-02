@@ -11,7 +11,7 @@ using WolvenKit.Cache;
 using WolvenKit.Common;
 using WolvenKit.W3Strings;
 
-namespace WolvenKit.Controllers
+namespace WolvenKit.Functionality.Controllers
 {
     public abstract class GameControllerBase
     {

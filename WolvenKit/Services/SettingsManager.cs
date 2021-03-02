@@ -8,6 +8,7 @@ using WolvenKit.Commands;
 using Catel.Data;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using WolvenKit.Functionality.Controllers;
 
 namespace WolvenKit.Services
 {

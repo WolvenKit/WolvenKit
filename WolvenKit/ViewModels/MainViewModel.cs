@@ -1,4 +1,4 @@
-﻿//using SymbolicLinkSupport;
+//using SymbolicLinkSupport;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,6 +33,7 @@ namespace WolvenKit.ViewModels
     using CR2W.Reflection;
     using CR2W.Types;
     using Wwise;
+    using WolvenKit.Functionality.Controllers;
 
     /// <summary>
     /// 

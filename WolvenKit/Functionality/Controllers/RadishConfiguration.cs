@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace WolvenKit
+namespace WolvenKit.Functionality.Controllers
 {
     using Common;
     using Radish.Model;

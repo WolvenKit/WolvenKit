@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using WolvenKit.Common.DDS;
 
-namespace WolvenKit
+namespace WolvenKit.Functionality.Controllers
 {
     using Common.Model;
 

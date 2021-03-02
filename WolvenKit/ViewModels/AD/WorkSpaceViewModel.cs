@@ -40,6 +40,7 @@ using WolvenKit.ViewModels.Tools.MenuTool;
 using WolvenKit.ViewModels.AnimationTool;
 using WolvenKit.ViewModels.Editors.CR2WEditor;
 using WolvenKit.Views.AudioTool;
+using WolvenKit.Functionality.Controllers;
 
 namespace WolvenKit.ViewModels
 {

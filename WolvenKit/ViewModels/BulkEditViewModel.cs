@@ -17,6 +17,8 @@ namespace WolvenKit.ViewModels
     using CR2W;
     using CR2W.Types;
     using Radish.Model;
+    using WolvenKit.Functionality.Controllers;
+
     public class BulkEditOptions
     {
         public enum AvailableTypes

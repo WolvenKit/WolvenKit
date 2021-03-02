@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Navigation;
 using WolvenKit.Common;
 
-namespace WolvenKit.Controllers
+namespace WolvenKit.Functionality.Controllers
 {
     class MockGameController : GameControllerBase
     {

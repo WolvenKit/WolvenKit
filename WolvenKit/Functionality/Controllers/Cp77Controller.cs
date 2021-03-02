@@ -19,7 +19,7 @@ using CP77.CR2W.Archive;
 using WolvenKit.ViewModels;
 using WolvenKit.WKitGlobal;
 
-namespace WolvenKit.Controllers
+namespace WolvenKit.Functionality.Controllers
 {
     public class Cp77Controller : GameControllerBase
     {

@@ -10,7 +10,7 @@ using WolvenKit.WKitGlobal;
 
 namespace WolvenKit.Model
 {
-    using Controllers;
+    using Functionality.Controllers;
     using Services;
     using Bundles;
     using Cache;
