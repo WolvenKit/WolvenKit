@@ -26,14 +26,18 @@
     <Description>WPF</Description>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
+    <Compile Remove="MVVM\ViewModels\Components\Wizards\WizardPages\InstallerWizard\**" />
     <Compile Remove="MVVM\Views\Components\Wizards\WizardPages\InstallerWizard\**" />
-    <EmbeddedResource Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
+    <Compile Remove="NewFolder1\**" />
+    <EmbeddedResource Remove="MVVM\ViewModels\Components\Wizards\WizardPages\InstallerWizard\**" />
     <EmbeddedResource Remove="MVVM\Views\Components\Wizards\WizardPages\InstallerWizard\**" />
-    <None Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
+    <EmbeddedResource Remove="NewFolder1\**" />
+    <None Remove="MVVM\ViewModels\Components\Wizards\WizardPages\InstallerWizard\**" />
     <None Remove="MVVM\Views\Components\Wizards\WizardPages\InstallerWizard\**" />
-    <Page Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
+    <None Remove="NewFolder1\**" />
+    <Page Remove="MVVM\ViewModels\Components\Wizards\WizardPages\InstallerWizard\**" />
     <Page Remove="MVVM\Views\Components\Wizards\WizardPages\InstallerWizard\**" />
+    <Page Remove="NewFolder1\**" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\Icons\3.png" />
@@ -478,11 +482,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NewFolder1\" />
     <Folder Include="Resources\Styles\CustomBase\" />
     <Folder Include="Resources\Styles\Custom\" />
-    <Folder Include="ViewModels\SettingsPages\SubPages\Integration\" />
-    <Folder Include="ViewModels\SettingsPages\SubPages\Packaging\" />
+    <Folder Include="MVVM\ViewModels\Shell\HomePage\Pages\SettingsPages\SubPages\Integration\" />
+    <Folder Include="MVVM\ViewModels\Shell\HomePage\Pages\SettingsPages\SubPages\Packaging\" />
     <Folder Include="MVVM\Views\Components\Editors\VisualEditor\Nodes\Audio\" />
     <Folder Include="MVVM\Views\Components\Editors\VisualEditor\Nodes\Scene\" />
     <Folder Include="MVVM\Views\Components\Editors\VisualEditor\Nodes\Quest\" />
