@@ -19,7 +19,7 @@ using Orc.ProjectManagement;
 namespace WolvenKit.ViewModels
 {
     using Commands;
-    using Services;
+    using Functionality.Services;
     using Common.Services;
     using System.Timers;
 

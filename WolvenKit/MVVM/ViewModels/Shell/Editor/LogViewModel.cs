@@ -5,7 +5,7 @@ using System.Windows.Input;
 using WolvenKit.Commands;
 using Catel.IoC;
 using MLib.Interfaces;
-using WolvenKit.Services;
+using WolvenKit.Functionality.Services;
 using Catel;
 using Catel.Data;
 using System.ComponentModel;

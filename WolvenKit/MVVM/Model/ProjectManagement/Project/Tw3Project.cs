@@ -11,7 +11,7 @@ using WolvenKit.WKitGlobal;
 namespace WolvenKit.Model
 {
     using Functionality.Controllers;
-    using Services;
+    using Functionality.Services;
     using Bundles;
     using Cache;
     using Common;

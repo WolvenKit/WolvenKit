@@ -1,8 +1,8 @@
-﻿using Orchestra.Models;
+using Orchestra.Models;
 using Orchestra.Services;
 using System;
 
-namespace WolvenKit.Services
+namespace WolvenKit.Functionality.Services
 {
     internal class AboutInfoService : IAboutInfoService
     {

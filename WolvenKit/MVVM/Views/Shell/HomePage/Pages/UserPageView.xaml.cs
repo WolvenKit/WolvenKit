@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
-using WolvenKit.Services;
+using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.Views.HomePage.Pages
 {

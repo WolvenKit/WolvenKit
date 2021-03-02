@@ -2,7 +2,7 @@ using Orchestra.Services;
 using System.Windows;
 using WolvenKit.Views;
 
-namespace WolvenKit.Services
+namespace WolvenKit.Functionality.Services
 {
     public class RibbonService : IRibbonService
     {

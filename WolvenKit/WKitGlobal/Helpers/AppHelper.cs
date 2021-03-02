@@ -260,7 +260,7 @@ namespace WolvenKit.WKitGlobal
 
         public static void ShowFirstTimeSetup()
         {
-            if (Services.SettingsManager.FirstTimeSetupForUser)
+            if (Functionality.Services.SettingsManager.FirstTimeSetupForUser)
             {
                 Task.Run(() =>
                 {

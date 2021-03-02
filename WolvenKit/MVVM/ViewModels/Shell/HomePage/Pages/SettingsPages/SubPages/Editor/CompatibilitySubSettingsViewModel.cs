@@ -3,7 +3,7 @@ using Catel.Data;
 using Catel.Fody;
 using Catel.IoC;
 using Catel.MVVM;
-using WolvenKit.Services;
+using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.ViewModels.SettingsPages.SubPages.Editor
 {

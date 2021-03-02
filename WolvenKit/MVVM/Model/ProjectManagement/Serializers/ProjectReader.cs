@@ -8,7 +8,7 @@ using HandyControl.Controls;
 using Orc.ProjectManagement;
 using Orchestra.Services;
 using WolvenKit.Functionality.Controllers;
-using WolvenKit.Services;
+using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.Model.ProjectManagement
 {

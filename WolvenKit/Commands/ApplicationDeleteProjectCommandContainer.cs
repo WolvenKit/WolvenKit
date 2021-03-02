@@ -17,7 +17,7 @@ using Fluent;
 using Catel.IoC;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Common.Services;
-using WolvenKit.Services;
+using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.Commands
 {

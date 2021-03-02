@@ -13,7 +13,7 @@ using WolvenKit.Model.ProjectManagement;
 using System.Windows.Media;
 using WolvenKit.Commands;
 
-namespace WolvenKit.Services
+namespace WolvenKit.Functionality.Services
 {
     public class ApplicationInitializationService : ApplicationInitializationServiceBase
     {

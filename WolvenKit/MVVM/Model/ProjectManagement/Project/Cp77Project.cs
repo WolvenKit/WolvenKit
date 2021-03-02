@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 using Catel.IoC;
 using CP77.Common;
 using WolvenKit.Functionality.Controllers;
-using WolvenKit.Services;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Bundles;
 using WolvenKit.Cache;
 using WolvenKit.Common;

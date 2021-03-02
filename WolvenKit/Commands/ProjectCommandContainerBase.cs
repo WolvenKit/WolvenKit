@@ -8,7 +8,7 @@
 using System;
 using Catel.IoC;
 using Catel.Services;
-using WolvenKit.Services;
+using WolvenKit.Functionality.Services;
 
 namespace WolvenKit
 {

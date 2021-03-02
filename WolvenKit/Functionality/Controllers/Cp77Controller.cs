@@ -13,7 +13,7 @@ using Orc.ProjectManagement;
 using WolvenKit.Common;
 using WolvenKit.Model;
 using WolvenKit.ViewModels.AssetBrowser;
-using WolvenKit.Services;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Services;
 using CP77.CR2W.Archive;
 using WolvenKit.ViewModels;

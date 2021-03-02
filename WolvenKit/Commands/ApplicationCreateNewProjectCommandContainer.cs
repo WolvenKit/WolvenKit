@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using Orc.ProjectManagement;
-using WolvenKit.Services;
+using WolvenKit.Functionality.Services;
 using Settings = Orc.Squirrel.Settings;
 
 namespace WolvenKit

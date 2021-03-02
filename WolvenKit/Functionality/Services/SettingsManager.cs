@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using WolvenKit.Functionality.Controllers;
 
-namespace WolvenKit.Services
+namespace WolvenKit.Functionality.Services
 {
     /// <summary>
     /// This handles the application settings defined by the user.

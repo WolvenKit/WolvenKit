@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace WolvenKit.Services
+namespace WolvenKit.Functionality.Services
 {
     public interface ISettingsManager
     {

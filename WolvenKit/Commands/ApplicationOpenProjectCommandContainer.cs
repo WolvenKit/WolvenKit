@@ -10,7 +10,7 @@ using Orc.FileSystem;
 using Orc.ProjectManagement;
 using Orchestra.Services;
 using Orchestra.Views;
-using WolvenKit.Services;
+using WolvenKit.Functionality.Services;
 
 namespace WolvenKit
 {

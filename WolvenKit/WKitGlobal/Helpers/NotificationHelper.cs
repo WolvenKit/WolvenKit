@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
 using Orchestra.Services;
-using WolvenKit.Services;
+using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.WKitGlobal
 {

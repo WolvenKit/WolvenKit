@@ -10,7 +10,7 @@ using WolvenKit.Model;
 namespace WolvenKit.Functionality.Controllers
 {
     using Controllers;
-    using Services;
+    using Functionality.Services;
 
     using Bundles;
     using Cache;

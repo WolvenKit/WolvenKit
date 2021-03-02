@@ -1,7 +1,7 @@
 ﻿using Catel.IoC;
 using Catel.Services;
 using WolvenKit.Model.Wizards;
-using WolvenKit.Services;
+using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard

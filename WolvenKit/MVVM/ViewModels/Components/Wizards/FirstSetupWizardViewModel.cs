@@ -11,7 +11,7 @@ using Microsoft.Win32;
 using Orc.Squirrel;
 using WolvenKit.Commands;
 using WolvenKit.Common.Services;
-using WolvenKit.Services;
+using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.ViewModels.Wizards
 {

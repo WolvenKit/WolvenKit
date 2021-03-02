@@ -3,7 +3,7 @@ using Catel;
 using Catel.MVVM;
 using Catel.Services;
 using Orc.ProjectManagement;
-using WolvenKit.Services;
+using WolvenKit.Functionality.Services;
 
 namespace WolvenKit
 {

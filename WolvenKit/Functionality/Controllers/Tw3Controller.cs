@@ -20,7 +20,7 @@ using WolvenKit.Wwise.Wwise;
 
 namespace WolvenKit.Functionality.Controllers
 {
-    using Services;
+    using Functionality.Services;
     using Bundles;
     using Cache;
     using Common.Services;

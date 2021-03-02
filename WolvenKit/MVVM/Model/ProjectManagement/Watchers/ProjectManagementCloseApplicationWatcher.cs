@@ -15,7 +15,7 @@ namespace WolvenKit
 {
     using Model;
     using Model.ProjectManagement;
-    using Services;
+    using Functionality.Services;
 
     public class ProjectManagementCloseApplicationWatcher : CloseApplicationWatcherBase
     {
