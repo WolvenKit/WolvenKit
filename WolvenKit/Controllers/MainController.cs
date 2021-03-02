@@ -200,7 +200,7 @@ namespace WolvenKit
         {
             try
             {
-                // add a mechanism to update individual cache managers 
+                // add a mechanism to update individual cache managers
                 for (var j = 0; j < Configuration.ManagerVersions.Length; j++)
                 {
                     var savedversions = Configuration.ManagerVersions[j];
@@ -219,14 +219,14 @@ namespace WolvenKit
 
 
 
-                loadStatus = "Loading depot manager!";
+                loadStatus = "Loading depot manager...";
                 #region Load depot manager
                 // check if r4depot exists
                 if (!Directory.Exists(Configuration.DepotPath))
                 {
                     DirectoryInfo wccDir = new FileInfo(Configuration.WccLite).Directory.Parent.Parent;
                     if (!wccDir.Exists)
-                        throw new Exception("Wcc_lite is not specified.");
+                        throw new Exception("wcc_lite directory not specified.");
 
                     string wcc_r4data = Path.Combine(wccDir.FullName, "r4data");
                     if (!Directory.Exists(wcc_r4data))
@@ -237,10 +237,10 @@ namespace WolvenKit
 
                 // undbundle some engine files?
 
-                
+
                 #endregion
 
-                loadStatus = "Loading path hashes!";
+                loadStatus = "Loading path hashes...";
                 #region PathHasManager
                 //TODO: Figure out something for this! Probably should be inside the bundle manager
                 // create pathhashes if they don't already exist
@@ -254,11 +254,11 @@ namespace WolvenKit
                     Cr2wResourceManager.Get().WriteVanilla();
                 }*/
 
-                #endregion                
+                #endregion
 
                 loadStatus = "Loaded";
 
-                
+
                 WccHelper = new WccLite(MainController.Get().Configuration.WccLite, Logger);
 
                 mainController.Loaded = true;
@@ -268,11 +268,11 @@ namespace WolvenKit
                 mainController.Loaded = false;
                 Console.WriteLine(ex.Message);
             }
-            
+
             return Task.CompletedTask;
         }
 
-        
+
 
         /// <summary>
         /// Useful function for blindly importing a file.

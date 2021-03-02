@@ -28,7 +28,7 @@
                         <StackPanel>
 
                             <Grid Margin="5">
-                                <TextBlock Text="Open Mode" VerticalAlignment="Center"/>
+                                <TextBlock Text="Open mode" VerticalAlignment="Center"/>
                                 <ComboBox HorizontalAlignment="Right" VerticalAlignment="Center" Width="250" Text=""/>
                                 <!-- Discussed with rfuzzo that each tool should be dockable even if it takes the full editor view. But a personal settings to open it in a window should be setable (This is that option) -->
 

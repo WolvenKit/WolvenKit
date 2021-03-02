@@ -42,7 +42,7 @@ namespace WolvenKit.Commands
             var settingsViewModelType = TypeCache.GetTypes(x => string.Equals(x.Name, ViewModelType)).FirstOrDefault();
             if (settingsViewModelType == null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot find type '{0}'", ViewModelType);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot find type '{0}'.", ViewModelType);
             }
 
             var viewModel = _viewModelFactory.CreateViewModel(settingsViewModelType, null, null);

@@ -93,7 +93,7 @@ namespace WolvenKit.Services
 
             Catel.Windows.Controls.UserControl.DefaultCreateWarningAndErrorValidatorForViewModelValue = false;
             Catel.Windows.Controls.UserControl.DefaultSkipSearchingForInfoBarMessageControlValue = true;
-            
+
             return Task.CompletedTask;
         }
 
@@ -150,7 +150,7 @@ namespace WolvenKit.Services
 
             // project management
             _serviceLocator.RegisterType<IProjectSerializerSelector, ProjectSerializerSelector>();  //TODO: not needed?
-            //_serviceLocator.RegisterType<IMainWindowTitleService, MainWindowTitleService>();      //TODO: 
+            //_serviceLocator.RegisterType<IMainWindowTitleService, MainWindowTitleService>();      //TODO:
             //_serviceLocator.RegisterType<IProjectValidator, WkitProjectValidator>();
             _serviceLocator.RegisterType<ISaveProjectChangesService, SaveProjectChangesService>();
             _serviceLocator.RegisterType<IInitialProjectLocationService, WolvenKit.Model.ProjectManagement.InitialProjectLocationService>();
@@ -201,7 +201,7 @@ namespace WolvenKit.Services
                 var projectManager = _serviceLocator.ResolveType<IProjectManager>();
                 if (projectManager == null)
                 {
-                    const string error = "Failed to resolve project manager";
+                    const string error = "Failed to resolve project manager.";
                     Log.Error(error);
                     throw new Exception(error);
                 }

@@ -80,7 +80,7 @@ namespace WolvenKit.ViewModels.Wizards
             //TODO: handle this case!
             if (!TryCopyOodleLib())
             {
-                loggerService.LogString($"The oodle dll was not found!");
+                loggerService.LogString($"Oodle DLL not found.");
             }
 
         }
@@ -168,7 +168,7 @@ namespace WolvenKit.ViewModels.Wizards
         {
             var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext
             {
-                Title = "Select Cyberpunk 2077 Executable.",
+                Title = "Select Cyberpunk 2077 executable.",
                 Filter = "*.exe|*.exe",
                 IsMultiSelect = false
             });
@@ -183,7 +183,7 @@ namespace WolvenKit.ViewModels.Wizards
         {
             var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext
             {
-                Title = "Select Witcher 3 Executable.",
+                Title = "Select Witcher 3 executable.",
                 Filter = "witcher3.exe|witcher3.exe",
                 IsMultiSelect = false
             });
@@ -277,7 +277,7 @@ namespace WolvenKit.ViewModels.Wizards
 
         protected override async Task<bool> SaveAsync()
         {
-            //var cansave = 
+            //var cansave =
             //    //(File.Exists(WccLitePath) && Path.GetExtension(WccLitePath) == ".exe" && WccLitePath.Contains("wcc_lite.exe")) &&
             //    (File.Exists(ExecutablePath) && Path.GetExtension(ExecutablePath) == ".exe" && ExecutablePath.Contains("witcher3.exe"));
             //if (!cansave) return false;

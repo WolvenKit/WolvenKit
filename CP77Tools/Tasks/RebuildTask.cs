@@ -13,8 +13,8 @@ namespace CP77Tools.Tasks
         /// </summary>
         /// <param name="path"></param>
         /// <param name="outpath"></param>
-        public static void RebuildTask(string[] path, 
-            bool buffers, 
+        public static void RebuildTask(string[] path,
+            bool buffers,
             bool textures,
             bool import,
             bool keep,
@@ -24,7 +24,7 @@ namespace CP77Tools.Tasks
         {
             if (path == null || path.Length < 1)
             {
-                logger.LogString("Please fill in an input path", Logtype.Error);
+                logger.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
@@ -35,8 +35,8 @@ namespace CP77Tools.Tasks
 
         }
 
-        private static void RebuildTaskInner(string path, 
-            bool buffers, 
+        private static void RebuildTaskInner(string path,
+            bool buffers,
             bool textures,
             bool import,
             bool keep,
@@ -48,14 +48,14 @@ namespace CP77Tools.Tasks
 
             if (string.IsNullOrEmpty(path))
             {
-                logger.LogString("Please fill in an input path", Logtype.Error);
+                logger.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
             var inputDirInfo = new DirectoryInfo(path);
             if (!Directory.Exists(path) || !inputDirInfo.Exists)
             {
-                logger.LogString("Input path does not exist", Logtype.Error);
+                logger.LogString("Input path does not exist.", Logtype.Error);
                 return;
             }
 

@@ -89,7 +89,7 @@ namespace WolvenKit.ViewModels
 		#region Properties
 
         /// <summary>
-		/// 
+		///
 		/// </summary>
         [Model]
         private IWolvenkitFile File { get; set; }
@@ -289,7 +289,7 @@ namespace WolvenKit.ViewModels
                 {
 					EFileReadErrorCodes errorcode;
                     using var reader = new BinaryReader(stream);
-                    
+
                     if (Path.GetExtension(path) == ".srt")
                     {
                         File = new Srtfile()
@@ -309,7 +309,7 @@ namespace WolvenKit.ViewModels
                                 var cr2w = CP77.CR2W.ModTools.TryReadCr2WFile(reader);
                                 if (cr2w == null)
                                 {
-                                    logger.LogString($"Failed to read cr2w file {path}", Logtype.Error);
+                                    logger.LogString($"Failed to read CR2W file in {path}.", Logtype.Error);
                                     return false;
                                 }
                                 cr2w.FileName = path;

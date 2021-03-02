@@ -20,17 +20,17 @@ namespace WolvenKit.ViewModels
     public class BulkEditOptions
     {
         public enum AvailableTypes
-        { 
-            ANY, 
-            CUInt64, 
-            CUInt32, 
-            CUInt16, 
+        {
+            ANY,
+            CUInt64,
+            CUInt32,
+            CUInt16,
             CUInt8,
-            CInt64, 
-            CInt32, 
-            CInt16, 
+            CInt64,
+            CInt32,
+            CInt16,
             CInt8,
-            CBool, 
+            CBool,
             CString
         }
 
@@ -152,7 +152,7 @@ namespace WolvenKit.ViewModels
         {
             MainVM = mainViewModel;
             Logger = MainController.Get().Logger;
-            
+
 
             RunCommand = new RelayCommand(Run, CanRun);
             Options = new BulkEditOptions();
@@ -236,7 +236,7 @@ namespace WolvenKit.ViewModels
             if (opts.Extension != null)
                 files = MainController.Get().ActiveMod.Files.Where(_ => Path.GetExtension(_).Contains(opts.Extension)).ToList();
 
-            Logger.LogString($"Starting Bulk edit. Found {files.Count} files to edit. \r\n", Logtype.Success);
+            Logger.LogString($"Starting bulk edit. Found {files.Count} files to edit. \r\n", Logtype.Success);
             ProgressReport.Max = files.Count;
             ProgressReport.Min = 0;
             ProgressReport.Value = 0;
@@ -285,7 +285,7 @@ namespace WolvenKit.ViewModels
 
             // get chunks that match chunkname
             List<ICR2WExport> chunks = opts.ChunkName != null ? file.Chunks.Where(_ => _.data.GetType().Name == opts.ChunkName).ToList() : file.Chunks;
-            
+
             var splits = opts.Name.Split('.');
 
 
@@ -356,7 +356,7 @@ namespace WolvenKit.ViewModels
                                 }
                             }
 
-                            // check the value 
+                            // check the value
                             dynamic dyn = proptoedit;
                             if (!(dyn.val is string x))
                                 x = dyn.val.ToString();
@@ -379,7 +379,7 @@ namespace WolvenKit.ViewModels
                                     return;
 
 
-                                
+
 
                                 // set via reflection
                                 proptoedit.accessor[proptoedit, "val"] = convertedRequestedValue;
@@ -423,16 +423,16 @@ namespace WolvenKit.ViewModels
                                     }
                                 }
                             }
-                            
 
-                            
+
+
                         }
                         else
                             Logger.LogString($"{proptoedit.GetType()} not supported in {cvar.REDName}: {path}.\r\n", Logtype.Normal);
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogString($"Some error occored: {ex.Message}.\r\n", Logtype.Error);
+                        Logger.LogString($"An error occurred: {ex.Message}.\r\n", Logtype.Error);
                     }
                 }
             }

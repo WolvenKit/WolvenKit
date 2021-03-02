@@ -27,11 +27,11 @@
                             </StackPanel>
                             <hc:TextBox  x:Name="NameTb" hc:InfoElement.Necessary="True" hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Author" Style="{StaticResource TextBoxExtendCustom}" Margin="0,32,0,0" Text="{Binding Author}" HorizontalAlignment="Stretch" TextChanged="Field_TextChanged"/>
                             <hc:TextBox  x:Name="EmailTb" hc:InfoElement.Necessary="True" hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Email" Style="{StaticResource TextBoxExtendCustom}" Margin="0,32,0,0" Text="{Binding Email}" VerifyFunc="IsValidEmail" HorizontalAlignment="Stretch" TextChanged="Field_TextChanged"/>
-                            <hc:TextBox  x:Name="DonateTb" hc:InfoElement.Necessary="True" hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Donate Link" Style="{StaticResource TextBoxExtendCustom}" Margin="0,32,0,0" Text="{Binding DonateLink}" HorizontalAlignment="Stretch" TextChanged="Field_TextChanged"/>
+                            <hc:TextBox  x:Name="DonateTb" hc:InfoElement.Necessary="True" hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Donation link" Style="{StaticResource TextBoxExtendCustom}" Margin="0,32,0,0" Text="{Binding DonateLink}" HorizontalAlignment="Stretch" TextChanged="Field_TextChanged"/>
                             <hc:TextBox  VerticalContentAlignment="Top"  hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Description" Margin="0,32,10,0" Text="{Binding DefaultDescription}" HorizontalAlignment="Stretch" Height="100"/>
 
                         </StackPanel>
-                   
+
 
                     </Grid>
                 </StackPanel>

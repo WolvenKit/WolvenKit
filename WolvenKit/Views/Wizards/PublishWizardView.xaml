@@ -32,7 +32,7 @@
             </Grid>
             <StackPanel  VerticalAlignment="Center" Orientation="Vertical">
 
-                <TextBlock Text="Let's publish your project!"  FontSize="20" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,0"></TextBlock>
+                <TextBlock Text="Let's publish the project!"  FontSize="20" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,0"></TextBlock>
                 <hc:Divider  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,5,0,0"></hc:Divider>
             </StackPanel>
         </StackPanel>
@@ -47,9 +47,9 @@
                 <iconPacks:PackIconCodicons Kind="ArrowLeft"/>
             </Button>
             <hc:StepBar x:Name="StepMain" Margin="50,0,50,3" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Dock="Bottom"  >
-                <hc:StepBarItem Content="Required Settings"/>
-                <hc:StepBarItem Content="Additional Settings"/>
-                <hc:StepBarItem Content="Finalize Setup"/>
+                <hc:StepBarItem Content="Required settings"/>
+                <hc:StepBarItem Content="Additional settings"/>
+                <hc:StepBarItem Content="Finalize setup"/>
 
             </hc:StepBar>
             <Button Command="{Binding NextCmd}" CommandParameter="{Binding ElementName=StepMain}" Margin="3" VerticalAlignment="Bottom" Height="30" Width="50" IsEnabled="True"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Right" Click="Button_Click">
@@ -61,5 +61,3 @@
     </Grid>
 
 </catel:UserControl>
-
-

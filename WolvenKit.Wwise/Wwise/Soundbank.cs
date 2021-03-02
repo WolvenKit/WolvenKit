@@ -28,7 +28,7 @@ namespace WolvenKit.Wwise.Wwise
         public List<WEM> _to_add = new List<WEM>();
         public bool _isInit;
 
-        
+
         public Soundbank(string fileName)
         {
             try
@@ -42,7 +42,7 @@ namespace WolvenKit.Wwise.Wwise
             }
             catch (Exception)
             {
-                Console.WriteLine("Could not open soundbank, program is down");
+                Console.WriteLine("Could not open sound bank, exiting.");
                 Environment.Exit(0);
             }
 
@@ -56,7 +56,7 @@ namespace WolvenKit.Wwise.Wwise
             }
         }
 
-        
+
         public void readFile()
         {
             _header = new SBHeader(_file);
@@ -73,7 +73,7 @@ namespace WolvenKit.Wwise.Wwise
                 }
                 else
                 {
-                    Console.WriteLine("SBData or SBDataIndex is not loaded");
+                    Console.WriteLine("SBData or SBDataIndex not loaded, exiting.");
                     Environment.Exit(0);
                 }
             }
@@ -96,20 +96,20 @@ namespace WolvenKit.Wwise.Wwise
             _file.closeFile();
         }
 
-        
+
         public void debugSound()
         {
-            Console.WriteLine("--- Header Start ---");
-            Console.WriteLine("Head : " + _header._head);
-            Console.WriteLine("Length : " + _header._length);
-            Console.WriteLine("Version : " + _header._version);
-            Console.WriteLine("ID : " + _header._id);
-            Console.WriteLine("UNK Field32 1 : " + _header._unk_field32_1);
-            Console.WriteLine("UNK Field32 2 : " + _header._unk_field32_2);
+            Console.WriteLine("--- Header start ---");
+            Console.WriteLine("Head: " + _header._head);
+            Console.WriteLine("Length: " + _header._length);
+            Console.WriteLine("Version: " + _header._version);
+            Console.WriteLine("ID: " + _header._id);
+            Console.WriteLine("UNK Field32 1: " + _header._unk_field32_1);
+            Console.WriteLine("UNK Field32 2: " + _header._unk_field32_2);
 
             if (_header._unk_data != null)
             {
-                Console.WriteLine("UNK Data Length : " + _header._unk_data.Length);
+                Console.WriteLine("UNK data length : " + _header._unk_data.Length);
             }
             Console.WriteLine("--- Header ---");
             Console.WriteLine("");
@@ -118,9 +118,9 @@ namespace WolvenKit.Wwise.Wwise
             {
                 if (_dataIndex != null && _dataIndex._isSet)
                 {
-                    Console.WriteLine("--- Data Index Start ---");
-                    Console.WriteLine("Head : " + _dataIndex._head);
-                    Console.WriteLine("Length : " + _dataIndex._length);
+                    Console.WriteLine("--- Data index start ---");
+                    Console.WriteLine("Head: " + _dataIndex._head);
+                    Console.WriteLine("Length: " + _dataIndex._length);
 
                     int i = 1;
                     foreach (WEM w in _dataIndex._data_info)
@@ -128,18 +128,18 @@ namespace WolvenKit.Wwise.Wwise
                         Console.WriteLine("Data info " + i + " : (ID: " + w._id + "), (Offset: " + w._offset + "), (Size: " + w._size + ")");
                         i++;
                     }
-                    Console.WriteLine("--- Data Index End ---");
+                    Console.WriteLine("--- Data index end ---");
                     Console.WriteLine("");
                 }
 
                 if (_data != null && _data._isSet)
                 {
-                    Console.WriteLine("--- Data Start ---");
-                    Console.WriteLine("Head : " + _data._head);
-                    Console.WriteLine("Length (Non padded) : " + _dataIndex.get_total_size());
-                    Console.WriteLine("Length : " + _data._length);
-                    Console.WriteLine("Offset : " + _data._offset);
-                    Console.WriteLine("--- Data End ---");
+                    Console.WriteLine("--- Data start ---");
+                    Console.WriteLine("Head: " + _data._head);
+                    Console.WriteLine("Length (Non-padded): " + _dataIndex.get_total_size());
+                    Console.WriteLine("Length: " + _data._length);
+                    Console.WriteLine("Offset: " + _data._offset);
+                    Console.WriteLine("--- Data end ---");
                     Console.WriteLine("");
                 }
             }
@@ -147,23 +147,23 @@ namespace WolvenKit.Wwise.Wwise
             {
                 if (_stmg != null && _stmg._isSet)
                 {
-                    Console.WriteLine("--- Manager Start ---");
-                    Console.WriteLine("Head : " + _stmg._head);
-                    Console.WriteLine("Length : " + _stmg._length);
-                    Console.WriteLine("Volume : " + _stmg._volume);
-                    Console.WriteLine("Max voice instances : " + _stmg._max_voice_instances);
-                    Console.WriteLine("State groups : " + _stmg._state_groups_count);
-                    Console.WriteLine("Switch groups : " + _stmg._switch_groups_count);
-                    Console.WriteLine("Game parameters : " + _stmg._game_parameters_count);
-                    Console.WriteLine("--- Manager End ---");
+                    Console.WriteLine("--- Manager start ---");
+                    Console.WriteLine("Head: " + _stmg._head);
+                    Console.WriteLine("Length: " + _stmg._length);
+                    Console.WriteLine("Volume: " + _stmg._volume);
+                    Console.WriteLine("Max voice instances: " + _stmg._max_voice_instances);
+                    Console.WriteLine("State groups: " + _stmg._state_groups_count);
+                    Console.WriteLine("Switch groups: " + _stmg._switch_groups_count);
+                    Console.WriteLine("Game parameters: " + _stmg._game_parameters_count);
+                    Console.WriteLine("--- Manager end ---");
                     Console.WriteLine("");
                 }
             }
 
-            Console.WriteLine("--- Objects Start ----");
-            Console.WriteLine("Head : " + _objects._head);
-            Console.WriteLine("Length : " + _objects._length);
-            Console.WriteLine("Quantity : " + _objects._quantity);
+            Console.WriteLine("--- Objects start ----");
+            Console.WriteLine("Head: " + _objects._head);
+            Console.WriteLine("Length: " + _objects._length);
+            Console.WriteLine("Quantity: " + _objects._quantity);
 
             var objTypes = new Dictionary<byte, int>();
             foreach (SBObject obj in _objects._objects)
@@ -182,35 +182,35 @@ namespace WolvenKit.Wwise.Wwise
             {
                 Console.WriteLine("Type " + t.Key + " : " + t.Value);
             }
-            Console.WriteLine("--- Objects End ---");
+            Console.WriteLine("--- Objects end ---");
             Console.WriteLine("");
 
             if (!_isInit)
             {
                 if (_stid != null && _stid._isSet)
                 {
-                    Console.WriteLine("--- Sound type id Start ---");
-                    Console.WriteLine("Head : " + _stid._head);
-                    Console.WriteLine("Length : " + _stid._length);
-                    Console.WriteLine("UNK Field32 1 : " + _stid._unk_field32_1);
-                    Console.WriteLine("Quantity : " + _stid._quantity);
-                    Console.WriteLine("Remaining size : " + _stid._remaining.Length);
-                    Console.WriteLine("--- Sound type id End ---");
+                    Console.WriteLine("--- Sound type ID start ---");
+                    Console.WriteLine("Head: " + _stid._head);
+                    Console.WriteLine("Length: " + _stid._length);
+                    Console.WriteLine("UNK Field32 1: " + _stid._unk_field32_1);
+                    Console.WriteLine("Quantity: " + _stid._quantity);
+                    Console.WriteLine("Remaining size: " + _stid._remaining.Length);
+                    Console.WriteLine("--- Sound type ID end ---");
                     Console.WriteLine("");
                 }
                 else if (_envs != null && _envs._isSet)
                 {
-                    Console.WriteLine("--- Environments Start ---");
-                    Console.WriteLine("Head : " + _envs._head);
-                    Console.WriteLine("Length : " + _envs._length);
-                    Console.WriteLine("Unk data length : " + _envs._unk_data.Length);
-                    Console.WriteLine("--- Environments End ---");
+                    Console.WriteLine("--- Environments start ---");
+                    Console.WriteLine("Head: " + _envs._head);
+                    Console.WriteLine("Length: " + _envs._length);
+                    Console.WriteLine("UNK data length: " + _envs._unk_data.Length);
+                    Console.WriteLine("--- Environments end ---");
                     Console.WriteLine("");
                 }
             }
         }
 
-        
+
         public void rebuild_data()
         {
             foreach (WEM w in _dataIndex._data_info)
@@ -227,12 +227,12 @@ namespace WolvenKit.Wwise.Wwise
             }
         }
 
-        
+
         public void get_playlist_ids(uint wid)
         {
             if (wid < 1 || wid > 0xFFFFFFFF)
             {
-                Console.WriteLine("Soundbank (get_playlist_ids) : Invalid music ID");
+                Console.WriteLine("Sound bank (get_playlist_ids): Invalid music ID");
                 return;
             }
             List<uint> trackids = new List<uint>();
@@ -249,7 +249,7 @@ namespace WolvenKit.Wwise.Wwise
             }
             if (trackids.Count == 0)
             {
-                Console.WriteLine("Could not find ID : " + wid + " within soundbank");
+                Console.WriteLine("Could not find ID " + wid + " within sound bank.");
                 return;
             }
             List<uint> segids = new List<uint>();
@@ -270,7 +270,7 @@ namespace WolvenKit.Wwise.Wwise
             }
             if (segids.Count == 0)
             {
-                Console.WriteLine(wid + " has no music segments");
+                Console.WriteLine(wid + " has no music segments.");
                 return;
             }
 
@@ -291,23 +291,23 @@ namespace WolvenKit.Wwise.Wwise
             }
             if (playlist_ids.Count == 0)
             {
-                Console.WriteLine(wid + " has no music playlists");
+                Console.WriteLine(wid + " has no music playlists.");
                 return;
             }
             string s = string.Join(", ", playlist_ids.ToArray());
 
-            Console.WriteLine("[*] Playlists found : " + playlist_ids.Count);
-            Console.WriteLine("[*] Playlists IDs : " + s);
+            Console.WriteLine("[*] Playlists found: " + playlist_ids.Count);
+            Console.WriteLine("[*] Playlists IDs: " + s);
             Console.WriteLine("");
 
         }
 
-        
+
         public void export_playlist(uint playlist_id)
         {
             if (playlist_id < 1 || playlist_id > 0xFFFFFFFF)
             {
-                Console.WriteLine("Soundbank : Invalid playlist ID in export");
+                Console.WriteLine("Sound bank: Invalid playlist ID in export.");
                 return;
             }
 
@@ -326,7 +326,7 @@ namespace WolvenKit.Wwise.Wwise
 
             if (playlist == null)
             {
-                Console.WriteLine("Playlist " + playlist_id + " not found within soundbank");
+                Console.WriteLine("Playlist " + playlist_id + " not found within sound bank.");
                 return;
             }
 
@@ -339,7 +339,7 @@ namespace WolvenKit.Wwise.Wwise
         {
             if (playlist_id < 1 || playlist_id > 0xFFFFFFFF)
             {
-                Console.WriteLine("Soundbank : Invalid playlist ID in reimport");
+                Console.WriteLine("Sound bank: Invalid playlist ID in reimport.");
                 return;
             }
 
@@ -363,7 +363,7 @@ namespace WolvenKit.Wwise.Wwise
             }
             if (playlist == null)
             {
-                Console.WriteLine("Playlist " + playlist_id + " not found within soundbank");
+                Console.WriteLine("Playlist " + playlist_id + " not found within sound bank.");
                 return;
             }
 
@@ -437,12 +437,12 @@ namespace WolvenKit.Wwise.Wwise
             */
         }
 
-        
+
         public void build_bnk(string outpath)
         {
             if (_isInit)
             {
-                Console.WriteLine("Soundbank : Rebuilding init.bnk is not yet supported");
+                Console.WriteLine("Sound bank: Rebuilding init.bnk not yet supported.");
                 return;
             }
 
@@ -515,7 +515,7 @@ namespace WolvenKit.Wwise.Wwise
                             obj._obj_so._offset = offset;
                             obj._obj_so._size = size;
                         }
-                        
+
                     }
                 }
 
@@ -534,7 +534,7 @@ namespace WolvenKit.Wwise.Wwise
             fw._file.Close();
         }
 
-        
+
         public void read_wems(string folder)
         {
             string[] files = Directory.GetFiles(folder, "*.wem", SearchOption.AllDirectories);
@@ -559,19 +559,19 @@ namespace WolvenKit.Wwise.Wwise
             }
         }
 
-        
+
         public void rebuild_music(string file)
         {
-            
+
             uint mid = 0;
             if(!uint.TryParse(Path.GetFileNameWithoutExtension(file), out mid))
             {
-                Console.WriteLine("Soundbank : rebuild_music -- wrong file");
+                Console.WriteLine("Sound bank: rebuild_music -- wrong file.");
                 return;
             }
             if(mid < 1 || mid > 0xFFFFFFFF)
             {
-                Console.WriteLine("Soundbank : rebuild_music -- Invalid WEM ID");
+                Console.WriteLine("Sound bank: rebuild_music -- Invalid wem ID.");
                 return;
             }
 
@@ -597,7 +597,7 @@ namespace WolvenKit.Wwise.Wwise
             }
             if(trackids.Count == 0)
             {
-                Console.WriteLine("Could not find ID " + mid + " within soundbank -- rebuild_music");
+                Console.WriteLine("Could not find ID " + mid + " within sound bank -- rebuild_music.");
                 return;
             }
             foreach(var obj in _objects._objects)
@@ -639,7 +639,7 @@ namespace WolvenKit.Wwise.Wwise
                     }
                 }
             }
-        
+
             foreach(var t in trackids)
             {
                 if(t.Value[1] != 0)
@@ -652,19 +652,19 @@ namespace WolvenKit.Wwise.Wwise
             _objects.calculate_length();
         }
 
-        
+
         public uint add_music(string file)
         {
             string s = Path.GetFileNameWithoutExtension(file);
             uint mid = 0;
             if(!uint.TryParse(s, out mid))
             {
-                Console.WriteLine("Soundbank : add_music -- Invalid WEM ID");
+                Console.WriteLine("Sound bank: add_music -- Invalid wem ID.");
                 Environment.Exit(0);
             }
             if(mid < 1 || mid > 0xFFFFFFFF)
             {
-                Console.WriteLine("Soundbank : add_music -- Invalid WEM ID");
+                Console.WriteLine("Sound bank: add_music -- Invalid wem ID.");
                 Environment.Exit(0);
             }
 
@@ -679,7 +679,7 @@ namespace WolvenKit.Wwise.Wwise
                 {
                     if(obj._obj_mto._id1 == mid)
                     {
-                        Console.WriteLine("Add new music : ID " + mid + " is already used");
+                        Console.WriteLine("Add new music: ID " + mid + " is already in use.");
                         Environment.Exit(0);
                     }
                 }
@@ -693,7 +693,7 @@ namespace WolvenKit.Wwise.Wwise
             }
             if(segment != null)
             {
-                Console.WriteLine("No music segments within the soundbank");
+                Console.WriteLine("No music segments within sound bank.");
                 Environment.Exit(0);
             }
 

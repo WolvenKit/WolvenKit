@@ -18,7 +18,7 @@ namespace WolvenKit.CR2W
 
         private CR2WManager()
         {
-            
+
         }
 
         public static CR2WManager Instance => instance;
@@ -113,12 +113,12 @@ namespace WolvenKit.CR2W
                 m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(csharpstring, m_assembly, logger);
                 if (m_assembly != null)
                 {
-                    m_logger.LogString($"Successfully compiled custom assembly {m_assembly.GetName()}", Logtype.Success);
+                    m_logger.LogString($"Successfully compiled custom assembly {m_assembly.GetName()}.", Logtype.Success);
                     LoadTypes();
                     LoadEnums();
                 }
                 else
-                    m_logger.LogString($"Custom class assembly could not be compiled. An error occured", Logtype.Error);
+                    m_logger.LogString($"Custom class assembly could not be compiled. An error occurred.", Logtype.Error);
             }
         }
 
@@ -393,7 +393,7 @@ namespace WolvenKit.CR2W.Types
             }
             else
             {
-                
+
             }
 
             return csline;
@@ -429,7 +429,7 @@ namespace WolvenKit.CR2W.Types
                 }
                 else
                 {
-                    
+
                 }
                 return returntype;
             }

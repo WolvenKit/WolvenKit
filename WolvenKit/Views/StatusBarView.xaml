@@ -6,10 +6,10 @@
                    xmlns:local="clr-namespace:WolvenKit.Views"
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:orchestra="http://schemas.wildgums.com/orchestra"
-                   xmlns:orccontrols="http://schemas.wildgums.com/orc/controls" 
+                   xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
                    xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
-                   xmlns:WolvenKit="clr-namespace:WolvenKit"       
-                   xmlns:hc="https://handyorg.github.io/handycontrol" 
+                   xmlns:WolvenKit="clr-namespace:WolvenKit"
+                   xmlns:hc="https://handyorg.github.io/handycontrol"
 
                    mc:Ignorable="d"
                    d:DesignWidth="300">
@@ -57,8 +57,8 @@
             </StackPanel>
 
             <StackPanel Visibility="{Binding IsUpdatedInstalled, Converter={StaticResource BooleanToCollapsingVisibilityConverter}}">
-                <Image Width="16" Height="16" Source="{orctheming:FontImage {x:Static WolvenKit:FontAwesome.Download}}" 
-                    ToolTip="Update is installed, restart to enable new features" />
+                <Image Width="16" Height="16" Source="{orctheming:FontImage {x:Static WolvenKit:FontAwesome.Download}}"
+                    ToolTip="Update installed, restart to apply." />
 
                 <Separator Background="{DynamicResource MahApps.Brushes.Accent3}" Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
                     <Separator.LayoutTransform>
@@ -79,7 +79,7 @@
                 <TextBlock Text="{Binding Version}" />
             </StackPanel>
 
-        
+
 
         </StackPanel>
     </Grid>

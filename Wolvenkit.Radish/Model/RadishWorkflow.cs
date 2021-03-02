@@ -21,7 +21,7 @@ namespace WolvenKit.Radish.Model
 
         [Category("0 Misc")] public string Name { get; set; }
 
-        [Description("If set to true, the game will automatically be launched after building. ")] [Category("0 Misc")] public bool START_GAME { get; set; }
+        [Description("If set to true, the game will automatically be launched upon building. ")] [Category("0 Misc")] public bool START_GAME { get; set; }
         [Category("0 Misc")] public bool Cleanup_folder { get; set; }
         [Description("If set to true, dependency steps will automatically be set. ")] [Category("0 Misc")] public bool PATCH_MODE { get; set; }
 

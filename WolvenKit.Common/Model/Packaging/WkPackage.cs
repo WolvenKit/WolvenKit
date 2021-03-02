@@ -59,7 +59,7 @@ namespace WolvenKit.Common.Model.Packaging
             }
             else
             {
-                throw new Exception("Missing parameters!");
+                throw new Exception("Missing parameters.");
             }
         }
 
@@ -179,7 +179,7 @@ namespace WolvenKit.Common.Model.Packaging
         {
             if (version == null || name == null || Author.Item1 == null || Colors == null)
             {
-                throw new ArgumentException("Invalid parameters when trying to generate the assembly.xml!");
+                throw new ArgumentException("Invalid parameters when trying to generate assembly.xml.");
             }
             var rootnode = new XElement("package", new XAttribute("version", version), new XAttribute("name", name));
             var authorelement = new XElement("author", new XElement("displayName", Author.Item1));

@@ -29,7 +29,7 @@
 
                 <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
                     <Grid>
-                        <TextBlock Text="Executable Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                        <TextBlock Text="Executable path" VerticalAlignment="Center" Margin="0,0,50,0"/>
                         <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="CP77ExecutablePathBtn_Click">
                             <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                         </Button>
@@ -56,7 +56,7 @@
 
 
                         <Grid Margin="5">
-                            <TextBlock Text="Executable Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                            <TextBlock Text="Executable path" VerticalAlignment="Center" Margin="0,0,50,0"/>
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="W3ExecutablePathBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
@@ -66,7 +66,7 @@
 
 
                         <Grid Margin="5">
-                            <TextBlock Text="WCC_Lite.exe Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                            <TextBlock Text="ModKit (wcc_lite.exe) path" VerticalAlignment="Center" Margin="0,0,50,0"/>
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="WccLitePathBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>
@@ -75,7 +75,7 @@
 
 
                         <Grid Margin="5">
-                            <TextBlock Text="Uncooked Depot Path" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                            <TextBlock Text="Uncooked depot path" VerticalAlignment="Center" Margin="0,0,50,0"/>
                             <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="DepotPathBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened"/>
                             </Button>

@@ -74,7 +74,7 @@ namespace TextEditLib.ViewModels
 		/// <summary>
 		/// Gets/sets the AvalonEdit document object that contains the text edit
 		/// information being displayed in the editor control (text backend storage).
-		/// </summary>		
+		/// </summary>
 		public TextDocument Document
 		{
 			get { return _Document; }
@@ -83,7 +83,7 @@ namespace TextEditLib.ViewModels
 		/// <summary>
 		/// Gets/sets whether the file has been changed (edited) and should
 		/// therefore, be saved on exit, or not.
-		/// </summary>		
+		/// </summary>
 		public bool IsDirty
 		{
 			get { return _IsDirty; }
@@ -117,7 +117,7 @@ namespace TextEditLib.ViewModels
 
 		/// <summary>
 		/// Gets/sets the path of the current file.
-		/// </summary>		
+		/// </summary>
 		public string FilePath
 		{
 			get { return _FilePath; }
@@ -134,7 +134,7 @@ namespace TextEditLib.ViewModels
 
 		/// <summary>
 		/// Gets/sets whether a file is readonly or not (can be edit and saved to).
-		/// </summary>		
+		/// </summary>
 		public bool IsReadOnly
 		{
 			get
@@ -155,7 +155,7 @@ namespace TextEditLib.ViewModels
 		/// <summary>
 		/// Gets/sets a humanreadle string that describe why a file may not be edible
 		/// if it appears to be available in readonly mode, only.
-		/// </summary>		
+		/// </summary>
 		public string IsReadOnlyReason
 		{
 			get
@@ -459,7 +459,7 @@ namespace TextEditLib.ViewModels
 		}
 		#endregion properties
 
-		#region methods		
+		#region methods
 		/// <summary>
 		/// Loads a text document from the persistance of the file system
 		/// and updates all corresponding states in this viewmodel.
@@ -477,8 +477,8 @@ namespace TextEditLib.ViewModels
 				if ((System.IO.File.GetAttributes(paramFilePath) & FileAttributes.ReadOnly) != 0)
 				{
 					IsReadOnly = true;
-					IsReadOnlyReason = "This file cannot be edit because another process is currently writting to it.\n" +
-									   "Change the file access permissions or save the file in a different location if you want to edit it.";
+					IsReadOnlyReason = "This file cannot be edited because another process is currently writing on it.\n" +
+									   "Change file access perms or save the file in a different location in order to edit.";
 				}
 
 				try
@@ -528,7 +528,7 @@ namespace TextEditLib.ViewModels
 		/// <summary>
 		/// Determines a text file's encoding by analyzing its byte order mark (BOM).
 		/// Defaults to ASCII when detection of the text file's endianness fails.
-		/// 
+		///
 		/// source: https://stackoverflow.com/questions/3825390/effective-way-to-find-any-files-encoding
 		/// </summary>
 		/// <param name="filename">The text file to analyze.</param>
@@ -632,4 +632,3 @@ namespace TextEditLib.ViewModels
 		#endregion methods
 	}
 }
-

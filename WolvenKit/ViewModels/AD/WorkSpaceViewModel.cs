@@ -53,7 +53,7 @@ namespace WolvenKit.ViewModels
         public WorkSpaceViewModel(
             IProjectManager projectManager,
 			ILoggerService loggerService,
-			IMessageService messageService, 
+			IMessageService messageService,
             ICommandManager commandManager
             )
 		{
@@ -79,7 +79,7 @@ namespace WolvenKit.ViewModels
             ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
 
             OpenFileCommand = new DelegateCommand<FileSystemInfoModel>(
-                async (p ) => await ExecuteOpenFile(p), 
+                async (p ) => await ExecuteOpenFile(p),
                 (p) =>  CanOpenFile(p));
             NewFileCommand = new RelayCommand(ExecuteNewFile, CanNewFile);
 
@@ -98,7 +98,7 @@ namespace WolvenKit.ViewModels
 
 			#region events
 
-			
+
 
             #endregion
 
@@ -159,7 +159,7 @@ namespace WolvenKit.ViewModels
         protected override Task CloseAsync()
 		{
 			// TODO: Unsubscribe from events
-            
+
 
 			return base.CloseAsync();
 		}
@@ -237,10 +237,10 @@ namespace WolvenKit.ViewModels
                     //await Task.Run(() => RequestFileOpen(model));
                 }
             }
-			
+
 		}
 
-        
+
 
         /// <summary>
         /// Creates a new cr2w file in WolvenKit.
@@ -279,18 +279,18 @@ namespace WolvenKit.ViewModels
             try
             {
                 var vm = new UserControlHostWindowViewModel(new PublishWizardView(), 600, 1200);
-                
+
                 ServiceLocator.Default.ResolveType<IUIVisualizerService>().ShowDialogAsync(vm);
 
             }
             catch (Exception ex)
             {
                 _loggerService.LogString(ex.Message, Logtype.Error);
-                _loggerService.LogString("Failed to publish project!", Logtype.Error);
+                _loggerService.LogString("Failed to publish project.", Logtype.Error);
             }
         }
 
-		
+
 
 
 		#endregion
@@ -334,9 +334,9 @@ namespace WolvenKit.ViewModels
 		/// </summary>
 		public IEnumerable<ToolViewModel> Tools => _tools ??= new ToolViewModel[]
         {
-            Log, 
-            ProjectExplorer, 
-            PropertiesViewModel, 
+            Log,
+            ProjectExplorer,
+            PropertiesViewModel,
             ImportViewModel
         };
 
@@ -514,7 +514,7 @@ namespace WolvenKit.ViewModels
                 catch (Win32Exception)
                 {
                     // eat this: no default app set for filetype
-                    _loggerService.LogString($"No default prgram set in Windows to open file extension {Path.GetExtension(path)}", Logtype.Error);
+                    _loggerService.LogString($"No default program set to open {Path.GetExtension(path)} files.", Logtype.Error);
                 }
             }
 
@@ -529,7 +529,7 @@ namespace WolvenKit.ViewModels
                 }
                 else
                 {
-                    throw new InvalidFileTypeException("Invalid file type");
+                    throw new InvalidFileTypeException("Invalid file type.");
                 }
             }
         }
@@ -545,7 +545,7 @@ namespace WolvenKit.ViewModels
 
         //
         // https://github.com/Dirkster99/AvalonDock/blob/5032524bae6e342dbb648a4c1d3fc3264f449db9/source/MLibTest/MLibTest/Demos/ViewModels/WorkSpaceViewModel.cs
-        // 
+        //
 
 
         /// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
@@ -564,7 +564,7 @@ namespace WolvenKit.ViewModels
 		{
 			if (fileToClose.IsDirty)
 			{
-				var res = MessageBox.Show($"Save changes for file '{fileToClose.FileName}'?", "AvalonDock Test App", MessageBoxButton.YesNoCancel);
+				var res = MessageBox.Show($"Save changes for '{fileToClose.FileName}'?", "AvalonDock Test App", MessageBoxButton.YesNoCancel);
 				if (res == MessageBoxResult.Cancel)
 					return;
 
@@ -608,12 +608,12 @@ namespace WolvenKit.ViewModels
 
 			// TODO
 
-			
+
 
 			ActiveDocument.IsDirty = false;
 		}
 
-        
+
 
         /// <summary>
 		/// Open a file and return its content in a viewmodel.

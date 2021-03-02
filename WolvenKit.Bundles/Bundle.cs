@@ -42,7 +42,7 @@ namespace WolvenKit.Bundles
         public EArchiveType TypeName { get { return EArchiveType.Bundle; } }
         public string ArchiveAbsolutePath { get; set; }
         public Dictionary<string, BundleItem> Items { get; set; }
-        
+
         /// <summary>
         /// Reads the Table Of Contents of the bundle.
         /// </summary>
@@ -103,7 +103,7 @@ namespace WolvenKit.Bundles
                     }
                     else
                     {
-                        Console.WriteLine("Warning: Archive '" + ArchiveAbsolutePath + "' could not be fully loaded as resource '" + item.Name + "' is defined more than once. Thus, only the first definition was loaded.");
+                        Console.WriteLine("Warning: archive '" + ArchiveAbsolutePath + "' could not be fully loaded as resource '" + item.Name + "' is defined more than once. Only the first definition was loaded.");
                     }
                 }
 

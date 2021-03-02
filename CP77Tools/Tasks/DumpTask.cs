@@ -58,12 +58,12 @@ namespace CP77Tools.Tasks
     {
         private static byte[] MAGIC = {0x43, 0x52, 0x32, 0x57};
 
-        public static void DumpTask(string[] path, bool imports, bool missinghashes, 
+        public static void DumpTask(string[] path, bool imports, bool missinghashes,
             bool texinfo, bool classinfo, bool dump, bool list)
         {
             if (path == null || path.Length < 1)
             {
-                logger.LogString("Please fill in an input path", Logtype.Error);
+                logger.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
@@ -74,14 +74,14 @@ namespace CP77Tools.Tasks
 
         }
 
-        public static int DumpTaskInner(string path, bool imports, bool missinghashes, 
+        public static int DumpTaskInner(string path, bool imports, bool missinghashes,
             bool texinfo, bool classinfo, bool dump, bool list)
         {
             #region checks
 
             if (string.IsNullOrEmpty(path))
             {
-                ConsoleFunctions.logger.LogString("Please fill in an input path",Logtype.Error);
+                ConsoleFunctions.logger.LogString("Please fill in an input path.",Logtype.Error);
                 return 0;
             }
 
@@ -96,7 +96,7 @@ namespace CP77Tools.Tasks
                     isDirectory = true;
             }
             #endregion
-            
+
             var archives = new List<Archive>();
 
             if (isDirectory)
@@ -110,7 +110,7 @@ namespace CP77Tools.Tasks
                 archives.Add(new Archive(inputFileInfo.FullName));
             }
 
-            
+
 
             var mainController = ServiceLocator.Default.ResolveType<IHashService>();
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
@@ -164,7 +164,7 @@ namespace CP77Tools.Tasks
                                 }
                             });
                         }
-                        
+
                         Interlocked.Increment(ref progress);
                         logger.LogProgress(progress / (float)total);
 
@@ -276,14 +276,14 @@ namespace CP77Tools.Tasks
                         logger.LogString($"Finished. Dump file written to {ar.ArchiveAbsolutePath}.", Logtype.Success);
 
                         //write
-                        File.WriteAllText($"{ar.ArchiveAbsolutePath}.json",
+                        File.WriteAllText($"{ar.ArchiveAbsolutePath}.json.",
                             JsonConvert.SerializeObject(arobj, Formatting.Indented, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                                 PreserveReferencesHandling = PreserveReferencesHandling.None,
                                 TypeNameHandling = TypeNameHandling.None
                             }));
-                        logger.LogString($"Finished. Dump file written to {inputFileInfo.FullName}.json", Logtype.Success);
+                        logger.LogString($"Finished. Dump file written to {inputFileInfo.FullName}.json.", Logtype.Success);
 
                     }
 
@@ -300,7 +300,7 @@ namespace CP77Tools.Tasks
                         logger.LogString($"Finished. Dump file written to {inputFileInfo.FullName}.json", Logtype.Success);
                     }
                 }
-                
+
                 // TODO: add this here
                 if (dump)
                 {
@@ -429,7 +429,7 @@ namespace CP77Tools.Tasks
                             continue;
                         }
 
-                        
+
                     }
 
                     Register(oVariable);
@@ -439,4 +439,3 @@ namespace CP77Tools.Tasks
         }
     }
 }
-

@@ -1,7 +1,7 @@
 ﻿<catel:UserControl x:Class="WolvenKit.Views.Wizards.WizardPages.FeedbackWizard.RateView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com" 
+                   xmlns:catel="http://schemas.catelproject.com"
                    xmlns:hc="https://handyorg.github.io/handycontrol"
                    xmlns:iconpacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
     <catel:UserControl.Resources>
@@ -9,7 +9,7 @@
         <Geometry x:Key="Wolf"   >
             M510.323 915.894c-253.205 0-458.466-205.261-458.466-458.466 0-50.724 8.255-99.515 23.465-145.126 80.174 48.325 151.779 82.196 214.759 103.883-71.391-11.212-132.602-47.204-219.336-7.945 63 55.436 175.081 131.465 276.614 143.078 53.078 43.16 136.032 87.775 179.046 74.435 60.885 53.657 135.731 121.976 215.885 171.21l0.002-0.002c21.3-32.259 34.166-71.774 25.057-115.568-160.477-40.344-123.141-297.378 26.935-134.664 12.672-26.088 18.784-53.201 18.155-82.697-65.244-67.551-133.723-125.902-203.54-175.58 0.929-47.899-11.232-105.657-37.977-169.349-11.251-26.791-14.64-72.677 45.656-107.744 201.967 47.929 352.216 229.439 352.216 446.065-0.003 253.209-205.264 458.47-458.47 458.47z
         </Geometry>
-        
+
         <Style x:Key="RateRateItemBaseStyle" TargetType="hc:RateItem">
             <Setter Property="Focusable" Value="False"/>
             <Setter Property="Margin" Value="{Binding ItemMargin,RelativeSource={RelativeSource  AncestorType=hc:Rate}}"/>
@@ -112,7 +112,7 @@
 
                     <Grid Margin="22,10,0,0">
                         <hc:TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="380" hc:InfoElement.TitleWidth="130" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Review (Optional)" Margin="0,0,0,0" Text="??"/>
-              
+
                         <RichTextBox  Margin="10,45,80,0" ></RichTextBox>
 
 
@@ -128,8 +128,8 @@
 
                     </Grid>
 
-                  
-                        <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,-40" Width="150" Content="Send Review"/>
+
+                        <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,-40" Width="150" Content="Send review"/>
 
                 </Grid>
 

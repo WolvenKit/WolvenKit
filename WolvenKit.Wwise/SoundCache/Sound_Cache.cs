@@ -100,7 +100,7 @@ namespace WolvenKit.Wwise
         /// <param name="FileList">The list of files to build the info for.</param>
         /// <returns></returns>
         private static byte[] GetInfo(List<string> FileList)
-        {            
+        {
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))
             {
@@ -152,11 +152,11 @@ namespace WolvenKit.Wwise
         /// Reads the soundcache file.
         /// </summary>
         /// <param name="br">The binaryreader to read the file contents from.</param>
-        public void Read(BinaryReader br) 
+        public void Read(BinaryReader br)
         {
             Files = new List<SoundCacheItem>();
             if (!br.ReadBytes(4).SequenceEqual(Magic))
-                throw new InvalidDataException("Wrong IDString in soundcache!");
+                throw new InvalidDataException("Wrong ID string in sound cache.");
             Version = br.ReadInt32();
             Unknown1 = br.ReadUInt32();
             Unknown2 = br.ReadUInt32();
@@ -174,7 +174,7 @@ namespace WolvenKit.Wwise
             }
             NamesSize = br.ReadUInt32();
             if (Version >= 2)
-                Unk3 = br.ReadUInt32();      
+                Unk3 = br.ReadUInt32();
             buffsize = br.ReadInt64();
             checksum = br.ReadInt64();
             br.BaseStream.Seek(InfoOffset, SeekOrigin.Begin);
@@ -256,7 +256,7 @@ namespace WolvenKit.Wwise
                 {
                     var fremainder = buffersize % CACHE_BUFFER_SIZE;
                     buffersize += (CACHE_BUFFER_SIZE - fremainder);
-                }      
+                }
 
                 bw.Write(Magic);
                 bw.Write((UInt32)Version);
@@ -288,7 +288,7 @@ namespace WolvenKit.Wwise
                         bw.Write(File.ReadAllBytes(FileList[i]));
                 //Write filenames and the offsets and such for the files.
                 bw.Write(GetNames(FileList));
-                bw.Write(GetInfo(FileList));                
+                bw.Write(GetInfo(FileList));
             }
         }
     }

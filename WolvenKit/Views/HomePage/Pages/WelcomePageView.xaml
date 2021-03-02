@@ -109,7 +109,7 @@
         </ResourceDictionary>
     </catel:UserControl.Resources>
 
-   
+
         <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"  MinWidth="300" MinHeight="300" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,2,5">
 
 
@@ -126,7 +126,7 @@
         </Grid.ColumnDefinitions>
 
 
-            
+
 
         <Grid Grid.Column="0" Grid.Row="0" >
             <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
@@ -138,20 +138,20 @@
 
                     </Grid>
                     <StackPanel  VerticalAlignment="Center" Orientation="Vertical">
-                        <TextBlock Text="Welcome to WolvenKit!"  FontSize="20" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,0"></TextBlock>
+                        <TextBlock Text="Welcome to WolvenKit"  FontSize="20" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,0"></TextBlock>
                         <hc:Divider  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,5,0,0"></hc:Divider>
                     </StackPanel>
                 </StackPanel>
                 <TextBlock Margin="15" TextWrapping="Wrap">
-                    <Run  Text="If this is your first time using Wolvenkit, It is recommended to get yourself started by using our First Use Setup."> </Run>
+                    <Run  Text="If this is your first time using the tool, it's recommended to start off with the First Use Setup."> </Run>
                     <LineBreak/> <LineBreak/>
-                    <Run Text="You can find the First Use Setup in the left SideMenu by clicking Get Started."/> 
+                    <Run Text="The First Use Setup can be found on the left-hand side menu by clicking 'Get Started'."/>
                     <LineBreak/>
-                    <Run Text="After setting yourself up you can start creating your own mod by creating a new project!"/>                    
-                    <LineBreak/><LineBreak/><LineBreak/>     
-                    <Run Text="Have fun modding!,"/>
-                    <LineBreak/><LineBreak/><LineBreak/>                   
-                    <Run Text="The WolvenKit Team."/>
+                    <Run Text="After getting done with that, you can start creating your own mod by creating a new project."/>                    
+                    <LineBreak/><LineBreak/><LineBreak/>
+                    <Run Text="Have fun modding,"/>
+                    <LineBreak/><LineBreak/><LineBreak/>
+                    <Run Text="The WolvenKit team"/>
 
                 </TextBlock>
 
@@ -161,11 +161,11 @@
 
 
         </Grid>
-        
-        
-        
-        
-        
+
+
+
+
+
         <Grid Grid.Column="1" Grid.Row="0" >
             <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
@@ -179,11 +179,11 @@
                 <hc:Divider Margin="15,5,15,5"/>
                         <hc:ButtonGroup Margin="5,5,5,5" Style="{DynamicResource ButtonGroupSolid}" Orientation="Vertical">
                     <Button x:Name="CreateProjectButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalFirst}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.NewProject}" >
-                        
+
                         <Grid Width="125" >
                             <iconPacks:PackIconCodicons Kind="Add" HorizontalAlignment="Right"/>
                             <TextBlock Margin="5,0,35,0" Text="Create Project" HorizontalAlignment="Right"/>
-                        </Grid>                      
+                        </Grid>
                     </Button>
 
                     <Button x:Name="OpenProjectButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.OpenProject}"  >
@@ -225,7 +225,7 @@
                 <Grid  hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"  Background="{DynamicResource MahApps.Brushes.ThemeBackground}"  >
                 <Grid Margin="3,0,3,0">
                         <StackPanel>
-                            
+
                         <StackPanel Orientation="Horizontal" Margin="32,0,32,5">
                             <iconPacks:PackIconCodicons   Grid.Row="0"   Kind="GoToFile" Spin="False" SpinAutoReverse="False" Height="25" Width="25" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"  />
 
@@ -318,7 +318,7 @@
                                     </DataTemplate>
 
                                 </hc:CoverView.ItemHeaderTemplate>
-                          
+
                             </hc:CoverView>
                             </hc:TransitioningContentControl>
                         </StackPanel>

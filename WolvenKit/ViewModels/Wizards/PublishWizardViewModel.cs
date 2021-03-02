@@ -46,14 +46,14 @@ namespace WolvenKit.ViewModels.Wizards
         /// |---wkpmeta\<modname>\<modname>.wkmeta (json) + icon
         /// |
         /// |---r6\cache\tweakdbpatches\<modname>.tweakdbpatch
-        /// 
+        ///
         /// </summary>
         /// <param name="project">Project to pack</param>
         public void WitcherPublishStrategy(Tw3Project project)
         {
             //TODO: I am not sure how to do this until we have packing
 
-            Logger.Write("Packing Witcher 3 mod completed!", LogLevel.Info);
+            Logger.Write("Packing Witcher 3 mod complete.", LogLevel.Info);
         }
 
         /// <summary>
@@ -65,14 +65,14 @@ namespace WolvenKit.ViewModels.Wizards
         /// |---wkpmeta\<modname>\<modname>.wkmeta (json) + icon
         /// |
         /// |---r6\cache\tweakdbpatches\<modname>.tweakdbpatch
-        /// 
+        ///
         /// </summary>
         /// <param name="project">Project to pack</param>
         public void CyberpunkPublishStrategy(Cp77Project project)
         {
             //TODO: I am not sure how to do this until we have packing
 
-            Logger.Write("Packing Cyberpunk 2077 mod completed!", LogLevel.Info);
+            Logger.Write("Packing Cyberpunk 2077 mod complete.", LogLevel.Info);
         }
     }
 }

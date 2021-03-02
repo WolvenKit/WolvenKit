@@ -24,7 +24,7 @@ namespace WolvenKit.ViewModels
         private readonly IMessageService _messageService;
         private readonly IProcessService _processService;
 
-        public RecentlyUsedItemsViewModel(IRecentlyUsedItemsService recentlyUsedItemsService, IFileService fileService, 
+        public RecentlyUsedItemsViewModel(IRecentlyUsedItemsService recentlyUsedItemsService, IFileService fileService,
             IMessageService messageService, IProcessService processService)
         {
             Argument.IsNotNull(() => recentlyUsedItemsService);
@@ -75,10 +75,10 @@ namespace WolvenKit.ViewModels
         {
             if (!_fileService.Exists(parameter))
             {
-                await _messageService.ShowWarningAsync("The file doesn't seem to exist. Cannot open it in explorer.");
+                await _messageService.ShowWarningAsync("File does not exist. Cannot be opened in File Explorer.");
                 return;
             }
-          
+
             _processService.StartProcess("explorer.exe", $"/select, \"{parameter}\"");
         }
         #endregion
@@ -108,7 +108,7 @@ namespace WolvenKit.ViewModels
 
         private void UpdateRecentlyUsedItems()
         {
-            RecentlyUsedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.Items);            
+            RecentlyUsedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.Items);
         }
 
         private void UpdatePinnedItem()

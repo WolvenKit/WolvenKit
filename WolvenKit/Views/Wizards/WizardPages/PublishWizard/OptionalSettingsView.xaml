@@ -9,13 +9,13 @@
                 <Grid Margin="0,10,0,0"  VerticalAlignment="Top">
                     <hc:ScrollViewer>
                         <Grid Margin="22,0,10,0">
-                            <TextBlock Text="Additional Settings"  FontSize="14" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0"></TextBlock>
+                            <TextBlock Text="Additional settings"  FontSize="14" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0"></TextBlock>
 
                             <StackPanel>
                             <Grid Margin="0,32,0,0">
 
                                 <StackPanel Margin="0,0,0,0" Orientation="Vertical">
-                                    
+
                                     <Grid Margin="0,5,0,5">
                                         <TextBlock Margin="30,0,0,0" VerticalAlignment="Center" Text="Youtube"></TextBlock>
                                         <iconPacks:PackIconBoxIcons  Grid.Row="0"   Kind="LogosYoutube" Spin="False" SpinAutoReverse="False" Height="15" Width="15" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="5" HorizontalAlignment="Left"  VerticalAlignment="Center" />
@@ -61,23 +61,23 @@
                             </Grid>
                             <TextBox hc:InfoElement.TitleWidth="100" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="License" Style="{StaticResource TextBoxExtend}" Margin="0,32,0,0" Text="test" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" SelectionBrush="{DynamicResource MahApps.Brushes.Accent}" HorizontalAlignment="Stretch"/>
                             <Grid Margin="0,32,0,5">
-                                <TextBlock Margin="0,0,0,0" VerticalAlignment="Center" Text="Header Background"></TextBlock>
+                                <TextBlock Margin="0,0,0,0" VerticalAlignment="Center" Text="Header background"></TextBlock>
                                     <Button Margin="120,0,0,0" HorizontalAlignment="Left" Content="None"></Button>
                                 </Grid>
                             <Grid Margin="0,32,0,5">
-                                <TextBlock Margin="0,0,0,0" VerticalAlignment="Center" Text="Icon Background"></TextBlock>
+                                <TextBlock Margin="0,0,0,0" VerticalAlignment="Center" Text="Icon background"></TextBlock>
                                     <Button Margin="120,0,0,0" HorizontalAlignment="Left" Content="None"></Button>
 
                                 </Grid>
                             <Grid Margin="0,32,0,5">
-                                <TextBlock Margin="0,0,0,0" VerticalAlignment="Center" Text="Use Black Text"></TextBlock>
+                                <TextBlock Margin="0,0,0,0" VerticalAlignment="Center" Text="Use black text"></TextBlock>
                                     <CheckBox Margin="120,0,0,0" HorizontalAlignment="Left" Content="None"></CheckBox>
 
                                 </Grid>
                             <Grid >
                                 <RichTextBox Margin="100,32,0,0" HorizontalAlignment="Stretch" Height="200"></RichTextBox>
 
-                                <TextBlock Text="Large Description" Margin="2,32,0,0" VerticalAlignment="Center" />
+                                <TextBlock Text="Large description" Margin="2,32,0,0" VerticalAlignment="Center" />
 
                             </Grid>
 
@@ -88,7 +88,7 @@
 
                     </Grid>
                     </hc:ScrollViewer>
-                    
+
                 </Grid>
             </Grid>
         </Grid>

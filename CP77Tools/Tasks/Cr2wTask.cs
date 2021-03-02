@@ -18,7 +18,7 @@ namespace CP77Tools.Tasks
         {
             if (path == null || path.Length < 1)
             {
-                logger.LogString("Please fill in an input path", Logtype.Error);
+                logger.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
@@ -55,8 +55,8 @@ namespace CP77Tools.Tasks
             watch.Restart();
 
             // get all files
-            var fileInfos = isDirectory 
-                ? inDirInfo.GetFiles("*", SearchOption.AllDirectories).ToList() 
+            var fileInfos = isDirectory
+                ? inDirInfo.GetFiles("*", SearchOption.AllDirectories).ToList()
                 : new List<FileInfo> { inFileInfo };
 
             // check search pattern then regex
@@ -88,7 +88,7 @@ namespace CP77Tools.Tasks
                     : new DirectoryInfo(outpath);
                 if (outputDirInfo == null || !outputDirInfo.Exists)
                 {
-                    logger.LogString("Output directory is not valid.", Logtype.Error);
+                    logger.LogString("Invalid output directory.", Logtype.Error);
                     return;
                 }
 
@@ -116,7 +116,7 @@ namespace CP77Tools.Tasks
 
             watch.Stop();
             logger.LogString(
-                $"Finished. Dumped {finalMatchesList.Count} files to json in {watch.ElapsedMilliseconds.ToString()}ms.",
+                $"Finished. Dumped {finalMatchesList.Count} files to JSON in {watch.ElapsedMilliseconds.ToString()}ms.",
                 Logtype.Success);
         }
     }

@@ -18,7 +18,7 @@ namespace WolvenKit.CR2W.Types
         [Ordinal(1002)] [REDBuffer(true)] public CBufferUInt32<SEntityBufferType2> BufferV2 { get; set; }
 
         private bool isCreatedFromTemplate;
-            
+
         public CEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Components = new CArray<CPtr<CComponent>>(cr2w, this, nameof(Components)) {IsSerialized = true, Elementtype = "ptr:CComponent"};
@@ -40,7 +40,7 @@ namespace WolvenKit.CR2W.Types
 
             //if (Components == null)
             //    Components = CR2WTypeManager.Create("array:2,0,ptr:CComponent", "Components", cr2w, this) as CArray<CPtr<CComponent>>;
-                
+
 
             var endPos = file.BaseStream.Position;
             var bytesleft = size - (endPos - startPos);
@@ -59,12 +59,12 @@ namespace WolvenKit.CR2W.Types
                             ptr.Read(file, 0);
                             Components.AddVariable(ptr);
                         }
-                        
+
                     }
                 }
                 else
                 {
-                    throw new EndOfStreamException("unknown CEntity Fileformat.");
+                    throw new EndOfStreamException("Unknown CEntity file format.");
                 }
             }
             #endregion
@@ -84,14 +84,14 @@ namespace WolvenKit.CR2W.Types
                     canRead = t_buffer.CanRead(file);
                     if (canRead)
                         t_buffer.Read(file, 0);
-                    
+
                     BufferV1.AddVariable(t_buffer);
                     idx++;
                 } while (canRead);
             }
             else
             {
-                throw new EndOfStreamException("unknown CEntity Fileformat.");
+                throw new EndOfStreamException("Unknown CEntity file format.");
             }
             #endregion
 
@@ -107,7 +107,7 @@ namespace WolvenKit.CR2W.Types
                 }
                 else
                 {
-                    throw new EndOfStreamException("unknown CEntity Fileformat.");
+                    throw new EndOfStreamException("Unknown CEntity file format.");
                 }
             }
             #endregion

@@ -38,7 +38,7 @@ namespace WolvenKit.ViewModels
         /// </summary>
         public const string ToolTitle = "ProjectExplorer";
 
-        
+
 
         private readonly IMessageService _messageService;
         private readonly ILoggerService _loggerService;
@@ -78,7 +78,7 @@ namespace WolvenKit.ViewModels
             Treenodes.ListChanged += new ListChangedEventHandler(Treenodes_ListChanged);
         }
 
-        
+
 
         #endregion constructors
 
@@ -220,7 +220,7 @@ namespace WolvenKit.ViewModels
             }
 
 
-            
+
             return b;
         }
         private async void ExecuteDeleteFile()
@@ -258,19 +258,19 @@ namespace WolvenKit.ViewModels
             }
             catch (Exception)
             {
-                MainController.LogString("Failed to delete " + fullpath + "!\r\n", Common.Services.Logtype.Error);
+                MainController.LogString("Failed to delete " + fullpath + ".\r\n", Common.Services.Logtype.Error);
             }
         }
 
         /// <summary>
-        /// Renames selected node. 
+        /// Renames selected node.
         /// </summary>
         public ICommand RenameFileCommand { get; private set; }
         private bool CanRenameFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
         private async void ExecuteRenameFile()
         {
             var filename = SelectedItem.FullName;
-            
+
             var visualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();
             var viewModel = new Dialogs.InputDialogViewModel() {Text = filename};
             await visualizerService.ShowDialogAsync(viewModel, delegate(object sender, UICompletedEventArgs args)
@@ -283,7 +283,7 @@ namespace WolvenKit.ViewModels
 
                 if (File.Exists(newfullpath))
                     return;
-                    
+
                 try
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(newfullpath));
@@ -301,7 +301,7 @@ namespace WolvenKit.ViewModels
                 {
                     throw new NotImplementedException();
                 }
-                
+
             });
         }
 
@@ -397,7 +397,7 @@ namespace WolvenKit.ViewModels
         ///  Opens the fast render Window for selected file
         /// </summary>
         public ICommand FastRenderCommand { get; private set; }
-        private bool CanFastRender() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null 
+        private bool CanFastRender() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null
             && SelectedItem.IsFile && SelectedItem.Extension == ".w2mesh";
         private void ExecuteFastRender()
         {
@@ -408,7 +408,7 @@ namespace WolvenKit.ViewModels
         /// Exports selected node with wcc.
         /// </summary>
         public ICommand ExportMeshCommand { get; private set; }
-        private bool CanExportMesh() => _projectManager.ActiveProject is EditorProject && SelectedItem != null 
+        private bool CanExportMesh() => _projectManager.ActiveProject is EditorProject && SelectedItem != null
             && SelectedItem.IsFile && SelectedItem.Extension == ".w2mesh";
         private async void ExportMesh() => await Task.Run(() => WccHelper.ExportFileToMod(SelectedItem.FullName));
 
@@ -562,12 +562,12 @@ namespace WolvenKit.ViewModels
                 reldir = reldir.Substring(EProjectFolders.Cooked.ToString().Length);
             if (reldir.StartsWith(EProjectFolders.Uncooked.ToString()))
                 reldir = reldir.Substring(EProjectFolders.Uncooked.ToString().Length);
-            
+
             reldir = reldir.TrimStart(Path.DirectorySeparatorChar);
 
             // create cooked mod Dir
-            var cookedtargetDir = isDlc 
-                ? Path.Combine(tw3mod.DlcCookedDirectory, reldir) 
+            var cookedtargetDir = isDlc
+                ? Path.Combine(tw3mod.DlcCookedDirectory, reldir)
                 : Path.Combine(tw3mod.ModCookedDirectory, reldir);
             if (!Directory.Exists(cookedtargetDir))
             {
@@ -613,7 +613,7 @@ namespace WolvenKit.ViewModels
                 MainController.LogString("Error cooking files.", Logtype.Error);
             }
         }
-        
+
         #endregion
 
     }

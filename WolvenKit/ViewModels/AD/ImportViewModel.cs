@@ -153,7 +153,7 @@ namespace WolvenKit.ViewModels
 
         private void OpenFolder()
         {
-            
+
         }
 
         private bool CanTryGetTextureGroups() => Importableobjects != null;
@@ -197,7 +197,7 @@ namespace WolvenKit.ViewModels
                     importable.SetState(ImportableFile.EObjectState.Ready);
                     importable.IsSelected = true;
                 }
-                
+
             }
             else
             {
@@ -237,11 +237,11 @@ namespace WolvenKit.ViewModels
                         using (var writer = new BinaryWriter(fs))
                         {
                             cr2w.Write(writer);
-                            MainController.LogString($"Succesfully imported file {fullpath}.", Logtype.Success);
+                            MainController.LogString($"Succesfully imported {fullpath}.", Logtype.Success);
                         }
                     }
                     else
-                        MainController.LogString($"Could not import file {fullpath}.", Logtype.Error);
+                        MainController.LogString($"Failed to import {fullpath}.", Logtype.Error);
                 }
                 else
                 {
@@ -285,7 +285,7 @@ namespace WolvenKit.ViewModels
             if (activeProject == null)
                 return TaskHelper.Completed;
 
-            
+
 
             return TaskHelper.Completed;
         }
@@ -355,7 +355,7 @@ namespace WolvenKit.ViewModels
             // check if not a power of 2
             if (height % 2 != 0)
             {
-                MainController.LogString("Height is not a power of 2. Please resize your image.", Logtype.Error);
+                MainController.LogString("Texture dimensions not a power of 2. Please resize appropriately.", Logtype.Error);
                 return null;
             }
 
@@ -376,7 +376,7 @@ namespace WolvenKit.ViewModels
                 // read data here
                 for (int i = 0; i < mipcount; i++)
                 {
-                    
+
                     var buffer = reader.ReadBytes((int)GetMipMapSize(mipsizeW, mipsizeH, textureformat));
 
                     var mipdata = new SMipData(cr2w, xbm.Mipdata, $"{i}") { IsSerialized = true };
@@ -438,12 +438,12 @@ namespace WolvenKit.ViewModels
                     case EFormat.R8G8B8A8_UNORM:
                     case EFormat.BC7_UNORM:
                     default:
-                        throw new MissingFormatException($"Missing Format: {_textureformat}");
+                        throw new MissingFormatException($"Missing format: {_textureformat}");
                 }
             }
         }
 
-        
+
 
         private void RegisterXBMDump()
         {
@@ -498,7 +498,7 @@ namespace WolvenKit.ViewModels
 
                 }
 
-                
+
             }
         }
         #endregion

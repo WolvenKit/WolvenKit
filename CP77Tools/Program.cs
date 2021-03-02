@@ -72,7 +72,7 @@ namespace CP77Tools
             if ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) && !TryCopyOodleLib())
             {
                 logger.LogString("Could not automatically find oo2ext_7_win64.dll. " +
-                                 "Please manually copy and paste the dll found here Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
+                                 "Please manually copy and paste the DLL found in <gamedir>\Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
                                  $"{AppDomain.CurrentDomain.BaseDirectory}.");
             }
 

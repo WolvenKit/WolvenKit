@@ -37,7 +37,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
             {
                 throw new ParseVariableException(
                     string.Format(
-                    "Expeced SXAP but read {0} at {1}",
+                    "Expected SXAP but read {0} at {1}",
                     magicNumber,
                     reader.BaseStream.Position - 4));
             }

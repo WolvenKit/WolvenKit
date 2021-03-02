@@ -12,12 +12,12 @@
     </catel:UserControl.Resources>
     <Grid Width="600">
         <StackPanel>
-            <TextBlock Text="The file you are trying to extract exists in one or more archives, Please select the item of your preference."></TextBlock>
+            <TextBlock Text="The name of the file you're trying to extract exists in more than one archive, please select the item of your preference."></TextBlock>
             <Grid>
                 <ListBox Height="300">
-                    
+
                 </ListBox>
-                
+
             </Grid>
             <Grid  Margin="0,50,0,0" >
                 <Button HorizontalAlignment="Left" Width="150" Content="Cancel"/>
@@ -28,7 +28,7 @@
 
             </Grid>
         </StackPanel>
-    
+
     </Grid>
-    
+
 </catel:UserControl>

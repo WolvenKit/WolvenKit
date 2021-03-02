@@ -45,12 +45,12 @@
                 <fluent:Backstage Margin="70,0,0,0"  x:Name="Backstage" MouseLeftButtonDown="Backstage_MouseLeftButtonDown" >
 
                     <fluent:BackstageTabControl  Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}" ItemsPanelBackground="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"  SelectedContentMargin="0" x:Name="backstageTabControl"
-                                                
+
                     >
 
 
                         <fluent:BackstageTabControl.Resources>
-                            <Style x:Key="MyFLuentButtonStyle" TargetType="{x:Type fluent:BackstageTabItem}" 
+                            <Style x:Key="MyFLuentButtonStyle" TargetType="{x:Type fluent:BackstageTabItem}"
                                    BasedOn="{StaticResource {x:Type fluent:BackstageTabItem}}">
                                 <Setter Property="FontSize" Value="18" />
                             </Style>
@@ -62,14 +62,14 @@
                         <fluent:SeparatorTabItem Height="Auto" Margin="20,10,20,10"/>
                         <fluent:BackstageTabItem    Header="Files"
                                                     Height="60"
-                                                    Icon="{iconPacks:Codicons Kind=RootFolder}"                            
+                                                    Icon="{iconPacks:Codicons Kind=RootFolder}"
                                                     Style="{StaticResource MyFLuentButtonStyle}" >
                             <views:OpenFileView />
                         </fluent:BackstageTabItem>
                         <fluent:Button  Header="Open"
                                         Height="60"
                                         Icon="{iconPacks:Codicons Kind=FolderOpened}"
-                                        Command="{catel:CommandManagerBinding Application.OpenProject}" 
+                                        Command="{catel:CommandManagerBinding Application.OpenProject}"
                                         FontSize="18">
 
                         </fluent:Button>
@@ -86,7 +86,7 @@
                                        FontSize="18"
                                        Command="{catel:CommandManagerBinding Application.NewProject}" >
                         </fluent:Button>
-                        <fluent:Button Header="Save As"
+                        <fluent:Button Header="Save as"
                                        Height="60"
                                         Icon="{iconPacks:Codicons Kind=NewFolder}"
                                        FontSize="18"
@@ -110,21 +110,21 @@
 
 
                         <fluent:SeparatorTabItem Height="Auto" Margin="20,200,20,0"/>
-                        <fluent:Button Header="Options" 
-                                       
+                        <fluent:Button Header="Options"
+
                                         Icon="{iconPacks:Codicons Kind=Settings}"
                                        Command="{catel:CommandManagerBinding Application.Options}" />
-                        <fluent:Button Header="Bug Report" 
-                                       
+                        <fluent:Button Header="Bug Report"
+
                                         Icon="{iconPacks:Codicons Kind=Bug}"
                                        Command="{catel:CommandManagerBinding Application.BugReport}" />
 
-                        <fluent:Button Header="About" 
+                        <fluent:Button Header="About"
                                         Icon="{iconPacks:Codicons Kind=Info}"
-                                       Command="{catel:CommandManagerBinding Application.About}" 
+                                       Command="{catel:CommandManagerBinding Application.About}"
                                        VerticalAlignment="Bottom"
                                        VerticalContentAlignment="Bottom"
-                                       
+
                                        />
 
 
@@ -136,12 +136,12 @@
             <!-- Contextual Tab Groups -->
             <fluent:Ribbon.ContextualGroups>
                 <fluent:RibbonContextualTabGroup x:Name="ProjectExplorerContextualTabGroup"
-                                 Header="Tools" 
+                                 Header="Tools"
                                  Visibility="{Binding ProjectExplorerContextualTabGroupVisibilityStr}"
                                  Background="Green"
                                  BorderBrush="Orange"
-                                 
-                                
+
+
                                              />
             </fluent:Ribbon.ContextualGroups>
 
@@ -153,17 +153,17 @@
             <fluent:RibbonTabItem Header="General" >
                 <!-- File -->
                 <fluent:RibbonGroupBox Header="File">
-                    <fluent:Button Header="Open File" Command="{catel:CommandManagerBinding Application.OpenFile}">
+                    <fluent:Button Header="Open file" Command="{catel:CommandManagerBinding Application.OpenFile}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="GoToFile" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-                    <fluent:Button Header="New File"  Command="{catel:CommandManagerBinding Application.NewFile}">
+                    <fluent:Button Header="New file"  Command="{catel:CommandManagerBinding Application.NewFile}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="NewFile" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-                    <fluent:Button Header="Game Assets"  Command="{catel:CommandManagerBinding Application.ShowAssetBrowser}">
+                    <fluent:Button Header="Game assets"  Command="{catel:CommandManagerBinding Application.ShowAssetBrowser}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="OpenPreview" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
@@ -174,22 +174,22 @@
 
                 <!-- Project -->
                 <fluent:RibbonGroupBox Header="Project">
-                    <fluent:Button Header="Pack Mod"  Command="{catel:CommandManagerBinding Application.PackMod}">
+                    <fluent:Button Header="Pack mod"  Command="{catel:CommandManagerBinding Application.PackMod}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="Play" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-                    <fluent:Button Header="Package Installer" Command="{catel:CommandManagerBinding Application.ShowPackageInstaller}" Size="Middle">
+                    <fluent:Button Header="Package installer" Command="{catel:CommandManagerBinding Application.ShowPackageInstaller}" Size="Middle">
                         <fluent:Button.Icon>
                             <iconPacks:PackIconCodicons Kind="Package"></iconPacks:PackIconCodicons>
                         </fluent:Button.Icon>
                     </fluent:Button>
-                    <fluent:Button Header="Backup Mod"  Command="{catel:CommandManagerBinding Application.BackupMod}"  Size="Middle">
+                    <fluent:Button Header="Backup mod"  Command="{catel:CommandManagerBinding Application.BackupMod}"  Size="Middle">
                         <fluent:Button.Icon>
                             <iconPacks:PackIconCodicons Kind="Archive"></iconPacks:PackIconCodicons>
                         </fluent:Button.Icon>
                     </fluent:Button>
-                    <fluent:Button Header="Mod Settings" Command="{catel:CommandManagerBinding Settings.General}" Size="Middle">
+                    <fluent:Button Header="Mod settings" Command="{catel:CommandManagerBinding Settings.General}" Size="Middle">
                         <fluent:Button.Icon>
                             <iconPacks:PackIconCodicons Kind="SettingsGear"></iconPacks:PackIconCodicons>
                         </fluent:Button.Icon>
@@ -225,18 +225,18 @@
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="Notebook" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-                    <fluent:Button Header="View Project Explorer" Command="{catel:CommandManagerBinding Application.ShowProjectExplorer}">
+                    <fluent:Button Header="View project explorer" Command="{catel:CommandManagerBinding Application.ShowProjectExplorer}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="Note" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-                    <fluent:Button Header="View Import Utility"
+                    <fluent:Button Header="View import utility"
                                    Command="{catel:CommandManagerBinding Application.ShowImportUtility}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="Extensions" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-                    <fluent:Button Header="View Properties Window" 
+                    <fluent:Button Header="View properties window"
                                    Command="{catel:CommandManagerBinding Application.ShowProperties}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="SymbolProperty" Height="25" Width="25"></iconPacks:PackIconCodicons>
@@ -276,7 +276,7 @@
                 </fluent:RibbonGroupBox>
 
                 <!-- Quick Access Tools -->
-                <fluent:RibbonGroupBox Header="Quick Access">
+                <fluent:RibbonGroupBox Header="Quick access">
                     <fluent:Button Click="CBAssetBrowserItem_Selected" Header="Asset Browser">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconBootstrapIcons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="InboxesFill" Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
@@ -326,30 +326,30 @@
 
 
             <!--Contextual  Tab-->
-            <fluent:RibbonTabItem Header="Project Explorer" 
-                              Group="{Binding Source={x:Reference ProjectExplorerContextualTabGroup}}" 
+            <fluent:RibbonTabItem Header="Project explorer" 
+                              Group="{Binding Source={x:Reference ProjectExplorerContextualTabGroup}}"
                               ActiveTabBackground="AliceBlue"
                               >
                 <!-- View -->
                 <fluent:RibbonGroupBox Header="View">
                     <fluent:Button Header="Expand All"
                                    Icon="{DynamicResource IconExpandAll}"
-                                   LargeIcon="{DynamicResource IconExpandAll}" 
+                                   LargeIcon="{DynamicResource IconExpandAll}"
                                    Command="{catel:CommandManagerBinding ProjectExplorer.ExpandAll}"
                                    Size="Large"/>
                     <fluent:Button Header="Collapse All"
                                    Icon="{DynamicResource IconCollapseAll}"
-                                   LargeIcon="{DynamicResource IconCollapseAll}" 
+                                   LargeIcon="{DynamicResource IconCollapseAll}"
                                    Command="{catel:CommandManagerBinding ProjectExplorer.CollapseAll}"
                                    Size="Large"/>
                     <fluent:Button Header="Expand"
                                    Icon="{DynamicResource IconExpand}"
-                                   LargeIcon="{DynamicResource IconExpand}" 
+                                   LargeIcon="{DynamicResource IconExpand}"
                                    Command="{catel:CommandManagerBinding ProjectExplorer.Expand}"
                                    Size="Large"/>
                     <fluent:Button Header="Collapse"
                                    Icon="{DynamicResource IconCollapse}"
-                                   LargeIcon="{DynamicResource IconCollapse}" 
+                                   LargeIcon="{DynamicResource IconCollapse}"
                                    Command="{catel:CommandManagerBinding ProjectExplorer.Collapse}"
                                    Size="Large"/>
 

@@ -144,7 +144,7 @@ namespace WolvenKit.Wwise.Wwise
             using (var bw = new BinaryWriter(ms))
             {
                 if (!fake_vorb)
-                    throw new Exception("Not supported");
+                    throw new Exception("Not supported.");
 
                 riff_size = 0;
                 subtype = original.subtype;
@@ -239,13 +239,13 @@ namespace WolvenKit.Wwise.Wwise
             {
                 riff_head = new String(br.ReadChars(4));
                 if (riff_head != "RIFF")
-                    throw new Exception("Invalid file! No RIFF header tag!");
+                    throw new Exception("RIFF header tag not found, file invalid.");
                 riff_size = br.ReadUInt32() + 8;
                 if (br.BaseStream.Length < riff_size)
                     throw new Exception("Truncated RIFF!");
                 wave_head = new String(br.ReadChars(4));
                 if (wave_head != "WAVE")
-                    throw new Exception("Invalid file! No WAVE header tag!");
+                    throw new Exception("WAVE header tag not found, file invalid.");
 
                 chunk_offset = 12;
 
@@ -254,7 +254,7 @@ namespace WolvenKit.Wwise.Wwise
                     br.BaseStream.Seek(chunk_offset, SeekOrigin.Begin);
 
                     if (chunk_offset + 8 > riff_size)
-                        throw new Exception("Truncated chunk header");  
+                        throw new Exception("Truncated chunk header.");
 
                     var type = br.ReadChars(4);
                     var size = br.ReadUInt32();
@@ -270,7 +270,7 @@ namespace WolvenKit.Wwise.Wwise
                         case "cue ":
                             {
                                 if(filetype == WwAudioFileType.Wav)
-                                    throw new Exception("Already contains cue!");
+                                    throw new Exception("Cue already contained.");
                                 cue_offset = chunk_offset + 8;
                                 cue_size = size;
                                 break;
@@ -300,28 +300,28 @@ namespace WolvenKit.Wwise.Wwise
                                 break;
                             }
                         default:
-                            throw new Exception("Unknown chunk with type: " + type + "!");
+                            throw new Exception("Unknown chunk with type " + type + ".");
                     }
                     chunk_offset += (8 + size);
                 }
 
                 if (chunk_offset > riff_size)
-                    throw new Exception("Truncated chunk");
+                    throw new Exception("Truncated chunk.");
 
                 if (fmt_offset == 0 || data_offset == 0)
-                    throw new Exception("No fmt and data chunks found!");
+                    throw new Exception("No FMT/data chunks found.");
 
                 if (filetype == WwAudioFileType.Wem)
                 {
 
                     if (Array.IndexOf(new uint[] {0, 0x28, 0x2A, 0x2C, 0x32, 0x34}, vorb_size) == -1)
-                        throw new Exception("Bad vorb size!");
+                        throw new Exception("Bad vorb size.");
 
                     if (vorb_offset == 0)
                     {
                         if (fmt_size != 0x42)
                         {
-                            throw new Exception("fmt size must be 0x42 if no vorb");
+                            throw new Exception("FMT size must be 0x42 if no vorb.");
                         }
                         else
                         {
@@ -331,7 +331,7 @@ namespace WolvenKit.Wwise.Wwise
                     }
                     else
                     {
-                        throw new Exception("Not supported!");
+                        throw new Exception("Not supported.");
 
 /*                        if (Array.IndexOf(new uint[] {0x28, 0x18, 0x12}, fmt_size) > -1)
                         {
@@ -350,13 +350,13 @@ namespace WolvenKit.Wwise.Wwise
                     case WwAudioFileType.Wav:
                     {
                         if (codecid != 1)
-                            throw new Exception("Compressed WAVE not supported!");
+                            throw new Exception("Compressed WAVE not supported.");
                         break;
                     }
                     case WwAudioFileType.Wem:
                     {
                         if (codecid != 0xFFFF)
-                            throw new Exception("Bad codec  id!");
+                            throw new Exception("Bad codec id.");
                         break;
                     }
                 }
@@ -385,17 +385,17 @@ namespace WolvenKit.Wwise.Wwise
                 }
 
                 if (block_alignment != 0)
-                    throw new Exception("Bad block alignment!");
+                    throw new Exception("Bad block alignment.");
 
                 bps = br.ReadUInt16();
 
                 if (bps != 0)
-                    throw new Exception("BPS is not 0");
+                    throw new Exception("Non-zero BPS.");
 
                 extra_fmt_length = br.ReadUInt16();
 
                 if (extra_fmt_length != (fmt_size - 0x12))
-                    throw new Exception("Bad extra fmt length!");
+                    throw new Exception("Bad extra FMT length.");
 
                 if ((fmt_size - 0x12) >= 2)
                     ext_unk = br.ReadUInt16();
@@ -423,7 +423,7 @@ namespace WolvenKit.Wwise.Wwise
                     adtlbuf = new String(br.ReadChars(4));
 
                     if (adtlbuf != "adtl")
-                        throw new Exception("List is not adtl!");
+                        throw new Exception("List is not adtl.");
 
                     LIST_remain = br.ReadBytes((int)(LIST_size - 4));
                 }
@@ -436,7 +436,7 @@ namespace WolvenKit.Wwise.Wwise
                     loop_count = br.ReadUInt32();
 
                     if (loop_count != 1)
-                        throw new Exception("Not an one loop!");
+                        throw new Exception("Non-singular loop.");
 
                     br.BaseStream.Seek(smpl_offset + 0x2C, SeekOrigin.Begin);
                     loop_count = br.ReadUInt32();
@@ -493,7 +493,7 @@ namespace WolvenKit.Wwise.Wwise
                     else
                         loop_end += 1;
                     if (loop_start >= sample_count || loop_end > sample_count || loop_start > loop_end)
-                        throw new Exception("Loops out of range");
+                        throw new Exception("Loop out of range.");
                 }
 
                 if (Array.Exists(new uint[] { 4, 3, 0x33, 0x37, 0x3b, 0x3f }, e => e == subtype))
@@ -507,7 +507,7 @@ namespace WolvenKit.Wwise.Wwise
                 data = br.ReadBytes((int)(br.BaseStream.Length - br.BaseStream.Position));
 
                 if ((pre_data.Length + data_setup.Length + data.Length) != data_size)
-                    throw new Exception("Bad data!");
+                    throw new Exception("Bad data.");
             }
         }
 
@@ -529,7 +529,7 @@ namespace WolvenKit.Wwise.Wwise
             ms.Write(buffer, 0, buffer.Length);
             using (var bw = new BinaryWriter(ms))
             {
-                
+
                 riff_size = 0;
 
                 bw.Write("RIFF".ToCharArray());
@@ -554,7 +554,7 @@ namespace WolvenKit.Wwise.Wwise
                 bw.Write("cue ".ToCharArray());
                 bw.Write(28); // cue chunk size
                 bw.Write(1); // cue count
-                bw.Write(1); // cue id 
+                bw.Write(1); // cue id
                 bw.Write(0); // cue position
                 bw.Write("data".ToCharArray()); // chunk id
                 bw.Write(0); // chunk start

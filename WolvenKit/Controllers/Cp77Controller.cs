@@ -35,10 +35,10 @@ namespace WolvenKit.Controllers
 
             if (!File.Exists(_settings.CP77ExecutablePath))
             {
-                _logger.LogString("Settings are not set up properly... can't load the archive manager... ", Logtype.Error);
+                _logger.LogString("Settings are not properly set up, archive manager cannot be loaded.", Logtype.Error);
                 return null;
             }
-            _logger.LogString("Loading archive Manager ... ", Logtype.Important);
+            _logger.LogString("Loading archive manager... ", Logtype.Important);
             try
             {
                 if (File.Exists(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager)))
@@ -115,15 +115,15 @@ namespace WolvenKit.Controllers
             var cp77proj = _projectService.ActiveProject as Cp77Project;
             if (cp77proj == null)
             {
-                _loggerService.LogString("Can't pack nor install project (no project/not cyberpunk project)!", Logtype.Error);
+                _loggerService.LogString("Cannot pack nor install project (project not present/not CP77 project).", Logtype.Error);
                 return Task.FromResult(false);
             }
-            _loggerService.LogString("Rebuilding necessary files....", Logtype.Normal);
+            _loggerService.LogString("Rebuilding necessary files...", Logtype.Normal);
             CP77.CR2W.ModTools.Recombine(new DirectoryInfo(cp77proj.ModDirectory), true, true, true, true, true, true);
-            _loggerService.LogString("Rebuilding done, packing files into archive(s)....", Logtype.Normal);
+            _loggerService.LogString("Rebuilding done, packing files into archive(s)...", Logtype.Normal);
             CP77.CR2W.ModTools.Pack(new DirectoryInfo(cp77proj.ModDirectory),
                 new DirectoryInfo(cp77proj.PackedModDirectory));
-            _loggerService.LogString("Packing complete!", Logtype.Important);
+            _loggerService.LogString("Packing complete.", Logtype.Important);
             InstallMod();
             return Task.FromResult(true);
         }
@@ -183,7 +183,7 @@ namespace WolvenKit.Controllers
                 //Copy and log the files.
                 if (!Directory.Exists(Path.Combine(ActiveMod.ProjectDirectory, "packed")))
                 {
-                    _logger.LogString("Failed to install the mod! The packed directory doesn't exist! You forgot to tick any of the packing options?", Logtype.Important);
+                    _logger.LogString("Failed to install mod. Packed directory does not exist. Check packing options.", Logtype.Important);
                     return;
                 }
 

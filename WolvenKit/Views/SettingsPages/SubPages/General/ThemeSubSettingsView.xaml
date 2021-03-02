@@ -1,6 +1,6 @@
 ﻿<catel:UserControl x:Class="WolvenKit.Views.SettingsPages.SubPages.General.ThemeSubSettingsView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                    xmlns:hc="https://handyorg.github.io/handycontrol"
                    xmlns:catel="http://schemas.catelproject.com">
@@ -30,14 +30,14 @@
                         <StackPanel>
 
                             <Grid Margin="5">
-                                <TextBlock Text="Application Theme" VerticalAlignment="Center"/>
+                                <TextBlock Text="Application theme" VerticalAlignment="Center"/>
                                 <ComboBox HorizontalAlignment="Right" VerticalAlignment="Center" Width="250" Text=""/>
                             </Grid>
 
 
 
                             <Grid Margin="5">
-                                <TextBlock Text="Create A Theme" VerticalAlignment="Center"/>
+                                <TextBlock Text="Create a theme" VerticalAlignment="Center"/>
                                 <Button Command="{catel:CommandManagerBinding Application.ThemeWizard}"  Margin="0" HorizontalAlignment="Right" VerticalAlignment="Center" >
                                     <Grid Margin="0">
                                         <iconPacks:PackIconBootstrapIcons Kind="BoxArrowUpRight"/>

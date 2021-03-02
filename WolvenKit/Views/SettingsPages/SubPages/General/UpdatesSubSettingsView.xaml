@@ -20,12 +20,12 @@
                             <TextBlock Text="Application" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0"/>
                         </Grid>
                     </Border>
-                    
+
                     <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
                         <StackPanel>
-                            
+
                             <Grid Margin="5">
-                                <TextBlock Text="Automatically Update WolvenKit" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                                <TextBlock Text="Auto-update WolvenKit" VerticalAlignment="Center" Margin="0,0,50,0"/>
                                 <ToggleButton HorizontalAlignment="Right" BorderThickness="0" IsEnabled="True"  VerticalAlignment="Center"   Style="{StaticResource ToggleButtonFlip}">
                                     <hc:StatusSwitchElement.CheckedElement>
                                         <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
@@ -40,11 +40,11 @@
 
 
                             <Grid Margin="5">
-                                <TextBlock Text="Update Channel" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                                <TextBlock Text="Update channel" VerticalAlignment="Center" Margin="0,0,50,0"/>
                                 <ComboBox HorizontalAlignment="Right" VerticalAlignment="Center" Width="250" Text=""/>
                             </Grid>
-                            
-                        </StackPanel>                  
+
+                        </StackPanel>
                     </Border>
 
 
@@ -66,6 +66,6 @@
 
 
     </Grid>
-   
+
 
 </catel:UserControl>

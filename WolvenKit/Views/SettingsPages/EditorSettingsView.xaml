@@ -13,7 +13,7 @@
             </hc:SideMenuItem>
             <hc:SideMenuItem x:Name="CompatibilitySubItem"  Selected="CompatibilitySubItem_Selected" >
                 <hc:SideMenuItem.Header>
-                    <TextBlock Text="Compatibility Library Paths" FontSize="10.5"/>
+                    <TextBlock Text="Compatibility library paths" FontSize="10.5"/>
                 </hc:SideMenuItem.Header>
             </hc:SideMenuItem>
 

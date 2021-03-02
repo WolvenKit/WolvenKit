@@ -14,12 +14,12 @@
                         <RowDefinition Height="45"></RowDefinition>
                         <RowDefinition Height="5*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="Does This Look Right?"  FontSize="14"  HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,10"></TextBlock>
+                    <TextBlock Grid.Row="0" Text="Does this look right?"  FontSize="14"  HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,10"></TextBlock>
                     <hc:ScrollViewer Grid.Row="1" IsInertiaEnabled="True" VerticalScrollBarVisibility="Visible">
-                        
-                        
-                        
-                
+
+
+
+
                         <StackPanel>
 
 
@@ -27,8 +27,8 @@
                             <hc:Divider Margin="0,32,10,0" Content="User" HorizontalContentAlignment="Left"></hc:Divider>
                             <Grid Margin="5,32,10,0" >
 
-                                <TextBlock   VerticalAlignment="Center">                               
-                                    <Run Text="Created User"></Run>
+                                <TextBlock   VerticalAlignment="Center">
+                                    <Run Text="Created user"></Run>
 
                                     <LineBreak/>
                                     <Run Text="(Optional)"></Run>
@@ -41,11 +41,11 @@
 
                             <Grid Margin="5,32,10,0" >
 
-                                <TextBlock Text="Selected Theme" VerticalAlignment="Center"></TextBlock>
+                                <TextBlock Text="Selected theme" VerticalAlignment="Center"></TextBlock>
                                 <hc:Divider Margin="200,0,0,0"  Orientation="Vertical" HorizontalAlignment="Left"></hc:Divider>
                                 <Rectangle Margin="205,0,0,0" Height="25" Width="25"  Fill="{DynamicResource MahApps.Brushes.Accent3}" VerticalAlignment="Stretch" HorizontalAlignment="Left"></Rectangle>
                             </Grid>
-                            <hc:Divider Margin="0,32,10,0" Content="Initial Preferences" HorizontalContentAlignment="Left"></hc:Divider>
+                            <hc:Divider Margin="0,32,10,0" Content="Initial preferences" HorizontalContentAlignment="Left"></hc:Divider>
 
                             <Grid Margin="5,32,10,0" >
 
@@ -54,50 +54,50 @@
                             </Grid>
                             <Grid Margin="5,32,10,0" >
 
-                                <TextBlock Text="Auto Install Mods" VerticalAlignment="Center"></TextBlock>
+                                <TextBlock Text="Auto-install mods" VerticalAlignment="Center"></TextBlock>
                                 <TextBox  IsEnabled="False" Margin="200,0,0,0" Text="{Binding AutoInstallMods}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
                             <Grid Margin="5,32,10,0" >
 
-                                <TextBlock Text="Automatic Updates" VerticalAlignment="Center"></TextBlock>
+                                <TextBlock Text="Automatic updates" VerticalAlignment="Center"></TextBlock>
                                 <TextBox  IsEnabled="False" Margin="200,0,0,0" Text="{Binding AutoUpdatesEnabled}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                             </Grid>
                             <hc:Divider Margin="0,32,10,0" Content="Game Data" HorizontalContentAlignment="Left"></hc:Divider>
                             <StackPanel Visibility="{Binding CreateModForW3, Converter={StaticResource Boolean2VisibilityConverter}}">
                                 <Grid Margin="5,32,10,0" >
 
-                                    <TextBlock Text="TW3 Executable Path" VerticalAlignment="Center"></TextBlock>
+                                    <TextBlock Text="TW3 executable path" VerticalAlignment="Center"></TextBlock>
                                     <TextBox  IsEnabled="False" Margin="200,0,0,0" Text="{Binding W3ExePath}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                                 </Grid>
                                 <Grid Margin="5,32,10,0" >
 
-                                    <TextBlock Text="TW3 WCC_Lite.exe Path" VerticalAlignment="Center"></TextBlock>
+                                    <TextBlock Text="ModKit (wcc_lite.exe) path" VerticalAlignment="Center"></TextBlock>
                                     <TextBox  IsEnabled="False" Margin="200,0,0,0" Text="{Binding WccLitePath}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                                 </Grid>
                                 <Grid Margin="5,32,10,0" >
 
-                                    <TextBlock Text="TW3 Uncooked Depot Path" VerticalAlignment="Center"></TextBlock>
+                                    <TextBlock Text="TW3 uncooked depot path" VerticalAlignment="Center"></TextBlock>
                                     <TextBox   IsEnabled="False" Margin="200,0,0,0" Text="{Binding DepotPath}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Visibility="{Binding CreateModForCP77, Converter={StaticResource Boolean2VisibilityConverter}}">
                                 <Grid Margin="5,32,10,0" >
 
-                                    <TextBlock Text="CP77 Executable Path" VerticalAlignment="Center"></TextBlock>
+                                    <TextBlock Text="CP77 executable path" VerticalAlignment="Center"></TextBlock>
                                     <TextBox IsEnabled="False" Margin="200,0,0,0" Text="{Binding CP77ExePath}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></TextBox>
                                 </Grid>
                             </StackPanel>
 
                             <hc:Divider Margin="0,32,10,5"></hc:Divider>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                                <Button Height="45" Content="Yes, Confirm my settings!" Margin="0,0,0,0" Click="ConfirmSettings_Click"></Button>
+                                <Button Height="45" Content="Yes, confirm settings." Margin="0,0,0,0" Click="ConfirmSettings_Click"></Button>
 
-                                <Button Height="45" Content="No, Cancel my settings!" Margin="15,0,10,0" Click="CancelSettings_Click"></Button>
+                                <Button Height="45" Content="No, cancel changes." Margin="15,0,10,0" Click="CancelSettings_Click"></Button>
                             </StackPanel>
                         </StackPanel>
 
 
-              
+
                     </hc:ScrollViewer>
 
                 </Grid>

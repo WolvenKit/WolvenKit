@@ -19,7 +19,7 @@ namespace WolvenKit.CR2W.Types
         [Ordinal(4)] [RED] public CUInt8 forcedLodLevel { get; set; }
         [Ordinal(5)] [RED] public CUInt8 shadowBias { get; set; }
         [Ordinal(6)] [RED] public CUInt8 renderingPlane { get; set; }
-        
+
         [Ordinal(999)] [REDBuffer(true)] public CBytes unk1 { get; set; }
 
         public SBlockDataMeshObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {
@@ -41,7 +41,7 @@ namespace WolvenKit.CR2W.Types
             }
             else if (read > size)
             {
-                throw new InvalidParsingException("read too far");
+                throw new InvalidParsingException("Read too far.");
             }
         }
 

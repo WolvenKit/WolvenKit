@@ -8,9 +8,9 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
-        <Label Grid.Row="0" Content="{Binding Title}" />
-        <Label Grid.Row="1" Content="Here goes your real content" />
+
+        <Label Grid.Row="0" Content="{Binding title}" />
+        <Label Grid.Row="1" Content="Real content goes here" />
     </Grid>
-    
+
 </catel:UserControl>

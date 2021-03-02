@@ -7,7 +7,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
     public class AvalVariableParser : VariableParserBase<AvalVariable>
     {
         private const string FullMagicNumber = "AVAL";
-        
+
         public override string MagicNumber
         {
             get { return "AV"; }
@@ -42,7 +42,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
             {
                 throw new ParseVariableException(
                     string.Format(
-                    "Expeced AVAL but read {0} at {1}",
+                    "Expected AVAL but read {0} at {1}",
                     magicNumber,
                     reader.BaseStream.Position - 4));
             }

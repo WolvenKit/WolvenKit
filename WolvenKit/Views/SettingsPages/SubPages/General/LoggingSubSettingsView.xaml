@@ -1,6 +1,6 @@
 ﻿<catel:UserControl x:Class="WolvenKit.Views.SettingsPages.SubPages.General.LoggingSubSettingsView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"     
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                    xmlns:hc="https://handyorg.github.io/handycontrol"
                    xmlns:catel="http://schemas.catelproject.com">
@@ -38,7 +38,7 @@
 
 
                             <Grid Margin="5">
-                                <TextBlock Text="Open Logs" VerticalAlignment="Center"/>
+                                <TextBlock Text="View logs" VerticalAlignment="Center"/>
                                 <Button HorizontalAlignment="Right"  VerticalAlignment="Center">
                                     <Grid >
                                         <iconPacks:PackIconBootstrapIcons Kind="BoxArrowUpRight"/>

@@ -11,7 +11,7 @@
                     <Grid Margin="22,0,0,0">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock VerticalAlignment="Center" Text="Mod Logo"></TextBlock>
+                                <TextBlock VerticalAlignment="Center" Text="Mod logo"></TextBlock>
                                 <hc:ImageSelector Margin="85,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
 
                             </StackPanel>

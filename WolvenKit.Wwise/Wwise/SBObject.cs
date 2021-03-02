@@ -8,7 +8,7 @@ using IniParser.Model;
 
 namespace WolvenKit.Wwise.Wwise
 {
-    
+
     public class SBObjectType
     {
         public string getData()
@@ -22,7 +22,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    
+
     public class SBSoundObject
     {
         public const uint SOUND_EMBEDED = 0x00;
@@ -50,7 +50,7 @@ namespace WolvenKit.Wwise.Wwise
 
                 if (_include_type != SOUND_EMBEDED && _include_type != SOUND_STREAMED && _include_type != SOUND_PREFETCHED)
                 {
-                    Console.WriteLine("SBSoundObject : Invalid include type");
+                    Console.WriteLine("SBSoundObject: Invalid include type.");
                     _isSet = false;
                     return;
 
@@ -69,7 +69,7 @@ namespace WolvenKit.Wwise.Wwise
 
                 if (_sound_type != SOUND_TYPE_SFX && _sound_type != SOUND_TYPE_VOICE)
                 {
-                    Console.WriteLine("SBSoundObject : Invalid sound type");
+                    Console.WriteLine("SBSoundObject: Invalid sound type.");
                     _isSet = false;
                     return;
                 }
@@ -102,7 +102,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    
+
     public class EventAction_Additional
     {
         public byte _type = 0;
@@ -118,7 +118,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    
+
     public class SBEventActionObject
     {
         public const uint ACTION_TYPE_SET_STATE = 0x12;
@@ -201,7 +201,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    
+
     public class SBEventObject
     {
         public uint _event_actions = 0;
@@ -221,7 +221,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    
+
     public class SBMusicSegmentObject
     {
         public SoundStructure _sound_structure = null;
@@ -325,7 +325,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    
+
     public class SBMusicTrackObject
     {
         public byte _unk_field8_1 = 0;
@@ -403,7 +403,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    
+
     public class SBMusicTrackCustomObject
     {
         public uint _unk_field32_1 = 1;
@@ -479,7 +479,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    
+
     public class SBHeader
     {
         public const string HEAD = "BKHD";
@@ -501,7 +501,7 @@ namespace WolvenKit.Wwise.Wwise
                 _head = fr.read_header();
                 if (_head != HEAD)
                 {
-                    Console.WriteLine("Invalid head, program is down");
+                    Console.WriteLine("Invalid header, exiting.");
                     Environment.Exit(0);
                 }
                 _length = fr.read_uint32();
@@ -511,7 +511,7 @@ namespace WolvenKit.Wwise.Wwise
 
                 if (_version != VERSION)
                 {
-                    Console.Write("Invalid version");
+                    Console.Write("Invalid version, exiting.");
                     Environment.Exit(0);
                 }
 
@@ -533,7 +533,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    
+
     public class SBDataIndex
     {
         public const string HEAD = "DIDX";
@@ -558,7 +558,7 @@ namespace WolvenKit.Wwise.Wwise
                 _length = fr.read_uint32();
                 if (_length % 12 != 0)
                 {
-                    Console.WriteLine("SBDataIndex : Invalid length, program is down");
+                    Console.WriteLine("SBDataIndex: Invalid file length, exiting.");
                     Environment.Exit(0);
                 }
                 // wem file
@@ -614,7 +614,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    
+
     public class SBData
     {
         public const string HEAD = "DATA";
@@ -676,7 +676,7 @@ namespace WolvenKit.Wwise.Wwise
                 _head = fr.read_header();
                 if (_head != HEAD)
                 {
-                    Console.WriteLine("SBObjects : Invalid head");
+                    Console.WriteLine("SBObjects: Invalid header.");
                     _isSet = false;
                     return;
                 }
@@ -761,7 +761,7 @@ namespace WolvenKit.Wwise.Wwise
 
                 if (_head != SBManager.HEAD)
                 {
-                    Console.WriteLine("SBManger : Invalid head");
+                    Console.WriteLine("SBManger: Invalid header");
                     _isSet = false;
                     return;
                 }
@@ -806,7 +806,7 @@ namespace WolvenKit.Wwise.Wwise
                 _head = fr.read_header();
                 if (_head != HEAD)
                 {
-                    Console.WriteLine("SBEnvironments : Invalid head");
+                    Console.WriteLine("SBEnvironments: Invalid header.");
                     _isSet = false;
                     return;
                 }
@@ -816,7 +816,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    
+
     public class SBSoundTypeID
     {
         public const string HEAD = "STID";
@@ -834,7 +834,7 @@ namespace WolvenKit.Wwise.Wwise
                 _head = fr.read_header();
                 if (_head != HEAD)
                 {
-                    Console.WriteLine("SBSoundTypeID : Invalid head");
+                    Console.WriteLine("SBSoundTypeID: Invalid header.");
                     _isSet = false;
                     return;
                 }
@@ -846,7 +846,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    
+
     public class SBMusicPlaylistObject
     {
         public SoundStructure _sound_structure = null;
@@ -1182,7 +1182,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    
+
     public class SBObject
     {
         public const byte TYPE_SOUND = 0x02;
@@ -1309,7 +1309,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    
+
     public class MusicPlaylistObject_PlaylistElement
     {
         public const uint SIZE = 0x1A;
@@ -1341,7 +1341,7 @@ namespace WolvenKit.Wwise.Wwise
         }
     }
 
-    
+
     public class MusicPlaylistObject_Transition
     {
         public uint _source_id = 0;

@@ -81,7 +81,7 @@ namespace WolvenKit
             // update the radish config if necessary
             if (modname != Configuration.modname)
             {
-                MainController.LogString($"Radish modname updated: {modname}\r\n", Logtype.Important);
+                MainController.LogString($"Radish ModName updated: {modname}\r\n", Logtype.Important);
                 Configuration.modname = modname;
             }
             if (idspace != Configuration.idspace)
@@ -96,12 +96,12 @@ namespace WolvenKit
             }
             if (DIR_MODKIT != Configuration.DIR_MODKIT)
             {
-                MainController.LogString($"Radish modkit directory updated: {DIR_MODKIT}\r\n", Logtype.Important);
+                MainController.LogString($"Radish ModKit directory updated: {DIR_MODKIT}\r\n", Logtype.Important);
                 Configuration.DIR_MODKIT = DIR_MODKIT;
             }
             if (DIR_ENCODER != Configuration.DIR_ENCODER)
             {
-                MainController.LogString($"Radish tools directory updated: {DIR_ENCODER}\r\n", Logtype.Important);
+                MainController.LogString($"Radish Tools directory updated: {DIR_ENCODER}\r\n", Logtype.Important);
                 Configuration.DIR_ENCODER = DIR_ENCODER;
             }
 
@@ -122,7 +122,7 @@ namespace WolvenKit
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         public ERadishStatus CheckSelf()
@@ -132,13 +132,13 @@ namespace WolvenKit
             FileInfo settingsbat = filedir.GetFiles("*.bat", SearchOption.AllDirectories)?.FirstOrDefault(_ => _.Name == "_settings_.bat");
             if (settingsbat == null)
             {
-                MainController.LogString("ERROR! No radish settingsfile found.\r\n", Logtype.Error);
+                MainController.LogString("ERROR! No Radish settings file found.\r\n", Logtype.Error);
                 return ERadishStatus.NoRadish;
             }
             DirectoryInfo radishdir = settingsbat.Directory;
             if (radishdir == null)
             {
-                MainController.LogString("ERROR! No radish mod directory found.\r\n", Logtype.Error);
+                MainController.LogString("ERROR! No Radish mod directory found.\r\n", Logtype.Error);
                 return ERadishStatus.NoRadish;
             }
             // update the radish config if necessary
@@ -168,29 +168,29 @@ namespace WolvenKit
 
             if (string.IsNullOrEmpty(modname))
             {
-                MainController.LogString("ERROR! ModName was not found! adjust the name in the _settings_.bat\r\n", Logtype.Error);
+                MainController.LogString("ERROR! ModName not found. Adjust in _settings_.bat.\r\n", Logtype.Error);
                 return ERadishStatus.SettingsError;
             }
             if (string.IsNullOrEmpty(idspace))
             {
-                MainController.LogString("ERROR! idspace was not found! adjust the name in the _settings_.bat\r\n", Logtype.Error);
+                MainController.LogString("ERROR! idspace not found. Adjust in the _settings_.bat\r\n", Logtype.Error);
                 return ERadishStatus.SettingsError;
             }
             if (! new DirectoryInfo(DIR_W3).Exists)
             {
-                MainController.LogString("ERROR! Game directory was not found! adjust the paths in the _settings_.bat\r\n", Logtype.Error);
+                MainController.LogString("ERROR! Game directory not found. Adjust paths in _settings_.bat\r\n", Logtype.Error);
                 return ERadishStatus.SettingsError;
             }
             if (!new DirectoryInfo(DIR_MODKIT).Exists)
             {
-                MainController.LogString("ERROR! Modkit directory was not found! adjust the paths in the _settings_.bat\r\n", Logtype.Error);
+                MainController.LogString("ERROR! ModKit directory not found. Adjust paths in _settings_.bat\r\n", Logtype.Error);
                 return ERadishStatus.SettingsError;
             }
             if (!new DirectoryInfo(DIR_ENCODER).Exists)
             {
-                MainController.LogString("ERROR! Radish Tools directory was not found! adjust the paths in the _settings_.bat\r\n", Logtype.Error);
+                MainController.LogString("ERROR! Radish Tools directory not found. Adjust paths in _settings_.bat\r\n", Logtype.Error);
                 return ERadishStatus.SettingsError;
-            }  
+            }
             #endregion
 
             MainController.LogString($"Radish project healthy.\r\n", Logtype.Success);
@@ -218,11 +218,11 @@ namespace WolvenKit
                         settingslines[i] = $"set DIR_ENCODER={Configuration.DIR_ENCODER}";
                 }
                 File.WriteAllLines(settingsbat.FullName, settingslines);
-                MainController.LogString("Sucessfully updated the radish settings file.\r\n", Logtype.Success);
+                MainController.LogString("Radish settings file successfully updated.\r\n", Logtype.Success);
             }
             catch (Exception ex)
             {
-                MainController.LogString($"Writing the radish settings file failed. It may be corrupted. Error message: {ex.Message}\r\n", Logtype.Important);
+                MainController.LogString($"Failed to write Radish settings file. Potential corruption. Error message: {ex.Message}.\r\n", Logtype.Important);
             }
         }
 

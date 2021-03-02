@@ -11,9 +11,9 @@ namespace CP77Tools.Commands
 
         public HashCommand() : base(Name, Description)
         {
-            AddOption(new Option<string[]>(new[] {"--input", "-i"}, "Create FNV1A hash of given string"));
-            AddOption(new Option<bool>(new[] {"--missing", "-m"}, ""));
-            
+            AddOption(new Option<string[]>(new[] {"--input", "-i"}, "Create FNV1A hash of a given string."));
+            AddOption(new Option<bool>(new[] {"--missing", "-m"}, "List missing hashes."));
+
             Handler = CommandHandler.Create<string[], bool>(ConsoleFunctions.HashTask);
         }
     }
