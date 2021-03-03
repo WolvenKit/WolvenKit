@@ -23,7 +23,7 @@ save x
 scaleform x
 w3speech x
 w3strings x
-wwise
+wwise x
 TESTS
 cp77tools
 Wkit
