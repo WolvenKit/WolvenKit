@@ -1,5 +1,5 @@
-﻿
-namespace WolvenKit.Views.CsvEditor
+
+namespace WolvenKit.MVVM.Views.Components.Editors
 {
     public partial class CsvEditorView
     {

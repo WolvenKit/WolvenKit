@@ -3,24 +3,12 @@
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:ad="clr-namespace:WolvenKit.Functionality.Layout"
-                   
-                   xmlns:journaleditor="clr-namespace:WolvenKit.Views.JournalEditor"
-                   xmlns:hexeditor="clr-namespace:WolvenKit.Views.HexEditor"
-                   xmlns:csveditor="clr-namespace:WolvenKit.Views.CsvEditor"
-                   xmlns:codeeditorz="clr-namespace:WolvenKit.Views.CodeEditor"
-                   xmlns:bulkeditor="clr-namespace:WolvenKit.Views.BulkEditor"
                    xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-                   xmlns:cr2weditor="clr-namespace:WolvenKit.Views.Editors.CR2WEditor"
                    xmlns:views1="clr-namespace:WolvenKit.MVVM.Views.Shell.Editor"
-                   xmlns:views2="clr-namespace:WolvenKit.MVVM.Views.Components.Tools.AssetBrowser"
                    xmlns:audiotoolz="clr-namespace:WolvenKit.MVVM.Views.Components.Tools.AudioTool"
-                   xmlns:cr2wtotexttool="clr-namespace:WolvenKit.MVVM.Views.Components.Tools.CR2WToTextTool"
-                   xmlns:gamedebuggertool="clr-namespace:WolvenKit.MVVM.Views.Components.Tools.GameDebuggerTool"
-                   xmlns:importertool="clr-namespace:WolvenKit.MVVM.Views.Components.Tools.ImporterTool"
-                   xmlns:menutool="clr-namespace:WolvenKit.MVVM.Views.Components.Tools.MenuTool"
-                   xmlns:views21="clr-namespace:WolvenKit.MVVM.Views.Components.Tools.WccTool"
-                   xmlns:radishtool="clr-namespace:WolvenKit.MVVM.Views.Components.Tools.RadishTool"
-                   xmlns:pluginmanagerz="clr-namespace:WolvenKit.MVVM.Views.Components.Tools.PluginManager" xmlns:visualeditorz="clr-namespace:WolvenKit.MVVM.Views.Components.Editors.VisualEditor"
+                   xmlns:visualeditorz="clr-namespace:WolvenKit.MVVM.Views.Components.Editors.VisualEditor"
+                   xmlns:importertool1="clr-namespace:WolvenKit.MVVM.Views.Components.Tools"
+                   xmlns:cr2weditor1="clr-namespace:WolvenKit.MVVM.Views.Components.Editors"
                    IsVisibleChanged="UserControl_IsVisibleChanged_1"
                    >
 
@@ -92,42 +80,42 @@
                     <!-- ProjectExplorerView -->
                     <ad:PanesTemplateSelector.AssetBrowserTemplate>
                         <DataTemplate>
-                            <views2:AssetBrowserView/>
+                            <importertool1:AssetBrowserView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.AssetBrowserTemplate>
                     
                     <!-- ProjectExplorerView -->
                     <ad:PanesTemplateSelector.BulkEditorTemplate>
                         <DataTemplate>
-                            <bulkeditor:BulkEditorView/>
+                            <cr2weditor1:BulkEditorView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.BulkEditorTemplate>
                     
                     <!-- ProjectExplorerView -->
                     <ad:PanesTemplateSelector.CodeEditorTemplate>
                         <DataTemplate>
-                            <codeeditorz:CodeEditorView/>
+                            <cr2weditor1:CodeEditorView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.CodeEditorTemplate>
                     
                     <!-- ProjectExplorerView -->
                     <ad:PanesTemplateSelector.CsvEditorTemplate>
                         <DataTemplate>
-                            <csveditor:CsvEditorView/>
+                            <cr2weditor1:CsvEditorView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.CsvEditorTemplate>
                     
                     <!-- ProjectExplorerView -->
                     <ad:PanesTemplateSelector.HexEditorTemplate>
                         <DataTemplate>
-                            <hexeditor:HexEditorView/>
+                            <cr2weditor1:HexEditorView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.HexEditorTemplate>
                     
                     <!-- ProjectExplorerView -->
                     <ad:PanesTemplateSelector.JournalEditorTemplate>
                         <DataTemplate>
-                            <journaleditor:JournalEditorView/>
+                            <cr2weditor1:JournalEditorView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.JournalEditorTemplate>
                     
@@ -148,58 +136,53 @@
                     <!-- ProjectExplorerView -->
                     <ad:PanesTemplateSelector.CR2WToTextToolTemplate>
                         <DataTemplate>
-                            <cr2wtotexttool:CR2WToTextToolView/>
+                            <importertool1:CR2WToTextToolView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.CR2WToTextToolTemplate>
                     
                     <!-- ProjectExplorerView -->
                     <ad:PanesTemplateSelector.GameDebuggerToolTemplate>
                         <DataTemplate>
-                            <gamedebuggertool:GameDebuggerToolView/>
+                            <importertool1:GameDebuggerToolView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.GameDebuggerToolTemplate>
                     
                     <!-- ProjectExplorerView -->
                     <ad:PanesTemplateSelector.ImporterToolTemplate>
                         <DataTemplate>
-                            <importertool:ImporterToolView/>
+                            <importertool1:ImporterToolView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.ImporterToolTemplate>
                     
                     <!-- ProjectExplorerView -->
                     <ad:PanesTemplateSelector.MenuToolTemplate>
                         <DataTemplate>
-                            <menutool:MenuCreatorToolView/>
+                            <importertool1:MenuCreatorToolView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.MenuToolTemplate>
                     
                     <!-- ProjectExplorerView -->
                     <ad:PanesTemplateSelector.WccToolTemplate>
                         <DataTemplate>
-                            <views21:WccToolView/>
+                            <importertool1:WccToolView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.WccToolTemplate>
                     
                     <!-- ProjectExplorerView -->
                     <ad:PanesTemplateSelector.RadishToolTemplate>
                         <DataTemplate>
-                            <radishtool:RadishToolView/>
+                            <importertool1:RadishToolView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.RadishToolTemplate>
                     
                     <!-- ProjectExplorerView -->
                     <ad:PanesTemplateSelector.PluginManagerTemplate>
                         <DataTemplate>
-                            <pluginmanagerz:PluginManagerView/>
+                            <importertool1:PluginManagerView/>
                         </DataTemplate>
                     </ad:PanesTemplateSelector.PluginManagerTemplate>
                     
-                    <!-- ProjectExplorerView -->
-                    <ad:PanesTemplateSelector.CR2WEditorTemplate>
-                        <DataTemplate>
-                            <cr2weditor:CR2WEditorView/>
-                        </DataTemplate>
-                    </ad:PanesTemplateSelector.CR2WEditorTemplate>
+                   
 
                 </ad:PanesTemplateSelector>
             </DockingManager.LayoutItemTemplateSelector>

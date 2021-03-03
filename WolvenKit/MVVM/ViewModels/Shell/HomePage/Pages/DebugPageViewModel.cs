@@ -1,18 +1,9 @@
 using Catel.MVVM;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
-using WolvenKit.MVVM.Views.Components.Tools.AnimationTool;
-using WolvenKit.MVVM.Views.Components.Tools.CR2WToTextTool;
-using WolvenKit.MVVM.Views.Components.Tools.GameDebuggerTool;
-using WolvenKit.MVVM.Views.Components.Tools.ImporterTool;
-using WolvenKit.MVVM.Views.Components.Tools.MenuTool;
-using WolvenKit.MVVM.Views.Components.Tools.RadishTool;
-using WolvenKit.MVVM.Views.Components.Tools.WccTool;
-using WolvenKit.Views.BulkEditor;
-using WolvenKit.Views.CsvEditor;
+using WolvenKit.MVVM.Views.Components.Editors;
+using WolvenKit.MVVM.Views.Components.Tools;
 using WolvenKit.Views.Dialogs;
-using WolvenKit.Views.EditorBars;
-using WolvenKit.Views.JournalEditor;
 
 
 namespace WolvenKit.ViewModels.HomePage.Pages

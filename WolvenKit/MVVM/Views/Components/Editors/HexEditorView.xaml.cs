@@ -1,7 +1,7 @@
 
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.Views.HexEditor
+namespace WolvenKit.MVVM.Views.Components.Editors
 {
     public partial class HexEditorView
     {

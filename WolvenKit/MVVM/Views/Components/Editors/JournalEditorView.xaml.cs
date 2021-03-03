@@ -1,6 +1,6 @@
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.Views.JournalEditor
+namespace WolvenKit.MVVM.Views.Components.Editors
 {
     public partial class JournalEditorView
     {
