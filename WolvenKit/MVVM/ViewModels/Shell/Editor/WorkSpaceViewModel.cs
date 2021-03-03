@@ -40,6 +40,7 @@ using WolvenKit.ViewModels.AnimationTool;
 using WolvenKit.Views.AudioTool;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.MVVM.Views.Others;
 
 namespace WolvenKit.ViewModels
 {

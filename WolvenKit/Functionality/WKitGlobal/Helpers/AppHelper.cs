@@ -79,6 +79,7 @@ using WolvenKit.MVVM.Views.Shell.HomePage;
 using WolvenKit.MVVM.Views.Shell.Homepage.Pages.IntegratedToolsPages.CyberCAT;
 using WolvenKit.MVVM.Views.Shell.Editor;
 using WolvenKit.MVVM.Views.Shell.Backstage;
+using WolvenKit.MVVM.Views.Others;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
