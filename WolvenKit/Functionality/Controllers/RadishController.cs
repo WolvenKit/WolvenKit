@@ -272,11 +272,11 @@ namespace WolvenKit.Functionality.Controllers
             var settingsbat = new FileInfo(Directory.GetFiles(Configuration.RadishProjectPath, "*.bat", SearchOption.AllDirectories)?
                 .First(_ => _.EndsWith("_settings_.bat")));
             var settingslines = File.ReadAllLines(settingsbat.FullName);
-            modname = settingslines.First(_ => _.StartsWith("set MODNAME=")).Substring("set MODNAME=".Length);
-            idspace = settingslines.First(_ => _.StartsWith("set idspace=")).Substring("set idspace=".Length);
-            DIR_W3 = settingslines.First(_ => _.StartsWith("set DIR_W3=")).Substring("set DIR_W3=".Length);
-            DIR_MODKIT = settingslines.First(_ => _.StartsWith("set DIR_MODKIT=")).Substring("set DIR_MODKIT=".Length);
-            DIR_ENCODER = settingslines.First(_ => _.StartsWith("set DIR_ENCODER=")).Substring("set DIR_ENCODER=".Length);
+            modname = settingslines.First(_ => _.StartsWith("set MODNAME="))["set MODNAME=".Length..];
+            idspace = settingslines.First(_ => _.StartsWith("set idspace="))["set idspace=".Length..];
+            DIR_W3 = settingslines.First(_ => _.StartsWith("set DIR_W3="))["set DIR_W3=".Length..];
+            DIR_MODKIT = settingslines.First(_ => _.StartsWith("set DIR_MODKIT="))["set DIR_MODKIT=".Length..];
+            DIR_ENCODER = settingslines.First(_ => _.StartsWith("set DIR_ENCODER="))["set DIR_ENCODER=".Length..];
         }
 
         #endregion Methods

@@ -190,7 +190,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                     Directory.CreateDirectory(DlcDirectory);
                 }
                 return Directory.EnumerateFiles(DlcDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file.Substring(DlcDirectory.Length + 1))
+                    .Select(file => file[(DlcDirectory.Length + 1)..])
                     .ToList();
             }
         }
@@ -207,7 +207,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                     Directory.CreateDirectory(ModDirectory);
                 }
                 return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file.Substring(ModDirectory.Length + 1))
+                    .Select(file => file[(ModDirectory.Length + 1)..])
                     .ToList();
             }
         }
@@ -264,7 +264,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             // Hash all filepaths
             _logger.LogString("Starting additional tasks...", Logtype.Important);
             var relativepaths = ModFiles
-                .Select(_ => _.Substring(_.IndexOf(Path.DirectorySeparatorChar) + 1))
+                .Select(_ => _[(_.IndexOf(Path.DirectorySeparatorChar) + 1)..])
                 .ToList();
             Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
 

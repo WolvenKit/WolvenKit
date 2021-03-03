@@ -809,7 +809,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         Logger.LogString($"Found {files.Length} files in {di.FullName}. \n");
                         foreach (var fi in files)
                         {
-                            var relpath = fi.FullName.Substring(ActiveMod.ModCookedDirectory.Length + 1);
+                            var relpath = fi.FullName[(ActiveMod.ModCookedDirectory.Length + 1)..];
                             var newpath = Path.Combine(ActiveMod.CookedModDirectory, relpath);
 
                             if (File.Exists(newpath))
@@ -843,7 +843,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         Logger.LogString($"Found {files.Length} files in {di.FullName}. \n");
                         foreach (var fi in files)
                         {
-                            var relpath = fi.FullName.Substring(ActiveMod.DlcCookedDirectory.Length + 1);
+                            var relpath = fi.FullName[(ActiveMod.DlcCookedDirectory.Length + 1)..];
                             var newpath = Path.Combine(ActiveMod.CookedDlcDirectory, relpath);
 
                             if (File.Exists(newpath))

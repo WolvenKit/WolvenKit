@@ -381,7 +381,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                     Directory.CreateDirectory(DlcDirectory);
                 }
                 return Directory.EnumerateFiles(DlcDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file.Substring(DlcDirectory.Length + 1))
+                    .Select(file => file[(DlcDirectory.Length + 1)..])
                     .ToList();
             }
         }
@@ -398,7 +398,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                     Directory.CreateDirectory(ModDirectory);
                 }
                 return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file.Substring(ModDirectory.Length + 1))
+                    .Select(file => file[(ModDirectory.Length + 1)..])
                     .ToList();
             }
         }
@@ -415,7 +415,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                     Directory.CreateDirectory(RadishDirectory);
                 }
                 return Directory.EnumerateFiles(RadishDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file.Substring(RadishDirectory.Length + 1))
+                    .Select(file => file[(RadishDirectory.Length + 1)..])
                     .ToList();
             }
         }
@@ -432,7 +432,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                     Directory.CreateDirectory(RawDirectory);
                 }
                 return Directory.EnumerateFiles(RawDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file.Substring(RawDirectory.Length + 1))
+                    .Select(file => file[(RawDirectory.Length + 1)..])
                     .ToList();
             }
         }
@@ -485,7 +485,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                     if (subdi.Exists && subdi.GetDirectories().Any())
                     {
                         relpath = subdi.GetDirectories().First().FullName;
-                        return relpath.Substring(DlcCookedDirectory.Length + 5);
+                        return relpath[(DlcCookedDirectory.Length + 5)..];
                     }
                     else
                     {
@@ -497,7 +497,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                     relpath = di.GetDirectories().First().FullName;
                 }
 
-                return relpath.Substring(DlcCookedDirectory.Length + 1);
+                return relpath[(DlcCookedDirectory.Length + 1)..];
             }
             return relpath;
         }
@@ -540,7 +540,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                     if (subdi.Exists && subdi.GetDirectories().Any())
                     {
                         relpath = subdi.GetDirectories().First().FullName;
-                        return relpath.Substring(DlcUncookedDirectory.Length + 5);
+                        return relpath[(DlcUncookedDirectory.Length + 5)..];
                     }
                     else
                     {
@@ -552,7 +552,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                     relpath = di.GetDirectories().First().FullName;
                 }
 
-                return relpath.Substring(DlcUncookedDirectory.Length + 1);
+                return relpath[(DlcUncookedDirectory.Length + 1)..];
             }
             return relpath;
         }
@@ -593,7 +593,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             // Hash all filepaths
             _logger.LogString("Starting additional tasks...", Logtype.Important);
             var relativepaths = ModFiles
-                .Select(_ => _.Substring(_.IndexOf(Path.DirectorySeparatorChar) + 1))
+                .Select(_ => _[(_.IndexOf(Path.DirectorySeparatorChar) + 1)..])
                 .ToList();
             Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
 

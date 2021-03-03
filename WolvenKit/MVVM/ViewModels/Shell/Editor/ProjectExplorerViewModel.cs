@@ -333,7 +333,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             {
                 if (s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Length > 2)
                 {
-                    var relpath = s.Substring(ActiveMod.FileDirectory.Length + 1);
+                    var relpath = s[(ActiveMod.FileDirectory.Length + 1)..];
                     return string.Join(Path.DirectorySeparatorChar.ToString(), relpath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(2).ToArray());
                 }
                 else
@@ -662,7 +662,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
 
             var dir = File.Exists(fullpath) ? Path.GetDirectoryName(fullpath) : fullpath;
-            var reldir = dir.Substring(ActiveMod.FileDirectory.Length + 1);
+            var reldir = dir[(ActiveMod.FileDirectory.Length + 1)..];
 
             // Trim working directories in path
             var reg = new Regex(@"^(Raw|Mod|DLC)\\(.*)");
@@ -687,12 +687,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             if (reldir.StartsWith(EProjectFolders.Cooked.ToString()))
             {
-                reldir = reldir.Substring(EProjectFolders.Cooked.ToString().Length);
+                reldir = reldir[EProjectFolders.Cooked.ToString().Length..];
             }
 
             if (reldir.StartsWith(EProjectFolders.Uncooked.ToString()))
             {
-                reldir = reldir.Substring(EProjectFolders.Uncooked.ToString().Length);
+                reldir = reldir[EProjectFolders.Uncooked.ToString().Length..];
             }
 
             reldir = reldir.TrimStart(Path.DirectorySeparatorChar);

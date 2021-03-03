@@ -233,7 +233,7 @@ namespace WolvenKit.MVVM.Model
                     for (var i = 0; i < files.Length; i++)
                     {
                         var file = files[i];
-                        var relpath = $"{file.FullName.Substring(uncookeddlcdir.FullName.Length + 1)}";
+                        var relpath = $"{file.FullName[(uncookeddlcdir.FullName.Length + 1)..]}";
                         if (!relpath.StartsWith("dlc\\"))
                         {
                             relpath = $"dlc\\{relpath}";
@@ -547,7 +547,7 @@ namespace WolvenKit.MVVM.Model
             }
             else
             {
-                relativepath = importfilepath.Substring(alternateOutDirectory.Length + 1);
+                relativepath = importfilepath[(alternateOutDirectory.Length + 1)..];
             }
 
             var importslist = new List<ICR2WImport>();

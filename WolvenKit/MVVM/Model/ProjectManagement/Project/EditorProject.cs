@@ -100,7 +100,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                     Directory.CreateDirectory(FileDirectory);
                 }
                 return Directory.EnumerateFiles(FileDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file.Substring(FileDirectory.Length + 1))
+                    .Select(file => file[(FileDirectory.Length + 1)..])
                     .ToList();
             }
         }

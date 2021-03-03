@@ -110,18 +110,18 @@ namespace WolvenKit.MVVM.Model
             // first, trim Raw from the path
             if (relPath.Substring(0, 3) == "Raw")
             {
-                relPath = relPath.Substring(4);
+                relPath = relPath[4..];
             }
             // then, trim Mod or dlc from the path
             var isDLC = false;
             if (relPath.Substring(0, 3) == "Mod")
             {
-                relPath = relPath.Substring(4);
+                relPath = relPath[4..];
             }
             if (relPath.Substring(0, 3) == "DLC")
             {
                 isDLC = true;
-                relPath = relPath.Substring(4);
+                relPath = relPath[4..];
             }
 
             // new path with new extension

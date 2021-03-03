@@ -55,7 +55,7 @@ namespace WolvenKit.MVVM.Model
             foreach (var filename in files)
             {
                 var fi = new FileInfo(filename);
-                var entryName = filename.Substring(folderOffset);
+                var entryName = filename[folderOffset..];
                 entryName = ZipEntry.CleanName(entryName);
                 var newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
                 zipStream.PutNextEntry(newEntry);
