@@ -319,7 +319,7 @@ namespace WolvenKit.Functionality.Controllers
             //TODO: Create wkpackage from the mod
             Task.FromResult(true);
 
-        public async override Task<bool> PackAndInstallProject()
+        public override async Task<bool> PackAndInstallProject()
         {
             var ActiveMod = MainController.Get().ActiveMod;
             var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
