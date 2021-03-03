@@ -14,7 +14,9 @@ namespace WolvenKit.MVVM.Views.Others
         }
 
         private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => DragMove();
+
         private void ButtonClose(object sender, RoutedEventArgs e) => Close();
+
         private void ButtonMinimize(object sender, RoutedEventArgs e) => SetCurrentValue(WindowStateProperty, WindowState.Minimized);
     }
 }

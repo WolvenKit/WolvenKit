@@ -1,4 +1,3 @@
-
 using System;
 using System.Threading;
 using System.Windows;
@@ -20,18 +19,15 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
 
         private void ThemeColorsHoney_Loaded(object sender, RoutedEventArgs e)
         {
-
         }
+
         private bool filled = false;
-      
 
         private void Circle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var a = (Ellipse)sender;
 
             ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "Dark." + a.Name.ToString());
-
-
         }
 
         private void Circle_MouseLeave(object sender, MouseEventArgs e)
@@ -39,7 +35,9 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
             var a = (Ellipse)sender;
             a.Fill = lastaccent;
         }
+
         private Brush lastaccent;
+
         private void Circle_MouseEnter(object sender, MouseEventArgs e)
         {
             var a = (Ellipse)sender;
@@ -47,25 +45,16 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
             a.Fill = new SolidColorBrush(Colors.AliceBlue);
         }
 
-      
-
-       
-
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
         {
-
         }
 
         private void UserControl_Initialized_1(object sender, EventArgs e)
         {
             if (!filled)
             {
-
                 (new Thread(() =>
                 {
-
-
-
                     foreach (var Theme in ThemeManager.Current.Themes)
                     {
                         Thread.Sleep(15);
@@ -77,7 +66,6 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
                                 {
                                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                                     {
-
                                         Ellipse circle = new Ellipse();
                                         circle.Height = 25;
                                         circle.Width = 25;
@@ -89,25 +77,12 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
                                         circle.Fill = Theme.ShowcaseBrush;
 
                                         CircleTest.Children.Add(circle);
-
                                     }));
-
                                 }
-                            
                             }
-                        
-                            
-
-
-
-
                         }
                     }
-      
-
-
                 })).Start();
-
             }
             filled = true;
         }
@@ -118,4 +93,3 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
         }
     }
 }
-

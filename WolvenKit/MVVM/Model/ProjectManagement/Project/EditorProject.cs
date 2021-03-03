@@ -16,10 +16,11 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         protected EditorProject(string location)
             : base(location)
         {
-
         }
 
-        protected EditorProject() : base("") { }
+        protected EditorProject() : base("")
+        {
+        }
 
         public EditorProjectData Data;
 
@@ -28,6 +29,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         public abstract void Load(string path);
 
         #region properties
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -35,7 +37,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         [XmlIgnore]
         public GameType GameType;
-
 
         [Category("About")]
         [Description("The name of your mod.")]
@@ -53,7 +54,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         [Category("About")]
         [Description("The version of your mod. It's a string so 0.1-ALPHA and such is possible.")]
         public string Version { get; set; } = "0.62";
-
 
         #region not serialized
 
@@ -93,18 +93,20 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        #endregion
+        #endregion not serialized
 
-        #endregion
+        #endregion properties
 
         #region Methods
 
-        
         public abstract Task Initialize();
+
         public abstract void Check();
-        #endregion
+
+        #endregion Methods
 
         #region implements IEquatable
+
         public bool Equals(EditorProject other)
         {
             if (ReferenceEquals(null, other))
@@ -131,7 +133,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
             return (Location != null ? Location.GetHashCode() : 0);
         }
-        #endregion
+
+        #endregion implements IEquatable
 
         public void SetIsDirty(bool isDirty)
         {
@@ -143,5 +146,4 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             return Location;
         }
     }
-
 }

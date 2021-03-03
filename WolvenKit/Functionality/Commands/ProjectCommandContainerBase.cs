@@ -4,7 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 using System.Threading.Tasks;
 using Catel;
 using Catel.IoC;
@@ -21,16 +20,19 @@ namespace WolvenKit.Functionality.Commands
     public abstract class ProjectCommandContainerBase : CommandContainerBase
     {
         #region Fields
+
         protected readonly ICommandManager _commandManager;
         protected readonly IGrowlNotificationService _notificationService;
         protected readonly ILoggerService _logger;
         protected readonly IProjectManager _projectManager;
         protected readonly IPleaseWaitService _pleaseWaitService;
-        #endregion
+
+        #endregion Fields
 
         #region Constructors
-        protected ProjectCommandContainerBase(string commandName, 
-            ICommandManager commandManager, 
+
+        protected ProjectCommandContainerBase(string commandName,
+            ICommandManager commandManager,
             IProjectManager projectManager,
             IGrowlNotificationService notificationService,
             ILoggerService loggerService)
@@ -49,9 +51,11 @@ namespace WolvenKit.Functionality.Commands
 
             _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
         }
-        #endregion
+
+        #endregion Constructors
 
         #region Methods
+
         private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs e)
         {
             //Task.Run(() => ProjectActivated((EditorProject) e.OldProject, (EditorProject) e.NewProject));
@@ -69,8 +73,6 @@ namespace WolvenKit.Functionality.Commands
                 return;
 
             await Task.Run(() => newEditorProject.Initialize());
-
-            
         }
 
         protected override bool CanExecute(object parameter)
@@ -82,6 +84,7 @@ namespace WolvenKit.Functionality.Commands
 
             return base.CanExecute(parameter);
         }
-        #endregion
+
+        #endregion Methods
     }
 }

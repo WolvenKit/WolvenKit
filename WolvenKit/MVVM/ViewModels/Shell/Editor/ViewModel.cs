@@ -1,4 +1,5 @@
 using Catel.MVVM;
+
 //using Ninject;
 //using Ninject.Activation;
 //using Ninject.Syntax;
@@ -21,12 +22,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         public ViewModel()
         {
-
         }
 
         public virtual void Initialize()
         {
-            
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 {
     using Common.Services;
+
     /// <summary>
     /// https://stackoverflow.com/a/11948550
     /// </summary>
@@ -10,10 +11,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
     {
         public CloseableViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
-            
         }
 
         public event EventHandler ClosingRequest;
+
         public event EventHandler ActivateRequest;
 
         protected void OnClosingRequest() => ClosingRequest?.Invoke(this, EventArgs.Empty);
@@ -21,6 +22,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         protected void OnActivateRequest() => ActivateRequest?.Invoke(this, EventArgs.Empty);
 
         public void Close() => OnClosingRequest();
+
         public void Activate() => OnActivateRequest();
     }
 }

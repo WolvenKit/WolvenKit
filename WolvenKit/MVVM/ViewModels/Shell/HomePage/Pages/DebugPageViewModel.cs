@@ -5,7 +5,6 @@ using WolvenKit.MVVM.Views.Components.Dialogs;
 using WolvenKit.MVVM.Views.Components.Editors;
 using WolvenKit.MVVM.Views.Components.Tools;
 
-
 namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages
 {
     public class DebugPageViewModel : ViewModelBase
@@ -15,17 +14,15 @@ namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages
         public static ObservableCollection<UserControl> _ToolsUC = new ObservableCollection<UserControl>();
         public static ObservableCollection<UserControl> _EditorsUC = new ObservableCollection<UserControl>();
 
-
-
-
         public ObservableCollection<UserControl> DialogsUC { get { return _DialogsUC; } }
         public ObservableCollection<UserControl> WizardsUC { get { return _WizardsUC; } }
         public ObservableCollection<UserControl> ToolsUC { get { return _ToolsUC; } }
         public ObservableCollection<UserControl> EditorsUC { get { return _EditorsUC; } }
 
-        public DebugPageViewModel() { InitThis(); }
-
-     
+        public DebugPageViewModel()
+        {
+            InitThis();
+        }
 
         public void InitThis()
         {

@@ -1,8 +1,8 @@
-﻿using Catel.MVVM;
+using Catel.MVVM;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.SettingsPages.SubPages.Tool
 {
-    class CodeEditorSubSettingsViewModel : ViewModelBase
+    internal class CodeEditorSubSettingsViewModel : ViewModelBase
     {
     }
 }

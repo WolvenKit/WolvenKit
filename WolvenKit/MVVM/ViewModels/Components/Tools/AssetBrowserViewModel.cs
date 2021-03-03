@@ -23,7 +23,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
 {
     public class AssetBrowserViewModel : ToolViewModel
     {
-
         #region constants
 
         /// <summary>
@@ -36,7 +35,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
         /// </summary>
         public const string ToolTitle = "AssetBrowser";
 
-        #endregion
+        #endregion constants
 
         #region fields
 
@@ -47,39 +46,37 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
 
         private List<IGameArchiveManager> Managers { get; set; }
 
-        #endregion
+        #endregion fields
 
         #region properties
+
         public bool IsLoaded { get; set; }
         public GameFileTreeNode CurrentNode { get; set; } = new GameFileTreeNode();
         public List<AssetBrowserData> CurrentNodeFiles { get; set; } = new List<AssetBrowserData>();
         public GameFileTreeNode RootNode { get; set; }
-        
+
         public string SelectedExtension { get; set; }
 
-
         // binding properties. do not make private
-// ReSharper disable MemberCanBePrivate.Global
+        // ReSharper disable MemberCanBePrivate.Global
         public bool PreviewVisible { get; set; }
-        public System.Windows.GridLength PreviewWidth { get; set; } = new(0, System.Windows.GridUnitType.Pixel);
 
+        public System.Windows.GridLength PreviewWidth { get; set; } = new(0, System.Windows.GridUnitType.Pixel);
 
         public string Folder { get; set; }
         public ImageSource Image { get; set; }
 
-       
         public List<IGameFile> SelectedFiles { get; set; }
         public List<string> Extensions { get; set; }
 
         public List<string> Classes { get; set; }
         public string SelectedClass { get; set; }
-        
 
         public AssetBrowserData SelectedNode { get; set; }
         public List<AssetBrowserData> SelectedNodes { get; set; }
         // ReSharper restore MemberCanBePrivate.Global
 
-        #endregion
+        #endregion properties
 
         #region ctor
 
@@ -106,16 +103,16 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
 
             SetupToolDefaults();
             ReInit();
-
-
         }
 
-        #endregion
+        #endregion ctor
 
         #region commands
 
         public ICommand HomeCommand { get; private set; }
+
         private bool CanHome() => true;
+
         private void ExecuteHome()
         {
             CurrentNode = RootNode;
@@ -123,10 +120,11 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
         }
 
         public ICommand TogglePreviewCommand { get; private set; }
+
         private bool CanTogglePreview() => true;
+
         private void ExecuteTogglePreview()
         {
-
             if (PreviewWidth.GridUnitType != System.Windows.GridUnitType.Pixel)
             {
                 PreviewWidth = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
@@ -140,7 +138,9 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
         }
 
         public ICommand SearchStartedCommand { get; private set; }
+
         private bool CanSearchStartedCommand(object arg) => true;
+
         private void ExecuteSearchStartedCommand(object arg)
         {
             if (arg is FunctionEventArgs<string> e)
@@ -150,12 +150,12 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
         }
 
         public ICommand ImportFileCommand { get; private set; }
+
         private bool CanImportFile() => SelectedNode != null;
+
         private void ExecuteImportFile() => ImportFile(SelectedNode);
 
-        #endregion
-
-        
+        #endregion commands
 
         #region methods
 
@@ -164,12 +164,10 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
         /// </summary>
         public void ReInit()
         {
-       
-
             SelectedFiles = new List<IGameFile>();
             Managers = MainController.Get().GetManagers(true);
 
-            CurrentNode = new GameFileTreeNode(EArchiveType.ANY) {Name = "Depot"};
+            CurrentNode = new GameFileTreeNode(EArchiveType.ANY) { Name = "Depot" };
             foreach (var mngr in Managers)
             {
                 if (mngr.RootNode != null)
@@ -205,7 +203,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
                 SelectMany(_ => CollectFiles(query, _))
                 .GroupBy(x => x.Name)
                 .Select(x => x.First())
-                .Select(f => new KeyValuePair<string, List<IGameFile>>(f.Name, new List<IGameFile>(){f}))
+                .Select(f => new KeyValuePair<string, List<IGameFile>>(f.Name, new List<IGameFile>() { f }))
                 .ToDictionary(x => x.Key, x => x.Value);
             this.CurrentNode = newnode;
             CurrentNodeFiles = CurrentNode.ToAssetBrowserData();
@@ -237,7 +235,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
                 {
                     Task.Run(new Action(() => AddToMod(item.This.Files.First(x => x.Key == item.Name).Value.First())));
                     _notificationService.Info($"Importing file: {item.Name}");
-                    
+
                     break;
                 }
                 case EntryType.MoveUP:
@@ -290,13 +288,12 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
                         using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
                         file.Extract(fs);
                     }
-                    
 
                     break;
                 }
                 default:
                     break;
-            }   
+            }
         }
 
         private static IEnumerable<IGameFile> CollectFiles(string searchkeyword, IGameArchiveManager root)
@@ -306,7 +303,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
             {
                 if (f.Name.ToUpper().Contains(searchkeyword.ToUpper()))
                 {
-                    if(!ret.ContainsKey(f.Name))
+                    if (!ret.ContainsKey(f.Name))
                     {
                         ret.TryAdd(f.Name, f);
                     }
@@ -326,12 +323,10 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
         {
             // TODO: Unsubscribe from events
 
-
             return base.CloseAsync();
         }
 
-        #endregion
-
+        #endregion methods
     }
 
     public class FolderItem
@@ -342,7 +337,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
         public FolderItem()
             : base()
         {
-    
         }
     }
 }

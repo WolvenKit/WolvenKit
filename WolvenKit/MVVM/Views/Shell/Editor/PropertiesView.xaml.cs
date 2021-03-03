@@ -21,6 +21,4 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
             }
         }
     }
-
-
 }

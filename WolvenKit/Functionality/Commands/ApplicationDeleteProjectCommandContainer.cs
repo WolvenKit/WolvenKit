@@ -44,12 +44,10 @@ namespace WolvenKit.Functionality.Commands
 
         protected override bool CanExecute(object parameter) => true;
 
-        protected override  void Execute(object parameter)
+        protected override void Execute(object parameter)
         {
             try
             {
-              
-
             }
             catch (Exception ex)
             {

@@ -7,8 +7,8 @@
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources/>
-                <hc:Theme/>
+                <hc:ThemeResources />
+                <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </catel:UserControl.Resources>
@@ -16,13 +16,11 @@
     <Grid Width="800" Height="450">
         <DataGrid>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Width="400"/>
-                <DataGridTextColumn Header="Text"/>
-                
+                <DataGridTextColumn Header="ID" Width="400" />
+                <DataGridTextColumn Header="Text" />
             </DataGrid.Columns>
 
             <hc:Row ></hc:Row>
         </DataGrid>
     </Grid>
-    
 </catel:UserControl>

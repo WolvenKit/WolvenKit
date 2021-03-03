@@ -1,37 +1,33 @@
 <catel:UserControl x:Class="WolvenKit.MVVM.Views.Components.Tools.AssetBrowserView"
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"     
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                   xmlns:hc="https://handyorg.github.io/handycontrol"
 
                   xmlns:catel="http://schemas.catelproject.com" xmlns:Fluent="urn:fluent-ribbon"
                     xmlns:controls1="clr-namespace:WolvenKit.AssetBrowserBar.Controls;assembly=WolvenKit.AssetBrowserBar"
-                   BorderBrush="{x:Null}"     IsVisibleChanged="DataWindow_IsVisibleChanged" >
+                   BorderBrush="{x:Null}"     IsVisibleChanged="DataWindow_IsVisibleChanged">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
 
-                <hc:ThemeResources/>
-                <hc:Theme/>
-
+                <hc:ThemeResources />
+                <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-
     </catel:UserControl.Resources>
     <Border hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
 
         <Grid>
             <Grid.RowDefinitions>
 
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="9*"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="9*" />
             </Grid.RowDefinitions>
 
-            
-
-            <StackPanel Grid.Row="0" VerticalAlignment="Top"  >
-                <ToolBarTray    Style="{DynamicResource MahApps.Styles.ToolBarTray}" >
+            <StackPanel Grid.Row="0" VerticalAlignment="Top">
+                <ToolBarTray    Style="{DynamicResource MahApps.Styles.ToolBarTray}">
                     <ToolBar Visibility="Collapsed" Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
                         <Menu Background="Transparent" VerticalAlignment="Center">
                             <MenuItem Header="View">
@@ -48,8 +44,8 @@
                                 <MenuItem Header="Empty">
                                 </MenuItem>
                             </MenuItem>
-                            <MenuItem Header="Bookmarks"/>
-                            <MenuItem Header="Tabs"/>
+                            <MenuItem Header="Bookmarks" />
+                            <MenuItem Header="Tabs" />
                         </Menu>
                     </ToolBar>
 
@@ -72,38 +68,33 @@
                                 RenderTransformOrigin="0.5,0.5">
                                 <Button.RenderTransform>
                                     <TransformGroup>
-                                        <ScaleTransform/>
-                                        <SkewTransform/>
-                                        <RotateTransform Angle="180"/>
-                                        <TranslateTransform/>
+                                        <ScaleTransform />
+                                        <SkewTransform />
+                                        <RotateTransform Angle="180" />
+                                        <TranslateTransform />
                                     </TransformGroup>
                                 </Button.RenderTransform>
-
                             </Button>
 
                             <controls1:BreadcrumbBar
                                 Visibility="Hidden"
-                                x:Name="bar" 
+                                x:Name="bar"
                                 Background="Transparent"
                                 Root="{Binding Path=CurrentNode.Name, Mode=OneWay}"
-  TraceBinding="{Binding CurrentNode.Name}"                           
+  TraceBinding="{Binding CurrentNode.Name}"
 
-    ImageBinding="{Binding Image}" >
-
-
-
+    ImageBinding="{Binding Image}">
                             </controls1:BreadcrumbBar>
                             <hc:TextBox Text="{Binding Path=CurrentNode.FullPath, Mode=OneWay}" Width="500"></hc:TextBox>
 
                             <Button   Style="{StaticResource ButtonIcon}" Width="40" hc:IconElement.Geometry="{DynamicResource AssetBrowserStar}" Background="Transparent" BorderBrush="{x:Null}">
-
                             </Button>
                         </Menu>
                     </ToolBar>
 
                     <ToolBar Visibility="Collapsed" Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
                         <Menu Background="Transparent" VerticalAlignment="Center">
-                            <TextBlock Text="Class :"/>
+                            <TextBlock Text="Class :" />
                             <hc:ComboBox ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}" MinWidth="100">
                                 <ComboBox.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -120,7 +111,7 @@
                                            hc:InfoElement.Placeholder="Search something">
                                 <hc:Interaction.Triggers>
                                     <hc:EventTrigger EventName="SearchStarted">
-                                        <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True"/>
+                                        <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
                                     </hc:EventTrigger>
                                 </hc:Interaction.Triggers>
                             </hc:SearchBar>
@@ -138,26 +129,25 @@
                             </hc:ComboBox>
                         </Menu>
                     </ToolBar>
-
                 </ToolBarTray>
             </StackPanel>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="4*" />
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Column="0" xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters">
                     <Grid.Resources>
-                        <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter"/>
+                        <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
                     </Grid.Resources>
                     <TreeView SelectedItemChanged="TreeView_OnSelectedItemChanged" Margin="0" ItemsSource="{Binding RootNode.SubDirectories}"  BorderBrush="{DynamicResource MahApps.Brushes.Accent4}">
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding SubDirectories}">
                                 <StackPanel Orientation="Horizontal" Margin="2">
-                                    <Image Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}" 
+                                    <Image Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
                                            Margin="0,1,8,1"
-                                           Height="16"/>
+                                           Height="16" />
                                     <TextBlock Text="{Binding Name}" />
                                 </StackPanel>
                             </HierarchicalDataTemplate>
@@ -166,31 +156,29 @@
                 </Grid>
                 <GridSplitter Grid.Column="0" Margin="2,0,2,0"
                               Width="3" VerticalAlignment="Stretch"
-                              Background="{DynamicResource MahApps.Brushes.Accent3}" 
-                              ShowsPreview="False" >
+                              Background="{DynamicResource MahApps.Brushes.Accent3}"
+                              ShowsPreview="False">
                 </GridSplitter>
                 <Grid Grid.Column="1">
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="{Binding PreviewWidth}" MinWidth="8" MaxWidth="500"/>
-                        <ColumnDefinition Width="0"/>
-
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="{Binding PreviewWidth}" MinWidth="8" MaxWidth="500" />
+                        <ColumnDefinition Width="0" />
                     </Grid.ColumnDefinitions>
 
-                    <Grid Grid.Column="1" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  >
+                    <Grid Grid.Column="1" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
                         <Border BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" BorderThickness="1">
                             <Grid Visibility="{Binding PreviewVisible}" x:Name="PreviewGridAsset">
                                 <Label HorizontalAlignment="Center" Content="{Binding SelectedNode.Name, FallbackValue='No file selected'}"></Label>
                             </Grid>
                         </Border>
-                    
                     </Grid>
                     <GridSplitter Grid.Row="0" Grid.Column="1" Margin="2,0,2,0"
-                                        Width="3"  HorizontalAlignment="Left" 
+                                        Width="3"  HorizontalAlignment="Left"
                                         VerticalAlignment="Stretch"
-                                        Background="{DynamicResource MahApps.Brushes.Accent3}" 
-                                        ShowsPreview="False" >
+                                        Background="{DynamicResource MahApps.Brushes.Accent3}"
+                                        ShowsPreview="False">
                     </GridSplitter>
                     <hc:TabControl Grid.Column="0" IsAnimationEnabled="True" ShowCloseButton="True" IsDraggable="True">
                         <hc:TabItem Header="Depot">
@@ -200,26 +188,26 @@
                                       SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
                                       ItemsSource="{Binding CurrentNodeFiles}" xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters">
                                 <ListView.Resources>
-                                    <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter"/>
+                                    <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
                                 </ListView.Resources>
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Width="Auto">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Image Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}" 
+                                                    <Image Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
                                                            Margin="0,1,8,1"
-                                                           Height="16"/>
+                                                           Height="16" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Width="500" Header="Name" DisplayMemberBinding="{Binding Name}"/>
-                                        <GridViewColumn Width="Auto" Header="Size" DisplayMemberBinding="{Binding Size}"/>
+                                        <GridViewColumn Width="500" Header="Name" DisplayMemberBinding="{Binding Name}" />
+                                        <GridViewColumn Width="Auto" Header="Size" DisplayMemberBinding="{Binding Size}" />
                                     </GridView>
                                 </ListView.View>
                                 <hc:Interaction.Triggers>
                                     <hc:EventTrigger EventName="MouseDoubleClick">
-                                        <hc:EventToCommand Command="{Binding ImportFileCommand}"/>
+                                        <hc:EventToCommand Command="{Binding ImportFileCommand}" />
                                     </hc:EventTrigger>
                                 </hc:Interaction.Triggers>
                             </ListView>
@@ -238,10 +226,10 @@
                         RenderTransformOrigin="0.5,0.5">
                         <Button.RenderTransform>
                             <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="180"/>
-                                <TranslateTransform/>
+                                <ScaleTransform />
+                                <SkewTransform />
+                                <RotateTransform Angle="180" />
+                                <TranslateTransform />
                             </TransformGroup>
                         </Button.RenderTransform>
                     </Button>

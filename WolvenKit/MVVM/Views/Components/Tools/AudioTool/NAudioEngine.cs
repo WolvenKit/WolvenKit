@@ -12,9 +12,10 @@ using WPFSoundVisualizationLib;
 
 namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 {
-    class NAudioEngine : INotifyPropertyChanged, ISpectrumPlayer, IWaveformPlayer, IDisposable
+    internal class NAudioEngine : INotifyPropertyChanged, ISpectrumPlayer, IWaveformPlayer, IDisposable
     {
         #region Fields
+
         private static NAudioEngine instance;
         private readonly DispatcherTimer positionTimer = new DispatcherTimer(DispatcherPriority.ApplicationIdle);
         private readonly BackgroundWorker waveformGenerateWorker = new BackgroundWorker();
@@ -33,21 +34,25 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         private NAudio.Wave.WaveChannel32 inputStream;
         private SampleAggregator sampleAggregator;
         private SampleAggregator waveformAggregator;
-        private string pendingWaveformPath;        
+        private string pendingWaveformPath;
         private float[] fullLevelData;
         private float[] waveformData;
         private TagLib.File fileTag;
         private TimeSpan repeatStart;
         private TimeSpan repeatStop;
         private bool inRepeatSet;
-        #endregion
+
+        #endregion Fields
 
         #region Constants
+
         private const int waveformCompressedPointCount = 2000;
         private const int repeatThreshold = 200;
-        #endregion
+
+        #endregion Constants
 
         #region Singleton Pattern
+
         public static NAudioEngine Instance
         {
             get
@@ -57,9 +62,11 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 return instance;
             }
         }
-        #endregion
+
+        #endregion Singleton Pattern
 
         #region Constructor
+
         private NAudioEngine()
         {
             positionTimer.Interval = TimeSpan.FromMilliseconds(50);
@@ -68,21 +75,23 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             waveformGenerateWorker.DoWork += waveformGenerateWorker_DoWork;
             waveformGenerateWorker.RunWorkerCompleted += waveformGenerateWorker_RunWorkerCompleted;
             waveformGenerateWorker.WorkerSupportsCancellation = true;
-        }        
-        #endregion
+        }
+
+        #endregion Constructor
 
         #region IDisposable
+
         public void Dispose()
         {
-            Dispose(true);            
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if(!disposed)
+            if (!disposed)
             {
-                if(disposing)
+                if (disposing)
                 {
                     StopAndCloseStream();
                 }
@@ -90,9 +99,11 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 disposed = true;
             }
         }
-        #endregion
+
+        #endregion IDisposable
 
         #region ISpectrumPlayer
+
         public bool GetFFTData(float[] fftDataBuffer)
         {
             sampleAggregator.GetFFTResults(fftDataBuffer);
@@ -108,9 +119,11 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 maxFrequency = 22050; // Assume a default 44.1 kHz sample rate.
             return (int)((frequency / maxFrequency) * (fftDataSize / 2));
         }
-        #endregion
+
+        #endregion ISpectrumPlayer
 
         #region IWaveformPlayer
+
         public TimeSpan SelectionBegin
         {
             get { return repeatStart; }
@@ -143,7 +156,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                     inRepeatSet = false;
                 }
             }
-        }        
+        }
 
         public float[] WaveformData
         {
@@ -188,9 +201,11 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 }
             }
         }
-        #endregion
+
+        #endregion IWaveformPlayer
 
         #region INotifyPropertyChanged
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged(String info)
@@ -200,9 +215,11 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-        #endregion
+
+        #endregion INotifyPropertyChanged
 
         #region Waveform Generation
+
         private class WaveformGenerationParams
         {
             public WaveformGenerationParams(int points, string path)
@@ -235,28 +252,28 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 if (!waveformGenerateWorker.IsBusy && waveformCompressedPointCount != 0)
                     waveformGenerateWorker.RunWorkerAsync(new WaveformGenerationParams(waveformCompressedPointCount, pendingWaveformPath));
             }
-        }        
+        }
 
         private void waveformGenerateWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             WaveformGenerationParams waveformParams = e.Argument as WaveformGenerationParams;
             Mp3FileReader waveformMp3Stream = new Mp3FileReader(waveformParams.Path);
-            WaveChannel32 waveformInputStream = new WaveChannel32(waveformMp3Stream);            
+            WaveChannel32 waveformInputStream = new WaveChannel32(waveformMp3Stream);
             waveformInputStream.Sample += waveStream_Sample;
-            
+
             int frameLength = fftDataSize;
             int frameCount = (int)((double)waveformInputStream.Length / (double)frameLength);
             int waveformLength = frameCount * 2;
             byte[] readBuffer = new byte[frameLength];
             waveformAggregator = new SampleAggregator(frameLength);
-   
+
             float maxLeftPointLevel = float.MinValue;
             float maxRightPointLevel = float.MinValue;
             int currentPointIndex = 0;
             float[] waveformCompressedPoints = new float[waveformParams.Points];
             List<float> waveformData = new List<float>();
             List<int> waveMaxPointIndexes = new List<int>();
-            
+
             for (int i = 1; i <= waveformParams.Points; i++)
             {
                 waveMaxPointIndexes.Add((int)Math.Round(waveformLength * ((double)i / (double)waveformParams.Points), 0));
@@ -312,9 +329,11 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             waveformMp3Stream.Dispose();
             waveformMp3Stream = null;
         }
-        #endregion
+
+        #endregion Waveform Generation
 
         #region Private Utility Methods
+
         private void StopAndCloseStream()
         {
             if (waveOutDevice != null)
@@ -333,10 +352,12 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 waveOutDevice.Dispose();
                 waveOutDevice = null;
             }
-        }        
-        #endregion
+        }
+
+        #endregion Private Utility Methods
 
         #region Public Methods
+
         public void Stop()
         {
             if (waveOutDevice != null)
@@ -382,8 +403,8 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 SelectionEnd = TimeSpan.Zero;
                 ChannelPosition = 0;
             }
-            
-            StopAndCloseStream();            
+
+            StopAndCloseStream();
 
             if (System.IO.File.Exists(path))
             {
@@ -410,9 +431,11 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 }
             }
         }
-        #endregion
+
+        #endregion Public Methods
 
         #region Public Properties
+
         public TagLib.File FileTag
         {
             get { return fileTag; }
@@ -473,7 +496,6 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             }
         }
 
-
         public bool IsPlaying
         {
             get { return isPlaying; }
@@ -485,10 +507,12 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                     NotifyPropertyChanged("IsPlaying");
                 positionTimer.IsEnabled = value;
             }
-        }    
-        #endregion
+        }
+
+        #endregion Public Properties
 
         #region Event Handlers
+
         private void inputStream_Sample(object sender, SampleEventArgs e)
         {
             sampleAggregator.Add(e.Left, e.Right);
@@ -501,17 +525,18 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             }
         }
 
-        void waveStream_Sample(object sender, SampleEventArgs e)
+        private void waveStream_Sample(object sender, SampleEventArgs e)
         {
             waveformAggregator.Add(e.Left, e.Right);
-        }  
+        }
 
-        void positionTimer_Tick(object sender, EventArgs e)
+        private void positionTimer_Tick(object sender, EventArgs e)
         {
             inChannelTimerUpdate = true;
             ChannelPosition = ((double)ActiveStream.Position / (double)ActiveStream.Length) * ActiveStream.TotalTime.TotalSeconds;
             inChannelTimerUpdate = false;
         }
-        #endregion
+
+        #endregion Event Handlers
     }
 }

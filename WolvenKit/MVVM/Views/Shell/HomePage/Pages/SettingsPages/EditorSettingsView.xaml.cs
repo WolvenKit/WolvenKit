@@ -1,4 +1,3 @@
-
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Editor;
 
@@ -40,13 +39,10 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages
 
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Setting - Editor");
             }
-
-
         }
     }
 }

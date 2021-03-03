@@ -11,19 +11,24 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
     public class ProjectReader : ProjectReaderBase
     {
         #region Fields
+
         private readonly IGrowlNotificationService _notificationService;
-        #endregion
+
+        #endregion Fields
 
         #region Constructors
+
         public ProjectReader(IGrowlNotificationService notificationService)
         {
             Argument.IsNotNull(() => notificationService);
 
             _notificationService = notificationService;
         }
-        #endregion
+
+        #endregion Constructors
 
         #region Methods
+
         protected override async Task<IProject> ReadFromLocationAsync(string location)
         {
             try
@@ -43,9 +48,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
                         MainController.Get().ActiveMod = project.Data;
                         await MainController.SetGame(new Tw3Controller()).ContinueWith(t =>
                             {
-                                 _notificationService.Success( "Project " + Path.GetFileNameWithoutExtension(location) +
-                                   " loaded!");
-
+                                _notificationService.Success("Project " + Path.GetFileNameWithoutExtension(location) +
+                                  " loaded!");
                             }, TaskContinuationOptions.OnlyOnRanToCompletion);
                         break;
                     }
@@ -55,14 +59,13 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
                         MainController.Get().ActiveMod = project.Data;
                         await MainController.SetGame(new Cp77Controller()).ContinueWith(t =>
                             {
-                                _notificationService.Success( "Project " + Path.GetFileNameWithoutExtension(location) + " loaded!");
+                                _notificationService.Success("Project " + Path.GetFileNameWithoutExtension(location) + " loaded!");
                             }, TaskContinuationOptions.OnlyOnRanToCompletion);
                         break;
                     }
                 }
 
                 return await Task.FromResult<IProject>(project);
-
             }
             catch (IOException ex)
             {
@@ -70,8 +73,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
             }
 
             return null;
-
         }
-        #endregion
+
+        #endregion Methods
     }
 }

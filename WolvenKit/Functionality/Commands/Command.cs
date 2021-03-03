@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Input;
 
 namespace WolvenKit.Functionality.Commands
@@ -21,6 +21,7 @@ namespace WolvenKit.Functionality.Commands
         }
 
         public abstract bool CanExecute(object parameter);
+
         public abstract void Execute(object parameter);
     }
 }

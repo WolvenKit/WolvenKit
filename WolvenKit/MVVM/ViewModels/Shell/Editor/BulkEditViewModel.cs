@@ -21,17 +21,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
     public class BulkEditOptions
     {
         public enum AvailableTypes
-        { 
-            ANY, 
-            CUInt64, 
-            CUInt32, 
-            CUInt16, 
+        {
+            ANY,
+            CUInt64,
+            CUInt32,
+            CUInt16,
             CUInt8,
-            CInt64, 
-            CInt32, 
-            CInt16, 
+            CInt64,
+            CInt32,
+            CInt16,
             CInt8,
-            CBool, 
+            CBool,
             CString
         }
 
@@ -60,9 +60,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         [Category("Is Required")]
         public string ChunkName { get; set; }
 
-
-
-
         // Optional string
         [Description("Specify the file extensions to edit. \n\r" +
             "Example: w2mesh,w2l,xbm")]
@@ -87,7 +84,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
     public class ProgressReport : ObservableObject
     {
         #region Min
+
         private int _min;
+
         public int Min
         {
             get => _min;
@@ -100,9 +99,13 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
             }
         }
-        #endregion
+
+        #endregion Min
+
         #region Max
+
         private int _max;
+
         public int Max
         {
             get => _max;
@@ -115,9 +118,13 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
             }
         }
-        #endregion
+
+        #endregion Max
+
         #region Value
+
         private int _value;
+
         public int Value
         {
             get => _value;
@@ -130,11 +137,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
             }
         }
-        #endregion
+
+        #endregion Value
 
         public ProgressReport()
         {
-
         }
 
         public ProgressReport(ProgressReport old)
@@ -153,29 +160,33 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         {
             MainVM = mainViewModel;
             Logger = MainController.Get().Logger;
-            
 
             RunCommand = new RelayCommand(Run, CanRun);
             Options = new BulkEditOptions();
-
 
             ProgressReport = new ProgressReport();
         }
 
         public event EventHandler PerformStep = delegate { };
+
         protected void OnPerformStepRequest() => this.PerformStep?.Invoke(this, new EventArgs());
+
         protected void OnResetRequest() => this.PerformStep?.Invoke(this, new EventArgs());
 
         #region Fields
+
         private /*readonly*/ LoggerService Logger;
 
-        #endregion
+        #endregion Fields
 
         #region Properties
+
         public BulkEditOptions Options { get; set; }
 
         #region ProgressReport
+
         private ProgressReport _progressReport;
+
         public ProgressReport ProgressReport
         {
             get => _progressReport;
@@ -189,15 +200,19 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
             }
         }
-        #endregion
-        #endregion
+
+        #endregion ProgressReport
+
+        #endregion Properties
 
         #region Commands
+
         public ICommand RunCommand { get; }
 
-        #endregion
+        #endregion Commands
 
         #region Commands Implementation
+
         protected bool CanRun()
         {
             if (MainVM.GetOpenDocuments().Any())
@@ -218,9 +233,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             await Task.Run(() => RunBulkEditInternal(Options));
         }
 
-        #endregion
+        #endregion Commands Implementation
 
         #region Methods
+
         public async Task<int> RunBulkEditInternal(BulkEditOptions opts)
         {
             if (!(opts.Name != null && opts.Value != null && opts.ChunkName != null))
@@ -242,7 +258,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             ProgressReport.Min = 0;
             ProgressReport.Value = 0;
             ProgressReport = new ProgressReport(ProgressReport);
-
 
             foreach (var path in files)
             {
@@ -286,9 +301,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             // get chunks that match chunkname
             List<ICR2WExport> chunks = opts.ChunkName != null ? file.Chunks.Where(_ => _.data.GetType().Name == opts.ChunkName).ToList() : file.Chunks;
-            
-            var splits = opts.Name.Split('.');
 
+            var splits = opts.Name.Split('.');
 
             foreach (var chunk in chunks.Select(_ => _.data))
             {
@@ -341,14 +355,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         {
                             // check if the user specified a file type
                             if (opts.Type != BulkEditOptions.AvailableTypes.ANY)
-                                if ( proptoedit.GetType().Name != opts.Type.ToString())
+                                if (proptoedit.GetType().Name != opts.Type.ToString())
                                     return;
 
                             // check if the user specified a parent
                             if (splits.Length > 1)
                             {
                                 var parent = proptoedit.ParentVar;
-                                for (int i = splits.Length; i > 0 ; i--)
+                                for (int i = splits.Length; i > 0; i--)
                                 {
                                     if (parent.REDName != splits[i])
                                         return;
@@ -357,7 +371,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                                 }
                             }
 
-                            // check the value 
+                            // check the value
                             dynamic dyn = proptoedit;
                             if (!(dyn.val is string x))
                                 x = dyn.val.ToString();
@@ -379,9 +393,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                                 if (x == opts.Value)
                                     return;
 
-
-                                
-
                                 // set via reflection
                                 proptoedit.accessor[proptoedit, "val"] = convertedRequestedValue;
                                 Logger.LogString($"Succesfully edited a variable in {cvar.REDName}: {x} ===> {convertedRequestedValue}.\r\n", Logtype.Normal);
@@ -399,15 +410,19 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                                         case BulkEditOptions.AvailableOperations.Multiply:
                                             dresult *= dconvertedRequestedValue;
                                             break;
+
                                         case BulkEditOptions.AvailableOperations.Divide:
                                             dresult /= dconvertedRequestedValue;
                                             break;
+
                                         case BulkEditOptions.AvailableOperations.Add:
                                             dresult += dconvertedRequestedValue;
                                             break;
+
                                         case BulkEditOptions.AvailableOperations.Subtract:
                                             dresult -= dconvertedRequestedValue;
                                             break;
+
                                         default:
                                             break;
                                     }
@@ -424,9 +439,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                                     }
                                 }
                             }
-                            
-
-                            
                         }
                         else
                             Logger.LogString($"{proptoedit.GetType()} not supported in {cvar.REDName}: {path}.\r\n", Logtype.Normal);
@@ -437,11 +449,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     }
                 }
             }
-
         }
-        #endregion
 
-
-
+        #endregion Methods
     }
 }

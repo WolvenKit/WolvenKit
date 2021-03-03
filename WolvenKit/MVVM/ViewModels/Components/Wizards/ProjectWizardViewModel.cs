@@ -1,23 +1,28 @@
-﻿using System.Windows.Media;
+using System.Windows.Media;
 using Catel.MVVM;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Wizards
 {
-    class ProjectWizardViewModel : ViewModelBase
+    internal class ProjectWizardViewModel : ViewModelBase
     {
         #region Fields
+
         private bool _allFieldIsValid = false;
         private ImageBrush _profileImageBrush = default(ImageBrush);
         private string _profileImagePath = "";
+
         #endregion Fields
 
         #region Constructors
+
         public ProjectWizardViewModel() : base(null)
         {
         }
+
         #endregion Constructors
 
         #region Properties
+
         /// <summary>
         /// Gets/Sets if all the fields are valid.
         /// </summary>
@@ -56,6 +61,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
                 RaisePropertyChanged(nameof(ProfileImageBrushPath));
             }
         }
+
         #endregion Properties
     }
 }

@@ -5,7 +5,6 @@
                    IsVisibleChanged="UserControl_IsVisibleChanged">
 
     <Grid>
-        <TextBlock Text="CyberCAT" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Text="CyberCAT" HorizontalAlignment="Center" VerticalAlignment="Center" />
     </Grid>
-    
 </catel:UserControl>

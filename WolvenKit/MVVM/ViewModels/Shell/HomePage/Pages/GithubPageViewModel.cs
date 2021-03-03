@@ -1,8 +1,8 @@
-﻿using Catel.MVVM;
+using Catel.MVVM;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages
 {
-    class GithubPageViewModel : ViewModelBase
+    internal class GithubPageViewModel : ViewModelBase
     {
     }
 }

@@ -10,35 +10,38 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.ProjectWizard
     /// <summary>
     /// The ProjectConfigurationViewModel implements project wizard configuration window's viewmodel.
     /// </summary>
-    class ProjectConfigurationViewModel : ViewModelBase
-	{
-		#region constructors
-		public ProjectConfigurationViewModel(IServiceLocator serviceLocator)
-		{
-			Argument.IsNotNull(() => serviceLocator);
+    internal class ProjectConfigurationViewModel : ViewModelBase
+    {
+        #region constructors
 
-			ProjectWizardModel = serviceLocator.ResolveType<ProjectWizardModel>();
-		}
-		#endregion
+        public ProjectConfigurationViewModel(IServiceLocator serviceLocator)
+        {
+            Argument.IsNotNull(() => serviceLocator);
 
-		#region properties
-		/// <summary>
-		/// Gets or sets the projectWizardModel.
-		/// </summary>
-		[Model]
-		[Expose("ProjectName")]
-		[Expose("ProjectPath")]
-		public ProjectWizardModel ProjectWizardModel
-		{
-			get { return GetValue<ProjectWizardModel>(ProjectWizardModelProperty); }
-			set { SetValue(ProjectWizardModelProperty, value); }
-		}
+            ProjectWizardModel = serviceLocator.ResolveType<ProjectWizardModel>();
+        }
 
+        #endregion constructors
 
-		/// <summary>
-		/// Register the ProjectWizardModel property so it is known in the class.
-		/// </summary>
-		public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty("ProjectWizardModel", typeof(ProjectWizardModel));
-		#endregion properties
-	}
+        #region properties
+
+        /// <summary>
+        /// Gets or sets the projectWizardModel.
+        /// </summary>
+        [Model]
+        [Expose("ProjectName")]
+        [Expose("ProjectPath")]
+        public ProjectWizardModel ProjectWizardModel
+        {
+            get { return GetValue<ProjectWizardModel>(ProjectWizardModelProperty); }
+            set { SetValue(ProjectWizardModelProperty, value); }
+        }
+
+        /// <summary>
+        /// Register the ProjectWizardModel property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty("ProjectWizardModel", typeof(ProjectWizardModel));
+
+        #endregion properties
+    }
 }

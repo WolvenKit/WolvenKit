@@ -18,14 +18,13 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {
     public sealed class Cp77Project : EditorProject, ICloneable
     {
-
         #region fields
+
         private readonly ISettingsManager _settings;
         private readonly ILoggerService _logger;
         private Task initializeTask;
 
-
-        #endregion
+        #endregion fields
 
         public Cp77Project(string location) : base(location)
         {
@@ -35,11 +34,12 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 Load(location);
         }
 
-        public Cp77Project() : base("") { }
-
-
+        public Cp77Project() : base("")
+        {
+        }
 
         #region properties
+
         public override void Save(string path)
         {
             using (var sf = new FileStream(path, FileMode.Create, FileAccess.Write))
@@ -67,9 +67,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
 
-
-
         #region Directories
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -85,6 +84,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         }
 
         #region Top-level Dirs
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -113,10 +113,10 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        #endregion
+        #endregion Top-level Dirs
 
         #region Cooked and Packed Directories
-        
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -130,7 +130,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 return dir;
             }
         }
-        
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -148,13 +148,12 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 return dir;
             }
         }
-        #endregion
-        #endregion
 
+        #endregion Cooked and Packed Directories
+
+        #endregion Directories
 
         #region Files
-
-
 
         [XmlIgnore]
         [ReadOnly(true)]
@@ -189,11 +188,13 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                     .ToList();
             }
         }
-        #endregion
 
-        #endregion
+        #endregion Files
+
+        #endregion properties
 
         #region methods
+
         // TODO: debug
         public override void Check() => _logger.LogString($"{initializeTask.Status.ToString()}", Logtype.Error);
 
@@ -212,11 +213,9 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                     initializeTask.Status != TaskStatus.WaitingToRun &&
                     initializeTask.Status != TaskStatus.WaitingForActivation)
                 {
-
                 }
                 else
                 {
-
                 }
             }
 
@@ -241,10 +240,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             return Task.CompletedTask;
         }
 
-
-
-
-
         public void CreateDefaultDirectories()
         {
             // create top-level directories
@@ -259,10 +254,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         /// <returns></returns>
         public string GetDlcName() => $"dlc{Name}";
 
-        
-
-        #endregion
-
+        #endregion methods
 
         public override string ToString()
         {

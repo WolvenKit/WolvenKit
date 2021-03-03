@@ -29,7 +29,7 @@ namespace WolvenKit.Functionality.Services
         public override bool ShowSplashScreen => true;
         public override bool ShowShell => true;
 
-        #endregion
+        #endregion fields
 
         #region constructors
 
@@ -45,7 +45,7 @@ namespace WolvenKit.Functionality.Services
             _pleaseWaitService = pleaseWaitService;
         }
 
-        #endregion
+        #endregion constructors
 
         #region events
 
@@ -75,25 +75,25 @@ namespace WolvenKit.Functionality.Services
             await base.InitializeAfterShowingShellAsync();
 
             await LoadProjectAsync();
-
         }
 
-        #endregion
+        #endregion events
 
         #region methods
+
         private Task InitializePerformanceAsync()
         {
             Log.Info("Improving performance");
 
             Catel.Windows.Controls.UserControl.DefaultCreateWarningAndErrorValidatorForViewModelValue = false;
             Catel.Windows.Controls.UserControl.DefaultSkipSearchingForInfoBarMessageControlValue = true;
-            
+
             return Task.CompletedTask;
         }
 
         private void InitializeFonts()
         {
-           // Orc.Theming.FontImage.RegisterFont("FontAwesome", new FontFamily(new Uri("pack://application:,,,/WolvenKit;component/Resources/Fonts/", UriKind.RelativeOrAbsolute), "./#FontAwesome"));
+            // Orc.Theming.FontImage.RegisterFont("FontAwesome", new FontFamily(new Uri("pack://application:,,,/WolvenKit;component/Resources/Fonts/", UriKind.RelativeOrAbsolute), "./#FontAwesome"));
             Orc.Theming.FontImage.DefaultFontFamily = "Segoe UI";
             Orc.Theming.FontImage.DefaultBrush = new SolidColorBrush(Color.FromArgb(255, 87, 87, 87));
         }
@@ -112,20 +112,15 @@ namespace WolvenKit.Functionality.Services
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.OpenProject));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.OpenLink));
 
-
             // application-wide commands that viewmodels can subscribe to
             // Workspace Viewmodel
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.DelProject));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.SaveAsProject));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.SaveProject));
 
-
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.ShowAbout));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.ShowFeedback));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.ShowSettings));
-
-
-
 
             _commandManager.CreateCommand((AppCommands.Application.ShowLog));
             _commandManager.CreateCommand((AppCommands.Application.ShowProjectExplorer));
@@ -151,7 +146,6 @@ namespace WolvenKit.Functionality.Services
             _commandManager.CreateCommand((AppCommands.Application.ShowRadishTool));
             _commandManager.CreateCommand((AppCommands.Application.ShowWccTool));
 
-
             _commandManager.CreateCommand((AppCommands.Application.OpenFile));
             _commandManager.CreateCommand((AppCommands.Application.NewFile));
             _commandManager.CreateCommand((AppCommands.Application.PackMod));
@@ -165,16 +159,13 @@ namespace WolvenKit.Functionality.Services
             _commandManager.CreateCommand(AppCommands.ProjectExplorer.Collapse);
             _commandManager.CreateCommand(AppCommands.ProjectExplorer.Refresh);
 
-
             _commandManager.CreateCommand(AppCommands.Application.ViewSelected);
-
         }
 
         private void RegisterTypes()
         {
             // project management
             _serviceLocator.RegisterType<IGrowlNotificationService, GrowlNotificationService>();
-
 
             _serviceLocator.RegisterType<IProjectSerializerSelector, ProjectSerializerSelector>();  //TODO: not needed?
             _serviceLocator.RegisterType<ISaveProjectChangesService, SaveProjectChangesService>();
@@ -183,15 +174,13 @@ namespace WolvenKit.Functionality.Services
             _serviceLocator.RegisterType<IProjectRefresherSelector, MyProjectRefresherSelector>();
             _serviceLocator.RegisterType<IProjectRefresher, WolvenKitProjectRefresher>(RegistrationType.Transient);
 
-            //_serviceLocator.RegisterType<IMainWindowTitleService, MainWindowTitleService>();      //TODO: 
+            //_serviceLocator.RegisterType<IMainWindowTitleService, MainWindowTitleService>();      //TODO:
             //_serviceLocator.RegisterType<IProjectValidator, WkitProjectValidator>();
 
             _serviceLocator.RegisterTypeAndInstantiate<ProjectManagementCloseApplicationWatcher>();
 
-
             // Orchestra
             _serviceLocator.RegisterType<IAboutInfoService, AboutInfoService>();
-
 
             // Wkit
             _serviceLocator.RegisterType<ILoggerService, LoggerService>();
@@ -209,16 +198,16 @@ namespace WolvenKit.Functionality.Services
         {
             //TODO: enable
             return Task.CompletedTask;
-//            Log.Info("Checking for updates");
+            //            Log.Info("Checking for updates");
 
-//            var updateService = _serviceLocator.ResolveType<IUpdateService>();
-//            updateService.Initialize(Settings.Application.AutomaticUpdates.AvailableChannels, Settings.Application.AutomaticUpdates.DefaultChannel,
-//                Settings.Application.AutomaticUpdates.CheckForUpdatesDefaultValue);
+            //            var updateService = _serviceLocator.ResolveType<IUpdateService>();
+            //            updateService.Initialize(Settings.Application.AutomaticUpdates.AvailableChannels, Settings.Application.AutomaticUpdates.DefaultChannel,
+            //                Settings.Application.AutomaticUpdates.CheckForUpdatesDefaultValue);
 
-//#pragma warning disable 4014
-//            // Not dot await, it's a background thread
-//            updateService.InstallAvailableUpdatesAsync(new SquirrelContext());
-//#pragma warning restore 4014
+            //#pragma warning disable 4014
+            //            // Not dot await, it's a background thread
+            //            updateService.InstallAvailableUpdatesAsync(new SquirrelContext());
+            //#pragma warning restore 4014
         }
 
         private async Task LoadProjectAsync()
@@ -236,7 +225,7 @@ namespace WolvenKit.Functionality.Services
                 await projectManager.InitializeAsync();
             }
         }
-        #endregion
 
+        #endregion methods
     }
 }

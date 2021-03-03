@@ -4,7 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 using System.Threading.Tasks;
 using Catel;
 using Catel.Reflection;
@@ -17,12 +16,15 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
     public class SaveProjectChangesService : ISaveProjectChangesService
     {
         #region Fields
+
         private readonly IMessageService _messageService;
         private readonly IPleaseWaitService _pleaseWaitService;
         private readonly IProjectManager _projectManager;
-        #endregion
+
+        #endregion Fields
 
         #region Constructors
+
         public SaveProjectChangesService(IProjectManager projectManager, IPleaseWaitService pleaseWaitService,
             IMessageService messageService)
         {
@@ -34,9 +36,11 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
             _pleaseWaitService = pleaseWaitService;
             _messageService = messageService;
         }
-        #endregion
+
+        #endregion Constructors
 
         #region Methods
+
         public Task<bool> EnsureChangesSavedAsync(EditorProject project, SaveChangesReason reason)
         {
             Argument.IsNotNull(() => project);
@@ -102,6 +106,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
 
             return false;
         }
-        #endregion
+
+        #endregion Methods
     }
 }

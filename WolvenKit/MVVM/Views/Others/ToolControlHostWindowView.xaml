@@ -5,38 +5,32 @@
                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                   xmlns:hc="https://handyorg.github.io/handycontrol"
 
-                  ShowInTaskbar="True" 
-                  AllowsTransparency="True" 
-                  BorderBrush="{x:Null}" 
-                  WindowStartupLocation="CenterScreen"  
-            
-                  WindowStyle="None" 
+                  ShowInTaskbar="True"
+                  AllowsTransparency="True"
+                  BorderBrush="{x:Null}"
+                  WindowStartupLocation="CenterScreen"
+
+                  WindowStyle="None"
                   Title="{Binding Content.Tag, ElementName=UserContentControl}">
 
     <catel:DataWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources/>
-                <hc:Theme/>
+                <hc:ThemeResources />
+                <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-
     </catel:DataWindow.Resources>
     <Grid>
         <Border hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Width="auto" Height="auto" BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
 
             <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
 
-             
-
-
                 <Grid  Margin="3,3,3,3">
 
-                    <ContentControl  x:Name="UserContentControl"/>
-
+                    <ContentControl  x:Name="UserContentControl" />
                 </Grid>
             </Grid>
         </Border>
     </Grid>
-
 </catel:DataWindow>

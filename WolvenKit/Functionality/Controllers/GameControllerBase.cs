@@ -31,26 +31,51 @@ namespace WolvenKit.Functionality.Controllers
         {
             switch (type)
             {
-                case EManagerType.BundleManager: return Path.Combine(ManagerCacheDir, "bundle_cache.json");
-                case EManagerType.CollisionManager: return Path.Combine(ManagerCacheDir, "collision_cache.json");
-                case EManagerType.SoundManager: return Path.Combine(ManagerCacheDir, "sound_cache.json");
-                case EManagerType.W3StringManager: return Path.Combine(ManagerCacheDir, "string_cache.bin");
-                case EManagerType.TextureManager: return Path.Combine(ManagerCacheDir, "texture_cache.json");
-                case EManagerType.ArchiveManager: return Path.Combine(ManagerCacheDir, "archive_cache.json");
+                case EManagerType.BundleManager:
+                    return Path.Combine(ManagerCacheDir, "bundle_cache.json");
+
+                case EManagerType.CollisionManager:
+                    return Path.Combine(ManagerCacheDir, "collision_cache.json");
+
+                case EManagerType.SoundManager:
+                    return Path.Combine(ManagerCacheDir, "sound_cache.json");
+
+                case EManagerType.W3StringManager:
+                    return Path.Combine(ManagerCacheDir, "string_cache.bin");
+
+                case EManagerType.TextureManager:
+                    return Path.Combine(ManagerCacheDir, "texture_cache.json");
+
+                case EManagerType.ArchiveManager:
+                    return Path.Combine(ManagerCacheDir, "archive_cache.json");
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
         }
+
         public static string GetManagerVersion(EManagerType type)
         {
             switch (type)
             {
-                case EManagerType.BundleManager: return BundleManager.SerializationVersion;
-                case EManagerType.CollisionManager: return CollisionManager.SerializationVersion;
-                case EManagerType.SoundManager: return SoundManager.SerializationVersion;
-                case EManagerType.W3StringManager: return W3StringManager.SerializationVersion;
-                case EManagerType.TextureManager: return TextureManager.SerializationVersion;
-                case EManagerType.ArchiveManager: return ArchiveManager.SerializationVersion;
+                case EManagerType.BundleManager:
+                    return BundleManager.SerializationVersion;
+
+                case EManagerType.CollisionManager:
+                    return CollisionManager.SerializationVersion;
+
+                case EManagerType.SoundManager:
+                    return SoundManager.SerializationVersion;
+
+                case EManagerType.W3StringManager:
+                    return W3StringManager.SerializationVersion;
+
+                case EManagerType.TextureManager:
+                    return TextureManager.SerializationVersion;
+
+                case EManagerType.ArchiveManager:
+                    return ArchiveManager.SerializationVersion;
+
                 case EManagerType.Max:
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);

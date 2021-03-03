@@ -7,18 +7,16 @@
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources/>
-                <hc:Theme/>
+                <hc:ThemeResources />
+                <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </catel:UserControl.Resources>
 
-
     <Grid>
         <StackPanel Orientation="Horizontal">
-            <hc:TextBox Width="250" hc:InfoElement.TitleWidth="50" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Type" Text=""/>
-            <hc:TextBox Margin="15,0,0,0" Width="400" hc:InfoElement.TitleWidth="50" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Guid Tag"  Text=""/>
+            <hc:TextBox Width="250" hc:InfoElement.TitleWidth="50" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Type" Text="" />
+            <hc:TextBox Margin="15,0,0,0" Width="400" hc:InfoElement.TitleWidth="50" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Guid Tag"  Text="" />
         </StackPanel>
     </Grid>
-
 </catel:UserControl>

@@ -1,10 +1,9 @@
-﻿using Catel.MVVM;
+using Catel.MVVM;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.PublishWizard
 {
-    class W3PackSettingsViewModel : ViewModelBase
+    internal class W3PackSettingsViewModel : ViewModelBase
     {
-
         public string[] PackerSource
         {
             get
@@ -12,6 +11,5 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.PublishWizard
                 return new string[] { "DLC", "MOD" };
             }
         }
-          
     }
 }

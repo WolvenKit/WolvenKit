@@ -1,4 +1,3 @@
-
 using Catel.IoC;
 using WolvenKit.MVVM.ViewModels.Components.Wizards;
 
@@ -6,7 +5,8 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
 {
     public partial class SetInitialPreferencesView
     {
-        FirstSetupWizardViewModel _fswvm;
+        private FirstSetupWizardViewModel _fswvm;
+
         public SetInitialPreferencesView()
         {
             InitializeComponent();

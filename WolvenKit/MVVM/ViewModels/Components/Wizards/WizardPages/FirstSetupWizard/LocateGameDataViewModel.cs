@@ -8,9 +8,10 @@ using WolvenKit.MVVM.Model.Wizards;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWizard
 {
-    class LocateGameDataViewModel : ViewModelBase
+    internal class LocateGameDataViewModel : ViewModelBase
     {
         #region constructors
+
         public LocateGameDataViewModel(IServiceLocator serviceLocator)
         {
             Argument.IsNotNull(() => serviceLocator);
@@ -19,9 +20,11 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWiz
             FirstSetupWizardViewModel = serviceLocator.ResolveType<FirstSetupWizardViewModel>();
             FirstSetupWizardModel = serviceLocator.ResolveType<FirstSetupWizardModel>();
         }
-        #endregion
+
+        #endregion constructors
 
         #region properties
+
         /// <summary>
         /// Gets or sets the SettingsManager.
         /// </summary>
@@ -58,7 +61,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWiz
             set { SetValue(ProjectWizardModelProperty, value); }
         }
 
-
         /// <summary>
         /// Register the SettingsManager property so it is known in the class.
         /// </summary>
@@ -73,6 +75,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWiz
         /// Register the FirstSetupWizardModel property so it is known in the class.
         /// </summary>
         public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty("FirstSetupWizardModel", typeof(FirstSetupWizardModel));
+
         #endregion properties
     }
 }

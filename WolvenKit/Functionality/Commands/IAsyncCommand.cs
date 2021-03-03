@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Input;
 
 namespace WolvenKit.Functionality.Commands
@@ -9,6 +9,7 @@ namespace WolvenKit.Functionality.Commands
     public interface IAsyncCommand : ICommand
     {
         IAsyncResult BeginExecute(object parameter);
+
         void EndExecute(IAsyncResult result);
     }
 }

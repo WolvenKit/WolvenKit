@@ -2,10 +2,8 @@ using Catel.MVVM;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Tools
 {
-    class RadioPlayerViewModel : ViewModelBase
+    internal class RadioPlayerViewModel : ViewModelBase
     {
-
-     
         public int RadioVolume()
         {
             //get

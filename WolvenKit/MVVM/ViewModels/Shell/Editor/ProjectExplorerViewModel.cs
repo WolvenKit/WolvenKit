@@ -30,7 +30,6 @@ using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
-
     public class ProjectExplorerViewModel : ToolViewModel
     {
         #region fields
@@ -51,11 +50,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         private readonly ICommandManager _commandManager;
         private readonly IProjectRefresherSelector _refresherSelector;
 
-
         private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
         private readonly ConcurrentDictionary<ulong, FileSystemInfoModel> _flatNodeDictionary;
 
-        #endregion
+        #endregion fields
 
         #region constructors
 
@@ -89,18 +87,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             _flatNodeDictionary = new ConcurrentDictionary<ulong, FileSystemInfoModel>();
             Treenodes = new BindingList<FileSystemInfoModel>();
             Treenodes.ListChanged += new ListChangedEventHandler(Treenodes_ListChanged);
-
         }
-
-        
 
         #endregion constructors
 
         #region properties
 
-        
-
         private BindingList<FileSystemInfoModel> _treenodes = null;
+
         public BindingList<FileSystemInfoModel> Treenodes
         {
             get => _treenodes;
@@ -116,6 +110,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         }
 
         private FileSystemInfoModel _selectedItem;
+
         public FileSystemInfoModel SelectedItem
         {
             get => _selectedItem;
@@ -130,7 +125,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-        #endregion
+        #endregion properties
 
         #region commands
 
@@ -138,7 +133,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Refresh a node in the ProjectExplorer tree with a given physical path
         /// </summary>
         public ICommand RefreshNodeCommand { get; private set; }
+
         private bool CanRefreshNode(string path) => true;
+
         private void ExecuteRefreshNode(string path)
         {
             var dir = new DirectoryInfo(path);
@@ -210,7 +207,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Copies relative path of node.
         /// </summary>
         public ICommand CopyRelPathCommand { get; private set; }
+
         private bool CanCopyRelPath() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+
         private void ExecuteCopyRelPath()
         {
             if (SelectedItem.IsFile)
@@ -232,7 +231,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Opens selected node in File Explorer.
         /// </summary>
         public ICommand OpenInFileExplorerCommand { get; private set; }
+
         private bool CanOpenInFileExplorer() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+
         private void ExecuteOpenInFileExplorer()
         {
             if (SelectedItem.IsDirectory)
@@ -245,40 +246,51 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Expands all nodes in the treeview.
         /// </summary>
         public ICommand ExpandAllCommand { get; private set; }
+
         private bool CanExpandAll() => _projectManager.ActiveProject is EditorProject;
+
         private void ExecuteExpandAll()
         {
-            foreach (var node in Treenodes) node.ExpandChildren(true);
+            foreach (var node in Treenodes)
+                node.ExpandChildren(true);
         }
 
         /// <summary>
         /// Collapses all nodes in the treeview.
         /// </summary>
         public ICommand CollapseAllCommand { get; private set; }
+
         private bool CanCollapseAll() => _projectManager.ActiveProject is EditorProject;
+
         private void ExecuteCollapseAll()
         {
-            foreach (var node in Treenodes) node.CollapseChildren(true);
+            foreach (var node in Treenodes)
+                node.CollapseChildren(true);
         }
 
         /// <summary>
         /// Expands all children of the selected node.
         /// </summary>
         public ICommand ExpandCommand { get; private set; }
+
         private bool CanExpand() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+
         private void ExecuteExpand() => SelectedItem.ExpandChildren(true);
 
         /// <summary>
         /// Collapses all children of the selected node.
         /// </summary>
         public ICommand CollapseCommand { get; private set; }
+
         private bool CanCollapse() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+
         private void ExecuteCollapse() => SelectedItem.CollapseChildren(true);
 
         /// <summary>
         /// Delets selected node.
         /// </summary>
         public ICommand DeleteFileCommand { get; private set; }
+
         private bool CanDeleteFile()
         {
             var b = _projectManager.ActiveProject is EditorProject && SelectedItem != null;
@@ -299,17 +311,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     );
             }
 
-
-            
             return b;
         }
+
         private async void ExecuteDeleteFile()
         {
             //// TODO: close open documents
 
             if (await _messageService.ShowAsync(
                     "Are you sure you want to delete this?", "Are you sure?", MessageButton.YesNo) !=
-                MessageResult.Yes) return;
+                MessageResult.Yes)
+                return;
 
             // Delete from file structure
             var fullpath = SelectedItem.FullName;
@@ -345,17 +357,19 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         }
 
         /// <summary>
-        /// Renames selected node. 
+        /// Renames selected node.
         /// </summary>
         public ICommand RenameFileCommand { get; private set; }
+
         private bool CanRenameFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+
         private async void ExecuteRenameFile()
         {
             var filename = SelectedItem.FullName;
-            
+
             var visualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();
-            var viewModel = new Components.Dialogs.InputDialogViewModel() {Text = filename};
-            await visualizerService.ShowDialogAsync(viewModel, delegate(object sender, UICompletedEventArgs args)
+            var viewModel = new Components.Dialogs.InputDialogViewModel() { Text = filename };
+            await visualizerService.ShowDialogAsync(viewModel, delegate (object sender, UICompletedEventArgs args)
             {
                 if (args.Result != true)
                     return;
@@ -380,13 +394,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
                 catch
                 {
-
                 }
                 finally
                 {
                     //SelectedItem.RaiseRequestRefresh();
                 }
-                
             });
         }
 
@@ -394,7 +406,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Cuts selected node to the clipboard.
         /// </summary>
         public ICommand CutFileCommand { get; private set; }
+
         private bool CanCutFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+
         private void ExecuteCutFile()
         {
             // TODO: Handle command logic here
@@ -405,14 +419,18 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Copies selected node to the clipboard.
         /// </summary>
         public ICommand CopyFileCommand { get; private set; }
+
         private bool CanCopyFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+
         private void CopyFile() => Clipboard.SetText(SelectedItem.FullName);
 
         /// <summary>
         /// Pastes a file from the clipboard into selected node.
         /// </summary>
         public ICommand PasteFileCommand { get; private set; }
+
         private bool CanPasteFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null && Clipboard.ContainsText();
+
         private void PasteFile()
         {
             if (File.Exists(Clipboard.GetText()))
@@ -453,7 +471,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-        #endregion
+        #endregion general commands
 
         #region Tw3 Commands
 
@@ -461,7 +479,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Opens selected node in asset browser.
         /// </summary>
         public ICommand OpenInAssetBrowserCommand { get; private set; }
+
         private bool CanOpenInAssetBrowser() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null;
+
         private void ExecuteOpenInAssetBrowser()
         {
             // TODO: Handle command logic here
@@ -471,8 +491,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Exports selected file to Json.
         /// </summary>
         public ICommand ExportJsonCommand { get; private set; }
+
         private bool CanExportJson() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null
             && SelectedItem.IsFile;
+
         private void ExecuteExportJson()
         {
             // TODO: Handle command logic here
@@ -482,8 +504,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         ///  Opens the fast render Window for selected file
         /// </summary>
         public ICommand FastRenderCommand { get; private set; }
-        private bool CanFastRender() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null 
+
+        private bool CanFastRender() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null
             && SelectedItem.IsFile && SelectedItem.Extension == ".w2mesh";
+
         private void ExecuteFastRender()
         {
             // TODO: Handle command logic here
@@ -493,27 +517,32 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Exports selected node with wcc.
         /// </summary>
         public ICommand ExportMeshCommand { get; private set; }
-        private bool CanExportMesh() => _projectManager.ActiveProject is EditorProject && SelectedItem != null 
+
+        private bool CanExportMesh() => _projectManager.ActiveProject is EditorProject && SelectedItem != null
             && SelectedItem.IsFile && SelectedItem.Extension == ".w2mesh";
+
         private async void ExportMesh() => await Task.Run(() => WccHelper.ExportFileToMod(SelectedItem.FullName));
 
         /// <summary>
         /// Adds all dependencies (imports) of selected node from the game.
         /// </summary>
         public ICommand AddAllImportsCommand { get; private set; }
-        private bool CanAddAllImports() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null && SelectedItem.IsFile;
-        private async void AddAllImports() => await WccHelper.AddAllImportsAsync(SelectedItem.FullName, true);
 
+        private bool CanAddAllImports() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null && SelectedItem.IsFile;
+
+        private async void AddAllImports() => await WccHelper.AddAllImportsAsync(SelectedItem.FullName, true);
 
         // legacy
 
         public ICommand CookCommand { get; private set; }
+
         private bool CanCook() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null;
+
         private void Cook() => RequestFileCook(this, new RequestFileOpenArgs { File = SelectedItem.FullName });
 
-        #endregion
+        #endregion Tw3 Commands
 
-        #endregion
+        #endregion commands
 
         #region Methods
 
@@ -628,8 +657,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             //IconSource = bi;
         }
 
-        
-
         protected override async Task CloseAsync()
         {
             _projectManager.ProjectActivatedAsync -= OnProjectActivatedAsync;
@@ -637,7 +664,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             await base.CloseAsync();
         }
 
-        void Treenodes_ListChanged(object sender, ListChangedEventArgs e)
+        private void Treenodes_ListChanged(object sender, ListChangedEventArgs e)
         {
             //RaisePropertyChanged(nameof(Treenodes));
         }
@@ -687,12 +714,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             if (reldir.StartsWith(EProjectFolders.Uncooked.ToString()))
                 reldir = reldir.Substring(EProjectFolders.Uncooked.ToString().Length);
-            
+
             reldir = reldir.TrimStart(Path.DirectorySeparatorChar);
 
             // create cooked mod Dir
-            var cookedtargetDir = isDlc 
-                ? Path.Combine(tw3mod.DlcCookedDirectory, reldir) 
+            var cookedtargetDir = isDlc
+                ? Path.Combine(tw3mod.DlcCookedDirectory, reldir)
                 : Path.Combine(tw3mod.ModCookedDirectory, reldir);
             if (!Directory.Exists(cookedtargetDir))
             {
@@ -727,14 +754,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 };
                 await Task.Run(() => MainController.Get().WccHelper.RunCommand(cook));
             }
-
             catch (Exception)
             {
                 MainController.LogString("Error cooking files.", Logtype.Error);
             }
         }
-        
-        #endregion
 
+        #endregion Methods
     }
 }

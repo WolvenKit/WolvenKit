@@ -1,8 +1,8 @@
-﻿using Catel.MVVM;
+using Catel.MVVM;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.UserWizard
 {
-    class UserWizardPageViewModel : ViewModelBase
+    internal class UserWizardPageViewModel : ViewModelBase
     {
     }
 }

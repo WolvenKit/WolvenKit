@@ -19,14 +19,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
     public class RibbonViewModel : ViewModel
     {
         #region fields
+
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
         private readonly INavigationService _navigationService;
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly ISettingsManager _settingsManager;
-        #endregion
+
+        #endregion fields
 
         #region constructors
+
         public RibbonViewModel(
             ISettingsManager settingsManager,
             IProjectManager projectManager,
@@ -49,12 +52,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
 
-
             var assembly = AssemblyHelper.GetEntryAssembly();
             Title = assembly.Title();
-
         }
-        #endregion
+
+        #endregion constructors
 
         #region properties
 
@@ -65,13 +67,13 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         }
 
         public ERibbonContextualTabGroupVisibility ProjectExplorerContextualTabGroupVisibility { get; set; }
+
         public string ProjectExplorerContextualTabGroupVisibilityStr =>
             ProjectExplorerContextualTabGroupVisibility.ToString();
 
-        
-
-        private Color _selectedTheme;  
+        private Color _selectedTheme;
         public Random rnd = new Random();
+
         public Color SelectedTheme
         {
             get => _selectedTheme;
@@ -85,20 +87,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     ControlzEx.Theming.ThemeManager.Current.AddTheme(new ControlzEx.Theming.Theme(stringint, "asfasf", "Dark", "Red", value, color, true, false));
                     ControlzEx.Theming.ThemeManager.Current.AddTheme(ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", Colors.Red));
                     ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, stringint);
-           
-
                 }
-
             }
         }
 
-
-        
-
-
-
-
-        #endregion
+        #endregion properties
 
         #region commands
 
@@ -106,7 +99,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Is raised when a PaneView is selected: shows the contextual ribbon tab
         /// </summary>
         public ICommand ViewSelectedCommand { get; private set; }
+
         private bool CanViewSelected(object view) => true;
+
         private void ExecuteViewSelected(object viewmodel)
         {
             if (viewmodel is not Tuple<PaneViewModel, bool> tuple)
@@ -122,15 +117,15 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-        #endregion
+        #endregion commands
 
         #region methods
+
         protected override async Task InitializeAsync()
         {
             await base.InitializeAsync();
 
             // Write initialization code here and subscribe to events
-
 
             ServiceLocator.Default.ResolveType<ICommandManager>()
                 .RegisterCommand(AppCommands.Application.ViewSelected, ViewSelectedCommand, this);
@@ -142,6 +137,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             return base.CloseAsync();
         }
-        #endregion
+
+        #endregion methods
     }
 }

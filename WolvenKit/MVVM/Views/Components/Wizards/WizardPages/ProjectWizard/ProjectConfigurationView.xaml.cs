@@ -1,4 +1,3 @@
-
 using Catel.IoC;
 using Catel.Services;
 using HandyControl.Controls;

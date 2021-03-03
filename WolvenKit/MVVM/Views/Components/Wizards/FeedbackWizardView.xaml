@@ -6,33 +6,26 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:rv1="clr-namespace:WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FeedbackWizard"
-    IsVisibleChanged="UserControl_IsVisibleChanged"
-                   >
+    IsVisibleChanged="UserControl_IsVisibleChanged">
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources/>
-                <hc:Theme/>
+                <hc:ThemeResources />
+                <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-
     </catel:UserControl.Resources>
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" MinWidth="300"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,2,5">
 
-
         <Grid.RowDefinitions>
-            <RowDefinition Height="15*"/>
-            <RowDefinition Height="90*"/>
-            <RowDefinition Height="10*"/>
-
+            <RowDefinition Height="15*" />
+            <RowDefinition Height="90*" />
+            <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
-
-
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="5,0,5,0">
             <Grid>
                 <iconPacks:PackIconCodicons  Grid.Row="0"   Kind="Hubot" Spin="False" SpinAutoReverse="False" Height="50" Width="50" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
-
             </Grid>
 
             <StackPanel  VerticalAlignment="Bottom" Orientation="Vertical" HorizontalAlignment="Stretch">
@@ -42,19 +35,8 @@
             </StackPanel>
         </StackPanel>
 
-
         <Grid x:Name="PageGrid" Grid.Row="1">
-            <rv1:RateView/>
+            <rv1:RateView />
         </Grid>
-
-
-
-
-
-
-
-      
-
     </Grid>
-
 </catel:UserControl>

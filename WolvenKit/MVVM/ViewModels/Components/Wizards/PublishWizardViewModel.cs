@@ -8,7 +8,7 @@ using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Wizards
 {
-    class PublishWizardViewModel : ViewModelBase
+    internal class PublishWizardViewModel : ViewModelBase
     {
         private ILogger Logger => ServiceLocator.Default.ResolveType<ILogger>();
 
@@ -25,9 +25,11 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
                 case GameType.Witcher3:
                     WitcherPublishStrategy(proj as Tw3Project);
                     break;
+
                 case GameType.Cyberpunk2077:
                     CyberpunkPublishStrategy(proj as Cp77Project);
                     break;
+
                 default:
                     break;
             }
@@ -42,7 +44,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
         /// |---wkpmeta\<modname>\<modname>.wkmeta (json) + icon
         /// |
         /// |---r6\cache\tweakdbpatches\<modname>.tweakdbpatch
-        /// 
+        ///
         /// </summary>
         /// <param name="project">Project to pack</param>
         public void WitcherPublishStrategy(Tw3Project project)
@@ -61,7 +63,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
         /// |---wkpmeta\<modname>\<modname>.wkmeta (json) + icon
         /// |
         /// |---r6\cache\tweakdbpatches\<modname>.tweakdbpatch
-        /// 
+        ///
         /// </summary>
         /// <param name="project">Project to pack</param>
         public void CyberpunkPublishStrategy(Cp77Project project)

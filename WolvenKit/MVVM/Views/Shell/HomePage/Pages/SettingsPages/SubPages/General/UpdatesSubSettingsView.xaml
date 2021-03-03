@@ -1,4 +1,4 @@
-﻿<catel:UserControl x:Class="WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.General.UpdatesSubSettingsView"
+<catel:UserControl x:Class="WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.General.UpdatesSubSettingsView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -6,10 +6,9 @@
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
-
 
         <Grid Grid.Column="0">
             <hc:ScrollViewer>
@@ -17,37 +16,33 @@
 
                     <Border BorderThickness="4,0,0,6" Margin="15,15,32,0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
                         <Grid>
-                            <TextBlock Text="Application" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                            <TextBlock Text="Application" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0" />
                         </Grid>
                     </Border>
-                    
+
                     <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
                         <StackPanel>
-                            
+
                             <Grid Margin="5">
-                                <TextBlock Text="Automatically Update WolvenKit" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                                <TextBlock Text="Automatically Update WolvenKit" VerticalAlignment="Center" Margin="0,0,50,0" />
                                 <ToggleButton HorizontalAlignment="Right" BorderThickness="0" IsEnabled="True"  VerticalAlignment="Center"   Style="{StaticResource ToggleButtonFlip}">
                                     <hc:StatusSwitchElement.CheckedElement>
                                         <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
-                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="On" Foreground="{DynamicResource TextIconBrush}"/>
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="On" Foreground="{DynamicResource TextIconBrush}" />
                                         </Border>
                                     </hc:StatusSwitchElement.CheckedElement>
                                     <Border Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
-                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Off" Foreground="{DynamicResource TextIconBrush}"/>
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Off" Foreground="{DynamicResource TextIconBrush}" />
                                     </Border>
                                 </ToggleButton>
                             </Grid>
 
-
                             <Grid Margin="5">
-                                <TextBlock Text="Update Channel" VerticalAlignment="Center" Margin="0,0,50,0"/>
-                                <ComboBox HorizontalAlignment="Right" VerticalAlignment="Center" Width="250" Text=""/>
+                                <TextBlock Text="Update Channel" VerticalAlignment="Center" Margin="0,0,50,0" />
+                                <ComboBox HorizontalAlignment="Right" VerticalAlignment="Center" Width="250" Text="" />
                             </Grid>
-                            
-                        </StackPanel>                  
+                        </StackPanel>
                     </Border>
-
-
                 </StackPanel>
             </hc:ScrollViewer>
         </Grid>
@@ -55,17 +50,8 @@
         <Grid Grid.Column="1">
             <hc:ScrollViewer>
                 <StackPanel>
-
-
-
-
-
                 </StackPanel>
             </hc:ScrollViewer>
         </Grid>
-
-
     </Grid>
-   
-
 </catel:UserControl>

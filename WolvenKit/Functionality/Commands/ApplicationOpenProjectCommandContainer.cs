@@ -68,7 +68,8 @@ namespace WolvenKit.Functionality.Commands
                     {
                         await _projectManager.LoadAsync(location);
                         var btn = (StaticReferences.GlobalShell.FindName("ProjectNameDisplay") as System.Windows.Controls.Button);
-                        btn?.SetCurrentValue(ContentControl.ContentProperty, Path.GetFileNameWithoutExtension(location)); ;
+                        btn?.SetCurrentValue(ContentControl.ContentProperty, Path.GetFileNameWithoutExtension(location));
+                        ;
                     }
                 }
 

@@ -16,21 +16,23 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
     {
         public CommonDocumentViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
-            
         }
 
         #region Fields
-        
-        
+
         public event EventHandler<FileSavedEventArgs> OnFileSaved;
-        #endregion
+
+        #endregion Fields
 
         #region Properties
+
         public object SaveTarget { get; set; }
         public override string Title => Path.GetFileName(FileName);
 
         #region File
+
         private IWolvenkitFile _file;
+
         public IWolvenkitFile File
         {
             get => _file;
@@ -44,13 +46,16 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
                 }
             }
         }
-        #endregion
+
+        #endregion File
+
         #region FileName
+
         public string FileName => File.FileName;
-        #endregion
 
+        #endregion FileName
 
-        #endregion
+        #endregion Properties
 
         // Propagate changed event from cr2wfile
         private void File_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -62,22 +67,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
                     RaisePropertyChanged(nameof(File));
                 }
             }
-
         }
 
-        #region Commands
 
-        #endregion
-
-        #region Commands Implementation
-
-        #endregion
 
         #region Methods
 
         public void CreateNewChunk()
         {
-
         }
 
         public virtual void SaveFile()
@@ -145,10 +142,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             //}
         }
 
-
         public async Task<Common.EFileReadErrorCodes> LoadFile(string filename, IVariableEditor variableEditor, LoggerService logger, Stream stream = null)
         {
-
             if (stream != null)
             {
                 return await loadFile(stream, filename, variableEditor, logger);
@@ -160,7 +155,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
                     return await loadFile(fs, filename, variableEditor, logger);
                 }
             }
-
         }
 
         private async Task<Common.EFileReadErrorCodes> loadFile(Stream stream, string filename, IVariableEditor variableEditor, LoggerService logger)
@@ -199,7 +193,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             return errorcode;
         }
 
-
-        #endregion
+        #endregion Methods
     }
 }

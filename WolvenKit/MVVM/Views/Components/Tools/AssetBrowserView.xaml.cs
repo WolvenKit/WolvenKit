@@ -16,6 +16,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools
         }
 
         public new event PropertyChangedEventHandler PropertyChanged;
+
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -28,7 +29,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools
 
         private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Asset Browser");
             }

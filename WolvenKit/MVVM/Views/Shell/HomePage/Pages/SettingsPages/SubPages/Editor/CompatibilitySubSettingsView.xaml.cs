@@ -1,4 +1,4 @@
-﻿using Catel.IoC;
+using Catel.IoC;
 using Catel.Services;
 using WolvenKit.Functionality.Services;
 
@@ -21,7 +21,8 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Edito
 
         private async void CP77ExecutablePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext() {
+            var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext()
+            {
                 Filter = "Exe files|*.exe"
             });
             if (result.Result)
@@ -30,7 +31,8 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Edito
 
         private async void W3ExecutablePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext() {
+            var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext()
+            {
                 Filter = "Exe files|*.exe"
             });
             if (result.Result)
@@ -39,7 +41,8 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Edito
 
         private async void WccLitePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext() {
+            var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext()
+            {
                 Filter = "wcc_lite.exe file|wcc_lite.exe"
             });
             if (result.Result)

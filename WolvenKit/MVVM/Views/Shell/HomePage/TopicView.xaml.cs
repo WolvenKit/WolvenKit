@@ -1,4 +1,3 @@
-
 namespace WolvenKit.MVVM.Views.Shell.HomePage
 {
     public partial class TopicView

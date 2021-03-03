@@ -99,47 +99,46 @@ namespace WolvenKit.Functionality.Commands
                         switch (Path.GetExtension(location))
                         {
                             case ".w3modproj":
+                            {
+                                var np = new Tw3Project(location)
                                 {
-                                    var np = new Tw3Project(location)
+                                    Name = Path.GetFileNameWithoutExtension(location),
+                                    Data = new W3Mod()
                                     {
+                                        FileName = location,
                                         Name = Path.GetFileNameWithoutExtension(location),
-                                        Data = new W3Mod()
-                                        {
-                                            FileName = location,
-                                            Name = Path.GetFileNameWithoutExtension(location),
-                                            Author = "WolvenKit",
-                                            Email = "",
-                                            Version = "1.0"
-                                        }
-                                    };
-                                    np.Save(location);
-                                    np.CreateDefaultDirectories();
-                                    saveProjectImg(location);
-                                    break;
-                                }
+                                        Author = "WolvenKit",
+                                        Email = "",
+                                        Version = "1.0"
+                                    }
+                                };
+                                np.Save(location);
+                                np.CreateDefaultDirectories();
+                                saveProjectImg(location);
+                                break;
+                            }
                             case ".cpmodproj":
+                            {
+                                var np = new Cp77Project(location)
                                 {
-                                    var np = new Cp77Project(location)
+                                    Name = Path.GetFileNameWithoutExtension(location),
+                                    Data = new CP77Mod()
                                     {
+                                        FileName = location,
                                         Name = Path.GetFileNameWithoutExtension(location),
-                                        Data = new CP77Mod()
-                                        {
-                                            FileName = location,
-                                            Name = Path.GetFileNameWithoutExtension(location),
-                                            Author = "WolvenKit",
-                                            Email = "",
-                                            Version = "1.0"
-                                        }
-                                    };
-                                    np.Save(location);
-                                    np.CreateDefaultDirectories();
-                                    saveProjectImg(location);
-                                    break;
-                                }
+                                        Author = "WolvenKit",
+                                        Email = "",
+                                        Version = "1.0"
+                                    }
+                                };
+                                np.Save(location);
+                                np.CreateDefaultDirectories();
+                                saveProjectImg(location);
+                                break;
+                            }
                             default:
                                 _loggerService.LogString("Invalid project path!", Logtype.Error);
                                 break;
-
                         }
                     }
                     await _projectManager.LoadAsync(location);
@@ -152,11 +151,8 @@ namespace WolvenKit.Functionality.Commands
                 _loggerService.LogString(ex.Message, Logtype.Error);
                 _loggerService.LogString("Failed to create a new project!", Logtype.Error);
             }
-  
-            OnCommandCompleted?.Invoke();
 
-      
-         
+            OnCommandCompleted?.Invoke();
         }
 
         public event Action OnCommandCompleted;

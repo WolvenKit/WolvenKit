@@ -11,12 +11,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
     public class ModkitViewModel : ViewModel
     {
-        
-
         public ModkitViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
             Logger = MainController.Get().Logger;
-            
 
             RunCommand = new Functionality.Commands.RelayCommand(Run, CanRun);
 
@@ -27,19 +24,22 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 Commands.Add(cmd);
             }
             Commands = Commands.OrderBy(_ => _.Name).ToList();
-            
         }
 
-
-
         #region Fields
+
         private /*readonly*/ LoggerService Logger;
-        #endregion
+
+        #endregion Fields
 
         #region Properties
+
         public readonly List<Common.Wcc.WCC_Command> Commands = new List<Common.Wcc.WCC_Command>();
+
         #region SelectedObject
+
         private Common.Wcc.WCC_Command _selectedObject;
+
         public Common.Wcc.WCC_Command SelectedObject
         {
             get => _selectedObject;
@@ -53,20 +53,21 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
             }
         }
-        #endregion
 
-        #endregion
+        #endregion SelectedObject
+
+        #endregion Properties
 
         #region Commands
+
         public ICommand RunCommand { get; }
 
-        #endregion
+        #endregion Commands
 
         #region Commands Implementation
+
         protected bool CanRun()
         {
-          
-            
             return true;
         }
 
@@ -75,13 +76,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             await Task.Run(() => MainController.Get().WccHelper.RunCommand(SelectedObject));
         }
 
-        #endregion
-
-        #region Methods
-        
-        #endregion
-
-
-
+        #endregion Commands Implementation
     }
 }

@@ -12,6 +12,7 @@ namespace WolvenKit.MVVM.Model.Wizards
     public class FirstSetupWizardModel : ModelBase
     {
         #region fields
+
         private string _author = "";
         private string _email = "";
         private string _donateLink = "";
@@ -22,9 +23,11 @@ namespace WolvenKit.MVVM.Model.Wizards
         private bool _createModForCP77 = true;
         private bool _autoInstallMods = true;
         private bool _autoUpdatesEnabled = true;
+
         #endregion fields
 
         #region properties
+
         /// <summary>
         /// Gets/Sets the author's profile image brush.
         /// </summary>
@@ -162,6 +165,7 @@ namespace WolvenKit.MVVM.Model.Wizards
         {
             get => (CreateModForW3 ? ProjectWizardModel.WitcherGameName + "\t" : "") + (CreateModForCP77 ? ProjectWizardModel.CyberpunkGameName : "");
         }
+
         #endregion properties
     }
 }

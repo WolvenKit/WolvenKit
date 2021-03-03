@@ -5,53 +5,44 @@
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources/>
-                <hc:Theme/>
+                <hc:ThemeResources />
+                <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </catel:UserControl.Resources>
 
+    <Grid>
 
-    <Grid >
-
-
-        
         <hc:TabControl Margin="0,0,0,150">
             <hc:TabItem Header="Game">
                 <Grid>
                     <StackPanel Margin="35" HorizontalAlignment="Left" Orientation="Vertical" Width="250">
-                        <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" x:Name="ConnectButton" Content="Connect"/>
-                        <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" x:Name="StartGameMinusNetButton" Content="Start game with -net"/>
-                        <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" x:Name="TaskKillGameButton" Content="TaskKill Game"/>
-                        <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" x:Name="StartGameWithCustomCommandsButton" Content="Start Game With Custom Commands"/>
-
+                        <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" x:Name="ConnectButton" Content="Connect" />
+                        <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" x:Name="StartGameMinusNetButton" Content="Start game with -net" />
+                        <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" x:Name="TaskKillGameButton" Content="TaskKill Game" />
+                        <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" x:Name="StartGameWithCustomCommandsButton" Content="Start Game With Custom Commands" />
                     </StackPanel>
 
-                   
                     <TextBlock HorizontalAlignment="Center" Margin="15,40,0,0" VerticalAlignment="Top">
                         STATUS
                     </TextBlock>
                 </Grid>
-                
-
             </hc:TabItem>
             <hc:TabItem Header="Utilities">
-                <Grid >
+                <Grid>
                     <hc:UniformSpacingPanel Spacing="5" Margin="35" HorizontalAlignment="Left" Orientation="Vertical" Width="175">
-                        <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" x:Name="SendConsoleCommandButton" Content="Send Console Command"/>
-                        <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" x:Name="GetOpCodeButton" Content="Get Opcode"/>
-                        <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" x:Name="VarlistButton" Content="Varlist"/>
-                        <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" x:Name="ListInstalledModsButton" Content="List Installed Mods"/>
-
+                        <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" x:Name="SendConsoleCommandButton" Content="Send Console Command" />
+                        <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" x:Name="GetOpCodeButton" Content="Get Opcode" />
+                        <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" x:Name="VarlistButton" Content="Varlist" />
+                        <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" x:Name="ListInstalledModsButton" Content="List Installed Mods" />
                     </hc:UniformSpacingPanel>
 
                     <hc:UniformSpacingPanel Spacing="5" Margin="35" HorizontalAlignment="Right" Orientation="Vertical" Width="325">
-                        <hc:TextBox Width="325" hc:InfoElement.TitleWidth="100" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Command" Text=""/>
-                        <hc:TextBox Width="325" hc:InfoElement.TitleWidth="100" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Funcname" Text=""/>
-                        <hc:TextBox Width="325" hc:InfoElement.TitleWidth="100" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Classname" Text=""/>
-                        <hc:TextBox Width="325" hc:InfoElement.TitleWidth="100" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Section" Text=""/>
-                        <hc:TextBox Width="325" hc:InfoElement.TitleWidth="100" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Name" Text=""/>
-
+                        <hc:TextBox Width="325" hc:InfoElement.TitleWidth="100" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Command" Text="" />
+                        <hc:TextBox Width="325" hc:InfoElement.TitleWidth="100" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Funcname" Text="" />
+                        <hc:TextBox Width="325" hc:InfoElement.TitleWidth="100" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Classname" Text="" />
+                        <hc:TextBox Width="325" hc:InfoElement.TitleWidth="100" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Section" Text="" />
+                        <hc:TextBox Width="325" hc:InfoElement.TitleWidth="100" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Name" Text="" />
                     </hc:UniformSpacingPanel>
                 </Grid>
             </hc:TabItem>
@@ -59,23 +50,12 @@
                 <Grid>
                     <Button Content="Help" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,0"></Button>
                         <DataGrid Margin="15,35,15,15" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
-
-
                         </DataGrid>
-
                 </Grid>
-
-                
             </hc:TabItem>
         </hc:TabControl>
 
         <RichTextBox Height="150" VerticalAlignment="Bottom">
-            
         </RichTextBox>
-       
-       
-
-
     </Grid>
-
 </catel:UserControl>

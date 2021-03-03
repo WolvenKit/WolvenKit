@@ -23,6 +23,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
     public sealed class Tw3Project : EditorProject, ICloneable
     {
         #region fields
+
         private readonly ISettingsManager _settings;
         private readonly ILoggerService _logger;
 
@@ -36,19 +37,19 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         private SpeechManager SpeechManager { get; set; }
 
-        #endregion
+        #endregion fields
 
         public Tw3Project(string location) : base(location)
         {
             _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            if(File.Exists(location))
+            if (File.Exists(location))
                 Load(location);
         }
 
-        public Tw3Project() : base("") { }
-
-        
+        public Tw3Project() : base("")
+        {
+        }
 
         #region properties
 
@@ -79,9 +80,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
 
-        
-
         #region Directories
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -97,6 +97,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         }
 
         #region Top-level Dirs
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -152,9 +153,11 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 return dir;
             }
         }
-        #endregion
+
+        #endregion Top-level Dirs
 
         #region Mod-level Dirs
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -167,6 +170,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 return Path.Combine(ModDirectory, EProjectFolders.Uncooked.ToString());
             }
         }
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -179,9 +183,11 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 return Path.Combine(ModDirectory, EProjectFolders.Cooked.ToString());
             }
         }
-        #endregion
+
+        #endregion Mod-level Dirs
 
         #region DLC-level Dirs
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -194,6 +200,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 return Path.Combine(DlcDirectory, EProjectFolders.Uncooked.ToString());
             }
         }
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -206,9 +213,11 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 return Path.Combine(DlcDirectory, EProjectFolders.Cooked.ToString());
             }
         }
-        #endregion
+
+        #endregion DLC-level Dirs
 
         #region RAW-level Dirs
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -221,6 +230,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 return Path.Combine(RawDirectory, "Mod");
             }
         }
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -233,9 +243,11 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 return Path.Combine(RawDirectory, "DLC");
             }
         }
-        #endregion
+
+        #endregion RAW-level Dirs
 
         #region Cooked and Packed Directories
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -249,6 +261,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 return dir;
             }
         }
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -262,6 +275,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 return dir;
             }
         }
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -279,6 +293,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 return dir;
             }
         }
+
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
@@ -296,13 +311,12 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 return dir;
             }
         }
-        #endregion
-        #endregion
 
+        #endregion Cooked and Packed Directories
+
+        #endregion Directories
 
         #region Files
-
-        
 
         [XmlIgnore]
         [ReadOnly(true)]
@@ -371,11 +385,13 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                     .ToList();
             }
         }
-        #endregion
 
-        #endregion
+        #endregion Files
+
+        #endregion properties
 
         #region methods
+
         // TODO: debug
         public override void Check() => _logger.LogString($"{initializeTask.Status.ToString()}", Logtype.Error);
 
@@ -384,24 +400,22 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             // if initializeTask is null
             if (initializeTask == null)
             {
-                initializeTask =  Task.Run(() => InitializeAsync());
+                initializeTask = Task.Run(() => InitializeAsync());
             }
             else
             {
                 // TODO: needed?
-                if (initializeTask.IsCompleted == false && 
-                    initializeTask.Status != TaskStatus.Running && 
+                if (initializeTask.IsCompleted == false &&
+                    initializeTask.Status != TaskStatus.Running &&
                     initializeTask.Status != TaskStatus.WaitingToRun &&
                     initializeTask.Status != TaskStatus.WaitingForActivation)
                 {
-
                 }
                 else
                 {
-                    
                 }
             }
-            
+
             return initializeTask;
         }
 
@@ -413,8 +427,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             CollisionManager ??= await Task.Run(() => Tw3Controller.LoadCollisionManager()).ConfigureAwait(false);
             SoundManager ??= await Task.Run(() => Tw3Controller.LoadSoundManager()).ConfigureAwait(false);
             SpeechManager ??= await Task.Run(() => Tw3Controller.LoadSpeechManager()).ConfigureAwait(false);
-
-
 
             // Hash all filepaths
             _logger.LogString("Starting additional tasks...", Logtype.Important);
@@ -429,10 +441,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
             NotificationHelper.Growl.Success($"Project {Name} has finished loading.");
         }
-
-
-
-
 
         public void CreateDefaultDirectories()
         {
@@ -533,8 +541,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             return relpath;
         }
 
-        #endregion
-
+        #endregion methods
 
         public object Clone()
         {

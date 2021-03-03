@@ -1,4 +1,3 @@
-
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -17,19 +16,17 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
     {
         public AboutPageView()
         {
-            InitializeComponent(); 
+            InitializeComponent();
             InitializeGitHub();
-
         }
 
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("About Page");
             }
         }
-
 
         private async void InitializeGitHub()
         {
@@ -38,19 +35,16 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
             await GhubLastReleaseAsync();
         }
 
-        GitHubClient GhubClient;
+        private GitHubClient GhubClient;
 
         public Credentials GhubAuth(string u, string p)
         {
-
             var basicAuth = new Credentials(u, p); // NOTE: not real credentials
             return basicAuth;
-
         }
 
         public async Task GhubLastReleaseAsync()
         {
-
             try
             {
                 var general = await GhubClient.Repository.Get("WolvenKit", "Wolven-Kit");
@@ -60,14 +54,9 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
                 var g_watchers = general.SubscribersCount;  // Ignore that error its the only way to get the watchers atm. (Shit documentation online tbh)
 #pragma warning restore 618
 
-
-                  WatchShield.SetCurrentValue(Shield.StatusProperty, g_watchers.ToString());
-                 ForkShield.SetCurrentValue(Shield.StatusProperty, g_forks.ToString());
-                   StarShield.SetCurrentValue(Shield.StatusProperty, g_stars.ToString());
-
-
-
-
+                WatchShield.SetCurrentValue(Shield.StatusProperty, g_watchers.ToString());
+                ForkShield.SetCurrentValue(Shield.StatusProperty, g_forks.ToString());
+                StarShield.SetCurrentValue(Shield.StatusProperty, g_stars.ToString());
 
                 var releases = await GhubClient.Repository.Release.GetLatest("WolvenKit", "Wolven-Kit");
                 var latest = releases; // Just a temp fix so I don't spam GHub api during dev
@@ -87,34 +76,27 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
                         if (myStrings.Any(line.ToLowerInvariant().Contains))
                         {
                             item.Members.Add(new ContentMember() { ContentTitle = "Addon", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelInfo) });
-
                         }
                         else if (line.ToLowerInvariant().Contains("new"))
                         {
                             item.Members.Add(new ContentMember() { ContentTitle = "New", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelSuccess) });
-
                         }
                         else if (line.ToLowerInvariant().Contains("breaking change"))
                         {
                             item.Members.Add(new ContentMember() { ContentTitle = "Breaking", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelDanger) });
-
                         }
                         else if (line.ToLowerInvariant().Contains("overhaul"))
                         {
                             item.Members.Add(new ContentMember() { ContentTitle = "Overhaul", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelWarning) });
-
                         }
                         else
                         {
                             item.Members.Add(new ContentMember() { ContentTitle = "Change", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelPrimary) });
-
                         }
-
                     }
-
                 }
                 data.Add(item);
-                  gitTime.SetCurrentValue(ItemsControl.ItemsSourceProperty, data);
+                gitTime.SetCurrentValue(ItemsControl.ItemsSourceProperty, data);
             }
             catch { }
         }

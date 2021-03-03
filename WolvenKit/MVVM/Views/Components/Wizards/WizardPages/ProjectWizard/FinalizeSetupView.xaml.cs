@@ -1,4 +1,3 @@
-
 using Catel.IoC;
 using HandyControl.Controls;
 using WolvenKit.Functionality.Commands;
@@ -8,7 +7,7 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard
 {
     public partial class FinalizeSetupView
     {
-        ProjectWizardViewModel _pwvm;
+        private ProjectWizardViewModel _pwvm;
 
         public FinalizeSetupView()
         {
@@ -53,7 +52,6 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard
                 _pwvm.ProfileImageBrushPath = "";
             }
         }
-
 
         private void CancelProjectBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {

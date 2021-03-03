@@ -4,7 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.MVVM.Views.Shell.Backstage
@@ -12,15 +11,17 @@ namespace WolvenKit.MVVM.Views.Shell.Backstage
     public partial class OpenFileView
     {
         #region Constructors
+
         public OpenFileView()
         {
             InitializeComponent();
         }
-        #endregion
+
+        #endregion Constructors
 
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Backstage - Open File");
             }

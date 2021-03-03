@@ -11,10 +11,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
     {
         public ScriptDocumentViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
-            
         }
 
         #region Properties
+
         public object SaveTarget { get; set; }
         public override string Title => FileName;
         public bool IsUnsaved { get; private set; }
@@ -23,7 +23,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         public string FileName => Path.GetFileName(FilePath);
 
         #region Text
+
         private string _text;
+
         public string Text
         {
             get => _text;
@@ -41,10 +43,13 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
                 }
             }
         }
-        #endregion
+
+        #endregion Text
 
         #region FormTitle
+
         private string _formTitle;
+
         public string FormTitle
         {
             get => _formTitle;
@@ -58,20 +63,15 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
                 }
             }
         }
-        #endregion
-        #endregion
+
+        #endregion FormTitle
+
+        #endregion Properties
 
 
-
-        #region Commands
-
-        #endregion
-
-        #region Commands Implementation
-
-        #endregion
 
         #region Methods
+
         public void SaveFile()
         {
             MainController.Get().ProjectStatus = EProjectStatus.Busy;
@@ -85,7 +85,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             // register all new classes
             CR2WManager.ReloadAssembly(MainController.Get().Logger);
 
-
             IsUnsaved = false;
             FormTitle = Path.GetFileName(FilePath);
 
@@ -93,9 +92,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             MainController.LogString(FileName + " saved!\n", Logtype.Success);
             MainController.Get().ProjectStatus = EProjectStatus.Ready;
         }
-        #endregion
 
-
-        
+        #endregion Methods
     }
 }

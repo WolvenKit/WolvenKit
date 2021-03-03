@@ -4,7 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,7 +29,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
         private readonly IMessageService _messageService;
         private readonly IProcessService _processService;
 
-        public RecentlyUsedItemsViewModel(IRecentlyUsedItemsService recentlyUsedItemsService, IFileService fileService, 
+        public RecentlyUsedItemsViewModel(IRecentlyUsedItemsService recentlyUsedItemsService, IFileService fileService,
             IMessageService messageService, IProcessService processService)
         {
             Argument.IsNotNull(() => recentlyUsedItemsService);
@@ -52,6 +51,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
         public List<RecentlyUsedItem> PinnedItems { get; private set; }
 
         #region Commands
+
         public Command<string> PinItem { get; private set; }
 
         private void OnPinItemExecute(string parameter)
@@ -84,10 +84,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
                 await _messageService.ShowWarningAsync("The file doesn't seem to exist. Cannot open it in explorer.");
                 return;
             }
-          
+
             _processService.StartProcess("explorer.exe", $"/select, \"{parameter}\"");
         }
-        #endregion
+
+        #endregion Commands
 
         protected override async Task InitializeAsync()
         {
@@ -124,14 +125,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
         }
 
         public ObservableCollection<FancyProjectObject> BFancyProjectObjects = new ObservableCollection<FancyProjectObject>();
-        public ObservableCollection<FancyProjectObject> FancyProjects { get { return BFancyProjectObjects; }
+
+        public ObservableCollection<FancyProjectObject> FancyProjects
+        {
+            get { return BFancyProjectObjects; }
 
             set
             {
                 BFancyProjectObjects = value;
             }
-
         }
+
         public void ConvertRecentProjects() // Converts Recent projects for the homepage.
         {
             var RCUI = RecentlyUsedItems;
@@ -147,8 +151,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
                 var newfi = fi.Directory + "\\" + newfo[0] + "\\" + "img.png";
 
                 var IsThere = File.Exists(newfi);
-
-
 
                 FancyProjectObject NewItem;
                 if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.cpmodproj.ToString())
@@ -180,11 +182,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
         }
 
         public string VersionWkit { get { return GetAssemblyVersion(); } }
+
         public string GetAssemblyVersion()
         {
             return GetType().Assembly.GetName().Version.ToString();
         }
-
 
         public string DiscordLink { get { return "https://discord.gg/tKZXma5SaA"; } }
         public string PatreonLink { get { return "https://www.patreon.com/m/RedModdingTools"; } }
@@ -200,17 +202,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
             public string ProjectPath { get; set; }
             public string Image { get; set; }
 
-            public FancyProjectObject(string name, DateTime createdate,string type, string path ,string image)
+            public FancyProjectObject(string name, DateTime createdate, string type, string path, string image)
             {
                 Name = name;
                 CreationDate = createdate;
                 Type = type;
                 ProjectPath = path;
                 Image = image;
-               
             }
         }
     }
-
-   
 }

@@ -10,7 +10,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         public static void InitializeDiscordRPC()
         {
-            
             if (DiscordRPCEnabled == true && DiscordRPCInitizialized == false)
             {
                 //Create Client
@@ -23,7 +22,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                 //Connect to the RPC
                 client.Initialize();
                 DiscordRPCInitizialized = true;
-            }           
+            }
         }
 
         public static void SetDiscordRPCStatus(string details)

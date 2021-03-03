@@ -61,6 +61,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
     {
         [DllImport("wininet.dll")]
         private static extern bool InternetGetConnectedState(out int Description, int ReservedValue);
+
         public static bool IsConnectedToInternet()
         {
             return InternetGetConnectedState(out int Desc, 0);
@@ -69,27 +70,16 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
     public static class AppHelper
     {
-       
-
         public static async Task InitializeMVVM()
         {
-
             var uri = new Uri("pack://application:,,,/WolvenKit.Resources;component/Resources/Media/Images/git.png");
 
             await SquirrelHelper.HandleSquirrelAutomaticallyAsync();
-
-
-
-
-
-
-
 
             // Register Viewmodels
             var viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
             viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels");
             //TODO: rename later to MainViewModel
-
 
             // ---- HeadCategory : Extras
             //-- Category : Radio
@@ -128,13 +118,11 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.Register(typeof(RibbonView), typeof(RibbonViewModel));
             viewModelLocator.Register(typeof(StatusBarView), typeof(StatusBarViewModel));
 
-
-
             // ---- HeadCategory : FluentBackstage
             //-- Category : Backstage
             viewModelLocator.Register(typeof(OpenFileView), typeof(OpenFileViewModel));
             viewModelLocator.Register(typeof(RecentlyUsedItemsView), typeof(RecentlyUsedItemsViewModel));
-            //-- Category : Homepage 
+            //-- Category : Homepage
             viewModelLocator.Register(typeof(HomePageView), typeof(HomePageViewModel));
             viewModelLocator.Register(typeof(TopicView), typeof(TopicViewModel));
             viewModelLocator.Register(typeof(AboutPageView), typeof(AboutPageViewModel));
@@ -149,7 +137,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             //-- Category : Integrated Tools
             viewModelLocator.Register(typeof(IntegratedToolsPageView), typeof(IntegratedToolsPageViewModel));
             viewModelLocator.Register(typeof(CyberCATPageView), typeof(CyberCATPageViewModel));
-            //-- Category : Settings Pages 
+            //-- Category : Settings Pages
             viewModelLocator.Register(typeof(GeneralSettingsView), typeof(GeneralSettingsViewModel));
             viewModelLocator.Register(typeof(GlobalSubSettingsView), typeof(GlobalSubSettingsViewModel));
             viewModelLocator.Register(typeof(AccountSubSettingsView), typeof(AccountSubSettingsViewModel));
@@ -175,7 +163,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.Register(typeof(UserWizardView), typeof(UserWizardViewModel));
             viewModelLocator.Register(typeof(UserWizardPageView), typeof(UserWizardPageViewModel));
             //-- Category : ThemeWizard
-   
+
             //-- Category : ProjectWizard
             viewModelLocator.Register(typeof(ProjectWizardView), typeof(ProjectWizardViewModel));
             viewModelLocator.Register(typeof(SelectProjectTypeView), typeof(SelectProjectTypeViewModel));
@@ -187,19 +175,19 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.Register(typeof(OptionalSettingsView), typeof(OptionalSettingsViewModel));
             viewModelLocator.Register(typeof(MVVM.Views.Components.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(MVVM.ViewModels.Components.Wizards.WizardPages.PublishWizard.FinalizeSetupViewModel));
             viewModelLocator.Register(typeof(W3PackSettingsView), typeof(W3PackSettingsViewModel));
-            //-- Category : FirstSetupWizard 
+            //-- Category : FirstSetupWizard
             viewModelLocator.Register(typeof(FirstSetupWizardView), typeof(FirstSetupWizardViewModel));
             viewModelLocator.Register(typeof(CreateUserView), typeof(CreateUserViewModel));
             viewModelLocator.Register(typeof(SelectThemeView), typeof(SelectThemeViewModel));
             viewModelLocator.Register(typeof(SetInitialPreferencesView), typeof(SetInitialPreferencesViewModel));
             viewModelLocator.Register(typeof(LocateGameDateView), typeof(LocateGameDataViewModel));
             viewModelLocator.Register(typeof(MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard.FinalizeSetupView), typeof(MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWizard.FinalizeSetupViewModel));
-            //-- Category : FeedBackWizard 
+            //-- Category : FeedBackWizard
             viewModelLocator.Register(typeof(FeedbackWizardView), typeof(FeedbackWizardViewModel));
             viewModelLocator.Register(typeof(RateView), typeof(RateViewModel));
-            //-- Category : InstallerWizard 
+            //-- Category : InstallerWizard
             viewModelLocator.Register(typeof(InstallerWizardView), typeof(InstallerWizardViewModel));
-            //-- Category : BugReportWizard 
+            //-- Category : BugReportWizard
             viewModelLocator.Register(typeof(BugReportWizard), typeof(BugReportWizardViewModel));
             viewModelLocator.Register(typeof(SendBugView), typeof(SendBugViewModel));
             var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
@@ -227,8 +215,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             sh.WindowState = WindowState.Normal;
             sh.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-
-
             StaticReferences.GlobalShell.SetCurrentValue(MahApps.Metro.Controls.MetroWindow.TitleBarHeightProperty, 25);
             StaticReferences.GlobalShell.SetCurrentValue(Window.TitleProperty, "");
 
@@ -237,12 +223,9 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             ThemeManager.Current.AddTheme(RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", Colors.Red));
             ThemeManager.Current.ChangeTheme(Application.Current, "CustomLightRed");
 
-          //  GlobalShell.SetCurrentValue(FrameworkElement.MinHeightProperty, (double)810);
-          //  GlobalShell.SetCurrentValue(FrameworkElement.MinWidthProperty, (double)1060);
+            //  GlobalShell.SetCurrentValue(FrameworkElement.MinHeightProperty, (double)810);
+            //  GlobalShell.SetCurrentValue(FrameworkElement.MinWidthProperty, (double)1060);
         }
-
-
-
 
         public static void ShowFirstTimeSetup()
         {
@@ -273,6 +256,5 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                 });
             }
         }
-
     }
 }

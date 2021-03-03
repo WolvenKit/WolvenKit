@@ -7,20 +7,18 @@
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources/>
-                <hc:Theme/>
+                <hc:ThemeResources />
+                <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </catel:UserControl.Resources>
 
-
     <Grid>
         <StackPanel Orientation="Horizontal">
-            <Button Width="75" Margin="2" Content="Export"/>
-            <Button Width="75" Margin="2" Content="Import"/>
-            <Button Width="75" Margin="2" Content="Open"/>
-            <TextBlock VerticalAlignment="Center"    Text="-" Width="320"/>
+            <Button Width="75" Margin="2" Content="Export" />
+            <Button Width="75" Margin="2" Content="Import" />
+            <Button Width="75" Margin="2" Content="Open" />
+            <TextBlock VerticalAlignment="Center"    Text="-" Width="320" />
         </StackPanel>
     </Grid>
-
 </catel:UserControl>

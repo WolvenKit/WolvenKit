@@ -9,7 +9,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
     public class PropertiesViewModel : ToolViewModel
     {
-
         #region constructors
 
         public PropertiesViewModel(
@@ -29,16 +28,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
             _projectManager.ProjectRefreshedAsync += ProjectManagerOnProjectRefreshedAsync;
 
-
             SetupCommands();
             SetupToolDefaults();
-
-
         }
 
-        #endregion
+        #endregion constructors
 
         #region Fields
+
         /// <summary>
         /// Identifies the <see ref="ContentId"/> of this tool window.
         /// </summary>
@@ -53,25 +50,18 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
 
-
-        #endregion
+        #endregion Fields
 
         //void Importableobjects_ListChanged(object sender, ListChangedEventArgs e) => OnPropertyChanged(nameof(Importableobjects));
 
         #region Properties
-
 
         /// <summary>
         /// Bound to the View via TreeViewBehavior.cs
         /// </summary>
         public ChunkViewModel SelectedChunk { get; set; }
 
-
-        #endregion
-
-        #region Commands
-
-        #endregion
+        #endregion Properties
 
 
 
@@ -82,8 +72,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             var activeProject = args.NewProject;
             if (activeProject == null)
                 return TaskHelper.Completed;
-
-            
 
             return TaskHelper.Completed;
         }
@@ -98,7 +86,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// </summary>
         private void SetupCommands()
         {
-
         }
 
         /// <summary>
@@ -115,7 +102,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             //IconSource = bi;
         }
 
-        #endregion
-
+        #endregion Methods
     }
 }

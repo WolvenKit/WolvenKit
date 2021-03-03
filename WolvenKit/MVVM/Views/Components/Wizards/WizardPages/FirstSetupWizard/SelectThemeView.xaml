@@ -1,4 +1,4 @@
-﻿<catel:UserControl    
+<catel:UserControl
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:catel="http://schemas.catelproject.com"
@@ -10,7 +10,7 @@
     Initialized="UserControl_Initialized_1"
     Loaded="UserControl_Loaded">
 
-    <Grid VerticalAlignment="Center" Grid.Row="3" >
+    <Grid VerticalAlignment="Center" Grid.Row="3">
         <Grid Margin="5,5,5,5" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Stretch">
             <Grid Grid.Row="1" HorizontalAlignment="Stretch">
                 <StackPanel Margin="0,10,0,0" Orientation="Vertical" VerticalAlignment="Top">
@@ -20,7 +20,6 @@
                     </Grid>
                 </StackPanel>
             </Grid>
-
         </Grid>
     </Grid>
 </catel:UserControl>

@@ -50,10 +50,9 @@ namespace WolvenKit.Functionality.Commands
         {
             try
             {
-                var vm = new UserControlHostWindowViewModel(new BugReportWizard(),600,1000);
+                var vm = new UserControlHostWindowViewModel(new BugReportWizard(), 600, 1000);
 
                 var result = await _uIVisualizerService.ShowDialogAsync(vm);
-
             }
             catch (Exception ex)
             {
@@ -62,5 +61,4 @@ namespace WolvenKit.Functionality.Commands
             }
         }
     }
-
 }

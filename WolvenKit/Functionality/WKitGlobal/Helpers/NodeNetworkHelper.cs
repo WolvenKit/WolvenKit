@@ -16,22 +16,17 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             PhoneManagerNode, CutControlNode,
         }
 
-
         public class Node_Template
         {
             //  public string Name;
             //  public Color Color;
             //  public List<NodeType> Sockets = new List<NodeType>();
-
         }
     }
-
-
 
     public class CustomNode : NodeViewModel
     {
         //public Color nodecolor;
-
 
         //public CustomNode(
         //    string NodeName,
@@ -39,30 +34,22 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
         //    string NodeDescription,
         //    string NodeFamily,
 
-
-
         //    List<ValueNodeInputViewModel<Type>> InputSockets,
         //    List<ValueNodeOutputViewModel<Type>> OutputSockets)
         //{
         //    this.Name = NodeName;
         //    nodecolor = NodeColor;
 
-
         //    foreach (var InSocket in InputSockets)
         //    {
         //        this.Inputs.Add(InSocket);
         //    }
-
 
         //    foreach (var OutSocket in OutputSockets)
         //    {
         //        this.Outputs.Add(OutSocket);
         //    }
 
-
         //}
     }
-
-
-
 }

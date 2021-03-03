@@ -4,13 +4,13 @@ using AvalonDock.Layout;
 namespace WolvenKit.Functionality.Layout
 {
     internal class LayoutInitializer : ILayoutUpdateStrategy
-	{
-		public bool BeforeInsertAnchorable(LayoutRoot layout,
-										   LayoutAnchorable anchorableToShow,
-										   ILayoutContainer destinationContainer)
-		{
+    {
+        public bool BeforeInsertAnchorable(LayoutRoot layout,
+                                           LayoutAnchorable anchorableToShow,
+                                           ILayoutContainer destinationContainer)
+        {
             // AD wants to add the anchorable into destinationContainer
-            // just for test provide a new anchorablepane 
+            // just for test provide a new anchorablepane
             // if the pane is floating let the manager go ahead
             var destPane = destinationContainer as LayoutAnchorablePane;
             if (destinationContainer?.FindParent<LayoutFloatingWindow>() != null)
@@ -30,19 +30,17 @@ namespace WolvenKit.Functionality.Layout
             return false;
         }
 
+        public void AfterInsertAnchorable(LayoutRoot layout, LayoutAnchorable anchorableShown)
+        {
+        }
 
-		public void AfterInsertAnchorable(LayoutRoot layout, LayoutAnchorable anchorableShown)
-		{
-		}
-
-
-		public bool BeforeInsertDocument(LayoutRoot layout,
-										LayoutDocument layoutDocumentToShow,
-										ILayoutContainer destinationContainer) =>
+        public bool BeforeInsertDocument(LayoutRoot layout,
+                                        LayoutDocument layoutDocumentToShow,
+                                        ILayoutContainer destinationContainer) =>
             false;
 
         public void AfterInsertDocument(LayoutRoot layout, LayoutDocument layoutDocumentToShow)
-		{
-		}
-	}
+        {
+        }
+    }
 }

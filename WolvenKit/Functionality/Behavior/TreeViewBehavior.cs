@@ -18,12 +18,12 @@ namespace WolvenKit.Functionality.Behavior
         {
             var tv = sender as TreeView;
 
-
             switch (tv?.DataContext)
             {
                 case ProjectExplorerViewModel projvm:
                     projvm.SelectedItem = tv.SelectedItem as FileSystemInfoModel;
                     break;
+
                 case DocumentViewModel docvm:
                     docvm.SelectedChunk = tv.SelectedItem as ChunkViewModel;
                     break;

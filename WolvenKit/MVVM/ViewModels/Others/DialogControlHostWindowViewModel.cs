@@ -18,7 +18,6 @@ namespace WolvenKit.MVVM.ViewModels.Others
             ContentUserControl = views.FirstOrDefault();
         }
 
-
         public DialogControlHostWindowViewModel(UserControl uc)
         {
             ContentUserControl = uc;
@@ -36,7 +35,6 @@ namespace WolvenKit.MVVM.ViewModels.Others
         public IView ContentUserControl { get; internal set; }
         public int Height { get; }
         public int Width { get; }
-
 
         // TODO: Register commands with the vmcommand or vmcommandwithcanexecute codesnippets
 

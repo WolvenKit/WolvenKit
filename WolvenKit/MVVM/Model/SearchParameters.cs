@@ -7,8 +7,6 @@ namespace WolvenKit.MVVM.Model
 {
     public class SearchParameters : ObservableObject, INotifyPropertyChanged, INotifyPropertyChanging
     {
-
-
         public SearchParameters()
         {
             CaseSensitiveCommand = new RelayCommand(CaseSensitive);
@@ -21,7 +19,9 @@ namespace WolvenKit.MVVM.Model
         public ICommand RegexCommand { get; }
 
         #region SearchText
+
         private string _searchText;
+
         public string SearchText
         {
             get => _searchText;
@@ -34,9 +34,13 @@ namespace WolvenKit.MVVM.Model
                 }
             }
         }
-        #endregion
+
+        #endregion SearchText
+
         #region SearchBundleText
+
         private string _searchBundleText;
+
         public string SearchBundleText
         {
             get => _searchBundleText;
@@ -49,9 +53,13 @@ namespace WolvenKit.MVVM.Model
                 }
             }
         }
-        #endregion
+
+        #endregion SearchBundleText
+
         #region SearchTypeText
+
         private string _searchTypeText;
+
         public string SearchTypeText
         {
             get => _searchTypeText;
@@ -64,9 +72,13 @@ namespace WolvenKit.MVVM.Model
                 }
             }
         }
-        #endregion
+
+        #endregion SearchTypeText
+
         #region IsRegex
+
         private bool _isRegex;
+
         public bool IsRegex
         {
             get => _isRegex;
@@ -79,9 +91,13 @@ namespace WolvenKit.MVVM.Model
                 }
             }
         }
-        #endregion
+
+        #endregion IsRegex
+
         #region IsWholeWord
+
         private bool _isWholeWord;
+
         public bool IsWholeWord
         {
             get => _isWholeWord;
@@ -94,9 +110,13 @@ namespace WolvenKit.MVVM.Model
                 }
             }
         }
-        #endregion
+
+        #endregion IsWholeWord
+
         #region IsMatchCase
+
         private bool _isMatchCase;
+
         public bool IsMatchCase
         {
             get => _isMatchCase;
@@ -109,9 +129,13 @@ namespace WolvenKit.MVVM.Model
                 }
             }
         }
-        #endregion
+
+        #endregion IsMatchCase
+
         #region IsCurrentFolder
+
         private bool _isCurrentFolder;
+
         public bool IsCurrentFolder
         {
             get => _isCurrentFolder;
@@ -124,9 +148,13 @@ namespace WolvenKit.MVVM.Model
                 }
             }
         }
-        #endregion
+
+        #endregion IsCurrentFolder
+
         #region IsRoot
+
         private bool _isRoot;
+
         public bool IsRoot
         {
             get => _isRoot;
@@ -139,9 +167,13 @@ namespace WolvenKit.MVVM.Model
                 }
             }
         }
-        #endregion
+
+        #endregion IsRoot
+
         #region IsAllSubfolders
+
         private bool _isAllSubfolders;
+
         public bool IsAllSubfolders
         {
             get => _isAllSubfolders;
@@ -154,22 +186,22 @@ namespace WolvenKit.MVVM.Model
                 }
             }
         }
-        #endregion
+
+        #endregion IsAllSubfolders
 
         protected void CaseSensitive()
         {
             IsMatchCase = !IsMatchCase;
         }
+
         protected void WholeWord()
         {
             IsWholeWord = !IsWholeWord;
         }
+
         protected void Regex()
         {
             IsRegex = !IsRegex;
         }
-
-
-
     }
 }

@@ -1,8 +1,8 @@
-﻿using Catel.MVVM;
+using Catel.MVVM;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.SettingsPages
 {
-    class PackagingSettingsViewModel : ViewModelBase
+    internal class PackagingSettingsViewModel : ViewModelBase
     {
     }
 }

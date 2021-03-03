@@ -1,4 +1,3 @@
-
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.MVVM.Views.Components.Tools

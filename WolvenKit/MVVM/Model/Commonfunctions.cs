@@ -88,15 +88,14 @@ namespace WolvenKit.MVVM.Model
             // If copySubDirs is true, copy the subdirectories.
             if (copySubDirs)
             {
-
                 foreach (DirectoryInfo subdir in dirs)
                 {
                     // Create the subdirectory.
                     string temppath = Path.Combine(destDirName, subdir.Name);
 
                     // Copy the subdirectories.
-                    if(Directory.GetFiles(subdir.FullName,"*",SearchOption.AllDirectories).Any())
-                        ret.Add(new XElement("Directory",new XAttribute("Path",temppath), DirectoryCopy(subdir.FullName, temppath, copySubDirs)));
+                    if (Directory.GetFiles(subdir.FullName, "*", SearchOption.AllDirectories).Any())
+                        ret.Add(new XElement("Directory", new XAttribute("Path", temppath), DirectoryCopy(subdir.FullName, temppath, copySubDirs)));
                 }
             }
             return ret;
@@ -169,7 +168,6 @@ namespace WolvenKit.MVVM.Model
         /// <param name="folderOffset">The folderoffset.</param>
         public static void CompressFolder(string path, ZipOutputStream zipStream, int folderOffset)
         {
-
             string[] files = Directory.GetFiles(path);
 
             foreach (string filename in files)

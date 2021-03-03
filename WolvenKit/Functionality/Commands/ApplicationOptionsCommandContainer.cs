@@ -19,13 +19,6 @@ namespace WolvenKit.Functionality.Commands
 
         protected override void Execute(object parameter)
         {
-            
-
-
-
-
-
-
         }
     }
 }

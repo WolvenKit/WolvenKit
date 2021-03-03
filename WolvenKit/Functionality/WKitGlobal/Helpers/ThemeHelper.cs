@@ -6,13 +6,12 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
     public static class ThemeHelper
     {
         // Setup theming defaults.
-        public static void InitializeThemeHelper() 
+        public static void InitializeThemeHelper()
         {
             HandyControl.Themes.ThemeManager.Current.SetCurrentValue(HandyControl.Themes.ThemeManager.ApplicationThemeProperty, HandyControl.Themes.ApplicationTheme.Dark);
             HandyControl.Themes.ThemeResources tr = new HandyControl.Themes.ThemeResources();
             tr.AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3");
         }
-
 
         // Global List of userthemes.
         public static ObservableCollection<WkitTheme> UserThemes = new ObservableCollection<WkitTheme>();
@@ -29,14 +28,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
         // Load user theme
         public static void LoadUserTheme(string theme)
         {
-            
         }
-
-
-
-
-
-
 
         public static void LoadUserThemeTemp(string ColorHex) // Not used , keep for now
         {
@@ -48,10 +40,12 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             //Orc.Theming.ThemeManager.Current.SynchronizeTheme();
             //ThemeManager.Current.SyncTheme();
         }
-
     }
 
-
-    public class WkitTheme { public string ThemeID; public string ThemeHexColor; public WkitTheme(string id, string hex) { ThemeID = id; ThemeHexColor = hex; } }
+    public class WkitTheme { public string ThemeID; public string ThemeHexColor; public WkitTheme(string id, string hex)
+        {
+            ThemeID = id;
+            ThemeHexColor = hex;
+        }
+    }
 }
-

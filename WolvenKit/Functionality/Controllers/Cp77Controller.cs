@@ -191,7 +191,6 @@ namespace WolvenKit.Functionality.Controllers
                 if (Directory.Exists(packeddlcdir))
                     fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.CP77GameDlcDir, true));*/
 
-
                 installlog.Root.Add(fileroot);
                 //Save the log.
                 installlog.Save(activeMod.ProjectDirectory + "\\install_log.xml");

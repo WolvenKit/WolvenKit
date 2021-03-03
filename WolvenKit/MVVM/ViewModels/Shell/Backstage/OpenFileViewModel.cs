@@ -4,7 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
 {
     using Catel.MVVM;

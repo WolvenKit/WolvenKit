@@ -44,7 +44,7 @@ namespace WolvenKit.Functionality.Services
             }
         }
 
-        #endregion
+        #endregion fields
 
         #region constructors
 
@@ -53,13 +53,9 @@ namespace WolvenKit.Functionality.Services
         /// </summary>
         public SettingsManager()
         {
-
-
-
-
         }
 
-        #endregion
+        #endregion constructors
 
         #region properties
 
@@ -80,6 +76,7 @@ namespace WolvenKit.Functionality.Services
                 RaisePropertyChanged(nameof(W3ExecutablePath));
             }
         }
+
         public string CP77ExecutablePath
         {
             get => _cp77ExecutablePath;
@@ -89,6 +86,7 @@ namespace WolvenKit.Functionality.Services
                 RaisePropertyChanged(nameof(CP77ExecutablePath));
             }
         }
+
         public string WccLitePath
         {
             get => _wccLitePath;
@@ -101,7 +99,7 @@ namespace WolvenKit.Functionality.Services
 
         public string DepotPath
         {
-            get =>_depotPath;
+            get => _depotPath;
             set
             {
                 _depotPath = value;
@@ -127,7 +125,7 @@ namespace WolvenKit.Functionality.Services
         public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
         public string TextLanguage { get; set; }
 
-        #endregion
+        #endregion properties
 
         #region methods
 
@@ -185,7 +183,7 @@ namespace WolvenKit.Functionality.Services
             }
 
             // TODO: move this?
-            // add a mechanism to update individual cache managers 
+            // add a mechanism to update individual cache managers
             for (var j = 0; j < config.ManagerVersions.Length; j++)
             {
                 var savedversions = config.ManagerVersions[j];
@@ -201,7 +199,7 @@ namespace WolvenKit.Functionality.Services
 
             return config;
         }
-        #endregion
 
+        #endregion methods
     }
 }

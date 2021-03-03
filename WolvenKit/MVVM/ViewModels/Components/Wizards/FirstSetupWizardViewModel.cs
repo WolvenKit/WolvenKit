@@ -21,6 +21,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
     public class FirstSetupWizardViewModel : ViewModelBase
     {
         #region Fields
+
         private readonly ISettingsManager _settingsManager;
         private readonly IUpdateService _updateService;
         private readonly IOpenFileService _openFileService;
@@ -29,16 +30,17 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
         private string wccLiteexe = "";
         private string cp77eexe = "";
 
-
         private const string wcc_sha256 = "fb20d7aa45b95446baac9b376533b06b86add732cbe40fd0620e4a4feffae47b";
         private const string wcc_sha256_patched = "275faa214c6263287deea47ddbcd7afcf6c2503a76ff57f2799bc158f5af7c5d";
         private const string wcc_sha256_patched2 = "104f50142fde883337d332d319d205701e8a302197360f5237e6bb426984212a";
 
         private const string redBG = "#96ff0000";
         private const string greenBG = "#9600ff00";
-        #endregion
+
+        #endregion Fields
 
         #region Constructors
+
         public FirstSetupWizardViewModel(ISettingsManager settingsManager, IUpdateService updateService, IOpenFileService openFileService, ILoggerService loggerService)
         {
             Argument.IsNotNull(() => settingsManager);
@@ -58,7 +60,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
 
             Title = "Settings";
 
-
             CheckForUpdates = _settingsManager.CheckForUpdates;
             W3ExePath = _settingsManager.W3ExecutablePath;
             CP77ExePath = _settingsManager.CP77ExecutablePath;
@@ -76,15 +77,17 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
             {
                 loggerService.LogString($"The oodle dll was not found!");
             }
-
         }
-        #endregion
+
+        #endregion Constructors
 
         #region Properties
+
         public bool IsUpdateSystemAvailable { get; private set; }
         public bool CheckForUpdates { get; set; }
 
         private string _w3ExePath;
+
         public string W3ExePath
         {
             get => _w3ExePath;
@@ -94,7 +97,9 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
                 RaisePropertyChanged(nameof(W3ExePath));
             }
         }
+
         private string _cpp77ExePath;
+
         public string CP77ExePath
         {
             get => _cpp77ExePath;
@@ -106,6 +111,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
         }
 
         private bool _allFieldIsValid = false;
+
         public bool AllFieldIsValid
         {
             get => _allFieldIsValid;
@@ -119,6 +125,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
         public string ExecutablePathBG => string.IsNullOrEmpty(W3ExePath) ? redBG : greenBG;
 
         private string _wccLitePath;
+
         public string WccLitePath
         {
             get => _wccLitePath;
@@ -140,14 +147,15 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
                 }
             }
         }
+
         public string WccLitePathBG => string.IsNullOrEmpty(WccLitePath) ? redBG : greenBG;
         public List<UpdateChannel> AvailableUpdateChannels { get; private set; }
         public UpdateChannel UpdateChannel { get; set; }
 
-
-        #endregion
+        #endregion Properties
 
         #region Commands
+
         public ICommand OpenCP77GamePathCommand { get; private set; }
         public ICommand OpenW3GamePathCommand { get; private set; }
 
@@ -216,17 +224,19 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
 
         private void ExecuteOpenDlc()
         {
-
         }
-        #endregion
+
+        #endregion Commands
 
         #region Methods
+
         private bool TryCopyOodleLib()
         {
             var path = AppDomain.CurrentDomain.BaseDirectory;
             var dir = Path.GetDirectoryName(path);
 
-            if (dir == null) return false;
+            if (dir == null)
+                return false;
 
             var destFileName = Path.Combine(dir, "oo2ext_7_win64.dll");
             if (File.Exists(destFileName))
@@ -260,17 +270,14 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
             _settingsManager.CheckForUpdates = _updateService.CheckForUpdates;
             AvailableUpdateChannels = new List<UpdateChannel>(_updateService.AvailableChannels);
             UpdateChannel = _updateService.CurrentChannel;
-
-
         }
 
         protected override async Task<bool> SaveAsync()
         {
-            //var cansave = 
+            //var cansave =
             //    //(File.Exists(WccLitePath) && Path.GetExtension(WccLitePath) == ".exe" && WccLitePath.Contains("wcc_lite.exe")) &&
             //    (File.Exists(ExecutablePath) && Path.GetExtension(ExecutablePath) == ".exe" && ExecutablePath.Contains("witcher3.exe"));
             //if (!cansave) return false;
-
 
             //_updateService.CheckForUpdates = _settingsManager.CheckForUpdates;
             //_updateService.CurrentChannel = UpdateChannel;
@@ -380,7 +387,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
             if (File.Exists(cp77eexe))
                 CP77ExePath = cp77eexe;
 
-
             // get the depot path
             // if depot path is empty, get the r4data from wcc_lite
             if (string.IsNullOrEmpty(_settingsManager.DepotPath) || !Directory.Exists(_settingsManager.DepotPath))
@@ -401,6 +407,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
             }
         }
 
-        #endregion
+        #endregion Methods
     }
 }

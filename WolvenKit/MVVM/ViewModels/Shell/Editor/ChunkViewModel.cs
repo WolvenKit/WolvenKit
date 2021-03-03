@@ -33,19 +33,16 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             Name = prop.REDName;
             Type = prop.REDType;
             Value = prop.REDValue;
-
         }
 
-        public System.Windows.Media.Brush ForegroundColor => _property.IsSerialized 
-            ? System.Windows.Media.Brushes.Green 
+        public System.Windows.Media.Brush ForegroundColor => _property.IsSerialized
+            ? System.Windows.Media.Brushes.Green
             : System.Windows.Media.Brushes.Azure;
-
 
         public string Name { get; }
         public string Type { get; }
         public string Value { get; set; }
 
         public List<ChunkPropertyViewModel> Children => _property.ChildrEditableVariables.Select(_ => new ChunkPropertyViewModel(_)).ToList();
-
     }
 }

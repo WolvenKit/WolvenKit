@@ -3,7 +3,6 @@ using System.Windows.Input;
 using Orc.Squirrel;
 using InputGesture = Catel.Windows.Input.InputGesture;
 
-
 namespace WolvenKit.Functionality.WKitGlobal
 {
     public static class AppCommands
@@ -18,7 +17,6 @@ namespace WolvenKit.Functionality.WKitGlobal
 
             public const string Options = "Application.Options";
             public static readonly InputGesture OptionsInputGesture = new InputGesture(Key.F12);
-
 
             public const string OpenLink = "Application.OpenLink";
 
@@ -69,18 +67,15 @@ namespace WolvenKit.Functionality.WKitGlobal
 
             public const string OpenFile = "Application.OpenFile";
             public const string NewFile = "Application.NewFile";
-            public const string BugReport = "Application.BugReport"; 
-
+            public const string BugReport = "Application.BugReport";
 
             public const string PackMod = "Application.PackMod";
             public const string BackupMod = "Application.BackupMod";
             public const string PublishMod = "Application.PublishMod";
 
-
-
             public const string ViewSelected = "Application.ViewSelected";
-
         }
+
         public static class ProjectExplorer
         {
             public const string ExpandAll = "ProjectExplorer.ExpandAll";
@@ -91,10 +86,8 @@ namespace WolvenKit.Functionality.WKitGlobal
             public const string Refresh = "ProjectExplorer.Refresh";
         }
 
-
         public static class Settings
         {
-
             public const string General = "Settings.General";
             public static readonly InputGesture GeneralInputGesture = new InputGesture(Key.S, ModifierKeys.Alt | ModifierKeys.Control);
         }
@@ -123,12 +116,4 @@ namespace WolvenKit.Functionality.WKitGlobal
             }
         }
     }
-
-
-
-
-  
-
-
-
 }

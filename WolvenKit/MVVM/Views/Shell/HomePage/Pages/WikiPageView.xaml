@@ -6,13 +6,12 @@
                    xmlns:hc="https://handyorg.github.io/handycontrol"
                    IsVisibleChanged="UserControl_IsVisibleChanged">
 
-    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"  Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300" >
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"  Background="{DynamicResource MahApps.Brushes.ThemeBackground}" MinWidth="300" MinHeight="300">
         <Grid Margin="3,75,3,0">
             <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
-                <wv2:WebView2 Source="https://wiki.cybermods.net/wolvenkit/"/>
+                <wv2:WebView2 Source="https://wiki.cybermods.net/wolvenkit/" />
             </hc:TransitioningContentControl>
-
         </Grid>
         <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
@@ -20,25 +19,20 @@
 
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center " FontSize="20" Text="Wiki"></TextBlock>
             <hc:Divider Margin="15" Orientation="Vertical" Height="45" HorizontalAlignment="Center" VerticalAlignment="Center"></hc:Divider>
-            <hc:AnimationPath Height="45" Width="45" Data="{DynamicResource WikiGeo}" 
-                          Duration="00:00:08" 
+            <hc:AnimationPath Height="45" Width="45" Data="{DynamicResource WikiGeo}"
+                          Duration="00:00:08"
                           Stretch="Uniform" StrokeThickness="1.5"
                           Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}" PathLength="250" RenderTransformOrigin="0.5,0.5">
                 <hc:AnimationPath.RenderTransform>
                     <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="180"/>
-                        <TranslateTransform/>
+                        <ScaleTransform />
+                        <SkewTransform />
+                        <RotateTransform Angle="180" />
+                        <TranslateTransform />
                     </TransformGroup>
                 </hc:AnimationPath.RenderTransform>
             </hc:AnimationPath>
         </StackPanel>
         </hc:TransitioningContentControl>
-
-
     </Grid>
-
-
-
 </catel:UserControl>

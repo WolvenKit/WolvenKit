@@ -1,4 +1,3 @@
-
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.MVVM.Views.Components.Wizards
@@ -12,11 +11,10 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
 
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Bug Report Wizard");
             }
         }
     }
 }
-

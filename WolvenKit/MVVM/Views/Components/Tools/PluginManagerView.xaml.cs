@@ -4,11 +4,9 @@ namespace WolvenKit.MVVM.Views.Components.Tools
 {
     public partial class PluginManagerView
     {
-        public PluginManagerView() 
+        public PluginManagerView()
         {
-            InitializeComponent(); 
-          
-
+            InitializeComponent();
         }
 
         private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -28,7 +26,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools
 
         private void DataWindow_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Plugin Manager");
             }

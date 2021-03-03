@@ -14,26 +14,24 @@ namespace WolvenKit.Functionality.Extensions
             IsReadOnly = propertyItem.IsReadOnly,
             Background = Brushes.Aqua
         };
+
         public override DependencyProperty GetDependencyProperty() => System.Windows.Controls.TextBox.TextProperty;
     }
-
 
     public class MyPropertyResolver : PropertyResolver
     {
         public MyPropertyResolver() : base()
         {
-
         }
 
         private enum EditorTypeCode
         {
             IList,
         }
+
         private static readonly Dictionary<Type, EditorTypeCode> MyTypeCodeDic = new()
         {
             [typeof(IList)] = EditorTypeCode.IList,
         };
-
     }
-
 }

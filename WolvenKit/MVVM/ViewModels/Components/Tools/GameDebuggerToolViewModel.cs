@@ -10,7 +10,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
 {
     public class GameDebuggerToolViewModel : ToolViewModel
     {
-
         /// <summary>
         /// Identifies the <see ref="ContentId"/> of this tool window.
         /// </summary>
@@ -20,10 +19,10 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
         /// Identifies the caption string used for this tool window.
         /// </summary>
         public const string ToolTitle = "Game Debugger";
+
         private readonly IMessageService _messageService;
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
-
 
         private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
 
@@ -62,7 +61,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
         protected override Task CloseAsync()
         {
             // TODO: Unsubscribe from events
-
 
             return base.CloseAsync();
         }

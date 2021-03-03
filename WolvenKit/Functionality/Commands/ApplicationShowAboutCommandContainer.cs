@@ -5,13 +5,11 @@ using WolvenKit.MVVM.Views.Shell.HomePage;
 
 namespace WolvenKit.Functionality.Commands
 {
-    class ApplicationShowAboutCommandContainer : Catel.MVVM.CommandContainerBase
+    internal class ApplicationShowAboutCommandContainer : Catel.MVVM.CommandContainerBase
     {
-
         public ApplicationShowAboutCommandContainer(ICommandManager commandManager)
             : base(AppCommands.Application.ShowAbout, commandManager)
         {
-
         }
 
         protected override void Execute(object parameter)

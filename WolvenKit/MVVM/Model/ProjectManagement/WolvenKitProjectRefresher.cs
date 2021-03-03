@@ -12,7 +12,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
         private DirectoryInfo _dataLocation;
         private FileSystemWatcher _fileSystemWatcher;
 
-        #endregion
+        #endregion fields
 
         #region ctors
 
@@ -26,11 +26,9 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
             IsEnabled = true;
         }
 
-        #endregion
+        #endregion ctors
 
-        #region properties
 
-        #endregion
 
         #region methods
 
@@ -38,7 +36,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
         {
             var projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
 
-            // all wkit projects have a folder with the same name 
+            // all wkit projects have a folder with the same name
             var projectInfo = new FileInfo(location);
             if (projectInfo.Directory == null)
             {
@@ -98,7 +96,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
             }
         }
 
-        #endregion
-
+        #endregion methods
     }
 }

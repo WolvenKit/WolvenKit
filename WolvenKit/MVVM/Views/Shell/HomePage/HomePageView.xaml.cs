@@ -20,7 +20,6 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
     {
         public static HomePageView GlobalHomePage;
 
-
         public WelcomePageView WelcomePV;
         public FirstSetupWizardView FirstSWV;
         public RecentProjectView RecentPV;
@@ -34,14 +33,12 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
         public GithubPageView GithubPV;
         public DebugPageView DebugPV;
 
-
         public HomePageView()
         {
             InitializeComponent();
             GlobalHomePage = this;
             InitializeGitHub();
             InitializePages();
-
         }
 
         private void setupProjectWV()
@@ -71,7 +68,6 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
             GithubPV = new GithubPageView();
             IntegratedTPV = new IntegratedToolsPageView();
             DebugPV = new DebugPageView();
-
         }
 
         private async void InitializeGitHub()
@@ -81,19 +77,16 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
             await GhubLastReleaseAsync();
         }
 
-        GitHubClient GhubClient;
+        private GitHubClient GhubClient;
 
         public Credentials GhubAuth(string u, string p)
         {
-
             var basicAuth = new Credentials(u, p); // NOTE: not real credentials
             return basicAuth;
-
         }
 
         public async Task GhubLastReleaseAsync()
         {
-
             try
             {
                 var general = await GhubClient.Repository.Get("WolvenKit", "Wolven-Kit");
@@ -103,14 +96,9 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
                 var g_watchers = general.SubscribersCount;  // Ignore that error its the only way to get the watchers atm. (Shit documentation online tbh)
 #pragma warning restore 618
 
-
                 //  WatchShield.SetCurrentValue(Shield.StatusProperty, g_watchers.ToString());
                 // ForkShield.SetCurrentValue(Shield.StatusProperty, g_forks.ToString());
                 //   StarShield.SetCurrentValue(Shield.StatusProperty, g_stars.ToString());
-
-
-
-
 
                 var releases = await GhubClient.Repository.Release.GetLatest("WolvenKit", "Wolven-Kit");
                 var latest = releases; // Just a temp fix so I don't spam GHub api during dev
@@ -130,31 +118,24 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
                         if (myStrings.Any(line.ToLowerInvariant().Contains))
                         {
                             item.Members.Add(new ContentMember() { ContentTitle = "Addon", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelInfo) });
-
                         }
                         else if (line.ToLowerInvariant().Contains("new"))
                         {
                             item.Members.Add(new ContentMember() { ContentTitle = "New", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelSuccess) });
-
                         }
                         else if (line.ToLowerInvariant().Contains("breaking change"))
                         {
                             item.Members.Add(new ContentMember() { ContentTitle = "Breaking", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelDanger) });
-
                         }
                         else if (line.ToLowerInvariant().Contains("overhaul"))
                         {
                             item.Members.Add(new ContentMember() { ContentTitle = "Overhaul", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelWarning) });
-
                         }
                         else
                         {
                             item.Members.Add(new ContentMember() { ContentTitle = "Change", ContentInfo = line, ContentStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelPrimary) });
-
                         }
-
                     }
-
                 }
                 data.Add(item);
                 //  gitTime.SetCurrentValue(ItemsControl.ItemsSourceProperty, data);
@@ -179,11 +160,7 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
                 PageViewGrid.Children.Clear();
                 PageViewGrid.Children.Add(WelcomePV);
             }
-
         }
-
-
-
 
         private void SideMenu_FirstUseItem_Selected(object sender, RoutedEventArgs e)
         {
@@ -193,9 +170,6 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
                 UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
                 UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
                 uchwv.Show();
-
-
-
             }
         }
 
@@ -271,14 +245,6 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
                 PageViewGrid.Children.Clear();
                 PageViewGrid.Children.Add(UserPV);
             }
-
-
-
-
-
-
-
-
         }
 
         private void SideMenu_IntegratedItem_Selected(object sender, RoutedEventArgs e)
@@ -288,15 +254,11 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
                 PageViewGrid.Children.Clear();
                 PageViewGrid.Children.Add(IntegratedTPV);
             }
-
         }
 
         private void Grid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-
-
-
 
             StaticReferences.GlobalShell.DragMove();
         }
@@ -304,9 +266,6 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
         private void Grid_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-
-
-
 
             StaticReferences.GlobalShell.DragMove();
 
@@ -323,14 +282,9 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
                 {
                     PageViewGrid.Children.Clear();
                     PageViewGrid.Children.Add(WelcomePV);
-
                 }
-
             }
-
         }
-
-
 
         private void Grid_MouseLeftButtonDown_2(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -341,21 +295,16 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
                     if (StaticReferences.GlobalShell.WindowState == WindowState.Maximized)
                     {
                         StaticReferences.GlobalShell.SetCurrentValue(System.Windows.Window.WindowStateProperty, WindowState.Normal);
-
                     }
                     else
                     {
                         StaticReferences.GlobalShell.SetCurrentValue(System.Windows.Window.WindowStateProperty, WindowState.Maximized);
-
                     }
                 }
             }
             else
             {
                 base.OnMouseLeftButtonDown(e);
-
-
-
 
                 StaticReferences.GlobalShell.DragMove();
             }

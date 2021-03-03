@@ -16,17 +16,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
         public static StatusBarViewModel GlobalStatusBar;
     }
 
-
-
-
-
-
-
-
-
-
-
-
     /// <summary>
     /// Below is WIP piece of me (Offline) ,,,, The idea behind it is to create preset workflows (Automated actions in WolvenKit)
     ///
@@ -38,16 +27,37 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
         public string Name { get; set; }
         public int ID { get; set; }
         public List<ProjectWorkFlowAction> FlowActions { get; set; }
-        public ProjectWorkFlow(string name, int id, List<ProjectWorkFlowAction> flowactions) { Name = name; ID = id; FlowActions = flowactions; }
-        public ProjectWorkFlow CreateProjectWorkFlow(string name, int id, List<ProjectWorkFlowAction> flowactions) { ProjectWorkFlow projectWorkFlow = new ProjectWorkFlow(name, id, flowactions); return projectWorkFlow; }
+
+        public ProjectWorkFlow(string name, int id, List<ProjectWorkFlowAction> flowactions)
+        {
+            Name = name;
+            ID = id;
+            FlowActions = flowactions;
+        }
+
+        public ProjectWorkFlow CreateProjectWorkFlow(string name, int id, List<ProjectWorkFlowAction> flowactions)
+        {
+            ProjectWorkFlow projectWorkFlow = new ProjectWorkFlow(name, id, flowactions);
+            return projectWorkFlow;
+        }
     }
 
     public class ProjectWorkFlowAction
     {
         public Command ProjectWorkFlowActionCommand { get; set; }
         public ProjectWorkFlowActionStatus ProjectWorkFlowActionStatus { get; set; }
-        public ProjectWorkFlowAction(Command command) { ProjectWorkFlowActionCommand = command; ProjectWorkFlowActionStatus = ProjectWorkFlowActionStatus.Queued; }
-        public ProjectWorkFlowAction CreateProjectWorkFlowAction(Command projectWorkFlowActionCommand) { ProjectWorkFlowAction projectWorkFlowAction = new ProjectWorkFlowAction(projectWorkFlowActionCommand); return projectWorkFlowAction; }
+
+        public ProjectWorkFlowAction(Command command)
+        {
+            ProjectWorkFlowActionCommand = command;
+            ProjectWorkFlowActionStatus = ProjectWorkFlowActionStatus.Queued;
+        }
+
+        public ProjectWorkFlowAction CreateProjectWorkFlowAction(Command projectWorkFlowActionCommand)
+        {
+            ProjectWorkFlowAction projectWorkFlowAction = new ProjectWorkFlowAction(projectWorkFlowActionCommand);
+            return projectWorkFlowAction;
+        }
     }
 
     public enum ProjectWorkFlowActionStatus

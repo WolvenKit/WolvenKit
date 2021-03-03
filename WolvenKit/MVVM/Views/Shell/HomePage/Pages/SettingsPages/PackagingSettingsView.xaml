@@ -4,10 +4,7 @@
                    xmlns:catel="http://schemas.catelproject.com" IsVisibleChanged="UserControl_IsVisibleChanged">
 
     <Grid>
- 
-        
 
         <Label VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent" FontSize="50" Grid.Row="1" Content="COMING SOON" />
     </Grid>
-    
 </catel:UserControl>

@@ -27,7 +27,6 @@ namespace WolvenKit.MVVM.Model
                 // missing:  0x0    //EFormat.R8G8B8A8_UNORM
                 case Enums.ETextureCompression.TCM_None:
                     return EFormat.R8G8B8A8_UNORM;
-                
 
                 //0x07 // exception: characters\models\animals\goose\model\t_01__goose_d01.xbm has 0x07 but TCM_DXTAlpha
                 case Enums.ETextureCompression.TCM_DXTNoAlpha:
@@ -38,8 +37,7 @@ namespace WolvenKit.MVVM.Model
                 case Enums.ETextureCompression.TCM_DXTAlpha:
                 case Enums.ETextureCompression.TCM_NormalsHigh:
                 case Enums.ETextureCompression.TCM_NormalsGloss:
-                    return EFormat.BC3_UNORM; 
-
+                    return EFormat.BC3_UNORM;
 
                 case Enums.ETextureCompression.TCM_QualityColor:
                     return EFormat.BC7_UNORM; //0x0A
@@ -103,7 +101,6 @@ namespace WolvenKit.MVVM.Model
                 case Common.Wcc.ETextureGroup.HeadNormalHQ:
                     return Enums.ETextureCompression.TCM_NormalsHigh;
 
-
                 case Common.Wcc.ETextureGroup.NormalmapGloss:
                 case Common.Wcc.ETextureGroup.CharacterNormalmapGloss:
                 case Common.Wcc.ETextureGroup.NormalsNoMips:
@@ -133,9 +130,6 @@ namespace WolvenKit.MVVM.Model
                     throw new NotImplementedException();
             }
         }
-
-
-
 
         /// <summary>
         /// Create a System.Drawing.Bitmap from a physical file with Pfim
@@ -296,8 +290,6 @@ namespace WolvenKit.MVVM.Model
             if (xbm == null)
                 return null;
 
-            
-
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))
             {
@@ -319,7 +311,7 @@ namespace WolvenKit.MVVM.Model
         private static DDSMetadata GetDDSMetadata(CBitmapTexture xbm)
         {
             int residentMipIndex = xbm.ResidentMipIndex?.val ?? 0;
-                
+
             int mipcount = xbm.Mipdata.elements.Count - residentMipIndex;
 
             uint width = xbm.Mipdata.elements[residentMipIndex].Width.val;
@@ -329,16 +321,15 @@ namespace WolvenKit.MVVM.Model
 
             var ddsformat = ImageUtility.GetEFormatFromCompression(compression);
 
-
             // TODO: TEST THIS
             if (ddsformat == EFormat.R8G8B8A8_UNORM)
             {
                 Enums.ETextureRawFormat format = xbm.Format.WrappedEnum;
                 switch (format)
                 {
-                    
                     case Enums.ETextureRawFormat.TRF_Grayscale:   // only this is ever used
                         break;
+
                     case Enums.ETextureRawFormat.TRF_TrueColor:   // this is set if format is NULL
                     case Enums.ETextureRawFormat.TRF_HDR:
                     case Enums.ETextureRawFormat.TRF_AlphaGrayscale:

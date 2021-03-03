@@ -13,7 +13,6 @@ namespace WolvenKit.MVVM.Model
         public string Format { get; set; }
         public string Compression { get; set; }
         public string TextureGroup { get; set; }
-
     }
 
     public class ImportableFile : ObservableObject
@@ -26,7 +25,9 @@ namespace WolvenKit.MVVM.Model
         }
 
         #region IsSelected
+
         private bool _isSelected;
+
         public bool IsSelected
         {
             get => _isSelected;
@@ -39,10 +40,13 @@ namespace WolvenKit.MVVM.Model
                 }
             }
         }
-        #endregion
+
+        #endregion IsSelected
 
         #region Texturegroup
+
         private ETextureGroup _textureGroup;
+
         public ETextureGroup TextureGroup
         {
             get => _textureGroup;
@@ -55,20 +59,22 @@ namespace WolvenKit.MVVM.Model
                 }
             }
         }
-        #endregion
+
+        #endregion Texturegroup
 
         #region ImportType
 
         public Enum ImportType { get; }
 
-        #endregion
+        #endregion ImportType
 
         /// <summary>
         /// PropertyBound in the listView
         /// </summary>
         public string Name => Path.GetFileName(GetRelativePath());
+
         private readonly string _relativePath;
-        
+
         private readonly EImportable _type;
         private EObjectState _state;
 
@@ -102,7 +108,9 @@ namespace WolvenKit.MVVM.Model
         }
 
         public EImportable GetImportableType() => _type;
+
         public EObjectState GetState() => _state;
+
         public void SetState(EObjectState value)
         {
             if (_state != value)
@@ -118,8 +126,5 @@ namespace WolvenKit.MVVM.Model
             _type = type;
             ImportType = importtype;
         }
-
-        
-
     }
 }

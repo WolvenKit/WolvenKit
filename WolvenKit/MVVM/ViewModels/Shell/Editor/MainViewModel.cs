@@ -30,11 +30,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
     using Wwise.Wwise;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed class MainViewModel : ViewModel
     {
-
         // TODO: Register models with the vmpropmodel codesnippet
         // TODO: Register view model properties with the vmprop or vmpropviewmodeltomodel codesnippets
         // TODO: Register commands with the vmcommand or vmcommandwithcanexecute codesnippets
@@ -54,10 +53,13 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         }
 
         #region Properties
+
         public bool IsToolStripBtnPackEnabled { get; private set; }
 
         #region Title
+
         private string _title;
+
         public new string Title
         {
             get => _title;
@@ -71,19 +73,21 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
             }
         }
-        #endregion
+
+        #endregion Title
 
         #region Open Documents
 
         private readonly Dictionary<string, Old_IDocumentViewModel> _openDocuments;
+
         public Dictionary<string, Old_IDocumentViewModel> GetOpenDocuments() => _openDocuments;
 
-        
-
-        #endregion
+        #endregion Open Documents
 
         #region Active Document
+
         private Old_IDocumentViewModel _activeDocument;
+
         public Old_IDocumentViewModel ActiveDocument
         {
             get => _activeDocument;
@@ -97,23 +101,24 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
             }
         }
-        #endregion
 
-        #endregion
+        #endregion Active Document
+
+        #endregion Properties
 
         #region Fields
+
         private static Task _packer;
         private static LoggerService Logger => MainController.Get().Logger;
         private static EditorProjectData ActiveMod => MainController.Get().ActiveMod;
-        
-        #endregion
+
+        #endregion Fields
 
         public MainViewModel()
         {
             Title = "WolvenKit";
 
             _openDocuments = new Dictionary<string, Old_IDocumentViewModel>();
-            
 
             DdsToCacheCommand = new RelayCommand(DdsToCache, CanDdsToCacheCommand);
             CreateCr2wFileCommand = new DelegateCommand<bool>(CreateCr2w, CanCreateCr2w);
@@ -121,21 +126,25 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             Command1 = new RelayCommand(RunCommand1, CanRunCommand1);
         }
 
-
         #region Commands
+
         public ICommand DdsToCacheCommand { get; }
         public ICommand CreateCr2wFileCommand { get; }
         public ICommand BackupProjectCommand { get; }
         public ICommand Command1 { get; }
-        #endregion
+
+        #endregion Commands
 
         #region CommandsImplementation
+
         private bool CanRunCommand1() => true;
+
         private void RunCommand1()
         {
         }
 
         private bool CanDdsToCacheCommand() => true;
+
         private void DdsToCache()
         {
             // Creation
@@ -150,6 +159,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         }
 
         private bool CanCreateCr2w(bool b) => MainController.Get().ActiveMod != null;
+
         private void CreateCr2w(bool b) => CreateCustomCr2wFile(b);
 
         private bool CanBackupProject() => MainController.Get().ActiveMod != null;
@@ -211,7 +221,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             string archiveName = commitMessage + ".zip";
             string archivePath = Path.Combine(ActiveMod.BackupDirectory, archiveName);
 
-
             // commit new files
             MainController.LogString($"Running git commit command...", Common.Services.Logtype.Important);
             var resultCommit = await GitHelper.Commit(Logger, ActiveMod.ProjectDirectory, commitMessage);
@@ -246,9 +255,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 return;
             }
         }
-        #endregion
+
+        #endregion CommandsImplementation
 
         #region Methods
+
         /// <summary>
         /// Start Game with custom arguments
         /// </summary>
@@ -270,7 +281,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 UseShellExecute = false,
                 RedirectStandardOutput = true
             };
-
 
             Logger.LogString("Executing " + proc.FileName + " " + proc.Arguments + "\n");
 
@@ -311,13 +321,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-
-        
         private CR2WFile CreateCustomCr2wFile(bool isDlc)
         {
             // ask user for type
             List<string> availableTypes = CR2WManager.GetAvailableTypes("CResource").Select(_ => _.Name).ToList();
-            if (availableTypes.Count <= 0) return null;
+            if (availableTypes.Count <= 0)
+                return null;
             // remove abstract classes
 
             availableTypes = availableTypes
@@ -330,14 +339,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             var newChunktypename = result.Split(' ').Last().TrimStart("(").TrimEnd(')');
             var redextension = result.Split(' ').First();
 
-            
-
-            if (string.IsNullOrEmpty(redextension)) return null;
+            if (string.IsNullOrEmpty(redextension))
+                return null;
 
             // create cr2wfile
             var cr2w = new CR2WFile();
             var obj = CR2WTypeManager.Create(newChunktypename, newChunktypename, cr2w, null);
-            if (!(obj is CResource resource)) return null;
+            if (!(obj is CResource resource))
+                return null;
             cr2w.FromCResource(resource);
 
             // write cr2wfile
@@ -345,13 +354,13 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 ? ActiveMod.DlcUncookedDirectory
                 : ActiveMod.ModUncookedDirectory;
 
-            if (string.IsNullOrEmpty(redextension)) return null;
+            if (string.IsNullOrEmpty(redextension))
+                return null;
 
             var filepath = Path.Combine(initialDir, $"{newChunktypename}.{redextension}");
             var newfilepath = m_windowFactory.ShowRenameForm(filepath);
             if (string.IsNullOrEmpty(newfilepath))
                 return null;
-
 
             // create directory
             newfilepath.EnsureFolderExists();
@@ -364,15 +373,18 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             return cr2w;
         }
-        #endregion
+
+        #endregion Methods
 
         #region Mod
+
         /// <summary>
         /// Saves a W3ModProject
         /// </summary>
         public void SaveMod()
         {
-            if (ActiveMod == null) return;
+            if (ActiveMod == null)
+                return;
 
             if (ActiveMod.LastOpenedFiles != null)
                 ActiveMod.LastOpenedFiles = GetOpenDocuments().Keys.ToList();
@@ -444,8 +456,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
                 if (Directory.Exists(packeddlcdir))
                     fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.W3GameDlcDir, true));
-                
-                
+
                 installlog.Root.Add(fileroot);
                 //Save the log.
                 installlog.Save(ActiveMod.ProjectDirectory + "\\install_log.xml");
@@ -459,7 +470,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void PackProject()
         {
@@ -478,9 +489,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             else
                 _packer = PackAndInstallMod();
         }
-        
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="install"></param>
         /// <returns></returns>
@@ -509,7 +520,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 if (!string.IsNullOrEmpty(ActiveMod.GetDlcName()))
                     Directory.CreateDirectory(ActiveMod.PackedDlcDirectory);
 
-
                 //------------------------PRE COOKING------------------------------------//
                 // have a check if somehow users forget to add a dlc folder in their dlc :(
                 // but have files inform them that it just not gonna work
@@ -521,6 +531,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
 
                 #region Pre Cooking
+
                 //Handle strings.
                 if (packsettings.Strings.Item1 || packsettings.Strings.Item2)
                 {
@@ -567,11 +578,15 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         }
                     }
                 }
-                #endregion
+
+                #endregion Pre Cooking
+
                 MainController.Get().StatusProgress = 5;
 
                 //------------------------- COOKING -------------------------------------//
+
                 #region Cooking
+
                 int statusCook = -1;
 
                 // cook uncooked files
@@ -584,11 +599,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 if (statusCook == 0)
                     Logger.LogString("Cooking collision finished with errors. \n", Logtype.Error);
 
-                #endregion
+                #endregion Cooking
+
                 MainController.Get().StatusProgress = 15;
 
                 //------------------------- POST COOKING --------------------------------//
+
                 #region Copy Cooked Files
+
                 // copy mod files from Archive (cooked files) to \cooked
                 if (Directory.GetFiles(ActiveMod.ModCookedDirectory, "*", SearchOption.AllDirectories).Any())
                 {
@@ -656,11 +674,15 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         Logger.LogString("Finished succesfully. \n", Logtype.Success);
                     }
                 }
-                #endregion
+
+                #endregion Copy Cooked Files
+
                 MainController.Get().StatusProgress = 20;
 
                 //------------------------- PACKING -------------------------------------//
+
                 #region Packing
+
                 int statusPack = -1;
 
                 //Handle bundle packing.
@@ -681,11 +703,15 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     //else
                     //    Logger.LogString("Cooking assets failed. No bundles will be packed!\n", Logtype.Error);
                 }
-                #endregion
+
+                #endregion Packing
+
                 MainController.Get().StatusProgress = 40;
 
                 //------------------------ METADATA -------------------------------------//
+
                 #region Metadata
+
                 //Handle metadata generation.
                 int statusMetaData = -1;
 
@@ -705,13 +731,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     else
                         Logger.LogString("Packing bundles failed. No metadata will be created!\n", Logtype.Error);
                 }
-                #endregion
+
+                #endregion Metadata
+
                 MainController.Get().StatusProgress = 50;
 
                 //------------------------ POST COOKING ---------------------------------//
 
                 //---------------------------- CACHES -----------------------------------//
+
                 #region Buildcache
+
                 int statusCol = -1;
                 int statusTex = -1;
 
@@ -740,7 +770,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     if (statusTex == 0)
                         Logger.LogString("Building texture cache finished with errors. \n", Logtype.Error);
                 }
-
 
                 //Handle sound caching
                 if (packsettings.Sound.Item1 || packsettings.Sound.Item2)
@@ -824,11 +853,15 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         }
                     }
                 }
-                #endregion
+
+                #endregion Buildcache
+
                 MainController.Get().StatusProgress = 60;
 
                 //---------------------------- SCRIPTS ----------------------------------//
+
                 #region Scripts
+
                 (bool packscriptsMod, bool packscriptsdlc) = packsettings.Scripts;
                 //Handle mod scripts
                 if (packscriptsMod && Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
@@ -861,11 +894,15 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         SearchOption.AllDirectories))
                         File.Copy(newPath, newPath.Replace(Path.Combine(ActiveMod.DlcDirectory, "scripts"), Path.Combine(ActiveMod.PackedDlcDirectory, "scripts")), true);
                 }
-                #endregion
+
+                #endregion Scripts
+
                 MainController.Get().StatusProgress = 80;
 
                 //---------------------------- STRINGS ----------------------------------//
+
                 #region Strings
+
                 //Copy the generated w3strings
                 if (packsettings.Strings.Item1 || packsettings.Strings.Item2)
                 {
@@ -876,11 +913,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     if (packsettings.Strings.Item2)
                         files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedModDirectory, Path.GetFileName(x))));
                 }
-                #endregion
+
+                #endregion Strings
+
                 MainController.Get().StatusProgress = 90;
 
                 //---------------------------- FINALIZE ---------------------------------//
-
 
                 //Install the mod
                 if (!MainController.Get().Configuration.IsAutoInstallModsDisabled)
@@ -899,7 +937,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-
         /// <summary>
         /// Scans the depot and the given archivemanagers for a file. If found, extracts it to the project.
         /// Supports Uncooking and exporting with wcc_lite
@@ -917,12 +954,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             string extension = Path.GetExtension(relativePath);
             string filename = Path.GetFileName(relativePath);
 
-
             // always uncook xbms, w2mesh, redcloth and redapex in Archive
             //if ((extension == ".xbm" /*|| Enum.GetNames(typeof(EExportable)).Contains(extension.TrimStart('.'))*/) && manager.TypeName == EBundleType.Archive)
             //    uncook = true;
 
             #region Check Existing Files in Working Dir
+
             // if uncooking check first if the file isn't already in the working depot or the r4depot
             if (uncook)
             {
@@ -939,7 +976,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     fi.CopyToAndCreate(cnewpath, true);
                     Logger.LogString($"Added {filename} from depot.", Logtype.Success);
 
-                    // Optionally Export 
+                    // Optionally Export
                     if (export && File.Exists(cnewpath))
                     {
                         var task = Task.Run(() => WccHelper.ExportFileToMod(cnewpath));
@@ -949,7 +986,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     return;
                 }
             }
-            #endregion
+
+            #endregion Check Existing Files in Working Dir
 
             // file is in no manager return, should never happen
             if (!(manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath))))
@@ -968,6 +1006,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
 
             #region Get new Filename
+
             var bundletype = archives.First().Value.Archive.TypeName;
             var bundletypestr = bundletype.ToString();
             string newpath = "";
@@ -975,49 +1014,51 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             {
                 // extract files from bundle to Cooked
                 case EArchiveType.Bundle:
-                    {
-                        newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                            ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), $"dlc{ActiveMod.Name}",
-                                NormalizeDlcPath(relativePath))
-                            : Path.Combine("Mod", EProjectFolders.Cooked.ToString(), relativePath));
-                    }
-                    break;
+                {
+                    newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                        ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), $"dlc{ActiveMod.Name}",
+                            NormalizeDlcPath(relativePath))
+                        : Path.Combine("Mod", EProjectFolders.Cooked.ToString(), relativePath));
+                }
+                break;
                 // extract files from Collision and Texture caches to Raw (except for pngs etc)
                 case EArchiveType.CollisionCache:
                 case EArchiveType.TextureCache:
+                {
+                    // add pngs, jpgs and dds directly to Uncooked
+                    // (not Raw, since they don't get imported)
+                    if (extension == ".png" || extension == ".jpg" || extension == ".dds")
                     {
-                        // add pngs, jpgs and dds directly to Uncooked
-                        // (not Raw, since they don't get imported)
-                        if (extension == ".png" || extension == ".jpg" || extension == ".dds")
-                        {
-                            newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                                ? Path.Combine("DLC", EProjectFolders.Uncooked.ToString(), $"dlc{ActiveMod.Name}",
-                                    NormalizeDlcPath(relativePath))
-                                : Path.Combine("Mod", EProjectFolders.Uncooked.ToString(), relativePath));
-                        }
-                        // all other textures and collision stuff goes into Raw (since they have to be imported first)
-                        else
-                            newpath = Path.Combine(ActiveMod.RawDirectory, addAsDLC
-                                ? Path.Combine("DLC", $"dlc{ActiveMod.Name}", NormalizeDlcPath(relativePath))
-                                : Path.Combine("Mod", relativePath));
+                        newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                            ? Path.Combine("DLC", EProjectFolders.Uncooked.ToString(), $"dlc{ActiveMod.Name}",
+                                NormalizeDlcPath(relativePath))
+                            : Path.Combine("Mod", EProjectFolders.Uncooked.ToString(), relativePath));
                     }
-                    break;
+                    // all other textures and collision stuff goes into Raw (since they have to be imported first)
+                    else
+                        newpath = Path.Combine(ActiveMod.RawDirectory, addAsDLC
+                            ? Path.Combine("DLC", $"dlc{ActiveMod.Name}", NormalizeDlcPath(relativePath))
+                            : Path.Combine("Mod", relativePath));
+                }
+                break;
                 // some special cases
                 case EArchiveType.SoundCache:
                 case EArchiveType.Speech:
                 case EArchiveType.Shader:
-                    {
-                        newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                            ? Path.Combine("DLC", bundletypestr,
-                                $"dlc{ActiveMod.Name}", NormalizeDlcPath(relativePath))
-                            : Path.Combine("Mod", bundletypestr, relativePath));
-                    }
-                    break;
+                {
+                    newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                        ? Path.Combine("DLC", bundletypestr,
+                            $"dlc{ActiveMod.Name}", NormalizeDlcPath(relativePath))
+                        : Path.Combine("Mod", bundletypestr, relativePath));
+                }
+                break;
+
                 case EArchiveType.ANY:
                 default:
                     throw new NotImplementedException();
             }
-            #endregion
+
+            #endregion Get new Filename
 
             // more than one archive
             if (archives.Count() > 1)
@@ -1049,36 +1090,42 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         prioritizedBundles.Add(selectedFile.Archive.ArchiveAbsolutePath);
                     }
                 }
-                
-                
+
                 #region Uncooking
+
                 if (uncook)
                 {
                     var result = UncookInner(selectedFile);
                     if (result)
                         return;
                 }
-                #endregion
+
+                #endregion Uncooking
 
                 #region Unbundling
+
                 ExtractInner(selectedFile);
-                #endregion
+
+                #endregion Unbundling
             }
             else
             {
                 #region Uncooking
+
                 if (uncook)
                 {
                     var result = UncookInner(archives.FirstOrDefault().Value);
                     if (result)
                         return;
                 }
-                #endregion
 
+                #endregion Uncooking
 
                 #region Unbundling
+
                 ExtractInner(archives.FirstOrDefault().Value);
-                #endregion
+
+                #endregion Unbundling
             }
 
             return;
@@ -1112,7 +1159,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 // return if any files have been uncooked, continue to extract otherwise
                 if (uncookedFilesCount > 0)
                 {
-                    // Optionally Export 
+                    // Optionally Export
                     string _newpath = addAsDLC
                         ? Path.Combine(ActiveMod.DlcUncookedDirectory, $"dlc{ActiveMod.Name}", relativePath)
                         : Path.Combine(ActiveMod.ModUncookedDirectory, relativePath);
@@ -1142,13 +1189,16 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 return path;
             }
         }
-        #endregion
+
+        #endregion Mod
 
         #region Documents
+
         public bool CloseAllDocuments()
         {
             //if (ActiveMod == null) return false;
-            if (GetOpenDocuments().Count <= 0) return true;
+            if (GetOpenDocuments().Count <= 0)
+                return true;
 
             bool saveall;
             switch (m_windowFactory.ShowMessageBox(
@@ -1159,6 +1209,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             {
                 default:
                     return false;
+
                 case DialogResult.Yes:
                 {
                     saveall = true;
@@ -1198,13 +1249,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             return true;
         }
-        
+
         public void AddOpenDocument(Old_IDocumentViewModel document)
         {
             if (_openDocuments.ContainsKey(document.FileName))
                 throw new NullReferenceException();
             _openDocuments.Add(document.FileName, document);
         }
+
         public void RemoveOpenDocument(string key)
         {
             if (!_openDocuments.ContainsKey(key))
@@ -1216,9 +1268,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         }
 
         public void SaveActiveFile() => ActiveDocument?.SaveFile();
+
         public void SaveAllFiles()
         {
-            if (GetOpenDocuments().Count <= 0) return;
+            if (GetOpenDocuments().Count <= 0)
+                return;
             MainController.Get().ProjectStatus = EProjectStatus.Busy;
 
             foreach (var d in GetOpenDocuments().Values.Where(d => d.SaveTarget != null))
@@ -1234,6 +1288,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             MainController.Get().ProjectStatus = EProjectStatus.Ready;
             MainController.Get().ProjectUnsaved = false;
         }
-        #endregion
+
+        #endregion Documents
     }
 }

@@ -5,7 +5,7 @@ using WolvenKit.Common;
 
 namespace WolvenKit.Functionality.Controllers
 {
-    class MockGameController : GameControllerBase
+    internal class MockGameController : GameControllerBase
     {
         public override List<IGameArchiveManager> GetArchiveManagersManagers()
         {

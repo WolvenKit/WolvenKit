@@ -8,9 +8,10 @@ using WolvenKit.MVVM.Model.Wizards;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWizard
 {
-    class FinalizeSetupViewModel : ViewModelBase
+    internal class FinalizeSetupViewModel : ViewModelBase
     {
         #region constructors
+
         public FinalizeSetupViewModel(IServiceLocator serviceLocator)
         {
             Argument.IsNotNull(() => serviceLocator);
@@ -19,9 +20,11 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWiz
             FirstSetupWizardViewModel = serviceLocator.ResolveType<FirstSetupWizardViewModel>();
             SettingsManager = serviceLocator.ResolveType<ISettingsManager>();
         }
-        #endregion
+
+        #endregion constructors
 
         #region properties
+
         /// <summary>
         /// Gets or sets the FirstSetupWizardModel.
         /// </summary>
@@ -62,7 +65,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWiz
             set { SetValue(FirstSetupWizardViewModelProperty, value); }
         }
 
-
         /// <summary>
         /// Register the FirstSetupWizardModel property so it is known in the class.
         /// </summary>
@@ -77,6 +79,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWiz
         /// Register the FirstSetupWizardViewModel property so it is known in the class.
         /// </summary>
         public static readonly PropertyData FirstSetupWizardViewModelProperty = RegisterProperty("FirstSetupWizardViewModel", typeof(FirstSetupWizardViewModel));
+
         #endregion properties
     }
 }

@@ -2,7 +2,7 @@ using Catel.MVVM;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Dialogs
 {
-    class ExtractAmbigiousDialogViewModel : ViewModelBase
+    internal class ExtractAmbigiousDialogViewModel : ViewModelBase
     {
     }
 }

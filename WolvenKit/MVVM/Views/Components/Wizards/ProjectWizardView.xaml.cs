@@ -1,4 +1,3 @@
-
 using Catel.IoC;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.Model.Wizards;
@@ -37,16 +36,18 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
 
         private void ShowPage()
         {
-            switch(StepMain.StepIndex)
+            switch (StepMain.StepIndex)
             {
                 case 0:
                     PageGrid.Children.Clear();
                     PageGrid.Children.Add(SPTV);
                     break;
+
                 case 1:
                     PageGrid.Children.Clear();
                     PageGrid.Children.Add(PCV);
                     break;
+
                 case 2:
                     PageGrid.Children.Clear();
                     PageGrid.Children.Add(FSV);
@@ -68,7 +69,7 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
 
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Project Wizard");
             }

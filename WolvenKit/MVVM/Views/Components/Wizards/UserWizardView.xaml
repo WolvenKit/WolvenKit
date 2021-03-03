@@ -10,18 +10,15 @@
 
     <Grid MinWidth="300" MinHeight="300" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,2,5">
 
-
         <Grid.RowDefinitions>
-            <RowDefinition Height="15*"/>
-            <RowDefinition Height="90*"/>
-            <RowDefinition Height="10*"/>
-
+            <RowDefinition Height="15*" />
+            <RowDefinition Height="90*" />
+            <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="5,0,5,0">
             <Grid>
                 <iconPacks:PackIconCodicons  Grid.Row="0"   Kind="Hubot" Spin="False" SpinAutoReverse="False" Height="50" Width="50" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
-
             </Grid>
 
             <StackPanel  VerticalAlignment="Bottom" Orientation="Vertical" HorizontalAlignment="Stretch">
@@ -31,20 +28,8 @@
             </StackPanel>
         </StackPanel>
 
-      
-
-
         <Grid x:Name="PageGrid" Grid.Row="1">
-            <thmPage1:UserWizardPageView/>
+            <thmPage1:UserWizardPageView />
         </Grid>
-
-
-
-
-
-
-
-
     </Grid>
-
 </catel:UserControl>

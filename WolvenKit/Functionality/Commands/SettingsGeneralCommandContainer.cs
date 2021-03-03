@@ -25,7 +25,5 @@ namespace WolvenKit.Functionality.Commands
             _uiVisualizerService = uiVisualizerService;
             _viewModelFactory = viewModelFactory;
         }
-
-        
     }
 }

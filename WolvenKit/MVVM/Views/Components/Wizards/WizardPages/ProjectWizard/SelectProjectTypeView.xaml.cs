@@ -1,4 +1,3 @@
-
 using Catel.IoC;
 using WolvenKit.MVVM.ViewModels.Components.Wizards;
 

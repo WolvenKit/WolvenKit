@@ -50,8 +50,10 @@ namespace WolvenKit.MVVM.Model
                     "git config core.safecrlf false"
                 };
 
-                if (!String.IsNullOrWhiteSpace(AuthorName)) commands.Add("git config user.name \"" + AuthorName + "\"");
-                if (!String.IsNullOrWhiteSpace(Email)) commands.Add("git config user.email \"" + Email + "\"");
+                if (!String.IsNullOrWhiteSpace(AuthorName))
+                    commands.Add("git config user.name \"" + AuthorName + "\"");
+                if (!String.IsNullOrWhiteSpace(Email))
+                    commands.Add("git config user.email \"" + Email + "\"");
 
                 var exitCode = await ProcessHelper.RunCommandLineAsync(loggerService, RepoPath, commands.ToArray());
                 return exitCode == 0;

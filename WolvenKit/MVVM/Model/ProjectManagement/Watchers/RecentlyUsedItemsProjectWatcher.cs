@@ -4,7 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 namespace WolvenKit.MVVM.Model.ProjectManagement.Watchers
 {
     using System;
@@ -17,10 +16,13 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Watchers
     public class RecentlyUsedItemsProjectWatcher : ProjectWatcherBase
     {
         #region Fields
+
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
-        #endregion
+
+        #endregion Fields
 
         #region Constructors
+
         public RecentlyUsedItemsProjectWatcher(IProjectManager projectManager, IRecentlyUsedItemsService recentlyUsedItemsService)
             : base(projectManager)
         {
@@ -28,15 +30,18 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Watchers
 
             _recentlyUsedItemsService = recentlyUsedItemsService;
         }
-        #endregion
+
+        #endregion Constructors
 
         #region Methods
+
         protected override Task OnLoadedAsync(IProject project)
         {
             _recentlyUsedItemsService.AddItem(new RecentlyUsedItem(project.Location, DateTime.Now));
 
             return base.OnLoadedAsync(project);
         }
-        #endregion
+
+        #endregion Methods
     }
 }

@@ -4,80 +4,84 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
     using Catel.MVVM;
 
     public class PaneViewModel : ViewModelBase
-	{
-		#region fields
-		private string _title = null;
-		private string _contentId = null;
-		private bool _isSelected = false;
-		private bool _isActive = false;
-		#endregion fields
+    {
+        #region fields
 
-		#region constructors
-		public PaneViewModel()
-		{
-		}
-		#endregion constructors
+        private string _title = null;
+        private string _contentId = null;
+        private bool _isSelected = false;
+        private bool _isActive = false;
 
-		#region Properties
+        #endregion fields
 
-		public new string Title
-		{
-			get => _title;
-			set
-			{
-				if (_title != value)
-				{
-					_title = value;
-					RaisePropertyChanged(nameof(Title));
-				}
-			}
-		}
+        #region constructors
 
-		public ImageSource IconSource
-		{
-			get;
-			protected set;
-		}
+        public PaneViewModel()
+        {
+        }
 
-		public string ContentId
-		{
-			get => _contentId;
-			protected set
-			{
-				if (_contentId != value)
-				{
-					_contentId = value;
-					RaisePropertyChanged(nameof(ContentId));
-				}
-			}
-		}
+        #endregion constructors
 
-		public bool IsSelected
-		{
-			get => _isSelected;
-			set
-			{
-				if (_isSelected != value)
-				{
-					_isSelected = value;
-					RaisePropertyChanged(nameof(IsSelected));
-				}
-			}
-		}
+        #region Properties
 
-		public bool IsActive
-		{
-			get => _isActive;
-			set
-			{
-				if (_isActive != value)
-				{
-					_isActive = value;
-					RaisePropertyChanged(nameof(IsActive));
-				}
-			}
-		}
+        public new string Title
+        {
+            get => _title;
+            set
+            {
+                if (_title != value)
+                {
+                    _title = value;
+                    RaisePropertyChanged(nameof(Title));
+                }
+            }
+        }
 
-		#endregion Properties
-	}
+        public ImageSource IconSource
+        {
+            get;
+            protected set;
+        }
+
+        public string ContentId
+        {
+            get => _contentId;
+            protected set
+            {
+                if (_contentId != value)
+                {
+                    _contentId = value;
+                    RaisePropertyChanged(nameof(ContentId));
+                }
+            }
+        }
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    RaisePropertyChanged(nameof(IsSelected));
+                }
+            }
+        }
+
+        public bool IsActive
+        {
+            get => _isActive;
+            set
+            {
+                if (_isActive != value)
+                {
+                    _isActive = value;
+                    RaisePropertyChanged(nameof(IsActive));
+                }
+            }
+        }
+
+        #endregion Properties
+    }
 }

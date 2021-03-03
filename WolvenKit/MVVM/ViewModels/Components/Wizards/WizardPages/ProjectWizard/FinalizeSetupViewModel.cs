@@ -10,18 +10,21 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.ProjectWizard
     /// <summary>
     /// The FinalizeSetupViewModel implements the project's finalize setup wizard's window viewmodel.
     /// </summary>
-    class FinalizeSetupViewModel : ViewModelBase
+    internal class FinalizeSetupViewModel : ViewModelBase
     {
         #region constructors
+
         public FinalizeSetupViewModel(IServiceLocator serviceLocator)
         {
             Argument.IsNotNull(() => serviceLocator);
 
             ProjectWizardModel = serviceLocator.ResolveType<ProjectWizardModel>();
         }
-        #endregion
+
+        #endregion constructors
 
         #region properties
+
         /// <summary>
         /// Gets or sets the projectWizardModel.
         /// </summary>
@@ -36,11 +39,11 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.ProjectWizard
             set { SetValue(ProjectWizardModelProperty, value); }
         }
 
-
         /// <summary>
         /// Register the ProjectWizardModel property so it is known in the class.
         /// </summary>
         public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty("ProjectWizardModel", typeof(ProjectWizardModel));
+
         #endregion properties
     }
 }

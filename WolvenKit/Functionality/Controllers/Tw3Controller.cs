@@ -35,8 +35,6 @@ namespace WolvenKit.Functionality.Controllers
         private static SoundManager soundManager;
         private static SpeechManager speechManager;
 
-
-
         public static BundleManager LoadBundleManager()
         {
             var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
@@ -83,6 +81,7 @@ namespace WolvenKit.Functionality.Controllers
             _logger.LogString("Finished loading Bundle Manager.", Logtype.Success);
             return bundleManager;
         }
+
         public static W3StringManager LoadStringsManager()
         {
             var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
@@ -120,8 +119,8 @@ namespace WolvenKit.Functionality.Controllers
             }
             _logger.LogString("Finished loading Strings Manager.", Logtype.Success);
             return w3StringManager;
-
         }
+
         public static TextureManager LoadTextureManager()
         {
             var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
@@ -165,6 +164,7 @@ namespace WolvenKit.Functionality.Controllers
 
             return textureManager;
         }
+
         public static CollisionManager LoadCollisionManager()
         {
             var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
@@ -208,6 +208,7 @@ namespace WolvenKit.Functionality.Controllers
 
             return collisionManager;
         }
+
         public static SoundManager LoadSoundManager()
         {
             var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
@@ -251,6 +252,7 @@ namespace WolvenKit.Functionality.Controllers
 
             return soundManager;
         }
+
         public static SpeechManager LoadSpeechManager()
         {
             var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
@@ -266,7 +268,7 @@ namespace WolvenKit.Functionality.Controllers
 
         public override List<IGameArchiveManager> GetArchiveManagersManagers()
         {
-            return new ()
+            return new()
             {
                 bundleManager,
                 textureManager,
@@ -323,7 +325,6 @@ namespace WolvenKit.Functionality.Controllers
                 if (!string.IsNullOrEmpty(ActiveMod.GetDlcName()))
                     Directory.CreateDirectory(ActiveMod.PackedDlcDirectory);
 
-
                 //------------------------PRE COOKING------------------------------------//
                 // have a check if somehow users forget to add a dlc folder in their dlc :(
                 // but have files inform them that it just not gonna work
@@ -335,6 +336,7 @@ namespace WolvenKit.Functionality.Controllers
                 }
 
                 #region Pre Cooking
+
                 //Handle strings.
                 //if (packsettings.Strings.Item1 || packsettings.Strings.Item2)
                 {
@@ -381,11 +383,15 @@ namespace WolvenKit.Functionality.Controllers
                         }
                     }
                 }
-                #endregion
+
+                #endregion Pre Cooking
+
                 MainController.Get().StatusProgress = 5;
 
                 //------------------------- COOKING -------------------------------------//
+
                 #region Cooking
+
                 int statusCook = -1;
 
                 // cook uncooked files
@@ -398,11 +404,14 @@ namespace WolvenKit.Functionality.Controllers
                 if (statusCook == 0)
                     _logger.LogString("Cooking collision finished with errors. \n", Logtype.Error);
 
-                #endregion
+                #endregion Cooking
+
                 MainController.Get().StatusProgress = 15;
 
                 //------------------------- POST COOKING --------------------------------//
+
                 #region Copy Cooked Files
+
                 // copy mod files from Archive (cooked files) to \cooked
                 if (Directory.GetFiles(ActiveMod.ModCookedDirectory, "*", SearchOption.AllDirectories).Any())
                 {
@@ -470,11 +479,15 @@ namespace WolvenKit.Functionality.Controllers
                         _logger.LogString("Finished succesfully. \n", Logtype.Success);
                     }
                 }
-                #endregion
+
+                #endregion Copy Cooked Files
+
                 MainController.Get().StatusProgress = 20;
 
                 //------------------------- PACKING -------------------------------------//
+
                 #region Packing
+
                 int statusPack = -1;
 
                 //Handle bundle packing.
@@ -495,11 +508,15 @@ namespace WolvenKit.Functionality.Controllers
                     //else
                     //    Logger.LogString("Cooking assets failed. No bundles will be packed!\n", Logtype.Error);
                 }
-                #endregion
+
+                #endregion Packing
+
                 MainController.Get().StatusProgress = 40;
 
                 //------------------------ METADATA -------------------------------------//
+
                 #region Metadata
+
                 //Handle metadata generation.
                 int statusMetaData = -1;
 
@@ -520,13 +537,17 @@ namespace WolvenKit.Functionality.Controllers
                     else
                         _logger.LogString("Packing bundles failed. No metadata will be created!\n", Logtype.Error);
                 }
-                #endregion
+
+                #endregion Metadata
+
                 MainController.Get().StatusProgress = 50;
 
                 //------------------------ POST COOKING ---------------------------------//
 
                 //---------------------------- CACHES -----------------------------------//
+
                 #region Buildcache
+
                 int statusCol = -1;
                 int statusTex = -1;
 
@@ -556,7 +577,6 @@ namespace WolvenKit.Functionality.Controllers
                     if (statusTex == 0)
                         _logger.LogString("Building texture cache finished with errors. \n", Logtype.Error);
                 }
-
 
                 //Handle sound caching
                 if (packsettings.modSound || packsettings.dlcSound)
@@ -640,11 +660,15 @@ namespace WolvenKit.Functionality.Controllers
                         }
                     }
                 }
-                #endregion
+
+                #endregion Buildcache
+
                 MainController.Get().StatusProgress = 60;
 
                 //---------------------------- SCRIPTS ----------------------------------//
+
                 #region Scripts
+
                 bool packscriptsMod = packsettings.modScripts;
                 bool packscriptsdlc = packsettings.dlcScripts;
                 //Handle mod scripts
@@ -678,11 +702,15 @@ namespace WolvenKit.Functionality.Controllers
                         SearchOption.AllDirectories))
                         File.Copy(newPath, newPath.Replace(Path.Combine(ActiveMod.DlcDirectory, "scripts"), Path.Combine(ActiveMod.PackedDlcDirectory, "scripts")), true);
                 }
-                #endregion
+
+                #endregion Scripts
+
                 MainController.Get().StatusProgress = 80;
 
                 //---------------------------- STRINGS ----------------------------------//
+
                 #region Strings
+
                 //Copy the generated w3strings
                 if (packsettings.modStrings || packsettings.dlcStrings)
                 {
@@ -693,7 +721,9 @@ namespace WolvenKit.Functionality.Controllers
                     if (packsettings.dlcStrings)
                         files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedModDirectory, Path.GetFileName(x))));
                 }
-                #endregion
+
+                #endregion Strings
+
                 MainController.Get().StatusProgress = 90;
 
                 //---------------------------- FINALIZE ---------------------------------//
@@ -777,7 +807,6 @@ namespace WolvenKit.Functionality.Controllers
                 var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
                 if (Directory.Exists(packeddlcdir))
                     fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.W3GameDlcDir, true));
-
 
                 installlog.Root.Add(fileroot);
                 //Save the log.

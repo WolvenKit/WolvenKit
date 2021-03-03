@@ -8,10 +8,7 @@ namespace WolvenKit.MVVM.Views.Components.Editors
         public CodeEditorView()
         {
             InitializeComponent();
-
         }
-
-
 
         private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace WolvenKit.Functionality.Commands
 {
@@ -18,7 +18,6 @@ namespace WolvenKit.Functionality.Commands
         public RelayCommand(Action execute)
             : this(execute, null)
         {
-
         }
 
         /// <summary>
@@ -39,7 +38,7 @@ namespace WolvenKit.Functionality.Commands
         /// <returns>True if the command can be executed, otherwise false.</returns>
         public override bool CanExecute(object parameter)
         {
-            if(_canExecute is null)
+            if (_canExecute is null)
             {
                 return true;
             }

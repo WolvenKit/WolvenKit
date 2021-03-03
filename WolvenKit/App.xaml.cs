@@ -10,27 +10,22 @@ namespace WolvenKit
     /// </summary>
     public partial class App : Application
     {
-        #region fields
-        #endregion fields
-
         #region constructors
+
         // Main Constructor
         static App()
         {
-
         }
 
         // Alternative Constructor
         public App()
         {
-
         }
+
         #endregion constructors
 
         // Get Logger.
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-
 
         protected override async void OnStartup(StartupEventArgs e)
         {
@@ -53,14 +48,11 @@ namespace WolvenKit
             NNViewRegistrar.RegisterSplat();
             NotificationHelper.InitializeNotificationHelper();
 
-
-
             // Temp Fix for MainViewModel.OnClosing
             if (MainWindow != null)
             {
                 MainWindow.Closing += OnClosing;
             }
-
         }
 
         // TODO: add closing logic here for now since MainViewModel.OnClosing isn't realiable. Investigate this

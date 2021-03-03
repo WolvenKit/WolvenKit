@@ -7,18 +7,21 @@ using WolvenKit.MVVM.Model.Wizards;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWizard
 {
-    class CreateUserViewModel : ViewModelBase
+    internal class CreateUserViewModel : ViewModelBase
     {
         #region constructors
+
         public CreateUserViewModel(IServiceLocator serviceLocator)
         {
             Argument.IsNotNull(() => serviceLocator);
 
             FirstSetupWizardModel = serviceLocator.ResolveType<FirstSetupWizardModel>();
         }
-        #endregion
+
+        #endregion constructors
 
         #region properties
+
         /// <summary>
         /// Gets or sets the FirstSetupWizardModel.
         /// </summary>
@@ -37,6 +40,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWiz
         /// Register the FirstSetupWizardModel property so it is known in the class.
         /// </summary>
         public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty("FirstSetupWizardModel", typeof(FirstSetupWizardModel));
+
         #endregion properties
     }
 }

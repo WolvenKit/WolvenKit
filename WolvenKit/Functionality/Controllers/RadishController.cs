@@ -18,12 +18,14 @@ namespace WolvenKit.Functionality.Controllers
             Healthy
         }
 
-
         private static RadishController radishController;
 
         //public RadishConfiguration Configuration { get; private set; }
+
         #region modname
+
         private RadishConfiguration _configuration;
+
         public RadishConfiguration Configuration
         {
             get => _configuration;
@@ -36,9 +38,12 @@ namespace WolvenKit.Functionality.Controllers
                 }
             }
         }
-        #endregion
 
-        private RadishController() { }
+        #endregion modname
+
+        private RadishController()
+        {
+        }
 
         public static RadishController Get()
         {
@@ -71,7 +76,6 @@ namespace WolvenKit.Functionality.Controllers
             // read the settings file
             ReadSettings(out string modname, out string idspace, out string DIR_W3, out string DIR_MODKIT, out string DIR_ENCODER);
 
-
             // update the radish config if necessary
             if (modname != Configuration.modname)
             {
@@ -99,7 +103,6 @@ namespace WolvenKit.Functionality.Controllers
                 Configuration.DIR_ENCODER = DIR_ENCODER;
             }
 
-
             return true;
         }
 
@@ -116,7 +119,7 @@ namespace WolvenKit.Functionality.Controllers
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         public ERadishStatus CheckSelf()
@@ -143,7 +146,9 @@ namespace WolvenKit.Functionality.Controllers
             }
 
             // read the settings file
+
             #region read settings
+
             string modname = "";
             string idspace = "";
             string DIR_W3 = "";
@@ -152,7 +157,6 @@ namespace WolvenKit.Functionality.Controllers
             //try
             {
                 ReadSettings(out modname, out idspace, out DIR_W3, out DIR_MODKIT, out DIR_ENCODER);
-
             }
             //catch (Exception ex)
             //{
@@ -170,7 +174,7 @@ namespace WolvenKit.Functionality.Controllers
                 MainController.LogString("ERROR! idspace was not found! adjust the name in the _settings_.bat\r\n", Logtype.Error);
                 return ERadishStatus.SettingsError;
             }
-            if (! new DirectoryInfo(DIR_W3).Exists)
+            if (!new DirectoryInfo(DIR_W3).Exists)
             {
                 MainController.LogString("ERROR! Game directory was not found! adjust the paths in the _settings_.bat\r\n", Logtype.Error);
                 return ERadishStatus.SettingsError;
@@ -184,8 +188,9 @@ namespace WolvenKit.Functionality.Controllers
             {
                 MainController.LogString("ERROR! Radish Tools directory was not found! adjust the paths in the _settings_.bat\r\n", Logtype.Error);
                 return ERadishStatus.SettingsError;
-            }  
-            #endregion
+            }
+
+            #endregion read settings
 
             MainController.LogString($"Radish project healthy.\r\n", Logtype.Success);
             return ERadishStatus.Healthy;
@@ -222,7 +227,7 @@ namespace WolvenKit.Functionality.Controllers
 
         public bool IsHealthy() => CheckSelf() == ERadishStatus.Healthy;
 
-        static void lineChanger(string newText, string fileName, int line_to_edit)
+        private static void lineChanger(string newText, string fileName, int line_to_edit)
         {
             string[] arrLine = File.ReadAllLines(fileName);
             arrLine[line_to_edit - 1] = newText;

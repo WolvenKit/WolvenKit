@@ -23,7 +23,6 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
             ribbon.AddAboutButton();
 
             StaticReferences.RibbonViewInstance = this;
-           
         }
 
         protected override void OnViewModelChanged()
@@ -47,30 +46,22 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
                     if (property.NewValue is Color themename)
                     {
                         //wtf is this even
-                
                     }
 
-
-
-
                     break;
+
                 default:
                     break;
             }
         }
 
         private void ShowStartScreen_OnClick(object sender, RoutedEventArgs e) // Convert me to MVVM
-        {        
+        {
             // Nope we dont do that here . And I am not removing this >:) lol
         }
 
-       
-
-     
-
         private void CBAssetBrowserItem_Selected(object sender, RoutedEventArgs e)
         {
-     
         }
 
         private void CBCodeEditorItem_Selected(object sender, RoutedEventArgs e)
@@ -95,8 +86,8 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
 
         private void CBJournalEditorItem_Selected(object sender, RoutedEventArgs e)
         {
-          //  JournalEditorView journaleditor = new JournalEditorView();
-         //   journaleditor.Show();
+            //  JournalEditorView journaleditor = new JournalEditorView();
+            //   journaleditor.Show();
         }
 
         private void Backstage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -106,8 +97,6 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
             var serviceLocator = ServiceLocator.Default;
 
             var shellService = serviceLocator.ResolveType<IShellService>();
-
-
 
             StaticReferences.GlobalShell.DragMove();
         }
@@ -132,13 +121,10 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
             var brush = (Brush)App.Current.FindResource("MahApps.Brushes.AccentBase");
 
             HomeHighLighter.SetCurrentValue(System.Windows.Controls.Panel.BackgroundProperty, brush);
-
         }
 
         private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-
-
             StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
             StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, true);
         }

@@ -34,13 +34,12 @@ namespace WolvenKit.MVVM.Model
 
         private object _childrenLock = new();
         private readonly IProjectManager _projectManager;
-        
 
-        #endregion
+        #endregion fields
 
         #region constructors
 
-        public  FileSystemInfoModel(FileSystemInfo fileSystemInfo, FileSystemInfoModel parent)
+        public FileSystemInfoModel(FileSystemInfo fileSystemInfo, FileSystemInfoModel parent)
         {
             if (this is UpdateToken)
             {
@@ -52,8 +51,7 @@ namespace WolvenKit.MVVM.Model
             {
                 BindingOperations.EnableCollectionSynchronization(Children, _childrenLock);
             }));
-            
-            
+
             FileSystemInfo = fileSystemInfo;
             Parent = parent;
             _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
@@ -66,13 +64,14 @@ namespace WolvenKit.MVVM.Model
             PropertyChanged += FileSystemObjectInfo_PropertyChanged;
         }
 
-        #endregion
+        #endregion constructors
 
         #region properties
 
         public FileSystemInfoModel Parent { get; }
 
         private bool _isExpanded;
+
         public bool IsExpanded
         {
             get => _isExpanded;
@@ -91,6 +90,7 @@ namespace WolvenKit.MVVM.Model
         }
 
         private bool _isSelected;
+
         public bool IsSelected
         {
             get => _isSelected;
@@ -113,7 +113,8 @@ namespace WolvenKit.MVVM.Model
         public string FullName => FileSystemInfo.FullName;
 
         private ObservableCollection<FileSystemInfoModel> _children;
-        public ObservableCollection<FileSystemInfoModel> Children 
+
+        public ObservableCollection<FileSystemInfoModel> Children
         {
             get => _children;
             set
@@ -128,6 +129,7 @@ namespace WolvenKit.MVVM.Model
         }
 
         private FileSystemInfo _fileSystemInfo;
+
         public FileSystemInfo FileSystemInfo
         {
             get => _fileSystemInfo;
@@ -141,7 +143,8 @@ namespace WolvenKit.MVVM.Model
                 }
             }
         }
-        #endregion
+
+        #endregion properties
 
         #region events
 
@@ -155,7 +158,6 @@ namespace WolvenKit.MVVM.Model
 
         public event EventHandler AfterExplore;
 
-        
         public void RaiseRequestRefresh() => RequestRefresh?.Invoke(this, EventArgs.Empty);
 
         private void RaiseBeforeExpand() => BeforeExpand?.Invoke(this, EventArgs.Empty);
@@ -166,7 +168,7 @@ namespace WolvenKit.MVVM.Model
 
         private void RaiseAfterExplore() => AfterExplore?.Invoke(this, EventArgs.Empty);
 
-        #endregion
+        #endregion events
 
         #region methods
 
@@ -195,6 +197,7 @@ namespace WolvenKit.MVVM.Model
                     RaiseAfterExpand();
 
                     break;
+
                 default:
                     break;
             }
@@ -317,14 +320,11 @@ namespace WolvenKit.MVVM.Model
             {
                 oldNode.IsExpanded = true;
             }
-
         }
 
         private void FileSystemObject_AfterExplore(object sender, EventArgs e) => RaiseAfterExplore();
 
         private void FileSystemObject_BeforeExplore(object sender, EventArgs e) => RaiseBeforeExplore();
-
-        
 
         public void ExpandChildren(bool recursive)
         {
@@ -378,7 +378,6 @@ namespace WolvenKit.MVVM.Model
                     if (node.FullName == tw3Project.RadishDirectory)
                         return ECustomImageKeys.RadishImageKey.ToString();
                 }
-                
 
                 return IsExpanded
                     ? ECustomImageKeys.OpenDirImageKey.ToString()
@@ -388,8 +387,6 @@ namespace WolvenKit.MVVM.Model
                 return (node as FileInfo)?.Extension;
         }
 
-        #endregion
+        #endregion methods
     }
-
-    
 }

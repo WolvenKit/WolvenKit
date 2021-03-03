@@ -1,4 +1,3 @@
-
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.MVVM.Views.Shell.Homepage.Pages.IntegratedToolsPages.CyberCAT
@@ -12,13 +11,10 @@ namespace WolvenKit.MVVM.Views.Shell.Homepage.Pages.IntegratedToolsPages.CyberCA
 
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("CyberCAT Save Editor");
             }
-
-
         }
     }
 }

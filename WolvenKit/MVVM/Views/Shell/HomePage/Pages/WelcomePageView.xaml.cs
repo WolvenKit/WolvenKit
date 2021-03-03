@@ -1,10 +1,8 @@
-
 using System.Windows;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.ViewModels.Others;
 using WolvenKit.MVVM.Views.Components.Wizards;
 using WolvenKit.MVVM.Views.Others;
-
 
 namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
 {
@@ -17,12 +15,10 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
-               DiscordHelper.SetDiscordRPCStatus("Welcome");
-
+                DiscordHelper.SetDiscordRPCStatus("Welcome");
             }
-
         }
 
         private void CreateProjectButton_Click(object sender, RoutedEventArgs e)
@@ -45,7 +41,6 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
         {
             HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
             HomePageView.GlobalHomePage.PageViewGrid.Children.Add(HomePageView.GlobalHomePage.SettingsPV);
-          
         }
 
         private void TutorialsButton_Click(object sender, RoutedEventArgs e)
@@ -62,10 +57,9 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
 
         private void irathernot_Click(object sender, RoutedEventArgs e)
         {
-                        System.Diagnostics.Process.Start("");
+            System.Diagnostics.Process.Start("");
 
             // backup if this joke doesnt work
-
         }
     }
 }

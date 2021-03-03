@@ -1,4 +1,3 @@
-
 using Catel.IoC;
 using HandyControl.Controls;
 using WolvenKit.MVVM.Model.Wizards;
@@ -8,8 +7,9 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
 {
     public partial class CreateUserView
     {
-        FirstSetupWizardViewModel _fswvm;
-        FirstSetupWizardModel _fswm;
+        private FirstSetupWizardViewModel _fswvm;
+        private FirstSetupWizardModel _fswm;
+
         public CreateUserView()
         {
             InitializeComponent();
@@ -75,7 +75,6 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
 
         private void ImageSelector_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
-
         }
     }
 }

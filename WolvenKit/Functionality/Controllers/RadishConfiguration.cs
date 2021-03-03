@@ -8,12 +8,13 @@ namespace WolvenKit.Functionality.Controllers
 {
     using Common;
     using Radish.Model;
+
     public class RadishConfiguration : ObservableObject
     {
         public RadishConfiguration()
         {
-            
         }
+
         public static string ConfigurationPath
         {
             get
@@ -25,17 +26,21 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
-
         [Browsable(false)]
         public List<RadishWorkflow> Workflows { get; set; } = new List<RadishWorkflow>();
+
         [Browsable(false)]
         public string RadishProjectPath { get; set; }
 
         //
         private string _oldmodname;
+
         public string GetOldModname() => _oldmodname;
+
         #region modname
+
         private string _modname;
+
         public string modname
         {
             get => _modname;
@@ -49,9 +54,13 @@ namespace WolvenKit.Functionality.Controllers
                 }
             }
         }
-        #endregion
+
+        #endregion modname
+
         #region idspace
+
         private string _idspace;
+
         public string idspace
         {
             get => _idspace;
@@ -64,9 +73,13 @@ namespace WolvenKit.Functionality.Controllers
                 }
             }
         }
-        #endregion
+
+        #endregion idspace
+
         #region DIR_ENCODER
+
         private string _DIR_ENCODER;
+
         public string DIR_ENCODER
         {
             get => _DIR_ENCODER;
@@ -79,9 +92,13 @@ namespace WolvenKit.Functionality.Controllers
                 }
             }
         }
-        #endregion
+
+        #endregion DIR_ENCODER
+
         #region DIR_MODKIT
+
         private string _DIR_MODKIT;
+
         public string DIR_MODKIT
         {
             get => _DIR_MODKIT;
@@ -94,9 +111,13 @@ namespace WolvenKit.Functionality.Controllers
                 }
             }
         }
-        #endregion
+
+        #endregion DIR_MODKIT
+
         #region DIR_W3
+
         private string _DIR_W3;
+
         public string DIR_W3
         {
             get => _DIR_W3;
@@ -109,7 +130,8 @@ namespace WolvenKit.Functionality.Controllers
                 }
             }
         }
-        #endregion
+
+        #endregion DIR_W3
 
         public void Save()
         {
@@ -133,15 +155,7 @@ namespace WolvenKit.Functionality.Controllers
             // Defaults
             return new RadishConfiguration
             {
-
             };
-
         }
-
-
-
-
-
-
     }
 }

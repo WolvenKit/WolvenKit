@@ -9,7 +9,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 using System.Threading.Tasks;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 

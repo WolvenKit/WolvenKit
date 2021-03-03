@@ -1,4 +1,4 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 using MLib.Interfaces;
 
 namespace WolvenKit.Functionality.Services
@@ -8,12 +8,14 @@ namespace WolvenKit.Functionality.Services
         [XmlIgnore]
         IThemeInfos Themes { get; }
 
-
         bool CheckForUpdates { get; set; }
 
-        /*public*/ string W3ExecutablePath { get; set; }
-        /*public*/ string CP77ExecutablePath { get; set; }
-        /*public*/ string WccLitePath { get; set; }
+        /*public*/
+        string W3ExecutablePath { get; set; }
+        /*public*/
+        string CP77ExecutablePath { get; set; }
+        /*public*/
+        string WccLitePath { get; set; }
 
         string DepotPath { get; set; }
 
@@ -24,7 +26,5 @@ namespace WolvenKit.Functionality.Services
         public System.Windows.Media.ImageBrush ProfileImageBrush { get; set; }
 
         void Save();
-        
-
     }
 }

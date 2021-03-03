@@ -2,7 +2,7 @@ using Catel.MVVM;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Dialogs
 {
-    class StringsGuiScriptsPrefixDialogViewModel : ViewModelBase
+    internal class StringsGuiScriptsPrefixDialogViewModel : ViewModelBase
     {
     }
 }

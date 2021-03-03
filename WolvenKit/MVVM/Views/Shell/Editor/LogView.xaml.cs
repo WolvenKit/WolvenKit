@@ -20,20 +20,21 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
         public LogView()
         {
             InitializeComponent();
-            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this)) { return; } // Prevents Designer from trying to do the below.
-                                                                                              
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            { return; } // Prevents Designer from trying to do the below.
+
             _loggerService = ServiceLocator.Default.ResolveType<ILoggerService>();
             _loggerService.OnStringLogged += LoggerServiceOnOnStringLogged;
         }
 
         private delegate void LogDelegate(string t, Logtype type);
+
         private async void LoggerServiceOnOnStringLogged(object sender, LogStringEventArgs e)
         {
             var logdel = new LogDelegate(AddText);
 
             await Task.Run(() => logdel(((LoggerService)sender).Log + "\n", ((LoggerService)sender).Logtype));
         }
-
 
         private void AddText(string text, Logtype type = Logtype.Normal)
         {
@@ -62,12 +63,15 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
                 case Logtype.Error:
                     color = errorColor;
                     break;
+
                 case Logtype.Important:
                     color = importantColor;
                     break;
+
                 case Logtype.Success:
                     color = successColor;
                     break;
+
                 case Logtype.Normal:
                 case Logtype.Wcc:
                 default:
@@ -79,11 +83,10 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Log View");
             }
         }
-
     }
 }

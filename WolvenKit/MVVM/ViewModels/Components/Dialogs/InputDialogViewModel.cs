@@ -3,18 +3,17 @@ using Catel.MVVM;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Dialogs
 {
-
     /// <summary>
     /// Implements the viewmodel that drives the log view.
     /// </summary>
     public class InputDialogViewModel : ViewModelBase
     {
-
         #region constructors
-        public InputDialogViewModel() 
+
+        public InputDialogViewModel()
         {
-            
         }
+
         #endregion constructors
 
         #region properties
@@ -25,10 +24,10 @@ namespace WolvenKit.MVVM.ViewModels.Components.Dialogs
         /// </summary>
         public string Text { get; set; }
 
-
-        #endregion
+        #endregion properties
 
         #region methods
+
         protected override async Task InitializeAsync()
         {
             await base.InitializeAsync();
@@ -40,10 +39,9 @@ namespace WolvenKit.MVVM.ViewModels.Components.Dialogs
         {
             // TODO: Unsubscribe from events
 
-
             return base.CloseAsync();
         }
 
-        #endregion
+        #endregion methods
     }
 }

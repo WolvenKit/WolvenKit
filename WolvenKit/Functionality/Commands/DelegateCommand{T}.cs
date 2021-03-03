@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace WolvenKit.Functionality.Commands
 {
@@ -18,8 +18,8 @@ namespace WolvenKit.Functionality.Commands
         public DelegateCommand(Action<T> execute)
             : this(execute, null)
         {
-
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegateCommand{T}"/> class.
         /// </summary>
@@ -32,6 +32,7 @@ namespace WolvenKit.Functionality.Commands
         }
 
         #region ICommand Members
+
         /// <summary>
         /// Check if the command can be executed.
         /// </summary>
@@ -45,6 +46,7 @@ namespace WolvenKit.Functionality.Commands
             }
             return _canExecute((T)parameter);
         }
+
         /// <summary>
         /// Execute the command
         /// </summary>
@@ -53,6 +55,7 @@ namespace WolvenKit.Functionality.Commands
         {
             _execute((T)parameter);
         }
-        #endregion
+
+        #endregion ICommand Members
     }
 }

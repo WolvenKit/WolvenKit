@@ -8,13 +8,16 @@ namespace WolvenKit.MVVM.Model.Wizards
     public class ProjectWizardModel : ModelBase
     {
         #region fields
+
         private bool _witcherGameChecked = false;
         private bool _cyberpunkGameChecked = true;
         private string _projectName = "";
         private string _projectPath = "";
+
         #endregion fields
 
         #region properties
+
         public static string WitcherGameName { get; } = "The Witcher 3";
         public static string CyberpunkGameName { get; } = "Cyberpunk 2077";
 
@@ -85,6 +88,7 @@ namespace WolvenKit.MVVM.Model.Wizards
         {
             get => new TypeAndPath(ProjectType, ProjectPath, ProjectName);
         }
+
         #endregion properties
 
         public class TypeAndPath
@@ -92,6 +96,7 @@ namespace WolvenKit.MVVM.Model.Wizards
             public string Path;
             public string Type;
             public string Name;
+
             public TypeAndPath(string type, string path, string name)
             {
                 Type = type;

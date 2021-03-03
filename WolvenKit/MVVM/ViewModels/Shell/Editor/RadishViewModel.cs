@@ -23,6 +23,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             {
                 File = new FileInfo(path);
             }
+
             public FileInfo File { get; set; }
             public string Name => File.Name;
 
@@ -40,10 +41,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 case RadishController.ERadishStatus.SettingsError:
                     // load but functions are disabled
                     break;
+
                 case RadishController.ERadishStatus.Healthy:
                     // check if different from settings file
                     RadishController.Get().UpdatdeSelf();
                     break;
+
                 case RadishController.ERadishStatus.NoRadish:
                 default:
                     // close the view
@@ -73,8 +76,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             RecreateLinksInternal();
 
-
             #region Setup Workflows
+
             // initialize workflows
             if (!RadishController.GetConfig().Workflows.Any(_ => _.Name == "All"))
                 RadishController.GetConfig().Workflows.Add(new RadishWorkflow("All")
@@ -127,13 +130,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     DEPLOY_SCRIPTS = true,
                     DEPLOY_TMP_SCRIPTS = true,
                 });
-            #endregion
+
+            #endregion Setup Workflows
 
             CurrentWorkflow = RadishController.Get().Configuration.Workflows.First();
-
         }
 
         #region Fields
+
         private readonly List<RadishBatFileWrapper> radishBats;
         private readonly LoggerService Logger;
 
@@ -142,13 +146,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             "2. make sure _settings_.bat is in the root folder of the new project\r\n" +
             "3. adjust the paths in the _settings_.bat\r\n" +
             "4. run this script again";
-        #endregion
+
+        #endregion Fields
 
         #region Properties
+
         public bool IsCorrupt { get; private set; }
 
         #region SelectedItem
+
         private RadishWorkflow _currentWorkflow = null;
+
         public RadishWorkflow CurrentWorkflow
         {
             get => _currentWorkflow;
@@ -162,10 +170,13 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
             }
         }
-        #endregion
-        #endregion
+
+        #endregion SelectedItem
+
+        #endregion Properties
 
         #region Commands
+
         public ICommand LaunchQuestEditorCommand { get; }
         public ICommand FullRebuildCommand { get; }
         public ICommand RunSelectedCommand { get; }
@@ -173,14 +184,21 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         public ICommand PackCommand { get; }
         public ICommand ReCreateLinksCommand { get; }
         public ICommand StartGameCommand { get; }
-        #endregion
+
+        #endregion Commands
 
         #region Commands Implementation
+
         protected bool CanLaunchQuestEditor() => RadishController.Get().IsHealthy();
+
         protected void LaunchQuestEditor() => TryRunRadishBat("launchQuestEditor.bat");
+
         protected bool CanFullRebuild() => RadishController.Get().IsHealthy();
+
         protected void FullRebuild() => TryRunRadishBat("full.rebuild.bat");
+
         protected bool CanRunSelected() => RadishController.Get().IsHealthy();
+
         protected void RunSelected()
         {
             // write and call temp bat file
@@ -189,7 +207,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             WriteRadishBat(tempbatpath, settings);
             RunRadishBat(new RadishBatFileWrapper(tempbatpath));
         }
+
         protected bool CanBuildUntilPack() => RadishController.Get().IsHealthy();
+
         protected void BuildUntilPack()
         {
             // write temp bat file
@@ -200,7 +220,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             // call temp bat file
             RunRadishBat(new RadishBatFileWrapper(tempbatpath));
         }
+
         protected bool CanPack() => RadishController.Get().IsHealthy();
+
         protected void Pack()
         {
             // write temp bat file
@@ -208,13 +230,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             string tempbatpath = Path.Combine(RadishController.Get().Configuration.RadishProjectPath, "wkit_radish_temp.bat");
             WriteRadishBat(tempbatpath, settings);
 
-
             // call temp bat file
             RunRadishBat(new RadishBatFileWrapper(tempbatpath));
         }
 
         protected bool CanReCreateLinks() => RadishController.Get().IsHealthy();
+
         protected void ReCreateLinks() => RecreateLinksInternal();
+
         protected bool CanStartGame()
         {
             return RadishController.Get().IsHealthy() && (MainController.Get().ActiveMod != null) && (Process.GetProcessesByName("Witcher3").Length == 0);
@@ -241,7 +264,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 RedirectStandardOutput = true
             };
 
-
             MainController.LogString("Executing " + proc.FileName + " " + proc.Arguments + "\n", Logtype.Success);
 
             var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -256,9 +278,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-        bool oldstate = false;
-        string currentLoggedFile = "";
-        enum ERadishLogFilter
+        private bool oldstate = false;
+        private string currentLoggedFile = "";
+
+        private enum ERadishLogFilter
         {
             None,
             W2SCENE,
@@ -269,6 +292,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             W3NAVMESH,
             W3FUR,
         }
+
         private async Task RadishMonitorGame(Process process)
         {
             oldstate = false;
@@ -290,7 +314,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 fs.Close();
             }
 
-            
             void MonitorOutput(string val)
             {
                 // get logtype
@@ -306,7 +329,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 else
                 {
                     // file has ended
-                    if (oldstate) 
+                    if (oldstate)
                         WriteFile(currentLoggedFile, ERadishLogFilter.W2LAYER);
                     oldstate = false;
                 }
@@ -315,7 +338,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             (string, ERadishLogFilter) GetLogTypeFromString(string str)
             {
                 if (str.StartsWith("[W2LAYER] "))
-                    return ($"{str.Replace("[W2LAYER] ","")}\r\n", ERadishLogFilter.W2LAYER);
+                    return ($"{str.Replace("[W2LAYER] ", "")}\r\n", ERadishLogFilter.W2LAYER);
                 else if (str.StartsWith("[W2COMMUNITY] "))
                     return ($"{str.Replace("[W2COMMUNITY] ", "")}\r\n", ERadishLogFilter.W2COMMUNITY);
                 else if (str.StartsWith("[W2SCENE] "))
@@ -328,7 +351,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     return ($"{str.Replace("[W3NAVMESH] ", "")}\r\n", ERadishLogFilter.W3NAVMESH);
                 else if (str.StartsWith("[W3FUR] "))
                     return ($"{str.Replace("[W3FUR] ", "")}\r\n", ERadishLogFilter.W3FUR);
-                else return ("", ERadishLogFilter.None);
+                else
+                    return ("", ERadishLogFilter.None);
             }
 
             void WriteFile(string contents, ERadishLogFilter type)
@@ -342,24 +366,31 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     case ERadishLogFilter.W2SCENE:
                         filename = $"scene.{filename}.yml";
                         break;
+
                     case ERadishLogFilter.W2LAYER:
                         filename = $"layers.{filename}.yml";
                         break;
+
                     case ERadishLogFilter.W2COMMUNITY:
                         filename = $"community.{filename}.yml";
                         break;
+
                     case ERadishLogFilter.W3ENV:
                         filename = $"env.{filename}.yml";
                         break;
+
                     case ERadishLogFilter.W3FOLIAGE:
                         filename = $"foliage.{filename}.yml";
                         break;
+
                     case ERadishLogFilter.W3NAVMESH:
                         filename = $"navmesh.{filename}.yml";
                         break;
+
                     case ERadishLogFilter.W3FUR:
                         filename = $"redfur.{filename}.yml";
                         break;
+
                     default:
                         break;
                 }
@@ -368,9 +399,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 MainController.LogString($"Radish File logged {path}", Logtype.Success);
             }
         }
-        #endregion
+
+        #endregion Commands Implementation
 
         #region Methods
+
         private void ConfigurationUpdated(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "modname"
@@ -408,8 +441,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-        
-
         private void TryRunRadishBat(string name)
         {
             try
@@ -421,6 +452,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 Logger.LogString($"Bat file not found: {name}", Logtype.Error);
             }
         }
+
         private void RunRadishBat(RadishBatFileWrapper bat)
         {
             if (bat == null)
@@ -476,22 +508,25 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
             }
         }
+
         private void RecreateLinksInternal()
         {
             // write and call temp bat file
+
             #region create new links
+
             string tempbatpath = Path.Combine(RadishController.Get().Configuration.RadishProjectPath, "wkit_radish_temp.bat");
             WriteLinksBat(tempbatpath);
             RunRadishBat(new RadishBatFileWrapper(tempbatpath));
-            #endregion
 
+            #endregion create new links
         }
+
         private void WriteRadishBat(string tempbatpath, RadishWorkflow radishsettings)
         {
             //gather dependencies
             if (!radishsettings.PATCH_MODE)
                 SetDependencies(radishsettings);
-
 
             if (File.Exists(tempbatpath))
                 File.Delete(tempbatpath);
@@ -507,30 +542,50 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         "SET FULL_REBUILD = 0\r\n";
                 sr.Write(header);
 
-                if (radishsettings.ENCODE_WORLD) sr.WriteLine($"SET ENCODE_WORLD=1");
-                if (radishsettings.ENCODE_ENVS) sr.WriteLine($"SET ENCODE_ENVS=1");
-                if (radishsettings.ENCODE_SCENES) sr.WriteLine($"SET ENCODE_SCENES=1");
-                if (radishsettings.ENCODE_QUEST) sr.WriteLine($"SET ENCODE_QUEST=1");
-                if (radishsettings.ENCODE_STRINGS) sr.WriteLine($"SET ENCODE_STRINGS=1");
-                if (radishsettings.ENCODE_SPEECH) sr.WriteLine($"SET ENCODE_SPEECH=1");
-                if (radishsettings.ENCODE_HAIRWORKS) sr.WriteLine($"SET ENCODE_HAIRWORKS=1");
+                if (radishsettings.ENCODE_WORLD)
+                    sr.WriteLine($"SET ENCODE_WORLD=1");
+                if (radishsettings.ENCODE_ENVS)
+                    sr.WriteLine($"SET ENCODE_ENVS=1");
+                if (radishsettings.ENCODE_SCENES)
+                    sr.WriteLine($"SET ENCODE_SCENES=1");
+                if (radishsettings.ENCODE_QUEST)
+                    sr.WriteLine($"SET ENCODE_QUEST=1");
+                if (radishsettings.ENCODE_STRINGS)
+                    sr.WriteLine($"SET ENCODE_STRINGS=1");
+                if (radishsettings.ENCODE_SPEECH)
+                    sr.WriteLine($"SET ENCODE_SPEECH=1");
+                if (radishsettings.ENCODE_HAIRWORKS)
+                    sr.WriteLine($"SET ENCODE_HAIRWORKS=1");
 
-                if (radishsettings.WCC_IMPORT_MODELS) sr.WriteLine($"SET WCC_IMPORT_MODELS=1");
-                if (radishsettings.WCC_IMPORT_TEXTURES) sr.WriteLine($"SET WCC_IMPORT_TEXTURES=1");
-                if (radishsettings.WCC_COOK) sr.WriteLine($"SET WCC_COOK=1");
-                if (radishsettings.WCC_NAVDATA) sr.WriteLine($"SET WCC_NAVDATA=1");
-                if (radishsettings.WCC_TEXTURECACHE) sr.WriteLine($"SET WCC_TEXTURECACHE=1");
-                if (radishsettings.WCC_COLLISIONCACHE) sr.WriteLine($"SET WCC_COLLISIONCACHE=1");
+                if (radishsettings.WCC_IMPORT_MODELS)
+                    sr.WriteLine($"SET WCC_IMPORT_MODELS=1");
+                if (radishsettings.WCC_IMPORT_TEXTURES)
+                    sr.WriteLine($"SET WCC_IMPORT_TEXTURES=1");
+                if (radishsettings.WCC_COOK)
+                    sr.WriteLine($"SET WCC_COOK=1");
+                if (radishsettings.WCC_NAVDATA)
+                    sr.WriteLine($"SET WCC_NAVDATA=1");
+                if (radishsettings.WCC_TEXTURECACHE)
+                    sr.WriteLine($"SET WCC_TEXTURECACHE=1");
+                if (radishsettings.WCC_COLLISIONCACHE)
+                    sr.WriteLine($"SET WCC_COLLISIONCACHE=1");
 
-                if (radishsettings.WCC_ANALYZE) sr.WriteLine($"SET WCC_ANALYZE=1");
-                if (radishsettings.WCC_ANALYZE_WORLD) sr.WriteLine($"SET WCC_ANALYZE_WORLD=1");
+                if (radishsettings.WCC_ANALYZE)
+                    sr.WriteLine($"SET WCC_ANALYZE=1");
+                if (radishsettings.WCC_ANALYZE_WORLD)
+                    sr.WriteLine($"SET WCC_ANALYZE_WORLD=1");
 
-                if (radishsettings.WCC_REPACK_DLC) sr.WriteLine($"SET WCC_REPACK_DLC=1");
-                if (radishsettings.WCC_REPACK_MOD) sr.WriteLine($"SET WCC_REPACK_MOD=1");
+                if (radishsettings.WCC_REPACK_DLC)
+                    sr.WriteLine($"SET WCC_REPACK_DLC=1");
+                if (radishsettings.WCC_REPACK_MOD)
+                    sr.WriteLine($"SET WCC_REPACK_MOD=1");
 
-                if (radishsettings.DEPLOY_SCRIPTS) sr.WriteLine($"SET DEPLOY_SCRIPTS=1");
-                if (radishsettings.DEPLOY_TMP_SCRIPTS) sr.WriteLine($"SET DEPLOY_TMP_SCRIPTS=1");
-                if (radishsettings.START_GAME) sr.WriteLine($"SET START_GAME=1");
+                if (radishsettings.DEPLOY_SCRIPTS)
+                    sr.WriteLine($"SET DEPLOY_SCRIPTS=1");
+                if (radishsettings.DEPLOY_TMP_SCRIPTS)
+                    sr.WriteLine($"SET DEPLOY_TMP_SCRIPTS=1");
+                if (radishsettings.START_GAME)
+                    sr.WriteLine($"SET START_GAME=1");
 
                 // hack to call pre-cleanup because build.bat makes this dependent on full-rebuild = true
                 // and we do it in patch mode
@@ -603,9 +658,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
             }
         }
+
         private void WriteLinksBat(string tempbatpath)
         {
-
             if (File.Exists(tempbatpath))
                 File.Delete(tempbatpath);
 
@@ -632,7 +687,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 sr.WriteLine("echo links successfully created.");
             }
         }
-        #endregion
 
+        #endregion Methods
     }
 }

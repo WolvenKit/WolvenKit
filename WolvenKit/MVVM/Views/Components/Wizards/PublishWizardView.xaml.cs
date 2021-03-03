@@ -1,4 +1,3 @@
-
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.PublishWizard;
 
@@ -28,10 +27,12 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
                     PageGrid.Children.Clear();
                     PageGrid.Children.Add(RSV);
                     break;
+
                 case 1:
                     PageGrid.Children.Clear();
                     PageGrid.Children.Add(OSV);
                     break;
+
                 case 2:
                     PageGrid.Children.Clear();
                     PageGrid.Children.Add(FSV);
@@ -53,7 +54,7 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
 
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("User Wizard");
             }

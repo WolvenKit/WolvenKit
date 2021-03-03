@@ -20,13 +20,16 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
     public class StatusBarViewModel : ViewModelBase
     {
         #region Fields
+
         private readonly IProjectManager _projectManager;
         private readonly IServiceLocator _serviceLocator;
         private readonly IConfigurationService _configurationService;
         private readonly IUpdateService _updateService;
-        #endregion
+
+        #endregion Fields
 
         #region Constructors
+
         public StatusBarViewModel(IProjectManager projectManager, IServiceLocator serviceLocator, IConfigurationService configurationService,
             IUpdateService updateService)
         {
@@ -40,9 +43,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             _configurationService = configurationService;
             _updateService = updateService;
         }
-        #endregion
+
+        #endregion Constructors
 
         #region Properties
+
         public string ReceivingAutomaticUpdates { get; private set; }
         public bool IsUpdatedInstalled { get; private set; }
         public string Version { get; private set; }
@@ -52,9 +57,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         public string InternetConnected { get; private set; }
         public string LoadingString { get; set; }
         public bool IsLoading { get; set; }
-        #endregion
+
+        #endregion Properties
 
         #region Methods
+
         protected override async Task InitializeAsync()
         {
             await base.InitializeAsync();
@@ -123,13 +130,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 return TaskHelper.Completed;
             }
 
-            
             return TaskHelper.Completed;
         }
 
-        
-
-        
-        #endregion
+        #endregion Methods
     }
 }

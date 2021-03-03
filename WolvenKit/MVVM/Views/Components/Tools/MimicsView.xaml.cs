@@ -1,4 +1,3 @@
-
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.MVVM.Views.Components.Tools
@@ -12,7 +11,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools
 
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Mimics Exporter");
             }

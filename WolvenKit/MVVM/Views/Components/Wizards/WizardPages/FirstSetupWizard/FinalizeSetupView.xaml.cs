@@ -1,4 +1,3 @@
-
 using Catel.IoC;
 using HandyControl.Controls;
 using WolvenKit.Functionality.Services;

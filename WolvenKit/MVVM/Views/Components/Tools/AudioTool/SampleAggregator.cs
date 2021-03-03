@@ -34,13 +34,13 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             volumeRightMinValue = float.MaxValue;
             channelDataPosition = 0;
         }
-             
+
         /// <summary>
         /// Add a sample value to the aggregator.
         /// </summary>
         /// <param name="value">The value of the sample.</param>
         public void Add(float leftValue, float rightValue)
-        {            
+        {
             if (channelDataPosition == 0)
             {
                 volumeLeftMaxValue = float.MinValue;
@@ -52,7 +52,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             // Make stored channel data stereo by averaging left and right values.
             channelData[channelDataPosition].X = (leftValue + rightValue) / 2.0f;
             channelData[channelDataPosition].Y = 0;
-            channelDataPosition++;            
+            channelDataPosition++;
 
             volumeLeftMaxValue = Math.Max(volumeLeftMaxValue, leftValue);
             volumeLeftMinValue = Math.Min(volumeLeftMinValue, leftValue);
@@ -99,6 +99,6 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         public float RightMinVolume
         {
             get { return volumeRightMinValue; }
-        }        
+        }
     }
 }

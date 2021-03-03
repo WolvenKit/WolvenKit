@@ -1,8 +1,8 @@
-﻿using Catel.MVVM;
+using Catel.MVVM;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.PublishWizard
 {
-    class RequiredSettingsViewModel : ViewModelBase
+    internal class RequiredSettingsViewModel : ViewModelBase
     {
     }
 }

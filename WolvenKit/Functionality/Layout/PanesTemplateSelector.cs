@@ -38,7 +38,6 @@ namespace WolvenKit.Functionality.Layout
         /// </summary>
         public DataTemplate ProjectExplorerTemplate { get; set; }
 
-
         /// <summary>
         /// Gets/sets the view instance of the AssetBrowser.
         /// </summary>
@@ -133,7 +132,6 @@ namespace WolvenKit.Functionality.Layout
         /// Gets/sets the view instance of the WccTool.
         /// </summary>
         public DataTemplate MimicsViewTemplate { get; set; }
-
 
         /// <summary>
         /// Determines the matching view for a specific given type of viewmodel.

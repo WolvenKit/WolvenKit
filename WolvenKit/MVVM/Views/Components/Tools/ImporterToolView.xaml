@@ -5,36 +5,27 @@
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources/>
-                <hc:Theme/>
+                <hc:ThemeResources />
+                <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </catel:UserControl.Resources>
 
-
-    <Grid >
+    <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        
-            <ToolBar HorizontalAlignment="Left" VerticalAlignment="Top">
-                <Button Content="Import"/>
-                <Separator/>
-                <Button Content="Auto-Fill Texturegroups"/>
-                <ComboBox Text="" Width="150"></ComboBox>
 
+            <ToolBar HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Button Content="Import" />
+                <Separator />
+                <Button Content="Auto-Fill Texturegroups" />
+                <ComboBox Text="" Width="150"></ComboBox>
             </ToolBar>
-    
 
         <ListView Grid.Row="1"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-
-
         </ListView>
-
-
     </Grid>
-
 </catel:UserControl>
-

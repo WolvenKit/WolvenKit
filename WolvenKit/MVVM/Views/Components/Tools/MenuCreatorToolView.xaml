@@ -6,44 +6,34 @@
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources/>
-                <hc:Theme/>
+                <hc:ThemeResources />
+                <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </catel:UserControl.Resources>
 
-
-    <Grid >
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
-        
-            <ToolBar HorizontalAlignment="Left" VerticalAlignment="Top">
-                <Button Content="File"/>
-                <Separator/>
-                <Button Content="Edit Main"/>
-                <Separator/>
-                <Button Content="Refresh"/>
 
+            <ToolBar HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Button Content="File" />
+                <Separator />
+                <Button Content="Edit Main" />
+                <Separator />
+                <Button Content="Refresh" />
             </ToolBar>
 
-
         <hc:CheckTreeView Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-
-
         </hc:CheckTreeView>
 
-
         <hc:PropertyGrid Grid.Column="1" Grid.Row="1">
-            
         </hc:PropertyGrid>
-
-
     </Grid>
-
 </catel:UserControl>

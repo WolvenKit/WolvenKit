@@ -23,6 +23,7 @@ namespace WolvenKit.Functionality.Controllers
     public enum EUpdateChannel
     {
         Stable,
+
         //Beta,
         Nightly,
     }
@@ -66,23 +67,26 @@ namespace WolvenKit.Functionality.Controllers
 
         #region Fields
 
-
         public string InitialModProject { get; set; } = "";
         public string InitialWKP { get; set; } = "";
         public string InitialFilePath { get; set; } = "";
-        #endregion
+
+        #endregion Fields
 
         #region Properties
+
         public Configuration Configuration { get; private set; }
         public EditorProjectData ActiveMod { get; set; }
         public WccLite WccHelper { get; set; }
         public List<HashDump> Hashdumplist { get; set; }
+
         /// <summary>
         /// Shows if there are unsaved changes in the project.
         /// </summary>
         public bool ProjectUnsaved = false;
 
         private EProjectStatus _projectstatus = EProjectStatus.Idle;
+
         public EProjectStatus ProjectStatus
         {
             get => _projectstatus;
@@ -90,6 +94,7 @@ namespace WolvenKit.Functionality.Controllers
         }
 
         private int _statusProgress = 0;
+
         public int StatusProgress
         {
             get => _statusProgress;
@@ -97,6 +102,7 @@ namespace WolvenKit.Functionality.Controllers
         }
 
         private string _loadstatus = "Loading...";
+
         public string loadStatus
         {
             get => _loadstatus;
@@ -104,29 +110,34 @@ namespace WolvenKit.Functionality.Controllers
         }
 
         private bool _loaded = false;
+
         public bool Loaded
         {
             get => _loaded;
             set => SetField(ref _loaded, value, nameof(Loaded));
         }
-        #endregion
+
+        #endregion Properties
 
         #region Archive Managers
 
         //TODO: Implement mod loading, it's not a priority atm so I left it out but we should support it.
         public List<IGameArchiveManager> GetManagers(bool loadmods) => s_gameController.GetArchiveManagersManagers();
 
-        #endregion
+        #endregion Archive Managers
 
         #region Logging
+
         public LoggerService Logger { get; private set; }
 
         private KeyValuePair<string, Logtype> _logMessage = new KeyValuePair<string, Logtype>("", Logtype.Normal);
+
         public KeyValuePair<string, Logtype> LogMessage
         {
             get => _logMessage;
             set => SetField(ref _logMessage, value, nameof(LogMessage));
         }
+
         /// <summary>
         /// Queues a string for logging in the main window.
         /// </summary>
@@ -166,14 +177,17 @@ namespace WolvenKit.Functionality.Controllers
             if (Get().Logger != null)
                 Get().Logger.LogProgress(value);
         }
-        #endregion
+
+        #endregion Logging
 
         #region Methods
 
         public static string ManagerCacheDir => GameControllerBase.ManagerCacheDir;
         public static string WorkDir => GameControllerBase.WorkDir;
         public static string XBMDumpPath => GameControllerBase.XBMDumpPath;
+
         public static string GetManagerPath(EManagerType type) => GameControllerBase.GetManagerPath(type);
+
         public static string GetManagerVersion(EManagerType type) => GameControllerBase.GetManagerVersion(type);
 
         /// <summary>
@@ -184,7 +198,7 @@ namespace WolvenKit.Functionality.Controllers
         {
             try
             {
-                // add a mechanism to update individual cache managers 
+                // add a mechanism to update individual cache managers
                 for (var j = 0; j < Configuration.ManagerVersions.Length; j++)
                 {
                     var savedversions = Configuration.ManagerVersions[j];
@@ -200,10 +214,10 @@ namespace WolvenKit.Functionality.Controllers
                 //multithread these
                 s_gameController.HandleStartup();
 
-
-
                 loadStatus = "Loading depot manager!";
+
                 #region Load depot manager
+
                 // check if r4depot exists
                 if (!Directory.Exists(Configuration.DepotPath))
                 {
@@ -220,11 +234,12 @@ namespace WolvenKit.Functionality.Controllers
 
                 // undbundle some engine files?
 
-                
-                #endregion
+                #endregion Load depot manager
 
                 loadStatus = "Loading path hashes!";
+
                 #region PathHasManager
+
                 //TODO: Figure out something for this! Probably should be inside the bundle manager
                 // create pathhashes if they don't already exist
                 /*var fi = new FileInfo(Cr2wResourceManager.pathashespath);
@@ -237,11 +252,12 @@ namespace WolvenKit.Functionality.Controllers
                     Cr2wResourceManager.Get().WriteVanilla();
                 }*/
 
-                #endregion                
+                #endregion PathHasManager
+
+
 
                 loadStatus = "Loaded";
 
-                
                 WccHelper = new WccLite(MainController.Get().Configuration.WccLite, Logger);
 
                 s_mainController.Loaded = true;
@@ -251,11 +267,9 @@ namespace WolvenKit.Functionality.Controllers
                 s_mainController.Loaded = false;
                 Console.WriteLine(ex.Message);
             }
-            
+
             return Task.CompletedTask;
         }
-
-        
 
         /// <summary>
         /// Useful function for blindly importing a file.
@@ -263,7 +277,7 @@ namespace WolvenKit.Functionality.Controllers
         /// <param name="name">The name of the file.</param>
         /// <param name="archive">The manager to search for the file in.</param>
         /// <returns></returns>
-        public static List<byte[]> ImportFile(string name,IGameArchiveManager archive)
+        public static List<byte[]> ImportFile(string name, IGameArchiveManager archive)
         {
             var ret = new List<byte[]>();
             archive.FileList.ToList().Where(x => x.Name.Contains(name)).ToList().ForEach(x =>
@@ -284,7 +298,7 @@ namespace WolvenKit.Functionality.Controllers
 
         public void UpdateWccHelper(string wccLite)
         {
-            if(WccHelper == null)
+            if (WccHelper == null)
             {
                 s_mainController.WccHelper = new WccLite(wccLite, s_mainController.Logger);
             }
@@ -299,12 +313,13 @@ namespace WolvenKit.Functionality.Controllers
 
         protected bool SetField<T>(ref T field, T value, string propertyName)
         {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            if (EqualityComparer<T>.Default.Equals(field, value))
+                return false;
             field = value;
             OnPropertyChanged(propertyName);
             return true;
         }
-        #endregion
 
+        #endregion Methods
     }
 }

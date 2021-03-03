@@ -1,4 +1,3 @@
-
 using System.Windows;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
@@ -13,11 +12,10 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Recent Projects");
             }
-
         }
     }
 }

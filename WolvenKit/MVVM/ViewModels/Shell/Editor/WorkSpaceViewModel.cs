@@ -40,6 +40,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
     public class WorkSpaceViewModel : ViewModelBase, IWorkSpaceViewModel
     {
         #region fields
+
         private readonly ObservableCollection<DocumentViewModel> _files = new ObservableCollection<DocumentViewModel>();
 
         private DocumentViewModel _activeDocument = null;
@@ -51,9 +52,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         private delegate void DocumentViewModelDelegate(DocumentViewModel value);
 
         private readonly DocumentViewModelDelegate addfiledel;
+
         #endregion fields
 
         #region constructors
+
         /// <summary>
         /// Class constructor
         /// </summary>
@@ -75,7 +78,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             _loggerService = loggerService;
             _messageService = messageService;
 
-            #endregion
+            #endregion dependency injection
 
             #region commands
 
@@ -111,22 +114,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
             PublishModCommand = new RelayCommand(ExecutePublishMod, CanPublishMod);
 
-
-
-
             addfiledel = vm => _files.Add(vm);
-
 
             // register as application-wide commands
             RegisterCommands(commandManager);
 
-            #endregion
-
-            #region events
-
-
-
-            #endregion
+            #endregion commands
 
             Tools = new ObservableCollection<ToolViewModel> {
                 Log,
@@ -152,8 +145,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 MimicsToolVM,
             };
         }
-
-
 
         #endregion constructors
 
@@ -192,7 +183,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             commandManager.RegisterCommand(AppCommands.Application.ShowPackageInstaller, ShowPackageInstallerCommand, this);
         }
 
-
         private static void OnToolViewModelPropertyChanged(object sender, PropertyChangedEventArgs args)
         {
             // executes a global command that can be subscribed to from any viewmodel
@@ -218,14 +208,18 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             await base.InitializeAsync();
         }
-        #endregion
+
+        #endregion init
 
         #region commands
+
         /// <summary>
         /// Displays the Project Installer.
         /// </summary>
         public ICommand ShowPackageInstallerCommand { get; private set; }
+
         private bool CanShowInstaller() => true;
+
         private void ExecuteShowInstaller()
         {
             var rpv = new InstallerWizardView();
@@ -234,159 +228,193 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             uchwv.Show();
         }
 
-
-
         /// <summary>
         /// Displays the BulkEditor.
         /// </summary>
         public ICommand ShowBulkEditorCommand { get; private set; }
+
         private bool CanShowBulkEditor() => true;
+
         private void ExecuteBulkEditor() => BulkEditorVM.IsVisible = !BulkEditorVM.IsVisible;
 
         /// <summary>
         /// Displays the CsvEditor.
         /// </summary>
         public ICommand ShowCsvEditorCommand { get; private set; }
+
         private bool CanShowCsvEditor() => true;
+
         private void ExecuteCsvEditor() => CsvEditorVM.IsVisible = !CsvEditorVM.IsVisible;
 
         /// <summary>
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowHexEditorCommand { get; private set; }
+
         private bool CanShowHexEditor() => true;
+
         private void ExecuteHexEditor() => HexEditorVM.IsVisible = !HexEditorVM.IsVisible;
 
         /// <summary>
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowJournalEditorCommand { get; private set; }
+
         private bool CanShowJournalEditor() => true;
+
         private void ExecuteJournalEditor() => JournalEditorVM.IsVisible = !JournalEditorVM.IsVisible;
 
         /// <summary>
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowVisualEditorCommand { get; private set; }
+
         private bool CanShowVisualEditor() => true;
+
         private void ExecuteVisualEditor() => VisualEditorVM.IsVisible = !VisualEditorVM.IsVisible;
 
         /// <summary>
         /// Displays the AssetBrowser.
         /// </summary>
-       public ICommand ShowAnimationToolCommand { get; private set; }
-       private bool CanShowAnimationTool() => true;
-       private void ExecuteAnimationTool() => AnimationToolVM.IsVisible = !AnimationToolVM.IsVisible;
+        public ICommand ShowAnimationToolCommand { get; private set; }
+
+        private bool CanShowAnimationTool() => true;
+
+        private void ExecuteAnimationTool() => AnimationToolVM.IsVisible = !AnimationToolVM.IsVisible;
 
         /// <summary>
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowMimicsToolCommand { get; private set; }
+
         private bool CanShowMimicsTool() => true;
+
         private void ExecuteMimicsTool() => MimicsToolVM.IsVisible = !MimicsToolVM.IsVisible;
 
         /// <summary>
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowAudioToolCommand { get; private set; }
+
         private bool CanShowAudioTool() => true;
+
         public void ExecuteAudioTool() => AudioToolVM.IsVisible = !AudioToolVM.IsVisible;
 
         /// <summary>
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowImporterToolCommand { get; private set; }
+
         private bool CanShowImporterTool() => true;
+
         private void ExecuteImporterTool() => ImporterToolVM.IsVisible = !ImporterToolVM.IsVisible;
 
         /// <summary>
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowCR2WToTextToolCommand { get; private set; }
+
         private bool CanShowCR2WToTextTool() => true;
+
         private void ExecuteCR2WToTextTool() => CR2WToTextToolVM.IsVisible = !CR2WToTextToolVM.IsVisible;
 
         /// <summary>
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowGameDebuggerToolCommand { get; private set; }
+
         private bool CanShowGameDebuggerTool() => true;
+
         private void ExecuteGameDebuggerTool() => GameDebuggerToolVM.IsVisible = !GameDebuggerToolVM.IsVisible;
 
         /// <summary>
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowMenuCreatorToolCommand { get; private set; }
+
         private bool CanShowMenuCreatorTool() => true;
+
         private void ExecuteMenuCreatorTool() => MenuCreatorToolVM.IsVisible = !MenuCreatorToolVM.IsVisible;
 
         /// <summary>
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowPluginManagerCommand { get; private set; }
+
         private bool CanShowPluginManagerTool() => true;
+
         private void ExecutePluginManagerTool() => PluginManagerVM.IsVisible = !PluginManagerVM.IsVisible;
 
         /// <summary>
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowRadishToolCommand { get; private set; }
+
         private bool CanShowRadishTool() => true;
+
         private void ExecuteRadishTool() => RadishToolVM.IsVisible = !RadishToolVM.IsVisible;
 
         /// <summary>
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowWccToolCommand { get; private set; }
+
         private bool CanShowWccTool() => true;
+
         private void ExecuteWccTool() => WccToolVM.IsVisible = !WccToolVM.IsVisible;
-
-
-
-
-
 
         /// <summary>
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowAssetsCommand { get; private set; }
-        private bool CanShowAssetBrowser() => AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
-        private void ExecuteAssetBrowser() => AssetBrowserVM.IsVisible = !AssetBrowserVM.IsVisible;
 
+        private bool CanShowAssetBrowser() => AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
+
+        private void ExecuteAssetBrowser() => AssetBrowserVM.IsVisible = !AssetBrowserVM.IsVisible;
 
         /// <summary>
         /// Displays the LogView.
         /// </summary>
         public ICommand ShowLogCommand { get; private set; }
+
         private bool CanShowLog() => true;
+
         private void ExecuteShowLog() => Log.IsVisible = !Log.IsVisible;
 
         /// <summary>
         /// Displays the Project Explorer View.
         /// </summary>
         public ICommand ShowProjectExplorerCommand { get; private set; }
+
         private bool CanShowProjectExplorer() => true;
+
         private void ExecuteShowProjectExplorer() => ProjectExplorer.IsVisible = !ProjectExplorer.IsVisible;
 
         /// <summary>
         /// Displays the Import Utility View
         /// </summary>
         public ICommand ShowImportUtilityCommand { get; private set; }
+
         private bool CanShowImportUtility() => true;
+
         private void ExecuteShowImportUtility() => ImportViewModel.IsVisible = !ImportViewModel.IsVisible;
 
         /// <summary>
         /// Displays the Properties View
         /// </summary>
         public ICommand ShowPropertiesCommand { get; private set; }
+
         private bool CanShowProperties() => true;
+
         private void ExecuteShowProperties() => PropertiesViewModel.IsVisible = !PropertiesViewModel.IsVisible;
 
         /// <summary>
         /// Opens a physical file in WolvenKit.
         /// </summary>
         public ICommand OpenFileCommand { get; private set; }
+
         private bool CanOpenFile(FileSystemInfoModel model) => true;
+
         private async Task ExecuteOpenFile(FileSystemInfoModel model)
         {
             if (model == null)
@@ -409,16 +437,15 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     //await Task.Run(() => RequestFileOpen(model));
                 }
             }
-
         }
-
-
 
         /// <summary>
         /// Creates a new cr2w file in WolvenKit.
         /// </summary>
         public ICommand NewFileCommand { get; private set; }
+
         private bool CanNewFile() => true;
+
         private void ExecuteNewFile()
         {
             //TODO
@@ -428,21 +455,27 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Packs the current mod project.
         /// </summary>
         public ICommand PackModCommand { get; private set; }
+
         private bool CanPackMod() => _projectManager.ActiveProject is EditorProject proj;
+
         private static void ExecutePackMod() => MainController.GetGame().PackAndInstallProject();
 
         /// <summary>
         /// Git-backup current mod project
         /// </summary>
         public ICommand BackupModCommand { get; private set; }
+
         private bool CanBackupMod() => _projectManager.ActiveProject is EditorProject;
+
         private void ExecuteBackupMod()
         {
             // TODO: Implement this
         }
 
         public ICommand PublishModCommand { get; private set; }
+
         private bool CanPublishMod() => _projectManager.ActiveProject is EditorProject;
+
         private void ExecutePublishMod()
         {
             try
@@ -450,7 +483,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 var vm = new UserControlHostWindowViewModel(new PublishWizardView(), 600, 1200);
 
                 ServiceLocator.Default.ResolveType<IUIVisualizerService>().ShowDialogAsync(vm);
-
             }
             catch (Exception ex)
             {
@@ -459,10 +491,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-
-
-
-        #endregion
+        #endregion commands
 
         #region properties
 
@@ -501,12 +530,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// </summary>
         public ObservableCollection<ToolViewModel> Tools { get; set; }
 
-     
-
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private CodeEditorViewModel _CodeEditorVM = null;
+
         public CodeEditorViewModel CodeEditorVM
         {
             get
@@ -517,11 +545,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private Components.Editors.BulkEditorViewModel _BulkEditorVM = null;
+
         public Components.Editors.BulkEditorViewModel BulkEditorVM
         {
             get
@@ -536,6 +564,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private CsvEditorViewModel _CsvEditorVM = null;
+
         public CsvEditorViewModel CsvEditorVM
         {
             get
@@ -550,6 +579,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private HexEditorViewModel _HexEditorVM = null;
+
         public HexEditorViewModel HexEditorVM
         {
             get
@@ -564,6 +594,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private AudioToolViewModel _AudioToolVM = null;
+
         public AudioToolViewModel AudioToolVM
         {
             get
@@ -578,6 +609,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private JournalEditorViewModel _JournalEditorVM = null;
+
         public JournalEditorViewModel JournalEditorVM
         {
             get
@@ -592,6 +624,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private VisualEditorViewModel _VisualEditorVM = null;
+
         public VisualEditorViewModel VisualEditorVM
         {
             get
@@ -606,6 +639,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Gets an instance of the ProjectExplorerViewModer.
         ///
         private AnimsViewModel _AnimationToolVM = null;
+
         public AnimsViewModel AnimationToolVM
         {
             get
@@ -616,11 +650,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
         ///
         private MimicsViewModel _MimicsToolVM = null;
+
         public MimicsViewModel MimicsToolVM
         {
             get
@@ -637,6 +671,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private ImporterToolViewModel _ImporterToolVM = null;
+
         public ImporterToolViewModel ImporterToolVM
         {
             get
@@ -651,6 +686,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private CR2WToTextToolViewModel _CR2WToTextToolVM = null;
+
         public CR2WToTextToolViewModel CR2WToTextToolVM
         {
             get
@@ -665,6 +701,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private GameDebuggerToolViewModel _GameDebuggerToolVM = null;
+
         public GameDebuggerToolViewModel GameDebuggerToolVM
         {
             get
@@ -679,6 +716,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private MenuCreatorToolViewModel _MenuCreatorToolVM = null;
+
         public MenuCreatorToolViewModel MenuCreatorToolVM
         {
             get
@@ -693,6 +731,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private PluginManagerViewModel _PluginManagerVM = null;
+
         public PluginManagerViewModel PluginManagerVM
         {
             get
@@ -707,6 +746,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private RadishToolViewModel _RadishToolVM = null;
+
         public RadishToolViewModel RadishToolVM
         {
             get
@@ -721,6 +761,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private WccToolViewModel _WccToolVM = null;
+
         public WccToolViewModel WccToolVM
         {
             get
@@ -731,19 +772,18 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-
-
-
         /// <summary>
         /// Gets an instance of the LogViewModel.
         /// </summary>
         private LogViewModel _logViewModel = null;
+
         public LogViewModel Log => _logViewModel ??= new LogViewModel();
 
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private ProjectExplorerViewModel _projectExplorerViewModel = null;
+
         public ProjectExplorerViewModel ProjectExplorer
         {
             get
@@ -758,11 +798,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Gets an instance of the AssetBrowserViewModel.
         /// </summary>
         private AssetBrowserViewModel _AssetBrowserViewModel = null;
+
         public AssetBrowserViewModel AssetBrowserVM
         {
             get
             {
-
                 _AssetBrowserViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AssetBrowserViewModel>();
                 _AssetBrowserViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _AssetBrowserViewModel;
@@ -773,6 +813,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Gets an instance of the ImportViewModel.
         /// </summary>
         private ImportViewModel _importViewModel = null;
+
         public ImportViewModel ImportViewModel
         {
             get
@@ -786,6 +827,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Gets an instance of the PropertiesViewModel.
         /// </summary>
         private PropertiesViewModel _propertiesViewModel = null;
+
         public PropertiesViewModel PropertiesViewModel
         {
             get
@@ -795,11 +837,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-
-
-
-
-        #endregion Properties
+        #endregion properties
 
         #region methods
 
@@ -856,7 +894,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             //    return;
             //}
 
-            #endregion
+            #endregion inspect on single click
 
             // double click
             switch (ext)
@@ -889,10 +927,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 case ".INI":
                     ShellExecute(fullpath);
                     break;
+
                 case ".BNK":
                 case ".WEM":
                 {
-
                     OpenAudioFile(fullpath);
                     // TODO: port winforms
                     //using (var sp = new frmAudioPlayer(fullpath))
@@ -904,6 +942,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 case ".SUBS":
                     PolymorphExecute(fullpath, ".txt");
                     break;
+
                 case ".USM":
                 {
                     // TODO: port winforms
@@ -918,7 +957,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     ActiveDocument = await OpenAsync(model);
                     break;
             }
-
 
             void OpenAudioFile(string full)
             {
@@ -968,8 +1006,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         //
         // https://github.com/Dirkster99/AvalonDock/blob/5032524bae6e342dbb648a4c1d3fc3264f449db9/source/MLibTest/MLibTest/Demos/ViewModels/WorkSpaceViewModel.cs
-        // 
-
+        //
 
         /// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
         public void CloseAllDocuments()
@@ -1034,12 +1071,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             // TODO
 
-
-
             ActiveDocument.IsDirty = false;
         }
-
-
 
         /// <summary>
         /// Open a file and return its content in a viewmodel.
@@ -1074,6 +1107,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         }
 
         #region NewCommand
+
         /// <summary>
         /// Determines if application can currently create a new document or not.
         /// </summary>
@@ -1091,7 +1125,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             //ActiveDocument = newFile;
         }
 
-        #endregion
+        #endregion NewCommand
+
         #endregion methods
     }
 }

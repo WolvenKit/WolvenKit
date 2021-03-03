@@ -12,6 +12,7 @@ namespace WolvenKit.MVVM.Model
         Old_IDocumentViewModel GetViewModel();
 
         void Close();
+
         void Activate();
     }
 }

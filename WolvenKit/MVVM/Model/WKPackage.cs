@@ -74,11 +74,11 @@ namespace WolvenKit.MVVM.Model
         public static XDocument CreateModAssembly(
             string version,
             string name,
-            Tuple<string,string,string,string,string,string> Author,
+            Tuple<string, string, string, string, string, string> Author,
             string description,
             string Largedescription,
             string license,
-            Tuple<Color,bool,
+            Tuple<Color, bool,
             Color> Colors,
             List<XElement> Contents)
         {
@@ -86,11 +86,11 @@ namespace WolvenKit.MVVM.Model
             {
                 throw new ArgumentException("Invalid parameters when trying to generate the assembly.xml!");
             }
-            var rootnode = new XElement("package",new XAttribute("version",version), new XAttribute("name",name));
-            var authorelement = new XElement("author",new XElement("displayName",Author.Item1));
+            var rootnode = new XElement("package", new XAttribute("version", version), new XAttribute("name", name));
+            var authorelement = new XElement("author", new XElement("displayName", Author.Item1));
             var metadataelement = new XElement("metadata");
             if (Author.Item2 != null || Author.Item2 != "")
-                authorelement.Add(new XElement("actionLink",Author.Item2));
+                authorelement.Add(new XElement("actionLink", Author.Item2));
             if (Author.Item3 != null || Author.Item3 != "")
                 authorelement.Add(new XElement("web", Author.Item3));
             if (Author.Item4 != null || Author.Item4 != "")
@@ -100,16 +100,16 @@ namespace WolvenKit.MVVM.Model
             if (Author.Item6 != null || Author.Item6 != "")
                 authorelement.Add(new XElement("youtube", Author.Item6));
             metadataelement.Add(authorelement);
-            if(description?.Length > 0)
-                metadataelement.Add(new XElement("description",description));
+            if (description?.Length > 0)
+                metadataelement.Add(new XElement("description", description));
             if (Largedescription?.Length > 0)
                 metadataelement.Add(new XElement("largeDescription", Largedescription));
             if (license?.Length > 0)
                 metadataelement.Add(new XElement("license", license));
             rootnode.Add(metadataelement);
-            rootnode.Add(new XElement("colors",new XElement("headerBackground", ColorTranslator.ToHtml(Colors.Item1),new XAttribute("useBlackTextColor",Colors.Item2)),new XElement("iconBackground",ColorTranslator.ToHtml(Colors.Item3))));
+            rootnode.Add(new XElement("colors", new XElement("headerBackground", ColorTranslator.ToHtml(Colors.Item1), new XAttribute("useBlackTextColor", Colors.Item2)), new XElement("iconBackground", ColorTranslator.ToHtml(Colors.Item3))));
             rootnode.Add(new XElement("content", Contents));
-            return new XDocument(new XDeclaration("1.0", "UTF-8", "True"),rootnode);
+            return new XDocument(new XDeclaration("1.0", "UTF-8", "True"), rootnode);
         }
     }
 }

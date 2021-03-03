@@ -1,4 +1,4 @@
-﻿<catel:UserControl x:Class="WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard.FinalizeSetupView"
+<catel:UserControl x:Class="WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard.FinalizeSetupView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com"
@@ -8,50 +8,46 @@
         <catel:BooleanToOppositeBooleanConverter x:Key="booleanToOppositeBooleanConverter" />
         <ResourceDictionary x:Key="resourceDictionary">
 
-
             <ResourceDictionary.MergedDictionaries>
 
-                <hc:ThemeResources/>
-                <hc:Theme/>
-
+                <hc:ThemeResources />
+                <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-
     </catel:UserControl.Resources>
-    <Grid  VerticalAlignment="Center" Grid.Row="3" >
+    <Grid  VerticalAlignment="Center" Grid.Row="3">
         <Grid Margin="5,5,5,5" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Stretch">
             <Grid Grid.Row="1" HorizontalAlignment="Stretch">
                 <StackPanel Margin="0,10,0,0" Orientation="Vertical" VerticalAlignment="Top">
                     <TextBlock Text="Does This Look Right?"  FontSize="14" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,10"></TextBlock>
-                    <Grid Margin="22,0,0,0" >
+                    <Grid Margin="22,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="6*"></ColumnDefinition>
-
                         </Grid.ColumnDefinitions>
                         <AdornerDecorator>
                             <StackPanel>
-                                <Grid Margin="5,32,0,0" >
+                                <Grid Margin="5,32,0,0">
 
                                     <TextBlock   VerticalAlignment="Center">
                                         <Run Text="Project Image"></Run>
 
-                                        <LineBreak/>
+                                        <LineBreak />
                                         <Run Text="(Optional)"></Run>
                                     </TextBlock>
-                                    <hc:ImageSelector  x:Name="imgSelector" Margin="100,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left"/>
+                                    <hc:ImageSelector  x:Name="imgSelector" Margin="100,0,0,0" Width="100" Height="100"  HorizontalAlignment="Left" />
                                 </Grid>
-                                <Grid Margin="5,32,0,0" >
+                                <Grid Margin="5,32,0,0">
 
                                     <TextBlock Text="Project Name" VerticalAlignment="Center"></TextBlock>
                                     <TextBox  Margin="100,0,0,0" Text="{Binding ProjectName}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsEnabled="False"></TextBox>
                                 </Grid>
 
-                                <Grid Margin="5,32,0,0" >
+                                <Grid Margin="5,32,0,0">
 
                                     <TextBlock Text="Project Type" VerticalAlignment="Center"></TextBlock>
                                     <TextBox   Margin="100,0,0,0" Text="{Binding ProjectType}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsEnabled="False"></TextBox>
                                 </Grid>
-                                <Grid Margin="5,32,0,0" >
+                                <Grid Margin="5,32,0,0">
 
                                     <TextBlock Text="Project Path" VerticalAlignment="Center"></TextBlock>
                                     <TextBox   Margin="100,0,0,0" Text="{Binding ProjectPath}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsEnabled="False"></TextBox>
@@ -66,11 +62,7 @@
                             </StackPanel>
                         </AdornerDecorator>
 
-
                         <Grid Grid.Column="0">
-                       
-                
-
                         </Grid>
                     </Grid>
                 </StackPanel>

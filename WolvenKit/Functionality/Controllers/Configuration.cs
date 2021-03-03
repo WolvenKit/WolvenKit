@@ -19,13 +19,11 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
-        
-
-
         /// <summary>
         ///     Configuration values
         /// </summary>
         public string W3ExePath { get; set; }
+
         public string CP77ExePath { get; set; }
 
         public string TextLanguage { get; set; }
@@ -43,25 +41,25 @@ namespace WolvenKit.Functionality.Controllers
 
         public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
 
-        
-
         public EUpdateChannel UpdateChannel { get; set; }
 
-        
         [XmlIgnore]
         public string W3GameRootDir => Path.Combine(W3ExePath, @"..\..\..\");
+
         [XmlIgnore]
         public string W3GameContentDir => Path.Combine(W3GameRootDir, "content");
+
         [XmlIgnore]
         public string W3GameModDir => Path.Combine(W3GameRootDir, "Mods");
+
         [XmlIgnore]
         public string W3GameDlcDir => Path.Combine(W3GameRootDir, "DLC");
 
         [XmlIgnore]
         public string CP77GameContentDir => Path.Combine(CP77GameRootDir, "content");
+
         [XmlIgnore]
         public string CP77GameRootDir => Path.Combine(CP77ExePath, @"..\..\..\");
-
 
         ~Configuration()
         {
@@ -70,7 +68,7 @@ namespace WolvenKit.Functionality.Controllers
 
         public void Save()
         {
-            var ser = new XmlSerializer(typeof (Configuration));
+            var ser = new XmlSerializer(typeof(Configuration));
             var stream = new FileStream(ConfigurationPath, FileMode.Create, FileAccess.Write);
             ser.Serialize(stream, this);
             stream.Close();
@@ -91,9 +89,7 @@ namespace WolvenKit.Functionality.Controllers
             }
             catch (Exception)
             {
-
             }
-            
 
             // Defaults
             return new Configuration

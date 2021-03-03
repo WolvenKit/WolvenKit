@@ -7,16 +7,13 @@
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources/>
-                <hc:Theme/>
+                <hc:ThemeResources />
+                <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </catel:UserControl.Resources>
 
-
-    <Grid> 
-        <hexz:HexEditor Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" Width="Auto" Height="Auto"/>
-
+    <Grid>
+        <hexz:HexEditor Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" Width="Auto" Height="Auto" />
     </Grid>
-
 </catel:UserControl>

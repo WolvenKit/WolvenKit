@@ -1,4 +1,4 @@
-﻿using Catel;
+using Catel;
 using Catel.Data;
 using Catel.Fody;
 using Catel.IoC;
@@ -7,18 +7,21 @@ using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.SettingsPages.SubPages.Editor
 {
-    class CompatibilitySubSettingsViewModel : ViewModelBase
+    internal class CompatibilitySubSettingsViewModel : ViewModelBase
     {
         #region constructors
+
         public CompatibilitySubSettingsViewModel(IServiceLocator serviceLocator)
         {
             Argument.IsNotNull(() => serviceLocator);
 
             SettingsManager = serviceLocator.ResolveType<ISettingsManager>();
         }
-        #endregion
+
+        #endregion constructors
 
         #region properties
+
         /// <summary>
         /// Gets or sets the SettingsManager.
         /// </summary>
@@ -37,6 +40,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.SettingsPages.SubPages.
         /// Register the SettingsManagerProperty property so it is known in the class.
         /// </summary>
         public static readonly PropertyData SettingsManagerProperty = RegisterProperty("SettingsManager", typeof(ISettingsManager));
+
         #endregion properties
     }
 }

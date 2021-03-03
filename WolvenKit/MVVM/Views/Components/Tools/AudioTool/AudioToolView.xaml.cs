@@ -11,26 +11,19 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 {
     public partial class AudioToolView
     {
-
         public AudioToolView()
         {
             InitializeComponent();
 
             Reinit();
-
-      
         }
 
         public void Reinit()
         {
-
-
-
             ResourceDictionary themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
             Resources.MergedDictionaries.Add(themeResources);
             //clockDisplay.SetCurrentValue(WPFSoundVisualizationLib.DigitalClock.TimeProperty, TimeSpan.FromMilliseconds(channel.CurrentSound.GetLength(TimeUnit.MS)));
             // this.DataContext = new AudioToolViewModel();
-
 
             NAudioEngine soundEngine = NAudioEngine.Instance;
             soundEngine.PropertyChanged += NAudioEngine_PropertyChanged;
@@ -39,14 +32,12 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             // UIHelper.Bind(soundEngine, "CanPlay", PlayButton, Button.IsEnabledProperty);
             // UIHelper.Bind(soundEngine, "CanPause", PauseButton, Button.IsEnabledProperty);
 
-
             spectrumAnalyzer.RegisterSoundPlayer(soundEngine);
             waveformTimeline.RegisterSoundPlayer(soundEngine);
 
-            //LoadExpressionDarkTheme();  
+            //LoadExpressionDarkTheme();
             ShowPage();
         }
-
 
         private void ShowPage()
         {
@@ -59,18 +50,21 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                     StepFour.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
 
                     break;
+
                 case 1:
                     StepOne.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
                     StepTwo.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                     StepThree.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
                     StepFour.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
                     break;
+
                 case 2:
                     StepOne.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
                     StepTwo.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
                     StepThree.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                     StepFour.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
                     break;
+
                 case 3:
                     StepOne.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
                     StepTwo.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
@@ -88,28 +82,26 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public void AddAudioItem(string path)
         {
-            TempConvertToWemWav( path);
+            TempConvertToWemWav(path);
         }
 
-        const string wdir = "vgmstream\\AudioWorkingDir\\";
+        private const string wdir = "vgmstream\\AudioWorkingDir\\";
 
         public void TempConvertToWemWav(string path)
         {
             Directory.CreateDirectory(wdir);
 
-        
-                string outf = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Path.GetFileNameWithoutExtension(path) + ".wav");
-                string arg = path + " -o " + outf;
-                var si = new ProcessStartInfo(
-                        "vgmstream\\test.exe",
-                        arg
-                    );
-                si.CreateNoWindow = true;
-                si.WindowStyle = ProcessWindowStyle.Hidden;
-                si.UseShellExecute = false;
-                var proc = Process.Start(si);
-                proc.WaitForExit();
-          
+            string outf = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Path.GetFileNameWithoutExtension(path) + ".wav");
+            string arg = path + " -o " + outf;
+            var si = new ProcessStartInfo(
+                    "vgmstream\\test.exe",
+                    arg
+                );
+            si.CreateNoWindow = true;
+            si.WindowStyle = ProcessWindowStyle.Hidden;
+            si.UseShellExecute = false;
+            var proc = Process.Start(si);
+            proc.WaitForExit();
 
             foreach (var f in Directory.GetFiles(wdir))
             {
@@ -123,25 +115,10 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 PlayListView.Items.Add(lvi);
                 PlayListView.Items.Add(lvi);
                 PlayListView.Items.Add(lvi);
-
             }
 
             Trace.WriteLine("WeDiDThis");
-
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         private void PreviousPage(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -150,6 +127,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         }
 
         #region NAudio Engine Events
+
         private void NAudioEngine_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             NAudioEngine engine = NAudioEngine.Instance;
@@ -187,16 +165,18 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                     {
                     }
                     break;
+
                 case "ChannelPosition":
                     clockDisplay.SetCurrentValue(WPFSoundVisualizationLib.DigitalClock.TimeProperty, TimeSpan.FromSeconds(engine.ChannelPosition));
                     break;
+
                 default:
                     // Do Nothing
                     break;
             }
-
         }
-        #endregion
+
+        #endregion NAudio Engine Events
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
@@ -223,15 +203,11 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         private void LoadDefaultTheme()
         {
-
-
             Resources.MergedDictionaries.Clear();
         }
 
         private void LoadDarkBlueTheme()
         {
-      
-
             Resources.MergedDictionaries.Clear();
             ResourceDictionary themeResources = Application.LoadComponent(new Uri("DarkBlue.xaml", UriKind.Relative)) as ResourceDictionary;
             Resources.MergedDictionaries.Add(themeResources);
@@ -239,8 +215,6 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         private void LoadExpressionDarkTheme()
         {
-     
-
             Resources.MergedDictionaries.Clear();
             ResourceDictionary themeResources = Application.LoadComponent(new Uri("ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
             Resources.MergedDictionaries.Add(themeResources);
@@ -248,8 +222,6 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         private void LoadExpressionLightTheme()
         {
-          
-
             Resources.MergedDictionaries.Clear();
             ResourceDictionary themeResources = Application.LoadComponent(new Uri("ExpressionLight.xaml", UriKind.Relative)) as ResourceDictionary;
             Resources.MergedDictionaries.Add(themeResources);
@@ -267,7 +239,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         private void ExpressionLightMenuItem_Checked(object sender, RoutedEventArgs e)
         {
-          //  LoadExpressionLightTheme();
+            //  LoadExpressionLightTheme();
         }
 
         private void OpenFile()
@@ -291,13 +263,10 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         {
         }
 
-      //  protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
-    //    {
-     //       NAudioEngine.Instance.Dispose();
-     //   }
-
-
-
+        //  protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        //    {
+        //       NAudioEngine.Instance.Dispose();
+        //   }
 
         private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -317,15 +286,12 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         {
         }
 
-
-
         private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Audio Tool");
             }
         }
     }
-
 }

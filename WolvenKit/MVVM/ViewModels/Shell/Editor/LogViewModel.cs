@@ -2,13 +2,11 @@ using System.Threading.Tasks;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
-
     /// <summary>
     /// Implements the viewmodel that drives the log view.
     /// </summary>
     public class LogViewModel : ToolViewModel
     {
-        
         /// <summary>
         /// Identifies the <see ref="ContentId"/> of this tool window.
         /// </summary>
@@ -19,12 +17,13 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// </summary>
         public const string ToolTitle = "Log";
 
-
         #region constructors
-        public LogViewModel(): base(ToolTitle)
+
+        public LogViewModel() : base(ToolTitle)
         {
             SetupToolDefaults();
         }
+
         #endregion constructors
 
         #region properties
@@ -35,8 +34,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// </summary>
         public string Log { get; set; }
 
-
-        #endregion
+        #endregion properties
 
         #region methods
 
@@ -65,9 +63,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         {
             // TODO: Unsubscribe from events
 
-
             return base.CloseAsync();
         }
-        #endregion
+
+        #endregion methods
     }
 }

@@ -15,39 +15,27 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-
         <fluent:Ribbon Margin="0,0,0,0" Grid.Row="0" x:Name="ribbon">
-
 
             <!-- StartScreen -->
             <fluent:Ribbon.StartScreen>
-                <fluent:StartScreen x:Name="startScreen" IsOpen="True" >
+                <fluent:StartScreen x:Name="startScreen" IsOpen="True">
                     <HomeView:HomePageView />
-
-
                 </fluent:StartScreen>
             </fluent:Ribbon.StartScreen>
 
-
             <!-- Backstage -->
-            <fluent:Ribbon.Menu >
-                <fluent:Backstage  Margin="70,0,0,0"  x:Name="BackstageX" MouseLeftButtonDown="Backstage_MouseLeftButtonDown" >
-                    <views1:BackStageView/>
-          
-
-                       
+            <fluent:Ribbon.Menu>
+                <fluent:Backstage  Margin="70,0,0,0"  x:Name="BackstageX" MouseLeftButtonDown="Backstage_MouseLeftButtonDown">
+                    <views1:BackStageView />
                 </fluent:Backstage>
             </fluent:Ribbon.Menu>
-
-
-
 
             <!-- Home Tab -->
             <fluent:RibbonTabItem  Header="General">
@@ -68,8 +56,6 @@
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="OpenPreview" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-
-
                 </fluent:RibbonGroupBox>
 
                 <!-- Project -->
@@ -79,7 +65,7 @@
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="Play" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-           
+
                     <fluent:Button Header="Package Installer" Command="{catel:CommandManagerBinding Application.ShowPackageInstaller}" Size="Middle">
                         <fluent:Button.Icon>
                             <iconPacks:PackIconCodicons Kind="Package"></iconPacks:PackIconCodicons>
@@ -95,28 +81,16 @@
                             <iconPacks:PackIconCodicons Kind="Settings"></iconPacks:PackIconCodicons>
                         </fluent:Button.Icon>
                     </fluent:Button>
-             
-
-                    
-
-                       
-
-
-
-
                 </fluent:RibbonGroupBox>
 
+                <fluent:RibbonGroupBox Header="Quick Access">
 
-                <fluent:RibbonGroupBox Header="Quick Access" >
-
-                    <fluent:Button Header="Asset Browser" Command="{catel:CommandManagerBinding Application.ShowAssetBrowser}" >
+                    <fluent:Button Header="Asset Browser" Command="{catel:CommandManagerBinding Application.ShowAssetBrowser}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconBootstrapIcons Kind="InboxesFill" HorizontalAlignment="Center" VerticalAlignment="Stretch"  Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
 
-          
-       
                     <fluent:Button Header="Project Log" Command="{catel:CommandManagerBinding Application.ShowLog}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="Notebook" Height="25" Width="25"></iconPacks:PackIconCodicons>
@@ -133,31 +107,25 @@
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="Extensions" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-                    <fluent:Button Header="Properties Window" 
+                    <fluent:Button Header="Properties Window"
                                    Command="{catel:CommandManagerBinding Application.ShowProperties}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons HorizontalAlignment="Center" VerticalAlignment="Stretch" Kind="SymbolProperty" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
 
-                    <fluent:Button Header="Plugin Manager" Visibility="Collapsed" Command="{catel:CommandManagerBinding Application.ShowPluginManager}" >
+                    <fluent:Button Header="Plugin Manager" Visibility="Collapsed" Command="{catel:CommandManagerBinding Application.ShowPluginManager}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconBootstrapIcons Kind="PlugFill" HorizontalAlignment="Center" VerticalAlignment="Stretch"  Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
                 </fluent:RibbonGroupBox>
-
             </fluent:RibbonTabItem>
-
-          
-
- 
-
 
             <!-- Tools Dropdown Tab -->
             <fluent:RibbonTabItem Visibility="Collapsed" Header="Editors">
                 <fluent:RibbonGroupBox Header="Quick Access">
-                    <fluent:Button Header="Visual Editor"  HorizontalAlignment="Center" VerticalAlignment="Center" Command="{catel:CommandManagerBinding Application.ShowVisualEditor}" >
+                    <fluent:Button Header="Visual Editor"  HorizontalAlignment="Center" VerticalAlignment="Center" Command="{catel:CommandManagerBinding Application.ShowVisualEditor}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconBootstrapIcons Height="25" Width="25" Kind="UiRadiosGrid"></iconPacks:PackIconBootstrapIcons>
                         </fluent:Button.LargeIcon>
@@ -167,7 +135,6 @@
                             <iconPacks:PackIconBootstrapIcons Height="25" Width="25" Kind="CodeSquare"></iconPacks:PackIconBootstrapIcons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-        
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox Header="Editors">
                     <fluent:Button Header="Visual Editor" Command="{catel:CommandManagerBinding Application.ShowVisualEditor}" Size="Middle">
@@ -206,38 +173,32 @@
                         </fluent:Button.Icon>
                     </fluent:Button>
                 </fluent:RibbonGroupBox>
-
             </fluent:RibbonTabItem>
 
-
-
-
             <fluent:RibbonTabItem Header="Tools">
-               
 
                 <!-- Quick Access Tools -->
                 <fluent:RibbonGroupBox  Header="Quick Access">
-                    <fluent:Button Header="Audio Tool" Visibility="Collapsed"  Command="{catel:CommandManagerBinding Application.ShowAudioTool}"  >
+                    <fluent:Button Header="Audio Tool" Visibility="Collapsed"  Command="{catel:CommandManagerBinding Application.ShowAudioTool}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconBootstrapIcons Kind="Soundwave" HorizontalAlignment="Center" VerticalAlignment="Stretch"  Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-                    
-                    <fluent:Button Header="Asset Browser" Command="{catel:CommandManagerBinding Application.ShowAssetBrowser}" >
+
+                    <fluent:Button Header="Asset Browser" Command="{catel:CommandManagerBinding Application.ShowAssetBrowser}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconBootstrapIcons Kind="InboxesFill" HorizontalAlignment="Center" VerticalAlignment="Stretch"  Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
 
-                    <fluent:Button Header="Plugin Manager" Visibility="Collapsed"  Command="{catel:CommandManagerBinding Application.ShowPluginManager}" >
+                    <fluent:Button Header="Plugin Manager" Visibility="Collapsed"  Command="{catel:CommandManagerBinding Application.ShowPluginManager}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconBootstrapIcons Kind="PlugFill" HorizontalAlignment="Center" VerticalAlignment="Stretch"  Height="25" Width="25"></iconPacks:PackIconBootstrapIcons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
                 </fluent:RibbonGroupBox>
 
-
-                <fluent:RibbonGroupBox Header="Tools" Visibility="Collapsed"  >
+                <fluent:RibbonGroupBox Header="Tools" Visibility="Collapsed">
                     <fluent:Button Header="Audio Tool" Visibility="Collapsed"   Command="{catel:CommandManagerBinding Application.ShowAudioTool}"  Size="Middle">
                         <fluent:Button.Icon>
                             <iconPacks:PackIconBootstrapIcons Kind="Soundwave"></iconPacks:PackIconBootstrapIcons>
@@ -278,7 +239,6 @@
                         </fluent:Button.Icon>
                     </fluent:Button>
 
-
                     <fluent:Button Header="Game Debugger" Visibility="Collapsed"  Command="{catel:CommandManagerBinding Application.ShowGameDebuggerTool}" Size="Middle">
                         <fluent:Button.Icon>
                             <iconPacks:PackIconCodicons Kind="Debug"></iconPacks:PackIconCodicons>
@@ -290,124 +250,85 @@
                             <iconPacks:PackIconBootstrapIcons Kind="HddRack"></iconPacks:PackIconBootstrapIcons>
                         </fluent:Button.Icon>
                     </fluent:Button>
-
                 </fluent:RibbonGroupBox>
-
-                
-
-                
             </fluent:RibbonTabItem>
 
-
-            <fluent:RibbonTabItem Header="Options" >
-                
-
+            <fluent:RibbonTabItem Header="Options">
 
                 <fluent:RibbonGroupBox  Header="General">
-                    <fluent:Button Header="Settings" Command="{catel:CommandManagerBinding Application.ShowSettings}" >
+                    <fluent:Button Header="Settings" Command="{catel:CommandManagerBinding Application.ShowSettings}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons Kind="Settings" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
                 </fluent:RibbonGroupBox>
 
-
                 <fluent:RibbonGroupBox  Header="Theme Accent">
                     <mah:ColorPicker  Width="250"   SelectedColor="{Binding SelectedTheme, Delay=100}">
-
                     </mah:ColorPicker>
-                    <TextBlock HorizontalAlignment="Center" Margin="0,5,0,0" Foreground="Gray" Text="Wait a few seconds after selecting a theme."/>
-
-
-
+                    <TextBlock HorizontalAlignment="Center" Margin="0,5,0,0" Foreground="Gray" Text="Wait a few seconds after selecting a theme." />
                 </fluent:RibbonGroupBox>
 
-                
                 <fluent:RibbonGroupBox  Header="Support">
 
-
-
-                    <fluent:Button Header="Bug Report"  IsEnabled="False"  Command="{catel:CommandManagerBinding Application.BugReport}" >
+                    <fluent:Button Header="Bug Report"  IsEnabled="False"  Command="{catel:CommandManagerBinding Application.BugReport}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons Kind="Bug" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
 
-                    <fluent:Button Header="Feedback" IsEnabled="False" Command="{catel:CommandManagerBinding Application.ShowFeedback}" >
+                    <fluent:Button Header="Feedback" IsEnabled="False" Command="{catel:CommandManagerBinding Application.ShowFeedback}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons Kind="Feedback" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
 
-                    <fluent:Button Header="About" Command="{catel:CommandManagerBinding Application.ShowAbout}" >
+                    <fluent:Button Header="About" Command="{catel:CommandManagerBinding Application.ShowAbout}">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons Kind="Info" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="25" Width="25"></iconPacks:PackIconCodicons>
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
-
-
                 </fluent:RibbonGroupBox>
-
-                
             </fluent:RibbonTabItem>
-
-
-
-
-            
         </fluent:Ribbon>
 
         <StackPanel Width="170" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="75,-21,0,0"  Orientation="Horizontal">
             <TextBlock Background="{x:Null}" Text="RED Modding Tools - WolvenKit" />
-
         </StackPanel>
         <Border Margin="0,-25,0,0" Width="70" HorizontalAlignment="Left" CornerRadius="0,5,0,0" VerticalAlignment="top" Height="30" Background="{DynamicResource Fluent.Ribbon.Brushes.RibbonTabControl.Background}">
-
         </Border>
 
-        <Border  Margin="13,-24,0,0" Width="42" HorizontalAlignment="Left"  VerticalAlignment="Top" Height="49" Background="Transparent" MouseEnter="Border_MouseEnter" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeave="Border_MouseLeave"  >
+        <Border  Margin="13,-24,0,0" Width="42" HorizontalAlignment="Left"  VerticalAlignment="Top" Height="49" Background="Transparent" MouseEnter="Border_MouseEnter" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeave="Border_MouseLeave">
             <Grid>
 
                 <Border>
                     <Border.OpacityMask>
-                        <ImageBrush ImageSource="/Resources/Media/Images/Application/SeeTroughIcon.png"/>
+                        <ImageBrush ImageSource="/Resources/Media/Images/Application/SeeTroughIcon.png" />
                     </Border.OpacityMask>
                     <Grid>
 
                         <Grid Margin="1"  x:Name="HomeHighLighter"  Background="{DynamicResource MahApps.Brushes.AccentBase}">
                         </Grid>
-
-
                     </Grid>
                 </Border>
             </Grid>
-
-
-
         </Border>
 
-        <Border  Margin="13,-24,0,0" Width="42" HorizontalAlignment="Left"  VerticalAlignment="top" Height="49" Background="Transparent" MouseEnter="Border_MouseEnter" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeave="Border_MouseLeave"  >
+        <Border  Margin="13,-24,0,0" Width="42" HorizontalAlignment="Left"  VerticalAlignment="top" Height="49" Background="Transparent" MouseEnter="Border_MouseEnter" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeave="Border_MouseLeave">
             <Border>
                 <Border.OpacityMask>
-                    <ImageBrush ImageSource="/Resources/Media/Images/Application/HomeSickTransp.png"/>
+                    <ImageBrush ImageSource="/Resources/Media/Images/Application/HomeSickTransp.png" />
                 </Border.OpacityMask>
                 <Grid>
 
-
-                    <Grid >
+                    <Grid>
 
                         <Grid  Margin="0">
                             <Image  Stretch="Fill"  Source="pack://application:,,,/Resources/Media/Images/Application/HomeSickTransp.png" Margin="0,-1,0,0" />
-
                         </Grid>
-
                     </Grid>
-
                 </Grid>
             </Border>
-
         </Border>
-
     </Grid>
-
 </catel:UserControl>

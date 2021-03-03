@@ -26,9 +26,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
     public class ImportViewModel : ToolViewModel
     {
-
-
-
         #region constructors
 
         public ImportViewModel(
@@ -48,7 +45,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
             _projectManager.ProjectRefreshedAsync += ProjectManagerOnProjectRefreshedAsync;
 
-
             SetupCommands();
             SetupToolDefaults();
 
@@ -56,12 +52,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             UseLocalResourcesCommand.SafeExecute();
             xbmdict = new Dictionary<string, XBMDumpRecord>();
             RegisterXBMDump();
-
         }
 
-        #endregion
+        #endregion constructors
 
         #region Fields
+
         /// <summary>
         /// Identifies the <see ref="ContentId"/> of this tool window.
         /// </summary>
@@ -76,18 +72,21 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
 
-
         private readonly List<string> importableexts = Enum.GetNames(typeof(EImportable)).Select(_ => $".{_}".ToLower()).ToList();
 
         private readonly Dictionary<string, XBMDumpRecord> xbmdict;
         private DirectoryInfo importdepot;
-        #endregion
+
+        #endregion Fields
 
         //void Importableobjects_ListChanged(object sender, ListChangedEventArgs e) => OnPropertyChanged(nameof(Importableobjects));
 
         #region Properties
+
         #region SelectedItem
+
         private BindingList<ImportableFile> _importableobjects = null;
+
         public BindingList<ImportableFile> Importableobjects
         {
             get => _importableobjects;
@@ -101,18 +100,21 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
             }
         }
-        #endregion
+
+        #endregion SelectedItem
 
         public bool UseWolvenKitImport { get; set; }
 
-        #endregion
+        #endregion Properties
 
         #region Commands
+
         public ICommand UseLocalResourcesCommand { get; private set; }
         public ICommand OpenFolderCommand { get; private set; }
         public ICommand TryGetTextureGroupsCommand { get; private set; }
         public ICommand ImportCommand { get; private set; }
-        #endregion
+
+        #endregion Commands
 
         #region Commands Implementation
 
@@ -137,7 +139,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
                     importablefiles.Add(Path.ChangeExtension(file, lowerExt));
                 }
-
             }
             AddObjects(importablefiles, MainController.Get().ActiveMod.FileDirectory);
 
@@ -149,7 +150,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         private void OpenFolder()
         {
-            
         }
 
         private bool CanTryGetTextureGroups() => Importableobjects != null;
@@ -193,7 +193,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     importable.SetState(ImportableFile.EObjectState.Ready);
                     importable.IsSelected = true;
                 }
-                
             }
             else
             {
@@ -271,7 +270,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 return newpath;
             }
         }
-        #endregion
+
+        #endregion Commands Implementation
 
         #region Methods
 
@@ -280,8 +280,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             var activeProject = args.NewProject;
             if (activeProject == null)
                 return TaskHelper.Completed;
-
-            
 
             return TaskHelper.Completed;
         }
@@ -330,7 +328,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             var textureformat = ImageUtility.GetEFormatFromCompression(compression);
             var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, EUncookExtension.dds, textureformat);
 
-            if (!File.Exists(ddsfile)) throw new NotImplementedException();
+            if (!File.Exists(ddsfile))
+                throw new NotImplementedException();
             var metadata = DDSUtils.ReadHeader(ddsfile);
             var width = metadata.Width;
             var height = metadata.Height;
@@ -341,7 +340,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             xbm.Width = new CUInt32(cr2w, xbm, "width") { val = width, IsSerialized = true };
             xbm.Height = new CUInt32(cr2w, xbm, "height") { val = height, IsSerialized = true };
             xbm.Compression = new CEnum<ETextureCompression>(cr2w, xbm, "compression")
-                { WrappedEnum = compression, IsSerialized = true };
+            { WrappedEnum = compression, IsSerialized = true };
             xbm.TextureGroup = new CName(cr2w, xbm, "textureGroup") { Value = tg, IsSerialized = true };
             xbm.unk = new CUInt32(cr2w, xbm, "unk") { val = 0, IsSerialized = true };
             xbm.unk1 = new CUInt16(cr2w, xbm, "unk1") { val = 512, IsSerialized = true }; //TODO: find out what that is
@@ -372,11 +371,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 // read data here
                 for (int i = 0; i < mipcount; i++)
                 {
-                    
                     var buffer = reader.ReadBytes((int)GetMipMapSize(mipsizeW, mipsizeH, textureformat));
 
                     var mipdata = new SMipData(cr2w, xbm.Mipdata, $"{i}") { IsSerialized = true };
-                    mipdata.Height = new CUInt32(cr2w, mipdata, $"Height") { IsSerialized = true, val = mipsizeH};
+                    mipdata.Height = new CUInt32(cr2w, mipdata, $"Height") { IsSerialized = true, val = mipsizeH };
                     mipdata.Width = new CUInt32(cr2w, mipdata, $"Width") { IsSerialized = true, val = mipsizeW };
                     mipdata.Blocksize = new CUInt32(cr2w, mipdata, $"Blocksize") { IsSerialized = true, val = GetBlockSize(mipsizeW, textureformat) };
                     mipdata.Mip = new CByteArray(cr2w, mipdata, $"Mip") { IsSerialized = true, Bytes = buffer };
@@ -386,11 +384,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     mipsizeH = Math.Max(4, mipsizeH / 2);
                     mipsizeW = Math.Max(4, mipsizeW / 2);
                 }
-
             }
 
             // residentmips
-
 
             cr2w.FromCResource(xbm);
 
@@ -403,6 +399,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     case EFormat.BC1_UNORM:
                     case EFormat.BC4_UNORM:
                         return Math.Max(1, (_height / 4)) * Math.Max(1, (_width / 4)) * 8;
+
                     case EFormat.BC2_UNORM:
                     case EFormat.BC3_UNORM:
                     case EFormat.BC5_UNORM:
@@ -424,6 +421,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     case EFormat.BC1_UNORM:
                     case EFormat.BC4_UNORM:
                         return Math.Max(1, (_width / 4)) * 8;
+
                     case EFormat.BC2_UNORM:
                     case EFormat.BC3_UNORM:
                     case EFormat.BC5_UNORM:
@@ -438,8 +436,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
             }
         }
-
-        
 
         private void RegisterXBMDump()
         {
@@ -491,13 +487,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     Importableobjects.Add(importableobj);
                 else
                 {
-
                 }
-
-                
             }
         }
-        #endregion
 
+        #endregion Methods
     }
 }
