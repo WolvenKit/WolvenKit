@@ -232,7 +232,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged(String info)
+        private void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)
             {

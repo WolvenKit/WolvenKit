@@ -18,7 +18,7 @@ namespace WolvenKit.Functionality.Layout.Converters
     public sealed class BoolToVisibilityConverter : IValueConverter
     {
         /// <summary>
-        /// Converts a <seealso cref="Boolean"/> value
+        /// Converts a <seealso cref="bool"/> value
         /// into a <seealso cref="Visibility"/> value.
         /// </summary>
         /// <param name="value"></param>
@@ -35,7 +35,7 @@ namespace WolvenKit.Functionality.Layout.Converters
 
         /// <summary>
         /// Converts a <seealso cref="Visibility"/> value
-        /// into a <seealso cref="Boolean"/> value.
+        /// into a <seealso cref="bool"/> value.
         /// </summary>
         /// <param name="value"></param>
         /// <param name="targetType"></param>

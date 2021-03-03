@@ -94,12 +94,12 @@ namespace WolvenKit.MVVM.Model
                     "git config core.safecrlf false"
                 };
 
-                if (!String.IsNullOrWhiteSpace(AuthorName))
+                if (!string.IsNullOrWhiteSpace(AuthorName))
                 {
                     commands.Add("git config user.name \"" + AuthorName + "\"");
                 }
 
-                if (!String.IsNullOrWhiteSpace(Email))
+                if (!string.IsNullOrWhiteSpace(Email))
                 {
                     commands.Add("git config user.email \"" + Email + "\"");
                 }
