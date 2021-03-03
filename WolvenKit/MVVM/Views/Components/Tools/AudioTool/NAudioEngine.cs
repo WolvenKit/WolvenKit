@@ -134,7 +134,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public TimeSpan SelectionBegin
         {
-            get { return repeatStart; }
+            get => repeatStart;
             set
             {
                 if (!inRepeatSet)
@@ -154,7 +154,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public TimeSpan SelectionEnd
         {
-            get { return repeatStop; }
+            get => repeatStop;
             set
             {
                 if (!inChannelSet)
@@ -174,7 +174,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public float[] WaveformData
         {
-            get { return waveformData; }
+            get => waveformData;
             protected set
             {
                 var oldValue = waveformData;
@@ -188,7 +188,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public double ChannelLength
         {
-            get { return channelLength; }
+            get => channelLength;
             protected set
             {
                 var oldValue = channelLength;
@@ -202,7 +202,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public double ChannelPosition
         {
-            get { return channelPosition; }
+            get => channelPosition;
             set
             {
                 if (!inChannelSet)
@@ -471,7 +471,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public TagLib.File FileTag
         {
-            get { return fileTag; }
+            get => fileTag;
             set
             {
                 var oldValue = fileTag;
@@ -485,7 +485,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public WaveStream ActiveStream
         {
-            get { return activeStream; }
+            get => activeStream;
             protected set
             {
                 var oldValue = activeStream;
@@ -499,7 +499,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public bool CanPlay
         {
-            get { return canPlay; }
+            get => canPlay;
             protected set
             {
                 var oldValue = canPlay;
@@ -513,7 +513,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public bool CanPause
         {
-            get { return canPause; }
+            get => canPause;
             protected set
             {
                 var oldValue = canPause;
@@ -527,7 +527,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public bool CanStop
         {
-            get { return canStop; }
+            get => canStop;
             protected set
             {
                 var oldValue = canStop;
@@ -541,7 +541,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public bool IsPlaying
         {
-            get { return isPlaying; }
+            get => isPlaying;
             protected set
             {
                 var oldValue = isPlaying;

@@ -52,8 +52,8 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWiz
         [Expose("CreateModForCP77")]
         public FirstSetupWizardModel FirstSetupWizardModel
         {
-            get { return GetValue<FirstSetupWizardModel>(ProjectWizardModelProperty); }
-            set { SetValue(ProjectWizardModelProperty, value); }
+            get => GetValue<FirstSetupWizardModel>(ProjectWizardModelProperty);
+            set => SetValue(ProjectWizardModelProperty, value);
         }
 
         /// <summary>
@@ -65,8 +65,8 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWiz
         [Expose("CP77ExePath")]
         public FirstSetupWizardViewModel FirstSetupWizardViewModel
         {
-            get { return GetValue<FirstSetupWizardViewModel>(FirstSetupWizardViewModelProperty); }
-            set { SetValue(FirstSetupWizardViewModelProperty, value); }
+            get => GetValue<FirstSetupWizardViewModel>(FirstSetupWizardViewModelProperty);
+            set => SetValue(FirstSetupWizardViewModelProperty, value);
         }
 
         /// <summary>
@@ -76,8 +76,8 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWiz
         [Expose("DepotPath")]
         public ISettingsManager SettingsManager
         {
-            get { return GetValue<ISettingsManager>(SettingsManagerProperty); }
-            set { SetValue(SettingsManagerProperty, value); }
+            get => GetValue<ISettingsManager>(SettingsManagerProperty);
+            set => SetValue(SettingsManagerProperty, value);
         }
 
         #endregion properties

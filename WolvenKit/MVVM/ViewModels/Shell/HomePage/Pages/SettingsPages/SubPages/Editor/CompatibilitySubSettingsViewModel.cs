@@ -32,8 +32,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.SettingsPages.SubPages.
         [Expose("DepotPath")]
         private ISettingsManager SettingsManager
         {
-            get { return GetValue<ISettingsManager>(SettingsManagerProperty); }
-            set { SetValue(SettingsManagerProperty, value); }
+            get => GetValue<ISettingsManager>(SettingsManagerProperty);
+            set => SetValue(SettingsManagerProperty, value);
         }
 
         /// <summary>

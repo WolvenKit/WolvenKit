@@ -37,8 +37,8 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWiz
         [Expose("AutoUpdatesEnabled")]
         public FirstSetupWizardModel FirstSetupWizardModel
         {
-            get { return GetValue<FirstSetupWizardModel>(ProjectWizardModelProperty); }
-            set { SetValue(ProjectWizardModelProperty, value); }
+            get => GetValue<FirstSetupWizardModel>(ProjectWizardModelProperty);
+            set => SetValue(ProjectWizardModelProperty, value);
         }
 
         #endregion properties

@@ -38,8 +38,8 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.ProjectWizard
         [Expose("ProjectPath")]
         public ProjectWizardModel ProjectWizardModel
         {
-            get { return GetValue<ProjectWizardModel>(ProjectWizardModelProperty); }
-            set { SetValue(ProjectWizardModelProperty, value); }
+            get => GetValue<ProjectWizardModel>(ProjectWizardModelProperty);
+            set => SetValue(ProjectWizardModelProperty, value);
         }
 
         #endregion properties

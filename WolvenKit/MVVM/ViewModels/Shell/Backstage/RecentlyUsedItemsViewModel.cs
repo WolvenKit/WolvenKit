@@ -125,12 +125,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
 
         public ObservableCollection<FancyProjectObject> FancyProjects
         {
-            get { return BFancyProjectObjects; }
+            get => BFancyProjectObjects;
 
-            set
-            {
-                BFancyProjectObjects = value;
-            }
+            set => BFancyProjectObjects = value;
         }
 
         public void ConvertRecentProjects() // Converts Recent projects for the homepage.
