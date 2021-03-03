@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using CP77.CR2W.Reflection;
@@ -13,6 +13,7 @@ namespace CP77.CR2W.Types
         
 		public enum EGameplayRole
         {
+            [RED("")]
             UnAssigned = 0,
             None = 1,
             Alarm = 2,
@@ -233,6 +234,16 @@ namespace CP77.CR2W.Types
 		    Bottom,
 		    Right,
 		}
+        public enum toolsAudioPlaybackDirectionSupport
+        {
+            Forward,
+            Backward
+        }
+        public enum toolsAudioFastForwardSupport
+        {
+            MuteDuringFastForward,
+            DontMuteDuringFastForward
+        }
         public enum scnbPerformerAcquisitionPlanType
 		{
 		    Community,
@@ -12589,8 +12600,7 @@ namespace CP77.CR2W.Types
 			Facial = 1,
 			Cyberware = 2
 		}
-		[Flags]
-		public enum scnAnimNameType
+        public enum scnAnimNameType
 		{
 			direct = 0,
 			reference = 1,

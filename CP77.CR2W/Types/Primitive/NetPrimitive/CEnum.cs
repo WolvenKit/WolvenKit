@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -81,7 +81,7 @@ namespace CP77.CR2W.Types
             if (att.Length < 1)
                 return WrappedEnum.ToString();
 
-            if (!(att.First() is REDAttribute attribute) || string.IsNullOrWhiteSpace(attribute.Name))
+            if (!(att.First() is REDAttribute attribute) || attribute.Name == null)
                 return WrappedEnum.ToString();
             else
                 return attribute.Name;

@@ -1,4 +1,4 @@
-﻿using CP77.CR2W.Reflection;
+using CP77.CR2W.Reflection;
 using FastMember;
 
 namespace CP77.CR2W.Types
