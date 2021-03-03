@@ -1,17 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using WolvenKit.Common;
-using WolvenKit.Common.Model;
 
 namespace WolvenKit.Cache
 {
     public class TextureManager : WitcherArchiveManager
     {
+        #region Constructors
+
         public TextureManager()
         {
             Items = new Dictionary<string, List<IGameFile>>();
@@ -22,54 +20,17 @@ namespace WolvenKit.Cache
             AutocompleteSource = new List<string>();
         }
 
-        private Dictionary<string, TextureCache> Archives { get; }
-        public override EArchiveType TypeName => EArchiveType.TextureCache;
+        #endregion Constructors
+
+        #region Properties
+
         public static string SerializationVersion => "1.1";
+        public override EArchiveType TypeName => EArchiveType.TextureCache;
+        private Dictionary<string, TextureCache> Archives { get; }
 
+        #endregion Properties
 
-        /// <summary>
-        ///     Load a single mod soundcache
-        /// </summary>
-        /// <param name="filename"></param>
-        public override void LoadModArchive(string filename)
-        {
-            if (Archives.ContainsKey(filename))
-                return;
-
-            var bundle = new TextureCache(filename);
-
-            foreach (var item in bundle.Files)
-            {
-                if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Name))
-                    Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IGameFile>());
-
-                Items[GetModFolder(filename) + "\\" + item.Name].Add(item);
-            }
-
-            Archives.Add(filename, bundle);
-        }
-
-        /// <summary>
-        ///     Load a single soundcache
-        /// </summary>
-        /// <param name="filename"></param>
-        public override void LoadArchive(string filename, bool ispatch = false)
-        {
-            if (Archives.ContainsKey(filename))
-                return;
-
-            var bundle = new TextureCache(filename);
-
-            foreach (var item in bundle.Files)
-            {
-                if (!Items.ContainsKey(item.Name))
-                    Items.Add(item.Name, new List<IGameFile>());
-
-                Items[item.Name].Add(item);
-            }
-
-            Archives.Add(filename, bundle);
-        }
+        #region Methods
 
         /// <summary>
         ///     Load every non-mod bundle it can find in ..\\..\\content and ..\\..\\DLC, also calls RebuildRootNode()
@@ -115,6 +76,50 @@ namespace WolvenKit.Cache
         }
 
         /// <summary>
+        ///     Load a single soundcache
+        /// </summary>
+        /// <param name="filename"></param>
+        public override void LoadArchive(string filename, bool ispatch = false)
+        {
+            if (Archives.ContainsKey(filename))
+                return;
+
+            var bundle = new TextureCache(filename);
+
+            foreach (var item in bundle.Files)
+            {
+                if (!Items.ContainsKey(item.Name))
+                    Items.Add(item.Name, new List<IGameFile>());
+
+                Items[item.Name].Add(item);
+            }
+
+            Archives.Add(filename, bundle);
+        }
+
+        /// <summary>
+        ///     Load a single mod soundcache
+        /// </summary>
+        /// <param name="filename"></param>
+        public override void LoadModArchive(string filename)
+        {
+            if (Archives.ContainsKey(filename))
+                return;
+
+            var bundle = new TextureCache(filename);
+
+            foreach (var item in bundle.Files)
+            {
+                if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Name))
+                    Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IGameFile>());
+
+                Items[GetModFolder(filename) + "\\" + item.Name].Add(item);
+            }
+
+            Archives.Add(filename, bundle);
+        }
+
+        /// <summary>
         /// Loads .cache files from given mods and dlc folder
         /// </summary>
         /// <param name="mods"></param>
@@ -152,5 +157,7 @@ namespace WolvenKit.Cache
             }
             RebuildRootNode();
         }
+
+        #endregion Methods
     }
 }
