@@ -1,20 +1,20 @@
 
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.MVVM.Views.Components.Tools.CR2WToTextTool
+namespace WolvenKit.MVVM.Views.Components.Tools
 {
-    public partial class CR2WToTextToolView
+    public partial class AnimsView
     {
-        public CR2WToTextToolView()
+        public AnimsView()
         {
             InitializeComponent();
         }
 
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("CR2W To Text Tool");
+                DiscordHelper.SetDiscordRPCStatus("Animation Exporter");
             }
         }
     }

@@ -1,20 +1,20 @@
 
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.MVVM.Views.Components.Tools.AnimationTool
+namespace WolvenKit.MVVM.Views.Components.Tools
 {
-    public partial class AnimsView
+    public partial class MimicsView
     {
-        public AnimsView()
+        public MimicsView()
         {
             InitializeComponent();
         }
 
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible)
+            if (this.IsVisible )
             {
-                DiscordHelper.SetDiscordRPCStatus("Animation Exporter");
+                DiscordHelper.SetDiscordRPCStatus("Mimics Exporter");
             }
         }
     }

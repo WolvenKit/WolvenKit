@@ -1,5 +1,5 @@
 
-namespace WolvenKit.MVVM.Views.Components.Tools.MenuTool
+namespace WolvenKit.MVVM.Views.Components.Tools
 {
     public partial class MenuCreatorToolView
     {

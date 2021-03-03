@@ -1,11 +1,11 @@
 
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.MVVM.Views.Components.Tools.AnimationTool
+namespace WolvenKit.MVVM.Views.Components.Tools
 {
-    public partial class MimicsView
+    public partial class GameDebuggerToolView
     {
-        public MimicsView()
+        public GameDebuggerToolView()
         {
             InitializeComponent();
         }
@@ -14,7 +14,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AnimationTool
         {
             if (this.IsVisible )
             {
-                DiscordHelper.SetDiscordRPCStatus("Mimics Exporter");
+                DiscordHelper.SetDiscordRPCStatus("Game Debugger");
             }
         }
     }

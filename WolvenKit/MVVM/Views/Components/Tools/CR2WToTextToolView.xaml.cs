@@ -1,11 +1,11 @@
 
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.MVVM.Views.Components.Tools.GameDebuggerTool
+namespace WolvenKit.MVVM.Views.Components.Tools
 {
-    public partial class GameDebuggerToolView
+    public partial class CR2WToTextToolView
     {
-        public GameDebuggerToolView()
+        public CR2WToTextToolView()
         {
             InitializeComponent();
         }
@@ -14,7 +14,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.GameDebuggerTool
         {
             if (this.IsVisible )
             {
-                DiscordHelper.SetDiscordRPCStatus("Game Debugger");
+                DiscordHelper.SetDiscordRPCStatus("CR2W To Text Tool");
             }
         }
     }
