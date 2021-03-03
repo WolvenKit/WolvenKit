@@ -18,7 +18,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
             var q = await nexus.Users.ValidateAsync();
 
-            UserTrackedMod[] mods = await nexus.Users.GetTrackedMods();
+            var mods = await nexus.Users.GetTrackedMods();
 
         }
     }

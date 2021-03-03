@@ -3,27 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Catel.IoC;
-using Orc.ProjectManagement;
-using WolvenKit.Model;
+using WolvenKit.Common;
+using WolvenKit.Common.Services;
+using WolvenKit.CR2W;
+using WolvenKit.Common.Model;
+using WolvenKit.Common.Wcc;
+using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.Functionality.Controllers
 {
-    using Controllers;
-    using Functionality.Services;
-
-    using Bundles;
-    using Cache;
-    using Common;
-    using Common.Services;
-    using CR2W;
-    using W3Strings;
-    using Common.Model;
-    using Common.Wcc;
-    using CR2W.Types;
-    using W3Speech;
-    using WolvenKit.Functionality.WKitGlobal;
-
     public enum EProjectStatus
     {
         Idle,

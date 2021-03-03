@@ -14,7 +14,7 @@ using WolvenKit.ViewModels;
 using WolvenKit.Functionality.Layout.MLib;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.Views
+namespace WolvenKit.MVVM.Views.Shell.Editor
 {
     public partial class MainView
     {

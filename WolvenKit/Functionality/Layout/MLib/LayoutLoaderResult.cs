@@ -1,7 +1,7 @@
+using System;
+
 namespace WolvenKit.Functionality.Layout.MLib
 {
-	using System;
-
 	/// <summary>
 	/// Implements a class that contains the items that describe the results
 	/// of loading the AvalonDock layout from persistence.

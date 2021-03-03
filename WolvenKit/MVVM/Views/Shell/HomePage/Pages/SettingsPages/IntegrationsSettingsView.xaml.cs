@@ -1,7 +1,7 @@
 
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.Views.SettingsPages
+namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages
 {
     public partial class IntegrationsSettingsView
     {

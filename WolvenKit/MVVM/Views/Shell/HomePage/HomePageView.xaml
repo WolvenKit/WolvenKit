@@ -6,15 +6,15 @@
     xmlns:av="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:Mid="clr-namespace:WolvenKit.Views.HomePage" 
-    xmlns:HPPage="clr-namespace:WolvenKit.Views.HomePage.Pages" 
+    xmlns:Mid="clr-namespace:WolvenKit.MVVM.Views.Shell.HomePage" 
+    xmlns:HPPage="clr-namespace:WolvenKit.MVVM.Views.Shell.HomePage.Pages" 
     xmlns:Fluent="urn:fluent-ribbon"
     mc:Ignorable="av"
     MinHeight="810"
     MinWidth="1060"
   
     
-    x:Class="WolvenKit.Views.HomePage.HomePageView" IsVisibleChanged="UserControl_IsVisibleChanged">
+    x:Class="WolvenKit.MVVM.Views.Shell.HomePage.HomePageView" IsVisibleChanged="UserControl_IsVisibleChanged">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -43,11 +43,7 @@
 
 
         <Grid MouseLeftButtonDown="Grid_MouseLeftButtonDown_2"  Background="Transparent" >
-            <hc:SideMenu>
-                <hc:SideMenuItem>
-                    
-                </hc:SideMenuItem>
-            </hc:SideMenu>
+   
         </Grid>
 
         <Grid        MouseLeftButtonDown="Grid_MouseLeftButtonDown_1" VerticalAlignment="Top" Height="20" >

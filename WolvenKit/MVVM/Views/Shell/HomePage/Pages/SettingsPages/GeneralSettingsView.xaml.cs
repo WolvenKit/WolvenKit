@@ -1,8 +1,8 @@
 
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Views.SettingsPages.SubPages.General;
+using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.General;
 
-namespace WolvenKit.Views.SettingsPages
+namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages
 {
     public partial class GeneralSettingsView
     {

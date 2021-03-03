@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Catel.MVVM;
 using Orchestra.Views;
+using WolvenKit.MVVM.Views.Shell.Editor;
 using WolvenKit.ViewModels;
 using WolvenKit.Views;
 

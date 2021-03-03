@@ -12,7 +12,7 @@ using WolvenKit.Views.AudioTool;
 using System.Windows.Media;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.Views
+namespace WolvenKit.MVVM.Views.Shell.Editor
 {
     public partial class RibbonView
     {
@@ -38,7 +38,7 @@ namespace WolvenKit.Views
         {
             base.OnViewModelPropertyChanged(e);
 
-            if (!(e is AdvancedPropertyChangedEventArgs property))
+            if (e is not AdvancedPropertyChangedEventArgs property)
                 return;
 
             switch (property.PropertyName)
@@ -140,7 +140,7 @@ namespace WolvenKit.Views
 
 
             StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
-            StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
+            StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, true);
         }
 
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)

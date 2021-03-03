@@ -2,8 +2,10 @@
 using System.Windows;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels;
+using WolvenKit.Views;
+using WolvenKit.Views.Wizards;
 
-namespace WolvenKit.Views.HomePage.Pages
+namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
 {
     public partial class WelcomePageView
     {
@@ -24,7 +26,7 @@ namespace WolvenKit.Views.HomePage.Pages
 
         private void CreateProjectButton_Click(object sender, RoutedEventArgs e)
         {
-            Views.Wizards.FirstSetupWizardView rpv = new Views.Wizards.FirstSetupWizardView();
+            FirstSetupWizardView rpv = new FirstSetupWizardView();
             UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
             UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
             uchwv.Show();
@@ -32,7 +34,7 @@ namespace WolvenKit.Views.HomePage.Pages
 
         private void OpenProjectButton_Click(object sender, RoutedEventArgs e)
         {
-            Views.Wizards.FirstSetupWizardView rpv = new Views.Wizards.FirstSetupWizardView();
+            FirstSetupWizardView rpv = new FirstSetupWizardView();
             UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
             UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
             uchwv.Show();

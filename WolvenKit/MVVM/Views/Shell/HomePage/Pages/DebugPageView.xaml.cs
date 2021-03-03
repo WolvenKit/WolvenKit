@@ -19,7 +19,7 @@ using WolvenKit.Views.Tools.MenuTool;
 using WolvenKit.Views.WccTool;
 using WolvenKit.Views.Wizards;
 
-namespace WolvenKit.Views.HomePage.Pages
+namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
 {
     public partial class DebugPageView
     {

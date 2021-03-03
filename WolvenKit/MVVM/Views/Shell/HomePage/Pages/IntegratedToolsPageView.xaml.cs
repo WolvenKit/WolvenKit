@@ -1,8 +1,9 @@
 
 using System.Windows;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.MVVM.Views.Shell.Homepage.Pages.IntegratedToolsPages.CyberCAT;
 
-namespace WolvenKit.Views.HomePage.Pages
+namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
 {
     public partial class IntegratedToolsPageView
     {
@@ -10,7 +11,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             InitializeComponent();
 
-            GeneralTabItem.Content = new IntegratedToolsPages.CyberCAT.CyberCATPageView();
+            GeneralTabItem.Content = new CyberCATPageView();
         }
 
 

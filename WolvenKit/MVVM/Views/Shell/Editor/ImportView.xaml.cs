@@ -14,7 +14,7 @@ using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Model;
 using WolvenKit.ViewModels;
 
-namespace WolvenKit.Views
+namespace WolvenKit.MVVM.Views.Shell.Editor
 {
     /// <summary>
     /// Interaction logic for ProjectExplorerView.xaml

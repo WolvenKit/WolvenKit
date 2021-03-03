@@ -1,4 +1,4 @@
-﻿<catel:UserControl x:Class="WolvenKit.Views.SettingsPages.SubPages.General.LoggingSubSettingsView"
+﻿<catel:UserControl x:Class="WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.General.LoggingSubSettingsView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"     
                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"

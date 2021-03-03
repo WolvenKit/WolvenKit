@@ -1,7 +1,7 @@
 using Catel.MVVM;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Views.HomePage;
+using WolvenKit.MVVM.Views.Shell.HomePage;
 
 namespace WolvenKit.Functionality.Commands
 {

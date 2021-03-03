@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.Functionality.Layout.Converters
+namespace WolvenKit.Functionality.Layout.Converters
 {
 	using System;
 	using System.Globalization;
@@ -27,7 +27,7 @@
 		/// <returns></returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			var back = ((value is Visibility) && (((Visibility)value) == Visibility.Visible));
+			var back = (value is Visibility visibility) && (visibility == Visibility.Visible);
 
 			return back;
 		}
@@ -44,9 +44,9 @@
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			var flag = false;
-			if (value is bool)
+			if (value is bool boolean)
 			{
-				flag = (bool)value;
+				flag = boolean;
 			}
 			else if (value is bool?)
 			{

@@ -47,7 +47,6 @@ using WolvenKit.ViewModels.ImporterTool;
 using WolvenKit.ViewModels.HexEditor;
 using WolvenKit.Views.ImporterTool;
 using WolvenKit.ViewModels.RadishTool;
-using WolvenKit.Views.HomePage;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Wizards;
@@ -67,16 +66,19 @@ using WolvenKit.ViewModels.SettingsPages;
 using WolvenKit.ViewModels.SettingsPages.SubPages.Editor;
 using WolvenKit.ViewModels.SettingsPages.SubPages.Tool;
 using WolvenKit.ViewModels.SettingsPages.SubPages.General;
-using WolvenKit.Views.SettingsPages.SubPages.General;
-using WolvenKit.Views.SettingsPages.SubPages.Tool;
-using WolvenKit.Views.SettingsPages.SubPages.Editor;
-using WolvenKit.Views.SettingsPages;
-using WolvenKit.Views.IntegratedToolsPages.CyberCAT;
-using WolvenKit.Views.HomePage.Pages;
+using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.General;
+using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Tool;
+using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Editor;
+using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages;
+using WolvenKit.MVVM.Views.Shell.HomePage.Pages;
 using WolvenKit.ViewModels.HomePage.Pages;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.IntegratedToolsPages.CyberCAT;
 using System.Runtime.InteropServices;
+using WolvenKit.MVVM.Views.Shell.HomePage;
+using WolvenKit.MVVM.Views.Shell.Homepage.Pages.IntegratedToolsPages.CyberCAT;
+using WolvenKit.MVVM.Views.Shell.Editor;
+using WolvenKit.MVVM.Views.Shell.Backstage;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {

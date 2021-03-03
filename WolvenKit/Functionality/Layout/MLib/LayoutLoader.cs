@@ -1,11 +1,11 @@
+using System;
+using System.IO;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace WolvenKit.Functionality.Layout.MLib
 {
-	using System;
-    using System.IO;
-    using System.Text;
-    using System.Threading;
-	using System.Threading.Tasks;
-
 	/// <summary>
 	/// Implements base methods and events for loading an AvalonDock layout
 	/// in a background thread.
@@ -62,7 +62,7 @@ namespace WolvenKit.Functionality.Layout.MLib
 			{
 				var result = await LoadAvalonDockLayoutToStringAsync();
 
-				await this._LayoutSemaphore.WaitAsync();
+				await _LayoutSemaphore.WaitAsync();
 				try
 				{
 					this._LayoutLoaded = result;
@@ -78,7 +78,7 @@ namespace WolvenKit.Functionality.Layout.MLib
 			}
 			catch (Exception exc)
 			{
-				this._LayoutLoaded = new LayoutLoaderResult(null, false, exc);
+				_LayoutLoaded = new LayoutLoaderResult(null, false, exc);
 			}
 		}
 
@@ -132,7 +132,7 @@ namespace WolvenKit.Functionality.Layout.MLib
 			{
 				if (this._LayoutLoaded != null)
                 {
-                    return this._LayoutLoaded;
+                    return _LayoutLoaded;
                 }
                 else
 				{
@@ -155,14 +155,16 @@ namespace WolvenKit.Functionality.Layout.MLib
 		/// <returns></returns>
 		private async Task<LayoutLoaderResult> LoadAvalonDockLayoutToStringAsync()
 		{
-			string path = GetFullPathToLayout();
+			var path = GetFullPathToLayout();
 
-			if (System.IO.File.Exists(path) == false)
-				return null;
+			if (File.Exists(path) == false)
+            {
+                return null;
+            }
 
-			try
+            try
 			{
-				string textContent = string.Empty;
+				var textContent = string.Empty;
 				// This is the same default buffer size as StreamReader and FileStream
 				int DefaultBufferSize = 4096;
 

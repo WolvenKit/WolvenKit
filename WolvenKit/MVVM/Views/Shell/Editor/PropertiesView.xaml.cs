@@ -14,7 +14,7 @@ using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Model;
 using WolvenKit.ViewModels;
 
-namespace WolvenKit.Views
+namespace WolvenKit.MVVM.Views.Shell.Editor
 {
     /// <summary>
     /// Interaction logic for ProjectExplorerView.xaml
@@ -28,12 +28,12 @@ namespace WolvenKit.Views
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
+            if (this.IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Properties View");
             }
         }
     }
 
-    
+
 }

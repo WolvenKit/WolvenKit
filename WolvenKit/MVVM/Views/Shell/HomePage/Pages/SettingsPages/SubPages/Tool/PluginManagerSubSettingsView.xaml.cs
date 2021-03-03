@@ -1,5 +1,5 @@
 ﻿
-namespace WolvenKit.Views.SettingsPages.SubPages.Tool
+namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Tool
 {
     public partial class PluginManagerSubSettingsView
     {

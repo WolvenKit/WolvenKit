@@ -12,13 +12,12 @@ using Catel.Logging;
 using Catel.MVVM;
 using Catel.Reflection;
 using Catel.Services;
+using System.Threading;
+using WolvenKit.ViewModels;
+using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.Functionality.Commands
 {
-    using System.Threading;
-    using ViewModels;
-    using WolvenKit.Functionality.WKitGlobal;
-
     public class SettingsGeneralCommandContainer : CommandContainerBase
     {
         private readonly IUIVisualizerService _uiVisualizerService;

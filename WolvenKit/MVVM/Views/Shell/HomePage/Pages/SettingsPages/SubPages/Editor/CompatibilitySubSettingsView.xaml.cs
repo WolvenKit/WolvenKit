@@ -2,7 +2,7 @@
 using Catel.Services;
 using WolvenKit.Functionality.Services;
 
-namespace WolvenKit.Views.SettingsPages.SubPages.Editor
+namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Editor
 {
     public partial class CompatibilitySubSettingsView
     {

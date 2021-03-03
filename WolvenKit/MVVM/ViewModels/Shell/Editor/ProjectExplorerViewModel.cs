@@ -358,7 +358,7 @@ namespace WolvenKit.ViewModels
             {
                 if (args.Result != true)
                     return;
-                if (!(args.DataContext is Dialogs.InputDialogViewModel vm))
+                if (args.DataContext is not Dialogs.InputDialogViewModel vm)
                     return;
                 var newfullpath = Path.Combine(ActiveMod.FileDirectory, vm.Text);
 
@@ -643,37 +643,47 @@ namespace WolvenKit.ViewModels
 
         private async void RequestFileCook(object sender, RequestFileOpenArgs e)
         {
-            if (!(ActiveMod is Tw3Project tw3mod))
+            if (ActiveMod is not Tw3Project tw3mod)
+            {
                 return;
+            }
 
             var filename = e.File;
             var fullpath = Path.Combine(ActiveMod.FileDirectory, filename);
             if (!File.Exists(fullpath) && !Directory.Exists(fullpath))
+            {
                 return;
-            string dir;
-            if (File.Exists(fullpath))
-                dir = Path.GetDirectoryName(fullpath);
-            else
-                dir = fullpath;
-            string reldir = dir.Substring(ActiveMod.FileDirectory.Length + 1);
+            }
+
+            var dir = File.Exists(fullpath) ? Path.GetDirectoryName(fullpath) : fullpath;
+            var reldir = dir.Substring(ActiveMod.FileDirectory.Length + 1);
 
             // Trim working directories in path
             var reg = new Regex(@"^(Raw|Mod|DLC)\\(.*)");
             var match = reg.Match(reldir);
-            bool isDlc = false;
+            var isDlc = false;
             if (match.Success)
             {
                 reldir = match.Groups[2].Value;
                 if (match.Groups[1].Value == "Raw")
+                {
                     return;
+                }
                 else if (match.Groups[1].Value == "DLC")
+                {
                     isDlc = true;
+                }
                 else if (match.Groups[1].Value == "Mod")
+                {
                     isDlc = false;
+                }
             }
 
             if (reldir.StartsWith(EProjectFolders.Cooked.ToString()))
+            {
                 reldir = reldir.Substring(EProjectFolders.Cooked.ToString().Length);
+            }
+
             if (reldir.StartsWith(EProjectFolders.Uncooked.ToString()))
                 reldir = reldir.Substring(EProjectFolders.Uncooked.ToString().Length);
             

@@ -134,7 +134,7 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     using (StreamReader file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
                     {
-                        JsonSerializer serializer = new JsonSerializer();
+                        var serializer = new JsonSerializer();
                         serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                         serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                         serializer.TypeNameHandling = TypeNameHandling.Auto;

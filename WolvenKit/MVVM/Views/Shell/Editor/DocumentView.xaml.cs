@@ -6,7 +6,7 @@ using WolvenKit.Functionality.Extensions;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels;
 
-namespace WolvenKit.Views
+namespace WolvenKit.MVVM.Views.Shell.Editor
 {
 	/// <summary>
 	/// Interaction logic for TextDocumentView.xaml
@@ -41,12 +41,11 @@ namespace WolvenKit.Views
 		{
 			_viewInitialized = true;                    // We'll try this only once
 
-			var vm = DataContext as IDocumentViewModel;
 
-			if (vm == null)
-				return;
+            if (DataContext is not IDocumentViewModel vm)
+                return;
 
-			try
+            try
 			{
 				bool result = await vm.OpenFileWithInitialPathAsync();
 

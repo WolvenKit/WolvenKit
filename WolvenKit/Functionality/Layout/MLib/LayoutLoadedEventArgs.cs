@@ -1,7 +1,7 @@
+using System;
+
 namespace WolvenKit.Functionality.Layout.MLib
 {
-	using System;
-
 	/// <summary>
 	/// Implements an event that is invoked when a layout is loaded.
 	/// </summary>

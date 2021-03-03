@@ -11,7 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.Views.HomePage.Pages
+namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
 {
     public partial class AboutPageView
     {

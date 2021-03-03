@@ -16,10 +16,11 @@ using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.AudioTool.Radio;
-using WolvenKit.Views.HomePage.Pages;
+using WolvenKit.MVVM.Views.Shell.HomePage.Pages;
 using WolvenKit.Views.Wizards;
+using WolvenKit.Views;
 
-namespace WolvenKit.Views.HomePage
+namespace WolvenKit.MVVM.Views.Shell.HomePage
 {
     public partial class HomePageView
     {
@@ -194,7 +195,7 @@ namespace WolvenKit.Views.HomePage
         {
             if (IsLoaded && IsVisible && IsInitialized)
             {
-                Views.Wizards.FirstSetupWizardView rpv = new Views.Wizards.FirstSetupWizardView();
+                FirstSetupWizardView rpv = new FirstSetupWizardView();
                 UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
                 UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
                 uchwv.Show();
@@ -217,7 +218,7 @@ namespace WolvenKit.Views.HomePage
         {
             if (IsLoaded && IsVisible && IsInitialized)
             {
-                Views.Wizards.ProjectWizardView rpv = new Views.Wizards.ProjectWizardView();
+                ProjectWizardView rpv = new ProjectWizardView();
                 UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
                 UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
                 uchwv.Show();
@@ -378,7 +379,7 @@ namespace WolvenKit.Views.HomePage
         private void Image_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
-            StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, false);
+            StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
         }
     }
 }

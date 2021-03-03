@@ -116,7 +116,7 @@ namespace WolvenKit.Functionality.Controllers
         {
             var loggerService = ServiceLocator.Default.ResolveType<ILoggerService>();
             var projectService = ServiceLocator.Default.ResolveType<IProjectManager>();
-            if (!(projectService.ActiveProject is Cp77Project cp77Proj))
+            if (projectService.ActiveProject is not Cp77Project cp77Proj)
             {
                 loggerService.LogString("Can't pack nor install project (no project/not cyberpunk project)!", Logtype.Error);
                 return Task.FromResult(false);
