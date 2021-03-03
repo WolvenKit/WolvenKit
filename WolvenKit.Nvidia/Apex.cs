@@ -1,33 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
-using WolvenKit.Nvidia.HairWorks;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
+using WolvenKit.Nvidia.HairWorks;
 
 namespace WolvenKit
 {
     public class Apex
     {
+        #region Methods
+
+        /// <summary>
+        /// Formats a CArray of coordinates to NvParameterized format.
+        /// Eg.: X Y Z, X Y Z, ......
+        /// </summary>
+        /// <param name="coords">Coordinates to format.</param>
+        /// <returns>The string of coordinates.</returns>
+        public static string FormatCoordinateArray(CArray<Vector> coords)
+        {
+            var ret = "";
+            foreach (var coord in coords)
+            {
+                ret += coord.X.ToString() + " ";
+                ret += coord.Y.ToString() + " ";
+                ret += coord.Z.ToString() + ", ";
+            }
+            return ret.Trim(',', ' ');
+        }
+
+        #endregion Methods
+
+        #region Classes
+
         /// <summary>
         /// Class to convert and operate with hairworks files.
         /// </summary>
         public class HairWorks
         {
+            #region Fields
+
             public static XDocument Doc = new XDocument();
+
+            #endregion Fields
+
+            #region Methods
 
             public static XDocument ConvertToApexXml(CR2WFile ApexChunk)
             {
                 if (ApexChunk.Chunks[0].REDType == "CFurMeshResource" && ApexChunk.Chunks[0].data is CFurMeshResource cFurMesh)
                 {
-                    var root = new XElement("root",""); 
+                    var root = new XElement("root", "");
                     // NvParameters
                     var NvParameters = new XElement("NvParameters");
                     NvParameters.Add(new XAttribute("numObjects", "4"));
@@ -39,7 +60,7 @@ namespace WolvenKit
                     //HairSceneDescriptor
                     var hairscenedesc = new HairSceneDescriptor();
                     root.Add(hairscenedesc.serialize(cFurMesh));
-                    //NvHairAssetDescriptor    
+                    //NvHairAssetDescriptor
                     var hairassetdescriptor = new NvHairAssetDescriptor();
                     root.Add(hairassetdescriptor.serialize(cFurMesh));
                     //HairInstanceDescriptor
@@ -58,24 +79,10 @@ namespace WolvenKit
                 var crw = new CR2WFile();
                 return crw;
             }
+
+            #endregion Methods
         }
 
-        /// <summary>
-        /// Formats a CArray of coordinates to NvParameterized format.
-        /// Eg.: X Y Z, X Y Z, ......
-        /// </summary>
-        /// <param name="coords">Coordinates to format.</param>
-        /// <returns>The string of coordinates.</returns>
-        public static string FormatCoordinateArray(CArray<Vector> coords)
-        {
-            var ret = "";
-            foreach (var coord in coords)
-            {
-                ret += coord.X.ToString() + " ";
-                ret += coord.Y.ToString() + " ";
-                ret += coord.Z.ToString() + ", ";
-            }
-            return ret.Trim(',',' ');
-        }
+        #endregion Classes
     }
 }
