@@ -53,7 +53,7 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
         {
             if (!filled)
             {
-                (new Thread(() =>
+                new Thread(() =>
                 {
                     foreach (var Theme in ThemeManager.Current.Themes)
                     {
@@ -84,7 +84,7 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
                             }
                         }
                     }
-                })).Start();
+                }).Start();
             }
             filled = true;
         }

@@ -160,8 +160,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 return;
             }
 
-            if ((mpath != null && !mpath.Split(';').Any(_ => _.Contains("\\Git\\")))
-                && ((upath != null && !upath.Split(';').Any(_ => _.Contains("\\Git\\")))))
+            if (mpath != null && !mpath.Split(';').Any(_ => _.Contains("\\Git\\"))
+                && upath != null && !upath.Split(';').Any(_ => _.Contains("\\Git\\")))
             {
                 MainController.LogString(
                     "Git was not found in your PATH environmental variables, it may not be installed on your machine. " +
@@ -1099,7 +1099,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 //Copy the generated w3strings
                 if (packsettings.Strings.Item1 || packsettings.Strings.Item2)
                 {
-                    var files = Directory.GetFiles((ActiveMod.ProjectDirectory + "\\strings")).Where(s => Path.GetExtension(s) == ".w3strings").ToList();
+                    var files = Directory.GetFiles(ActiveMod.ProjectDirectory + "\\strings").Where(s => Path.GetExtension(s) == ".w3strings").ToList();
 
                     if (packsettings.Strings.Item1)
                     {
@@ -1214,7 +1214,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                             {
                                 if (Directory.Exists(d.Attribute("Path").Value))
                                 {
-                                    if (!(Directory.GetFiles(d.Attribute("Path").Value, "*", SearchOption.AllDirectories).Any()))
+                                    if (!Directory.GetFiles(d.Attribute("Path").Value, "*", SearchOption.AllDirectories).Any())
                                     {
                                         Directory.Delete(d.Attribute("Path").Value, true);
                                         Debug.WriteLine("Directory delete: " + d.Attribute("Path").Value);

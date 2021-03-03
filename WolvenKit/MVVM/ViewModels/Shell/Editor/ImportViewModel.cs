@@ -410,12 +410,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 {
                     case EFormat.BC1_UNORM:
                     case EFormat.BC4_UNORM:
-                        return Math.Max(1, (_height / 4)) * Math.Max(1, (_width / 4)) * 8;
+                        return Math.Max(1, _height / 4) * Math.Max(1, _width / 4) * 8;
 
                     case EFormat.BC2_UNORM:
                     case EFormat.BC3_UNORM:
                     case EFormat.BC5_UNORM:
-                        return Math.Max(1, (_height / 4)) * Math.Max(1, (_width / 4)) * 16;
+                        return Math.Max(1, _height / 4) * Math.Max(1, _width / 4) * 16;
                     //case EFormat.R32G32B32A32_FLOAT:
                     //case EFormat.R16G16B16A16_FLOAT:
                     //case EFormat.BC6H_UF16:
@@ -432,12 +432,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 {
                     case EFormat.BC1_UNORM:
                     case EFormat.BC4_UNORM:
-                        return Math.Max(1, (_width / 4)) * 8;
+                        return Math.Max(1, _width / 4) * 8;
 
                     case EFormat.BC2_UNORM:
                     case EFormat.BC3_UNORM:
                     case EFormat.BC5_UNORM:
-                        return Math.Max(1, (_width / 4)) * 16;
+                        return Math.Max(1, _width / 4) * 16;
                     //case EFormat.R32G32B32A32_FLOAT:
                     //case EFormat.R16G16B16A16_FLOAT:
                     //case EFormat.BC6H_UF16:

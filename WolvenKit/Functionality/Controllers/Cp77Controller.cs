@@ -105,7 +105,7 @@ namespace WolvenKit.Functionality.Controllers
                         {
                             if (d.Attribute("Path") != null
                                 && Directory.Exists(d.Attribute("Path").Value)
-                                && !(Directory.GetFiles(d.Attribute("Path").Value, "*", SearchOption.AllDirectories).Any()))
+                                && !Directory.GetFiles(d.Attribute("Path").Value, "*", SearchOption.AllDirectories).Any())
                             {
                                 Directory.Delete(d.Attribute("Path").Value, true);
                                 Debug.WriteLine("Directory delete: " + d.Attribute("Path").Value);

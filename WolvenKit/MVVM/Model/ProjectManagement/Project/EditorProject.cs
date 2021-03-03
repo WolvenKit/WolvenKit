@@ -156,7 +156,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             return obj.GetType() == GetType() && Equals((EditorProject)obj);
         }
 
-        public override int GetHashCode() => (Location != null ? Location.GetHashCode() : 0);
+        public override int GetHashCode() => Location != null ? Location.GetHashCode() : 0;
 
         #endregion implements IEquatable
 

@@ -125,7 +125,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 maxFrequency = 22050; // Assume a default 44.1 kHz sample rate.
             }
 
-            return (int)((frequency / maxFrequency) * (fftDataSize / 2));
+            return (int)(frequency / maxFrequency * (fftDataSize / 2));
         }
 
         #endregion ISpectrumPlayer
@@ -212,7 +212,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                     var position = Math.Max(0, Math.Min(value, ChannelLength));
                     if (!inChannelTimerUpdate && ActiveStream != null)
                     {
-                        ActiveStream.Position = (long)((position / ActiveStream.TotalTime.TotalSeconds) * ActiveStream.Length);
+                        ActiveStream.Position = (long)(position / ActiveStream.TotalTime.TotalSeconds * ActiveStream.Length);
                     }
 
                     channelPosition = position;
@@ -326,7 +326,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
                 if (readCount > waveMaxPointIndexes[currentPointIndex])
                 {
-                    waveformCompressedPoints[(currentPointIndex * 2)] = maxLeftPointLevel;
+                    waveformCompressedPoints[currentPointIndex * 2] = maxLeftPointLevel;
                     waveformCompressedPoints[(currentPointIndex * 2) + 1] = maxRightPointLevel;
                     maxLeftPointLevel = float.MinValue;
                     maxRightPointLevel = float.MinValue;
@@ -559,8 +559,8 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         private void inputStream_Sample(object sender, SampleEventArgs e)
         {
             sampleAggregator.Add(e.Left, e.Right);
-            var repeatStartPosition = (long)((SelectionBegin.TotalSeconds / ActiveStream.TotalTime.TotalSeconds) * ActiveStream.Length);
-            var repeatStopPosition = (long)((SelectionEnd.TotalSeconds / ActiveStream.TotalTime.TotalSeconds) * ActiveStream.Length);
+            var repeatStartPosition = (long)(SelectionBegin.TotalSeconds / ActiveStream.TotalTime.TotalSeconds * ActiveStream.Length);
+            var repeatStopPosition = (long)(SelectionEnd.TotalSeconds / ActiveStream.TotalTime.TotalSeconds * ActiveStream.Length);
             if (((SelectionEnd - SelectionBegin) >= TimeSpan.FromMilliseconds(repeatThreshold)) && ActiveStream.Position >= repeatStopPosition)
             {
                 sampleAggregator.Clear();
@@ -573,7 +573,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         private void positionTimer_Tick(object sender, EventArgs e)
         {
             inChannelTimerUpdate = true;
-            ChannelPosition = ((double)ActiveStream.Position / (double)ActiveStream.Length) * ActiveStream.TotalTime.TotalSeconds;
+            ChannelPosition = (double)ActiveStream.Position / (double)ActiveStream.Length * ActiveStream.TotalTime.TotalSeconds;
             inChannelTimerUpdate = false;
         }
 

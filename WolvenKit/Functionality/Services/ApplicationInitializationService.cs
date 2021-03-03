@@ -108,35 +108,35 @@ namespace WolvenKit.Functionality.Services
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.ShowFeedback));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.ShowSettings));
 
-            _commandManager.CreateCommand((AppCommands.Application.ShowLog));
-            _commandManager.CreateCommand((AppCommands.Application.ShowProjectExplorer));
-            _commandManager.CreateCommand((AppCommands.Application.ShowImportUtility));
-            _commandManager.CreateCommand((AppCommands.Application.ShowProperties));
-            _commandManager.CreateCommand((AppCommands.Application.ShowPackageInstaller));
-            _commandManager.CreateCommand((AppCommands.Application.ShowMimicsTool));
-            _commandManager.CreateCommand((AppCommands.Application.ShowCR2WEditor));
+            _commandManager.CreateCommand(AppCommands.Application.ShowLog);
+            _commandManager.CreateCommand(AppCommands.Application.ShowProjectExplorer);
+            _commandManager.CreateCommand(AppCommands.Application.ShowImportUtility);
+            _commandManager.CreateCommand(AppCommands.Application.ShowProperties);
+            _commandManager.CreateCommand(AppCommands.Application.ShowPackageInstaller);
+            _commandManager.CreateCommand(AppCommands.Application.ShowMimicsTool);
+            _commandManager.CreateCommand(AppCommands.Application.ShowCR2WEditor);
 
-            _commandManager.CreateCommand((AppCommands.Application.ShowAssetBrowser));
-            _commandManager.CreateCommand((AppCommands.Application.ShowBulkEditor));
-            _commandManager.CreateCommand((AppCommands.Application.ShowCsvEditor));
-            _commandManager.CreateCommand((AppCommands.Application.ShowHexEditor));
-            _commandManager.CreateCommand((AppCommands.Application.ShowJournalEditor));
-            _commandManager.CreateCommand((AppCommands.Application.ShowVisualEditor));
-            _commandManager.CreateCommand((AppCommands.Application.ShowAnimationTool));
-            _commandManager.CreateCommand((AppCommands.Application.ShowAudioTool));
-            _commandManager.CreateCommand((AppCommands.Application.ShowImporterTool));
-            _commandManager.CreateCommand((AppCommands.Application.ShowCR2WToTextTool));
-            _commandManager.CreateCommand((AppCommands.Application.ShowGameDebuggerTool));
-            _commandManager.CreateCommand((AppCommands.Application.ShowMenuCreatorTool));
-            _commandManager.CreateCommand((AppCommands.Application.ShowPluginManager));
-            _commandManager.CreateCommand((AppCommands.Application.ShowRadishTool));
-            _commandManager.CreateCommand((AppCommands.Application.ShowWccTool));
+            _commandManager.CreateCommand(AppCommands.Application.ShowAssetBrowser);
+            _commandManager.CreateCommand(AppCommands.Application.ShowBulkEditor);
+            _commandManager.CreateCommand(AppCommands.Application.ShowCsvEditor);
+            _commandManager.CreateCommand(AppCommands.Application.ShowHexEditor);
+            _commandManager.CreateCommand(AppCommands.Application.ShowJournalEditor);
+            _commandManager.CreateCommand(AppCommands.Application.ShowVisualEditor);
+            _commandManager.CreateCommand(AppCommands.Application.ShowAnimationTool);
+            _commandManager.CreateCommand(AppCommands.Application.ShowAudioTool);
+            _commandManager.CreateCommand(AppCommands.Application.ShowImporterTool);
+            _commandManager.CreateCommand(AppCommands.Application.ShowCR2WToTextTool);
+            _commandManager.CreateCommand(AppCommands.Application.ShowGameDebuggerTool);
+            _commandManager.CreateCommand(AppCommands.Application.ShowMenuCreatorTool);
+            _commandManager.CreateCommand(AppCommands.Application.ShowPluginManager);
+            _commandManager.CreateCommand(AppCommands.Application.ShowRadishTool);
+            _commandManager.CreateCommand(AppCommands.Application.ShowWccTool);
 
-            _commandManager.CreateCommand((AppCommands.Application.OpenFile));
-            _commandManager.CreateCommand((AppCommands.Application.NewFile));
-            _commandManager.CreateCommand((AppCommands.Application.PackMod));
-            _commandManager.CreateCommand((AppCommands.Application.BackupMod));
-            _commandManager.CreateCommand((AppCommands.Application.PublishMod));
+            _commandManager.CreateCommand(AppCommands.Application.OpenFile);
+            _commandManager.CreateCommand(AppCommands.Application.NewFile);
+            _commandManager.CreateCommand(AppCommands.Application.PackMod);
+            _commandManager.CreateCommand(AppCommands.Application.BackupMod);
+            _commandManager.CreateCommand(AppCommands.Application.PublishMod);
 
             // Project Explorer Viewmodel
             _commandManager.CreateCommand(AppCommands.ProjectExplorer.ExpandAll);

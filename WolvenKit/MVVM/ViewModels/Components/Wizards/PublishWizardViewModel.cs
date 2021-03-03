@@ -39,7 +39,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
 
         public void PublishMod()
         {
-            var proj = (ServiceLocator.Default.ResolveType<IProjectManager>().ActiveProject as EditorProject);
+            var proj = ServiceLocator.Default.ResolveType<IProjectManager>().ActiveProject as EditorProject;
             if (proj == null)
             {
                 return;

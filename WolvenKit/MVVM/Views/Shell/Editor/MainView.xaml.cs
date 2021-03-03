@@ -140,7 +140,7 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
             var loaderResult = await LayoutLoader.GetLayoutString(OnLayoutLoaded_Event);
 
             // Call this even with null to ensure standard initialization takes place
-            OnLayoutLoaded_Event(null, (loaderResult == null ? null : new LayoutLoadedEventArgs(loaderResult)));
+            OnLayoutLoaded_Event(null, loaderResult == null ? null : new LayoutLoadedEventArgs(loaderResult));
         }
 
         #endregion LoadLayoutCommand

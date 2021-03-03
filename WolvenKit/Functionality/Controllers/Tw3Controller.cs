@@ -746,7 +746,7 @@ namespace WolvenKit.Functionality.Controllers
                 //Copy the generated w3strings
                 if (packsettings.modStrings || packsettings.dlcStrings)
                 {
-                    var files = Directory.GetFiles((ActiveMod.ProjectDirectory + "\\strings")).Where(s => Path.GetExtension(s) == ".w3strings").ToList();
+                    var files = Directory.GetFiles(ActiveMod.ProjectDirectory + "\\strings").Where(s => Path.GetExtension(s) == ".w3strings").ToList();
 
                     if (packsettings.modStrings)
                     {
@@ -810,7 +810,7 @@ namespace WolvenKit.Functionality.Controllers
                             {
                                 if (Directory.Exists(d.Attribute("Path").Value))
                                 {
-                                    if (!(Directory.GetFiles(d.Attribute("Path").Value, "*", SearchOption.AllDirectories).Any()))
+                                    if (!Directory.GetFiles(d.Attribute("Path").Value, "*", SearchOption.AllDirectories).Any())
                                     {
                                         Directory.Delete(d.Attribute("Path").Value, true);
                                         Debug.WriteLine("Directory delete: " + d.Attribute("Path").Value);

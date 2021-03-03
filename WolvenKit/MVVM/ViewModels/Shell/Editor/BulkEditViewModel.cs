@@ -283,7 +283,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 // edit lists
                 if (cvar is IList && cvar.GetType().IsGenericType)
                 {
-                    foreach (var listitem in (cvar as IList))
+                    foreach (var listitem in cvar as IList)
                     {
                         if (listitem is CVariable clistitem)
                         {
