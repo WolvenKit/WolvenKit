@@ -15,7 +15,6 @@ using WolvenKit.Model;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Services;
 using CP77.CR2W.Archive;
-using WolvenKit.ViewModels;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.ViewModels.Components.Tools;

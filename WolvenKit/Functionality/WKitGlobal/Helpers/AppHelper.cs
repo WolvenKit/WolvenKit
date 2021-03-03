@@ -26,8 +26,6 @@ using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Editor;
 using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages;
 using WolvenKit.MVVM.Views.Shell.HomePage.Pages;
 using WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages;
-using WolvenKit.ViewModels.HomePage;
-using WolvenKit.ViewModels.IntegratedToolsPages.CyberCAT;
 using System.Runtime.InteropServices;
 using WolvenKit.MVVM.Views.Shell.HomePage;
 using WolvenKit.MVVM.Views.Shell.Homepage.Pages.IntegratedToolsPages.CyberCAT;
@@ -53,6 +51,9 @@ using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWizard;
 using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FeedbackWizard;
 using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.BugReportWizard;
 using WolvenKit.MVVM.ViewModels.Others;
+using WolvenKit.MVVM.ViewModels.Shell.HomePage;
+using WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.IntegratedToolsPages.CyberCAT;
+using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
@@ -94,6 +95,12 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             //-- Category : Radio
             viewModelLocator.Register(typeof(RadioPlayerView), typeof(RadioPlayerViewModel));
             // ---- HeadCategory : ProjectView
+            viewModelLocator.Register(typeof(DocumentView), typeof(DocumentViewModel));
+            viewModelLocator.Register(typeof(PropertiesView), typeof(PropertiesViewModel));
+
+            viewModelLocator.Register(typeof(LogView), typeof(LogViewModel));
+            viewModelLocator.Register(typeof(ProjectExplorerView), typeof(ProjectExplorerViewModel));
+            viewModelLocator.Register(typeof(StatusBarView), typeof(StatusBarViewModel));
             viewModelLocator.Register(typeof(MainView), typeof(WorkSpaceViewModel));
             viewModelLocator.Register(typeof(AssetBrowserView), typeof(AssetBrowserViewModel));
             viewModelLocator.Register(typeof(JournalEditorView), typeof(JournalEditorViewModel));
@@ -118,6 +125,9 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.Register(typeof(RadishToolView), typeof(RadishToolViewModel));
             viewModelLocator.Register(typeof(WccToolView), typeof(WccToolViewModel));
             viewModelLocator.Register(typeof(MenuCreatorToolView), typeof(MenuCreatorToolViewModel));
+            viewModelLocator.Register(typeof(RibbonView), typeof(RibbonViewModel));
+            viewModelLocator.Register(typeof(StatusBarView), typeof(StatusBarViewModel));
+
 
 
             // ---- HeadCategory : FluentBackstage
