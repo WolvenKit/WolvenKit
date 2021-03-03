@@ -8,7 +8,7 @@ using System.Text;
 
 namespace WolvenKit.Net
 {
-    public class Response
+    public static class Response
     {
         #region Enums
 
