@@ -28,7 +28,6 @@ using WolvenKit.ViewModels.GameDebuggerTool;
 using WolvenKit.ViewModels.ImporterTool;
 using WolvenKit.ViewModels.HexEditor;
 using WolvenKit.ViewModels.RadishTool;
-using WolvenKit.Views.Dialogs;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard;
@@ -66,6 +65,7 @@ using WolvenKit.MVVM.Views.Components.Tools.AudioTool.Radio;
 using WolvenKit.MVVM.Views.Components.Editors.VisualEditor;
 using WolvenKit.MVVM.Views.Components.Tools;
 using WolvenKit.MVVM.Views.Components.Editors;
+using WolvenKit.MVVM.Views.Components.Dialogs;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {

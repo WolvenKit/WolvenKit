@@ -1,9 +1,9 @@
 using Catel.MVVM;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using WolvenKit.MVVM.Views.Components.Dialogs;
 using WolvenKit.MVVM.Views.Components.Editors;
 using WolvenKit.MVVM.Views.Components.Tools;
-using WolvenKit.Views.Dialogs;
 
 
 namespace WolvenKit.ViewModels.HomePage.Pages

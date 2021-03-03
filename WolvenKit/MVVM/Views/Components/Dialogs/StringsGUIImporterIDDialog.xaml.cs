@@ -1,5 +1,5 @@
-﻿
-namespace WolvenKit.Views.Dialogs
+
+namespace WolvenKit.MVVM.Views.Components.Dialogs
 {
     public partial class StringsGUIImporterIDDialog
     {
