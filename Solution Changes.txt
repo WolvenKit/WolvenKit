@@ -17,7 +17,7 @@ Bundles | Cleaned
 cache x
 cr2w
 net x 
-nvidia
+nvidia x
 radish
 save
 scaleform
