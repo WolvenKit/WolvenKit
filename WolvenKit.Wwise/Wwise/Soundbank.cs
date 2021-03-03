@@ -1,33 +1,35 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace WolvenKit.Wwise.Wwise
 {
-
     public class Soundbank
     {
+        #region Fields
+
+        public const int MODE_ADD_NEW_MUSIC = 2;
         public const int MODE_BUILD = 0;
         public const int MODE_BUILD_MUSIC = 1;
-        public const int MODE_ADD_NEW_MUSIC = 2;
-        public const int MODE_PLAYLIST_ID = 3;
-        public const int MODE_EXPORT_PLAYLIST = 4;
-        public const int MODE_REIMPORT_PLAYLIST = 5;
         public const int MODE_DEBUG = 6;
-
+        public const int MODE_EXPORT_PLAYLIST = 4;
+        public const int MODE_PLAYLIST_ID = 3;
+        public const int MODE_REIMPORT_PLAYLIST = 5;
+        public SBData _data = null;
+        public SBDataIndex _dataIndex = null;
+        public SBEnvironments _envs = null;
         public FileRead _file;
         public string _fileName;
         public SBHeader _header = null;
-        public SBDataIndex _dataIndex = null;
-        public SBData _data = null;
+        public bool _isInit;
         public SBObjects _objects = null;
         public SBSoundTypeID _stid = null;
         public SBManager _stmg = null;
-        public SBEnvironments _envs = null;
         public List<WEM> _to_add = new List<WEM>();
-        public bool _isInit;
 
+        #endregion Fields
+
+        #region Constructors
 
         public Soundbank(string fileName)
         {
@@ -38,15 +40,17 @@ namespace WolvenKit.Wwise.Wwise
 
                 _header = null;
                 _dataIndex = null;
-
             }
             catch (Exception)
             {
                 Console.WriteLine("Could not open sound bank, exiting.");
                 Environment.Exit(0);
             }
-
         }
+
+        #endregion Constructors
+
+        #region Destructors
 
         ~Soundbank()
         {
@@ -56,46 +60,180 @@ namespace WolvenKit.Wwise.Wwise
             }
         }
 
+        #endregion Destructors
 
-        public void readFile()
+        #region Methods
+
+        public uint add_music(string file)
         {
-            _header = new SBHeader(_file);
-            _isInit = (_fileName == "Init.bnk");
-
-            if (!_isInit)
+            string s = Path.GetFileNameWithoutExtension(file);
+            uint mid = 0;
+            if (!uint.TryParse(s, out mid))
             {
-                _dataIndex = new SBDataIndex(_file);
-                _data = new SBData(_file);
+                Console.WriteLine("Sound bank: add_music -- Invalid wem ID.");
+                Environment.Exit(0);
+            }
+            if (mid < 1 || mid > 0xFFFFFFFF)
+            {
+                Console.WriteLine("Sound bank: add_music -- Invalid wem ID.");
+                Environment.Exit(0);
+            }
 
-                if (_data._isSet && _dataIndex._isSet)
+            WemFile wem = new WemFile();
+            wem.LoadFromFile(file, WwAudioFileType.Wem);
+
+            double new_time = (wem.sample_count / wem.sample_rate) * 1000;
+            SBObject segment = null;
+            foreach (var obj in _objects._objects)
+            {
+                if (obj._type == SBObject.TYPE_MUSIC_TRACK)
                 {
-                    _data.read_data(_file, _dataIndex);
+                    if (obj._obj_mto._id1 == mid)
+                    {
+                        Console.WriteLine("Add new music: ID " + mid + " is already in use.");
+                        Environment.Exit(0);
+                    }
                 }
-                else
+                else if (obj._type == SBObject.TYPE_MUSIC_SEGMENT)
                 {
-                    Console.WriteLine("SBData or SBDataIndex not loaded, exiting.");
-                    Environment.Exit(0);
+                    if (segment == null)
+                    {
+                        segment = obj;
+                    }
                 }
             }
-            else
+            if (segment != null)
             {
-                // manager
-                _stmg = new SBManager(_file);
+                Console.WriteLine("No music segments within sound bank.");
+                Environment.Exit(0);
             }
 
-            _objects = new SBObjects(_file);
-            if (!_isInit)
-            {
-                _stid = new SBSoundTypeID(_file);
-            }
-            else
-            {
-                _envs = new SBEnvironments(_file);
-            }
+            uint musicTrackId = _objects.get_new_id();
+            SBObject musicTrackObject = new SBObject();
+            musicTrackObject._type = SBObject.TYPE_MUSIC_TRACK;
+            musicTrackObject._id = musicTrackId;
+            musicTrackObject._obj_mto_custom = new SBMusicTrackCustomObject(mid, new_time, 0);
+            musicTrackObject._current_obj = "MusicTrackCustom";
+            musicTrackObject.calculateLength();
 
-            _file.closeFile();
+            _objects._objects.Add(musicTrackObject);
+
+            uint musicSegmentId = _objects.get_new_id();
+            musicTrackObject._obj_mto_custom._parent = musicSegmentId;
+
+            SBObject musicSegmentObject = segment;
+            musicSegmentObject._id = musicSegmentId;
+            musicSegmentObject._obj_mso._children = 1;
+            musicSegmentObject._obj_mso._child_ids = new List<uint>();
+            musicSegmentObject._obj_mso._child_ids.Add(musicTrackId);
+            musicSegmentObject._obj_mso._unk_double_1 = 1000;
+            musicSegmentObject._obj_mso._unk_field64_1 = 0;
+            musicSegmentObject._obj_mso._unk_field64_2 = 0;
+            musicSegmentObject._obj_mso._time_length = new_time;
+            musicSegmentObject._obj_mso._time_length_next = new_time;
+            musicSegmentObject._obj_mso._sound_structure._parent_id = 0;
+            musicSegmentObject.calculateLength();
+
+            _objects._objects.Add(musicSegmentObject);
+            _objects.calculate_length();
+
+            return musicSegmentId;
         }
 
+        public void build_bnk(string outpath)
+        {
+            if (_isInit)
+            {
+                Console.WriteLine("Sound bank: Rebuilding init.bnk not yet supported.");
+                return;
+            }
+
+            FileWrite fw = new FileWrite(outpath ?? _fileName + ".wkrebuilt");
+            fw._file.Write(_header._head.ToCharArray());
+            fw._file.Write((UInt32)_header._length);
+            fw._file.Write((UInt32)_header._version);
+            fw._file.Write((UInt32)_header._id);
+            fw._file.Write((UInt32)_header._unk_field32_1);
+            fw._file.Write((UInt32)_header._unk_field32_2);
+
+            if (_header._unk_data != null)
+            {
+                fw._file.Write(_header._unk_data);
+            }
+
+            if (_dataIndex != null && _dataIndex._isSet)
+            {
+                _dataIndex.calculate_offset();
+                fw._file.Write(_dataIndex._head.ToCharArray());
+                fw._file.Write((UInt32)_dataIndex._length);
+
+                foreach (var info in _dataIndex._data_info)
+                {
+                    fw._file.Write((UInt32)info._id);
+                    fw._file.Write((UInt32)info._offset);
+                    fw._file.Write((UInt32)info._size);
+                }
+            }
+            if (_data != null && _data._isSet)
+            {
+                fw._file.Write(_data._head.ToCharArray());
+                fw._file.Write((UInt32)_dataIndex.get_total_size());
+
+                _data._offset = (uint)fw.getPosition();
+                foreach (var info in _dataIndex._data_info)
+                {
+                    fw._file.Write(info._data);
+                }
+            }
+
+            fw._file.Write(_objects._head.ToCharArray());
+            fw._file.Write((UInt32)_objects._length);
+            fw._file.Write((UInt32)_objects._quantity);
+
+            foreach (var obj in _objects._objects)
+            {
+                fw._file.Write((byte)obj._type);
+                fw._file.Write((UInt32)obj._length);
+                fw._file.Write((UInt32)obj._id);
+
+                if (obj._type == SBObject.TYPE_SOUND)
+                {
+                    if (obj._obj_so._include_type == SBSoundObject.SOUND_EMBEDED && _dataIndex != null && _dataIndex._isSet)
+                    {
+                        uint offset = obj._obj_so._offset;
+                        uint size = obj._obj_so._size;
+                        bool bSet = true;
+                        try
+                        {
+                            offset = _data._offset + (uint)_dataIndex.get_offset(obj._obj_so._audio_id);
+                            size = (uint)_dataIndex.get_size(obj._obj_so._audio_id);
+                        }
+                        catch
+                        {
+                            bSet = false;
+                        }
+                        if (bSet)
+                        {
+                            obj._obj_so._offset = offset;
+                            obj._obj_so._size = size;
+                        }
+                    }
+                }
+
+                fw._file.Write(obj.getData());
+            }
+
+            if (_stid != null && _stid._isSet)
+            {
+                fw._file.Write(_stid._head.ToCharArray());
+                fw._file.Write((UInt32)_stid._length);
+                fw._file.Write((UInt32)_stid._unk_field32_1);
+                fw._file.Write((UInt32)_stid._quantity);
+                fw._file.Write(_stid._remaining);
+            }
+
+            fw._file.Close();
+        }
 
         public void debugSound()
         {
@@ -210,23 +348,36 @@ namespace WolvenKit.Wwise.Wwise
             }
         }
 
-
-        public void rebuild_data()
+        public void export_playlist(uint playlist_id)
         {
-            foreach (WEM w in _dataIndex._data_info)
+            if (playlist_id < 1 || playlist_id > 0xFFFFFFFF)
             {
-                foreach (WEM w1 in _to_add)
+                Console.WriteLine("Sound bank: Invalid playlist ID in export.");
+                return;
+            }
+
+            SBObject playlist = null;
+            foreach (var obj in _objects._objects)
+            {
+                if (obj._type == SBObject.TYPE_MUSIC_PLAYLIST)
                 {
-                    if (w._id == w1._id)
+                    if (obj._id == playlist_id)
                     {
-                        w._size = w1._size;
-                        w._data = w1._data;
+                        playlist = obj;
                         break;
                     }
                 }
             }
-        }
 
+            if (playlist == null)
+            {
+                Console.WriteLine("Playlist " + playlist_id + " not found within sound bank.");
+                return;
+            }
+
+            var playlist_file = playlist_id + "_playlist.ini";
+            playlist._obj_mpo.export(playlist_file);
+        }
 
         public void get_playlist_ids(uint wid)
         {
@@ -299,39 +450,176 @@ namespace WolvenKit.Wwise.Wwise
             Console.WriteLine("[*] Playlists found: " + playlist_ids.Count);
             Console.WriteLine("[*] Playlists IDs: " + s);
             Console.WriteLine("");
-
         }
 
-
-        public void export_playlist(uint playlist_id)
+        public void read_wems(string folder)
         {
-            if (playlist_id < 1 || playlist_id > 0xFFFFFFFF)
+            string[] files = Directory.GetFiles(folder, "*.wem", SearchOption.AllDirectories);
+            foreach (string f in files)
             {
-                Console.WriteLine("Sound bank: Invalid playlist ID in export.");
-                return;
+                try
+                {
+                    FileInfo fi = new FileInfo(f);
+                    WEM w = new WEM();
+                    var sbi_name = SoundCache.GetIDFromPath(f);
+                    uint.TryParse(Path.GetFileNameWithoutExtension(sbi_name), out w._id);
+                    w._size = (UInt32)fi.Length;
+                    BinaryReader br = new BinaryReader(fi.OpenRead());
+                    w._data = br.ReadBytes((int)br.BaseStream.Length);
+                    _to_add.Add(w);
+                    Console.WriteLine("\tFile ->" + f + " | " + sbi_name);
+                }
+                catch
+                {
+                    continue;
+                }
+            }
+        }
+
+        public void readFile()
+        {
+            _header = new SBHeader(_file);
+            _isInit = (_fileName == "Init.bnk");
+
+            if (!_isInit)
+            {
+                _dataIndex = new SBDataIndex(_file);
+                _data = new SBData(_file);
+
+                if (_data._isSet && _dataIndex._isSet)
+                {
+                    _data.read_data(_file, _dataIndex);
+                }
+                else
+                {
+                    Console.WriteLine("SBData or SBDataIndex not loaded, exiting.");
+                    Environment.Exit(0);
+                }
+            }
+            else
+            {
+                // manager
+                _stmg = new SBManager(_file);
             }
 
-            SBObject playlist = null;
-            foreach (var obj in _objects._objects)
+            _objects = new SBObjects(_file);
+            if (!_isInit)
             {
-                if (obj._type == SBObject.TYPE_MUSIC_PLAYLIST)
+                _stid = new SBSoundTypeID(_file);
+            }
+            else
+            {
+                _envs = new SBEnvironments(_file);
+            }
+
+            _file.closeFile();
+        }
+
+        public void rebuild_data()
+        {
+            foreach (WEM w in _dataIndex._data_info)
+            {
+                foreach (WEM w1 in _to_add)
                 {
-                    if (obj._id == playlist_id)
+                    if (w._id == w1._id)
                     {
-                        playlist = obj;
+                        w._size = w1._size;
+                        w._data = w1._data;
                         break;
                     }
                 }
             }
+        }
 
-            if (playlist == null)
+        public void rebuild_music(string file)
+        {
+            uint mid = 0;
+            if (!uint.TryParse(Path.GetFileNameWithoutExtension(file), out mid))
             {
-                Console.WriteLine("Playlist " + playlist_id + " not found within sound bank.");
+                Console.WriteLine("Sound bank: rebuild_music -- wrong file.");
+                return;
+            }
+            if (mid < 1 || mid > 0xFFFFFFFF)
+            {
+                Console.WriteLine("Sound bank: rebuild_music -- Invalid wem ID.");
                 return;
             }
 
-            var playlist_file = playlist_id + "_playlist.ini";
-            playlist._obj_mpo.export(playlist_file);
+            WemFile wem = new WemFile();
+            wem.LoadFromFile(file, WwAudioFileType.Wem);
+
+            double new_time = (wem.sample_count / (float)wem.sample_rate) * 1000;
+
+            Dictionary<uint, List<uint>> trackids = new Dictionary<uint, List<uint>>();
+            uint i = 0;
+
+            foreach (var obj in _objects._objects)
+            {
+                if (obj._type == SBObject.TYPE_MUSIC_TRACK)
+                {
+                    if (obj._obj_mto._id1 == mid)
+                    {
+                        List<uint> v = new List<uint> { i, 0 };
+                        trackids.Add(obj._id, v);
+                    }
+                }
+                i++;
+            }
+            if (trackids.Count == 0)
+            {
+                Console.WriteLine("Could not find ID " + mid + " within sound bank -- rebuild_music.");
+                return;
+            }
+            foreach (var obj in _objects._objects)
+            {
+                if (obj._type == SBObject.TYPE_MUSIC_SEGMENT)
+                {
+                    if (obj._obj_mso._child_ids.Count == 1)
+                    {
+                        obj._obj_mso._unk_double_1 = 1000;
+                        obj._obj_mso._unk_field64_1 = 0;
+                        obj._obj_mso._unk_field64_2 = 0;
+                        obj._obj_mso._time_length = new_time;
+                        obj._obj_mso._time_length_next = new_time;
+                        trackids[obj._obj_mso._child_ids[0]][1] = obj._id;
+                    }
+                    else
+                    {
+                        long hasTrack = -1;
+                        foreach (var trackid in trackids)
+                        {
+                            if (obj._obj_mso._child_ids.Contains(trackid.Key))
+                            {
+                                hasTrack = (long)trackid.Key;
+                            }
+                        }
+                        if (hasTrack != -1)
+                        {
+                            obj._obj_mso._children = 1;
+                            obj._obj_mso._child_ids = new List<uint>();
+                            obj._obj_mso._child_ids.Add((uint)hasTrack);
+                            obj._obj_mso._unk_double_1 = 1000;
+                            obj._obj_mso._unk_field64_1 = 0;
+                            obj._obj_mso._unk_field64_2 = 0;
+                            obj._obj_mso._time_length = new_time;
+                            obj._obj_mso._time_length_next = new_time;
+                            obj.calculateLength();
+                            trackids[(uint)hasTrack][1] = obj._id;
+                        }
+                    }
+                }
+            }
+
+            foreach (var t in trackids)
+            {
+                if (t.Value[1] != 0)
+                {
+                    _objects._objects[(int)t.Value[0]]._obj_mto_custom = new SBMusicTrackCustomObject(mid, new_time, t.Value[1]);
+                    _objects._objects[(int)t.Value[0]].calculateLength();
+                }
+            }
+
+            _objects.calculate_length();
         }
 
         // need to check for moveSegment
@@ -432,301 +720,10 @@ namespace WolvenKit.Wwise.Wwise
                     {
                     }
                 }
-
             }
             */
         }
 
-
-        public void build_bnk(string outpath)
-        {
-            if (_isInit)
-            {
-                Console.WriteLine("Sound bank: Rebuilding init.bnk not yet supported.");
-                return;
-            }
-
-            FileWrite fw = new FileWrite(outpath ?? _fileName + ".wkrebuilt");
-            fw._file.Write(_header._head.ToCharArray());
-            fw._file.Write((UInt32)_header._length);
-            fw._file.Write((UInt32)_header._version);
-            fw._file.Write((UInt32)_header._id);
-            fw._file.Write((UInt32)_header._unk_field32_1);
-            fw._file.Write((UInt32)_header._unk_field32_2);
-
-            if(_header._unk_data != null)
-            {
-                fw._file.Write(_header._unk_data);
-            }
-
-            if(_dataIndex != null && _dataIndex._isSet)
-            {
-                _dataIndex.calculate_offset();
-                fw._file.Write(_dataIndex._head.ToCharArray());
-                fw._file.Write((UInt32)_dataIndex._length);
-
-                foreach(var info in _dataIndex._data_info)
-                {
-                    fw._file.Write((UInt32)info._id);
-                    fw._file.Write((UInt32)info._offset);
-                    fw._file.Write((UInt32)info._size);
-                }
-            }
-            if(_data != null && _data._isSet)
-            {
-                fw._file.Write(_data._head.ToCharArray());
-                fw._file.Write((UInt32)_dataIndex.get_total_size());
-
-                _data._offset = (uint)fw.getPosition();
-                foreach(var info in _dataIndex._data_info)
-                {
-                    fw._file.Write(info._data);
-                }
-            }
-
-            fw._file.Write(_objects._head.ToCharArray());
-            fw._file.Write((UInt32)_objects._length);
-            fw._file.Write((UInt32)_objects._quantity);
-
-            foreach(var obj in _objects._objects)
-            {
-                fw._file.Write((byte)obj._type);
-                fw._file.Write((UInt32)obj._length);
-                fw._file.Write((UInt32)obj._id);
-
-                if(obj._type == SBObject.TYPE_SOUND)
-                {
-                    if(obj._obj_so._include_type == SBSoundObject.SOUND_EMBEDED && _dataIndex != null && _dataIndex._isSet)
-                    {
-                        uint offset = obj._obj_so._offset;
-                        uint size = obj._obj_so._size;
-                        bool bSet = true;
-                        try
-                        {
-                            offset = _data._offset + (uint)_dataIndex.get_offset(obj._obj_so._audio_id);
-                            size = (uint)_dataIndex.get_size(obj._obj_so._audio_id);
-                        }
-                        catch
-                        {
-                            bSet = false;
-                        }
-                        if (bSet)
-                        {
-                            obj._obj_so._offset = offset;
-                            obj._obj_so._size = size;
-                        }
-
-                    }
-                }
-
-                fw._file.Write(obj.getData());
-            }
-
-            if(_stid != null && _stid._isSet)
-            {
-                fw._file.Write(_stid._head.ToCharArray());
-                fw._file.Write((UInt32)_stid._length);
-                fw._file.Write((UInt32)_stid._unk_field32_1);
-                fw._file.Write((UInt32)_stid._quantity);
-                fw._file.Write(_stid._remaining);
-            }
-
-            fw._file.Close();
-        }
-
-
-        public void read_wems(string folder)
-        {
-            string[] files = Directory.GetFiles(folder, "*.wem", SearchOption.AllDirectories);
-            foreach(string f in files)
-            {
-                try
-                {
-                    FileInfo fi = new FileInfo(f);
-                    WEM w = new WEM();
-                    var sbi_name = SoundCache.GetIDFromPath(f);
-                    uint.TryParse(Path.GetFileNameWithoutExtension(sbi_name), out w._id);
-                    w._size = (UInt32)fi.Length;
-                    BinaryReader br = new BinaryReader(fi.OpenRead());
-                    w._data = br.ReadBytes((int)br.BaseStream.Length);
-                    _to_add.Add(w);
-                    Console.WriteLine("\tFile ->" + f + " | " + sbi_name);
-                }
-                catch
-                {
-                    continue;
-                }
-            }
-        }
-
-
-        public void rebuild_music(string file)
-        {
-
-            uint mid = 0;
-            if(!uint.TryParse(Path.GetFileNameWithoutExtension(file), out mid))
-            {
-                Console.WriteLine("Sound bank: rebuild_music -- wrong file.");
-                return;
-            }
-            if(mid < 1 || mid > 0xFFFFFFFF)
-            {
-                Console.WriteLine("Sound bank: rebuild_music -- Invalid wem ID.");
-                return;
-            }
-
-            WemFile wem = new WemFile();
-            wem.LoadFromFile(file, WwAudioFileType.Wem);
-
-            double new_time = (wem.sample_count / (float)wem.sample_rate) * 1000;
-
-            Dictionary<uint, List<uint>> trackids = new Dictionary<uint, List<uint>>();
-            uint i = 0;
-
-            foreach(var obj in _objects._objects)
-            {
-                if(obj._type == SBObject.TYPE_MUSIC_TRACK)
-                {
-                    if(obj._obj_mto._id1 == mid)
-                    {
-                        List<uint> v = new List<uint> { i, 0};
-                        trackids.Add(obj._id, v);
-                    }
-                }
-                i++;
-            }
-            if(trackids.Count == 0)
-            {
-                Console.WriteLine("Could not find ID " + mid + " within sound bank -- rebuild_music.");
-                return;
-            }
-            foreach(var obj in _objects._objects)
-            {
-                if(obj._type == SBObject.TYPE_MUSIC_SEGMENT)
-                {
-                    if(obj._obj_mso._child_ids.Count == 1)
-                    {
-                        obj._obj_mso._unk_double_1 = 1000;
-                        obj._obj_mso._unk_field64_1 = 0;
-                        obj._obj_mso._unk_field64_2 = 0;
-                        obj._obj_mso._time_length = new_time;
-                        obj._obj_mso._time_length_next = new_time;
-                        trackids[obj._obj_mso._child_ids[0]][1] = obj._id;
-                    }
-                    else
-                    {
-                        long hasTrack = -1;
-                        foreach (var trackid in trackids)
-                        {
-                            if(obj._obj_mso._child_ids.Contains(trackid.Key))
-                            {
-                                hasTrack = (long)trackid.Key;
-                            }
-                        }
-                        if(hasTrack != -1)
-                        {
-                            obj._obj_mso._children = 1;
-                            obj._obj_mso._child_ids = new List<uint>();
-                            obj._obj_mso._child_ids.Add((uint)hasTrack);
-                            obj._obj_mso._unk_double_1 = 1000;
-                            obj._obj_mso._unk_field64_1 = 0;
-                            obj._obj_mso._unk_field64_2 = 0;
-                            obj._obj_mso._time_length = new_time;
-                            obj._obj_mso._time_length_next = new_time;
-                            obj.calculateLength();
-                            trackids[(uint)hasTrack][1] = obj._id;
-                        }
-                    }
-                }
-            }
-
-            foreach(var t in trackids)
-            {
-                if(t.Value[1] != 0)
-                {
-                    _objects._objects[(int)t.Value[0]]._obj_mto_custom = new SBMusicTrackCustomObject(mid, new_time, t.Value[1]);
-                    _objects._objects[(int)t.Value[0]].calculateLength();
-                }
-            }
-
-            _objects.calculate_length();
-        }
-
-
-        public uint add_music(string file)
-        {
-            string s = Path.GetFileNameWithoutExtension(file);
-            uint mid = 0;
-            if(!uint.TryParse(s, out mid))
-            {
-                Console.WriteLine("Sound bank: add_music -- Invalid wem ID.");
-                Environment.Exit(0);
-            }
-            if(mid < 1 || mid > 0xFFFFFFFF)
-            {
-                Console.WriteLine("Sound bank: add_music -- Invalid wem ID.");
-                Environment.Exit(0);
-            }
-
-            WemFile wem = new WemFile();
-            wem.LoadFromFile(file, WwAudioFileType.Wem);
-
-            double new_time = (wem.sample_count / wem.sample_rate) * 1000;
-            SBObject segment = null;
-            foreach(var obj in _objects._objects)
-            {
-                if(obj._type == SBObject.TYPE_MUSIC_TRACK)
-                {
-                    if(obj._obj_mto._id1 == mid)
-                    {
-                        Console.WriteLine("Add new music: ID " + mid + " is already in use.");
-                        Environment.Exit(0);
-                    }
-                }
-                else if(obj._type == SBObject.TYPE_MUSIC_SEGMENT)
-                {
-                    if(segment == null)
-                    {
-                        segment = obj;
-                    }
-                }
-            }
-            if(segment != null)
-            {
-                Console.WriteLine("No music segments within sound bank.");
-                Environment.Exit(0);
-            }
-
-            uint musicTrackId = _objects.get_new_id();
-            SBObject musicTrackObject = new SBObject();
-            musicTrackObject._type = SBObject.TYPE_MUSIC_TRACK;
-            musicTrackObject._id = musicTrackId;
-            musicTrackObject._obj_mto_custom = new SBMusicTrackCustomObject(mid, new_time, 0);
-            musicTrackObject._current_obj = "MusicTrackCustom";
-            musicTrackObject.calculateLength();
-
-            _objects._objects.Add(musicTrackObject);
-
-            uint musicSegmentId = _objects.get_new_id();
-            musicTrackObject._obj_mto_custom._parent = musicSegmentId;
-
-            SBObject musicSegmentObject = segment;
-            musicSegmentObject._id = musicSegmentId;
-            musicSegmentObject._obj_mso._children = 1;
-            musicSegmentObject._obj_mso._child_ids = new List<uint>();
-            musicSegmentObject._obj_mso._child_ids.Add(musicTrackId);
-            musicSegmentObject._obj_mso._unk_double_1 = 1000;
-            musicSegmentObject._obj_mso._unk_field64_1 = 0;
-            musicSegmentObject._obj_mso._unk_field64_2 = 0;
-            musicSegmentObject._obj_mso._time_length = new_time;
-            musicSegmentObject._obj_mso._time_length_next = new_time;
-            musicSegmentObject._obj_mso._sound_structure._parent_id = 0;
-            musicSegmentObject.calculateLength();
-
-            _objects._objects.Add(musicSegmentObject);
-            _objects.calculate_length();
-
-            return musicSegmentId;
-        }
+        #endregion Methods
     }
 }
