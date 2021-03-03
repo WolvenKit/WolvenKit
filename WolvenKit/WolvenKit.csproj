@@ -27,21 +27,33 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="MVVM\ViewModels\Components\Wizards\WizardPages\InstallerWizard\**" />
+    <Compile Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Audio\**" />
+    <Compile Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Quest\**" />
+    <Compile Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Scene\**" />
     <Compile Remove="MVVM\Views\Components\Wizards\WizardPages\InstallerWizard\**" />
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="Resources\Styles\CustomBase\**" />
     <Compile Remove="Resources\Styles\Custom\**" />
     <EmbeddedResource Remove="MVVM\ViewModels\Components\Wizards\WizardPages\InstallerWizard\**" />
+    <EmbeddedResource Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Audio\**" />
+    <EmbeddedResource Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Quest\**" />
+    <EmbeddedResource Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Scene\**" />
     <EmbeddedResource Remove="MVVM\Views\Components\Wizards\WizardPages\InstallerWizard\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="Resources\Styles\CustomBase\**" />
     <EmbeddedResource Remove="Resources\Styles\Custom\**" />
     <None Remove="MVVM\ViewModels\Components\Wizards\WizardPages\InstallerWizard\**" />
+    <None Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Audio\**" />
+    <None Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Quest\**" />
+    <None Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Scene\**" />
     <None Remove="MVVM\Views\Components\Wizards\WizardPages\InstallerWizard\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="Resources\Styles\CustomBase\**" />
     <None Remove="Resources\Styles\Custom\**" />
     <Page Remove="MVVM\ViewModels\Components\Wizards\WizardPages\InstallerWizard\**" />
+    <Page Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Audio\**" />
+    <Page Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Quest\**" />
+    <Page Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Scene\**" />
     <Page Remove="MVVM\Views\Components\Wizards\WizardPages\InstallerWizard\**" />
     <Page Remove="NewFolder1\**" />
     <Page Remove="Resources\Styles\CustomBase\**" />
@@ -431,9 +443,6 @@
   <ItemGroup>
     <Folder Include="MVVM\ViewModels\Shell\HomePage\Pages\SettingsPages\SubPages\Integration\" />
     <Folder Include="MVVM\ViewModels\Shell\HomePage\Pages\SettingsPages\SubPages\Packaging\" />
-    <Folder Include="MVVM\Views\Components\Editors\VisualEditor\Nodes\Audio\" />
-    <Folder Include="MVVM\Views\Components\Editors\VisualEditor\Nodes\Scene\" />
-    <Folder Include="MVVM\Views\Components\Editors\VisualEditor\Nodes\Quest\" />
     <Folder Include="MVVM\Views\Shell\HomePage\Pages\SettingsPages\SubPages\Integration\" />
     <Folder Include="MVVM\Views\Shell\HomePage\Pages\SettingsPages\SubPages\Packaging\" />
   </ItemGroup>
