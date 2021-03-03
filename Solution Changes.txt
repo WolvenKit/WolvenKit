@@ -9,5 +9,24 @@
 
 changelog for clean-up.
 
+Projects :
 
-- Start
+
+TextEditLib
+Bundles
+cache
+cr2w
+net
+nvidia
+radish
+save
+scaleform
+w3speech
+w3strings
+wwise
+TESTS
+cp77tools
+Wkit
+common
+cyberformats
+
