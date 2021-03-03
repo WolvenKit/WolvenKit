@@ -20,9 +20,9 @@ net x
 nvidia x
 radish x
 save x
-scaleform
-w3speech
-w3strings
+scaleform x
+w3speech x
+w3strings x
 wwise
 TESTS
 cp77tools

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using ProtoBuf;
@@ -10,6 +10,7 @@ namespace WolvenKit.W3Strings
     public class W3StringManager
     {
         #region Proto
+
         [ProtoMember(1)]
         public Dictionary<uint, ProtoList<W3StringBlock1>> ProtoLines
         {
@@ -22,22 +23,23 @@ namespace WolvenKit.W3Strings
                     {
                         var bloc = new ProtoList<W3StringBlock1>();
                         bloc.innerlist = line.Value;
-                        ret.Add(line.Key,bloc);
+                        ret.Add(line.Key, bloc);
                     }
                 }
                 return ret;
             }
             set
             {
-                if(Lines == null)
+                if (Lines == null)
                     Lines = new Dictionary<uint, List<W3StringBlock1>>();
                 Lines.Clear();
                 foreach (var protoLine in ProtoLines)
                 {
-                    Lines.Add(protoLine.Key,protoLine.Value.innerlist);
+                    Lines.Add(protoLine.Key, protoLine.Value.innerlist);
                 }
             }
         }
+
         [ProtoMember(2)]
         private List<ProtoList<string>> ProtiomportedStrings
         {
@@ -57,7 +59,7 @@ namespace WolvenKit.W3Strings
             }
             set
             {
-                if(importedStrings == null)
+                if (importedStrings == null)
                     importedStrings = new List<List<string>>();
                 importedStrings.Clear();
                 foreach (var protostring in ProtiomportedStrings)
@@ -66,18 +68,57 @@ namespace WolvenKit.W3Strings
                 }
             }
         }
-        #endregion
 
-        [ProtoMember(3)]
-        public Dictionary<uint, List<W3StringBlock1>> Lines { get; private set; }
-        [ProtoMember(4)]
-        public Dictionary<uint, bool> Keys { get; private set; }
-        [ProtoMember(5)]
-        public string Language { get; private set; }
+        #endregion Proto
+
+        #region Fields
 
         private List<List<string>> importedStrings = new List<List<string>>();
 
+        #endregion Fields
+
+        #region Properties
+
         public static string SerializationVersion => "1.0";
+
+        [ProtoMember(4)]
+        public Dictionary<uint, bool> Keys { get; private set; }
+
+        [ProtoMember(5)]
+        public string Language { get; private set; }
+
+        [ProtoMember(3)]
+        public Dictionary<uint, List<W3StringBlock1>> Lines { get; private set; }
+
+        #endregion Properties
+
+        #region Methods
+
+        public void ClearImportedStrings()
+        {
+            importedStrings.Clear();
+        }
+
+        public string[] GetdirectoriesDebug(string s, string k, SearchOption so = SearchOption.TopDirectoryOnly)
+        {
+            return Directory.GetDirectories(s, k, so);
+        }
+
+        public List<List<string>> GetImportedStrings()
+        {
+            return importedStrings;
+        }
+
+        public string GetString(uint id)
+        {
+            if (Lines != null && Lines.ContainsKey(id))
+            {
+                var list = Lines[id];
+                return list[list.Count - 1].str;
+            }
+
+            return null;
+        }
 
         public void Load(string newlanguage, string path, bool onlyIfLanguageChanged = false)
         {
@@ -121,10 +162,21 @@ namespace WolvenKit.W3Strings
                     }
                 }
             }
-            catch(DirectoryNotFoundException)
+            catch (DirectoryNotFoundException)
             {
                 Directory.CreateDirectory(dlc);
             }
+        }
+
+        public void SaveImportedStrings(List<List<string>> strings)
+        {
+            foreach (var str in strings)
+                importedStrings.Add(str);
+        }
+
+        public void Test()
+        {
+            importedStrings.Add(new List<string>() { "0", "0", "0" });
         }
 
         private void OpenFile(string filename)
@@ -150,7 +202,6 @@ namespace WolvenKit.W3Strings
                 Lines[item.str_id].Add(item);
             }
 
-
             foreach (var item in file.block2)
             {
                 if (!Keys.ContainsKey(item.str_id))
@@ -160,41 +211,6 @@ namespace WolvenKit.W3Strings
             }
         }
 
-        public string GetString(uint id)
-        {
-            if (Lines != null  && Lines.ContainsKey(id))
-            {
-                var list = Lines[id];
-                return list[list.Count - 1].str;
-            }
-
-            return null;
-        }
-
-        public void SaveImportedStrings(List<List<string>> strings)
-        {
-            foreach (var str in strings)
-                importedStrings.Add(str);
-        }
-
-        public List<List<string>> GetImportedStrings()
-        {
-            return importedStrings;
-        }
-
-        public void ClearImportedStrings()
-        {
-            importedStrings.Clear();
-        }
-
-        public void Test()
-        {
-            importedStrings.Add(new List<string>() { "0", "0", "0" });
-        }
-
-        public string[] GetdirectoriesDebug(string s, string k,SearchOption so = SearchOption.TopDirectoryOnly)
-        {
-            return Directory.GetDirectories(s, k,so);
-        }
+        #endregion Methods
     }
 }
