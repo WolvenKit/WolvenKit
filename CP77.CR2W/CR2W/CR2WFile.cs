@@ -355,8 +355,6 @@ namespace CP77.CR2W
         public CR2WFileHeader GetFileHeader() => m_fileheader;
         public CR2WTable[] GetTableHeaders() => m_tableheaders;
 
-        private List<string> _varList = new();
-
         public CVariable ReadVariable(BinaryReader file, CVariable parent)
         {
 
@@ -372,12 +370,7 @@ namespace CP77.CR2W
             var typeId = file.ReadUInt16();
             var typename = Names[typeId].Str;
 
-            _varList.Add($"{parent.UniqueIdentifier}: {typename} {varname}");
-
             // Read Size
-            if (typeId == 251)
-                Debugger.Break();
-
             var sizepos = file.BaseStream.Position;
             var size = file.ReadUInt32();
 
@@ -392,19 +385,10 @@ namespace CP77.CR2W
             if (bytesleft > 0)
             {
                 var unreadBytes = file.ReadBytes((int)bytesleft);
-
-                file.BaseStream.Position = 0;
-                var buffer = file.ReadBytes((int) file.BaseStream.Length);
-                File.WriteAllBytes("C:\\Dev\\test.bin", buffer);
-
                 throw new InvalidParsingException($"Parsing Variable read too short. Difference: {bytesleft}");
             }
             else if (bytesleft < 0)
             {
-                file.BaseStream.Position = 0;
-                var buffer = file.ReadBytes((int)file.BaseStream.Length);
-                File.WriteAllBytes("C:\\Dev\\test.bin", buffer);
-
                 throw new InvalidParsingException($"Parsing Variable read too far. Difference: {bytesleft}");
             }
 
@@ -667,9 +651,6 @@ namespace CP77.CR2W
             //Logger?.LogString($"File {FileName} loaded in: {stopwatch1.Elapsed}\n", Logtype.Normal);
             stopwatch1.Stop();
             //m_stream = null;
-
-            File.WriteAllLines("C:\\Dev\\test.txt", _varList);
-
             return 0;
         }
 
@@ -1008,9 +989,6 @@ namespace CP77.CR2W
                 //collection.Add(var);
                 dbg_trace.Add($"{var.Var.UniqueIdentifier} - {var.Mod}");
                 AddStrings(var);
-
-                if (var.Var.UniqueIdentifier == "8.scnPlaySkAnimEvent")
-                    Debugger.Break();
 
                 List<SNameArg> nextl = GetVariables(var.Var);
                 if (nextl == null)
