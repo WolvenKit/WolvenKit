@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,11 +31,11 @@ namespace WolvenKit.Bundles
         TDynArray<UFileInitInfo> fileInitInfoList;
         TDynArray<UHash> hashes;
 
-        public void cwdump(object obj,BinaryReader br)
+        public void cwdump(object obj, BinaryReader br)
         {
             Console.WriteLine("Dumping object: " + obj.GetType().Name);
             Console.WriteLine(ObjectDumper.Dump(obj));
-            Console.WriteLine("Binary reader is at: " + br.BaseStream.Position + "[0x"+ br.BaseStream.Position.ToString("X") + "] left: " + ((int)br.BaseStream.Length-br.BaseStream.Position) + "[0x" + ((int)br.BaseStream.Length-br.BaseStream.Position).ToString("X") + "]");
+            Console.WriteLine("Binary reader is at: " + br.BaseStream.Position + "[0x" + br.BaseStream.Position.ToString("X") + "] left: " + ((int)br.BaseStream.Length - br.BaseStream.Position) + "[0x" + ((int)br.BaseStream.Length - br.BaseStream.Position).ToString("X") + "]");
             Console.WriteLine();
 
         }
@@ -70,7 +70,7 @@ namespace WolvenKit.Bundles
             using (var br = new BinaryReader(new FileStream(filepath, FileMode.Open)))
             {
                 if (!br.ReadBytes(4).SequenceEqual(IDString))
-                    throw new InvalidDataException("Wrong magic when reading the metadata.store file.);
+                    throw new InvalidDataException("Wrong magic when reading the metadata.store file.");
                 Version = br.ReadInt32();
                 MaxFileSizeInBundle = br.ReadInt32();
                 MaxFileSizeInMemory = br.ReadInt32();
@@ -118,7 +118,7 @@ namespace WolvenKit.Bundles
                 var buffercount = br.ReadVLQInt32();
                 if (buffercount > 0)
                 {
-                    for (int i = 0;i < buffercount;i++)
+                    for (int i = 0; i < buffercount; i++)
                     {
                         Buffers.Add(br.ReadInt32());
                     }
@@ -136,14 +136,14 @@ namespace WolvenKit.Bundles
                 hashes = new TDynArray<UHash>();
                 hashes.Deserialize(br);
 
-                if(br.BaseStream.Position == br.BaseStream.Length)
+                if (br.BaseStream.Position == br.BaseStream.Length)
                 {
                     Console.WriteLine("Succesfully read everything.");
 
                 }
                 else
                 {
-                    Console.WriteLine($"Reader is at {br.BaseStream.Position} bytes. File length is { br.BaseStream.Length} bytes.\n{ br.BaseStream.Length-br.BaseStream.Position} bytes weren't read.");
+                    Console.WriteLine($"Reader is at {br.BaseStream.Position} bytes. File length is { br.BaseStream.Length} bytes.\n{ br.BaseStream.Length - br.BaseStream.Position} bytes weren't read.");
                 }
             }
         }
@@ -189,7 +189,7 @@ namespace WolvenKit.Bundles
             writer.WriteLine(new string('-', 80));
             writer.WriteLine("\"StringTableNameByteOffset\";\"PathHash\";\"SizeInBundle\";\"SizeInMemory\";\"FirstEntry\";\"CompressionType\";\"BufferID\";\"HasBuffer\"");
 
-            foreach(var ufi in fileInfoList)
+            foreach (var ufi in fileInfoList)
                 writer.WriteLine(ufi.StringTableNameOffset + ";" + ufi.PathHash + ";" + ufi.SizeInBundle + ";" + ufi.SizeInMemory + ";" + ufi.FirstEntry + ";" + ufi.CompressionType + ";" + ufi.bufferid + ";" + ufi.hasbuffer);
 
             writer.WriteLine(new string('-', 80));
@@ -242,7 +242,7 @@ namespace WolvenKit.Bundles
             writer.WriteLine(new string('-', 80));
             writer.WriteLine("\"Hash\";\"Unk2\"");
             foreach (var h in hashes)
-                writer.WriteLine(h.Hash+ ";" + h.Unk2);
+                writer.WriteLine(h.Hash + ";" + h.Unk2);
 
 
             Console.WriteLine("Succesfully wrote CSV dump.");
@@ -293,7 +293,7 @@ namespace WolvenKit.Bundles
         public UInt32 PathHash;
         public UInt32 SizeInBundle;
         public UInt32 SizeInMemory;
-        public UInt32  FirstEntry;
+        public UInt32 FirstEntry;
         public UInt32 CompressionType;
         public UInt32 bufferid;
         public UInt32 hasbuffer;
