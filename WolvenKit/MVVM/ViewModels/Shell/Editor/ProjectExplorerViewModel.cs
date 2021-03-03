@@ -466,7 +466,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         {
             if (File.Exists(Clipboard.GetText()))
             {
-                FileAttributes attr = File.GetAttributes(SelectedItem.FullName);
+                var attr = File.GetAttributes(SelectedItem.FullName);
                 if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                 {
                     SafeCopy(Clipboard.GetText(), SelectedItem.FullName + "\\" + Path.GetFileName(Clipboard.GetText()));

@@ -17,11 +17,11 @@ namespace WolvenKit.Functionality.Layout.Converters
                 return DependencyProperty.UnsetValue;
             }
 
-            string extension = value.ToString();
+            var extension = value.ToString();
 
             if (!string.IsNullOrEmpty(extension))
             {
-                string result = GetSmallIconForFileType(extension);
+                var result = GetSmallIconForFileType(extension);
                 var uri = new Uri("pack://application:,,,/WolvenKit;component/Resources/Media/Images/" + result);
 
                 return uri;

@@ -136,8 +136,8 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
                 // get the depot path
                 if (File.Exists(_wccLitePath) && Path.GetExtension(_wccLitePath) == ".exe" && _wccLitePath.Contains("wcc_lite.exe"))
                 {
-                    DirectoryInfo wccDir = new FileInfo(_wccLitePath).Directory.Parent.Parent;
-                    string wcc_r4data = Path.Combine(wccDir.FullName, "r4data");
+                    var wccDir = new FileInfo(_wccLitePath).Directory.Parent.Parent;
+                    var wcc_r4data = Path.Combine(wccDir.FullName, "r4data");
                     if (Directory.Exists(wcc_r4data))
                     {
                         _settingsManager.DepotPath = wcc_r4data;
@@ -377,7 +377,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
                     var wccDir = directoryInfo?.Parent?.Parent;
                     if (wccDir != null)
                     {
-                        string wccR4data = Path.Combine(wccDir.FullName, "r4data");
+                        var wccR4data = Path.Combine(wccDir.FullName, "r4data");
                         if (Directory.Exists(wccR4data))
                         {
                             _settingsManager.DepotPath = wccR4data;

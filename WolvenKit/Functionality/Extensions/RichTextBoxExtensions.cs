@@ -12,8 +12,8 @@ namespace WolvenKit.Functionality.Extensions
         //https://stackoverflow.com/a/23402165
         public static void AppendText(this RichTextBox box, string text, string color)
         {
-            BrushConverter bc = new BrushConverter();
-            TextRange tr = new TextRange(box.Document.ContentEnd, box.Document.ContentEnd);
+            var bc = new BrushConverter();
+            var tr = new TextRange(box.Document.ContentEnd, box.Document.ContentEnd);
             tr.Text = text;
             try
             {

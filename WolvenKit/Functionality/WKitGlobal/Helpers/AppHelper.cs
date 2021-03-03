@@ -197,7 +197,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             HandyControl.Tools.ConfigHelper.Instance.SetLang("en");
             var shellService = serviceLocator.ResolveType<IShellService>();
             await shellService.CreateAsync<ShellWindow>();
-            ShellWindow sh = (ShellWindow)shellService.Shell;
+            var sh = (ShellWindow)shellService.Shell;
             StaticReferences.GlobalShell = sh;
             sh.MinWidth = 1;
             sh.MinHeight = 1;
@@ -227,9 +227,9 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                     //await Task.Delay(5000);
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        FirstSetupWizardView rpv = new FirstSetupWizardView();
-                        UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
-                        UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
+                        var rpv = new FirstSetupWizardView();
+                        var zxc = new UserControlHostWindowViewModel(rpv);
+                        var uchwv = new UserControlHostWindowView(zxc);
                         rpv.ViewModelChanged += (_s, _e) =>
                         {
                             if (rpv.ViewModel == null)
@@ -260,7 +260,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         public static bool IsConnectedToInternet()
         {
-            return InternetGetConnectedState(out int Desc, 0);
+            return InternetGetConnectedState(out var Desc, 0);
         }
 
         [DllImport("wininet.dll")]

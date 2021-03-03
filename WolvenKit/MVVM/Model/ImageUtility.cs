@@ -328,19 +328,19 @@ namespace WolvenKit.MVVM.Model
         {
             int residentMipIndex = xbm.ResidentMipIndex?.val ?? 0;
 
-            int mipcount = xbm.Mipdata.elements.Count - residentMipIndex;
+            var mipcount = xbm.Mipdata.elements.Count - residentMipIndex;
 
-            uint width = xbm.Mipdata.elements[residentMipIndex].Width.val;
-            uint height = xbm.Mipdata.elements[residentMipIndex].Height.val;
+            var width = xbm.Mipdata.elements[residentMipIndex].Width.val;
+            var height = xbm.Mipdata.elements[residentMipIndex].Height.val;
 
-            Enums.ETextureCompression compression = xbm.Compression.WrappedEnum;
+            var compression = xbm.Compression.WrappedEnum;
 
             var ddsformat = ImageUtility.GetEFormatFromCompression(compression);
 
             // TODO: TEST THIS
             if (ddsformat == EFormat.R8G8B8A8_UNORM)
             {
-                Enums.ETextureRawFormat format = xbm.Format.WrappedEnum;
+                var format = xbm.Format.WrappedEnum;
                 switch (format)
                 {
                     case Enums.ETextureRawFormat.TRF_Grayscale:   // only this is ever used

@@ -47,7 +47,7 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
 
             try
             {
-                bool result = await vm.OpenFileWithInitialPathAsync();
+                var result = await vm.OpenFileWithInitialPathAsync();
 
                 // Poor mans error handling:
                 // Attempt to close this document if it appears to be invalid

@@ -91,7 +91,7 @@ namespace WolvenKit.MVVM.Model
 
         private static int RunProcess(Process process, params string[] commands)
         {
-            bool started = process.Start();
+            var started = process.Start();
             if (!started)
             {
                 //you may allow for the process to be re-used (started = false)
@@ -102,7 +102,7 @@ namespace WolvenKit.MVVM.Model
             {
                 if (commands != null && commands.Length > 0)
                 {
-                    System.IO.StreamWriter stream = process.StandardInput;
+                    var stream = process.StandardInput;
 
                     for (var i = 0; i < commands.Length; i++)
                     {
@@ -134,7 +134,7 @@ namespace WolvenKit.MVVM.Model
             //process.OutputDataReceived += (sender, e) =>
             //    { loggerService.LogString($"O: {e.Data}", Logtype.Normal); };
 
-            bool started = process.Start();
+            var started = process.Start();
             if (!started)
             {
                 //you may allow for the process to be re-used (started = false)

@@ -19,7 +19,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             RunCommand = new Functionality.Commands.RelayCommand(Run, CanRun);
 
-            List<Type> x = typeof(Common.Wcc.Wcc_lite).GetNestedTypes().ToList();//.Cast<WCC_Command>().ToList();
+            var x = typeof(Common.Wcc.Wcc_lite).GetNestedTypes().ToList();//.Cast<WCC_Command>().ToList();
             foreach (var item in x)
             {
                 var cmd = (Common.Wcc.WCC_Command)Activator.CreateInstance(item);

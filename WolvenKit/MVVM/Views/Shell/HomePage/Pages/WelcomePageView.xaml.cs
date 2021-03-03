@@ -23,17 +23,17 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
 
         private void CreateProjectButton_Click(object sender, RoutedEventArgs e)
         {
-            FirstSetupWizardView rpv = new FirstSetupWizardView();
-            UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
-            UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
+            var rpv = new FirstSetupWizardView();
+            var zxc = new UserControlHostWindowViewModel(rpv);
+            var uchwv = new UserControlHostWindowView(zxc);
             uchwv.Show();
         }
 
         private void OpenProjectButton_Click(object sender, RoutedEventArgs e)
         {
-            FirstSetupWizardView rpv = new FirstSetupWizardView();
-            UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
-            UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
+            var rpv = new FirstSetupWizardView();
+            var zxc = new UserControlHostWindowViewModel(rpv);
+            var uchwv = new UserControlHostWindowView(zxc);
             uchwv.Show();
         }
 

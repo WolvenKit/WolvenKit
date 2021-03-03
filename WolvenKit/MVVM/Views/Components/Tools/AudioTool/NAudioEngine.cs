@@ -140,7 +140,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 if (!inRepeatSet)
                 {
                     inRepeatSet = true;
-                    TimeSpan oldValue = repeatStart;
+                    var oldValue = repeatStart;
                     repeatStart = value;
                     if (oldValue != repeatStart)
                     {
@@ -160,7 +160,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 if (!inChannelSet)
                 {
                     inRepeatSet = true;
-                    TimeSpan oldValue = repeatStop;
+                    var oldValue = repeatStop;
                     repeatStop = value;
                     if (oldValue != repeatStop)
                     {
@@ -177,7 +177,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             get { return waveformData; }
             protected set
             {
-                float[] oldValue = waveformData;
+                var oldValue = waveformData;
                 waveformData = value;
                 if (oldValue != waveformData)
                 {
@@ -191,7 +191,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             get { return channelLength; }
             protected set
             {
-                double oldValue = channelLength;
+                var oldValue = channelLength;
                 channelLength = value;
                 if (oldValue != channelLength)
                 {
@@ -208,8 +208,8 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 if (!inChannelSet)
                 {
                     inChannelSet = true; // Avoid recursion
-                    double oldValue = channelPosition;
-                    double position = Math.Max(0, Math.Min(value, ChannelLength));
+                    var oldValue = channelPosition;
+                    var position = Math.Max(0, Math.Min(value, ChannelLength));
                     if (!inChannelTimerUpdate && ActiveStream != null)
                     {
                         ActiveStream.Position = (long)((position / ActiveStream.TotalTime.TotalSeconds) * ActiveStream.Length);
@@ -284,29 +284,29 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         private void waveformGenerateWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            WaveformGenerationParams waveformParams = e.Argument as WaveformGenerationParams;
-            Mp3FileReader waveformMp3Stream = new Mp3FileReader(waveformParams.Path);
-            WaveChannel32 waveformInputStream = new WaveChannel32(waveformMp3Stream);
+            var waveformParams = e.Argument as WaveformGenerationParams;
+            var waveformMp3Stream = new Mp3FileReader(waveformParams.Path);
+            var waveformInputStream = new WaveChannel32(waveformMp3Stream);
             waveformInputStream.Sample += waveStream_Sample;
 
-            int frameLength = fftDataSize;
-            int frameCount = (int)((double)waveformInputStream.Length / (double)frameLength);
-            int waveformLength = frameCount * 2;
-            byte[] readBuffer = new byte[frameLength];
+            var frameLength = fftDataSize;
+            var frameCount = (int)((double)waveformInputStream.Length / (double)frameLength);
+            var waveformLength = frameCount * 2;
+            var readBuffer = new byte[frameLength];
             waveformAggregator = new SampleAggregator(frameLength);
 
-            float maxLeftPointLevel = float.MinValue;
-            float maxRightPointLevel = float.MinValue;
-            int currentPointIndex = 0;
-            float[] waveformCompressedPoints = new float[waveformParams.Points];
-            List<float> waveformData = new List<float>();
-            List<int> waveMaxPointIndexes = new List<int>();
+            var maxLeftPointLevel = float.MinValue;
+            var maxRightPointLevel = float.MinValue;
+            var currentPointIndex = 0;
+            var waveformCompressedPoints = new float[waveformParams.Points];
+            var waveformData = new List<float>();
+            var waveMaxPointIndexes = new List<int>();
 
-            for (int i = 1; i <= waveformParams.Points; i++)
+            for (var i = 1; i <= waveformParams.Points; i++)
             {
                 waveMaxPointIndexes.Add((int)Math.Round(waveformLength * ((double)i / (double)waveformParams.Points), 0));
             }
-            int readCount = 0;
+            var readCount = 0;
             while (currentPointIndex * 2 < waveformParams.Points)
             {
                 waveformInputStream.Read(readBuffer, 0, readBuffer.Length);
@@ -334,7 +334,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 }
                 if (readCount % 3000 == 0)
                 {
-                    float[] clonedData = (float[])waveformCompressedPoints.Clone();
+                    var clonedData = (float[])waveformCompressedPoints.Clone();
                     App.Current.Dispatcher.Invoke(new Action(() =>
                     {
                         WaveformData = clonedData;
@@ -349,7 +349,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 readCount++;
             }
 
-            float[] finalClonedData = (float[])waveformCompressedPoints.Clone();
+            var finalClonedData = (float[])waveformCompressedPoints.Clone();
             App.Current.Dispatcher.Invoke(new Action(() =>
             {
                 fullLevelData = waveformData.ToArray();
@@ -474,7 +474,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             get { return fileTag; }
             set
             {
-                TagLib.File oldValue = fileTag;
+                var oldValue = fileTag;
                 fileTag = value;
                 if (oldValue != fileTag)
                 {
@@ -488,7 +488,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             get { return activeStream; }
             protected set
             {
-                WaveStream oldValue = activeStream;
+                var oldValue = activeStream;
                 activeStream = value;
                 if (oldValue != activeStream)
                 {
@@ -502,7 +502,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             get { return canPlay; }
             protected set
             {
-                bool oldValue = canPlay;
+                var oldValue = canPlay;
                 canPlay = value;
                 if (oldValue != canPlay)
                 {
@@ -516,7 +516,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             get { return canPause; }
             protected set
             {
-                bool oldValue = canPause;
+                var oldValue = canPause;
                 canPause = value;
                 if (oldValue != canPause)
                 {
@@ -530,7 +530,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             get { return canStop; }
             protected set
             {
-                bool oldValue = canStop;
+                var oldValue = canStop;
                 canStop = value;
                 if (oldValue != canStop)
                 {
@@ -544,7 +544,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             get { return isPlaying; }
             protected set
             {
-                bool oldValue = isPlaying;
+                var oldValue = isPlaying;
                 isPlaying = value;
                 if (oldValue != isPlaying)
                 {
@@ -562,8 +562,8 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         private void inputStream_Sample(object sender, SampleEventArgs e)
         {
             sampleAggregator.Add(e.Left, e.Right);
-            long repeatStartPosition = (long)((SelectionBegin.TotalSeconds / ActiveStream.TotalTime.TotalSeconds) * ActiveStream.Length);
-            long repeatStopPosition = (long)((SelectionEnd.TotalSeconds / ActiveStream.TotalTime.TotalSeconds) * ActiveStream.Length);
+            var repeatStartPosition = (long)((SelectionBegin.TotalSeconds / ActiveStream.TotalTime.TotalSeconds) * ActiveStream.Length);
+            var repeatStopPosition = (long)((SelectionEnd.TotalSeconds / ActiveStream.TotalTime.TotalSeconds) * ActiveStream.Length);
             if (((SelectionEnd - SelectionBegin) >= TimeSpan.FromMilliseconds(repeatThreshold)) && ActiveStream.Position >= repeatStopPosition)
             {
                 sampleAggregator.Clear();

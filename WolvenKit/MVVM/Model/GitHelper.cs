@@ -37,7 +37,7 @@ namespace WolvenKit.MVVM.Model
             {
                 //Directory.CreateDirectory(Path.GetDirectoryName(OutputFileName));
 
-                string command = "git archive --format=zip HEAD --output=\"" + outputFileName + "\"";
+                var command = "git archive --format=zip HEAD --output=\"" + outputFileName + "\"";
 
                 //string command = "git archive master > --output=\"" + OutputFileName + "\"";
                 //command += Environment.NewLine + "tar -rf " + OutputFileName + " .git";
@@ -80,7 +80,7 @@ namespace WolvenKit.MVVM.Model
                     Directory.CreateDirectory(RepoPath);
                 }
 
-                string initargs = "git init";
+                var initargs = "git init";
                 if (!string.IsNullOrEmpty(templatedir))
                 {
                     initargs += $" --template={templatedir}";

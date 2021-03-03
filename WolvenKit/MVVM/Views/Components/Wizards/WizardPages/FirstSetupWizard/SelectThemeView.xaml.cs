@@ -66,7 +66,7 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
                                 {
                                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                                     {
-                                        Ellipse circle = new Ellipse();
+                                        var circle = new Ellipse();
                                         circle.Height = 25;
                                         circle.Width = 25;
                                         circle.Margin = new Thickness(5);

@@ -20,12 +20,12 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public void Reinit()
         {
-            ResourceDictionary themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
+            var themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
             Resources.MergedDictionaries.Add(themeResources);
             //clockDisplay.SetCurrentValue(WPFSoundVisualizationLib.DigitalClock.TimeProperty, TimeSpan.FromMilliseconds(channel.CurrentSound.GetLength(TimeUnit.MS)));
             // this.DataContext = new AudioToolViewModel();
 
-            NAudioEngine soundEngine = NAudioEngine.Instance;
+            var soundEngine = NAudioEngine.Instance;
             soundEngine.PropertyChanged += NAudioEngine_PropertyChanged;
 
             // UIHelper.Bind(soundEngine, "CanStop", StopButton, Button.IsEnabledProperty);
@@ -91,8 +91,8 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         {
             Directory.CreateDirectory(wdir);
 
-            string outf = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Path.GetFileNameWithoutExtension(path) + ".wav");
-            string arg = path + " -o " + outf;
+            var outf = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Path.GetFileNameWithoutExtension(path) + ".wav");
+            var arg = path + " -o " + outf;
             var si = new ProcessStartInfo(
                     "vgmstream\\test.exe",
                     arg
@@ -130,20 +130,20 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         private void NAudioEngine_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            NAudioEngine engine = NAudioEngine.Instance;
+            var engine = NAudioEngine.Instance;
             switch (e.PropertyName)
             {
                 case "FileTag":
                     if (engine.FileTag != null)
                     {
-                        TagLib.Tag tag = engine.FileTag.Tag;
+                        var tag = engine.FileTag.Tag;
                         if (tag.Pictures.Length > 0)
                         {
-                            using (MemoryStream albumArtworkMemStream = new MemoryStream(tag.Pictures[0].Data.Data))
+                            using (var albumArtworkMemStream = new MemoryStream(tag.Pictures[0].Data.Data))
                             {
                                 try
                                 {
-                                    BitmapImage albumImage = new BitmapImage();
+                                    var albumImage = new BitmapImage();
                                     albumImage.BeginInit();
                                     albumImage.CacheOption = BitmapCacheOption.OnLoad;
                                     albumImage.StreamSource = albumArtworkMemStream;
@@ -215,21 +215,21 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         private void LoadDarkBlueTheme()
         {
             Resources.MergedDictionaries.Clear();
-            ResourceDictionary themeResources = Application.LoadComponent(new Uri("DarkBlue.xaml", UriKind.Relative)) as ResourceDictionary;
+            var themeResources = Application.LoadComponent(new Uri("DarkBlue.xaml", UriKind.Relative)) as ResourceDictionary;
             Resources.MergedDictionaries.Add(themeResources);
         }
 
         private void LoadExpressionDarkTheme()
         {
             Resources.MergedDictionaries.Clear();
-            ResourceDictionary themeResources = Application.LoadComponent(new Uri("ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
+            var themeResources = Application.LoadComponent(new Uri("ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
             Resources.MergedDictionaries.Add(themeResources);
         }
 
         private void LoadExpressionLightTheme()
         {
             Resources.MergedDictionaries.Clear();
-            ResourceDictionary themeResources = Application.LoadComponent(new Uri("ExpressionLight.xaml", UriKind.Relative)) as ResourceDictionary;
+            var themeResources = Application.LoadComponent(new Uri("ExpressionLight.xaml", UriKind.Relative)) as ResourceDictionary;
             Resources.MergedDictionaries.Add(themeResources);
         }
 
@@ -250,7 +250,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         private void OpenFile()
         {
-            Microsoft.Win32.OpenFileDialog openDialog = new Microsoft.Win32.OpenFileDialog();
+            var openDialog = new Microsoft.Win32.OpenFileDialog();
             openDialog.Filter = "(*.mp3)|*.mp3";
             if (openDialog.ShowDialog() == true)
             {

@@ -102,7 +102,7 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
 
                 var releases = await GhubClient.Repository.Release.GetLatest("WolvenKit", "Wolven-Kit");
                 var latest = releases; // Just a temp fix so I don't spam GHub api during dev
-                ObservableCollection<GithubTimeLine> data = new ObservableCollection<GithubTimeLine>();
+                var data = new ObservableCollection<GithubTimeLine>();
 
                 var item = new GithubTimeLine() { TitleLabel = latest.TagName, TitleInfo = latest.Name, TitleStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelViolet) };
 
@@ -166,9 +166,9 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
         {
             if (IsLoaded && IsVisible && IsInitialized)
             {
-                FirstSetupWizardView rpv = new FirstSetupWizardView();
-                UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
-                UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
+                var rpv = new FirstSetupWizardView();
+                var zxc = new UserControlHostWindowViewModel(rpv);
+                var uchwv = new UserControlHostWindowView(zxc);
                 uchwv.Show();
             }
         }
@@ -186,9 +186,9 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
         {
             if (IsLoaded && IsVisible && IsInitialized)
             {
-                ProjectWizardView rpv = new ProjectWizardView();
-                UserControlHostWindowViewModel zxc = new UserControlHostWindowViewModel(rpv);
-                UserControlHostWindowView uchwv = new UserControlHostWindowView(zxc);
+                var rpv = new ProjectWizardView();
+                var zxc = new UserControlHostWindowViewModel(rpv);
+                var uchwv = new UserControlHostWindowView(zxc);
                 uchwv.Show();
             }
         }

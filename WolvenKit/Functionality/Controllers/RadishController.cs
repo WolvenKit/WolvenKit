@@ -102,14 +102,14 @@ namespace WolvenKit.Functionality.Controllers
         public ERadishStatus CheckSelf()
         {
             // first check if a file and directory with the _settings.bat exists in the modproject file folder
-            DirectoryInfo filedir = new DirectoryInfo(MainController.Get().ActiveMod.FileDirectory);
-            FileInfo settingsbat = filedir.GetFiles("*.bat", SearchOption.AllDirectories)?.FirstOrDefault(_ => _.Name == "_settings_.bat");
+            var filedir = new DirectoryInfo(MainController.Get().ActiveMod.FileDirectory);
+            var settingsbat = filedir.GetFiles("*.bat", SearchOption.AllDirectories)?.FirstOrDefault(_ => _.Name == "_settings_.bat");
             if (settingsbat == null)
             {
                 MainController.LogString("ERROR! No Radish settings file found.\r\n", Logtype.Error);
                 return ERadishStatus.NoRadish;
             }
-            DirectoryInfo radishdir = settingsbat.Directory;
+            var radishdir = settingsbat.Directory;
             if (radishdir == null)
             {
                 MainController.LogString("ERROR! No Radish mod directory found.\r\n", Logtype.Error);
@@ -126,11 +126,11 @@ namespace WolvenKit.Functionality.Controllers
 
             #region read settings
 
-            string modname = "";
-            string idspace = "";
-            string DIR_W3 = "";
-            string DIR_MODKIT = "";
-            string DIR_ENCODER = "";
+            var modname = "";
+            var idspace = "";
+            var DIR_W3 = "";
+            var DIR_MODKIT = "";
+            var DIR_ENCODER = "";
             //try
             {
                 ReadSettings(out modname, out idspace, out DIR_W3, out DIR_MODKIT, out DIR_ENCODER);
@@ -183,7 +183,7 @@ namespace WolvenKit.Functionality.Controllers
             }
 
             // read the settings file
-            ReadSettings(out string modname, out string idspace, out string DIR_W3, out string DIR_MODKIT, out string DIR_ENCODER);
+            ReadSettings(out var modname, out var idspace, out var DIR_W3, out var DIR_MODKIT, out var DIR_ENCODER);
 
             // update the radish config if necessary
             if (modname != Configuration.modname)
@@ -219,10 +219,10 @@ namespace WolvenKit.Functionality.Controllers
         {
             try
             {
-                DirectoryInfo filedir = new DirectoryInfo(Configuration.RadishProjectPath);
-                FileInfo settingsbat = filedir.GetFiles("*.bat", SearchOption.AllDirectories)?.FirstOrDefault(_ => _.Name == "_settings_.bat");
-                string[] settingslines = File.ReadAllLines(settingsbat.FullName);
-                for (int i = 0; i < settingslines.Length; i++)
+                var filedir = new DirectoryInfo(Configuration.RadishProjectPath);
+                var settingsbat = filedir.GetFiles("*.bat", SearchOption.AllDirectories)?.FirstOrDefault(_ => _.Name == "_settings_.bat");
+                var settingslines = File.ReadAllLines(settingsbat.FullName);
+                for (var i = 0; i < settingslines.Length; i++)
                 {
                     if (settingslines[i].StartsWith("set MODNAME="))
                     {
@@ -260,16 +260,16 @@ namespace WolvenKit.Functionality.Controllers
 
         private static void lineChanger(string newText, string fileName, int line_to_edit)
         {
-            string[] arrLine = File.ReadAllLines(fileName);
+            var arrLine = File.ReadAllLines(fileName);
             arrLine[line_to_edit - 1] = newText;
             File.WriteAllLines(fileName, arrLine);
         }
 
         private void ReadSettings(out string modname, out string idspace, out string DIR_W3, out string DIR_MODKIT, out string DIR_ENCODER)
         {
-            FileInfo settingsbat = new FileInfo(Directory.GetFiles(Configuration.RadishProjectPath, "*.bat", SearchOption.AllDirectories)?
+            var settingsbat = new FileInfo(Directory.GetFiles(Configuration.RadishProjectPath, "*.bat", SearchOption.AllDirectories)?
                 .First(_ => _.EndsWith("_settings_.bat")));
-            string[] settingslines = File.ReadAllLines(settingsbat.FullName);
+            var settingslines = File.ReadAllLines(settingsbat.FullName);
             modname = settingslines.First(_ => _.StartsWith("set MODNAME=")).Substring("set MODNAME=".Length);
             idspace = settingslines.First(_ => _.StartsWith("set idspace=")).Substring("set idspace=".Length);
             DIR_W3 = settingslines.First(_ => _.StartsWith("set DIR_W3=")).Substring("set DIR_W3=".Length);

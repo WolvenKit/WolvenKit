@@ -53,9 +53,9 @@ namespace WolvenKit.Functionality.Controllers
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.BundleManager)))
                 {
-                    using (StreamReader file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.BundleManager)))
+                    using (var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.BundleManager)))
                     {
-                        JsonSerializer serializer = new JsonSerializer();
+                        var serializer = new JsonSerializer();
                         serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                         serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                         serializer.TypeNameHandling = TypeNameHandling.Auto;
@@ -66,7 +66,7 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     bundleManager = new BundleManager();
                     bundleManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
-                    using (StreamWriter writer = new StreamWriter(
+                    using (var writer = new StreamWriter(
                         new FileStream(Tw3Controller.GetManagerPath(EManagerType.BundleManager), FileMode.Open)))
                     {
                         writer.Write(JsonConvert.SerializeObject(bundleManager, Formatting.None, new JsonSerializerSettings()
@@ -103,9 +103,9 @@ namespace WolvenKit.Functionality.Controllers
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.CollisionManager)))
                 {
-                    using (StreamReader file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.CollisionManager)))
+                    using (var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.CollisionManager)))
                     {
-                        JsonSerializer serializer = new JsonSerializer();
+                        var serializer = new JsonSerializer();
                         serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                         serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                         serializer.TypeNameHandling = TypeNameHandling.Auto;
@@ -150,9 +150,9 @@ namespace WolvenKit.Functionality.Controllers
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.SoundManager)))
                 {
-                    using (StreamReader file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.SoundManager)))
+                    using (var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.SoundManager)))
                     {
-                        JsonSerializer serializer = new JsonSerializer();
+                        var serializer = new JsonSerializer();
                         serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                         serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                         serializer.TypeNameHandling = TypeNameHandling.Auto;
@@ -252,7 +252,7 @@ namespace WolvenKit.Functionality.Controllers
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
                 {
-                    using (StreamReader file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
+                    using (var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
                     {
                         var serializer = new JsonSerializer();
                         serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -362,7 +362,7 @@ namespace WolvenKit.Functionality.Controllers
                 //------------------------PRE COOKING------------------------------------//
                 // have a check if somehow users forget to add a dlc folder in their dlc :(
                 // but have files inform them that it just not gonna work
-                bool initialDlcCheck = true;
+                var initialDlcCheck = true;
                 if (ActiveMod.DLCFiles.Any() && string.IsNullOrEmpty(ActiveMod.GetDlcName()))
                 {
                     _logger.LogString("Files in your DLC directory must be structured as such: dlc\\DLCNAME\\files. DLC will not be packed.", Logtype.Error);
@@ -384,7 +384,7 @@ namespace WolvenKit.Functionality.Controllers
                 WccHelper.CreateVirtualLinks();
 
                 // analyze files in dlc
-                int statusanalyzedlc = -1;
+                var statusanalyzedlc = -1;
 
                 var seedfile = Path.Combine(ActiveMod.ProjectDirectory, @"cooked", $"seed_dlc{ActiveMod.Name}.files");
 
@@ -426,7 +426,7 @@ namespace WolvenKit.Functionality.Controllers
 
                 #region Cooking
 
-                int statusCook = -1;
+                var statusCook = -1;
 
                 // cook uncooked files
                 var taskCookCol = Task.Run(() => WccHelper.Cook());
@@ -459,8 +459,8 @@ namespace WolvenKit.Functionality.Controllers
                         _logger.LogString($"Found {files.Length} files in {di.FullName}. \n");
                         foreach (var fi in files)
                         {
-                            string relpath = fi.FullName.Substring(ActiveMod.ModCookedDirectory.Length + 1);
-                            string newpath = Path.Combine(ActiveMod.CookedModDirectory, relpath);
+                            var relpath = fi.FullName.Substring(ActiveMod.ModCookedDirectory.Length + 1);
+                            var newpath = Path.Combine(ActiveMod.CookedModDirectory, relpath);
 
                             if (File.Exists(newpath))
                             {
@@ -493,8 +493,8 @@ namespace WolvenKit.Functionality.Controllers
                         _logger.LogString($"Found {files.Length} files in {di.FullName}. \n");
                         foreach (var fi in files)
                         {
-                            string relpath = fi.FullName.Substring(ActiveMod.DlcCookedDirectory.Length + 1);
-                            string newpath = Path.Combine(ActiveMod.CookedDlcDirectory, relpath);
+                            var relpath = fi.FullName.Substring(ActiveMod.DlcCookedDirectory.Length + 1);
+                            var newpath = Path.Combine(ActiveMod.CookedDlcDirectory, relpath);
 
                             if (File.Exists(newpath))
                             {
@@ -524,7 +524,7 @@ namespace WolvenKit.Functionality.Controllers
 
                 #region Packing
 
-                int statusPack = -1;
+                var statusPack = -1;
 
                 //Handle bundle packing.
                 if (packsettings.dlcPackBundles || packsettings.modPackBundles)
@@ -556,7 +556,7 @@ namespace WolvenKit.Functionality.Controllers
                 #region Metadata
 
                 //Handle metadata generation.
-                int statusMetaData = -1;
+                var statusMetaData = -1;
 
                 if (packsettings.modGenMetadata || packsettings.dlcGenMetadata)
                 {
@@ -590,8 +590,8 @@ namespace WolvenKit.Functionality.Controllers
 
                 #region Buildcache
 
-                int statusCol = -1;
-                int statusTex = -1;
+                var statusCol = -1;
+                var statusTex = -1;
 
                 //Generate collision cache
                 if (packsettings.modGenCollCache || packsettings.dlcGenCollCache)
@@ -656,7 +656,7 @@ namespace WolvenKit.Functionality.Controllers
 
                         foreach (var bnk in Directory.GetFiles(soundmoddir, "*.bnk", SearchOption.AllDirectories))
                         {
-                            Soundbank bank = new Soundbank(bnk);
+                            var bank = new Soundbank(bnk);
                             bank.readFile();
                             bank.read_wems(soundmoddir);
                             bank.rebuild_data();
@@ -715,8 +715,8 @@ namespace WolvenKit.Functionality.Controllers
 
                 #region Scripts
 
-                bool packscriptsMod = packsettings.modScripts;
-                bool packscriptsdlc = packsettings.dlcScripts;
+                var packscriptsMod = packsettings.modScripts;
+                var packscriptsdlc = packsettings.dlcScripts;
                 //Handle mod scripts
                 if (packscriptsMod && Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
                 {
@@ -725,14 +725,14 @@ namespace WolvenKit.Functionality.Controllers
                         Directory.CreateDirectory(Path.Combine(ActiveMod.ModDirectory, "scripts"));
                     }
                     //Now Create all of the directories
-                    foreach (string dirPath in Directory.GetDirectories(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*",
+                    foreach (var dirPath in Directory.GetDirectories(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
                     {
                         Directory.CreateDirectory(dirPath.Replace(Path.Combine(ActiveMod.ModDirectory, "scripts"), Path.Combine(ActiveMod.PackedModDirectory, "scripts")));
                     }
 
                     //Copy all the files & Replaces any files with the same name
-                    foreach (string newPath in Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*",
+                    foreach (var newPath in Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
                     {
                         File.Copy(newPath, newPath.Replace(Path.Combine(ActiveMod.ModDirectory, "scripts"), Path.Combine(ActiveMod.PackedModDirectory, "scripts")), true);
@@ -747,14 +747,14 @@ namespace WolvenKit.Functionality.Controllers
                         Directory.CreateDirectory(Path.Combine(ActiveMod.DlcDirectory, "scripts"));
                     }
                     //Now Create all of the directories
-                    foreach (string dirPath in Directory.GetDirectories(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*",
+                    foreach (var dirPath in Directory.GetDirectories(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
                     {
                         Directory.CreateDirectory(dirPath.Replace(Path.Combine(ActiveMod.DlcDirectory, "scripts"), Path.Combine(ActiveMod.PackedDlcDirectory, "scripts")));
                     }
 
                     //Copy all the files & Replaces any files with the same name
-                    foreach (string newPath in Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*",
+                    foreach (var newPath in Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
                     {
                         File.Copy(newPath, newPath.Replace(Path.Combine(ActiveMod.DlcDirectory, "scripts"), Path.Combine(ActiveMod.PackedDlcDirectory, "scripts")), true);
@@ -813,7 +813,7 @@ namespace WolvenKit.Functionality.Controllers
                 //Check if we have installed this mod before. If so do a little cleanup.
                 if (File.Exists(ActiveMod.ProjectDirectory + "\\install_log.xml"))
                 {
-                    XDocument log = XDocument.Load(ActiveMod.ProjectDirectory + "\\install_log.xml");
+                    var log = XDocument.Load(ActiveMod.ProjectDirectory + "\\install_log.xml");
                     var dirs = log.Root.Element("Files")?.Descendants("Directory");
                     if (dirs != null)
                     {

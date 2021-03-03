@@ -264,13 +264,13 @@ namespace WolvenKit.Functionality.Controllers
                 // check if r4depot exists
                 if (!Directory.Exists(Configuration.DepotPath))
                 {
-                    DirectoryInfo wccDir = new FileInfo(Configuration.WccLite).Directory.Parent.Parent;
+                    var wccDir = new FileInfo(Configuration.WccLite).Directory.Parent.Parent;
                     if (!wccDir.Exists)
                     {
                         throw new Exception("wcc_lite directory not specified.");
                     }
 
-                    string wcc_r4data = Path.Combine(wccDir.FullName, "r4data");
+                    var wcc_r4data = Path.Combine(wccDir.FullName, "r4data");
                     if (!Directory.Exists(wcc_r4data))
                     {
                         Directory.CreateDirectory(wcc_r4data);  //create an empty depot

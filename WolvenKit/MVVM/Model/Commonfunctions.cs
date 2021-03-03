@@ -23,19 +23,19 @@ namespace WolvenKit.MVVM.Model
         /// <param name="nameOverride">Rename the file to a costum name.</param>
         public static void CompressFile(string filename, ZipOutputStream zipStream, string nameOverride = "")
         {
-            FileInfo fi = new FileInfo(filename);
+            var fi = new FileInfo(filename);
 
-            string entryName = Path.GetFileName(filename);
+            var entryName = Path.GetFileName(filename);
             if (nameOverride != "")
             {
                 entryName = nameOverride;
             }
 
             entryName = ZipEntry.CleanName(entryName);
-            ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
+            var newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
             zipStream.PutNextEntry(newEntry);
-            byte[] buffer = new byte[4096];
-            using (FileStream streamReader = File.OpenRead(filename))
+            var buffer = new byte[4096];
+            using (var streamReader = File.OpenRead(filename))
             {
                 StreamUtils.Copy(streamReader, zipStream, buffer);
             }
@@ -50,24 +50,24 @@ namespace WolvenKit.MVVM.Model
         /// <param name="folderOffset">The folderoffset.</param>
         public static void CompressFolder(string path, ZipOutputStream zipStream, int folderOffset)
         {
-            string[] files = Directory.GetFiles(path);
+            var files = Directory.GetFiles(path);
 
-            foreach (string filename in files)
+            foreach (var filename in files)
             {
-                FileInfo fi = new FileInfo(filename);
-                string entryName = filename.Substring(folderOffset);
+                var fi = new FileInfo(filename);
+                var entryName = filename.Substring(folderOffset);
                 entryName = ZipEntry.CleanName(entryName);
-                ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
+                var newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
                 zipStream.PutNextEntry(newEntry);
-                byte[] buffer = new byte[4096];
-                using (FileStream streamReader = File.OpenRead(filename))
+                var buffer = new byte[4096];
+                using (var streamReader = File.OpenRead(filename))
                 {
                     StreamUtils.Copy(streamReader, zipStream, buffer);
                 }
                 zipStream.CloseEntry();
             }
-            string[] folders = Directory.GetDirectories(path);
-            foreach (string folder in folders)
+            var folders = Directory.GetDirectories(path);
+            foreach (var folder in folders)
             {
                 CompressFolder(folder, zipStream, folderOffset);
             }
@@ -82,9 +82,9 @@ namespace WolvenKit.MVVM.Model
         public static void CompressStream(byte[] file, string filename, ZipOutputStream zipStream)
         {
             filename = ZipEntry.CleanName(filename);
-            ZipEntry newEntry = new ZipEntry(filename) { DateTime = DateTime.Now, Size = file.Length };
+            var newEntry = new ZipEntry(filename) { DateTime = DateTime.Now, Size = file.Length };
             zipStream.PutNextEntry(newEntry);
-            byte[] buffer = new byte[4096];
+            var buffer = new byte[4096];
             StreamUtils.Copy(new MemoryStream(file), zipStream, buffer);
             zipStream.CloseEntry();
         }
@@ -95,10 +95,10 @@ namespace WolvenKit.MVVM.Model
         /// <param name="targetDir">The directory to delete.</param>
         public static void DeleteDirectory(string targetDir)
         {
-            string[] files = Directory.GetFiles(targetDir);
-            string[] dirs = Directory.GetDirectories(targetDir);
+            var files = Directory.GetFiles(targetDir);
+            var dirs = Directory.GetDirectories(targetDir);
 
-            foreach (string file in files)
+            foreach (var file in files)
             {
                 File.SetAttributes(file, FileAttributes.Normal);
                 File.Delete(file);
@@ -118,12 +118,12 @@ namespace WolvenKit.MVVM.Model
         /// <param name="target_dir">Targed directory.</param>
         public static void DeleteFilesAndFoldersRecursively(string target_dir)
         {
-            foreach (string file in Directory.EnumerateFiles(target_dir))
+            foreach (var file in Directory.EnumerateFiles(target_dir))
             {
                 File.Delete(file);
             }
 
-            foreach (string subDir in Directory.GetDirectories(target_dir))
+            foreach (var subDir in Directory.GetDirectories(target_dir))
             {
                 DeleteFilesAndFoldersRecursively(subDir);
             }
@@ -141,9 +141,9 @@ namespace WolvenKit.MVVM.Model
         /// <returns>A log of copied files.</returns>
         public static List<XElement> DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
-            List<XElement> ret = new List<XElement>();
-            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
-            DirectoryInfo[] dirs = dir.GetDirectories();
+            var ret = new List<XElement>();
+            var dir = new DirectoryInfo(sourceDirName);
+            var dirs = dir.GetDirectories();
 
             // If the source directory does not exist, throw an exception.
             if (!dir.Exists)
@@ -160,12 +160,12 @@ namespace WolvenKit.MVVM.Model
             }
 
             // Get the file contents of the directory to copy.
-            FileInfo[] files = dir.GetFiles();
+            var files = dir.GetFiles();
 
-            foreach (FileInfo file in files)
+            foreach (var file in files)
             {
                 // Create the path to the new copy of the file.
-                string temppath = Path.Combine(destDirName, file.Name);
+                var temppath = Path.Combine(destDirName, file.Name);
 
                 // Copy the file.
                 ret.Add(new XElement("file", temppath));
@@ -175,10 +175,10 @@ namespace WolvenKit.MVVM.Model
             // If copySubDirs is true, copy the subdirectories.
             if (copySubDirs)
             {
-                foreach (DirectoryInfo subdir in dirs)
+                foreach (var subdir in dirs)
                 {
                     // Create the subdirectory.
-                    string temppath = Path.Combine(destDirName, subdir.Name);
+                    var temppath = Path.Combine(destDirName, subdir.Name);
 
                     // Copy the subdirectories.
                     if (Directory.GetFiles(subdir.FullName, "*", SearchOption.AllDirectories).Any())
@@ -201,14 +201,14 @@ namespace WolvenKit.MVVM.Model
             var newdir = Path.Combine(oi.Parent.FullName, oi.Name + "_old");
             oi.MoveTo(newdir);
             //Now Create all of the directories
-            foreach (string dirPath in Directory.GetDirectories(newdir, "*",
+            foreach (var dirPath in Directory.GetDirectories(newdir, "*",
                 SearchOption.AllDirectories))
             {
                 Directory.CreateDirectory(dirPath.Replace(newdir, DestinationPath));
             }
 
             //Copy all the files & Replaces any files with the same name
-            foreach (string newPath in Directory.GetFiles(newdir, "*.*",
+            foreach (var newPath in Directory.GetFiles(newdir, "*.*",
                 SearchOption.AllDirectories))
             {
                 File.Move(newPath, newPath.Replace(newdir, DestinationPath));
@@ -226,13 +226,13 @@ namespace WolvenKit.MVVM.Model
         /// <returns></returns>
         public static string GetRelativePath(string filespec, string folder)
         {
-            Uri pathUri = new Uri(filespec);
+            var pathUri = new Uri(filespec);
             // Folders must end in a slash
             if (!folder.EndsWith(Path.DirectorySeparatorChar.ToString()))
             {
                 folder += Path.DirectorySeparatorChar;
             }
-            Uri folderUri = new Uri(folder);
+            var folderUri = new Uri(folder);
             return Uri.UnescapeDataString(folderUri.MakeRelativeUri(pathUri).ToString().Replace('/', Path.DirectorySeparatorChar));
         }
 
@@ -277,12 +277,12 @@ namespace WolvenKit.MVVM.Model
         /// <returns>The byte contents of the array.</returns>
         public static byte[] XDocToByteArray(XDocument xdoc)
         {
-            MemoryStream ms = new MemoryStream();
-            XmlWriterSettings xws = new XmlWriterSettings();
+            var ms = new MemoryStream();
+            var xws = new XmlWriterSettings();
             xws.OmitXmlDeclaration = true;
             xws.Indent = true;
 
-            using (XmlWriter xw = XmlWriter.Create(ms, xws))
+            using (var xw = XmlWriter.Create(ms, xws))
             {
                 xdoc.WriteTo(xw);
             }

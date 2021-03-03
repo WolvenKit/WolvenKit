@@ -175,18 +175,18 @@ namespace WolvenKit.Functionality.Layout.MLib
             {
                 var textContent = string.Empty;
                 // This is the same default buffer size as StreamReader and FileStream
-                int DefaultBufferSize = 4096;
+                var DefaultBufferSize = 4096;
 
                 // 1. The file is to be used for asynchronous reading.
                 // 2. The file is to be accessed sequentially from beginning to end.
-                FileOptions DefaultOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
+                var DefaultOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
 
                 using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, DefaultBufferSize, DefaultOptions))
                 {
                     var bom = new byte[4];
                     await stream.ReadAsync(bom, 0, 4);
                     stream.Seek(0, SeekOrigin.Begin);
-                    Encoding fileEncoding = GetEncoding(bom);
+                    var fileEncoding = GetEncoding(bom);
 
                     using (var reader = new StreamReader(stream, fileEncoding))
                     {

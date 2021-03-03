@@ -33,7 +33,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public static void Bind(object dataSource, string sourcePath, FrameworkElement destinationObject, DependencyProperty dp, string stringFormat, BindingMode bindingMode, IValueConverter converter)
         {
-            Binding binding = new Binding
+            var binding = new Binding
             {
                 Source = dataSource,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
@@ -47,10 +47,10 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public static T FindParent<T>(this DependencyObject child) where T : DependencyObject
         {
-            DependencyObject parent = VisualTreeHelper.GetParent(child);
+            var parent = VisualTreeHelper.GetParent(child);
             do
             {
-                T matchedParent = parent as T;
+                var matchedParent = parent as T;
                 if (matchedParent != null)
                 {
                     return matchedParent;

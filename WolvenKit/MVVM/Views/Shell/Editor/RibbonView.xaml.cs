@@ -68,22 +68,22 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
 
         private void CBCodeEditorItem_Selected(object sender, RoutedEventArgs e)
         {
-            CodeEditorView codeeditor = new CodeEditorView();
+            var codeeditor = new CodeEditorView();
         }
 
         private void CBPluginManager_Selected(object sender, RoutedEventArgs e)
         {
-            PluginManagerView pluginmanager = new PluginManagerView();
+            var pluginmanager = new PluginManagerView();
         }
 
         private void CBVisualEditorItem_Selected(object sender, RoutedEventArgs e)
         {
-            VisualEditorView visualeditor = new VisualEditorView();
+            var visualeditor = new VisualEditorView();
         }
 
         private void CBAudioToolItem_Selected(object sender, RoutedEventArgs e)
         {
-            AudioToolView audiotool = new AudioToolView();
+            var audiotool = new AudioToolView();
         }
 
         private void CBJournalEditorItem_Selected(object sender, RoutedEventArgs e)

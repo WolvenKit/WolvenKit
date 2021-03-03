@@ -190,7 +190,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             // create git repo - rerunning git init is safe
             //MainController.LogString($"Running git init command...", Logtype.Important);
-            string templatedir = Path.Combine(AppContext.BaseDirectory, "Resources/GitTemplateDir");
+            var templatedir = Path.Combine(AppContext.BaseDirectory, "Resources/GitTemplateDir");
             var resultInit = await GitHelper.InitRepository(Logger, ActiveMod.ProjectDirectory, templatedir, ActiveMod.Author, ActiveMod.Email);
             if (resultInit)
             {
@@ -205,10 +205,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 return;
             }
 
-            string sysFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.Replace("/", "-");
-            string commitMessage = ActiveMod.Name + "_" + DateTime.Now.ToString(sysFormat + "_HH-mm-ss");
-            string archiveName = commitMessage + ".zip";
-            string archivePath = Path.Combine(ActiveMod.BackupDirectory, archiveName);
+            var sysFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.Replace("/", "-");
+            var commitMessage = ActiveMod.Name + "_" + DateTime.Now.ToString(sysFormat + "_HH-mm-ss");
+            var archiveName = commitMessage + ".zip";
+            var archivePath = Path.Combine(ActiveMod.BackupDirectory, archiveName);
 
             // commit new files
             MainController.LogString($"Running Git commit command...", Common.Services.Logtype.Important);
@@ -345,7 +345,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         private CR2WFile CreateCustomCr2wFile(bool isDlc)
         {
             // ask user for type
-            List<string> availableTypes = CR2WManager.GetAvailableTypes("CResource").Select(_ => _.Name).ToList();
+            var availableTypes = CR2WManager.GetAvailableTypes("CResource").Select(_ => _.Name).ToList();
             if (availableTypes.Count <= 0)
             {
                 return null;
@@ -357,7 +357,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 .Where(_ => _.Split(' ').First() != "")
                 .ToList();
 
-            string result = m_windowFactory.ShowAddChunkFormModal(availableTypes);
+            var result = m_windowFactory.ShowAddChunkFormModal(availableTypes);
 
             var newChunktypename = result.Split(' ').Last().TrimStart("(").TrimEnd(')');
             var redextension = result.Split(' ').First();
@@ -424,8 +424,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         public void AddToMod(string relativePath, IGameArchiveManager manager, List<string> prioritizedBundles, bool addAsDLC,
             bool uncook = false, bool export = false)
         {
-            string extension = Path.GetExtension(relativePath);
-            string filename = Path.GetFileName(relativePath);
+            var extension = Path.GetExtension(relativePath);
+            var filename = Path.GetFileName(relativePath);
 
             // always uncook xbms, w2mesh, redcloth and redapex in Archive
             //if ((extension == ".xbm" /*|| Enum.GetNames(typeof(EExportable)).Contains(extension.TrimStart('.'))*/) && manager.TypeName == EBundleType.Archive)
@@ -475,7 +475,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             var archives = new Dictionary<string, IGameFile>();
             foreach (var witcherFile in files)
             {
-                string key = witcherFile.Archive.ArchiveAbsolutePath;
+                var key = witcherFile.Archive.ArchiveAbsolutePath;
                 if (!archives.ContainsKey(key))
                 {
                     archives.Add(key, witcherFile);
@@ -486,7 +486,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             var bundletype = archives.First().Value.Archive.TypeName;
             var bundletypestr = bundletype.ToString();
-            string newpath = "";
+            var newpath = "";
             switch (bundletype)
             {
                 // extract files from bundle to Cooked
@@ -648,7 +648,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 if (uncookedFilesCount > 0)
                 {
                     // Optionally Export
-                    string _newpath = addAsDLC
+                    var _newpath = addAsDLC
                         ? Path.Combine(ActiveMod.DlcUncookedDirectory, $"dlc{ActiveMod.Name}", relativePath)
                         : Path.Combine(ActiveMod.ModUncookedDirectory, relativePath);
                     if (export && File.Exists(_newpath))
@@ -720,7 +720,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 //------------------------PRE COOKING------------------------------------//
                 // have a check if somehow users forget to add a dlc folder in their dlc :(
                 // but have files inform them that it just not gonna work
-                bool initialDlcCheck = true;
+                var initialDlcCheck = true;
                 if (ActiveMod.DLCFiles.Any() && string.IsNullOrEmpty(ActiveMod.GetDlcName()))
                 {
                     Logger.LogString("Files in your DLC directory need to have the following structure: dlc\\DLCNAME\\files. DLC will not be packed.", Logtype.Error);
@@ -742,7 +742,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 WccHelper.CreateVirtualLinks();
 
                 // analyze files in dlc
-                int statusanalyzedlc = -1;
+                var statusanalyzedlc = -1;
 
                 var seedfile = Path.Combine(ActiveMod.ProjectDirectory, @"cooked", $"seed_dlc{ActiveMod.Name}.files");
 
@@ -784,7 +784,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
                 #region Cooking
 
-                int statusCook = -1;
+                var statusCook = -1;
 
                 // cook uncooked files
                 var taskCookCol = Task.Run(() => WccHelper.Cook());
@@ -817,8 +817,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         Logger.LogString($"Found {files.Length} files in {di.FullName}. \n");
                         foreach (var fi in files)
                         {
-                            string relpath = fi.FullName.Substring(ActiveMod.ModCookedDirectory.Length + 1);
-                            string newpath = Path.Combine(ActiveMod.CookedModDirectory, relpath);
+                            var relpath = fi.FullName.Substring(ActiveMod.ModCookedDirectory.Length + 1);
+                            var newpath = Path.Combine(ActiveMod.CookedModDirectory, relpath);
 
                             if (File.Exists(newpath))
                             {
@@ -851,8 +851,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         Logger.LogString($"Found {files.Length} files in {di.FullName}. \n");
                         foreach (var fi in files)
                         {
-                            string relpath = fi.FullName.Substring(ActiveMod.DlcCookedDirectory.Length + 1);
-                            string newpath = Path.Combine(ActiveMod.CookedDlcDirectory, relpath);
+                            var relpath = fi.FullName.Substring(ActiveMod.DlcCookedDirectory.Length + 1);
+                            var newpath = Path.Combine(ActiveMod.CookedDlcDirectory, relpath);
 
                             if (File.Exists(newpath))
                             {
@@ -882,7 +882,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
                 #region Packing
 
-                int statusPack = -1;
+                var statusPack = -1;
 
                 //Handle bundle packing.
                 if (packsettings.PackBundles.Item1 || packsettings.PackBundles.Item2)
@@ -914,7 +914,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 #region Metadata
 
                 //Handle metadata generation.
-                int statusMetaData = -1;
+                var statusMetaData = -1;
 
                 if (packsettings.GenMetadata.Item1 || packsettings.GenMetadata.Item2)
                 {
@@ -947,8 +947,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
                 #region Buildcache
 
-                int statusCol = -1;
-                int statusTex = -1;
+                var statusCol = -1;
+                var statusTex = -1;
 
                 //Generate collision cache
                 if (packsettings.GenCollCache.Item1 || packsettings.GenCollCache.Item2)
@@ -1012,7 +1012,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
                         foreach (var bnk in Directory.GetFiles(soundmoddir, "*.bnk", SearchOption.AllDirectories))
                         {
-                            Soundbank bank = new Soundbank(bnk);
+                            var bank = new Soundbank(bnk);
                             bank.readFile();
                             bank.read_wems(soundmoddir);
                             bank.rebuild_data();
@@ -1071,7 +1071,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
                 #region Scripts
 
-                (bool packscriptsMod, bool packscriptsdlc) = packsettings.Scripts;
+                (var packscriptsMod, var packscriptsdlc) = packsettings.Scripts;
                 //Handle mod scripts
                 if (packscriptsMod && Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
                 {
@@ -1080,14 +1080,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         Directory.CreateDirectory(Path.Combine(ActiveMod.ModDirectory, "scripts"));
                     }
                     //Now Create all of the directories
-                    foreach (string dirPath in Directory.GetDirectories(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*",
+                    foreach (var dirPath in Directory.GetDirectories(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
                     {
                         Directory.CreateDirectory(dirPath.Replace(Path.Combine(ActiveMod.ModDirectory, "scripts"), Path.Combine(ActiveMod.PackedModDirectory, "scripts")));
                     }
 
                     //Copy all the files & Replaces any files with the same name
-                    foreach (string newPath in Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*",
+                    foreach (var newPath in Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
                     {
                         File.Copy(newPath, newPath.Replace(Path.Combine(ActiveMod.ModDirectory, "scripts"), Path.Combine(ActiveMod.PackedModDirectory, "scripts")), true);
@@ -1102,14 +1102,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         Directory.CreateDirectory(Path.Combine(ActiveMod.DlcDirectory, "scripts"));
                     }
                     //Now Create all of the directories
-                    foreach (string dirPath in Directory.GetDirectories(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*",
+                    foreach (var dirPath in Directory.GetDirectories(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
                     {
                         Directory.CreateDirectory(dirPath.Replace(Path.Combine(ActiveMod.DlcDirectory, "scripts"), Path.Combine(ActiveMod.PackedDlcDirectory, "scripts")));
                     }
 
                     //Copy all the files & Replaces any files with the same name
-                    foreach (string newPath in Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*",
+                    foreach (var newPath in Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
                     {
                         File.Copy(newPath, newPath.Replace(Path.Combine(ActiveMod.DlcDirectory, "scripts"), Path.Combine(ActiveMod.PackedDlcDirectory, "scripts")), true);
@@ -1219,7 +1219,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 //Check if we have installed this mod before. If so do a little cleanup.
                 if (File.Exists(ActiveMod.ProjectDirectory + "\\install_log.xml"))
                 {
-                    XDocument log = XDocument.Load(ActiveMod.ProjectDirectory + "\\install_log.xml");
+                    var log = XDocument.Load(ActiveMod.ProjectDirectory + "\\install_log.xml");
                     var dirs = log.Root.Element("Files")?.Descendants("Directory");
                     if (dirs != null)
                     {

@@ -132,9 +132,9 @@ namespace WolvenKit.MVVM.Model
         {
             if (Icon != null && Assembly != null)
             {
-                FileStream fsOut = File.Create(OutputPath);
-                ZipOutputStream zipStream = new ZipOutputStream(fsOut);
-                int folderOffset = RootFolder.Length + (RootFolder.EndsWith("\\") ? 0 : 1);
+                var fsOut = File.Create(OutputPath);
+                var zipStream = new ZipOutputStream(fsOut);
+                var folderOffset = RootFolder.Length + (RootFolder.EndsWith("\\") ? 0 : 1);
                 Commonfunctions.CompressFolder(RootFolder, zipStream, folderOffset);
                 Commonfunctions.CompressFile(Icon, zipStream, "Icon" + Path.GetExtension(Icon));
                 Commonfunctions.CompressStream(Commonfunctions.XDocToByteArray(Assembly), "Assembly.xml", zipStream);

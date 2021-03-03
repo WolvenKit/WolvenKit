@@ -474,7 +474,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         /// <returns></returns>
         public string GetDlcCookedRelativePath()
         {
-            string relpath = "";
+            var relpath = "";
             var di = new DirectoryInfo(DlcCookedDirectory);
             if (di.Exists && di.GetDirectories().Any())
             {
@@ -529,7 +529,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         /// <returns></returns>
         public string GetDlcUncookedRelativePath()
         {
-            string relpath = "";
+            var relpath = "";
             var di = new DirectoryInfo(DlcUncookedDirectory);
             if (di.Exists && di.GetDirectories().Any())
             {

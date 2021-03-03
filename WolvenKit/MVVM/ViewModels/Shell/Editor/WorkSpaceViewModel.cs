@@ -962,7 +962,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             void OpenAudioFile(string full)
             {
-                AudioToolView z = (AudioToolView)ServiceLocator.Default.ResolveType(typeof(AudioToolView));
+                var z = (AudioToolView)ServiceLocator.Default.ResolveType(typeof(AudioToolView));
                 ExecuteAudioTool();
                 z.AddAudioItem(full);
             }
@@ -1100,7 +1100,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             // open file
             fileViewModel = new DocumentViewModel(this as IWorkSpaceViewModel, model, true);
-            bool result = await fileViewModel.OpenFileAsync(model.FullName);
+            var result = await fileViewModel.OpenFileAsync(model.FullName);
 
             if (result)
             {

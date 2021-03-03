@@ -401,7 +401,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
                 return true;
             }
 
-            bool result = await OpenFileAsync(_initialPath);
+            var result = await OpenFileAsync(_initialPath);
 
             if (result == true)
             {

@@ -211,7 +211,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         {
             // write and call temp bat file
             var settings = CurrentWorkflow;
-            string tempbatpath = Path.Combine(RadishController.Get().Configuration.RadishProjectPath, "wkit_radish_temp.bat");
+            var tempbatpath = Path.Combine(RadishController.Get().Configuration.RadishProjectPath, "wkit_radish_temp.bat");
             WriteRadishBat(tempbatpath, settings);
             RunRadishBat(new RadishBatFileWrapper(tempbatpath));
         }
@@ -222,7 +222,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         {
             // write temp bat file
             var settings = RadishController.Get().Configuration.Workflows.First(_ => _.Name == "Rebuild until pack");
-            string tempbatpath = Path.Combine(RadishController.Get().Configuration.RadishProjectPath, "wkit_radish_temp.bat");
+            var tempbatpath = Path.Combine(RadishController.Get().Configuration.RadishProjectPath, "wkit_radish_temp.bat");
             WriteRadishBat(tempbatpath, settings);
 
             // call temp bat file
@@ -235,7 +235,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         {
             // write temp bat file
             var settings = RadishController.Get().Configuration.Workflows.First(_ => _.Name == "Pack");
-            string tempbatpath = Path.Combine(RadishController.Get().Configuration.RadishProjectPath, "wkit_radish_temp.bat");
+            var tempbatpath = Path.Combine(RadishController.Get().Configuration.RadishProjectPath, "wkit_radish_temp.bat");
             WriteRadishBat(tempbatpath, settings);
 
             // call temp bat file
@@ -327,7 +327,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             void MonitorOutput(string val)
             {
                 // get logtype
-                (string text, ERadishLogFilter filter) = GetLogTypeFromString(val);
+                (var text, var filter) = GetLogTypeFromString(val);
                 // if any of the radish logtypes
                 if (filter != ERadishLogFilter.None)
                 {
@@ -387,9 +387,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             void WriteFile(string contents, ERadishLogFilter type)
             {
                 var dt = DateTime.Now;
-                string idx = RED.CRC32.Crc32Algorithm.Compute(Encoding.ASCII.GetBytes($"{dt.Year}{dt.Month}{dt.Day}{dt.Hour}{dt.Minute}{dt.Second}"))
+                var idx = RED.CRC32.Crc32Algorithm.Compute(Encoding.ASCII.GetBytes($"{dt.Year}{dt.Month}{dt.Day}{dt.Hour}{dt.Minute}{dt.Second}"))
                     .ToString();
-                string filename = $"{dt.Year}{dt.Month}{dt.Day}{dt.Hour}-{idx}";
+                var filename = $"{dt.Year}{dt.Month}{dt.Day}{dt.Hour}-{idx}";
                 switch (type)
                 {
                     case ERadishLogFilter.W2SCENE:
@@ -423,7 +423,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     default:
                         break;
                 }
-                string path = Path.Combine(RadishController.Get().WkitLoggedFiles, filename);
+                var path = Path.Combine(RadishController.Get().WkitLoggedFiles, filename);
                 File.WriteAllText(path, contents);
                 MainController.LogString($"Radish File logged {path}", Logtype.Success);
             }
@@ -493,11 +493,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 Logger.LogString($"Bat file not found: {bat.Name}", Logtype.Error);
             }
 
-            string path = bat.Path;
+            var path = bat.Path;
 
             if (bat.Interactive)
             {
-                using (Process p = new Process())
+                using (var p = new Process())
                 {
                     p.StartInfo.UseShellExecute = true;
                     p.StartInfo.FileName = path;
@@ -508,7 +508,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
             else
             {
-                using (Process p = new Process())
+                using (var p = new Process())
                 {
                     p.StartInfo.RedirectStandardError = true;
                     p.StartInfo.RedirectStandardOutput = true;
@@ -558,7 +558,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             #region create new links
 
-            string tempbatpath = Path.Combine(RadishController.Get().Configuration.RadishProjectPath, "wkit_radish_temp.bat");
+            var tempbatpath = Path.Combine(RadishController.Get().Configuration.RadishProjectPath, "wkit_radish_temp.bat");
             WriteLinksBat(tempbatpath);
             RunRadishBat(new RadishBatFileWrapper(tempbatpath));
 
@@ -581,7 +581,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             using (var fs = new FileStream(tempbatpath, FileMode.Create, FileAccess.Write))
             using (var sr = new StreamWriter(fs, Encoding.Default))
             {
-                string header =
+                var header =
                         "@echo off\r\n" +
                         "call _settings_.bat\r\n" +
                         "SET INTERACTIVE_BUILD = 0\r\n" +
@@ -771,7 +771,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             using (var fs = new FileStream(tempbatpath, FileMode.Create, FileAccess.Write))
             using (var sr = new StreamWriter(fs, Encoding.Default))
             {
-                string header =
+                var header =
                         "@echo off\r\n" +
                         "call _settings_.bat\r\n";
                 sr.Write(header);

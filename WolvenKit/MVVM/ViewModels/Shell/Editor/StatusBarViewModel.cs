@@ -73,7 +73,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             IsUpdatedInstalled = _updateService.IsUpdatedInstalled;
             //Version = VersionHelper.GetCurrentVersion(); //TODO
             Version = "Version 0.8.1"; // TempFix
-            bool Connected = InternetHelper.IsConnectedToInternet();
+            var Connected = InternetHelper.IsConnectedToInternet();
             if (Connected)
             { InternetConnected = "Connected"; }
 
@@ -106,7 +106,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         private void UpdateAutoUpdateInfo()
         {
-            string updateInfo = string.Empty;
+            var updateInfo = string.Empty;
 
             var checkForUpdates = _updateService.CheckForUpdates;
             if (!_updateService.IsUpdateSystemAvailable || !checkForUpdates)

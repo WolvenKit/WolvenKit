@@ -113,7 +113,7 @@ namespace WolvenKit.MVVM.Model
                 relPath = relPath.Substring(4);
             }
             // then, trim Mod or dlc from the path
-            bool isDLC = false;
+            var isDLC = false;
             if (relPath.Substring(0, 3) == "Mod")
             {
                 relPath = relPath.Substring(4);
@@ -125,7 +125,7 @@ namespace WolvenKit.MVVM.Model
             }
 
             // new path with new extension
-            string importext = $".{this.ImportType:G}";
+            var importext = $".{this.ImportType:G}";
             relPath = Path.ChangeExtension(relPath, importext);
 
             return (relPath, isDLC);

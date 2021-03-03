@@ -71,10 +71,10 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         /// <param name="fftBuffer">A buffer where the FFT data will be stored.</param>
         public void GetFFTResults(float[] fftBuffer)
         {
-            Complex[] channelDataClone = new Complex[bufferSize];
+            var channelDataClone = new Complex[bufferSize];
             channelData.CopyTo(channelDataClone, 0);
             FastFourierTransform.FFT(true, binaryExponentitation, channelDataClone);
-            for (int i = 0; i < channelDataClone.Length / 2; i++)
+            for (var i = 0; i < channelDataClone.Length / 2; i++)
             {
                 // Calculate actual intensities for the FFT results.
                 fftBuffer[i] = (float)Math.Sqrt(channelDataClone[i].X * channelDataClone[i].X + channelDataClone[i].Y * channelDataClone[i].Y);

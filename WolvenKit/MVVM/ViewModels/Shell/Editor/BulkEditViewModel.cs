@@ -215,7 +215,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 return 0;
             }
 
-            List<string> files = MainController.Get().ActiveMod.Files;
+            var files = MainController.Get().ActiveMod.Files;
             if (opts.Extension != null)
             {
                 files = MainController.Get().ActiveMod.Files.Where(_ => Path.GetExtension(_).Contains(opts.Extension)).ToList();
@@ -269,11 +269,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 return;
             }
 
-            List<string> excludedvalues = opts.Exclude == null ? new List<string>() : opts.Exclude.Split(',').ToList();
-            List<string> includedvalues = opts.Include == null ? new List<string>() : opts.Include.Split(',').ToList();
+            var excludedvalues = opts.Exclude == null ? new List<string>() : opts.Exclude.Split(',').ToList();
+            var includedvalues = opts.Include == null ? new List<string>() : opts.Include.Split(',').ToList();
 
             // get chunks that match chunkname
-            List<ICR2WExport> chunks = opts.ChunkName != null ? file.Chunks.Where(_ => _.data.GetType().Name == opts.ChunkName).ToList() : file.Chunks;
+            var chunks = opts.ChunkName != null ? file.Chunks.Where(_ => _.data.GetType().Name == opts.ChunkName).ToList() : file.Chunks;
 
             var splits = opts.Name.Split('.');
 
@@ -341,7 +341,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                             if (splits.Length > 1)
                             {
                                 var parent = proptoedit.ParentVar;
-                                for (int i = splits.Length; i > 0; i--)
+                                for (var i = splits.Length; i > 0; i--)
                                 {
                                     if (parent.REDName != splits[i])
                                     {
@@ -370,7 +370,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                             }
 
                             // access the val property of the CVariable because there's typeconverters from string available
-                            Member member = proptoedit.accessor.GetMembers().First(_ => _.Name == "val");
+                            var member = proptoedit.accessor.GetMembers().First(_ => _.Name == "val");
                             var converter = TypeDescriptor.GetConverter(member.Type);
                             var convertedRequestedValue = converter.ConvertFrom(opts.Value);      // convert the requested balue to the type of the cvariable
 

@@ -145,7 +145,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     return;
                 }
 
-                string importext = $".{file.ImportType:G}";
+                var importext = $".{file.ImportType:G}";
                 if (UseWolvenKitImport && importext == ".xbm")
                 {
                     // experimental: import with wkit
@@ -223,7 +223,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             if (xbmdict.ContainsKey(hash))
             {
                 var record = xbmdict[hash];
-                string stxtgroup = record.TextureGroup;
+                var stxtgroup = record.TextureGroup;
                 if (string.IsNullOrEmpty(stxtgroup))
                 {
                     //importable.TextureGroup = ETextureGroup.None;
@@ -231,7 +231,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
                 else
                 {
-                    ETextureGroup etxtgroup = (ETextureGroup)Enum.Parse(typeof(ETextureGroup), stxtgroup);
+                    var etxtgroup = (ETextureGroup)Enum.Parse(typeof(ETextureGroup), stxtgroup);
                     importable.TextureGroup = etxtgroup;
 
                     importable.SetState(ImportableFile.EObjectState.Ready);
@@ -294,8 +294,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             //List<ImportableFile> filestoAdd = new List<ImportableFile>();
             foreach (var f in importablefiles)
             {
-                string ext = Path.GetExtension(f);
-                EImportable type = (EImportable)Enum.Parse(typeof(EImportable), ext.TrimStart('.').ToLower());
+                var ext = Path.GetExtension(f);
+                var type = (EImportable)Enum.Parse(typeof(EImportable), ext.TrimStart('.').ToLower());
 
                 var importableobj = new ImportableFile(
                     f,
@@ -370,8 +370,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             // funkiest way to calculate log2, the length of the bit array is also the number of mipmaps
             // height = 1024 = 2^10 = 11 mipmaps
-            string b = System.Convert.ToString(Math.Max(height, width), 2);
-            int mipcount = b.Length;
+            var b = System.Convert.ToString(Math.Max(height, width), 2);
+            var mipcount = b.Length;
 
             xbm.Mipdata = new CCompressedBuffer<SMipData>(cr2w, xbm, "Mipdata") { IsSerialized = true };
             using (var fs = new FileStream(ddsfile, FileMode.Open, FileAccess.Read))
@@ -383,7 +383,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 var mipsizeH = height;
                 var mipsizeW = width;
                 // read data here
-                for (int i = 0; i < mipcount; i++)
+                for (var i = 0; i < mipcount; i++)
                 {
                     var buffer = reader.ReadBytes((int)GetMipMapSize(mipsizeW, mipsizeH, textureformat));
 

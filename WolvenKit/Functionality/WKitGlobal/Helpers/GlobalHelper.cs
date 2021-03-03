@@ -60,7 +60,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         public ProjectWorkFlow CreateProjectWorkFlow(string name, int id, List<ProjectWorkFlowAction> flowactions)
         {
-            ProjectWorkFlow projectWorkFlow = new ProjectWorkFlow(name, id, flowactions);
+            var projectWorkFlow = new ProjectWorkFlow(name, id, flowactions);
             return projectWorkFlow;
         }
 
@@ -94,7 +94,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         public ProjectWorkFlowAction CreateProjectWorkFlowAction(Command projectWorkFlowActionCommand)
         {
-            ProjectWorkFlowAction projectWorkFlowAction = new ProjectWorkFlowAction(projectWorkFlowActionCommand);
+            var projectWorkFlowAction = new ProjectWorkFlowAction(projectWorkFlowActionCommand);
             return projectWorkFlowAction;
         }
 

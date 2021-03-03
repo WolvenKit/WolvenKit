@@ -60,7 +60,7 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
 
                 var releases = await GhubClient.Repository.Release.GetLatest("WolvenKit", "Wolven-Kit");
                 var latest = releases; // Just a temp fix so I don't spam GHub api during dev
-                ObservableCollection<GithubTimeLine> data = new ObservableCollection<GithubTimeLine>();
+                var data = new ObservableCollection<GithubTimeLine>();
 
                 var item = new GithubTimeLine() { TitleLabel = latest.TagName, TitleInfo = latest.Name, TitleStyle = ResourceHelper.GetResource<Style>(ResourceToken.LabelViolet) };
 
