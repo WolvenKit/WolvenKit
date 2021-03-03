@@ -5,16 +5,15 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-using WolvenKit.Model;
+using System.Threading.Tasks;
+using Catel;
+using Catel.Reflection;
+using Catel.Services;
+using Orc.ProjectManagement;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
-namespace WolvenKit.Model.ProjectManagement
+namespace WolvenKit.MVVM.Model.ProjectManagement
 {
-    using System.Threading.Tasks;
-    using Catel;
-    using Catel.Reflection;
-    using Catel.Services;
-    using Orc.ProjectManagement;
-
     public class SaveProjectChangesService : ISaveProjectChangesService
     {
         #region Fields

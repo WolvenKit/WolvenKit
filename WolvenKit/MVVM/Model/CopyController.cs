@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace WolvenKit.Model
+namespace WolvenKit.MVVM.Model
 {
     using CR2W;
     using WolvenKit.Common.Model.Cr2w;

@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SaveChangesReason.cs" company="WildGums">
 //   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
 // </copyright>
@@ -10,13 +10,10 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using WolvenKit.Model;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
-namespace WolvenKit.Model.ProjectManagement
+namespace WolvenKit.MVVM.Model.ProjectManagement
 {
     public enum SaveChangesReason
     {

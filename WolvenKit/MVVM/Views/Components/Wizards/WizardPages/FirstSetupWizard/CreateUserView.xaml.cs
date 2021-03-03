@@ -1,7 +1,7 @@
 
 using Catel.IoC;
 using HandyControl.Controls;
-using WolvenKit.Model.Wizards;
+using WolvenKit.MVVM.Model.Wizards;
 using WolvenKit.MVVM.ViewModels.Components.Wizards;
 
 namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard

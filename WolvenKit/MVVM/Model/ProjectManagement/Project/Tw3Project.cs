@@ -18,7 +18,7 @@ using WolvenKit.W3Speech;
 using WolvenKit.W3Strings;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.Model
+namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {
     public sealed class Tw3Project : EditorProject, ICloneable
     {

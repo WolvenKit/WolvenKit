@@ -1,9 +1,8 @@
-using System;
 using Catel;
 using Catel.IoC;
 using Orc.ProjectManagement;
 
-namespace WolvenKit.Model.ProjectManagement
+namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
 {
     public class ProjectSerializerSelector : IProjectSerializerSelector
     {

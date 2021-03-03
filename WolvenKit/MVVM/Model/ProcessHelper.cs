@@ -1,4 +1,4 @@
-﻿// MIT License
+// MIT License
 //Copyright(c) 2018 LaughingLeader
 
 //Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,16 +24,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WolvenKit.Common.Services;
 
-namespace WolvenKit.Model
+namespace WolvenKit.MVVM.Model
 {
-	using Common.Services;
-
-
-	public static class ProcessHelper
+    public static class ProcessHelper
 	{
         /// <summary>
         /// Waits asynchronously for the process to exit.

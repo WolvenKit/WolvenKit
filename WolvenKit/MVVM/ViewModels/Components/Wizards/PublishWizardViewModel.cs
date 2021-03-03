@@ -3,8 +3,8 @@ using Catel.IoC;
 using Orc.ProjectManagement;
 using Splat;
 using WolvenKit.Common;
-using WolvenKit.Model;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Wizards
 {

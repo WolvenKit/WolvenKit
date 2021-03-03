@@ -1,34 +1,9 @@
-using CsvHelper;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
 using Catel;
 using Catel.Services;
 using Catel.Threading;
 using Orc.ProjectManagement;
-using WolvenKit.Common.DDS;
-
-
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Model;
-using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
-using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
-using WolvenKit.Common.Tools;
-using WolvenKit.Common.Wcc;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Types;
-using static WolvenKit.CR2W.Types.Enums;
-using static WolvenKit.Common.DDS.TexconvWrapper;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {

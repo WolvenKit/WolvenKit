@@ -13,7 +13,6 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Wcc;
 using WolvenKit.CR2W.Types;
-using WolvenKit.Model;
 using WolvenKit.Wwise;
 using WolvenKit.Wwise.Wwise;
 using WolvenKit.Functionality.Services;
@@ -23,6 +22,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.W3Speech;
 using WolvenKit.W3Strings;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.MVVM.Model;
 
 namespace WolvenKit.Functionality.Controllers
 {

@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:WolvenKit"
              xmlns:catel="http://schemas.catelproject.com"
              xmlns:viewModels="clr-namespace:WolvenKit"
-             xmlns:model="clr-namespace:WolvenKit.Model"
+              xmlns:model="clr-namespace:WolvenKit.MVVM.Model" 
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:behavior="clr-namespace:WolvenKit.Functionality.Behavior" 

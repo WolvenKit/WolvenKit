@@ -2,18 +2,15 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Orc.ProjectManagement;
+using WolvenKit.Common;
+using WolvenKit.Common.Model;
 
-namespace WolvenKit.Model
+namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {
-    using Common;
-    using Common.Model;
-
     public abstract class EditorProject : ProjectBase, IEquatable<EditorProject>
     {
         protected EditorProject(string location)

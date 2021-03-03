@@ -3,26 +3,21 @@
 //
 
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media;
 using Catel.IoC;
 using Catel.MVVM;
 using Orc.ProjectManagement;
 using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
-using WolvenKit.Common.FNV1A;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using ObservableObject = Catel.Data.ObservableObject;
 
-namespace WolvenKit.Model
+namespace WolvenKit.MVVM.Model
 {
     [Model]
     public class FileSystemInfoModel : ObservableObject

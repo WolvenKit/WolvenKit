@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace WolvenKit.Model.ProjectManagement
+namespace WolvenKit.MVVM.Model.ProjectManagement
 {
     using System.Threading.Tasks;
     using Catel;

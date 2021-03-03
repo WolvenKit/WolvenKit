@@ -1,6 +1,7 @@
 using Microsoft.Xaml.Behaviors;
 using System.Windows;
 using System.Windows.Controls;
+using WolvenKit.MVVM.Model;
 using WolvenKit.MVVM.ViewModels.Shell.Editor;
 using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
 
@@ -21,7 +22,7 @@ namespace WolvenKit.Functionality.Behavior
             switch (tv?.DataContext)
             {
                 case ProjectExplorerViewModel projvm:
-                    projvm.SelectedItem = tv.SelectedItem as Model.FileSystemInfoModel;
+                    projvm.SelectedItem = tv.SelectedItem as FileSystemInfoModel;
                     break;
                 case DocumentViewModel docvm:
                     docvm.SelectedChunk = tv.SelectedItem as ChunkViewModel;

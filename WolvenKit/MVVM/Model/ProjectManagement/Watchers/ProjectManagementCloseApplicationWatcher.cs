@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ProjectManagementCloseApplicationWatcher.cs" company="WildGums">
 //   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
 // </copyright>
@@ -10,13 +10,10 @@ using Catel;
 using Catel.Services;
 using Orc.ProjectManagement;
 using Orchestra;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
-namespace WolvenKit
+namespace WolvenKit.MVVM.Model.ProjectManagement.Watchers
 {
-    using Model;
-    using Model.ProjectManagement;
-    using Functionality.Services;
-
     public class ProjectManagementCloseApplicationWatcher : CloseApplicationWatcherBase
     {
         private readonly IProjectManager _projectManager;

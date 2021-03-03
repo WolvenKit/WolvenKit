@@ -1,4 +1,4 @@
-﻿// MIT License
+// MIT License
 //Copyright(c) 2018 LaughingLeader
 
 //Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,14 +22,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using WolvenKit.Common.Services;
 
-namespace WolvenKit.Model
+namespace WolvenKit.MVVM.Model
 {
-    using Common.Services;
-
     public static class GitHelper
     {
         public static async Task<bool> InitRepository(ILoggerService loggerService, string RepoPath, string templatedir = "", string AuthorName = "", string Email = "")

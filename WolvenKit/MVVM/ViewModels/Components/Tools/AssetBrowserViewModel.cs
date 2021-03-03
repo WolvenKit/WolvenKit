@@ -8,7 +8,6 @@ using Catel.IoC;
 using Orc.ProjectManagement;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.Model;
 using WolvenKit.Common.Services;
 using Catel.Services;
 using Catel;
@@ -18,6 +17,7 @@ using WolvenKit.Functionality.Controllers;
 using Orchestra.Services;
 using System.Windows.Media;
 using WolvenKit.MVVM.ViewModels.Shell.Editor;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Tools
 {

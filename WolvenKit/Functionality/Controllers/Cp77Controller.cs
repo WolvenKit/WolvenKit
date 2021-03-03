@@ -11,13 +11,14 @@ using CP77.CR2W.Types;
 using Newtonsoft.Json;
 using Orc.ProjectManagement;
 using WolvenKit.Common;
-using WolvenKit.Model;
+
 using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Services;
 using CP77.CR2W.Archive;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.ViewModels.Components.Tools;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenKit.Functionality.Controllers
 {

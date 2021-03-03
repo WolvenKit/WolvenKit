@@ -9,10 +9,12 @@ using System.Threading.Tasks;
 using Catel.Services;
 using Orc.ProjectManagement;
 using WolvenKit.Common.Services;
-using WolvenKit.Model.ProjectManagement;
+using WolvenKit.MVVM.Model.ProjectManagement;
 using System.Windows.Media;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.MVVM.Model.ProjectManagement.Serializers;
+using WolvenKit.MVVM.Model.ProjectManagement.Watchers;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -178,7 +180,7 @@ namespace WolvenKit.Functionality.Services
 
             _serviceLocator.RegisterType<IProjectSerializerSelector, ProjectSerializerSelector>();  //TODO: not needed?
             _serviceLocator.RegisterType<ISaveProjectChangesService, SaveProjectChangesService>();
-            _serviceLocator.RegisterType<IInitialProjectLocationService, Model.ProjectManagement.InitialProjectLocationService>();
+            _serviceLocator.RegisterType<IInitialProjectLocationService, MVVM.Model.ProjectManagement.InitialProjectLocationService>();
             _serviceLocator.RegisterType<IProjectInitializer, FileProjectInitializer>();
             _serviceLocator.RegisterType<IProjectRefresherSelector, MyProjectRefresherSelector>();
             _serviceLocator.RegisterType<IProjectRefresher, WolvenKitProjectRefresher>(RegistrationType.Transient);

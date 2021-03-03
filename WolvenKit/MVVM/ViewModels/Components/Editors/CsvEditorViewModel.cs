@@ -3,7 +3,7 @@ using Catel.Services;
 using Orc.ProjectManagement;
 using System.Threading.Tasks;
 using WolvenKit.Common.Services;
-using WolvenKit.Model;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.MVVM.ViewModels.Shell.Editor;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Editors

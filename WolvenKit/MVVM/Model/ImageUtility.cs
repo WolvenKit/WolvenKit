@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -6,11 +6,10 @@ using System.Runtime.InteropServices;
 using System.Drawing.Imaging;
 using WolvenKit.Common.DDS;
 using ImageFormat = Pfim.ImageFormat;
+using WolvenKit.CR2W.Types;
 
-namespace WolvenKit.Model
+namespace WolvenKit.MVVM.Model
 {
-    using CR2W.Types;
-
     public static class ImageUtility
     {
         /// <summary>

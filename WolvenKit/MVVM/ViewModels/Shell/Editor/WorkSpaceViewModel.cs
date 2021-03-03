@@ -17,7 +17,6 @@ using Catel.IoC;
 using Orc.ProjectManagement;
 using WolvenKit.MVVM.Views.Components.Wizards;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
-using WolvenKit.Model;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
@@ -30,6 +29,8 @@ using WolvenKit.MVVM.ViewModels.Components.Editors.VisualEditor;
 using WolvenKit.MVVM.ViewModels.Others;
 using WolvenKit.MVVM.ViewModels.Components.Editors;
 using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.MVVM.Model;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {

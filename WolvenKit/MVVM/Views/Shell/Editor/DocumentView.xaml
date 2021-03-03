@@ -8,7 +8,6 @@
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:behavior="clr-namespace:WolvenKit.Functionality.Behavior"
     xmlns:catel="http://schemas.catelproject.com"
-    xmlns:model="clr-namespace:WolvenKit.Model"
     xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:cmodel="clr-namespace:WolvenKit.MVVM.ViewModels.Shell.Editor"
     xmlns:types="clr-namespace:WolvenKit.Common.Model.Cr2w;assembly=WolvenKit.Common"

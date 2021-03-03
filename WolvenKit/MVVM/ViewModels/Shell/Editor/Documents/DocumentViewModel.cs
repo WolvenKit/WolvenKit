@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Drawing.Design;
 using System.Linq;
 using Catel.MVVM;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -20,8 +17,8 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.CR2W.SRT;
 using WolvenKit.Functionality.Extensions;
-using WolvenKit.Model;
-using WolvenKit.MVVM.ViewModels.Shell.Editor;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.MVVM.Model;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 {

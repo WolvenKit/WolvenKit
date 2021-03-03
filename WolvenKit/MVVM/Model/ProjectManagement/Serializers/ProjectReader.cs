@@ -1,16 +1,12 @@
-using System;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Threading;
 using Catel;
-using HandyControl.Controls;
 using Orc.ProjectManagement;
 using Orchestra.Services;
 using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
-namespace WolvenKit.Model.ProjectManagement
+namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
 {
     public class ProjectReader : ProjectReaderBase
     {

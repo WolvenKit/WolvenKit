@@ -1,6 +1,6 @@
 using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
 
-namespace WolvenKit.Common.Model
+namespace WolvenKit.MVVM.Model
 {
     /// <summary>
     /// A CR2W Form

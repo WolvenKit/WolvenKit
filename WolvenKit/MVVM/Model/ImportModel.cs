@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WolvenKit.Common;
+using WolvenKit.Common.Wcc;
 
-namespace WolvenKit.Model
+namespace WolvenKit.MVVM.Model
 {
-    using Common;
-    using Common.Wcc;
-
     public class XBMDumpRecord
     {
         public string RedName { get; set; }

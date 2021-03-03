@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Catel;
 using Orc.ProjectManagement;
 
-namespace WolvenKit.Model.ProjectManagement
+namespace WolvenKit.MVVM.Model.ProjectManagement
 {
 	public class MyProjectRefresherSelector : IProjectRefresherSelector
     {

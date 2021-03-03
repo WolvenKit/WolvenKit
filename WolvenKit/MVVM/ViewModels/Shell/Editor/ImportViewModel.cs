@@ -12,24 +12,18 @@ using Catel.Services;
 using Catel.Threading;
 using Orc.ProjectManagement;
 using WolvenKit.Common.DDS;
+using WolvenKit.Functionality.Commands;
+using WolvenKit.MVVM.Model;
+using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Services;
+using WolvenKit.Common.Wcc;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
+using static WolvenKit.CR2W.Types.Enums;
+using WolvenKit.Functionality.Controllers;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
-    using Functionality.Commands;
-    using Model;
-    using Common;
-    using Common.Extensions;
-    using WolvenKit.Common.FNV1A;
-    using Common.Model;
-    using Common.Services;
-    using Common.Tools;
-    using Common.Wcc;
-    using CR2W;
-    using CR2W.Types;
-    using static CR2W.Types.Enums;
-    using static TexconvWrapper;
-    using WolvenKit.Functionality.Controllers;
-
     public class ImportViewModel : ToolViewModel
     {
 

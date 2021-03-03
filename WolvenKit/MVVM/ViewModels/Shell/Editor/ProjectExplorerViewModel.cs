@@ -17,15 +17,16 @@ using Catel.Threading;
 using Orc.FileSystem;
 using Orc.ProjectManagement;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Model;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
-using WolvenKit.Model.ProjectManagement;
+using WolvenKit.MVVM.Model.ProjectManagement;
 using Open.ChannelExtensions;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.MVVM.Model;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {

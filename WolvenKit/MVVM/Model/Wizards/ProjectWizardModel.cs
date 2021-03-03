@@ -1,6 +1,6 @@
 using Catel.Data;
 
-namespace WolvenKit.Model.Wizards
+namespace WolvenKit.MVVM.Model.Wizards
 {
     /// <summary>
     /// Keeps track of which game was selected by the user during setting up a project.

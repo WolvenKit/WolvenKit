@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:catel="http://schemas.catelproject.com"
-    xmlns:model="clr-namespace:WolvenKit.Model" 
+    xmlns:model="clr-namespace:WolvenKit.MVVM.Model" 
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:behavior="clr-namespace:WolvenKit.Functionality.Behavior"
     xmlns:i1="http://schemas.microsoft.com/xaml/behaviors"

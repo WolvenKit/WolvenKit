@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace WolvenKit.Model
+namespace WolvenKit.MVVM.Model
 {
     using Common.Services;
     using CR2W.Types;

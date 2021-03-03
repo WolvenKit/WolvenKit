@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using WolvenKit.Functionality.Commands;
+using WolvenKit.Common;
 
-namespace WolvenKit.Model
+namespace WolvenKit.MVVM.Model
 {
-    using Functionality.Commands;
-    using Common;
     public class SearchParameters : ObservableObject, INotifyPropertyChanged, INotifyPropertyChanging
     {
 

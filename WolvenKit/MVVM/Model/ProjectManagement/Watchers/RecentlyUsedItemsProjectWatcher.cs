@@ -1,11 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RecentlyUsedItemsProjectWatcher.cs" company="WildGums">
 //   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace WolvenKit
+namespace WolvenKit.MVVM.Model.ProjectManagement.Watchers
 {
     using System;
     using System.Threading.Tasks;

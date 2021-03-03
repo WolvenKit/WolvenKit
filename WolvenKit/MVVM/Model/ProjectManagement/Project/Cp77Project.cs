@@ -3,28 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Catel.IoC;
-using CP77.Common;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Bundles;
-using WolvenKit.Cache;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
-using WolvenKit.W3Speech;
-using WolvenKit.W3Strings;
-using CP77.CR2W.Archive;
-using HandyControl.Controls;
-using System.Windows;
-using System.Windows.Threading;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.Model
+namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {
     public sealed class Cp77Project : EditorProject, ICloneable
     {

@@ -1,7 +1,7 @@
-﻿using CsvHelper.Configuration;
+using CsvHelper.Configuration;
 using WolvenKit.CR2W.Types;
 
-namespace WolvenKit.Model
+namespace WolvenKit.MVVM.Model
 {
     public class CNameMap : ClassMap<CR2W.Types.CName>
     {

@@ -9,7 +9,7 @@ using Catel.IoC;
 using Catel.Logging;
 using Orc.ProjectManagement;
 
-namespace WolvenKit.Model.ProjectManagement
+namespace WolvenKit.MVVM.Model.ProjectManagement
 {
     public class WolvenKitProjectRefresher : ProjectRefresherBase
     {

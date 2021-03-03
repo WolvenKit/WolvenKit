@@ -5,15 +5,15 @@ using Catel.MVVM;
 using Catel.Services;
 using Orchestra.Services;
 using Orc.ProjectManagement;
-using WolvenKit.Model;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
-using WolvenKit.Model.Wizards;
 using Catel.IoC;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.MVVM.ViewModels.Components.Wizards;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.MVVM.Model.Wizards;
 
 namespace WolvenKit.Functionality.Commands
 {
