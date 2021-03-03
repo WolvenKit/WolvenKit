@@ -12,8 +12,8 @@ changelog for clean-up.
 Projects :
 
 
-TextEditLib
-Bundles
+TextEditLib | Cleaned ,
+Bundles | Cleaned 
 cache
 cr2w
 net
