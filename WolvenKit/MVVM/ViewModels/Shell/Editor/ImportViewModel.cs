@@ -205,11 +205,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         private void TryGetTextureGroup(ImportableFile importable)
         {
             // check for non-texture files
-            if (importable.GetImportableType() != EImportable.bmp &&
+            if (importable.GetImportableType() is not EImportable.bmp and
                 //importable.GetImportableType() != EImportable.dds &&
-                importable.GetImportableType() != EImportable.jpg &&
-                importable.GetImportableType() != EImportable.png &&
-                importable.GetImportableType() != EImportable.tga
+                not EImportable.jpg and
+                not EImportable.png and
+                not EImportable.tga
             )
             {
                 return;
@@ -302,9 +302,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     );
 
                 // non-texture imports are ready by default (no texture group must be set)
-                if (importableobj.GetImportableType() == EImportable.apb ||
-                    importableobj.GetImportableType() == EImportable.fbx ||
-                    importableobj.GetImportableType() == EImportable.nxs
+                if (importableobj.GetImportableType() is EImportable.apb or
+                    EImportable.fbx or
+                    EImportable.nxs
                     )
                 {
                     importableobj.SetState(ImportableFile.EObjectState.Ready);
