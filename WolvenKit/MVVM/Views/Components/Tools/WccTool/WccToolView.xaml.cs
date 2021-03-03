@@ -1,5 +1,5 @@
-﻿
-namespace WolvenKit.Views.WccTool
+
+namespace WolvenKit.Components.Tools.WccTool
 {
     public partial class WccToolView
     {

@@ -1,21 +1,13 @@
-
-using Catel.Windows;
-using Sample_NAudio;
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.ViewModels.AudioTool;
-using WPFSoundVisualizationLib;
 
-namespace WolvenKit.Views.AudioTool
+namespace WolvenKit.Components.Tools.AudioTool
 {
     public partial class AudioToolView
     {

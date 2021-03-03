@@ -6,11 +6,11 @@ using Orchestra.Services;
 using System.Windows;
 using Catel.Data;
 using WolvenKit.Views.CodeEditor;
-using WolvenKit.Views.PluginManager;
 using WolvenKit.Views.VisualEditor;
-using WolvenKit.Views.AudioTool;
 using System.Windows.Media;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Components.Tools.PluginManager;
+using WolvenKit.Components.Tools.AudioTool;
 
 namespace WolvenKit.MVVM.Views.Shell.Editor
 {

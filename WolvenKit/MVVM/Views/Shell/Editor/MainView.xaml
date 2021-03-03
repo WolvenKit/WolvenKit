@@ -3,15 +3,7 @@
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:ad="clr-namespace:WolvenKit.Functionality.Layout"
-                   xmlns:views2="clr-namespace:WolvenKit.Views.AssetBrowser"
-                   xmlns:radishtool="clr-namespace:WolvenKit.Views.RadishTool"
-                   xmlns:pluginmanagerz="clr-namespace:WolvenKit.Views.PluginManager"
-                   xmlns:views21="clr-namespace:WolvenKit.Views.WccTool"
-                   xmlns:menutool="clr-namespace:WolvenKit.Views.Tools.MenuTool"
-                   xmlns:importertool="clr-namespace:WolvenKit.Views.ImporterTool"
-                   xmlns:gamedebuggertool="clr-namespace:WolvenKit.Views.GameDebuggerTool"
-                   xmlns:cr2wtotexttool="clr-namespace:WolvenKit.Views.CR2WToTextTool"
-                   xmlns:audiotoolz="clr-namespace:WolvenKit.Views.AudioTool"
+                   
                    xmlns:visualeditorz="clr-namespace:WolvenKit.Views.VisualEditor"
                    xmlns:journaleditor="clr-namespace:WolvenKit.Views.JournalEditor"
                    xmlns:hexeditor="clr-namespace:WolvenKit.Views.HexEditor"
@@ -19,7 +11,7 @@
                    xmlns:codeeditorz="clr-namespace:WolvenKit.Views.CodeEditor"
                    xmlns:bulkeditor="clr-namespace:WolvenKit.Views.BulkEditor"
                    xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-                   xmlns:cr2weditor="clr-namespace:WolvenKit.Views.Editors.CR2WEditor" xmlns:views1="clr-namespace:WolvenKit.MVVM.Views.Shell.Editor"
+                   xmlns:cr2weditor="clr-namespace:WolvenKit.Views.Editors.CR2WEditor" xmlns:views1="clr-namespace:WolvenKit.MVVM.Views.Shell.Editor" xmlns:views2="clr-namespace:WolvenKit.Components.Tools.AssetBrowser" xmlns:audiotoolz="clr-namespace:WolvenKit.Components.Tools.AudioTool" xmlns:cr2wtotexttool="clr-namespace:WolvenKit.Components.Tools.CR2WToTextTool" xmlns:gamedebuggertool="clr-namespace:WolvenKit.Components.Tools.GameDebuggerTool" xmlns:importertool="clr-namespace:WolvenKit.Components.Tools.ImporterTool" xmlns:menutool="clr-namespace:WolvenKit.Components.Tools.MenuTool" xmlns:views21="clr-namespace:WolvenKit.Components.Tools.WccTool" xmlns:radishtool="clr-namespace:WolvenKit.Components.Tools.RadishTool" xmlns:pluginmanagerz="clr-namespace:WolvenKit.Components.Tools.PluginManager"
                    IsVisibleChanged="UserControl_IsVisibleChanged_1"
                    >
 
@@ -47,7 +39,6 @@
         
 
         <DockingManager Background="Transparent" Grid.Row="0"
-                        xmlns:views="clr-namespace:WolvenKit.Views"
                         x:Name="dockManager"
                         ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}"
                         AnchorablesSource="{Binding Tools}"

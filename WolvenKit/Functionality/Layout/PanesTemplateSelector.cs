@@ -5,7 +5,6 @@ namespace WolvenKit.Functionality.Layout
 	using System.Windows.Controls;
 	using System.Windows;
 	using ViewModels;
-    using WolvenKit.Views.AssetBrowser;
     using WolvenKit.ViewModels.AssetBrowser;
     using WolvenKit.ViewModels.CodeEditor;
     using WolvenKit.ViewModels.CsvEditor;

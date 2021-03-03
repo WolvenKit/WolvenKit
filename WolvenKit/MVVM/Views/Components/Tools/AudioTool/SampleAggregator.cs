@@ -1,4 +1,4 @@
-﻿// (c) Copyright Jacob Johnston.
+// (c) Copyright Jacob Johnston.
 // This source is subject to Microsoft Public License (Ms-PL).
 // Please see http://go.microsoft.com/fwlink/?LinkID=131993 for details.
 // All other rights reserved.
@@ -6,7 +6,7 @@
 using System;
 using NAudio.Dsp;
 
-namespace Sample_NAudio
+namespace WolvenKit.Components.Tools.AudioTool
 {
     public class SampleAggregator
     {

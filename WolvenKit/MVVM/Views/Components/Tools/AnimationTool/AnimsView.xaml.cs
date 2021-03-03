@@ -1,7 +1,7 @@
 
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.Views.AnimationTool
+namespace WolvenKit.Components.Tools.AnimationTool
 {
     public partial class AnimsView
     {

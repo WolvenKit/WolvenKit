@@ -1,5 +1,5 @@
-﻿
-namespace WolvenKit.Views.RadishTool
+
+namespace WolvenKit.Components.Tools.RadishTool
 {
     public partial class RadishToolView
     {

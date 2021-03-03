@@ -2,7 +2,7 @@
 using Catel.Windows;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.Views.PluginManager
+namespace WolvenKit.Components.Tools.PluginManager
 {
     public partial class PluginManagerView
     {

@@ -1,5 +1,5 @@
-﻿
-namespace WolvenKit.Views.ImporterTool
+
+namespace WolvenKit.Components.Tools.ImporterTool
 {
     public partial class ImporterToolView
     {

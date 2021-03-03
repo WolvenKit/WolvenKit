@@ -1,27 +1,18 @@
 using Catel.MVVM;
-using SharpVectors.Converters;
-using SharpVectors.Renderers.Wpf;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
-using WolvenKit.ViewModels;
-using WolvenKit.Views.AnimationTool;
+using WolvenKit.Components.Tools.AnimationTool;
+using WolvenKit.Components.Tools.CR2WToTextTool;
+using WolvenKit.Components.Tools.GameDebuggerTool;
+using WolvenKit.Components.Tools.ImporterTool;
+using WolvenKit.Components.Tools.MenuTool;
+using WolvenKit.Components.Tools.RadishTool;
+using WolvenKit.Components.Tools.WccTool;
 using WolvenKit.Views.BulkEditor;
-using WolvenKit.Views.CR2WToTextTool;
 using WolvenKit.Views.CsvEditor;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.EditorBars;
-using WolvenKit.Views.GameDebuggerTool;
-using WolvenKit.Views.ImporterTool;
 using WolvenKit.Views.JournalEditor;
-using WolvenKit.Views.RadishTool;
-using WolvenKit.Views.Tools.MenuTool;
-using WolvenKit.Views.WccTool;
-using WolvenKit.MVVM.Views.Components.Wizards;
 
 
 namespace WolvenKit.ViewModels.HomePage.Pages
