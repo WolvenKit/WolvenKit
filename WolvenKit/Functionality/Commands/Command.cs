@@ -8,6 +8,8 @@ namespace WolvenKit.Functionality.Commands
     /// </summary>
     public abstract class Command : ICommand
     {
+        #region Events
+
         public virtual event EventHandler CanExecuteChanged
         {
             add
@@ -20,8 +22,16 @@ namespace WolvenKit.Functionality.Commands
             }
         }
 
+        #endregion Events
+
+
+
+        #region Methods
+
         public abstract bool CanExecute(object parameter);
 
         public abstract void Execute(object parameter);
+
+        #endregion Methods
     }
 }

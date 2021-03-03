@@ -28,12 +28,20 @@ namespace WolvenKit.Functionality.Controllers
 {
     public class Tw3Controller : GameControllerBase
     {
+        #region Fields
+
         private static BundleManager bundleManager;
-        private static W3StringManager w3StringManager;
-        private static TextureManager textureManager;
         private static CollisionManager collisionManager;
         private static SoundManager soundManager;
         private static SpeechManager speechManager;
+        private static TextureManager textureManager;
+        private static W3StringManager w3StringManager;
+
+        #endregion Fields
+
+
+
+        #region Methods
 
         public static BundleManager LoadBundleManager()
         {
@@ -80,89 +88,6 @@ namespace WolvenKit.Functionality.Controllers
             }
             _logger.LogString("Finished loading bundle manager.", Logtype.Success);
             return bundleManager;
-        }
-
-        public static W3StringManager LoadStringsManager()
-        {
-            var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-
-            _logger.LogString("Loading strings manager ... ", Logtype.Important);
-            try
-            {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.W3StringManager)) && new FileInfo(Tw3Controller.GetManagerPath(EManagerType.W3StringManager)).Length > 0)
-                {
-                    using (var file = File.Open(Tw3Controller.GetManagerPath(EManagerType.W3StringManager), FileMode.Open))
-                    {
-                        w3StringManager = Serializer.Deserialize<W3StringManager>(file);
-                    }
-                }
-                else
-                {
-                    w3StringManager = new W3StringManager();
-                    w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.W3ExecutablePath));
-                    Directory.CreateDirectory(Tw3Controller.ManagerCacheDir);
-                    using (var file = File.Open(Tw3Controller.GetManagerPath(EManagerType.W3StringManager), FileMode.Create))
-                    {
-                        Serializer.Serialize(file, w3StringManager);
-                    }
-
-                    _settings.ManagerVersions[(int)EManagerType.W3StringManager] = W3StringManager.SerializationVersion;
-                }
-            }
-            catch (System.Exception)
-            {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.W3StringManager)))
-                    File.Delete(Tw3Controller.GetManagerPath(EManagerType.W3StringManager));
-                w3StringManager = new W3StringManager();
-                w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.W3ExecutablePath));
-            }
-            _logger.LogString("Finished loading strings manager.", Logtype.Success);
-            return w3StringManager;
-        }
-
-        public static TextureManager LoadTextureManager()
-        {
-            var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-
-            _logger.LogString("Loading texture manager... ", Logtype.Important);
-            try
-            {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
-                {
-                    using (StreamReader file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
-                    {
-                        var serializer = new JsonSerializer();
-                        serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                        serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                        serializer.TypeNameHandling = TypeNameHandling.Auto;
-                        textureManager = (TextureManager)serializer.Deserialize(file, typeof(TextureManager));
-                    }
-                }
-                else
-                {
-                    textureManager = new TextureManager();
-                    textureManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
-                    File.WriteAllText(Tw3Controller.GetManagerPath(EManagerType.TextureManager), JsonConvert.SerializeObject(textureManager, Formatting.None, new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                        TypeNameHandling = TypeNameHandling.Auto
-                    }));
-                    _settings.ManagerVersions[(int)EManagerType.TextureManager] = TextureManager.SerializationVersion;
-                }
-            }
-            catch (System.Exception)
-            {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
-                    File.Delete(Tw3Controller.GetManagerPath(EManagerType.TextureManager));
-                textureManager = new TextureManager();
-                textureManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
-            }
-            _logger.LogString("Finished loading texture manager.", Logtype.Success);
-
-            return textureManager;
         }
 
         public static CollisionManager LoadCollisionManager()
@@ -266,6 +191,89 @@ namespace WolvenKit.Functionality.Controllers
             return speechManager;
         }
 
+        public static W3StringManager LoadStringsManager()
+        {
+            var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+
+            _logger.LogString("Loading strings manager ... ", Logtype.Important);
+            try
+            {
+                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.W3StringManager)) && new FileInfo(Tw3Controller.GetManagerPath(EManagerType.W3StringManager)).Length > 0)
+                {
+                    using (var file = File.Open(Tw3Controller.GetManagerPath(EManagerType.W3StringManager), FileMode.Open))
+                    {
+                        w3StringManager = Serializer.Deserialize<W3StringManager>(file);
+                    }
+                }
+                else
+                {
+                    w3StringManager = new W3StringManager();
+                    w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.W3ExecutablePath));
+                    Directory.CreateDirectory(Tw3Controller.ManagerCacheDir);
+                    using (var file = File.Open(Tw3Controller.GetManagerPath(EManagerType.W3StringManager), FileMode.Create))
+                    {
+                        Serializer.Serialize(file, w3StringManager);
+                    }
+
+                    _settings.ManagerVersions[(int)EManagerType.W3StringManager] = W3StringManager.SerializationVersion;
+                }
+            }
+            catch (System.Exception)
+            {
+                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.W3StringManager)))
+                    File.Delete(Tw3Controller.GetManagerPath(EManagerType.W3StringManager));
+                w3StringManager = new W3StringManager();
+                w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.W3ExecutablePath));
+            }
+            _logger.LogString("Finished loading strings manager.", Logtype.Success);
+            return w3StringManager;
+        }
+
+        public static TextureManager LoadTextureManager()
+        {
+            var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+
+            _logger.LogString("Loading texture manager... ", Logtype.Important);
+            try
+            {
+                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
+                {
+                    using (StreamReader file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
+                    {
+                        var serializer = new JsonSerializer();
+                        serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                        serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+                        serializer.TypeNameHandling = TypeNameHandling.Auto;
+                        textureManager = (TextureManager)serializer.Deserialize(file, typeof(TextureManager));
+                    }
+                }
+                else
+                {
+                    textureManager = new TextureManager();
+                    textureManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                    File.WriteAllText(Tw3Controller.GetManagerPath(EManagerType.TextureManager), JsonConvert.SerializeObject(textureManager, Formatting.None, new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                        TypeNameHandling = TypeNameHandling.Auto
+                    }));
+                    _settings.ManagerVersions[(int)EManagerType.TextureManager] = TextureManager.SerializationVersion;
+                }
+            }
+            catch (System.Exception)
+            {
+                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
+                    File.Delete(Tw3Controller.GetManagerPath(EManagerType.TextureManager));
+                textureManager = new TextureManager();
+                textureManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+            }
+            _logger.LogString("Finished loading texture manager.", Logtype.Success);
+
+            return textureManager;
+        }
+
         public override List<IGameArchiveManager> GetArchiveManagersManagers()
         {
             return new()
@@ -296,6 +304,12 @@ namespace WolvenKit.Functionality.Controllers
             };
             Parallel.ForEach(todo, _ => Task.Run(_));
             await Task.CompletedTask;
+        }
+
+        public override Task<bool> PackageMod()
+        {
+            //TODO: Create wkpackage from the mod
+            return Task.FromResult(true);
         }
 
         public async override Task<bool> PackAndInstallProject()
@@ -741,12 +755,6 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
-        public override Task<bool> PackageMod()
-        {
-            //TODO: Create wkpackage from the mod
-            return Task.FromResult(true);
-        }
-
         private static void InstallMod()
         {
             var ActiveMod = MainController.Get().ActiveMod;
@@ -819,5 +827,7 @@ namespace WolvenKit.Functionality.Controllers
                 _logger.LogString(ex.ToString() + "\n", Logtype.Error);
             }
         }
+
+        #endregion Methods
     }
 }

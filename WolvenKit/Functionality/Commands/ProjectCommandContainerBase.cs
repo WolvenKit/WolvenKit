@@ -22,10 +22,10 @@ namespace WolvenKit.Functionality.Commands
         #region Fields
 
         protected readonly ICommandManager _commandManager;
-        protected readonly IGrowlNotificationService _notificationService;
         protected readonly ILoggerService _logger;
-        protected readonly IProjectManager _projectManager;
+        protected readonly IGrowlNotificationService _notificationService;
         protected readonly IPleaseWaitService _pleaseWaitService;
+        protected readonly IProjectManager _projectManager;
 
         #endregion Fields
 
@@ -54,17 +54,18 @@ namespace WolvenKit.Functionality.Commands
 
         #endregion Constructors
 
+
+
         #region Methods
 
-        private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs e)
+        protected override bool CanExecute(object parameter)
         {
-            //Task.Run(() => ProjectActivated((EditorProject) e.OldProject, (EditorProject) e.NewProject));
-            var asd = ProjectActivated((EditorProject)e.OldProject, (EditorProject)e.NewProject);
+            if (_projectManager.ActiveProject == null)
+            {
+                return false;
+            }
 
-            //TODO: why is that here?
-            _commandManager.InvalidateCommands();
-
-            return TaskHelper.Completed;
+            return base.CanExecute(parameter);
         }
 
         protected virtual async Task ProjectActivated(EditorProject oldEditorProject, EditorProject newEditorProject)
@@ -75,14 +76,15 @@ namespace WolvenKit.Functionality.Commands
             await Task.Run(() => newEditorProject.Initialize());
         }
 
-        protected override bool CanExecute(object parameter)
+        private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs e)
         {
-            if (_projectManager.ActiveProject == null)
-            {
-                return false;
-            }
+            //Task.Run(() => ProjectActivated((EditorProject) e.OldProject, (EditorProject) e.NewProject));
+            var asd = ProjectActivated((EditorProject)e.OldProject, (EditorProject)e.NewProject);
 
-            return base.CanExecute(parameter);
+            //TODO: why is that here?
+            _commandManager.InvalidateCommands();
+
+            return TaskHelper.Completed;
         }
 
         #endregion Methods

@@ -68,8 +68,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// </summary>
         public const string ToolTitle = "Import";
 
-        private readonly IMessageService _messageService;
         private readonly ILoggerService _loggerService;
+        private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
 
         private readonly List<string> importableexts = Enum.GetNames(typeof(EImportable)).Select(_ => $".{_}".ToLower()).ToList();
@@ -80,6 +80,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         #endregion Fields
 
         //void Importableobjects_ListChanged(object sender, ListChangedEventArgs e) => OnPropertyChanged(nameof(Importableobjects));
+
+
 
         #region Properties
 
@@ -109,101 +111,22 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #region Commands
 
-        public ICommand UseLocalResourcesCommand { get; private set; }
+        public ICommand ImportCommand { get; private set; }
         public ICommand OpenFolderCommand { get; private set; }
         public ICommand TryGetTextureGroupsCommand { get; private set; }
-        public ICommand ImportCommand { get; private set; }
+        public ICommand UseLocalResourcesCommand { get; private set; }
 
         #endregion Commands
 
         #region Commands Implementation
 
-        private bool CanUseLocalResources() => MainController.Get().ActiveMod != null;
-
-        private void UseLocalResources()
-        {
-            var importablefiles = new List<string>();
-            foreach (var file in MainController.Get().ActiveMod.RawFiles)
-            {
-                var originalExt = Path.GetExtension(file);
-                var lowerExt = originalExt.ToLower();
-                if (importableexts.Contains(lowerExt))
-                {
-                    if (originalExt != lowerExt)
-                    {
-                        // rename file first because wcc can't handle uppercase file extensions
-                        var oldpath = Path.Combine(MainController.Get().ActiveMod.FileDirectory, file);
-                        var newpath = Path.ChangeExtension(oldpath, lowerExt);
-                        File.Move(oldpath, newpath);
-                    }
-
-                    importablefiles.Add(Path.ChangeExtension(file, lowerExt));
-                }
-            }
-            AddObjects(importablefiles, MainController.Get().ActiveMod.FileDirectory);
-
-            //TryGetTextureGroupsCommand.SafeExecute();
-            RaisePropertyChanged(nameof(Importableobjects));
-        }
+        private bool CanImport() => Importableobjects != null;
 
         private bool CanOpenFolder() => MainController.Get().ActiveMod != null;
 
-        private void OpenFolder()
-        {
-        }
-
         private bool CanTryGetTextureGroups() => Importableobjects != null;
 
-        private void TryGetTextureGroups()
-        {
-            foreach (var importable in Importableobjects)
-            {
-                TryGetTextureGroup(importable);
-            }
-        }
-
-        private void TryGetTextureGroup(ImportableFile importable)
-        {
-            // check for non-texture files
-            if (importable.GetImportableType() != EImportable.bmp &&
-                //importable.GetImportableType() != EImportable.dds &&
-                importable.GetImportableType() != EImportable.jpg &&
-                importable.GetImportableType() != EImportable.png &&
-                importable.GetImportableType() != EImportable.tga
-            )
-                return;
-
-            // try getting texture group from vanilla files
-            //var hash = FNV1A64HashAlgorithm.HashString();
-            var hash = Path.GetFileName(importable.GetREDRelativePath().Item1);
-            if (xbmdict.ContainsKey(hash))
-            {
-                var record = xbmdict[hash];
-                string stxtgroup = record.TextureGroup;
-                if (string.IsNullOrEmpty(stxtgroup))
-                {
-                    //importable.TextureGroup = ETextureGroup.None;
-                    importable.SetState(ImportableFile.EObjectState.NoTextureGroup);
-                }
-                else
-                {
-                    ETextureGroup etxtgroup = (ETextureGroup)Enum.Parse(typeof(ETextureGroup), stxtgroup);
-                    importable.TextureGroup = etxtgroup;
-
-                    importable.SetState(ImportableFile.EObjectState.Ready);
-                    importable.IsSelected = true;
-                }
-            }
-            else
-            {
-                importable.TextureGroup = ETextureGroup.Default;
-                importable.SetState(ImportableFile.EObjectState.Ready);
-                importable.IsSelected = true;
-                //importable.SetState(ImportableFile.EObjectState.NoTextureGroup);
-            }
-        }
-
-        private bool CanImport() => Importableobjects != null;
+        private bool CanUseLocalResources() => MainController.Get().ActiveMod != null;
 
         private async void Import()
         {
@@ -271,47 +194,125 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
+        private void OpenFolder()
+        {
+        }
+
+        private void TryGetTextureGroup(ImportableFile importable)
+        {
+            // check for non-texture files
+            if (importable.GetImportableType() != EImportable.bmp &&
+                //importable.GetImportableType() != EImportable.dds &&
+                importable.GetImportableType() != EImportable.jpg &&
+                importable.GetImportableType() != EImportable.png &&
+                importable.GetImportableType() != EImportable.tga
+            )
+                return;
+
+            // try getting texture group from vanilla files
+            //var hash = FNV1A64HashAlgorithm.HashString();
+            var hash = Path.GetFileName(importable.GetREDRelativePath().Item1);
+            if (xbmdict.ContainsKey(hash))
+            {
+                var record = xbmdict[hash];
+                string stxtgroup = record.TextureGroup;
+                if (string.IsNullOrEmpty(stxtgroup))
+                {
+                    //importable.TextureGroup = ETextureGroup.None;
+                    importable.SetState(ImportableFile.EObjectState.NoTextureGroup);
+                }
+                else
+                {
+                    ETextureGroup etxtgroup = (ETextureGroup)Enum.Parse(typeof(ETextureGroup), stxtgroup);
+                    importable.TextureGroup = etxtgroup;
+
+                    importable.SetState(ImportableFile.EObjectState.Ready);
+                    importable.IsSelected = true;
+                }
+            }
+            else
+            {
+                importable.TextureGroup = ETextureGroup.Default;
+                importable.SetState(ImportableFile.EObjectState.Ready);
+                importable.IsSelected = true;
+                //importable.SetState(ImportableFile.EObjectState.NoTextureGroup);
+            }
+        }
+
+        private void TryGetTextureGroups()
+        {
+            foreach (var importable in Importableobjects)
+            {
+                TryGetTextureGroup(importable);
+            }
+        }
+
+        private void UseLocalResources()
+        {
+            var importablefiles = new List<string>();
+            foreach (var file in MainController.Get().ActiveMod.RawFiles)
+            {
+                var originalExt = Path.GetExtension(file);
+                var lowerExt = originalExt.ToLower();
+                if (importableexts.Contains(lowerExt))
+                {
+                    if (originalExt != lowerExt)
+                    {
+                        // rename file first because wcc can't handle uppercase file extensions
+                        var oldpath = Path.Combine(MainController.Get().ActiveMod.FileDirectory, file);
+                        var newpath = Path.ChangeExtension(oldpath, lowerExt);
+                        File.Move(oldpath, newpath);
+                    }
+
+                    importablefiles.Add(Path.ChangeExtension(file, lowerExt));
+                }
+            }
+            AddObjects(importablefiles, MainController.Get().ActiveMod.FileDirectory);
+
+            //TryGetTextureGroupsCommand.SafeExecute();
+            RaisePropertyChanged(nameof(Importableobjects));
+        }
+
         #endregion Commands Implementation
+
+
 
         #region Methods
 
-        private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs args)
+        private void AddObjects(IEnumerable<string> importablefiles, string dirpath)
         {
-            var activeProject = args.NewProject;
-            if (activeProject == null)
-                return TaskHelper.Completed;
+            Importableobjects.Clear();
+            importdepot = new DirectoryInfo(dirpath);
+            //List<ImportableFile> filestoAdd = new List<ImportableFile>();
+            foreach (var f in importablefiles)
+            {
+                string ext = Path.GetExtension(f);
+                EImportable type = (EImportable)Enum.Parse(typeof(EImportable), ext.TrimStart('.').ToLower());
 
-            return TaskHelper.Completed;
-        }
+                var importableobj = new ImportableFile(
+                    f,
+                    type,
+                    REDTypes.RawExtensionToEnum(ext)
+                    );
 
-        private Task ProjectManagerOnProjectRefreshedAsync(object sender, ProjectEventArgs e)
-        {
-            return TaskHelper.Completed;
-        }
+                // non-texture imports are ready by default (no texture group must be set)
+                if (importableobj.GetImportableType() == EImportable.apb ||
+                    importableobj.GetImportableType() == EImportable.fbx ||
+                    importableobj.GetImportableType() == EImportable.nxs
+                    )
+                {
+                    importableobj.SetState(ImportableFile.EObjectState.Ready);
+                    importableobj.IsSelected = true;
+                }
 
-        /// <summary>
-        /// Initialize commands for this window.
-        /// </summary>
-        private void SetupCommands()
-        {
-            UseLocalResourcesCommand = new RelayCommand(UseLocalResources, CanUseLocalResources);
-            OpenFolderCommand = new RelayCommand(OpenFolder, CanOpenFolder);
-            TryGetTextureGroupsCommand = new RelayCommand(TryGetTextureGroups, CanTryGetTextureGroups);
-            ImportCommand = new RelayCommand(Import, CanImport);
-        }
+                TryGetTextureGroup(importableobj);
 
-        /// <summary>
-        /// Initialize Avalondock specific defaults that are specific to this tool window.
-        /// </summary>
-        private void SetupToolDefaults()
-        {
-            ContentId = ToolContentId;           // Define a unique contentid for this toolwindow
-
-            //BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow
-            //bi.BeginInit();
-            //bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
-            //bi.EndInit();
-            //IconSource = bi;
+                if (!Importableobjects.Contains(importableobj))
+                    Importableobjects.Add(importableobj);
+                else
+                {
+                }
+            }
         }
 
         private CR2WFile CreateCr2wXbmFromImagePath(ImportableFile file)
@@ -437,6 +438,20 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
+        private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs args)
+        {
+            var activeProject = args.NewProject;
+            if (activeProject == null)
+                return TaskHelper.Completed;
+
+            return TaskHelper.Completed;
+        }
+
+        private Task ProjectManagerOnProjectRefreshedAsync(object sender, ProjectEventArgs e)
+        {
+            return TaskHelper.Completed;
+        }
+
         private void RegisterXBMDump()
         {
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MainController.XBMDumpPath);
@@ -455,40 +470,29 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-        private void AddObjects(IEnumerable<string> importablefiles, string dirpath)
+        /// <summary>
+        /// Initialize commands for this window.
+        /// </summary>
+        private void SetupCommands()
         {
-            Importableobjects.Clear();
-            importdepot = new DirectoryInfo(dirpath);
-            //List<ImportableFile> filestoAdd = new List<ImportableFile>();
-            foreach (var f in importablefiles)
-            {
-                string ext = Path.GetExtension(f);
-                EImportable type = (EImportable)Enum.Parse(typeof(EImportable), ext.TrimStart('.').ToLower());
+            UseLocalResourcesCommand = new RelayCommand(UseLocalResources, CanUseLocalResources);
+            OpenFolderCommand = new RelayCommand(OpenFolder, CanOpenFolder);
+            TryGetTextureGroupsCommand = new RelayCommand(TryGetTextureGroups, CanTryGetTextureGroups);
+            ImportCommand = new RelayCommand(Import, CanImport);
+        }
 
-                var importableobj = new ImportableFile(
-                    f,
-                    type,
-                    REDTypes.RawExtensionToEnum(ext)
-                    );
+        /// <summary>
+        /// Initialize Avalondock specific defaults that are specific to this tool window.
+        /// </summary>
+        private void SetupToolDefaults()
+        {
+            ContentId = ToolContentId;           // Define a unique contentid for this toolwindow
 
-                // non-texture imports are ready by default (no texture group must be set)
-                if (importableobj.GetImportableType() == EImportable.apb ||
-                    importableobj.GetImportableType() == EImportable.fbx ||
-                    importableobj.GetImportableType() == EImportable.nxs
-                    )
-                {
-                    importableobj.SetState(ImportableFile.EObjectState.Ready);
-                    importableobj.IsSelected = true;
-                }
-
-                TryGetTextureGroup(importableobj);
-
-                if (!Importableobjects.Contains(importableobj))
-                    Importableobjects.Add(importableobj);
-                else
-                {
-                }
-            }
+            //BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow
+            //bi.BeginInit();
+            //bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
+            //bi.EndInit();
+            //IconSource = bi;
         }
 
         #endregion Methods

@@ -13,46 +13,7 @@ namespace WolvenKit.Functionality.Layout.MLib
     {
         #region properties
 
-        /// <summary>
-        /// Get the name of the executing assembly (usually name of *.exe file)
-        /// </summary>
-        internal static string AssemblyTitle
-        {
-            get
-            {
-                return Assembly.GetEntryAssembly().GetName().Name;
-            }
-        }
-
-        //
-        // Summary:
-        //     Gets the path or UNC location of the loaded file that contains the manifest.
-        //
-        // Returns:
-        //     The location of the loaded file that contains the manifest. If the loaded
-        //     file was shadow-copied, the location is that of the file after being shadow-copied.
-        //     If the assembly is loaded from a byte array, such as when using the System.Reflection.Assembly.Load(System.Byte[])
-        //     method overload, the value returned is an empty string ("").
-        internal static string AssemblyEntryLocation
-        {
-            get
-            {
-                return AppContext.BaseDirectory;
-            }
-        }
-
-        /// <summary>
-        /// Get a path to the directory where the user store his documents
-        /// </summary>
-        public static string MyDocumentsUserDir
-        {
-            get
-            {
-                return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            }
-        }
-
-        public static string Company
+        public static string Application_Title
         {
             get
             {
@@ -60,7 +21,7 @@ namespace WolvenKit.Functionality.Layout.MLib
             }
         }
 
-        public static string Application_Title
+        public static string Company
         {
             get
             {
@@ -82,18 +43,6 @@ namespace WolvenKit.Functionality.Layout.MLib
             }
         }
 
-        ////        /// <summary>
-        ////        /// Get path and file name to application specific settings file
-        ////        /// </summary>
-        ////        public static string DirFileAppSettingsData
-        ////        {
-        ////            get
-        ////            {
-        ////                return System.IO.Path.Combine(AppCore.DirAppData,
-        ////                                              string.Format(CultureInfo.InvariantCulture, "{0}.App.settings", AppCore.AssemblyTitle));
-        ////            }
-        ////        }
-
         /// <summary>
         /// Get path and file name to application specific session file
         /// </summary>
@@ -105,6 +54,57 @@ namespace WolvenKit.Functionality.Layout.MLib
                                               string.Format(CultureInfo.InvariantCulture, "{0}.App.session", AppCore.AssemblyTitle));
             }
         }
+
+        /// <summary>
+        /// Get a path to the directory where the user store his documents
+        /// </summary>
+        public static string MyDocumentsUserDir
+        {
+            get
+            {
+                return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            }
+        }
+
+        //
+        // Summary:
+        //     Gets the path or UNC location of the loaded file that contains the manifest.
+        //
+        // Returns:
+        //     The location of the loaded file that contains the manifest. If the loaded
+        //     file was shadow-copied, the location is that of the file after being shadow-copied.
+        //     If the assembly is loaded from a byte array, such as when using the System.Reflection.Assembly.Load(System.Byte[])
+        //     method overload, the value returned is an empty string ("").
+        internal static string AssemblyEntryLocation
+        {
+            get
+            {
+                return AppContext.BaseDirectory;
+            }
+        }
+
+        /// <summary>
+        /// Get the name of the executing assembly (usually name of *.exe file)
+        /// </summary>
+        internal static string AssemblyTitle
+        {
+            get
+            {
+                return Assembly.GetEntryAssembly().GetName().Name;
+            }
+        }
+
+        ////        /// <summary>
+        ////        /// Get path and file name to application specific settings file
+        ////        /// </summary>
+        ////        public static string DirFileAppSettingsData
+        ////        {
+        ////            get
+        ////            {
+        ////                return System.IO.Path.Combine(AppCore.DirAppData,
+        ////                                              string.Format(CultureInfo.InvariantCulture, "{0}.App.settings", AppCore.AssemblyTitle));
+        ////            }
+        ////        }
 
         #endregion properties
 

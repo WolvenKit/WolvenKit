@@ -22,20 +22,17 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
     {
         #region Fields
 
-        private readonly ISettingsManager _settingsManager;
-        private readonly IUpdateService _updateService;
-        private readonly IOpenFileService _openFileService;
-
-        private string witcherexe = "";
-        private string wccLiteexe = "";
-        private string cp77eexe = "";
-
+        private const string greenBG = "#9600ff00";
+        private const string redBG = "#96ff0000";
         private const string wcc_sha256 = "fb20d7aa45b95446baac9b376533b06b86add732cbe40fd0620e4a4feffae47b";
         private const string wcc_sha256_patched = "275faa214c6263287deea47ddbcd7afcf6c2503a76ff57f2799bc158f5af7c5d";
         private const string wcc_sha256_patched2 = "104f50142fde883337d332d319d205701e8a302197360f5237e6bb426984212a";
-
-        private const string redBG = "#96ff0000";
-        private const string greenBG = "#9600ff00";
+        private readonly IOpenFileService _openFileService;
+        private readonly ISettingsManager _settingsManager;
+        private readonly IUpdateService _updateService;
+        private string cp77eexe = "";
+        private string wccLiteexe = "";
+        private string witcherexe = "";
 
         #endregion Fields
 
@@ -81,36 +78,14 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
 
         #endregion Constructors
 
+
+
         #region Properties
 
-        public bool IsUpdateSystemAvailable { get; private set; }
-        public bool CheckForUpdates { get; set; }
-
-        private string _w3ExePath;
-
-        public string W3ExePath
-        {
-            get => _w3ExePath;
-            set
-            {
-                _w3ExePath = value;
-                RaisePropertyChanged(nameof(W3ExePath));
-            }
-        }
-
-        private string _cpp77ExePath;
-
-        public string CP77ExePath
-        {
-            get => _cpp77ExePath;
-            set
-            {
-                _cpp77ExePath = value;
-                RaisePropertyChanged(nameof(CP77ExePath));
-            }
-        }
-
         private bool _allFieldIsValid = false;
+        private string _cpp77ExePath;
+        private string _w3ExePath;
+        private string _wccLitePath;
 
         public bool AllFieldIsValid
         {
@@ -122,9 +97,32 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
             }
         }
 
-        public string ExecutablePathBG => string.IsNullOrEmpty(W3ExePath) ? redBG : greenBG;
+        public List<UpdateChannel> AvailableUpdateChannels { get; private set; }
+        public bool CheckForUpdates { get; set; }
 
-        private string _wccLitePath;
+        public string CP77ExePath
+        {
+            get => _cpp77ExePath;
+            set
+            {
+                _cpp77ExePath = value;
+                RaisePropertyChanged(nameof(CP77ExePath));
+            }
+        }
+
+        public string ExecutablePathBG => string.IsNullOrEmpty(W3ExePath) ? redBG : greenBG;
+        public bool IsUpdateSystemAvailable { get; private set; }
+        public UpdateChannel UpdateChannel { get; set; }
+
+        public string W3ExePath
+        {
+            get => _w3ExePath;
+            set
+            {
+                _w3ExePath = value;
+                RaisePropertyChanged(nameof(W3ExePath));
+            }
+        }
 
         public string WccLitePath
         {
@@ -149,17 +147,25 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
         }
 
         public string WccLitePathBG => string.IsNullOrEmpty(WccLitePath) ? redBG : greenBG;
-        public List<UpdateChannel> AvailableUpdateChannels { get; private set; }
-        public UpdateChannel UpdateChannel { get; set; }
 
         #endregion Properties
 
         #region Commands
 
         public ICommand OpenCP77GamePathCommand { get; private set; }
+        public ICommand OpenDlcDirectoryCommand { get; private set; }
+        public ICommand OpenModDirectoryCommand { get; private set; }
         public ICommand OpenW3GamePathCommand { get; private set; }
 
+        public ICommand OpenWccPathCommand { get; private set; }
+
+        private bool CanOpenDlc() => true;
+
         private bool CanOpenGamePath() => true;
+
+        private bool CanOpenMod() => true;
+
+        private bool CanOpenWccPath() => true;
 
         private async void ExecuteOpenCP77GamePath()
         {
@@ -174,6 +180,10 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
             {
                 CP77ExePath = result.FileName;
             }
+        }
+
+        private void ExecuteOpenDlc()
+        {
         }
 
         private async void ExecuteOpenGamePath()
@@ -191,9 +201,9 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
             }
         }
 
-        public ICommand OpenWccPathCommand { get; private set; }
-
-        private bool CanOpenWccPath() => true;
+        private void ExecuteOpenMod()
+        {
+        }
 
         private async void ExecuteOpenWccPath()
         {
@@ -210,57 +220,13 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
             }
         }
 
-        public ICommand OpenModDirectoryCommand { get; private set; }
-
-        private bool CanOpenMod() => true;
-
-        private void ExecuteOpenMod()
-        {
-        }
-
-        public ICommand OpenDlcDirectoryCommand { get; private set; }
-
-        private bool CanOpenDlc() => true;
-
-        private void ExecuteOpenDlc()
-        {
-        }
-
         #endregion Commands
+
+
 
         #region Methods
 
-        private bool TryCopyOodleLib()
-        {
-            var path = AppDomain.CurrentDomain.BaseDirectory;
-            var dir = Path.GetDirectoryName(path);
-
-            if (dir == null)
-                return false;
-
-            var destFileName = Path.Combine(dir, "oo2ext_7_win64.dll");
-            if (File.Exists(destFileName))
-                return true;
-
-            if (!File.Exists(CP77ExePath))
-                return true;
-            var directory = new FileInfo(CP77ExePath).Directory;
-            if (directory == null)
-                return false;
-            var cp77BinDir = directory.FullName;
-            if (string.IsNullOrEmpty(cp77BinDir))
-                return false;
-
-            // copy oodle dll
-            var oodleInfo = new FileInfo(Path.Combine(cp77BinDir, "oo2ext_7_win64.dll"));
-            if (!oodleInfo.Exists)
-                return false;
-
-            if (!File.Exists(destFileName))
-                oodleInfo.CopyTo(destFileName);
-
-            return true;
-        }
+        private delegate void StrDelegate(string value);
 
         protected override async Task InitializeAsync()
         {
@@ -291,8 +257,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
 
             return await base.SaveAsync();
         }
-
-        private delegate void StrDelegate(string value);
 
         private void exeSearcherSlave_DoWork()
         {
@@ -405,6 +369,38 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
                     }
                 }
             }
+        }
+
+        private bool TryCopyOodleLib()
+        {
+            var path = AppDomain.CurrentDomain.BaseDirectory;
+            var dir = Path.GetDirectoryName(path);
+
+            if (dir == null)
+                return false;
+
+            var destFileName = Path.Combine(dir, "oo2ext_7_win64.dll");
+            if (File.Exists(destFileName))
+                return true;
+
+            if (!File.Exists(CP77ExePath))
+                return true;
+            var directory = new FileInfo(CP77ExePath).Directory;
+            if (directory == null)
+                return false;
+            var cp77BinDir = directory.FullName;
+            if (string.IsNullOrEmpty(cp77BinDir))
+                return false;
+
+            // copy oodle dll
+            var oodleInfo = new FileInfo(Path.Combine(cp77BinDir, "oo2ext_7_win64.dll"));
+            if (!oodleInfo.Exists)
+                return false;
+
+            if (!File.Exists(destFileName))
+                oodleInfo.CopyTo(destFileName);
+
+            return true;
         }
 
         #endregion Methods

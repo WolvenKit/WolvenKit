@@ -22,18 +22,26 @@ namespace WolvenKit.MVVM.Model
     [Model]
     public class FileSystemInfoModel : ObservableObject
     {
+        #region Classes
+
         private class UpdateToken : FileSystemInfoModel
         {
+            #region Constructors
+
             public UpdateToken(FileSystemInfoModel parent)
                 : base(new DirectoryInfo("DummyFileSystemObjectInfo"), parent)
             {
             }
+
+            #endregion Constructors
         }
+
+        #endregion Classes
 
         #region fields
 
-        private object _childrenLock = new();
         private readonly IProjectManager _projectManager;
+        private object _childrenLock = new();
 
         #endregion fields
 
@@ -68,9 +76,43 @@ namespace WolvenKit.MVVM.Model
 
         #region properties
 
-        public FileSystemInfoModel Parent { get; }
-
+        private ObservableCollection<FileSystemInfoModel> _children;
+        private FileSystemInfo _fileSystemInfo;
         private bool _isExpanded;
+        private bool _isSelected;
+
+        public ObservableCollection<FileSystemInfoModel> Children
+        {
+            get => _children;
+            set
+            {
+                if (_children != value)
+                {
+                    var oldValue = _children;
+                    _children = value;
+                    RaisePropertyChanged(() => Children, oldValue, value);
+                }
+            }
+        }
+
+        public string Extension => GetFileExtension();
+
+        public FileSystemInfo FileSystemInfo
+        {
+            get => _fileSystemInfo;
+            set
+            {
+                if (_fileSystemInfo != value)
+                {
+                    var oldValue = _fileSystemInfo;
+                    _fileSystemInfo = value;
+                    RaisePropertyChanged(() => FileSystemInfo, oldValue, value);
+                }
+            }
+        }
+
+        public string FullName => FileSystemInfo.FullName;
+        public bool IsDirectory => FileSystemInfo is DirectoryInfo;
 
         public bool IsExpanded
         {
@@ -89,7 +131,7 @@ namespace WolvenKit.MVVM.Model
             }
         }
 
-        private bool _isSelected;
+        public bool IsFile => FileSystemInfo is FileInfo;
 
         public bool IsSelected
         {
@@ -105,121 +147,54 @@ namespace WolvenKit.MVVM.Model
             }
         }
 
-        public bool IsDirectory => FileSystemInfo is DirectoryInfo;
-        public bool IsFile => FileSystemInfo is FileInfo;
-
-        public string Extension => GetFileExtension();
         public string Name => FileSystemInfo.Name;
-        public string FullName => FileSystemInfo.FullName;
-
-        private ObservableCollection<FileSystemInfoModel> _children;
-
-        public ObservableCollection<FileSystemInfoModel> Children
-        {
-            get => _children;
-            set
-            {
-                if (_children != value)
-                {
-                    var oldValue = _children;
-                    _children = value;
-                    RaisePropertyChanged(() => Children, oldValue, value);
-                }
-            }
-        }
-
-        private FileSystemInfo _fileSystemInfo;
-
-        public FileSystemInfo FileSystemInfo
-        {
-            get => _fileSystemInfo;
-            set
-            {
-                if (_fileSystemInfo != value)
-                {
-                    var oldValue = _fileSystemInfo;
-                    _fileSystemInfo = value;
-                    RaisePropertyChanged(() => FileSystemInfo, oldValue, value);
-                }
-            }
-        }
+        public FileSystemInfoModel Parent { get; }
 
         #endregion properties
 
         #region events
 
-        public event EventHandler RequestRefresh;
-
-        public event EventHandler BeforeExpand;
-
         public event EventHandler AfterExpand;
-
-        public event EventHandler BeforeExplore;
 
         public event EventHandler AfterExplore;
 
-        public void RaiseRequestRefresh() => RequestRefresh?.Invoke(this, EventArgs.Empty);
+        public event EventHandler BeforeExpand;
 
-        private void RaiseBeforeExpand() => BeforeExpand?.Invoke(this, EventArgs.Empty);
+        public event EventHandler BeforeExplore;
+
+        public event EventHandler RequestRefresh;
+
+        public void RaiseRequestRefresh() => RequestRefresh?.Invoke(this, EventArgs.Empty);
 
         private void RaiseAfterExpand() => AfterExpand?.Invoke(this, EventArgs.Empty);
 
-        private void RaiseBeforeExplore() => BeforeExplore?.Invoke(this, EventArgs.Empty);
-
         private void RaiseAfterExplore() => AfterExplore?.Invoke(this, EventArgs.Empty);
+
+        private void RaiseBeforeExpand() => BeforeExpand?.Invoke(this, EventArgs.Empty);
+
+        private void RaiseBeforeExplore() => BeforeExplore?.Invoke(this, EventArgs.Empty);
 
         #endregion events
 
         #region methods
 
-        private void FileSystemObjectInfo_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        public void CollapseChildren(bool recursive)
         {
-            if (!IsDirectory)
+            IsExpanded = false;
+            foreach (var info in Children)
             {
-                return;
-            }
-
-            switch (e.PropertyName)
-            {
-                case nameof(IsExpanded):
-                    RaiseBeforeExpand();
-                    if (IsExpanded)
-                    {
-                        if (HasDummy())
-                        {
-                            RaiseBeforeExplore();
-                            RemoveDummy();
-                            AddDirectories();
-                            AddFiles();
-                            RaiseAfterExplore();
-                        }
-                    }
-                    RaiseAfterExpand();
-
-                    break;
-
-                default:
-                    break;
+                info.IsExpanded = false;
+                info.CollapseChildren(recursive);
             }
         }
 
-        private void AddUpdateToken()
+        public void ExpandChildren(bool recursive)
         {
-            lock (_childrenLock)
+            IsExpanded = true;
+            foreach (var info in Children)
             {
-                Children.Add(new UpdateToken(this));
-            }
-        }
-
-        private bool HasDummy() => GetDummy() != null;
-
-        private UpdateToken GetDummy() => Children.OfType<UpdateToken>().FirstOrDefault();
-
-        private void RemoveDummy()
-        {
-            lock (_childrenLock)
-            {
-                Children.Remove(GetDummy());
+                info.IsExpanded = true;
+                info.ExpandChildren(recursive);
             }
         }
 
@@ -288,6 +263,18 @@ namespace WolvenKit.MVVM.Model
             }
         }
 
+        private void AddUpdateToken()
+        {
+            lock (_childrenLock)
+            {
+                Children.Add(new UpdateToken(this));
+            }
+        }
+
+        private void FileSystemObject_AfterExplore(object sender, EventArgs e) => RaiseAfterExplore();
+
+        private void FileSystemObject_BeforeExplore(object sender, EventArgs e) => RaiseBeforeExplore();
+
         /// <summary>
         /// Exectuted when a RequestRefresh event is raised in one of the children
         /// </summary>
@@ -322,29 +309,38 @@ namespace WolvenKit.MVVM.Model
             }
         }
 
-        private void FileSystemObject_AfterExplore(object sender, EventArgs e) => RaiseAfterExplore();
-
-        private void FileSystemObject_BeforeExplore(object sender, EventArgs e) => RaiseBeforeExplore();
-
-        public void ExpandChildren(bool recursive)
+        private void FileSystemObjectInfo_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            IsExpanded = true;
-            foreach (var info in Children)
+            if (!IsDirectory)
             {
-                info.IsExpanded = true;
-                info.ExpandChildren(recursive);
+                return;
+            }
+
+            switch (e.PropertyName)
+            {
+                case nameof(IsExpanded):
+                    RaiseBeforeExpand();
+                    if (IsExpanded)
+                    {
+                        if (HasDummy())
+                        {
+                            RaiseBeforeExplore();
+                            RemoveDummy();
+                            AddDirectories();
+                            AddFiles();
+                            RaiseAfterExplore();
+                        }
+                    }
+                    RaiseAfterExpand();
+
+                    break;
+
+                default:
+                    break;
             }
         }
 
-        public void CollapseChildren(bool recursive)
-        {
-            IsExpanded = false;
-            foreach (var info in Children)
-            {
-                info.IsExpanded = false;
-                info.CollapseChildren(recursive);
-            }
-        }
+        private UpdateToken GetDummy() => Children.OfType<UpdateToken>().FirstOrDefault();
 
         private string GetFileExtension()
         {
@@ -385,6 +381,16 @@ namespace WolvenKit.MVVM.Model
             }
             else
                 return (node as FileInfo)?.Extension;
+        }
+
+        private bool HasDummy() => GetDummy() != null;
+
+        private void RemoveDummy()
+        {
+            lock (_childrenLock)
+            {
+                Children.Remove(GetDummy());
+            }
         }
 
         #endregion methods

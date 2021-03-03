@@ -7,7 +7,13 @@ namespace WolvenKit.Functionality.Commands
 {
     public class ApplicationExitCommandContainer : Catel.MVVM.CommandContainerBase
     {
+        #region Fields
+
         private readonly INavigationService _navigationService;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ApplicationExitCommandContainer(ICommandManager commandManager, INavigationService navigationService)
             : base(AppCommands.Application.Exit, commandManager)
@@ -17,9 +23,17 @@ namespace WolvenKit.Functionality.Commands
             _navigationService = navigationService;
         }
 
+        #endregion Constructors
+
+
+
+        #region Methods
+
         protected override void Execute(object parameter)
         {
             _navigationService.CloseApplication();
         }
+
+        #endregion Methods
     }
 }

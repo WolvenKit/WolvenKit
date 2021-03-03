@@ -10,7 +10,34 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
 {
     internal class PublishWizardViewModel : ViewModelBase
     {
+        #region Properties
+
         private ILogger Logger => ServiceLocator.Default.ResolveType<ILogger>();
+
+        #endregion Properties
+
+
+
+        #region Methods
+
+        /// <summary>
+        /// Scoops up the packed files and packs it into a zip in a hierarchy that can be easily unzipped
+        /// even if the user is not using our manager
+        /// Package.wkp (zip)
+        /// |---archive\pc\*.archive
+        /// |
+        /// |---wkpmeta\<modname>\<modname>.wkmeta (json) + icon
+        /// |
+        /// |---r6\cache\tweakdbpatches\<modname>.tweakdbpatch
+        ///
+        /// </summary>
+        /// <param name="project">Project to pack</param>
+        public void CyberpunkPublishStrategy(Cp77Project project)
+        {
+            //TODO: I am not sure how to do this until we have packing
+
+            Logger.Write("Packing Cyberpunk 2077 mod complete.", LogLevel.Info);
+        }
 
         public void PublishMod()
         {
@@ -54,23 +81,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
             Logger.Write("Packing Witcher 3 mod complete.", LogLevel.Info);
         }
 
-        /// <summary>
-        /// Scoops up the packed files and packs it into a zip in a hierarchy that can be easily unzipped
-        /// even if the user is not using our manager
-        /// Package.wkp (zip)
-        /// |---archive\pc\*.archive
-        /// |
-        /// |---wkpmeta\<modname>\<modname>.wkmeta (json) + icon
-        /// |
-        /// |---r6\cache\tweakdbpatches\<modname>.tweakdbpatch
-        ///
-        /// </summary>
-        /// <param name="project">Project to pack</param>
-        public void CyberpunkPublishStrategy(Cp77Project project)
-        {
-            //TODO: I am not sure how to do this until we have packing
-
-            Logger.Write("Packing Cyberpunk 2077 mod complete.", LogLevel.Info);
-        }
+        #endregion Methods
     }
 }

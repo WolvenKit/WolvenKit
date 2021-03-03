@@ -7,6 +7,8 @@ namespace WolvenKit.MVVM.Model
 {
     public class SearchParameters : ObservableObject, INotifyPropertyChanged, INotifyPropertyChanging
     {
+        #region Constructors
+
         public SearchParameters()
         {
             CaseSensitiveCommand = new RelayCommand(CaseSensitive);
@@ -14,9 +16,17 @@ namespace WolvenKit.MVVM.Model
             RegexCommand = new RelayCommand(Regex);
         }
 
+        #endregion Constructors
+
+
+
+        #region Properties
+
         public ICommand CaseSensitiveCommand { get; }
-        public ICommand WholeWordCommand { get; }
         public ICommand RegexCommand { get; }
+        public ICommand WholeWordCommand { get; }
+
+        #endregion Properties
 
         #region SearchText
 
@@ -189,9 +199,18 @@ namespace WolvenKit.MVVM.Model
 
         #endregion IsAllSubfolders
 
+
+
+        #region Methods
+
         protected void CaseSensitive()
         {
             IsMatchCase = !IsMatchCase;
+        }
+
+        protected void Regex()
+        {
+            IsRegex = !IsRegex;
         }
 
         protected void WholeWord()
@@ -199,9 +218,6 @@ namespace WolvenKit.MVVM.Model
             IsWholeWord = !IsWholeWord;
         }
 
-        protected void Regex()
-        {
-            IsRegex = !IsRegex;
-        }
+        #endregion Methods
     }
 }

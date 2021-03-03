@@ -7,7 +7,13 @@ namespace WolvenKit.Functionality.Commands
 {
     public class ApplicationOptionsCommandContainer : Catel.MVVM.CommandContainerBase
     {
+        #region Fields
+
         private readonly INavigationService _navigationService;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ApplicationOptionsCommandContainer(ICommandManager commandManager, INavigationService navigationService)
             : base(AppCommands.Application.Options, commandManager)
@@ -17,8 +23,16 @@ namespace WolvenKit.Functionality.Commands
             _navigationService = navigationService;
         }
 
+        #endregion Constructors
+
+
+
+        #region Methods
+
         protected override void Execute(object parameter)
         {
         }
+
+        #endregion Methods
     }
 }

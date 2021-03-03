@@ -33,9 +33,10 @@ namespace WolvenKit.Functionality.Layout.MLib
         #region properties
 
         /// <summary>
-        /// Gets the Xml definition of the AvalonDock layout with a string object.
+        /// Gets an <see cref="Exception"/> that might be available if layout loading
+        /// was not succesful and additional error information is available.
         /// </summary>
-        public string XmlContent { get; }
+        public Exception LoadError { get; }
 
         /// <summary>
         /// Determines whether loading the layout was successful or not.
@@ -43,10 +44,9 @@ namespace WolvenKit.Functionality.Layout.MLib
         public bool LoadwasSuccesful { get; }
 
         /// <summary>
-        /// Gets an <see cref="Exception"/> that might be available if layout loading
-        /// was not succesful and additional error information is available.
+        /// Gets the Xml definition of the AvalonDock layout with a string object.
         /// </summary>
-        public Exception LoadError { get; }
+        public string XmlContent { get; }
 
         #endregion properties
     }

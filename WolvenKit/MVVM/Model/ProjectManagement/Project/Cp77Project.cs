@@ -20,11 +20,15 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
     {
         #region fields
 
-        private readonly ISettingsManager _settings;
         private readonly ILoggerService _logger;
+        private readonly ISettingsManager _settings;
         private Task initializeTask;
 
         #endregion fields
+
+
+
+        #region Constructors
 
         public Cp77Project(string location) : base(location)
         {
@@ -38,16 +42,11 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
         }
 
+        #endregion Constructors
+
         #region properties
 
-        public override void Save(string path)
-        {
-            using (var sf = new FileStream(path, FileMode.Create, FileAccess.Write))
-            {
-                var ser = new XmlSerializer(typeof(CP77Mod));
-                ser.Serialize(sf, (CP77Mod)this.Data);
-            }
-        }
+        public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
 
         public override void Load(string path)
         {
@@ -65,7 +64,14 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
+        public override void Save(string path)
+        {
+            using (var sf = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                var ser = new XmlSerializer(typeof(CP77Mod));
+                ser.Serialize(sf, (CP77Mod)this.Data);
+            }
+        }
 
         #region Directories
 
@@ -88,20 +94,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string ModDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(FileDirectory, "Mod");
-                if (!Directory.Exists(dir))
-                    Directory.CreateDirectory(dir);
-                return dir;
-            }
-        }
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string DlcDirectory
         {
             get
@@ -113,23 +105,23 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        #endregion Top-level Dirs
-
-        #region Cooked and Packed Directories
-
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string PackedModDirectory
+        public string ModDirectory
         {
             get
             {
-                var dir = Path.Combine(ProjectDirectory, "packed", "Mods", $"mod{Name}", "content");
+                var dir = Path.Combine(FileDirectory, "Mod");
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
                 return dir;
             }
         }
+
+        #endregion Top-level Dirs
+
+        #region Cooked and Packed Directories
 
         [XmlIgnore]
         [ReadOnly(true)]
@@ -149,28 +141,25 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string PackedModDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "packed", "Mods", $"mod{Name}", "content");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
+
         #endregion Cooked and Packed Directories
 
         #endregion Directories
 
         #region Files
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public List<string> ModFiles
-        {
-            get
-            {
-                if (!Directory.Exists(ModDirectory))
-                {
-                    Directory.CreateDirectory(ModDirectory);
-                }
-                return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file.Substring(ModDirectory.Length + 1))
-                    .ToList();
-            }
-        }
 
         [XmlIgnore]
         [ReadOnly(true)]
@@ -189,6 +178,23 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public List<string> ModFiles
+        {
+            get
+            {
+                if (!Directory.Exists(ModDirectory))
+                {
+                    Directory.CreateDirectory(ModDirectory);
+                }
+                return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories)
+                    .Select(file => file.Substring(ModDirectory.Length + 1))
+                    .ToList();
+            }
+        }
+
         #endregion Files
 
         #endregion properties
@@ -197,6 +203,20 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         // TODO: debug
         public override void Check() => _logger.LogString($"{initializeTask.Status.ToString()}", Logtype.Error);
+
+        public void CreateDefaultDirectories()
+        {
+            // create top-level directories
+            _ = ModDirectory;
+            _ = DlcDirectory;
+        }
+
+        /// <summary>
+        /// Returns the first relative folder path in the ActiveMod/dlc directory
+        /// Does not support multiple DLC
+        /// </summary>
+        /// <returns></returns>
+        public string GetDlcName() => $"dlc{Name}";
 
         public sealed override Task Initialize()
         {
@@ -240,26 +260,11 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             return Task.CompletedTask;
         }
 
-        public void CreateDefaultDirectories()
-        {
-            // create top-level directories
-            _ = ModDirectory;
-            _ = DlcDirectory;
-        }
-
-        /// <summary>
-        /// Returns the first relative folder path in the ActiveMod/dlc directory
-        /// Does not support multiple DLC
-        /// </summary>
-        /// <returns></returns>
-        public string GetDlcName() => $"dlc{Name}";
-
         #endregion methods
 
-        public override string ToString()
-        {
-            return Location;
-        }
+
+
+        #region Methods
 
         public object Clone()
         {
@@ -273,5 +278,12 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             };
             return clone;
         }
+
+        public override string ToString()
+        {
+            return Location;
+        }
+
+        #endregion Methods
     }
 }

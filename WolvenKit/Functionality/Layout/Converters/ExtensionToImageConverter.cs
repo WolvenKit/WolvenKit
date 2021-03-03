@@ -8,6 +8,8 @@ namespace WolvenKit.Functionality.Layout.Converters
 {
     public class ExtensionToImageConverter : IValueConverter
     {
+        #region Methods
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
@@ -119,5 +121,7 @@ namespace WolvenKit.Functionality.Layout.Converters
                     return $"Files/BlankFile_16x.png";
             }
         }
+
+        #endregion Methods
     }
 }

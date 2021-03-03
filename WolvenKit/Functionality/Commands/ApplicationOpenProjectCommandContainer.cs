@@ -16,9 +16,15 @@ namespace WolvenKit.Functionality.Commands
 {
     public class ApplicationOpenProjectCommandContainer : ProjectCommandContainerBase
     {
-        private readonly IOpenFileService _openFileService;
+        #region Fields
+
         private readonly IFileService _fileService;
+        private readonly IOpenFileService _openFileService;
         private new readonly IPleaseWaitService _pleaseWaitService;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ApplicationOpenProjectCommandContainer(
             ICommandManager commandManager,
@@ -38,6 +44,12 @@ namespace WolvenKit.Functionality.Commands
             _openFileService = openFileService;
             _fileService = fileService;
         }
+
+        #endregion Constructors
+
+
+
+        #region Methods
 
         protected override bool CanExecute(object parameter) => true;
 
@@ -82,5 +94,7 @@ namespace WolvenKit.Functionality.Commands
                 //Log.Error(ex, "Failed to open file");
             }
         }
+
+        #endregion Methods
     }
 }

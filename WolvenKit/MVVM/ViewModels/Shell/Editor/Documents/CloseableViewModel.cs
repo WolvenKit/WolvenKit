@@ -9,20 +9,36 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
     /// </summary>
     public abstract class CloseableViewModel : ViewModel
     {
+        #region Constructors
+
         public CloseableViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
         }
 
-        public event EventHandler ClosingRequest;
+        #endregion Constructors
+
+
+
+        #region Events
 
         public event EventHandler ActivateRequest;
 
-        protected void OnClosingRequest() => ClosingRequest?.Invoke(this, EventArgs.Empty);
+        public event EventHandler ClosingRequest;
 
-        protected void OnActivateRequest() => ActivateRequest?.Invoke(this, EventArgs.Empty);
+        #endregion Events
+
+
+
+        #region Methods
+
+        public void Activate() => OnActivateRequest();
 
         public void Close() => OnClosingRequest();
 
-        public void Activate() => OnActivateRequest();
+        protected void OnActivateRequest() => ActivateRequest?.Invoke(this, EventArgs.Empty);
+
+        protected void OnClosingRequest() => ClosingRequest?.Invoke(this, EventArgs.Empty);
+
+        #endregion Methods
     }
 }

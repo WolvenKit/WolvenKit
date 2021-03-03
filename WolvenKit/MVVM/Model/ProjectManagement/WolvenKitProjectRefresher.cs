@@ -28,31 +28,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
 
         #endregion ctors
 
-
-
         #region methods
-
-        private bool ValidateLocation(string location)
-        {
-            var projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
-
-            // all wkit projects have a folder with the same name
-            var projectInfo = new FileInfo(location);
-            if (projectInfo.Directory == null)
-            {
-                return false;
-            }
-            var projectName = Path.GetFileNameWithoutExtension(location);
-
-            _dataLocation =
-                new DirectoryInfo(Path.Combine(projectInfo.Directory.FullName, projectName));
-            if (!_dataLocation.Exists)
-            {
-                Directory.CreateDirectory(_dataLocation.FullName);
-            }
-
-            return true;
-        }
 
         protected override void SubscribeToLocation(string location)
         {
@@ -94,6 +70,28 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
 
                 fileSystemWatcher.EnableRaisingEvents = true;
             }
+        }
+
+        private bool ValidateLocation(string location)
+        {
+            var projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
+
+            // all wkit projects have a folder with the same name
+            var projectInfo = new FileInfo(location);
+            if (projectInfo.Directory == null)
+            {
+                return false;
+            }
+            var projectName = Path.GetFileNameWithoutExtension(location);
+
+            _dataLocation =
+                new DirectoryInfo(Path.Combine(projectInfo.Directory.FullName, projectName));
+            if (!_dataLocation.Exists)
+            {
+                Directory.CreateDirectory(_dataLocation.FullName);
+            }
+
+            return true;
         }
 
         #endregion methods

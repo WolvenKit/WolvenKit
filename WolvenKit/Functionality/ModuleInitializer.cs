@@ -8,6 +8,8 @@ using WolvenKit.Functionality.Services;
 /// </summary>
 public static class ModuleInitializer
 {
+    #region Methods
+
     /// <summary>
     /// Initializes the module.
     /// </summary>
@@ -19,4 +21,6 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<IHashService, HashService>();
         serviceLocator.RegisterType<ILoggerService, LoggerService>();
     }
+
+    #endregion Methods
 }

@@ -46,13 +46,15 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// </summary>
         public const string ToolTitle = "Properties";
 
-        private readonly IMessageService _messageService;
         private readonly ILoggerService _loggerService;
+        private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
 
         #endregion Fields
 
         //void Importableobjects_ListChanged(object sender, ListChangedEventArgs e) => OnPropertyChanged(nameof(Importableobjects));
+
+
 
         #region Properties
 

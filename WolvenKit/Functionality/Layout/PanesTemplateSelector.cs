@@ -16,6 +16,8 @@ namespace WolvenKit.Functionality.Layout
     /// </summary>
     internal class PanesTemplateSelector : DataTemplateSelector
     {
+        #region Constructors
+
         /// <summary>
         /// Default class constructor.
         /// </summary>
@@ -23,55 +25,11 @@ namespace WolvenKit.Functionality.Layout
         {
         }
 
-        /// <summary>
-        /// Gets/sets the view instance of the file document.
-        /// </summary>
-        public DataTemplate FileViewTemplate { get; set; }
+        #endregion Constructors
 
-        /// <summary>
-        /// Gets/sets the view instance of the LogView.
-        /// </summary>
-        public DataTemplate LogViewTemplate { get; set; }
 
-        /// <summary>
-        /// Gets/sets the view instance of the ProjectExplorerView.
-        /// </summary>
-        public DataTemplate ProjectExplorerTemplate { get; set; }
 
-        /// <summary>
-        /// Gets/sets the view instance of the AssetBrowser.
-        /// </summary>
-        public DataTemplate AssetBrowserTemplate { get; set; }
-
-        /// <summary>
-        /// Gets/sets the view instance of the CodeEditor.
-        /// </summary>
-        public DataTemplate CodeEditorTemplate { get; set; }
-
-        /// <summary>
-        /// Gets/sets the view instance of the BulkEditor.
-        /// </summary>
-        public DataTemplate BulkEditorTemplate { get; set; }
-
-        /// <summary>
-        /// Gets/sets the view instance of the CsvEditor.
-        /// </summary>
-        public DataTemplate CsvEditorTemplate { get; set; }
-
-        /// <summary>
-        /// Gets/sets the view instance of the HexEditor.
-        /// </summary>
-        public DataTemplate HexEditorTemplate { get; set; }
-
-        /// <summary>
-        /// Gets/sets the view instance of the JournalEditor.
-        /// </summary>
-        public DataTemplate JournalEditorTemplate { get; set; }
-
-        /// <summary>
-        /// Gets/sets the view instance of the CR2WEditor.
-        /// </summary>
-        public DataTemplate CR2WEditorTemplate { get; set; }
+        #region Properties
 
         /// <summary>
         /// Gets/sets the view instance of the AnimationTool.
@@ -79,9 +37,34 @@ namespace WolvenKit.Functionality.Layout
         public DataTemplate AnimationToolTemplate { get; set; }
 
         /// <summary>
+        /// Gets/sets the view instance of the WccTool.
+        /// </summary>
+        public DataTemplate AnimsViewTemplate { get; set; }
+
+        /// <summary>
+        /// Gets/sets the view instance of the AssetBrowser.
+        /// </summary>
+        public DataTemplate AssetBrowserTemplate { get; set; }
+
+        /// <summary>
         /// Gets/sets the view instance of the AudioTool.
         /// </summary>
         public DataTemplate AudioToolTemplate { get; set; }
+
+        /// <summary>
+        /// Gets/sets the view instance of the BulkEditor.
+        /// </summary>
+        public DataTemplate BulkEditorTemplate { get; set; }
+
+        /// <summary>
+        /// Gets/sets the view instance of the CodeEditor.
+        /// </summary>
+        public DataTemplate CodeEditorTemplate { get; set; }
+
+        /// <summary>
+        /// Gets/sets the view instance of the CR2WEditor.
+        /// </summary>
+        public DataTemplate CR2WEditorTemplate { get; set; }
 
         /// <summary>
         /// Gets/sets the view instance of the CR2WToTextTool.
@@ -89,9 +72,24 @@ namespace WolvenKit.Functionality.Layout
         public DataTemplate CR2WToTextToolTemplate { get; set; }
 
         /// <summary>
+        /// Gets/sets the view instance of the CsvEditor.
+        /// </summary>
+        public DataTemplate CsvEditorTemplate { get; set; }
+
+        /// <summary>
+        /// Gets/sets the view instance of the file document.
+        /// </summary>
+        public DataTemplate FileViewTemplate { get; set; }
+
+        /// <summary>
         /// Gets/sets the view instance of the GameDebuggerTool.
         /// </summary>
         public DataTemplate GameDebuggerToolTemplate { get; set; }
+
+        /// <summary>
+        /// Gets/sets the view instance of the HexEditor.
+        /// </summary>
+        public DataTemplate HexEditorTemplate { get; set; }
 
         /// <summary>
         /// Gets/sets the view instance of the ImporterTool.
@@ -99,9 +97,24 @@ namespace WolvenKit.Functionality.Layout
         public DataTemplate ImporterToolTemplate { get; set; }
 
         /// <summary>
+        /// Gets/sets the view instance of the JournalEditor.
+        /// </summary>
+        public DataTemplate JournalEditorTemplate { get; set; }
+
+        /// <summary>
+        /// Gets/sets the view instance of the LogView.
+        /// </summary>
+        public DataTemplate LogViewTemplate { get; set; }
+
+        /// <summary>
         /// Gets/sets the view instance of the MenuTool.
         /// </summary>
         public DataTemplate MenuToolTemplate { get; set; }
+
+        /// <summary>
+        /// Gets/sets the view instance of the WccTool.
+        /// </summary>
+        public DataTemplate MimicsViewTemplate { get; set; }
 
         /// <summary>
         /// Gets/sets the view instance of the PluginManager.
@@ -109,14 +122,14 @@ namespace WolvenKit.Functionality.Layout
         public DataTemplate PluginManagerTemplate { get; set; }
 
         /// <summary>
+        /// Gets/sets the view instance of the ProjectExplorerView.
+        /// </summary>
+        public DataTemplate ProjectExplorerTemplate { get; set; }
+
+        /// <summary>
         /// Gets/sets the view instance of the RadishTool.
         /// </summary>
         public DataTemplate RadishToolTemplate { get; set; }
-
-        /// <summary>
-        /// Gets/sets the view instance of the WccTool.
-        /// </summary>
-        public DataTemplate WccToolTemplate { get; set; }
 
         /// <summary>
         /// Gets/sets the view instance of the VisualEditor.
@@ -126,12 +139,13 @@ namespace WolvenKit.Functionality.Layout
         /// <summary>
         /// Gets/sets the view instance of the WccTool.
         /// </summary>
-        public DataTemplate AnimsViewTemplate { get; set; }
+        public DataTemplate WccToolTemplate { get; set; }
 
-        /// <summary>
-        /// Gets/sets the view instance of the WccTool.
-        /// </summary>
-        public DataTemplate MimicsViewTemplate { get; set; }
+        #endregion Properties
+
+
+
+        #region Methods
 
         /// <summary>
         /// Determines the matching view for a specific given type of viewmodel.
@@ -167,5 +181,7 @@ namespace WolvenKit.Functionality.Layout
                 _ => base.SelectTemplate(item, container)
             };
         }
+
+        #endregion Methods
     }
 }

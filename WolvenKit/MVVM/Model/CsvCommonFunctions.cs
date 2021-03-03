@@ -15,6 +15,24 @@ namespace WolvenKit.MVVM.Model
 
     public static class CsvCommonFunctions
     {
+        #region Methods
+
+        public static IEnumerable<object> FromCsv(Type type, string csvstring, bool useHeader = false)
+        {
+            using (var reader = new StringReader(csvstring))
+            {
+                return FromCsvInner(type, reader, useHeader);
+            }
+        }
+
+        public static IEnumerable<object> FromCsv(Type type, FileInfo path, bool useHeader = true)
+        {
+            using (var reader = new StreamReader(path.FullName))
+            {
+                return FromCsvInner(type, reader, useHeader);
+            }
+        }
+
         public static string ToCsvString(this IArrayAccessor wrappedArray, bool useHeader = false)
         {
             try
@@ -39,22 +57,6 @@ namespace WolvenKit.MVVM.Model
             {
                 MainController.LogString("Creating Csv file failed, please double-check your input.", Logtype.Error);
                 return null;
-            }
-        }
-
-        public static IEnumerable<object> FromCsv(Type type, string csvstring, bool useHeader = false)
-        {
-            using (var reader = new StringReader(csvstring))
-            {
-                return FromCsvInner(type, reader, useHeader);
-            }
-        }
-
-        public static IEnumerable<object> FromCsv(Type type, FileInfo path, bool useHeader = true)
-        {
-            using (var reader = new StreamReader(path.FullName))
-            {
-                return FromCsvInner(type, reader, useHeader);
             }
         }
 
@@ -114,5 +116,7 @@ namespace WolvenKit.MVVM.Model
             if (type == typeof(CName))
                 csv.Configuration.RegisterClassMap<CNameMap>();
         }
+
+        #endregion Methods
     }
 }

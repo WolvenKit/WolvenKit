@@ -22,12 +22,11 @@ namespace WolvenKit.Functionality.Services
 
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly IServiceLocator _serviceLocator;
         private readonly ICommandManager _commandManager;
         private readonly IPleaseWaitService _pleaseWaitService;
-
-        public override bool ShowSplashScreen => true;
+        private readonly IServiceLocator _serviceLocator;
         public override bool ShowShell => true;
+        public override bool ShowSplashScreen => true;
 
         #endregion fields
 
@@ -48,6 +47,13 @@ namespace WolvenKit.Functionality.Services
         #endregion constructors
 
         #region events
+
+        public override async Task InitializeAfterShowingShellAsync()
+        {
+            await base.InitializeAfterShowingShellAsync();
+
+            await LoadProjectAsync();
+        }
 
         public override async Task InitializeBeforeCreatingShellAsync()
         {
@@ -70,32 +76,24 @@ namespace WolvenKit.Functionality.Services
         {
         }*/
 
-        public override async Task InitializeAfterShowingShellAsync()
-        {
-            await base.InitializeAfterShowingShellAsync();
-
-            await LoadProjectAsync();
-        }
-
         #endregion events
 
         #region methods
 
-        private Task InitializePerformanceAsync()
+        private Task CheckForUpdatesAsync()
         {
-            Log.Info("Improving performance");
-
-            Catel.Windows.Controls.UserControl.DefaultCreateWarningAndErrorValidatorForViewModelValue = false;
-            Catel.Windows.Controls.UserControl.DefaultSkipSearchingForInfoBarMessageControlValue = true;
-
+            //TODO: enable
             return Task.CompletedTask;
-        }
+            //            Log.Info("Checking for updates");
 
-        private void InitializeFonts()
-        {
-            // Orc.Theming.FontImage.RegisterFont("FontAwesome", new FontFamily(new Uri("pack://application:,,,/WolvenKit;component/Resources/Fonts/", UriKind.RelativeOrAbsolute), "./#FontAwesome"));
-            Orc.Theming.FontImage.DefaultFontFamily = "Segoe UI";
-            Orc.Theming.FontImage.DefaultBrush = new SolidColorBrush(Color.FromArgb(255, 87, 87, 87));
+            //            var updateService = _serviceLocator.ResolveType<IUpdateService>();
+            //            updateService.Initialize(Settings.Application.AutomaticUpdates.AvailableChannels, Settings.Application.AutomaticUpdates.DefaultChannel,
+            //                Settings.Application.AutomaticUpdates.CheckForUpdatesDefaultValue);
+
+            //#pragma warning disable 4014
+            //            // Not dot await, it's a background thread
+            //            updateService.InstallAvailableUpdatesAsync(new SquirrelContext());
+            //#pragma warning restore 4014
         }
 
         private void InitializeCommands()
@@ -162,6 +160,44 @@ namespace WolvenKit.Functionality.Services
             _commandManager.CreateCommand(AppCommands.Application.ViewSelected);
         }
 
+        private void InitializeFonts()
+        {
+            // Orc.Theming.FontImage.RegisterFont("FontAwesome", new FontFamily(new Uri("pack://application:,,,/WolvenKit;component/Resources/Fonts/", UriKind.RelativeOrAbsolute), "./#FontAwesome"));
+            Orc.Theming.FontImage.DefaultFontFamily = "Segoe UI";
+            Orc.Theming.FontImage.DefaultBrush = new SolidColorBrush(Color.FromArgb(255, 87, 87, 87));
+        }
+
+        private Task InitializePerformanceAsync()
+        {
+            Log.Info("Improving performance");
+
+            Catel.Windows.Controls.UserControl.DefaultCreateWarningAndErrorValidatorForViewModelValue = false;
+            Catel.Windows.Controls.UserControl.DefaultSkipSearchingForInfoBarMessageControlValue = true;
+
+            return Task.CompletedTask;
+        }
+
+        private void InitializeWatchers()
+        {
+            _serviceLocator.RegisterTypeAndInstantiate<RecentlyUsedItemsProjectWatcher>();
+        }
+
+        private async Task LoadProjectAsync()
+        {
+            using (_pleaseWaitService.PushInScope())
+            {
+                var projectManager = _serviceLocator.ResolveType<IProjectManager>();
+                if (projectManager == null)
+                {
+                    const string error = "Failed to resolve project manager.";
+                    Log.Error(error);
+                    throw new Exception(error);
+                }
+
+                await projectManager.InitializeAsync();
+            }
+        }
+
         private void RegisterTypes()
         {
             // project management
@@ -187,43 +223,6 @@ namespace WolvenKit.Functionality.Services
 
             var config = SettingsManager.Load();
             _serviceLocator.RegisterInstance(typeof(ISettingsManager), config);
-        }
-
-        private void InitializeWatchers()
-        {
-            _serviceLocator.RegisterTypeAndInstantiate<RecentlyUsedItemsProjectWatcher>();
-        }
-
-        private Task CheckForUpdatesAsync()
-        {
-            //TODO: enable
-            return Task.CompletedTask;
-            //            Log.Info("Checking for updates");
-
-            //            var updateService = _serviceLocator.ResolveType<IUpdateService>();
-            //            updateService.Initialize(Settings.Application.AutomaticUpdates.AvailableChannels, Settings.Application.AutomaticUpdates.DefaultChannel,
-            //                Settings.Application.AutomaticUpdates.CheckForUpdatesDefaultValue);
-
-            //#pragma warning disable 4014
-            //            // Not dot await, it's a background thread
-            //            updateService.InstallAvailableUpdatesAsync(new SquirrelContext());
-            //#pragma warning restore 4014
-        }
-
-        private async Task LoadProjectAsync()
-        {
-            using (_pleaseWaitService.PushInScope())
-            {
-                var projectManager = _serviceLocator.ResolveType<IProjectManager>();
-                if (projectManager == null)
-                {
-                    const string error = "Failed to resolve project manager.";
-                    Log.Error(error);
-                    throw new Exception(error);
-                }
-
-                await projectManager.InitializeAsync();
-            }
         }
 
         #endregion methods

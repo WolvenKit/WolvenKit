@@ -22,13 +22,10 @@ using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 {
-    public class EditorViewModel
+    public enum Gender
     {
-        public EditorViewModel()
-        {
-        }
-
-        public string Name { get; } = "TBA";
+        Male,
+        Female
     }
 
     public class DocumentViewModel : PaneViewModel, IDocumentViewModel
@@ -36,20 +33,16 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         #region fields
 
         private static ImageSourceConverter ISC = new ImageSourceConverter();
-        private IWorkSpaceViewModel _workSpaceViewModel = null;
-
-        private string _textContent = string.Empty;
-        private string _filePath = null;
-        private bool _isDirty = false;
-
         private ICommand _closeCommand = null;
+        private string _filePath = null;
+        private string _initialPath;
+        private bool _isDirty = false;
+        private bool _IsExistingInFileSystem;
+        private bool _isInitialized;
         private ICommand _saveAsCommand = null;
         private ICommand _saveCommand = null;
-
-        private string _initialPath;
-        private bool _isInitialized;
-        private bool _IsExistingInFileSystem;
-
+        private string _textContent = string.Empty;
+        private IWorkSpaceViewModel _workSpaceViewModel = null;
         private FileSystemInfoModel fileinfo;
 
         #endregion fields
@@ -93,32 +86,25 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 
         #region commands
 
-        public ICommand OpenImportCommand { get; private set; }
-
-        private bool CanOpenImport() => true;
-
-        private void ExecuteOpenImport()
-        {
-            // TODO: Handle command logic here
-        }
-
         public ICommand OpenBufferCommand { get; private set; }
+        public ICommand OpenEditorCommand { get; private set; }
+        public ICommand OpenImportCommand { get; private set; }
 
         private bool CanOpenBuffer()
         {
             return true;
         }
 
-        private void ExecuteOpenBuffer()
-        {
-            // TODO: Handle command logic here
-        }
-
-        public ICommand OpenEditorCommand { get; private set; }
-
         private bool CanOpenEditor()
         {
             return true;
+        }
+
+        private bool CanOpenImport() => true;
+
+        private void ExecuteOpenBuffer()
+        {
+            // TODO: Handle command logic here
         }
 
         private void ExecuteOpenEditor()
@@ -126,27 +112,18 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             // TODO: Handle command logic here
         }
 
+        private void ExecuteOpenImport()
+        {
+            // TODO: Handle command logic here
+        }
+
         #endregion commands
+
+
 
         #region Properties
 
-        /// <summary>
-        ///
-        /// </summary>
-        [Model]
-        private IWolvenkitFile File { get; set; }
-
-        /// <summary>
-        /// Bound to the View
-        /// </summary>
-        public List<ChunkViewModel> Chunks => File.Chunks
-            .Where(_ => _.VirtualParentChunk == null)
-            .Select(_ => new ChunkViewModel(_)).ToList();
-
-        /// <summary>
-        /// Bound to the View
-        /// </summary>
-        public List<ICR2WImport> Imports => File.Imports;
+        private ChunkViewModel _selectedChunk;
 
         /// <summary>
         /// Bound to the View
@@ -156,48 +133,38 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         /// <summary>
         /// Bound to the View
         /// </summary>
-        public List<EditorViewModel> Editors => GetEditorsForFile(File);
+        public List<ChunkViewModel> Chunks => File.Chunks
+            .Where(_ => _.VirtualParentChunk == null)
+            .Select(_ => new ChunkViewModel(_)).ToList();
 
-        private List<EditorViewModel> GetEditorsForFile(IWolvenkitFile file)
+        /// <summary>Gets a command to close this document.</summary>
+        public ICommand CloseCommand
         {
-            return new();
-        }
-
-        private ChunkViewModel _selectedChunk;
-
-        /// <summary>
-        /// Bound to the View via TreeViewBehavior.cs
-        /// </summary>
-        public ChunkViewModel SelectedChunk
-        {
-            get => _selectedChunk;
-            set
+            get
             {
-                if (_selectedChunk != value)
-                {
-                    var oldValue = _selectedChunk;
-                    _selectedChunk = value;
-                    RaisePropertyChanged(() => SelectedChunk, oldValue, value);
+                if (_closeCommand == null)
+                    _closeCommand = new DelegateCommand<object>((p) => OnClose(), (p) => CanClose());
 
-                    //SelectEditableVariables = _selectedChunk?.ChildrenProperties;
-                }
+                return _closeCommand;
             }
         }
 
-        //      public List<ChunkPropertyViewModel> _selectEditableVariables;
-        //public List<ChunkPropertyViewModel> SelectEditableVariables
-        //      {
-        //          get => _selectEditableVariables;
-        //          set
-        //          {
-        //              if (_selectEditableVariables != value)
-        //              {
-        //                  var oldValue = _selectEditableVariables;
-        //                  _selectEditableVariables = value;
-        //                  RaisePropertyChanged(() => SelectEditableVariables, oldValue, value);
-        //              }
-        //          }
-        //      }
+        /// <summary>
+        /// Bound to the View
+        /// </summary>
+        public List<EditorViewModel> Editors => GetEditorsForFile(File);
+
+        /// <summary>Gets the current filename of the file being managed in this document viewmodel.</summary>
+        public string FileName
+        {
+            get
+            {
+                if (FilePath == null)
+                    return "Noname" + (IsDirty ? "*" : "");
+
+                return System.IO.Path.GetFileName(FilePath) + (IsDirty ? "*" : "");
+            }
+        }
 
         /// <summary>
         /// Gets the current path of the file being managed in this document viewmodel.
@@ -218,18 +185,25 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             }
         }
 
-        /// <summary>Gets the current filename of the file being managed in this document viewmodel.</summary>
-        public string FileName
-        {
-            get
-            {
-                if (FilePath == null)
-                    return "Noname" + (IsDirty ? "*" : "");
+        /// <summary>
+        /// Bound to the View
+        /// </summary>
+        public List<ICR2WImport> Imports => File.Imports;
 
-                return System.IO.Path.GetFileName(FilePath) + (IsDirty ? "*" : "");
-            }
-        }
-
+        //      public List<ChunkPropertyViewModel> _selectEditableVariables;
+        //public List<ChunkPropertyViewModel> SelectEditableVariables
+        //      {
+        //          get => _selectEditableVariables;
+        //          set
+        //          {
+        //              if (_selectEditableVariables != value)
+        //              {
+        //                  var oldValue = _selectEditableVariables;
+        //                  _selectEditableVariables = value;
+        //                  RaisePropertyChanged(() => SelectEditableVariables, oldValue, value);
+        //              }
+        //          }
+        //      }
         /// <summary>Gets/sets whether the documents content has been changed without saving into file system or not.</summary>
         public new bool IsDirty
         {
@@ -259,6 +233,18 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             }
         }
 
+        /// <summary>Gets a command to save this document's content into another file in the file system.</summary>
+        public ICommand SaveAsCommand
+        {
+            get
+            {
+                if (_saveAsCommand == null)
+                    _saveAsCommand = new DelegateCommand<object>((p) => OnSaveAs(p), (p) => CanSaveAs(p));
+
+                return _saveAsCommand;
+            }
+        }
+
         /// <summary>Gets a command to save this document's content into the file system.</summary>
         public ICommand SaveCommand
         {
@@ -273,54 +259,39 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             }
         }
 
-        /// <summary>Gets a command to save this document's content into another file in the file system.</summary>
-        public ICommand SaveAsCommand
+        /// <summary>
+        /// Bound to the View via TreeViewBehavior.cs
+        /// </summary>
+        public ChunkViewModel SelectedChunk
         {
-            get
+            get => _selectedChunk;
+            set
             {
-                if (_saveAsCommand == null)
-                    _saveAsCommand = new DelegateCommand<object>((p) => OnSaveAs(p), (p) => CanSaveAs(p));
+                if (_selectedChunk != value)
+                {
+                    var oldValue = _selectedChunk;
+                    _selectedChunk = value;
+                    RaisePropertyChanged(() => SelectedChunk, oldValue, value);
 
-                return _saveAsCommand;
+                    //SelectEditableVariables = _selectedChunk?.ChildrenProperties;
+                }
             }
         }
 
-        /// <summary>Gets a command to close this document.</summary>
-        public ICommand CloseCommand
-        {
-            get
-            {
-                if (_closeCommand == null)
-                    _closeCommand = new DelegateCommand<object>((p) => OnClose(), (p) => CanClose());
+        /// <summary>
+        ///
+        /// </summary>
+        [Model]
+        private IWolvenkitFile File { get; set; }
 
-                return _closeCommand;
-            }
+        private List<EditorViewModel> GetEditorsForFile(IWolvenkitFile file)
+        {
+            return new();
         }
 
         #endregion Properties
 
         #region methods
-
-        /// <summary>
-        /// Attempts to read the contents of a text file defined via initialPath
-        /// and assigns it to text content of this viewmodel.
-        /// </summary>
-        /// <returns>True if file read was successful, otherwise false</returns>
-        public async Task<bool> OpenFileWithInitialPathAsync()
-        {
-            if (string.IsNullOrEmpty(_initialPath) && _isInitialized == false)
-                return false;
-
-            if (_isInitialized || _IsExistingInFileSystem == false)
-                return true;
-
-            bool result = await OpenFileAsync(_initialPath);
-
-            if (result == true)
-                _initialPath = null;
-
-            return result;
-        }
 
         /// <summary>
         /// Attempts to read the contents of a text file and assigns it to
@@ -407,14 +378,30 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             return false;
         }
 
+        /// <summary>
+        /// Attempts to read the contents of a text file defined via initialPath
+        /// and assigns it to text content of this viewmodel.
+        /// </summary>
+        /// <returns>True if file read was successful, otherwise false</returns>
+        public async Task<bool> OpenFileWithInitialPathAsync()
+        {
+            if (string.IsNullOrEmpty(_initialPath) && _isInitialized == false)
+                return false;
+
+            if (_isInitialized || _IsExistingInFileSystem == false)
+                return true;
+
+            bool result = await OpenFileAsync(_initialPath);
+
+            if (result == true)
+                _initialPath = null;
+
+            return result;
+        }
+
         private bool CanClose()
         {
             return true;
-        }
-
-        private void OnClose()
-        {
-            _workSpaceViewModel.Close(this);
         }
 
         private bool CanSave(object parameter)
@@ -422,14 +409,19 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             return IsDirty;
         }
 
-        private void OnSave(object parameter)
-        {
-            _workSpaceViewModel.Save(this, false);
-        }
-
         private bool CanSaveAs(object parameter)
         {
             return IsDirty;
+        }
+
+        private void OnClose()
+        {
+            _workSpaceViewModel.Close(this);
+        }
+
+        private void OnSave(object parameter)
+        {
+            _workSpaceViewModel.Save(this, false);
         }
 
         private void OnSaveAs(object parameter)
@@ -448,22 +440,39 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         };
     }
 
+    public class EditorViewModel
+    {
+        #region Constructors
+
+        public EditorViewModel()
+        {
+        }
+
+        #endregion Constructors
+
+
+
+        #region Properties
+
+        public string Name { get; } = "TBA";
+
+        #endregion Properties
+    }
+
     public class PropertyGridDemoModel
     {
+        #region Constructors
+
         public PropertyGridDemoModel()
         {
             List = new List<string>() { "aaa", "bbb" };
         }
 
-        [Category("Category1")]
-        [Editor(typeof(IListPropertyEditor), typeof(PropertyEditorBase))]
-        public List<string> List { get; set; }
+        #endregion Constructors
 
-        [Category("Category1")]
-        public string String { get; set; }
 
-        [Category("Category2")]
-        public int Integer { get; set; }
+
+        #region Properties
 
         [Category("Category2")]
         public bool Boolean { get; set; }
@@ -472,11 +481,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         public Gender Enum { get; set; }
 
         public ImageSource ImageSource { get; set; }
-    }
 
-    public enum Gender
-    {
-        Male,
-        Female
+        [Category("Category2")]
+        public int Integer { get; set; }
+
+        [Category("Category1")]
+        [Editor(typeof(IListPropertyEditor), typeof(PropertyEditorBase))]
+        public List<string> List { get; set; }
+
+        [Category("Category1")]
+        public string String { get; set; }
+
+        #endregion Properties
     }
 }

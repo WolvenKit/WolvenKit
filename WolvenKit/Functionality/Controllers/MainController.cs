@@ -33,12 +33,24 @@ namespace WolvenKit.Functionality.Controllers
     /// </summary>
     public class MainController : ObservableObject, ILocalizedStringSource
     {
-        private static MainController s_mainController;
+        #region Fields
+
         private static GameControllerBase s_gameController;
+        private static MainController s_mainController;
+
+        #endregion Fields
+
+        #region Constructors
 
         private MainController()
         {
         }
+
+        #endregion Constructors
+
+
+
+        #region Methods
 
         public static MainController Get()
         {
@@ -57,51 +69,46 @@ namespace WolvenKit.Functionality.Controllers
             return s_mainController;
         }
 
+        public static GameControllerBase GetGame() => s_gameController;
+
         public static async Task SetGame(GameControllerBase controller)
         {
             s_gameController = controller;
             await controller.HandleStartup();
         }
 
-        public static GameControllerBase GetGame() => s_gameController;
+        #endregion Methods
+
+
 
         #region Fields
 
+        public string InitialFilePath { get; set; } = "";
         public string InitialModProject { get; set; } = "";
         public string InitialWKP { get; set; } = "";
-        public string InitialFilePath { get; set; } = "";
 
         #endregion Fields
 
         #region Properties
-
-        public Configuration Configuration { get; private set; }
-        public EditorProjectData ActiveMod { get; set; }
-        public WccLite WccHelper { get; set; }
-        public List<HashDump> Hashdumplist { get; set; }
 
         /// <summary>
         /// Shows if there are unsaved changes in the project.
         /// </summary>
         public bool ProjectUnsaved = false;
 
-        private EProjectStatus _projectstatus = EProjectStatus.Idle;
-
-        public EProjectStatus ProjectStatus
-        {
-            get => _projectstatus;
-            set => SetField(ref _projectstatus, value, nameof(ProjectStatus));
-        }
-
-        private int _statusProgress = 0;
-
-        public int StatusProgress
-        {
-            get => _statusProgress;
-            set => SetField(ref _statusProgress, value, nameof(StatusProgress));
-        }
-
+        private bool _loaded = false;
         private string _loadstatus = "Loading...";
+        private EProjectStatus _projectstatus = EProjectStatus.Idle;
+        private int _statusProgress = 0;
+        public EditorProjectData ActiveMod { get; set; }
+        public Configuration Configuration { get; private set; }
+        public List<HashDump> Hashdumplist { get; set; }
+
+        public bool Loaded
+        {
+            get => _loaded;
+            set => SetField(ref _loaded, value, nameof(Loaded));
+        }
 
         public string loadStatus
         {
@@ -109,13 +116,19 @@ namespace WolvenKit.Functionality.Controllers
             set => SetField(ref _loadstatus, value, nameof(loadStatus));
         }
 
-        private bool _loaded = false;
-
-        public bool Loaded
+        public EProjectStatus ProjectStatus
         {
-            get => _loaded;
-            set => SetField(ref _loaded, value, nameof(Loaded));
+            get => _projectstatus;
+            set => SetField(ref _projectstatus, value, nameof(ProjectStatus));
         }
+
+        public int StatusProgress
+        {
+            get => _statusProgress;
+            set => SetField(ref _statusProgress, value, nameof(StatusProgress));
+        }
+
+        public WccLite WccHelper { get; set; }
 
         #endregion Properties
 
@@ -128,9 +141,8 @@ namespace WolvenKit.Functionality.Controllers
 
         #region Logging
 
-        public LoggerService Logger { get; private set; }
-
         private KeyValuePair<string, Logtype> _logMessage = new KeyValuePair<string, Logtype>("", Logtype.Normal);
+        public LoggerService Logger { get; private set; }
 
         public KeyValuePair<string, Logtype> LogMessage
         {
@@ -139,13 +151,13 @@ namespace WolvenKit.Functionality.Controllers
         }
 
         /// <summary>
-        /// Queues a string for logging in the main window.
+        /// Use this for threadsafe progress updates.
         /// </summary>
-        /// <param name="msg">The message to log.</param>
-        /// <param name="type">The type of the log. Not needed.</param>
-        public void QueueLog(string msg, Logtype type = Logtype.Normal)
+        /// <param name="value"></param>
+        public static void LogProgress(int value)
         {
-            LogMessage = new KeyValuePair<string, Logtype>(msg, type);
+            if (Get().Logger != null)
+                Get().Logger.LogProgress(value);
         }
 
         /// <summary>
@@ -169,13 +181,13 @@ namespace WolvenKit.Functionality.Controllers
         }
 
         /// <summary>
-        /// Use this for threadsafe progress updates.
+        /// Queues a string for logging in the main window.
         /// </summary>
-        /// <param name="value"></param>
-        public static void LogProgress(int value)
+        /// <param name="msg">The message to log.</param>
+        /// <param name="type">The type of the log. Not needed.</param>
+        public void QueueLog(string msg, Logtype type = Logtype.Normal)
         {
-            if (Get().Logger != null)
-                Get().Logger.LogProgress(value);
+            LogMessage = new KeyValuePair<string, Logtype>(msg, type);
         }
 
         #endregion Logging
@@ -189,85 +201,6 @@ namespace WolvenKit.Functionality.Controllers
         public static string GetManagerPath(EManagerType type) => GameControllerBase.GetManagerPath(type);
 
         public static string GetManagerVersion(EManagerType type) => GameControllerBase.GetManagerVersion(type);
-
-        /// <summary>
-        /// Initializes the archive managers in an async thread
-        /// </summary>
-        /// <returns></returns>
-        public Task Initialize()
-        {
-            try
-            {
-                // add a mechanism to update individual cache managers
-                for (var j = 0; j < Configuration.ManagerVersions.Length; j++)
-                {
-                    var savedversions = Configuration.ManagerVersions[j];
-                    var e = (EManagerType)j;
-                    var curversion = GameControllerBase.GetManagerVersion(e);
-
-                    if (savedversions != curversion && File.Exists(GameControllerBase.GetManagerPath(e)))
-                    {
-                        File.Delete(GameControllerBase.GetManagerPath(e));
-                    }
-                }
-
-                //multithread these
-                s_gameController.HandleStartup();
-
-                loadStatus = "Loading depot manager...";
-                #region Load depot manager
-
-                // check if r4depot exists
-                if (!Directory.Exists(Configuration.DepotPath))
-                {
-                    DirectoryInfo wccDir = new FileInfo(Configuration.WccLite).Directory.Parent.Parent;
-                    if (!wccDir.Exists)
-                        throw new Exception("wcc_lite directory not specified.");
-
-                    string wcc_r4data = Path.Combine(wccDir.FullName, "r4data");
-                    if (!Directory.Exists(wcc_r4data))
-                        Directory.CreateDirectory(wcc_r4data);  //create an empty depot
-                    Configuration.DepotPath = wcc_r4data;
-                    Configuration.Save();
-                }
-
-                // undbundle some engine files?
-
-                #endregion Load depot manager
-
-                loadStatus = "Loading path hashes...";
-                #region PathHasManager
-
-                //TODO: Figure out something for this! Probably should be inside the bundle manager
-                // create pathhashes if they don't already exist
-                /*var fi = new FileInfo(Cr2wResourceManager.pathashespath);
-                if (!fi.Exists)
-                {
-                    foreach (string item in BundleManager.FileList.Select(_ => _.Name).Distinct())
-                    {
-                        Cr2wResourceManager.Get().RegisterVanillaPath(item);
-                    }
-                    Cr2wResourceManager.Get().WriteVanilla();
-                }*/
-
-                #endregion PathHasManager
-
-
-
-                loadStatus = "Loaded";
-
-                WccHelper = new WccLite(MainController.Get().Configuration.WccLite, Logger);
-
-                s_mainController.Loaded = true;
-            }
-            catch (Exception ex)
-            {
-                s_mainController.Loaded = false;
-                Console.WriteLine(ex.Message);
-            }
-
-            return Task.CompletedTask;
-        }
 
         /// <summary>
         /// Useful function for blindly importing a file.
@@ -294,6 +227,91 @@ namespace WolvenKit.Functionality.Controllers
             return "";
         }
 
+        /// <summary>
+        /// Initializes the archive managers in an async thread
+        /// </summary>
+        /// <returns></returns>
+        public Task Initialize()
+        {
+            try
+            {
+                // add a mechanism to update individual cache managers
+                for (var j = 0; j < Configuration.ManagerVersions.Length; j++)
+                {
+                    var savedversions = Configuration.ManagerVersions[j];
+                    var e = (EManagerType)j;
+                    var curversion = GameControllerBase.GetManagerVersion(e);
+
+                    if (savedversions != curversion && File.Exists(GameControllerBase.GetManagerPath(e)))
+                    {
+                        File.Delete(GameControllerBase.GetManagerPath(e));
+                    }
+                }
+
+                //multithread these
+                s_gameController.HandleStartup();
+
+                loadStatus = "Loading depot manager...";
+
+                #region Load depot manager
+
+                // check if r4depot exists
+                if (!Directory.Exists(Configuration.DepotPath))
+                {
+                    DirectoryInfo wccDir = new FileInfo(Configuration.WccLite).Directory.Parent.Parent;
+                    if (!wccDir.Exists)
+                        throw new Exception("wcc_lite directory not specified.");
+
+                    string wcc_r4data = Path.Combine(wccDir.FullName, "r4data");
+                    if (!Directory.Exists(wcc_r4data))
+                        Directory.CreateDirectory(wcc_r4data);  //create an empty depot
+                    Configuration.DepotPath = wcc_r4data;
+                    Configuration.Save();
+                }
+
+                // undbundle some engine files?
+
+                #endregion Load depot manager
+
+                loadStatus = "Loading path hashes...";
+
+                #region PathHasManager
+
+                //TODO: Figure out something for this! Probably should be inside the bundle manager
+                // create pathhashes if they don't already exist
+                /*var fi = new FileInfo(Cr2wResourceManager.pathashespath);
+                if (!fi.Exists)
+                {
+                    foreach (string item in BundleManager.FileList.Select(_ => _.Name).Distinct())
+                    {
+                        Cr2wResourceManager.Get().RegisterVanillaPath(item);
+                    }
+                    Cr2wResourceManager.Get().WriteVanilla();
+                }*/
+
+                #endregion PathHasManager
+
+                loadStatus = "Loaded";
+
+                WccHelper = new WccLite(MainController.Get().Configuration.WccLite, Logger);
+
+                s_mainController.Loaded = true;
+            }
+            catch (Exception ex)
+            {
+                s_mainController.Loaded = false;
+                Console.WriteLine(ex.Message);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public void ReloadStringManager()
+        {
+            //TODO: Idk what to do with this
+            //W3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath), true);
+        }
+
         public void UpdateWccHelper(string wccLite)
         {
             if (WccHelper == null)
@@ -301,12 +319,6 @@ namespace WolvenKit.Functionality.Controllers
                 s_mainController.WccHelper = new WccLite(wccLite, s_mainController.Logger);
             }
             WccHelper.UpdatePath(wccLite);
-        }
-
-        public void ReloadStringManager()
-        {
-            //TODO: Idk what to do with this
-            //W3StringManager.Load(Configuration.TextLanguage, Path.GetDirectoryName(Configuration.ExecutablePath), true);
         }
 
         protected bool SetField<T>(ref T field, T value, string propertyName)

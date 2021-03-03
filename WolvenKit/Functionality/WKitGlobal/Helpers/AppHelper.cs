@@ -57,19 +57,10 @@ using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Tool;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
-    public static class InternetHelper
-    {
-        [DllImport("wininet.dll")]
-        private static extern bool InternetGetConnectedState(out int Description, int ReservedValue);
-
-        public static bool IsConnectedToInternet()
-        {
-            return InternetGetConnectedState(out int Desc, 0);
-        }
-    }
-
     public static class AppHelper
     {
+        #region Methods
+
         public static async Task InitializeMVVM()
         {
             var uri = new Uri("pack://application:,,,/WolvenKit.Resources;component/Resources/Media/Images/git.png");
@@ -256,5 +247,22 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                 });
             }
         }
+
+        #endregion Methods
+    }
+
+    public static class InternetHelper
+    {
+        #region Methods
+
+        public static bool IsConnectedToInternet()
+        {
+            return InternetGetConnectedState(out int Desc, 0);
+        }
+
+        [DllImport("wininet.dll")]
+        private static extern bool InternetGetConnectedState(out int Description, int ReservedValue);
+
+        #endregion Methods
     }
 }

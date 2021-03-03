@@ -9,6 +9,8 @@ namespace WolvenKit.Functionality.Behavior
 {
     public class TreeViewBehavior : Behavior<TreeView>
     {
+        #region Methods
+
         protected override void OnAttached()
         {
             AssociatedObject.SelectedItemChanged += AssociatedObject_SelectedItemChanged;
@@ -29,5 +31,7 @@ namespace WolvenKit.Functionality.Behavior
                     break;
             }
         }
+
+        #endregion Methods
     }
 }

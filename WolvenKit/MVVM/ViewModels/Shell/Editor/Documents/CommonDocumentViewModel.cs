@@ -14,9 +14,15 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 
     public class CommonDocumentViewModel : CloseableViewModel, Old_IDocumentViewModel
     {
+        #region Constructors
+
         public CommonDocumentViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
         }
+
+        #endregion Constructors
+
+
 
         #region Fields
 
@@ -69,12 +75,25 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             }
         }
 
-
-
         #region Methods
 
         public void CreateNewChunk()
         {
+        }
+
+        public async Task<Common.EFileReadErrorCodes> LoadFile(string filename, IVariableEditor variableEditor, LoggerService logger, Stream stream = null)
+        {
+            if (stream != null)
+            {
+                return await loadFile(stream, filename, variableEditor, logger);
+            }
+            else
+            {
+                using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                {
+                    return await loadFile(fs, filename, variableEditor, logger);
+                }
+            }
         }
 
         public virtual void SaveFile()
@@ -103,57 +122,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             {
                 File.Write(writer);
                 return mem.ToArray();
-            }
-        }
-
-        private void saveToMemoryStream()
-        {
-            using (var mem = new MemoryStream())
-            using (var writer = new BinaryWriter(mem))
-            {
-                File.Write(writer);
-
-                OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = mem, File = File });
-            }
-        }
-
-        private void saveToFileName()
-        {
-            //try
-            //{
-            using (var mem = new MemoryStream())
-            using (var writer = new BinaryWriter(mem))
-            {
-                File.Write(writer);
-                mem.Seek(0, SeekOrigin.Begin);
-
-                using (var fs = new FileStream(FileName, FileMode.Create, FileAccess.Write))
-                {
-                    mem.WriteTo(fs);
-
-                    OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = fs, File = File });
-                    fs.Close();
-                }
-            }
-            //}
-            //catch (Exception e)
-            //{
-            //    MainController.Get().QueueLog("Failed to save the file(s)! They are probably in use.\n" + e.ToString());
-            //}
-        }
-
-        public async Task<Common.EFileReadErrorCodes> LoadFile(string filename, IVariableEditor variableEditor, LoggerService logger, Stream stream = null)
-        {
-            if (stream != null)
-            {
-                return await loadFile(stream, filename, variableEditor, logger);
-            }
-            else
-            {
-                using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
-                {
-                    return await loadFile(fs, filename, variableEditor, logger);
-                }
             }
         }
 
@@ -191,6 +159,42 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             }
 
             return errorcode;
+        }
+
+        private void saveToFileName()
+        {
+            //try
+            //{
+            using (var mem = new MemoryStream())
+            using (var writer = new BinaryWriter(mem))
+            {
+                File.Write(writer);
+                mem.Seek(0, SeekOrigin.Begin);
+
+                using (var fs = new FileStream(FileName, FileMode.Create, FileAccess.Write))
+                {
+                    mem.WriteTo(fs);
+
+                    OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = fs, File = File });
+                    fs.Close();
+                }
+            }
+            //}
+            //catch (Exception e)
+            //{
+            //    MainController.Get().QueueLog("Failed to save the file(s)! They are probably in use.\n" + e.ToString());
+            //}
+        }
+
+        private void saveToMemoryStream()
+        {
+            using (var mem = new MemoryStream())
+            using (var writer = new BinaryWriter(mem))
+            {
+                File.Write(writer);
+
+                OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = mem, File = File });
+            }
         }
 
         #endregion Methods

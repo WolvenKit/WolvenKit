@@ -13,19 +13,17 @@ namespace WolvenKit.Functionality.Controllers
 {
     public abstract class GameControllerBase
     {
+        #region Properties
+
         public static string ManagerCacheDir => Path.Combine(AppContext.BaseDirectory, "Config");
         public static string WorkDir => Path.Combine(AppContext.BaseDirectory, "tmp_workdir");
         public static string XBMDumpPath => Path.Combine(ManagerCacheDir, "__xbmdump_3768555366.csv");
 
-        public abstract List<IGameArchiveManager> GetArchiveManagersManagers();
+        #endregion Properties
 
-        public abstract List<string> GetAvaliableClasses();
 
-        public abstract Task HandleStartup();
 
-        public abstract Task<bool> PackAndInstallProject();
-
-        public abstract Task<bool> PackageMod();
+        #region Methods
 
         public static string GetManagerPath(EManagerType type)
         {
@@ -81,5 +79,17 @@ namespace WolvenKit.Functionality.Controllers
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
         }
+
+        public abstract List<IGameArchiveManager> GetArchiveManagersManagers();
+
+        public abstract List<string> GetAvaliableClasses();
+
+        public abstract Task HandleStartup();
+
+        public abstract Task<bool> PackageMod();
+
+        public abstract Task<bool> PackAndInstallProject();
+
+        #endregion Methods
     }
 }

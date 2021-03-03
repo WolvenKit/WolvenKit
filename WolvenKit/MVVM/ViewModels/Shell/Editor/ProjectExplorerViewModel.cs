@@ -44,14 +44,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// </summary>
         public const string ToolTitle = "ProjectExplorer";
 
-        private readonly IMessageService _messageService;
-        private readonly ILoggerService _loggerService;
-        private readonly IProjectManager _projectManager;
         private readonly ICommandManager _commandManager;
+        private readonly ConcurrentDictionary<ulong, FileSystemInfoModel> _flatNodeDictionary;
+        private readonly ILoggerService _loggerService;
+        private readonly IMessageService _messageService;
+        private readonly IProjectManager _projectManager;
         private readonly IProjectRefresherSelector _refresherSelector;
 
         private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
-        private readonly ConcurrentDictionary<ulong, FileSystemInfoModel> _flatNodeDictionary;
 
         #endregion fields
 
@@ -93,23 +93,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #region properties
 
-        private BindingList<FileSystemInfoModel> _treenodes = null;
-
-        public BindingList<FileSystemInfoModel> Treenodes
-        {
-            get => _treenodes;
-            set
-            {
-                if (_treenodes != value)
-                {
-                    var oldValue = _treenodes;
-                    _treenodes = value;
-                    RaisePropertyChanged(() => Treenodes, oldValue, value);
-                }
-            }
-        }
-
         private FileSystemInfoModel _selectedItem;
+        private BindingList<FileSystemInfoModel> _treenodes = null;
 
         public FileSystemInfoModel SelectedItem
         {
@@ -121,6 +106,20 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     var oldValue = _selectedItem;
                     _selectedItem = value;
                     RaisePropertyChanged(() => SelectedItem, oldValue, value);
+                }
+            }
+        }
+
+        public BindingList<FileSystemInfoModel> Treenodes
+        {
+            get => _treenodes;
+            set
+            {
+                if (_treenodes != value)
+                {
+                    var oldValue = _treenodes;
+                    _treenodes = value;
+                    RaisePropertyChanged(() => Treenodes, oldValue, value);
                 }
             }
         }
@@ -204,92 +203,69 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         #region general commands
 
         /// <summary>
-        /// Copies relative path of node.
-        /// </summary>
-        public ICommand CopyRelPathCommand { get; private set; }
-
-        private bool CanCopyRelPath() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
-
-        private void ExecuteCopyRelPath()
-        {
-            if (SelectedItem.IsFile)
-                Clipboard.SetText(GetArchivePath(SelectedItem.FullName));
-
-            string GetArchivePath(string s)
-            {
-                if (s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Length > 2)
-                {
-                    var relpath = s.Substring(ActiveMod.FileDirectory.Length + 1);
-                    return string.Join(Path.DirectorySeparatorChar.ToString(), relpath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(2).ToArray());
-                }
-                else
-                    return s;
-            }
-        }
-
-        /// <summary>
-        /// Opens selected node in File Explorer.
-        /// </summary>
-        public ICommand OpenInFileExplorerCommand { get; private set; }
-
-        private bool CanOpenInFileExplorer() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
-
-        private void ExecuteOpenInFileExplorer()
-        {
-            if (SelectedItem.IsDirectory)
-                Commonfunctions.ShowFolderInExplorer(SelectedItem.FullName);
-            else
-                Commonfunctions.ShowFileInExplorer(SelectedItem.FullName);
-        }
-
-        /// <summary>
-        /// Expands all nodes in the treeview.
-        /// </summary>
-        public ICommand ExpandAllCommand { get; private set; }
-
-        private bool CanExpandAll() => _projectManager.ActiveProject is EditorProject;
-
-        private void ExecuteExpandAll()
-        {
-            foreach (var node in Treenodes)
-                node.ExpandChildren(true);
-        }
-
-        /// <summary>
         /// Collapses all nodes in the treeview.
         /// </summary>
         public ICommand CollapseAllCommand { get; private set; }
-
-        private bool CanCollapseAll() => _projectManager.ActiveProject is EditorProject;
-
-        private void ExecuteCollapseAll()
-        {
-            foreach (var node in Treenodes)
-                node.CollapseChildren(true);
-        }
-
-        /// <summary>
-        /// Expands all children of the selected node.
-        /// </summary>
-        public ICommand ExpandCommand { get; private set; }
-
-        private bool CanExpand() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
-
-        private void ExecuteExpand() => SelectedItem.ExpandChildren(true);
 
         /// <summary>
         /// Collapses all children of the selected node.
         /// </summary>
         public ICommand CollapseCommand { get; private set; }
 
-        private bool CanCollapse() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+        /// <summary>
+        /// Copies selected node to the clipboard.
+        /// </summary>
+        public ICommand CopyFileCommand { get; private set; }
 
-        private void ExecuteCollapse() => SelectedItem.CollapseChildren(true);
+        /// <summary>
+        /// Copies relative path of node.
+        /// </summary>
+        public ICommand CopyRelPathCommand { get; private set; }
+
+        /// <summary>
+        /// Cuts selected node to the clipboard.
+        /// </summary>
+        public ICommand CutFileCommand { get; private set; }
 
         /// <summary>
         /// Delets selected node.
         /// </summary>
         public ICommand DeleteFileCommand { get; private set; }
+
+        /// <summary>
+        /// Expands all nodes in the treeview.
+        /// </summary>
+        public ICommand ExpandAllCommand { get; private set; }
+
+        /// <summary>
+        /// Expands all children of the selected node.
+        /// </summary>
+        public ICommand ExpandCommand { get; private set; }
+
+        /// <summary>
+        /// Opens selected node in File Explorer.
+        /// </summary>
+        public ICommand OpenInFileExplorerCommand { get; private set; }
+
+        /// <summary>
+        /// Pastes a file from the clipboard into selected node.
+        /// </summary>
+        public ICommand PasteFileCommand { get; private set; }
+
+        /// <summary>
+        /// Renames selected node.
+        /// </summary>
+        public ICommand RenameFileCommand { get; private set; }
+
+        private bool CanCollapse() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+
+        private bool CanCollapseAll() => _projectManager.ActiveProject is EditorProject;
+
+        private bool CanCopyFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+
+        private bool CanCopyRelPath() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+
+        private bool CanCutFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
 
         private bool CanDeleteFile()
         {
@@ -312,6 +288,49 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
 
             return b;
+        }
+
+        private bool CanExpand() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+
+        private bool CanExpandAll() => _projectManager.ActiveProject is EditorProject;
+
+        private bool CanOpenInFileExplorer() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+
+        private bool CanPasteFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null && Clipboard.ContainsText();
+
+        private bool CanRenameFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+
+        private void CopyFile() => Clipboard.SetText(SelectedItem.FullName);
+
+        private void ExecuteCollapse() => SelectedItem.CollapseChildren(true);
+
+        private void ExecuteCollapseAll()
+        {
+            foreach (var node in Treenodes)
+                node.CollapseChildren(true);
+        }
+
+        private void ExecuteCopyRelPath()
+        {
+            if (SelectedItem.IsFile)
+                Clipboard.SetText(GetArchivePath(SelectedItem.FullName));
+
+            string GetArchivePath(string s)
+            {
+                if (s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Length > 2)
+                {
+                    var relpath = s.Substring(ActiveMod.FileDirectory.Length + 1);
+                    return string.Join(Path.DirectorySeparatorChar.ToString(), relpath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(2).ToArray());
+                }
+                else
+                    return s;
+            }
+        }
+
+        private void ExecuteCutFile()
+        {
+            // TODO: Handle command logic here
+            throw new NotImplementedException();
         }
 
         private async void ExecuteDeleteFile()
@@ -356,12 +375,21 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-        /// <summary>
-        /// Renames selected node.
-        /// </summary>
-        public ICommand RenameFileCommand { get; private set; }
+        private void ExecuteExpand() => SelectedItem.ExpandChildren(true);
 
-        private bool CanRenameFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+        private void ExecuteExpandAll()
+        {
+            foreach (var node in Treenodes)
+                node.ExpandChildren(true);
+        }
+
+        private void ExecuteOpenInFileExplorer()
+        {
+            if (SelectedItem.IsDirectory)
+                Commonfunctions.ShowFolderInExplorer(SelectedItem.FullName);
+            else
+                Commonfunctions.ShowFileInExplorer(SelectedItem.FullName);
+        }
 
         private async void ExecuteRenameFile()
         {
@@ -401,35 +429,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
             });
         }
-
-        /// <summary>
-        /// Cuts selected node to the clipboard.
-        /// </summary>
-        public ICommand CutFileCommand { get; private set; }
-
-        private bool CanCutFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
-
-        private void ExecuteCutFile()
-        {
-            // TODO: Handle command logic here
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Copies selected node to the clipboard.
-        /// </summary>
-        public ICommand CopyFileCommand { get; private set; }
-
-        private bool CanCopyFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
-
-        private void CopyFile() => Clipboard.SetText(SelectedItem.FullName);
-
-        /// <summary>
-        /// Pastes a file from the clipboard into selected node.
-        /// </summary>
-        public ICommand PasteFileCommand { get; private set; }
-
-        private bool CanPasteFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null && Clipboard.ContainsText();
 
         private void PasteFile()
         {
@@ -476,89 +475,82 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         #region Tw3 Commands
 
         /// <summary>
-        /// Opens selected node in asset browser.
+        /// Adds all dependencies (imports) of selected node from the game.
         /// </summary>
-        public ICommand OpenInAssetBrowserCommand { get; private set; }
+        public ICommand AddAllImportsCommand { get; private set; }
 
-        private bool CanOpenInAssetBrowser() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null;
-
-        private void ExecuteOpenInAssetBrowser()
-        {
-            // TODO: Handle command logic here
-        }
+        public ICommand CookCommand { get; private set; }
 
         /// <summary>
         /// Exports selected file to Json.
         /// </summary>
         public ICommand ExportJsonCommand { get; private set; }
 
-        private bool CanExportJson() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null
-            && SelectedItem.IsFile;
-
-        private void ExecuteExportJson()
-        {
-            // TODO: Handle command logic here
-        }
+        /// <summary>
+        /// Exports selected node with wcc.
+        /// </summary>
+        public ICommand ExportMeshCommand { get; private set; }
 
         /// <summary>
         ///  Opens the fast render Window for selected file
         /// </summary>
         public ICommand FastRenderCommand { get; private set; }
 
+        /// <summary>
+        /// Opens selected node in asset browser.
+        /// </summary>
+        public ICommand OpenInAssetBrowserCommand { get; private set; }
+
+        private async void AddAllImports() => await WccHelper.AddAllImportsAsync(SelectedItem.FullName, true);
+
+        private bool CanAddAllImports() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null && SelectedItem.IsFile;
+
+        // legacy
+        private bool CanCook() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null;
+
+        private bool CanExportJson() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null
+            && SelectedItem.IsFile;
+
+        private bool CanExportMesh() => _projectManager.ActiveProject is EditorProject && SelectedItem != null
+            && SelectedItem.IsFile && SelectedItem.Extension == ".w2mesh";
+
         private bool CanFastRender() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null
             && SelectedItem.IsFile && SelectedItem.Extension == ".w2mesh";
+
+        private bool CanOpenInAssetBrowser() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null;
+
+        private void Cook() => RequestFileCook(this, new RequestFileOpenArgs { File = SelectedItem.FullName });
+
+        private void ExecuteExportJson()
+        {
+            // TODO: Handle command logic here
+        }
 
         private void ExecuteFastRender()
         {
             // TODO: Handle command logic here
         }
 
-        /// <summary>
-        /// Exports selected node with wcc.
-        /// </summary>
-        public ICommand ExportMeshCommand { get; private set; }
-
-        private bool CanExportMesh() => _projectManager.ActiveProject is EditorProject && SelectedItem != null
-            && SelectedItem.IsFile && SelectedItem.Extension == ".w2mesh";
+        private void ExecuteOpenInAssetBrowser()
+        {
+            // TODO: Handle command logic here
+        }
 
         private async void ExportMesh() => await Task.Run(() => WccHelper.ExportFileToMod(SelectedItem.FullName));
-
-        /// <summary>
-        /// Adds all dependencies (imports) of selected node from the game.
-        /// </summary>
-        public ICommand AddAllImportsCommand { get; private set; }
-
-        private bool CanAddAllImports() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null && SelectedItem.IsFile;
-
-        private async void AddAllImports() => await WccHelper.AddAllImportsAsync(SelectedItem.FullName, true);
-
-        // legacy
-
-        public ICommand CookCommand { get; private set; }
-
-        private bool CanCook() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null;
-
-        private void Cook() => RequestFileCook(this, new RequestFileOpenArgs { File = SelectedItem.FullName });
 
         #endregion Tw3 Commands
 
         #endregion commands
 
+
+
         #region Methods
 
-        private void RepopulateTreeView()
+        protected override async Task CloseAsync()
         {
-            if (ActiveMod == null)
-            {
-                return;
-            }
+            _projectManager.ProjectActivatedAsync -= OnProjectActivatedAsync;
 
-            Treenodes.Clear();
-            var fileDirectoryInfo = new DirectoryInfo(ActiveMod.FileDirectory);
-            foreach (var fileSystemInfo in fileDirectoryInfo.GetFileSystemInfos("*", SearchOption.TopDirectoryOnly))
-            {
-                Treenodes.Add(new FileSystemInfoModel(fileSystemInfo, null));
-            }
+            await base.CloseAsync();
         }
 
         protected override async Task InitializeAsync()
@@ -573,11 +565,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             _projectManager.ProjectRefreshRequiredAsync += ProjectManagerOnProjectRefreshRequiredAsync;
             _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
-        }
-
-        private Task ProjectManagerOnProjectRefreshRequiredAsync(object sender, ProjectEventArgs e)
-        {
-            return Task.CompletedTask;
         }
 
         private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs args)
@@ -613,60 +600,24 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-        /// <summary>
-        /// Initialize commands for this window.
-        /// </summary>
-        private void SetupCommands()
+        private Task ProjectManagerOnProjectRefreshRequiredAsync(object sender, ProjectEventArgs e)
         {
-            CutFileCommand = new RelayCommand(ExecuteCutFile, CanCutFile);
-            CopyFileCommand = new RelayCommand(CopyFile, CanCopyFile);
-            PasteFileCommand = new RelayCommand(PasteFile, CanPasteFile);
-            DeleteFileCommand = new RelayCommand(ExecuteDeleteFile, CanDeleteFile);
-            RenameFileCommand = new RelayCommand(ExecuteRenameFile, CanRenameFile);
-            CopyRelPathCommand = new RelayCommand(ExecuteCopyRelPath, CanCopyRelPath);
-            OpenInFileExplorerCommand = new RelayCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer);
-
-            CookCommand = new RelayCommand(Cook, CanCook);
-            FastRenderCommand = new RelayCommand(ExecuteFastRender, CanFastRender);
-            ExportMeshCommand = new RelayCommand(ExportMesh, CanExportMesh);
-            AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
-            ExportJsonCommand = new RelayCommand(ExecuteExportJson, CanExportJson);
-            OpenInAssetBrowserCommand = new RelayCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser);
-
-            // global commands
-            ExpandAllCommand = new RelayCommand(ExecuteExpandAll, CanExpandAll);
-            CollapseAllCommand = new RelayCommand(ExecuteCollapseAll, CanCollapseAll);
-            ExpandCommand = new RelayCommand(ExecuteExpand, CanExpand);
-            CollapseCommand = new RelayCommand(ExecuteCollapse, CanCollapse);
-
-            RefreshNodeCommand = new DelegateCommand<string>(ExecuteRefreshNode, CanRefreshNode);
-            _commandManager.RegisterCommand(AppCommands.ProjectExplorer.Refresh, RefreshNodeCommand, this);
+            return Task.CompletedTask;
         }
 
-        /// <summary>
-        /// Initialize Avalondock specific defaults that are specific to this tool window.
-        /// </summary>
-        private void SetupToolDefaults()
+        private void RepopulateTreeView()
         {
-            ContentId = ToolContentId;           // Define a unique contentid for this toolwindow
+            if (ActiveMod == null)
+            {
+                return;
+            }
 
-            //BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow
-            //bi.BeginInit();
-            //bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
-            //bi.EndInit();
-            //IconSource = bi;
-        }
-
-        protected override async Task CloseAsync()
-        {
-            _projectManager.ProjectActivatedAsync -= OnProjectActivatedAsync;
-
-            await base.CloseAsync();
-        }
-
-        private void Treenodes_ListChanged(object sender, ListChangedEventArgs e)
-        {
-            //RaisePropertyChanged(nameof(Treenodes));
+            Treenodes.Clear();
+            var fileDirectoryInfo = new DirectoryInfo(ActiveMod.FileDirectory);
+            foreach (var fileSystemInfo in fileDirectoryInfo.GetFileSystemInfos("*", SearchOption.TopDirectoryOnly))
+            {
+                Treenodes.Add(new FileSystemInfoModel(fileSystemInfo, null));
+            }
         }
 
         private async void RequestFileCook(object sender, RequestFileOpenArgs e)
@@ -758,6 +709,55 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             {
                 MainController.LogString("Error cooking files.", Logtype.Error);
             }
+        }
+
+        /// <summary>
+        /// Initialize commands for this window.
+        /// </summary>
+        private void SetupCommands()
+        {
+            CutFileCommand = new RelayCommand(ExecuteCutFile, CanCutFile);
+            CopyFileCommand = new RelayCommand(CopyFile, CanCopyFile);
+            PasteFileCommand = new RelayCommand(PasteFile, CanPasteFile);
+            DeleteFileCommand = new RelayCommand(ExecuteDeleteFile, CanDeleteFile);
+            RenameFileCommand = new RelayCommand(ExecuteRenameFile, CanRenameFile);
+            CopyRelPathCommand = new RelayCommand(ExecuteCopyRelPath, CanCopyRelPath);
+            OpenInFileExplorerCommand = new RelayCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer);
+
+            CookCommand = new RelayCommand(Cook, CanCook);
+            FastRenderCommand = new RelayCommand(ExecuteFastRender, CanFastRender);
+            ExportMeshCommand = new RelayCommand(ExportMesh, CanExportMesh);
+            AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
+            ExportJsonCommand = new RelayCommand(ExecuteExportJson, CanExportJson);
+            OpenInAssetBrowserCommand = new RelayCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser);
+
+            // global commands
+            ExpandAllCommand = new RelayCommand(ExecuteExpandAll, CanExpandAll);
+            CollapseAllCommand = new RelayCommand(ExecuteCollapseAll, CanCollapseAll);
+            ExpandCommand = new RelayCommand(ExecuteExpand, CanExpand);
+            CollapseCommand = new RelayCommand(ExecuteCollapse, CanCollapse);
+
+            RefreshNodeCommand = new DelegateCommand<string>(ExecuteRefreshNode, CanRefreshNode);
+            _commandManager.RegisterCommand(AppCommands.ProjectExplorer.Refresh, RefreshNodeCommand, this);
+        }
+
+        /// <summary>
+        /// Initialize Avalondock specific defaults that are specific to this tool window.
+        /// </summary>
+        private void SetupToolDefaults()
+        {
+            ContentId = ToolContentId;           // Define a unique contentid for this toolwindow
+
+            //BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow
+            //bi.BeginInit();
+            //bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
+            //bi.EndInit();
+            //IconSource = bi;
+        }
+
+        private void Treenodes_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            //RaisePropertyChanged(nameof(Treenodes));
         }
 
         #endregion Methods

@@ -38,12 +38,27 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         // TODO: Register view model properties with the vmprop or vmpropviewmodeltomodel codesnippets
         // TODO: Register commands with the vmcommand or vmcommandwithcanexecute codesnippets
 
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
 
-            // TODO: subscribe to events here
+
+        #region Constructors
+
+        public MainViewModel()
+        {
+            Title = "WolvenKit";
+
+            _openDocuments = new Dictionary<string, Old_IDocumentViewModel>();
+
+            DdsToCacheCommand = new RelayCommand(DdsToCache, CanDdsToCacheCommand);
+            CreateCr2wFileCommand = new DelegateCommand<bool>(CreateCr2w, CanCreateCr2w);
+            BackupProjectCommand = new RelayCommand(BackupProject, CanBackupProject);
+            Command1 = new RelayCommand(RunCommand1, CanRunCommand1);
         }
+
+        #endregion Constructors
+
+
+
+        #region Methods
 
         protected override async Task CloseAsync()
         {
@@ -51,6 +66,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             await base.CloseAsync();
         }
+
+        protected override async Task InitializeAsync()
+        {
+            await base.InitializeAsync();
+
+            // TODO: subscribe to events here
+        }
+
+        #endregion Methods
+
+
 
         #region Properties
 
@@ -109,60 +135,21 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         #region Fields
 
         private static Task _packer;
-        private static LoggerService Logger => MainController.Get().Logger;
         private static EditorProjectData ActiveMod => MainController.Get().ActiveMod;
+        private static LoggerService Logger => MainController.Get().Logger;
 
         #endregion Fields
 
-        public MainViewModel()
-        {
-            Title = "WolvenKit";
-
-            _openDocuments = new Dictionary<string, Old_IDocumentViewModel>();
-
-            DdsToCacheCommand = new RelayCommand(DdsToCache, CanDdsToCacheCommand);
-            CreateCr2wFileCommand = new DelegateCommand<bool>(CreateCr2w, CanCreateCr2w);
-            BackupProjectCommand = new RelayCommand(BackupProject, CanBackupProject);
-            Command1 = new RelayCommand(RunCommand1, CanRunCommand1);
-        }
-
         #region Commands
 
-        public ICommand DdsToCacheCommand { get; }
-        public ICommand CreateCr2wFileCommand { get; }
         public ICommand BackupProjectCommand { get; }
         public ICommand Command1 { get; }
+        public ICommand CreateCr2wFileCommand { get; }
+        public ICommand DdsToCacheCommand { get; }
 
         #endregion Commands
 
         #region CommandsImplementation
-
-        private bool CanRunCommand1() => true;
-
-        private void RunCommand1()
-        {
-        }
-
-        private bool CanDdsToCacheCommand() => true;
-
-        private void DdsToCache()
-        {
-            // Creation
-            var txc = new TextureCache();
-            txc.LoadFiles(((W3Mod)ActiveMod).RawModDirectory, MainController.Get().Logger);
-            txc.Write(Path.Combine(ActiveMod.PackedModDirectory, "texture.cache"), MainController.Get().Logger);
-
-            MainController.LogString($@"Finished creating texture.cache.", Logtype.Success);
-
-            // Installing
-            InstallMod();
-        }
-
-        private bool CanCreateCr2w(bool b) => MainController.Get().ActiveMod != null;
-
-        private void CreateCr2w(bool b) => CreateCustomCr2wFile(b);
-
-        private bool CanBackupProject() => MainController.Get().ActiveMod != null;
 
         private async void BackupProject()
         {
@@ -254,6 +241,33 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 MainController.LogString($"Error creating Git archive for project {ActiveMod.Name}.", Common.Services.Logtype.Error);
                 return;
             }
+        }
+
+        private bool CanBackupProject() => MainController.Get().ActiveMod != null;
+
+        private bool CanCreateCr2w(bool b) => MainController.Get().ActiveMod != null;
+
+        private bool CanDdsToCacheCommand() => true;
+
+        private bool CanRunCommand1() => true;
+
+        private void CreateCr2w(bool b) => CreateCustomCr2wFile(b);
+
+        private void DdsToCache()
+        {
+            // Creation
+            var txc = new TextureCache();
+            txc.LoadFiles(((W3Mod)ActiveMod).RawModDirectory, MainController.Get().Logger);
+            txc.Write(Path.Combine(ActiveMod.PackedModDirectory, "texture.cache"), MainController.Get().Logger);
+
+            MainController.LogString($@"Finished creating texture.cache.", Logtype.Success);
+
+            // Installing
+            InstallMod();
+        }
+
+        private void RunCommand1()
+        {
         }
 
         #endregion CommandsImplementation
@@ -379,115 +393,256 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         #region Mod
 
         /// <summary>
-        /// Saves a W3ModProject
+        /// Scans the depot and the given archivemanagers for a file. If found, extracts it to the project.
+        /// Supports Uncooking and exporting with wcc_lite
         /// </summary>
-        public void SaveMod()
+        /// <param name="relativePath"></param>
+        /// <param name="manager"></param>
+        /// <param name="skipping"></param>
+        /// <param name="addAsDLC"></param>
+        /// <param name="uncook"></param>
+        /// <param name="export"></param>
+        /// <returns></returns>
+        public void AddToMod(string relativePath, IGameArchiveManager manager, List<string> prioritizedBundles, bool addAsDLC,
+            bool uncook = false, bool export = false)
         {
-            if (ActiveMod == null)
-                return;
+            string extension = Path.GetExtension(relativePath);
+            string filename = Path.GetFileName(relativePath);
 
-            if (ActiveMod.LastOpenedFiles != null)
-                ActiveMod.LastOpenedFiles = GetOpenDocuments().Keys.ToList();
+            // always uncook xbms, w2mesh, redcloth and redapex in Archive
+            //if ((extension == ".xbm" /*|| Enum.GetNames(typeof(EExportable)).Contains(extension.TrimStart('.'))*/) && manager.TypeName == EBundleType.Archive)
+            //    uncook = true;
 
-            var ser = new XmlSerializer(typeof(W3Mod));
-            var modfile = new FileStream(ActiveMod.FileName, FileMode.Create, FileAccess.Write);
-            ser.Serialize(modfile, ActiveMod);
-            modfile.Close();
-        }
+            #region Check Existing Files in Working Dir
 
-        /// <summary>
-        /// Installs the project from the packed folder of the project to the game
-        /// </summary>
-        private static void InstallMod()
-        {
-            try
+            // if uncooking check first if the file isn't already in the working depot or the r4depot
+            if (uncook)
             {
-                //Check if we have installed this mod before. If so do a little cleanup.
-                if (File.Exists(ActiveMod.ProjectDirectory + "\\install_log.xml"))
+                var cnewpath = "";
+                // Working Depot
+                var fi = new FileInfo(Path.Combine(Path.GetFullPath(MainController.WorkDir), relativePath));
+                if (fi.Exists)
                 {
-                    XDocument log = XDocument.Load(ActiveMod.ProjectDirectory + "\\install_log.xml");
-                    var dirs = log.Root.Element("Files")?.Descendants("Directory");
-                    if (dirs != null)
+                    // copy to uncooked folder in mod project
+                    cnewpath = addAsDLC
+                        ? Path.Combine(ActiveMod.DlcUncookedDirectory, $"dlc{ActiveMod.Name}", relativePath)
+                        : Path.Combine(ActiveMod.ModUncookedDirectory, relativePath);
+
+                    fi.CopyToAndCreate(cnewpath, true);
+                    Logger.LogString($"Added {filename} from depot.", Logtype.Success);
+
+                    // Optionally Export
+                    if (export && File.Exists(cnewpath))
                     {
-                        //Loop throught dirs and delete the old files in them.
-                        foreach (var d in dirs)
-                        {
-                            foreach (var f in d.Elements("file"))
-                            {
-                                if (File.Exists(f.Value))
-                                {
-                                    File.Delete(f.Value);
-                                    Debug.WriteLine("File delete: " + f.Value);
-                                }
-                            }
-                        }
-                        //Delete the empty directories.
-                        foreach (var d in dirs)
-                        {
-                            if (d.Attribute("Path") != null)
-                            {
-                                if (Directory.Exists(d.Attribute("Path").Value))
-                                {
-                                    if (!(Directory.GetFiles(d.Attribute("Path").Value, "*", SearchOption.AllDirectories).Any()))
-                                    {
-                                        Directory.Delete(d.Attribute("Path").Value, true);
-                                        Debug.WriteLine("Directory delete: " + d.Attribute("Path").Value);
-                                    }
-                                }
-                            }
-                        }
+                        var task = Task.Run(() => WccHelper.ExportFileToMod(cnewpath));
+                        Task.WaitAll(task);
                     }
-                    //Delete the old install log. We will make a new one so this is not needed anymore.
-                    File.Delete(ActiveMod.ProjectDirectory + "\\install_log.xml");
-                }
-                var installlog = new XDocument(new XElement("InstalLog", new XAttribute("Project", ActiveMod.Name), new XAttribute("Build_date", DateTime.Now.ToString())));
-                var fileroot = new XElement("Files");
-                //Copy and log the files.
-                if (!Directory.Exists(Path.Combine(ActiveMod.ProjectDirectory, "packed")))
-                {
-                    Logger.LogString("Failed to install mod. Packed directory does not exist. Check packing options.", Logtype.Important);
+
                     return;
                 }
-
-                var packedmoddir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "Mods");
-                if (Directory.Exists(packedmoddir))
-                    fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, MainController.Get().Configuration.W3GameModDir, true));
-
-                var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
-                if (Directory.Exists(packeddlcdir))
-                    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.W3GameDlcDir, true));
-
-                installlog.Root.Add(fileroot);
-                //Save the log.
-                installlog.Save(ActiveMod.ProjectDirectory + "\\install_log.xml");
-                Logger.LogString(ActiveMod.Name + " installed!" + "\n", Logtype.Success);
             }
-            catch (Exception ex)
-            {
-                //If we screwed up something. Log it.
-                Logger.LogString(ex.ToString() + "\n", Logtype.Error);
-            }
-        }
 
-        /// <summary>
-        ///
-        /// </summary>
-        public void PackProject()
-        {
-            if (ActiveMod == null)
-            {
-                m_windowFactory.ShowMessageBox(@"Please create a new mod project."
-                    , "Missing Mod Project"
-                    , MessageBoxButtons.OK
-                    , MessageBoxIcon.Information);
+            #endregion Check Existing Files in Working Dir
+
+            // file is in no manager return, should never happen
+            if (!(manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath))))
                 return;
-            }
-            if (_packer != null && (_packer.Status == TaskStatus.Running || _packer.Status == TaskStatus.WaitingToRun || _packer.Status == TaskStatus.WaitingForActivation))
+
+            // get archives with that file in them
+            // <BundlePath, File>
+            var files = manager.FileList
+                .Where(x => x.Name == relativePath);
+            var archives = new Dictionary<string, IGameFile>();
+            foreach (var witcherFile in files)
             {
-                m_windowFactory.ShowMessageBox("Packing task already running, please wait.", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                string key = witcherFile.Archive.ArchiveAbsolutePath;
+                if (!archives.ContainsKey(key))
+                    archives.Add(key, witcherFile);
+            }
+
+            #region Get new Filename
+
+            var bundletype = archives.First().Value.Archive.TypeName;
+            var bundletypestr = bundletype.ToString();
+            string newpath = "";
+            switch (bundletype)
+            {
+                // extract files from bundle to Cooked
+                case EArchiveType.Bundle:
+                {
+                    newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                        ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), $"dlc{ActiveMod.Name}",
+                            NormalizeDlcPath(relativePath))
+                        : Path.Combine("Mod", EProjectFolders.Cooked.ToString(), relativePath));
+                }
+                break;
+                // extract files from Collision and Texture caches to Raw (except for pngs etc)
+                case EArchiveType.CollisionCache:
+                case EArchiveType.TextureCache:
+                {
+                    // add pngs, jpgs and dds directly to Uncooked
+                    // (not Raw, since they don't get imported)
+                    if (extension == ".png" || extension == ".jpg" || extension == ".dds")
+                    {
+                        newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                            ? Path.Combine("DLC", EProjectFolders.Uncooked.ToString(), $"dlc{ActiveMod.Name}",
+                                NormalizeDlcPath(relativePath))
+                            : Path.Combine("Mod", EProjectFolders.Uncooked.ToString(), relativePath));
+                    }
+                    // all other textures and collision stuff goes into Raw (since they have to be imported first)
+                    else
+                        newpath = Path.Combine(ActiveMod.RawDirectory, addAsDLC
+                            ? Path.Combine("DLC", $"dlc{ActiveMod.Name}", NormalizeDlcPath(relativePath))
+                            : Path.Combine("Mod", relativePath));
+                }
+                break;
+                // some special cases
+                case EArchiveType.SoundCache:
+                case EArchiveType.Speech:
+                case EArchiveType.Shader:
+                {
+                    newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
+                        ? Path.Combine("DLC", bundletypestr,
+                            $"dlc{ActiveMod.Name}", NormalizeDlcPath(relativePath))
+                        : Path.Combine("Mod", bundletypestr, relativePath));
+                }
+                break;
+
+                case EArchiveType.ANY:
+                default:
+                    throw new NotImplementedException();
+            }
+
+            #endregion Get new Filename
+
+            // more than one archive
+            if (archives.Count() > 1)
+            {
+                // check against saved priority bundles
+                // if any of the prioritized bundles is in the archivesdict
+                // we select the first??
+                var priokeys = new List<string>();
+                IGameFile selectedFile;
+                foreach (var priokey in prioritizedBundles)
+                {
+                    if (archives.ContainsKey(priokey))
+                        priokeys.Add(priokey);
+                }
+
+                if (priokeys.Count > 0)
+                {
+                    selectedFile = archives[priokeys.First()];
+                }
+                else
+                {
+                    var a = archives.Select(x => x.Value).ToList();
+                    bool onlyusethisbundle;
+                    (onlyusethisbundle, selectedFile) = m_windowFactory.ResolveExtractAmbigious(a);
+                    if (selectedFile == null)
+                        return;
+                    if (onlyusethisbundle)
+                    {
+                        prioritizedBundles.Add(selectedFile.Archive.ArchiveAbsolutePath);
+                    }
+                }
+
+                #region Uncooking
+
+                if (uncook)
+                {
+                    var result = UncookInner(selectedFile);
+                    if (result)
+                        return;
+                }
+
+                #endregion Uncooking
+
+                #region Unbundling
+
+                ExtractInner(selectedFile);
+
+                #endregion Unbundling
             }
             else
-                _packer = PackAndInstallMod();
+            {
+                #region Uncooking
+
+                if (uncook)
+                {
+                    var result = UncookInner(archives.FirstOrDefault().Value);
+                    if (result)
+                        return;
+                }
+
+                #endregion Uncooking
+
+                #region Unbundling
+
+                ExtractInner(archives.FirstOrDefault().Value);
+
+                #endregion Unbundling
+            }
+
+            return;
+
+            void ExtractInner(IGameFile file)
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(newpath));
+                if (File.Exists(newpath))
+                {
+                    File.Delete(newpath);
+                }
+
+                using (var fs = new FileStream(newpath, FileMode.Create))
+                {
+                    file.Extract(fs);
+                }
+
+                Logger.LogString($"Succesfully extracted {filename}.", Logtype.Success);
+            }
+
+            bool UncookInner(IGameFile file)
+            {
+                var basedir = Path.GetDirectoryName(file.Archive.ArchiveAbsolutePath);
+
+                // copy to uncooked folder in mod project
+                var uncookTask = Task.Run(() => WccHelper.UncookFileToPath(basedir, relativePath, addAsDLC));
+
+                Task.WaitAll(uncookTask);
+
+                var uncookedFilesCount = uncookTask.Result;
+                // return if any files have been uncooked, continue to extract otherwise
+                if (uncookedFilesCount > 0)
+                {
+                    // Optionally Export
+                    string _newpath = addAsDLC
+                        ? Path.Combine(ActiveMod.DlcUncookedDirectory, $"dlc{ActiveMod.Name}", relativePath)
+                        : Path.Combine(ActiveMod.ModUncookedDirectory, relativePath);
+                    if (export && File.Exists(_newpath))
+                    {
+                        var exportTask = Task.Run(() => WccHelper.ExportFileToMod(_newpath));
+                        Task.WaitAll(exportTask);
+                    }
+
+                    return true;
+                }
+                else
+                    Logger.LogString($"Could not uncook {filename}, will try to extract instead.", Logtype.Important);
+
+                return false;
+            }
+
+            string NormalizeDlcPath(string path)
+            {
+                // trim off 2 folders from dlc paths for jato
+                if (addAsDLC && path.StartsWith("dlc"))
+                {
+                    var splits = path.Split(Path.DirectorySeparatorChar).ToList();
+                    if (splits.Count > 2)
+                        path = string.Join(Path.DirectorySeparatorChar.ToString(), splits.Skip(2));
+                }
+                return path;
+            }
         }
 
         /// <summary>
@@ -938,261 +1093,127 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         }
 
         /// <summary>
-        /// Scans the depot and the given archivemanagers for a file. If found, extracts it to the project.
-        /// Supports Uncooking and exporting with wcc_lite
+        ///
         /// </summary>
-        /// <param name="relativePath"></param>
-        /// <param name="manager"></param>
-        /// <param name="skipping"></param>
-        /// <param name="addAsDLC"></param>
-        /// <param name="uncook"></param>
-        /// <param name="export"></param>
-        /// <returns></returns>
-        public void AddToMod(string relativePath, IGameArchiveManager manager, List<string> prioritizedBundles, bool addAsDLC,
-            bool uncook = false, bool export = false)
+        public void PackProject()
         {
-            string extension = Path.GetExtension(relativePath);
-            string filename = Path.GetFileName(relativePath);
-
-            // always uncook xbms, w2mesh, redcloth and redapex in Archive
-            //if ((extension == ".xbm" /*|| Enum.GetNames(typeof(EExportable)).Contains(extension.TrimStart('.'))*/) && manager.TypeName == EBundleType.Archive)
-            //    uncook = true;
-
-            #region Check Existing Files in Working Dir
-
-            // if uncooking check first if the file isn't already in the working depot or the r4depot
-            if (uncook)
+            if (ActiveMod == null)
             {
-                var cnewpath = "";
-                // Working Depot
-                var fi = new FileInfo(Path.Combine(Path.GetFullPath(MainController.WorkDir), relativePath));
-                if (fi.Exists)
-                {
-                    // copy to uncooked folder in mod project
-                    cnewpath = addAsDLC
-                        ? Path.Combine(ActiveMod.DlcUncookedDirectory, $"dlc{ActiveMod.Name}", relativePath)
-                        : Path.Combine(ActiveMod.ModUncookedDirectory, relativePath);
-
-                    fi.CopyToAndCreate(cnewpath, true);
-                    Logger.LogString($"Added {filename} from depot.", Logtype.Success);
-
-                    // Optionally Export
-                    if (export && File.Exists(cnewpath))
-                    {
-                        var task = Task.Run(() => WccHelper.ExportFileToMod(cnewpath));
-                        Task.WaitAll(task);
-                    }
-
-                    return;
-                }
-            }
-
-            #endregion Check Existing Files in Working Dir
-
-            // file is in no manager return, should never happen
-            if (!(manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath))))
+                m_windowFactory.ShowMessageBox(@"Please create a new mod project."
+                    , "Missing Mod Project"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Information);
                 return;
-
-            // get archives with that file in them
-            // <BundlePath, File>
-            var files = manager.FileList
-                .Where(x => x.Name == relativePath);
-            var archives = new Dictionary<string, IGameFile>();
-            foreach (var witcherFile in files)
-            {
-                string key = witcherFile.Archive.ArchiveAbsolutePath;
-                if (!archives.ContainsKey(key))
-                    archives.Add(key, witcherFile);
             }
-
-            #region Get new Filename
-
-            var bundletype = archives.First().Value.Archive.TypeName;
-            var bundletypestr = bundletype.ToString();
-            string newpath = "";
-            switch (bundletype)
+            if (_packer != null && (_packer.Status == TaskStatus.Running || _packer.Status == TaskStatus.WaitingToRun || _packer.Status == TaskStatus.WaitingForActivation))
             {
-                // extract files from bundle to Cooked
-                case EArchiveType.Bundle:
-                {
-                    newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                        ? Path.Combine("DLC", EProjectFolders.Cooked.ToString(), $"dlc{ActiveMod.Name}",
-                            NormalizeDlcPath(relativePath))
-                        : Path.Combine("Mod", EProjectFolders.Cooked.ToString(), relativePath));
-                }
-                break;
-                // extract files from Collision and Texture caches to Raw (except for pngs etc)
-                case EArchiveType.CollisionCache:
-                case EArchiveType.TextureCache:
-                {
-                    // add pngs, jpgs and dds directly to Uncooked
-                    // (not Raw, since they don't get imported)
-                    if (extension == ".png" || extension == ".jpg" || extension == ".dds")
-                    {
-                        newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                            ? Path.Combine("DLC", EProjectFolders.Uncooked.ToString(), $"dlc{ActiveMod.Name}",
-                                NormalizeDlcPath(relativePath))
-                            : Path.Combine("Mod", EProjectFolders.Uncooked.ToString(), relativePath));
-                    }
-                    // all other textures and collision stuff goes into Raw (since they have to be imported first)
-                    else
-                        newpath = Path.Combine(ActiveMod.RawDirectory, addAsDLC
-                            ? Path.Combine("DLC", $"dlc{ActiveMod.Name}", NormalizeDlcPath(relativePath))
-                            : Path.Combine("Mod", relativePath));
-                }
-                break;
-                // some special cases
-                case EArchiveType.SoundCache:
-                case EArchiveType.Speech:
-                case EArchiveType.Shader:
-                {
-                    newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
-                        ? Path.Combine("DLC", bundletypestr,
-                            $"dlc{ActiveMod.Name}", NormalizeDlcPath(relativePath))
-                        : Path.Combine("Mod", bundletypestr, relativePath));
-                }
-                break;
-
-                case EArchiveType.ANY:
-                default:
-                    throw new NotImplementedException();
-            }
-
-            #endregion Get new Filename
-
-            // more than one archive
-            if (archives.Count() > 1)
-            {
-                // check against saved priority bundles
-                // if any of the prioritized bundles is in the archivesdict
-                // we select the first??
-                var priokeys = new List<string>();
-                IGameFile selectedFile;
-                foreach (var priokey in prioritizedBundles)
-                {
-                    if (archives.ContainsKey(priokey))
-                        priokeys.Add(priokey);
-                }
-
-                if (priokeys.Count > 0)
-                {
-                    selectedFile = archives[priokeys.First()];
-                }
-                else
-                {
-                    var a = archives.Select(x => x.Value).ToList();
-                    bool onlyusethisbundle;
-                    (onlyusethisbundle, selectedFile) = m_windowFactory.ResolveExtractAmbigious(a);
-                    if (selectedFile == null)
-                        return;
-                    if (onlyusethisbundle)
-                    {
-                        prioritizedBundles.Add(selectedFile.Archive.ArchiveAbsolutePath);
-                    }
-                }
-
-                #region Uncooking
-
-                if (uncook)
-                {
-                    var result = UncookInner(selectedFile);
-                    if (result)
-                        return;
-                }
-
-                #endregion Uncooking
-
-                #region Unbundling
-
-                ExtractInner(selectedFile);
-
-                #endregion Unbundling
+                m_windowFactory.ShowMessageBox("Packing task already running, please wait.", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
+                _packer = PackAndInstallMod();
+        }
+
+        /// <summary>
+        /// Saves a W3ModProject
+        /// </summary>
+        public void SaveMod()
+        {
+            if (ActiveMod == null)
+                return;
+
+            if (ActiveMod.LastOpenedFiles != null)
+                ActiveMod.LastOpenedFiles = GetOpenDocuments().Keys.ToList();
+
+            var ser = new XmlSerializer(typeof(W3Mod));
+            var modfile = new FileStream(ActiveMod.FileName, FileMode.Create, FileAccess.Write);
+            ser.Serialize(modfile, ActiveMod);
+            modfile.Close();
+        }
+
+        /// <summary>
+        /// Installs the project from the packed folder of the project to the game
+        /// </summary>
+        private static void InstallMod()
+        {
+            try
             {
-                #region Uncooking
-
-                if (uncook)
+                //Check if we have installed this mod before. If so do a little cleanup.
+                if (File.Exists(ActiveMod.ProjectDirectory + "\\install_log.xml"))
                 {
-                    var result = UncookInner(archives.FirstOrDefault().Value);
-                    if (result)
-                        return;
-                }
-
-                #endregion Uncooking
-
-                #region Unbundling
-
-                ExtractInner(archives.FirstOrDefault().Value);
-
-                #endregion Unbundling
-            }
-
-            return;
-
-            void ExtractInner(IGameFile file)
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(newpath));
-                if (File.Exists(newpath))
-                {
-                    File.Delete(newpath);
-                }
-
-                using (var fs = new FileStream(newpath, FileMode.Create))
-                {
-                    file.Extract(fs);
-                }
-
-                Logger.LogString($"Succesfully extracted {filename}.", Logtype.Success);
-            }
-
-            bool UncookInner(IGameFile file)
-            {
-                var basedir = Path.GetDirectoryName(file.Archive.ArchiveAbsolutePath);
-
-                // copy to uncooked folder in mod project
-                var uncookTask = Task.Run(() => WccHelper.UncookFileToPath(basedir, relativePath, addAsDLC));
-
-                Task.WaitAll(uncookTask);
-
-                var uncookedFilesCount = uncookTask.Result;
-                // return if any files have been uncooked, continue to extract otherwise
-                if (uncookedFilesCount > 0)
-                {
-                    // Optionally Export
-                    string _newpath = addAsDLC
-                        ? Path.Combine(ActiveMod.DlcUncookedDirectory, $"dlc{ActiveMod.Name}", relativePath)
-                        : Path.Combine(ActiveMod.ModUncookedDirectory, relativePath);
-                    if (export && File.Exists(_newpath))
+                    XDocument log = XDocument.Load(ActiveMod.ProjectDirectory + "\\install_log.xml");
+                    var dirs = log.Root.Element("Files")?.Descendants("Directory");
+                    if (dirs != null)
                     {
-                        var exportTask = Task.Run(() => WccHelper.ExportFileToMod(_newpath));
-                        Task.WaitAll(exportTask);
+                        //Loop throught dirs and delete the old files in them.
+                        foreach (var d in dirs)
+                        {
+                            foreach (var f in d.Elements("file"))
+                            {
+                                if (File.Exists(f.Value))
+                                {
+                                    File.Delete(f.Value);
+                                    Debug.WriteLine("File delete: " + f.Value);
+                                }
+                            }
+                        }
+                        //Delete the empty directories.
+                        foreach (var d in dirs)
+                        {
+                            if (d.Attribute("Path") != null)
+                            {
+                                if (Directory.Exists(d.Attribute("Path").Value))
+                                {
+                                    if (!(Directory.GetFiles(d.Attribute("Path").Value, "*", SearchOption.AllDirectories).Any()))
+                                    {
+                                        Directory.Delete(d.Attribute("Path").Value, true);
+                                        Debug.WriteLine("Directory delete: " + d.Attribute("Path").Value);
+                                    }
+                                }
+                            }
+                        }
                     }
-
-                    return true;
+                    //Delete the old install log. We will make a new one so this is not needed anymore.
+                    File.Delete(ActiveMod.ProjectDirectory + "\\install_log.xml");
                 }
-                else
-                    Logger.LogString($"Could not uncook {filename}, will try to extract instead.", Logtype.Important);
-
-                return false;
-            }
-
-            string NormalizeDlcPath(string path)
-            {
-                // trim off 2 folders from dlc paths for jato
-                if (addAsDLC && path.StartsWith("dlc"))
+                var installlog = new XDocument(new XElement("InstalLog", new XAttribute("Project", ActiveMod.Name), new XAttribute("Build_date", DateTime.Now.ToString())));
+                var fileroot = new XElement("Files");
+                //Copy and log the files.
+                if (!Directory.Exists(Path.Combine(ActiveMod.ProjectDirectory, "packed")))
                 {
-                    var splits = path.Split(Path.DirectorySeparatorChar).ToList();
-                    if (splits.Count > 2)
-                        path = string.Join(Path.DirectorySeparatorChar.ToString(), splits.Skip(2));
+                    Logger.LogString("Failed to install mod. Packed directory does not exist. Check packing options.", Logtype.Important);
+                    return;
                 }
-                return path;
+
+                var packedmoddir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "Mods");
+                if (Directory.Exists(packedmoddir))
+                    fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, MainController.Get().Configuration.W3GameModDir, true));
+
+                var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
+                if (Directory.Exists(packeddlcdir))
+                    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.W3GameDlcDir, true));
+
+                installlog.Root.Add(fileroot);
+                //Save the log.
+                installlog.Save(ActiveMod.ProjectDirectory + "\\install_log.xml");
+                Logger.LogString(ActiveMod.Name + " installed!" + "\n", Logtype.Success);
+            }
+            catch (Exception ex)
+            {
+                //If we screwed up something. Log it.
+                Logger.LogString(ex.ToString() + "\n", Logtype.Error);
             }
         }
 
         #endregion Mod
 
         #region Documents
+
+        public void AddOpenDocument(Old_IDocumentViewModel document)
+        {
+            if (_openDocuments.ContainsKey(document.FileName))
+                throw new NullReferenceException();
+            _openDocuments.Add(document.FileName, document);
+        }
 
         public bool CloseAllDocuments()
         {
@@ -1248,13 +1269,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             //}
 
             return true;
-        }
-
-        public void AddOpenDocument(Old_IDocumentViewModel document)
-        {
-            if (_openDocuments.ContainsKey(document.FileName))
-                throw new NullReferenceException();
-            _openDocuments.Add(document.FileName, document);
         }
 
         public void RemoveOpenDocument(string key)

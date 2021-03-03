@@ -11,6 +11,24 @@ namespace WolvenKit.Functionality.Controllers
     /// </summary>
     public class RadishController : ObservableObject
     {
+        #region Fields
+
+        private static RadishController radishController;
+
+        #endregion Fields
+
+        #region Constructors
+
+        private RadishController()
+        {
+        }
+
+        #endregion Constructors
+
+
+
+        #region Enums
+
         public enum ERadishStatus
         {
             NoRadish,
@@ -18,7 +36,7 @@ namespace WolvenKit.Functionality.Controllers
             Healthy
         }
 
-        private static RadishController radishController;
+        #endregion Enums
 
         //public RadishConfiguration Configuration { get; private set; }
 
@@ -41,19 +59,9 @@ namespace WolvenKit.Functionality.Controllers
 
         #endregion modname
 
-        private RadishController()
-        {
-        }
 
-        public static RadishController Get()
-        {
-            if (radishController == null)
-            {
-                radishController = new RadishController();
-                radishController.Configuration = RadishConfiguration.Load();
-            }
-            return radishController;
-        }
+
+        #region Properties
 
         public string WkitLoggedFiles
         {
@@ -66,57 +74,23 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
+        #endregion Properties
+
+
+
+        #region Methods
+
+        public static RadishController Get()
+        {
+            if (radishController == null)
+            {
+                radishController = new RadishController();
+                radishController.Configuration = RadishConfiguration.Load();
+            }
+            return radishController;
+        }
+
         public static RadishConfiguration GetConfig() => Get().Configuration;
-
-        public bool UpdatdeSelf()
-        {
-            if (!IsHealthy())
-                return false;
-
-            // read the settings file
-            ReadSettings(out string modname, out string idspace, out string DIR_W3, out string DIR_MODKIT, out string DIR_ENCODER);
-
-            // update the radish config if necessary
-            if (modname != Configuration.modname)
-            {
-                MainController.LogString($"Radish ModName updated: {modname}\r\n", Logtype.Important);
-                Configuration.modname = modname;
-            }
-            if (idspace != Configuration.idspace)
-            {
-                MainController.LogString($"Radish idspace updated: {idspace}\r\n", Logtype.Important);
-                Configuration.idspace = idspace;
-            }
-            if (DIR_W3 != Configuration.DIR_W3)
-            {
-                MainController.LogString($"Radish game directory updated: {DIR_W3}\r\n", Logtype.Important);
-                Configuration.DIR_W3 = DIR_W3;
-            }
-            if (DIR_MODKIT != Configuration.DIR_MODKIT)
-            {
-                MainController.LogString($"Radish ModKit directory updated: {DIR_MODKIT}\r\n", Logtype.Important);
-                Configuration.DIR_MODKIT = DIR_MODKIT;
-            }
-            if (DIR_ENCODER != Configuration.DIR_ENCODER)
-            {
-                MainController.LogString($"Radish Tools directory updated: {DIR_ENCODER}\r\n", Logtype.Important);
-                Configuration.DIR_ENCODER = DIR_ENCODER;
-            }
-
-            return true;
-        }
-
-        private void ReadSettings(out string modname, out string idspace, out string DIR_W3, out string DIR_MODKIT, out string DIR_ENCODER)
-        {
-            FileInfo settingsbat = new FileInfo(Directory.GetFiles(Configuration.RadishProjectPath, "*.bat", SearchOption.AllDirectories)?
-                .First(_ => _.EndsWith("_settings_.bat")));
-            string[] settingslines = File.ReadAllLines(settingsbat.FullName);
-            modname = settingslines.First(_ => _.StartsWith("set MODNAME=")).Substring("set MODNAME=".Length);
-            idspace = settingslines.First(_ => _.StartsWith("set idspace=")).Substring("set idspace=".Length);
-            DIR_W3 = settingslines.First(_ => _.StartsWith("set DIR_W3=")).Substring("set DIR_W3=".Length);
-            DIR_MODKIT = settingslines.First(_ => _.StartsWith("set DIR_MODKIT=")).Substring("set DIR_MODKIT=".Length);
-            DIR_ENCODER = settingslines.First(_ => _.StartsWith("set DIR_ENCODER=")).Substring("set DIR_ENCODER=".Length);
-        }
 
         /// <summary>
         ///
@@ -196,6 +170,46 @@ namespace WolvenKit.Functionality.Controllers
             return ERadishStatus.Healthy;
         }
 
+        public bool IsHealthy() => CheckSelf() == ERadishStatus.Healthy;
+
+        public bool UpdatdeSelf()
+        {
+            if (!IsHealthy())
+                return false;
+
+            // read the settings file
+            ReadSettings(out string modname, out string idspace, out string DIR_W3, out string DIR_MODKIT, out string DIR_ENCODER);
+
+            // update the radish config if necessary
+            if (modname != Configuration.modname)
+            {
+                MainController.LogString($"Radish ModName updated: {modname}\r\n", Logtype.Important);
+                Configuration.modname = modname;
+            }
+            if (idspace != Configuration.idspace)
+            {
+                MainController.LogString($"Radish idspace updated: {idspace}\r\n", Logtype.Important);
+                Configuration.idspace = idspace;
+            }
+            if (DIR_W3 != Configuration.DIR_W3)
+            {
+                MainController.LogString($"Radish game directory updated: {DIR_W3}\r\n", Logtype.Important);
+                Configuration.DIR_W3 = DIR_W3;
+            }
+            if (DIR_MODKIT != Configuration.DIR_MODKIT)
+            {
+                MainController.LogString($"Radish ModKit directory updated: {DIR_MODKIT}\r\n", Logtype.Important);
+                Configuration.DIR_MODKIT = DIR_MODKIT;
+            }
+            if (DIR_ENCODER != Configuration.DIR_ENCODER)
+            {
+                MainController.LogString($"Radish Tools directory updated: {DIR_ENCODER}\r\n", Logtype.Important);
+                Configuration.DIR_ENCODER = DIR_ENCODER;
+            }
+
+            return true;
+        }
+
         public void UpdateSettingsBat()
         {
             try
@@ -225,13 +239,25 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
-        public bool IsHealthy() => CheckSelf() == ERadishStatus.Healthy;
-
         private static void lineChanger(string newText, string fileName, int line_to_edit)
         {
             string[] arrLine = File.ReadAllLines(fileName);
             arrLine[line_to_edit - 1] = newText;
             File.WriteAllLines(fileName, arrLine);
         }
+
+        private void ReadSettings(out string modname, out string idspace, out string DIR_W3, out string DIR_MODKIT, out string DIR_ENCODER)
+        {
+            FileInfo settingsbat = new FileInfo(Directory.GetFiles(Configuration.RadishProjectPath, "*.bat", SearchOption.AllDirectories)?
+                .First(_ => _.EndsWith("_settings_.bat")));
+            string[] settingslines = File.ReadAllLines(settingsbat.FullName);
+            modname = settingslines.First(_ => _.StartsWith("set MODNAME=")).Substring("set MODNAME=".Length);
+            idspace = settingslines.First(_ => _.StartsWith("set idspace=")).Substring("set idspace=".Length);
+            DIR_W3 = settingslines.First(_ => _.StartsWith("set DIR_W3=")).Substring("set DIR_W3=".Length);
+            DIR_MODKIT = settingslines.First(_ => _.StartsWith("set DIR_MODKIT=")).Substring("set DIR_MODKIT=".Length);
+            DIR_ENCODER = settingslines.First(_ => _.StartsWith("set DIR_ENCODER=")).Substring("set DIR_ENCODER=".Length);
+        }
+
+        #endregion Methods
     }
 }

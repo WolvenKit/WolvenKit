@@ -13,8 +13,14 @@ namespace WolvenKit.Functionality.Commands
 {
     public class SettingsGeneralCommandContainer : CommandContainerBase
     {
+        #region Fields
+
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly IViewModelFactory _viewModelFactory;
+
+        #endregion Fields
+
+        #region Constructors
 
         public SettingsGeneralCommandContainer(ICommandManager commandManager, IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory)
             : base(AppCommands.Settings.General, commandManager)
@@ -25,5 +31,7 @@ namespace WolvenKit.Functionality.Commands
             _uiVisualizerService = uiVisualizerService;
             _viewModelFactory = viewModelFactory;
         }
+
+        #endregion Constructors
     }
 }

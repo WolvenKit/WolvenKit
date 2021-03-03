@@ -7,12 +7,22 @@ namespace WolvenKit.MVVM.Model
     /// </summary>
     public interface IWolvenkitView
     {
+        #region Properties
+
         string FileName { get; }
 
-        Old_IDocumentViewModel GetViewModel();
+        #endregion Properties
+
+
+
+        #region Methods
+
+        void Activate();
 
         void Close();
 
-        void Activate();
+        Old_IDocumentViewModel GetViewModel();
+
+        #endregion Methods
     }
 }

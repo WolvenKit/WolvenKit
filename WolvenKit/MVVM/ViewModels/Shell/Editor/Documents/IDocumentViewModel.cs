@@ -5,6 +5,13 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 {
     public interface IDocumentViewModel
     {
+        #region Properties
+
+        /// <summary>
+        /// Gets a command to close this document.
+        /// </summary>
+        ICommand CloseCommand { get; }
+
         /// <summary>
         /// Gets the current filename of the file being managed in this document viewmodel.
         /// </summary>
@@ -21,27 +28,28 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 		bool IsDirty { get; set; }
 
         /// <summary>
-        /// Gets a command to close this document.
+        /// Gets a command to save this document's content into another file in the file system.
         /// </summary>
-        ICommand CloseCommand { get; }
+        ICommand SaveAsCommand { get; }
 
         /// <summary>
         /// Gets a command to save this document's content into the file system.
         /// </summary>
         ICommand SaveCommand { get; }
 
-        /// <summary>
-        /// Gets a command to save this document's content into another file in the file system.
-        /// </summary>
-        ICommand SaveAsCommand { get; }
+        #endregion Properties
+
+
+
+        #region Methods
 
         /// <summary>
-		/// Attempts to read the contents of a text file and assigns it to
-		/// text content of this viewmodel.
-		/// </summary>
-		/// <param name="path"></param>
-		/// <returns>True if file read was successful, otherwise false</returns>
-		Task<bool> OpenFileAsync(string path);
+        /// Attempts to read the contents of a text file and assigns it to
+        /// text content of this viewmodel.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns>True if file read was successful, otherwise false</returns>
+        Task<bool> OpenFileAsync(string path);
 
         /// <summary>
         /// Attempts to read the contents of a text file defined via initialPath
@@ -50,5 +58,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         /// <param name="path"></param>
         /// <returns>True if file read was successful, otherwise false</returns>
         Task<bool> OpenFileWithInitialPathAsync();
+
+        #endregion Methods
     }
 }

@@ -8,14 +8,32 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
 {
     public class MyProjectRefresherSelector : IProjectRefresherSelector
     {
+        #region Fields
+
         private readonly IDictionary<string, IProjectRefresher> _projectRefreshers;
 
-        public event AsyncEventHandler<ProjectEventArgs> ProjectRefresherUpdatedAsync;
+        #endregion Fields
+
+        #region Constructors
 
         public MyProjectRefresherSelector()
         {
             _projectRefreshers = new ConcurrentDictionary<string, IProjectRefresher>(StringComparer.OrdinalIgnoreCase);
         }
+
+        #endregion Constructors
+
+
+
+        #region Events
+
+        public event AsyncEventHandler<ProjectEventArgs> ProjectRefresherUpdatedAsync;
+
+        #endregion Events
+
+
+
+        #region Methods
 
         public IProjectRefresher GetProjectRefresher(string location)
         {
@@ -35,5 +53,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
                 .SafeInvokeAsync(this,
                     e)
                 .ConfigureAwait(false);
+
+        #endregion Methods
     }
 }

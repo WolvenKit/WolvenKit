@@ -19,11 +19,11 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
 
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private readonly ICommandLineParser _commandLineParser;
+        private readonly ICommandLineService _commandLineService;
         private readonly IConfigurationService _configurationService;
         private readonly IDirectoryService _directoryService;
-        private readonly ICommandLineParser _commandLineParser;
         private readonly IFileService _fileService;
-        private readonly ICommandLineService _commandLineService;
 
         #endregion Fields
 
@@ -46,6 +46,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
         }
 
         #endregion Constructors
+
+
 
         #region Methods
 

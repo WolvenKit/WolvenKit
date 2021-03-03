@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Catel.IoC;
+using System;
 using System.CommandLine;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using Catel.IoC;
 using CP77.CR2W;
 using CP77Tools.Commands;
 using CP77Tools.Extensions;
@@ -71,7 +71,7 @@ namespace CP77Tools
             if ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) && !TryCopyOodleLib())
             {
                 logger.LogString("Could not automatically find oo2ext_7_win64.dll. " +
-                                 "Please manually copy and paste the DLL found in <gamedir>\Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
+                                 "Please manually copy and paste the DLL found in <gamedir>\\Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
                                  $"{AppDomain.CurrentDomain.BaseDirectory}.");
             }
 
@@ -150,7 +150,8 @@ namespace CP77Tools
 
                 var baseDirectory = AppContext.BaseDirectory;
 
-                if (string.IsNullOrEmpty(baseDirectory)) return;
+                if (string.IsNullOrEmpty(baseDirectory))
+                    return;
 
                 var fi = new FileInfo(Path.Combine(baseDirectory, $"errorlogs/log_{t}.txt"));
                 if (fi.Directory != null)

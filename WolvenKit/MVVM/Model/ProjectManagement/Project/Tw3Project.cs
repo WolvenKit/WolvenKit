@@ -24,20 +24,22 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
     {
         #region fields
 
-        private readonly ISettingsManager _settings;
         private readonly ILoggerService _logger;
-
+        private readonly ISettingsManager _settings;
+        private BundleManager BundleManager;
+        private CollisionManager CollisionManager;
         private Task initializeTask;
 
-        private W3StringManager W3StringManager;
-        private BundleManager BundleManager;
         private SoundManager SoundManager;
         private TextureManager TextureManager;
-        private CollisionManager CollisionManager;
-
+        private W3StringManager W3StringManager;
         private SpeechManager SpeechManager { get; set; }
 
         #endregion fields
+
+
+
+        #region Constructors
 
         public Tw3Project(string location) : base(location)
         {
@@ -51,16 +53,11 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
         }
 
+        #endregion Constructors
+
         #region properties
 
-        public override void Save(string path)
-        {
-            using (var sf = new FileStream(path, FileMode.Create, FileAccess.Write))
-            {
-                var ser = new XmlSerializer(typeof(W3Mod));
-                ser.Serialize(sf, (W3Mod)this.Data);
-            }
-        }
+        public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
 
         public override void Load(string path)
         {
@@ -78,7 +75,14 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
+        public override void Save(string path)
+        {
+            using (var sf = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                var ser = new XmlSerializer(typeof(W3Mod));
+                ser.Serialize(sf, (W3Mod)this.Data);
+            }
+        }
 
         #region Directories
 
@@ -101,20 +105,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string ModDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(FileDirectory, "Mod");
-                if (!Directory.Exists(dir))
-                    Directory.CreateDirectory(dir);
-                return dir;
-            }
-        }
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string DlcDirectory
         {
             get
@@ -129,11 +119,11 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string RawDirectory
+        public string ModDirectory
         {
             get
             {
-                var dir = Path.Combine(FileDirectory, "Raw");
+                var dir = Path.Combine(FileDirectory, "Mod");
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
                 return dir;
@@ -154,22 +144,23 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        #endregion Top-level Dirs
-
-        #region Mod-level Dirs
-
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string ModUncookedDirectory
+        public string RawDirectory
         {
             get
             {
-                if (!Directory.Exists(Path.Combine(ModDirectory, EProjectFolders.Uncooked.ToString())))
-                    Directory.CreateDirectory(Path.Combine(ModDirectory, EProjectFolders.Uncooked.ToString()));
-                return Path.Combine(ModDirectory, EProjectFolders.Uncooked.ToString());
+                var dir = Path.Combine(FileDirectory, "Raw");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
             }
         }
+
+        #endregion Top-level Dirs
+
+        #region Mod-level Dirs
 
         [XmlIgnore]
         [ReadOnly(true)]
@@ -184,22 +175,22 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        #endregion Mod-level Dirs
-
-        #region DLC-level Dirs
-
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string DlcUncookedDirectory
+        public string ModUncookedDirectory
         {
             get
             {
-                if (!Directory.Exists(Path.Combine(DlcDirectory, EProjectFolders.Uncooked.ToString())))
-                    Directory.CreateDirectory(Path.Combine(DlcDirectory, EProjectFolders.Uncooked.ToString()));
-                return Path.Combine(DlcDirectory, EProjectFolders.Uncooked.ToString());
+                if (!Directory.Exists(Path.Combine(ModDirectory, EProjectFolders.Uncooked.ToString())))
+                    Directory.CreateDirectory(Path.Combine(ModDirectory, EProjectFolders.Uncooked.ToString()));
+                return Path.Combine(ModDirectory, EProjectFolders.Uncooked.ToString());
             }
         }
+
+        #endregion Mod-level Dirs
+
+        #region DLC-level Dirs
 
         [XmlIgnore]
         [ReadOnly(true)]
@@ -214,22 +205,22 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        #endregion DLC-level Dirs
-
-        #region RAW-level Dirs
-
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public string RawModDirectory
+        public string DlcUncookedDirectory
         {
             get
             {
-                if (!Directory.Exists(Path.Combine(RawDirectory, "Mod")))
-                    Directory.CreateDirectory(Path.Combine(RawDirectory, "Mod"));
-                return Path.Combine(RawDirectory, "Mod");
+                if (!Directory.Exists(Path.Combine(DlcDirectory, EProjectFolders.Uncooked.ToString())))
+                    Directory.CreateDirectory(Path.Combine(DlcDirectory, EProjectFolders.Uncooked.ToString()));
+                return Path.Combine(DlcDirectory, EProjectFolders.Uncooked.ToString());
             }
         }
+
+        #endregion DLC-level Dirs
+
+        #region RAW-level Dirs
 
         [XmlIgnore]
         [ReadOnly(true)]
@@ -244,37 +235,22 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string RawModDirectory
+        {
+            get
+            {
+                if (!Directory.Exists(Path.Combine(RawDirectory, "Mod")))
+                    Directory.CreateDirectory(Path.Combine(RawDirectory, "Mod"));
+                return Path.Combine(RawDirectory, "Mod");
+            }
+        }
+
         #endregion RAW-level Dirs
 
         #region Cooked and Packed Directories
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string CookedModDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(ProjectDirectory, "cooked", "Mods", $"mod{Name}", "content");
-                if (!Directory.Exists(dir))
-                    Directory.CreateDirectory(dir);
-                return dir;
-            }
-        }
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string PackedModDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(ProjectDirectory, "packed", "Mods", $"mod{Name}", "content");
-                if (!Directory.Exists(dir))
-                    Directory.CreateDirectory(dir);
-                return dir;
-            }
-        }
 
         [XmlIgnore]
         [ReadOnly(true)]
@@ -288,6 +264,20 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                     return null;
                 }
                 var dir = Path.Combine(ProjectDirectory, "cooked", "DLC", GetDlcName(), "content");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
+
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string CookedModDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "cooked", "Mods", $"mod{Name}", "content");
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
                 return dir;
@@ -312,28 +302,25 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string PackedModDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "packed", "Mods", $"mod{Name}", "content");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
+
         #endregion Cooked and Packed Directories
 
         #endregion Directories
 
         #region Files
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public List<string> ModFiles
-        {
-            get
-            {
-                if (!Directory.Exists(ModDirectory))
-                {
-                    Directory.CreateDirectory(ModDirectory);
-                }
-                return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file.Substring(ModDirectory.Length + 1))
-                    .ToList();
-            }
-        }
 
         [XmlIgnore]
         [ReadOnly(true)]
@@ -355,16 +342,16 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
-        public List<string> RawFiles
+        public List<string> ModFiles
         {
             get
             {
-                if (!Directory.Exists(RawDirectory))
+                if (!Directory.Exists(ModDirectory))
                 {
-                    Directory.CreateDirectory(RawDirectory);
+                    Directory.CreateDirectory(ModDirectory);
                 }
-                return Directory.EnumerateFiles(RawDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file.Substring(RawDirectory.Length + 1))
+                return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories)
+                    .Select(file => file.Substring(ModDirectory.Length + 1))
                     .ToList();
             }
         }
@@ -386,6 +373,23 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public List<string> RawFiles
+        {
+            get
+            {
+                if (!Directory.Exists(RawDirectory))
+                {
+                    Directory.CreateDirectory(RawDirectory);
+                }
+                return Directory.EnumerateFiles(RawDirectory, "*", SearchOption.AllDirectories)
+                    .Select(file => file.Substring(RawDirectory.Length + 1))
+                    .ToList();
+            }
+        }
+
         #endregion Files
 
         #endregion properties
@@ -394,6 +398,105 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         // TODO: debug
         public override void Check() => _logger.LogString($"{initializeTask.Status.ToString()}", Logtype.Error);
+
+        public void CreateDefaultDirectories()
+        {
+            // create top-level directories
+            _ = ModDirectory;
+            _ = DlcDirectory;
+            _ = RawDirectory;
+            _ = RadishDirectory;
+
+            // create mod-level directories
+            _ = ModUncookedDirectory;
+            _ = ModCookedDirectory;
+
+            // create dlc-level directories
+            _ = DlcUncookedDirectory;
+            _ = DlcCookedDirectory;
+
+            // create raw-level directories
+            _ = RawModDirectory;
+            _ = RawDlcDirectory;
+        }
+
+        /// <summary>
+        /// Returns the first folder name in the DlcCookedDirectory.
+        /// Does not support multiple dlc
+        /// </summary>
+        /// <returns></returns>
+        public string GetDlcCookedRelativePath()
+        {
+            string relpath = "";
+            var di = new DirectoryInfo(DlcCookedDirectory);
+            if (di.Exists && di.GetDirectories().Any())
+            {
+                // support older projects
+                if (di.GetDirectories().Any(_ => _.Name == "dlc"))
+                {
+                    var subdi = di.GetDirectories().First(_ => _.Name == "dlc");
+                    if (subdi.Exists && subdi.GetDirectories().Any())
+                    {
+                        relpath = subdi.GetDirectories().First().FullName;
+                        return relpath.Substring(DlcCookedDirectory.Length + 5);
+                    }
+                    else
+                    {
+                        return "";
+                    }
+                }
+                else
+                    relpath = di.GetDirectories().First().FullName;
+                return relpath.Substring(DlcCookedDirectory.Length + 1);
+            }
+            return relpath;
+        }
+
+        /// <summary>
+        /// Returns the first relative folder path in the ActiveMod/dlc directory
+        /// Does not support multiple DLC
+        /// </summary>
+        /// <returns></returns>
+        public string GetDlcName()
+        {
+            if (!string.IsNullOrEmpty(GetDlcCookedRelativePath()))
+                return GetDlcCookedRelativePath();
+            if (!string.IsNullOrEmpty(GetDlcUncookedRelativePath()))
+                return GetDlcUncookedRelativePath();
+            return "";
+        }
+
+        /// <summary>
+        /// Returns the first folder name in the DlcUncookedDirectory.
+        /// Does not support multiple dlc
+        /// </summary>
+        /// <returns></returns>
+        public string GetDlcUncookedRelativePath()
+        {
+            string relpath = "";
+            var di = new DirectoryInfo(DlcUncookedDirectory);
+            if (di.Exists && di.GetDirectories().Any())
+            {
+                // support older projects
+                if (di.GetDirectories().Any(_ => _.Name == "dlc"))
+                {
+                    var subdi = di.GetDirectories().First(_ => _.Name == "dlc");
+                    if (subdi.Exists && subdi.GetDirectories().Any())
+                    {
+                        relpath = subdi.GetDirectories().First().FullName;
+                        return relpath.Substring(DlcUncookedDirectory.Length + 5);
+                    }
+                    else
+                    {
+                        return "";
+                    }
+                }
+                else
+                    relpath = di.GetDirectories().First().FullName;
+                return relpath.Substring(DlcUncookedDirectory.Length + 1);
+            }
+            return relpath;
+        }
 
         public sealed override Task Initialize()
         {
@@ -442,106 +545,11 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             NotificationHelper.Growl.Success($"Project {Name} has finished loading.");
         }
 
-        public void CreateDefaultDirectories()
-        {
-            // create top-level directories
-            _ = ModDirectory;
-            _ = DlcDirectory;
-            _ = RawDirectory;
-            _ = RadishDirectory;
-
-            // create mod-level directories
-            _ = ModUncookedDirectory;
-            _ = ModCookedDirectory;
-
-            // create dlc-level directories
-            _ = DlcUncookedDirectory;
-            _ = DlcCookedDirectory;
-
-            // create raw-level directories
-            _ = RawModDirectory;
-            _ = RawDlcDirectory;
-        }
-
-        /// <summary>
-        /// Returns the first relative folder path in the ActiveMod/dlc directory
-        /// Does not support multiple DLC
-        /// </summary>
-        /// <returns></returns>
-        public string GetDlcName()
-        {
-            if (!string.IsNullOrEmpty(GetDlcCookedRelativePath()))
-                return GetDlcCookedRelativePath();
-            if (!string.IsNullOrEmpty(GetDlcUncookedRelativePath()))
-                return GetDlcUncookedRelativePath();
-            return "";
-        }
-
-        /// <summary>
-        /// Returns the first folder name in the DlcCookedDirectory.
-        /// Does not support multiple dlc
-        /// </summary>
-        /// <returns></returns>
-        public string GetDlcCookedRelativePath()
-        {
-            string relpath = "";
-            var di = new DirectoryInfo(DlcCookedDirectory);
-            if (di.Exists && di.GetDirectories().Any())
-            {
-                // support older projects
-                if (di.GetDirectories().Any(_ => _.Name == "dlc"))
-                {
-                    var subdi = di.GetDirectories().First(_ => _.Name == "dlc");
-                    if (subdi.Exists && subdi.GetDirectories().Any())
-                    {
-                        relpath = subdi.GetDirectories().First().FullName;
-                        return relpath.Substring(DlcCookedDirectory.Length + 5);
-                    }
-                    else
-                    {
-                        return "";
-                    }
-                }
-                else
-                    relpath = di.GetDirectories().First().FullName;
-                return relpath.Substring(DlcCookedDirectory.Length + 1);
-            }
-            return relpath;
-        }
-
-        /// <summary>
-        /// Returns the first folder name in the DlcUncookedDirectory.
-        /// Does not support multiple dlc
-        /// </summary>
-        /// <returns></returns>
-        public string GetDlcUncookedRelativePath()
-        {
-            string relpath = "";
-            var di = new DirectoryInfo(DlcUncookedDirectory);
-            if (di.Exists && di.GetDirectories().Any())
-            {
-                // support older projects
-                if (di.GetDirectories().Any(_ => _.Name == "dlc"))
-                {
-                    var subdi = di.GetDirectories().First(_ => _.Name == "dlc");
-                    if (subdi.Exists && subdi.GetDirectories().Any())
-                    {
-                        relpath = subdi.GetDirectories().First().FullName;
-                        return relpath.Substring(DlcUncookedDirectory.Length + 5);
-                    }
-                    else
-                    {
-                        return "";
-                    }
-                }
-                else
-                    relpath = di.GetDirectories().First().FullName;
-                return relpath.Substring(DlcUncookedDirectory.Length + 1);
-            }
-            return relpath;
-        }
-
         #endregion methods
+
+
+
+        #region Methods
 
         public object Clone()
         {
@@ -560,5 +568,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
             return Location;
         }
+
+        #endregion Methods
     }
 }

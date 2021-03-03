@@ -4,27 +4,15 @@ using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
-    public class ChunkViewModel
-    {
-        private readonly ICR2WExport _export;
-
-        public ChunkViewModel(ICR2WExport export)
-        {
-            _export = export;
-        }
-
-        public IEditableVariable Data => _export.data;
-
-        public string Name => _export.REDName;
-        public List<ChunkViewModel> Children => _export.VirtualChildrenChunks.Select(_ => new ChunkViewModel(_)).ToList();
-
-        public List<ChunkPropertyViewModel> ChildrenProperties =>
-            Data.ChildrEditableVariables.Select(_ => new ChunkPropertyViewModel(_)).ToList();
-    }
-
     public class ChunkPropertyViewModel
     {
+        #region Fields
+
         private readonly IEditableVariable _property;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ChunkPropertyViewModel(IEditableVariable prop)
         {
@@ -35,14 +23,55 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             Value = prop.REDValue;
         }
 
+        #endregion Constructors
+
+
+
+        #region Properties
+
+        public List<ChunkPropertyViewModel> Children => _property.ChildrEditableVariables.Select(_ => new ChunkPropertyViewModel(_)).ToList();
+
         public System.Windows.Media.Brush ForegroundColor => _property.IsSerialized
-            ? System.Windows.Media.Brushes.Green
+                    ? System.Windows.Media.Brushes.Green
             : System.Windows.Media.Brushes.Azure;
 
         public string Name { get; }
         public string Type { get; }
         public string Value { get; set; }
 
-        public List<ChunkPropertyViewModel> Children => _property.ChildrEditableVariables.Select(_ => new ChunkPropertyViewModel(_)).ToList();
+        #endregion Properties
+    }
+
+    public class ChunkViewModel
+    {
+        #region Fields
+
+        private readonly ICR2WExport _export;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ChunkViewModel(ICR2WExport export)
+        {
+            _export = export;
+        }
+
+        #endregion Constructors
+
+
+
+        #region Properties
+
+        public List<ChunkViewModel> Children => _export.VirtualChildrenChunks.Select(_ => new ChunkViewModel(_)).ToList();
+
+        public List<ChunkPropertyViewModel> ChildrenProperties =>
+            Data.ChildrEditableVariables.Select(_ => new ChunkPropertyViewModel(_)).ToList();
+
+        public IEditableVariable Data => _export.data;
+
+        public string Name => _export.REDName;
+
+        #endregion Properties
     }
 }

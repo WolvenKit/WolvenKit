@@ -20,6 +20,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
     public class BulkEditOptions
     {
+        #region Enums
+
+        public enum AvailableOperations
+        {
+            Replace,
+            Multiply,
+            Divide,
+            Add,
+            Subtract
+        }
+
         public enum AvailableTypes
         {
             ANY,
@@ -35,14 +46,30 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             CString
         }
 
-        public enum AvailableOperations
-        {
-            Replace,
-            Multiply,
-            Divide,
-            Add,
-            Subtract
-        }
+        #endregion Enums
+
+
+
+        #region Properties
+
+        [Description("Specify the chunk name. \n\r" +
+            "Example: CMesh")]
+        [Category("Is Required")]
+        public string ChunkName { get; set; }
+
+        // Optional lists
+        [Description("Exclude the following values.\n\r" +
+            "Example: 0,64,1028,2053")]
+        public string Exclude { get; set; }
+
+        // Optional string
+        [Description("Specify the file extensions to edit. \n\r" +
+            "Example: w2mesh,w2l,xbm")]
+        public string Extension { get; set; }
+
+        [Description("Include only the following values.\n\r" +
+                    "Example: 0,32,64")]
+        public string Include { get; set; }
 
         // Required
         [Description("Specify the variable name. \n\r" +
@@ -50,111 +77,29 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         [Category("Is Required")]
         public string Name { get; set; }
 
-        [Description("Specify the new variable value. \n\r" +
-            "Example: 9999")]
-        [Category("Is Required")]
-        public string Value { get; set; }
-
-        [Description("Specify the chunk name. \n\r" +
-    "Example: CMesh")]
-        [Category("Is Required")]
-        public string ChunkName { get; set; }
-
-        // Optional string
-        [Description("Specify the file extensions to edit. \n\r" +
-            "Example: w2mesh,w2l,xbm")]
-        public string Extension { get; set; }
+        [Description("Specify the option type. Default is replace.")]
+        public AvailableOperations Operation { get; set; }
 
         [Description("Specify the variable type.")]
         public AvailableTypes Type { get; set; }
 
-        [Description("Specify the option type. Default is replace.")]
-        public AvailableOperations Operation { get; set; }
+        [Description("Specify the new variable value. \n\r" +
+                            "Example: 9999")]
+        [Category("Is Required")]
+        public string Value { get; set; }
 
-        // Optional lists
-        [Description("Exclude the following values.\n\r" +
-            "Example: 0,64,1028,2053")]
-        public string Exclude { get; set; }
-
-        [Description("Include only the following values.\n\r" +
-            "Example: 0,32,64")]
-        public string Include { get; set; }
-    }
-
-    public class ProgressReport : ObservableObject
-    {
-        #region Min
-
-        private int _min;
-
-        public int Min
-        {
-            get => _min;
-            set
-            {
-                if (_min != value)
-                {
-                    _min = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        #endregion Min
-
-        #region Max
-
-        private int _max;
-
-        public int Max
-        {
-            get => _max;
-            set
-            {
-                if (_max != value)
-                {
-                    _max = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        #endregion Max
-
-        #region Value
-
-        private int _value;
-
-        public int Value
-        {
-            get => _value;
-            set
-            {
-                if (_value != value)
-                {
-                    _value = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        #endregion Value
-
-        public ProgressReport()
-        {
-        }
-
-        public ProgressReport(ProgressReport old)
-        {
-            Min = old.Min;
-            Max = old.Max;
-            Value = old.Value;
-        }
+        #endregion Properties
     }
 
     public class BulkEditorViewModel : ViewModel
     {
+        #region Fields
+
         private readonly MainViewModel MainVM;
+
+        #endregion Fields
+
+        #region Constructors
 
         public BulkEditorViewModel(IWindowFactory windowFactory, MainViewModel mainViewModel) : base(windowFactory)
         {
@@ -167,11 +112,27 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             ProgressReport = new ProgressReport();
         }
 
+        #endregion Constructors
+
+
+
+        #region Events
+
         public event EventHandler PerformStep = delegate { };
+
+        #endregion Events
+
+
+
+        #region Methods
 
         protected void OnPerformStepRequest() => this.PerformStep?.Invoke(this, new EventArgs());
 
         protected void OnResetRequest() => this.PerformStep?.Invoke(this, new EventArgs());
+
+        #endregion Methods
+
+
 
         #region Fields
 
@@ -452,5 +413,82 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         }
 
         #endregion Methods
+    }
+
+    public class ProgressReport : ObservableObject
+    {
+        #region Min
+
+        private int _min;
+
+        public int Min
+        {
+            get => _min;
+            set
+            {
+                if (_min != value)
+                {
+                    _min = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        #endregion Min
+
+        #region Max
+
+        private int _max;
+
+        public int Max
+        {
+            get => _max;
+            set
+            {
+                if (_max != value)
+                {
+                    _max = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        #endregion Max
+
+        #region Value
+
+        private int _value;
+
+        public int Value
+        {
+            get => _value;
+            set
+            {
+                if (_value != value)
+                {
+                    _value = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        #endregion Value
+
+
+
+        #region Constructors
+
+        public ProgressReport()
+        {
+        }
+
+        public ProgressReport(ProgressReport old)
+        {
+            Min = old.Min;
+            Max = old.Max;
+            Value = old.Value;
+        }
+
+        #endregion Constructors
     }
 }

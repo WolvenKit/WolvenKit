@@ -7,10 +7,18 @@ namespace WolvenKit.Functionality.Commands
 {
     internal class ApplicationShowSettingsCommandContainer : Catel.MVVM.CommandContainerBase
     {
+        #region Constructors
+
         public ApplicationShowSettingsCommandContainer(ICommandManager commandManager)
             : base(AppCommands.Application.ShowSettings, commandManager)
         {
         }
+
+        #endregion Constructors
+
+
+
+        #region Methods
 
         protected override void Execute(object parameter)
         {
@@ -20,5 +28,7 @@ namespace WolvenKit.Functionality.Commands
             HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
             HomePageView.GlobalHomePage.PageViewGrid.Children.Add(HomePageView.GlobalHomePage.SettingsPV);
         }
+
+        #endregion Methods
     }
 }

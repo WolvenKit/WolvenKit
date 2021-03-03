@@ -11,6 +11,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
     public class ModkitViewModel : ViewModel
     {
+        #region Constructors
+
         public ModkitViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
             Logger = MainController.Get().Logger;
@@ -25,6 +27,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
             Commands = Commands.OrderBy(_ => _.Name).ToList();
         }
+
+        #endregion Constructors
+
+
 
         #region Fields
 

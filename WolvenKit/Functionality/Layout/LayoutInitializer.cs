@@ -5,8 +5,18 @@ namespace WolvenKit.Functionality.Layout
 {
     internal class LayoutInitializer : ILayoutUpdateStrategy
     {
+        #region Methods
+
+        public void AfterInsertAnchorable(LayoutRoot layout, LayoutAnchorable anchorableShown)
+        {
+        }
+
+        public void AfterInsertDocument(LayoutRoot layout, LayoutDocument layoutDocumentToShow)
+        {
+        }
+
         public bool BeforeInsertAnchorable(LayoutRoot layout,
-                                           LayoutAnchorable anchorableToShow,
+                                                           LayoutAnchorable anchorableToShow,
                                            ILayoutContainer destinationContainer)
         {
             // AD wants to add the anchorable into destinationContainer
@@ -30,17 +40,11 @@ namespace WolvenKit.Functionality.Layout
             return false;
         }
 
-        public void AfterInsertAnchorable(LayoutRoot layout, LayoutAnchorable anchorableShown)
-        {
-        }
-
         public bool BeforeInsertDocument(LayoutRoot layout,
                                         LayoutDocument layoutDocumentToShow,
                                         ILayoutContainer destinationContainer) =>
             false;
 
-        public void AfterInsertDocument(LayoutRoot layout, LayoutDocument layoutDocumentToShow)
-        {
-        }
+        #endregion Methods
     }
 }

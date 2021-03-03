@@ -7,10 +7,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
     {
         #region fields
 
-        private string _title = null;
         private string _contentId = null;
-        private bool _isSelected = false;
         private bool _isActive = false;
+        private bool _isSelected = false;
+        private string _title = null;
 
         #endregion fields
 
@@ -22,26 +22,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #endregion constructors
 
+
+
         #region Properties
-
-        public new string Title
-        {
-            get => _title;
-            set
-            {
-                if (_title != value)
-                {
-                    _title = value;
-                    RaisePropertyChanged(nameof(Title));
-                }
-            }
-        }
-
-        public ImageSource IconSource
-        {
-            get;
-            protected set;
-        }
 
         public string ContentId
         {
@@ -52,6 +35,25 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 {
                     _contentId = value;
                     RaisePropertyChanged(nameof(ContentId));
+                }
+            }
+        }
+
+        public ImageSource IconSource
+        {
+            get;
+            protected set;
+        }
+
+        public bool IsActive
+        {
+            get => _isActive;
+            set
+            {
+                if (_isActive != value)
+                {
+                    _isActive = value;
+                    RaisePropertyChanged(nameof(IsActive));
                 }
             }
         }
@@ -69,15 +71,15 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-        public bool IsActive
+        public new string Title
         {
-            get => _isActive;
+            get => _title;
             set
             {
-                if (_isActive != value)
+                if (_title != value)
                 {
-                    _isActive = value;
-                    RaisePropertyChanged(nameof(IsActive));
+                    _title = value;
+                    RaisePropertyChanged(nameof(Title));
                 }
             }
         }

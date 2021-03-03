@@ -29,41 +29,7 @@ namespace WolvenKit.MVVM.Model
 {
     public static class GitHelper
     {
-        public static async Task<bool> InitRepository(ILoggerService loggerService, string RepoPath, string templatedir = "", string AuthorName = "", string Email = "")
-        {
-            try
-            {
-                if (!Directory.Exists(RepoPath))
-                {
-                    Directory.CreateDirectory(RepoPath);
-                }
-
-                string initargs = "git init";
-                if (!string.IsNullOrEmpty(templatedir))
-                    initargs += $" --template={templatedir}";
-
-                var commands = new List<string>()
-                {
-                    initargs,
-                    "git config core.longpaths true",
-                    "git config core.autocrlf true",
-                    "git config core.safecrlf false"
-                };
-
-                if (!String.IsNullOrWhiteSpace(AuthorName))
-                    commands.Add("git config user.name \"" + AuthorName + "\"");
-                if (!String.IsNullOrWhiteSpace(Email))
-                    commands.Add("git config user.email \"" + Email + "\"");
-
-                var exitCode = await ProcessHelper.RunCommandLineAsync(loggerService, RepoPath, commands.ToArray());
-                return exitCode == 0;
-            }
-            catch (Exception ex)
-            {
-                loggerService.LogString($"Error creating git repository: {ex.ToString()}", Logtype.Error);
-            }
-            return false;
-        }
+        #region Methods
 
         public static async Task<bool> Archive(ILoggerService loggerService, string repoPath, string outputFileName, bool useAttributesFile = true)
         {
@@ -104,5 +70,43 @@ namespace WolvenKit.MVVM.Model
             }
             return false;
         }
+
+        public static async Task<bool> InitRepository(ILoggerService loggerService, string RepoPath, string templatedir = "", string AuthorName = "", string Email = "")
+        {
+            try
+            {
+                if (!Directory.Exists(RepoPath))
+                {
+                    Directory.CreateDirectory(RepoPath);
+                }
+
+                string initargs = "git init";
+                if (!string.IsNullOrEmpty(templatedir))
+                    initargs += $" --template={templatedir}";
+
+                var commands = new List<string>()
+                {
+                    initargs,
+                    "git config core.longpaths true",
+                    "git config core.autocrlf true",
+                    "git config core.safecrlf false"
+                };
+
+                if (!String.IsNullOrWhiteSpace(AuthorName))
+                    commands.Add("git config user.name \"" + AuthorName + "\"");
+                if (!String.IsNullOrWhiteSpace(Email))
+                    commands.Add("git config user.email \"" + Email + "\"");
+
+                var exitCode = await ProcessHelper.RunCommandLineAsync(loggerService, RepoPath, commands.ToArray());
+                return exitCode == 0;
+            }
+            catch (Exception ex)
+            {
+                loggerService.LogString($"Error creating git repository: {ex.ToString()}", Logtype.Error);
+            }
+            return false;
+        }
+
+        #endregion Methods
     }
 }

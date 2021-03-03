@@ -13,8 +13,14 @@ namespace WolvenKit.Functionality.Commands
 {
     public class ApplicationNewProjectCommandContainer : ProjectCommandContainerBase
     {
+        #region Fields
+
         private readonly ILoggerService _loggerService;
         private readonly IUIVisualizerService _uIVisualizerService;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ApplicationNewProjectCommandContainer(
             ICommandManager commandManager,
@@ -29,6 +35,12 @@ namespace WolvenKit.Functionality.Commands
             _loggerService = loggerService;
             _uIVisualizerService = uIVisualizerService;
         }
+
+        #endregion Constructors
+
+
+
+        #region Methods
 
         protected override bool CanExecute(object parameter) => true;
 
@@ -46,5 +58,7 @@ namespace WolvenKit.Functionality.Commands
                 _loggerService.LogString("Failed to create a new project!", Logtype.Error);
             }
         }
+
+        #endregion Methods
     }
 }

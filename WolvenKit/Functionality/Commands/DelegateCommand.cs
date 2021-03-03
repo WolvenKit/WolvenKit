@@ -7,8 +7,14 @@ namespace WolvenKit.Functionality.Commands
     /// </summary>
     public class DelegateCommand : Command
     {
-        private readonly Action<object> _execute;
+        #region Fields
+
         private readonly Predicate<object> _canExecute;
+        private readonly Action<object> _execute;
+
+        #endregion Fields
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegateCommand"/> class.
@@ -29,6 +35,8 @@ namespace WolvenKit.Functionality.Commands
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
+
+        #endregion Constructors
 
         #region ICommand Members
 

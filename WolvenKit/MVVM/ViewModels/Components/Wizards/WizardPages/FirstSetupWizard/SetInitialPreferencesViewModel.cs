@@ -23,6 +23,11 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWiz
         #region properties
 
         /// <summary>
+        /// Register the FirstSetupWizardModel property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty("FirstSetupWizardModel", typeof(FirstSetupWizardModel));
+
+        /// <summary>
         /// Gets or sets the FirstSetupWizardModel.
         /// </summary>
         [Model]
@@ -35,11 +40,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWiz
             get { return GetValue<FirstSetupWizardModel>(ProjectWizardModelProperty); }
             set { SetValue(ProjectWizardModelProperty, value); }
         }
-
-        /// <summary>
-        /// Register the FirstSetupWizardModel property so it is known in the class.
-        /// </summary>
-        public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty("FirstSetupWizardModel", typeof(FirstSetupWizardModel));
 
         #endregion properties
     }

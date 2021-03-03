@@ -22,6 +22,10 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
 
     public interface ISaveProjectChangesService
     {
+        #region Methods
+
         Task<bool> EnsureChangesSavedAsync(EditorProject project, SaveChangesReason reason);
+
+        #endregion Methods
     }
 }

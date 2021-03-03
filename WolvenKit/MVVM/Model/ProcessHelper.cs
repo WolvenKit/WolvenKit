@@ -32,6 +32,42 @@ namespace WolvenKit.MVVM.Model
 {
     public static class ProcessHelper
     {
+        #region Methods
+
+        public static int RunCommandLine(string workingDirectory = "", params string[] commands)
+        {
+            return RunProcess(Path.Combine(Environment.SystemDirectory, "cmd.exe"), workingDirectory, commands);
+        }
+
+        public static async Task<int> RunCommandLineAsync(ILoggerService loggerService, string workingDirectory = "", params string[] commands)
+        {
+            return await RunProcessAsync(loggerService,
+                    Path.Combine(Environment.SystemDirectory, "cmd.exe"),
+                    workingDirectory,
+                    commands)
+                .ConfigureAwait(false);
+        }
+
+        public static int RunProcess(string filePath, string workingDirectory = "", params string[] commands)
+        {
+            using (var process = new Process
+            {
+                EnableRaisingEvents = true,
+                StartInfo =
+                {
+                    FileName = filePath,
+                    UseShellExecute = false,
+                    RedirectStandardInput = true,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    WorkingDirectory = workingDirectory
+                }
+            })
+            {
+                return RunProcess(process, commands);
+            }
+        }
+
         /// <summary>
         /// Waits asynchronously for the process to exit.
         /// </summary>
@@ -49,6 +85,34 @@ namespace WolvenKit.MVVM.Model
                 cancellationToken.Register(tcs.SetCanceled);
 
             return tcs.Task;
+        }
+
+        private static int RunProcess(Process process, params string[] commands)
+        {
+            bool started = process.Start();
+            if (!started)
+            {
+                //you may allow for the process to be re-used (started = false)
+                //but I'm not sure about the guarantees of the Exited event in such a case
+                throw new InvalidOperationException("Could not start process: " + process);
+            }
+            else
+            {
+                if (commands != null && commands.Length > 0)
+                {
+                    System.IO.StreamWriter stream = process.StandardInput;
+
+                    for (var i = 0; i < commands.Length; i++)
+                    {
+                        stream.WriteLine(commands[i]);
+                    }
+
+                    stream.Close();
+                }
+
+                process.WaitForExit(1000 * 60 * 5);
+                return process.ExitCode;
+            }
         }
 
         private static async Task<int> RunProcessAsync(ILoggerService loggerService, Process process, params string[] commands)
@@ -130,66 +194,6 @@ namespace WolvenKit.MVVM.Model
             }
         }
 
-        public static async Task<int> RunCommandLineAsync(ILoggerService loggerService, string workingDirectory = "", params string[] commands)
-        {
-            return await RunProcessAsync(loggerService,
-                    Path.Combine(Environment.SystemDirectory, "cmd.exe"),
-                    workingDirectory,
-                    commands)
-                .ConfigureAwait(false);
-        }
-
-        private static int RunProcess(Process process, params string[] commands)
-        {
-            bool started = process.Start();
-            if (!started)
-            {
-                //you may allow for the process to be re-used (started = false)
-                //but I'm not sure about the guarantees of the Exited event in such a case
-                throw new InvalidOperationException("Could not start process: " + process);
-            }
-            else
-            {
-                if (commands != null && commands.Length > 0)
-                {
-                    System.IO.StreamWriter stream = process.StandardInput;
-
-                    for (var i = 0; i < commands.Length; i++)
-                    {
-                        stream.WriteLine(commands[i]);
-                    }
-
-                    stream.Close();
-                }
-
-                process.WaitForExit(1000 * 60 * 5);
-                return process.ExitCode;
-            }
-        }
-
-        public static int RunProcess(string filePath, string workingDirectory = "", params string[] commands)
-        {
-            using (var process = new Process
-            {
-                EnableRaisingEvents = true,
-                StartInfo =
-                {
-                    FileName = filePath,
-                    UseShellExecute = false,
-                    RedirectStandardInput = true,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    WorkingDirectory = workingDirectory
-                }
-            })
-            {
-                return RunProcess(process, commands);
-            }
-        }
-
-        public static int RunCommandLine(string workingDirectory = "", params string[] commands)
-        {
-            return RunProcess(Path.Combine(Environment.SystemDirectory, "cmd.exe"), workingDirectory, commands);
-        }
+        #endregion Methods
     }
 }

@@ -6,15 +6,24 @@ using WolvenKit.MVVM.Views.Shell.Editor;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
-    public class GlobalHelper { } // Template.
+    public enum ProjectWorkFlowActionStatus
+    { Queued, Started, Finished, Failed, }
 
     public static class StaticReferences
     {
-        public static RibbonView RibbonViewInstance;
+        #region Fields
+
         public static ShellWindow GlobalShell;
-        public static MainView MainView;
         public static StatusBarViewModel GlobalStatusBar;
+        public static MainView MainView;
+        public static RibbonView RibbonViewInstance;
+
+        #endregion Fields
     }
+
+    public class GlobalHelper
+    {
+    } // Template.
 
     /// <summary>
     /// Below is WIP piece of me (Offline) ,,,, The idea behind it is to create preset workflows (Automated actions in WolvenKit)
@@ -24,9 +33,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
     public class ProjectWorkFlow
     {
-        public string Name { get; set; }
-        public int ID { get; set; }
-        public List<ProjectWorkFlowAction> FlowActions { get; set; }
+        #region Constructors
 
         public ProjectWorkFlow(string name, int id, List<ProjectWorkFlowAction> flowactions)
         {
@@ -35,17 +42,34 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             FlowActions = flowactions;
         }
 
+        #endregion Constructors
+
+
+
+        #region Properties
+
+        public List<ProjectWorkFlowAction> FlowActions { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
+
+        #endregion Properties
+
+
+
+        #region Methods
+
         public ProjectWorkFlow CreateProjectWorkFlow(string name, int id, List<ProjectWorkFlowAction> flowactions)
         {
             ProjectWorkFlow projectWorkFlow = new ProjectWorkFlow(name, id, flowactions);
             return projectWorkFlow;
         }
+
+        #endregion Methods
     }
 
     public class ProjectWorkFlowAction
     {
-        public Command ProjectWorkFlowActionCommand { get; set; }
-        public ProjectWorkFlowActionStatus ProjectWorkFlowActionStatus { get; set; }
+        #region Constructors
 
         public ProjectWorkFlowAction(Command command)
         {
@@ -53,13 +77,27 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             ProjectWorkFlowActionStatus = ProjectWorkFlowActionStatus.Queued;
         }
 
+        #endregion Constructors
+
+
+
+        #region Properties
+
+        public Command ProjectWorkFlowActionCommand { get; set; }
+        public ProjectWorkFlowActionStatus ProjectWorkFlowActionStatus { get; set; }
+
+        #endregion Properties
+
+
+
+        #region Methods
+
         public ProjectWorkFlowAction CreateProjectWorkFlowAction(Command projectWorkFlowActionCommand)
         {
             ProjectWorkFlowAction projectWorkFlowAction = new ProjectWorkFlowAction(projectWorkFlowActionCommand);
             return projectWorkFlowAction;
         }
-    }
 
-    public enum ProjectWorkFlowActionStatus
-    { Queued, Started, Finished, Failed, }
+        #endregion Methods
+    }
 }

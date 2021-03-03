@@ -6,6 +6,8 @@ namespace WolvenKit.Functionality.Services
 {
     internal class AboutInfoService : IAboutInfoService
     {
+        #region Methods
+
         public AboutInfo GetAboutInfo()
         {
             var aboutInfo = new AboutInfo(new Uri("pack://application:,,,/Resources/Media/Images/Application/CompanyLogo.png", UriKind.RelativeOrAbsolute),
@@ -13,5 +15,7 @@ namespace WolvenKit.Functionality.Services
 
             return aboutInfo;
         }
+
+        #endregion Methods
     }
 }

@@ -5,24 +5,41 @@ using WolvenKit.Common.Wcc;
 
 namespace WolvenKit.MVVM.Model
 {
-    public class XBMDumpRecord
-    {
-        public string RedName { get; set; }
-        public string Width { get; set; }
-        public string Height { get; set; }
-        public string Format { get; set; }
-        public string Compression { get; set; }
-        public string TextureGroup { get; set; }
-    }
-
     public class ImportableFile : ObservableObject
     {
+        #region Fields
+
+        private readonly string _relativePath;
+
+        private readonly EImportable _type;
+
+        private EObjectState _state;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ImportableFile(string path, EImportable type, Enum importtype)
+        {
+            _relativePath = path;
+            _type = type;
+            ImportType = importtype;
+        }
+
+        #endregion Constructors
+
+
+
+        #region Enums
+
         public enum EObjectState
         {
             NoTextureGroup, //Orange
             Ready,  //Green
             Error //Read
         }
+
+        #endregion Enums
 
         #region IsSelected
 
@@ -68,17 +85,22 @@ namespace WolvenKit.MVVM.Model
 
         #endregion ImportType
 
+
+
+        #region Properties
+
         /// <summary>
         /// PropertyBound in the listView
         /// </summary>
         public string Name => Path.GetFileName(GetRelativePath());
 
-        private readonly string _relativePath;
+        #endregion Properties
 
-        private readonly EImportable _type;
-        private EObjectState _state;
 
-        public string GetRelativePath() => _relativePath;
+
+        #region Methods
+
+        public EImportable GetImportableType() => _type;
 
         public (string, bool) GetREDRelativePath()
         {
@@ -107,7 +129,7 @@ namespace WolvenKit.MVVM.Model
             return (relPath, isDLC);
         }
 
-        public EImportable GetImportableType() => _type;
+        public string GetRelativePath() => _relativePath;
 
         public EObjectState GetState() => _state;
 
@@ -120,11 +142,20 @@ namespace WolvenKit.MVVM.Model
             }
         }
 
-        public ImportableFile(string path, EImportable type, Enum importtype)
-        {
-            _relativePath = path;
-            _type = type;
-            ImportType = importtype;
-        }
+        #endregion Methods
+    }
+
+    public class XBMDumpRecord
+    {
+        #region Properties
+
+        public string Compression { get; set; }
+        public string Format { get; set; }
+        public string Height { get; set; }
+        public string RedName { get; set; }
+        public string TextureGroup { get; set; }
+        public string Width { get; set; }
+
+        #endregion Properties
     }
 }

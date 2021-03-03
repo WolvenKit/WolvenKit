@@ -18,13 +18,27 @@ namespace WolvenKit.MVVM.Model
 {
     public static class WccHelper
     {
-        private static LoggerService Logger => MainController.Get().Logger;
-        private static W3Mod ActiveMod => (W3Mod)MainController.Get().ActiveMod;
+        #region Fields
 
         private const string db_dlcfiles = "db_dlcfiles";
         private const string db_dlctextures = "db_dlctextures";
         private const string db_modfiles = "db_modfiles";
         private const string db_modtextures = "db_modtextures";
+
+        #endregion Fields
+
+
+
+        #region Properties
+
+        private static W3Mod ActiveMod => (W3Mod)MainController.Get().ActiveMod;
+        private static LoggerService Logger => MainController.Get().Logger;
+
+        #endregion Properties
+
+
+
+        #region Methods
 
         /// <summary>
         /// Always call this first to clean the directories.
@@ -182,52 +196,47 @@ namespace WolvenKit.MVVM.Model
         }
 
         /// <summary>
-        /// Packs the bundles for the DLC and the Mod.
+        /// Manually creates a seedfile for cooking
         /// </summary>
-        /// <param name="packmod"></param>
-        /// <param name="packdlc"></param>
-        /// <returns></returns>
-        public static async Task<int> Pack(bool packmod, bool packdlc)
+        /// <param name="seedfile"></param>
+        public static void CreateFallBackSeedFile(string seedfile)
         {
-            int finished = 1;
+            if (File.Exists(seedfile))
+                File.Delete(seedfile);
 
-            if (packmod && Directory.Exists(ActiveMod.CookedModDirectory) && Directory.Exists(ActiveMod.PackedModDirectory))
-                finished *= await Task.Run(() => PackBundleInternal(ActiveMod.CookedModDirectory, ActiveMod.PackedModDirectory));
-            if (packdlc && Directory.Exists(ActiveMod.CookedDlcDirectory) && Directory.Exists(ActiveMod.PackedDlcDirectory))
-                finished *= await Task.Run(() => PackBundleInternal(ActiveMod.CookedDlcDirectory, ActiveMod.PackedDlcDirectory, true));
-
-            return finished == 0 ? 0 : 1;
-
-            async Task<int> PackBundleInternal(string inputDir, string outputDir, bool dlc = false)
+            var uncookeddlcdir = new DirectoryInfo(ActiveMod.DlcUncookedDirectory);
+            if (uncookeddlcdir.Exists)
             {
-                string type = dlc ? "Dlc" : "Mod";
-                try
+                using (var fs = new FileStream(seedfile, FileMode.Create, FileAccess.Write))
+                using (var sr = new StreamWriter(fs, Encoding.Default))
                 {
-                    if (Directory.Exists(inputDir) && Directory.GetFiles(inputDir, "*", SearchOption.AllDirectories).Any())
-                    {
-                        Logger.LogString($"======== Packing {type} bundles ======== \n", Logtype.Important);
-                        //MainController.Get().ProjectStatus = $"Packing {type} bundles";
+                    sr.WriteLine("{");
+                    sr.WriteLine("\t\"files\": [");
 
-                        var pack = new Wcc_lite.pack()
+                    FileInfo[] files = uncookeddlcdir.GetFiles("*", SearchOption.AllDirectories);
+                    for (int i = 0; i < files.Length; i++)
+                    {
+                        var file = files[i];
+                        var relpath = $"{file.FullName.Substring(uncookeddlcdir.FullName.Length + 1)}";
+                        if (!relpath.StartsWith("dlc\\"))
                         {
-                            Directory = inputDir,
-                            Outdir = outputDir
-                        };
-                        return await Task.Run(() => MainController.Get().WccHelper.RunCommand(pack));
+                            relpath = $"dlc\\{relpath}";
+                        }
+
+                        relpath = relpath.Replace("\\", "\\\\");
+                        sr.WriteLine("\t\t{");
+                        sr.WriteLine($"\t\t\t\"path\": \"{relpath}\",");
+                        sr.WriteLine($"\t\t\t\"bundle\": \"blob\"");
+                        if (i < files.Length - 1)
+                            sr.WriteLine("\t\t},");
+                        else
+                            sr.WriteLine("\t\t}");
                     }
-                    else
-                        return -1;
+
+                    sr.WriteLine("\t]");
+                    sr.WriteLine("}");
                 }
-                catch (DirectoryNotFoundException)
-                {
-                    Logger.LogString($"{type} Archive directory not found. Bundles will not be packed for {type}. \n", Logtype.Important);
-                    return -1;
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogString(ex.ToString() + "\n", Logtype.Error);
-                    return 0;
-                }
+                Logger.LogString($"Fallback seedfile created: {seedfile}. \n", Logtype.Success);
             }
         }
 
@@ -282,6 +291,42 @@ namespace WolvenKit.MVVM.Model
                     Logger.LogString(ex.ToString() + "\n", Logtype.Error);
                     return 0;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Creates virtual links (mklink junction) between the project dlc folder
+        /// and the modkit r4Data/dlc folder
+        /// </summary>
+        public static void CreateVirtualLinks()
+        {
+            if (string.IsNullOrEmpty(ActiveMod.GetDlcName()))
+                return;
+            if (string.IsNullOrEmpty(ActiveMod.GetDlcUncookedRelativePath()))
+                return;
+
+            // hack to determine if older project
+            string r4link = Path.Combine(MainController.Get().Configuration.DepotPath, "dlc", ActiveMod.GetDlcName());
+            string projlink = Path.Combine(ActiveMod.DlcUncookedDirectory, ActiveMod.GetDlcUncookedRelativePath());
+            if (new DirectoryInfo(ActiveMod.DlcUncookedDirectory).GetDirectories().Any(_ => _.Name == "dlc"))
+            {
+                projlink = Path.Combine(ActiveMod.DlcUncookedDirectory, "dlc", ActiveMod.GetDlcUncookedRelativePath());
+            }
+
+            if (Directory.Exists(r4link))
+            {
+                Directory.Delete(r4link);
+            }
+            if (!Directory.Exists(r4link))
+            {
+                string args = $"/c mklink /J \"{r4link}\" \"{projlink}\"";
+                var startInfo = new ProcessStartInfo("cmd.exe", args)
+                {
+                    WindowStyle = ProcessWindowStyle.Minimized
+                };
+                Process.Start(startInfo);
+
+                Logger.LogString($"Links {r4link} <<==>> {projlink} succesfully created.", Logtype.Success);
             }
         }
 
@@ -377,113 +422,141 @@ namespace WolvenKit.MVVM.Model
         }
 
         /// <summary>
-        /// Manually creates a seedfile for cooking
+        /// Packs the bundles for the DLC and the Mod.
         /// </summary>
-        /// <param name="seedfile"></param>
-        public static void CreateFallBackSeedFile(string seedfile)
+        /// <param name="packmod"></param>
+        /// <param name="packdlc"></param>
+        /// <returns></returns>
+        public static async Task<int> Pack(bool packmod, bool packdlc)
         {
-            if (File.Exists(seedfile))
-                File.Delete(seedfile);
+            int finished = 1;
 
-            var uncookeddlcdir = new DirectoryInfo(ActiveMod.DlcUncookedDirectory);
-            if (uncookeddlcdir.Exists)
+            if (packmod && Directory.Exists(ActiveMod.CookedModDirectory) && Directory.Exists(ActiveMod.PackedModDirectory))
+                finished *= await Task.Run(() => PackBundleInternal(ActiveMod.CookedModDirectory, ActiveMod.PackedModDirectory));
+            if (packdlc && Directory.Exists(ActiveMod.CookedDlcDirectory) && Directory.Exists(ActiveMod.PackedDlcDirectory))
+                finished *= await Task.Run(() => PackBundleInternal(ActiveMod.CookedDlcDirectory, ActiveMod.PackedDlcDirectory, true));
+
+            return finished == 0 ? 0 : 1;
+
+            async Task<int> PackBundleInternal(string inputDir, string outputDir, bool dlc = false)
             {
-                using (var fs = new FileStream(seedfile, FileMode.Create, FileAccess.Write))
-                using (var sr = new StreamWriter(fs, Encoding.Default))
+                string type = dlc ? "Dlc" : "Mod";
+                try
                 {
-                    sr.WriteLine("{");
-                    sr.WriteLine("\t\"files\": [");
-
-                    FileInfo[] files = uncookeddlcdir.GetFiles("*", SearchOption.AllDirectories);
-                    for (int i = 0; i < files.Length; i++)
+                    if (Directory.Exists(inputDir) && Directory.GetFiles(inputDir, "*", SearchOption.AllDirectories).Any())
                     {
-                        var file = files[i];
-                        var relpath = $"{file.FullName.Substring(uncookeddlcdir.FullName.Length + 1)}";
-                        if (!relpath.StartsWith("dlc\\"))
+                        Logger.LogString($"======== Packing {type} bundles ======== \n", Logtype.Important);
+                        //MainController.Get().ProjectStatus = $"Packing {type} bundles";
+
+                        var pack = new Wcc_lite.pack()
                         {
-                            relpath = $"dlc\\{relpath}";
-                        }
-
-                        relpath = relpath.Replace("\\", "\\\\");
-                        sr.WriteLine("\t\t{");
-                        sr.WriteLine($"\t\t\t\"path\": \"{relpath}\",");
-                        sr.WriteLine($"\t\t\t\"bundle\": \"blob\"");
-                        if (i < files.Length - 1)
-                            sr.WriteLine("\t\t},");
-                        else
-                            sr.WriteLine("\t\t}");
+                            Directory = inputDir,
+                            Outdir = outputDir
+                        };
+                        return await Task.Run(() => MainController.Get().WccHelper.RunCommand(pack));
                     }
-
-                    sr.WriteLine("\t]");
-                    sr.WriteLine("}");
+                    else
+                        return -1;
                 }
-                Logger.LogString($"Fallback seedfile created: {seedfile}. \n", Logtype.Success);
-            }
-        }
-
-        /// <summary>
-        /// Creates virtual links (mklink junction) between the project dlc folder
-        /// and the modkit r4Data/dlc folder
-        /// </summary>
-        public static void CreateVirtualLinks()
-        {
-            if (string.IsNullOrEmpty(ActiveMod.GetDlcName()))
-                return;
-            if (string.IsNullOrEmpty(ActiveMod.GetDlcUncookedRelativePath()))
-                return;
-
-            // hack to determine if older project
-            string r4link = Path.Combine(MainController.Get().Configuration.DepotPath, "dlc", ActiveMod.GetDlcName());
-            string projlink = Path.Combine(ActiveMod.DlcUncookedDirectory, ActiveMod.GetDlcUncookedRelativePath());
-            if (new DirectoryInfo(ActiveMod.DlcUncookedDirectory).GetDirectories().Any(_ => _.Name == "dlc"))
-            {
-                projlink = Path.Combine(ActiveMod.DlcUncookedDirectory, "dlc", ActiveMod.GetDlcUncookedRelativePath());
-            }
-
-            if (Directory.Exists(r4link))
-            {
-                Directory.Delete(r4link);
-            }
-            if (!Directory.Exists(r4link))
-            {
-                string args = $"/c mklink /J \"{r4link}\" \"{projlink}\"";
-                var startInfo = new ProcessStartInfo("cmd.exe", args)
+                catch (DirectoryNotFoundException)
                 {
-                    WindowStyle = ProcessWindowStyle.Minimized
-                };
-                Process.Start(startInfo);
-
-                Logger.LogString($"Links {r4link} <<==>> {projlink} succesfully created.", Logtype.Success);
+                    Logger.LogString($"{type} Archive directory not found. Bundles will not be packed for {type}. \n", Logtype.Important);
+                    return -1;
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogString(ex.ToString() + "\n", Logtype.Error);
+                    return 0;
+                }
             }
         }
+
+        #endregion Methods
 
         #region Wcc Tasks
 
         /// <summary>
-        /// Deprecated, Use the Modkit instead
-        /// Kept for a neat hack tricking wcc_lite into dumping individual files
+        /// Adds all file dependencies (cr2w imports) to a specified folder
+        /// retaining relative paths
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public static async void RequestWccliteFileDumpfile(object sender, RequestFileOpenArgs e)
+        /// <param name="importfilepath"></param>
+        /// <param name="recursive"></param>
+        /// <param name="silent"></param>
+        /// <param name="alternateOutDirectory"></param>
+        /// <returns></returns>
+        public static async Task AddAllImportsAsync(string importfilepath,
+            bool recursive = false, bool silent = false, string alternateOutDirectory = "", bool logonly = false)
         {
-            var filename = e.File;
-            if (!File.Exists(filename) && !Directory.Exists(filename))
+            if (!File.Exists(importfilepath))
                 return;
-            // We dump an individual file with wcclite dumpfile
-            if (File.Exists(filename))
+
+            string relativepath = "";
+            bool isDLC = false;
+            EProjectFolders projectFolder = EProjectFolders.Uncooked;
+            if (string.IsNullOrWhiteSpace(alternateOutDirectory))
+                (relativepath, isDLC, projectFolder) = importfilepath.GetModRelativePath(ActiveMod.FileDirectory);
+            else
             {
-                // '\\?\' is a neutral win32 path prefix. It hacks wcc_lite into dumping individual files.
-                // This string will get input again, further down the line, in wcc_command.GetVariables
-                // Windows paths and string management... This one is more than stupid, it is an horror. \\FIXME if you can.
-                await DumpFile("", @"\\?\", filename);
+                relativepath = importfilepath.Substring(alternateOutDirectory.Length + 1);
             }
-            //Wcclite recursively dumps CR2Ws in a directory.
-            else if (Directory.Exists(filename))
+
+            var importslist = new List<ICR2WImport>();
+            var bufferlist = new List<ICR2WBuffer>();
+            bool hasinternalBuffer;
+
+            using (var fs = new FileStream(importfilepath, FileMode.Open, FileAccess.Read))
+            using (var reader = new BinaryReader(fs))
             {
-                string dir = filename;
-                await DumpFile(dir, dir);
+                var cr2w = new CR2WFile();
+                (importslist, hasinternalBuffer, bufferlist) = cr2w.ReadImportsAndBuffers(reader);
             }
+
+            // add imports
+            foreach (var import in importslist)
+            {
+                var filename = Path.GetFileName(import.DepotPathStr);
+                if (logonly)
+                    MainController.LogString(filename, Logtype.Important);
+
+                var path = UnbundleFile(import.DepotPathStr, isDLC, projectFolder, EArchiveType.Bundle, alternateOutDirectory, false, silent);
+                // If unbundled file is xbm, also extract tga from texturecache
+                if (Path.GetExtension(import.DepotPathStr) == ".xbm")
+                {
+                    UnbundleFile(import.DepotPathStr, isDLC, EProjectFolders.Raw, EArchiveType.TextureCache, alternateOutDirectory, false, silent);
+                }
+
+                if (string.IsNullOrWhiteSpace(path))
+                    Logger.LogString($"Did not unbundle {filename}, import is missing.", Logtype.Error);
+                else
+                {
+                    // recursively add all 1st order dependencies :Gp:
+                    if (recursive)
+                        await AddAllImportsAsync(path, true, silent, alternateOutDirectory, logonly);
+                }
+            }
+
+            // add buffers
+            if (hasinternalBuffer)
+            {
+                Logger.LogString($"{Path.GetFileName(importfilepath)} has internal buffers. If you need external buffers, unbundle them manually.", Logtype.Important);
+            }
+            else
+            {
+                // unbundle external buffers
+                foreach (var buffer in bufferlist)
+                {
+                    var index = buffer;
+                    string bufferpath = $"{relativepath}.{index}.buffer";
+                    var bufferName = $"{Path.GetFileName(relativepath)}.{index}.buffer";
+
+                    var path = UnbundleFile(bufferpath, isDLC, projectFolder, EArchiveType.Bundle, alternateOutDirectory, false, silent);
+                    if (string.IsNullOrWhiteSpace(path))
+                        Logger.LogString($"Did not unbundle {bufferName}, import is missing.", Logtype.Error);
+                }
+            }
+
+            //if (success && !silent)
+            //    Logger.LogString($"Succesfully imported all dependencies.", Logtype.Success);
         }
 
         /// <summary>
@@ -523,6 +596,205 @@ namespace WolvenKit.MVVM.Model
             }
 
             MainController.Get().ProjectStatus = EProjectStatus.Ready;
+        }
+
+        /// <summary>
+        /// Exports an existing file in the ModProject (w2mesh, redcloth) to the modProject
+        /// </summary>
+        /// <param name="fullpath"></param>
+        /// <returns></returns>
+        public static async Task ExportFileToMod(string fullpath)
+        {
+            string workDir = Path.GetFullPath($"{MainController.WorkDir}_export");
+            if (!Directory.Exists(workDir))
+                Directory.CreateDirectory(workDir);
+            Directory.Delete(workDir, true);
+
+            // check if physical file exists
+            if (!File.Exists(fullpath))
+            {
+                Logger.LogString($"File to export does not exist {fullpath}.", Logtype.Error);
+                return;
+            }
+
+            // check if the extension matches an exportable format
+            string importedExtension = Path.GetExtension(fullpath).TrimStart('.');
+            EImportable exportedExtension;
+            try
+            {
+                exportedExtension = REDTypes.ExportExtensionToRawExtension((EExportable)Enum.Parse(typeof(EExportable), importedExtension));
+            }
+            catch (Exception)
+            {
+                Logger.LogString($"Not an exportable filetype: {importedExtension}.", Logtype.Error);
+                return;
+            }
+
+            // get relative path
+            (string relativePath, bool isDLC, EProjectFolders projectFolder) = fullpath.GetModRelativePath(ActiveMod.FileDirectory);
+            var exportpath = isDLC
+                ? Path.Combine(ActiveMod.RawDirectory, "DLC", relativePath)
+                : Path.Combine(ActiveMod.RawDirectory, "Mod", relativePath);
+            exportpath = Path.ChangeExtension(exportpath, exportedExtension.ToString());
+
+            // add all imports to
+
+            //string workDir = "";                                            // add to mod
+            //string workDir = MainController.Get().Configuration.DepotPath;  // r4depot
+
+            await AddAllImportsAsync(fullpath, true, true, workDir);
+
+            // copy the w2mesh and all imports to the depot
+            var depotInfo = new FileInfo(Path.Combine(workDir, relativePath));
+            var uncookedInfo = new FileInfo(fullpath);
+            uncookedInfo.CopyToAndCreate(depotInfo.FullName, true);
+
+            // export with wcc_lite
+            if (!string.IsNullOrEmpty(relativePath) && !string.IsNullOrEmpty(exportpath))
+            {
+                // uncook the folder
+                var export = new Wcc_lite.export()
+                {
+                    File = relativePath,
+                    Out = exportpath,
+                    Depot = workDir
+                };
+                await Task.Run(() => MainController.Get().WccHelper.RunCommand(export));
+
+                if (File.Exists(exportpath))
+                    Logger.LogString($"Successfully exported {relativePath}.", Logtype.Success);
+                else
+                    Logger.LogString($"Did not export {relativePath}.", Logtype.Error);
+            }
+        }
+
+        /// <summary>
+        /// Deprecated, Use the Modkit instead
+        /// Kept for a neat hack tricking wcc_lite into dumping individual files
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public static async void RequestWccliteFileDumpfile(object sender, RequestFileOpenArgs e)
+        {
+            var filename = e.File;
+            if (!File.Exists(filename) && !Directory.Exists(filename))
+                return;
+            // We dump an individual file with wcclite dumpfile
+            if (File.Exists(filename))
+            {
+                // '\\?\' is a neutral win32 path prefix. It hacks wcc_lite into dumping individual files.
+                // This string will get input again, further down the line, in wcc_command.GetVariables
+                // Windows paths and string management... This one is more than stupid, it is an horror. \\FIXME if you can.
+                await DumpFile("", @"\\?\", filename);
+            }
+            //Wcclite recursively dumps CR2Ws in a directory.
+            else if (Directory.Exists(filename))
+            {
+                string dir = filename;
+                await DumpFile(dir, dir);
+            }
+        }
+
+        /// <summary>
+        /// Unbundles a file with the given relativepath from either the Game or the Mod BundleManager
+        /// and adds it to the depot, optionally copying to the project
+        /// </summary>
+        /// <param name="relativePath"></param>
+        /// <param name="isDLC"></param>
+        /// <param name="projectFolder"></param>
+        /// <param name="bundleType"></param>
+        /// <param name="alternateOutDirectory"></param>
+        /// <param name="loadmods"></param>
+        /// <param name="silent"></param>
+        /// <returns></returns>
+        public static string UnbundleFile(string relativePath, bool isDlc, EProjectFolders projectFolder, EArchiveType bundleType = EArchiveType.Bundle, string alternateOutDirectory = "", bool loadmods = false, bool silent = false)
+        {
+            string extension = Path.GetExtension(relativePath);
+            string filename = Path.GetFileName(relativePath);
+
+            // Jato said not to add textures to an fbx
+            // so I am keeping meshes violet :)
+            //if (extension == ".xbm" && bundleType == EBundleType.Archive)
+            //{
+            //    //var uncookTask = Task.Run(() => UncookFileToPath(relativePath, isDLC, alternateOutDirectory));
+            //    //Task.WaitAll(uncookTask);
+            //    //return relativePath;
+            //    UnbundleFile(relativePath, isDLC, projectFolder, EBundleType.TextureCache, alternateOutDirectory,
+            //        loadmods, silent);
+            //}
+            IGameArchiveManager manager = MainController.Get().GetManagers(loadmods).FirstOrDefault(_ => _.TypeName == bundleType);
+
+            if (manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath)))
+            {
+                var archives = manager.FileList
+                    .Where(x => x.Name == relativePath)
+                    .Select(y => new KeyValuePair<string, IGameFile>(y.Archive.ArchiveAbsolutePath, y))
+                    .ToList();
+
+                // Extract
+                try
+                {
+                    // if more than one archive get the last
+                    var archive = archives.Last().Value;
+
+                    string newpath = "";
+                    if (string.IsNullOrWhiteSpace(alternateOutDirectory))
+                    {
+                        switch (projectFolder)
+                        {
+                            case EProjectFolders.Cooked:
+                                newpath = Path.Combine(isDlc
+                                    ? ActiveMod.DlcCookedDirectory
+                                    : ActiveMod.ModCookedDirectory, relativePath);
+                                break;
+
+                            case EProjectFolders.Uncooked:
+                                newpath = Path.Combine(isDlc
+                                    ? ActiveMod.DlcUncookedDirectory
+                                    : ActiveMod.ModUncookedDirectory, relativePath);
+                                break;
+
+                            case EProjectFolders.Raw:
+                                newpath = Path.Combine(isDlc
+                                    ? ActiveMod.RawDlcDirectory
+                                    : ActiveMod.RawModDirectory, relativePath);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        newpath = Path.Combine(alternateOutDirectory, relativePath);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(newpath))
+                        return "";
+
+                    // for xbms check if a file with the current export extensions exists
+                    if (!File.Exists(newpath) && (extension != ".xbm" || !File.Exists(Path.ChangeExtension(newpath,
+                        MainController.Get().Configuration.UncookExtension.ToString()))))
+                    {
+                        using (var fs = new FileStream(newpath, FileMode.Create))
+                        {
+                            archive.Extract(fs);
+                        }
+                        if (!silent)
+                            Logger.LogString($"Succesfully unbundled {filename}.", Logtype.Success);
+                    }
+                    //else
+                    //    if (!silent) Logger.LogString($"File already exists in mod project: {filename}.", Logtype.Success);
+                    return newpath;
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogString(ex.ToString(), Logtype.Error);
+                    return "";
+                }
+            }
+
+            return "";
         }
 
         /// <summary>
@@ -632,262 +904,6 @@ namespace WolvenKit.MVVM.Model
                 Logger.LogString($"Wcc_lite is unable to uncook this file.", Logtype.Error);
 
             return addedFilesCount;
-        }
-
-        /// <summary>
-        /// Unbundles a file with the given relativepath from either the Game or the Mod BundleManager
-        /// and adds it to the depot, optionally copying to the project
-        /// </summary>
-        /// <param name="relativePath"></param>
-        /// <param name="isDLC"></param>
-        /// <param name="projectFolder"></param>
-        /// <param name="bundleType"></param>
-        /// <param name="alternateOutDirectory"></param>
-        /// <param name="loadmods"></param>
-        /// <param name="silent"></param>
-        /// <returns></returns>
-        public static string UnbundleFile(string relativePath, bool isDlc, EProjectFolders projectFolder, EArchiveType bundleType = EArchiveType.Bundle, string alternateOutDirectory = "", bool loadmods = false, bool silent = false)
-        {
-            string extension = Path.GetExtension(relativePath);
-            string filename = Path.GetFileName(relativePath);
-
-            // Jato said not to add textures to an fbx
-            // so I am keeping meshes violet :)
-            //if (extension == ".xbm" && bundleType == EBundleType.Archive)
-            //{
-            //    //var uncookTask = Task.Run(() => UncookFileToPath(relativePath, isDLC, alternateOutDirectory));
-            //    //Task.WaitAll(uncookTask);
-            //    //return relativePath;
-            //    UnbundleFile(relativePath, isDLC, projectFolder, EBundleType.TextureCache, alternateOutDirectory,
-            //        loadmods, silent);
-            //}
-            IGameArchiveManager manager = MainController.Get().GetManagers(loadmods).FirstOrDefault(_ => _.TypeName == bundleType);
-
-            if (manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath)))
-            {
-                var archives = manager.FileList
-                    .Where(x => x.Name == relativePath)
-                    .Select(y => new KeyValuePair<string, IGameFile>(y.Archive.ArchiveAbsolutePath, y))
-                    .ToList();
-
-                // Extract
-                try
-                {
-                    // if more than one archive get the last
-                    var archive = archives.Last().Value;
-
-                    string newpath = "";
-                    if (string.IsNullOrWhiteSpace(alternateOutDirectory))
-                    {
-                        switch (projectFolder)
-                        {
-                            case EProjectFolders.Cooked:
-                                newpath = Path.Combine(isDlc
-                                    ? ActiveMod.DlcCookedDirectory
-                                    : ActiveMod.ModCookedDirectory, relativePath);
-                                break;
-
-                            case EProjectFolders.Uncooked:
-                                newpath = Path.Combine(isDlc
-                                    ? ActiveMod.DlcUncookedDirectory
-                                    : ActiveMod.ModUncookedDirectory, relativePath);
-                                break;
-
-                            case EProjectFolders.Raw:
-                                newpath = Path.Combine(isDlc
-                                    ? ActiveMod.RawDlcDirectory
-                                    : ActiveMod.RawModDirectory, relativePath);
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        newpath = Path.Combine(alternateOutDirectory, relativePath);
-                    }
-
-                    if (string.IsNullOrWhiteSpace(newpath))
-                        return "";
-
-                    // for xbms check if a file with the current export extensions exists
-                    if (!File.Exists(newpath) && (extension != ".xbm" || !File.Exists(Path.ChangeExtension(newpath,
-                        MainController.Get().Configuration.UncookExtension.ToString()))))
-                    {
-                        using (var fs = new FileStream(newpath, FileMode.Create))
-                        {
-                            archive.Extract(fs);
-                        }
-                        if (!silent)
-                            Logger.LogString($"Succesfully unbundled {filename}.", Logtype.Success);
-                    }
-                    //else
-                    //    if (!silent) Logger.LogString($"File already exists in mod project: {filename}.", Logtype.Success);
-                    return newpath;
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogString(ex.ToString(), Logtype.Error);
-                    return "";
-                }
-            }
-
-            return "";
-        }
-
-        /// <summary>
-        /// Exports an existing file in the ModProject (w2mesh, redcloth) to the modProject
-        /// </summary>
-        /// <param name="fullpath"></param>
-        /// <returns></returns>
-        public static async Task ExportFileToMod(string fullpath)
-        {
-            string workDir = Path.GetFullPath($"{MainController.WorkDir}_export");
-            if (!Directory.Exists(workDir))
-                Directory.CreateDirectory(workDir);
-            Directory.Delete(workDir, true);
-
-            // check if physical file exists
-            if (!File.Exists(fullpath))
-            {
-                Logger.LogString($"File to export does not exist {fullpath}.", Logtype.Error);
-                return;
-            }
-
-            // check if the extension matches an exportable format
-            string importedExtension = Path.GetExtension(fullpath).TrimStart('.');
-            EImportable exportedExtension;
-            try
-            {
-                exportedExtension = REDTypes.ExportExtensionToRawExtension((EExportable)Enum.Parse(typeof(EExportable), importedExtension));
-            }
-            catch (Exception)
-            {
-                Logger.LogString($"Not an exportable filetype: {importedExtension}.", Logtype.Error);
-                return;
-            }
-
-            // get relative path
-            (string relativePath, bool isDLC, EProjectFolders projectFolder) = fullpath.GetModRelativePath(ActiveMod.FileDirectory);
-            var exportpath = isDLC
-                ? Path.Combine(ActiveMod.RawDirectory, "DLC", relativePath)
-                : Path.Combine(ActiveMod.RawDirectory, "Mod", relativePath);
-            exportpath = Path.ChangeExtension(exportpath, exportedExtension.ToString());
-
-            // add all imports to
-
-            //string workDir = "";                                            // add to mod
-            //string workDir = MainController.Get().Configuration.DepotPath;  // r4depot
-
-            await AddAllImportsAsync(fullpath, true, true, workDir);
-
-            // copy the w2mesh and all imports to the depot
-            var depotInfo = new FileInfo(Path.Combine(workDir, relativePath));
-            var uncookedInfo = new FileInfo(fullpath);
-            uncookedInfo.CopyToAndCreate(depotInfo.FullName, true);
-
-            // export with wcc_lite
-            if (!string.IsNullOrEmpty(relativePath) && !string.IsNullOrEmpty(exportpath))
-            {
-                // uncook the folder
-                var export = new Wcc_lite.export()
-                {
-                    File = relativePath,
-                    Out = exportpath,
-                    Depot = workDir
-                };
-                await Task.Run(() => MainController.Get().WccHelper.RunCommand(export));
-
-                if (File.Exists(exportpath))
-                    Logger.LogString($"Successfully exported {relativePath}.", Logtype.Success);
-                else
-                    Logger.LogString($"Did not export {relativePath}.", Logtype.Error);
-            }
-        }
-
-        /// <summary>
-        /// Adds all file dependencies (cr2w imports) to a specified folder
-        /// retaining relative paths
-        /// </summary>
-        /// <param name="importfilepath"></param>
-        /// <param name="recursive"></param>
-        /// <param name="silent"></param>
-        /// <param name="alternateOutDirectory"></param>
-        /// <returns></returns>
-        public static async Task AddAllImportsAsync(string importfilepath,
-            bool recursive = false, bool silent = false, string alternateOutDirectory = "", bool logonly = false)
-        {
-            if (!File.Exists(importfilepath))
-                return;
-
-            string relativepath = "";
-            bool isDLC = false;
-            EProjectFolders projectFolder = EProjectFolders.Uncooked;
-            if (string.IsNullOrWhiteSpace(alternateOutDirectory))
-                (relativepath, isDLC, projectFolder) = importfilepath.GetModRelativePath(ActiveMod.FileDirectory);
-            else
-            {
-                relativepath = importfilepath.Substring(alternateOutDirectory.Length + 1);
-            }
-
-            var importslist = new List<ICR2WImport>();
-            var bufferlist = new List<ICR2WBuffer>();
-            bool hasinternalBuffer;
-
-            using (var fs = new FileStream(importfilepath, FileMode.Open, FileAccess.Read))
-            using (var reader = new BinaryReader(fs))
-            {
-                var cr2w = new CR2WFile();
-                (importslist, hasinternalBuffer, bufferlist) = cr2w.ReadImportsAndBuffers(reader);
-            }
-
-            // add imports
-            foreach (var import in importslist)
-            {
-                var filename = Path.GetFileName(import.DepotPathStr);
-                if (logonly)
-                    MainController.LogString(filename, Logtype.Important);
-
-                var path = UnbundleFile(import.DepotPathStr, isDLC, projectFolder, EArchiveType.Bundle, alternateOutDirectory, false, silent);
-                // If unbundled file is xbm, also extract tga from texturecache
-                if (Path.GetExtension(import.DepotPathStr) == ".xbm")
-                {
-                    UnbundleFile(import.DepotPathStr, isDLC, EProjectFolders.Raw, EArchiveType.TextureCache, alternateOutDirectory, false, silent);
-                }
-
-                if (string.IsNullOrWhiteSpace(path))
-                    Logger.LogString($"Did not unbundle {filename}, import is missing.", Logtype.Error);
-                else
-                {
-                    // recursively add all 1st order dependencies :Gp:
-                    if (recursive)
-                        await AddAllImportsAsync(path, true, silent, alternateOutDirectory, logonly);
-                }
-            }
-
-            // add buffers
-            if (hasinternalBuffer)
-            {
-                Logger.LogString($"{Path.GetFileName(importfilepath)} has internal buffers. If you need external buffers, unbundle them manually.", Logtype.Important);
-            }
-            else
-            {
-                // unbundle external buffers
-                foreach (var buffer in bufferlist)
-                {
-                    var index = buffer;
-                    string bufferpath = $"{relativepath}.{index}.buffer";
-                    var bufferName = $"{Path.GetFileName(relativepath)}.{index}.buffer";
-
-                    var path = UnbundleFile(bufferpath, isDLC, projectFolder, EArchiveType.Bundle, alternateOutDirectory, false, silent);
-                    if (string.IsNullOrWhiteSpace(path))
-                        Logger.LogString($"Did not unbundle {bufferName}, import is missing.", Logtype.Error);
-                }
-            }
-
-            //if (success && !silent)
-            //    Logger.LogString($"Succesfully imported all dependencies.", Logtype.Success);
         }
 
         #endregion Wcc Tasks

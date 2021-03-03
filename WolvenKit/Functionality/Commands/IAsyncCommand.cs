@@ -8,8 +8,12 @@ namespace WolvenKit.Functionality.Commands
     /// </summary>
     public interface IAsyncCommand : ICommand
     {
+        #region Methods
+
         IAsyncResult BeginExecute(object parameter);
 
         void EndExecute(IAsyncResult result);
+
+        #endregion Methods
     }
 }

@@ -5,13 +5,24 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
     /// </summary>
     public interface Old_IDocumentViewModel/* : INotifyPropertyChanged, INotifyPropertyChanging*/
     {
+        #region Properties
+
         string FileName { get; }
+
+        object SaveTarget { get; set; }
+
+        string Title { get; }
+
+        #endregion Properties
+
+
+
+        #region Methods
+
+        void Close();
 
         void SaveFile();
 
-        object SaveTarget { get; set; }
-        string Title { get; }
-
-        void Close();
+        #endregion Methods
     }
 }

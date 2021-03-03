@@ -9,10 +9,15 @@ namespace WolvenKit.MVVM.Model
 {
     public class WKPackage
     {
+        #region Fields
+
+        public string RootFolder;
         private XDocument Assembly;
         private string Icon;
 
-        public string RootFolder;
+        #endregion Fields
+
+        #region Constructors
 
         /// <summary>
         /// Collects the info and the files from an already created WolveKit package.
@@ -36,28 +41,11 @@ namespace WolvenKit.MVVM.Model
             RootFolder = rootfolder;
         }
 
-        /// <summary>
-        /// Saves the package to the specified output path.
-        /// </summary>
-        /// <param name="OutputPath">The path to save the file to.</param>
-        public void Save(string OutputPath)
-        {
-            if (Icon != null && Assembly != null)
-            {
-                FileStream fsOut = File.Create(OutputPath);
-                ZipOutputStream zipStream = new ZipOutputStream(fsOut);
-                int folderOffset = RootFolder.Length + (RootFolder.EndsWith("\\") ? 0 : 1);
-                Commonfunctions.CompressFolder(RootFolder, zipStream, folderOffset);
-                Commonfunctions.CompressFile(Icon, zipStream, "Icon" + Path.GetExtension(Icon));
-                Commonfunctions.CompressStream(Commonfunctions.XDocToByteArray(Assembly), "Assembly.xml", zipStream);
-                zipStream.IsStreamOwner = true;
-                zipStream.Close();
-            }
-            else
-            {
-                throw new Exception("Missing parameters!");
-            }
-        }
+        #endregion Constructors
+
+
+
+        #region Methods
 
         /// <summary>
         /// This creates the modassembly xml. Values which are optional are marked in their description as such. If a value is not given pass the method NULL for that value.
@@ -111,5 +99,30 @@ namespace WolvenKit.MVVM.Model
             rootnode.Add(new XElement("content", Contents));
             return new XDocument(new XDeclaration("1.0", "UTF-8", "True"), rootnode);
         }
+
+        /// <summary>
+        /// Saves the package to the specified output path.
+        /// </summary>
+        /// <param name="OutputPath">The path to save the file to.</param>
+        public void Save(string OutputPath)
+        {
+            if (Icon != null && Assembly != null)
+            {
+                FileStream fsOut = File.Create(OutputPath);
+                ZipOutputStream zipStream = new ZipOutputStream(fsOut);
+                int folderOffset = RootFolder.Length + (RootFolder.EndsWith("\\") ? 0 : 1);
+                Commonfunctions.CompressFolder(RootFolder, zipStream, folderOffset);
+                Commonfunctions.CompressFile(Icon, zipStream, "Icon" + Path.GetExtension(Icon));
+                Commonfunctions.CompressStream(Commonfunctions.XDocToByteArray(Assembly), "Assembly.xml", zipStream);
+                zipStream.IsStreamOwner = true;
+                zipStream.Close();
+            }
+            else
+            {
+                throw new Exception("Missing parameters!");
+            }
+        }
+
+        #endregion Methods
     }
 }

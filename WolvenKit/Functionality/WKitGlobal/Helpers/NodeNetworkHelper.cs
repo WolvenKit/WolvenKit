@@ -2,28 +2,6 @@ using NodeNetwork.ViewModels;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
-    public class NodeNetworkHelper
-    {
-        public enum NodeType
-        {
-            StartNode, SceneNode, PhaseNode, InputNode,
-            OutputNode, DeletionNode, PauseNode, InteractiveObjectManagerNode,
-            DeviceManagerNode, ConditionNode, QuestNode, HubNode,
-            EndNode, ChoiceNode, SectionNode, RandomizerNode,
-            XorNode, FactsDBManagerNode, LogicalHubNode, WorldDataManagerNode,
-            AudioNode, TeleportPuppetNode, UIManagerNode, RenderFXNode,
-            LogicalXorNode, RewardManagerNode, CheckpointNode, CharacterManagerNode,
-            PhoneManagerNode, CutControlNode,
-        }
-
-        public class Node_Template
-        {
-            //  public string Name;
-            //  public Color Color;
-            //  public List<NodeType> Sockets = new List<NodeType>();
-        }
-    }
-
     public class CustomNode : NodeViewModel
     {
         //public Color nodecolor;
@@ -51,5 +29,37 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
         //    }
 
         //}
+    }
+
+    public class NodeNetworkHelper
+    {
+        #region Enums
+
+        public enum NodeType
+        {
+            StartNode, SceneNode, PhaseNode, InputNode,
+            OutputNode, DeletionNode, PauseNode, InteractiveObjectManagerNode,
+            DeviceManagerNode, ConditionNode, QuestNode, HubNode,
+            EndNode, ChoiceNode, SectionNode, RandomizerNode,
+            XorNode, FactsDBManagerNode, LogicalHubNode, WorldDataManagerNode,
+            AudioNode, TeleportPuppetNode, UIManagerNode, RenderFXNode,
+            LogicalXorNode, RewardManagerNode, CheckpointNode, CharacterManagerNode,
+            PhoneManagerNode, CutControlNode,
+        }
+
+        #endregion Enums
+
+
+
+        #region Classes
+
+        public class Node_Template
+        {
+            //  public string Name;
+            //  public Color Color;
+            //  public List<NodeType> Sockets = new List<NodeType>();
+        }
+
+        #endregion Classes
     }
 }

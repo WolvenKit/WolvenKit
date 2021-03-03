@@ -5,26 +5,39 @@ namespace WolvenKit.Functionality.Services
 {
     public interface ISettingsManager
     {
-        [XmlIgnore]
-        IThemeInfos Themes { get; }
+        #region Properties
 
         bool CheckForUpdates { get; set; }
+
+        string CP77ExecutablePath { get; set; }
+
+        string DepotPath { get; set; }
+
+        string[] ManagerVersions { get; set; }
+
+        public System.Windows.Media.ImageBrush ProfileImageBrush { get; set; }
+
+        string TextLanguage { get; set; }
+
+        [XmlIgnore]
+        IThemeInfos Themes { get; }
 
         /*public*/
         string W3ExecutablePath { get; set; }
         /*public*/
-        string CP77ExecutablePath { get; set; }
         /*public*/
         string WccLitePath { get; set; }
 
-        string DepotPath { get; set; }
+        #endregion Properties
 
         /*public*/
-        string[] ManagerVersions { get; set; }
-        string TextLanguage { get; set; }
 
-        public System.Windows.Media.ImageBrush ProfileImageBrush { get; set; }
+
+
+        #region Methods
 
         void Save();
+
+        #endregion Methods
     }
 }

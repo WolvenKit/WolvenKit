@@ -16,11 +16,11 @@ namespace WolvenKit.Functionality.Services
     {
         #region fields
 
-        private string _w3ExecutablePath = "";
         private string _cp77ExecutablePath = "";
-        private string _wccLitePath = "";
         private string _depotPath = "";
         private System.Windows.Media.ImageBrush _profileImageBrush;
+        private string _w3ExecutablePath = "";
+        private string _wccLitePath = "";
 
         private static string ConfigurationPath
         {
@@ -59,23 +59,9 @@ namespace WolvenKit.Functionality.Services
 
         #region properties
 
-        /// <summary>
-        /// Gets the internal name and Uri source for all available themes.
-        /// </summary>
-        [XmlIgnore]
-        public IThemeInfos Themes { get; private set; }
+        public static bool FirstTimeSetupForUser { get; set; } = true;
 
         public bool CheckForUpdates { get; set; }
-
-        public string W3ExecutablePath
-        {
-            get => _w3ExecutablePath;
-            set
-            {
-                _w3ExecutablePath = value;
-                RaisePropertyChanged(nameof(W3ExecutablePath));
-            }
-        }
 
         public string CP77ExecutablePath
         {
@@ -84,16 +70,6 @@ namespace WolvenKit.Functionality.Services
             {
                 _cp77ExecutablePath = value;
                 RaisePropertyChanged(nameof(CP77ExecutablePath));
-            }
-        }
-
-        public string WccLitePath
-        {
-            get => _wccLitePath;
-            set
-            {
-                _wccLitePath = value;
-                RaisePropertyChanged(nameof(WccLitePath));
             }
         }
 
@@ -106,6 +82,8 @@ namespace WolvenKit.Functionality.Services
                 RaisePropertyChanged(nameof(DepotPath));
             }
         }
+
+        public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
 
         /// <summary>
         /// Gets/Sets the author's profile image brush.
@@ -120,37 +98,37 @@ namespace WolvenKit.Functionality.Services
             }
         }
 
-        public static bool FirstTimeSetupForUser { get; set; } = true;
-
-        public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
         public string TextLanguage { get; set; }
+
+        /// <summary>
+        /// Gets the internal name and Uri source for all available themes.
+        /// </summary>
+        [XmlIgnore]
+        public IThemeInfos Themes { get; private set; }
+
+        public string W3ExecutablePath
+        {
+            get => _w3ExecutablePath;
+            set
+            {
+                _w3ExecutablePath = value;
+                RaisePropertyChanged(nameof(W3ExecutablePath));
+            }
+        }
+
+        public string WccLitePath
+        {
+            get => _wccLitePath;
+            set
+            {
+                _wccLitePath = value;
+                RaisePropertyChanged(nameof(WccLitePath));
+            }
+        }
 
         #endregion properties
 
         #region methods
-
-        public void Save()
-        {
-            var src = (System.Windows.Media.Imaging.BitmapSource)ProfileImageBrush?.ImageSource;
-            if (src != null)
-            {
-                using (var fs1 = new FileStream(ImagePath, FileMode.OpenOrCreate))
-                {
-                    var frame = System.Windows.Media.Imaging.BitmapFrame.Create(src);
-                    var enc = new System.Windows.Media.Imaging.PngBitmapEncoder();
-                    enc.Frames.Add(frame);
-                    enc.Save(fs1);
-                }
-            }
-
-            File.WriteAllText(ConfigurationPath,
-                JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                    PreserveReferencesHandling = PreserveReferencesHandling.None,
-                    TypeNameHandling = TypeNameHandling.None
-                }));
-        }
 
         public static SettingsManager Load()
         {
@@ -198,6 +176,29 @@ namespace WolvenKit.Functionality.Services
             }
 
             return config;
+        }
+
+        public void Save()
+        {
+            var src = (System.Windows.Media.Imaging.BitmapSource)ProfileImageBrush?.ImageSource;
+            if (src != null)
+            {
+                using (var fs1 = new FileStream(ImagePath, FileMode.OpenOrCreate))
+                {
+                    var frame = System.Windows.Media.Imaging.BitmapFrame.Create(src);
+                    var enc = new System.Windows.Media.Imaging.PngBitmapEncoder();
+                    enc.Frames.Add(frame);
+                    enc.Save(fs1);
+                }
+            }
+
+            File.WriteAllText(ConfigurationPath,
+                JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    PreserveReferencesHandling = PreserveReferencesHandling.None,
+                    TypeNameHandling = TypeNameHandling.None
+                }));
         }
 
         #endregion methods

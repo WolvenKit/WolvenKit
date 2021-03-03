@@ -4,6 +4,8 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
 {
     internal class RadioPlayerViewModel : ViewModelBase
     {
+        #region Methods
+
         public int RadioVolume()
         {
             //get
@@ -29,5 +31,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
             //}
             return 0;
         }
+
+        #endregion Methods
     }
 }

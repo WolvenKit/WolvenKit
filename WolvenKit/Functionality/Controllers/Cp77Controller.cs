@@ -23,7 +23,15 @@ namespace WolvenKit.Functionality.Controllers
 {
     public class Cp77Controller : GameControllerBase
     {
+        #region Properties
+
         private static ArchiveManager ArchiveManager { get; set; } = new ArchiveManager();
+
+        #endregion Properties
+
+
+
+        #region Methods
 
         public override List<IGameArchiveManager> GetArchiveManagersManagers() =>
             new()
@@ -45,71 +53,8 @@ namespace WolvenKit.Functionality.Controllers
             return Task.CompletedTask;
         }
 
-        private static ArchiveManager LoadArchiveManager()
-        {
-            var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-
-            if (!File.Exists(settings.CP77ExecutablePath))
-            {
-                logger.LogString("Settings are not set up properly... can't load the archive manager... ", Logtype.Error);
-                return null;
-            }
-            logger.LogString("Loading archive Manager ... ", Logtype.Important);
-            try
-            {
-                if (File.Exists(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager)))
-                {
-                    using var file = File.OpenText(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager));
-                    var serializer = new JsonSerializer
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                        TypeNameHandling = TypeNameHandling.Auto
-                    };
-                    ArchiveManager = (ArchiveManager)serializer.Deserialize(file, typeof(ArchiveManager));
-                }
-                else
-                {
-                    ArchiveManager = new ArchiveManager();
-                    ArchiveManager.LoadAll(Path.GetDirectoryName(settings.CP77ExecutablePath));
-                    File.WriteAllText(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager), JsonConvert.SerializeObject(ArchiveManager, Formatting.None, new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                        TypeNameHandling = TypeNameHandling.Auto
-                    }));
-                    settings.ManagerVersions[(int)EManagerType.ArchiveManager] = ArchiveManager.SerializationVersion;
-                }
-            }
-            catch (Exception)
-            {
-                if (File.Exists(GetManagerPath(EManagerType.ArchiveManager)))
-                {
-                    File.Delete(GetManagerPath(EManagerType.ArchiveManager));
-                }
-
-                ArchiveManager = new ArchiveManager();
-                ArchiveManager.LoadAll(Path.GetDirectoryName(settings.CP77ExecutablePath));
-            }
-            logger.LogString("Finished loading archive manager.", Logtype.Success);
-            //start LOAD INDICATOR
-            StaticReferences.GlobalStatusBar.LoadingString = "loading";
-            // init asset browser here after the manager has loaded
-            var assetBrowserViewModel = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
-            assetBrowserViewModel.ReInit();
-
-            return ArchiveManager;
-        }
-
-        private static void RegisterServices()
-        {
-            if (ServiceLocator.Default.IsTypeRegistered<IWolvenkitFileService>())
-            {
-                ServiceLocator.Default.RemoveType<IWolvenkitFileService>();
-            }
-            ServiceLocator.Default.RegisterType<IWolvenkitFileService, Cp77FileService>();
-        }
+        //TODO: Create wkpackage from the mod
+        public override Task<bool> PackageMod() => Task.FromResult(true);
 
         public override Task<bool> PackAndInstallProject()
         {
@@ -129,9 +74,6 @@ namespace WolvenKit.Functionality.Controllers
             InstallMod();
             return Task.FromResult(true);
         }
-
-        //TODO: Create wkpackage from the mod
-        public override Task<bool> PackageMod() => Task.FromResult(true);
 
         private static void InstallMod()
         {
@@ -202,5 +144,73 @@ namespace WolvenKit.Functionality.Controllers
                 logger.LogString(ex + "\n", Logtype.Error);
             }
         }
+
+        private static ArchiveManager LoadArchiveManager()
+        {
+            var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+
+            if (!File.Exists(settings.CP77ExecutablePath))
+            {
+                logger.LogString("Settings are not set up properly... can't load the archive manager... ", Logtype.Error);
+                return null;
+            }
+            logger.LogString("Loading archive Manager ... ", Logtype.Important);
+            try
+            {
+                if (File.Exists(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager)))
+                {
+                    using var file = File.OpenText(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager));
+                    var serializer = new JsonSerializer
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                        TypeNameHandling = TypeNameHandling.Auto
+                    };
+                    ArchiveManager = (ArchiveManager)serializer.Deserialize(file, typeof(ArchiveManager));
+                }
+                else
+                {
+                    ArchiveManager = new ArchiveManager();
+                    ArchiveManager.LoadAll(Path.GetDirectoryName(settings.CP77ExecutablePath));
+                    File.WriteAllText(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager), JsonConvert.SerializeObject(ArchiveManager, Formatting.None, new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                        TypeNameHandling = TypeNameHandling.Auto
+                    }));
+                    settings.ManagerVersions[(int)EManagerType.ArchiveManager] = ArchiveManager.SerializationVersion;
+                }
+            }
+            catch (Exception)
+            {
+                if (File.Exists(GetManagerPath(EManagerType.ArchiveManager)))
+                {
+                    File.Delete(GetManagerPath(EManagerType.ArchiveManager));
+                }
+
+                ArchiveManager = new ArchiveManager();
+                ArchiveManager.LoadAll(Path.GetDirectoryName(settings.CP77ExecutablePath));
+            }
+            logger.LogString("Finished loading archive manager.", Logtype.Success);
+            //start LOAD INDICATOR
+            StaticReferences.GlobalStatusBar.LoadingString = "loading";
+            // init asset browser here after the manager has loaded
+            var assetBrowserViewModel = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
+            assetBrowserViewModel.ReInit();
+
+            return ArchiveManager;
+        }
+
+        private static void RegisterServices()
+        {
+            if (ServiceLocator.Default.IsTypeRegistered<IWolvenkitFileService>())
+            {
+                ServiceLocator.Default.RemoveType<IWolvenkitFileService>();
+            }
+            ServiceLocator.Default.RegisterType<IWolvenkitFileService, Cp77FileService>();
+        }
+
+        #endregion Methods
     }
 }

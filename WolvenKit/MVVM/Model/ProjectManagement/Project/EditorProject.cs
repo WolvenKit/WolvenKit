@@ -13,8 +13,16 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {
     public abstract class EditorProject : ProjectBase, IEquatable<EditorProject>
     {
+        #region Fields
+
+        public EditorProjectData Data;
+
+        #endregion Fields
+
+        #region Constructors
+
         protected EditorProject(string location)
-            : base(location)
+                    : base(location)
         {
         }
 
@@ -22,25 +30,22 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
         }
 
-        public EditorProjectData Data;
+        #endregion Constructors
+
+
+
+        #region Methods
+
+        public abstract void Load(string path);
 
         public abstract void Save(string path);
 
-        public abstract void Load(string path);
+        #endregion Methods
 
         #region properties
 
         [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public abstract bool IsInitialized { get; }
-
-        [XmlIgnore]
         public GameType GameType;
-
-        [Category("About")]
-        [Description("The name of your mod.")]
-        public string Name { get; set; }
 
         [Category("About")]
         [Description("The name of your mod.")]
@@ -50,12 +55,35 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         [Description("Your contact email.")]
         public string Email { get; set; }
 
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public abstract bool IsInitialized { get; }
+
+        [Category("About")]
+        [Description("The name of your mod.")]
+        public string Name { get; set; }
+
         [Browsable(false)]
         [Category("About")]
         [Description("The version of your mod. It's a string so 0.1-ALPHA and such is possible.")]
         public string Version { get; set; } = "0.62";
 
         #region not serialized
+
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string FileDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "files");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
 
         [XmlIgnore]
         [ReadOnly(true)]
@@ -79,29 +107,17 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         [Browsable(false)]
         public string ProjectDirectory => Path.Combine(Path.GetDirectoryName(Location), Name);
 
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string FileDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(ProjectDirectory, "files");
-                if (!Directory.Exists(dir))
-                    Directory.CreateDirectory(dir);
-                return dir;
-            }
-        }
-
         #endregion not serialized
 
         #endregion properties
 
+
+
         #region Methods
 
-        public abstract Task Initialize();
-
         public abstract void Check();
+
+        public abstract Task Initialize();
 
         #endregion Methods
 

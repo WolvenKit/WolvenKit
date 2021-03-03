@@ -33,6 +33,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Watchers
 
         #endregion Constructors
 
+
+
         #region Methods
 
         protected override Task OnLoadedAsync(IProject project)

@@ -7,6 +7,8 @@ namespace WolvenKit.Functionality.Extensions
 {
     public static class RichTextBoxExtensions
     {
+        #region Methods
+
         //https://stackoverflow.com/a/23402165
         public static void AppendText(this RichTextBox box, string text, string color)
         {
@@ -20,5 +22,7 @@ namespace WolvenKit.Functionality.Extensions
             }
             catch (FormatException) { }
         }
+
+        #endregion Methods
     }
 }

@@ -11,9 +11,24 @@ namespace WolvenKit.Functionality.Controllers
 
     public class RadishConfiguration : ObservableObject
     {
+        #region Fields
+
+        //
+        private string _oldmodname;
+
+        #endregion Fields
+
+        #region Constructors
+
         public RadishConfiguration()
         {
         }
+
+        #endregion Constructors
+
+
+
+        #region Properties
 
         public static string ConfigurationPath
         {
@@ -27,15 +42,37 @@ namespace WolvenKit.Functionality.Controllers
         }
 
         [Browsable(false)]
-        public List<RadishWorkflow> Workflows { get; set; } = new List<RadishWorkflow>();
-
-        [Browsable(false)]
         public string RadishProjectPath { get; set; }
 
-        //
-        private string _oldmodname;
+        [Browsable(false)]
+        public List<RadishWorkflow> Workflows { get; set; } = new List<RadishWorkflow>();
+
+        #endregion Properties
+
+
+
+        #region Methods
+
+        public static RadishConfiguration Load()
+        {
+            if (File.Exists(ConfigurationPath) && new FileInfo(ConfigurationPath).Length != 0)
+            {
+                var ser = new XmlSerializer(typeof(RadishConfiguration));
+                var stream = new FileStream(ConfigurationPath, FileMode.Open, FileAccess.Read);
+                var config = (RadishConfiguration)ser.Deserialize(stream);
+                stream.Close();
+                return config;
+            }
+
+            // Defaults
+            return new RadishConfiguration
+            {
+            };
+        }
 
         public string GetOldModname() => _oldmodname;
+
+        #endregion Methods
 
         #region modname
 
@@ -139,23 +176,6 @@ namespace WolvenKit.Functionality.Controllers
             var stream = new FileStream(RadishConfiguration.ConfigurationPath, FileMode.Create, FileAccess.Write);
             ser.Serialize(stream, this);
             stream.Close();
-        }
-
-        public static RadishConfiguration Load()
-        {
-            if (File.Exists(ConfigurationPath) && new FileInfo(ConfigurationPath).Length != 0)
-            {
-                var ser = new XmlSerializer(typeof(RadishConfiguration));
-                var stream = new FileStream(ConfigurationPath, FileMode.Open, FileAccess.Read);
-                var config = (RadishConfiguration)ser.Deserialize(stream);
-                stream.Close();
-                return config;
-            }
-
-            // Defaults
-            return new RadishConfiguration
-            {
-            };
         }
     }
 }

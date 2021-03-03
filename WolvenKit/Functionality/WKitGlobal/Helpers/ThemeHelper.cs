@@ -5,24 +5,23 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
     public static class ThemeHelper
     {
+        #region Fields
+
+        // Global List of userthemes.
+        public static ObservableCollection<WkitTheme> UserThemes = new ObservableCollection<WkitTheme>();
+
+        #endregion Fields
+
+
+
+        #region Methods
+
         // Setup theming defaults.
         public static void InitializeThemeHelper()
         {
             HandyControl.Themes.ThemeManager.Current.SetCurrentValue(HandyControl.Themes.ThemeManager.ApplicationThemeProperty, HandyControl.Themes.ApplicationTheme.Dark);
             HandyControl.Themes.ThemeResources tr = new HandyControl.Themes.ThemeResources();
             tr.AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3");
-        }
-
-        // Global List of userthemes.
-        public static ObservableCollection<WkitTheme> UserThemes = new ObservableCollection<WkitTheme>();
-
-        // Save user theme
-        public static void SaveUserTheme(WkitTheme theme)
-        {
-            if (!UserThemes.Contains(theme))
-            {
-                UserThemes.Add(theme);
-            }
         }
 
         // Load user theme
@@ -40,12 +39,36 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             //Orc.Theming.ThemeManager.Current.SynchronizeTheme();
             //ThemeManager.Current.SyncTheme();
         }
+
+        // Save user theme
+        public static void SaveUserTheme(WkitTheme theme)
+        {
+            if (!UserThemes.Contains(theme))
+            {
+                UserThemes.Add(theme);
+            }
+        }
+
+        #endregion Methods
     }
 
-    public class WkitTheme { public string ThemeID; public string ThemeHexColor; public WkitTheme(string id, string hex)
+    public class WkitTheme
+    {
+        #region Fields
+
+        public string ThemeHexColor;
+        public string ThemeID;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public WkitTheme(string id, string hex)
         {
             ThemeID = id;
             ThemeHexColor = hex;
         }
+
+        #endregion Constructors
     }
 }

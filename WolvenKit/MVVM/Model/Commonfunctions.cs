@@ -13,36 +13,120 @@ namespace WolvenKit.MVVM.Model
 {
     public static class Commonfunctions
     {
-        /// <summary>
-        /// Show the given path in the windows explorer.
-        /// </summary>
-        /// <param name="path">The file/folder to show.</param>
-        public static void ShowFileInExplorer(string path) => Process.Start("explorer.exe", "/select, \"" + path + "\"");
+        #region Methods
 
         /// <summary>
-        /// Show the given folder in the windows explorer.
+        /// Compresses a file into a zipstream.
         /// </summary>
-        /// <param name="path">The file/folder to show.</param>
-        public static void ShowFolderInExplorer(string path)
+        /// <param name="filename">Path to the file.</param>
+        /// <param name="zipStream">The zipstream to output to.</param>
+        /// <param name="nameOverride">Rename the file to a costum name.</param>
+        public static void CompressFile(string filename, ZipOutputStream zipStream, string nameOverride = "")
         {
-            if (Directory.Exists(path))
-                Process.Start("explorer.exe", "\"" + path + "\"");
+            FileInfo fi = new FileInfo(filename);
+
+            string entryName = Path.GetFileName(filename);
+            if (nameOverride != "")
+                entryName = nameOverride;
+            entryName = ZipEntry.CleanName(entryName);
+            ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
+            zipStream.PutNextEntry(newEntry);
+            byte[] buffer = new byte[4096];
+            using (FileStream streamReader = File.OpenRead(filename))
+            {
+                StreamUtils.Copy(streamReader, zipStream, buffer);
+            }
+            zipStream.CloseEntry();
         }
 
         /// <summary>
-        /// Opens command prompt at given location
+        /// Compresses a folder of files into a zipstream.
         /// </summary>
-        /// <param name="path"></param>
-        public static void OpenConsoleAtPath(string path)
+        /// <param name="path">The path of the folder.</param>
+        /// <param name="zipStream">The output zipstream.</param>
+        /// <param name="folderOffset">The folderoffset.</param>
+        public static void CompressFolder(string path, ZipOutputStream zipStream, int folderOffset)
         {
-            using (var process = Process.Start(new ProcessStartInfo("cmd.exe")
+            string[] files = Directory.GetFiles(path);
+
+            foreach (string filename in files)
             {
-                UseShellExecute = false,
-                WorkingDirectory = path
-            }))
-            {
-                process?.WaitForExit();
+                FileInfo fi = new FileInfo(filename);
+                string entryName = filename.Substring(folderOffset);
+                entryName = ZipEntry.CleanName(entryName);
+                ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
+                zipStream.PutNextEntry(newEntry);
+                byte[] buffer = new byte[4096];
+                using (FileStream streamReader = File.OpenRead(filename))
+                {
+                    StreamUtils.Copy(streamReader, zipStream, buffer);
+                }
+                zipStream.CloseEntry();
             }
+            string[] folders = Directory.GetDirectories(path);
+            foreach (string folder in folders)
+            {
+                CompressFolder(folder, zipStream, folderOffset);
+            }
+        }
+
+        /// <summary>
+        /// Compresses a byte array to a zipstream.
+        /// </summary>
+        /// <param name="file">The byte array to compress.</param>
+        /// <param name="filename">The entry name.</param>
+        /// <param name="zipStream">The zipstream which we want to output this file to.</param>
+        public static void CompressStream(byte[] file, string filename, ZipOutputStream zipStream)
+        {
+            filename = ZipEntry.CleanName(filename);
+            ZipEntry newEntry = new ZipEntry(filename) { DateTime = DateTime.Now, Size = file.Length };
+            zipStream.PutNextEntry(newEntry);
+            byte[] buffer = new byte[4096];
+            StreamUtils.Copy(new MemoryStream(file), zipStream, buffer);
+            zipStream.CloseEntry();
+        }
+
+        /// <summary>
+        /// Deletes a non empty directory
+        /// </summary>
+        /// <param name="targetDir">The directory to delete.</param>
+        public static void DeleteDirectory(string targetDir)
+        {
+            string[] files = Directory.GetFiles(targetDir);
+            string[] dirs = Directory.GetDirectories(targetDir);
+
+            foreach (string file in files)
+            {
+                File.SetAttributes(file, FileAttributes.Normal);
+                File.Delete(file);
+            }
+
+            foreach (var dir in dirs)
+            {
+                DeleteDirectory(dir);
+            }
+
+            Directory.Delete(targetDir, false);
+        }
+
+        /// <summary>
+        /// Deletes files and folders in given folder.
+        /// </summary>
+        /// <param name="target_dir">Targed directory.</param>
+        public static void DeleteFilesAndFoldersRecursively(string target_dir)
+        {
+            foreach (string file in Directory.EnumerateFiles(target_dir))
+            {
+                File.Delete(file);
+            }
+
+            foreach (string subDir in Directory.GetDirectories(target_dir))
+            {
+                DeleteFilesAndFoldersRecursively(subDir);
+            }
+
+            Thread.Sleep(1); // This makes the difference between whether it works or not. Sleep(0) is not enough.
+            Directory.Delete(target_dir);
         }
 
         /// <summary>
@@ -102,134 +186,6 @@ namespace WolvenKit.MVVM.Model
         }
 
         /// <summary>
-        /// Compresses a file into a zipstream.
-        /// </summary>
-        /// <param name="filename">Path to the file.</param>
-        /// <param name="zipStream">The zipstream to output to.</param>
-        /// <param name="nameOverride">Rename the file to a costum name.</param>
-        public static void CompressFile(string filename, ZipOutputStream zipStream, string nameOverride = "")
-        {
-            FileInfo fi = new FileInfo(filename);
-
-            string entryName = Path.GetFileName(filename);
-            if (nameOverride != "")
-                entryName = nameOverride;
-            entryName = ZipEntry.CleanName(entryName);
-            ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
-            zipStream.PutNextEntry(newEntry);
-            byte[] buffer = new byte[4096];
-            using (FileStream streamReader = File.OpenRead(filename))
-            {
-                StreamUtils.Copy(streamReader, zipStream, buffer);
-            }
-            zipStream.CloseEntry();
-        }
-
-        /// <summary>
-        /// Converts an XDocuments to a byte array.
-        /// </summary>
-        /// <param name="xdoc">The xdocument which we want to convert.</param>
-        /// <returns>The byte contents of the array.</returns>
-        public static byte[] XDocToByteArray(XDocument xdoc)
-        {
-            MemoryStream ms = new MemoryStream();
-            XmlWriterSettings xws = new XmlWriterSettings();
-            xws.OmitXmlDeclaration = true;
-            xws.Indent = true;
-
-            using (XmlWriter xw = XmlWriter.Create(ms, xws))
-            {
-                xdoc.WriteTo(xw);
-            }
-            return ms.ToArray();
-        }
-
-        /// <summary>
-        /// Compresses a byte array to a zipstream.
-        /// </summary>
-        /// <param name="file">The byte array to compress.</param>
-        /// <param name="filename">The entry name.</param>
-        /// <param name="zipStream">The zipstream which we want to output this file to.</param>
-        public static void CompressStream(byte[] file, string filename, ZipOutputStream zipStream)
-        {
-            filename = ZipEntry.CleanName(filename);
-            ZipEntry newEntry = new ZipEntry(filename) { DateTime = DateTime.Now, Size = file.Length };
-            zipStream.PutNextEntry(newEntry);
-            byte[] buffer = new byte[4096];
-            StreamUtils.Copy(new MemoryStream(file), zipStream, buffer);
-            zipStream.CloseEntry();
-        }
-
-        /// <summary>
-        /// Compresses a folder of files into a zipstream.
-        /// </summary>
-        /// <param name="path">The path of the folder.</param>
-        /// <param name="zipStream">The output zipstream.</param>
-        /// <param name="folderOffset">The folderoffset.</param>
-        public static void CompressFolder(string path, ZipOutputStream zipStream, int folderOffset)
-        {
-            string[] files = Directory.GetFiles(path);
-
-            foreach (string filename in files)
-            {
-                FileInfo fi = new FileInfo(filename);
-                string entryName = filename.Substring(folderOffset);
-                entryName = ZipEntry.CleanName(entryName);
-                ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
-                zipStream.PutNextEntry(newEntry);
-                byte[] buffer = new byte[4096];
-                using (FileStream streamReader = File.OpenRead(filename))
-                {
-                    StreamUtils.Copy(streamReader, zipStream, buffer);
-                }
-                zipStream.CloseEntry();
-            }
-            string[] folders = Directory.GetDirectories(path);
-            foreach (string folder in folders)
-            {
-                CompressFolder(folder, zipStream, folderOffset);
-            }
-        }
-
-        /// <summary>
-        /// Deletes files and folders in given folder.
-        /// </summary>
-        /// <param name="target_dir">Targed directory.</param>
-        public static void DeleteFilesAndFoldersRecursively(string target_dir)
-        {
-            foreach (string file in Directory.EnumerateFiles(target_dir))
-            {
-                File.Delete(file);
-            }
-
-            foreach (string subDir in Directory.GetDirectories(target_dir))
-            {
-                DeleteFilesAndFoldersRecursively(subDir);
-            }
-
-            Thread.Sleep(1); // This makes the difference between whether it works or not. Sleep(0) is not enough.
-            Directory.Delete(target_dir);
-        }
-
-        /// <summary>
-        /// Gets relative path from absolute path.
-        /// </summary>
-        /// <param name="filespec">A files path.</param>
-        /// <param name="folder">The folder's path.</param>
-        /// <returns></returns>
-        public static string GetRelativePath(string filespec, string folder)
-        {
-            Uri pathUri = new Uri(filespec);
-            // Folders must end in a slash
-            if (!folder.EndsWith(Path.DirectorySeparatorChar.ToString()))
-            {
-                folder += Path.DirectorySeparatorChar;
-            }
-            Uri folderUri = new Uri(folder);
-            return Uri.UnescapeDataString(folderUri.MakeRelativeUri(pathUri).ToString().Replace('/', Path.DirectorySeparatorChar));
-        }
-
-        /// <summary>
         /// Moves a directory's contents to anothet directory
         /// </summary>
         /// <param name="SourcePath">The old dir (will be deleted)</param>
@@ -256,26 +212,74 @@ namespace WolvenKit.MVVM.Model
         }
 
         /// <summary>
-        /// Deletes a non empty directory
+        /// Gets relative path from absolute path.
         /// </summary>
-        /// <param name="targetDir">The directory to delete.</param>
-        public static void DeleteDirectory(string targetDir)
+        /// <param name="filespec">A files path.</param>
+        /// <param name="folder">The folder's path.</param>
+        /// <returns></returns>
+        public static string GetRelativePath(string filespec, string folder)
         {
-            string[] files = Directory.GetFiles(targetDir);
-            string[] dirs = Directory.GetDirectories(targetDir);
-
-            foreach (string file in files)
+            Uri pathUri = new Uri(filespec);
+            // Folders must end in a slash
+            if (!folder.EndsWith(Path.DirectorySeparatorChar.ToString()))
             {
-                File.SetAttributes(file, FileAttributes.Normal);
-                File.Delete(file);
+                folder += Path.DirectorySeparatorChar;
             }
-
-            foreach (var dir in dirs)
-            {
-                DeleteDirectory(dir);
-            }
-
-            Directory.Delete(targetDir, false);
+            Uri folderUri = new Uri(folder);
+            return Uri.UnescapeDataString(folderUri.MakeRelativeUri(pathUri).ToString().Replace('/', Path.DirectorySeparatorChar));
         }
+
+        /// <summary>
+        /// Opens command prompt at given location
+        /// </summary>
+        /// <param name="path"></param>
+        public static void OpenConsoleAtPath(string path)
+        {
+            using (var process = Process.Start(new ProcessStartInfo("cmd.exe")
+            {
+                UseShellExecute = false,
+                WorkingDirectory = path
+            }))
+            {
+                process?.WaitForExit();
+            }
+        }
+
+        /// <summary>
+        /// Show the given path in the windows explorer.
+        /// </summary>
+        /// <param name="path">The file/folder to show.</param>
+        public static void ShowFileInExplorer(string path) => Process.Start("explorer.exe", "/select, \"" + path + "\"");
+
+        /// <summary>
+        /// Show the given folder in the windows explorer.
+        /// </summary>
+        /// <param name="path">The file/folder to show.</param>
+        public static void ShowFolderInExplorer(string path)
+        {
+            if (Directory.Exists(path))
+                Process.Start("explorer.exe", "\"" + path + "\"");
+        }
+
+        /// <summary>
+        /// Converts an XDocuments to a byte array.
+        /// </summary>
+        /// <param name="xdoc">The xdocument which we want to convert.</param>
+        /// <returns>The byte contents of the array.</returns>
+        public static byte[] XDocToByteArray(XDocument xdoc)
+        {
+            MemoryStream ms = new MemoryStream();
+            XmlWriterSettings xws = new XmlWriterSettings();
+            xws.OmitXmlDeclaration = true;
+            xws.Indent = true;
+
+            using (XmlWriter xw = XmlWriter.Create(ms, xws))
+            {
+                xdoc.WriteTo(xw);
+            }
+            return ms.ToArray();
+        }
+
+        #endregion Methods
     }
 }

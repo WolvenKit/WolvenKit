@@ -9,7 +9,11 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
 
     public class CommandLineContext : ContextBase
     {
+        #region Properties
+
         [Option("", "", DisplayName = "initialFile", HelpText = "The initial project open in WolvenKit")]
         public string InitialFile { get; set; }
+
+        #endregion Properties
     }
 }

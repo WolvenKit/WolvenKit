@@ -9,30 +9,17 @@ namespace WolvenKit.MVVM.Model.Wizards
     {
         #region fields
 
-        private bool _witcherGameChecked = false;
         private bool _cyberpunkGameChecked = true;
         private string _projectName = "";
         private string _projectPath = "";
+        private bool _witcherGameChecked = false;
 
         #endregion fields
 
         #region properties
 
-        public static string WitcherGameName { get; } = "The Witcher 3";
         public static string CyberpunkGameName { get; } = "Cyberpunk 2077";
-
-        /// <summary>
-        /// Gets/Sets the project's name.
-        /// </summary>
-        public bool WitcherChecked
-        {
-            get => _witcherGameChecked;
-            set
-            {
-                _witcherGameChecked = value;
-                RaisePropertyChanged(nameof(WitcherChecked));
-            }
-        }
+        public static string WitcherGameName { get; } = "The Witcher 3";
 
         /// <summary>
         /// Gets/Sets the project's path.
@@ -89,13 +76,36 @@ namespace WolvenKit.MVVM.Model.Wizards
             get => new TypeAndPath(ProjectType, ProjectPath, ProjectName);
         }
 
+        /// <summary>
+        /// Gets/Sets the project's name.
+        /// </summary>
+        public bool WitcherChecked
+        {
+            get => _witcherGameChecked;
+            set
+            {
+                _witcherGameChecked = value;
+                RaisePropertyChanged(nameof(WitcherChecked));
+            }
+        }
+
         #endregion properties
+
+
+
+        #region Classes
 
         public class TypeAndPath
         {
+            #region Fields
+
+            public string Name;
             public string Path;
             public string Type;
-            public string Name;
+
+            #endregion Fields
+
+            #region Constructors
 
             public TypeAndPath(string type, string path, string name)
             {
@@ -103,6 +113,10 @@ namespace WolvenKit.MVVM.Model.Wizards
                 Path = path;
                 Name = name;
             }
+
+            #endregion Constructors
         }
+
+        #endregion Classes
     }
 }

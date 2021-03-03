@@ -28,18 +28,18 @@ namespace WolvenKit.MVVM.ViewModels.Components.Dialogs
 
         #region methods
 
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
-
-            // TODO: Write initialization code here and subscribe to events
-        }
-
         protected override Task CloseAsync()
         {
             // TODO: Unsubscribe from events
 
             return base.CloseAsync();
+        }
+
+        protected override async Task InitializeAsync()
+        {
+            await base.InitializeAsync();
+
+            // TODO: Write initialization code here and subscribe to events
         }
 
         #endregion methods

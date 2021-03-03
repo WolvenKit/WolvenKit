@@ -7,11 +7,21 @@ namespace WolvenKit.Functionality.Extensions
     /// </summary>
     public partial class MyPropertyGrid : PropertyGrid
     {
+        #region Constructors
+
         public MyPropertyGrid()
         {
             InitializeComponent();
         }
 
+        #endregion Constructors
+
+
+
+        #region Properties
+
         public override PropertyResolver PropertyResolver => new MyPropertyResolver();
+
+        #endregion Properties
     }
 }

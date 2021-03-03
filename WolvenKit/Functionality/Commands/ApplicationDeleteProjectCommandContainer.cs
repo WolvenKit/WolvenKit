@@ -11,12 +11,18 @@ namespace WolvenKit.Functionality.Commands
 {
     public class ApplicationDeleteProjectCommandContainer : Catel.MVVM.CommandContainerBase
     {
-        private readonly INavigationService _navigationService;
+        #region Fields
+
         private readonly ILoggerService _loggerService;
+        private readonly IMessageService _messageService;
+        private readonly INavigationService _navigationService;
         private readonly ISaveFileService _saveFileService;
         private readonly IUIVisualizerService _uIVisualizerService;
         private readonly IViewModelFactory _viewModelFactory;
-        private readonly IMessageService _messageService;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ApplicationDeleteProjectCommandContainer(
             ICommandManager commandManager,
@@ -42,6 +48,12 @@ namespace WolvenKit.Functionality.Commands
             _messageService = messageService;
         }
 
+        #endregion Constructors
+
+
+
+        #region Methods
+
         protected override bool CanExecute(object parameter) => true;
 
         protected override void Execute(object parameter)
@@ -55,5 +67,7 @@ namespace WolvenKit.Functionality.Commands
                 _loggerService.LogString("Failed to steal your nuggets!", Logtype.Error);
             }
         }
+
+        #endregion Methods
     }
 }

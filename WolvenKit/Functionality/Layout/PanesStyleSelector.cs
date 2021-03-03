@@ -7,17 +7,25 @@ namespace WolvenKit.Functionality.Layout
 {
     internal class PanesStyleSelector : StyleSelector
     {
-        public Style ToolStyle
-        {
-            get;
-            set;
-        }
+        #region Properties
 
         public Style FileStyle
         {
             get;
             set;
         }
+
+        public Style ToolStyle
+        {
+            get;
+            set;
+        }
+
+        #endregion Properties
+
+
+
+        #region Methods
 
         public override System.Windows.Style SelectStyle(object item, System.Windows.DependencyObject container)
         {
@@ -33,5 +41,7 @@ namespace WolvenKit.Functionality.Layout
                     return base.SelectStyle(item, container);
             }
         }
+
+        #endregion Methods
     }
 }

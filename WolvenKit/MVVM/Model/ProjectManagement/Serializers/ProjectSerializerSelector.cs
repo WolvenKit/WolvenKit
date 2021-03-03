@@ -23,6 +23,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
 
         #endregion Constructors
 
+
+
         #region Methods
 
         public IProjectReader GetReader(string location) => _typeFactory.CreateInstance<ProjectReader>();

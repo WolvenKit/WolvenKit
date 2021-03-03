@@ -9,18 +9,23 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 
     public class ScriptDocumentViewModel : CloseableViewModel, Old_IDocumentViewModel
     {
+        #region Constructors
+
         public ScriptDocumentViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
         }
 
+        #endregion Constructors
+
+
+
         #region Properties
 
+        public string FileName => Path.GetFileName(FilePath);
+        public string FilePath { get; set; }
+        public bool IsUnsaved { get; private set; }
         public object SaveTarget { get; set; }
         public override string Title => FileName;
-        public bool IsUnsaved { get; private set; }
-
-        public string FilePath { get; set; }
-        public string FileName => Path.GetFileName(FilePath);
 
         #region Text
 

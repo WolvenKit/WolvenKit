@@ -8,8 +8,14 @@ namespace WolvenKit.Functionality.Commands
     /// <typeparam name="T">The command parameter type.</typeparam>
     public class DelegateCommand<T> : Command
     {
-        private readonly Action<T> _execute;
+        #region Fields
+
         private readonly Predicate<T> _canExecute;
+        private readonly Action<T> _execute;
+
+        #endregion Fields
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegateCommand{T}"/> class.
@@ -30,6 +36,8 @@ namespace WolvenKit.Functionality.Commands
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
+
+        #endregion Constructors
 
         #region ICommand Members
 

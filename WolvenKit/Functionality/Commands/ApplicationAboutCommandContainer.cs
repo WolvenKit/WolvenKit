@@ -7,7 +7,13 @@ namespace WolvenKit.Functionality.Commands
 {
     public class ApplicationAboutCommandContainer : Catel.MVVM.CommandContainerBase
     {
+        #region Fields
+
         private readonly IAboutService _aboutService;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ApplicationAboutCommandContainer(ICommandManager commandManager, IAboutService aboutService)
             : base(AppCommands.Application.About, commandManager)
@@ -17,9 +23,17 @@ namespace WolvenKit.Functionality.Commands
             _aboutService = aboutService;
         }
 
+        #endregion Constructors
+
+
+
+        #region Methods
+
         protected override void Execute(object parameter)
         {
             _aboutService.ShowAboutAsync();
         }
+
+        #endregion Methods
     }
 }

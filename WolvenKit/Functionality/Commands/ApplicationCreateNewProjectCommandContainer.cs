@@ -19,8 +19,14 @@ namespace WolvenKit.Functionality.Commands
 {
     public class ApplicationCreateNewProjectCommandContainer : ProjectCommandContainerBase
     {
+        #region Fields
+
         private readonly ILoggerService _loggerService;
         private readonly ISaveFileService _saveFileService;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ApplicationCreateNewProjectCommandContainer(
             ICommandManager commandManager,
@@ -37,22 +43,19 @@ namespace WolvenKit.Functionality.Commands
             _saveFileService = saveFileService;
         }
 
-        private void saveProjectImg(string ProjectPath)
-        {
-            var imagePath = Path.Combine(Path.GetDirectoryName(ProjectPath), Path.GetFileNameWithoutExtension(ProjectPath));
-            var _pwvm = ServiceLocator.Default.ResolveType<ProjectWizardViewModel>();
-            var src = (System.Windows.Media.Imaging.BitmapSource)_pwvm?.ProfileImageBrush?.ImageSource;
-            if (src != null)
-            {
-                using (var fs1 = new FileStream(Path.Combine(imagePath, "img.png"), FileMode.OpenOrCreate))
-                {
-                    var frame = System.Windows.Media.Imaging.BitmapFrame.Create(src);
-                    var enc = new System.Windows.Media.Imaging.PngBitmapEncoder();
-                    enc.Frames.Add(frame);
-                    enc.Save(fs1);
-                }
-            }
-        }
+        #endregion Constructors
+
+
+
+        #region Events
+
+        public event Action OnCommandCompleted;
+
+        #endregion Events
+
+
+
+        #region Methods
 
         protected override bool CanExecute(object parameter) => true;
 
@@ -155,6 +158,23 @@ namespace WolvenKit.Functionality.Commands
             OnCommandCompleted?.Invoke();
         }
 
-        public event Action OnCommandCompleted;
+        private void saveProjectImg(string ProjectPath)
+        {
+            var imagePath = Path.Combine(Path.GetDirectoryName(ProjectPath), Path.GetFileNameWithoutExtension(ProjectPath));
+            var _pwvm = ServiceLocator.Default.ResolveType<ProjectWizardViewModel>();
+            var src = (System.Windows.Media.Imaging.BitmapSource)_pwvm?.ProfileImageBrush?.ImageSource;
+            if (src != null)
+            {
+                using (var fs1 = new FileStream(Path.Combine(imagePath, "img.png"), FileMode.OpenOrCreate))
+                {
+                    var frame = System.Windows.Media.Imaging.BitmapFrame.Create(src);
+                    var enc = new System.Windows.Media.Imaging.PngBitmapEncoder();
+                    enc.Frames.Add(frame);
+                    enc.Save(fs1);
+                }
+            }
+        }
+
+        #endregion Methods
     }
 }

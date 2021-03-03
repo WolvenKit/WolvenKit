@@ -13,13 +13,12 @@ namespace WolvenKit.Functionality.Commands
 {
     public class ApplicationBugReportCommandContainer : CommandContainerBase
     {
-        private readonly INavigationService _navigationService;
         private readonly ILoggerService _loggerService;
+        private readonly IMessageService _messageService;
+        private readonly INavigationService _navigationService;
         private readonly ISaveFileService _saveFileService;
         private readonly IUIVisualizerService _uIVisualizerService;
         private readonly IViewModelFactory _viewModelFactory;
-        private readonly IMessageService _messageService;
-
         public ApplicationBugReportCommandContainer(
             ICommandManager commandManager,
             INavigationService navigationService,

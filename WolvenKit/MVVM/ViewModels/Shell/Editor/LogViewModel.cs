@@ -7,6 +7,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
     /// </summary>
     public class LogViewModel : ToolViewModel
     {
+        #region Fields
+
         /// <summary>
         /// Identifies the <see ref="ContentId"/> of this tool window.
         /// </summary>
@@ -16,6 +18,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// Identifies the caption string used for this tool window.
         /// </summary>
         public const string ToolTitle = "Log";
+
+        #endregion Fields
 
         #region constructors
 
@@ -38,6 +42,20 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #region methods
 
+        protected override Task CloseAsync()
+        {
+            // TODO: Unsubscribe from events
+
+            return base.CloseAsync();
+        }
+
+        protected override async Task InitializeAsync()
+        {
+            await base.InitializeAsync();
+
+            // TODO: Write initialization code here and subscribe to events
+        }
+
         /// <summary>
         /// Initialize Avalondock specific defaults that are specific to this tool window.
         /// </summary>
@@ -50,20 +68,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             //bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
             //bi.EndInit();
             //IconSource = bi;
-        }
-
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
-
-            // TODO: Write initialization code here and subscribe to events
-        }
-
-        protected override Task CloseAsync()
-        {
-            // TODO: Unsubscribe from events
-
-            return base.CloseAsync();
         }
 
         #endregion methods

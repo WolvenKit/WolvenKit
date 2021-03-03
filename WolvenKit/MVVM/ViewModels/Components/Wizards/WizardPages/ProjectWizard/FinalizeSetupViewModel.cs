@@ -26,6 +26,11 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.ProjectWizard
         #region properties
 
         /// <summary>
+        /// Register the ProjectWizardModel property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty("ProjectWizardModel", typeof(ProjectWizardModel));
+
+        /// <summary>
         /// Gets or sets the projectWizardModel.
         /// </summary>
         [Model]
@@ -38,11 +43,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.ProjectWizard
             get { return GetValue<ProjectWizardModel>(ProjectWizardModelProperty); }
             set { SetValue(ProjectWizardModelProperty, value); }
         }
-
-        /// <summary>
-        /// Register the ProjectWizardModel property so it is known in the class.
-        /// </summary>
-        public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty("ProjectWizardModel", typeof(ProjectWizardModel));
 
         #endregion properties
     }

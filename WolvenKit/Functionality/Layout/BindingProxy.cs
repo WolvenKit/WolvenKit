@@ -11,8 +11,16 @@ namespace WolvenKit.Functionality.Layout
     /// </summary>
     public class BindingProxy : Freezable
     {
+        #region Fields
+
         public static readonly DependencyProperty DataProperty =
             DependencyProperty.Register(nameof(Data), typeof(object), typeof(BindingProxy), new UIPropertyMetadata(null));
+
+        #endregion Fields
+
+
+
+        #region Properties
 
         /// <summary>
         /// Gets the data object this class is forwarding to everyone
@@ -24,6 +32,12 @@ namespace WolvenKit.Functionality.Layout
             set => this.SetValue(DataProperty, value);
         }
 
+        #endregion Properties
+
+
+
+        #region Methods
+
         /// <summary>
         /// Overrides of Freezable
         /// </summary>
@@ -32,5 +46,7 @@ namespace WolvenKit.Functionality.Layout
         {
             return new BindingProxy();
         }
+
+        #endregion Methods
     }
 }

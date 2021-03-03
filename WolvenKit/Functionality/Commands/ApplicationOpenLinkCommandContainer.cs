@@ -6,10 +6,18 @@ namespace WolvenKit.Functionality.Commands
 {
     internal class ApplicationOpenLinkCommandContainer : Catel.MVVM.CommandContainerBase
     {
+        #region Constructors
+
         public ApplicationOpenLinkCommandContainer(ICommandManager commandManager)
             : base(AppCommands.Application.OpenLink, commandManager)
         {
         }
+
+        #endregion Constructors
+
+
+
+        #region Methods
 
         protected override bool CanExecute(object parameter) => true;
 
@@ -22,5 +30,7 @@ namespace WolvenKit.Functionality.Commands
             };
             Process.Start(ps);
         }
+
+        #endregion Methods
     }
 }

@@ -26,6 +26,21 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWiz
         #region properties
 
         /// <summary>
+        /// Register the FirstSetupWizardViewModel property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData FirstSetupWizardViewModelProperty = RegisterProperty("FirstSetupWizardViewModel", typeof(FirstSetupWizardViewModel));
+
+        /// <summary>
+        /// Register the FirstSetupWizardModel property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty("FirstSetupWizardModel", typeof(FirstSetupWizardModel));
+
+        /// <summary>
+        /// Register the SettingsManager property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData SettingsManagerProperty = RegisterProperty("SettingsManager", typeof(ISettingsManager));
+
+        /// <summary>
         /// Gets or sets the FirstSetupWizardModel.
         /// </summary>
         [Model]
@@ -42,17 +57,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWiz
         }
 
         /// <summary>
-        /// Gets or sets the SettingsManager.
-        /// </summary>
-        [Model]
-        [Expose("DepotPath")]
-        public ISettingsManager SettingsManager
-        {
-            get { return GetValue<ISettingsManager>(SettingsManagerProperty); }
-            set { SetValue(SettingsManagerProperty, value); }
-        }
-
-        /// <summary>
         /// Gets or sets the FirstSetupWizardViewModel.
         /// </summary>
         [Model]
@@ -66,19 +70,15 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWiz
         }
 
         /// <summary>
-        /// Register the FirstSetupWizardModel property so it is known in the class.
+        /// Gets or sets the SettingsManager.
         /// </summary>
-        public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty("FirstSetupWizardModel", typeof(FirstSetupWizardModel));
-
-        /// <summary>
-        /// Register the SettingsManager property so it is known in the class.
-        /// </summary>
-        public static readonly PropertyData SettingsManagerProperty = RegisterProperty("SettingsManager", typeof(ISettingsManager));
-
-        /// <summary>
-        /// Register the FirstSetupWizardViewModel property so it is known in the class.
-        /// </summary>
-        public static readonly PropertyData FirstSetupWizardViewModelProperty = RegisterProperty("FirstSetupWizardViewModel", typeof(FirstSetupWizardViewModel));
+        [Model]
+        [Expose("DepotPath")]
+        public ISettingsManager SettingsManager
+        {
+            get { return GetValue<ISettingsManager>(SettingsManagerProperty); }
+            set { SetValue(SettingsManagerProperty, value); }
+        }
 
         #endregion properties
     }

@@ -6,6 +6,8 @@ namespace WolvenKit.Functionality.Layout.Converters
 {
     public class ActiveDocumentConverter : IValueConverter
     {
+        #region Methods
+
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value is DocumentViewModel)
@@ -21,5 +23,7 @@ namespace WolvenKit.Functionality.Layout.Converters
 
             return Binding.DoNothing;
         }
+
+        #endregion Methods
     }
 }

@@ -16,9 +16,15 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Watchers
 {
     public class ProjectManagementCloseApplicationWatcher : CloseApplicationWatcherBase
     {
-        private readonly IProjectManager _projectManager;
+        #region Fields
+
         private readonly IPleaseWaitService _pleaseWaitService;
+        private readonly IProjectManager _projectManager;
         private readonly ISaveProjectChangesService _saveProjectChangesService;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ProjectManagementCloseApplicationWatcher(IProjectManager projectManager, IPleaseWaitService pleaseWaitService,
             ISaveProjectChangesService saveProjectChangesService)
@@ -31,6 +37,12 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Watchers
             _pleaseWaitService = pleaseWaitService;
             _saveProjectChangesService = saveProjectChangesService;
         }
+
+        #endregion Constructors
+
+
+
+        #region Methods
 
         protected override async Task<bool> ClosingAsync()
         {
@@ -67,5 +79,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Watchers
 
             return await base.PrepareClosingAsync();
         }
+
+        #endregion Methods
     }
 }
