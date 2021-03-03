@@ -223,7 +223,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             if (Functionality.Services.SettingsManager.FirstTimeSetupForUser)
             {
                 Task.Run(() =>
-                {
                     //await Task.Delay(5000);
                     Application.Current.Dispatcher.Invoke(() =>
                     {
@@ -237,17 +236,10 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                                 return;
                             }
 
-                            rpv.ViewModel.ClosedAsync += async (s, e) =>
-                            {
-                                await Task.Run(() =>
-                                {
-                                    Application.Current.Dispatcher.Invoke(() => uchwv.Close());
-                                });
-                            };
+                            rpv.ViewModel.ClosedAsync += async (s, e) => await Task.Run(() => Application.Current.Dispatcher.Invoke(() => uchwv.Close()));
                         };
                         uchwv.Show();
-                    });
-                });
+                    }));
             }
         }
 

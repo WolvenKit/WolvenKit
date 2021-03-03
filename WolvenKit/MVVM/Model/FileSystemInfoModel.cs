@@ -55,10 +55,7 @@ namespace WolvenKit.MVVM.Model
             }
 
             Children = new ObservableCollection<FileSystemInfoModel>();
-            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                BindingOperations.EnableCollectionSynchronization(Children, _childrenLock);
-            }));
+            Application.Current.Dispatcher.BeginInvoke(new Action(() => BindingOperations.EnableCollectionSynchronization(Children, _childrenLock)));
 
             FileSystemInfo = fileSystemInfo;
             Parent = parent;

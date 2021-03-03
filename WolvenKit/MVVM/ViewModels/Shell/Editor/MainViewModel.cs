@@ -781,10 +781,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 // cook uncooked files
                 var taskCookCol = Task.Run(() => WccHelper.Cook());
                 await taskCookCol.ContinueWith(antecedent =>
-                {
                     //Logger.LogString($"Cooking Collision ended with status: {antecedent.Result}", Logtype.Important);
-                    statusCook = antecedent.Result;
-                });
+                    statusCook = antecedent.Result);
                 if (statusCook == 0)
                 {
                     Logger.LogString("Cooking collision finished with errors. \n", Logtype.Error);
@@ -884,10 +882,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     {
                         var t = Task.Run(() => WccHelper.Pack(packsettings.PackBundles.Item1, packsettings.PackBundles.Item2));
                         await t.ContinueWith(antecedent =>
-                        {
                             //Logger.LogString($"Packing Bundles ended with status: {antecedent.Result}", Logtype.Important);
-                            statusPack = antecedent.Result;
-                        });
+                            statusPack = antecedent.Result);
                         if (statusPack == 0)
                         {
                             Logger.LogString("Packing bundles finished with errors. \n", Logtype.Error);
@@ -913,11 +909,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     if (statusPack == 1)
                     {
                         var t = Task.Run(() => WccHelper.CreateMetaData(packsettings.GenMetadata.Item1, packsettings.GenMetadata.Item2));
-                        await t.ContinueWith(antecedent =>
-                        {
-                            statusMetaData = antecedent.Result;
-                            //Logger.LogString($"Creating metadata ended with status: {statusMetaData}", Logtype.Important);
-                        });
+                        await t.ContinueWith(antecedent => statusMetaData = antecedent.Result);
                         if (statusMetaData == 0)
                         {
                             Logger.LogString("Generating metadata with errors. \n", Logtype.Error);
@@ -946,11 +938,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 if (packsettings.GenCollCache.Item1 || packsettings.GenCollCache.Item2)
                 {
                     var t = Task.Run(() => WccHelper.GenerateCache(EArchiveType.CollisionCache, packsettings.GenCollCache.Item1, packsettings.GenCollCache.Item2));
-                    await t.ContinueWith(antecedent =>
-                    {
-                        statusCol = antecedent.Result;
-                        //Logger.LogString($"Building collision cache ended with status: {statusCol}", Logtype.Important);
-                    });
+                    await t.ContinueWith(antecedent => statusCol = antecedent.Result);
                     if (statusCol == 0)
                     {
                         Logger.LogString("Collision cache built with errors. \n", Logtype.Error);
@@ -961,11 +949,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 if (packsettings.GenTexCache.Item1 || packsettings.GenTexCache.Item2)
                 {
                     var t = Task.Run(() => WccHelper.GenerateCache(EArchiveType.TextureCache, packsettings.GenTexCache.Item1, packsettings.GenTexCache.Item2));
-                    await t.ContinueWith(antecedent =>
-                    {
-                        statusTex = antecedent.Result;
-                        //Logger.LogString($"Building texture cache ended with status: {statusTex}", Logtype.Important);
-                    });
+                    await t.ContinueWith(antecedent => statusTex = antecedent.Result);
                     if (statusTex == 0)
                     {
                         Logger.LogString("Texture cache built with errors. \n", Logtype.Error);

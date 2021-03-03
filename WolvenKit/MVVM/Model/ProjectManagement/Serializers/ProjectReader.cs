@@ -48,21 +48,15 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
                     {
                         project = new Tw3Project(location);
                         MainController.Get().ActiveMod = project.Data;
-                        await MainController.SetGame(new Tw3Controller()).ContinueWith(t =>
-                            {
-                                _notificationService.Success("Project " + Path.GetFileNameWithoutExtension(location) +
-                                  " loaded!");
-                            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                        await MainController.SetGame(new Tw3Controller()).ContinueWith(t => _notificationService.Success("Project " + Path.GetFileNameWithoutExtension(location) +
+                                  " loaded!"), TaskContinuationOptions.OnlyOnRanToCompletion);
                         break;
                     }
                     case ".cpmodproj":
                     {
                         project = new Cp77Project(location);
                         MainController.Get().ActiveMod = project.Data;
-                        await MainController.SetGame(new Cp77Controller()).ContinueWith(t =>
-                            {
-                                _notificationService.Success("Project " + Path.GetFileNameWithoutExtension(location) + " loaded!");
-                            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                        await MainController.SetGame(new Cp77Controller()).ContinueWith(t => _notificationService.Success("Project " + Path.GetFileNameWithoutExtension(location) + " loaded!"), TaskContinuationOptions.OnlyOnRanToCompletion);
                         break;
                     }
                 }

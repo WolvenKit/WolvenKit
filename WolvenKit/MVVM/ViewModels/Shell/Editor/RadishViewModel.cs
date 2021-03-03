@@ -533,10 +533,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                             }
                         }
                     });
-                    p.ErrorDataReceived += new DataReceivedEventHandler((s, ev) =>
-                    {
-                        Logger.LogString(ev.Data, Logtype.Error);
-                    });
+                    p.ErrorDataReceived += new DataReceivedEventHandler((s, ev) => Logger.LogString(ev.Data, Logtype.Error));
 
                     p.Start();
                     p.BeginOutputReadLine();

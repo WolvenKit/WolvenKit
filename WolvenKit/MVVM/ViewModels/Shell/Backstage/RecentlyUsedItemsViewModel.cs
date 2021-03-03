@@ -154,10 +154,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
                     NewItem = new FancyProjectObject(fi.Name, cd, "Cyberpunk 2077", p, newfi);
                     Application.Current.Dispatcher.BeginInvoke(
                                             DispatcherPriority.Background,
-                                            new Action(() =>
-                                            {
-                                                FancyProjects.Add(NewItem);
-                                            }));
+                                            new Action(() => FancyProjects.Add(NewItem)));
                 }
                 if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.w3modproj.ToString())
                 {
@@ -167,10 +164,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
                     NewItem = new FancyProjectObject(n, cd, "The Witcher 3", p, newfi);
                     Application.Current.Dispatcher.BeginInvoke(
                                            DispatcherPriority.Background,
-                                           new Action(() =>
-                                           {
-                                               FancyProjects.Add(NewItem);
-                                           }));
+                                           new Action(() => FancyProjects.Add(NewItem)));
                 }
             }
         }

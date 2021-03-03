@@ -10,7 +10,7 @@ namespace WolvenKit.MVVM.Views.Others
         {
             InitializeComponent();
             UserContentControl.Content = ucvm.ContentUserControl;
-            ucvm.ClosedAsync += (s, e) => { return System.Threading.Tasks.Task.Run(() => Dispatcher.Invoke(() => Close())); };
+            ucvm.ClosedAsync += (s, e) => System.Threading.Tasks.Task.Run(() => Dispatcher.Invoke(() => Close()));
         }
 
         private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => DragMove();

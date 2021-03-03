@@ -28,10 +28,7 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
         {
             InitializeComponent();
 
-            this.WhenActivated(d =>
-            {
-                this.WhenAnyValue(v => v.ViewModel).BindTo(this, v => v.NodeView.ViewModel).DisposeWith(d);
-            });
+            this.WhenActivated(d => this.WhenAnyValue(v => v.ViewModel).BindTo(this, v => v.NodeView.ViewModel).DisposeWith(d));
         }
     }
 }

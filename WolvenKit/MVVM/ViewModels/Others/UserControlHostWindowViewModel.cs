@@ -29,10 +29,7 @@ namespace WolvenKit.MVVM.ViewModels.Others
                     return;
                 }
 
-                uc.ViewModel.ClosedAsync += (s, e) =>
-                {
-                    return CloseViewModelAsync(null);
-                };
+                uc.ViewModel.ClosedAsync += (s, e) => CloseViewModelAsync(null);
             };
         }
 

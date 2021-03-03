@@ -623,10 +623,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 await Channel
                     .CreateBounded<string>(50000)
                     .Source(args.FileNames)
-                    .ReadAllAsync(async path =>
-                    {
-                        await Task.Run(() => RefreshNodeCommand.SafeExecute(path));
-                    });
+                    .ReadAllAsync(async path => await Task.Run(() => RefreshNodeCommand.SafeExecute(path)));
             }
         }
 

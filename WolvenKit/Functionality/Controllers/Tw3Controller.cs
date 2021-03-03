@@ -431,10 +431,8 @@ namespace WolvenKit.Functionality.Controllers
                 // cook uncooked files
                 var taskCookCol = Task.Run(() => WccHelper.Cook());
                 await taskCookCol.ContinueWith(antecedent =>
-                {
                     //Logger.LogString($"Cooking Collision ended with status: {antecedent.Result}", Logtype.Important);
-                    statusCook = antecedent.Result;
-                });
+                    statusCook = antecedent.Result);
                 if (statusCook == 0)
                 {
                     _logger.LogString("Cooking collision finished with errors. \n", Logtype.Error);
@@ -534,10 +532,8 @@ namespace WolvenKit.Functionality.Controllers
                     {
                         var t = WccHelper.Pack(packsettings.modPackBundles, packsettings.dlcPackBundles);
                         await t.ContinueWith(antecedent =>
-                        {
                             //Logger.LogString($"Packing Bundles ended with status: {antecedent.Result}", Logtype.Important);
-                            statusPack = (int)antecedent.Status;
-                        });
+                            statusPack = (int)antecedent.Status);
                         if (statusPack == 0)
                         {
                             _logger.LogString("Packing bundles finished with errors. \n", Logtype.Error);
@@ -564,11 +560,7 @@ namespace WolvenKit.Functionality.Controllers
                     {
                         var t = WccHelper.CreateMetaData(packsettings.modGenMetadata,
                             packsettings.dlcGenMetadata);
-                        await t.ContinueWith(antecedent =>
-                        {
-                            statusMetaData = antecedent.Result;
-                            //Logger.LogString($"Creating metadata ended with status: {statusMetaData}", Logtype.Important);
-                        });
+                        await t.ContinueWith(antecedent => statusMetaData = antecedent.Result);
                         if (statusMetaData == 0)
                         {
                             _logger.LogString("Generating metadata finished with errors. \n", Logtype.Error);
@@ -598,11 +590,7 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     var t = WccHelper.GenerateCache(EArchiveType.CollisionCache, packsettings.modGenCollCache,
                         packsettings.dlcGenCollCache);
-                    await t.ContinueWith(antecedent =>
-                    {
-                        statusCol = antecedent.Result;
-                        //Logger.LogString($"Building collision cache ended with status: {statusCol}", Logtype.Important);
-                    });
+                    await t.ContinueWith(antecedent => statusCol = antecedent.Result);
                     if (statusCol == 0)
                     {
                         _logger.LogString("Collision cache built with errors. \n", Logtype.Error);
@@ -613,11 +601,7 @@ namespace WolvenKit.Functionality.Controllers
                 if (packsettings.modGenTexCache || packsettings.dlcGenTexCache)
                 {
                     var t = WccHelper.GenerateCache(EArchiveType.TextureCache, packsettings.modGenTexCache, packsettings.dlcGenTexCache);
-                    await t.ContinueWith(antecedent =>
-                    {
-                        statusTex = antecedent.Result;
-                        //Logger.LogString($"Building texture cache ended with status: {statusTex}", Logtype.Important);
-                    });
+                    await t.ContinueWith(antecedent => statusTex = antecedent.Result);
                     if (statusTex == 0)
                     {
                         _logger.LogString("Texture cache built with errors. \n", Logtype.Error);

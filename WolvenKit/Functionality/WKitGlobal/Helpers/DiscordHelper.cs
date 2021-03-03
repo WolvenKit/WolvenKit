@@ -25,8 +25,8 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                 //Set the logger (Disabled for now ..)
                 //client.Logger = new DiscordRPC.Logging.ConsoleLogger() { Level = DiscordRPC.Logging.LogLevel.Warning };
                 //Subscribe to events
-                client.OnReady += (sender, e) => { Console.WriteLine("Received Ready from user {0}", e.User.Username); };
-                client.OnPresenceUpdate += (sender, e) => { Console.WriteLine("Received Update! {0}", e.Presence); };
+                client.OnReady += (sender, e) => Console.WriteLine("Received Ready from user {0}", e.User.Username);
+                client.OnPresenceUpdate += (sender, e) => Console.WriteLine("Received Update! {0}", e.Presence);
                 //Connect to the RPC
                 client.Initialize();
                 DiscordRPCInitizialized = true;

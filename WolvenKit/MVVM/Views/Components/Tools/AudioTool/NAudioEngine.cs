@@ -335,10 +335,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 if (readCount % 3000 == 0)
                 {
                     var clonedData = (float[])waveformCompressedPoints.Clone();
-                    App.Current.Dispatcher.Invoke(new Action(() =>
-                    {
-                        WaveformData = clonedData;
-                    }));
+                    App.Current.Dispatcher.Invoke(new Action(() => WaveformData = clonedData));
                 }
 
                 if (waveformGenerateWorker.CancellationPending)
