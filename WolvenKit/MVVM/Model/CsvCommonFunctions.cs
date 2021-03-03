@@ -85,36 +85,72 @@ namespace WolvenKit.MVVM.Model
         private static void RegisterClassMap(Type type, CsvWriter csv)
         {
             if (type == typeof(CName))
+            {
                 csv.Configuration.RegisterClassMap<CNameMap>();
+            }
+
             if (type == typeof(CString))
+            {
                 csv.Configuration.RegisterClassMap<CStringMap>();
+            }
+
             if (type == typeof(CBool))
+            {
                 csv.Configuration.RegisterClassMap<CBoolMap>();
+            }
+
             if (type == typeof(CFloat))
+            {
                 csv.Configuration.RegisterClassMap<CFloatMap>();
+            }
 
             if (type == typeof(CUInt8))
+            {
                 csv.Configuration.RegisterClassMap<CUInt8Map>();
+            }
+
             if (type == typeof(CUInt16))
+            {
                 csv.Configuration.RegisterClassMap<CUInt16Map>();
+            }
+
             if (type == typeof(CUInt32))
+            {
                 csv.Configuration.RegisterClassMap<CUInt32Map>();
+            }
+
             if (type == typeof(CUInt64))
+            {
                 csv.Configuration.RegisterClassMap<CUInt64Map>();
+            }
+
             if (type == typeof(CInt8))
+            {
                 csv.Configuration.RegisterClassMap<CInt8Map>();
+            }
+
             if (type == typeof(CInt16))
+            {
                 csv.Configuration.RegisterClassMap<CInt16Map>();
+            }
+
             if (type == typeof(CInt32))
+            {
                 csv.Configuration.RegisterClassMap<CInt32Map>();
+            }
+
             if (type == typeof(CInt64))
+            {
                 csv.Configuration.RegisterClassMap<CInt64Map>();
+            }
         }
 
         private static void RegisterClassMap(Type type, CsvReader csv)
         {
             if (type == typeof(CName))
+            {
                 csv.Configuration.RegisterClassMap<CNameMap>();
+            }
         }
 
         #endregion Methods

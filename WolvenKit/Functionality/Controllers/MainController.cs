@@ -157,7 +157,9 @@ namespace WolvenKit.Functionality.Controllers
         public static void LogProgress(int value)
         {
             if (Get().Logger != null)
+            {
                 Get().Logger.LogProgress(value);
+            }
         }
 
         /// <summary>
@@ -167,7 +169,9 @@ namespace WolvenKit.Functionality.Controllers
         public static void LogString(string value, Logtype logtype = Logtype.Normal)
         {
             if (Get().Logger != null)
+            {
                 Get().Logger.LogString(value, logtype);
+            }
         }
 
         /// <summary>
@@ -177,7 +181,9 @@ namespace WolvenKit.Functionality.Controllers
         public static void LogString(object sender, string value)
         {
             if (Get().Logger != null)
+            {
                 Get().Logger.LogString(value, Logtype.Normal);
+            }
         }
 
         /// <summary>
@@ -260,11 +266,16 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     DirectoryInfo wccDir = new FileInfo(Configuration.WccLite).Directory.Parent.Parent;
                     if (!wccDir.Exists)
+                    {
                         throw new Exception("wcc_lite directory not specified.");
+                    }
 
                     string wcc_r4data = Path.Combine(wccDir.FullName, "r4data");
                     if (!Directory.Exists(wcc_r4data))
+                    {
                         Directory.CreateDirectory(wcc_r4data);  //create an empty depot
+                    }
+
                     Configuration.DepotPath = wcc_r4data;
                     Configuration.Save();
                 }
@@ -324,7 +335,10 @@ namespace WolvenKit.Functionality.Controllers
         protected bool SetField<T>(ref T field, T value, string propertyName)
         {
             if (EqualityComparer<T>.Default.Equals(field, value))
+            {
                 return false;
+            }
+
             field = value;
             OnPropertyChanged(propertyName);
             return true;

@@ -10,8 +10,9 @@ namespace CP77Tools.Extensions
         {
 
             if (line == null)
+            {
                 yield break;
-
+            }
             else
             {
                 Char prevChar = '\0';
@@ -27,14 +28,22 @@ namespace CP77Tools.Extensions
                     currentChar = line[i];
 
                     if (i > 0)
+                    {
                         prevChar = line[i - 1];
+                    }
                     else
+                    {
                         prevChar = '\0';
+                    }
 
                     if (i + 1 < line.Length)
+                    {
                         nextChar = line[i + 1];
+                    }
                     else
+                    {
                         nextChar = '\0';
+                    }
 
                     if (currentChar == textQualifier && prevChar != 0x5c && !inString)
                     {

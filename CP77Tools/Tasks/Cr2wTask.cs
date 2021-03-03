@@ -62,7 +62,10 @@ namespace CP77Tools.Tasks
             // check search pattern then regex
             IEnumerable<FileInfo> finalmatches = fileInfos;
             if (!string.IsNullOrEmpty(pattern))
+            {
                 finalmatches = fileInfos.MatchesWildcard(item => item.FullName, pattern);
+            }
+
             if (!string.IsNullOrEmpty(regex))
             {
                 var searchTerm = new System.Text.RegularExpressions.Regex($@"{regex}");
@@ -98,7 +101,9 @@ namespace CP77Tools.Tasks
                     using var fs = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read);
                     var cr2w = ModTools.TryReadCr2WFile(fs);
                     if (cr2w == null)
+                    {
                         return;
+                    }
 
                     //write
                     File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.json"),

@@ -109,7 +109,9 @@ namespace WolvenKit.MVVM.Model
             // make new path
             // first, trim Raw from the path
             if (relPath.Substring(0, 3) == "Raw")
+            {
                 relPath = relPath.Substring(4);
+            }
             // then, trim Mod or dlc from the path
             bool isDLC = false;
             if (relPath.Substring(0, 3) == "Mod")

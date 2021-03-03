@@ -53,7 +53,9 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
                 new DetermineDirectoryContext()
             );
             if (result.Result)
+            {
                 _settingsManager.DepotPath = result.DirectoryName;
+            }
         }
 
         private HandyControl.Data.OperationResult<bool> VerifyFolder(string str)
@@ -74,9 +76,15 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
         {
             bool w3IsValid = true, cp77IsValid = true;
             if (_firstSetupWizardModel.CreateModForW3)
+            {
                 w3IsValid = w3ExeTxtb.VerifyData() && wccLiteExeTxtb.VerifyData() && uncookedDepTxtb.VerifyData();
+            }
+
             if (_firstSetupWizardModel.CreateModForCP77)
+            {
                 cp77IsValid = cp77ExeTxtb.VerifyData();
+            }
+
             _firstSetupWizardViewModel.AllFieldIsValid = w3IsValid && cp77IsValid;
         }
 

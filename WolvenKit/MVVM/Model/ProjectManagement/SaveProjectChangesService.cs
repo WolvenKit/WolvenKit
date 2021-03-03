@@ -83,7 +83,9 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
             Argument.IsNotNullOrEmpty(() => message);
 
             if (project == null || !project.IsDirty)
+            {
                 return true;
+            }
 
             var caption = AssemblyHelper.GetEntryAssembly().Title();
 

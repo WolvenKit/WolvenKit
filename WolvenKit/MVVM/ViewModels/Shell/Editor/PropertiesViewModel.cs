@@ -73,7 +73,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         {
             var activeProject = args.NewProject;
             if (activeProject == null)
+            {
                 return TaskHelper.Completed;
+            }
 
             return TaskHelper.Completed;
         }

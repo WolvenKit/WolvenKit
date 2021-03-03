@@ -52,7 +52,10 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             {
                 T matchedParent = parent as T;
                 if (matchedParent != null)
+                {
                     return matchedParent;
+                }
+
                 parent = VisualTreeHelper.GetParent(parent);
             }
             while (parent != null);

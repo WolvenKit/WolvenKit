@@ -25,7 +25,10 @@ namespace WolvenKit.MVVM.ViewModels.Others
             uc.ViewModelChanged += (_s, _e) =>
             {
                 if (uc.ViewModel == null)
+                {
                     return;
+                }
+
                 uc.ViewModel.ClosedAsync += (s, e) =>
                 {
                     return CloseViewModelAsync(null);

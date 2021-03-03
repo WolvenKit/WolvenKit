@@ -171,7 +171,9 @@ namespace WolvenKit.Functionality.Services
                 if (savedversions != curversion)
                 {
                     if (File.Exists(MainController.GetManagerPath(e)))
+                    {
                         File.Delete(MainController.GetManagerPath(e));
+                    }
                 }
             }
 

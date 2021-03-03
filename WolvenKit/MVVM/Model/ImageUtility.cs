@@ -224,7 +224,9 @@ namespace WolvenKit.MVVM.Model
         public static Bitmap Xbm2Bmp(CBitmapTexture xbm)
         {
             if (xbm == null)
+            {
                 return null;
+            }
 
             using (var ms = new MemoryStream(Xbm2DdsBytes(xbm)))
             {
@@ -240,7 +242,9 @@ namespace WolvenKit.MVVM.Model
         public static byte[] Xbm2DdsBytes(CBitmapTexture xbm)
         {
             if (xbm == null)
+            {
                 return null;
+            }
 
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))

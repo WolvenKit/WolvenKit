@@ -27,7 +27,10 @@ namespace WolvenKit.MVVM.Model
 
             string entryName = Path.GetFileName(filename);
             if (nameOverride != "")
+            {
                 entryName = nameOverride;
+            }
+
             entryName = ZipEntry.CleanName(entryName);
             ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
             zipStream.PutNextEntry(newEntry);
@@ -179,7 +182,9 @@ namespace WolvenKit.MVVM.Model
 
                     // Copy the subdirectories.
                     if (Directory.GetFiles(subdir.FullName, "*", SearchOption.AllDirectories).Any())
+                    {
                         ret.Add(new XElement("Directory", new XAttribute("Path", temppath), DirectoryCopy(subdir.FullName, temppath, copySubDirs)));
+                    }
                 }
             }
             return ret;
@@ -198,7 +203,9 @@ namespace WolvenKit.MVVM.Model
             //Now Create all of the directories
             foreach (string dirPath in Directory.GetDirectories(newdir, "*",
                 SearchOption.AllDirectories))
+            {
                 Directory.CreateDirectory(dirPath.Replace(newdir, DestinationPath));
+            }
 
             //Copy all the files & Replaces any files with the same name
             foreach (string newPath in Directory.GetFiles(newdir, "*.*",
@@ -258,7 +265,9 @@ namespace WolvenKit.MVVM.Model
         public static void ShowFolderInExplorer(string path)
         {
             if (Directory.Exists(path))
+            {
                 Process.Start("explorer.exe", "\"" + path + "\"");
+            }
         }
 
         /// <summary>

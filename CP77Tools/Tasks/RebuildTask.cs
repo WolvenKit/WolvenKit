@@ -60,7 +60,10 @@ namespace CP77Tools.Tasks
             }
 
             var basedir = inputDirInfo;
-            if (basedir?.Parent == null) return;
+            if (basedir?.Parent == null)
+            {
+                return;
+            }
 
             #endregion
 

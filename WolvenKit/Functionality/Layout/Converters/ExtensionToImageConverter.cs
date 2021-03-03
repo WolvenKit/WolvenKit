@@ -13,7 +13,9 @@ namespace WolvenKit.Functionality.Layout.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
+            {
                 return DependencyProperty.UnsetValue;
+            }
 
             string extension = value.ToString();
 

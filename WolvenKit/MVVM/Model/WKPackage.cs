@@ -78,22 +78,46 @@ namespace WolvenKit.MVVM.Model
             var authorelement = new XElement("author", new XElement("displayName", Author.Item1));
             var metadataelement = new XElement("metadata");
             if (Author.Item2 != null || Author.Item2 != "")
+            {
                 authorelement.Add(new XElement("actionLink", Author.Item2));
+            }
+
             if (Author.Item3 != null || Author.Item3 != "")
+            {
                 authorelement.Add(new XElement("web", Author.Item3));
+            }
+
             if (Author.Item4 != null || Author.Item4 != "")
+            {
                 authorelement.Add(new XElement("facebook", Author.Item4));
+            }
+
             if (Author.Item5 != null || Author.Item5 != "")
+            {
                 authorelement.Add(new XElement("twitter", Author.Item5));
+            }
+
             if (Author.Item6 != null || Author.Item6 != "")
+            {
                 authorelement.Add(new XElement("youtube", Author.Item6));
+            }
+
             metadataelement.Add(authorelement);
             if (description?.Length > 0)
+            {
                 metadataelement.Add(new XElement("description", description));
+            }
+
             if (Largedescription?.Length > 0)
+            {
                 metadataelement.Add(new XElement("largeDescription", Largedescription));
+            }
+
             if (license?.Length > 0)
+            {
                 metadataelement.Add(new XElement("license", license));
+            }
+
             rootnode.Add(metadataelement);
             rootnode.Add(new XElement("colors", new XElement("headerBackground", ColorTranslator.ToHtml(Colors.Item1), new XAttribute("useBlackTextColor", Colors.Item2)), new XElement("iconBackground", ColorTranslator.ToHtml(Colors.Item3))));
             rootnode.Add(new XElement("content", Contents));

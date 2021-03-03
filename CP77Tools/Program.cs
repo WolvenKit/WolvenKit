@@ -87,7 +87,9 @@ namespace CP77Tools
 
 
                     if (line == "q()")
+                    {
                         return;
+                    }
 
                     var pb = new ConsoleProgressBar()
                     {
@@ -144,14 +146,18 @@ namespace CP77Tools
             async Task WriteLog()
             {
                 if (string.IsNullOrEmpty(logger.ErrorLogStr))
+                {
                     return;
+                }
 
                 var t = DateTime.Now.ToString("yyyyMMddHHmmss");
 
                 var baseDirectory = AppContext.BaseDirectory;
 
                 if (string.IsNullOrEmpty(baseDirectory))
+                {
                     return;
+                }
 
                 var fi = new FileInfo(Path.Combine(baseDirectory, $"errorlogs/log_{t}.txt"));
                 if (fi.Directory != null)
@@ -182,9 +188,14 @@ namespace CP77Tools
             // check for CP77_DIR environment variable first
             var CP77_DIR = System.Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
             if (!string.IsNullOrEmpty(CP77_DIR) && new DirectoryInfo(CP77_DIR).Exists)
+            {
                 cp77BinDir = Path.Combine(CP77_DIR, "bin", "x64");
+            }
+
             if (File.Exists(Path.Combine(cp77BinDir, "Cyberpunk2077.exe")))
+            {
                 return cp77BinDir;
+            }
 
             // else: look for install location
             const string uninstallkey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
@@ -226,8 +237,10 @@ namespace CP77Tools
                             programName.ToString().Contains(gameName))
                         {
                             if (Directory.Exists(installLocation.ToString()))
+                            {
                                 exePath = Directory.GetFiles(installLocation.ToString(), exeName,
                                     SearchOption.AllDirectories).First();
+                            }
                         }
                     }
 
@@ -235,7 +248,9 @@ namespace CP77Tools
                 });
 
                 if (File.Exists(cp77exe))
+                {
                     cp77BinDir = new FileInfo(cp77exe).Directory.FullName;
+                }
             }
             catch (Exception)
             {
@@ -243,9 +258,14 @@ namespace CP77Tools
             }
 
             if (string.IsNullOrEmpty(cp77BinDir))
+            {
                 return null;
+            }
+
             if (!File.Exists(Path.Combine(cp77BinDir, "Cyberpunk2077.exe")))
+            {
                 return null;
+            }
 #endif
 #pragma warning restore CA1416
 
@@ -257,19 +277,27 @@ namespace CP77Tools
             var ass = AppDomain.CurrentDomain.BaseDirectory;
             var destFileName = Path.Combine(ass, "oo2ext_7_win64.dll");
             if (File.Exists(destFileName))
+            {
                 return true;
+            }
 
             var cp77BinDir = TryGetGameInstallDir();
             if (string.IsNullOrEmpty(cp77BinDir))
+            {
                 return false;
+            }
 
             // copy oodle dll
             var oodleInfo = new FileInfo(Path.Combine(cp77BinDir, "oo2ext_7_win64.dll"));
             if (!oodleInfo.Exists)
+            {
                 return false;
+            }
 
             if (!File.Exists(destFileName))
+            {
                 oodleInfo.CopyTo(destFileName);
+            }
 
             return true;
         }

@@ -69,7 +69,10 @@ namespace WolvenKit.Functionality.Controllers
             {
                 var dir = Path.Combine(MainController.Get().ActiveMod.RadishDirectory, "WkitLoggedFiles");
                 if (!Directory.Exists(dir))
+                {
                     Directory.CreateDirectory(dir);
+                }
+
                 return dir;
             }
         }
@@ -175,7 +178,9 @@ namespace WolvenKit.Functionality.Controllers
         public bool UpdatdeSelf()
         {
             if (!IsHealthy())
+            {
                 return false;
+            }
 
             // read the settings file
             ReadSettings(out string modname, out string idspace, out string DIR_W3, out string DIR_MODKIT, out string DIR_ENCODER);
@@ -220,15 +225,29 @@ namespace WolvenKit.Functionality.Controllers
                 for (int i = 0; i < settingslines.Length; i++)
                 {
                     if (settingslines[i].StartsWith("set MODNAME="))
+                    {
                         settingslines[i] = $"set MODNAME={Configuration.modname}";
+                    }
+
                     if (settingslines[i].StartsWith("set idspace="))
+                    {
                         settingslines[i] = $"set idspace={Configuration.idspace}";
+                    }
+
                     if (settingslines[i].StartsWith("set DIR_W3="))
+                    {
                         settingslines[i] = $"set DIR_W3={Configuration.DIR_W3}";
+                    }
+
                     if (settingslines[i].StartsWith("set DIR_MODKIT="))
+                    {
                         settingslines[i] = $"set DIR_MODKIT={Configuration.DIR_MODKIT}";
+                    }
+
                     if (settingslines[i].StartsWith("set DIR_ENCODER="))
+                    {
                         settingslines[i] = $"set DIR_ENCODER={Configuration.DIR_ENCODER}";
+                    }
                 }
                 File.WriteAllLines(settingsbat.FullName, settingslines);
                 MainController.LogString("Radish settings file successfully updated.\r\n", Logtype.Success);

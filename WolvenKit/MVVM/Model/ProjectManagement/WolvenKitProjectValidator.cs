@@ -12,12 +12,16 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
         {
             // first check if w3modproj or cpmodproj exist
             if (!File.Exists(location))
+            {
                 return Task.FromResult(false);
+            }
 
             // redundant check
             var projectInfo = new FileInfo(location);
             if (projectInfo.Directory == null)
+            {
                 return Task.FromResult(false);
+            }
 
             // all wkit projects have a folder with the same name
             var projectName = Path.GetFileNameWithoutExtension(location);

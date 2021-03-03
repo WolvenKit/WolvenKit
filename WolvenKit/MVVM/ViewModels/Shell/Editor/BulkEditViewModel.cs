@@ -206,13 +206,20 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 return 0;
             }
             if (Logger == null)
+            {
                 Logger = MainController.Get().Logger;
+            }
 
             if (MainController.Get().ActiveMod == null)
+            {
                 return 0;
+            }
+
             List<string> files = MainController.Get().ActiveMod.Files;
             if (opts.Extension != null)
+            {
                 files = MainController.Get().ActiveMod.Files.Where(_ => Path.GetExtension(_).Contains(opts.Extension)).ToList();
+            }
 
             Logger.LogString($"Starting bulk edit. Found {files.Count} files to edit. \r\n", Logtype.Success);
             ProgressReport.Max = files.Count;
@@ -253,9 +260,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         private void EditVariablesInFile(string path, CR2WFile file, BulkEditOptions opts)
         {
             if (file == null)
+            {
                 return;
+            }
+
             if (opts.ChunkName != null && !file.Chunks.Any(_ => opts.ChunkName.Contains(_.REDType)))
+            {
                 return;
+            }
 
             List<string> excludedvalues = opts.Exclude == null ? new List<string>() : opts.Exclude.Split(',').ToList();
             List<string> includedvalues = opts.Include == null ? new List<string>() : opts.Include.Split(',').ToList();
@@ -278,7 +290,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     foreach (var listitem in (cvar as IList))
                     {
                         if (listitem is CVariable clistitem)
+                        {
                             CheckProperties(clistitem);
+                        }
                     }
                 }
                 else
@@ -316,8 +330,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         {
                             // check if the user specified a file type
                             if (opts.Type != BulkEditOptions.AvailableTypes.ANY)
+                            {
                                 if (proptoedit.GetType().Name != opts.Type.ToString())
+                                {
                                     return;
+                                }
+                            }
 
                             // check if the user specified a parent
                             if (splits.Length > 1)
@@ -326,7 +344,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                                 for (int i = splits.Length; i > 0; i--)
                                 {
                                     if (parent.REDName != splits[i])
+                                    {
                                         return;
+                                    }
 
                                     parent = parent.ParentVar;
                                 }
@@ -335,12 +355,19 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                             // check the value
                             dynamic dyn = proptoedit;
                             if (!(dyn.val is string x))
+                            {
                                 x = dyn.val.ToString();
+                            }
 
                             if (excludedvalues.Count != 0 && excludedvalues.Contains(x))
+                            {
                                 return;
+                            }
+
                             if (includedvalues.Count != 0 && !includedvalues.Contains(x))
+                            {
                                 return;
+                            }
 
                             // access the val property of the CVariable because there's typeconverters from string available
                             Member member = proptoedit.accessor.GetMembers().First(_ => _.Name == "val");
@@ -352,7 +379,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                             {
                                 // value is already set to the desired value
                                 if (x == opts.Value)
+                                {
                                     return;
+                                }
 
                                 // set via reflection
                                 proptoedit.accessor[proptoedit, "val"] = convertedRequestedValue;
@@ -402,7 +431,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                             }
                         }
                         else
+                        {
                             Logger.LogString($"{proptoedit.GetType()} not supported in {cvar.REDName}: {path}.\r\n", Logtype.Normal);
+                        }
                     }
                     catch (Exception ex)
                     {

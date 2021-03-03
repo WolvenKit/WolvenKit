@@ -43,7 +43,10 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
         {
             var proj = (ServiceLocator.Default.ResolveType<IProjectManager>().ActiveProject as EditorProject);
             if (proj == null)
+            {
                 return;
+            }
+
             Logger.Write("Starting mod publishing task... packing mod...", LogLevel.Info);
             ServiceLocator.Default.ResolveType<ICommandManager>().ExecuteCommand(AppCommands.Application.PackMod);
             Logger.Write("Packaging mod...", LogLevel.Info);

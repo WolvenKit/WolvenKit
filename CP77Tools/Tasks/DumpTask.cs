@@ -92,9 +92,13 @@ namespace CP77Tools.Tasks
             if (!inputFileInfo.Exists)
             {
                 if (!inputDirInfo.Exists)
+                {
                     return 0;
+                }
                 else
+                {
                     isDirectory = true;
+                }
             }
             #endregion
 
@@ -156,7 +160,9 @@ namespace CP77Tools.Tasks
                                 ar.CopyFileToStream(ms, fi.NameHash64, false);
                                 var cr2w = ModTools.TryReadCr2WFile(ms);
                                 if (cr2w == null)
+                                {
                                     return;
+                                }
 
                                 foreach (var o in cr2w.Chunks.Select(chunk => (chunk as CR2WExportWrapper).GetDumpObject(ms))
                                     .Where(o => o != null))
@@ -202,7 +208,9 @@ namespace CP77Tools.Tasks
                             ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
                             var cr2w = ModTools.TryReadCr2WFileHeaders(ms);
                             if (cr2w == null)
+                            {
                                 return;
+                            }
 
                             var obj = new Cr2wChunkInfo
                             {
@@ -223,7 +231,9 @@ namespace CP77Tools.Tasks
 
                                 if (cr2w?.Chunks.FirstOrDefault()?.data is not CBitmapTexture xbm ||
                                     !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+                                {
                                     return;
+                                }
 
                                 // create dds header
                                 var texinfoObj = new Cr2wTextureInfo()
@@ -264,14 +274,19 @@ namespace CP77Tools.Tasks
                         foreach (var (key, value) in arobj.FileDictionary)
                         {
                             if (value.Imports == null)
+                            {
                                 continue;
+                            }
+
                             allimports.AddRange(value.Imports.Select(import => import.DepotPathStr));
                         }
                         foreach (var str in allimports.Distinct())
                         {
                             var hash = FNV1A64HashAlgorithm.HashString(str);
                             if (!mainController.Contains(hash))
+                            {
                                 hwriter.WriteLine($"{str},{hash}");
+                            }
                         }
 
                         logger.LogString($"Finished. Dump file written to {ar.ArchiveAbsolutePath}.", Logtype.Success);
@@ -347,9 +362,15 @@ namespace CP77Tools.Tasks
                         var nam = variableslist[i].Split(' ').Last();
                         var wktype = REDReflection.GetWKitBaseTypeFromREDBaseType(typ);
 
-                        if (string.IsNullOrEmpty(nam)) nam = "Missing";
-                        if (string.IsNullOrEmpty(typ)) typ = "Missing";
+                        if (string.IsNullOrEmpty(nam))
+                        {
+                            nam = "Missing";
+                        }
 
+                        if (string.IsNullOrEmpty(typ))
+                        {
+                            typ = "Missing";
+                        }
 
                         sb.Append($"\t[Ordinal({i})]  [RED(\"{nam}\")] public {wktype} {nam.FirstCharToUpper()} {{ get; set; }}\r\n");
                     }
@@ -399,7 +420,10 @@ namespace CP77Tools.Tasks
 
             void Register(CR2WExportWrapper.Cr2wVariableDumpObject o)
             {
-                if (o?.Type == null) return;
+                if (o?.Type == null)
+                {
+                    return;
+                }
 
                 o.Variables ??= new List<CR2WExportWrapper.Cr2wVariableDumpObject>();
 
@@ -408,7 +432,10 @@ namespace CP77Tools.Tasks
                 {
                     var existing = typedict[o.Type];
                     var newlist = o.Variables.Select(_ => _.ToSimpleString());
-                    if (existing != null) vars = existing.Union(newlist);
+                    if (existing != null)
+                    {
+                        vars = existing.Union(newlist);
+                    }
                 }
                 typedict.AddOrUpdate(o.Type, vars, (arg1, ol) => ol);
 

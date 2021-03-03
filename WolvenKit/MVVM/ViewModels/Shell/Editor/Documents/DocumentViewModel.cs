@@ -143,7 +143,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             get
             {
                 if (_closeCommand == null)
+                {
                     _closeCommand = new DelegateCommand<object>((p) => OnClose(), (p) => CanClose());
+                }
 
                 return _closeCommand;
             }
@@ -160,7 +162,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             get
             {
                 if (FilePath == null)
+                {
                     return "Noname" + (IsDirty ? "*" : "");
+                }
 
                 return System.IO.Path.GetFileName(FilePath) + (IsDirty ? "*" : "");
             }
@@ -239,7 +243,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             get
             {
                 if (_saveAsCommand == null)
+                {
                     _saveAsCommand = new DelegateCommand<object>((p) => OnSaveAs(p), (p) => CanSaveAs(p));
+                }
 
                 return _saveAsCommand;
             }
@@ -386,15 +392,21 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         public async Task<bool> OpenFileWithInitialPathAsync()
         {
             if (string.IsNullOrEmpty(_initialPath) && _isInitialized == false)
+            {
                 return false;
+            }
 
             if (_isInitialized || _IsExistingInFileSystem == false)
+            {
                 return true;
+            }
 
             bool result = await OpenFileAsync(_initialPath);
 
             if (result == true)
+            {
                 _initialPath = null;
+            }
 
             return result;
         }

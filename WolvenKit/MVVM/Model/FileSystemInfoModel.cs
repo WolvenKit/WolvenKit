@@ -127,7 +127,9 @@ namespace WolvenKit.MVVM.Model
 
                 // Expand all the way up to the root.
                 if (_isExpanded && Parent != null)
+                {
                     Parent.IsExpanded = true;
+                }
             }
         }
 
@@ -351,28 +353,54 @@ namespace WolvenKit.MVVM.Model
                 {
                     // check for base dirs
                     if (node.FullName == tw3Project.ModDirectory)
+                    {
                         return ECustomImageKeys.ModImageKey.ToString();
+                    }
+
                     if (node.FullName == tw3Project.ModCookedDirectory)
+                    {
                         return ECustomImageKeys.ModCookedImageKey.ToString();
+                    }
+
                     if (node.FullName == tw3Project.ModUncookedDirectory)
+                    {
                         return ECustomImageKeys.ModUncookedImageKey.ToString();
+                    }
 
                     if (node.FullName == tw3Project.DlcDirectory)
+                    {
                         return ECustomImageKeys.DlcImageKey.ToString();
+                    }
+
                     if (node.FullName == tw3Project.DlcCookedDirectory)
+                    {
                         return ECustomImageKeys.DlcCookedImageKey.ToString();
+                    }
+
                     if (node.FullName == tw3Project.DlcUncookedDirectory)
+                    {
                         return ECustomImageKeys.DlcUncookedImageKey.ToString();
+                    }
 
                     if (node.FullName == tw3Project.RawDirectory)
+                    {
                         return ECustomImageKeys.RawImageKey.ToString();
+                    }
+
                     if (node.FullName == tw3Project.RawModDirectory)
+                    {
                         return ECustomImageKeys.RawModImageKey.ToString();
+                    }
+
                     if (node.FullName == tw3Project.RawDlcDirectory)
+                    {
                         return ECustomImageKeys.RawDlcImageKey.ToString();
+                    }
 
                     if (node.FullName == tw3Project.RadishDirectory)
+                    {
                         return ECustomImageKeys.RadishImageKey.ToString();
+                    }
                 }
 
                 return IsExpanded
@@ -380,7 +408,9 @@ namespace WolvenKit.MVVM.Model
                     : ECustomImageKeys.ClosedDirImageKey.ToString();
             }
             else
+            {
                 return (node as FileInfo)?.Extension;
+            }
         }
 
         private bool HasDummy() => GetDummy() != null;

@@ -31,7 +31,9 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
         private async void View_LoadedAsync(object sender, RoutedEventArgs e)
         {
             if (this.Visibility == Visibility.Visible && _viewInitialized == false)
+            {
                 await LoadContentAsync();
+            }
         }
 
         private async Task LoadContentAsync()
@@ -39,7 +41,9 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
             _viewInitialized = true;                    // We'll try this only once
 
             if (DataContext is not IDocumentViewModel vm)
+            {
                 return;
+            }
 
             try
             {
@@ -48,7 +52,9 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
                 // Poor mans error handling:
                 // Attempt to close this document if it appears to be invalid
                 if (result == false)
+                {
                     vm.CloseCommand.Execute(null);
+                }
             }
             catch
             {

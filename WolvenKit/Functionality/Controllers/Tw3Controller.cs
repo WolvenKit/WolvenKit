@@ -82,7 +82,10 @@ namespace WolvenKit.Functionality.Controllers
             catch (Exception)
             {
                 if (File.Exists(GetManagerPath(EManagerType.BundleManager)))
+                {
                     File.Delete(GetManagerPath(EManagerType.BundleManager));
+                }
+
                 bundleManager = new BundleManager();
                 bundleManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
             }
@@ -125,7 +128,10 @@ namespace WolvenKit.Functionality.Controllers
             catch (System.Exception)
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.CollisionManager)))
+                {
                     File.Delete(Tw3Controller.GetManagerPath(EManagerType.CollisionManager));
+                }
+
                 collisionManager = new CollisionManager();
                 collisionManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
             }
@@ -169,7 +175,10 @@ namespace WolvenKit.Functionality.Controllers
             catch (Exception)
             {
                 if (File.Exists(GetManagerPath(EManagerType.SoundManager)))
+                {
                     File.Delete(GetManagerPath(EManagerType.SoundManager));
+                }
+
                 soundManager = new SoundManager();
                 soundManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
             }
@@ -222,7 +231,10 @@ namespace WolvenKit.Functionality.Controllers
             catch (System.Exception)
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.W3StringManager)))
+                {
                     File.Delete(Tw3Controller.GetManagerPath(EManagerType.W3StringManager));
+                }
+
                 w3StringManager = new W3StringManager();
                 w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.W3ExecutablePath));
             }
@@ -265,7 +277,10 @@ namespace WolvenKit.Functionality.Controllers
             catch (System.Exception)
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
+                {
                     File.Delete(Tw3Controller.GetManagerPath(EManagerType.TextureManager));
+                }
+
                 textureManager = new TextureManager();
                 textureManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
             }
@@ -317,7 +332,10 @@ namespace WolvenKit.Functionality.Controllers
             var ActiveMod = MainController.Get().ActiveMod;
             var _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             if (ActiveMod == null)
+            {
                 return false;
+            }
+
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
                 _logger.LogString("Please ensure the game is not running before editing the files.", Logtype.Error);
@@ -337,7 +355,9 @@ namespace WolvenKit.Functionality.Controllers
                 //Create the dirs. So script only mods don't die.
                 Directory.CreateDirectory(ActiveMod.PackedModDirectory);
                 if (!string.IsNullOrEmpty(ActiveMod.GetDlcName()))
+                {
                     Directory.CreateDirectory(ActiveMod.PackedDlcDirectory);
+                }
 
                 //------------------------PRE COOKING------------------------------------//
                 // have a check if somehow users forget to add a dlc folder in their dlc :(
@@ -416,7 +436,9 @@ namespace WolvenKit.Functionality.Controllers
                     statusCook = antecedent.Result;
                 });
                 if (statusCook == 0)
+                {
                     _logger.LogString("Cooking collision finished with errors. \n", Logtype.Error);
+                }
 
                 #endregion Cooking
 
@@ -517,7 +539,9 @@ namespace WolvenKit.Functionality.Controllers
                             statusPack = (int)antecedent.Status;
                         });
                         if (statusPack == 0)
+                        {
                             _logger.LogString("Packing bundles finished with errors. \n", Logtype.Error);
+                        }
                     }
                     //else
                     //    Logger.LogString("Cooking assets failed. No bundles will be packed!\n", Logtype.Error);
@@ -546,10 +570,14 @@ namespace WolvenKit.Functionality.Controllers
                             //Logger.LogString($"Creating metadata ended with status: {statusMetaData}", Logtype.Important);
                         });
                         if (statusMetaData == 0)
+                        {
                             _logger.LogString("Generating metadata finished with errors. \n", Logtype.Error);
+                        }
                     }
                     else
+                    {
                         _logger.LogString("Packing bundles failed. No metadata will be generated.\n", Logtype.Error);
+                    }
                 }
 
                 #endregion Metadata
@@ -576,7 +604,9 @@ namespace WolvenKit.Functionality.Controllers
                         //Logger.LogString($"Building collision cache ended with status: {statusCol}", Logtype.Important);
                     });
                     if (statusCol == 0)
+                    {
                         _logger.LogString("Collision cache built with errors. \n", Logtype.Error);
+                    }
                 }
 
                 //Handle texture caching
@@ -589,7 +619,9 @@ namespace WolvenKit.Functionality.Controllers
                         //Logger.LogString($"Building texture cache ended with status: {statusTex}", Logtype.Important);
                     });
                     if (statusTex == 0)
+                    {
                         _logger.LogString("Texture cache built with errors. \n", Logtype.Error);
+                    }
                 }
 
                 //Handle sound caching
@@ -689,32 +721,44 @@ namespace WolvenKit.Functionality.Controllers
                 if (packscriptsMod && Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
                 {
                     if (!Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")))
+                    {
                         Directory.CreateDirectory(Path.Combine(ActiveMod.ModDirectory, "scripts"));
+                    }
                     //Now Create all of the directories
                     foreach (string dirPath in Directory.GetDirectories(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
+                    {
                         Directory.CreateDirectory(dirPath.Replace(Path.Combine(ActiveMod.ModDirectory, "scripts"), Path.Combine(ActiveMod.PackedModDirectory, "scripts")));
+                    }
 
                     //Copy all the files & Replaces any files with the same name
                     foreach (string newPath in Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
+                    {
                         File.Copy(newPath, newPath.Replace(Path.Combine(ActiveMod.ModDirectory, "scripts"), Path.Combine(ActiveMod.PackedModDirectory, "scripts")), true);
+                    }
                 }
 
                 //Handle the DLC scripts
                 if (packscriptsdlc && Directory.Exists(Path.Combine(ActiveMod.DlcDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
                 {
                     if (!Directory.Exists(Path.Combine(ActiveMod.DlcDirectory, "scripts")))
+                    {
                         Directory.CreateDirectory(Path.Combine(ActiveMod.DlcDirectory, "scripts"));
+                    }
                     //Now Create all of the directories
                     foreach (string dirPath in Directory.GetDirectories(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
+                    {
                         Directory.CreateDirectory(dirPath.Replace(Path.Combine(ActiveMod.DlcDirectory, "scripts"), Path.Combine(ActiveMod.PackedDlcDirectory, "scripts")));
+                    }
 
                     //Copy all the files & Replaces any files with the same name
                     foreach (string newPath in Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
+                    {
                         File.Copy(newPath, newPath.Replace(Path.Combine(ActiveMod.DlcDirectory, "scripts"), Path.Combine(ActiveMod.PackedDlcDirectory, "scripts")), true);
+                    }
                 }
 
                 #endregion Scripts
@@ -731,9 +775,14 @@ namespace WolvenKit.Functionality.Controllers
                     var files = Directory.GetFiles((ActiveMod.ProjectDirectory + "\\strings")).Where(s => Path.GetExtension(s) == ".w3strings").ToList();
 
                     if (packsettings.modStrings)
+                    {
                         files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedDlcDirectory, Path.GetFileName(x))));
+                    }
+
                     if (packsettings.dlcStrings)
+                    {
                         files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedModDirectory, Path.GetFileName(x))));
+                    }
                 }
 
                 #endregion Strings
@@ -810,11 +859,15 @@ namespace WolvenKit.Functionality.Controllers
 
                 var packedmoddir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "Mods");
                 if (Directory.Exists(packedmoddir))
+                {
                     fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, MainController.Get().Configuration.W3GameModDir, true));
+                }
 
                 var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
                 if (Directory.Exists(packeddlcdir))
+                {
                     fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.W3GameDlcDir, true));
+                }
 
                 installlog.Root.Add(fileroot);
                 //Save the log.

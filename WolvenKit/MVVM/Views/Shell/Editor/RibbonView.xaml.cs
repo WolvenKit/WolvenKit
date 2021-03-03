@@ -38,7 +38,9 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
             base.OnViewModelPropertyChanged(e);
 
             if (e is not AdvancedPropertyChangedEventArgs property)
+            {
                 return;
+            }
 
             switch (property.PropertyName)
             {

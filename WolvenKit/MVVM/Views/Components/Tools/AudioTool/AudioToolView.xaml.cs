@@ -181,19 +181,25 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
             if (NAudioEngine.Instance.CanPlay)
+            {
                 NAudioEngine.Instance.Play();
+            }
         }
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)
         {
             if (NAudioEngine.Instance.CanPause)
+            {
                 NAudioEngine.Instance.Pause();
+            }
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
             if (NAudioEngine.Instance.CanStop)
+            {
                 NAudioEngine.Instance.Stop();
+            }
         }
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
@@ -279,7 +285,9 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         {
             NAudioEngine.Instance.Dispose();
             if (NAudioEngine.Instance.CanStop)
+            {
                 NAudioEngine.Instance.Stop();
+            }
         }
 
         private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)

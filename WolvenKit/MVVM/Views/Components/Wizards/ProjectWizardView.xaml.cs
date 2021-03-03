@@ -19,7 +19,9 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
         private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
         {
             if (ViewModel == null)
+            {
                 return;
+            }
 
             ServiceLocator.Default.RegisterInstance(ViewModel as ProjectWizardViewModel);
 

@@ -164,7 +164,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             var mpath = System.Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
             var upath = System.Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User);
             if (mpath == null && upath == null)
+            {
                 return;
+            }
 
             if ((mpath != null && !mpath.Split(';').Any(_ => _.Contains("\\Git\\")))
                 && ((upath != null && !upath.Split(';').Any(_ => _.Contains("\\Git\\")))))
@@ -281,7 +283,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         public static async void ExecuteGame(string args = "")
         {
             if (ActiveMod == null)
+            {
                 return;
+            }
+
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
                 Logger.LogString(@"Game is already running!", Logtype.Error);
@@ -301,7 +306,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var scriptlog = Path.Combine(documents, @"The Witcher 3\scriptslog.txt");
             if (File.Exists(scriptlog))
+            {
                 File.Delete(scriptlog);
+            }
 
             using (var process = Process.Start(proc))
             {
@@ -340,7 +347,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             // ask user for type
             List<string> availableTypes = CR2WManager.GetAvailableTypes("CResource").Select(_ => _.Name).ToList();
             if (availableTypes.Count <= 0)
+            {
                 return null;
+            }
             // remove abstract classes
 
             availableTypes = availableTypes
@@ -354,13 +363,18 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             var redextension = result.Split(' ').First();
 
             if (string.IsNullOrEmpty(redextension))
+            {
                 return null;
+            }
 
             // create cr2wfile
             var cr2w = new CR2WFile();
             var obj = CR2WTypeManager.Create(newChunktypename, newChunktypename, cr2w, null);
             if (!(obj is CResource resource))
+            {
                 return null;
+            }
+
             cr2w.FromCResource(resource);
 
             // write cr2wfile
@@ -369,12 +383,16 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 : ActiveMod.ModUncookedDirectory;
 
             if (string.IsNullOrEmpty(redextension))
+            {
                 return null;
+            }
 
             var filepath = Path.Combine(initialDir, $"{newChunktypename}.{redextension}");
             var newfilepath = m_windowFactory.ShowRenameForm(filepath);
             if (string.IsNullOrEmpty(newfilepath))
+            {
                 return null;
+            }
 
             // create directory
             newfilepath.EnsureFolderExists();
@@ -446,7 +464,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             // file is in no manager return, should never happen
             if (!(manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath))))
+            {
                 return;
+            }
 
             // get archives with that file in them
             // <BundlePath, File>
@@ -457,7 +477,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             {
                 string key = witcherFile.Archive.ArchiveAbsolutePath;
                 if (!archives.ContainsKey(key))
+                {
                     archives.Add(key, witcherFile);
+                }
             }
 
             #region Get new Filename
@@ -491,9 +513,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     }
                     // all other textures and collision stuff goes into Raw (since they have to be imported first)
                     else
+                    {
                         newpath = Path.Combine(ActiveMod.RawDirectory, addAsDLC
                             ? Path.Combine("DLC", $"dlc{ActiveMod.Name}", NormalizeDlcPath(relativePath))
                             : Path.Combine("Mod", relativePath));
+                    }
                 }
                 break;
                 // some special cases
@@ -526,7 +550,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 foreach (var priokey in prioritizedBundles)
                 {
                     if (archives.ContainsKey(priokey))
+                    {
                         priokeys.Add(priokey);
+                    }
                 }
 
                 if (priokeys.Count > 0)
@@ -539,7 +565,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     bool onlyusethisbundle;
                     (onlyusethisbundle, selectedFile) = m_windowFactory.ResolveExtractAmbigious(a);
                     if (selectedFile == null)
+                    {
                         return;
+                    }
+
                     if (onlyusethisbundle)
                     {
                         prioritizedBundles.Add(selectedFile.Archive.ArchiveAbsolutePath);
@@ -552,7 +581,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 {
                     var result = UncookInner(selectedFile);
                     if (result)
+                    {
                         return;
+                    }
                 }
 
                 #endregion Uncooking
@@ -571,7 +602,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 {
                     var result = UncookInner(archives.FirstOrDefault().Value);
                     if (result)
+                    {
                         return;
+                    }
                 }
 
                 #endregion Uncooking
@@ -627,7 +660,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     return true;
                 }
                 else
+                {
                     Logger.LogString($"Could not uncook {filename}, will try to extract instead.", Logtype.Important);
+                }
 
                 return false;
             }
@@ -639,7 +674,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 {
                     var splits = path.Split(Path.DirectorySeparatorChar).ToList();
                     if (splits.Count > 2)
+                    {
                         path = string.Join(Path.DirectorySeparatorChar.ToString(), splits.Skip(2));
+                    }
                 }
                 return path;
             }
@@ -653,7 +690,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         public async Task<bool> PackAndInstallMod()
         {
             if (ActiveMod == null)
+            {
                 return false;
+            }
+
             if (Process.GetProcessesByName("Witcher3").Length != 0)
             {
                 Logger.LogString("Please ensure the game is not running before trying to edit its files.", Logtype.Error);
@@ -673,7 +713,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 //Create the dirs. So script only mods don't die.
                 Directory.CreateDirectory(ActiveMod.PackedModDirectory);
                 if (!string.IsNullOrEmpty(ActiveMod.GetDlcName()))
+                {
                     Directory.CreateDirectory(ActiveMod.PackedDlcDirectory);
+                }
 
                 //------------------------PRE COOKING------------------------------------//
                 // have a check if somehow users forget to add a dlc folder in their dlc :(
@@ -752,7 +794,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     statusCook = antecedent.Result;
                 });
                 if (statusCook == 0)
+                {
                     Logger.LogString("Cooking collision finished with errors. \n", Logtype.Error);
+                }
 
                 #endregion Cooking
 
@@ -853,7 +897,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                             statusPack = antecedent.Result;
                         });
                         if (statusPack == 0)
+                        {
                             Logger.LogString("Packing bundles finished with errors. \n", Logtype.Error);
+                        }
                     }
                     //else
                     //    Logger.LogString("Cooking assets failed. No bundles will be packed!\n", Logtype.Error);
@@ -881,10 +927,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                             //Logger.LogString($"Creating metadata ended with status: {statusMetaData}", Logtype.Important);
                         });
                         if (statusMetaData == 0)
+                        {
                             Logger.LogString("Generating metadata with errors. \n", Logtype.Error);
+                        }
                     }
                     else
+                    {
                         Logger.LogString("Packing bundles failed. No metadata will be generated.\n", Logtype.Error);
+                    }
                 }
 
                 #endregion Metadata
@@ -910,7 +960,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         //Logger.LogString($"Building collision cache ended with status: {statusCol}", Logtype.Important);
                     });
                     if (statusCol == 0)
+                    {
                         Logger.LogString("Collision cache built with errors. \n", Logtype.Error);
+                    }
                 }
 
                 //Handle texture caching
@@ -923,7 +975,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         //Logger.LogString($"Building texture cache ended with status: {statusTex}", Logtype.Important);
                     });
                     if (statusTex == 0)
+                    {
                         Logger.LogString("Texture cache built with errors. \n", Logtype.Error);
+                    }
                 }
 
                 //Handle sound caching
@@ -1022,32 +1076,44 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 if (packscriptsMod && Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
                 {
                     if (!Directory.Exists(Path.Combine(ActiveMod.ModDirectory, "scripts")))
+                    {
                         Directory.CreateDirectory(Path.Combine(ActiveMod.ModDirectory, "scripts"));
+                    }
                     //Now Create all of the directories
                     foreach (string dirPath in Directory.GetDirectories(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
+                    {
                         Directory.CreateDirectory(dirPath.Replace(Path.Combine(ActiveMod.ModDirectory, "scripts"), Path.Combine(ActiveMod.PackedModDirectory, "scripts")));
+                    }
 
                     //Copy all the files & Replaces any files with the same name
                     foreach (string newPath in Directory.GetFiles(Path.Combine(ActiveMod.ModDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
+                    {
                         File.Copy(newPath, newPath.Replace(Path.Combine(ActiveMod.ModDirectory, "scripts"), Path.Combine(ActiveMod.PackedModDirectory, "scripts")), true);
+                    }
                 }
 
                 //Handle the DLC scripts
                 if (packscriptsdlc && Directory.Exists(Path.Combine(ActiveMod.DlcDirectory, "scripts")) && Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
                 {
                     if (!Directory.Exists(Path.Combine(ActiveMod.DlcDirectory, "scripts")))
+                    {
                         Directory.CreateDirectory(Path.Combine(ActiveMod.DlcDirectory, "scripts"));
+                    }
                     //Now Create all of the directories
                     foreach (string dirPath in Directory.GetDirectories(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
+                    {
                         Directory.CreateDirectory(dirPath.Replace(Path.Combine(ActiveMod.DlcDirectory, "scripts"), Path.Combine(ActiveMod.PackedDlcDirectory, "scripts")));
+                    }
 
                     //Copy all the files & Replaces any files with the same name
                     foreach (string newPath in Directory.GetFiles(Path.Combine(ActiveMod.DlcDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
+                    {
                         File.Copy(newPath, newPath.Replace(Path.Combine(ActiveMod.DlcDirectory, "scripts"), Path.Combine(ActiveMod.PackedDlcDirectory, "scripts")), true);
+                    }
                 }
 
                 #endregion Scripts
@@ -1064,9 +1130,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     var files = Directory.GetFiles((ActiveMod.ProjectDirectory + "\\strings")).Where(s => Path.GetExtension(s) == ".w3strings").ToList();
 
                     if (packsettings.Strings.Item1)
+                    {
                         files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedDlcDirectory, Path.GetFileName(x))));
+                    }
+
                     if (packsettings.Strings.Item2)
+                    {
                         files.ForEach(x => File.Copy(x, Path.Combine(ActiveMod.PackedModDirectory, Path.GetFileName(x))));
+                    }
                 }
 
                 #endregion Strings
@@ -1077,7 +1148,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
                 //Install the mod
                 if (!MainController.Get().Configuration.IsAutoInstallModsDisabled)
+                {
                     InstallMod();
+                }
 
                 //Report that we are done
                 MainController.Get().StatusProgress = 100;
@@ -1110,7 +1183,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 m_windowFactory.ShowMessageBox("Packing task already running, please wait.", "WolvenKit", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
+            {
                 _packer = PackAndInstallMod();
+            }
         }
 
         /// <summary>
@@ -1119,10 +1194,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         public void SaveMod()
         {
             if (ActiveMod == null)
+            {
                 return;
+            }
 
             if (ActiveMod.LastOpenedFiles != null)
+            {
                 ActiveMod.LastOpenedFiles = GetOpenDocuments().Keys.ToList();
+            }
 
             var ser = new XmlSerializer(typeof(W3Mod));
             var modfile = new FileStream(ActiveMod.FileName, FileMode.Create, FileAccess.Write);
@@ -1186,11 +1265,15 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
                 var packedmoddir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "Mods");
                 if (Directory.Exists(packedmoddir))
+                {
                     fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, MainController.Get().Configuration.W3GameModDir, true));
+                }
 
                 var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
                 if (Directory.Exists(packeddlcdir))
+                {
                     fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.W3GameDlcDir, true));
+                }
 
                 installlog.Root.Add(fileroot);
                 //Save the log.
@@ -1211,7 +1294,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         public void AddOpenDocument(Old_IDocumentViewModel document)
         {
             if (_openDocuments.ContainsKey(document.FileName))
+            {
                 throw new NullReferenceException();
+            }
+
             _openDocuments.Add(document.FileName, document);
         }
 
@@ -1219,7 +1305,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         {
             //if (ActiveMod == null) return false;
             if (GetOpenDocuments().Count <= 0)
+            {
                 return true;
+            }
 
             bool saveall;
             switch (m_windowFactory.ShowMessageBox(
@@ -1251,7 +1339,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             foreach (var t in GetOpenDocuments().Values.ToList())
             {
                 if (saveall)
+                {
                     t.SaveFile();
+                }
+
                 t.Close();
             }
 
@@ -1274,11 +1365,16 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         public void RemoveOpenDocument(string key)
         {
             if (!_openDocuments.ContainsKey(key))
+            {
                 throw new NullReferenceException();
+            }
+
             _openDocuments.Remove(key);
             // update Active Document
             if (ActiveDocument.FileName == key)
+            {
                 ActiveDocument = null;
+            }
         }
 
         public void SaveActiveFile() => ActiveDocument?.SaveFile();
@@ -1286,7 +1382,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         public void SaveAllFiles()
         {
             if (GetOpenDocuments().Count <= 0)
+            {
                 return;
+            }
+
             MainController.Get().ProjectStatus = EProjectStatus.Busy;
 
             foreach (var d in GetOpenDocuments().Values.Where(d => d.SaveTarget != null))

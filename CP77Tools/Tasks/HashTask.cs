@@ -19,7 +19,9 @@ namespace CP77Tools.Tasks
             foreach (var s in input)
             {
                 if (!string.IsNullOrEmpty(s))
+                {
                     logger.LogString(FNV1A64HashAlgorithm.HashString(s).ToString(), Logtype.Normal);
+                }
             }
 
             #endregion
@@ -39,12 +41,16 @@ namespace CP77Tools.Tasks
                     if (missingh.Contains(hash.ToString()))
                     {
                         if (!Hashdict.ContainsKey(hash))
+                        {
                             Hashdict.Add(hash, line);
+                        }
                     }
                     else
                     {
                         if (!bad.ContainsKey(hash))
+                        {
                             bad.Add(hash, line);
+                        }
                     }
                     
                 }

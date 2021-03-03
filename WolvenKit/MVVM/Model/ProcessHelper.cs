@@ -82,7 +82,9 @@ namespace WolvenKit.MVVM.Model
             process.EnableRaisingEvents = true;
             process.Exited += (sender, args) => tcs.TrySetResult(null);
             if (cancellationToken != default(CancellationToken))
+            {
                 cancellationToken.Register(tcs.SetCanceled);
+            }
 
             return tcs.Task;
         }
@@ -161,7 +163,9 @@ namespace WolvenKit.MVVM.Model
                 process.WaitForExit();
                 result = process.ExitCode;
                 if (errorLog.Any())
+                {
                     result = 1;
+                }
                 //loggerService.LogString($"Process exited with code {result}", Logtype.Important);
                 //await process.WaitForExitAsync();
             }

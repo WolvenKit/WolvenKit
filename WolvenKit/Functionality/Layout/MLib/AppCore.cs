@@ -119,7 +119,9 @@ namespace WolvenKit.Functionality.Layout.MLib
             try
             {
                 if (System.IO.Directory.Exists(AppCore.DirAppData) == false)
+                {
                     System.IO.Directory.CreateDirectory(AppCore.DirAppData);
+                }
             }
             catch (Exception exp)
             {

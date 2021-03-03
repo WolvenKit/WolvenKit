@@ -35,7 +35,9 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             if (File.Exists(location))
+            {
                 Load(location);
+            }
         }
 
         public Cp77Project() : base("")
@@ -84,7 +86,10 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             {
                 var dir = Path.Combine(ProjectDirectory, "_backups");
                 if (!Directory.Exists(dir))
+                {
                     Directory.CreateDirectory(dir);
+                }
+
                 return dir;
             }
         }
@@ -100,7 +105,10 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             {
                 var dir = Path.Combine(FileDirectory, "DLC");
                 if (!Directory.Exists(dir))
+                {
                     Directory.CreateDirectory(dir);
+                }
+
                 return dir;
             }
         }
@@ -114,7 +122,10 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             {
                 var dir = Path.Combine(FileDirectory, "Mod");
                 if (!Directory.Exists(dir))
+                {
                     Directory.CreateDirectory(dir);
+                }
+
                 return dir;
             }
         }
@@ -136,7 +147,10 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 }
                 var dir = Path.Combine(ProjectDirectory, "packed", "DLC", GetDlcName(), "content");
                 if (!Directory.Exists(dir))
+                {
                     Directory.CreateDirectory(dir);
+                }
+
                 return dir;
             }
         }
@@ -150,7 +164,10 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             {
                 var dir = Path.Combine(ProjectDirectory, "packed", "Mods", $"mod{Name}", "content");
                 if (!Directory.Exists(dir))
+                {
                     Directory.CreateDirectory(dir);
+                }
+
                 return dir;
             }
         }

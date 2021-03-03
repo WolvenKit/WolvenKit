@@ -12,7 +12,9 @@ namespace CP77Tools.Tasks
         public static int OodleTask(string path, string outpath, bool decompress)
         {
             if (string.IsNullOrEmpty(path))
+            {
                 return 0;
+            }
 
             if (string.IsNullOrEmpty(outpath)) { outpath = path; }
 
@@ -24,7 +26,10 @@ namespace CP77Tools.Tasks
 
                 var oodleCompression = br.ReadBytes(4);
                 if (!(oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
+                {
                     throw new NotImplementedException();
+                }
+
                 var size = br.ReadUInt32();
 
                 var buffer = br.ReadBytes(file.Length - 8);

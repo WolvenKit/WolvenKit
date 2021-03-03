@@ -71,7 +71,9 @@ namespace WolvenKit.Functionality.Commands
         protected virtual async Task ProjectActivated(EditorProject oldEditorProject, EditorProject newEditorProject)
         {
             if (newEditorProject == null)
+            {
                 return;
+            }
 
             await Task.Run(() => newEditorProject.Initialize());
         }

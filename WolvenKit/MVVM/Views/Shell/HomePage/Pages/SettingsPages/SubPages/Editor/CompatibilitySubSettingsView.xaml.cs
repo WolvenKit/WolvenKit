@@ -26,7 +26,9 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Edito
                 Filter = "Exe files|*.exe"
             });
             if (result.Result)
+            {
                 _settingsManager.CP77ExecutablePath = result.FileName;
+            }
         }
 
         private async void W3ExecutablePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -36,7 +38,9 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Edito
                 Filter = "Exe files|*.exe"
             });
             if (result.Result)
+            {
                 _settingsManager.W3ExecutablePath = result.FileName;
+            }
         }
 
         private async void WccLitePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -46,7 +50,9 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Edito
                 Filter = "wcc_lite.exe file|wcc_lite.exe"
             });
             if (result.Result)
+            {
                 _settingsManager.WccLitePath = result.FileName;
+            }
         }
 
         private async void DepotPathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -55,7 +61,9 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Edito
                 new DetermineDirectoryContext()
             );
             if (result.Result)
+            {
                 _settingsManager.DepotPath = result.DirectoryName;
+            }
         }
 
         private HandyControl.Data.OperationResult<bool> VerifyFolder(string str)
@@ -75,13 +83,25 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Edito
         private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             if (cp77Txtbx.VerifyData())
+            {
                 _settingsManager.CP77ExecutablePath = cp77Txtbx.Text;
+            }
+
             if (w3Txtbx.VerifyData())
+            {
                 _settingsManager.W3ExecutablePath = w3Txtbx.Text;
+            }
+
             if (wccliteTxtbx.VerifyData())
+            {
                 _settingsManager.WccLitePath = wccliteTxtbx.Text;
+            }
+
             if (depotTxtbx.VerifyData())
+            {
                 _settingsManager.DepotPath = depotTxtbx.Text;
+            }
+
             _settingsManager.Save();
         }
     }

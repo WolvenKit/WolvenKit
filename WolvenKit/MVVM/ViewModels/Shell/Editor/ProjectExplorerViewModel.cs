@@ -140,11 +140,19 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             var dir = new DirectoryInfo(path);
             var fi = new FileInfo(path);
             if (string.IsNullOrEmpty(path))
+            {
                 return;
+            }
+
             if (fi.Exists)
+            {
                 dir = fi.Directory;
+            }
+
             if (!dir.Exists)
+            {
                 return;
+            }
 
             // get parents
             var dirlist = new List<DirectoryInfo>();
@@ -271,7 +279,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         {
             var b = _projectManager.ActiveProject is EditorProject && SelectedItem != null;
             if (!b)
+            {
                 return false;
+            }
 
             if (ActiveMod is Tw3Project tw3Project)
             {
@@ -307,13 +317,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         private void ExecuteCollapseAll()
         {
             foreach (var node in Treenodes)
+            {
                 node.CollapseChildren(true);
+            }
         }
 
         private void ExecuteCopyRelPath()
         {
             if (SelectedItem.IsFile)
+            {
                 Clipboard.SetText(GetArchivePath(SelectedItem.FullName));
+            }
 
             string GetArchivePath(string s)
             {
@@ -323,7 +337,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     return string.Join(Path.DirectorySeparatorChar.ToString(), relpath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(2).ToArray());
                 }
                 else
+                {
                     return s;
+                }
             }
         }
 
@@ -340,7 +356,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             if (await _messageService.ShowAsync(
                     "Are you sure you want to delete this?", "Are you sure?", MessageButton.YesNo) !=
                 MessageResult.Yes)
+            {
                 return;
+            }
 
             // Delete from file structure
             var fullpath = SelectedItem.FullName;
@@ -380,15 +398,21 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         private void ExecuteExpandAll()
         {
             foreach (var node in Treenodes)
+            {
                 node.ExpandChildren(true);
+            }
         }
 
         private void ExecuteOpenInFileExplorer()
         {
             if (SelectedItem.IsDirectory)
+            {
                 Commonfunctions.ShowFolderInExplorer(SelectedItem.FullName);
+            }
             else
+            {
                 Commonfunctions.ShowFileInExplorer(SelectedItem.FullName);
+            }
         }
 
         private async void ExecuteRenameFile()
@@ -400,13 +424,21 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             await visualizerService.ShowDialogAsync(viewModel, delegate (object sender, UICompletedEventArgs args)
             {
                 if (args.Result != true)
+                {
                     return;
+                }
+
                 if (args.DataContext is not Components.Dialogs.InputDialogViewModel vm)
+                {
                     return;
+                }
+
                 var newfullpath = Path.Combine(ActiveMod.FileDirectory, vm.Text);
 
                 if (File.Exists(newfullpath))
+                {
                     return;
+                }
 
                 try
                 {
@@ -664,7 +696,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
 
             if (reldir.StartsWith(EProjectFolders.Uncooked.ToString()))
+            {
                 reldir = reldir.Substring(EProjectFolders.Uncooked.ToString().Length);
+            }
 
             reldir = reldir.TrimStart(Path.DirectorySeparatorChar);
 

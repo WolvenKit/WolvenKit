@@ -46,7 +46,10 @@ namespace CP77Tools.Tasks
             }
 
             var basedir = inputDirInfo;
-            if (basedir?.Parent == null) return;
+            if (basedir?.Parent == null)
+            {
+                return;
+            }
 
             DirectoryInfo outDir;
             if (string.IsNullOrEmpty(outpath))
@@ -57,16 +60,22 @@ namespace CP77Tools.Tasks
             {
                 outDir = new DirectoryInfo(outpath);
                 if (!outDir.Exists)
+                {
                     outDir = Directory.CreateDirectory(outpath);
+                }
             }
 
             #endregion
 
             var ar = ModTools.Pack(basedir, outDir);
             if (ar != null)
+            {
                 logger.LogString($"Finished packing {ar.ArchiveAbsolutePath}.", Logtype.Success);
+            }
             else
+            {
                 logger.LogString($"Packing failed.", Logtype.Error);
+            }
 
             return;
         }

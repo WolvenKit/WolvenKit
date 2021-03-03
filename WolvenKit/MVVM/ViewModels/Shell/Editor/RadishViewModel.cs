@@ -80,6 +80,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             // initialize workflows
             if (!RadishController.GetConfig().Workflows.Any(_ => _.Name == "All"))
+            {
                 RadishController.GetConfig().Workflows.Add(new RadishWorkflow("All")
                 {
                     Cleanup_folder = true,
@@ -106,7 +107,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     DEPLOY_SCRIPTS = true,
                     DEPLOY_TMP_SCRIPTS = true,
                 });
+            }
+
             if (!RadishController.GetConfig().Workflows.Any(_ => _.Name == "Rebuild until pack"))
+            {
                 RadishController.GetConfig().Workflows.Add(new RadishWorkflow("Rebuild until pack")
                 {
                     Cleanup_folder = true,
@@ -122,7 +126,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     WCC_IMPORT_MODELS = true,
                     WCC_IMPORT_TEXTURES = true,
                 });
+            }
+
             if (!RadishController.GetConfig().Workflows.Any(_ => _.Name == "Pack"))
+            {
                 RadishController.GetConfig().Workflows.Add(new RadishWorkflow("Pack")
                 {
                     WCC_REPACK_DLC = true,
@@ -130,6 +137,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     DEPLOY_SCRIPTS = true,
                     DEPLOY_TMP_SCRIPTS = true,
                 });
+            }
 
             #endregion Setup Workflows
 
@@ -269,7 +277,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var scriptlog = Path.Combine(documents, @"The Witcher 3\scriptslog.txt");
             if (File.Exists(scriptlog))
+            {
                 File.Delete(scriptlog);
+            }
 
             using (var process = Process.Start(proc))
             {
@@ -330,7 +340,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 {
                     // file has ended
                     if (oldstate)
+                    {
                         WriteFile(currentLoggedFile, ERadishLogFilter.W2LAYER);
+                    }
+
                     oldstate = false;
                 }
             }
@@ -338,21 +351,37 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             (string, ERadishLogFilter) GetLogTypeFromString(string str)
             {
                 if (str.StartsWith("[W2LAYER] "))
+                {
                     return ($"{str.Replace("[W2LAYER] ", "")}\r\n", ERadishLogFilter.W2LAYER);
+                }
                 else if (str.StartsWith("[W2COMMUNITY] "))
+                {
                     return ($"{str.Replace("[W2COMMUNITY] ", "")}\r\n", ERadishLogFilter.W2COMMUNITY);
+                }
                 else if (str.StartsWith("[W2SCENE] "))
+                {
                     return ($"{str.Replace("[W2SCENE] ", "")}\r\n", ERadishLogFilter.W2SCENE);
+                }
                 else if (str.StartsWith("[W3ENV] "))
+                {
                     return ($"{str.Replace("[W3ENV] ", "")}\r\n", ERadishLogFilter.W3ENV);
+                }
                 else if (str.StartsWith("[W3FOLIAGE] "))
+                {
                     return ($"{str.Replace("[W3FOLIAGE] ", "")}\r\n", ERadishLogFilter.W3FOLIAGE);
+                }
                 else if (str.StartsWith("[W3NAVMESH] "))
+                {
                     return ($"{str.Replace("[W3NAVMESH] ", "")}\r\n", ERadishLogFilter.W3NAVMESH);
+                }
                 else if (str.StartsWith("[W3FUR] "))
+                {
                     return ($"{str.Replace("[W3FUR] ", "")}\r\n", ERadishLogFilter.W3FUR);
+                }
                 else
+                {
                     return ("", ERadishLogFilter.None);
+                }
             }
 
             void WriteFile(string contents, ERadishLogFilter type)
@@ -424,12 +453,16 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         //"%DIR_MODKIT_DEPOT%\\dlc\\dlc%MODNAME%\"
                         var olddlclink = Path.Combine(RadishController.GetConfig().DIR_MODKIT, "dlc", $"dlc{RadishController.GetConfig().GetOldModname()}");
                         if (Directory.Exists(olddlclink))
+                        {
                             Directory.Delete(olddlclink);
+                        }
 
                         //"%DIR_MODKIT_DEPOT%\\scripts\\dlc%MODNAME%\"
                         var oldscriptslink = Path.Combine(RadishController.GetConfig().DIR_MODKIT, "scripts", $"dlc{RadishController.GetConfig().GetOldModname()}");
                         if (Directory.Exists(oldscriptslink))
+                        {
                             Directory.Delete(oldscriptslink);
+                        }
 
                         // create new links
                         RecreateLinksInternal();
@@ -456,7 +489,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         private void RunRadishBat(RadishBatFileWrapper bat)
         {
             if (bat == null)
+            {
                 Logger.LogString($"Bat file not found: {bat.Name}", Logtype.Error);
+            }
 
             string path = bat.Path;
 
@@ -488,13 +523,21 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         if (ev.Data != null)
                         {
                             if (ev.Data.StartsWith("WARN"))
+                            {
                                 Logger.LogString(ev.Data, Logtype.Important);
+                            }
                             else if (ev.Data.StartsWith("ERROR"))
+                            {
                                 Logger.LogString(ev.Data, Logtype.Error);
+                            }
                             else if (ev.Data.StartsWith("INFO"))
+                            {
                                 Logger.LogString(ev.Data, Logtype.Normal);
+                            }
                             else
+                            {
                                 Logger.LogString(ev.Data);
+                            }
                         }
                     });
                     p.ErrorDataReceived += new DataReceivedEventHandler((s, ev) =>
@@ -526,10 +569,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         {
             //gather dependencies
             if (!radishsettings.PATCH_MODE)
+            {
                 SetDependencies(radishsettings);
+            }
 
             if (File.Exists(tempbatpath))
+            {
                 File.Delete(tempbatpath);
+            }
 
             using (var fs = new FileStream(tempbatpath, FileMode.Create, FileAccess.Write))
             using (var sr = new StreamWriter(fs, Encoding.Default))
@@ -543,49 +590,104 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 sr.Write(header);
 
                 if (radishsettings.ENCODE_WORLD)
+                {
                     sr.WriteLine($"SET ENCODE_WORLD=1");
+                }
+
                 if (radishsettings.ENCODE_ENVS)
+                {
                     sr.WriteLine($"SET ENCODE_ENVS=1");
+                }
+
                 if (radishsettings.ENCODE_SCENES)
+                {
                     sr.WriteLine($"SET ENCODE_SCENES=1");
+                }
+
                 if (radishsettings.ENCODE_QUEST)
+                {
                     sr.WriteLine($"SET ENCODE_QUEST=1");
+                }
+
                 if (radishsettings.ENCODE_STRINGS)
+                {
                     sr.WriteLine($"SET ENCODE_STRINGS=1");
+                }
+
                 if (radishsettings.ENCODE_SPEECH)
+                {
                     sr.WriteLine($"SET ENCODE_SPEECH=1");
+                }
+
                 if (radishsettings.ENCODE_HAIRWORKS)
+                {
                     sr.WriteLine($"SET ENCODE_HAIRWORKS=1");
+                }
 
                 if (radishsettings.WCC_IMPORT_MODELS)
+                {
                     sr.WriteLine($"SET WCC_IMPORT_MODELS=1");
+                }
+
                 if (radishsettings.WCC_IMPORT_TEXTURES)
+                {
                     sr.WriteLine($"SET WCC_IMPORT_TEXTURES=1");
+                }
+
                 if (radishsettings.WCC_COOK)
+                {
                     sr.WriteLine($"SET WCC_COOK=1");
+                }
+
                 if (radishsettings.WCC_NAVDATA)
+                {
                     sr.WriteLine($"SET WCC_NAVDATA=1");
+                }
+
                 if (radishsettings.WCC_TEXTURECACHE)
+                {
                     sr.WriteLine($"SET WCC_TEXTURECACHE=1");
+                }
+
                 if (radishsettings.WCC_COLLISIONCACHE)
+                {
                     sr.WriteLine($"SET WCC_COLLISIONCACHE=1");
+                }
 
                 if (radishsettings.WCC_ANALYZE)
+                {
                     sr.WriteLine($"SET WCC_ANALYZE=1");
+                }
+
                 if (radishsettings.WCC_ANALYZE_WORLD)
+                {
                     sr.WriteLine($"SET WCC_ANALYZE_WORLD=1");
+                }
 
                 if (radishsettings.WCC_REPACK_DLC)
+                {
                     sr.WriteLine($"SET WCC_REPACK_DLC=1");
+                }
+
                 if (radishsettings.WCC_REPACK_MOD)
+                {
                     sr.WriteLine($"SET WCC_REPACK_MOD=1");
+                }
 
                 if (radishsettings.DEPLOY_SCRIPTS)
+                {
                     sr.WriteLine($"SET DEPLOY_SCRIPTS=1");
+                }
+
                 if (radishsettings.DEPLOY_TMP_SCRIPTS)
+                {
                     sr.WriteLine($"SET DEPLOY_TMP_SCRIPTS=1");
+                }
+
                 if (radishsettings.START_GAME)
+                {
                     sr.WriteLine($"SET START_GAME=1");
+                }
 
                 // hack to call pre-cleanup because build.bat makes this dependent on full-rebuild = true
                 // and we do it in patch mode
@@ -662,7 +764,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         private void WriteLinksBat(string tempbatpath)
         {
             if (File.Exists(tempbatpath))
+            {
                 File.Delete(tempbatpath);
+            }
 
             using (var fs = new FileStream(tempbatpath, FileMode.Create, FileAccess.Write))
             using (var sr = new StreamWriter(fs, Encoding.Default))

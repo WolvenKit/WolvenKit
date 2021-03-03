@@ -82,7 +82,9 @@ namespace WolvenKit.MVVM.Model
 
                 string initargs = "git init";
                 if (!string.IsNullOrEmpty(templatedir))
+                {
                     initargs += $" --template={templatedir}";
+                }
 
                 var commands = new List<string>()
                 {
@@ -93,9 +95,14 @@ namespace WolvenKit.MVVM.Model
                 };
 
                 if (!String.IsNullOrWhiteSpace(AuthorName))
+                {
                     commands.Add("git config user.name \"" + AuthorName + "\"");
+                }
+
                 if (!String.IsNullOrWhiteSpace(Email))
+                {
                     commands.Add("git config user.email \"" + Email + "\"");
+                }
 
                 var exitCode = await ProcessHelper.RunCommandLineAsync(loggerService, RepoPath, commands.ToArray());
                 return exitCode == 0;

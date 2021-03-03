@@ -28,16 +28,25 @@ namespace CP77Tools.Tasks
             var gameArchiveDir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "archive", "pc", "content"));
 
             if (path != null)
+            {
                 foreach (var s in path)
                 {
-                    if (!File.Exists(s)) continue;
+                    if (!File.Exists(s))
+                    {
+                        continue;
+                    }
 
                     using var fs = new FileStream(s, FileMode.Open, FileAccess.Read);
                     if (VerifyFile(fs, s))
+                    {
                         logger.LogString($"{s} - No problems found.", Logtype.Success);
+                    }
                     else
+                    {
                         logger.LogString($"{s} - Verification failed, files not binary equal.", Logtype.Error);
+                    }
                 }
+            }
 
             if (hashes != null)
             {
@@ -45,20 +54,29 @@ namespace CP77Tools.Tasks
                 foreach (var hash in hashes)
                 {
                     if (!hashService.Contains(hash))
+                    {
                         continue;
+                    }
 
                     var file = bm.Files[hash];
 
                     foreach (var fileEntry in file)
                     {
                         if (fileEntry.Archive is not Archive ar)
+                        {
                             continue;
+                        }
+
                         using var ms = new MemoryStream();
                         ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
                         if (VerifyFile(ms))
+                        {
                             logger.LogString($"{fileEntry.NameOrHash} - No errors found.", Logtype.Success);
+                        }
                         else
+                        {
                             logger.LogString($"{fileEntry.NameOrHash} - Verification failed, files not binary equal.", Logtype.Error);
+                        }
                     }
                 }
             }
@@ -93,14 +111,22 @@ namespace CP77Tools.Tasks
                             string str1 = "";
                             string str2 = "";
                             if (i < oldst.Count)
+                            {
                                 compstr += oldst[i];
+                            }
+
                             compstr += ",";
                             if (i < newst.Count)
+                            {
                                 compstr += newst[i];
+                            }
+
                             compstr += "\n";
 
                             if (str1 != str2)
+                            {
                                 correctStringTable = false;
+                            }
                         }
 
                         // Binary Equal Test

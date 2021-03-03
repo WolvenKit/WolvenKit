@@ -135,11 +135,15 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             foreach (var file in filesToImport)
             {
                 if (file.GetState() != ImportableFile.EObjectState.Ready)
+                {
                     continue;
+                }
 
                 var fullpath = Path.Combine(importdepot.FullName, file.GetRelativePath());
                 if (!File.Exists(fullpath))
+                {
                     return;
+                }
 
                 string importext = $".{file.ImportType:G}";
                 if (UseWolvenKitImport && importext == ".xbm")
@@ -159,7 +163,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         }
                     }
                     else
+                    {
                         MainController.LogString($"Failed to import {fullpath}.", Logtype.Error);
+                    }
                 }
                 else
                 {
@@ -207,7 +213,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 importable.GetImportableType() != EImportable.png &&
                 importable.GetImportableType() != EImportable.tga
             )
+            {
                 return;
+            }
 
             // try getting texture group from vanilla files
             //var hash = FNV1A64HashAlgorithm.HashString();
@@ -308,7 +316,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 TryGetTextureGroup(importableobj);
 
                 if (!Importableobjects.Contains(importableobj))
+                {
                     Importableobjects.Add(importableobj);
+                }
                 else
                 {
                 }
@@ -330,7 +340,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, EUncookExtension.dds, textureformat);
 
             if (!File.Exists(ddsfile))
+            {
                 throw new NotImplementedException();
+            }
+
             var metadata = DDSUtils.ReadHeader(ddsfile);
             var width = metadata.Width;
             var height = metadata.Height;
@@ -442,7 +455,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         {
             var activeProject = args.NewProject;
             if (activeProject == null)
+            {
                 return TaskHelper.Completed;
+            }
 
             return TaskHelper.Completed;
         }
@@ -465,7 +480,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     //var hash = FNV1A64HashAlgorithm.HashString(record.RedName);
                     var hash = Path.GetFileName(record.RedName);
                     if (!xbmdict.ContainsKey(hash))
+                    {
                         xbmdict.Add(hash, record);
+                    }
                 }
             }
         }

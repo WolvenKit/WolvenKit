@@ -429,7 +429,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             else
             {
                 if (model.IsDirectory)
+                {
                     model.IsExpanded = !model.IsExpanded;
+                }
                 else if (model.IsFile)
                 {
                     // TODO: make this a background task
@@ -999,7 +1001,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         {
             var newProject = (EditorProject)e.NewProject;
             if (newProject is not null)
+            {
                 EditorProject = newProject;
+            }
 
             return Task.CompletedTask;
         }
@@ -1046,11 +1050,15 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         public void AddFile(DocumentViewModel fileToAdd)
         {
             if (fileToAdd == null)
+            {
                 return;
+            }
 
             // Don't add this twice
             if (_files.Any(f => f.ContentId == fileToAdd.ContentId))
+            {
                 return;
+            }
 
             _files.Add(fileToAdd);
         }
@@ -1066,7 +1074,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             {
                 var dlg = new SaveFileDialog();
                 if (dlg.ShowDialog().GetValueOrDefault())
+                {
                     fileToSave.FilePath = dlg.SafeFileName;
+                }
             }
 
             // TODO
@@ -1084,7 +1094,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             // Check if we have already loaded this file and return it if so
             var fileViewModel = _files.FirstOrDefault(fm => fm.ContentId == model.FullName);
             if (fileViewModel != null)
+            {
                 return fileViewModel;
+            }
 
             // open file
             fileViewModel = new DocumentViewModel(this as IWorkSpaceViewModel, model, true);

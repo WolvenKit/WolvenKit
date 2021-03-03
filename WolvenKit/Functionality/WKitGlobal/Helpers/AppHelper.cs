@@ -233,7 +233,10 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                         rpv.ViewModelChanged += (_s, _e) =>
                         {
                             if (rpv.ViewModel == null)
+                            {
                                 return;
+                            }
+
                             rpv.ViewModel.ClosedAsync += async (s, e) =>
                             {
                                 await Task.Run(() =>

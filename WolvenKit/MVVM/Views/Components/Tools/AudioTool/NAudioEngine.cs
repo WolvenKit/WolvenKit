@@ -58,7 +58,10 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             get
             {
                 if (instance == null)
+                {
                     instance = new NAudioEngine();
+                }
+
                 return instance;
             }
         }
@@ -114,9 +117,14 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         {
             double maxFrequency;
             if (ActiveStream != null)
+            {
                 maxFrequency = ActiveStream.WaveFormat.SampleRate / 2.0d;
+            }
             else
+            {
                 maxFrequency = 22050; // Assume a default 44.1 kHz sample rate.
+            }
+
             return (int)((frequency / maxFrequency) * (fftDataSize / 2));
         }
 
@@ -135,7 +143,10 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                     TimeSpan oldValue = repeatStart;
                     repeatStart = value;
                     if (oldValue != repeatStart)
+                    {
                         NotifyPropertyChanged("SelectionBegin");
+                    }
+
                     inRepeatSet = false;
                 }
             }
@@ -152,7 +163,10 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                     TimeSpan oldValue = repeatStop;
                     repeatStop = value;
                     if (oldValue != repeatStop)
+                    {
                         NotifyPropertyChanged("SelectionEnd");
+                    }
+
                     inRepeatSet = false;
                 }
             }
@@ -166,7 +180,9 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 float[] oldValue = waveformData;
                 waveformData = value;
                 if (oldValue != waveformData)
+                {
                     NotifyPropertyChanged("WaveformData");
+                }
             }
         }
 
@@ -178,7 +194,9 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 double oldValue = channelLength;
                 channelLength = value;
                 if (oldValue != channelLength)
+                {
                     NotifyPropertyChanged("ChannelLength");
+                }
             }
         }
 
@@ -193,10 +211,16 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                     double oldValue = channelPosition;
                     double position = Math.Max(0, Math.Min(value, ChannelLength));
                     if (!inChannelTimerUpdate && ActiveStream != null)
+                    {
                         ActiveStream.Position = (long)((position / ActiveStream.TotalTime.TotalSeconds) * ActiveStream.Length);
+                    }
+
                     channelPosition = position;
                     if (oldValue != channelPosition)
+                    {
                         NotifyPropertyChanged("ChannelPosition");
+                    }
+
                     inChannelSet = false;
                 }
             }
@@ -242,7 +266,9 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             }
 
             if (!waveformGenerateWorker.IsBusy && waveformCompressedPointCount != 0)
+            {
                 waveformGenerateWorker.RunWorkerAsync(new WaveformGenerationParams(waveformCompressedPointCount, path));
+            }
         }
 
         private void waveformGenerateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -250,7 +276,9 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             if (e.Cancelled)
             {
                 if (!waveformGenerateWorker.IsBusy && waveformCompressedPointCount != 0)
+                {
                     waveformGenerateWorker.RunWorkerAsync(new WaveformGenerationParams(waveformCompressedPointCount, pendingWaveformPath));
+                }
             }
         }
 
@@ -287,9 +315,14 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 waveformData.Add(waveformAggregator.RightMaxVolume);
 
                 if (waveformAggregator.LeftMaxVolume > maxLeftPointLevel)
+                {
                     maxLeftPointLevel = waveformAggregator.LeftMaxVolume;
+                }
+
                 if (waveformAggregator.RightMaxVolume > maxRightPointLevel)
+                {
                     maxRightPointLevel = waveformAggregator.RightMaxVolume;
+                }
 
                 if (readCount > waveMaxPointIndexes[currentPointIndex])
                 {
@@ -444,7 +477,9 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 TagLib.File oldValue = fileTag;
                 fileTag = value;
                 if (oldValue != fileTag)
+                {
                     NotifyPropertyChanged("FileTag");
+                }
             }
         }
 
@@ -456,7 +491,9 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 WaveStream oldValue = activeStream;
                 activeStream = value;
                 if (oldValue != activeStream)
+                {
                     NotifyPropertyChanged("ActiveStream");
+                }
             }
         }
 
@@ -468,7 +505,9 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 bool oldValue = canPlay;
                 canPlay = value;
                 if (oldValue != canPlay)
+                {
                     NotifyPropertyChanged("CanPlay");
+                }
             }
         }
 
@@ -480,7 +519,9 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 bool oldValue = canPause;
                 canPause = value;
                 if (oldValue != canPause)
+                {
                     NotifyPropertyChanged("CanPause");
+                }
             }
         }
 
@@ -492,7 +533,9 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 bool oldValue = canStop;
                 canStop = value;
                 if (oldValue != canStop)
+                {
                     NotifyPropertyChanged("CanStop");
+                }
             }
         }
 
@@ -504,7 +547,10 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 bool oldValue = isPlaying;
                 isPlaying = value;
                 if (oldValue != isPlaying)
+                {
                     NotifyPropertyChanged("IsPlaying");
+                }
+
                 positionTimer.IsEnabled = value;
             }
         }

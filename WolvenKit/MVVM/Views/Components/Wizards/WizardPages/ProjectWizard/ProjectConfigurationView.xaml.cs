@@ -61,7 +61,9 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard
                 new DetermineDirectoryContext()
             );
             if (result.Result)
+            {
                 (ViewModel as ProjectConfigurationViewModel).ProjectWizardModel.ProjectPath = result.DirectoryName;
+            }
         }
 
         private HandyControl.Data.OperationResult<bool> VerifyFolder(string str)

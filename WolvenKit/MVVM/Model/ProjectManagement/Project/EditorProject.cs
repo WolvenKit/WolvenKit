@@ -80,7 +80,10 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             {
                 var dir = Path.Combine(ProjectDirectory, "files");
                 if (!Directory.Exists(dir))
+                {
                     Directory.CreateDirectory(dir);
+                }
+
                 return dir;
             }
         }
@@ -126,10 +129,14 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         public bool Equals(EditorProject other)
         {
             if (ReferenceEquals(null, other))
+            {
                 return false;
+            }
 
             if (ReferenceEquals(this, other))
+            {
                 return true;
+            }
 
             return string.Equals(Location, other.Location);
         }
@@ -137,10 +144,14 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
+            {
                 return false;
+            }
 
             if (ReferenceEquals(this, obj))
+            {
                 return true;
+            }
 
             return obj.GetType() == GetType() && Equals((EditorProject)obj);
         }
