@@ -350,7 +350,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
                             // check the value
                             dynamic dyn = proptoedit;
-                            if (dyn.val is not string x)
+                            if (!(dyn.val is string x))
                             {
                                 x = dyn.val.ToString();
                             }
@@ -386,7 +386,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                             // if a multiply etc operation is requested
                             else
                             {
-                                if (opts.Type is not BulkEditOptions.AvailableTypes.CBool and not BulkEditOptions.AvailableTypes.CString)
+                                if (opts.Type != BulkEditOptions.AvailableTypes.CBool && opts.Type != BulkEditOptions.AvailableTypes.CString)
                                 {
                                     dynamic dresult = proptoedit.accessor[proptoedit, "val"];
                                     string original = dresult.ToString();

@@ -358,7 +358,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             // create cr2wfile
             var cr2w = new CR2WFile();
             var obj = CR2WTypeManager.Create(newChunktypename, newChunktypename, cr2w, null);
-            if (obj is not CResource resource)
+            if (!(obj is CResource resource))
             {
                 return null;
             }
@@ -492,7 +492,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 {
                     // add pngs, jpgs and dds directly to Uncooked
                     // (not Raw, since they don't get imported)
-                    if (extension is ".png" or ".jpg" or ".dds")
+                    if (extension == ".png" || extension == ".jpg" || extension == ".dds")
                     {
                         newpath = Path.Combine(ActiveMod.FileDirectory, addAsDLC
                             ? Path.Combine("DLC", EProjectFolders.Uncooked.ToString(), $"dlc{ActiveMod.Name}",

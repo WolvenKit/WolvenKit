@@ -426,11 +426,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         private void ConfigurationUpdated(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName is "modname"
-                or "idspace"
-                or "DIR_ENCODER"
-                or "DIR_MODKIT"
-                or "DIR_W3"
+            if (e.PropertyName == "modname"
+                || e.PropertyName == "idspace"
+                || e.PropertyName == "DIR_ENCODER"
+                || e.PropertyName == "DIR_MODKIT"
+                || e.PropertyName == "DIR_W3"
                 )
             {
                 if (RadishController.Get().IsHealthy())
