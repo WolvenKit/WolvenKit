@@ -242,14 +242,12 @@ namespace WolvenKit.MVVM.Model
         /// <param name="path"></param>
         public static void OpenConsoleAtPath(string path)
         {
-            using (var process = Process.Start(new ProcessStartInfo("cmd.exe")
+            using var process = Process.Start(new ProcessStartInfo("cmd.exe")
             {
                 UseShellExecute = false,
                 WorkingDirectory = path
-            }))
-            {
-                process?.WaitForExit();
-            }
+            });
+            process?.WaitForExit();
         }
 
         /// <summary>

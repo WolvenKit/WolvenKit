@@ -53,16 +53,14 @@ namespace WolvenKit.Functionality.Controllers
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.BundleManager)))
                 {
-                    using (var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.BundleManager)))
+                    using var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.BundleManager));
+                    var serializer = new JsonSerializer
                     {
-                        var serializer = new JsonSerializer
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                            TypeNameHandling = TypeNameHandling.Auto
-                        };
-                        bundleManager = (BundleManager)serializer.Deserialize(file, typeof(BundleManager));
-                    }
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                        TypeNameHandling = TypeNameHandling.Auto
+                    };
+                    bundleManager = (BundleManager)serializer.Deserialize(file, typeof(BundleManager));
                 }
                 else
                 {
@@ -105,16 +103,14 @@ namespace WolvenKit.Functionality.Controllers
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.CollisionManager)))
                 {
-                    using (var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.CollisionManager)))
+                    using var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.CollisionManager));
+                    var serializer = new JsonSerializer
                     {
-                        var serializer = new JsonSerializer
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                            TypeNameHandling = TypeNameHandling.Auto
-                        };
-                        collisionManager = (CollisionManager)serializer.Deserialize(file, typeof(CollisionManager));
-                    }
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                        TypeNameHandling = TypeNameHandling.Auto
+                    };
+                    collisionManager = (CollisionManager)serializer.Deserialize(file, typeof(CollisionManager));
                 }
                 else
                 {
@@ -154,16 +150,14 @@ namespace WolvenKit.Functionality.Controllers
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.SoundManager)))
                 {
-                    using (var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.SoundManager)))
+                    using var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.SoundManager));
+                    var serializer = new JsonSerializer
                     {
-                        var serializer = new JsonSerializer
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                            TypeNameHandling = TypeNameHandling.Auto
-                        };
-                        soundManager = (SoundManager)serializer.Deserialize(file, typeof(SoundManager));
-                    }
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                        TypeNameHandling = TypeNameHandling.Auto
+                    };
+                    soundManager = (SoundManager)serializer.Deserialize(file, typeof(SoundManager));
                 }
                 else
                 {
@@ -216,10 +210,8 @@ namespace WolvenKit.Functionality.Controllers
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.W3StringManager)) && new FileInfo(Tw3Controller.GetManagerPath(EManagerType.W3StringManager)).Length > 0)
                 {
-                    using (var file = File.Open(Tw3Controller.GetManagerPath(EManagerType.W3StringManager), FileMode.Open))
-                    {
-                        w3StringManager = Serializer.Deserialize<W3StringManager>(file);
-                    }
+                    using var file = File.Open(Tw3Controller.GetManagerPath(EManagerType.W3StringManager), FileMode.Open);
+                    w3StringManager = Serializer.Deserialize<W3StringManager>(file);
                 }
                 else
                 {
@@ -258,16 +250,14 @@ namespace WolvenKit.Functionality.Controllers
             {
                 if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
                 {
-                    using (var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
+                    using var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.TextureManager));
+                    var serializer = new JsonSerializer
                     {
-                        var serializer = new JsonSerializer
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                            TypeNameHandling = TypeNameHandling.Auto
-                        };
-                        textureManager = (TextureManager)serializer.Deserialize(file, typeof(TextureManager));
-                    }
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                        TypeNameHandling = TypeNameHandling.Auto
+                    };
+                    textureManager = (TextureManager)serializer.Deserialize(file, typeof(TextureManager));
                 }
                 else
                 {

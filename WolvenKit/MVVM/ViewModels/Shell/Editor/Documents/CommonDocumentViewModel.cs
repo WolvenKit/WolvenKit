@@ -88,10 +88,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             }
             else
             {
-                using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
-                {
-                    return await loadFile(fs, filename, variableEditor, logger);
-                }
+                using var fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+                return await loadFile(fs, filename, variableEditor, logger);
             }
         }
 
@@ -116,12 +114,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 
         protected byte[] GetRawBytes()
         {
-            using (var mem = new MemoryStream())
-            using (var writer = new BinaryWriter(mem))
-            {
-                File.Write(writer);
-                return mem.ToArray();
-            }
+            using var mem = new MemoryStream();
+            using var writer = new BinaryWriter(mem);
+            File.Write(writer);
+            return mem.ToArray();
         }
 
         private async Task<Common.EFileReadErrorCodes> loadFile(Stream stream, string filename, IVariableEditor variableEditor, LoggerService logger)
@@ -164,20 +160,16 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         {
             //try
             //{
-            using (var mem = new MemoryStream())
-            using (var writer = new BinaryWriter(mem))
-            {
-                File.Write(writer);
-                mem.Seek(0, SeekOrigin.Begin);
+            using var mem = new MemoryStream();
+            using var writer = new BinaryWriter(mem);
+            File.Write(writer);
+            mem.Seek(0, SeekOrigin.Begin);
 
-                using (var fs = new FileStream(FileName, FileMode.Create, FileAccess.Write))
-                {
-                    mem.WriteTo(fs);
+            using var fs = new FileStream(FileName, FileMode.Create, FileAccess.Write);
+            mem.WriteTo(fs);
 
-                    OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = fs, File = File });
-                    fs.Close();
-                }
-            }
+            OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = fs, File = File });
+            fs.Close();
             //}
             //catch (Exception e)
             //{
@@ -187,13 +179,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 
         private void saveToMemoryStream()
         {
-            using (var mem = new MemoryStream())
-            using (var writer = new BinaryWriter(mem))
-            {
-                File.Write(writer);
+            using var mem = new MemoryStream();
+            using var writer = new BinaryWriter(mem);
+            File.Write(writer);
 
-                OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = mem, File = File });
-            }
+            OnFileSaved?.Invoke(this, new FileSavedEventArgs { FileName = FileName, Stream = mem, File = File });
         }
 
         #endregion Methods

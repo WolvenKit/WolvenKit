@@ -18,39 +18,33 @@ namespace WolvenKit.MVVM.Model
 
         public static IEnumerable<object> FromCsv(Type type, string csvstring, bool useHeader = false)
         {
-            using (var reader = new StringReader(csvstring))
-            {
-                return FromCsvInner(type, reader, useHeader);
-            }
+            using var reader = new StringReader(csvstring);
+            return FromCsvInner(type, reader, useHeader);
         }
 
         public static IEnumerable<object> FromCsv(Type type, FileInfo path, bool useHeader = true)
         {
-            using (var reader = new StreamReader(path.FullName))
-            {
-                return FromCsvInner(type, reader, useHeader);
-            }
+            using var reader = new StreamReader(path.FullName);
+            return FromCsvInner(type, reader, useHeader);
         }
 
         public static string ToCsvString(this IArrayAccessor wrappedArray, bool useHeader = false)
         {
             try
             {
-                using (var ms = new MemoryStream())
-                using (var writer = new StreamWriter(ms, Encoding.UTF8))
-                using (var reader = new StreamReader(ms))
-                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-                {
-                    RegisterClassMap(wrappedArray.InnerType, csv);
-                    csv.Configuration.HasHeaderRecord = useHeader;
-                    csv.WriteRecords(wrappedArray);
+                using var ms = new MemoryStream();
+                using var writer = new StreamWriter(ms, Encoding.UTF8);
+                using var reader = new StreamReader(ms);
+                using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+                RegisterClassMap(wrappedArray.InnerType, csv);
+                csv.Configuration.HasHeaderRecord = useHeader;
+                csv.WriteRecords(wrappedArray);
 
-                    writer.Flush();
-                    ms.Seek(0, SeekOrigin.Begin);
+                writer.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
 
-                    var s = reader.ReadToEnd();
-                    return s;
-                }
+                var s = reader.ReadToEnd();
+                return s;
             }
             catch (Exception)
             {
@@ -63,16 +57,14 @@ namespace WolvenKit.MVVM.Model
         {
             try
             {
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-                {
-                    RegisterClassMap(type, csv);
-                    csv.Configuration.HasHeaderRecord = useHeader;
+                using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+                RegisterClassMap(type, csv);
+                csv.Configuration.HasHeaderRecord = useHeader;
 
-                    var records = csv.GetRecords(type).ToList();
-                    // TODO: is there a way without recreating all?
+                var records = csv.GetRecords(type).ToList();
+                // TODO: is there a way without recreating all?
 
-                    return records;
-                }
+                return records;
             }
             catch (Exception)
             {

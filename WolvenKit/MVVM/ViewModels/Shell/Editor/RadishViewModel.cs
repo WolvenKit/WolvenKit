@@ -274,11 +274,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 File.Delete(scriptlog);
             }
 
-            using (var process = Process.Start(proc))
-            {
-                //await RadishMonitorGame(process);
-                await Task.Run(() => RadishMonitorGame(process));
-            }
+            using var process = Process.Start(proc);
+            //await RadishMonitorGame(process);
+            await Task.Run(() => RadishMonitorGame(process));
         }
 
         private bool oldstate = false;
@@ -490,55 +488,51 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             if (bat.Interactive)
             {
-                using (var p = new Process())
-                {
-                    p.StartInfo.UseShellExecute = true;
-                    p.StartInfo.FileName = path;
-                    p.StartInfo.WorkingDirectory = Path.GetDirectoryName(path);
+                using var p = new Process();
+                p.StartInfo.UseShellExecute = true;
+                p.StartInfo.FileName = path;
+                p.StartInfo.WorkingDirectory = Path.GetDirectoryName(path);
 
-                    p.Start();
-                }
+                p.Start();
             }
             else
             {
-                using (var p = new Process())
+                using var p = new Process();
+                p.StartInfo.RedirectStandardError = true;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.CreateNoWindow = true;
+
+                p.StartInfo.FileName = path;
+                p.StartInfo.WorkingDirectory = Path.GetDirectoryName(path);
+
+                p.OutputDataReceived += new DataReceivedEventHandler((s, ev) =>
                 {
-                    p.StartInfo.RedirectStandardError = true;
-                    p.StartInfo.RedirectStandardOutput = true;
-                    p.StartInfo.UseShellExecute = false;
-                    p.StartInfo.CreateNoWindow = true;
-
-                    p.StartInfo.FileName = path;
-                    p.StartInfo.WorkingDirectory = Path.GetDirectoryName(path);
-
-                    p.OutputDataReceived += new DataReceivedEventHandler((s, ev) =>
+                    if (ev.Data != null)
                     {
-                        if (ev.Data != null)
+                        if (ev.Data.StartsWith("WARN"))
                         {
-                            if (ev.Data.StartsWith("WARN"))
-                            {
-                                Logger.LogString(ev.Data, Logtype.Important);
-                            }
-                            else if (ev.Data.StartsWith("ERROR"))
-                            {
-                                Logger.LogString(ev.Data, Logtype.Error);
-                            }
-                            else if (ev.Data.StartsWith("INFO"))
-                            {
-                                Logger.LogString(ev.Data, Logtype.Normal);
-                            }
-                            else
-                            {
-                                Logger.LogString(ev.Data);
-                            }
+                            Logger.LogString(ev.Data, Logtype.Important);
                         }
-                    });
-                    p.ErrorDataReceived += new DataReceivedEventHandler((s, ev) => Logger.LogString(ev.Data, Logtype.Error));
+                        else if (ev.Data.StartsWith("ERROR"))
+                        {
+                            Logger.LogString(ev.Data, Logtype.Error);
+                        }
+                        else if (ev.Data.StartsWith("INFO"))
+                        {
+                            Logger.LogString(ev.Data, Logtype.Normal);
+                        }
+                        else
+                        {
+                            Logger.LogString(ev.Data);
+                        }
+                    }
+                });
+                p.ErrorDataReceived += new DataReceivedEventHandler((s, ev) => Logger.LogString(ev.Data, Logtype.Error));
 
-                    p.Start();
-                    p.BeginOutputReadLine();
-                    p.BeginErrorReadLine();
-                }
+                p.Start();
+                p.BeginOutputReadLine();
+                p.BeginErrorReadLine();
             }
         }
 
@@ -758,28 +752,26 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 File.Delete(tempbatpath);
             }
 
-            using (var fs = new FileStream(tempbatpath, FileMode.Create, FileAccess.Write))
-            using (var sr = new StreamWriter(fs, Encoding.Default))
-            {
-                var header =
-                        "@echo off\r\n" +
-                        "call _settings_.bat\r\n";
-                sr.Write(header);
+            using var fs = new FileStream(tempbatpath, FileMode.Create, FileAccess.Write);
+            using var sr = new StreamWriter(fs, Encoding.Default);
+            var header =
+                    "@echo off\r\n" +
+                    "call _settings_.bat\r\n";
+            sr.Write(header);
 
-                //delete old links
-                sr.WriteLine("rd /s /q \"%DIR_MODKIT_DEPOT%\\dlc\\dlc%MODNAME%\"");
-                sr.WriteLine("rd /s /q \"%DIR_MODKIT_DEPOT%\\scripts\\dlc%MODNAME%\"");
-                sr.WriteLine("echo old links successfully deleted.");
+            //delete old links
+            sr.WriteLine("rd /s /q \"%DIR_MODKIT_DEPOT%\\dlc\\dlc%MODNAME%\"");
+            sr.WriteLine("rd /s /q \"%DIR_MODKIT_DEPOT%\\scripts\\dlc%MODNAME%\"");
+            sr.WriteLine("echo old links successfully deleted.");
 
-                // relink
-                sr.WriteLine("mklink / J \"%DIR_MODKIT_DEPOT%\\dlc\\dlc%MODNAME%\" \"%DIR_UNCOOKED%\\dlc\\dlc%MODNAME%\"");
-                sr.WriteLine("echo.");
+            // relink
+            sr.WriteLine("mklink / J \"%DIR_MODKIT_DEPOT%\\dlc\\dlc%MODNAME%\" \"%DIR_UNCOOKED%\\dlc\\dlc%MODNAME%\"");
+            sr.WriteLine("echo.");
 
-                sr.WriteLine("mklink / J \"%DIR_MODKIT_DEPOT%\\scripts\\dlc%MODNAME%\" \"%DIR_MOD_SCRIPTS%\"");
-                sr.WriteLine("echo.");
+            sr.WriteLine("mklink / J \"%DIR_MODKIT_DEPOT%\\scripts\\dlc%MODNAME%\" \"%DIR_MOD_SCRIPTS%\"");
+            sr.WriteLine("echo.");
 
-                sr.WriteLine("echo links successfully created.");
-            }
+            sr.WriteLine("echo links successfully created.");
         }
 
         #endregion Methods

@@ -28,10 +28,8 @@ namespace WolvenKit.MVVM.Model
         /// <returns></returns>
         public static Bitmap FromBytes(byte[] bytes)
         {
-            using (var ms = new MemoryStream(bytes))
-            {
-                return FromStream(ms);
-            }
+            using var ms = new MemoryStream(bytes);
+            return FromStream(ms);
         }
 
         /// <summary>
@@ -41,56 +39,54 @@ namespace WolvenKit.MVVM.Model
         /// <returns></returns>
         public static Bitmap FromFile(string path)
         {
-            using (var image = Pfim.Pfim.FromFile(path))
+            using var image = Pfim.Pfim.FromFile(path);
+            PixelFormat format;
+
+            // Convert from Pfim's backend agnostic image format into GDI+'s image format
+            switch (image.Format)
             {
-                PixelFormat format;
+                case ImageFormat.Rgb24:
+                    format = PixelFormat.Format24bppRgb;
+                    break;
 
-                // Convert from Pfim's backend agnostic image format into GDI+'s image format
-                switch (image.Format)
-                {
-                    case ImageFormat.Rgb24:
-                        format = PixelFormat.Format24bppRgb;
-                        break;
+                case ImageFormat.Rgba32:
+                    format = PixelFormat.Format32bppArgb;
+                    break;
 
-                    case ImageFormat.Rgba32:
-                        format = PixelFormat.Format32bppArgb;
-                        break;
+                case ImageFormat.R5g5b5:
+                    format = PixelFormat.Format16bppRgb555;
+                    break;
 
-                    case ImageFormat.R5g5b5:
-                        format = PixelFormat.Format16bppRgb555;
-                        break;
+                case ImageFormat.R5g6b5:
+                    format = PixelFormat.Format16bppRgb565;
+                    break;
 
-                    case ImageFormat.R5g6b5:
-                        format = PixelFormat.Format16bppRgb565;
-                        break;
+                case ImageFormat.R5g5b5a1:
+                    format = PixelFormat.Format16bppArgb1555;
+                    break;
 
-                    case ImageFormat.R5g5b5a1:
-                        format = PixelFormat.Format16bppArgb1555;
-                        break;
+                case ImageFormat.Rgb8:
+                    format = PixelFormat.Format8bppIndexed;
+                    break;
 
-                    case ImageFormat.Rgb8:
-                        format = PixelFormat.Format8bppIndexed;
-                        break;
+                default:
+                    var msg = $"{image.Format} is not recognized for Bitmap on Windows Forms. " +
+                               "You'd need to write a conversion function to convert the data to known format";
+                    //var caption = "Unrecognized format";
+                    //MessageBox.Show(msg, caption, MessageBoxButtons.OK);
+                    throw new NotImplementedException(msg);
+            }
 
-                    default:
-                        var msg = $"{image.Format} is not recognized for Bitmap on Windows Forms. " +
-                                   "You'd need to write a conversion function to convert the data to known format";
-                        //var caption = "Unrecognized format";
-                        //MessageBox.Show(msg, caption, MessageBoxButtons.OK);
-                        throw new NotImplementedException(msg);
-                }
-
-                // Pin pfim's data array so that it doesn't get reaped by GC
-                var handle = GCHandle.Alloc(image.Data, GCHandleType.Pinned);
-                try
-                {
-                    var data = Marshal.UnsafeAddrOfPinnedArrayElement(image.Data, 0);
-                    return new Bitmap(image.Width, image.Height, image.Stride, format, data);
-                }
-                finally
-                {
-                    handle.Free();
-                }
+            // Pin pfim's data array so that it doesn't get reaped by GC
+            var handle = GCHandle.Alloc(image.Data, GCHandleType.Pinned);
+            try
+            {
+                var data = Marshal.UnsafeAddrOfPinnedArrayElement(image.Data, 0);
+                return new Bitmap(image.Width, image.Height, image.Stride, format, data);
+            }
+            finally
+            {
+                handle.Free();
             }
         }
 
@@ -225,10 +221,8 @@ namespace WolvenKit.MVVM.Model
                 return null;
             }
 
-            using (var ms = new MemoryStream(Xbm2DdsBytes(xbm)))
-            {
-                return FromStream(ms);
-            }
+            using var ms = new MemoryStream(Xbm2DdsBytes(xbm));
+            return FromStream(ms);
         }
 
         /// <summary>
@@ -243,17 +237,15 @@ namespace WolvenKit.MVVM.Model
                 return null;
             }
 
-            using (var ms = new MemoryStream())
-            using (var bw = new BinaryWriter(ms))
-            {
-                DDSUtils.GenerateAndWriteHeader(bw.BaseStream, GetDDSMetadata(xbm));
+            using var ms = new MemoryStream();
+            using var bw = new BinaryWriter(ms);
+            DDSUtils.GenerateAndWriteHeader(bw.BaseStream, GetDDSMetadata(xbm));
 
-                bw.Write(xbm.GetBytes());
+            bw.Write(xbm.GetBytes());
 
-                ms.Flush();
+            ms.Flush();
 
-                return ms.ToArray();
-            }
+            return ms.ToArray();
         }
 
         /// <summary>
@@ -263,56 +255,54 @@ namespace WolvenKit.MVVM.Model
         /// <returns></returns>
         private static Bitmap FromStream(Stream stream)
         {
-            using (var image = Pfim.Pfim.FromStream(stream))
+            using var image = Pfim.Pfim.FromStream(stream);
+            PixelFormat format;
+
+            // Convert from Pfim's backend agnostic image format into GDI+'s image format
+            switch (image.Format)
             {
-                PixelFormat format;
+                case ImageFormat.Rgb24:
+                    format = PixelFormat.Format24bppRgb;
+                    break;
 
-                // Convert from Pfim's backend agnostic image format into GDI+'s image format
-                switch (image.Format)
-                {
-                    case ImageFormat.Rgb24:
-                        format = PixelFormat.Format24bppRgb;
-                        break;
+                case ImageFormat.Rgba32:
+                    format = PixelFormat.Format32bppArgb;
+                    break;
 
-                    case ImageFormat.Rgba32:
-                        format = PixelFormat.Format32bppArgb;
-                        break;
+                case ImageFormat.R5g5b5:
+                    format = PixelFormat.Format16bppRgb555;
+                    break;
 
-                    case ImageFormat.R5g5b5:
-                        format = PixelFormat.Format16bppRgb555;
-                        break;
+                case ImageFormat.R5g6b5:
+                    format = PixelFormat.Format16bppRgb565;
+                    break;
 
-                    case ImageFormat.R5g6b5:
-                        format = PixelFormat.Format16bppRgb565;
-                        break;
+                case ImageFormat.R5g5b5a1:
+                    format = PixelFormat.Format16bppArgb1555;
+                    break;
 
-                    case ImageFormat.R5g5b5a1:
-                        format = PixelFormat.Format16bppArgb1555;
-                        break;
+                case ImageFormat.Rgb8:
+                    format = PixelFormat.Format8bppIndexed;
+                    break;
 
-                    case ImageFormat.Rgb8:
-                        format = PixelFormat.Format8bppIndexed;
-                        break;
+                default:
+                    var msg = $"{image.Format} is not recognized for Bitmap on Windows Forms. " +
+                               "You'd need to write a conversion function to convert the data to known format";
+                    //var caption = "Unrecognized format";
+                    //MessageBox.Show(msg, caption, MessageBoxButtons.OK);
+                    throw new NotImplementedException(msg);
+            }
 
-                    default:
-                        var msg = $"{image.Format} is not recognized for Bitmap on Windows Forms. " +
-                                   "You'd need to write a conversion function to convert the data to known format";
-                        //var caption = "Unrecognized format";
-                        //MessageBox.Show(msg, caption, MessageBoxButtons.OK);
-                        throw new NotImplementedException(msg);
-                }
-
-                // Pin pfim's data array so that it doesn't get reaped by GC
-                var handle = GCHandle.Alloc(image.Data, GCHandleType.Pinned);
-                try
-                {
-                    var data = Marshal.UnsafeAddrOfPinnedArrayElement(image.Data, 0);
-                    return new Bitmap(image.Width, image.Height, image.Stride, format, data);
-                }
-                finally
-                {
-                    handle.Free();
-                }
+            // Pin pfim's data array so that it doesn't get reaped by GC
+            var handle = GCHandle.Alloc(image.Data, GCHandleType.Pinned);
+            try
+            {
+                var data = Marshal.UnsafeAddrOfPinnedArrayElement(image.Data, 0);
+                return new Bitmap(image.Width, image.Height, image.Stride, format, data);
+            }
+            finally
+            {
+                handle.Free();
             }
         }
 

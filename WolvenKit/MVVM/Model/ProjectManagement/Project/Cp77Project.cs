@@ -52,27 +52,23 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public override void Load(string path)
         {
-            using (var lf = new FileStream(path, FileMode.Open, FileAccess.Read))
-            {
-                var ser = new XmlSerializer(typeof(CP77Mod));
-                var obj = (CP77Mod)ser.Deserialize(lf);
-                Name = obj.Name;
-                Version = obj.Version;
-                Author = obj.Author;
-                Email = obj.Email;
-                GameType = GameType.Cyberpunk2077;
-                Data = obj;
-                Data.FileName = path;
-            }
+            using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
+            var ser = new XmlSerializer(typeof(CP77Mod));
+            var obj = (CP77Mod)ser.Deserialize(lf);
+            Name = obj.Name;
+            Version = obj.Version;
+            Author = obj.Author;
+            Email = obj.Email;
+            GameType = GameType.Cyberpunk2077;
+            Data = obj;
+            Data.FileName = path;
         }
 
         public override void Save(string path)
         {
-            using (var sf = new FileStream(path, FileMode.Create, FileAccess.Write))
-            {
-                var ser = new XmlSerializer(typeof(CP77Mod));
-                ser.Serialize(sf, (CP77Mod)Data);
-            }
+            using var sf = new FileStream(path, FileMode.Create, FileAccess.Write);
+            var ser = new XmlSerializer(typeof(CP77Mod));
+            ser.Serialize(sf, (CP77Mod)Data);
         }
 
         #region Directories

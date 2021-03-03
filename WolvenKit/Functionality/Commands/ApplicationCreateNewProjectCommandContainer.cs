@@ -165,13 +165,11 @@ namespace WolvenKit.Functionality.Commands
             var src = (System.Windows.Media.Imaging.BitmapSource)_pwvm?.ProfileImageBrush?.ImageSource;
             if (src != null)
             {
-                using (var fs1 = new FileStream(Path.Combine(imagePath, "img.png"), FileMode.OpenOrCreate))
-                {
-                    var frame = System.Windows.Media.Imaging.BitmapFrame.Create(src);
-                    var enc = new System.Windows.Media.Imaging.PngBitmapEncoder();
-                    enc.Frames.Add(frame);
-                    enc.Save(fs1);
-                }
+                using var fs1 = new FileStream(Path.Combine(imagePath, "img.png"), FileMode.OpenOrCreate);
+                var frame = System.Windows.Media.Imaging.BitmapFrame.Create(src);
+                var enc = new System.Windows.Media.Imaging.PngBitmapEncoder();
+                enc.Frames.Add(frame);
+                enc.Save(fs1);
             }
         }
 

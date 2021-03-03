@@ -155,12 +155,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                         var exNewpath = $"{GetNewPath(file)}";
                         // create directory
                         exNewpath.EnsureFolderExists();
-                        using (var fs = new FileStream(exNewpath, FileMode.Create, FileAccess.ReadWrite))
-                        using (var writer = new BinaryWriter(fs))
-                        {
-                            cr2w.Write(writer);
-                            MainController.LogString($"Succesfully imported {fullpath}.", Logtype.Success);
-                        }
+                        using var fs = new FileStream(exNewpath, FileMode.Create, FileAccess.ReadWrite);
+                        using var writer = new BinaryWriter(fs);
+                        cr2w.Write(writer);
+                        MainController.LogString($"Succesfully imported {fullpath}.", Logtype.Success);
                     }
                     else
                     {
@@ -467,19 +465,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         private void RegisterXBMDump()
         {
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MainController.XBMDumpPath);
-            using (var fr = new FileStream(path, FileMode.Open, FileAccess.Read))
-            using (var sr = new StreamReader(fr))
-            using (var csv = new CsvReader(sr, CultureInfo.InvariantCulture))
+            using var fr = new FileStream(path, FileMode.Open, FileAccess.Read);
+            using var sr = new StreamReader(fr);
+            using var csv = new CsvReader(sr, CultureInfo.InvariantCulture);
+            var records = csv.GetRecords<XBMDumpRecord>();
+            foreach (var record in records)
             {
-                var records = csv.GetRecords<XBMDumpRecord>();
-                foreach (var record in records)
+                //var hash = FNV1A64HashAlgorithm.HashString(record.RedName);
+                var hash = Path.GetFileName(record.RedName);
+                if (!xbmdict.ContainsKey(hash))
                 {
-                    //var hash = FNV1A64HashAlgorithm.HashString(record.RedName);
-                    var hash = Path.GetFileName(record.RedName);
-                    if (!xbmdict.ContainsKey(hash))
-                    {
-                        xbmdict.Add(hash, record);
-                    }
+                    xbmdict.Add(hash, record);
                 }
             }
         }

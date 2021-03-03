@@ -63,27 +63,23 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public override void Load(string path)
         {
-            using (var lf = new FileStream(path, FileMode.Open, FileAccess.Read))
-            {
-                var ser = new XmlSerializer(typeof(W3Mod));
-                var obj = (W3Mod)ser.Deserialize(lf);
-                Name = obj.Name;
-                Version = obj.Version;
-                Author = obj.Author;
-                Email = obj.Email;
-                GameType = GameType.Witcher3;
-                Data = obj;
-                Data.FileName = path;
-            }
+            using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
+            var ser = new XmlSerializer(typeof(W3Mod));
+            var obj = (W3Mod)ser.Deserialize(lf);
+            Name = obj.Name;
+            Version = obj.Version;
+            Author = obj.Author;
+            Email = obj.Email;
+            GameType = GameType.Witcher3;
+            Data = obj;
+            Data.FileName = path;
         }
 
         public override void Save(string path)
         {
-            using (var sf = new FileStream(path, FileMode.Create, FileAccess.Write))
-            {
-                var ser = new XmlSerializer(typeof(W3Mod));
-                ser.Serialize(sf, (W3Mod)Data);
-            }
+            using var sf = new FileStream(path, FileMode.Create, FileAccess.Write);
+            var ser = new XmlSerializer(typeof(W3Mod));
+            ser.Serialize(sf, (W3Mod)Data);
         }
 
         #region Directories

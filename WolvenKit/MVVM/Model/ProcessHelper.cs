@@ -44,7 +44,7 @@ namespace WolvenKit.MVVM.Model
 
         public static int RunProcess(string filePath, string workingDirectory = "", params string[] commands)
         {
-            using (var process = new Process
+            using var process = new Process
             {
                 EnableRaisingEvents = true,
                 StartInfo =
@@ -56,10 +56,8 @@ namespace WolvenKit.MVVM.Model
                     WindowStyle = ProcessWindowStyle.Hidden,
                     WorkingDirectory = workingDirectory
                 }
-            })
-            {
-                return RunProcess(process, commands);
-            }
+            };
+            return RunProcess(process, commands);
         }
 
         /// <summary>
@@ -172,7 +170,7 @@ namespace WolvenKit.MVVM.Model
 
         private static async Task<int> RunProcessAsync(ILoggerService loggerService, string filePath, string workingDirectory = "", params string[] commands)
         {
-            using (var process = new Process
+            using var process = new Process
             {
                 EnableRaisingEvents = true,
                 StartInfo =
@@ -186,10 +184,8 @@ namespace WolvenKit.MVVM.Model
                     RedirectStandardError = true,
 					//RedirectStandardOutput = true
 		}
-            })
-            {
-                return await RunProcessAsync(loggerService, process, commands).ConfigureAwait(false);
-            }
+            };
+            return await RunProcessAsync(loggerService, process, commands).ConfigureAwait(false);
         }
 
         #endregion Methods

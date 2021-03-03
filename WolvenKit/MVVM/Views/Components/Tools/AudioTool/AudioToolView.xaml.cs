@@ -138,23 +138,21 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                         var tag = engine.FileTag.Tag;
                         if (tag.Pictures.Length > 0)
                         {
-                            using (var albumArtworkMemStream = new MemoryStream(tag.Pictures[0].Data.Data))
+                            using var albumArtworkMemStream = new MemoryStream(tag.Pictures[0].Data.Data);
+                            try
                             {
-                                try
-                                {
-                                    var albumImage = new BitmapImage();
-                                    albumImage.BeginInit();
-                                    albumImage.CacheOption = BitmapCacheOption.OnLoad;
-                                    albumImage.StreamSource = albumArtworkMemStream;
-                                    albumImage.EndInit();
-                                }
-                                catch (NotSupportedException)
-                                {
-                                    // System.NotSupportedException:
-                                    // No imaging component suitable to complete this operation was found.
-                                }
-                                albumArtworkMemStream.Close();
+                                var albumImage = new BitmapImage();
+                                albumImage.BeginInit();
+                                albumImage.CacheOption = BitmapCacheOption.OnLoad;
+                                albumImage.StreamSource = albumArtworkMemStream;
+                                albumImage.EndInit();
                             }
+                            catch (NotSupportedException)
+                            {
+                                // System.NotSupportedException:
+                                // No imaging component suitable to complete this operation was found.
+                            }
+                            albumArtworkMemStream.Close();
                         }
                         else
                         {

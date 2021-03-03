@@ -302,10 +302,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 File.Delete(scriptlog);
             }
 
-            using (var process = Process.Start(proc))
-            {
-                await Task.Run(() => RedirectScriptlogOutput(process));
-            }
+            using var process = Process.Start(proc);
+            await Task.Run(() => RedirectScriptlogOutput(process));
         }
 
         /// <summary>
@@ -317,21 +315,19 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         {
             var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var scriptlog = Path.Combine(documents, @"The Witcher 3\scriptslog.txt");
-            using (var fs = new FileStream(scriptlog, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
+            using var fs = new FileStream(scriptlog, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite);
+            using (var fsr = new StreamReader(fs))
             {
-                using (var fsr = new StreamReader(fs))
+                while (!process.HasExited)
                 {
-                    while (!process.HasExited)
-                    {
-                        var result = await fsr.ReadToEndAsync();
+                    var result = await fsr.ReadToEndAsync();
 
-                        Logger.LogString(result);
+                    Logger.LogString(result);
 
-                        //Application.DoEvents();
-                    }
+                    //Application.DoEvents();
                 }
-                fs.Close();
             }
+            fs.Close();
         }
 
         private CR2WFile CreateCustomCr2wFile(bool isDlc)

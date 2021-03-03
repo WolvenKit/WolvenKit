@@ -185,10 +185,8 @@ namespace WolvenKit.Functionality.Layout.MLib
                     stream.Seek(0, SeekOrigin.Begin);
                     var fileEncoding = GetEncoding(bom);
 
-                    using (var reader = new StreamReader(stream, fileEncoding))
-                    {
-                        textContent = await reader.ReadToEndAsync();
-                    }
+                    using var reader = new StreamReader(stream, fileEncoding);
+                    textContent = await reader.ReadToEndAsync();
                 }
 
                 //Thread.Sleep(2000);
