@@ -135,7 +135,8 @@ namespace CP77.CR2W.Archive
         {
             var zSize = offsetEntry.ZSize;
 
-            using var mmf = MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open);
+            using var fs = new FileStream(ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite,0x1000, FileOptions.None);
+            using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, false);
             using var vs = mmf.CreateViewStream((long)offsetEntry.Offset, zSize, MemoryMappedFileAccess.Read);
 
             if (!decompress)
