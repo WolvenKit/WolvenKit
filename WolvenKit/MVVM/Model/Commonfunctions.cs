@@ -278,9 +278,11 @@ namespace WolvenKit.MVVM.Model
         public static byte[] XDocToByteArray(XDocument xdoc)
         {
             var ms = new MemoryStream();
-            var xws = new XmlWriterSettings();
-            xws.OmitXmlDeclaration = true;
-            xws.Indent = true;
+            var xws = new XmlWriterSettings
+            {
+                OmitXmlDeclaration = true,
+                Indent = true
+            };
 
             using (var xw = XmlWriter.Create(ms, xws))
             {

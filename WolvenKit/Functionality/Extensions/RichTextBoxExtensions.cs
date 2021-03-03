@@ -13,8 +13,10 @@ namespace WolvenKit.Functionality.Extensions
         public static void AppendText(this RichTextBox box, string text, string color)
         {
             var bc = new BrushConverter();
-            var tr = new TextRange(box.Document.ContentEnd, box.Document.ContentEnd);
-            tr.Text = text;
+            var tr = new TextRange(box.Document.ContentEnd, box.Document.ContentEnd)
+            {
+                Text = text
+            };
             try
             {
                 tr.ApplyPropertyValue(TextElement.ForegroundProperty,

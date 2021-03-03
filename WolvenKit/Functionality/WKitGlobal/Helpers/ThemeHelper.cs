@@ -20,8 +20,10 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
         public static void InitializeThemeHelper()
         {
             HandyControl.Themes.ThemeManager.Current.SetCurrentValue(HandyControl.Themes.ThemeManager.ApplicationThemeProperty, HandyControl.Themes.ApplicationTheme.Dark);
-            var tr = new HandyControl.Themes.ThemeResources();
-            tr.AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3");
+            var tr = new HandyControl.Themes.ThemeResources
+            {
+                AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3")
+            };
         }
 
         // Load user theme

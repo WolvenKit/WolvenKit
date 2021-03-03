@@ -93,10 +93,12 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             var si = new ProcessStartInfo(
                     "vgmstream\\test.exe",
                     arg
-                );
-            si.CreateNoWindow = true;
-            si.WindowStyle = ProcessWindowStyle.Hidden;
-            si.UseShellExecute = false;
+                )
+            {
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                UseShellExecute = false
+            };
             var proc = Process.Start(si);
             proc.WaitForExit();
 
@@ -241,8 +243,10 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         private void OpenFile()
         {
-            var openDialog = new Microsoft.Win32.OpenFileDialog();
-            openDialog.Filter = "(*.mp3)|*.mp3";
+            var openDialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "(*.mp3)|*.mp3"
+            };
             if (openDialog.ShowDialog() == true)
             {
                 NAudioEngine.Instance.OpenFile(openDialog.FileName);

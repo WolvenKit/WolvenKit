@@ -55,10 +55,12 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     using (var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.BundleManager)))
                     {
-                        var serializer = new JsonSerializer();
-                        serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                        serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                        serializer.TypeNameHandling = TypeNameHandling.Auto;
+                        var serializer = new JsonSerializer
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                            TypeNameHandling = TypeNameHandling.Auto
+                        };
                         bundleManager = (BundleManager)serializer.Deserialize(file, typeof(BundleManager));
                     }
                 }
@@ -105,10 +107,12 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     using (var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.CollisionManager)))
                     {
-                        var serializer = new JsonSerializer();
-                        serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                        serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                        serializer.TypeNameHandling = TypeNameHandling.Auto;
+                        var serializer = new JsonSerializer
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                            TypeNameHandling = TypeNameHandling.Auto
+                        };
                         collisionManager = (CollisionManager)serializer.Deserialize(file, typeof(CollisionManager));
                     }
                 }
@@ -152,10 +156,12 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     using (var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.SoundManager)))
                     {
-                        var serializer = new JsonSerializer();
-                        serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                        serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                        serializer.TypeNameHandling = TypeNameHandling.Auto;
+                        var serializer = new JsonSerializer
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                            TypeNameHandling = TypeNameHandling.Auto
+                        };
                         soundManager = (SoundManager)serializer.Deserialize(file, typeof(SoundManager));
                     }
                 }
@@ -254,10 +260,12 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     using (var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
                     {
-                        var serializer = new JsonSerializer();
-                        serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                        serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                        serializer.TypeNameHandling = TypeNameHandling.Auto;
+                        var serializer = new JsonSerializer
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                            TypeNameHandling = TypeNameHandling.Auto
+                        };
                         textureManager = (TextureManager)serializer.Deserialize(file, typeof(TextureManager));
                     }
                 }

@@ -30,8 +30,10 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
 
         private async void InitializeGitHub()
         {
-            GhubClient = new GitHubClient(new ProductHeaderValue("WolvenKit"));
-            GhubClient.Credentials = GhubAuth("wolvenbot", "botwolven1");
+            GhubClient = new GitHubClient(new ProductHeaderValue("WolvenKit"))
+            {
+                Credentials = GhubAuth("wolvenbot", "botwolven1")
+            };
             await GhubLastReleaseAsync();
         }
 

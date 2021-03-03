@@ -87,8 +87,10 @@ namespace WolvenKit.Functionality.Controllers
         {
             if (radishController == null)
             {
-                radishController = new RadishController();
-                radishController.Configuration = RadishConfiguration.Load();
+                radishController = new RadishController
+                {
+                    Configuration = RadishConfiguration.Load()
+                };
             }
             return radishController;
         }

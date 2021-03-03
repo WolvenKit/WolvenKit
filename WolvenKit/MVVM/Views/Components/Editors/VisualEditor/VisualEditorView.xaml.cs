@@ -19,12 +19,16 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor
             var network = new NetworkViewModel();
 
             //Create the node for the first node, set its name and add it to the network.
-            var innode = new IN_Node_Class();
-            innode.Name = "IN";
+            var innode = new IN_Node_Class
+            {
+                Name = "IN"
+            };
             network.Nodes.Add(innode);
 
-            var outnode = new OUT_Node_Class();
-            outnode.Name = "OUT";
+            var outnode = new OUT_Node_Class
+            {
+                Name = "OUT"
+            };
             network.Nodes.Add(outnode);
 
             //Assign the viewmodel to the view.
