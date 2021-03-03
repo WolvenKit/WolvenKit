@@ -31,10 +31,7 @@ namespace WolvenKit.Functionality.Layout.Converters
         }
 
         // No need to implement converting back on a one-way binding
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return DependencyProperty.UnsetValue;
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => DependencyProperty.UnsetValue;
 
         private static string GetSmallIconForFileType(string extension)
         {

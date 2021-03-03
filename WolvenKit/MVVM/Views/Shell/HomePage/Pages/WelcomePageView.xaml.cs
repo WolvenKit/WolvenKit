@@ -55,11 +55,6 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
             HomePageView.GlobalHomePage.PageViewGrid.Children.Add(HomePageView.GlobalHomePage.WikitPV);
         }
 
-        private void irathernot_Click(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("");
-
-            // backup if this joke doesnt work
-        }
+        private void irathernot_Click(object sender, RoutedEventArgs e) => System.Diagnostics.Process.Start("");// backup if this joke doesnt work
     }
 }

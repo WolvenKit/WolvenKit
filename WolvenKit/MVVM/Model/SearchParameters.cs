@@ -203,20 +203,11 @@ namespace WolvenKit.MVVM.Model
 
         #region Methods
 
-        protected void CaseSensitive()
-        {
-            IsMatchCase = !IsMatchCase;
-        }
+        protected void CaseSensitive() => IsMatchCase = !IsMatchCase;
 
-        protected void Regex()
-        {
-            IsRegex = !IsRegex;
-        }
+        protected void Regex() => IsRegex = !IsRegex;
 
-        protected void WholeWord()
-        {
-            IsWholeWord = !IsWholeWord;
-        }
+        protected void WholeWord() => IsWholeWord = !IsWholeWord;
 
         #endregion Methods
     }

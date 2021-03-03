@@ -152,35 +152,32 @@ namespace WolvenKit.Functionality.Layout
         /// </summary>
         /// <param name="item">Identifies the viewmodel object for which we require an associated view.</param>
         /// <param name="container">Identifies the container's instance that wants to resolve this association.</param>
-        public override System.Windows.DataTemplate SelectTemplate(object item, System.Windows.DependencyObject container)
+        public override System.Windows.DataTemplate SelectTemplate(object item, System.Windows.DependencyObject container) => item switch
         {
-            return item switch
-            {
-                AnimsViewModel _ => AnimsViewTemplate,
-                MimicsViewModel _ => MimicsViewTemplate,
-                IDocumentViewModel _ => FileViewTemplate,
-                LogViewModel _ => LogViewTemplate,
-                ProjectExplorerViewModel _ => ProjectExplorerTemplate,
-                AssetBrowserViewModel _ => AssetBrowserTemplate,
-                MVVM.ViewModels.Components.Editors.BulkEditorViewModel _ => BulkEditorTemplate,
-                CodeEditorViewModel _ => CodeEditorTemplate,
-                CsvEditorViewModel _ => CsvEditorTemplate,
-                HexEditorViewModel _ => HexEditorTemplate,
-                JournalEditorViewModel _ => JournalEditorTemplate,
-                VisualEditorViewModel _ => VisualEditorTemplate,
-                AudioToolViewModel _ => AudioToolTemplate,
-                CR2WToTextToolViewModel _ => CR2WToTextToolTemplate,
-                GameDebuggerToolViewModel _ => GameDebuggerToolTemplate,
-                ImporterToolViewModel _ => ImporterToolTemplate,
-                MenuCreatorToolViewModel _ => MenuToolTemplate,
-                PluginManagerViewModel _ => PluginManagerTemplate,
-                RadishToolViewModel _ => RadishToolTemplate,
-                WccToolViewModel _ => WccToolTemplate,
-                CR2WEditorViewModel _ => CR2WEditorTemplate,
+            AnimsViewModel _ => AnimsViewTemplate,
+            MimicsViewModel _ => MimicsViewTemplate,
+            IDocumentViewModel _ => FileViewTemplate,
+            LogViewModel _ => LogViewTemplate,
+            ProjectExplorerViewModel _ => ProjectExplorerTemplate,
+            AssetBrowserViewModel _ => AssetBrowserTemplate,
+            MVVM.ViewModels.Components.Editors.BulkEditorViewModel _ => BulkEditorTemplate,
+            CodeEditorViewModel _ => CodeEditorTemplate,
+            CsvEditorViewModel _ => CsvEditorTemplate,
+            HexEditorViewModel _ => HexEditorTemplate,
+            JournalEditorViewModel _ => JournalEditorTemplate,
+            VisualEditorViewModel _ => VisualEditorTemplate,
+            AudioToolViewModel _ => AudioToolTemplate,
+            CR2WToTextToolViewModel _ => CR2WToTextToolTemplate,
+            GameDebuggerToolViewModel _ => GameDebuggerToolTemplate,
+            ImporterToolViewModel _ => ImporterToolTemplate,
+            MenuCreatorToolViewModel _ => MenuToolTemplate,
+            PluginManagerViewModel _ => PluginManagerTemplate,
+            RadishToolViewModel _ => RadishToolTemplate,
+            WccToolViewModel _ => WccToolTemplate,
+            CR2WEditorViewModel _ => CR2WEditorTemplate,
 
-                _ => base.SelectTemplate(item, container)
-            };
-        }
+            _ => base.SelectTemplate(item, container)
+        };
 
         #endregion Methods
     }

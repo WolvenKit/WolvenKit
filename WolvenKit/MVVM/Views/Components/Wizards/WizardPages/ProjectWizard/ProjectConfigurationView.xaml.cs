@@ -66,21 +66,12 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard
             }
         }
 
-        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str)
-        {
-            return System.IO.Directory.Exists(str)
+        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str) => System.IO.Directory.Exists(str)
                 ? HandyControl.Data.OperationResult.Success()
                 : HandyControl.Data.OperationResult.Failed("WolvenKit path does not exist");
-        }
 
-        private void validateAllFields()
-        {
-            _pwvm.AllFieldIsValid = projectNameTxtbx.VerifyData() && projectPathTxtbx.VerifyData();
-        }
+        private void validateAllFields() => _pwvm.AllFieldIsValid = projectNameTxtbx.VerifyData() && projectPathTxtbx.VerifyData();
 
-        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            validateAllFields();
-        }
+        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => validateAllFields();
     }
 }

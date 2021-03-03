@@ -258,10 +258,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
     {
         #region Methods
 
-        public static bool IsConnectedToInternet()
-        {
-            return InternetGetConnectedState(out var Desc, 0);
-        }
+        public static bool IsConnectedToInternet() => InternetGetConnectedState(out var Desc, 0);
 
         [DllImport("wininet.dll")]
         private static extern bool InternetGetConnectedState(out int Description, int ReservedValue);

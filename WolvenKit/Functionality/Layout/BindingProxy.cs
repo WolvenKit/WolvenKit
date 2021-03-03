@@ -42,10 +42,7 @@ namespace WolvenKit.Functionality.Layout
         /// Overrides of Freezable
         /// </summary>
         /// <returns></returns>
-        protected override Freezable CreateInstanceCore()
-        {
-            return new BindingProxy();
-        }
+        protected override Freezable CreateInstanceCore() => new BindingProxy();
 
         #endregion Methods
     }

@@ -571,10 +571,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             }
         }
 
-        private void waveStream_Sample(object sender, SampleEventArgs e)
-        {
-            waveformAggregator.Add(e.Left, e.Right);
-        }
+        private void waveStream_Sample(object sender, SampleEventArgs e) => waveformAggregator.Add(e.Left, e.Right);
 
         private void positionTimer_Tick(object sender, EventArgs e)
         {

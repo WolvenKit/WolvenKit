@@ -29,10 +29,7 @@ namespace WolvenKit.Functionality.Commands
 
         #region Methods
 
-        protected override void Execute(object parameter)
-        {
-            _navigationService.CloseApplication();
-        }
+        protected override void Execute(object parameter) => _navigationService.CloseApplication();
 
         #endregion Methods
     }

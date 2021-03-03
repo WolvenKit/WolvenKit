@@ -87,9 +87,6 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
             filled = true;
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            ServiceLocator.Default.ResolveType<FirstSetupWizardViewModel>().AllFieldIsValid = true;
-        }
+        private void UserControl_Loaded(object sender, RoutedEventArgs e) => ServiceLocator.Default.ResolveType<FirstSetupWizardViewModel>().AllFieldIsValid = true;
     }
 }

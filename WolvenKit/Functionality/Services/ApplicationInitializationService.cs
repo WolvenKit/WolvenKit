@@ -80,21 +80,9 @@ namespace WolvenKit.Functionality.Services
 
         #region methods
 
-        private Task CheckForUpdatesAsync()
-        {
+        private Task CheckForUpdatesAsync() =>
             //TODO: enable
-            return Task.CompletedTask;
-            //            Log.Info("Checking for updates");
-
-            //            var updateService = _serviceLocator.ResolveType<IUpdateService>();
-            //            updateService.Initialize(Settings.Application.AutomaticUpdates.AvailableChannels, Settings.Application.AutomaticUpdates.DefaultChannel,
-            //                Settings.Application.AutomaticUpdates.CheckForUpdatesDefaultValue);
-
-            //#pragma warning disable 4014
-            //            // Not dot await, it's a background thread
-            //            updateService.InstallAvailableUpdatesAsync(new SquirrelContext());
-            //#pragma warning restore 4014
-        }
+            Task.CompletedTask;//            Log.Info("Checking for updates");//            var updateService = _serviceLocator.ResolveType<IUpdateService>();//            updateService.Initialize(Settings.Application.AutomaticUpdates.AvailableChannels, Settings.Application.AutomaticUpdates.DefaultChannel,//                Settings.Application.AutomaticUpdates.CheckForUpdatesDefaultValue);//#pragma warning disable 4014//            // Not dot await, it's a background thread//            updateService.InstallAvailableUpdatesAsync(new SquirrelContext());//#pragma warning restore 4014
 
         private void InitializeCommands()
         {
@@ -177,10 +165,7 @@ namespace WolvenKit.Functionality.Services
             return Task.CompletedTask;
         }
 
-        private void InitializeWatchers()
-        {
-            _serviceLocator.RegisterTypeAndInstantiate<RecentlyUsedItemsProjectWatcher>();
-        }
+        private void InitializeWatchers() => _serviceLocator.RegisterTypeAndInstantiate<RecentlyUsedItemsProjectWatcher>();
 
         private async Task LoadProjectAsync()
         {

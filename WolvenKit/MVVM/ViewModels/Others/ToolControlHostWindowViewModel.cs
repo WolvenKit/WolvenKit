@@ -37,18 +37,11 @@ namespace WolvenKit.MVVM.ViewModels.Others
 
         // TODO: Register commands with the vmcommand or vmcommandwithcanexecute codesnippets
 
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
+        protected override async Task InitializeAsync() => await base.InitializeAsync();// TODO: subscribe to events here
 
-            // TODO: subscribe to events here
-        }
-
-        protected override async Task CloseAsync()
-        {
+        protected override async Task CloseAsync() =>
             // TODO: unsubscribe from events here
 
             await base.CloseAsync();
-        }
     }
 }

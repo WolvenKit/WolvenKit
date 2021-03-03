@@ -80,10 +80,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             ShowPage();
         }
 
-        public void AddAudioItem(string path)
-        {
-            TempConvertToWemWav(path);
-        }
+        public void AddAudioItem(string path) => TempConvertToWemWav(path);
 
         private const string wdir = "vgmstream\\AudioWorkingDir\\";
 
@@ -202,15 +199,9 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             }
         }
 
-        private void BrowseButton_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFile();
-        }
+        private void BrowseButton_Click(object sender, RoutedEventArgs e) => OpenFile();
 
-        private void LoadDefaultTheme()
-        {
-            Resources.MergedDictionaries.Clear();
-        }
+        private void LoadDefaultTheme() => Resources.MergedDictionaries.Clear();
 
         private void LoadDarkBlueTheme()
         {
@@ -260,10 +251,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             }
         }
 
-        private void OpenFileMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFile();
-        }
+        private void OpenFileMenuItem_Click(object sender, RoutedEventArgs e) => OpenFile();
 
         private void CloseMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -274,12 +262,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         //       NAudioEngine.Instance.Dispose();
         //   }
 
-        private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonDown(e);
-
-            // Begin dragging the window
-        }
+        private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => base.OnMouseLeftButtonDown(e);// Begin dragging the window
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {

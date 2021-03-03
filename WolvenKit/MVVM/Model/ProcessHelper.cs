@@ -34,19 +34,13 @@ namespace WolvenKit.MVVM.Model
     {
         #region Methods
 
-        public static int RunCommandLine(string workingDirectory = "", params string[] commands)
-        {
-            return RunProcess(Path.Combine(Environment.SystemDirectory, "cmd.exe"), workingDirectory, commands);
-        }
+        public static int RunCommandLine(string workingDirectory = "", params string[] commands) => RunProcess(Path.Combine(Environment.SystemDirectory, "cmd.exe"), workingDirectory, commands);
 
-        public static async Task<int> RunCommandLineAsync(ILoggerService loggerService, string workingDirectory = "", params string[] commands)
-        {
-            return await RunProcessAsync(loggerService,
+        public static async Task<int> RunCommandLineAsync(ILoggerService loggerService, string workingDirectory = "", params string[] commands) => await RunProcessAsync(loggerService,
                     Path.Combine(Environment.SystemDirectory, "cmd.exe"),
                     workingDirectory,
                     commands)
                 .ConfigureAwait(false);
-        }
 
         public static int RunProcess(string filePath, string workingDirectory = "", params string[] commands)
         {

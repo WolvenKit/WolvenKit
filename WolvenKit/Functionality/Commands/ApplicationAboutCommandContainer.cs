@@ -29,10 +29,7 @@ namespace WolvenKit.Functionality.Commands
 
         #region Methods
 
-        protected override void Execute(object parameter)
-        {
-            _aboutService.ShowAboutAsync();
-        }
+        protected override void Execute(object parameter) => _aboutService.ShowAboutAsync();
 
         #endregion Methods
     }

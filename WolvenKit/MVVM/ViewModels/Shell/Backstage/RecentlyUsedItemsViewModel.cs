@@ -119,10 +119,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
             ConvertRecentProjects();
         }
 
-        private void UpdatePinnedItem()
-        {
-            PinnedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.PinnedItems);
-        }
+        private void UpdatePinnedItem() => PinnedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.PinnedItems);
 
         public ObservableCollection<FancyProjectObject> BFancyProjectObjects = new ObservableCollection<FancyProjectObject>();
 
@@ -183,10 +180,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
 
         public string VersionWkit { get { return GetAssemblyVersion(); } }
 
-        public string GetAssemblyVersion()
-        {
-            return GetType().Assembly.GetName().Version.ToString();
-        }
+        public string GetAssemblyVersion() => GetType().Assembly.GetName().Version.ToString();
 
         public string DiscordLink { get { return "https://discord.gg/tKZXma5SaA"; } }
         public string PatreonLink { get { return "https://www.patreon.com/m/RedModdingTools"; } }

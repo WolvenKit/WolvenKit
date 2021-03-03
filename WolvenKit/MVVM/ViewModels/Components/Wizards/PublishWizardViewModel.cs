@@ -32,12 +32,10 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
         ///
         /// </summary>
         /// <param name="project">Project to pack</param>
-        public void CyberpunkPublishStrategy(Cp77Project project)
-        {
+        public void CyberpunkPublishStrategy(Cp77Project project) =>
             //TODO: I am not sure how to do this until we have packing
 
             Logger.Write("Packing Cyberpunk 2077 mod complete.", LogLevel.Info);
-        }
 
         public void PublishMod()
         {
@@ -77,12 +75,10 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
         ///
         /// </summary>
         /// <param name="project">Project to pack</param>
-        public void WitcherPublishStrategy(Tw3Project project)
-        {
+        public void WitcherPublishStrategy(Tw3Project project) =>
             //TODO: I am not sure how to do this until we have packing
 
             Logger.Write("Packing Witcher 3 mod complete.", LogLevel.Info);
-        }
 
         #endregion Methods
     }

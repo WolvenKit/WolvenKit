@@ -14,9 +14,6 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard
             _fswvm = ServiceLocator.Default.ResolveType<ProjectWizardViewModel>();
         }
 
-        private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
-        {
-            _fswvm.AllFieldIsValid = true;
-        }
+        private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e) => _fswvm.AllFieldIsValid = true;
     }
 }

@@ -53,9 +53,6 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard
             }
         }
 
-        private void CancelProjectBtn_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            _pwvm.CloseViewModelAsync(null);
-        }
+        private void CancelProjectBtn_Click(object sender, System.Windows.RoutedEventArgs e) => _pwvm.CloseViewModelAsync(null);
     }
 }

@@ -66,19 +66,13 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Edito
             }
         }
 
-        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str)
-        {
-            return System.IO.Directory.Exists(str)
+        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str) => System.IO.Directory.Exists(str)
                 ? HandyControl.Data.OperationResult.Success()
                 : HandyControl.Data.OperationResult.Failed();
-        }
 
-        private HandyControl.Data.OperationResult<bool> VerifyFile(string str)
-        {
-            return System.IO.File.Exists(str)
+        private HandyControl.Data.OperationResult<bool> VerifyFile(string str) => System.IO.File.Exists(str)
                 ? HandyControl.Data.OperationResult.Success()
                 : HandyControl.Data.OperationResult.Failed();
-        }
 
         private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {

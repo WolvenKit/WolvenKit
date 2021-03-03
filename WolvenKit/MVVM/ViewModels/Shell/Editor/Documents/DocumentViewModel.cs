@@ -90,15 +90,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         public ICommand OpenEditorCommand { get; private set; }
         public ICommand OpenImportCommand { get; private set; }
 
-        private bool CanOpenBuffer()
-        {
-            return true;
-        }
+        private bool CanOpenBuffer() => true;
 
-        private bool CanOpenEditor()
-        {
-            return true;
-        }
+        private bool CanOpenEditor() => true;
 
         private bool CanOpenImport() => true;
 
@@ -290,10 +284,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         [Model]
         private IWolvenkitFile File { get; set; }
 
-        private List<EditorViewModel> GetEditorsForFile(IWolvenkitFile file)
-        {
-            return new();
-        }
+        private List<EditorViewModel> GetEditorsForFile(IWolvenkitFile file) => new();
 
         #endregion Properties
 
@@ -411,35 +402,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             return result;
         }
 
-        private bool CanClose()
-        {
-            return true;
-        }
+        private bool CanClose() => true;
 
-        private bool CanSave(object parameter)
-        {
-            return IsDirty;
-        }
+        private bool CanSave(object parameter) => IsDirty;
 
-        private bool CanSaveAs(object parameter)
-        {
-            return IsDirty;
-        }
+        private bool CanSaveAs(object parameter) => IsDirty;
 
-        private void OnClose()
-        {
-            _workSpaceViewModel.Close(this);
-        }
+        private void OnClose() => _workSpaceViewModel.Close(this);
 
-        private void OnSave(object parameter)
-        {
-            _workSpaceViewModel.Save(this, false);
-        }
+        private void OnSave(object parameter) => _workSpaceViewModel.Save(this, false);
 
-        private void OnSaveAs(object parameter)
-        {
-            _workSpaceViewModel.Save(this, true);
-        }
+        private void OnSaveAs(object parameter) => _workSpaceViewModel.Save(this, true);
 
         #endregion methods
 

@@ -14,9 +14,6 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
             _fswvm = ServiceLocator.Default.ResolveType<FirstSetupWizardViewModel>();
         }
 
-        private void CheckBox_Checked(object sender, System.Windows.RoutedEventArgs e)
-        {
-            _fswvm.AllFieldIsValid = w3Checkbox.IsChecked == true || cp77Checkbox.IsChecked == true;
-        }
+        private void CheckBox_Checked(object sender, System.Windows.RoutedEventArgs e) => _fswvm.AllFieldIsValid = w3Checkbox.IsChecked == true || cp77Checkbox.IsChecked == true;
     }
 }

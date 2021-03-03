@@ -58,19 +58,13 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
             }
         }
 
-        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str)
-        {
-            return System.IO.Directory.Exists(str)
+        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str) => System.IO.Directory.Exists(str)
                 ? HandyControl.Data.OperationResult.Success()
                 : HandyControl.Data.OperationResult.Failed();
-        }
 
-        private HandyControl.Data.OperationResult<bool> VerifyFile(string str)
-        {
-            return System.IO.File.Exists(str)
+        private HandyControl.Data.OperationResult<bool> VerifyFile(string str) => System.IO.File.Exists(str)
                 ? HandyControl.Data.OperationResult.Success()
                 : HandyControl.Data.OperationResult.Failed();
-        }
 
         private void validateAllFields()
         {
@@ -88,9 +82,6 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
             _firstSetupWizardViewModel.AllFieldIsValid = w3IsValid && cp77IsValid;
         }
 
-        private void Field_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            validateAllFields();
-        }
+        private void Field_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => validateAllFields();
     }
 }

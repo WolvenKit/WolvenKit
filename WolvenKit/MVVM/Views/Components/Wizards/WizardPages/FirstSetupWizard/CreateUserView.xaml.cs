@@ -63,15 +63,9 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
                 : HandyControl.Data.OperationResult.Failed();
         }
 
-        private void validateAllFields()
-        {
-            _fswvm.AllFieldIsValid = NameTb.VerifyData() && EmailTb.VerifyData() && DonateTb.VerifyData();
-        }
+        private void validateAllFields() => _fswvm.AllFieldIsValid = NameTb.VerifyData() && EmailTb.VerifyData() && DonateTb.VerifyData();
 
-        private void Field_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            validateAllFields();
-        }
+        private void Field_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => validateAllFields();
 
         private void ImageSelector_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {

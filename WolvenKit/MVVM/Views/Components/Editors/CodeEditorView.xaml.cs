@@ -10,12 +10,7 @@ namespace WolvenKit.MVVM.Views.Components.Editors
             InitializeComponent();
         }
 
-        private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonDown(e);
-
-            // Begin dragging the window
-        }
+        private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => base.OnMouseLeftButtonDown(e);// Begin dragging the window
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {

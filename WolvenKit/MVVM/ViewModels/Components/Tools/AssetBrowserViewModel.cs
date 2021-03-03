@@ -185,19 +185,12 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
             }
         }
 
-        protected override Task CloseAsync()
-        {
+        protected override Task CloseAsync() =>
             // TODO: Unsubscribe from events
 
-            return base.CloseAsync();
-        }
+            base.CloseAsync();
 
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
-
-            // TODO: Write initialization code here and subscribe to events
-        }
+        protected override async Task InitializeAsync() => await base.InitializeAsync();// TODO: Write initialization code here and subscribe to events
 
         private static void AddToMod(IGameFile file)
         {
@@ -310,16 +303,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
             CurrentNodeFiles = CurrentNode.ToAssetBrowserData();
         }
 
-        private void SetupToolDefaults()
-        {
-            ContentId = ToolContentId;           // Define a unique contentid for this toolwindow
-
-            //BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow
-            //bi.BeginInit();
-            //bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
-            //bi.EndInit();
-            //IconSource = bi;
-        }
+        private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
         #endregion methods
     }

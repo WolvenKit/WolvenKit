@@ -191,10 +191,7 @@ namespace WolvenKit.Functionality.Controllers
         /// </summary>
         /// <param name="msg">The message to log.</param>
         /// <param name="type">The type of the log. Not needed.</param>
-        public void QueueLog(string msg, Logtype type = Logtype.Normal)
-        {
-            LogMessage = new KeyValuePair<string, Logtype>(msg, type);
-        }
+        public void QueueLog(string msg, Logtype type = Logtype.Normal) => LogMessage = new KeyValuePair<string, Logtype>(msg, type);
 
         #endregion Logging
 
@@ -226,12 +223,10 @@ namespace WolvenKit.Functionality.Controllers
             return ret;
         }
 
-        public string GetLocalizedString(uint val)
-        {
+        public string GetLocalizedString(uint val) =>
             //TODO: Idk what to do with this
             //return W3StringManager.GetString(val);
-            return "";
-        }
+            "";
 
         /// <summary>
         /// Initializes the archive managers in an async thread

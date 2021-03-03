@@ -27,10 +27,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             public FileInfo File { get; set; }
             public string Name => File.Name;
 
-            public override string ToString()
-            {
-                return File.FullName;
-            }
+            public override string ToString() => File.FullName;
         }
 
         public RadishViewModel(IWindowFactory windowFactory) : base(windowFactory)
@@ -246,10 +243,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         protected void ReCreateLinks() => RecreateLinksInternal();
 
-        protected bool CanStartGame()
-        {
-            return RadishController.Get().IsHealthy() && (MainController.Get().ActiveMod != null) && (Process.GetProcessesByName("Witcher3").Length == 0);
-        }
+        protected bool CanStartGame() => RadishController.Get().IsHealthy() && (MainController.Get().ActiveMod != null) && (Process.GetProcessesByName("Witcher3").Length == 0);
 
         protected async void StartGame()
         {

@@ -623,10 +623,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             return clone;
         }
 
-        public override string ToString()
-        {
-            return Location;
-        }
+        public override string ToString() => Location;
 
         #endregion Methods
     }

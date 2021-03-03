@@ -61,10 +61,7 @@ namespace WolvenKit.Functionality.Commands
         /// Execute the command
         /// </summary>
         /// <param name="parameter">The command parameter</param>
-        public override void Execute(object parameter)
-        {
-            _execute();
-        }
+        public override void Execute(object parameter) => _execute();
 
         #endregion Methods
     }

@@ -95,10 +95,7 @@ namespace WolvenKit.Functionality.Layout.MLib
         /// <summary>
         /// Standard dispose method of the <seealso cref="IDisposable" /> interface.
         /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+        public void Dispose() => Dispose(true);
 
         /// <summary>
         /// Source: http://www.codeproject.com/Articles/15360/Implementing-IDisposable-and-the-Dispose-Pattern-P
@@ -207,20 +204,14 @@ namespace WolvenKit.Functionality.Layout.MLib
         /// Gets whether a standard layout file is available for loading.
         /// </summary>
         /// <returns></returns>
-        internal bool CanLoadLayout()
-        {
-            return System.IO.File.Exists(GetFullPathToLayout());
-        }
+        internal bool CanLoadLayout() => System.IO.File.Exists(GetFullPathToLayout());
 
         /// <summary>
         /// Gets the full path to the layout file that stores the AvalonDock layout
         /// and is used to store/restore the layout of the controls.
         /// </summary>
         /// <returns></returns>
-        internal string GetFullPathToLayout()
-        {
-            return System.IO.Path.GetFullPath(_layoutFileName);
-        }
+        internal string GetFullPathToLayout() => System.IO.Path.GetFullPath(_layoutFileName);
 
         /// <summary>
         /// Gets the encoding of a file from its first 4 bytes.

@@ -72,15 +72,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #region Commands Implementation
 
-        protected bool CanRun()
-        {
-            return true;
-        }
+        protected bool CanRun() => true;
 
-        protected async void Run()
-        {
-            await Task.Run(() => MainController.Get().WccHelper.RunCommand(SelectedObject));
-        }
+        protected async void Run() => await Task.Run(() => MainController.Get().WccHelper.RunCommand(SelectedObject));
 
         #endregion Commands Implementation
     }

@@ -11,10 +11,7 @@ namespace WolvenKit.Functionality.Behavior
     {
         #region Methods
 
-        protected override void OnAttached()
-        {
-            AssociatedObject.SelectedItemChanged += AssociatedObject_SelectedItemChanged;
-        }
+        protected override void OnAttached() => AssociatedObject.SelectedItemChanged += AssociatedObject_SelectedItemChanged;
 
         private void AssociatedObject_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {

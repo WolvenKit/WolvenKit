@@ -19,10 +19,7 @@ namespace WolvenKit.MVVM.Model
         /// </summary>
         /// <param name="ddsImage"></param>
         /// <returns></returns>
-        public static byte[] Dds2Bytes(byte[] ddsImage)
-        {
-            return ddsImage.Length > 128 ? ddsImage.Skip(128).ToArray() : new byte[0];
-        }
+        public static byte[] Dds2Bytes(byte[] ddsImage) => ddsImage.Length > 128 ? ddsImage.Skip(128).ToArray() : new byte[0];
 
         /// <summary>
         /// Create a System.Drawing.Bitmap from a byte array with Pfim

@@ -343,11 +343,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-        private void ExecuteCutFile()
-        {
+        private void ExecuteCutFile() =>
             // TODO: Handle command logic here
             throw new NotImplementedException();
-        }
 
         private async void ExecuteDeleteFile()
         {
@@ -632,10 +630,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-        private Task ProjectManagerOnProjectRefreshRequiredAsync(object sender, ProjectEventArgs e)
-        {
-            return Task.CompletedTask;
-        }
+        private Task ProjectManagerOnProjectRefreshRequiredAsync(object sender, ProjectEventArgs e) => Task.CompletedTask;
 
         private void RepopulateTreeView()
         {
@@ -778,16 +773,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// <summary>
         /// Initialize Avalondock specific defaults that are specific to this tool window.
         /// </summary>
-        private void SetupToolDefaults()
-        {
-            ContentId = ToolContentId;           // Define a unique contentid for this toolwindow
-
-            //BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow
-            //bi.BeginInit();
-            //bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
-            //bi.EndInit();
-            //IconSource = bi;
-        }
+        private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
         private void Treenodes_ListChanged(object sender, ListChangedEventArgs e)
         {

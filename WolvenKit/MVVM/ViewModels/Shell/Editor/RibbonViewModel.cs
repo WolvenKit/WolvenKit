@@ -131,12 +131,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 .RegisterCommand(AppCommands.Application.ViewSelected, ViewSelectedCommand, this);
         }
 
-        protected override Task CloseAsync()
-        {
+        protected override Task CloseAsync() =>
             // TODO: Unsubscribe from events
 
-            return base.CloseAsync();
-        }
+            base.CloseAsync();
 
         #endregion methods
     }

@@ -289,22 +289,16 @@ namespace WolvenKit.Functionality.Controllers
             return textureManager;
         }
 
-        public override List<IGameArchiveManager> GetArchiveManagersManagers()
+        public override List<IGameArchiveManager> GetArchiveManagersManagers() => new()
         {
-            return new()
-            {
-                bundleManager,
-                textureManager,
-                collisionManager,
-                soundManager,
-                speechManager
-            };
-        }
+            bundleManager,
+            textureManager,
+            collisionManager,
+            soundManager,
+            speechManager
+        };
 
-        public override List<string> GetAvaliableClasses()
-        {
-            return CR2WTypeManager.AvailableTypes.ToList();
-        }
+        public override List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
 
         //TODO: make this async Tasks?
         public override async Task HandleStartup()
@@ -321,11 +315,9 @@ namespace WolvenKit.Functionality.Controllers
             await Task.CompletedTask;
         }
 
-        public override Task<bool> PackageMod()
-        {
+        public override Task<bool> PackageMod() =>
             //TODO: Create wkpackage from the mod
-            return Task.FromResult(true);
-        }
+            Task.FromResult(true);
 
         public async override Task<bool> PackAndInstallProject()
         {

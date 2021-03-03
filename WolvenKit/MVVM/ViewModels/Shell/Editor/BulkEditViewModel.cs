@@ -189,10 +189,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             return true;
         }
 
-        protected async void Run()
-        {
-            await Task.Run(() => RunBulkEditInternal(Options));
-        }
+        protected async void Run() => await Task.Run(() => RunBulkEditInternal(Options));
 
         #endregion Commands Implementation
 

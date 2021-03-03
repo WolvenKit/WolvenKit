@@ -11,25 +11,13 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 {
     public static class UIHelper
     {
-        public static void Bind(object dataSource, string sourcePath, FrameworkElement destinationObject, DependencyProperty dp)
-        {
-            Bind(dataSource, sourcePath, destinationObject, dp, null, BindingMode.Default, null);
-        }
+        public static void Bind(object dataSource, string sourcePath, FrameworkElement destinationObject, DependencyProperty dp) => Bind(dataSource, sourcePath, destinationObject, dp, null, BindingMode.Default, null);
 
-        public static void Bind(object dataSource, string sourcePath, FrameworkElement destinationObject, DependencyProperty dp, BindingMode bindingMode)
-        {
-            Bind(dataSource, sourcePath, destinationObject, dp, null, bindingMode, null);
-        }
+        public static void Bind(object dataSource, string sourcePath, FrameworkElement destinationObject, DependencyProperty dp, BindingMode bindingMode) => Bind(dataSource, sourcePath, destinationObject, dp, null, bindingMode, null);
 
-        public static void Bind(object dataSource, string sourcePath, FrameworkElement destinationObject, DependencyProperty dp, string stringFormat)
-        {
-            Bind(dataSource, sourcePath, destinationObject, dp, stringFormat, BindingMode.Default, null);
-        }
+        public static void Bind(object dataSource, string sourcePath, FrameworkElement destinationObject, DependencyProperty dp, string stringFormat) => Bind(dataSource, sourcePath, destinationObject, dp, stringFormat, BindingMode.Default, null);
 
-        public static void Bind(object dataSource, string sourcePath, FrameworkElement destinationObject, DependencyProperty dp, string stringFormat, BindingMode bindingMode)
-        {
-            Bind(dataSource, sourcePath, destinationObject, dp, stringFormat, bindingMode, null);
-        }
+        public static void Bind(object dataSource, string sourcePath, FrameworkElement destinationObject, DependencyProperty dp, string stringFormat, BindingMode bindingMode) => Bind(dataSource, sourcePath, destinationObject, dp, stringFormat, bindingMode, null);
 
         public static void Bind(object dataSource, string sourcePath, FrameworkElement destinationObject, DependencyProperty dp, string stringFormat, BindingMode bindingMode, IValueConverter converter)
         {

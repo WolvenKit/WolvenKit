@@ -6,8 +6,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
     {
         #region Methods
 
-        public int RadioVolume()
-        {
+        public int RadioVolume() =>
             //get
             //{
             //    if (RadioPlayerView.RadioChannel != null)
@@ -29,8 +28,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
             //        }
             //    }
             //}
-            return 0;
-        }
+            0;
 
         #endregion Methods
     }

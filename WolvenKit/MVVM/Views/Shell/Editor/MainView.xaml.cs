@@ -91,34 +91,32 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
 
         private bool CanLoadLayout(object parameter) => LayoutLoader.CanLoadLayout();
 
-        private void OnLayoutLoaded_Event(object sender, LayoutLoadedEventArgs layoutLoadedEvent)
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                try
-                {
+        private void OnLayoutLoaded_Event(object sender, LayoutLoadedEventArgs layoutLoadedEvent) => Application.Current.Dispatcher.Invoke(() =>
+                                                                                                   {
+                                                                                                       try
+                                                                                                       {
                     // Process the finally block since we have nothing to do here
                     var result = layoutLoadedEvent?.Result;
-                    if (result == null)
-                    {
-                        return;
-                    }
+                                                                                                           if (result == null)
+                                                                                                           {
+                                                                                                               return;
+                                                                                                           }
 
-                    if (result.LoadwasSuccesful)
-                    {
+                                                                                                           if (result.LoadwasSuccesful)
+                                                                                                           {
                         // Make sure AvalonDock control is visible at the end of restoring layout
                         var stringLayoutSerializer = new XmlLayoutSerializer(dockManager);
 
-                        using var reader = new StringReader(result.XmlContent);
-                        stringLayoutSerializer.Deserialize(reader);
-                    }
-                }
-                catch (Exception exception)
-                {
-                    Debug.WriteLine(exception);
-                }
-                finally
-                {
+                                                                                                               using var reader = new StringReader(result.XmlContent);
+                                                                                                               stringLayoutSerializer.Deserialize(reader);
+                                                                                                           }
+                                                                                                       }
+                                                                                                       catch (Exception exception)
+                                                                                                       {
+                                                                                                           Debug.WriteLine(exception);
+                                                                                                       }
+                                                                                                       finally
+                                                                                                       {
                     // Make sure AvalonDock control is visible at the end of restoring layout
                     dockManager.SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
@@ -130,8 +128,7 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
                     //    .GetCommand(AppCommands.Application.ShowProjectExplorer)
                     //    .SafeExecute(true);
                 }
-            }, System.Windows.Threading.DispatcherPriority.Background);
-        }
+                                                                                                   }, System.Windows.Threading.DispatcherPriority.Background);
 
         private async void OnLoadLayoutAsync(object parameter = null)
         {

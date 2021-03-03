@@ -65,9 +65,6 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
             await _fswvm.CloseViewModelAsync(null);
         }
 
-        private void CancelSettings_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            _fswvm.CloseViewModelAsync(null);
-        }
+        private void CancelSettings_Click(object sender, System.Windows.RoutedEventArgs e) => _fswvm.CloseViewModelAsync(null);
     }
 }

@@ -99,10 +99,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-        private void OnUpdateInstalled(object sender, EventArgs e)
-        {
-            IsUpdatedInstalled = _updateService.IsUpdatedInstalled;
-        }
+        private void OnUpdateInstalled(object sender, EventArgs e) => IsUpdatedInstalled = _updateService.IsUpdatedInstalled;
 
         private void UpdateAutoUpdateInfo()
         {

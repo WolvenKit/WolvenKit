@@ -42,33 +42,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #region methods
 
-        protected override Task CloseAsync()
-        {
+        protected override Task CloseAsync() =>
             // TODO: Unsubscribe from events
 
-            return base.CloseAsync();
-        }
+            base.CloseAsync();
 
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
-
-            // TODO: Write initialization code here and subscribe to events
-        }
+        protected override async Task InitializeAsync() => await base.InitializeAsync();// TODO: Write initialization code here and subscribe to events
 
         /// <summary>
         /// Initialize Avalondock specific defaults that are specific to this tool window.
         /// </summary>
-        private void SetupToolDefaults()
-        {
-            ContentId = ToolContentId;           // Define a unique contentid for this toolwindow
-
-            //BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow
-            //bi.BeginInit();
-            //bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
-            //bi.EndInit();
-            //IconSource = bi;
-        }
+        private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
         #endregion methods
     }
