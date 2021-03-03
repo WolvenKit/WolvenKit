@@ -10,7 +10,7 @@ using System.Windows.Media;
 using WolvenKit.Views;
 using Orc.Squirrel;
 using WolvenKit.ViewModels;
-using WolvenKit.Views.Wizards;
+using WolvenKit.MVVM.Views.Components.Wizards;
 using WolvenKit.ViewModels.AssetBrowser;
 using WolvenKit.Views.AssetBrowser;
 using WolvenKit.Views.AudioTool.Radio;
@@ -50,17 +50,17 @@ using WolvenKit.ViewModels.RadishTool;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Wizards;
-using WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard;
-using WolvenKit.Views.Wizards.WizardPages.BugReportWizard;
+using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard;
+using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.BugReportWizard;
 using WolvenKit.ViewModels.Wizards.WizardPages.BugReportWizard;
-using WolvenKit.Views.Wizards.WizardPages.FeedbackWizard;
+using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FeedbackWizard;
 using WolvenKit.ViewModels.Wizards.WizardPages.FeedbackWizard;
 using WolvenKit.ViewModels.Wizards.WizardPages.FirstSetupWizard;
 using WolvenKit.ViewModels.Wizards.WizardPages.PublishWizard;
 using WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard;
-using WolvenKit.Views.Wizards.WizardPages.ProjectWizard;
-using WolvenKit.Views.Wizards.WizardPages.PublishWizard;
-using WolvenKit.Views.Wizards.WizardPages.UserWizard;
+using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard;
+using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.PublishWizard;
+using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.UserWizard;
 using WolvenKit.ViewModels.Wizards.WizardPages.UserWizard;
 using WolvenKit.ViewModels.SettingsPages;
 using WolvenKit.ViewModels.SettingsPages.SubPages.Editor;
@@ -196,12 +196,12 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.Register(typeof(ProjectWizardView), typeof(ProjectWizardViewModel));
             viewModelLocator.Register(typeof(SelectProjectTypeView), typeof(SelectProjectTypeViewModel));
             viewModelLocator.Register(typeof(ProjectConfigurationView), typeof(ProjectConfigurationViewModel));
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(ViewModels.Wizards.WizardPages.ProjectWizard.FinalizeSetupViewModel));
+            viewModelLocator.Register(typeof(MVVM.Views.Components.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(ViewModels.Wizards.WizardPages.ProjectWizard.FinalizeSetupViewModel));
             //-- Category : PublishWizard
             viewModelLocator.Register(typeof(PublishWizardView), typeof(PublishWizardViewModel));
             viewModelLocator.Register(typeof(RequiredSettingsView), typeof(RequiredSettingsViewModel));
             viewModelLocator.Register(typeof(OptionalSettingsView), typeof(OptionalSettingsViewModel));
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.WizardPages.PublishWizard.FinalizeSetupViewModel));
+            viewModelLocator.Register(typeof(MVVM.Views.Components.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.WizardPages.PublishWizard.FinalizeSetupViewModel));
             viewModelLocator.Register(typeof(W3PackSettingsView), typeof(W3PackSettingsViewModel));
             //-- Category : FirstSetupWizard 
             viewModelLocator.Register(typeof(FirstSetupWizardView), typeof(FirstSetupWizardViewModel));
@@ -209,7 +209,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.Register(typeof(SelectThemeView), typeof(SelectThemeViewModel));
             viewModelLocator.Register(typeof(SetInitialPreferencesView), typeof(SetInitialPreferencesViewModel));
             viewModelLocator.Register(typeof(LocateGameDateView), typeof(LocateGameDataViewModel));
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.FirstSetupWizard.FinalizeSetupView), typeof(ViewModels.Wizards.WizardPages.FirstSetupWizard.FinalizeSetupViewModel));
+            viewModelLocator.Register(typeof(MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard.FinalizeSetupView), typeof(ViewModels.Wizards.WizardPages.FirstSetupWizard.FinalizeSetupViewModel));
             //-- Category : FeedBackWizard 
             viewModelLocator.Register(typeof(FeedbackWizardView), typeof(FeedbackWizardViewModel));
             viewModelLocator.Register(typeof(RateView), typeof(RateViewModel));

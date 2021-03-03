@@ -2,7 +2,7 @@
 using Catel.IoC;
 using WolvenKit.ViewModels.Wizards;
 
-namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
+namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
 {
     public partial class SetInitialPreferencesView
     {

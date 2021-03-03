@@ -21,7 +21,7 @@ using WolvenKit.Views.JournalEditor;
 using WolvenKit.Views.RadishTool;
 using WolvenKit.Views.Tools.MenuTool;
 using WolvenKit.Views.WccTool;
-using WolvenKit.Views.Wizards;
+using WolvenKit.MVVM.Views.Components.Wizards;
 
 
 namespace WolvenKit.ViewModels.HomePage.Pages

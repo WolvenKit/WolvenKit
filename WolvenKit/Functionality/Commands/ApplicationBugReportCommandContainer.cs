@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Common.Services;
 using WolvenKit.ViewModels;
-using WolvenKit.Views.Wizards;
+using WolvenKit.MVVM.Views.Components.Wizards;
 using WolvenKit.Views;
 using Orc.ProjectManagement;
 using Catel;

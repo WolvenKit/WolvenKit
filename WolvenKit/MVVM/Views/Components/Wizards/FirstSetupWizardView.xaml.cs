@@ -2,9 +2,9 @@
 using Catel.IoC;
 using Catel.MVVM;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard;
+using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard;
 
-namespace WolvenKit.Views.Wizards
+namespace WolvenKit.MVVM.Views.Components.Wizards
 {
     public partial class FirstSetupWizardView
     {

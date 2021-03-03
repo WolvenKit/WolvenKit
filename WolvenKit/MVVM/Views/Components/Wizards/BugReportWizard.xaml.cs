@@ -1,7 +1,7 @@
 
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.Views.Wizards
+namespace WolvenKit.MVVM.Views.Components.Wizards
 {
     public partial class BugReportWizard
     {

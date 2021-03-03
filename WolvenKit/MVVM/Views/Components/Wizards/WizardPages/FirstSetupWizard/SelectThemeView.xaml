@@ -6,7 +6,7 @@
     xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="av"
-    x:Class="WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard.SelectThemeView"
+    x:Class="WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard.SelectThemeView"
     Initialized="UserControl_Initialized_1"
     Loaded="UserControl_Loaded">
 

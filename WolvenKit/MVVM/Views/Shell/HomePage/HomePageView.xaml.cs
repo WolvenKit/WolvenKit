@@ -1,24 +1,18 @@
-using Catel.IoC;
 using Fluent;
 using HandyControl.Controls;
 using HandyControl.Data;
 using HandyControl.Tools;
 using Octokit;
-using Orchestra.Services;
-using Orchestra.Views;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels;
-using WolvenKit.ViewModels.Wizards;
-using WolvenKit.Views.AudioTool.Radio;
 using WolvenKit.MVVM.Views.Shell.HomePage.Pages;
-using WolvenKit.Views.Wizards;
 using WolvenKit.Views;
+using WolvenKit.MVVM.Views.Components.Wizards;
 
 namespace WolvenKit.MVVM.Views.Shell.HomePage
 {

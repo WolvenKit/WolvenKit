@@ -4,7 +4,7 @@ using Catel.MVVM;
 using Catel.Services;
 using Orc.ProjectManagement;
 using WolvenKit.Common.Services;
-using WolvenKit.Views.Wizards;
+using WolvenKit.MVVM.Views.Components.Wizards;
 using WolvenKit.ViewModels;
 using Orchestra.Services;
 using WolvenKit.Functionality.WKitGlobal;

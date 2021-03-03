@@ -1,8 +1,5 @@
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using HandyControl.Controls;
-using WolvenKit.Functionality.Extensions;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels;
 
@@ -19,12 +16,12 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
 		/// Class constructor
 		/// </summary>
 		public DocumentView()
-        {
-            InitializeComponent();
+		{
+			InitializeComponent();
 
-            WeakEventManager<FrameworkElement, RoutedEventArgs>
+			WeakEventManager<FrameworkElement, RoutedEventArgs>
 				.AddHandler(this, "Loaded", View_LoadedAsync);
-        }
+		}
 
 		/// <summary>
 		/// Initializes the viewmodel and view as soon as the view is loaded.
@@ -42,10 +39,10 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
 			_viewInitialized = true;                    // We'll try this only once
 
 
-            if (DataContext is not IDocumentViewModel vm)
-                return;
+			if (DataContext is not IDocumentViewModel vm)
+				return;
 
-            try
+			try
 			{
 				bool result = await vm.OpenFileWithInitialPathAsync();
 
@@ -59,12 +56,12 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
 			}
 		}
 
-        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
+		private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+		{
 			if (this.IsVisible)
 			{
 				DiscordHelper.SetDiscordRPCStatus("Document View");
 			}
 		}
-    }
+	}
 }

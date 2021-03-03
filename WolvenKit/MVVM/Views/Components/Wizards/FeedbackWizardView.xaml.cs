@@ -1,8 +1,7 @@
 
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Views.Wizards.WizardPages.FeedbackWizard;
 
-namespace WolvenKit.Views.Wizards
+namespace WolvenKit.MVVM.Views.Components.Wizards
 {
     public partial class FeedbackWizardView
     {

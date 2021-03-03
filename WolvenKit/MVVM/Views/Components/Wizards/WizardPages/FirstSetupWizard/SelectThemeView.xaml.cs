@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using WolvenKit.ViewModels.Wizards;
 
-namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
+namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
 {
     public partial class SelectThemeView
     {

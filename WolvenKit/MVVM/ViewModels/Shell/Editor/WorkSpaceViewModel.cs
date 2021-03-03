@@ -15,7 +15,7 @@ using Catel.MVVM;
 using Catel;
 using Catel.IoC;
 using Orc.ProjectManagement;
-using WolvenKit.Views.Wizards;
+using WolvenKit.MVVM.Views.Components.Wizards;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 using WolvenKit.Model;
 using WolvenKit.Functionality.Commands;

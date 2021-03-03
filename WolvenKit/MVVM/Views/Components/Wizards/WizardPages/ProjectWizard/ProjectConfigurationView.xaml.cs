@@ -5,7 +5,7 @@ using HandyControl.Controls;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard;
 
-namespace WolvenKit.Views.Wizards.WizardPages.ProjectWizard
+namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard
 {
     public partial class ProjectConfigurationView
     {

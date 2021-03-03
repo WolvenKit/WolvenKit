@@ -1,5 +1,5 @@
 ﻿
-namespace WolvenKit.Views.Wizards.WizardPages.PublishWizard
+namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.PublishWizard
 {
     public partial class FinalizeSetupView
     {

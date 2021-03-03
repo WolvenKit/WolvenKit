@@ -6,7 +6,7 @@
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                    xmlns:hc="https://handyorg.github.io/handycontrol" 
-                   xmlns:wiz="clr-namespace:WolvenKit.Views.Wizards"
+                 
                    xmlns:pag="clr-namespace:WolvenKit.MVVM.Views.Shell.HomePage.Pages"
                    mc:Ignorable="av" >
     
