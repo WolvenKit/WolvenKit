@@ -3,15 +3,14 @@ using Catel;
 using Catel.MVVM;
 using Catel.Services;
 using Orc.ProjectManagement;
-using WolvenKit.Functionality.Services;
+using WolvenKit.Common.Services;
+using WolvenKit.Views.Wizards;
+using WolvenKit.ViewModels;
+using Orchestra.Services;
+using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.Functionality.Commands
 {
-    using Common.Services;
-    using WolvenKit.Views.Wizards;
-    using WolvenKit.ViewModels;
-    using Orchestra.Services;
-
     public class ApplicationNewProjectCommandContainer : ProjectCommandContainerBase
     {
         private readonly ILoggerService _loggerService;

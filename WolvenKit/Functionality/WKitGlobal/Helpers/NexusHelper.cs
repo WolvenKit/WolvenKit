@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolvenKit.WKitGlobal
+namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
     public static class NexusHelper
     {

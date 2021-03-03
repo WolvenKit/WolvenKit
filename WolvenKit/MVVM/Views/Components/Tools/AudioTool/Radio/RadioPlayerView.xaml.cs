@@ -1,4 +1,5 @@
-﻿
+
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.AudioTool.Radio;
 
 namespace WolvenKit.Views.AudioTool.Radio
@@ -52,7 +53,7 @@ namespace WolvenKit.Views.AudioTool.Radio
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Radio Player");
+                DiscordHelper.SetDiscordRPCStatus("Radio Player");
             }
         }
     }

@@ -12,6 +12,7 @@ using Catel.MVVM;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.ViewModels;
 using WolvenKit.Functionality.Layout.MLib;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Views
 {
@@ -33,7 +34,7 @@ namespace WolvenKit.Views
             var path = Path.GetFullPath(AvalonDockConfigPath);
             LayoutLoader = new LayoutLoader(AvalonDockConfigPath);
 
-            WKitGlobal.StaticReferences.MainView = this;
+            StaticReferences.MainView = this;
         }
 
         /// <summary>
@@ -170,8 +171,9 @@ namespace WolvenKit.Views
         {
 			if (this.IsVisible && this.IsLoaded)
 			{
-				WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Main View");
+				DiscordHelper.SetDiscordRPCStatus("Main View");
 			}
 		}
     }
 }
+

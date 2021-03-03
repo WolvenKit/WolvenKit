@@ -1,5 +1,4 @@
-﻿
-using Catel.Windows;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Views.JournalEditor
 {
@@ -14,7 +13,7 @@ namespace WolvenKit.Views.JournalEditor
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Journal Editor");
+                DiscordHelper.SetDiscordRPCStatus("Journal Editor");
             }
         }
     }

@@ -29,7 +29,7 @@
     <catel:UserControl.Resources>
         <DrawingBrush o:Freeze="True"   Opacity=".02" x:Key="CloudDrawingBrushMain" RenderOptions.CacheInvalidationThresholdMinimum="0.5" RenderOptions.CacheInvalidationThresholdMaximum="2.0" RenderOptions.CachingHint="Cache"  Viewport="0,0,90,90" ViewportUnits="Absolute" Stretch="Uniform"  TileMode="Tile">
             <DrawingBrush.Drawing>
-                <ImageDrawing o:Freeze="True"   ImageSource="pack://application:,,,/Resources/Icons/SeeTroughIcon.png" Rect="0,0,70,80"/>
+                <ImageDrawing o:Freeze="True"   ImageSource="pack://application:,,,/Resources/Media/Images/Application/SeeTroughIcon.png" Rect="0,0,70,80"/>
             </DrawingBrush.Drawing>
         </DrawingBrush>
     </catel:UserControl.Resources>

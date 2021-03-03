@@ -1,4 +1,6 @@
-﻿
+
+using WolvenKit.Functionality.WKitGlobal.Helpers;
+
 namespace WolvenKit.Views.Wizards
 {
     public partial class InstallerWizardView
@@ -12,7 +14,7 @@ namespace WolvenKit.Views.Wizards
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Installer Wizard");
+                DiscordHelper.SetDiscordRPCStatus("Installer Wizard");
             }
         }
     }

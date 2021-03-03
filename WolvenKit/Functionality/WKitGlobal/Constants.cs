@@ -5,7 +5,7 @@ using InputGesture = Catel.Windows.Input.InputGesture;
 using DiscordRPC.Message;
 
 
-namespace WolvenKit
+namespace WolvenKit.Functionality.WKitGlobal
 {
     public static class AppCommands
     {

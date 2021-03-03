@@ -23,7 +23,7 @@ namespace WolvenKit.Functionality.Layout.Converters
             if (!string.IsNullOrEmpty(extension))
             {
                 string result = GetSmallIconForFileType(extension);
-                var uri = new Uri("pack://application:,,,/WolvenKit;component/Resources/Images/" + result);
+                var uri = new Uri("pack://application:,,,/WolvenKit;component/Resources/Media/Images/" + result);
 
                 return uri;
             }

@@ -4,6 +4,7 @@ using Catel.Services;
 using Orchestra;
 using System.Threading.Tasks;
 using WolvenKit;
+using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.Functionality.Commands
 {

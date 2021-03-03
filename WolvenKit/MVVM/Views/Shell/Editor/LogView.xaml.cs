@@ -20,6 +20,7 @@ namespace WolvenKit.Views
     using Common.Services;
     using Functionality.Extensions;
     using MahApps.Metro.Controls;
+    using WolvenKit.Functionality.WKitGlobal.Helpers;
 
     /// <summary>
     /// Interaction logic for LogView.xaml
@@ -92,7 +93,7 @@ namespace WolvenKit.Views
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Log View");
+                DiscordHelper.SetDiscordRPCStatus("Log View");
             }
         }
 

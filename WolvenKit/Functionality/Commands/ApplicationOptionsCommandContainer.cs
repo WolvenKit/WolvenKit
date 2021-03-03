@@ -5,6 +5,7 @@ using Orchestra;
 using Orchestra.Services;
 using System.Threading.Tasks;
 using WolvenKit;
+using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.Functionality.Commands
 {

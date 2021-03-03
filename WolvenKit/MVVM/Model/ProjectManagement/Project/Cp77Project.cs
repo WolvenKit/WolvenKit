@@ -22,7 +22,7 @@ using CP77.CR2W.Archive;
 using HandyControl.Controls;
 using System.Windows;
 using System.Windows.Threading;
-using WolvenKit.WKitGlobal;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Model
 {

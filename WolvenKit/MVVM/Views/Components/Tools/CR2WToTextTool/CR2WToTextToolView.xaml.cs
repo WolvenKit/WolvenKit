@@ -1,4 +1,6 @@
-﻿
+
+using WolvenKit.Functionality.WKitGlobal.Helpers;
+
 namespace WolvenKit.Views.CR2WToTextTool
 {
     public partial class CR2WToTextToolView
@@ -12,7 +14,7 @@ namespace WolvenKit.Views.CR2WToTextTool
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("CR2W To Text Tool");
+                DiscordHelper.SetDiscordRPCStatus("CR2W To Text Tool");
             }
         }
     }

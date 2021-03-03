@@ -8,7 +8,7 @@ namespace WolvenKit.Functionality.Services
     {
         public AboutInfo GetAboutInfo()
         {
-            var aboutInfo = new AboutInfo(new Uri("pack://application:,,,/Resources/Images/CompanyLogo.png", UriKind.RelativeOrAbsolute),
+            var aboutInfo = new AboutInfo(new Uri("pack://application:,,,/Resources/Media/Images/Application/CompanyLogo.png", UriKind.RelativeOrAbsolute),
                 uriInfo: new UriInfo("https://github.com/WolvenKit/Wolven-kit", "Github Page"));
 
             return aboutInfo;

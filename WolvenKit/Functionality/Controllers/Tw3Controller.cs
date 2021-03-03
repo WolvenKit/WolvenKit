@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Catel.IoC;
 using Catel.Linq;
-using log4net.Repository.Hierarchy;
 using Newtonsoft.Json;
 using ProtoBuf;
 using WolvenKit.Common;
@@ -17,15 +16,16 @@ using WolvenKit.CR2W.Types;
 using WolvenKit.Model;
 using WolvenKit.Wwise;
 using WolvenKit.Wwise.Wwise;
+using WolvenKit.Functionality.Services;
+using WolvenKit.Bundles;
+using WolvenKit.Cache;
+using WolvenKit.Common.Services;
+using WolvenKit.W3Speech;
+using WolvenKit.W3Strings;
+using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.Functionality.Controllers
 {
-    using Functionality.Services;
-    using Bundles;
-    using Cache;
-    using Common.Services;
-    using W3Speech;
-    using W3Strings;
     public class Tw3Controller : GameControllerBase
     {
         private static BundleManager bundleManager;

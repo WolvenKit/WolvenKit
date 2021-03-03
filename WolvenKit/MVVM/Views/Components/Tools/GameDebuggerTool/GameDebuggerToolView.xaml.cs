@@ -1,4 +1,6 @@
-﻿
+
+using WolvenKit.Functionality.WKitGlobal.Helpers;
+
 namespace WolvenKit.Views.GameDebuggerTool
 {
     public partial class GameDebuggerToolView
@@ -12,7 +14,7 @@ namespace WolvenKit.Views.GameDebuggerTool
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Game Debugger");
+                DiscordHelper.SetDiscordRPCStatus("Game Debugger");
             }
         }
     }

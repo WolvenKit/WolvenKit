@@ -1,9 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OpenFileView.xaml.cs" company="WildGums">
 //   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Views
 {
@@ -20,7 +22,7 @@ namespace WolvenKit.Views
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Backstage - Open File");
+                DiscordHelper.SetDiscordRPCStatus("Backstage - Open File");
             }
         }
     }

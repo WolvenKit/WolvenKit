@@ -1,4 +1,4 @@
-﻿
+
 using HandyControl.Controls;
 using HandyControl.Data;
 using HandyControl.Tools;
@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
@@ -25,7 +26,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("About Page");
+                DiscordHelper.SetDiscordRPCStatus("About Page");
             }
         }
 

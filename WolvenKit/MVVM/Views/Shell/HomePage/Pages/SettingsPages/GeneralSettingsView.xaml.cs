@@ -1,4 +1,5 @@
-﻿
+
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Views.SettingsPages.SubPages.General;
 
 namespace WolvenKit.Views.SettingsPages
@@ -76,7 +77,7 @@ namespace WolvenKit.Views.SettingsPages
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Setting - General");
+                DiscordHelper.SetDiscordRPCStatus("Setting - General");
             }
         }
     }

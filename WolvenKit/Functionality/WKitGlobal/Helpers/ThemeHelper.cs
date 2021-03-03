@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
 
-namespace WolvenKit.WKitGlobal
+namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
     public static class ThemeHelper
     {

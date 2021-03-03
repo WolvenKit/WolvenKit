@@ -61,7 +61,7 @@ namespace WolvenKit.ViewModels
 
             //BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow
             //bi.BeginInit();
-            //bi.UriSource = new Uri("pack://application:,,/Resources/Images/property-blue.png");
+            //bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
             //bi.EndInit();
             //IconSource = bi;
         }

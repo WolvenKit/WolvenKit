@@ -3,6 +3,7 @@ using Catel.Windows;
 using ICSharpCode.AvalonEdit.Folding;
 using System.Windows;
 using System.Windows.Controls;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Views.CodeEditor
 {
@@ -35,7 +36,7 @@ namespace WolvenKit.Views.CodeEditor
         {
             if (this.IsVisible)
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Code Editor");
+                DiscordHelper.SetDiscordRPCStatus("Code Editor");
             }
         }
     }

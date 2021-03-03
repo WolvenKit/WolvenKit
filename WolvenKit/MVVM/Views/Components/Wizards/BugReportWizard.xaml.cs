@@ -1,4 +1,6 @@
-﻿
+
+using WolvenKit.Functionality.WKitGlobal.Helpers;
+
 namespace WolvenKit.Views.Wizards
 {
     public partial class BugReportWizard
@@ -12,7 +14,7 @@ namespace WolvenKit.Views.Wizards
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Bug Report Wizard");
+                DiscordHelper.SetDiscordRPCStatus("Bug Report Wizard");
             }
         }
     }

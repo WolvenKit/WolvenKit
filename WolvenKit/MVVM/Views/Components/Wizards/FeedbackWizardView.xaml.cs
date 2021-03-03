@@ -1,4 +1,5 @@
-﻿
+
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Views.Wizards.WizardPages.FeedbackWizard;
 
 namespace WolvenKit.Views.Wizards
@@ -14,7 +15,7 @@ namespace WolvenKit.Views.Wizards
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Feedback Wizard");
+                DiscordHelper.SetDiscordRPCStatus("Feedback Wizard");
             }
         }
     }

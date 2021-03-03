@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using HandyControl.Controls;
 using WolvenKit.Functionality.Extensions;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels;
 
 namespace WolvenKit.Views
@@ -63,7 +64,7 @@ namespace WolvenKit.Views
         {
 			if (this.IsVisible)
 			{
-				WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Document View");
+				DiscordHelper.SetDiscordRPCStatus("Document View");
 			}
 		}
     }

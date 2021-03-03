@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.AudioTool;
 using WPFSoundVisualizationLib;
 
@@ -330,7 +331,7 @@ namespace WolvenKit.Views.AudioTool
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Audio Tool");
+                DiscordHelper.SetDiscordRPCStatus("Audio Tool");
             }
         }
     }

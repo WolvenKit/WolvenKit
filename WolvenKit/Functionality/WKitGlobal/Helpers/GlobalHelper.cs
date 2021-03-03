@@ -1,14 +1,10 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Catel.MVVM;
 using Orchestra.Views;
 using WolvenKit.ViewModels;
 using WolvenKit.Views;
 
-namespace WolvenKit.WKitGlobal
+namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
     public class GlobalHelper { } // Template.
 
@@ -36,13 +32,6 @@ namespace WolvenKit.WKitGlobal
     ///
     /// Please do add ideas. But please tell me why or what you did <3
     /// </summary>
-
-    public class WorkFlowHelper
-    {
-
-
-
-    }
 
     public class ProjectWorkFlow
     {

@@ -16,21 +16,20 @@ using Catel.Services;
 using Catel.Threading;
 using Orc.FileSystem;
 using Orc.ProjectManagement;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Model;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
-using WolvenKit.CR2W;
 using WolvenKit.Model.ProjectManagement;
 using Open.ChannelExtensions;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.ViewModels
 {
-    
+
     public class ProjectExplorerViewModel : ToolViewModel
     {
         #region fields
@@ -623,7 +622,7 @@ namespace WolvenKit.ViewModels
 
             //BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow
             //bi.BeginInit();
-            //bi.UriSource = new Uri("pack://application:,,/Resources/Images/property-blue.png");
+            //bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
             //bi.EndInit();
             //IconSource = bi;
         }

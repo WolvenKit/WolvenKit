@@ -1,4 +1,6 @@
-﻿
+
+using WolvenKit.Functionality.WKitGlobal.Helpers;
+
 namespace WolvenKit.Views.HexEditor
 {
     public partial class HexEditorView
@@ -12,7 +14,7 @@ namespace WolvenKit.Views.HexEditor
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Hex Editor");           
+                DiscordHelper.SetDiscordRPCStatus("Hex Editor");           
             }
         }
     }

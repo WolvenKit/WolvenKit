@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using WolvenKit.Common.DDS;
+using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.Functionality.Controllers
 {
-    using Common.Model;
-
     public class Configuration
     {
         public static string ConfigurationPath

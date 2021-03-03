@@ -1,5 +1,6 @@
-﻿
+
 using System.Windows;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
@@ -15,7 +16,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Wiki");
+                DiscordHelper.SetDiscordRPCStatus("Wiki");
             }
 
         }

@@ -1,4 +1,6 @@
-﻿
+
+using WolvenKit.Functionality.WKitGlobal.Helpers;
+
 namespace WolvenKit.Views.IntegratedToolsPages.CyberCAT
 {
     public partial class CyberCATPageView
@@ -13,7 +15,7 @@ namespace WolvenKit.Views.IntegratedToolsPages.CyberCAT
 
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("CyberCAT Save Editor");
+                DiscordHelper.SetDiscordRPCStatus("CyberCAT Save Editor");
             }
 
 

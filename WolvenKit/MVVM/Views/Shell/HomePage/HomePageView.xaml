@@ -176,7 +176,7 @@
             <Grid VerticalAlignment="Top" Margin="0,15,0,0" >
                 <Border  CornerRadius="0,0,0,0">
                     <Grid>
-                        <Image MouseLeftButtonDown="Image_MouseLeftButtonDown" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Width="152" Height="152"  Source="pack://application:,,,/Resources/Icons/3.png">
+                        <Image MouseLeftButtonDown="Image_MouseLeftButtonDown" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Width="152" Height="152"  Source="pack://application:,,,/Resources/Media/Images/Application/3.png">
 
                         </Image>
 

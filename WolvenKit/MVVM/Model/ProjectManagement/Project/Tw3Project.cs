@@ -6,25 +6,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Catel.IoC;
-using WolvenKit.WKitGlobal;
+using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
+using WolvenKit.Bundles;
+using WolvenKit.Cache;
+using WolvenKit.Common;
+using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
+using WolvenKit.CR2W;
+using WolvenKit.W3Speech;
+using WolvenKit.W3Strings;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Model
 {
-    using Functionality.Controllers;
-    using Functionality.Services;
-    using Bundles;
-    using Cache;
-    using Common;
-    using Common.Model;
-    using Common.Services;
-    using CR2W;
-    using CR2W.Types;
-    using W3Speech;
-    using W3Strings;
-    using System.Windows.Threading;
-    using HandyControl.Controls;
-    using System.Windows;
-
     public sealed class Tw3Project : EditorProject, ICloneable
     {
         #region fields

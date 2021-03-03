@@ -13,6 +13,7 @@ using Orc.ProjectManagement;
 using Catel;
 using WolvenKit.Functionality.Services;
 using Orchestra.Services;
+using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.Functionality.Commands
 {

@@ -23,7 +23,6 @@ using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
 using WolvenKit.Views;
 using WolvenKit.ViewModels.AssetBrowser;
-using WolvenKit.Views.AssetBrowser;
 using WolvenKit.ViewModels.CodeEditor;
 using WolvenKit.ViewModels.CsvEditor;
 using WolvenKit.ViewModels.HexEditor;
@@ -38,9 +37,9 @@ using WolvenKit.ViewModels.PluginManager;
 using WolvenKit.ViewModels.ImporterTool;
 using WolvenKit.ViewModels.Tools.MenuTool;
 using WolvenKit.ViewModels.AnimationTool;
-using WolvenKit.ViewModels.Editors.CR2WEditor;
 using WolvenKit.Views.AudioTool;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.ViewModels
 {

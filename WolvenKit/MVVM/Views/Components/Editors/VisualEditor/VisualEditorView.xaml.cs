@@ -13,6 +13,7 @@ using NodeNetwork.Toolkit.ValueNode;
 using ReactiveUI;
 using NodeNetwork.Views;
 using WolvenKit.Views.Editors.VisualEditor.Nodes;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Views.VisualEditor
 {
@@ -114,7 +115,7 @@ namespace WolvenKit.Views.VisualEditor
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Visual Editor");
+                DiscordHelper.SetDiscordRPCStatus("Visual Editor");
             }
         }
     }

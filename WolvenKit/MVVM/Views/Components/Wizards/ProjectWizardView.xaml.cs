@@ -1,5 +1,6 @@
-﻿
+
 using Catel.IoC;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Wizards.WizardPages.ProjectWizard;
 
@@ -67,7 +68,7 @@ namespace WolvenKit.Views.Wizards
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Project Wizard");
+                DiscordHelper.SetDiscordRPCStatus("Project Wizard");
             }
         }
     }

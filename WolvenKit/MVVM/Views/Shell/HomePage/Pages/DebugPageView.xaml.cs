@@ -37,54 +37,6 @@ namespace WolvenKit.Views.HomePage.Pages
 
 
 
-        private void DialogCB_SelectionChanged(object sender, SelectionChangedEventArgs e)  // Dialog Demo  Dont have own close / minimize buttons
-        {
-            if (IsLoaded && DialogCB.SelectedItem != null)
-            {
-                var z = (Catel.Windows.Controls.UserControl)DialogCB.SelectedItem;
-                z.Margin = new System.Windows.Thickness(0, 35, 0, 0);
-                var vm = new DialogControlHostWindowViewModel(z);
-                var xd = new DialogControlHostWindowView(vm);
-                xd.Show();
-
-            }
-
-        }
-
-        private void WizardsCB_SelectionChanged(object sender, SelectionChangedEventArgs e) // Dont have own close / minimize buttons
-        {
-            if (IsLoaded && WizardsCB.SelectedItem != null)
-            {
-                var z = (Catel.Windows.Controls.UserControl)WizardsCB.SelectedItem;
-                var vm = new UserControlHostWindowViewModel(z);
-                var xd = new UserControlHostWindowView(vm);
-                xd.Show();
-
-            }
-        }
-
-        private void EditorsCB_SelectionChanged(object sender, SelectionChangedEventArgs e) // Editors should have their own close / minimize buttons 
-        {
-            if (IsLoaded && EditorsCB.SelectedItem != null)
-            {
-                var z = (Catel.Windows.Controls.UserControl)EditorsCB.SelectedItem;
-                var vm = new ToolControlHostWindowViewModel(z);
-                var xd = new ToolControlHostWindowView(vm);
-                xd.Show();
-            }
-        }
-
-        private void ToolsCB_SelectionChanged(object sender, SelectionChangedEventArgs e) // Same as for editors
-        {
-            if (IsLoaded && ToolsCB.SelectedItem != null)
-            {
-                var z = (Catel.Windows.Controls.UserControl)ToolsCB.SelectedItem;
-                var vm = new ToolControlHostWindowViewModel(z);
-                var xd = new ToolControlHostWindowView(vm);
-                xd.Show();
-
-            }
-        }
     }
 }
 

@@ -1,4 +1,6 @@
 
+using WolvenKit.Functionality.WKitGlobal.Helpers;
+
 namespace WolvenKit.Views.AnimationTool
 {
     public partial class MimicsView
@@ -12,7 +14,7 @@ namespace WolvenKit.Views.AnimationTool
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Mimics Exporter");
+                DiscordHelper.SetDiscordRPCStatus("Mimics Exporter");
             }
         }
     }

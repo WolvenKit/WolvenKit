@@ -17,6 +17,7 @@ namespace WolvenKit.Functionality.Commands
 {
     using System.Threading;
     using ViewModels;
+    using WolvenKit.Functionality.WKitGlobal;
 
     public class SettingsGeneralCommandContainer : CommandContainerBase
     {

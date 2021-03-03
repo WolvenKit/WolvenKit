@@ -1,4 +1,5 @@
-﻿
+
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Views.SettingsPages.SubPages.Tool;
 
 namespace WolvenKit.Views.SettingsPages
@@ -63,7 +64,7 @@ namespace WolvenKit.Views.SettingsPages
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Setting - Tools");
+                DiscordHelper.SetDiscordRPCStatus("Setting - Tools");
             }
         }
     }

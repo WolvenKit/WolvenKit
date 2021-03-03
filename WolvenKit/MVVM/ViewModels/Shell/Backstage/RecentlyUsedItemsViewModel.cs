@@ -5,28 +5,27 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
+using Catel;
+using Catel.Data;
+using Catel.IoC;
+using Catel.MVVM;
+using Catel.Services;
+using Orc.FileSystem;
+using Orchestra.Models;
+using Orchestra.Services;
+using static WolvenKit.Functionality.WKitGlobal.Helpers.ProjectHelper;
+
 namespace WolvenKit.ViewModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.IO;
-    using System.Threading.Tasks;
-    using System.Windows;
-    using System.Windows.Threading;
-    using Catel;
-    using Catel.Data;
-    using Catel.IoC;
-    using Catel.MVVM;
-    using Catel.Services;
-    using Orc.FileSystem;
-    using Orchestra.Models;
-    using Orchestra.Services;
-    using WolvenKit.WKitGlobal;
-    using static WolvenKit.WKitGlobal.ProjectHelper;
-
     public class RecentlyUsedItemsViewModel : ViewModelBase
     {
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
@@ -158,7 +157,7 @@ namespace WolvenKit.ViewModels
                 if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.cpmodproj.ToString())
                 {
                     if (!IsThere)
-                    { newfi = "pack://application:,,,/Resources/Icons/CpProj.png"; }
+                    { newfi = "pack://application:,,,/Resources/Media/Images/Application/CpProj.png"; }
                     NewItem = new FancyProjectObject(fi.Name, cd, "Cyberpunk 2077", p, newfi);
                     Application.Current.Dispatcher.BeginInvoke(
                                             DispatcherPriority.Background,
@@ -170,7 +169,7 @@ namespace WolvenKit.ViewModels
                 if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.w3modproj.ToString())
                 {
                     if (!IsThere)
-                    { newfi = "pack://application:,,,/Resources/Icons/tw3proj.png"; }
+                    { newfi = "pack://application:,,,/Resources/Media/Images/Application/tw3proj.png"; }
 
                     NewItem = new FancyProjectObject(n, cd, "The Witcher 3", p, newfi);
                     Application.Current.Dispatcher.BeginInvoke(

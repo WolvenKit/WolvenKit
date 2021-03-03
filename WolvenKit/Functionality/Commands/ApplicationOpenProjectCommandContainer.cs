@@ -4,23 +4,16 @@ using Catel;
 using Catel.MVVM;
 using Catel.Services;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using Orc.FileSystem;
 using Orc.ProjectManagement;
 using Orchestra.Services;
-using Orchestra.Views;
-using WolvenKit.Functionality.Services;
+using WolvenKit.Common.Services;
+using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Functionality.Commands
 {
-    using Catel.IoC;
-    using Common.Services;
-    using Orchestra.Services;
-    using WolvenKit.ViewModels.AssetBrowser;
-    using WolvenKit.Views.AssetBrowser;
-    using WolvenKit.WKitGlobal;
-
     public class ApplicationOpenProjectCommandContainer : ProjectCommandContainerBase
     {
         private readonly IOpenFileService _openFileService;
@@ -79,8 +72,8 @@ namespace WolvenKit.Functionality.Commands
                     }
                 }
 
-                WKitGlobal.StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.StartScreen.ShownProperty, false);
-                WKitGlobal.StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
+                StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.StartScreen.ShownProperty, false);
+                StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
             }
             catch (Exception)
             {

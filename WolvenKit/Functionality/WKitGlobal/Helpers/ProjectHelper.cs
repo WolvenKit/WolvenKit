@@ -9,7 +9,7 @@ using Catel.IoC;
 using Catel.MVVM;
 using WolvenKit.ViewModels;
 
-namespace WolvenKit.WKitGlobal
+namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
     public static class ProjectHelper
     {

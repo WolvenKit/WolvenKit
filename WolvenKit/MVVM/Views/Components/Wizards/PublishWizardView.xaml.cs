@@ -1,4 +1,5 @@
-﻿
+
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Views.Wizards.WizardPages.PublishWizard;
 
 namespace WolvenKit.Views.Wizards
@@ -54,7 +55,7 @@ namespace WolvenKit.Views.Wizards
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("User Wizard");
+                DiscordHelper.SetDiscordRPCStatus("User Wizard");
             }
         }
     }

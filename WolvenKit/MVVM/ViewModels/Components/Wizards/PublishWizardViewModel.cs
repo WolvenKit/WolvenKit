@@ -1,14 +1,10 @@
-﻿using Catel.MVVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Catel.MVVM;
 using Catel.IoC;
 using Orc.ProjectManagement;
 using Splat;
 using WolvenKit.Common;
 using WolvenKit.Model;
+using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.ViewModels.Wizards
 {

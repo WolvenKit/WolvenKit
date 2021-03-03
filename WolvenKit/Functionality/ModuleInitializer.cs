@@ -1,4 +1,4 @@
-﻿using Catel.IoC;
+using Catel.IoC;
 using Orchestra.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
@@ -14,7 +14,6 @@ public static class ModuleInitializer
     public static void Initialize()
     {
         var serviceLocator = ServiceLocator.Default;
-
         serviceLocator.RegisterType<IRibbonService, RibbonService>();
         serviceLocator.RegisterType<IApplicationInitializationService, ApplicationInitializationService>();
         serviceLocator.RegisterType<IHashService, HashService>();

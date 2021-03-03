@@ -1,29 +1,22 @@
 using System;
 using System.IO;
-using System.Text;
 using Catel;
 using Catel.MVVM;
 using Catel.Services;
-using Orchestra;
 using Orchestra.Services;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
 using Orc.ProjectManagement;
-using WolvenKit.Functionality.Services;
-using Settings = Orc.Squirrel.Settings;
+using WolvenKit.Model;
+using WolvenKit.Common;
+using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
+using WolvenKit.Model.Wizards;
+using Catel.IoC;
+using WolvenKit.ViewModels.Wizards;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.Functionality.Commands
 {
-    using Model;
-    using Common;
-    using Common.Model;
-    using Common.Services;
-    using WolvenKit.Model.Wizards;
-    using Fluent;
-    using Catel.IoC;
-    using WolvenKit.ViewModels.Wizards;
-
     public class ApplicationCreateNewProjectCommandContainer : ProjectCommandContainerBase
     {
         private readonly ILoggerService _loggerService;
@@ -150,8 +143,8 @@ namespace WolvenKit.Functionality.Commands
                         }
                     }
                     await _projectManager.LoadAsync(location);
-                    WKitGlobal.StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.StartScreen.ShownProperty, false);
-                    WKitGlobal.StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
+                    StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.StartScreen.ShownProperty, false);
+                    StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
                 }
             }
             catch (Exception ex)

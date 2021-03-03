@@ -16,6 +16,7 @@ using WolvenKit.Bundles;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.AssetBrowser;
 
 namespace WolvenKit.Views.AssetBrowser
@@ -43,7 +44,7 @@ namespace WolvenKit.Views.AssetBrowser
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Asset Browser");
+                DiscordHelper.SetDiscordRPCStatus("Asset Browser");
             }
         }
 

@@ -17,7 +17,8 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Services;
 using CP77.CR2W.Archive;
 using WolvenKit.ViewModels;
-using WolvenKit.WKitGlobal;
+using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Functionality.Controllers
 {

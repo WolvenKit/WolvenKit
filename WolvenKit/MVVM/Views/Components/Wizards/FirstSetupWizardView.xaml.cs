@@ -1,6 +1,7 @@
-﻿
+
 using Catel.IoC;
 using Catel.MVVM;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard;
 
 namespace WolvenKit.Views.Wizards
@@ -80,7 +81,7 @@ namespace WolvenKit.Views.Wizards
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("First Setup Wizard");
+                DiscordHelper.SetDiscordRPCStatus("First Setup Wizard");
             }
         }
     }

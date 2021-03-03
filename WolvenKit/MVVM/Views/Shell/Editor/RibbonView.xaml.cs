@@ -4,17 +4,13 @@ using Fluent;
 using Orchestra;
 using Orchestra.Services;
 using System.Windows;
-using Catel;
 using Catel.Data;
-using WolvenKit.Views.AssetBrowser;
 using WolvenKit.Views.CodeEditor;
 using WolvenKit.Views.PluginManager;
 using WolvenKit.Views.VisualEditor;
 using WolvenKit.Views.AudioTool;
-using WolvenKit.Views.JournalEditor;
-using Orchestra.Views;
 using System.Windows.Media;
-using ControlzEx.Theming;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Views
 {
@@ -26,7 +22,7 @@ namespace WolvenKit.Views
 
             ribbon.AddAboutButton();
 
-            WKitGlobal.StaticReferences.RibbonViewInstance = this;
+            StaticReferences.RibbonViewInstance = this;
            
         }
 
@@ -113,14 +109,14 @@ namespace WolvenKit.Views
 
 
 
-            WKitGlobal.StaticReferences.GlobalShell.DragMove();
+            StaticReferences.GlobalShell.DragMove();
         }
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (this.IsVisible && IsLoaded)
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Ribbon/Backstage");
+                DiscordHelper.SetDiscordRPCStatus("Ribbon/Backstage");
             }
         }
 
@@ -143,8 +139,8 @@ namespace WolvenKit.Views
         {
 
 
-            WKitGlobal.StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
-            WKitGlobal.StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
+            StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
+            StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, true);
         }
 
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)

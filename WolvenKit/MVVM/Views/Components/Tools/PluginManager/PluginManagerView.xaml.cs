@@ -1,6 +1,6 @@
 
 using Catel.Windows;
-
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Views.PluginManager
 {
@@ -32,7 +32,7 @@ namespace WolvenKit.Views.PluginManager
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Plugin Manager");
+                DiscordHelper.SetDiscordRPCStatus("Plugin Manager");
             }
         }
     }

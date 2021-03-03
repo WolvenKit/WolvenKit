@@ -13,7 +13,7 @@ using Orc.ProjectManagement;
 using Orc.Squirrel;
 using System;
 using Catel.Configuration;
-using WolvenKit.WKitGlobal;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.ViewModels
 {

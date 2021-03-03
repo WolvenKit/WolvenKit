@@ -1,4 +1,5 @@
-﻿
+
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Views.SettingsPages.SubPages.Editor;
 
 namespace WolvenKit.Views.SettingsPages
@@ -42,7 +43,7 @@ namespace WolvenKit.Views.SettingsPages
 
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Setting - Editor");
+                DiscordHelper.SetDiscordRPCStatus("Setting - Editor");
             }
 
 

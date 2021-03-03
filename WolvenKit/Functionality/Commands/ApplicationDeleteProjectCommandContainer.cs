@@ -1,23 +1,11 @@
 using System;
-using System.IO;
-using System.Text;
 using Catel;
 using Catel.MVVM;
 using Catel.Services;
-using Orchestra;
 using Orchestra.Services;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
 using Orc.ProjectManagement;
-using Settings = Orc.Squirrel.Settings;
-
-using WolvenKit.Model.Wizards;
-using Fluent;
-using Catel.IoC;
-using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Services;
+using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.Functionality.Commands
 {

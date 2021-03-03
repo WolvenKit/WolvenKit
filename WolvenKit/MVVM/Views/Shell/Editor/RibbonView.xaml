@@ -374,7 +374,7 @@
 
                 <Border>
                     <Border.OpacityMask>
-                        <ImageBrush ImageSource="/Resources/Icons/SeeTroughIcon.png"/>
+                        <ImageBrush ImageSource="/Resources/Media/Images/Application/SeeTroughIcon.png"/>
                     </Border.OpacityMask>
                     <Grid>
 
@@ -393,7 +393,7 @@
         <Border  Margin="13,-24,0,0" Width="42" HorizontalAlignment="Left"  VerticalAlignment="top" Height="49" Background="Transparent" MouseEnter="Border_MouseEnter" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeave="Border_MouseLeave"  >
             <Border>
                 <Border.OpacityMask>
-                    <ImageBrush ImageSource="/Resources/Icons/HomeSickTransp.png"/>
+                    <ImageBrush ImageSource="/Resources/Media/Images/Application/HomeSickTransp.png"/>
                 </Border.OpacityMask>
                 <Grid>
 
@@ -401,7 +401,7 @@
                     <Grid >
 
                         <Grid  Margin="0">
-                            <Image  Stretch="Fill"  Source="pack://application:,,,/Resources/Icons/HomeSickTransp.png" Margin="0,-1,0,0" />
+                            <Image  Stretch="Fill"  Source="pack://application:,,,/Resources/Media/Images/Application/HomeSickTransp.png" Margin="0,-1,0,0" />
 
                         </Grid>
 

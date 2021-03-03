@@ -2,13 +2,10 @@ using MLib.Interfaces;
 using System;
 using System.IO;
 using System.Xml.Serialization;
-using Catel.IoC;
-using Catel.MVVM;
-using WolvenKit.Functionality.Commands;
 using Catel.Data;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.Functionality.Services
 {

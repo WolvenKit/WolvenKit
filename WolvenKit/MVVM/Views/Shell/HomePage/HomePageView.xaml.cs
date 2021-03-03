@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.AudioTool.Radio;
@@ -302,7 +303,7 @@ namespace WolvenKit.Views.HomePage
 
 
 
-            WKitGlobal.StaticReferences.GlobalShell.DragMove();
+            StaticReferences.GlobalShell.DragMove();
         }
 
         private void Grid_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -312,7 +313,7 @@ namespace WolvenKit.Views.HomePage
 
 
 
-            WKitGlobal.StaticReferences.GlobalShell.DragMove();
+            StaticReferences.GlobalShell.DragMove();
 
             // Begin dragging the window
         }
@@ -321,7 +322,7 @@ namespace WolvenKit.Views.HomePage
         {
             if (this.IsVisible)
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Home");
+                DiscordHelper.SetDiscordRPCStatus("Home");
 
                 if (IsVisible && IsLoaded)
                 {
@@ -342,14 +343,14 @@ namespace WolvenKit.Views.HomePage
             {
                 if (this.IsMouseOver)
                 {
-                    if (WKitGlobal.StaticReferences.GlobalShell.WindowState == WindowState.Maximized)
+                    if (StaticReferences.GlobalShell.WindowState == WindowState.Maximized)
                     {
-                        WKitGlobal.StaticReferences.GlobalShell.SetCurrentValue(System.Windows.Window.WindowStateProperty, WindowState.Normal);
+                        StaticReferences.GlobalShell.SetCurrentValue(System.Windows.Window.WindowStateProperty, WindowState.Normal);
 
                     }
                     else
                     {
-                        WKitGlobal.StaticReferences.GlobalShell.SetCurrentValue(System.Windows.Window.WindowStateProperty, WindowState.Maximized);
+                        StaticReferences.GlobalShell.SetCurrentValue(System.Windows.Window.WindowStateProperty, WindowState.Maximized);
 
                     }
                 }
@@ -361,7 +362,7 @@ namespace WolvenKit.Views.HomePage
 
 
 
-                WKitGlobal.StaticReferences.GlobalShell.DragMove();
+                StaticReferences.GlobalShell.DragMove();
             }
         }
 
@@ -376,8 +377,8 @@ namespace WolvenKit.Views.HomePage
 
         private void Image_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            WKitGlobal.StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
-            WKitGlobal.StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, false);
+            StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
+            StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Backstage.IsOpenProperty, false);
         }
     }
 }

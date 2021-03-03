@@ -39,7 +39,7 @@
 
                 <Border>
                     <Border.OpacityMask>
-                        <ImageBrush ImageSource="/Resources/Icons/SeeTroughIcon.png"/>
+                            <ImageBrush ImageSource="pack://application:,,,/Resources/Media/Images/Application/SeeTroughIcon.png"/>
                     </Border.OpacityMask>
                     <Grid>
 
@@ -60,7 +60,7 @@
         <Border Grid.Row="2" Margin="0,0,0,0"  Width="63" HorizontalAlignment="Center"  VerticalAlignment="Center" Height="72" Background="Transparent"   >
             <Border>
                 <Border.OpacityMask>
-                    <ImageBrush ImageSource="/Resources/Icons/HomeSickTransp.png"/>
+                        <ImageBrush ImageSource="pack://application:,,,/Resources/Media/Images/Application/HomeSickTransp.png"/>
                 </Border.OpacityMask>
                 <Grid>
 
@@ -68,7 +68,7 @@
                     <Grid >
 
                         <Grid Background="{DynamicResource MahApps.Brushes.Accent2}"  Margin="0">
-                            <Image  Stretch="Fill"  Source="pack://application:,,,/Resources/Icons/HomeSickTransp.png" Margin="0,-1,0,0" />
+                                <Image  Stretch="Fill"  Source="pack://application:,,,/Resources/Media/Images/Application/HomeSickTransp.png" Margin="0,-1,0,0" />
 
                         </Grid>
 

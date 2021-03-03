@@ -1,4 +1,6 @@
-﻿
+
+using WolvenKit.Functionality.WKitGlobal.Helpers;
+
 namespace WolvenKit.Views.SettingsPages
 {
     public partial class PackagingSettingsView
@@ -12,7 +14,7 @@ namespace WolvenKit.Views.SettingsPages
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("Setting - Packaging");
+                DiscordHelper.SetDiscordRPCStatus("Setting - Packaging");
             }
         }
     }

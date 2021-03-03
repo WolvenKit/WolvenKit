@@ -1,4 +1,4 @@
-﻿
+
 using Catel.IoC;
 using MLib.Interfaces;
 using System;
@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
@@ -16,43 +17,43 @@ namespace WolvenKit.Views.HomePage.Pages
             InitializeComponent();
             CoverFlowMain.AddRange(new[]
 {
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
 });
             asd3423.AddRange(new[]
 {
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
 });
 
             dsfdsf.AddRange(new[]
 {
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
-    new Uri(@"pack://application:,,,/Resources/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
+    new Uri(@"pack://application:,,,/Resources/Media/Images/RedEngine/detail.png"),
 });
             CoverFlowMain.JumpTo(2);
         }
@@ -69,7 +70,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             if (this.IsVisible )
             {
-                WKitGlobal.DiscordHelper.SetDiscordRPCStatus("User Page");
+                DiscordHelper.SetDiscordRPCStatus("User Page");
             }
 
         }

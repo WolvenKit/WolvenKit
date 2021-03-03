@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace WolvenKit.WKitGlobal
+namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
     public class NodeNetworkHelper
     {

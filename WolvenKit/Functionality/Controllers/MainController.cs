@@ -22,6 +22,7 @@ namespace WolvenKit.Functionality.Controllers
     using Common.Wcc;
     using CR2W.Types;
     using W3Speech;
+    using WolvenKit.Functionality.WKitGlobal;
 
     public enum EProjectStatus
     {

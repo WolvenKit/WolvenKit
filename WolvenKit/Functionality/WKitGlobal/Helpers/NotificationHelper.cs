@@ -7,7 +7,7 @@ using Catel.IoC;
 using Orchestra.Services;
 using WolvenKit.Functionality.Services;
 
-namespace WolvenKit.WKitGlobal
+namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
     public static class NotificationHelper
     {

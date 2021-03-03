@@ -12,6 +12,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Model.ProjectManagement;
 using System.Windows.Media;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.Functionality.Services
 {

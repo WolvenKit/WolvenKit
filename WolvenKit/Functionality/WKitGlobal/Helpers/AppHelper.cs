@@ -78,7 +78,7 @@ using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.IntegratedToolsPages.CyberCAT;
 using System.Runtime.InteropServices;
 
-namespace WolvenKit.WKitGlobal
+namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
     public static class InternetHelper
     {
@@ -97,7 +97,7 @@ namespace WolvenKit.WKitGlobal
         public static async Task InitializeMVVM()
         {
 
-            var uri = new Uri("pack://application:,,,/WolvenKit.Resources;component/Resources/Images/git.png");
+            var uri = new Uri("pack://application:,,,/WolvenKit.Resources;component/Resources/Media/Images/git.png");
 
             await SquirrelHelper.HandleSquirrelAutomaticallyAsync();
 
