@@ -11,7 +11,7 @@ namespace WolvenKit.MVVM.Views.Components.Editors
 
         private void DataWindow_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible)
+            if (IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Journal Editor");
             }

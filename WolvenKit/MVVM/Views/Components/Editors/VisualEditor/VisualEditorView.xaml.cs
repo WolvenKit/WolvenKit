@@ -44,7 +44,7 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor
                     Value = this.WhenAnyObservable(vm => vm.NameInput.ValueChanged)
                         .Select(name => $"Hello {name}!")
                 };
-                this.Outputs.Add(TextOutput);
+                Outputs.Add(TextOutput);
             }
 
             static IN_Node_Class()
@@ -64,7 +64,7 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor
                 {
                     Name = "Output",
                 };
-                this.Inputs.Add(NameInput);
+                Inputs.Add(NameInput);
             }
 
             static OUT_Node_Class()
@@ -85,7 +85,7 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor
 
         private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible)
+            if (IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Visual Editor");
             }

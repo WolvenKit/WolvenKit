@@ -56,13 +56,13 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             {
                 var ser = new XmlSerializer(typeof(CP77Mod));
                 var obj = (CP77Mod)ser.Deserialize(lf);
-                this.Name = obj.Name;
-                this.Version = obj.Version;
-                this.Author = obj.Author;
-                this.Email = obj.Email;
-                this.GameType = GameType.Cyberpunk2077;
-                this.Data = obj;
-                this.Data.FileName = path;
+                Name = obj.Name;
+                Version = obj.Version;
+                Author = obj.Author;
+                Email = obj.Email;
+                GameType = GameType.Cyberpunk2077;
+                Data = obj;
+                Data.FileName = path;
             }
         }
 
@@ -71,7 +71,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             using (var sf = new FileStream(path, FileMode.Create, FileAccess.Write))
             {
                 var ser = new XmlSerializer(typeof(CP77Mod));
-                ser.Serialize(sf, (CP77Mod)this.Data);
+                ser.Serialize(sf, (CP77Mod)Data);
             }
         }
 

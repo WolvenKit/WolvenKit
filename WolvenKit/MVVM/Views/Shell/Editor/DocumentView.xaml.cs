@@ -30,7 +30,7 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
         /// <param name="e"></param>
         private async void View_LoadedAsync(object sender, RoutedEventArgs e)
         {
-            if (this.Visibility == Visibility.Visible && _viewInitialized == false)
+            if (Visibility == Visibility.Visible && _viewInitialized == false)
             {
                 await LoadContentAsync();
             }
@@ -63,7 +63,7 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible)
+            if (IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Document View");
             }

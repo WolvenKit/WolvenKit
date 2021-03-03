@@ -299,7 +299,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
                 .Select(x => x.First())
                 .Select(f => new KeyValuePair<string, List<IGameFile>>(f.Name, new List<IGameFile>() { f }))
                 .ToDictionary(x => x.Key, x => x.Value);
-            this.CurrentNode = newnode;
+            CurrentNode = newnode;
             CurrentNodeFiles = CurrentNode.ToAssetBrowserData();
         }
 

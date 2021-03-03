@@ -104,7 +104,7 @@ namespace WolvenKit.MVVM.Model
 
         public (string, bool) GetREDRelativePath()
         {
-            var relPath = this.GetRelativePath();
+            var relPath = GetRelativePath();
 
             // make new path
             // first, trim Raw from the path
@@ -125,7 +125,7 @@ namespace WolvenKit.MVVM.Model
             }
 
             // new path with new extension
-            var importext = $".{this.ImportType:G}";
+            var importext = $".{ImportType:G}";
             relPath = Path.ChangeExtension(relPath, importext);
 
             return (relPath, isDLC);

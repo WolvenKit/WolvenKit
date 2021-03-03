@@ -61,7 +61,7 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages
 
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible)
+            if (IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Setting - Tools");
             }

@@ -67,13 +67,13 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             {
                 var ser = new XmlSerializer(typeof(W3Mod));
                 var obj = (W3Mod)ser.Deserialize(lf);
-                this.Name = obj.Name;
-                this.Version = obj.Version;
-                this.Author = obj.Author;
-                this.Email = obj.Email;
-                this.GameType = GameType.Witcher3;
-                this.Data = obj;
-                this.Data.FileName = path;
+                Name = obj.Name;
+                Version = obj.Version;
+                Author = obj.Author;
+                Email = obj.Email;
+                GameType = GameType.Witcher3;
+                Data = obj;
+                Data.FileName = path;
             }
         }
 
@@ -82,7 +82,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             using (var sf = new FileStream(path, FileMode.Create, FileAccess.Write))
             {
                 var ser = new XmlSerializer(typeof(W3Mod));
-                ser.Serialize(sf, (W3Mod)this.Data);
+                ser.Serialize(sf, (W3Mod)Data);
             }
         }
 

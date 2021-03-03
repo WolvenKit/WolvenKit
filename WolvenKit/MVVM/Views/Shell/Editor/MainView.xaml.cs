@@ -132,15 +132,15 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
 
         private async void OnLoadLayoutAsync(object parameter = null)
         {
-            if (this.DataContext is WorkSpaceViewModel wspace)
+            if (DataContext is WorkSpaceViewModel wspace)
             {
                 wspace.CloseAllDocuments();
             }
 
-            var loaderResult = await this.LayoutLoader.GetLayoutString(OnLayoutLoaded_Event);
+            var loaderResult = await LayoutLoader.GetLayoutString(OnLayoutLoaded_Event);
 
             // Call this even with null to ensure standard initialization takes place
-            this.OnLayoutLoaded_Event(null, (loaderResult == null ? null : new LayoutLoadedEventArgs(loaderResult)));
+            OnLayoutLoaded_Event(null, (loaderResult == null ? null : new LayoutLoadedEventArgs(loaderResult)));
         }
 
         #endregion LoadLayoutCommand
@@ -165,7 +165,7 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
 
         private void UserControl_IsVisibleChanged_1(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible && this.IsLoaded)
+            if (IsVisible && IsLoaded)
             {
                 DiscordHelper.SetDiscordRPCStatus("Main View");
             }

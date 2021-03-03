@@ -21,7 +21,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools
 
         private void DataWindow_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible)
+            if (IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Plugin Manager");
             }

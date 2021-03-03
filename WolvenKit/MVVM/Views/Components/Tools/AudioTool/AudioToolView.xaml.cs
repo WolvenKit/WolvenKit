@@ -279,7 +279,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible)
+            if (IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Audio Tool");
             }

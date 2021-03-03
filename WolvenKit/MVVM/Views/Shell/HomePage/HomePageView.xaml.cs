@@ -274,7 +274,7 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible)
+            if (IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Home");
 
@@ -290,7 +290,7 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
         {
             if (e.ClickCount == 2)
             {
-                if (this.IsMouseOver)
+                if (IsMouseOver)
                 {
                     if (StaticReferences.GlobalShell.WindowState == WindowState.Maximized)
                     {

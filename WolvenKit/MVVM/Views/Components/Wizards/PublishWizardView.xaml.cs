@@ -54,7 +54,7 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
 
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible)
+            if (IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("User Wizard");
             }

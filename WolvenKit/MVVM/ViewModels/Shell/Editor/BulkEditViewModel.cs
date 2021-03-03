@@ -125,9 +125,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #region Methods
 
-        protected void OnPerformStepRequest() => this.PerformStep?.Invoke(this, new EventArgs());
+        protected void OnPerformStepRequest() => PerformStep?.Invoke(this, new EventArgs());
 
-        protected void OnResetRequest() => this.PerformStep?.Invoke(this, new EventArgs());
+        protected void OnResetRequest() => PerformStep?.Invoke(this, new EventArgs());
 
         #endregion Methods
 

@@ -122,7 +122,7 @@ namespace WolvenKit.MVVM.Model
                 if (value != _isExpanded)
                 {
                     _isExpanded = value;
-                    this.RaisePropertyChanged(nameof(IsExpanded));
+                    RaisePropertyChanged(nameof(IsExpanded));
                 }
 
                 // Expand all the way up to the root.

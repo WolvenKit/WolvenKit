@@ -83,7 +83,7 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible)
+            if (IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Log View");
             }

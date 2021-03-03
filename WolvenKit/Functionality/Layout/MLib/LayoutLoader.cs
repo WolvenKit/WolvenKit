@@ -73,7 +73,7 @@ namespace WolvenKit.Functionality.Layout.MLib
                 await _LayoutSemaphore.WaitAsync();
                 try
                 {
-                    this._LayoutLoaded = result;
+                    _LayoutLoaded = result;
 
                     // Send an event if event subscriber is available
                     // if MainWindow is already successfull constructed and waiting for Xml Layout
@@ -81,7 +81,7 @@ namespace WolvenKit.Functionality.Layout.MLib
                 }
                 finally
                 {
-                    this._LayoutSemaphore.Release();
+                    _LayoutSemaphore.Release();
                 }
             }
             catch (Exception exc)
@@ -133,10 +133,10 @@ namespace WolvenKit.Functionality.Layout.MLib
         /// <returns></returns>
         internal async Task<LayoutLoaderResult> GetLayoutString(EventHandler<LayoutLoadedEventArgs> loadEventHandler)
         {
-            await this._LayoutSemaphore.WaitAsync();
+            await _LayoutSemaphore.WaitAsync();
             try
             {
-                if (this._LayoutLoaded != null)
+                if (_LayoutLoaded != null)
                 {
                     return _LayoutLoaded;
                 }
@@ -150,7 +150,7 @@ namespace WolvenKit.Functionality.Layout.MLib
             }
             finally
             {
-                this._LayoutSemaphore.Release();
+                _LayoutSemaphore.Release();
             }
         }
 

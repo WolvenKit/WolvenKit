@@ -19,9 +19,9 @@ namespace WolvenKit.Functionality.Layout.MLib
                                   )
             : this()
         {
-            this.XmlContent = paramXmlContent;
-            this.LoadwasSuccesful = paramLoadwasSuccesful;
-            this.LoadError = paramLoadError;
+            XmlContent = paramXmlContent;
+            LoadwasSuccesful = paramLoadwasSuccesful;
+            LoadError = paramLoadError;
         }
 
         protected LayoutLoaderResult()

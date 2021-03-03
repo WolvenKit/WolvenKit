@@ -23,7 +23,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools
 
         private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible)
+            if (IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Asset Browser");
             }

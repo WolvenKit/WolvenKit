@@ -28,8 +28,8 @@ namespace WolvenKit.Functionality.Layout
         /// </summary>
         public object Data
         {
-            get => (object)this.GetValue(DataProperty);
-            set => this.SetValue(DataProperty, value);
+            get => (object)GetValue(DataProperty);
+            set => SetValue(DataProperty, value);
         }
 
         #endregion Properties

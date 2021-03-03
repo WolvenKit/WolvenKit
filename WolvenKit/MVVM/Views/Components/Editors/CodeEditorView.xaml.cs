@@ -22,7 +22,7 @@ namespace WolvenKit.MVVM.Views.Components.Editors
 
         private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible)
+            if (IsVisible)
             {
                 DiscordHelper.SetDiscordRPCStatus("Code Editor");
             }

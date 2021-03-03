@@ -103,7 +103,7 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible && IsLoaded)
+            if (IsVisible && IsLoaded)
             {
                 DiscordHelper.SetDiscordRPCStatus("Ribbon/Backstage");
             }
