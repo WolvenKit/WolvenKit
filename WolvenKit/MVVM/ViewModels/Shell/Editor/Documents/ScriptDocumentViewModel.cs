@@ -1,21 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Text;
-using System.Windows.Input;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 {
-    using Functionality.Commands;
-    using Model;
-    using Common;
-    using Common.Model;
     using Common.Services;
     using CR2W;
-    using CR2W.SRT;
-    using CR2W.Types;
-    using Radish.Model;
     using WolvenKit.Functionality.Controllers;
 
     public class ScriptDocumentViewModel : CloseableViewModel, Old_IDocumentViewModel

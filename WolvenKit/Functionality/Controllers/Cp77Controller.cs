@@ -7,18 +7,17 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Catel.IoC;
 using CP77.CR2W;
+using CP77.CR2W.Archive;
 using CP77.CR2W.Types;
 using Newtonsoft.Json;
 using Orc.ProjectManagement;
 using WolvenKit.Common;
-
-using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Services;
-using CP77.CR2W.Archive;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.MVVM.ViewModels.Components.Tools;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.MVVM.ViewModels.Components.Tools;
 
 namespace WolvenKit.Functionality.Controllers
 {

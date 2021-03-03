@@ -4,15 +4,15 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using Catel;
+using Catel.Configuration;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.Threading;
 using Orc.ProjectManagement;
 using Orc.Squirrel;
-using System;
-using Catel.Configuration;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor

@@ -1,13 +1,13 @@
+using System;
+using Catel;
 using Catel.MVVM;
 using Catel.Services;
-using System;
-using WolvenKit.Common.Services;
-using WolvenKit.MVVM.Views.Components.Wizards;
 using Orc.ProjectManagement;
-using Catel;
 using Orchestra.Services;
+using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.MVVM.ViewModels.Others;
+using WolvenKit.MVVM.Views.Components.Wizards;
 
 namespace WolvenKit.Functionality.Commands
 {

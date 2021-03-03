@@ -4,20 +4,20 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
+using Catel;
 using Catel.IoC;
+using Catel.Services;
+using HandyControl.Data;
 using Orc.ProjectManagement;
+using Orchestra.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
-using Catel.Services;
-using Catel;
-using HandyControl.Data;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
-using Orchestra.Services;
-using System.Windows.Media;
-using WolvenKit.MVVM.ViewModels.Shell.Editor;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.MVVM.ViewModels.Shell.Editor;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Tools
 {

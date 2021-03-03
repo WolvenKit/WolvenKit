@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace WolvenKit.Functionality.Layout.MLib
 {
-	/// <summary>
-	/// Implements base methods and events for loading an AvalonDock layout
-	/// in a background thread.
-	/// </summary>
-	internal class LayoutLoader : IDisposable
+    /// <summary>
+    /// Implements base methods and events for loading an AvalonDock layout
+    /// in a background thread.
+    /// </summary>
+    internal class LayoutLoader : IDisposable
 	{
 		#region fields
 		private SemaphoreSlim _LayoutSemaphore;

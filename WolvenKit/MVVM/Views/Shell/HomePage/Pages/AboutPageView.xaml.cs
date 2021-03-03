@@ -1,14 +1,14 @@
 
-using HandyControl.Controls;
-using HandyControl.Data;
-using HandyControl.Tools;
-using Octokit;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using HandyControl.Controls;
+using HandyControl.Data;
+using HandyControl.Tools;
+using Octokit;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages

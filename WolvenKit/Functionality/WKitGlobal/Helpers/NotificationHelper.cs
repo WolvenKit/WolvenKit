@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Catel.IoC;
 using Orchestra.Services;
-using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {

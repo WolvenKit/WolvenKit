@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Windows.Input;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Common;
+using WolvenKit.Functionality.Commands;
 
 namespace WolvenKit.MVVM.Model
 {

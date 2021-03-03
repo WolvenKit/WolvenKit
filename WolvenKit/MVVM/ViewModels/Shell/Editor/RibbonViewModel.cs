@@ -1,17 +1,17 @@
-using Catel;
-using Catel.IoC;
-using Catel.MVVM;
-using Catel.Reflection;
-using Catel.Services;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using Catel;
+using Catel.IoC;
+using Catel.MVVM;
+using Catel.Reflection;
+using Catel.Services;
 using Orc.ProjectManagement;
+using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor

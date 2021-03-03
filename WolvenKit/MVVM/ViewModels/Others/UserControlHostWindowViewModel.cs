@@ -1,9 +1,9 @@
+using System.Linq;
+using System.Threading.Tasks;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.MVVM.Views;
 using Catel.Windows.Controls;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WolvenKit.MVVM.ViewModels.Others
 {

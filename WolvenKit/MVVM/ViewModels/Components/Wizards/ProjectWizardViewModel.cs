@@ -1,5 +1,5 @@
-﻿using Catel.MVVM;
-using System.Windows.Media;
+﻿using System.Windows.Media;
+using Catel.MVVM;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Wizards
 {

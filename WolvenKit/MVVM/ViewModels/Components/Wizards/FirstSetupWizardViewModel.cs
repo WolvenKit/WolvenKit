@@ -9,8 +9,8 @@ using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
 using Orc.Squirrel;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Wizards

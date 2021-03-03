@@ -2,8 +2,8 @@ using System;
 using Catel;
 using Catel.MVVM;
 using Catel.Services;
-using Orchestra.Services;
 using Orc.ProjectManagement;
+using Orchestra.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
 

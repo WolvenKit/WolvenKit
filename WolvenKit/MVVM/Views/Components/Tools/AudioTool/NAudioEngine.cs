@@ -3,12 +3,11 @@
 // Please see http://go.microsoft.com/fwlink/?LinkID=131993 for details.
 // All other rights reserved.
 
-using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Threading;
-using WolvenKit;
+using NAudio.Wave;
 using WPFSoundVisualizationLib;
 
 namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool

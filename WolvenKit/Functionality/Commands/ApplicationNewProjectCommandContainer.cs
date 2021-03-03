@@ -3,11 +3,11 @@ using Catel;
 using Catel.MVVM;
 using Catel.Services;
 using Orc.ProjectManagement;
-using WolvenKit.Common.Services;
-using WolvenKit.MVVM.Views.Components.Wizards;
 using Orchestra.Services;
+using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.MVVM.ViewModels.Others;
+using WolvenKit.MVVM.Views.Components.Wizards;
 
 namespace WolvenKit.Functionality.Commands
 {

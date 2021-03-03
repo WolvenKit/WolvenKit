@@ -1,10 +1,10 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
+using System.Windows.Controls;
 using Catel;
 using Catel.MVVM;
 using Catel.Services;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using Orc.FileSystem;
 using Orc.ProjectManagement;
 using Orchestra.Services;

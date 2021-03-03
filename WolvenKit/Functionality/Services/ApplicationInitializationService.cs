@@ -1,18 +1,16 @@
+using System;
+using System.Threading.Tasks;
+using System.Windows.Media;
 using Catel;
 using Catel.IoC;
 using Catel.Logging;
 using Catel.MVVM;
-using Orchestra.Services;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 using Catel.Services;
 using Orc.ProjectManagement;
+using Orchestra.Services;
 using WolvenKit.Common.Services;
-using WolvenKit.MVVM.Model.ProjectManagement;
-using System.Windows.Media;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.MVVM.Model.ProjectManagement;
 using WolvenKit.MVVM.Model.ProjectManagement.Serializers;
 using WolvenKit.MVVM.Model.ProjectManagement.Watchers;
 

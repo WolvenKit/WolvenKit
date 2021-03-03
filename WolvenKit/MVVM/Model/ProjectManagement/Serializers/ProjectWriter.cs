@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Catel;
 using Catel.Threading;
-using Orc.ProjectManagement;
 using Orc.FileSystem;
+using Orc.ProjectManagement;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers

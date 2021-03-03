@@ -1,5 +1,5 @@
-using Catel.Data;
 using System.Windows.Media;
+using Catel.Data;
 
 namespace WolvenKit.MVVM.Model.Wizards
 {

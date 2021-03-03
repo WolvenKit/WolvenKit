@@ -1,5 +1,5 @@
-using AvalonDock.Layout;
 using System.Linq;
+using AvalonDock.Layout;
 
 namespace WolvenKit.Functionality.Layout
 {

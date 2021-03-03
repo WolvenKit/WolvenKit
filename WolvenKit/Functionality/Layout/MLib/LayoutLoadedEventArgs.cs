@@ -2,10 +2,10 @@ using System;
 
 namespace WolvenKit.Functionality.Layout.MLib
 {
-	/// <summary>
-	/// Implements an event that is invoked when a layout is loaded.
-	/// </summary>
-	internal class LayoutLoadedEventArgs : EventArgs
+    /// <summary>
+    /// Implements an event that is invoked when a layout is loaded.
+    /// </summary>
+    internal class LayoutLoadedEventArgs : EventArgs
 	{
 		#region ctors
 		/// <summary>

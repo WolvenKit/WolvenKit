@@ -1,12 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
 using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.CR2W.Types;
-using Color = System.Drawing.Color;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {

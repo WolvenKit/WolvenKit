@@ -1,19 +1,12 @@
-
-using Catel.Windows;
-using DynamicData;
-using NodeNetwork.ViewModels;
-using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using NodeNetwork;
 using System.Reactive.Linq;
+using System.Windows;
+using DynamicData;
 using NodeNetwork.Toolkit.ValueNode;
+using NodeNetwork.ViewModels;
 using ReactiveUI;
-using WolvenKit.Views.Editors.VisualEditor.Nodes;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes;
+using WolvenKit.Views.Editors.VisualEditor.Nodes;
 
 namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor
 {

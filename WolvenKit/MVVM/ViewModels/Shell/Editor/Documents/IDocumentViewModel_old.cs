@@ -1,11 +1,5 @@
-using System;
-using System.ComponentModel;
-
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 {
-    using Common;
-
-
     /// <summary>
     /// Represents a viewmodel
     /// </summary>

@@ -7,10 +7,10 @@ using WolvenKit.MVVM.Model.Wizards;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.ProjectWizard
 {
-	/// <summary>
-	/// The ProjectConfigurationViewModel implements project wizard configuration window's viewmodel.
-	/// </summary>
-	class ProjectConfigurationViewModel : ViewModelBase
+    /// <summary>
+    /// The ProjectConfigurationViewModel implements project wizard configuration window's viewmodel.
+    /// </summary>
+    class ProjectConfigurationViewModel : ViewModelBase
 	{
 		#region constructors
 		public ProjectConfigurationViewModel(IServiceLocator serviceLocator)

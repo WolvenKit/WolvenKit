@@ -1,24 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using Catel.MVVM;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using Catel.IoC;
+using Catel.MVVM;
 using HandyControl.Controls;
 using Orc.ProjectManagement;
 using WolvenKit.Common;
-using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Common.Services;
 using WolvenKit.CR2W.SRT;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Extensions;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.MVVM.Model;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 {

@@ -1,5 +1,5 @@
-using Catel.MVVM;
 using Catel.IoC;
+using Catel.MVVM;
 using Orc.ProjectManagement;
 using Splat;
 using WolvenKit.Common;

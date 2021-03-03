@@ -1,6 +1,6 @@
+using System;
 using Orchestra.Models;
 using Orchestra.Services;
-using System;
 
 namespace WolvenKit.Functionality.Services
 {

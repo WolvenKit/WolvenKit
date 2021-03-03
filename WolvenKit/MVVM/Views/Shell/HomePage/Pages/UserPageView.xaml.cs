@@ -1,4 +1,3 @@
-using System;
 using System.Windows;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 

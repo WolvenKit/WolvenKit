@@ -1,4 +1,3 @@
-using CsvHelper;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,17 +9,18 @@ using System.Windows.Input;
 using Catel;
 using Catel.Services;
 using Catel.Threading;
+using CsvHelper;
 using Orc.ProjectManagement;
 using WolvenKit.Common.DDS;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.MVVM.Model;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
-using static WolvenKit.CR2W.Types.Enums;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.MVVM.Model;
+using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {

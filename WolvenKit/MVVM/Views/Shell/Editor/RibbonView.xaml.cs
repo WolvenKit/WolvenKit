@@ -1,16 +1,16 @@
 using System.ComponentModel;
+using System.Windows;
+using System.Windows.Media;
+using Catel.Data;
 using Catel.IoC;
 using Fluent;
 using Orchestra;
 using Orchestra.Services;
-using System.Windows;
-using Catel.Data;
-using System.Windows.Media;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
+using WolvenKit.MVVM.Views.Components.Editors;
 using WolvenKit.MVVM.Views.Components.Editors.VisualEditor;
 using WolvenKit.MVVM.Views.Components.Tools;
-using WolvenKit.MVVM.Views.Components.Editors;
+using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
 
 namespace WolvenKit.MVVM.Views.Shell.Editor
 {

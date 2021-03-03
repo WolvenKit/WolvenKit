@@ -1,21 +1,14 @@
 //using SymbolicLinkSupport;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using System.Windows.Input;
-using System.Globalization;
-using System.Reflection;
-using Catel;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
@@ -25,16 +18,16 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
     using Common.Model;
     using Common.Services;
     using Common.Wcc;
-    using CR2W;
-    using Wwise.Wwise;
     using Common.WinFormsEnums;
-    using Model;
-    using Functionality.Commands;
+    using CR2W;
     using CR2W.Reflection;
     using CR2W.Types;
-    using Wwise;
+    using Functionality.Commands;
+    using Model;
     using WolvenKit.Functionality.Controllers;
     using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
+    using Wwise;
+    using Wwise.Wwise;
 
     /// <summary>
     /// 

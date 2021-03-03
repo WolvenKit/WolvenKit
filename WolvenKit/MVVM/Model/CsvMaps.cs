@@ -1,5 +1,4 @@
 using CsvHelper.Configuration;
-using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.MVVM.Model
 {

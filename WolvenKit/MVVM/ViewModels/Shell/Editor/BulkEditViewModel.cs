@@ -1,4 +1,3 @@
-using FastMember;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,16 +6,16 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using FastMember;
 using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
-    using Functionality.Commands;
     using Common;
     using Common.Services;
     using CR2W;
     using CR2W.Types;
-    using Radish.Model;
+    using Functionality.Commands;
     using WolvenKit.Functionality.Controllers;
 
     public class BulkEditOptions

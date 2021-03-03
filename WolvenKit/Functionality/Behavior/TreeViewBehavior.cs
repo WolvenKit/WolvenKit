@@ -1,6 +1,6 @@
-using Microsoft.Xaml.Behaviors;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Xaml.Behaviors;
 using WolvenKit.MVVM.Model;
 using WolvenKit.MVVM.ViewModels.Shell.Editor;
 using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;

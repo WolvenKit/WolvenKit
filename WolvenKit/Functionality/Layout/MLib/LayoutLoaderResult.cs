@@ -2,11 +2,11 @@ using System;
 
 namespace WolvenKit.Functionality.Layout.MLib
 {
-	/// <summary>
-	/// Implements a class that contains the items that describe the results
-	/// of loading the AvalonDock layout from persistence.
-	/// </summary>
-	internal class LayoutLoaderResult
+    /// <summary>
+    /// Implements a class that contains the items that describe the results
+    /// of loading the AvalonDock layout from persistence.
+    /// </summary>
+    internal class LayoutLoaderResult
 	{
 		#region ctors
 		/// <summary>

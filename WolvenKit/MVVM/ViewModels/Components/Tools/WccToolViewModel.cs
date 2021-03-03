@@ -1,11 +1,10 @@
 using System.Threading.Tasks;
-using WolvenKit.Common.Services;
-using Catel.Services;
 using Catel;
+using Catel.Services;
 using Orc.ProjectManagement;
-
-using WolvenKit.MVVM.ViewModels.Shell.Editor;
+using WolvenKit.Common.Services;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.MVVM.ViewModels.Shell.Editor;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Tools
 {

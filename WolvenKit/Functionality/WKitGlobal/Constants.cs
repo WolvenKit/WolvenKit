@@ -2,7 +2,6 @@ using System.Collections.Immutable;
 using System.Windows.Input;
 using Orc.Squirrel;
 using InputGesture = Catel.Windows.Input.InputGesture;
-using DiscordRPC.Message;
 
 
 namespace WolvenKit.Functionality.WKitGlobal

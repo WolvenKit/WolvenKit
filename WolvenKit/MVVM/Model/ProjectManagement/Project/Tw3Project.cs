@@ -6,17 +6,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Catel.IoC;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Bundles;
 using WolvenKit.Cache;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
+using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.W3Speech;
 using WolvenKit.W3Strings;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {

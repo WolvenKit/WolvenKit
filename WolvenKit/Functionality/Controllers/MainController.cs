@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WolvenKit.Common;
-using WolvenKit.Common.Services;
-using WolvenKit.CR2W;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
+using WolvenKit.CR2W;
 using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.Functionality.Controllers

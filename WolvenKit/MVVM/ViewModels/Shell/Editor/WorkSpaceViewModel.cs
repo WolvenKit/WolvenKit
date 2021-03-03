@@ -1,5 +1,3 @@
-using Catel.Services;
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,26 +9,28 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Catel.MVVM;
 using Catel;
 using Catel.IoC;
+using Catel.MVVM;
+using Catel.Services;
+using Microsoft.Win32;
 using Orc.ProjectManagement;
-using WolvenKit.MVVM.Views.Components.Wizards;
-using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.MVVM.Views.Others;
-using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
-using WolvenKit.MVVM.ViewModels.Components.Tools;
-using WolvenKit.MVVM.ViewModels.Components.Editors.VisualEditor;
-using WolvenKit.MVVM.ViewModels.Others;
-using WolvenKit.MVVM.ViewModels.Components.Editors;
-using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.MVVM.Model;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.MVVM.ViewModels.Components.Editors;
+using WolvenKit.MVVM.ViewModels.Components.Editors.VisualEditor;
+using WolvenKit.MVVM.ViewModels.Components.Tools;
+using WolvenKit.MVVM.ViewModels.Others;
+using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
+using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
+using WolvenKit.MVVM.Views.Components.Wizards;
+using WolvenKit.MVVM.Views.Others;
+using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {

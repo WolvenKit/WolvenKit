@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Catel;
 using Catel.IoC;
-using Catel.Logging;
 using Orc.ProjectManagement;
 
 namespace WolvenKit.MVVM.Model.ProjectManagement

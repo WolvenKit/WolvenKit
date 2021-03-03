@@ -9,20 +9,20 @@ using Catel.IoC;
 using Catel.Linq;
 using Newtonsoft.Json;
 using ProtoBuf;
-using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Wcc;
-using WolvenKit.CR2W.Types;
-using WolvenKit.Wwise;
-using WolvenKit.Wwise.Wwise;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Bundles;
 using WolvenKit.Cache;
+using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
-using WolvenKit.W3Speech;
-using WolvenKit.W3Strings;
+using WolvenKit.Common.Wcc;
+using WolvenKit.CR2W.Types;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.MVVM.Model;
+using WolvenKit.W3Speech;
+using WolvenKit.W3Strings;
+using WolvenKit.Wwise;
+using WolvenKit.Wwise.Wwise;
 
 namespace WolvenKit.Functionality.Controllers
 {

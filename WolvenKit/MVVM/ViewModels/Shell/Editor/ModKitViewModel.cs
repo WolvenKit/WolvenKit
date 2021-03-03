@@ -1,26 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Security.Policy;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
-    using Functionality.Commands;
-    using Common;
     using Common.Services;
-    using Common.Wcc;
-    using CR2W;
-    using CR2W.Types;
-    using Radish.Model;
     using WolvenKit.Functionality.Controllers;
 
     public class ModkitViewModel : ViewModel

@@ -1,8 +1,4 @@
-
-using Catel.Windows;
-using ICSharpCode.AvalonEdit.Folding;
 using System.Windows;
-using System.Windows.Controls;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.MVVM.Views.Components.Editors

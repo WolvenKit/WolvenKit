@@ -5,16 +5,15 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-using Catel.IoC;
-using Catel.Services;
-using WolvenKit.Common.Services;
-
 using System.Threading.Tasks;
 using Catel;
+using Catel.IoC;
 using Catel.MVVM;
+using Catel.Services;
 using Catel.Threading;
 using Orc.ProjectManagement;
 using Orchestra.Services;
+using WolvenKit.Common.Services;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenKit.Functionality.Commands

@@ -14,19 +14,19 @@ using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
 using Catel.Threading;
+using Open.ChannelExtensions;
 using Orc.FileSystem;
 using Orc.ProjectManagement;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
-using WolvenKit.MVVM.Model.ProjectManagement;
-using Open.ChannelExtensions;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.MVVM.Model;
+using WolvenKit.MVVM.Model.ProjectManagement;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {

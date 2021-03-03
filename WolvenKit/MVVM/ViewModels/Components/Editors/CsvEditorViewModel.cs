@@ -1,7 +1,7 @@
+using System.Threading.Tasks;
 using Catel;
 using Catel.Services;
 using Orc.ProjectManagement;
-using System.Threading.Tasks;
 using WolvenKit.Common.Services;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.MVVM.ViewModels.Shell.Editor;

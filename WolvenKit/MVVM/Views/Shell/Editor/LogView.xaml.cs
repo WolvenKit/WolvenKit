@@ -3,9 +3,9 @@ using System.Windows;
 using System.Windows.Media;
 using Catel.IoC;
 using ControlzEx.Theming;
+using MahApps.Metro.Controls;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Extensions;
-using MahApps.Metro.Controls;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.MVVM.Views.Shell.Editor

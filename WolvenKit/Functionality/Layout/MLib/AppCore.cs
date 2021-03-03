@@ -5,11 +5,11 @@ using System.Reflection;
 
 namespace WolvenKit.Functionality.Layout.MLib
 {
-	/// <summary>
-	/// Class supplies a set of common static helper methodes that help
-	/// localizing application specific items such as setting folders etc.
-	/// </summary>
-	public class AppCore
+    /// <summary>
+    /// Class supplies a set of common static helper methodes that help
+    /// localizing application specific items such as setting folders etc.
+    /// </summary>
+    public class AppCore
 	{
 		#region properties
 		/// <summary>

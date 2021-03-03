@@ -1,6 +1,6 @@
-using Catel.MVVM;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using Catel.MVVM;
 using WolvenKit.MVVM.Views.Components.Dialogs;
 using WolvenKit.MVVM.Views.Components.Editors;
 using WolvenKit.MVVM.Views.Components.Tools;

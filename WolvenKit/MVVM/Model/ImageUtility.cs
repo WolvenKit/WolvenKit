@@ -1,12 +1,12 @@
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Drawing.Imaging;
 using WolvenKit.Common.DDS;
-using ImageFormat = Pfim.ImageFormat;
 using WolvenKit.CR2W.Types;
+using ImageFormat = Pfim.ImageFormat;
 
 namespace WolvenKit.MVVM.Model
 {

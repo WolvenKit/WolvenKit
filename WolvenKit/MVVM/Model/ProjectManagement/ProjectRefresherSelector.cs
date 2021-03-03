@@ -1,16 +1,12 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Catel;
 using Orc.ProjectManagement;
 
 namespace WolvenKit.MVVM.Model.ProjectManagement
 {
-	public class MyProjectRefresherSelector : IProjectRefresherSelector
+    public class MyProjectRefresherSelector : IProjectRefresherSelector
     {
         private readonly IDictionary<string, IProjectRefresher> _projectRefreshers;
 

@@ -1,18 +1,18 @@
-using Fluent;
-using HandyControl.Controls;
-using HandyControl.Data;
-using HandyControl.Tools;
-using Octokit;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using Fluent;
+using HandyControl.Controls;
+using HandyControl.Data;
+using HandyControl.Tools;
+using Octokit;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.MVVM.Views.Shell.HomePage.Pages;
+using WolvenKit.MVVM.ViewModels.Others;
 using WolvenKit.MVVM.Views.Components.Wizards;
 using WolvenKit.MVVM.Views.Others;
-using WolvenKit.MVVM.ViewModels.Others;
+using WolvenKit.MVVM.Views.Shell.HomePage.Pages;
 
 namespace WolvenKit.MVVM.Views.Shell.HomePage
 {

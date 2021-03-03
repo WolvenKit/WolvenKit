@@ -1,5 +1,5 @@
-using Catel.Logging;
 using System.Windows;
+using Catel.Logging;
 using NodeNetwork;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
