@@ -1,8 +1,9 @@
-﻿using DotNetHelper.FastMember.Extension.Extension;
+using DotNetHelper.FastMember.Extension.Extension;
 using FastMember;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -26,6 +27,8 @@ namespace CP77.CR2W.Types
 {
     public abstract class CVariable : ObservableObject, IEditableVariable
     {
+        #region ctor
+
         protected CVariable()
         {
             this.VarChunkIndex = -1;
@@ -44,27 +47,30 @@ namespace CP77.CR2W.Types
             accessor = TypeAccessor.Create(this.GetType());
         }
 
+        #endregion
+
 
         #region Fields
-        [JsonIgnore]
-        public TypeAccessor accessor { get; }
+
+        /// <summary>
+        /// an internal id that is used to track typenames 
+        /// </summary>
+        private string TypeNameWithParents => GetREDTypeNameWithParents();
 
         #endregion
 
         #region Properties
+        [JsonIgnore] [Browsable(false)] public TypeAccessor accessor { get; }
 
-        [JsonIgnore]
-        public List<CVariable> UnknownCVariables { get; set; } = new List<CVariable>();
+        [JsonIgnore] [Browsable(false)] public List<CVariable> UnknownCVariables { get; set; } = new List<CVariable>();
 
-        [JsonIgnore]
-        public IWolvenkitFile Cr2wFile { get; set; }
+        [JsonIgnore] [Browsable(false)] public IWolvenkitFile Cr2wFile { get; set; }
 
         /// <summary>
         /// Stores the parent cr2w file.
         /// used a lot
         /// </summary>
-        [JsonIgnore]
-        public CR2WFile cr2w => Cr2wFile as CR2WFile;
+        [JsonIgnore] [Browsable(false)] public CR2WFile cr2w => Cr2wFile as CR2WFile;
 
         /// <summary>
         /// Shows if the CVariable is to be serialized
@@ -73,8 +79,7 @@ namespace CP77.CR2W.Types
         /// Is set upon read
         /// Must also be set when a variable is edited in the editor
         /// </summary>
-        [JsonIgnore]
-        public bool IsSerialized { get; set; }
+        [JsonIgnore] [Browsable(false)] public bool IsSerialized { get; set; }
         public void SetIsSerialized()
         {
             IsSerialized = true;
@@ -84,7 +89,7 @@ namespace CP77.CR2W.Types
                     cparent.SetIsSerialized();
         }
 
-        public bool IsNulled { get; set; }
+        [JsonIgnore] [Browsable(false)] public bool IsNulled { get; set; }
 
         private ushort _redFlags;
         /// <summary>
@@ -93,20 +98,15 @@ namespace CP77.CR2W.Types
         /// a different layout in the uncooked and cooked state, e.g. CBitmapTexture)
         /// Is set on file read and should not be modified
         /// </summary>
-        public ushort REDFlags => ParentVar?.REDFlags ?? _redFlags;
+        [Browsable(false)] public ushort REDFlags => ParentVar?.REDFlags ?? _redFlags;
         public void SetREDFlags(ushort flag) => _redFlags = flag;
 
         /// <summary>
         /// an internal id that is used to track cvariables 
         /// </summary>
-        [JsonIgnore]
-        public string UniqueIdentifier => GetFullDependencyStringName();
+        [JsonIgnore] [Browsable(false)] public string UniqueIdentifier => GetFullDependencyStringName();
 
-        /// <summary>
-        /// an internal id that is used to track typenames 
-        /// </summary>
-        [JsonIgnore]
-        private string TypeNameWithParents => GetREDTypeNameWithParents();
+
 
 
         /// <summary>
@@ -115,23 +115,22 @@ namespace CP77.CR2W.Types
         /// otherwise must be set manually
         /// Consider moving this to the constructor
         /// </summary>
-        public IEditableVariable ParentVar { get; set; }
+        [JsonIgnore] [Browsable(false)] public IEditableVariable ParentVar { get; set; }
 
         /// <summary>
         /// -1 for children CVars, actual chunk index for root cvar aka cr2wexportwrapper.data
         /// </summary>
-        public int VarChunkIndex { get; set; }
+        [JsonIgnore] [Browsable(false)] public int VarChunkIndex { get; set; }
 
 
         private string name;
-        
-
         /// <summary>
         /// AspectName in frmChunkProperties
         /// Name of the Variable, is set upon read
         /// otherwise has to be set manually
         /// Consider moving this to the constructor
         /// </summary>
+        [Browsable(false)]
         public string REDName
         {
             get
@@ -159,12 +158,12 @@ namespace CP77.CR2W.Types
         /// e.g. Color from CColor, or Uint64 from CUInt64
         /// Can be overwritten (e.g. in Array, Ptr and other generic types)
         /// </summary>
-        public virtual string REDType => REDReflection.GetREDTypeString(this.GetType());
+        [Browsable(false)] public virtual string REDType => REDReflection.GetREDTypeString(this.GetType());
 
         /// <summary>
         /// AspectName in frmChunkProperties
         /// </summary>
-        public string REDValue => this.ToString();
+        [Browsable(false)] public string REDValue => this.ToString();
         /// <summary>
         /// Exported to database
         /// </summary>

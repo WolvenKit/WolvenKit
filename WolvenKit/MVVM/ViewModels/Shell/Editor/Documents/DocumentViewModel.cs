@@ -19,6 +19,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Extensions;
 using WolvenKit.MVVM.Model;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.MVVM.Views.PropertyGridEditors;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 {
@@ -44,6 +45,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         private string _textContent = string.Empty;
         private IWorkSpaceViewModel _workSpaceViewModel = null;
         private FileSystemInfoModel fileinfo;
+        private ChunkViewModel _selectedChunk;
 
         #endregion fields
 
@@ -111,13 +113,39 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             // TODO: Handle command logic here
         }
 
+        /// <summary>Gets a command to save this document's content into another file in the file system.</summary>
+        public ICommand SaveAsCommand
+        {
+            get
+            {
+                if (_saveAsCommand == null)
+                {
+                    _saveAsCommand = new DelegateCommand<object>((p) => OnSaveAs(p), (p) => CanSaveAs(p));
+                }
+
+                return _saveAsCommand;
+            }
+        }
+
+        /// <summary>Gets a command to save this document's content into the file system.</summary>
+        public ICommand SaveCommand
+        {
+            get
+            {
+                if (_saveCommand == null)
+                {
+                    _saveCommand = new DelegateCommand<object>((p) => OnSave(p), (p) => CanSave(p));
+                }
+
+                return _saveCommand;
+            }
+        }
+
         #endregion commands
-
-
 
         #region Properties
 
-        private ChunkViewModel _selectedChunk;
+        public PropertyResolver PropertyResolver => new MyPropertyResolver();
 
         /// <summary>
         /// Bound to the View
@@ -202,6 +230,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         //              }
         //          }
         //      }
+
         /// <summary>Gets/sets whether the documents content has been changed without saving into file system or not.</summary>
         public new bool IsDirty
         {
@@ -228,34 +257,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
                     _IsExistingInFileSystem = value;
                     RaisePropertyChanged(nameof(IsExistingInFileSystem));
                 }
-            }
-        }
-
-        /// <summary>Gets a command to save this document's content into another file in the file system.</summary>
-        public ICommand SaveAsCommand
-        {
-            get
-            {
-                if (_saveAsCommand == null)
-                {
-                    _saveAsCommand = new DelegateCommand<object>((p) => OnSaveAs(p), (p) => CanSaveAs(p));
-                }
-
-                return _saveAsCommand;
-            }
-        }
-
-        /// <summary>Gets a command to save this document's content into the file system.</summary>
-        public ICommand SaveCommand
-        {
-            get
-            {
-                if (_saveCommand == null)
-                {
-                    _saveCommand = new DelegateCommand<object>((p) => OnSave(p), (p) => CanSave(p));
-                }
-
-                return _saveCommand;
             }
         }
 
@@ -415,14 +416,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         private void OnSaveAs(object parameter) => _workSpaceViewModel.Save(this, true);
 
         #endregion methods
-
-        public PropertyGridDemoModel DemoModel { get; set; } = new PropertyGridDemoModel
-        {
-            String = "TestString",
-            Enum = Gender.Female,
-            Boolean = true,
-            Integer = 98,
-        };
     }
 
     public class EditorViewModel
@@ -440,42 +433,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         #region Properties
 
         public string Name { get; } = "TBA";
-
-        #endregion Properties
-    }
-
-    public class PropertyGridDemoModel
-    {
-        #region Constructors
-
-        public PropertyGridDemoModel()
-        {
-            List = new List<string>() { "aaa", "bbb" };
-        }
-
-        #endregion Constructors
-
-
-
-        #region Properties
-
-        [Category("Category2")]
-        public bool Boolean { get; set; }
-
-        [Category("Category1")]
-        public Gender Enum { get; set; }
-
-        public ImageSource ImageSource { get; set; }
-
-        [Category("Category2")]
-        public int Integer { get; set; }
-
-        [Category("Category1")]
-        [Editor(typeof(IListPropertyEditor), typeof(PropertyEditorBase))]
-        public List<string> List { get; set; }
-
-        [Category("Category1")]
-        public string String { get; set; }
 
         #endregion Properties
     }

@@ -1,6 +1,10 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using HandyControl.Controls;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Common.Services;
+using WolvenKit.MVVM.Views.PropertyGridEditors;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
@@ -25,10 +29,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #endregion Constructors
 
-
-
         #region Properties
 
+        [Editor(typeof(CollectionEditor), typeof(PropertyEditorBase))]
         public List<ChunkPropertyViewModel> Children => _property.ChildrEditableVariables.Select(_ => new ChunkPropertyViewModel(_)).ToList();
 
         public System.Windows.Media.Brush ForegroundColor => _property.IsSerialized
@@ -42,7 +45,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         #endregion Properties
     }
 
-    public class ChunkViewModel
+    public class ChunkViewModel : ISelectableTreeViewItemModel
     {
         #region Fields
 
@@ -59,12 +62,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #endregion Constructors
 
-
-
         #region Properties
 
         public List<ChunkViewModel> Children => _export.VirtualChildrenChunks.Select(_ => new ChunkViewModel(_)).ToList();
 
+        
         public List<ChunkPropertyViewModel> ChildrenProperties =>
             Data.ChildrEditableVariables.Select(_ => new ChunkPropertyViewModel(_)).ToList();
 
@@ -72,6 +74,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         public string Name => _export.REDName;
 
+        public bool IsSelected { get; set; }
+
         #endregion Properties
+
+
     }
 }

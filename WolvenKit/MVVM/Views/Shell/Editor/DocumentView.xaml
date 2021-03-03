@@ -14,6 +14,7 @@
     xmlns:cr2W="clr-namespace:WolvenKit.CR2W;assembly=WolvenKit.CR2W"
     xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:propertyGridEditors="clr-namespace:WolvenKit.MVVM.Views.PropertyGridEditors"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d" IsVisibleChanged="UserControl_IsVisibleChanged">
@@ -130,7 +131,9 @@
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
 
         <Grid Grid.Column="2">
-            <hc:PropertyGrid SelectedObject="{Binding DemoModel}">
+            <hc:PropertyGrid
+                PropertyResolver="{Binding PropertyResolver }"
+                SelectedObject="{Binding SelectedChunk.Data}">
             </hc:PropertyGrid>
         </Grid>
     </Grid>

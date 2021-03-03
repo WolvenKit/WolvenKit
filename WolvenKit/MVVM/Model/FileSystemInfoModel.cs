@@ -14,13 +14,14 @@ using Catel.IoC;
 using Catel.MVVM;
 using Orc.ProjectManagement;
 using WolvenKit.Common;
+using WolvenKit.Common.Services;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using ObservableObject = Catel.Data.ObservableObject;
 
 namespace WolvenKit.MVVM.Model
 {
     [Model]
-    public class FileSystemInfoModel : ObservableObject
+    public class FileSystemInfoModel : ObservableObject, ISelectableTreeViewItemModel
     {
         #region Classes
 

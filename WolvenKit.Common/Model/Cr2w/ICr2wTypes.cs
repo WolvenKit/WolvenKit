@@ -1,18 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Common.Model.Cr2w
 {
-    public interface IChunkPtrAccessor : IEditableVariable
-    {
-        ICR2WExport Reference { get; set; }
-        string ReferenceType { get; }
-    }
+    #region cr2w
 
     public interface ICR2WImport
     {
@@ -68,11 +66,32 @@ namespace WolvenKit.Common.Model.Cr2w
         public void WriteData(BinaryWriter file);
     }
 
+    #endregion
+
+    #region REDtypes
+
+    public interface IChunkPtrAccessor : IEditableVariable
+    {
+        ICR2WExport Reference { get; set; }
+        string ReferenceType { get; }
+    }
+
     public interface IREDPrimitive
     {
 
     }
 
+    public interface IREDIntegerType
+    {
+        public double Value { get; set; }
+    }
+
+    public interface IREDBool
+    {
+        public bool Value { get; set; }
+    }
+
+    [Editor(typeof(ICollectionEditor), typeof(IPropertyEditorBase))]
     public interface IArrayAccessor : IEditableVariable, IList
     {
         List<int> Flags { get; set; }
@@ -113,4 +132,6 @@ namespace WolvenKit.Common.Model.Cr2w
 
         void ChangeHandleType();
     }
+    #endregion
+
 }

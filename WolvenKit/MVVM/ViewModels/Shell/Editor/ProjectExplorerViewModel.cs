@@ -572,8 +572,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #endregion commands
 
-
-
         #region Methods
 
         protected override async Task CloseAsync()
