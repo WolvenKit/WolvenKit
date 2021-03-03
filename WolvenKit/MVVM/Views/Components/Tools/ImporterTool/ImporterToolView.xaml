@@ -1,4 +1,4 @@
-<catel:UserControl x:Class="WolvenKit.Components.Tools.ImporterTool.ImporterToolView"
+<catel:UserControl x:Class="WolvenKit.MVVM.Views.Components.Tools.ImporterTool.ImporterToolView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol">

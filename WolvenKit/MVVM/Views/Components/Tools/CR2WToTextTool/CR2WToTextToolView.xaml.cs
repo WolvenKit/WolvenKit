@@ -1,7 +1,7 @@
 
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.Components.Tools.CR2WToTextTool
+namespace WolvenKit.MVVM.Views.Components.Tools.CR2WToTextTool
 {
     public partial class CR2WToTextToolView
     {

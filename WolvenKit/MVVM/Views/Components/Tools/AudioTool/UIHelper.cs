@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace WolvenKit.Components.Tools.AudioTool
+namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 {
     public static class UIHelper
     {

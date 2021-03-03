@@ -1,7 +1,7 @@
 
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.Components.Tools.AnimationTool
+namespace WolvenKit.MVVM.Views.Components.Tools.AnimationTool
 {
     public partial class MimicsView
     {

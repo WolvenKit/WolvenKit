@@ -11,11 +11,11 @@ using NodeNetwork;
 using System.Reactive.Linq;
 using NodeNetwork.Toolkit.ValueNode;
 using ReactiveUI;
-using NodeNetwork.Views;
 using WolvenKit.Views.Editors.VisualEditor.Nodes;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes;
 
-namespace WolvenKit.Views.VisualEditor
+namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor
 {
     public partial class VisualEditorView
     {

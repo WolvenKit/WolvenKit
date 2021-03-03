@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.Components.Tools.AudioTool
+namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 {
     public partial class AudioToolView
     {

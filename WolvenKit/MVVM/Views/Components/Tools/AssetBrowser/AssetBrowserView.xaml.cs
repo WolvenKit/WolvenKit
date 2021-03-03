@@ -5,7 +5,7 @@ using WolvenKit.Common;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.AssetBrowser;
 
-namespace WolvenKit.Components.Tools.AssetBrowser
+namespace WolvenKit.MVVM.Views.Components.Tools.AssetBrowser
 {
     public partial class AssetBrowserView : INotifyPropertyChanged
     {

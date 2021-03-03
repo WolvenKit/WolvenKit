@@ -6,7 +6,7 @@
 using System;
 using NAudio.Dsp;
 
-namespace WolvenKit.Components.Tools.AudioTool
+namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 {
     public class SampleAggregator
     {

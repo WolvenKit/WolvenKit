@@ -11,7 +11,7 @@ using System.Windows.Threading;
 using WolvenKit;
 using WPFSoundVisualizationLib;
 
-namespace WolvenKit.Components.Tools.AudioTool
+namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 {
     class NAudioEngine : INotifyPropertyChanged, ISpectrumPlayer, IWaveformPlayer, IDisposable
     {

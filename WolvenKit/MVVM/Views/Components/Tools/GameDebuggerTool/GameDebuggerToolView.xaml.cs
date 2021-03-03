@@ -1,7 +1,7 @@
 
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.Components.Tools.GameDebuggerTool
+namespace WolvenKit.MVVM.Views.Components.Tools.GameDebuggerTool
 {
     public partial class GameDebuggerToolView
     {

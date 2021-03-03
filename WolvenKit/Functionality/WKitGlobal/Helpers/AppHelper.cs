@@ -24,7 +24,6 @@ using WolvenKit.ViewModels.AnimationTool;
 using WolvenKit.ViewModels.VisualEditor;
 using WolvenKit.ViewModels.PluginManager;
 using WolvenKit.ViewModels.CodeEditor;
-using WolvenKit.Views.VisualEditor;
 using WolvenKit.Views.BulkEditor;
 using WolvenKit.Views.EditorBars;
 using WolvenKit.ViewModels.EditorBars;
@@ -68,17 +67,18 @@ using WolvenKit.MVVM.Views.Shell.Homepage.Pages.IntegratedToolsPages.CyberCAT;
 using WolvenKit.MVVM.Views.Shell.Editor;
 using WolvenKit.MVVM.Views.Shell.Backstage;
 using WolvenKit.MVVM.Views.Others;
-using WolvenKit.Components.Tools.AnimationTool;
-using WolvenKit.Components.Tools.AudioTool;
-using WolvenKit.Components.Tools.AssetBrowser;
-using WolvenKit.Components.Tools.AudioTool.Radio;
-using WolvenKit.Components.Tools.PluginManager;
-using WolvenKit.Components.Tools.CR2WToTextTool;
-using WolvenKit.Components.Tools.RadishTool;
-using WolvenKit.Components.Tools.MenuTool;
-using WolvenKit.Components.Tools.GameDebuggerTool;
-using WolvenKit.Components.Tools.WccTool;
-using WolvenKit.Components.Tools.ImporterTool;
+using WolvenKit.MVVM.Views.Components.Tools.AnimationTool;
+using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
+using WolvenKit.MVVM.Views.Components.Tools.AssetBrowser;
+using WolvenKit.MVVM.Views.Components.Tools.AudioTool.Radio;
+using WolvenKit.MVVM.Views.Components.Tools.PluginManager;
+using WolvenKit.MVVM.Views.Components.Tools.CR2WToTextTool;
+using WolvenKit.MVVM.Views.Components.Tools.RadishTool;
+using WolvenKit.MVVM.Views.Components.Tools.MenuTool;
+using WolvenKit.MVVM.Views.Components.Tools.GameDebuggerTool;
+using WolvenKit.MVVM.Views.Components.Tools.WccTool;
+using WolvenKit.MVVM.Views.Components.Tools.ImporterTool;
+using WolvenKit.MVVM.Views.Components.Editors.VisualEditor;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
