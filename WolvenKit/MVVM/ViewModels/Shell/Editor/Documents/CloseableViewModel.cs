@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 {
     using Common.Services;
     /// <summary>

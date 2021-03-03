@@ -9,11 +9,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.ViewModels;
 using WolvenKit.MVVM.Views.Shell.HomePage.Pages;
-using WolvenKit.Views;
 using WolvenKit.MVVM.Views.Components.Wizards;
 using WolvenKit.MVVM.Views.Others;
+using WolvenKit.MVVM.ViewModels.Others;
 
 namespace WolvenKit.MVVM.Views.Shell.HomePage
 {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolvenKit.ViewModels.HomePage.Pages
+namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages
 {
     class SettingsPageViewModel : ViewModelBase
     {

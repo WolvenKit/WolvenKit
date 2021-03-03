@@ -1,19 +1,7 @@
-﻿using System;
-using System.Windows.Media.Imaging;
-using System.Windows.Media;
-using System.Windows.Input;
-using WolvenKit.Functionality.Commands;
-using Catel.IoC;
-using MLib.Interfaces;
-using WolvenKit.Functionality.Services;
-using Catel;
-using Catel.Data;
-using System.ComponentModel;
 using System.Threading.Tasks;
-using WolvenKit.Common.Services;
 using Catel.MVVM;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.MVVM.ViewModels.Components.Dialogs
 {
 
     /// <summary>

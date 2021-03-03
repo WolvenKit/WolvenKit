@@ -1,4 +1,4 @@
-﻿using Catel.MVVM;
+using Catel.MVVM;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 //using Ninject.Activation;
 //using Ninject.Syntax;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
     using Common;
     using Common.Services;

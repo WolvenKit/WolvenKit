@@ -1,8 +1,6 @@
-using WolvenKit.ViewModels.CsvEditor;
-
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
-	public class ToolViewModel : PaneViewModel
+    public class ToolViewModel : PaneViewModel
 	{
 		#region Fields
 		private bool _isVisible = false;

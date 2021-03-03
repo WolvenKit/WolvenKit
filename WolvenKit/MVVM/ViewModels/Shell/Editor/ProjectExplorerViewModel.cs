@@ -27,7 +27,7 @@ using Open.ChannelExtensions;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
 
     public class ProjectExplorerViewModel : ToolViewModel
@@ -353,12 +353,12 @@ namespace WolvenKit.ViewModels
             var filename = SelectedItem.FullName;
             
             var visualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();
-            var viewModel = new Dialogs.InputDialogViewModel() {Text = filename};
+            var viewModel = new Components.Dialogs.InputDialogViewModel() {Text = filename};
             await visualizerService.ShowDialogAsync(viewModel, delegate(object sender, UICompletedEventArgs args)
             {
                 if (args.Result != true)
                     return;
-                if (args.DataContext is not Dialogs.InputDialogViewModel vm)
+                if (args.DataContext is not Components.Dialogs.InputDialogViewModel vm)
                     return;
                 var newfullpath = Path.Combine(ActiveMod.FileDirectory, vm.Text);
 

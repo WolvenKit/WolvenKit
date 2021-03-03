@@ -14,7 +14,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
     public class RibbonViewModel : ViewModel
     {

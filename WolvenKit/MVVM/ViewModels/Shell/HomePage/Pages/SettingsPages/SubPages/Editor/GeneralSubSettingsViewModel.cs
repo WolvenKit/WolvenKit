@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolvenKit.ViewModels.SettingsPages.SubPages.Editor
+namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.SettingsPages.SubPages.Editor
 {
     class GeneralSubSettingsViewModel : ViewModelBase
     {

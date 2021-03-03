@@ -1,10 +1,10 @@
-﻿using System.Text;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 {
-	public interface IDocumentViewModel
+    public interface IDocumentViewModel
 	{
 		/// <summary>
 		/// Gets the current filename of the file being managed in this document viewmodel.

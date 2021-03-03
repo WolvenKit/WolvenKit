@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WolvenKit.Common.Model.Cr2w;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
     using Functionality.Commands;
     using Common;

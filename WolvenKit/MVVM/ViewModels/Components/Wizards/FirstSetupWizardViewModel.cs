@@ -13,7 +13,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 
-namespace WolvenKit.ViewModels.Wizards
+namespace WolvenKit.MVVM.ViewModels.Components.Wizards
 {
     /// <summary>
     /// During the first time setup it tries to automatically determine the missing paths and settings.

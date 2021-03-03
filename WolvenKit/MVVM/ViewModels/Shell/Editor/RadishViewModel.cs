@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
     using Functionality.Commands;
     using Common;

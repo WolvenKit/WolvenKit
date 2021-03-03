@@ -1,14 +1,14 @@
 using System.Threading.Tasks;
 using System.Windows;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.ViewModels;
+using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
 
 namespace WolvenKit.MVVM.Views.Shell.Editor
 {
-	/// <summary>
-	/// Interaction logic for TextDocumentView.xaml
-	/// </summary>
-	public partial class DocumentView
+    /// <summary>
+    /// Interaction logic for TextDocumentView.xaml
+    /// </summary>
+    public partial class DocumentView
 	{
 		private bool _viewInitialized;
 

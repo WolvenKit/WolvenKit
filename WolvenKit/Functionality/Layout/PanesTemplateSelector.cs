@@ -1,27 +1,13 @@
-using AvalonDock.Layout;
+using System.Windows.Controls;
+using System.Windows;
+using WolvenKit.MVVM.ViewModels.Components.Editors;
+using WolvenKit.MVVM.ViewModels.Components.Tools;
+using WolvenKit.MVVM.ViewModels.Shell.Editor;
+using WolvenKit.MVVM.ViewModels.Components.Editors.VisualEditor;
+using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
 
 namespace WolvenKit.Functionality.Layout
 {
-	using System.Windows.Controls;
-	using System.Windows;
-	using ViewModels;
-    using WolvenKit.ViewModels.AssetBrowser;
-    using WolvenKit.ViewModels.CodeEditor;
-    using WolvenKit.ViewModels.CsvEditor;
-    using WolvenKit.ViewModels.HexEditor;
-    using WolvenKit.ViewModels.AudioTool;
-    using WolvenKit.ViewModels.VisualEditor;
-    using WolvenKit.ViewModels.JournalEditor;
-    using WolvenKit.ViewModels.WccTool;
-    using WolvenKit.ViewModels.RadishTool;
-    using WolvenKit.ViewModels.CR2WToTextTool;
-    using WolvenKit.ViewModels.GameDebuggerTool;
-    using WolvenKit.ViewModels.PluginManager;
-    using WolvenKit.ViewModels.ImporterTool;
-    using WolvenKit.ViewModels.Tools.MenuTool;
-    using WolvenKit.ViewModels.AnimationTool;
-    using WolvenKit.ViewModels.Editors.CR2WEditor;
-
     /// <summary>
     /// Implements a <see ref="DataTemplateSelector"/> for AvalonDock's documents and toolwindows.
     ///
@@ -164,7 +150,7 @@ namespace WolvenKit.Functionality.Layout
                 LogViewModel _ => LogViewTemplate,
                 ProjectExplorerViewModel _ => ProjectExplorerTemplate,
                 AssetBrowserViewModel _ => AssetBrowserTemplate,
-                WolvenKit.ViewModels.BulkEditor.BulkEditorViewModel _ => BulkEditorTemplate,
+                MVVM.ViewModels.Components.Editors.BulkEditorViewModel _ => BulkEditorTemplate,
                 CodeEditorViewModel _ => CodeEditorTemplate,
                 CsvEditorViewModel _ => CsvEditorTemplate,
                 HexEditorViewModel _ => HexEditorTemplate,

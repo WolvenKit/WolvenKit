@@ -8,7 +8,7 @@ using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.CR2W.Types;
 using Color = System.Drawing.Color;
 
-namespace WolvenKit.Common.Model
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
     public class ChunkViewModel
     {

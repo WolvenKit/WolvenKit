@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
     using Catel.MVVM;
     using System.Windows.Media;

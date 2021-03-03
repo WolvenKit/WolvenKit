@@ -2,7 +2,7 @@
 using Catel.IoC;
 using HandyControl.Controls;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.ViewModels.Wizards;
+using WolvenKit.MVVM.ViewModels.Components.Wizards;
 
 namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard
 {

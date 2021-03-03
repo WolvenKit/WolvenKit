@@ -1,30 +1,25 @@
-using Catel.MVVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Common.Services;
 using Catel.Services;
 using Catel;
-using Catel.Threading;
 using Orc.ProjectManagement;
 using WolvenKit.Model;
+using WolvenKit.MVVM.ViewModels.Shell.Editor;
 
-namespace WolvenKit.ViewModels.CR2WToTextTool
+namespace WolvenKit.MVVM.ViewModels.Components.Tools
 {
-    public class CR2WToTextToolViewModel : ToolViewModel
+    public class AnimsViewModel : ToolViewModel
     {
 
         /// <summary>
         /// Identifies the <see ref="ContentId"/> of this tool window.
         /// </summary>
-        public const string ToolContentId = "CR2WToTextTool_Tool";
+        public const string ToolContentId = "Anims_Tool";
 
         /// <summary>
         /// Identifies the caption string used for this tool window.
         /// </summary>
-        public const string ToolTitle = "CR2W To Text Tool";
+        public const string ToolTitle = "Anims Tool";
         private readonly IMessageService _messageService;
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
@@ -32,7 +27,7 @@ namespace WolvenKit.ViewModels.CR2WToTextTool
 
         private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
 
-        public CR2WToTextToolViewModel(
+        public AnimsViewModel(
            IProjectManager projectManager,
            ILoggerService loggerService,
            IMessageService messageService) : base(ToolTitle)

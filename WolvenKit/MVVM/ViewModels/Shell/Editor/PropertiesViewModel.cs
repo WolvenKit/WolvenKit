@@ -1,4 +1,4 @@
-﻿using CsvHelper;
+using CsvHelper;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,24 +15,23 @@ using Catel.Threading;
 using Orc.ProjectManagement;
 using WolvenKit.Common.DDS;
 
-namespace WolvenKit.ViewModels
+
+using WolvenKit.Functionality.Commands;
+using WolvenKit.Model;
+using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
+using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
+using WolvenKit.Common.Tools;
+using WolvenKit.Common.Wcc;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
+using static WolvenKit.CR2W.Types.Enums;
+using static WolvenKit.Common.DDS.TexconvWrapper;
+
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
-
-
-    using Functionality.Commands;
-    using Model;
-    using Common;
-    using Common.Extensions;
-    using Common.FNV1A;
-    using Common.Model;
-    using Common.Services;
-    using Common.Tools;
-    using Common.Wcc;
-    using CR2W;
-    using CR2W.Types;
-    using static CR2W.Types.Enums;
-    using static TexconvWrapper;
-
     public class PropertiesViewModel : ToolViewModel
     {
 

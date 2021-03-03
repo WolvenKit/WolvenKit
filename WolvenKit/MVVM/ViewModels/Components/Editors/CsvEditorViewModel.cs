@@ -1,29 +1,25 @@
 using Catel;
-using Catel.MVVM;
 using Catel.Services;
 using Orc.ProjectManagement;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Common.Services;
 using WolvenKit.Model;
+using WolvenKit.MVVM.ViewModels.Shell.Editor;
 
-namespace WolvenKit.ViewModels.HexEditor
+namespace WolvenKit.MVVM.ViewModels.Components.Editors
 {
-    public class HexEditorViewModel : ToolViewModel
+    public class CsvEditorViewModel : ToolViewModel
     {
 
         /// <summary>
         /// Identifies the <see ref="ContentId"/> of this tool window.
         /// </summary>
-        public const string ToolContentId = "HexEditorVM_Tool";
+        public const string ToolContentId = "CsvEditor_Tool";
 
         /// <summary>
         /// Identifies the caption string used for this tool window.
         /// </summary>
-        public const string ToolTitle = "Hex Editor";
+        public const string ToolTitle = "Csv Editor";
         private readonly IMessageService _messageService;
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
@@ -31,7 +27,7 @@ namespace WolvenKit.ViewModels.HexEditor
 
         private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
 
-        public HexEditorViewModel(
+        public CsvEditorViewModel(
            IProjectManager projectManager,
            ILoggerService loggerService,
            IMessageService messageService) : base(ToolTitle)

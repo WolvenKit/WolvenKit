@@ -5,7 +5,7 @@ using Catel.IoC;
 using Catel.MVVM;
 using WolvenKit.Functionality.Services;
 
-namespace WolvenKit.ViewModels.SettingsPages.SubPages.Editor
+namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.SettingsPages.SubPages.Editor
 {
     class CompatibilitySubSettingsViewModel : ViewModelBase
     {

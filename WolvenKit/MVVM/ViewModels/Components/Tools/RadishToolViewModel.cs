@@ -1,31 +1,25 @@
-using Catel.MVVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Common.Services;
 using Catel.Services;
 using Catel;
-using Catel.Threading;
 using Orc.ProjectManagement;
 using WolvenKit.Model;
+using WolvenKit.MVVM.ViewModels.Shell.Editor;
 
-
-namespace WolvenKit.ViewModels.CodeEditor
+namespace WolvenKit.MVVM.ViewModels.Components.Tools
 {
-    public class CodeEditorViewModel : ToolViewModel
+    public class RadishToolViewModel : ToolViewModel
     {
 
         /// <summary>
         /// Identifies the <see ref="ContentId"/> of this tool window.
         /// </summary>
-        public const string ToolContentId = "CodeEditor_Tool";
+        public const string ToolContentId = "RadishTool_Tool";
 
         /// <summary>
         /// Identifies the caption string used for this tool window.
         /// </summary>
-        public const string ToolTitle = "Code Editor";
+        public const string ToolTitle = "Radish Tool";
         private readonly IMessageService _messageService;
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
@@ -33,7 +27,7 @@ namespace WolvenKit.ViewModels.CodeEditor
 
         private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
 
-        public CodeEditorViewModel(
+        public RadishToolViewModel(
            IProjectManager projectManager,
            ILoggerService loggerService,
            IMessageService messageService) : base(ToolTitle)

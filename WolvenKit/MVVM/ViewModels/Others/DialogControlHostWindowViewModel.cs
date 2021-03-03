@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.MVVM.Views;
 using Catel.Windows.Controls;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Others
 {
     public class DialogControlHostWindowViewModel : ViewModelBase
     {

@@ -6,7 +6,7 @@ using Catel.MVVM;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Model.Wizards;
 
-namespace WolvenKit.ViewModels.Wizards.WizardPages.FirstSetupWizard
+namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWizard
 {
     class FinalizeSetupViewModel : ViewModelBase
     {

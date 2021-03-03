@@ -8,15 +8,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Catel;
 using Catel.Data;
-using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
 using Orc.FileSystem;
@@ -24,7 +21,7 @@ using Orchestra.Models;
 using Orchestra.Services;
 using static WolvenKit.Functionality.WKitGlobal.Helpers.ProjectHelper;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
 {
     public class RecentlyUsedItemsViewModel : ViewModelBase
     {

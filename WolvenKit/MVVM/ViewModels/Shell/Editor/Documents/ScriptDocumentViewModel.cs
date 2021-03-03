@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Input;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 {
     using Functionality.Commands;
     using Model;

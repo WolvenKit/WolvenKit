@@ -1,6 +1,5 @@
 
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.ViewModels.AudioTool.Radio;
 
 namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool.Radio
 {

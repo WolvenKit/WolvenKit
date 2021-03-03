@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using Catel.MVVM;
 using Orchestra.Views;
+using WolvenKit.MVVM.ViewModels.Shell.Editor;
 using WolvenKit.MVVM.Views.Shell.Editor;
-using WolvenKit.ViewModels;
-using WolvenKit.Views;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {

@@ -21,28 +21,17 @@ using WolvenKit.Model;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
-using WolvenKit.Views;
-using WolvenKit.ViewModels.AssetBrowser;
-using WolvenKit.ViewModels.CodeEditor;
-using WolvenKit.ViewModels.CsvEditor;
-using WolvenKit.ViewModels.HexEditor;
-using WolvenKit.ViewModels.AudioTool;
-using WolvenKit.ViewModels.VisualEditor;
-using WolvenKit.ViewModels.JournalEditor;
-using WolvenKit.ViewModels.WccTool;
-using WolvenKit.ViewModels.RadishTool;
-using WolvenKit.ViewModels.CR2WToTextTool;
-using WolvenKit.ViewModels.GameDebuggerTool;
-using WolvenKit.ViewModels.PluginManager;
-using WolvenKit.ViewModels.ImporterTool;
-using WolvenKit.ViewModels.Tools.MenuTool;
-using WolvenKit.ViewModels.AnimationTool;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.MVVM.Views.Others;
 using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
+using WolvenKit.MVVM.ViewModels.Components.Tools;
+using WolvenKit.MVVM.ViewModels.Components.Editors.VisualEditor;
+using WolvenKit.MVVM.ViewModels.Others;
+using WolvenKit.MVVM.ViewModels.Components.Editors;
+using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
     /// <summary>
     /// The WorkSpaceViewModel implements AvalonDock demo specific properties, events and methods.
@@ -531,12 +520,12 @@ namespace WolvenKit.ViewModels
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
-        private WolvenKit.ViewModels.BulkEditor.BulkEditorViewModel _BulkEditorVM = null;
-        public BulkEditor.BulkEditorViewModel BulkEditorVM
+        private Components.Editors.BulkEditorViewModel _BulkEditorVM = null;
+        public Components.Editors.BulkEditorViewModel BulkEditorVM
         {
             get
             {
-                _BulkEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<BulkEditor.BulkEditorViewModel>();
+                _BulkEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<Components.Editors.BulkEditorViewModel>();
                 _BulkEditorVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _BulkEditorVM;
             }
@@ -615,7 +604,7 @@ namespace WolvenKit.ViewModels
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
         ///
-        private AnimationTool.AnimsViewModel _AnimationToolVM = null;
+        private AnimsViewModel _AnimationToolVM = null;
         public AnimsViewModel AnimationToolVM
         {
             get
@@ -630,7 +619,7 @@ namespace WolvenKit.ViewModels
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
         ///
-        private AnimationTool.MimicsViewModel _MimicsToolVM = null;
+        private MimicsViewModel _MimicsToolVM = null;
         public MimicsViewModel MimicsToolVM
         {
             get

@@ -17,7 +17,7 @@ using System.Globalization;
 using System.Reflection;
 using Catel;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
     using Cache;
     using Common;
@@ -34,6 +34,7 @@ namespace WolvenKit.ViewModels
     using CR2W.Types;
     using Wwise;
     using WolvenKit.Functionality.Controllers;
+    using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
 
     /// <summary>
     /// 

@@ -6,7 +6,7 @@ using WolvenKit.MVVM.Views.Components.Editors;
 using WolvenKit.MVVM.Views.Components.Tools;
 
 
-namespace WolvenKit.ViewModels.HomePage.Pages
+namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages
 {
     public class DebugPageViewModel : ViewModelBase
     {

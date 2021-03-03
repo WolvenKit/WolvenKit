@@ -12,7 +12,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using WolvenKit.Common.Services;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
 
     /// <summary>

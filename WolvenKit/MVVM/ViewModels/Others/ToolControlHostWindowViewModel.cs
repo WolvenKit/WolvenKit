@@ -8,7 +8,7 @@ using Catel.IoC;
 using Catel.MVVM;
 using Catel.MVVM.Views;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Others
 {
     public class ToolControlHostWindowViewModel : ViewModelBase
     {

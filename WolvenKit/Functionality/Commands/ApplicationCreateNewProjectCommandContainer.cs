@@ -11,9 +11,9 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Model.Wizards;
 using Catel.IoC;
-using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.MVVM.ViewModels.Components.Wizards;
 
 namespace WolvenKit.Functionality.Commands
 {

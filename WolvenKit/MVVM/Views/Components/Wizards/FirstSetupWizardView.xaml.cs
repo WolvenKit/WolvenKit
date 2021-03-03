@@ -1,7 +1,7 @@
 
 using Catel.IoC;
-using Catel.MVVM;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.MVVM.ViewModels.Components.Wizards;
 using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard;
 
 namespace WolvenKit.MVVM.Views.Components.Wizards
@@ -20,7 +20,7 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
             if (ViewModel == null)
                 return;
             
-            ServiceLocator.Default.RegisterInstance(ViewModel as ViewModels.Wizards.FirstSetupWizardViewModel);
+            ServiceLocator.Default.RegisterInstance(ViewModel as FirstSetupWizardViewModel);
 
             CUV = new CreateUserView();
             STV = new SelectThemeView();

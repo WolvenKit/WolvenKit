@@ -15,7 +15,7 @@ using System;
 using Catel.Configuration;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
     public class StatusBarViewModel : ViewModelBase
     {

@@ -1,10 +1,9 @@
 
 using System.Windows;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.MVVM.ViewModels.Others;
 using WolvenKit.MVVM.Views.Components.Wizards;
 using WolvenKit.MVVM.Views.Others;
-using WolvenKit.ViewModels;
-using WolvenKit.Views;
 
 
 namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages

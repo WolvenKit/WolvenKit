@@ -1,11 +1,11 @@
-﻿using Catel.MVVM;
+using Catel.MVVM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolvenKit.ViewModels.VisualEditor.Blocks
+namespace WolvenKit.MVVM.ViewModels.Components.Editors.VisualEditor.Blocks
 {
     class VisualBlockViewModel : ViewModelBase
     {

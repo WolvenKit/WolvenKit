@@ -1,11 +1,11 @@
-﻿using Catel.IoC;
+using Catel.IoC;
 using Catel.MVVM;
 using Catel.MVVM.Views;
 using Catel.Windows.Controls;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Others
 {
     public class UserControlHostWindowViewModel : ViewModelBase
     {

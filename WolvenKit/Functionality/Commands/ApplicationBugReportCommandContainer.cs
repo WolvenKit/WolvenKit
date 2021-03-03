@@ -1,23 +1,17 @@
 using Catel.MVVM;
 using Catel.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WolvenKit.Common.Services;
-using WolvenKit.ViewModels;
 using WolvenKit.MVVM.Views.Components.Wizards;
-using WolvenKit.Views;
 using Orc.ProjectManagement;
 using Catel;
-using WolvenKit.Functionality.Services;
 using Orchestra.Services;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.MVVM.ViewModels.Others;
 
 namespace WolvenKit.Functionality.Commands
 {
-    public class ApplicationBugReportCommandContainer : Catel.MVVM.CommandContainerBase
+    public class ApplicationBugReportCommandContainer : CommandContainerBase
     {
         private readonly INavigationService _navigationService;
         private readonly ILoggerService _loggerService;

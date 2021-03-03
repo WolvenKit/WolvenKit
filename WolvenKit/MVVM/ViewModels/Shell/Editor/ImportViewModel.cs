@@ -13,7 +13,7 @@ using Catel.Threading;
 using Orc.ProjectManagement;
 using WolvenKit.Common.DDS;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
     using Functionality.Commands;
     using Model;

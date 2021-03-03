@@ -7,13 +7,13 @@ using System.Windows.Input;
 using AvalonDock.Layout.Serialization;
 using Catel.Data;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.ViewModels;
 using WolvenKit.Functionality.Layout.MLib;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.MVVM.ViewModels.Shell.Editor;
 
 namespace WolvenKit.MVVM.Views.Shell.Editor
 {
-	public partial class MainView
+    public partial class MainView
 	{
 		#region fields
 

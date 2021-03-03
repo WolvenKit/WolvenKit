@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Model.Wizards;
 
-namespace WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard
+namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.ProjectWizard
 {
     /// <summary>
 	/// The ProjectConfigurationViewModel implements project wizard configuration window's viewmodel.

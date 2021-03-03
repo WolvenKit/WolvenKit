@@ -12,17 +12,14 @@ using WolvenKit.Model;
 using WolvenKit.Common.Services;
 using Catel.Services;
 using Catel;
-using Catel.MVVM;
 using HandyControl.Data;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
-using System.Windows;
-using System.Windows.Threading;
-using HandyControl.Controls;
 using Orchestra.Services;
 using System.Windows.Media;
+using WolvenKit.MVVM.ViewModels.Shell.Editor;
 
-namespace WolvenKit.ViewModels.AssetBrowser
+namespace WolvenKit.MVVM.ViewModels.Components.Tools
 {
     public class AssetBrowserViewModel : ToolViewModel
     {

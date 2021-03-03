@@ -21,8 +21,9 @@ using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.CR2W.SRT;
 using WolvenKit.Functionality.Extensions;
 using WolvenKit.Model;
+using WolvenKit.MVVM.ViewModels.Shell.Editor;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 {
     public class EditorViewModel
     {

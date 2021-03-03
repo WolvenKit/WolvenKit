@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using WolvenKit.Common;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.ViewModels.AssetBrowser;
+using WolvenKit.MVVM.ViewModels.Components.Tools;
 
 namespace WolvenKit.MVVM.Views.Components.Tools
 {

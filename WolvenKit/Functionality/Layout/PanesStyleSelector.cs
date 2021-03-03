@@ -1,9 +1,10 @@
-﻿namespace WolvenKit.Functionality.Layout
-{
-	using System.Windows.Controls;
-	using System.Windows;
-    using ViewModels;
+using System.Windows.Controls;
+using System.Windows;
+using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
+using WolvenKit.MVVM.ViewModels.Shell.Editor;
 
+namespace WolvenKit.Functionality.Layout
+{
     class PanesStyleSelector : StyleSelector
 	{
 		public Style ToolStyle

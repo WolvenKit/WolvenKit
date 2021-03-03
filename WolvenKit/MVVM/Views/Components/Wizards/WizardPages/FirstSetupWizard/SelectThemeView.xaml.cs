@@ -1,4 +1,4 @@
-﻿
+
 using Catel.IoC;
 using ControlzEx.Theming;
 using System;
@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using WolvenKit.ViewModels.Wizards;
+using WolvenKit.MVVM.ViewModels.Components.Wizards;
 
 namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
 {

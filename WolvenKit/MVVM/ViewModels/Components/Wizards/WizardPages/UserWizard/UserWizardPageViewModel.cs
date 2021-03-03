@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolvenKit.ViewModels.Wizards.WizardPages.UserWizard
+namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.UserWizard
 {
     class UserWizardPageViewModel : ViewModelBase
     {
