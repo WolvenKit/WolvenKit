@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,9 +6,10 @@ namespace CP77Tools.Extensions
 {
     public class CommandLineExtensions
     {
+        #region Methods
+
         public static IEnumerable<String> ParseText(String line, Char delimiter, Char textQualifier)
         {
-
             if (line == null)
             {
                 yield break;
@@ -65,12 +66,12 @@ namespace CP77Tools.Extensions
                     }
 
                     token = token.Append(currentChar);
-
                 }
 
                 yield return token.ToString();
-
             }
         }
+
+        #endregion Methods
     }
 }

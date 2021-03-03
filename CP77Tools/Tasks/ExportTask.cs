@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using CP77.CR2W;
@@ -9,6 +9,8 @@ namespace CP77Tools.Tasks
 {
     public static partial class ConsoleFunctions
     {
+        #region Methods
+
         public static void ExportTask(string[] path, EUncookExtension uncookext, bool flip)
         {
             if (path == null || path.Length < 1)
@@ -21,12 +23,10 @@ namespace CP77Tools.Tasks
             {
                 ExportTaskInner(file, uncookext, flip);
             });
-
         }
 
         private static int ExportTaskInner(string path, EUncookExtension uncookext, bool flip)
         {
-
             #region checks
 
             if (string.IsNullOrEmpty(path))
@@ -41,7 +41,7 @@ namespace CP77Tools.Tasks
                 return 0;
             }
 
-            #endregion
+            #endregion checks
 
             Stopwatch watch = new();
             watch.Restart();
@@ -60,5 +60,7 @@ namespace CP77Tools.Tasks
 
             return 1;
         }
+
+        #endregion Methods
     }
 }

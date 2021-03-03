@@ -24,7 +24,7 @@ scaleform x
 w3speech x
 w3strings x
 wwise x
-TESTS
+TESTS x
 cp77tools
 Wkit
 common

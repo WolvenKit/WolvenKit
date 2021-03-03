@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common.Oodle;
 
 namespace CP77Tools.Tasks
 {
-
     public static partial class ConsoleFunctions
     {
+        #region Methods
 
         public static int OodleTask(string path, string outpath, bool decompress)
         {
@@ -16,7 +16,8 @@ namespace CP77Tools.Tasks
                 return 0;
             }
 
-            if (string.IsNullOrEmpty(outpath)) { outpath = path; }
+            if (string.IsNullOrEmpty(outpath))
+            { outpath = path; }
 
             if (decompress)
             {
@@ -44,8 +45,9 @@ namespace CP77Tools.Tasks
                 File.WriteAllBytes($"{outpath}.kark", msout.ToArray());
             }
 
-
             return 1;
         }
+
+        #endregion Methods
     }
 }

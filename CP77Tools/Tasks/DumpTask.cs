@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -7,57 +6,27 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
-using CP77.CR2W.Archive;
-using Newtonsoft.Json;
-using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using CP77.CR2W;
+using CP77.CR2W.Archive;
 using CP77.CR2W.Reflection;
 using CP77.CR2W.Types;
+using Newtonsoft.Json;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
-    public class ArchiveDumpObject
-    {
-        public ConcurrentDictionary<ulong, Cr2wChunkInfo> FileDictionary { get; set; }
-        public ConcurrentDictionary<ulong, Cr2wTextureInfo> TextureDictionary { get; set; }
-        public string Filename { get; set; }
-    }
-
-    public class Cr2wChunkInfo
-    {
-        public Dictionary<uint, string> Stringdict { get; set; }
-        public List<ICR2WImport> Imports { get; set; }
-        public List<ICR2WBuffer> Buffers { get; set; }
-
-        public List<CR2WExportWrapper> Chunks { get; set; }
-
-        public List<CR2WExportWrapper.Cr2wVariableDumpObject> ChunkData { get; } = new();
-
-        public string Filename { get; set; }
-    }
-
-    public class Cr2wTextureInfo
-    {
-        public string Filename { get; set; }
-
-        public ushort width { get; set; }
-        public ushort height { get; set; }
-        public byte mips { get; set; }
-        public ushort slicecount { get; set; }
-        public uint alignment { get; set; }
-        public CEnum<Enums.ETextureCompression> compression { get; set; }
-        public CEnum<Enums.GpuWrapApieTextureGroup> Group { get; set; }
-        public CEnum<Enums.ETextureRawFormat> rawFormat { get; set; }
-    }
-
-
     public static partial class ConsoleFunctions
     {
-        private static byte[] MAGIC = {0x43, 0x52, 0x32, 0x57};
+        #region Fields
+
+        private static byte[] MAGIC = { 0x43, 0x52, 0x32, 0x57 };
+
+        #endregion Fields
+
+        #region Methods
 
         public static void DumpTask(string[] path, bool imports, bool missinghashes,
             bool texinfo, bool classinfo, bool dump, bool list)
@@ -72,7 +41,6 @@ namespace CP77Tools.Tasks
             {
                 DumpTaskInner(file, imports, missinghashes, texinfo, classinfo, dump, list);
             });
-
         }
 
         public static int DumpTaskInner(string path, bool imports, bool missinghashes,
@@ -82,7 +50,7 @@ namespace CP77Tools.Tasks
 
             if (string.IsNullOrEmpty(path))
             {
-                ConsoleFunctions.logger.LogString("Please fill in an input path.",Logtype.Error);
+                ConsoleFunctions.logger.LogString("Please fill in an input path.", Logtype.Error);
                 return 0;
             }
 
@@ -100,7 +68,8 @@ namespace CP77Tools.Tasks
                     isDirectory = true;
                 }
             }
-            #endregion
+
+            #endregion checks
 
             var archives = new List<Archive>();
 
@@ -114,8 +83,6 @@ namespace CP77Tools.Tasks
             {
                 archives.Add(new Archive(inputFileInfo.FullName));
             }
-
-
 
             var mainController = ServiceLocator.Default.ResolveType<IHashService>();
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
@@ -139,8 +106,6 @@ namespace CP77Tools.Tasks
                             Key = ext,
                             File = fileinfo.Where(_ => Path.GetExtension(_.FileName) == ext)
                         }).ToList();
-
-
 
                     var total = query.Count;
                     logger.LogString($"Exporting {total} bundle entries ");
@@ -177,8 +142,6 @@ namespace CP77Tools.Tasks
 
                         logger.LogString($"Dumped extension {result.Key}", Logtype.Normal);
                     });
-
-
                 }
                 if (imports || texinfo)
                 {
@@ -300,7 +263,6 @@ namespace CP77Tools.Tasks
                                 TypeNameHandling = TypeNameHandling.None
                             }));
                         logger.LogString($"Finished. Dump file written to {inputFileInfo.FullName}.json.", Logtype.Success);
-
                     }
 
                     if (texinfo)
@@ -415,7 +377,6 @@ namespace CP77Tools.Tasks
                 }
             }
 
-
             return 1;
 
             void Register(CR2WExportWrapper.Cr2wVariableDumpObject o)
@@ -456,14 +417,56 @@ namespace CP77Tools.Tasks
                         {
                             continue;
                         }
-
-
                     }
 
                     Register(oVariable);
                 }
             }
-
         }
+
+        #endregion Methods
+    }
+
+    public class ArchiveDumpObject
+    {
+        #region Properties
+
+        public ConcurrentDictionary<ulong, Cr2wChunkInfo> FileDictionary { get; set; }
+        public string Filename { get; set; }
+        public ConcurrentDictionary<ulong, Cr2wTextureInfo> TextureDictionary { get; set; }
+
+        #endregion Properties
+    }
+
+    public class Cr2wChunkInfo
+    {
+        #region Properties
+
+        public List<ICR2WBuffer> Buffers { get; set; }
+        public List<CR2WExportWrapper.Cr2wVariableDumpObject> ChunkData { get; } = new();
+        public List<CR2WExportWrapper> Chunks { get; set; }
+        public string Filename { get; set; }
+        public List<ICR2WImport> Imports { get; set; }
+        public Dictionary<uint, string> Stringdict { get; set; }
+
+        #endregion Properties
+    }
+
+    public class Cr2wTextureInfo
+    {
+        #region Properties
+
+        public uint alignment { get; set; }
+        public CEnum<Enums.ETextureCompression> compression { get; set; }
+        public string Filename { get; set; }
+
+        public CEnum<Enums.GpuWrapApieTextureGroup> Group { get; set; }
+        public ushort height { get; set; }
+        public byte mips { get; set; }
+        public CEnum<Enums.ETextureRawFormat> rawFormat { get; set; }
+        public ushort slicecount { get; set; }
+        public ushort width { get; set; }
+
+        #endregion Properties
     }
 }
