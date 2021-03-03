@@ -6,7 +6,6 @@ using NodeNetwork.ViewModels;
 using ReactiveUI;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes;
-using WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes;
 
 namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor
 {

@@ -1,4 +1,4 @@
-﻿using ReactiveUI;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,21 +20,21 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// <summary>
     /// Interaction logic for OUT_Node.xaml
     /// </summary>
-    public partial class OUT_Node : IViewFor<Views.VisualEditor.VisualEditorView.OUT_Node_Class>
+    public partial class OUT_Node : IViewFor<VisualEditor.VisualEditorView.OUT_Node_Class>
     {
         public static readonly DependencyProperty ViewModelProperty =
-                DependencyProperty.Register(nameof(ViewModel), typeof(Views.VisualEditor.VisualEditorView.OUT_Node_Class), typeof(OUT_Node), new PropertyMetadata(null));
+                DependencyProperty.Register(nameof(ViewModel), typeof(VisualEditor.VisualEditorView.OUT_Node_Class), typeof(OUT_Node), new PropertyMetadata(null));
 
-        public Views.VisualEditor.VisualEditorView.OUT_Node_Class ViewModel
+        public VisualEditor.VisualEditorView.OUT_Node_Class ViewModel
         {
-            get => (Views.VisualEditor.VisualEditorView.OUT_Node_Class)GetValue(ViewModelProperty);
+            get => (VisualEditor.VisualEditorView.OUT_Node_Class)GetValue(ViewModelProperty);
             set => SetValue(ViewModelProperty, value);
         }
 
         object IViewFor.ViewModel
         {
             get => ViewModel;
-            set => SetValue(ViewModelProperty, (Views.VisualEditor.VisualEditorView.OUT_Node_Class)value);
+            set => SetValue(ViewModelProperty, (VisualEditor.VisualEditorView.OUT_Node_Class)value);
         }
 
         public OUT_Node()

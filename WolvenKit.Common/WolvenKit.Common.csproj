@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Platforms>AnyCPU;x64</Platforms>
@@ -12,7 +12,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>wolvenkit</PackageTags>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-      <TargetFrameworks>net5.0;net5.0-windows</TargetFrameworks>
+      <TargetFrameworks>net5.0;net5.0-windows7</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>

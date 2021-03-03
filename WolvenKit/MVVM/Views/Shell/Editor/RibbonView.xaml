@@ -3,7 +3,6 @@
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:fluent="urn:fluent-ribbon"
-                   xmlns:views="clr-namespace:WolvenKit.Views"
                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                    xmlns:HomeView="clr-namespace:WolvenKit.MVVM.Views.Shell.HomePage"
                    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls" xmlns:views1="clr-namespace:WolvenKit.MVVM.Views.Shell.Backstage"
