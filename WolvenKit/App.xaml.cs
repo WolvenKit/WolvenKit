@@ -1,29 +1,7 @@
-using Catel.IoC;
 using Catel.Logging;
-using Catel.Reflection;
-using Catel.Windows;
-using Orc.Squirrel;
-using Orchestra.Services;
-using Orchestra.Views;
 using System.Windows;
-using WolvenKit.Views;
-using Catel.MVVM;
-using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.Threading;
-using WolvenKit.ViewModels;
-using WolvenKit.Views.Dialogs;
 using NodeNetwork;
-using System.Windows.Media;
-using MLib.Interfaces;
-using HandyControl.Controls.SplashWindow;
-using System.Windows.Media.Imaging;
-using ControlzEx.Theming;
-using System.Windows.Media.Effects;
-using Fluent;
-using MahApps.Metro.Controls.Dialogs;
-using WolvenKit.WKitGlobal;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit
 {

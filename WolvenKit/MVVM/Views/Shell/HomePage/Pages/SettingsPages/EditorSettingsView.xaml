@@ -1,0 +1,27 @@
+<catel:UserControl x:Class="WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.EditorSettingsView"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol" IsVisibleChanged="UserControl_IsVisibleChanged">
+
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+        <hc:SideMenu  x:Name="Test"  Width="150" SideBrush="{DynamicResource MahApps.Brushes.Accent}" HorizontalAlignment="Left" >
+
+            <hc:SideMenuItem x:Name="GeneralSubItem" Selected="GeneralSubItem_Selected" >
+                <hc:SideMenuItem.Header>
+                    <TextBlock Text="General" FontSize="10.5"/>
+                </hc:SideMenuItem.Header>
+            </hc:SideMenuItem>
+            <hc:SideMenuItem x:Name="CompatibilitySubItem"  Selected="CompatibilitySubItem_Selected" >
+                <hc:SideMenuItem.Header>
+                    <TextBlock Text="Compatibility Library Paths" FontSize="10.5"/>
+                </hc:SideMenuItem.Header>
+            </hc:SideMenuItem>
+
+        </hc:SideMenu>
+
+        <Grid Margin="150,1,0,0" x:Name="SettingsViewer"></Grid>
+
+
+    </Grid>
+
+</catel:UserControl>

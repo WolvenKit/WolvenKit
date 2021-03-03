@@ -1,0 +1,36 @@
+<catel:UserControl x:Class="WolvenKit.MVVM.Views.Components.Editors.CsvEditorView"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:catel="http://schemas.catelproject.com"
+                   xmlns:hc="https://handyorg.github.io/handycontrol">
+
+    <catel:UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources/>
+                <hc:Theme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </catel:UserControl.Resources>
+
+
+    <Grid >
+        <StackPanel Orientation="Vertical">
+
+            <StackPanel Orientation="Horizontal" >
+                <Button Margin="0,5,5,5" Width="150" Content="Save"/>
+                <Button Margin="5" Width="150" Content="Export Csv"/>
+                <Button Margin="5" Width="150" Content="Import Csv"/>
+
+
+            </StackPanel>
+            <Grid Height="360">
+                <hc:TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+
+                </hc:TextBox>
+            </Grid>
+
+        </StackPanel>
+    </Grid>
+
+</catel:UserControl>

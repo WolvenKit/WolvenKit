@@ -1,0 +1,206 @@
+<catel:UserControl    
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:catel="http://schemas.catelproject.com"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:av="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:Mid="clr-namespace:WolvenKit.MVVM.Views.Shell.HomePage" 
+    xmlns:HPPage="clr-namespace:WolvenKit.MVVM.Views.Shell.HomePage.Pages" 
+    xmlns:Fluent="urn:fluent-ribbon"
+    mc:Ignorable="av"
+    MinHeight="810"
+    MinWidth="1060"
+  
+    
+    x:Class="WolvenKit.MVVM.Views.Shell.HomePage.HomePageView" IsVisibleChanged="UserControl_IsVisibleChanged">
+
+    <catel:UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources  RequestedTheme="Dark"/>
+                <hc:Theme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </catel:UserControl.Resources>
+
+
+    <Grid  x:Name="FocusGrid" Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"  hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"  >
+
+        <StackPanel Margin="5,5,0,5" HorizontalAlignment="Right" VerticalAlignment="Top"  Orientation="Horizontal">
+            <iconPacks:PackIconCodicons Height="13" Width="13" Kind="ChromeMinimize" Margin="15,3,15,3">
+                <iconPacks:PackIconCodicons.Effect>
+                    <DropShadowEffect>
+                        
+                    </DropShadowEffect>
+                </iconPacks:PackIconCodicons.Effect>
+            </iconPacks:PackIconCodicons>
+            <iconPacks:PackIconCodicons Height="13" Width="13" Kind="ChromeRestore" Margin="15,3,15,3"/>
+            <iconPacks:PackIconCodicons Height="13" Width="13" Kind="ChromeClose" Margin="15,3,7,3"/>
+
+        </StackPanel>
+
+
+        <Grid MouseLeftButtonDown="Grid_MouseLeftButtonDown_2"  Background="Transparent" >
+   
+        </Grid>
+
+        <Grid        MouseLeftButtonDown="Grid_MouseLeftButtonDown_1" VerticalAlignment="Top" Height="20" >
+        </Grid>
+
+        <Grid Effect="{DynamicResource  MahApps.DropShadowEffect.Menu}"  Margin="15,25,15,15" HorizontalAlignment="Left">
+
+            <Border CornerRadius="15" Background="{DynamicResource RegionBrush}">
+                <hc:TransitioningContentControl>
+                    <hc:SideMenu    ExpandMode="ShowOne"   x:Name="LeftSideMenu" Margin="0,90,0,15" SideBrush="{DynamicResource MahApps.Brushes.AccentBase}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}"  BorderThickness="0" Width="200" SubSideBrush="{DynamicResource MahApps.Brushes.Accent2}">
+
+               
+
+
+
+                        <hc:SideMenuItem IsSelected="True" x:Name="SideMenu_GetStartedItem" Header="Get Started"  Margin="0,100,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
+                            <hc:SideMenuItem.Icon>
+                                <iconPacks:Codicons Height="25" Kind="Tools" Width="25"/>
+                            </hc:SideMenuItem.Icon>
+
+                            <hc:SideMenuItem  x:Name="SideMenu_WelcomeItem" Header="Welcome" IsSelected="True"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_WelcomeItem_Selected">
+                                <hc:SideMenuItem.Icon>
+                                    <iconPacks:Codicons Height="15" Kind="Pinned" Width="15"/>
+                                </hc:SideMenuItem.Icon>
+                            </hc:SideMenuItem>
+
+
+                        </hc:SideMenuItem>
+
+                        <hc:SideMenuItem Header="Project" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
+                            <hc:SideMenuItem.Icon>
+                                <iconPacks:Codicons Height="25" Kind="Repo" Width="25"/>
+                            </hc:SideMenuItem.Icon>
+                            <hc:SideMenuItem x:Name="SideMenu_OpenRecentProjectItem" Header="Open Recent Project"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_OpenRecentProjectItem_Selected">
+                                <hc:SideMenuItem.Icon>
+                                    <iconPacks:Codicons Height="13" Kind="GoToFile" Width="13"/>
+                                </hc:SideMenuItem.Icon>
+                            </hc:SideMenuItem>
+
+                        </hc:SideMenuItem>
+
+                        <hc:SideMenuItem x:Name="SideMenu_IntegratedItem" Header="Integrated Tools"  Margin="0,0,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_IntegratedItem_Selected" >
+                            <hc:SideMenuItem.Icon>
+                                <iconPacks:Codicons Height="25" Kind="Verified" Width="25" />
+                            </hc:SideMenuItem.Icon>
+                        </hc:SideMenuItem>
+
+
+
+                        <hc:SideMenuItem x:Name="SideMenu_SettingsItem" Header="Settings"  Margin="0,0,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_SettingsItem_Selected">
+                            <hc:SideMenuItem.Icon>
+                                <iconPacks:Codicons Height="25" Kind="Settings" Width="25" />
+                            </hc:SideMenuItem.Icon>
+                        </hc:SideMenuItem>
+
+                        <hc:SideMenuItem  IsSelected="False" x:Name="SideMenu_UserItem" Header="Account"  Margin="0,0,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_UserItem_Selected">
+                            <hc:SideMenuItem.Icon>
+                                <iconPacks:Codicons Height="25" Kind="Account" Width="25"/>
+                            </hc:SideMenuItem.Icon>
+                        </hc:SideMenuItem>
+
+                        <hc:SideMenuItem x:Name="SideMenu_InformationItem" Header="Information" Margin="0,0,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
+                            <hc:SideMenuItem.Icon>
+                                <iconPacks:Codicons Height="25" Kind="Info" Width="25" />
+                            </hc:SideMenuItem.Icon>
+
+                            <hc:SideMenuItem x:Name="SideMenu_WikiItem" Header="Wiki" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_WikiItem_Selected">
+                                <hc:SideMenuItem.Icon>
+                                    <iconPacks:PackIconBoxIcons Height="13" Kind="LogosWikipedia" Width="13" HorizontalAlignment="Center"/>
+                                </hc:SideMenuItem.Icon>
+                            </hc:SideMenuItem>
+                            <hc:SideMenuItem x:Name="SideMenu_GitHubItem" Header="Github"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_GitHubItem_Selected">
+                                <hc:SideMenuItem.Icon>
+                                    <iconPacks:PackIconBoxIcons Height="13" Kind="LogosGithub" Width="16" HorizontalAlignment="Center"/>
+                                </hc:SideMenuItem.Icon>
+                            </hc:SideMenuItem>
+                            <hc:SideMenuItem Visibility="Collapsed" Header="SDK"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}">
+                                <hc:SideMenuItem.Icon>
+                                    <iconPacks:PackIconBoxIcons Height="13" Kind="RegularPackage" Width="13" HorizontalAlignment="Center"/>
+                                </hc:SideMenuItem.Icon>
+                            </hc:SideMenuItem>
+                            <hc:SideMenuItem x:Name="SideMenu_AboutItem" Header="About"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_AboutItem_Selected">
+                                <hc:SideMenuItem.Icon>
+                                    <iconPacks:PackIconBoxIcons Height="13" Kind="RegularInfoCircle" Width="13" HorizontalAlignment="Center"/>
+                                </hc:SideMenuItem.Icon>
+                            </hc:SideMenuItem>
+                            <hc:SideMenuItem x:Name="SideMenu_WebsiteItem" Header="Website"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_WebsiteItem_Selected" >
+                                <hc:SideMenuItem.Icon>
+                                    <iconPacks:PackIconCodicons Height="13" Kind="Cloud" Width="13" HorizontalAlignment="Center"/>
+                                </hc:SideMenuItem.Icon>
+                            </hc:SideMenuItem>
+
+
+
+                        </hc:SideMenuItem>
+
+
+                        <hc:SideMenuItem IsSelected="False" Visibility="Hidden" x:Name="SideMenu_DebugItem" Header="DEBUG"  Margin="0,30,0,0" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Selected="SideMenu_DebugItem_Selected">
+                            <hc:SideMenuItem.Icon>
+                                <iconPacks:Codicons Height="25" Kind="Debug" Width="25"/>
+                            </hc:SideMenuItem.Icon>
+                        </hc:SideMenuItem>
+                    </hc:SideMenu>
+                </hc:TransitioningContentControl>
+            </Border>
+            <Fluent:Button  Height="39"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Stretch"
+                            Margin="5,5,5,15" 
+                            Background="Transparent" 
+                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" 
+                            BorderBrush="Transparent"
+                            BorderThickness="2"
+                            IsDefinitive="True"                            
+                            Style="{StaticResource ButtonIcon}" 
+                            hc:IconElement.Geometry="{DynamicResource HomeArrow}"
+                            hc:BorderElement.CornerRadius="5"  >
+
+            </Fluent:Button>
+
+
+            <StackPanel Margin="5,15,0,0" Orientation="Horizontal" VerticalAlignment="Top" Height="54">
+
+            </StackPanel>
+
+            <Grid VerticalAlignment="Top" Margin="0,15,0,0" >
+                <Border  CornerRadius="0,0,0,0">
+                    <Grid>
+                        <Image MouseLeftButtonDown="Image_MouseLeftButtonDown" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Width="152" Height="152"  Source="pack://application:,,,/Resources/Media/Images/Application/3.png">
+
+                        </Image>
+
+                    </Grid>
+
+                </Border>
+            </Grid>
+
+
+
+        </Grid>
+
+
+
+
+
+        <Border  Effect="{DynamicResource  MahApps.DropShadowEffect.Menu}" CornerRadius="10" Margin="230,25,15,15" Background="{DynamicResource RegionBrush}" >
+            <Border Margin="1,15,1,15" CornerRadius="10" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+                <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
+                    <Grid x:Name="PageViewGrid" Margin="0"/>
+
+                </hc:TransitioningContentControl>
+
+            </Border>
+        </Border>
+
+
+    </Grid>
+
+
+</catel:UserControl>

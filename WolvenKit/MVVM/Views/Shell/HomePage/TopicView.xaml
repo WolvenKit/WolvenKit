@@ -1,0 +1,29 @@
+<catel:UserControl x:Class="WolvenKit.MVVM.Views.Shell.HomePage.TopicView"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:catel="http://schemas.catelproject.com" 
+                   xmlns:av="http://schemas.microsoft.com/expression/blend/2008" 
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                   xmlns:hc="https://handyorg.github.io/handycontrol" 
+                 
+                   xmlns:pag="clr-namespace:WolvenKit.MVVM.Views.Shell.HomePage.Pages"
+                   mc:Ignorable="av" >
+    
+    
+    <!--Shows items in the middle of the homepage. (Welcome by default)-->
+    <hc:TransitioningContentControl TransitionMode="Fade" >
+
+        <Grid 
+        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+        x:Name="TopicViewer"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Center"
+        Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+        Margin="35,35,35,35">
+
+            <Grid.Children>
+            </Grid.Children>
+        </Grid>
+    </hc:TransitioningContentControl>
+</catel:UserControl>

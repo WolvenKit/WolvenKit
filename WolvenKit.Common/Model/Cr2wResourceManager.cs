@@ -1,14 +1,10 @@
-﻿using CsvHelper;
-using System;
+using CsvHelper;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common.Model
 {
@@ -19,11 +15,11 @@ namespace WolvenKit.Common.Model
         public Dictionary<string, ulong> CHashdumpDict { get; }
 
         public static readonly string pathashespath =
-            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ManagerCache",
+            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Config",
                 "pathhashes.csv");
 
         private static readonly string custompathashespath =
-            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ManagerCache",
+            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Config",
                 "custompathhashes.csv");
 
 
