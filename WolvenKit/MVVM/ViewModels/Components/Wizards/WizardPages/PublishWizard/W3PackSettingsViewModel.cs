@@ -6,13 +6,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.PublishWizard
     {
         #region Properties
 
-        public string[] PackerSource
-        {
-            get
-            {
-                return new string[] { "DLC", "MOD" };
-            }
-        }
+        public string[] PackerSource => new string[] { "DLC", "MOD" };
 
         #endregion Properties
     }

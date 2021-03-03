@@ -63,18 +63,12 @@ namespace WolvenKit.MVVM.Model.Wizards
         /// <summary>
         /// Gets/Sets the project's type.
         /// </summary>
-        public string ProjectType
-        {
-            get => CyberpunkChecked ? CyberpunkGameName : (WitcherChecked ? WitcherGameName : "");
-        }
+        public string ProjectType => CyberpunkChecked ? CyberpunkGameName : (WitcherChecked ? WitcherGameName : "");
 
         /// <summary>
         /// Gets/Sets the project's type and path.
         /// </summary>
-        public TypeAndPath ProjectTypeAndPath
-        {
-            get => new TypeAndPath(ProjectType, ProjectPath, ProjectName);
-        }
+        public TypeAndPath ProjectTypeAndPath => new TypeAndPath(ProjectType, ProjectPath, ProjectName);
 
         /// <summary>
         /// Gets/Sets the project's name.

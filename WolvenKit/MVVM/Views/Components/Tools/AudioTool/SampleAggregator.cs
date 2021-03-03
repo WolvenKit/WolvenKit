@@ -81,24 +81,12 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             }
         }
 
-        public float LeftMaxVolume
-        {
-            get { return volumeLeftMaxValue; }
-        }
+        public float LeftMaxVolume => volumeLeftMaxValue;
 
-        public float LeftMinVolume
-        {
-            get { return volumeLeftMinValue; }
-        }
+        public float LeftMinVolume => volumeLeftMinValue;
 
-        public float RightMaxVolume
-        {
-            get { return volumeRightMaxValue; }
-        }
+        public float RightMaxVolume => volumeRightMaxValue;
 
-        public float RightMinVolume
-        {
-            get { return volumeRightMinValue; }
-        }
+        public float RightMinVolume => volumeRightMinValue;
     }
 }

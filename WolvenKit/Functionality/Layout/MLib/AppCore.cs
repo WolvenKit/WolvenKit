@@ -13,58 +13,28 @@ namespace WolvenKit.Functionality.Layout.MLib
     {
         #region properties
 
-        public static string Application_Title
-        {
-            get
-            {
-                return "MLibTest";
-            }
-        }
+        public static string Application_Title => "MLibTest";
 
-        public static string Company
-        {
-            get
-            {
-                return "MLibTest";
-            }
-        }
+        public static string Company => "MLibTest";
 
         /// <summary>
         /// Get a path to the directory where the application
         /// can persist/load user data on session exit and re-start.
         /// </summary>
-        public static string DirAppData
-        {
-            get
-            {
-                return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+        public static string DirAppData => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                                                  System.IO.Path.DirectorySeparatorChar +
                                                  AppCore.Company;
-            }
-        }
 
         /// <summary>
         /// Get path and file name to application specific session file
         /// </summary>
-        public static string DirFileAppSessionData
-        {
-            get
-            {
-                return System.IO.Path.Combine(AppCore.DirAppData,
+        public static string DirFileAppSessionData => System.IO.Path.Combine(AppCore.DirAppData,
                                               string.Format(CultureInfo.InvariantCulture, "{0}.App.session", AppCore.AssemblyTitle));
-            }
-        }
 
         /// <summary>
         /// Get a path to the directory where the user store his documents
         /// </summary>
-        public static string MyDocumentsUserDir
-        {
-            get
-            {
-                return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            }
-        }
+        public static string MyDocumentsUserDir => Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
         //
         // Summary:
@@ -75,24 +45,12 @@ namespace WolvenKit.Functionality.Layout.MLib
         //     file was shadow-copied, the location is that of the file after being shadow-copied.
         //     If the assembly is loaded from a byte array, such as when using the System.Reflection.Assembly.Load(System.Byte[])
         //     method overload, the value returned is an empty string ("").
-        internal static string AssemblyEntryLocation
-        {
-            get
-            {
-                return AppContext.BaseDirectory;
-            }
-        }
+        internal static string AssemblyEntryLocation => AppContext.BaseDirectory;
 
         /// <summary>
         /// Get the name of the executing assembly (usually name of *.exe file)
         /// </summary>
-        internal static string AssemblyTitle
-        {
-            get
-            {
-                return Assembly.GetEntryAssembly().GetName().Name;
-            }
-        }
+        internal static string AssemblyTitle => Assembly.GetEntryAssembly().GetName().Name;
 
         ////        /// <summary>
         ////        /// Get path and file name to application specific settings file

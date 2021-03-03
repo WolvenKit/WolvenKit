@@ -175,14 +175,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
             }
         }
 
-        public string VersionWkit { get { return GetAssemblyVersion(); } }
+        public string VersionWkit => GetAssemblyVersion();
 
         public string GetAssemblyVersion() => GetType().Assembly.GetName().Version.ToString();
 
-        public string DiscordLink { get { return "https://discord.gg/tKZXma5SaA"; } }
-        public string PatreonLink { get { return "https://www.patreon.com/m/RedModdingTools"; } }
-        public string OpenCollectiveLink { get { return "https://opencollective.com/redmodding"; } }
-        public string TwitterLink { get { return "https://twitter.com/ModdingRed"; } }
+        public string DiscordLink => "https://discord.gg/tKZXma5SaA";
+        public string PatreonLink => "https://www.patreon.com/m/RedModdingTools";
+        public string OpenCollectiveLink => "https://opencollective.com/redmodding";
+        public string TwitterLink => "https://twitter.com/ModdingRed";
 
         public class FancyProjectObject : ObservableObject
         {

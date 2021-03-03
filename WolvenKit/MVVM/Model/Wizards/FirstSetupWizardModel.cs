@@ -161,10 +161,7 @@ namespace WolvenKit.MVVM.Model.Wizards
         /// <summary>
 	    /// Gets the SelectedGames string.
 	    /// </summary>
-        public string SelectedGames
-        {
-            get => (CreateModForW3 ? ProjectWizardModel.WitcherGameName + "\t" : "") + (CreateModForCP77 ? ProjectWizardModel.CyberpunkGameName : "");
-        }
+        public string SelectedGames => (CreateModForW3 ? ProjectWizardModel.WitcherGameName + "\t" : "") + (CreateModForCP77 ? ProjectWizardModel.CyberpunkGameName : "");
 
         #endregion properties
     }

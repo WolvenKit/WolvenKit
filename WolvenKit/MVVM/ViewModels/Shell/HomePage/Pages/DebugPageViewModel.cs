@@ -14,10 +14,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages
         public static ObservableCollection<UserControl> _ToolsUC = new ObservableCollection<UserControl>();
         public static ObservableCollection<UserControl> _EditorsUC = new ObservableCollection<UserControl>();
 
-        public ObservableCollection<UserControl> DialogsUC { get { return _DialogsUC; } }
-        public ObservableCollection<UserControl> WizardsUC { get { return _WizardsUC; } }
-        public ObservableCollection<UserControl> ToolsUC { get { return _ToolsUC; } }
-        public ObservableCollection<UserControl> EditorsUC { get { return _EditorsUC; } }
+        public ObservableCollection<UserControl> DialogsUC => _DialogsUC;
+        public ObservableCollection<UserControl> WizardsUC => _WizardsUC;
+        public ObservableCollection<UserControl> ToolsUC => _ToolsUC;
+        public ObservableCollection<UserControl> EditorsUC => _EditorsUC;
 
         public DebugPageViewModel()
         {
