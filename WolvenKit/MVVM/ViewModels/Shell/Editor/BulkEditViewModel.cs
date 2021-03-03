@@ -8,16 +8,15 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using FastMember;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Common;
+using WolvenKit.Common.Services;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Types;
+using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Controllers;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
-    using Common;
-    using Common.Services;
-    using CR2W;
-    using CR2W.Types;
-    using Functionality.Commands;
-    using WolvenKit.Functionality.Controllers;
-
     public class BulkEditOptions
     {
         #region Enums

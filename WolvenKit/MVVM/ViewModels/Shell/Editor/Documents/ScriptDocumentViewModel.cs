@@ -1,12 +1,11 @@
 using System.IO;
 using System.Text;
+using WolvenKit.Common.Services;
+using WolvenKit.CR2W;
+using WolvenKit.Functionality.Controllers;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 {
-    using Common.Services;
-    using CR2W;
-    using WolvenKit.Functionality.Controllers;
-
     public class ScriptDocumentViewModel : CloseableViewModel, Old_IDocumentViewModel
     {
         #region Constructors

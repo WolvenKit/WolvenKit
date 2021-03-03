@@ -4,15 +4,15 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
+using Catel;
+using Catel.Configuration;
+using Catel.Logging;
+using Orc.CommandLine;
+using Orc.FileSystem;
+
 namespace WolvenKit.MVVM.Model.ProjectManagement
 {
-    using System.Threading.Tasks;
-    using Catel;
-    using Catel.Configuration;
-    using Catel.Logging;
-    using Orc.CommandLine;
-    using Orc.FileSystem;
-
     public class InitialProjectLocationService : Orc.ProjectManagement.IInitialProjectLocationService
     {
         #region Fields

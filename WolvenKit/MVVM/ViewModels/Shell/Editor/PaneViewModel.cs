@@ -1,8 +1,8 @@
+using System.Windows.Media;
+using Catel.MVVM;
+
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
-    using System.Windows.Media;
-    using Catel.MVVM;
-
     public class PaneViewModel : ViewModelBase
     {
         #region fields

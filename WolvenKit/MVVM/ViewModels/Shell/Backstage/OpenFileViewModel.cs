@@ -4,10 +4,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Catel.MVVM;
+
 namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
 {
-    using Catel.MVVM;
-
     public class OpenFileViewModel : ViewModelBase
     {
     }

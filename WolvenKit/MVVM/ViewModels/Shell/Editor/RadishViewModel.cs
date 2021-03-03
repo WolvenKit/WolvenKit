@@ -7,14 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Commands;
+using WolvenKit.Radish.Model;
+using WolvenKit.Functionality.Controllers;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
-    using Common.Services;
-    using Functionality.Commands;
-    using Radish.Model;
-    using WolvenKit.Functionality.Controllers;
-
     public class RadishViewModel : ViewModel
     {
         public class FileWrapper

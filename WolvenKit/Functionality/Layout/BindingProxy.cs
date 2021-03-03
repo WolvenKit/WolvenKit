@@ -1,7 +1,7 @@
+using System.Windows;
+
 namespace WolvenKit.Functionality.Layout
 {
-    using System.Windows;
-
     /// <summary>
     /// Implements an XAML proxy which can be used to bind items (TreeViewItem, ListViewItem etc)
     /// with a viewmodel that manages the collections.

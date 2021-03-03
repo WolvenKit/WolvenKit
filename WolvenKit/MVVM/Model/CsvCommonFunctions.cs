@@ -5,14 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using CsvHelper;
+using WolvenKit.Common.Services;
+using WolvenKit.CR2W.Types;
+using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Functionality.Controllers;
 
 namespace WolvenKit.MVVM.Model
 {
-    using Common.Services;
-    using CR2W.Types;
-    using WolvenKit.Common.Model.Cr2w;
-    using WolvenKit.Functionality.Controllers;
-
     public static class CsvCommonFunctions
     {
         #region Methods

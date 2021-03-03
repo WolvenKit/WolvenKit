@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Controllers;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
-    using Common.Services;
-    using WolvenKit.Functionality.Controllers;
-
     public class ModkitViewModel : ViewModel
     {
         #region Constructors

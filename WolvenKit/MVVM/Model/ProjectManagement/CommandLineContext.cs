@@ -3,10 +3,10 @@
 //   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+using Orc.CommandLine;
+
 namespace WolvenKit.MVVM.Model.ProjectManagement
 {
-    using Orc.CommandLine;
-
     public class CommandLineContext : ContextBase
     {
         #region Properties

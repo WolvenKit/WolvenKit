@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Xml.Serialization;
+using WolvenKit.Common;
+using WolvenKit.Radish.Model;
 
 namespace WolvenKit.Functionality.Controllers
 {
-    using Common;
-    using Radish.Model;
-
     public class RadishConfiguration : ObservableObject
     {
         #region Fields

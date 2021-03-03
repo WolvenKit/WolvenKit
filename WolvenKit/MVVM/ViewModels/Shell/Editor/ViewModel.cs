@@ -1,4 +1,5 @@
 using Catel.MVVM;
+using WolvenKit.Common.Services;
 
 //using Ninject;
 //using Ninject.Activation;
@@ -6,8 +7,6 @@ using Catel.MVVM;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
-    using Common.Services;
-
     /// <summary>
     /// Base abstract class for all viewmodels.
     /// </summary>

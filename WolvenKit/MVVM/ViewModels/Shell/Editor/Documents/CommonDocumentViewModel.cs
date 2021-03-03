@@ -2,16 +2,15 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
+using WolvenKit.Common;
+using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.SRT;
+using WolvenKit.Functionality.Controllers;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 {
-    using Common;
-    using Common.Model;
-    using Common.Services;
-    using CR2W;
-    using CR2W.SRT;
-    using WolvenKit.Functionality.Controllers;
-
     public class CommonDocumentViewModel : CloseableViewModel, Old_IDocumentViewModel
     {
         #region Constructors

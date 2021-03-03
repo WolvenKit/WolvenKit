@@ -1,10 +1,10 @@
+using System;
+using System.Globalization;
+using System.Windows;
+using System.Windows.Data;
+
 namespace WolvenKit.Functionality.Layout.Converters
 {
-    using System;
-    using System.Globalization;
-    using System.Windows;
-    using System.Windows.Data;
-
     /// <summary>
     /// Source: http://stackoverflow.com/questions/534575/how-do-i-invert-booleantovisibilityconverter
     ///

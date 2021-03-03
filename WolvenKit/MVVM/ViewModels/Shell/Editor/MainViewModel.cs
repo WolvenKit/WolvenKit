@@ -9,26 +9,25 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using WolvenKit.Cache;
+using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
+using WolvenKit.Common.Wcc;
+using WolvenKit.Common.WinFormsEnums;
+using WolvenKit.CR2W;
+using WolvenKit.CR2W.Reflection;
+using WolvenKit.CR2W.Types;
+using WolvenKit.Functionality.Commands;
+using WolvenKit.MVVM.Model;
+using WolvenKit.Functionality.Controllers;
+using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
+using WolvenKit.Wwise;
+using WolvenKit.Wwise.Wwise;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
-    using Cache;
-    using Common;
-    using Common.Extensions;
-    using Common.Model;
-    using Common.Services;
-    using Common.Wcc;
-    using Common.WinFormsEnums;
-    using CR2W;
-    using CR2W.Reflection;
-    using CR2W.Types;
-    using Functionality.Commands;
-    using Model;
-    using WolvenKit.Functionality.Controllers;
-    using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
-    using Wwise;
-    using Wwise.Wwise;
-
     /// <summary>
     ///
     /// </summary>

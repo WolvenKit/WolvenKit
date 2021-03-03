@@ -1,9 +1,8 @@
 using System.Collections.Generic;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.MVVM.Model
 {
-    using WolvenKit.Common.Model.Cr2w;
-
     public static class CopyController
     {
         #region Properties

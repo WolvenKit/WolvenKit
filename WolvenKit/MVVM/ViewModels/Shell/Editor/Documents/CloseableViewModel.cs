@@ -1,9 +1,8 @@
 using System;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 {
-    using Common.Services;
-
     /// <summary>
     /// https://stackoverflow.com/a/11948550
     /// </summary>
