@@ -1,28 +1,70 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+
 // ReSharper disable InconsistentNaming
 
 namespace WolvenKit.Net
 {
     public class Response
     {
+        #region Enums
+
+        public enum ParamType
+        {
+            StringAnsi = 0xAC08,
+            StringUtf16 = 0x9C16,
+            Byte = 0x8108,
+            PacketEnd = 0xBEEF,
+            Uint32 = 0x7132,
+            Int32 = 0x8132,
+            Int64 = 0x8164
+        }
+
+        #endregion Enums
+
+        #region Classes
+
+        public class Byte_ : Param
+        {
+            #region Fields
+
+            public sbyte Value;
+
+            #endregion Fields
+
+            #region Methods
+
+            public override string ToString()
+            {
+                return "0x" + Value.ToString("X");
+            }
+
+            #endregion Methods
+        }
+
         public class Data
         {
+            #region Fields
+
             public byte[] Head = Const.PacketHead;
             public UInt16 Length;
             public List<Param> Params;
+
+            #endregion Fields
+
+            #region Constructors
 
             public Data(byte[] recievedBytes)
             {
                 using (var br = new BinaryReader(new MemoryStream(recievedBytes)))
                 {
                     this.Head = br.ReadBytes(2);
-                    this.Length = BitConverter.ToUInt16(br.ReadBytes(2).Reverse().ToArray(),0);
+                    this.Length = BitConverter.ToUInt16(br.ReadBytes(2).Reverse().ToArray(), 0);
                     this.Params = new List<Param>();
-                    for (;;)
+                    for (; ; )
                     {
                         if (!(br.BaseStream.Length - br.BaseStream.Position > 4))
                             break;
@@ -51,7 +93,7 @@ namespace WolvenKit.Net
                                     length = BitConverter.ToUInt16(br.ReadBytes(2).Reverse().ToArray(), 0),
                                     Type = ParamType.StringUtf16
                                 };
-                                param.Value = Encoding.BigEndianUnicode.GetString(br.ReadBytes(param.length*2));
+                                param.Value = Encoding.BigEndianUnicode.GetString(br.ReadBytes(param.length * 2));
                                 this.Params.Add(param);
                                 break;
                             }
@@ -101,87 +143,113 @@ namespace WolvenKit.Net
                     }
                 }
             }
-        }
 
-        public abstract class Param
-        {
-            public ParamType Type;
-        }
-
-        public class StringAnsi : Param
-        {
-            public UInt16 Unknown;
-            public UInt16 length;
-            public string Value;
-
-            public override string ToString()
-            {
-                return Value;
-            }
-        }
-
-        public class StringUtf16 : Param
-        {
-            public UInt16 Unknown;
-            public UInt16 length;
-            public string Value;
-
-            public override string ToString()
-            {
-                return Value;
-            }
-        }
-
-        public class Byte_ : Param
-        {
-            public sbyte Value;
-
-            public override string ToString()
-            {
-                return "0x" + Value.ToString("X");
-            }
-        }
-
-        public class Uint_32 : Param
-        {
-            public UInt32 Value;
-
-            public override string ToString()
-            {
-                return Value.ToString();
-            }
+            #endregion Constructors
         }
 
         public class Int_32 : Param
         {
+            #region Fields
+
             public Int32 Value;
+
+            #endregion Fields
+
+            #region Methods
 
             public override string ToString()
             {
                 return Value.ToString();
             }
+
+            #endregion Methods
         }
 
         public class Int_64 : Param
         {
+            #region Fields
+
             public Int64 Value;
+
+            #endregion Fields
+
+            #region Methods
 
             public override string ToString()
             {
                 return Value.ToString();
             }
+
+            #endregion Methods
         }
-        
-        
-        public enum ParamType
+
+        public abstract class Param
         {
-            StringAnsi = 0xAC08,
-            StringUtf16 = 0x9C16,
-            Byte = 0x8108,
-            PacketEnd = 0xBEEF,
-            Uint32 = 0x7132,
-            Int32 = 0x8132,
-            Int64 = 0x8164
+            #region Fields
+
+            public ParamType Type;
+
+            #endregion Fields
         }
+
+        public class StringAnsi : Param
+        {
+            #region Fields
+
+            public UInt16 length;
+            public UInt16 Unknown;
+            public string Value;
+
+            #endregion Fields
+
+            #region Methods
+
+            public override string ToString()
+            {
+                return Value;
+            }
+
+            #endregion Methods
+        }
+
+        public class StringUtf16 : Param
+        {
+            #region Fields
+
+            public UInt16 length;
+            public UInt16 Unknown;
+            public string Value;
+
+            #endregion Fields
+
+            #region Methods
+
+            public override string ToString()
+            {
+                return Value;
+            }
+
+            #endregion Methods
+        }
+
+        public class Uint_32 : Param
+        {
+            #region Fields
+
+            public UInt32 Value;
+
+            #endregion Fields
+
+            #region Methods
+
+            public override string ToString()
+            {
+                return Value.ToString();
+            }
+
+            #endregion Methods
+        }
+
+        #endregion Classes
     }
 }
