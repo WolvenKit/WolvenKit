@@ -18,7 +18,7 @@ cache x
 cr2w
 net x 
 nvidia x
-radish
+radish x
 save
 scaleform
 w3speech

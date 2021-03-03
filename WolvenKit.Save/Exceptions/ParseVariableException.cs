@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 
 namespace WolvenKit.W3SavegameEditor.Core.Exceptions
 {
-
     [Serializable]
     public class ParseVariableException : Exception
     {
+        #region Constructors
+
         public ParseVariableException()
         {
         }
@@ -17,5 +18,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Exceptions
         public ParseVariableException(string message, Exception inner) : base(message, inner)
         {
         }
+
+        #endregion Constructors
     }
 }
