@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W.SRT;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Extensions;
 using WolvenKit.MVVM.Model;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.MVVM.Views.PropertyGridEditors;
@@ -40,10 +42,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         private bool _isInitialized;
         private ICommand _saveAsCommand = null;
         private ICommand _saveCommand = null;
-        private ChunkViewModel _selectedChunk;
         private string _textContent = string.Empty;
         private IWorkSpaceViewModel _workSpaceViewModel = null;
         private FileSystemInfoModel fileinfo;
+        private ChunkViewModel _selectedChunk;
 
         #endregion fields
 
@@ -90,6 +92,27 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         public ICommand OpenEditorCommand { get; private set; }
         public ICommand OpenImportCommand { get; private set; }
 
+        private bool CanOpenBuffer() => true;
+
+        private bool CanOpenEditor() => true;
+
+        private bool CanOpenImport() => true;
+
+        private void ExecuteOpenBuffer()
+        {
+            // TODO: Handle command logic here
+        }
+
+        private void ExecuteOpenEditor()
+        {
+            // TODO: Handle command logic here
+        }
+
+        private void ExecuteOpenImport()
+        {
+            // TODO: Handle command logic here
+        }
+
         /// <summary>Gets a command to save this document's content into another file in the file system.</summary>
         public ICommand SaveAsCommand
         {
@@ -118,30 +141,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             }
         }
 
-        private bool CanOpenBuffer() => true;
-
-        private bool CanOpenEditor() => true;
-
-        private bool CanOpenImport() => true;
-
-        private void ExecuteOpenBuffer()
-        {
-            // TODO: Handle command logic here
-        }
-
-        private void ExecuteOpenEditor()
-        {
-            // TODO: Handle command logic here
-        }
-
-        private void ExecuteOpenImport()
-        {
-            // TODO: Handle command logic here
-        }
-
         #endregion commands
 
         #region Properties
+
+        public PropertyResolver PropertyResolver => new MyPropertyResolver();
 
         /// <summary>
         /// Bound to the View
@@ -212,6 +216,21 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         /// </summary>
         public List<ICR2WImport> Imports => File.Imports;
 
+        //      public List<ChunkPropertyViewModel> _selectEditableVariables;
+        //public List<ChunkPropertyViewModel> SelectEditableVariables
+        //      {
+        //          get => _selectEditableVariables;
+        //          set
+        //          {
+        //              if (_selectEditableVariables != value)
+        //              {
+        //                  var oldValue = _selectEditableVariables;
+        //                  _selectEditableVariables = value;
+        //                  RaisePropertyChanged(() => SelectEditableVariables, oldValue, value);
+        //              }
+        //          }
+        //      }
+
         /// <summary>Gets/sets whether the documents content has been changed without saving into file system or not.</summary>
         public new bool IsDirty
         {
@@ -227,20 +246,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
             }
         }
 
-        //      public List<ChunkPropertyViewModel> _selectEditableVariables;
-        //public List<ChunkPropertyViewModel> SelectEditableVariables
-        //      {
-        //          get => _selectEditableVariables;
-        //          set
-        //          {
-        //              if (_selectEditableVariables != value)
-        //              {
-        //                  var oldValue = _selectEditableVariables;
-        //                  _selectEditableVariables = value;
-        //                  RaisePropertyChanged(() => SelectEditableVariables, oldValue, value);
-        //              }
-        //          }
-        //      }
         /// <summary>Gets/sets whether the documents content has been changed without saving into file system or not.</summary>
         public bool IsExistingInFileSystem
         {
@@ -254,8 +259,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
                 }
             }
         }
-
-        public PropertyResolver PropertyResolver => new MyPropertyResolver();
 
         /// <summary>
         /// Bound to the View via TreeViewBehavior.cs
@@ -424,6 +427,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         }
 
         #endregion Constructors
+
+
 
         #region Properties
 

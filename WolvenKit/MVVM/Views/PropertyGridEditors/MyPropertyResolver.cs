@@ -1,12 +1,16 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Catel.IoC;
 using HandyControl.Controls;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.MVVM.Views.PropertyGridEditors
 {
     public class MyPropertyResolver : PropertyResolver
     {
-        #region Methods
-
         public override PropertyEditorBase CreateEditor(Type type, Type baseType)
         {
             //// support editor services
@@ -24,8 +28,7 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
             //}
 
             return base.CreateEditor(type, baseType);
-        }
 
-        #endregion Methods
+        }
     }
 }
