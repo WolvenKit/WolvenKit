@@ -1,18 +1,16 @@
-using CsvHelper;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using CsvHelper;
 using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.Common.Model
 {
     public class Cr2wResourceManager
     {
-        private static Cr2wResourceManager resourceManager;
-        public Dictionary<string, ulong> HashdumpDict { get; }
-        public Dictionary<string, ulong> CHashdumpDict { get; }
+        #region Fields
 
         public static readonly string pathashespath =
             Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Config",
@@ -22,15 +20,11 @@ namespace WolvenKit.Common.Model
             Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Config",
                 "custompathhashes.csv");
 
+        private static Cr2wResourceManager resourceManager;
 
-        public static Cr2wResourceManager Get()
-        {
-            if (resourceManager == null)
-            {
-                resourceManager = new Cr2wResourceManager();
-            }
-            return resourceManager;
-        }
+        #endregion Fields
+
+        #region Constructors
 
         public Cr2wResourceManager()
         {
@@ -56,20 +50,24 @@ namespace WolvenKit.Common.Model
             }
         }
 
-        public void RegisterAndWriteVanillaPaths(List<string> paths)
+        #endregion Constructors
+
+        #region Properties
+
+        public Dictionary<string, ulong> CHashdumpDict { get; }
+        public Dictionary<string, ulong> HashdumpDict { get; }
+
+        #endregion Properties
+
+        #region Methods
+
+        public static Cr2wResourceManager Get()
         {
-            foreach (var path in paths)
+            if (resourceManager == null)
             {
-                RegisterVanillaPath(path);
+                resourceManager = new Cr2wResourceManager();
             }
-            Write();
-        }
-        public ulong RegisterVanillaPath(string path)
-        {
-            var hashint = FNV1A64HashAlgorithm.HashString(path);
-            if (!HashdumpDict.ContainsKey(path))
-                HashdumpDict.Add(path, hashint);
-            return hashint;
+            return resourceManager;
         }
 
         public ulong RegisterAndWriteCustomPath(string path)
@@ -78,6 +76,7 @@ namespace WolvenKit.Common.Model
             Write();
             return hash;
         }
+
         public void RegisterAndWriteCustomPaths(List<string> paths)
         {
             foreach (var path in paths)
@@ -86,11 +85,29 @@ namespace WolvenKit.Common.Model
             }
             Write();
         }
+
+        public void RegisterAndWriteVanillaPaths(List<string> paths)
+        {
+            foreach (var path in paths)
+            {
+                RegisterVanillaPath(path);
+            }
+            Write();
+        }
+
         public ulong RegisterCustomPath(string path)
         {
             var hashint = FNV1A64HashAlgorithm.HashString(path);
             if (!CHashdumpDict.ContainsKey(path) && !HashdumpDict.ContainsKey(path))
                 CHashdumpDict.Add(path, hashint);
+            return hashint;
+        }
+
+        public ulong RegisterVanillaPath(string path)
+        {
+            var hashint = FNV1A64HashAlgorithm.HashString(path);
+            if (!HashdumpDict.ContainsKey(path))
+                HashdumpDict.Add(path, hashint);
             return hashint;
         }
 
@@ -102,6 +119,7 @@ namespace WolvenKit.Common.Model
                 csv.WriteRecords(CHashdumpDict.Select(_ => new HashDump { Path = _.Key, HashInt = _.Value }));
             }
         }
+
         public void WriteVanilla()
         {
             using (var writer = new StreamWriter(pathashespath))
@@ -111,5 +129,6 @@ namespace WolvenKit.Common.Model
             }
         }
 
+        #endregion Methods
     }
 }

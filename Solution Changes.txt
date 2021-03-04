@@ -25,7 +25,7 @@ w3speech x
 w3strings x
 wwise x
 TESTS x
-cp77tools
+cp77tools x
 Wkit
 common
 cyberformats

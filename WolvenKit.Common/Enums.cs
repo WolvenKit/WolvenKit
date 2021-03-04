@@ -12,20 +12,6 @@ namespace WolvenKit.Common
         Shader,
     }
 
-    public enum EProjectFolders
-    {
-        Cooked,
-        Uncooked,
-        Raw
-    }
-
-    public enum EFileReadErrorCodes
-    {
-        NoError,
-        NoCr2w,
-        UnsupportedVersion,
-    }
-
     /// <summary>
     /// Possible file extensions of cooked redengine files
     /// </summary>
@@ -39,16 +25,6 @@ namespace WolvenKit.Common
         cubemap,
         envprobe,
         texarray
-    }
-
-    /// <summary>
-    /// Possible file extensions of raw files
-    /// </summary>
-    public enum ERawFileFormat
-    {
-        tga,
-        dds,
-        fbx
     }
 
     public enum ECustomImageKeys
@@ -65,5 +41,29 @@ namespace WolvenKit.Common
         RadishImageKey,
         RawModImageKey,
         RawDlcImageKey
+    }
+
+    public enum EFileReadErrorCodes
+    {
+        NoError,
+        NoCr2w,
+        UnsupportedVersion,
+    }
+
+    public enum EProjectFolders
+    {
+        Cooked,
+        Uncooked,
+        Raw
+    }
+
+    /// <summary>
+    /// Possible file extensions of raw files
+    /// </summary>
+    public enum ERawFileFormat
+    {
+        tga,
+        dds,
+        fbx
     }
 }

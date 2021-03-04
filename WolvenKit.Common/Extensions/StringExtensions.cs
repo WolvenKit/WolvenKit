@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common.Extensions
 {
     public static class StringExtensions
     {
+        #region Methods
+
         // https://stackoverflow.com/a/3695190
         public static void EnsureFolderExists(this string path)
         {
@@ -20,6 +19,19 @@ namespace WolvenKit.Common.Extensions
             {
                 // Create all directories on the path that don't already exist
                 Directory.CreateDirectory(directoryName);
+            }
+        }
+
+        public static string FirstCharToLower(this string input)
+        {
+            switch (input)
+            {
+                case null:
+                    throw new ArgumentNullException(nameof(input));
+                case "":
+                    throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
+                default:
+                    return input.First().ToString().ToLower() + input.Substring(1);
             }
         }
 
@@ -33,16 +45,6 @@ namespace WolvenKit.Common.Extensions
             };
         }
 
-        public static string FirstCharToLower(this string input)
-        {
-            switch (input)
-            {
-                case null: throw new ArgumentNullException(nameof(input));
-                case "": throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
-                default: return input.First().ToString().ToLower() + input.Substring(1);
-            }
-        }
-
         public static string GetHashMD5(this string input)
         {
             byte[] encodedPassword = new UTF8Encoding().GetBytes(input);
@@ -51,31 +53,6 @@ namespace WolvenKit.Common.Extensions
                .Replace("-", string.Empty)
                .ToLower();
             return encoded;
-        }
-
-        public static uint HashStringKey(this string key)
-        {
-            char[] keyConverted = key.ToCharArray();
-            uint hash = 0;
-            foreach (char c in keyConverted)
-            {
-                hash *= 31;
-                hash += (uint)c;
-            }
-            return hash;
-        }
-
-        public static string TrimStart(this string target, string trimString)
-        {
-            if (string.IsNullOrEmpty(trimString)) return target;
-
-            string result = target;
-            while (result.StartsWith(trimString))
-            {
-                result = result.Substring(trimString.Length);
-            }
-
-            return result;
         }
 
         public static (string, bool, EProjectFolders) GetModRelativePath(this string fullpath, string activeModFileDirectory)
@@ -106,7 +83,6 @@ namespace WolvenKit.Common.Extensions
                 relativePath = relativePath.Substring(EProjectFolders.Uncooked.ToString().Length + 1);
                 projectfolder = EProjectFolders.Uncooked;
             }
-
             else if (relativePath.StartsWith(EArchiveType.SoundCache.ToString()))
                 relativePath = relativePath.Substring(EArchiveType.SoundCache.ToString().Length + 1);
             else if (relativePath.StartsWith(EArchiveType.Speech.ToString()))
@@ -114,5 +90,33 @@ namespace WolvenKit.Common.Extensions
 
             return (relativePath, isDLC, projectfolder);
         }
+
+        public static uint HashStringKey(this string key)
+        {
+            char[] keyConverted = key.ToCharArray();
+            uint hash = 0;
+            foreach (char c in keyConverted)
+            {
+                hash *= 31;
+                hash += (uint)c;
+            }
+            return hash;
+        }
+
+        public static string TrimStart(this string target, string trimString)
+        {
+            if (string.IsNullOrEmpty(trimString))
+                return target;
+
+            string result = target;
+            while (result.StartsWith(trimString))
+            {
+                result = result.Substring(trimString.Length);
+            }
+
+            return result;
+        }
+
+        #endregion Methods
     }
 }

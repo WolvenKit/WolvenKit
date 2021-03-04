@@ -1,9 +1,9 @@
-﻿
 namespace RED.CRC64
 {
-
     public class Crc64
     {
+        #region Fields
+
         private static readonly ulong[] Table = {
     0x0000000000000000, 0xb32e4cbe03a75f6f, 0xf4843657a840a05b, 0x47aa7ae9abe7ff34,
     0x7bd0c384ff8f5e33, 0xc8fe8f3afc28015c, 0x8f54f5d357cffe68, 0x3c7ab96d5468a107,
@@ -71,18 +71,20 @@ namespace RED.CRC64
     0xa707db9acf80c06d, 0x14299724cc279f02, 0x5383edcd67c06036, 0xe0ada17364673f59
     };
 
+        #endregion Fields
+
+        #region Methods
+
         public static ulong Compute(byte[] s, ulong crc = ~(ulong)0)
         {
-
             for (int j = 0; j < s.Length; j++)
             {
                 crc = (crc >> 8) ^ Crc64.Table[(byte)(crc ^ s[j])];
-
             }
 
             return ~crc;
-
         }
-    }
 
+        #endregion Methods
+    }
 }
