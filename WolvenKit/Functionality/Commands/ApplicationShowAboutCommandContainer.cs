@@ -1,6 +1,7 @@
 using Catel.MVVM;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.MVVM.ViewModels.Shell.HomePage;
 using WolvenKit.MVVM.Views.Shell.HomePage;
 
 namespace WolvenKit.Functionality.Commands
@@ -24,7 +25,7 @@ namespace WolvenKit.Functionality.Commands
             StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.StartScreen.ShownProperty, false);
             StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, true);
             HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
-            HomePageView.GlobalHomePage.PageViewGrid.Children.Add(HomePageView.GlobalHomePage.AboutPV);
+            HomePageView.GlobalHomePage.PageViewGrid.Children.Add(HomePageViewModel.GlobalHomePageVM.AboutPV);
         }
 
         #endregion Methods
