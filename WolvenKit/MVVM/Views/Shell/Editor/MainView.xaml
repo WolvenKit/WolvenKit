@@ -54,9 +54,10 @@
          Background="Transparent"
          DataContext="{Binding}"
          DocumentsSource="{Binding Files}"
+         IsEnabled="True"
          IsVirtualizingAnchorable="True"
          IsVirtualizingDocument="True"
-         Visibility="Hidden"
+         Visibility="Visible"
          >
             <!--  Global Theme  -->
             <DockingManager.Theme>

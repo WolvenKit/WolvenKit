@@ -3,10 +3,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using HandyControl.Controls;
 using HandyControl.Data;
 using HandyControl.Tools;
 using Octokit;
+using WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages;
+using WolvenKit.MVVM.Views.Shell.HomePage.Pages;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
@@ -37,9 +40,9 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                 var g_watchers = general.SubscribersCount;  // Ignore that error its the only way to get the watchers atm. (Shit documentation online tbh)
 #pragma warning restore 618
 
-                //  WatchShield.SetCurrentValue(Shield.StatusProperty, g_watchers.ToString());
-                // ForkShield.SetCurrentValue(Shield.StatusProperty, g_forks.ToString());
-                //   StarShield.SetCurrentValue(Shield.StatusProperty, g_stars.ToString());
+                AboutPageView.GlobalAboutPage.WatchShield.SetCurrentValue(Shield.StatusProperty, g_watchers.ToString());
+                AboutPageView.GlobalAboutPage.ForkShield.SetCurrentValue(Shield.StatusProperty, g_forks.ToString());
+                AboutPageView.GlobalAboutPage.StarShield.SetCurrentValue(Shield.StatusProperty, g_stars.ToString());
 
                 var releases = await GhubClient.Repository.Release.GetLatest("WolvenKit", "Wolven-Kit").ConfigureAwait(false);
                 var latest = releases; // Just a temp fix so I don't spam GHub api during dev
@@ -79,12 +82,14 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                     }
                 }
                 data.Add(item);
-                //  gitTime.SetCurrentValue(ItemsControl.ItemsSourceProperty, data);
+                AboutPageView.GlobalAboutPage.gitTime.SetCurrentValue(ItemsControl.ItemsSourceProperty, data);
+
+                AboutPageViewModel.GithubCollection = data;
             }
             catch { }
         }
 
-        private static async void InitializeGitHub()
+        public static async void InitializeGitHub()
         {
             GhubClient = new GitHubClient(new ProductHeaderValue("WolvenKit"))
             {

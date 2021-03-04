@@ -30,6 +30,8 @@ using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
 using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
 using WolvenKit.MVVM.Views.Components.Wizards;
 using WolvenKit.MVVM.Views.Others;
+using WolvenKit.ViewModels;
+using WolvenKit.Views;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor

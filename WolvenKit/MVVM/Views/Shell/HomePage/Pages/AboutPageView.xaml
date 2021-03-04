@@ -98,6 +98,7 @@
                          FlowDirection="RightToLeft"
                          FontSize="12"
                          Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                         ItemsSource="{Binding GithubCollection}"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
                          TitleInfo="Test"

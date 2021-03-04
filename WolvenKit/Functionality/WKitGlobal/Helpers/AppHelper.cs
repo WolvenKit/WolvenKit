@@ -20,7 +20,6 @@ using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWizard;
 using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.ProjectWizard;
 using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.PublishWizard;
 using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.UserWizard;
-using WolvenKit.MVVM.ViewModels.Others;
 using WolvenKit.MVVM.ViewModels.Shell.Backstage;
 using WolvenKit.MVVM.ViewModels.Shell.Editor;
 using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
@@ -44,7 +43,6 @@ using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard;
 using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard;
 using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.PublishWizard;
 using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.UserWizard;
-using WolvenKit.MVVM.Views.Others;
 using WolvenKit.MVVM.Views.Shell.Backstage;
 using WolvenKit.MVVM.Views.Shell.Editor;
 using WolvenKit.MVVM.Views.Shell.Homepage.Pages.IntegratedToolsPages.CyberCAT;
@@ -54,6 +52,8 @@ using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages;
 using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Editor;
 using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.General;
 using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Tool;
+using WolvenKit.ViewModels;
+using WolvenKit.Views;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
