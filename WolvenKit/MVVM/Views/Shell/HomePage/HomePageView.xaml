@@ -357,8 +357,33 @@
              CornerRadius="10"
              >
                 <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
-                    <Grid x:Name="PageViewGrid" Margin="0" />
+                    <Grid>
+                        <Grid x:Name="PageViewGrid" Margin="0" />
+                        <Button
+                         x:Name="PageCloseButton"
+                         Margin="25,25,0,0"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Top"
+                         Background="Transparent"
+                         BorderBrush="Transparent"
+                         Command="{Binding ClosePage}"
+                         Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
+                         Visibility="Hidden"
+                         >
+                            <iconPacks:PackIconCodicons
+                             Width="25"
+                             Height="25"
+                             Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
+                             Kind="ArrowLeft"
+                             >
+                                <iconPacks:PackIconCodicons.Effect>
+                                    <DropShadowEffect />
+                                </iconPacks:PackIconCodicons.Effect>
+                            </iconPacks:PackIconCodicons>
+                        </Button>
+                    </Grid>
                 </hc:TransitioningContentControl>
+
             </Border>
         </Border>
         <StackPanel

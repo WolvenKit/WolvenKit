@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Threading;
 using Catel;
 using Catel.Data;
@@ -18,16 +19,25 @@ using Catel.Services;
 using Orc.FileSystem;
 using Orchestra.Models;
 using Orchestra.Services;
+using WolvenKit.Functionality.Commands;
+using WolvenKit.MVVM.ViewModels.Shell.HomePage;
 using static WolvenKit.Functionality.WKitGlobal.Helpers.ProjectHelper;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
 {
     public class RecentlyUsedItemsViewModel : ViewModelBase
     {
-        private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
+        #region Fields
+
+        public ObservableCollection<FancyProjectObject> BFancyProjectObjects = new ObservableCollection<FancyProjectObject>();
         private readonly IFileService _fileService;
         private readonly IMessageService _messageService;
         private readonly IProcessService _processService;
+        private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
+
+        #endregion Fields
+
+        #region Constructors
 
         public RecentlyUsedItemsViewModel(IRecentlyUsedItemsService recentlyUsedItemsService, IFileService fileService,
             IMessageService messageService, IProcessService processService)
@@ -42,35 +52,45 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
             _messageService = messageService;
             _processService = processService;
 
+            SettingsCommand = new RelayCommand(ExecSC, CanSC);
+            TutorialsCommand = new RelayCommand(ExecTC, CanTC);
+            WikiCommand = new RelayCommand(ExecWC, CanWC);
+
             PinItem = new Command<string>(OnPinItemExecute);
             UnpinItem = new Command<string>(OnUnpinItemExecute);
             OpenInExplorer = new Command<string>(OnOpenInExplorerExecute);
         }
 
-        public List<RecentlyUsedItem> RecentlyUsedItems { get; private set; }
-        public List<RecentlyUsedItem> PinnedItems { get; private set; }
+        #endregion Constructors
 
-        #region Commands
+        #region Properties
 
-        public Command<string> PinItem { get; private set; }
+        public string DiscordLink => "https://discord.gg/tKZXma5SaA";
 
-        private void OnPinItemExecute(string parameter)
+        public ObservableCollection<FancyProjectObject> FancyProjects
         {
-            Argument.IsNotNullOrWhitespace(() => parameter);
+            get => BFancyProjectObjects;
 
-            _recentlyUsedItemsService.PinItem(parameter);
+            set => BFancyProjectObjects = value;
         }
 
-        public Command<string> UnpinItem { get; private set; }
-
-        private void OnUnpinItemExecute(string parameter)
-        {
-            Argument.IsNotNullOrWhitespace(() => parameter);
-
-            _recentlyUsedItemsService.UnpinItem(parameter);
-        }
-
+        public string OpenCollectiveLink => "https://opencollective.com/redmodding";
         public Command<string> OpenInExplorer { get; private set; }
+        public string PatreonLink => "https://www.patreon.com/m/RedModdingTools";
+        public Command<string> PinItem { get; private set; }
+        public List<RecentlyUsedItem> PinnedItems { get; private set; }
+        public List<RecentlyUsedItem> RecentlyUsedItems { get; private set; }
+        public ICommand SettingsCommand { get; private set; }
+        public ICommand TutorialsCommand { get; private set; }
+        public string TwitterLink => "https://twitter.com/ModdingRed";
+        public Command<string> UnpinItem { get; private set; }
+        public string VersionWkit => GetAssemblyVersion();
+        public ICommand WikiCommand { get; private set; }
+
+        #endregion Properties
+
+        #region Methods
+
 
 #pragma warning disable AsyncFixer03 // Avoid fire & forget async void methods
 #pragma warning disable AvoidAsyncVoid
@@ -86,48 +106,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
             }
 
             _processService.StartProcess("explorer.exe", $"/select, \"{parameter}\"");
-        }
-
-        #endregion Commands
-
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
-
-            _recentlyUsedItemsService.Updated += OnRecentlyUsedItemsServiceUpdated;
-
-            UpdateRecentlyUsedItems();
-            UpdatePinnedItem();
-        }
-
-        protected override Task CloseAsync()
-        {
-            _recentlyUsedItemsService.Updated -= OnRecentlyUsedItemsServiceUpdated;
-
-            return base.CloseAsync();
-        }
-
-        private void OnRecentlyUsedItemsServiceUpdated(object sender, EventArgs e)
-        {
-            UpdateRecentlyUsedItems();
-            UpdatePinnedItem();
-        }
-
-        private void UpdateRecentlyUsedItems()
-        {
-            RecentlyUsedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.Items);
-            ConvertRecentProjects();
-        }
-
-        private void UpdatePinnedItem() => PinnedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.PinnedItems);
-
-        public ObservableCollection<FancyProjectObject> BFancyProjectObjects = new ObservableCollection<FancyProjectObject>();
-
-        public ObservableCollection<FancyProjectObject> FancyProjects
-        {
-            get => BFancyProjectObjects;
-
-            set => BFancyProjectObjects = value;
         }
 
         public void ConvertRecentProjects() // Converts Recent projects for the homepage.
@@ -169,23 +147,84 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
             }
         }
 
-        public string VersionWkit => GetAssemblyVersion();
-
         public string GetAssemblyVersion() => GetType().Assembly.GetName().Version.ToString();
 
-        public string DiscordLink => "https://discord.gg/tKZXma5SaA";
-        public string PatreonLink => "https://www.patreon.com/m/RedModdingTools";
-        public string OpenCollectiveLink => "https://opencollective.com/redmodding";
-        public string TwitterLink => "https://twitter.com/ModdingRed";
+        protected override Task CloseAsync()
+        {
+            _recentlyUsedItemsService.Updated -= OnRecentlyUsedItemsServiceUpdated;
+
+            return base.CloseAsync();
+        }
+
+        protected override async Task InitializeAsync()
+        {
+            await base.InitializeAsync();
+
+            _recentlyUsedItemsService.Updated += OnRecentlyUsedItemsServiceUpdated;
+
+            UpdateRecentlyUsedItems();
+            UpdatePinnedItem();
+        }
+
+        private bool CanSC() => true;
+
+        private bool CanTC() => true;
+
+        private bool CanWC() => true;
+
+        private void ExecSC()
+        {
+            HomePageViewModel.GlobalHomePageVM.SetCurrentPage("Settings");
+
+        }
+
+        private void ExecTC()
+        {
+            HomePageViewModel.GlobalHomePageVM.SetCurrentPage("Wiki");
+
+        }
+
+        private void ExecWC()
+        {
+            HomePageViewModel.GlobalHomePageVM.SetCurrentPage("Wiki");
+
+        }
+
+        private void OnPinItemExecute(string parameter)
+        {
+            Argument.IsNotNullOrWhitespace(() => parameter);
+
+            _recentlyUsedItemsService.PinItem(parameter);
+        }
+
+        private void OnRecentlyUsedItemsServiceUpdated(object sender, EventArgs e)
+        {
+            UpdateRecentlyUsedItems();
+            UpdatePinnedItem();
+        }
+
+        private void OnUnpinItemExecute(string parameter)
+        {
+            Argument.IsNotNullOrWhitespace(() => parameter);
+
+            _recentlyUsedItemsService.UnpinItem(parameter);
+        }
+
+        private void UpdatePinnedItem() => PinnedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.PinnedItems);
+
+        private void UpdateRecentlyUsedItems()
+        {
+            RecentlyUsedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.Items);
+            ConvertRecentProjects();
+        }
+
+        #endregion Methods
+
+        #region Classes
 
         public class FancyProjectObject : ObservableObject
         {
-            public string Name { get; set; }
-            public DateTime CreationDate { get; set; }
-            public DateTime LastEditDate { get; set; }
-            public string Type { get; set; }
-            public string ProjectPath { get; set; }
-            public string Image { get; set; }
+            #region Constructors
 
             public FancyProjectObject(string name, DateTime createdate, string type, string path, string image)
             {
@@ -195,6 +234,21 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
                 ProjectPath = path;
                 Image = image;
             }
+
+            #endregion Constructors
+
+            #region Properties
+
+            public DateTime CreationDate { get; set; }
+            public string Image { get; set; }
+            public DateTime LastEditDate { get; set; }
+            public string Name { get; set; }
+            public string ProjectPath { get; set; }
+            public string Type { get; set; }
+
+            #endregion Properties
         }
+
+        #endregion Classes
     }
 }

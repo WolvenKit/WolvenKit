@@ -6,7 +6,6 @@
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:kapow="clr-namespace:WolvenKit.MVVM.Views.Shell.HomePage.Pages"
- IsVisibleChanged="UserControl_IsVisibleChanged"
  >
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -513,7 +512,7 @@
                              Margin="0.3"
                              HorizontalAlignment="Stretch"
                              BorderBrush="Transparent"
-                             Click="SettingsButton_Click"
+                             Command="{Binding SettingsCommand}"
                              Style="{DynamicResource ButtonGroupItemDefault}"
                              >
                                 <Grid Width="125">
@@ -533,7 +532,7 @@
                              Margin="0.3"
                              HorizontalAlignment="Stretch"
                              BorderBrush="Transparent"
-                             Click="TutorialsButton_Click"
+                             Command="{Binding TutorialsCommand}"
                              Style="{DynamicResource ButtonGroupItemDefault}"
                              >
                                 <Grid Width="125">
@@ -552,7 +551,7 @@
                              Margin="0.3"
                              HorizontalAlignment="Stretch"
                              BorderBrush="Transparent"
-                             Click="WikiButton_Click"
+                             Command="{Binding WikiCommand}"
                              Style="{DynamicResource ButtonGroupItemVerticalLast}"
                              >
                                 <Grid Width="125">

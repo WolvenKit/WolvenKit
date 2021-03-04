@@ -41,6 +41,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.HomePage
             GlobalHomePageVM = this;
             SetCurrentPage("Welcome");
             CloseHomePage = new RelayCommand(ExecuteHome, CanHome);
+            ClosePage = new RelayCommand(ExecPage, CanPage);
+
             CloseWkit = new RelayCommand(ExecuteCloseWkit, CanCloseWkit);
             RestoreWkit = new RelayCommand(ExecuteRestoreWkit, CanRestoreWkit);
             MinimizeWkit = new RelayCommand(ExecuteMinimizeWkit, CanMinimizeWkit);
@@ -51,6 +53,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.HomePage
         #region Properties
 
         public ICommand CloseHomePage { get; private set; }
+        public ICommand ClosePage { get; private set; }
+
         public ICommand CloseWkit { get; private set; }
         public ICommand MinimizeWkit { get; private set; }
         public ICommand RestoreWkit { get; private set; }
@@ -73,54 +77,71 @@ namespace WolvenKit.MVVM.ViewModels.Shell.HomePage
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Add(WelcomePV);
                     DiscordHelper.SetDiscordRPCStatus("Home");
+                    HomePageView.GlobalHomePage.PageCloseButton.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Hidden);
                     break;
 
                 case "Project":
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Add(WelcomePV);
                     DiscordHelper.SetDiscordRPCStatus("Home");
+                    HomePageView.GlobalHomePage.PageCloseButton.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Hidden);
+
                     break;
 
                 case "Open Recent Project":
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Add(RecentPV);
                     DiscordHelper.SetDiscordRPCStatus("Viewing recent projects.");
+                    HomePageView.GlobalHomePage.PageCloseButton.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
+
                     break;
 
                 case "Integrated Tools":
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Add(IntegratedTPV);
                     DiscordHelper.SetDiscordRPCStatus("Checking out the integrated tools.");
+                    HomePageView.GlobalHomePage.PageCloseButton.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
+
                     break;
 
                 case "Settings":
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Add(SettingsPV);
                     DiscordHelper.SetDiscordRPCStatus("Adjusting settings.");
+                    HomePageView.GlobalHomePage.PageCloseButton.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
+
                     break;
 
                 case "Account":
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Add(UserPV);
                     DiscordHelper.SetDiscordRPCStatus("Looking at their profile.");
+                    HomePageView.GlobalHomePage.PageCloseButton.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
+
                     break;
 
                 case "Information":
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Add(WikitPV);
                     DiscordHelper.SetDiscordRPCStatus("Reading the integrated Wiki.");
+                    HomePageView.GlobalHomePage.PageCloseButton.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
+
                     break;
 
                 case "Wiki":
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Add(WikitPV);
                     DiscordHelper.SetDiscordRPCStatus("Reading the integrated Wiki.");
+                    HomePageView.GlobalHomePage.PageCloseButton.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
+
                     break;
 
                 case "Github":
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Add(GithubPV);
                     DiscordHelper.SetDiscordRPCStatus("Viewing integrated Github page.");
+                    HomePageView.GlobalHomePage.PageCloseButton.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
+
                     break;
 
                 case "SDK":
@@ -131,17 +152,23 @@ namespace WolvenKit.MVVM.ViewModels.Shell.HomePage
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Add(AboutPV);
                     DiscordHelper.SetDiscordRPCStatus("Reading the about section.");
+                    HomePageView.GlobalHomePage.PageCloseButton.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
+
                     break;
 
                 case "Website":
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Add(WebsitePV);
                     DiscordHelper.SetDiscordRPCStatus("Viewing integrated website.");
+                    HomePageView.GlobalHomePage.PageCloseButton.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
+
                     break;
 
                 case "DEBUG":
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
                     HomePageView.GlobalHomePage.PageViewGrid.Children.Add(DebugPV);
+                    HomePageView.GlobalHomePage.PageCloseButton.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
+
                     DiscordHelper.SetDiscordRPCStatus("DEBUG");
                     break;
             }
@@ -150,6 +177,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.HomePage
         private bool CanCloseWkit() => true;
 
         private bool CanHome() => true;
+        private bool CanPage() => true;
+
 
         private bool CanMinimizeWkit() => true;
 
@@ -158,6 +187,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.HomePage
         private void ExecuteCloseWkit() =>
             // Add dialog here?
             Application.Current.Shutdown();
+
+
+        private void ExecPage()
+        {
+            SetCurrentPage("Welcome");
+        }
 
         private void ExecuteHome()
         {
