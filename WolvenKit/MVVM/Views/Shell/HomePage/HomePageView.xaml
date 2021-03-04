@@ -10,8 +10,6 @@
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
- MinWidth="1060"
- MinHeight="810"
  mc:Ignorable="av"
  >
 
@@ -364,16 +362,17 @@
             </Border>
         </Border>
         <StackPanel
-         Margin="0,3,0,0"
+         Margin="0,13,8,0"
          HorizontalAlignment="Right"
          VerticalAlignment="Top"
          Orientation="Horizontal"
          >
             <Button
-             Margin="15,-5,15,3"
+             Margin="25,-5,25,3"
              Background="Transparent"
              BorderBrush="Transparent"
              Command="{Binding MinimizeWkit}"
+             Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
              >
                 <iconPacks:PackIconCodicons
                  Width="13"
@@ -388,10 +387,11 @@
             </Button>
 
             <Button
-             Margin="15,-5,15,3"
+             Margin="25,-5,25,3"
              Background="Transparent"
              BorderBrush="Transparent"
              Command="{Binding RestoreWkit}"
+             Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
              >
                 <iconPacks:PackIconCodicons
                  Width="13"
@@ -406,10 +406,11 @@
             </Button>
 
             <Button
-             Margin="15,-5,0,3"
+             Margin="25,-5,0,3"
              Background="Transparent"
              BorderBrush="Transparent"
              Command="{Binding CloseWkit}"
+             Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
              >
                 <iconPacks:PackIconCodicons
                  Width="13"
