@@ -8,10 +8,16 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
 {
     public partial class LocateGameDateView
     {
-        private readonly ISettingsManager _settingsManager;
-        private readonly FirstSetupWizardViewModel _firstSetupWizardViewModel;
+        #region Fields
+
         private readonly FirstSetupWizardModel _firstSetupWizardModel;
+        private readonly FirstSetupWizardViewModel _firstSetupWizardViewModel;
         private readonly ISelectDirectoryService _selectDirectoryService;
+        private readonly ISettingsManager _settingsManager;
+
+        #endregion Fields
+
+        #region Constructors
 
         public LocateGameDateView()
         {
@@ -23,27 +29,15 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
             _selectDirectoryService = ServiceLocator.Default.ResolveType<ISelectDirectoryService>();
         }
 
+        #endregion Constructors
+
+        #region Methods
+
         private void CP77ExecutablePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if (_firstSetupWizardViewModel.OpenCP77GamePathCommand.CanExecute(null))
             {
                 _firstSetupWizardViewModel.OpenCP77GamePathCommand.Execute(null);
-            }
-        }
-
-        private void W3ExecutablePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (_firstSetupWizardViewModel.OpenW3GamePathCommand.CanExecute(null))
-            {
-                _firstSetupWizardViewModel.OpenW3GamePathCommand.Execute(null);
-            }
-        }
-
-        private void WccLitePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (_firstSetupWizardViewModel.OpenWccPathCommand.CanExecute(null))
-            {
-                _firstSetupWizardViewModel.OpenWccPathCommand.Execute(null);
             }
         }
 
@@ -58,13 +52,7 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
             }
         }
 
-        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str) => System.IO.Directory.Exists(str)
-                ? HandyControl.Data.OperationResult.Success()
-                : HandyControl.Data.OperationResult.Failed();
-
-        private HandyControl.Data.OperationResult<bool> VerifyFile(string str) => System.IO.File.Exists(str)
-                ? HandyControl.Data.OperationResult.Success()
-                : HandyControl.Data.OperationResult.Failed();
+        private void Field_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => validateAllFields();
 
         private void validateAllFields()
         {
@@ -82,6 +70,30 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
             _firstSetupWizardViewModel.AllFieldIsValid = w3IsValid && cp77IsValid;
         }
 
-        private void Field_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => validateAllFields();
+        private HandyControl.Data.OperationResult<bool> VerifyFile(string str) => System.IO.File.Exists(str)
+                ? HandyControl.Data.OperationResult.Success()
+                : HandyControl.Data.OperationResult.Failed();
+
+        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str) => System.IO.Directory.Exists(str)
+                ? HandyControl.Data.OperationResult.Success()
+                : HandyControl.Data.OperationResult.Failed();
+
+        private void W3ExecutablePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (_firstSetupWizardViewModel.OpenW3GamePathCommand.CanExecute(null))
+            {
+                _firstSetupWizardViewModel.OpenW3GamePathCommand.Execute(null);
+            }
+        }
+
+        private void WccLitePathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (_firstSetupWizardViewModel.OpenWccPathCommand.CanExecute(null))
+            {
+                _firstSetupWizardViewModel.OpenWccPathCommand.Execute(null);
+            }
+        }
+
+        #endregion Methods
     }
 }

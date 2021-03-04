@@ -49,8 +49,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         #endregion Enums
 
-
-
         #region Classes
 
         public class Node_Template

@@ -7,6 +7,8 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
 {
     public class ExpandableObjectEditor : PropertyEditorBase, IExpandableObjectEditor
     {
+        #region Methods
+
         public override FrameworkElement CreateElement(PropertyItem propertyItem)
         {
             var tree = new TreeView();
@@ -15,6 +17,9 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
             tree.Items.Add(treeviewitem);
             return tree;
         }
+
         public override DependencyProperty GetDependencyProperty() => PropertyGrid.SelectedObjectProperty;
+
+        #endregion Methods
     }
 }

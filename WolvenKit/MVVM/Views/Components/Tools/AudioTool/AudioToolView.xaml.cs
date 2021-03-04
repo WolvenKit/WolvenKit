@@ -11,12 +11,26 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 {
     public partial class AudioToolView
     {
+        #region Fields
+
+        private const string wdir = "vgmstream\\AudioWorkingDir\\";
+
+        #endregion Fields
+
+        #region Constructors
+
         public AudioToolView()
         {
             InitializeComponent();
 
             Reinit();
         }
+
+        #endregion Constructors
+
+        #region Methods
+
+        public void AddAudioItem(string path) => TempConvertToWemWav(path);
 
         public void Reinit()
         {
@@ -36,6 +50,152 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             waveformTimeline.RegisterSoundPlayer(soundEngine);
 
             //LoadExpressionDarkTheme();
+            ShowPage();
+        }
+
+        public void TempConvertToWemWav(string path)
+        {
+            Directory.CreateDirectory(wdir);
+
+            var outf = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Path.GetFileNameWithoutExtension(path) + ".wav");
+            var arg = path + " -o " + outf;
+            var si = new ProcessStartInfo(
+                    "vgmstream\\test.exe",
+                    arg
+                )
+            {
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                UseShellExecute = false
+            };
+            var proc = Process.Start(si);
+            proc.WaitForExit();
+
+            foreach (var f in Directory.GetFiles(wdir))
+            {
+                var lvi = new TextBlock()
+                {
+                    Text = Path.GetFullPath(f),
+                    Tag = Path.GetFileName(f)
+                };
+                PlayListView.Items.Add(lvi);
+                PlayListView.Items.Add(lvi);
+                PlayListView.Items.Add(lvi);
+                PlayListView.Items.Add(lvi);
+                PlayListView.Items.Add(lvi);
+            }
+
+            Trace.WriteLine("WeDiDThis");
+        }
+
+        private void BrowseButton_Click(object sender, RoutedEventArgs e) => OpenFile();
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            NAudioEngine.Instance.Dispose();
+            if (NAudioEngine.Instance.CanStop)
+            {
+                NAudioEngine.Instance.Stop();
+            }
+        }
+
+        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
+        {
+        }
+
+        private void CloseMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (IsVisible)
+            {
+                DiscordHelper.SetDiscordRPCStatus("Audio Tool");
+            }
+        }
+
+        private void DefaultThemeMenuItem_Checked(object sender, RoutedEventArgs e)
+        {
+            //LoadDefaultTheme();
+        }
+
+        private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => base.OnMouseLeftButtonDown(e);
+
+        private void ExpressionDarkMenuItem_Checked(object sender, RoutedEventArgs e)
+        {
+            //LoadExpressionDarkTheme();
+        }
+
+        private void ExpressionLightMenuItem_Checked(object sender, RoutedEventArgs e)
+        {
+            //  LoadExpressionLightTheme();
+        }
+
+        private void LoadDarkBlueTheme()
+        {
+            Resources.MergedDictionaries.Clear();
+            var themeResources = Application.LoadComponent(new Uri("DarkBlue.xaml", UriKind.Relative)) as ResourceDictionary;
+            Resources.MergedDictionaries.Add(themeResources);
+        }
+
+        private void LoadDefaultTheme() => Resources.MergedDictionaries.Clear();
+
+        private void LoadExpressionDarkTheme()
+        {
+            Resources.MergedDictionaries.Clear();
+            var themeResources = Application.LoadComponent(new Uri("ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
+            Resources.MergedDictionaries.Add(themeResources);
+        }
+
+        private void LoadExpressionLightTheme()
+        {
+            Resources.MergedDictionaries.Clear();
+            var themeResources = Application.LoadComponent(new Uri("ExpressionLight.xaml", UriKind.Relative)) as ResourceDictionary;
+            Resources.MergedDictionaries.Add(themeResources);
+        }
+
+        private void NextPage(object sender, System.Windows.RoutedEventArgs e)
+        {
+            StepMain.Next();
+            ShowPage();
+        }
+
+        private void OpenFile()
+        {
+            var openDialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "(*.mp3)|*.mp3"
+            };
+            if (openDialog.ShowDialog() == true)
+            {
+                NAudioEngine.Instance.OpenFile(openDialog.FileName);
+                //FileText.SetCurrentValue(TextBox.TextProperty, openDialog.FileName);
+                RunnerText.SetCurrentValue(ContentProperty, openDialog.FileName);
+            }
+        }
+
+        private void OpenFileMenuItem_Click(object sender, RoutedEventArgs e) => OpenFile();
+
+        private void PauseButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (NAudioEngine.Instance.CanPause)
+            {
+                NAudioEngine.Instance.Pause();
+            }
+        }
+
+        private void PlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (NAudioEngine.Instance.CanPlay)
+            {
+                NAudioEngine.Instance.Play();
+            }
+        }
+
+        private void PreviousPage(object sender, System.Windows.RoutedEventArgs e)
+        {
+            StepMain.Prev();
             ShowPage();
         }
 
@@ -74,56 +234,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             }
         }
 
-        private void NextPage(object sender, System.Windows.RoutedEventArgs e)
-        {
-            StepMain.Next();
-            ShowPage();
-        }
-
-        public void AddAudioItem(string path) => TempConvertToWemWav(path);
-
-        private const string wdir = "vgmstream\\AudioWorkingDir\\";
-
-        public void TempConvertToWemWav(string path)
-        {
-            Directory.CreateDirectory(wdir);
-
-            var outf = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Path.GetFileNameWithoutExtension(path) + ".wav");
-            var arg = path + " -o " + outf;
-            var si = new ProcessStartInfo(
-                    "vgmstream\\test.exe",
-                    arg
-                )
-            {
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                UseShellExecute = false
-            };
-            var proc = Process.Start(si);
-            proc.WaitForExit();
-
-            foreach (var f in Directory.GetFiles(wdir))
-            {
-                var lvi = new TextBlock()
-                {
-                    Text = Path.GetFullPath(f),
-                    Tag = Path.GetFileName(f)
-                };
-                PlayListView.Items.Add(lvi);
-                PlayListView.Items.Add(lvi);
-                PlayListView.Items.Add(lvi);
-                PlayListView.Items.Add(lvi);
-                PlayListView.Items.Add(lvi);
-            }
-
-            Trace.WriteLine("WeDiDThis");
-        }
-
-        private void PreviousPage(object sender, System.Windows.RoutedEventArgs e)
-        {
-            StepMain.Prev();
-            ShowPage();
-        }
+        #endregion Methods
 
         #region NAudio Engine Events
 
@@ -175,22 +286,6 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         #endregion NAudio Engine Events
 
-        private void PlayButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (NAudioEngine.Instance.CanPlay)
-            {
-                NAudioEngine.Instance.Play();
-            }
-        }
-
-        private void PauseButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (NAudioEngine.Instance.CanPause)
-            {
-                NAudioEngine.Instance.Pause();
-            }
-        }
-
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
             if (NAudioEngine.Instance.CanStop)
@@ -199,92 +294,11 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             }
         }
 
-        private void BrowseButton_Click(object sender, RoutedEventArgs e) => OpenFile();
-
-        private void LoadDefaultTheme() => Resources.MergedDictionaries.Clear();
-
-        private void LoadDarkBlueTheme()
-        {
-            Resources.MergedDictionaries.Clear();
-            var themeResources = Application.LoadComponent(new Uri("DarkBlue.xaml", UriKind.Relative)) as ResourceDictionary;
-            Resources.MergedDictionaries.Add(themeResources);
-        }
-
-        private void LoadExpressionDarkTheme()
-        {
-            Resources.MergedDictionaries.Clear();
-            var themeResources = Application.LoadComponent(new Uri("ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
-            Resources.MergedDictionaries.Add(themeResources);
-        }
-
-        private void LoadExpressionLightTheme()
-        {
-            Resources.MergedDictionaries.Clear();
-            var themeResources = Application.LoadComponent(new Uri("ExpressionLight.xaml", UriKind.Relative)) as ResourceDictionary;
-            Resources.MergedDictionaries.Add(themeResources);
-        }
-
-        private void DefaultThemeMenuItem_Checked(object sender, RoutedEventArgs e)
-        {
-            //LoadDefaultTheme();
-        }
-
-        private void ExpressionDarkMenuItem_Checked(object sender, RoutedEventArgs e)
-        {
-            //LoadExpressionDarkTheme();
-        }
-
-        private void ExpressionLightMenuItem_Checked(object sender, RoutedEventArgs e)
-        {
-            //  LoadExpressionLightTheme();
-        }
-
-        private void OpenFile()
-        {
-            var openDialog = new Microsoft.Win32.OpenFileDialog
-            {
-                Filter = "(*.mp3)|*.mp3"
-            };
-            if (openDialog.ShowDialog() == true)
-            {
-                NAudioEngine.Instance.OpenFile(openDialog.FileName);
-                //FileText.SetCurrentValue(TextBox.TextProperty, openDialog.FileName);
-                RunnerText.SetCurrentValue(ContentProperty, openDialog.FileName);
-            }
-        }
-
-        private void OpenFileMenuItem_Click(object sender, RoutedEventArgs e) => OpenFile();
-
-        private void CloseMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
         //  protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         //    {
         //       NAudioEngine.Instance.Dispose();
         //   }
 
-        private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => base.OnMouseLeftButtonDown(e);// Begin dragging the window
-
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            NAudioEngine.Instance.Dispose();
-            if (NAudioEngine.Instance.CanStop)
-            {
-                NAudioEngine.Instance.Stop();
-            }
-        }
-
-        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
-        {
-        }
-
-        private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible)
-            {
-                DiscordHelper.SetDiscordRPCStatus("Audio Tool");
-            }
-        }
+        // Begin dragging the window
     }
 }

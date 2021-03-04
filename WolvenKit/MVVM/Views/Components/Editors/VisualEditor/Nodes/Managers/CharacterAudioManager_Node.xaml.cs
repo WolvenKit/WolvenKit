@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class CharacterAudioManager_Node : UserControl
     {
+        #region Constructors
+
         public CharacterAudioManager_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

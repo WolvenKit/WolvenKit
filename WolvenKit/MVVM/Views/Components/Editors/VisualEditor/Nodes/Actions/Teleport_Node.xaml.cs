@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class Teleport_Node : UserControl
     {
+        #region Constructors
+
         public Teleport_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

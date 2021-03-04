@@ -18,8 +18,6 @@ namespace WolvenKit.Functionality.Layout
 
         #endregion Fields
 
-
-
         #region Properties
 
         /// <summary>
@@ -33,8 +31,6 @@ namespace WolvenKit.Functionality.Layout
         }
 
         #endregion Properties
-
-
 
         #region Methods
 

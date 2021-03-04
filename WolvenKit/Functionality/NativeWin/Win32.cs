@@ -18,8 +18,6 @@ namespace WolvenKit.Functionality.NativeWin
 
         #endregion Fields
 
-
-
         #region Methods
 
         [DllImport("shell32.dll")]

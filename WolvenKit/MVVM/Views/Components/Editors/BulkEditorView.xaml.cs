@@ -5,13 +5,23 @@ namespace WolvenKit.MVVM.Views.Components.Editors
 {
     public partial class BulkEditorView : INotifyPropertyChanged
     {
+        #region Constructors
+
         public BulkEditorView()
         {
             InitializeComponent();
             NotifyPropertyChanged();
         }
 
+        #endregion Constructors
+
+        #region Events
+
         public new event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion Events
+
+        #region Methods
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
@@ -20,5 +30,7 @@ namespace WolvenKit.MVVM.Views.Components.Editors
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+        #endregion Methods
     }
 }

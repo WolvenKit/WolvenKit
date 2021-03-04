@@ -9,25 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Radish.Model;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Radish.Model;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
     public class RadishViewModel : ViewModel
     {
-        public class FileWrapper
-        {
-            public FileWrapper(string path)
-            {
-                File = new FileInfo(path);
-            }
-
-            public FileInfo File { get; set; }
-            public string Name => File.Name;
-
-            public override string ToString() => File.FullName;
-        }
+        #region Constructors
 
         public RadishViewModel(IWindowFactory windowFactory) : base(windowFactory)
         {
@@ -140,16 +129,47 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             CurrentWorkflow = RadishController.Get().Configuration.Workflows.First();
         }
 
-        #region Fields
+        #endregion Constructors
 
-        private readonly List<RadishBatFileWrapper> radishBats;
-        private readonly LoggerService Logger;
+        #region Classes
+
+        public class FileWrapper
+        {
+            #region Constructors
+
+            public FileWrapper(string path)
+            {
+                File = new FileInfo(path);
+            }
+
+            #endregion Constructors
+
+            #region Properties
+
+            public FileInfo File { get; set; }
+            public string Name => File.Name;
+
+            #endregion Properties
+
+            #region Methods
+
+            public override string ToString() => File.FullName;
+
+            #endregion Methods
+        }
+
+        #endregion Classes
+
+        #region Fields
 
         private const string settingsnotfoundmsg = "ERROR! _settings_.bat was not found!\r\n" +
             "1. rename _settings_.bat-template from project template to _settings_.bat\r\n" +
             "2. make sure _settings_.bat is in the root folder of the new project\r\n" +
             "3. adjust the paths in the _settings_.bat\r\n" +
             "4. run this script again";
+
+        private readonly LoggerService Logger;
+        private readonly List<RadishBatFileWrapper> radishBats;
 
         #endregion Fields
 
@@ -181,38 +201,33 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #region Commands
 
-        public ICommand LaunchQuestEditorCommand { get; }
-        public ICommand FullRebuildCommand { get; }
-        public ICommand RunSelectedCommand { get; }
         public ICommand BuildUntilPackCommand { get; }
+        public ICommand FullRebuildCommand { get; }
+        public ICommand LaunchQuestEditorCommand { get; }
         public ICommand PackCommand { get; }
         public ICommand ReCreateLinksCommand { get; }
+        public ICommand RunSelectedCommand { get; }
         public ICommand StartGameCommand { get; }
 
         #endregion Commands
 
         #region Commands Implementation
 
-        protected bool CanLaunchQuestEditor() => RadishController.Get().IsHealthy();
+        private string currentLoggedFile = "";
 
-        protected void LaunchQuestEditor() => TryRunRadishBat("launchQuestEditor.bat");
+        private bool oldstate = false;
 
-        protected bool CanFullRebuild() => RadishController.Get().IsHealthy();
-
-        protected void FullRebuild() => TryRunRadishBat("full.rebuild.bat");
-
-        protected bool CanRunSelected() => RadishController.Get().IsHealthy();
-
-        protected void RunSelected()
+        private enum ERadishLogFilter
         {
-            // write and call temp bat file
-            var settings = CurrentWorkflow;
-            var tempbatpath = Path.Combine(RadishController.Get().Configuration.RadishProjectPath, "wkit_radish_temp.bat");
-            WriteRadishBat(tempbatpath, settings);
-            RunRadishBat(new RadishBatFileWrapper(tempbatpath));
+            None,
+            W2SCENE,
+            W2LAYER,
+            W2COMMUNITY,
+            W3ENV,
+            W3FOLIAGE,
+            W3NAVMESH,
+            W3FUR,
         }
-
-        protected bool CanBuildUntilPack() => RadishController.Get().IsHealthy();
 
         protected void BuildUntilPack()
         {
@@ -225,7 +240,23 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             RunRadishBat(new RadishBatFileWrapper(tempbatpath));
         }
 
+        protected bool CanBuildUntilPack() => RadishController.Get().IsHealthy();
+
+        protected bool CanFullRebuild() => RadishController.Get().IsHealthy();
+
+        protected bool CanLaunchQuestEditor() => RadishController.Get().IsHealthy();
+
         protected bool CanPack() => RadishController.Get().IsHealthy();
+
+        protected bool CanReCreateLinks() => RadishController.Get().IsHealthy();
+
+        protected bool CanRunSelected() => RadishController.Get().IsHealthy();
+
+        protected bool CanStartGame() => RadishController.Get().IsHealthy() && (MainController.Get().ActiveMod != null) && (Process.GetProcessesByName("Witcher3").Length == 0);
+
+        protected void FullRebuild() => TryRunRadishBat("full.rebuild.bat");
+
+        protected void LaunchQuestEditor() => TryRunRadishBat("launchQuestEditor.bat");
 
         protected void Pack()
         {
@@ -238,11 +269,16 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             RunRadishBat(new RadishBatFileWrapper(tempbatpath));
         }
 
-        protected bool CanReCreateLinks() => RadishController.Get().IsHealthy();
-
         protected void ReCreateLinks() => RecreateLinksInternal();
 
-        protected bool CanStartGame() => RadishController.Get().IsHealthy() && (MainController.Get().ActiveMod != null) && (Process.GetProcessesByName("Witcher3").Length == 0);
+        protected void RunSelected()
+        {
+            // write and call temp bat file
+            var settings = CurrentWorkflow;
+            var tempbatpath = Path.Combine(RadishController.Get().Configuration.RadishProjectPath, "wkit_radish_temp.bat");
+            WriteRadishBat(tempbatpath, settings);
+            RunRadishBat(new RadishBatFileWrapper(tempbatpath));
+        }
 
         protected async void StartGame()
         {
@@ -277,21 +313,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             using var process = Process.Start(proc);
             //await RadishMonitorGame(process);
             await Task.Run(() => RadishMonitorGame(process));
-        }
-
-        private bool oldstate = false;
-        private string currentLoggedFile = "";
-
-        private enum ERadishLogFilter
-        {
-            None,
-            W2SCENE,
-            W2LAYER,
-            W2COMMUNITY,
-            W3ENV,
-            W3FOLIAGE,
-            W3NAVMESH,
-            W3FUR,
         }
 
         private async Task RadishMonitorGame(Process process)
@@ -465,16 +486,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-        private void TryRunRadishBat(string name)
+        private void RecreateLinksInternal()
         {
-            try
-            {
-                RunRadishBat(radishBats.First(_ => _.Name == name));
-            }
-            catch (Exception)
-            {
-                Logger.LogString($"Bat file not found: {name}", Logtype.Error);
-            }
+            // write and call temp bat file
+
+            #region create new links
+
+            var tempbatpath = Path.Combine(RadishController.Get().Configuration.RadishProjectPath, "wkit_radish_temp.bat");
+            WriteLinksBat(tempbatpath);
+            RunRadishBat(new RadishBatFileWrapper(tempbatpath));
+
+            #endregion create new links
         }
 
         private void RunRadishBat(RadishBatFileWrapper bat)
@@ -536,17 +558,45 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-        private void RecreateLinksInternal()
+        private void TryRunRadishBat(string name)
         {
-            // write and call temp bat file
+            try
+            {
+                RunRadishBat(radishBats.First(_ => _.Name == name));
+            }
+            catch (Exception)
+            {
+                Logger.LogString($"Bat file not found: {name}", Logtype.Error);
+            }
+        }
 
-            #region create new links
+        private void WriteLinksBat(string tempbatpath)
+        {
+            if (File.Exists(tempbatpath))
+            {
+                File.Delete(tempbatpath);
+            }
 
-            var tempbatpath = Path.Combine(RadishController.Get().Configuration.RadishProjectPath, "wkit_radish_temp.bat");
-            WriteLinksBat(tempbatpath);
-            RunRadishBat(new RadishBatFileWrapper(tempbatpath));
+            using var fs = new FileStream(tempbatpath, FileMode.Create, FileAccess.Write);
+            using var sr = new StreamWriter(fs, Encoding.Default);
+            var header =
+                    "@echo off\r\n" +
+                    "call _settings_.bat\r\n";
+            sr.Write(header);
 
-            #endregion create new links
+            //delete old links
+            sr.WriteLine("rd /s /q \"%DIR_MODKIT_DEPOT%\\dlc\\dlc%MODNAME%\"");
+            sr.WriteLine("rd /s /q \"%DIR_MODKIT_DEPOT%\\scripts\\dlc%MODNAME%\"");
+            sr.WriteLine("echo old links successfully deleted.");
+
+            // relink
+            sr.WriteLine("mklink / J \"%DIR_MODKIT_DEPOT%\\dlc\\dlc%MODNAME%\" \"%DIR_UNCOOKED%\\dlc\\dlc%MODNAME%\"");
+            sr.WriteLine("echo.");
+
+            sr.WriteLine("mklink / J \"%DIR_MODKIT_DEPOT%\\scripts\\dlc%MODNAME%\" \"%DIR_MOD_SCRIPTS%\"");
+            sr.WriteLine("echo.");
+
+            sr.WriteLine("echo links successfully created.");
         }
 
         private void WriteRadishBat(string tempbatpath, RadishWorkflow radishsettings)
@@ -743,35 +793,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     }
                 }
             }
-        }
-
-        private void WriteLinksBat(string tempbatpath)
-        {
-            if (File.Exists(tempbatpath))
-            {
-                File.Delete(tempbatpath);
-            }
-
-            using var fs = new FileStream(tempbatpath, FileMode.Create, FileAccess.Write);
-            using var sr = new StreamWriter(fs, Encoding.Default);
-            var header =
-                    "@echo off\r\n" +
-                    "call _settings_.bat\r\n";
-            sr.Write(header);
-
-            //delete old links
-            sr.WriteLine("rd /s /q \"%DIR_MODKIT_DEPOT%\\dlc\\dlc%MODNAME%\"");
-            sr.WriteLine("rd /s /q \"%DIR_MODKIT_DEPOT%\\scripts\\dlc%MODNAME%\"");
-            sr.WriteLine("echo old links successfully deleted.");
-
-            // relink
-            sr.WriteLine("mklink / J \"%DIR_MODKIT_DEPOT%\\dlc\\dlc%MODNAME%\" \"%DIR_UNCOOKED%\\dlc\\dlc%MODNAME%\"");
-            sr.WriteLine("echo.");
-
-            sr.WriteLine("mklink / J \"%DIR_MODKIT_DEPOT%\\scripts\\dlc%MODNAME%\" \"%DIR_MOD_SCRIPTS%\"");
-            sr.WriteLine("echo.");
-
-            sr.WriteLine("echo links successfully created.");
         }
 
         #endregion Methods

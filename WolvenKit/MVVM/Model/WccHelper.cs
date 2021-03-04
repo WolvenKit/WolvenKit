@@ -27,16 +27,12 @@ namespace WolvenKit.MVVM.Model
 
         #endregion Fields
 
-
-
         #region Properties
 
         private static W3Mod ActiveMod => (W3Mod)MainController.Get().ActiveMod;
         private static LoggerService Logger => MainController.Get().Logger;
 
         #endregion Properties
-
-
 
         #region Methods
 

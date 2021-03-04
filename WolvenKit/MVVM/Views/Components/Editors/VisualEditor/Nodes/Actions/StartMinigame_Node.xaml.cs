@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class StartMinigame_Node : UserControl
     {
+        #region Constructors
+
         public StartMinigame_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

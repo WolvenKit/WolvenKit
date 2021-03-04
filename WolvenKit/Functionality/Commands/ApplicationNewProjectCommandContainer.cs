@@ -38,8 +38,6 @@ namespace WolvenKit.Functionality.Commands
 
         #endregion Constructors
 
-
-
         #region Methods
 
         protected override bool CanExecute(object parameter) => true;

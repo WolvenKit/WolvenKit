@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class PhoneManager_Node : UserControl
     {
+        #region Constructors
+
         public PhoneManager_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

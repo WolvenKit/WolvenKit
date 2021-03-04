@@ -18,8 +18,6 @@ namespace WolvenKit.MVVM.Model
 
         #endregion Constructors
 
-
-
         #region Properties
 
         public ICommand CaseSensitiveCommand { get; }
@@ -198,8 +196,6 @@ namespace WolvenKit.MVVM.Model
         }
 
         #endregion IsAllSubfolders
-
-
 
         #region Methods
 

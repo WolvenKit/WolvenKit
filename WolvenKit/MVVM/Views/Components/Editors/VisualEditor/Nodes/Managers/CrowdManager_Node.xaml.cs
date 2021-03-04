@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class CrowdManager_Node : UserControl
     {
+        #region Constructors
+
         public CrowdManager_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

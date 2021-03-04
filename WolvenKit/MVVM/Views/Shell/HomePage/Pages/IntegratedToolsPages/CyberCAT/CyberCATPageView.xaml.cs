@@ -4,10 +4,16 @@ namespace WolvenKit.MVVM.Views.Shell.Homepage.Pages.IntegratedToolsPages.CyberCA
 {
     public partial class CyberCATPageView
     {
+        #region Constructors
+
         public CyberCATPageView()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
@@ -16,5 +22,7 @@ namespace WolvenKit.MVVM.Views.Shell.Homepage.Pages.IntegratedToolsPages.CyberCA
                 DiscordHelper.SetDiscordRPCStatus("CyberCAT Save Editor");
             }
         }
+
+        #endregion Methods
     }
 }

@@ -43,8 +43,6 @@ namespace WolvenKit.MVVM.Model
 
         #endregion Constructors
 
-
-
         #region Methods
 
         /// <summary>

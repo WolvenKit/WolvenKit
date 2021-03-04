@@ -41,11 +41,10 @@
             <Button Margin="3" Width="50" Height="30" VerticalAlignment="Bottom" IsEnabled="True"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Left" Click="Button_Click_1">
                 <iconPacks:PackIconCodicons Kind="ArrowLeft" />
             </Button>
-            <hc:StepBar x:Name="StepMain" Margin="50,0,50,3" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Dock="Bottom"  >
-                <hc:StepBarItem Content="Required settings"/>
-                <hc:StepBarItem Content="Additional settings"/>
-                <hc:StepBarItem Content="Finalize setup"/>
-
+            <hc:StepBar x:Name="StepMain" Margin="50,0,50,3" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Dock="Bottom">
+                <hc:StepBarItem Content="Required settings" />
+                <hc:StepBarItem Content="Additional settings" />
+                <hc:StepBarItem Content="Finalize setup" />
             </hc:StepBar>
             <Button Command="{Binding NextCmd}" CommandParameter="{Binding ElementName=StepMain}" Margin="3" VerticalAlignment="Bottom" Height="30" Width="50" IsEnabled="True"  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}" HorizontalAlignment="Right" Click="Button_Click">
                 <iconPacks:PackIconCodicons Kind="ArrowRight" />

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using CP77.CR2W.Types;
 using HandyControl.Controls;
 using WolvenKit.Common.Model.Cr2w;
 
@@ -22,23 +21,32 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
             PropertyResolver = new MyPropertyResolver();
         }
 
-        #endregion
+        #endregion ctor
 
-        public PropertyResolver PropertyResolver { get; }
-
-
-        public IEnumerable ItemsSource
-        {
-            get => (IEnumerable) GetValue(ItemsSourceProperty);
-            set => SetValue(ItemsSourceProperty, value);
-        }
+        #region Fields
 
         public static readonly DependencyProperty ItemsSourceProperty
             = DependencyProperty.Register(
-                nameof(ItemsSource), 
-                typeof(IEnumerable), 
+                nameof(ItemsSource),
+                typeof(IEnumerable),
                 typeof(ListEditorView),
-                new FrameworkPropertyMetadata((IEnumerable) null, OnItemsSourceChanged));
+                new FrameworkPropertyMetadata((IEnumerable)null, OnItemsSourceChanged));
+
+        #endregion Fields
+
+        #region Properties
+
+        public IEnumerable ItemsSource
+        {
+            get => (IEnumerable)GetValue(ItemsSourceProperty);
+            set => SetValue(ItemsSourceProperty, value);
+        }
+
+        public PropertyResolver PropertyResolver { get; }
+
+        #endregion Properties
+
+        #region Methods
 
         private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -46,6 +54,45 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
             {
                 uc.OnSetItemSourceChanged(e.OldValue, e.NewValue);
             }
+        }
+
+        private void GetEditor(IEnumerable enumerable)
+        {
+            // us the correct editor for the type
+            switch (enumerable)
+            {
+                case IEnumerable<IREDIntegerType> intwrapper:
+                    InitNumericEditor(intwrapper);
+                    break;
+
+                default:
+                    InitDefaultEditor(enumerable);
+                    break;
+            }
+        }
+
+        private void InitDefaultEditor(IEnumerable enumerable)
+        {
+            var treeview = new TreeView();
+            foreach (var obj in enumerable)
+            {
+                const string templateName = "PropertyGridEditor";
+                var treeViewItem = new TreeViewItem
+                {
+                    Template = (ControlTemplate)this.FindResource(templateName),
+                    DataContext = obj
+                };
+
+                treeview.Items.Add(treeViewItem);
+            }
+
+            ContentControl.SetCurrentValue(ContentProperty, treeview);
+        }
+
+        private void InitNumericEditor(IEnumerable enumerable)
+        {
+            ContentControl.SetCurrentValue(TemplateProperty, (ControlTemplate)this.FindResource("NumericEditor"));
+            ContentControl.DataContext = enumerable;
         }
 
         private void OnSetItemSourceChanged(object oldValue, object newValue)
@@ -58,45 +105,6 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
             GetEditor(enumerable);
         }
 
-        private void GetEditor(IEnumerable enumerable)
-        {
-            // us the correct editor for the type
-            switch (enumerable)
-            {
-                case IEnumerable<IREDIntegerType> intwrapper:
-                    InitNumericEditor(intwrapper);
-                    break;
-                default:
-                    InitDefaultEditor(enumerable);
-                    break;
-            }
-        }
-
-        private void InitNumericEditor(IEnumerable enumerable)
-        {
-            ContentControl.SetCurrentValue(TemplateProperty, (ControlTemplate)this.FindResource("NumericEditor"));
-            ContentControl.DataContext = enumerable;
-        }
-
-        private void InitDefaultEditor(IEnumerable enumerable)
-        {
-            var treeview = new TreeView();
-            foreach (var obj in enumerable)
-            {
-                const string templateName = "PropertyGridEditor";
-                var treeViewItem = new TreeViewItem
-                {
-                    Template = (ControlTemplate) this.FindResource(templateName), 
-                    DataContext = obj
-                };
-
-                treeview.Items.Add(treeViewItem);
-            }
-
-            ContentControl.SetCurrentValue(ContentProperty, treeview);
-        }
-
-         
-
+        #endregion Methods
     }
 }

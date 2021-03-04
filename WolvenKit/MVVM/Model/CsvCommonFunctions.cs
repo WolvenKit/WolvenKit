@@ -5,9 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using CsvHelper;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W.Types;
-using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Functionality.Controllers;
 
 namespace WolvenKit.MVVM.Model

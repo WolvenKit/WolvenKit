@@ -142,23 +142,20 @@
                         </hc:Rate.LayoutTransform>
                     </hc:Rate>
                     <StackPanel Margin="-15,0,0,0" Orientation="Vertical">
-                        <TextBlock FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,10,0,0" Text="Frustrating"/>
-                        <TextBlock  FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,24,0,0" Text="Unexpected behavior"/>
-                        <TextBlock  FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,24,0,0" Text="Unresponsive"/>
-                        <TextBlock  FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,24,0,0" Text="Crash"/>
-                        <TextBlock  FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,24,0,0" Text="Lost work"/>
-
-
+                        <TextBlock FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,10,0,0" Text="Frustrating" />
+                        <TextBlock  FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,24,0,0" Text="Unexpected behavior" />
+                        <TextBlock  FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,24,0,0" Text="Unresponsive" />
+                        <TextBlock  FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,24,0,0" Text="Crash" />
+                        <TextBlock  FontSize="13" Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Margin="5,24,0,0" Text="Lost work" />
                     </StackPanel>
                 </StackPanel>
             </Grid>
             </Border>
 
         <StackPanel Margin="0,0,0,0" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
-            <Button  Margin="0,0,10,0" Height="35" Width="150" Content="Attach file"/>
+            <Button  Margin="0,0,10,0" Height="35" Width="150" Content="Attach file" />
 
-            <Button  Margin="0,0,10,0" Width="150" Height="35" Content="Send bug report"/>
-
+            <Button  Margin="0,0,10,0" Width="150" Height="35" Content="Send bug report" />
         </StackPanel>
     </Grid>
 </catel:UserControl>

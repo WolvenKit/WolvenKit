@@ -9,8 +9,25 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class OUT_Node : IViewFor<VisualEditor.VisualEditorView.OUT_Node_Class>
     {
+        #region Fields
+
         public static readonly DependencyProperty ViewModelProperty =
                 DependencyProperty.Register(nameof(ViewModel), typeof(VisualEditor.VisualEditorView.OUT_Node_Class), typeof(OUT_Node), new PropertyMetadata(null));
+
+        #endregion Fields
+
+        #region Constructors
+
+        public OUT_Node()
+        {
+            InitializeComponent();
+
+            this.WhenActivated(d => this.WhenAnyValue(v => v.ViewModel).BindTo(this, v => v.NodeView.ViewModel).DisposeWith(d));
+        }
+
+        #endregion Constructors
+
+        #region Properties
 
         public VisualEditor.VisualEditorView.OUT_Node_Class ViewModel
         {
@@ -24,11 +41,6 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
             set => SetValue(ViewModelProperty, (VisualEditor.VisualEditorView.OUT_Node_Class)value);
         }
 
-        public OUT_Node()
-        {
-            InitializeComponent();
-
-            this.WhenActivated(d => this.WhenAnyValue(v => v.ViewModel).BindTo(this, v => v.NodeView.ViewModel).DisposeWith(d));
-        }
+        #endregion Properties
     }
 }

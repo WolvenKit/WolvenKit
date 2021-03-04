@@ -8,8 +8,14 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard
 {
     public partial class ProjectConfigurationView
     {
-        private readonly ISelectDirectoryService _selectDirectoryService;
+        #region Fields
+
         private readonly ProjectWizardViewModel _pwvm;
+        private readonly ISelectDirectoryService _selectDirectoryService;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ProjectConfigurationView()
         {
@@ -21,24 +27,9 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard
             imgSelector.CommandBindings[0].Executed += imgSelector_Executed;
         }
 
-        private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
-        {
-            validateAllFields();
-            if (_pwvm.ProfileImageBrush != null)
-            {
-                imgSelector.SetValue(ImageSelector.UriPropertyKey, new System.Uri(_pwvm.ProfileImageBrushPath, System.UriKind.RelativeOrAbsolute));
-                imgSelector.SetValue(ImageSelector.PreviewBrushPropertyKey, _pwvm.ProfileImageBrush);
-                imgSelector.SetValue(ImageSelector.HasValuePropertyKey, true);
-                imgSelector.SetCurrentValue(ImageSelector.ToolTipProperty, _pwvm.ProfileImageBrushPath);
-            }
-            else
-            {
-                imgSelector.SetValue(ImageSelector.UriPropertyKey, default(System.Uri));
-                imgSelector.SetValue(ImageSelector.PreviewBrushPropertyKey, default(System.Windows.Media.Brush));
-                imgSelector.SetValue(ImageSelector.HasValuePropertyKey, false);
-                imgSelector.SetCurrentValue(ImageSelector.ToolTipProperty, default);
-            }
-        }
+        #endregion Constructors
+
+        #region Methods
 
         private void imgSelector_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
@@ -66,12 +57,33 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard
             }
         }
 
-        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str) => System.IO.Directory.Exists(str)
-                ? HandyControl.Data.OperationResult.Success()
-                : HandyControl.Data.OperationResult.Failed("WolvenKit path does not exist");
+        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => validateAllFields();
+
+        private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            validateAllFields();
+            if (_pwvm.ProfileImageBrush != null)
+            {
+                imgSelector.SetValue(ImageSelector.UriPropertyKey, new System.Uri(_pwvm.ProfileImageBrushPath, System.UriKind.RelativeOrAbsolute));
+                imgSelector.SetValue(ImageSelector.PreviewBrushPropertyKey, _pwvm.ProfileImageBrush);
+                imgSelector.SetValue(ImageSelector.HasValuePropertyKey, true);
+                imgSelector.SetCurrentValue(ImageSelector.ToolTipProperty, _pwvm.ProfileImageBrushPath);
+            }
+            else
+            {
+                imgSelector.SetValue(ImageSelector.UriPropertyKey, default(System.Uri));
+                imgSelector.SetValue(ImageSelector.PreviewBrushPropertyKey, default(System.Windows.Media.Brush));
+                imgSelector.SetValue(ImageSelector.HasValuePropertyKey, false);
+                imgSelector.SetCurrentValue(ImageSelector.ToolTipProperty, default);
+            }
+        }
 
         private void validateAllFields() => _pwvm.AllFieldIsValid = projectNameTxtbx.VerifyData() && projectPathTxtbx.VerifyData();
 
-        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => validateAllFields();
+        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str) => System.IO.Directory.Exists(str)
+                        ? HandyControl.Data.OperationResult.Success()
+                : HandyControl.Data.OperationResult.Failed("WolvenKit path does not exist");
+
+        #endregion Methods
     }
 }

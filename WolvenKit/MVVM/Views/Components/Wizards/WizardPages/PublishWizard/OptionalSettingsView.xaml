@@ -76,7 +76,6 @@
                                 <RichTextBox Margin="100,32,0,0" HorizontalAlignment="Stretch" Height="200"></RichTextBox>
 
                                 <TextBlock Text="Large description" Margin="2,32,0,0" VerticalAlignment="Center" />
-
                             </Grid>
                         </StackPanel>
                     </Grid>

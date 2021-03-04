@@ -15,8 +15,6 @@ namespace WolvenKit.MVVM.Model.Arguments
 
         #endregion Constructors
 
-
-
         #region Properties
 
         public CVariable Variable { get; }
@@ -34,8 +32,6 @@ namespace WolvenKit.MVVM.Model.Arguments
         }
 
         #endregion Constructors
-
-
 
         #region Properties
 

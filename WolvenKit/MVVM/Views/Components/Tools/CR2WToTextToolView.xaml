@@ -35,8 +35,8 @@ The following file extensions will not be opened:</Paragraph>
                         <Button Width="50" Margin="5,0,0,0" Content="Browse" />
                     </StackPanel>
                     <hc:UniformSpacingPanel HorizontalAlignment="Right" Spacing="15" Orientation="Horizontal">
-                        <RadioButton  Width="150" Margin="10,0,0,0" BorderThickness="1" Style="{StaticResource RadioButtonIcon}" Content="One per source file"/>
-                        <RadioButton  Width="150" Margin="10,0,0,0" BorderThickness="1" Style="{StaticResource RadioButtonIcon}" Content="Single file"/>
+                        <RadioButton  Width="150" Margin="10,0,0,0" BorderThickness="1" Style="{StaticResource RadioButtonIcon}" Content="One per source file" />
+                        <RadioButton  Width="150" Margin="10,0,0,0" BorderThickness="1" Style="{StaticResource RadioButtonIcon}" Content="Single file" />
                     </hc:UniformSpacingPanel>
 
                     <hc:NumericUpDown HorizontalAlignment="Right" VerticalAlignment="Center" Width="380" hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Number of Threads" Style="{StaticResource NumericUpDownPlus}" Margin="15,0,0,0" />
@@ -48,8 +48,8 @@ The following file extensions will not be opened:</Paragraph>
                     <hc:CheckComboBox  ItemsSource="{Binding DataList}" ShowClearButton="True" hc:InfoElement.TitleWidth="140" hc:InfoElement.TitlePlacement="Left" Style="{StaticResource CheckComboBoxPlus}" hc:InfoElement.Title="Dump Options" Margin="0,0,0,0" ShowSelectAllButton="True" />
 
                     <hc:UniformSpacingPanel HorizontalAlignment="Right" Spacing="15" Orientation="Horizontal">
-                        <RadioButton  Width="150" Margin="10,0,0,0" BorderThickness="1" Style="{StaticResource RadioButtonIcon}" Content="Overwrite existing files"/>
-                        <RadioButton  Width="150" Margin="10,0,0,0" BorderThickness="1" Style="{StaticResource RadioButtonIcon}" Content="Skip existing files"/>
+                        <RadioButton  Width="150" Margin="10,0,0,0" BorderThickness="1" Style="{StaticResource RadioButtonIcon}" Content="Overwrite existing files" />
+                        <RadioButton  Width="150" Margin="10,0,0,0" BorderThickness="1" Style="{StaticResource RadioButtonIcon}" Content="Skip existing files" />
                     </hc:UniformSpacingPanel>
                 </hc:UniformSpacingPanel>
             </Grid>

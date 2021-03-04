@@ -45,15 +45,11 @@ namespace WolvenKit.Functionality.Commands
 
         #endregion Constructors
 
-
-
         #region Events
 
         public event Action OnCommandCompleted;
 
         #endregion Events
-
-
 
         #region Methods
 

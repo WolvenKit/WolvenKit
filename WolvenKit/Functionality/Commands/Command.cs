@@ -24,8 +24,6 @@ namespace WolvenKit.Functionality.Commands
 
         #endregion Events
 
-
-
         #region Methods
 
         public abstract bool CanExecute(object parameter);

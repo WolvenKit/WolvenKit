@@ -16,8 +16,6 @@ namespace WolvenKit.Functionality.Commands
 
         #endregion Constructors
 
-
-
         #region Methods
 
         protected override void Execute(object parameter)

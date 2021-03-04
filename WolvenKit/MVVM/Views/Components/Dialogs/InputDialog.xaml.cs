@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Dialogs
     /// </summary>
     public partial class InputDialog : DataWindow
     {
+        #region Constructors
+
         public InputDialog()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

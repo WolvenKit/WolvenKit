@@ -47,8 +47,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
 
         #endregion Constructors
 
-
-
         #region Methods
 
         public Task<string> GetInitialProjectLocationAsync()

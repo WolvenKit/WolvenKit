@@ -13,12 +13,19 @@ namespace WolvenKit.Functionality.Commands
 {
     public class ApplicationBugReportCommandContainer : CommandContainerBase
     {
+        #region Fields
+
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
         private readonly INavigationService _navigationService;
         private readonly ISaveFileService _saveFileService;
         private readonly IUIVisualizerService _uIVisualizerService;
         private readonly IViewModelFactory _viewModelFactory;
+
+        #endregion Fields
+
+        #region Constructors
+
         public ApplicationBugReportCommandContainer(
             ICommandManager commandManager,
             INavigationService navigationService,
@@ -43,6 +50,10 @@ namespace WolvenKit.Functionality.Commands
             _messageService = messageService;
         }
 
+        #endregion Constructors
+
+        #region Methods
+
         protected override bool CanExecute(object parameter) => true;
 
         protected override async void Execute(object parameter)
@@ -59,5 +70,7 @@ namespace WolvenKit.Functionality.Commands
                 _loggerService.LogString("Failed to create new project.", Logtype.Error);
             }
         }
+
+        #endregion Methods
     }
 }

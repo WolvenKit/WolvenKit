@@ -40,8 +40,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Watchers
 
         #endregion Constructors
 
-
-
         #region Methods
 
         protected override async Task<bool> ClosingAsync()

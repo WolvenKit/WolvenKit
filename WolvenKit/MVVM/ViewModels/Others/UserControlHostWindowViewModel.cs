@@ -44,8 +44,6 @@ namespace WolvenKit.MVVM.ViewModels.Others
 
         #endregion Constructors
 
-
-
         #region Properties
 
         public IView ContentUserControl { get; internal set; }
@@ -55,8 +53,6 @@ namespace WolvenKit.MVVM.ViewModels.Others
         #endregion Properties
 
         // TODO: Register commands with the vmcommand or vmcommandwithcanexecute codesnippets
-
-
 
         #region Methods
 

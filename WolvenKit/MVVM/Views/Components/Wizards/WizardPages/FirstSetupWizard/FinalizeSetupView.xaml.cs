@@ -8,9 +8,15 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
 {
     public partial class FinalizeSetupView
     {
-        private readonly ISettingsManager _settingsManager;
-        private readonly FirstSetupWizardViewModel _fswvm;
+        #region Fields
+
         private readonly FirstSetupWizardModel _fswm;
+        private readonly FirstSetupWizardViewModel _fswvm;
+        private readonly ISettingsManager _settingsManager;
+
+        #endregion Fields
+
+        #region Constructors
 
         public FinalizeSetupView()
         {
@@ -21,6 +27,36 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
             _fswm = ServiceLocator.Default.ResolveType<FirstSetupWizardModel>();
 
             imgSelector.CommandBindings[0].Executed += imgSelector_Executed;
+        }
+
+        #endregion Constructors
+
+        #region Methods
+
+        private void CancelSettings_Click(object sender, System.Windows.RoutedEventArgs e) => _fswvm.CloseViewModelAsync(null);
+
+        private async void ConfirmSettings_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            await _fswvm.SaveViewModelAsync();
+
+            _settingsManager.ProfileImageBrush = _fswm.ProfileImageBrush;
+            _settingsManager.Save();
+            await _fswvm.CloseViewModelAsync(null);
+        }
+
+        private void imgSelector_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        {
+            var imgBrush = imgSelector.PreviewBrush as System.Windows.Media.ImageBrush;
+            if (imgBrush != null)
+            {
+                _fswm.ProfileImageBrush = imgBrush;
+                _fswm.ProfileImageBrushPath = imgSelector.Uri.AbsoluteUri;
+            }
+            else
+            {
+                _fswm.ProfileImageBrush = default(System.Windows.Media.ImageBrush);
+                _fswm.ProfileImageBrushPath = "";
+            }
         }
 
         private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -41,30 +77,6 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
             }
         }
 
-        private void imgSelector_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
-        {
-            var imgBrush = imgSelector.PreviewBrush as System.Windows.Media.ImageBrush;
-            if (imgBrush != null)
-            {
-                _fswm.ProfileImageBrush = imgBrush;
-                _fswm.ProfileImageBrushPath = imgSelector.Uri.AbsoluteUri;
-            }
-            else
-            {
-                _fswm.ProfileImageBrush = default(System.Windows.Media.ImageBrush);
-                _fswm.ProfileImageBrushPath = "";
-            }
-        }
-
-        private async void ConfirmSettings_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            await _fswvm.SaveViewModelAsync();
-
-            _settingsManager.ProfileImageBrush = _fswm.ProfileImageBrush;
-            _settingsManager.Save();
-            await _fswvm.CloseViewModelAsync(null);
-        }
-
-        private void CancelSettings_Click(object sender, System.Windows.RoutedEventArgs e) => _fswvm.CloseViewModelAsync(null);
+        #endregion Methods
     }
 }

@@ -20,8 +20,8 @@ using WolvenKit.CR2W;
 using WolvenKit.CR2W.Reflection;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.MVVM.Model;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.MVVM.Model;
 using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
 using WolvenKit.Wwise;
 using WolvenKit.Wwise.Wwise;
@@ -36,8 +36,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         // TODO: Register models with the vmpropmodel codesnippet
         // TODO: Register view model properties with the vmprop or vmpropviewmodeltomodel codesnippets
         // TODO: Register commands with the vmcommand or vmcommandwithcanexecute codesnippets
-
-
 
         #region Constructors
 
@@ -55,8 +53,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #endregion Constructors
 
-
-
         #region Methods
 
         protected override async Task CloseAsync() =>
@@ -67,8 +63,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         protected override async Task InitializeAsync() => await base.InitializeAsync();// TODO: subscribe to events here
 
         #endregion Methods
-
-
 
         #region Properties
 

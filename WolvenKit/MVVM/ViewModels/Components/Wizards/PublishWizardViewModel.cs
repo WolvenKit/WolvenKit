@@ -16,8 +16,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
 
         #endregion Properties
 
-
-
         #region Methods
 
         /// <summary>

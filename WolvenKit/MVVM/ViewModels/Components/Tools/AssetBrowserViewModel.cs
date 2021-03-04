@@ -319,8 +319,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
 
         #endregion Constructors
 
-
-
         #region Properties
 
         public string Folder { get; set; }

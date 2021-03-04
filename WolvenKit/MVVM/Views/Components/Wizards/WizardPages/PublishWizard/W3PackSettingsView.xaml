@@ -156,27 +156,26 @@
                 <CheckBox Margin="0,8,9,0" Background="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="Transparent" Content="All" />
             </StackPanel>
 
-
             <StackPanel Grid.Column="0"  Margin="0,15,0,0">
-                <TextBlock Margin="0,10,0,0" Text="Pack bundles"/>
+                <TextBlock Margin="0,10,0,0" Text="Pack bundles" />
                 <hc:Divider Margin="0,2,0,0"></hc:Divider>
                 <TextBlock Margin="0,10,0,0" Text="Generate metadata.store" />
                 <hc:Divider Margin="0,2,0,0"></hc:Divider>
-                <TextBlock Margin="0,10,0,0" Text="Generate texture cache"/>
+                <TextBlock Margin="0,10,0,0" Text="Generate texture cache" />
                 <hc:Divider Margin="0,2,0,0"></hc:Divider>
-                <TextBlock Margin="0,10,0,0" Text="Generate collision cache"/>
+                <TextBlock Margin="0,10,0,0" Text="Generate collision cache" />
                 <hc:Divider Margin="0,2,0,0"></hc:Divider>
-                <TextBlock Margin="0,10,0,0" Text="Generate sound cache"/>
+                <TextBlock Margin="0,10,0,0" Text="Generate sound cache" />
                 <hc:Divider Margin="0,2,0,0"></hc:Divider>
-                <TextBlock Margin="0,10,0,0" Text="Generate shader cache"/>
+                <TextBlock Margin="0,10,0,0" Text="Generate shader cache" />
                 <hc:Divider Margin="0,2,0,0"></hc:Divider>
-                <TextBlock Margin="0,10,0,0" Text="Generate deprecation cache"/>
+                <TextBlock Margin="0,10,0,0" Text="Generate deprecation cache" />
                 <hc:Divider Margin="0,2,0,0"></hc:Divider>
-                <TextBlock Margin="0,10,0,0" Text="Pack w3speech"/>
+                <TextBlock Margin="0,10,0,0" Text="Pack w3speech" />
                 <hc:Divider Margin="0,2,0,0"></hc:Divider>
-                <TextBlock Margin="0,10,0,0" Text="Deploy scripts"/>
+                <TextBlock Margin="0,10,0,0" Text="Deploy scripts" />
                 <hc:Divider Margin="0,2,0,0"></hc:Divider>
-                <TextBlock Margin="0,10,0,0" Text="Deploy w3strings"/>
+                <TextBlock Margin="0,10,0,0" Text="Deploy w3strings" />
                 <hc:Divider Margin="0,2,0,0"></hc:Divider>
             </StackPanel>
         </Grid>

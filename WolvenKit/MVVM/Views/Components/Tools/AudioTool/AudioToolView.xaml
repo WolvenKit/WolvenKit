@@ -204,9 +204,9 @@
                                     <StackPanel>
                                         <TextBlock Margin="10" HorizontalAlignment="Center" Text="Convert"></TextBlock>
                                         <hc:Divider Margin="5"></hc:Divider>
-                                        <TextBlock HorizontalAlignment="Center" Margin="10" TextAlignment="Center" >
+                                        <TextBlock HorizontalAlignment="Center" Margin="10" TextAlignment="Center">
                                             <Run Text="To convert an audio file to .wav,"></Run>
-                                            <LineBreak/>
+                                            <LineBreak />
                                             <Run Text="It's recommended to use the following converter."></Run>
                                         </TextBlock>
                                     </StackPanel>
@@ -243,11 +243,11 @@
                                     <StackPanel>
                                         <TextBlock Margin="10" HorizontalAlignment="Center" Text="Edit"></TextBlock>
                                         <hc:Divider Margin="5"></hc:Divider>
-                                        <TextBlock HorizontalAlignment="Center" Margin="10" TextAlignment="Center" >
+                                        <TextBlock HorizontalAlignment="Center" Margin="10" TextAlignment="Center">
                                             <Run Text="1. Open the file in Wwise."></Run>
-                                            <LineBreak/>
+                                            <LineBreak />
                                             <Run Text="2. Set the project setting to high Vorbis."></Run>
-                                            <LineBreak/>
+                                            <LineBreak />
                                             <Run Text="3. Right click on the file and convert it."></Run>
                                         </TextBlock>
                                     </StackPanel>
@@ -259,9 +259,9 @@
                                     <StackPanel>
                                         <TextBlock Margin="10" HorizontalAlignment="Center" Text="Replace"></TextBlock>
                                         <hc:Divider Margin="5"></hc:Divider>
-                                        <TextBlock HorizontalAlignment="Center" Margin="10" TextAlignment="Center" >
+                                        <TextBlock HorizontalAlignment="Center" Margin="10" TextAlignment="Center">
                                             <Run Text="Replace the file with the one converted in Wwise."></Run>
-                                            <LineBreak/>
+                                            <LineBreak />
                                             <Run Text="It's recommended to use the following converter."></Run>
                                         </TextBlock>
                                     </StackPanel>

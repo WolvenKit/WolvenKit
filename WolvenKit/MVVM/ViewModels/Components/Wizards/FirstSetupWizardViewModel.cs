@@ -78,8 +78,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
 
         #endregion Constructors
 
-
-
         #region Properties
 
         private bool _allFieldIsValid = false;
@@ -221,8 +219,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Wizards
         }
 
         #endregion Commands
-
-
 
         #region Methods
 
