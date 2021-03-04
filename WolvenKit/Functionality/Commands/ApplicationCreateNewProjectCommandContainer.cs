@@ -143,6 +143,8 @@ namespace WolvenKit.Functionality.Commands
                     await _projectManager.LoadAsync(location);
                     StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.StartScreen.ShownProperty, false);
                     StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
+                    StaticReferences.MainView.OnLoadLayoutAsync();
+
                 }
             }
             catch (Exception ex)
