@@ -6,12 +6,5 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
         {
             InitializeComponent();
         }
-
-        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
-        {
-
-        }
-
-
     }
 }

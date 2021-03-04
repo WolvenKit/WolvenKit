@@ -91,7 +91,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
 
         #region Methods
 
-
 #pragma warning disable AsyncFixer03 // Avoid fire & forget async void methods
 #pragma warning disable AvoidAsyncVoid
 
@@ -175,19 +174,16 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
         private void ExecSC()
         {
             HomePageViewModel.GlobalHomePageVM.SetCurrentPage("Settings");
-
         }
 
         private void ExecTC()
         {
             HomePageViewModel.GlobalHomePageVM.SetCurrentPage("Wiki");
-
         }
 
         private void ExecWC()
         {
             HomePageViewModel.GlobalHomePageVM.SetCurrentPage("Wiki");
-
         }
 
         private void OnPinItemExecute(string parameter)

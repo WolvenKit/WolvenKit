@@ -11,10 +11,5 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
 
             GeneralTabItem.Content = new CyberCATPageView();
         }
-
-        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
     }
 }

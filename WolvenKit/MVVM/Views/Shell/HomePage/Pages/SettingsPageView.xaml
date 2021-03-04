@@ -6,7 +6,6 @@
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:sp="clr-namespace:WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages"
- IsVisibleChanged="UserControl_IsVisibleChanged"
  >
 
     <Grid
