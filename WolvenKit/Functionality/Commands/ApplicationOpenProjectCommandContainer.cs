@@ -85,6 +85,7 @@ namespace WolvenKit.Functionality.Commands
 
                 StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.StartScreen.ShownProperty, false);
                 StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
+                StaticReferences.MainView.OnLoadLayoutAsync();
             }
             catch (Exception)
             {

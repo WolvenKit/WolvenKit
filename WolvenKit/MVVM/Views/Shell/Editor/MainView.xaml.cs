@@ -54,10 +54,14 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
         {
             base.OnLoaded(e);
 
-            await LayoutLoader.LoadLayoutAsync();
 
-            // Load and layout AvalonDock elements when MainWindow has loaded
-            OnLoadLayoutAsync();
+            // Testing Some shit
+            await LayoutLoader.LoadLayoutAsync();
+            // Loads empty layout?? Causes bug still ? (Not yet?)
+            // Load and layout AvalonDock elements when MainWindow has loaded .... False info :kek:
+            //
+            // Layout shouldn't load directly mhm . . . .   // Load this when project opens ? :D
+
         }
 
         protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
@@ -142,7 +146,9 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
                                                                                                        }
                                                                                                    }, System.Windows.Threading.DispatcherPriority.Background);
 
-        private async void OnLoadLayoutAsync(object parameter = null)
+
+        // Hijacking this for purposes beyond my knowledge :O
+        public async void OnLoadLayoutAsync(object parameter = null)
         {
             if (DataContext is WorkSpaceViewModel wspace)
             {

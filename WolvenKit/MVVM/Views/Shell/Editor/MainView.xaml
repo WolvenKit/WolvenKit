@@ -90,110 +90,124 @@
                         </DataTemplate>
                     </ad:PanesTemplateSelector.ProjectExplorerTemplate>
 
-                    <!--  ProjectExplorerView  -->
+                    <!--  Assetbrowser  -->
                     <ad:PanesTemplateSelector.AssetBrowserTemplate>
                         <DataTemplate>
                             <importertool1:AssetBrowserView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.AssetBrowserTemplate>
 
-                    <!--  ProjectExplorerView  -->
+                    <!--  Bulk Editor WIP
                     <ad:PanesTemplateSelector.BulkEditorTemplate>
                         <DataTemplate>
                             <cr2weditor1:BulkEditorView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.BulkEditorTemplate>
+                    -->
 
-                    <!--  ProjectExplorerView  -->
+                    <!--  Code Editor WIP
                     <ad:PanesTemplateSelector.CodeEditorTemplate>
                         <DataTemplate>
                             <cr2weditor1:CodeEditorView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.CodeEditorTemplate>
+                    -->
 
-                    <!--  ProjectExplorerView  -->
+                    <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.CsvEditorTemplate>
                         <DataTemplate>
                             <cr2weditor1:CsvEditorView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.CsvEditorTemplate>
+                    -->
 
-                    <!--  ProjectExplorerView  -->
+                    <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.HexEditorTemplate>
                         <DataTemplate>
                             <cr2weditor1:HexEditorView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.HexEditorTemplate>
+                    -->
 
-                    <!--  ProjectExplorerView  -->
+                    <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.JournalEditorTemplate>
                         <DataTemplate>
                             <cr2weditor1:JournalEditorView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.JournalEditorTemplate>
+                    -->
 
-                    <!--  ProjectExplorerView  -->
+                    <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.VisualEditorTemplate>
                         <DataTemplate>
                             <visualeditorz:VisualEditorView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.VisualEditorTemplate>
+                    -->
 
-                    <!--  ProjectExplorerView  -->
+                    <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.AudioToolTemplate>
                         <DataTemplate>
                             <audiotoolz:AudioToolView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.AudioToolTemplate>
+                    -->
 
-                    <!--  ProjectExplorerView  -->
+                    <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.CR2WToTextToolTemplate>
                         <DataTemplate>
                             <importertool1:CR2WToTextToolView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.CR2WToTextToolTemplate>
+                    -->
 
-                    <!--  ProjectExplorerView  -->
+                    <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.GameDebuggerToolTemplate>
                         <DataTemplate>
                             <importertool1:GameDebuggerToolView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.GameDebuggerToolTemplate>
+                    -->
 
-                    <!--  ProjectExplorerView  -->
+                    <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.ImporterToolTemplate>
                         <DataTemplate>
                             <importertool1:ImporterToolView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.ImporterToolTemplate>
+                    -->
 
-                    <!--  ProjectExplorerView  -->
+                    <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.MenuToolTemplate>
                         <DataTemplate>
                             <importertool1:MenuCreatorToolView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.MenuToolTemplate>
+                    -->
 
-                    <!--  ProjectExplorerView  -->
+                    <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.WccToolTemplate>
                         <DataTemplate>
                             <importertool1:WccToolView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.WccToolTemplate>
+                    -->
 
-                    <!--  ProjectExplorerView  -->
+                    <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.RadishToolTemplate>
                         <DataTemplate>
                             <importertool1:RadishToolView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.RadishToolTemplate>
+                    -->
 
-                    <!--  ProjectExplorerView  -->
+                    <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.PluginManagerTemplate>
                         <DataTemplate>
                             <importertool1:PluginManagerView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.PluginManagerTemplate>
+                    -->
                 </ad:PanesTemplateSelector>
             </DockingManager.LayoutItemTemplateSelector>
 

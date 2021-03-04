@@ -25,11 +25,9 @@ using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.MVVM.ViewModels.Components.Editors;
 using WolvenKit.MVVM.ViewModels.Components.Editors.VisualEditor;
 using WolvenKit.MVVM.ViewModels.Components.Tools;
-using WolvenKit.MVVM.ViewModels.Others;
 using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
 using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
 using WolvenKit.MVVM.Views.Components.Wizards;
-using WolvenKit.MVVM.Views.Others;
 using WolvenKit.ViewModels;
 using WolvenKit.Views;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
@@ -354,49 +352,49 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         private bool CanPublishMod() => _projectManager.ActiveProject is EditorProject;
 
-        private bool CanShowAnimationTool() => true;
+        private bool CanShowAnimationTool() => false;
 
         private bool CanShowAssetBrowser() => AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
 
-        private bool CanShowAudioTool() => true;
+        private bool CanShowAudioTool() => false;
 
-        private bool CanShowBulkEditor() => true;
+        private bool CanShowBulkEditor() => false;
 
-        private bool CanShowCR2WToTextTool() => true;
+        private bool CanShowCR2WToTextTool() => false;
 
-        private bool CanShowCsvEditor() => true;
+        private bool CanShowCsvEditor() => false;
 
-        private bool CanShowGameDebuggerTool() => true;
+        private bool CanShowGameDebuggerTool() => false;
 
-        private bool CanShowHexEditor() => true;
+        private bool CanShowHexEditor() => false;
 
-        private bool CanShowImporterTool() => true;
+        private bool CanShowImporterTool() => false;
 
-        private bool CanShowImportUtility() => true;
+        private bool CanShowImportUtility() => _projectManager.ActiveProject is EditorProject;
 
-        private bool CanShowInstaller() => true;
+        private bool CanShowInstaller() => false;
 
-        private bool CanShowJournalEditor() => true;
+        private bool CanShowJournalEditor() => false;
 
-        private bool CanShowLog() => true;
+        private bool CanShowLog() => _projectManager.ActiveProject is EditorProject;
 
-        private bool CanShowMenuCreatorTool() => true;
+        private bool CanShowMenuCreatorTool() => false;
 
-        private bool CanShowMimicsTool() => true;
+        private bool CanShowMimicsTool() => false;
 
-        private bool CanShowPluginManagerTool() => true;
+        private bool CanShowPluginManagerTool() => false;
 
-        private bool CanShowProjectExplorer() => true;
+        private bool CanShowProjectExplorer() => _projectManager.ActiveProject is EditorProject;
 
-        private bool CanShowProperties() => true;
+        private bool CanShowProperties() => _projectManager.ActiveProject is EditorProject;
 
-        private bool CanShowRadishTool() => true;
+        private bool CanShowRadishTool() => false;
 
-        private bool CanShowVisualEditor() => true;
+        private bool CanShowVisualEditor() => false;
 
-        private bool CanShowWccTool() => true;
+        private bool CanShowWccTool() => false;
 
-        private void ExecuteAnimationTool() => AnimationToolVM.IsVisible = !AnimationToolVM.IsVisible;
+        private void ExecuteAnimationTool() => AnimationToolVM.IsVisible = false;
 
         private void ExecuteAssetBrowser() => AssetBrowserVM.IsVisible = !AssetBrowserVM.IsVisible;
 
@@ -405,23 +403,21 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             // TODO: Implement this
         }
 
-        private void ExecuteBulkEditor() => BulkEditorVM.IsVisible = !BulkEditorVM.IsVisible;
+        private void ExecuteBulkEditor() => BulkEditorVM.IsVisible = false;
 
-        private void ExecuteCR2WToTextTool() => CR2WToTextToolVM.IsVisible = !CR2WToTextToolVM.IsVisible;
+        private void ExecuteCR2WToTextTool() => CR2WToTextToolVM.IsVisible = false;
 
-        private void ExecuteCsvEditor() => CsvEditorVM.IsVisible = !CsvEditorVM.IsVisible;
+        private void ExecuteCsvEditor() => CsvEditorVM.IsVisible = false;
 
-        private void ExecuteGameDebuggerTool() => GameDebuggerToolVM.IsVisible = !GameDebuggerToolVM.IsVisible;
+        private void ExecuteGameDebuggerTool() => GameDebuggerToolVM.IsVisible = false;
+        private void ExecuteHexEditor() => HexEditorVM.IsVisible = false;
 
-        private void ExecuteHexEditor() => HexEditorVM.IsVisible = !HexEditorVM.IsVisible;
+        private void ExecuteImporterTool() => ImporterToolVM.IsVisible = false;
 
-        private void ExecuteImporterTool() => ImporterToolVM.IsVisible = !ImporterToolVM.IsVisible;
+        private void ExecuteJournalEditor() => JournalEditorVM.IsVisible = false;
+        private void ExecuteMenuCreatorTool() => MenuCreatorToolVM.IsVisible = false;
 
-        private void ExecuteJournalEditor() => JournalEditorVM.IsVisible = !JournalEditorVM.IsVisible;
-
-        private void ExecuteMenuCreatorTool() => MenuCreatorToolVM.IsVisible = !MenuCreatorToolVM.IsVisible;
-
-        private void ExecuteMimicsTool() => MimicsToolVM.IsVisible = !MimicsToolVM.IsVisible;
+        private void ExecuteMimicsTool() => MimicsToolVM.IsVisible = false;
 
         private void ExecuteNewFile()
         {
