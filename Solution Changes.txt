@@ -27,6 +27,6 @@ wwise x
 TESTS x
 cp77tools x
 Wkit
-common
+common x
 cyberformats
 

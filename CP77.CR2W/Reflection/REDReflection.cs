@@ -1,11 +1,11 @@
-using DotNetHelper.FastMember.Extension.Extension;
-using FastMember;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using CP77.CR2W.Types;
+using DotNetHelper.FastMember.Extension.Extension;
+using FastMember;
 
 namespace CP77.CR2W.Reflection
 {
@@ -15,6 +15,38 @@ namespace CP77.CR2W.Reflection
     /// </summary>
     public static class REDReflection
     {
+        #region Fields
+
+        private static readonly ConcurrentDictionary<Type, Lazy<IEnumerable<Member>>> MembersCache = new();
+
+        #endregion Fields
+
+        #region Methods
+
+        public static IEnumerable<Member> GetREDBuffers(this CVariable cvar) =>
+            GetMembers(cvar)
+                .Where(p => p.GetMemberAttribute<REDBufferAttribute>() is not null)
+                .OrderBy(p => p.Ordinal);
+
+        public static IEnumerable<Member> GetREDMembers(this CVariable cvar, bool includeBuffers) =>
+            GetMembers(cvar)
+                .Where(p =>
+                {
+                    var attr = p.GetMemberAttribute<REDAttribute>();
+                    if (attr is null)
+                    {
+                        return false;
+                    }
+
+                    if (!includeBuffers)
+                    {
+                        return attr is not REDBufferAttribute;
+                    }
+
+                    return true;
+                })
+                .OrderBy(p => p.Ordinal);
+
         public static string GetREDNameString(Member item)
         {
             var attribute = item.GetMemberAttribute<REDAttribute>();
@@ -27,10 +59,57 @@ namespace CP77.CR2W.Reflection
 
         public static string GetREDTypeString(Type type, params int[] flags) => GetREDTypeString(type, flags.AsEnumerable().GetEnumerator());
 
+        public static string GetWKitBaseTypeFromREDBaseType(string typename) =>
+            typename switch
+            {
+                "Uint8" => "CUInt8",
+                "Int8" => "CInt8",
+                "Uint16" => "CUInt16",
+                "Int16" => "CInt16",
+                "Uint32" => "CUInt32",
+                "int" => "CInt32",
+                "Int32" => "CInt32",
+                "Uint64" => "CUInt64",
+                "Int64" => "CInt64",
+                "Bool" => "CBool",
+                "bool" => "CBool",
+                "Float" => "CFloat",
+                "float" => "CFloat",
+                "String" => "CString",
+                "string" => "CString",
+                "Color" => "CColor",
+                "Matrix" => "CMatrix",
+                "Variant" => "CVariant",
+                _ => typename
+            };
+
+        private static IEnumerable<Member> GetMembers(CVariable cvar) =>
+            MembersCache.GetOrAdd(cvar.GetType(), new Lazy<IEnumerable<Member>>(() => GetMembersInternal(cvar))).Value;
+
+        private static IEnumerable<Member> GetMembersInternal(CVariable cvar) => cvar.accessor.GetMembers();
+
+        private static string GetREDTypeFroWkitType(string typename) =>
+            typename switch
+            {
+                "CUInt8" => "Uint8",
+                "CInt8" => "Int8",
+                "CUInt16" => "Uint16",
+                "CInt16" => "Int16",
+                "CUInt32" => "Uint32",
+                "CInt32" => "Int32",
+                "CUInt64" => "Uint64",
+                "CInt64" => "Int64",
+                "CBool" => "Bool",
+                "CFloat" => "Float",
+                "CString" => "String",
+                "CColor" => "Color",
+                "CMatrix" => "Matrix",
+                _ => typename
+            };
+
         private static string GetREDTypeString(Type type, IEnumerator<int> flags)
         {
             // FIXME wkit doesn't support .NET types right now
-
 
             // Handles .Net types that have different names.
             // Types such as Double, Int32, or Int16 are the same.
@@ -86,7 +165,6 @@ namespace CP77.CR2W.Reflection
                 }
                 if (gentype == typeof(CEnum<>))
                 {
-
                 }
 
                 return type.GetPrettyGenericTypes();
@@ -94,82 +172,9 @@ namespace CP77.CR2W.Reflection
             else
             {
                 return GetREDTypeFroWkitType(type.Name);
-
             }
         }
 
-        public static string GetWKitBaseTypeFromREDBaseType(string typename) =>
-            typename switch
-            {
-                "Uint8" => "CUInt8",
-                "Int8" => "CInt8",
-                "Uint16" => "CUInt16",
-                "Int16" => "CInt16",
-                "Uint32" => "CUInt32",
-                "int" => "CInt32",
-                "Int32" => "CInt32",
-                "Uint64" => "CUInt64",
-                "Int64" => "CInt64",
-                "Bool" => "CBool",
-                "bool" => "CBool",
-                "Float" => "CFloat",
-                "float" => "CFloat",
-                "String" => "CString",
-                "string" => "CString",
-                "Color" => "CColor",
-                "Matrix" => "CMatrix",
-                "Variant" => "CVariant",
-                _ => typename
-            };
-
-        private static string GetREDTypeFroWkitType(string typename) =>
-            typename switch
-            {
-                "CUInt8" => "Uint8",
-                "CInt8" => "Int8",
-                "CUInt16" => "Uint16",
-                "CInt16" => "Int16",
-                "CUInt32" => "Uint32",
-                "CInt32" => "Int32",
-                "CUInt64" => "Uint64",
-                "CInt64" => "Int64",
-                "CBool" => "Bool",
-                "CFloat" => "Float",
-                "CString" => "String",
-                "CColor" => "Color",
-                "CMatrix" => "Matrix",
-                _ => typename
-            };
-
-        public static IEnumerable<Member> GetREDMembers(this CVariable cvar, bool includeBuffers) =>
-            GetMembers(cvar)
-                .Where(p =>
-                {
-                    var attr = p.GetMemberAttribute<REDAttribute>();
-                    if (attr is null)
-                    {
-                        return false;
-                    }
-
-                    if (!includeBuffers)
-                    {
-                        return attr is not REDBufferAttribute;
-                    }
-
-                    return true;
-                })
-                .OrderBy(p => p.Ordinal);
-
-        public static IEnumerable<Member> GetREDBuffers(this CVariable cvar) =>
-            GetMembers(cvar)
-                .Where(p => p.GetMemberAttribute<REDBufferAttribute>() is not null)
-                .OrderBy(p => p.Ordinal);
-
-        private static readonly ConcurrentDictionary<Type, Lazy<IEnumerable<Member>>> MembersCache = new();
-
-        private static IEnumerable<Member> GetMembers(CVariable cvar) =>
-            MembersCache.GetOrAdd(cvar.GetType(), new Lazy<IEnumerable<Member>>(() => GetMembersInternal(cvar))).Value;
-
-        private static IEnumerable<Member> GetMembersInternal(CVariable cvar) => cvar.accessor.GetMembers();
+        #endregion Methods
     }
 }
