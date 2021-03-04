@@ -1,15 +1,20 @@
-﻿using System;
+using System;
 
 namespace WolvenKit.CR2W.Reflection
 {
+    public enum EREDMetaInfo
+    {
+        REDStruct,
+        //REDComplex,
+    }
+
     /// <summary>
     /// Marks a field as serializable for redengine files.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class REDAttribute : Attribute
     {
-        public string Name { get; private set; }
-        public int[] Flags { get; private set; }
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="REDAttribute"/> class.
@@ -37,10 +42,23 @@ namespace WolvenKit.CR2W.Reflection
             Flags = flags;
         }
 
+        #endregion Constructors
+
+        #region Properties
+
+        public int[] Flags { get; private set; }
+        public string Name { get; private set; }
+
+        #endregion Properties
+
+        #region Methods
+
         public override string ToString()
         {
             return $"{Name} [{String.Join(",", Flags)}]";
         }
+
+        #endregion Methods
     }
 
     /// <summary>
@@ -49,7 +67,7 @@ namespace WolvenKit.CR2W.Reflection
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public sealed class REDBufferAttribute : REDAttribute
     {
-        public bool IsIgnored { get; private set; }
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="REDBufferAttribute"/> class.
@@ -59,12 +77,23 @@ namespace WolvenKit.CR2W.Reflection
             IsIgnored = isIgnored;
         }
 
+        #endregion Constructors
+
+        #region Properties
+
+        public bool IsIgnored { get; private set; }
+
+        #endregion Properties
+
+        #region Methods
+
         public override string ToString()
         {
             return String.Format($"{IsIgnored}");
         }
-    }
 
+        #endregion Methods
+    }
 
     /// <summary>
     /// Marks a class as serializable for redengine files.
@@ -72,7 +101,7 @@ namespace WolvenKit.CR2W.Reflection
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public sealed class REDMetaAttribute : Attribute
     {
-        public EREDMetaInfo[] Keywords { get; private set; }
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="REDMetaAttribute"/> class.
@@ -85,20 +114,21 @@ namespace WolvenKit.CR2W.Reflection
             Keywords = keywords;
         }
 
+        #endregion Constructors
+
+        #region Properties
+
+        public EREDMetaInfo[] Keywords { get; private set; }
+
+        #endregion Properties
+
+        #region Methods
+
         public override string ToString()
         {
             return $"{String.Join(",", Keywords)}";
         }
+
+        #endregion Methods
     }
-
-
-
-
-
-    public enum EREDMetaInfo
-    {
-        REDStruct,
-        //REDComplex,
-    }
-
 }

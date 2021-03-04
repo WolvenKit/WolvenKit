@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WolvenKit.CR2W.SRT
 {
     public static class BinaryReaderExtensions
     {
+        #region Methods
+
         public static void ParseUntilAligned(this BinaryReader br)
         {
             // read padding
@@ -16,10 +13,14 @@ namespace WolvenKit.CR2W.SRT
             if (uiPadSize < 4)
                 br.ReadBytes(uiPadSize);
         }
+
+        #endregion Methods
     }
 
     public static class BinaryWriterExtensions
     {
+        #region Methods
+
         public static void WriteUntilAligned(this BinaryWriter bw)
         {
             // read padding
@@ -27,5 +28,7 @@ namespace WolvenKit.CR2W.SRT
             if (uiPadSize < 4)
                 bw.Write(new byte[uiPadSize]);
         }
+
+        #endregion Methods
     }
 }

@@ -15,7 +15,7 @@ Projects :
 TextEditLib | Cleaned ,
 Bundles | Cleaned
 cache x
-cr2w
+cr2w x
 net x
 nvidia x
 radish x
@@ -28,5 +28,5 @@ TESTS x
 cp77tools x
 Wkit
 common x
-cyberformats
+cyberformats x
 
