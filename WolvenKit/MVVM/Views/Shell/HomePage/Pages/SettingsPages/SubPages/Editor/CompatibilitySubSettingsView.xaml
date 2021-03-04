@@ -1,7 +1,11 @@
-<catel:UserControl x:Class="WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Editor.CompatibilitySubSettingsView"
-                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
+<catel:UserControl
+ x:Class="WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Editor.CompatibilitySubSettingsView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ >
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -20,20 +24,53 @@
         <Grid Grid.Column="0">
             <StackPanel>
 
-                <Border BorderThickness="4,0,0,6" Margin="15,15,32,0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                <Border
+                 Margin="15,15,32,0"
+                 Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                 BorderThickness="4,0,0,6"
+                 Style="{StaticResource BorderTipPrimary}"
+                 >
                     <Grid>
-                        <TextBlock Text="Cyberpunk 2077" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0" />
+                        <TextBlock
+                         Margin="0,0,50,0"
+                         VerticalAlignment="Center"
+                         FontSize="16"
+                         Text="Cyberpunk 2077"
+                         />
                     </Grid>
                 </Border>
 
-                <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                <Border
+                 Margin="15,15,32,10"
+                 Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                 BorderThickness="4,0,0,2"
+                 Style="{StaticResource BorderTipPrimary}"
+                 >
                     <Grid>
-                        <TextBlock Text="Executable path" VerticalAlignment="Center" Margin="0,0,50,0" />
-                        <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="CP77ExecutablePathBtn_Click">
+                        <TextBlock
+                         Margin="0,0,50,0"
+                         VerticalAlignment="Center"
+                         Text="Executable path"
+                         />
+                        <Button
+                         Margin="0,0,250,0"
+                         HorizontalAlignment="Right"
+                         Click="CP77ExecutablePathBtn_Click"
+                         >
                             <iconPacks:PackIconCodicons Kind="FolderOpened" />
                         </Button>
 
-                        <hc:TextBox x:Name="cp77Txtbx" hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFile" Text="{Binding CP77ExecutablePath, Mode=OneWay}" TextChanged="TextBox_TextChanged" />
+                        <hc:TextBox
+                         x:Name="cp77Txtbx"
+                         Width="250"
+                         Margin="0,0,0,9"
+                         HorizontalAlignment="Right"
+                         hc:InfoElement.Necessary="True"
+                         Style="{StaticResource TextBoxExtendCustom}"
+                         Text="{Binding CP77ExecutablePath, Mode=OneWay}"
+                         TextChanged="TextBox_TextChanged"
+                         VerifyFunc="VerifyFile"
+                         />
                     </Grid>
                 </Border>
             </StackPanel>
@@ -42,37 +79,106 @@
         <Grid Grid.Column="1">
             <StackPanel>
 
-                <Border BorderThickness="4,0,0,6" Margin="15,15,32,0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                <Border
+                 Margin="15,15,32,0"
+                 Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                 BorderThickness="4,0,0,6"
+                 Style="{StaticResource BorderTipPrimary}"
+                 >
                     <Grid>
-                        <TextBlock Text="The Witcher 3" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0" />
+                        <TextBlock
+                         Margin="0,0,50,0"
+                         VerticalAlignment="Center"
+                         FontSize="16"
+                         Text="The Witcher 3"
+                         />
                     </Grid>
                 </Border>
 
-                <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                <Border
+                 Margin="15,15,32,10"
+                 Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                 BorderThickness="4,0,0,2"
+                 Style="{StaticResource BorderTipPrimary}"
+                 >
                     <StackPanel>
 
                         <Grid Margin="5">
-                            <TextBlock Text="Executable path" VerticalAlignment="Center" Margin="0,0,50,0" />
-                            <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="W3ExecutablePathBtn_Click">
+                            <TextBlock
+                             Margin="0,0,50,0"
+                             VerticalAlignment="Center"
+                             Text="Executable path"
+                             />
+                            <Button
+                             Margin="0,0,250,0"
+                             HorizontalAlignment="Right"
+                             Click="W3ExecutablePathBtn_Click"
+                             >
                                 <iconPacks:PackIconCodicons Kind="FolderOpened" />
                             </Button>
-                            <hc:TextBox x:Name="w3Txtbx" hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFile" Text="{Binding W3ExecutablePath, Mode=OneWay}" TextChanged="TextBox_TextChanged" />
+                            <hc:TextBox
+                             x:Name="w3Txtbx"
+                             Width="250"
+                             Margin="0,0,0,9"
+                             HorizontalAlignment="Right"
+                             hc:InfoElement.Necessary="True"
+                             Style="{StaticResource TextBoxExtendCustom}"
+                             Text="{Binding W3ExecutablePath, Mode=OneWay}"
+                             TextChanged="TextBox_TextChanged"
+                             VerifyFunc="VerifyFile"
+                             />
                         </Grid>
 
                         <Grid Margin="5">
-                            <TextBlock Text="ModKit (wcc_lite.exe) path" VerticalAlignment="Center" Margin="0,0,50,0" />
-                            <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="WccLitePathBtn_Click">
+                            <TextBlock
+                             Margin="0,0,50,0"
+                             VerticalAlignment="Center"
+                             Text="ModKit (wcc_lite.exe) path"
+                             />
+                            <Button
+                             Margin="0,0,250,0"
+                             HorizontalAlignment="Right"
+                             Click="WccLitePathBtn_Click"
+                             >
                                 <iconPacks:PackIconCodicons Kind="FolderOpened" />
                             </Button>
-                            <hc:TextBox x:Name="wccliteTxtbx" hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFile" Text="{Binding WccLitePath, Mode=OneWay}" TextChanged="TextBox_TextChanged" />
+                            <hc:TextBox
+                             x:Name="wccliteTxtbx"
+                             Width="250"
+                             Margin="0,0,0,9"
+                             HorizontalAlignment="Right"
+                             hc:InfoElement.Necessary="True"
+                             Style="{StaticResource TextBoxExtendCustom}"
+                             Text="{Binding WccLitePath, Mode=OneWay}"
+                             TextChanged="TextBox_TextChanged"
+                             VerifyFunc="VerifyFile"
+                             />
                         </Grid>
 
                         <Grid Margin="5">
-                            <TextBlock Text="Uncooked depot path" VerticalAlignment="Center" Margin="0,0,50,0" />
-                            <Button HorizontalAlignment="Right" Margin="0,0,250,0" Click="DepotPathBtn_Click">
+                            <TextBlock
+                             Margin="0,0,50,0"
+                             VerticalAlignment="Center"
+                             Text="Uncooked depot path"
+                             />
+                            <Button
+                             Margin="0,0,250,0"
+                             HorizontalAlignment="Right"
+                             Click="DepotPathBtn_Click"
+                             >
                                 <iconPacks:PackIconCodicons Kind="FolderOpened" />
                             </Button>
-                            <hc:TextBox x:Name="depotTxtbx" hc:InfoElement.Necessary="True" HorizontalAlignment="Right" Width="250" Margin="0,0,0,9" Style="{StaticResource TextBoxExtendCustom}" VerifyFunc="VerifyFolder" Text="{Binding DepotPath, Mode=OneWay}" TextChanged="TextBox_TextChanged" />
+                            <hc:TextBox
+                             x:Name="depotTxtbx"
+                             Width="250"
+                             Margin="0,0,0,9"
+                             HorizontalAlignment="Right"
+                             hc:InfoElement.Necessary="True"
+                             Style="{StaticResource TextBoxExtendCustom}"
+                             Text="{Binding DepotPath, Mode=OneWay}"
+                             TextChanged="TextBox_TextChanged"
+                             VerifyFunc="VerifyFolder"
+                             />
                         </Grid>
                     </StackPanel>
                 </Border>

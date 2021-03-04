@@ -1,12 +1,15 @@
-<catel:UserControl x:Class="WolvenKit.MVVM.Views.Components.Tools.AssetBrowserView"
-                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                  xmlns:hc="https://handyorg.github.io/handycontrol"
-
-                  xmlns:catel="http://schemas.catelproject.com" xmlns:Fluent="urn:fluent-ribbon"
-                    xmlns:controls1="clr-namespace:WolvenKit.AssetBrowserBar.Controls;assembly=WolvenKit.AssetBrowserBar"
-                   BorderBrush="{x:Null}"     IsVisibleChanged="DataWindow_IsVisibleChanged">
+<catel:UserControl
+ x:Class="WolvenKit.MVVM.Views.Components.Tools.AssetBrowserView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:Fluent="urn:fluent-ribbon"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:controls1="clr-namespace:WolvenKit.AssetBrowserBar.Controls;assembly=WolvenKit.AssetBrowserBar"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ BorderBrush="{x:Null}"
+ IsVisibleChanged="DataWindow_IsVisibleChanged"
+ >
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -17,7 +20,11 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </catel:UserControl.Resources>
-    <Border hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
+    <Border
+     hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+     BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+     BorderThickness="1"
+     >
 
         <Grid>
             <Grid.RowDefinitions>
@@ -27,45 +34,50 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" VerticalAlignment="Top">
-                <ToolBarTray    Style="{DynamicResource MahApps.Styles.ToolBarTray}">
-                    <ToolBar Visibility="Collapsed" Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
-                        <Menu Background="Transparent" VerticalAlignment="Center">
+                <ToolBarTray Style="{DynamicResource MahApps.Styles.ToolBarTray}">
+                    <ToolBar
+                     Padding="6"
+                     Band="0"
+                     Style="{StaticResource ToolBarBaseStyle}"
+                     Visibility="Collapsed"
+                     >
+                        <Menu VerticalAlignment="Center" Background="Transparent">
                             <MenuItem Header="View">
-                                <MenuItem Header="Empty">
-                                </MenuItem>
-                                <MenuItem Header="Empty">
-                                </MenuItem>
+                                <MenuItem Header="Empty" />
+                                <MenuItem Header="Empty" />
                             </MenuItem>
                             <MenuItem Header="Edit">
-                                <MenuItem Header="Empty">
-                                </MenuItem>
-                                <MenuItem Header="Empty">
-                                </MenuItem>
-                                <MenuItem Header="Empty">
-                                </MenuItem>
+                                <MenuItem Header="Empty" />
+                                <MenuItem Header="Empty" />
+                                <MenuItem Header="Empty" />
                             </MenuItem>
                             <MenuItem Header="Bookmarks" />
                             <MenuItem Header="Tabs" />
                         </Menu>
                     </ToolBar>
 
-                    <ToolBar Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
-                        <Menu Background="Transparent" VerticalAlignment="Center">
+                    <ToolBar
+                     Padding="6"
+                     Band="0"
+                     Style="{StaticResource ToolBarBaseStyle}"
+                     >
+                        <Menu VerticalAlignment="Center" Background="Transparent">
                             <Button
-                                Style="{StaticResource ButtonIcon}"
-                                Width="40"
-                                hc:IconElement.Geometry="{DynamicResource GlobalLeftArrow}"
-                                Background="Transparent"
-                                BorderBrush="{x:Null}">
-                            </Button>
+                             Width="40"
+                             hc:IconElement.Geometry="{DynamicResource GlobalLeftArrow}"
+                             Background="Transparent"
+                             BorderBrush="{x:Null}"
+                             Style="{StaticResource ButtonIcon}"
+                             />
                             <Button
-                                Style="{StaticResource ButtonIcon}"
-                                Width="40"
-                                hc:IconElement.Geometry="{DynamicResource AssetBrowserHome}"
-                                Background="Transparent"
-                                BorderBrush="{x:Null}"
-                                Command="{Binding HomeCommand}"
-                                RenderTransformOrigin="0.5,0.5">
+                             Width="40"
+                             hc:IconElement.Geometry="{DynamicResource AssetBrowserHome}"
+                             Background="Transparent"
+                             BorderBrush="{x:Null}"
+                             Command="{Binding HomeCommand}"
+                             RenderTransformOrigin="0.5,0.5"
+                             Style="{StaticResource ButtonIcon}"
+                             >
                                 <Button.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform />
@@ -77,25 +89,38 @@
                             </Button>
 
                             <controls1:BreadcrumbBar
-                                Visibility="Hidden"
-                                x:Name="bar"
-                                Background="Transparent"
-                                Root="{Binding Path=CurrentNode.Name, Mode=OneWay}"
-  TraceBinding="{Binding CurrentNode.Name}"
+                             x:Name="bar"
+                             Background="Transparent"
+                             ImageBinding="{Binding Image}"
+                             Root="{Binding Path=CurrentNode.Name, Mode=OneWay}"
+                             TraceBinding="{Binding CurrentNode.Name}"
+                             Visibility="Hidden"
+                             />
+                            <hc:TextBox Width="500" Text="{Binding Path=CurrentNode.FullPath, Mode=OneWay}" />
 
-    ImageBinding="{Binding Image}">
-                            </controls1:BreadcrumbBar>
-                            <hc:TextBox Text="{Binding Path=CurrentNode.FullPath, Mode=OneWay}" Width="500"></hc:TextBox>
-
-                            <Button   Style="{StaticResource ButtonIcon}" Width="40" hc:IconElement.Geometry="{DynamicResource AssetBrowserStar}" Background="Transparent" BorderBrush="{x:Null}">
-                            </Button>
+                            <Button
+                             Width="40"
+                             hc:IconElement.Geometry="{DynamicResource AssetBrowserStar}"
+                             Background="Transparent"
+                             BorderBrush="{x:Null}"
+                             Style="{StaticResource ButtonIcon}"
+                             />
                         </Menu>
                     </ToolBar>
 
-                    <ToolBar Visibility="Collapsed" Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
-                        <Menu Background="Transparent" VerticalAlignment="Center">
+                    <ToolBar
+                     Padding="6"
+                     Band="0"
+                     Style="{StaticResource ToolBarBaseStyle}"
+                     Visibility="Collapsed"
+                     >
+                        <Menu VerticalAlignment="Center" Background="Transparent">
                             <TextBlock Text="Class :" />
-                            <hc:ComboBox ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}" MinWidth="100">
+                            <hc:ComboBox
+                             MinWidth="100"
+                             ItemsSource="{Binding Classes}"
+                             SelectedItem="{Binding SelectedClass}"
+                             >
                                 <ComboBox.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <VirtualizingStackPanel />
@@ -105,10 +130,13 @@
                         </Menu>
                     </ToolBar>
 
-                    <ToolBar Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
-                        <Menu Background="Transparent" VerticalAlignment="Center">
-                            <hc:SearchBar  MinWidth="100"
-                                           hc:InfoElement.Placeholder="Search something">
+                    <ToolBar
+                     Padding="6"
+                     Band="0"
+                     Style="{StaticResource ToolBarBaseStyle}"
+                     >
+                        <Menu VerticalAlignment="Center" Background="Transparent">
+                            <hc:SearchBar MinWidth="100" hc:InfoElement.Placeholder="Search something">
                                 <hc:Interaction.Triggers>
                                     <hc:EventTrigger EventName="SearchStarted">
                                         <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
@@ -118,9 +146,18 @@
                         </Menu>
                     </ToolBar>
 
-                    <ToolBar Visibility="Collapsed" Band="0" Style="{StaticResource ToolBarBaseStyle}" Padding="6">
-                        <Menu Background="Transparent" VerticalAlignment="Center">
-                            <hc:ComboBox ItemsSource="{Binding Extensions}" SelectedItem="{Binding SelectedExtension}" MinWidth="100">
+                    <ToolBar
+                     Padding="6"
+                     Band="0"
+                     Style="{StaticResource ToolBarBaseStyle}"
+                     Visibility="Collapsed"
+                     >
+                        <Menu VerticalAlignment="Center" Background="Transparent">
+                            <hc:ComboBox
+                             MinWidth="100"
+                             ItemsSource="{Binding Extensions}"
+                             SelectedItem="{Binding SelectedExtension}"
+                             >
                                 <ComboBox.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <VirtualizingStackPanel />
@@ -137,56 +174,82 @@
                     <ColumnDefinition Width="4*" />
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="0" xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters">
+                <Grid xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters" Grid.Column="0">
                     <Grid.Resources>
                         <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
                     </Grid.Resources>
-                    <TreeView SelectedItemChanged="TreeView_OnSelectedItemChanged" Margin="0" ItemsSource="{Binding RootNode.SubDirectories}"  BorderBrush="{DynamicResource MahApps.Brushes.Accent4}">
+                    <TreeView
+                     Margin="0"
+                     BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+                     ItemsSource="{Binding RootNode.SubDirectories}"
+                     SelectedItemChanged="TreeView_OnSelectedItemChanged"
+                     >
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding SubDirectories}">
-                                <StackPanel Orientation="Horizontal" Margin="2">
-                                    <Image Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
-                                           Margin="0,1,8,1"
-                                           Height="16" />
+                                <StackPanel Margin="2" Orientation="Horizontal">
+                                    <Image
+                                     Height="16"
+                                     Margin="0,1,8,1"
+                                     Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
+                                     />
                                     <TextBlock Text="{Binding Name}" />
                                 </StackPanel>
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>
                 </Grid>
-                <GridSplitter Grid.Column="0" Margin="2,0,2,0"
-                              Width="3" VerticalAlignment="Stretch"
-                              Background="{DynamicResource MahApps.Brushes.Accent3}"
-                              ShowsPreview="False">
-                </GridSplitter>
+                <GridSplitter
+                 Grid.Column="0"
+                 Width="3"
+                 Margin="2,0,2,0"
+                 VerticalAlignment="Stretch"
+                 Background="{DynamicResource MahApps.Brushes.Accent3}"
+                 ShowsPreview="False"
+                 />
                 <Grid Grid.Column="1">
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="{Binding PreviewWidth}" MinWidth="8" MaxWidth="500" />
+                        <ColumnDefinition
+                         Width="{Binding PreviewWidth}"
+                         MinWidth="8"
+                         MaxWidth="500"
+                         />
                         <ColumnDefinition Width="0" />
                     </Grid.ColumnDefinitions>
 
                     <Grid Grid.Column="1" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
                         <Border BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" BorderThickness="1">
-                            <Grid Visibility="{Binding PreviewVisible}" x:Name="PreviewGridAsset">
-                                <Label HorizontalAlignment="Center" Content="{Binding SelectedNode.Name, FallbackValue='No file selected'}"></Label>
+                            <Grid x:Name="PreviewGridAsset" Visibility="{Binding PreviewVisible}">
+                                <Label HorizontalAlignment="Center" Content="{Binding SelectedNode.Name, FallbackValue='No file selected'}" />
                             </Grid>
                         </Border>
                     </Grid>
-                    <GridSplitter Grid.Row="0" Grid.Column="1" Margin="2,0,2,0"
-                                        Width="3"  HorizontalAlignment="Left"
-                                        VerticalAlignment="Stretch"
-                                        Background="{DynamicResource MahApps.Brushes.Accent3}"
-                                        ShowsPreview="False">
-                    </GridSplitter>
-                    <hc:TabControl Grid.Column="0" IsAnimationEnabled="True" ShowCloseButton="True" IsDraggable="True">
+                    <GridSplitter
+                     Grid.Row="0"
+                     Grid.Column="1"
+                     Width="3"
+                     Margin="2,0,2,0"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Stretch"
+                     Background="{DynamicResource MahApps.Brushes.Accent3}"
+                     ShowsPreview="False"
+                     />
+                    <hc:TabControl
+                     Grid.Column="0"
+                     IsAnimationEnabled="True"
+                     IsDraggable="True"
+                     ShowCloseButton="True"
+                     >
                         <hc:TabItem Header="Depot">
-                            <!-- Bind Header to selected item in treeview-->
-                            <ListView BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-                                      Background="Transparent"
-                                      SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
-                                      ItemsSource="{Binding CurrentNodeFiles}" xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters">
+                            <!--  Bind Header to selected item in treeview  -->
+                            <ListView
+                             xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters"
+                             Background="Transparent"
+                             BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+                             ItemsSource="{Binding CurrentNodeFiles}"
+                             SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
+                             >
                                 <ListView.Resources>
                                     <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
                                 </ListView.Resources>
@@ -195,14 +258,24 @@
                                         <GridViewColumn Width="Auto">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Image Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
-                                                           Margin="0,1,8,1"
-                                                           Height="16" />
+                                                    <Image
+                                                     Height="16"
+                                                     Margin="0,1,8,1"
+                                                     Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
+                                                     />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Width="500" Header="Name" DisplayMemberBinding="{Binding Name}" />
-                                        <GridViewColumn Width="Auto" Header="Size" DisplayMemberBinding="{Binding Size}" />
+                                        <GridViewColumn
+                                         Width="500"
+                                         DisplayMemberBinding="{Binding Name}"
+                                         Header="Name"
+                                         />
+                                        <GridViewColumn
+                                         Width="Auto"
+                                         DisplayMemberBinding="{Binding Size}"
+                                         Header="Size"
+                                         />
                                     </GridView>
                                 </ListView.View>
                                 <hc:Interaction.Triggers>
@@ -214,16 +287,17 @@
                         </hc:TabItem>
                     </hc:TabControl>
                     <Button
-                        Command="{Binding TogglePreviewCommand}"
-                        Style="{StaticResource ButtonIcon}"
-                        Width="40"
-                        hc:IconElement.Geometry="{DynamicResource AssetBrowserOpenPreview}"
-                        VerticalAlignment="Bottom"
-                        HorizontalAlignment="Right"
-                        Margin="0,0,15,15"
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        RenderTransformOrigin="0.5,0.5">
+                     Width="40"
+                     Margin="0,0,15,15"
+                     HorizontalAlignment="Right"
+                     VerticalAlignment="Bottom"
+                     hc:IconElement.Geometry="{DynamicResource AssetBrowserOpenPreview}"
+                     Background="Transparent"
+                     BorderBrush="Transparent"
+                     Command="{Binding TogglePreviewCommand}"
+                     RenderTransformOrigin="0.5,0.5"
+                     Style="{StaticResource ButtonIcon}"
+                     >
                         <Button.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform />

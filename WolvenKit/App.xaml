@@ -1,8 +1,10 @@
-<Application x:Class="WolvenKit.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-             xmlns:hc="https://handyorg.github.io/handycontrol">
+<Application
+ x:Class="WolvenKit.App"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+ >
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -11,7 +13,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
 
-                <!-- Theme setting -->
+                <!--  Theme setting  -->
                 <hc:ThemeResources />
                 <hc:Theme />
 
@@ -20,16 +22,35 @@
                 <ResourceDictionary Source="pack://application:,,,/Resources/Styles/CustomHandyStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <Style x:Key="MessageBoxPrimaryButtonStyle" BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+            <Style
+             x:Key="MessageBoxPrimaryButtonStyle"
+             BasedOn="{StaticResource {x:Type Button}}"
+             TargetType="Button"
+             >
                 <Setter Property="MinWidth" Value="88" />
-                <Setter Property="Visibility" Value="{Binding IsEnabled,RelativeSource={RelativeSource Self},Converter={StaticResource Boolean2VisibilityConverter}}" />
+                <Setter Property="Visibility" Value="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource Boolean2VisibilityConverter}}" />
                 <Setter Property="Margin" Value="5,0" />
                 <Setter Property="Background" Value="Transparent" />
             </Style>
 
-            <DrawingBrush o:Freeze="True" Opacity=".1" x:Key="CloudDrawingBrush" RenderOptions.CacheInvalidationThresholdMinimum="0.5" RenderOptions.CacheInvalidationThresholdMaximum="2.0" RenderOptions.CachingHint="Cache" Viewport="0,0,157,157" ViewportUnits="Absolute" Stretch="Uniform" TileMode="Tile">
+            <DrawingBrush
+             x:Key="CloudDrawingBrush"
+             o:Freeze="True"
+             Opacity=".1"
+             RenderOptions.CacheInvalidationThresholdMaximum="2.0"
+             RenderOptions.CacheInvalidationThresholdMinimum="0.5"
+             RenderOptions.CachingHint="Cache"
+             Stretch="Uniform"
+             TileMode="Tile"
+             Viewport="0,0,157,157"
+             ViewportUnits="Absolute"
+             >
                 <DrawingBrush.Drawing>
-                    <ImageDrawing o:Freeze="True" ImageSource="pack://application:,,,/Resources/Media/Images/Application/Cloud.png" Rect="0,0,157,157" />
+                    <ImageDrawing
+                     o:Freeze="True"
+                     ImageSource="pack://application:,,,/Resources/Media/Images/Application/Cloud.png"
+                     Rect="0,0,157,157"
+                     />
                 </DrawingBrush.Drawing>
             </DrawingBrush>
 

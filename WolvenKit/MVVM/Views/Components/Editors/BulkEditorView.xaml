@@ -1,8 +1,10 @@
-<catel:UserControl x:Class="WolvenKit.MVVM.Views.Components.Editors.BulkEditorView"
-                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com"
-                   xmlns:hc="https://handyorg.github.io/handycontrol">
+<catel:UserControl
+ x:Class="WolvenKit.MVVM.Views.Components.Editors.BulkEditorView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ >
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -20,47 +22,98 @@
             <RowDefinition Height="3*" />
             <RowDefinition Height="150" />
         </Grid.RowDefinitions>
-            <hc:PropertyGrid Margin="0" Grid.Row="1" Height="auto"></hc:PropertyGrid>
-        <Button HorizontalAlignment="Stretch" Margin="10,10,10,0"  Background="{DynamicResource MahApps.Brushes.Accent3}" VerticalAlignment="Center"   Content="Run" />
+        <hc:PropertyGrid
+         Grid.Row="1"
+         Height="auto"
+         Margin="0"
+         />
+        <Button
+         Margin="10,10,10,0"
+         HorizontalAlignment="Stretch"
+         VerticalAlignment="Center"
+         Background="{DynamicResource MahApps.Brushes.Accent3}"
+         Content="Run"
+         />
 
-        <Grid Height="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="2">
+        <Grid
+         Grid.Row="2"
+         Height="150"
+         HorizontalAlignment="Center"
+         VerticalAlignment="Bottom"
+         >
 
-            <hc:WaveProgressBar WaveFill="Transparent" Grid.Row="2" Margin="5,10,0,0" Value="{Binding Value, ElementName=ProgressBall}"  Background="Transparent" BorderBrush="Transparent" x:Name="ACTUALPROGRESBAR">
-            </hc:WaveProgressBar>
+            <hc:WaveProgressBar
+             x:Name="ACTUALPROGRESBAR"
+             Grid.Row="2"
+             Margin="5,10,0,0"
+             Background="Transparent"
+             BorderBrush="Transparent"
+             WaveFill="Transparent"
+             Value="{Binding Value, ElementName=ProgressBall}"
+             />
 
-            <Border Grid.Row="2" Margin="0,0,0,0"  Width="60" HorizontalAlignment="Center"  VerticalAlignment="Center" Height="70" Background="Transparent">
-            <Grid>
+            <Border
+             Grid.Row="2"
+             Width="60"
+             Height="70"
+             Margin="0,0,0,0"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center"
+             Background="Transparent"
+             >
+                <Grid>
 
+                    <Border>
+                        <Border.OpacityMask>
+                            <ImageBrush ImageSource="pack://application:,,,/Resources/Media/Images/Application/SeeTroughIcon.png" />
+                        </Border.OpacityMask>
+                        <Grid>
+
+                            <Grid Grid.Row="1">
+                                <hc:WaveProgressBar
+                                 x:Name="ProgressBall"
+                                 Width="95"
+                                 Height="90"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Background="Transparent"
+                                 WaveFill="{DynamicResource MahApps.Brushes.AccentBase}"
+                                 Value="90"
+                                 />
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Border
+             Grid.Row="2"
+             Width="63"
+             Height="72"
+             Margin="0,0,0,0"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center"
+             Background="Transparent"
+             >
                 <Border>
                     <Border.OpacityMask>
-                            <ImageBrush ImageSource="pack://application:,,,/Resources/Media/Images/Application/SeeTroughIcon.png" />
+                        <ImageBrush ImageSource="pack://application:,,,/Resources/Media/Images/Application/HomeSickTransp.png" />
                     </Border.OpacityMask>
                     <Grid>
 
-                        <Grid  Grid.Row="1">
-                                <hc:WaveProgressBar x:Name="ProgressBall"  Value="90" Background="Transparent" WaveFill="{DynamicResource MahApps.Brushes.AccentBase}" Height="90" Width="95" VerticalAlignment="Center" HorizontalAlignment="Center" ></hc:WaveProgressBar>
+                        <Grid>
+
+                            <Grid Margin="0" Background="{DynamicResource MahApps.Brushes.Accent2}">
+                                <Image
+                                 Margin="0,-1,0,0"
+                                 Source="pack://application:,,,/Resources/Media/Images/Application/HomeSickTransp.png"
+                                 Stretch="Fill"
+                                 />
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Border>
-            </Grid>
-        </Border>
-
-        <Border Grid.Row="2" Margin="0,0,0,0"  Width="63" HorizontalAlignment="Center"  VerticalAlignment="Center" Height="72" Background="Transparent">
-            <Border>
-                <Border.OpacityMask>
-                        <ImageBrush ImageSource="pack://application:,,,/Resources/Media/Images/Application/HomeSickTransp.png" />
-                </Border.OpacityMask>
-                <Grid>
-
-                    <Grid>
-
-                        <Grid Background="{DynamicResource MahApps.Brushes.Accent2}"  Margin="0">
-                                <Image  Stretch="Fill"  Source="pack://application:,,,/Resources/Media/Images/Application/HomeSickTransp.png" Margin="0,-1,0,0" />
-                        </Grid>
-                    </Grid>
-                </Grid>
             </Border>
-        </Border>
         </Grid>
     </Grid>
 </catel:UserControl>
