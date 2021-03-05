@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Catel.IoC;
+using Catel.Logging;
 using CP77.CR2W;
 using CP77.CR2W.Archive;
 using CP77.CR2W.Types;
@@ -56,19 +57,19 @@ namespace WolvenKit.Functionality.Controllers
 
         public override Task<bool> PackAndInstallProject()
         {
-            var loggerService = ServiceLocator.Default.ResolveType<ILoggerService>();
+            ILog logger = LogManager.GetCurrentClassLogger();
             var projectService = ServiceLocator.Default.ResolveType<IProjectManager>();
             if (projectService.ActiveProject is not Cp77Project cp77Proj)
             {
-                loggerService.LogString("Can't pack nor install project (no project/not cyberpunk project)!", Logtype.Error);
+                logger.Error("Can't pack nor install project (no project/not cyberpunk project)!");
                 return Task.FromResult(false);
             }
-            loggerService.LogString("Rebuilding necessary files....");
+            logger.Info("Rebuilding necessary files....");
             ModTools.Recombine(new DirectoryInfo(cp77Proj.ModDirectory), true, true, true, true, true, true);
-            loggerService.LogString("Rebuilding done, packing files into archive(s)....");
+            logger.Info("Rebuilding done, packing files into archive(s)....");
             ModTools.Pack(new DirectoryInfo(cp77Proj.ModDirectory),
                 new DirectoryInfo(cp77Proj.PackedModDirectory));
-            loggerService.LogString("Packing complete!", Logtype.Important);
+            logger.Info("Packing complete!");
             InstallMod();
             return Task.FromResult(true);
         }
@@ -76,7 +77,7 @@ namespace WolvenKit.Functionality.Controllers
         private static void InstallMod()
         {
             var activeMod = MainController.Get().ActiveMod;
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            ILog logger = LogManager.GetCurrentClassLogger();
             try
             {
                 //Check if we have installed this mod before. If so do a little cleanup.
@@ -118,7 +119,7 @@ namespace WolvenKit.Functionality.Controllers
                 //Copy and log the files.
                 if (!Directory.Exists(Path.Combine(activeMod.ProjectDirectory, "packed")))
                 {
-                    logger.LogString("Failed to install the mod! The packed directory doesn't exist! You forgot to tick any of the packing options?", Logtype.Important);
+                    logger.Error("Failed to install the mod! The packed directory doesn't exist! You forgot to tick any of the packing options?");
                     return;
                 }
 
@@ -134,26 +135,26 @@ namespace WolvenKit.Functionality.Controllers
                 installlog.Root.Add(fileroot);
                 //Save the log.
                 installlog.Save(activeMod.ProjectDirectory + "\\install_log.xml");
-                logger.LogString(activeMod.Name + " installed!" + "\n", Logtype.Success);
+                logger.Info(activeMod.Name + " installed!" + "\n");
             }
             catch (Exception ex)
             {
                 //If we screwed up something. Log it.
-                logger.LogString(ex + "\n", Logtype.Error);
+                logger.Error(ex + "\n");
             }
         }
 
         private static ArchiveManager LoadArchiveManager()
         {
             var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            ILog logger = LogManager.GetCurrentClassLogger();
 
             if (!File.Exists(settings.CP77ExecutablePath))
             {
-                logger.LogString("Settings are not set up properly... can't load the archive manager... ", Logtype.Error);
+                logger.Error("Settings are not set up properly... can't load the archive manager... ");
                 return null;
             }
-            logger.LogString("Loading archive Manager ... ", Logtype.Important);
+            logger.Info("Loading archive Manager ... ");
             try
             {
                 if (File.Exists(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager)))
@@ -190,7 +191,8 @@ namespace WolvenKit.Functionality.Controllers
                 ArchiveManager = new ArchiveManager();
                 ArchiveManager.LoadAll(Path.GetDirectoryName(settings.CP77ExecutablePath));
             }
-            logger.LogString("Finished loading archive manager.", Logtype.Success);
+            logger.Info("Finished loading archive manager.");
+
             //start LOAD INDICATOR
             StaticReferences.GlobalStatusBar.LoadingString = "loading";
             // init asset browser here after the manager has loaded

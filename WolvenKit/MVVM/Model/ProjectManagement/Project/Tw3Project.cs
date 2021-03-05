@@ -6,11 +6,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Catel.IoC;
+using Catel.Logging;
 using WolvenKit.Bundles;
 using WolvenKit.Cache;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
@@ -24,7 +24,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
     {
         #region fields
 
-        private readonly ILoggerService _logger;
+        private readonly ILog _logger;
         private readonly ISettingsManager _settings;
         private BundleManager BundleManager;
         private CollisionManager CollisionManager;
@@ -42,7 +42,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         public Tw3Project(string location) : base(location)
         {
             _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            _logger = LogManager.GetCurrentClassLogger();
             if (File.Exists(location))
             {
                 Load(location);
@@ -438,7 +438,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         #region methods
 
         // TODO: debug
-        public override void Check() => _logger.LogString($"{initializeTask.Status.ToString()}", Logtype.Error);
+        public override void Check() => _logger.Error($"{initializeTask.Status.ToString()}");
 
         public void CreateDefaultDirectories()
         {
@@ -577,6 +577,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         private async Task InitializeAsync()
         {
+            ILog _logger = LogManager.GetCurrentClassLogger();
             BundleManager ??= await Task.Run(() => Tw3Controller.LoadBundleManager()).ConfigureAwait(false);
             W3StringManager ??= await Task.Run(() => Tw3Controller.LoadStringsManager()).ConfigureAwait(false);
             TextureManager ??= await Task.Run(() => Tw3Controller.LoadTextureManager()).ConfigureAwait(false);
@@ -585,7 +586,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             SpeechManager ??= await Task.Run(() => Tw3Controller.LoadSpeechManager()).ConfigureAwait(false);
 
             // Hash all filepaths
-            _logger.LogString("Starting additional tasks...", Logtype.Important);
+            _logger.Info("Starting additional tasks...");
             var relativepaths = ModFiles
                 .Select(_ => _[(_.IndexOf(Path.DirectorySeparatorChar) + 1)..])
                 .ToList();
@@ -593,7 +594,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
             // register all custom classes
             CR2WManager.Init(FileDirectory, MainController.Get().Logger);
-            _logger.LogString("Finished additional tasks...", Logtype.Success);
+            _logger.Info("Finished additional tasks...");
 
             NotificationHelper.Growl.Success($"Project {Name} has finished loading.");
         }

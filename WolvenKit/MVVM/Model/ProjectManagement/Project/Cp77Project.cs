@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Catel.IoC;
+using Catel.Logging;
+
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
@@ -20,7 +22,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
     {
         #region fields
 
-        private readonly ILoggerService _logger;
+        private readonly ILog _logger;
         private readonly ISettingsManager _settings;
         private Task initializeTask;
 
@@ -31,7 +33,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         public Cp77Project(string location) : base(location)
         {
             _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            _logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            _logger = LogManager.GetCurrentClassLogger();
             if (File.Exists(location))
             {
                 Load(location);
@@ -213,7 +215,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         #region methods
 
         // TODO: debug
-        public override void Check() => _logger.LogString($"{initializeTask.Status.ToString()}", Logtype.Error);
+        public override void Check() => _logger.Error($"{initializeTask.Status.ToString()}");
 
         public void CreateDefaultDirectories()
         {
@@ -255,8 +257,9 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         private Task InitializeAsync()
         {
+            ILog _logger = LogManager.GetCurrentClassLogger();
             // Hash all filepaths
-            _logger.LogString("Starting additional tasks...", Logtype.Important);
+            _logger.Info("Starting additional tasks...");
             var relativepaths = ModFiles
                 .Select(_ => _[(_.IndexOf(Path.DirectorySeparatorChar) + 1)..])
                 .ToList();
@@ -264,7 +267,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
             // register all custom classes
             CR2WManager.Init(FileDirectory, MainController.Get().Logger);
-            _logger.LogString("Finished additional tasks...", Logtype.Success);
+            _logger.Info("Finished additional tasks...");
 
             NotificationHelper.Growl.Success($"Project {Name} has finished loading.");
 
