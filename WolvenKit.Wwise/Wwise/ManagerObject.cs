@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace WolvenKit.Wwise.Wwise
 {
@@ -6,31 +6,41 @@ namespace WolvenKit.Wwise.Wwise
     {
     }
 
-    
-    public class ManagerObject_StateGroup_CustomTransition
+    public class ManagerObject_GameParameter
     {
-        public uint _from_id = 0;
-        public uint _to_id = 0;
-        public uint _trans_time = 0;
+        #region Fields
 
-        public ManagerObject_StateGroup_CustomTransition(FileRead fr = null)
+        public float _default_value = 0;
+        public uint _id = 0;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ManagerObject_GameParameter(FileRead fr = null)
         {
             if (fr != null)
             {
-                _from_id = fr.read_uint32();
-                _to_id = fr.read_uint32();
-                _trans_time = fr.read_uint32();
+                _id = fr.read_uint32();
+                _default_value = fr.read_float();
             }
         }
+
+        #endregion Constructors
     }
 
-    
     public class ManagerObject_StateGroup
     {
-        public uint _id = 0;
-        public uint _default_trans = 0;
-        public uint _custom_trans_count = 0;
+        #region Fields
+
         public List<ManagerObject_StateGroup_CustomTransition> _custom_trans = new List<ManagerObject_StateGroup_CustomTransition>();
+        public uint _custom_trans_count = 0;
+        public uint _default_trans = 0;
+        public uint _id = 0;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ManagerObject_StateGroup(FileRead fr = null)
         {
@@ -47,15 +57,46 @@ namespace WolvenKit.Wwise.Wwise
             }
         }
 
+        #endregion Constructors
     }
 
-    
+    public class ManagerObject_StateGroup_CustomTransition
+    {
+        #region Fields
+
+        public uint _from_id = 0;
+        public uint _to_id = 0;
+        public uint _trans_time = 0;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ManagerObject_StateGroup_CustomTransition(FileRead fr = null)
+        {
+            if (fr != null)
+            {
+                _from_id = fr.read_uint32();
+                _to_id = fr.read_uint32();
+                _trans_time = fr.read_uint32();
+            }
+        }
+
+        #endregion Constructors
+    }
+
     public class ManagerObject_SwitchGroup
     {
-        public uint _id = 0;
+        #region Fields
+
         public uint _game_parameter_id = 0;
-        public uint _points_count = 0;
+        public uint _id = 0;
         public List<ManagerObject_SwitchGroup_Point> _points = new List<ManagerObject_SwitchGroup_Point>();
+        public uint _points_count = 0;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ManagerObject_SwitchGroup(FileRead fr = null)
         {
@@ -72,14 +113,20 @@ namespace WolvenKit.Wwise.Wwise
             }
         }
 
+        #endregion Constructors
     }
 
-    
     public class ManagerObject_SwitchGroup_Point
     {
-        public float _value = 0;
-        public uint _switch_id = 0;
+        #region Fields
+
         public uint _shape_curve = 0x09;
+        public uint _switch_id = 0;
+        public float _value = 0;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ManagerObject_SwitchGroup_Point(FileRead fr = null)
         {
@@ -90,21 +137,7 @@ namespace WolvenKit.Wwise.Wwise
                 _shape_curve = fr.read_uint32();
             }
         }
-    }
 
-    
-    public class ManagerObject_GameParameter
-    {
-        public uint _id = 0;
-        public float _default_value = 0;
-        public ManagerObject_GameParameter(FileRead fr = null)
-        {
-            if (fr != null)
-            {
-                _id = fr.read_uint32();
-                _default_value = fr.read_float();
-            }
-        }
+        #endregion Constructors
     }
-
 }

@@ -1,22 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace WolvenKit.W3Strings
 {
     public class W3Language
     {
-        /// <summary>
-        /// The unique identifier of the language as found in w3speech files.
-        /// </summary>
-        public readonly W3LanguageKey Key;
-        /// <summary>
-        /// A value used to convert language specific and neutral IDs to one another.
-        /// </summary>
-        public readonly W3LanguageMagic Magic;
-        /// <summary>
-        /// An abbreviation for the language, such as "pl", "en", "de" and many more.
-        /// </summary>
-        public readonly string Handle;
+        #region Fields
 
         /// <summary>
         /// A list of information about the known languages.
@@ -41,6 +30,25 @@ namespace WolvenKit.W3Strings
             new W3Language(new W3LanguageKey(0x54834893), new W3LanguageMagic(0x59825646), "jp")
         }.AsReadOnly();
 
+        /// <summary>
+        /// An abbreviation for the language, such as "pl", "en", "de" and many more.
+        /// </summary>
+        public readonly string Handle;
+
+        /// <summary>
+        /// The unique identifier of the language as found in w3speech files.
+        /// </summary>
+        public readonly W3LanguageKey Key;
+
+        /// <summary>
+        /// A value used to convert language specific and neutral IDs to one another.
+        /// </summary>
+        public readonly W3LanguageMagic Magic;
+
+        #endregion Fields
+
+        #region Constructors
+
         public W3Language(W3LanguageKey key, W3LanguageMagic magic, string handle)
         {
             Key = key;
@@ -48,10 +56,16 @@ namespace WolvenKit.W3Strings
             Handle = handle;
         }
 
+        #endregion Constructors
+
+        #region Methods
+
         public override string ToString()
         {
             return $"W3Language({Key},{Magic},{Handle})";
         }
+
+        #endregion Methods
     }
 
     /// <summary>
@@ -59,11 +73,16 @@ namespace WolvenKit.W3Strings
     /// </summary>
     public class W3LanguageKey
     {
+        #region Fields
+
         public UInt32 value;
+
+        #endregion Fields
+
+        #region Constructors
 
         public W3LanguageKey()
         {
-
         }
 
         public W3LanguageKey(UInt32 value)
@@ -71,10 +90,16 @@ namespace WolvenKit.W3Strings
             this.value = value;
         }
 
+        #endregion Constructors
+
+        #region Methods
+
         public override string ToString()
         {
             return $"W3LanguageKey({value})";
         }
+
+        #endregion Methods
     }
 
     /// <summary>
@@ -82,16 +107,28 @@ namespace WolvenKit.W3Strings
     /// </summary>
     public class W3LanguageMagic
     {
+        #region Fields
+
         public readonly UInt32 value;
+
+        #endregion Fields
+
+        #region Constructors
 
         public W3LanguageMagic(UInt32 value)
         {
             this.value = value;
         }
 
+        #endregion Constructors
+
+        #region Methods
+
         public override string ToString()
         {
             return $"W3LanguageMagic({value})";
         }
+
+        #endregion Methods
     }
 }

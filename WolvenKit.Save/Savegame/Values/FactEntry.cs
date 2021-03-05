@@ -1,15 +1,21 @@
-﻿using WolvenKit.W3SavegameEditor.Core.Savegame.Attributes;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Attributes;
 
 namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values
 {
     [CSerializable("entry")]
     public class FactEntry
     {
-        [CName("value")]
-        public int Value { get; set; }
-        [CName("time")]
-        public double Time { get; set; }
+        #region Properties
+
         [CName("expiryTime")]
         public double ExpiryTime { get; set; }
+
+        [CName("time")]
+        public double Time { get; set; }
+
+        [CName("value")]
+        public int Value { get; set; }
+
+        #endregion Properties
     }
 }

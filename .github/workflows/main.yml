@@ -9,31 +9,12 @@ on:
       - master
  
 jobs:
-  build:
+  create_release:
     runs-on: windows-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.100
-        
-    - name: Clean
-      run: dotnet clean ./WolvenKit.sln --configuration Release && dotnet nuget locals all --clear
-    - name: Install dependencies
-      run: dotnet restore ./WolvenKit.sln 
-    - name: Build
-      run: dotnet build ./WolvenKit.sln --configuration Release --no-restore
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.2.1
-      with:
-        name: artifact
-        path: ./WolvenKit/bin/Release/net5.0-windows
-    - uses: papeloto/action-zip@v1
-      with:
-        files: ./WolvenKit/bin/Release/net5.0-windows
-        dest: wolvenkit.zip
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -42,37 +23,120 @@ jobs:
       with:
         tag_name: commit-${{ github.sha }}
         draft: true
+
+  wkit-windows:
+    runs-on: windows-latest
+    needs: create_release
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.100
+    - name: dotnet clean
+      run: dotnet clean ./WolvenKit.sln --configuration Release && dotnet nuget locals all --clear
+    - name: dotnet restore
+      run: dotnet restore ./WolvenKit.sln 
+
+    - name: dotnet build WolvenKit.sln
+      run: dotnet build ./WolvenKit.sln --configuration Release --no-restore
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.1
+      with:
+        name: artifact_wkit-windows
+        path: ./WolvenKit/bin/Release/net5.0-windows
+    - name: zip
+      uses: papeloto/action-zip@v1
+      with:
+        files: ./WolvenKit/bin/Release/net5.0-windows
+        dest: wolvenkit.zip
+    
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        upload_url: ${{needs.create_release.outputs.upload_url }}
         asset_path: ./wolvenkit.zip
         asset_name: wolvenkit.zip
         asset_content_type: application/zip
-        
-    - name: Clean
+
+  console-windows:
+    runs-on: windows-latest
+    needs: create_release
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.100
+    - name: dotnet clean
       run: dotnet clean ./CP77Tools.sln --configuration Release && dotnet nuget locals all --clear
-    - name: Install dependencies
-      run: dotnet restore ./CP77Tools.sln 
-    - name: Build
+    - name: dotnet restore
+      run: dotnet restore ./CP77Tools.sln
+
+    - name: dotnet build CP77Tools.sln
       run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.1
       with:
-        name: artifact
+        name: artifact_console-windows
         path: ./CP77Tools/bin/Release/net5.0-windows
-    - uses: papeloto/action-zip@v1
+    - name: zip
+      uses: papeloto/action-zip@v1
       with:
         files: ./CP77Tools/bin/Release/net5.0-windows
         dest: wolvenkit_console.zip
+
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        upload_url: ${{needs.create_release.outputs.upload_url }}
         asset_path: ./wolvenkit_console.zip
         asset_name: wolvenkit_console.zip
         asset_content_type: application/zip
+      
+  console-OSX:
+    runs-on: macos-latest
+    needs: create_release
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.100
+    - name: dotnet clean
+      run: dotnet clean ./CP77Tools.sln --configuration Release && dotnet nuget locals all --clear
+    - name: dotnet restore
+      run: dotnet restore ./CP77Tools.sln
+    
+    - name: dotnet build CP77Tools.sln
+      run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.1
+      with:
+        name: artifact_console-OSX
+        path: ./CP77Tools/bin/Release/net5.0
+    - name: zip
+      uses: papeloto/action-zip@v1
+      with:
+        files: ./CP77Tools/bin/Release/net5.0
+        dest: wolvenkit_console_osx.zip
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{needs.create_release.outputs.upload_url }}
+        asset_path: ./wolvenkit_console_osx.zip
+        asset_name: wolvenkit_console_osx.zip
+        asset_content_type: application/zip     

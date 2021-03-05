@@ -1,47 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WolvenKit.Bundles
 {
-    class TDynArray<T> : List<T>, ISerializable where T : ISerializable, new()
-    {
-        public void Deserialize(BinaryReader reader)
-        {
-            
-            this.Clear();
-            Int32 count = reader.ReadVLQInt32();
-            if (count == 0)
-                return;
-            for (int i = 0; i < count; i++)
-            {
-                var item = new T();
-                item.Deserialize(reader);
-                this.Add(item);
-            }
-
-            Console.WriteLine(new T().GetType().Name + " - Reader is at: " + reader.BaseStream.Position + "[0x"+ reader.BaseStream.Position.ToString("X") + "] left: " + ((int)reader.BaseStream.Length-reader.BaseStream.Position) + "[0x" + ((int)reader.BaseStream.Length-reader.BaseStream.Position).ToString("X") + "]");
-        }
-
-        public void Serialize(BinaryWriter writer)
-        {
-            writer.WriteVLQInt32(this.Count);
-            if (this.Count == 0)
-                return;
-            foreach(var item in this)
-            {
-                item.Serialize(writer);
-            }
-        }
-
-
-    }
-
     public static class brext
     {
+        #region Methods
+
         public static int ReadVLQInt32(this BinaryReader br)
         {
             var b1 = br.ReadByte();
@@ -87,5 +53,41 @@ namespace WolvenKit.Bundles
                 bw.Write(b);
             }
         }
+
+        #endregion Methods
+    }
+
+    internal class TDynArray<T> : List<T>, ISerializable where T : ISerializable, new()
+    {
+        #region Methods
+
+        public void Deserialize(BinaryReader reader)
+        {
+            this.Clear();
+            Int32 count = reader.ReadVLQInt32();
+            if (count == 0)
+                return;
+            for (int i = 0; i < count; i++)
+            {
+                var item = new T();
+                item.Deserialize(reader);
+                this.Add(item);
+            }
+
+            Console.WriteLine(new T().GetType().Name + " - Reader is at: " + reader.BaseStream.Position + "[0x" + reader.BaseStream.Position.ToString("X") + "] left: " + ((int)reader.BaseStream.Length - reader.BaseStream.Position) + "[0x" + ((int)reader.BaseStream.Length - reader.BaseStream.Position).ToString("X") + "]");
+        }
+
+        public void Serialize(BinaryWriter writer)
+        {
+            writer.WriteVLQInt32(this.Count);
+            if (this.Count == 0)
+                return;
+            foreach (var item in this)
+            {
+                item.Serialize(writer);
+            }
+        }
+
+        #endregion Methods
     }
 }

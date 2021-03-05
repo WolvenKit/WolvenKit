@@ -1,46 +1,39 @@
 using System;
-using System.IO;
-using System.Text;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using RED.CRC32;
-using WolvenKit.CR2W.Types;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W
 {
     public class CR2WVerify : IDisposable
     {
         #region Fields
-        private const uint MAGIC = 0x57325243;
+
         private const uint DEADBEEF = 0xDEADBEEF;
-
-        private Stream m_stream;
-        private byte[] m_temp;
-        private bool m_hasInternalBuffer;
-        private string m_filePath;
-
-        private CR2WFileHeader      m_fileheader;
-        private CR2WTable[]   m_tableheaders;
-        private Byte[]              m_strings;
-        private CR2WName[]          m_names;
-        private CR2WImport[]        m_imports;
-        private CR2WProperty[]    m_table4;
-        private CR2WExport[]        m_exports;
-        private CR2WBuffer[]        m_buffers;
-        private CR2WEmbedded[]      m_embedded;
-
+        private const uint MAGIC = 0x57325243;
         private bool isDisposed;
+        private CR2WBuffer[] m_buffers;
         private Dictionary<uint, string> m_dictionary;
-        #endregion
+        private CR2WEmbedded[] m_embedded;
+        private CR2WExport[] m_exports;
+        private CR2WFileHeader m_fileheader;
+        private string m_filePath;
+        private bool m_hasInternalBuffer;
+        private CR2WImport[] m_imports;
+        private CR2WName[] m_names;
+        private Stream m_stream;
+        private Byte[] m_strings;
+        private CR2WProperty[] m_table4;
+        private CR2WTable[] m_tableheaders;
+        private byte[] m_temp;
+
+        #endregion Fields
 
         #region Constructor
-
-        public static void VerifyFile(string path)
-        {
-            var fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite);
-            var v = new CR2WVerify(fs, path);
-        }
 
         internal CR2WVerify(Stream stream, string filePath)
         {
@@ -49,36 +42,48 @@ namespace WolvenKit.CR2W
             m_stream.Seek(0, SeekOrigin.Begin);
             ProcessFile();
         }
-        #endregion
+
+        public static void VerifyFile(string path)
+        {
+            var fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite);
+            var v = new CR2WVerify(fs, path);
+        }
+
+        #endregion Constructor
+
+        #region Destructors
 
         ~CR2WVerify()
         {
             Dispose(false);
         }
 
+        #endregion Destructors
+
         #region Main
+
         private void ProcessFile()
         {
             var id = ReadStruct<uint>();
             if (id != MAGIC)
-                throw new FormatException($"Not a CR2W file, Magic read as 0x{id:X8}");
+                throw new FormatException($"Not a CR2W file, magic read as 0x{id:X8}.");
 
             m_fileheader = ReadStruct<CR2WFileHeader>();
             if (m_fileheader.version > 163 || m_fileheader.version < 159)
-                throw new FormatException($"Unknown Version {m_fileheader.version}. Supported versions: 159 - 163.");
+                throw new FormatException($"Unknown version {m_fileheader.version}. Supported versions: 159 - 163.");
 
             var dt = new CDateTime(m_fileheader.timeStamp, null, "");
 
             m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
             m_tableheaders = ReadStructs<CR2WTable>(10);
 
-            m_strings   = ReadStringsBuffer();
-            m_names     = ReadTable<CR2WName>(1);
-            m_imports   = ReadTable<CR2WImport>(2);
-            m_table4    = ReadTable<CR2WProperty>(3);
-            m_exports   = ReadTable<CR2WExport>(4);
-            m_buffers   = ReadTable<CR2WBuffer>(5);
-            m_embedded  = ReadTable<CR2WEmbedded>(6);
+            m_strings = ReadStringsBuffer();
+            m_names = ReadTable<CR2WName>(1);
+            m_imports = ReadTable<CR2WImport>(2);
+            m_table4 = ReadTable<CR2WProperty>(3);
+            m_exports = ReadTable<CR2WExport>(4);
+            m_buffers = ReadTable<CR2WBuffer>(5);
+            m_embedded = ReadTable<CR2WEmbedded>(6);
 
             // Fixing
             for (int i = 0; i < m_names.Length; i++)
@@ -111,9 +116,11 @@ namespace WolvenKit.CR2W
             WriteStruct<CR2WFileHeader>(m_fileheader);
             WriteStructs<CR2WTable>(m_tableheaders);
         }
-        #endregion
+
+        #endregion Main
 
         #region Table Reading
+
         private byte[] ReadStringsBuffer()
         {
             var start = m_tableheaders[0].offset;
@@ -143,11 +150,6 @@ namespace WolvenKit.CR2W
 
             return m_temp;
         }
-        private void WriteStringBuffer()
-        {
-            m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
-            m_stream.Write(m_strings, 0, m_strings.Length);
-        }
 
         private T[] ReadTable<T>(int index) where T : struct
         {
@@ -158,6 +160,13 @@ namespace WolvenKit.CR2W
 
             return table;
         }
+
+        private void WriteStringBuffer()
+        {
+            m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
+            m_stream.Write(m_strings, 0, m_strings.Length);
+        }
+
         private void WriteTable<T>(T[] array, int index) where T : struct
         {
             if (array.Length == 0)
@@ -167,22 +176,32 @@ namespace WolvenKit.CR2W
             WriteStructs<T>(array, crc);
             m_tableheaders[index].crc32 = crc.HashUInt32;
         }
-        #endregion
+
+        #endregion Table Reading
 
         #region Hashing
-        private void FixNameFNV1A(ref CR2WName name)
+
+        private uint CalculateHeaderCRC32()
         {
-            var str = m_dictionary[name.value];
-            var hash = FNV1A32HashAlgorithm.HashString(str, Encoding.ASCII, true);
-            name.hash = hash;
+            var hash = new Crc32Algorithm(false);
+            hash.Append(BitConverter.GetBytes(MAGIC));
+            hash.Append(BitConverter.GetBytes(m_fileheader.version));
+            hash.Append(BitConverter.GetBytes(m_fileheader.flags));
+            hash.Append(BitConverter.GetBytes(m_fileheader.timeStamp));
+            hash.Append(BitConverter.GetBytes(m_fileheader.buildVersion));
+            hash.Append(BitConverter.GetBytes(m_fileheader.fileSize));
+            hash.Append(BitConverter.GetBytes(m_fileheader.bufferSize));
+            hash.Append(BitConverter.GetBytes(DEADBEEF));
+            hash.Append(BitConverter.GetBytes(m_fileheader.numChunks));
+            foreach (var h in m_tableheaders)
+            {
+                hash.Append(BitConverter.GetBytes(h.offset));
+                hash.Append(BitConverter.GetBytes(h.itemCount));
+                hash.Append(BitConverter.GetBytes(h.crc32));
+            }
+            return hash.HashUInt32;
         }
-        private void FixExportCRC32(ref CR2WExport export)
-        {
-            m_stream.Seek(export.dataOffset, SeekOrigin.Begin);
-            m_temp = new byte[export.dataSize];
-            m_stream.Read(m_temp, 0, m_temp.Length);
-            export.crc32 = Crc32Algorithm.Compute(m_temp);
-        }
+
         private void FixBufferCRC32(ref CR2WBuffer buffer)
         {
             //This might throw errors, the way it should be checked for is by reading
@@ -207,29 +226,26 @@ namespace WolvenKit.CR2W
                 buffer.crc32 = Crc32Algorithm.Compute(m_temp);
             }
         }
-        private uint CalculateHeaderCRC32()
+
+        private void FixExportCRC32(ref CR2WExport export)
         {
-            var hash = new Crc32Algorithm(false);
-            hash.Append(BitConverter.GetBytes(MAGIC));
-            hash.Append(BitConverter.GetBytes(m_fileheader.version));
-            hash.Append(BitConverter.GetBytes(m_fileheader.flags));
-            hash.Append(BitConverter.GetBytes(m_fileheader.timeStamp));
-            hash.Append(BitConverter.GetBytes(m_fileheader.buildVersion));
-            hash.Append(BitConverter.GetBytes(m_fileheader.fileSize));
-            hash.Append(BitConverter.GetBytes(m_fileheader.bufferSize));
-            hash.Append(BitConverter.GetBytes(DEADBEEF));
-            hash.Append(BitConverter.GetBytes(m_fileheader.numChunks));
-            foreach (var h in m_tableheaders)
-            {
-                hash.Append(BitConverter.GetBytes(h.offset));
-                hash.Append(BitConverter.GetBytes(h.itemCount));
-                hash.Append(BitConverter.GetBytes(h.crc32));
-            }
-            return hash.HashUInt32;
+            m_stream.Seek(export.dataOffset, SeekOrigin.Begin);
+            m_temp = new byte[export.dataSize];
+            m_stream.Read(m_temp, 0, m_temp.Length);
+            export.crc32 = Crc32Algorithm.Compute(m_temp);
         }
-        #endregion
+
+        private void FixNameFNV1A(ref CR2WName name)
+        {
+            var str = m_dictionary[name.value];
+            var hash = FNV1A32HashAlgorithm.HashString(str, Encoding.ASCII, true);
+            name.hash = hash;
+        }
+
+        #endregion Hashing
 
         #region Supporting Functions
+
         private T ReadStruct<T>(Crc32Algorithm crc32 = null) where T : struct
         {
             var size = Marshal.SizeOf<T>();
@@ -247,6 +263,7 @@ namespace WolvenKit.CR2W
 
             return item;
         }
+
         private T[] ReadStructs<T>(uint count, Crc32Algorithm crc32 = null) where T : struct
         {
             var size = Marshal.SizeOf<T>();
@@ -268,6 +285,7 @@ namespace WolvenKit.CR2W
 
             return items;
         }
+
         private void WriteStruct<T>(T value, Crc32Algorithm crc32 = null) where T : struct
         {
             m_temp = new byte[Marshal.SizeOf<T>()];
@@ -281,6 +299,7 @@ namespace WolvenKit.CR2W
 
             handle.Free();
         }
+
         private void WriteStructs<T>(T[] array, Crc32Algorithm crc32 = null) where T : struct
         {
             var size = Marshal.SizeOf<T>();
@@ -298,16 +317,21 @@ namespace WolvenKit.CR2W
                 handle.Free();
             }
         }
-        #endregion
+
+        #endregion Supporting Functions
+
+        #region Methods
 
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
         protected virtual void Dispose(bool disposing)
         {
-            if (isDisposed) return;
+            if (isDisposed)
+                return;
 
             if (disposing)
             {
@@ -325,5 +349,7 @@ namespace WolvenKit.CR2W
 
             isDisposed = true;
         }
+
+        #endregion Methods
     }
 }

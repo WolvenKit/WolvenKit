@@ -46,7 +46,7 @@ namespace WolvenKit.CR2W.Types
 
             if (count > 4)
             {
-                Debug.Print("Curve piece count out of bounds: " + count + ", using as 4");
+                Debug.Print("Curve piece count (" + count + ") out of bounds, using as 4.");
                 count = 4;
             }
 
@@ -54,7 +54,7 @@ namespace WolvenKit.CR2W.Types
 
             pieces.Read(file, size, count);
 
-            
+
         }
 
         public override void Write(BinaryWriter file)
@@ -63,7 +63,7 @@ namespace WolvenKit.CR2W.Types
 
             if (pieceCount > 4)
             {
-                Debug.Print("Cannot write more than 4 pieces (" + pieceCount + ") for curve info, limiting");
+                Debug.Print("Cannot write " + pieceCount + " pieces for curve info, limiting to 4.");
                 pieceCount = 4;
             }
 

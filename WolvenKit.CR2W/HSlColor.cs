@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WolvenKit.CR2W
 {
@@ -12,18 +8,26 @@ namespace WolvenKit.CR2W
     /// </summary>
     public class HslColor
     {
+        #region Fields
+
         /// <summary>
         /// The hue of the color.
         /// </summary>
         public float Hue;
-        /// <summary>
-        /// The Saturation of the color.
-        /// </summary>
-        public float Saturation;
+
         /// <summary>
         /// The Luminosity of the color.
         /// </summary>
         public float Luminosity;
+
+        /// <summary>
+        /// The Saturation of the color.
+        /// </summary>
+        public float Saturation;
+
+        #endregion Fields
+
+        #region Constructors
 
         public HslColor(float H, float S, float L)
         {
@@ -31,6 +35,10 @@ namespace WolvenKit.CR2W
             Saturation = S;
             Luminosity = L;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         /// <summary>
         /// Creates a new HSLColor from a Color
@@ -40,62 +48,6 @@ namespace WolvenKit.CR2W
         public static HslColor FromRgb(Color clr)
         {
             return FromRGB(clr.R, clr.G, clr.B);
-        }
-
-        /// <summary>
-        /// Gets the HUE in degree style.
-        /// </summary>
-        /// <returns></returns>
-        public int GetHue()
-        {
-            var h = Hue * 60f;
-            if (h > 0) h += 360;
-            return (int)h;
-        }
-
-        /// <summary>
-        /// Gets the saturation in 1-100 range.
-        /// </summary>
-        /// <returns></returns>
-        public int GetSaturation()
-        {
-            return (int)(100 * Saturation);
-        }
-
-        /// <summary>
-        /// Gets the Luminosity in 1-100 range.
-        /// </summary>
-        /// <returns></returns>
-        public int GetLuminosity()
-        {
-            return (int)(100 * Luminosity);
-        }
-
-        /// <summary>
-        /// Sets the HUE value.
-        /// </summary>
-        /// <param name="value">Percentage of HUE.</param>
-        public void SetHue(int value)
-        {
-            Hue = (float)value / 60;
-        }
-
-        /// <summary>
-        /// Sets the Saturation value.
-        /// </summary>
-        /// <param name="value">Percentage of Saturation.</param>
-        public void SetSaturation(int value)
-        {
-            Saturation = (float)value / 100;
-        }
-
-        /// <summary>
-        /// Sets the Luminosity value.
-        /// </summary>
-        /// <param name="value">Percentage of Luminosity.</param>
-        public void SetLuminosity(int value)
-        {
-            Luminosity = (float)value / 100;
         }
 
         /// <summary>
@@ -130,7 +82,6 @@ namespace WolvenKit.CR2W
                     S = (float)(_Delta / (2.0f - _Max - _Min));
                 }
 
-
                 if (_R == _Max)
                 {
                     H = (_G - _B) / _Delta;
@@ -146,6 +97,63 @@ namespace WolvenKit.CR2W
             }
 
             return new HslColor(H, S, L);
+        }
+
+        /// <summary>
+        /// Gets the HUE in degree style.
+        /// </summary>
+        /// <returns></returns>
+        public int GetHue()
+        {
+            var h = Hue * 60f;
+            if (h > 0)
+                h += 360;
+            return (int)h;
+        }
+
+        /// <summary>
+        /// Gets the Luminosity in 1-100 range.
+        /// </summary>
+        /// <returns></returns>
+        public int GetLuminosity()
+        {
+            return (int)(100 * Luminosity);
+        }
+
+        /// <summary>
+        /// Gets the saturation in 1-100 range.
+        /// </summary>
+        /// <returns></returns>
+        public int GetSaturation()
+        {
+            return (int)(100 * Saturation);
+        }
+
+        /// <summary>
+        /// Sets the HUE value.
+        /// </summary>
+        /// <param name="value">Percentage of HUE.</param>
+        public void SetHue(int value)
+        {
+            Hue = (float)value / 60;
+        }
+
+        /// <summary>
+        /// Sets the Luminosity value.
+        /// </summary>
+        /// <param name="value">Percentage of Luminosity.</param>
+        public void SetLuminosity(int value)
+        {
+            Luminosity = (float)value / 100;
+        }
+
+        /// <summary>
+        /// Sets the Saturation value.
+        /// </summary>
+        /// <param name="value">Percentage of Saturation.</param>
+        public void SetSaturation(int value)
+        {
+            Saturation = (float)value / 100;
         }
 
         /// <summary>
@@ -192,13 +200,19 @@ namespace WolvenKit.CR2W
 
         private static double ColorCalc(double c, double t1, double t2)
         {
-
-            if (c < 0) c += 1d;
-            if (c > 1) c -= 1d;
-            if (6.0d * c < 1.0d) return t1 + (t2 - t1) * 6.0d * c;
-            if (2.0d * c < 1.0d) return t2;
-            if (3.0d * c < 2.0d) return t1 + (t2 - t1) * (2.0d / 3.0d - c) * 6.0d;
+            if (c < 0)
+                c += 1d;
+            if (c > 1)
+                c -= 1d;
+            if (6.0d * c < 1.0d)
+                return t1 + (t2 - t1) * 6.0d * c;
+            if (2.0d * c < 1.0d)
+                return t2;
+            if (3.0d * c < 2.0d)
+                return t1 + (t2 - t1) * (2.0d / 3.0d - c) * 6.0d;
             return t1;
         }
+
+        #endregion Methods
     }
 }

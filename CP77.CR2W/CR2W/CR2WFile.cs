@@ -1,4 +1,4 @@
-﻿using Catel;
+using Catel;
 using RED.CRC32;
 using System;
 using System.Collections.Generic;
@@ -45,10 +45,10 @@ namespace CP77.CR2W
         public CR2WFile()
         {
             Names = new List<CR2WNameWrapper>();            //block 2
-            Imports = new List<CR2WImportWrapper>();        //block 3
+            Imports = new List<ICR2WImport>();              //block 3
             Properties = new List<CR2WPropertyWrapper>();   //block 4
             Chunks = new List<ICR2WExport>();               //block 5
-            Buffers = new List<CR2WBufferWrapper>();        //block 6
+            Buffers = new List<ICR2WBuffer>();              //block 6
             Embedded = new List<CR2WEmbeddedWrapper>();     //block 7
 
             m_fileheader = new CR2WFileHeader()
@@ -106,10 +106,10 @@ namespace CP77.CR2W
 
         [JsonIgnore]
         public List<CR2WNameWrapper> Names { get; private set; }
-        public List<CR2WImportWrapper> Imports { get; private set; }
+        public List<ICR2WImport> Imports { get; private set; }
         public List<CR2WPropertyWrapper> Properties { get; private set; }
         public List<ICR2WExport> Chunks { get; private set; }
-        public List<CR2WBufferWrapper> Buffers { get; private set; }
+        public List<ICR2WBuffer> Buffers { get; private set; }
         public List<CR2WEmbeddedWrapper> Embedded { get; private set; }
 
 
@@ -426,7 +426,7 @@ namespace CP77.CR2W
             export.crc32 = Crc32Algorithm.Compute(m_temp);
         }
 
-        public static void FixBufferCRC32(Stream stream, CR2WBuffer buffer)
+        public static void FixBufferCRC32(Stream stream, ICR2WBuffer buffer)
         {
             //This might throw errors, the way it should be checked for is by reading
             //the object tree to find the deferred data buffers that will point to a buffer.
@@ -435,10 +435,10 @@ namespace CP77.CR2W
             // var m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
             // if (m_hasInternalBuffer)
             {
-                stream.Seek(buffer.offset, SeekOrigin.Begin);
-                var m_temp = new byte[buffer.diskSize];
+                stream.Seek(buffer.Offset, SeekOrigin.Begin);
+                var m_temp = new byte[buffer.DiskSize];
                 stream.Read(m_temp, 0, m_temp.Length);
-                buffer.crc32 = Crc32Algorithm.Compute(m_temp);
+                buffer.Crc32 = Crc32Algorithm.Compute(m_temp);
             }
             //else
             {
@@ -477,7 +477,7 @@ namespace CP77.CR2W
         #endregion
 
         #region Read
-        public (List<CR2WImportWrapper>, bool, List<CR2WBufferWrapper>) ReadImportsAndBuffers(BinaryReader file)
+        public (List<ICR2WImport>, bool, List<ICR2WBuffer>) ReadImportsAndBuffers(BinaryReader file)
         {
             #region Read Headers
             // read file header
@@ -503,10 +503,10 @@ namespace CP77.CR2W
 
             // read tables
             Names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
-            Imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this)).ToList();
+            Imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this) as ICR2WImport).ToList();
             Properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
             Chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this) as ICR2WExport).ToList();
-            Buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_)).ToList();
+            Buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_) as ICR2WBuffer).ToList();
             //Embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
             //{
             //    ParentFile = this,
@@ -581,10 +581,10 @@ namespace CP77.CR2W
 
             // read the other tables
             Names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList(); // block 2
-            Imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this)).ToList(); // block 3
+            Imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this) as ICR2WImport).ToList(); // block 3
             Properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList(); // block 4
             Chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this) as ICR2WExport).ToList(); // block 5
-            Buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_)).ToList(); // block 6
+            Buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_) as ICR2WBuffer).ToList(); // block 6
             Embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
             {
                 ParentFile = this,
@@ -830,7 +830,7 @@ namespace CP77.CR2W
             }
             foreach (var buffer in Buffers)
             {
-                var newoffset = buffer.Buffer.offset + headerOffset;
+                var newoffset = buffer.Offset + headerOffset;
                 buffer.SetOffset(newoffset);
             }
             m_fileheader.objectsEnd += headerOffset;
@@ -839,7 +839,7 @@ namespace CP77.CR2W
             foreach (var chunk in Chunks)
                 FixExportCRC32(file.BaseStream, (chunk as CR2WExportWrapper).Export);
             foreach (var buffer in Buffers)
-                FixBufferCRC32(file.BaseStream, buffer.Buffer);
+                FixBufferCRC32(file.BaseStream, buffer);
 
             // Write headers again with fixed offsets
             WriteHeader(file);
@@ -1192,7 +1192,7 @@ namespace CP77.CR2W
                     }
                     case IEnumAccessor {IsFlag: true} enumAccessor:
                     {
-                        foreach (var enumstring in enumAccessor.Value) AddUniqueToTable(enumstring);
+                        foreach (var enumstring in enumAccessor.EnumValueList) AddUniqueToTable(enumstring);
                         break;
                     }
                     case IEnumAccessor enumAccessor:
@@ -1263,7 +1263,7 @@ namespace CP77.CR2W
 
             m_tableheaders[2].itemCount = (uint)Imports.Count;
             m_tableheaders[2].offset = Imports.Count > 0 ? (uint)file.BaseStream.Position : 0;
-            WriteTable<CR2WImport>(file.BaseStream, Imports.Select(_ => _.Import).ToArray(), 2);
+            WriteTable<CR2WImport>(file.BaseStream, Imports.Select(_ => (_ as CR2WImportWrapper).Import).ToArray(), 2);
 
             m_tableheaders[3].itemCount = (uint)Properties.Count;
             m_tableheaders[3].offset = (uint)file.BaseStream.Position;
@@ -1277,7 +1277,7 @@ namespace CP77.CR2W
             {
                 m_tableheaders[5].itemCount = (uint)Buffers.Count;
                 m_tableheaders[5].offset = (uint)file.BaseStream.Position;
-                WriteTable<CR2WBuffer>(file.BaseStream, Buffers.Select(_ => _.Buffer).ToArray(), 5);
+                WriteTable<CR2WBuffer>(file.BaseStream, Buffers.Select(_ => (_ as CR2WBufferWrapper).Buffer).ToArray(), 5);
             }
 
             if (Embedded.Count > 0)
@@ -1306,7 +1306,7 @@ namespace CP77.CR2W
             m_fileheader.objectsEnd = (Chunks.Last() as CR2WExportWrapper).Export.dataOffset + (Chunks.Last() as CR2WExportWrapper).Export.dataSize; 
             
             // calculate buffersize again
-            m_fileheader.buffersEnd = (uint)Buffers.Sum(_ => _.Buffer.diskSize) + m_fileheader.objectsEnd;
+            m_fileheader.buffersEnd = (uint)Buffers.Sum(_ => _.DiskSize) + m_fileheader.objectsEnd;
             
             file.BaseStream.WriteStruct<uint>(MAGIC);
             file.BaseStream.WriteStruct<CR2WFileHeader>(m_fileheader);

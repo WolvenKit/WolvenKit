@@ -1,14 +1,13 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace WolvenKit.Common.Wcc
 {
-    using Services;
-    using System.Text;
     using System.Threading;
+    using Services;
 
     /// <summary>
     /// Closed-source program published by CDPR in the official Witcher 3 modkit.
@@ -17,14 +16,29 @@ namespace WolvenKit.Common.Wcc
     /// </summary>
     public class WccLite
     {
-        private ILoggerService _logger { get; set; }
+        #region Fields
+
         private string _wccPath;
+
+        #endregion Fields
+
+        #region Constructors
 
         public WccLite(string path, ILoggerService loggerService)
         {
             _wccPath = path;
             _logger = loggerService;
         }
+
+        #endregion Constructors
+
+        #region Properties
+
+        private ILoggerService _logger { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         /// <summary>
         /// runs wcc_lite with specified command
@@ -37,6 +51,8 @@ namespace WolvenKit.Common.Wcc
             string args = cmd.Arguments;
             return await Task.Run(() => RunCommand(cmd.Name, args));
         }
+
+        public void UpdatePath(string wccLite) => _wccPath = wccLite;
 
         /// <summary>
         /// Runs wcc_lite with specified arguments
@@ -69,20 +85,20 @@ namespace WolvenKit.Common.Wcc
                             {
                                 outputWaitHandle.Close();
                                 //Handle Errors
-                                if (_logger.ErrorLog.Any(x => x.Flag == WccLogFlag.WLF_Error) && 
-                                    _logger.ErrorLog.Any(x => x.Value.Contains("Wcc operation failed")))
+                                if (_logger.ErrorLog.Any(x => x.Flag == WccLogFlag.WLF_Error) &&
+                                    _logger.ErrorLog.Any(x => x.Value.Contains("WCC operation failed.")))
                                 {
                                     _logger.LogString("Did not complete.\r\n", Logtype.Error);
                                     status = EWccStatus.NotRun;
                                 }
                                 else if (_logger.ErrorLog.Any(x => x.Flag == WccLogFlag.WLF_Error))
                                 {
-                                    _logger.LogString("Finished with Errors.\r\n", Logtype.Error);
+                                    _logger.LogString("Finished with errors.\r\n", Logtype.Error);
                                     status = EWccStatus.Error;
                                 }
                                 else if (_logger.ErrorLog.Any(x => x.Flag == WccLogFlag.WLF_Warning))
                                 {
-                                    _logger.LogString("Finished with Warnings.\r\n", Logtype.Important);
+                                    _logger.LogString("Finished with warnings.\r\n", Logtype.Important);
                                     status = EWccStatus.Finished;
                                 }
                                 else
@@ -94,24 +110,28 @@ namespace WolvenKit.Common.Wcc
                             else
                             {
                                 _logger.LogExtended(SystemLogFlag.SLF_Interpretable, ToolLogFlag.TLF_Wcc, cmdName, $"{e.Data}");
-                                
+
                                 Logtype wkitflag = Logtype.Wcc;
                                 if (_logger.ErrorLog.Count > 0)
                                 {
                                     var flag = _logger.ErrorLog.Last().Flag;
                                     switch (flag)
                                     {
-                                        case WccLogFlag.WLF_Error: wkitflag = Logtype.Error;
+                                        case WccLogFlag.WLF_Error:
+                                            wkitflag = Logtype.Error;
                                             break;
-                                        case WccLogFlag.WLF_Warning: wkitflag = Logtype.Important;
+
+                                        case WccLogFlag.WLF_Warning:
+                                            wkitflag = Logtype.Important;
                                             break;
-                                        case WccLogFlag.WLF_Default: 
+
+                                        case WccLogFlag.WLF_Default:
                                         case WccLogFlag.WLF_Info:
                                         default:
                                             break;
                                     }
                                 }
-                                
+
                                 _logger.LogString(e.Data, wkitflag);
                             }
                         };
@@ -124,7 +144,6 @@ namespace WolvenKit.Common.Wcc
                         return 1;
                     else
                         return 0;
-                    
                 }
                 catch (Exception ex)
                 {
@@ -134,6 +153,6 @@ namespace WolvenKit.Common.Wcc
             }
         }
 
-        public void UpdatePath(string wccLite) => _wccPath = wccLite;
+        #endregion Methods
     }
 }

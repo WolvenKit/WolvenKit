@@ -1,21 +1,20 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Catel.IoC;
+using System;
 using System.CommandLine;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using Catel.IoC;
 using CP77.CR2W;
 using CP77Tools.Commands;
 using CP77Tools.Extensions;
 using Luna.ConsoleProgressBar;
-using Microsoft.Win32;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools
 {
-    class Program
+    internal class Program
     {
         [STAThread]
         public static async Task Main(string[] args)
@@ -32,15 +31,19 @@ namespace CP77Tools
                     case Logtype.Error:
                         Console.ForegroundColor = ConsoleColor.Red;
                         break;
+
                     case Logtype.Important:
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         break;
+
                     case Logtype.Success:
                         Console.ForegroundColor = ConsoleColor.Green;
                         break;
+
                     case Logtype.Normal:
                     case Logtype.Wcc:
                         break;
+
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -72,7 +75,7 @@ namespace CP77Tools
             if ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) && !TryCopyOodleLib())
             {
                 logger.LogString("Could not automatically find oo2ext_7_win64.dll. " +
-                                 "Please manually copy and paste the dll found here Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
+                                 "Please manually copy and paste the DLL found in <gamedir>\\Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
                                  $"{AppDomain.CurrentDomain.BaseDirectory}.");
             }
 
@@ -86,9 +89,10 @@ namespace CP77Tools
                 {
                     string line = System.Console.ReadLine();
 
-
                     if (line == "q()")
+                    {
                         return;
+                    }
 
                     var pb = new ConsoleProgressBar()
                     {
@@ -132,7 +136,6 @@ namespace CP77Tools
                     await WriteLog();
                     logger.PropertyChanged -= OnLoggerOnPropertyChanged;
                 }
-
             }
             else
             {
@@ -141,17 +144,21 @@ namespace CP77Tools
                 await WriteLog();
             }
 
-
             async Task WriteLog()
             {
                 if (string.IsNullOrEmpty(logger.ErrorLogStr))
+                {
                     return;
+                }
 
                 var t = DateTime.Now.ToString("yyyyMMddHHmmss");
 
                 var baseDirectory = AppContext.BaseDirectory;
 
-                if (string.IsNullOrEmpty(baseDirectory)) return;
+                if (string.IsNullOrEmpty(baseDirectory))
+                {
+                    return;
+                }
 
                 var fi = new FileInfo(Path.Combine(baseDirectory, $"errorlogs/log_{t}.txt"));
                 if (fi.Directory != null)
@@ -162,10 +169,8 @@ namespace CP77Tools
                 }
                 else
                 {
-
                 }
             }
-
         }
 
         private delegate void StrDelegate(string value);
@@ -173,15 +178,21 @@ namespace CP77Tools
         private static string TryGetGameInstallDir()
         {
             var cp77BinDir = "";
-#if _WINDOWS
 
+#pragma warning disable CA1416
+#if _WINDOWS
             var cp77exe = "";
             // check for CP77_DIR environment variable first
             var CP77_DIR = System.Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
             if (!string.IsNullOrEmpty(CP77_DIR) && new DirectoryInfo(CP77_DIR).Exists)
+            {
                 cp77BinDir = Path.Combine(CP77_DIR, "bin", "x64");
+            }
+
             if (File.Exists(Path.Combine(cp77BinDir, "Cyberpunk2077.exe")))
+            {
                 return cp77BinDir;
+            }
 
             // else: look for install location
             const string uninstallkey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
@@ -223,8 +234,10 @@ namespace CP77Tools
                             programName.ToString().Contains(gameName))
                         {
                             if (Directory.Exists(installLocation.ToString()))
+                            {
                                 exePath = Directory.GetFiles(installLocation.ToString(), exeName,
                                     SearchOption.AllDirectories).First();
+                            }
                         }
                     }
 
@@ -232,7 +245,9 @@ namespace CP77Tools
                 });
 
                 if (File.Exists(cp77exe))
+                {
                     cp77BinDir = new FileInfo(cp77exe).Directory.FullName;
+                }
             }
             catch (Exception)
             {
@@ -240,11 +255,16 @@ namespace CP77Tools
             }
 
             if (string.IsNullOrEmpty(cp77BinDir))
+            {
                 return null;
-            if (!File.Exists(Path.Combine(cp77BinDir, "Cyberpunk2077.exe")))
-                return null;
-#endif
+            }
 
+            if (!File.Exists(Path.Combine(cp77BinDir, "Cyberpunk2077.exe")))
+            {
+                return null;
+            }
+#endif
+#pragma warning restore CA1416
 
             return cp77BinDir;
         }
@@ -254,19 +274,27 @@ namespace CP77Tools
             var ass = AppDomain.CurrentDomain.BaseDirectory;
             var destFileName = Path.Combine(ass, "oo2ext_7_win64.dll");
             if (File.Exists(destFileName))
+            {
                 return true;
+            }
 
             var cp77BinDir = TryGetGameInstallDir();
             if (string.IsNullOrEmpty(cp77BinDir))
+            {
                 return false;
+            }
 
             // copy oodle dll
             var oodleInfo = new FileInfo(Path.Combine(cp77BinDir, "oo2ext_7_win64.dll"));
             if (!oodleInfo.Exists)
+            {
                 return false;
+            }
 
             if (!File.Exists(destFileName))
+            {
                 oodleInfo.CopyTo(destFileName);
+            }
 
             return true;
         }

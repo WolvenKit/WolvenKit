@@ -1,15 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common
 {
     public class GameFileTreeNode
     {
+        #region Constructors
+
         public GameFileTreeNode()
         {
             Directories = new Dictionary<string, GameFileTreeNode>();
@@ -23,6 +23,39 @@ namespace WolvenKit.Common
             Files = new Dictionary<string, List<IGameFile>>();
             Name = "";
         }
+
+        #endregion Constructors
+
+        #region Properties
+
+        public Dictionary<string, GameFileTreeNode> Directories { get; set; }
+
+        public string Extension => nameof(ECustomImageKeys.ClosedDirImageKey);
+
+        public Dictionary<string, List<IGameFile>> Files { get; set; }
+
+        public string FullPath
+        {
+            get
+            {
+                var path = "";
+                var current = this;
+                while (true)
+                {
+                    path = Path.Combine(current.Name, path);
+                    current = current.Parent;
+                    if (current == null)
+                        break;
+                }
+                return path ?? "";
+            }
+        }
+
+        public string Name { get; set; }
+
+        public GameFileTreeNode Parent { get; set; }
+
+        public List<GameFileTreeNode> SubDirectories => Directories.Values.ToList();
 
         public EArchiveType Type
         {
@@ -48,30 +81,9 @@ namespace WolvenKit.Common
             }
         }
 
-        public string FullPath
-        {
-            get
-            {
-                var path = "";
-                var current = this;
-                while (true)
-                {
-                    path = Path.Combine(current.Name, path);
-                    current = current.Parent;
-                    if (current == null)
-                        break;
-                }
+        #endregion Properties
 
-                return path ?? "";
-            }
-        }
-
-        public List<GameFileTreeNode> SubDirectories => Directories.Values.ToList();
-
-        public string Name { get; set; }
-        public GameFileTreeNode Parent { get; set; }
-        public Dictionary<string, GameFileTreeNode> Directories { get; set; }
-        public Dictionary<string, List<IGameFile>> Files { get; set; }
+        #region Methods
 
         public List<AssetBrowserData> ToAssetBrowserData()
         {
@@ -79,6 +91,7 @@ namespace WolvenKit.Common
             ret.Add(new AssetBrowserData()
             {
                 Name = "..",
+                Extension = nameof(ECustomImageKeys.OpenDirImageKey),
                 Type = EntryType.MoveUP,
                 This = this,
                 Parent = this.Parent
@@ -89,6 +102,7 @@ namespace WolvenKit.Common
                 Size = d.Value.Directories.Count + " directories, " + d.Value.Files.Count + " files",
                 Parent = this.Parent,
                 Children = d.Value,
+                Extension = nameof(ECustomImageKeys.ClosedDirImageKey),
                 This = this,
                 Type = EntryType.Directory
             }));
@@ -98,11 +112,14 @@ namespace WolvenKit.Common
                 Name = f.Key,
                 Size = f.Value[0].Size + " bytes",
                 This = this,
+                Extension = Path.GetExtension(f.Key),
                 Type = EntryType.File,
                 Parent = this.Parent
             }));
 
             return ret;
         }
+
+        #endregion Methods
     }
 }

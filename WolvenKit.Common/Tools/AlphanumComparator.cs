@@ -1,4 +1,4 @@
-﻿/*
+/*
  * The Alphanum Algorithm is an improved sorting algorithm for strings
  * containing numbers.  Instead of sorting numbers in ASCII order like
  * a standard sort, this algorithm sorts numbers in numeric order.
@@ -7,11 +7,11 @@
  *
  * Based on the Java implementation of Dave Koelle's Alphanum algorithm.
  * Contributed by Jonathan Ruckwood <jonathan.ruckwood@gmail.com>
- * 
- * Adapted by Dominik Hurnaus <dominik.hurnaus@gmail.com> to 
+ *
+ * Adapted by Dominik Hurnaus <dominik.hurnaus@gmail.com> to
  *   - correctly sort words where one word starts with another word
  *   - have slightly better performance
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -32,15 +32,27 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-/* 
+/*
  * Please compare against the latest Java version at http://www.DaveKoelle.com
- * to see the most recent modifications 
+ * to see the most recent modifications
  */
 
 namespace WolvenKit.Common
 {
     public class AlphanumComparator<T> : IComparer<T>
     {
+        #region Enums
+
+        private enum ChunkType
+        {
+            Alphanumeric,
+            Numeric
+        };
+
+        #endregion Enums
+
+        #region Methods
+
         public int Compare(T x, T y)
         {
             var s1 = x as string;
@@ -140,10 +152,6 @@ namespace WolvenKit.Common
             return true;
         }
 
-        private enum ChunkType
-        {
-            Alphanumeric,
-            Numeric
-        };
+        #endregion Methods
     }
 }

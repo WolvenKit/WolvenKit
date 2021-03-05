@@ -1,8 +1,4 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ProtoBuf;
 
 namespace WolvenKit.Common
@@ -10,7 +6,11 @@ namespace WolvenKit.Common
     [ProtoContract]
     public class ProtoList<T>
     {
+        #region Fields
+
         [ProtoMember(1)]
         public List<T> innerlist;
+
+        #endregion Fields
     }
 }

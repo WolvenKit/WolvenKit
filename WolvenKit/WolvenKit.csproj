@@ -1,6 +1,6 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net5.0-windows</TargetFrameworks>
+    <TargetFrameworks>net5.0-windows7</TargetFrameworks>
     <AssemblyName>WolvenKit</AssemblyName>
     <RootNamespace>WolvenKit</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -11,115 +11,64 @@
     <ProjectGuid>{1DD8B40B-2548-4663-B208-1D107EF47ACF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <StartupObject />
-    <ApplicationIcon>Wkit_Icon_Flattened_256x.ico</ApplicationIcon>
-	<PublishSingleFile>true</PublishSingleFile>
-	<SelfContained>false</SelfContained>
-	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
-	<PublishTrimmed>true</PublishTrimmed>
-	<PublishReadyToRun>true</PublishReadyToRun>
-	<DebugType>embedded</DebugType>
+    <ApplicationIcon>Resources\Media\Images\Icons\Application\TaskBarIcon.ico</ApplicationIcon>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>false</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <DebugType>embedded</DebugType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <NoWarn>$(NoWarn);CA1416</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
+    <Version>0.8.0.1-Beta</Version>
+    <Description>WPF</Description>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
-    <Compile Remove="Views\Wizards\WizardPages\InstallerWizard\**" />
-    <EmbeddedResource Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
-    <EmbeddedResource Remove="Views\Wizards\WizardPages\InstallerWizard\**" />
-    <None Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
-    <None Remove="Views\Wizards\WizardPages\InstallerWizard\**" />
-    <Page Remove="ViewModels\Wizards\WizardPages\InstallerWizard\**" />
-    <Page Remove="Views\Wizards\WizardPages\InstallerWizard\**" />
+    <Compile Remove="MVVM\ViewModels\Components\Wizards\WizardPages\InstallerWizard\**" />
+    <Compile Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Audio\**" />
+    <Compile Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Quest\**" />
+    <Compile Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Scene\**" />
+    <Compile Remove="MVVM\Views\Components\Wizards\WizardPages\InstallerWizard\**" />
+    <Compile Remove="NewFolder1\**" />
+    <Compile Remove="Resources\Styles\CustomBase\**" />
+    <Compile Remove="Resources\Styles\Custom\**" />
+    <EmbeddedResource Remove="MVVM\ViewModels\Components\Wizards\WizardPages\InstallerWizard\**" />
+    <EmbeddedResource Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Audio\**" />
+    <EmbeddedResource Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Quest\**" />
+    <EmbeddedResource Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Scene\**" />
+    <EmbeddedResource Remove="MVVM\Views\Components\Wizards\WizardPages\InstallerWizard\**" />
+    <EmbeddedResource Remove="NewFolder1\**" />
+    <EmbeddedResource Remove="Resources\Styles\CustomBase\**" />
+    <EmbeddedResource Remove="Resources\Styles\Custom\**" />
+    <None Remove="MVVM\ViewModels\Components\Wizards\WizardPages\InstallerWizard\**" />
+    <None Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Audio\**" />
+    <None Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Quest\**" />
+    <None Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Scene\**" />
+    <None Remove="MVVM\Views\Components\Wizards\WizardPages\InstallerWizard\**" />
+    <None Remove="NewFolder1\**" />
+    <None Remove="Resources\Styles\CustomBase\**" />
+    <None Remove="Resources\Styles\Custom\**" />
+    <Page Remove="MVVM\ViewModels\Components\Wizards\WizardPages\InstallerWizard\**" />
+    <Page Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Audio\**" />
+    <Page Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Quest\**" />
+    <Page Remove="MVVM\Views\Components\Editors\VisualEditor\Nodes\Scene\**" />
+    <Page Remove="MVVM\Views\Components\Wizards\WizardPages\InstallerWizard\**" />
+    <Page Remove="NewFolder1\**" />
+    <Page Remove="Resources\Styles\CustomBase\**" />
+    <Page Remove="Resources\Styles\Custom\**" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Resources\Icons\3.png" />
-    <None Remove="Resources\Icons\cloud.png" />
-    <None Remove="Resources\Icons\FileIcons\aiarch3.svg" />
-    <None Remove="Resources\Icons\FileIcons\animation.svg" />
-    <None Remove="Resources\Icons\FileIcons\aningraph.svg" />
-    <None Remove="Resources\Icons\FileIcons\app.svg" />
-    <None Remove="Resources\Icons\FileIcons\audiometadata2.svg" />
-    <None Remove="Resources\Icons\FileIcons\audiovehcurveset.svg" />
-    <None Remove="Resources\Icons\FileIcons\behavior_graph3.svg" />
-    <None Remove="Resources\Icons\FileIcons\bk2.svg" />
-    <None Remove="Resources\Icons\FileIcons\bnk.svg" />
-    <None Remove="Resources\Icons\FileIcons\camcurveset.svg" />
-    <None Remove="Resources\Icons\FileIcons\cfoilage.svg" />
-    <None Remove="Resources\Icons\FileIcons\cubemap.svg" />
-    <None Remove="Resources\Icons\FileIcons\font.svg" />
-    <None Remove="Resources\Icons\FileIcons\json.svg" />
-    <None Remove="Resources\Icons\FileIcons\lights.svg" />
-    <None Remove="Resources\Icons\FileIcons\materialinstance.svg" />
-    <None Remove="Resources\Icons\FileIcons\mesh.svg" />
-    <None Remove="Resources\Icons\FileIcons\nvmesh.svg" />
-    <None Remove="Resources\Icons\FileIcons\particle.svg" />
-    <None Remove="Resources\Icons\FileIcons\quest.svg" />
-    <None Remove="Resources\Icons\FileIcons\scenesversions_Cutscene_versioning.svg" />
-    <None Remove="Resources\Icons\FileIcons\scene_Cutscene.svg" />
-    <None Remove="Resources\Icons\FileIcons\texarray.svg" />
-    <None Remove="Resources\Icons\FileIcons\traffic_collisions.svg" />
-    <None Remove="Resources\Icons\FileIcons\traffic_persistent.svg" />
-    <None Remove="Resources\Icons\FileIcons\w2mesh.svg" />
-    <None Remove="Resources\Icons\FileIcons\w2mi2.svg" />
-    <None Remove="Resources\Icons\FileIcons\W3Dyng.svg" />
-    <None Remove="Resources\Icons\FileIcons\W3Occulsion.svg" />
-    <None Remove="Resources\Icons\FileIcons\wem.svg" />
-    <None Remove="Resources\Icons\FileIcons\xbm.svg" />
-    <None Remove="Resources\Icons\FileIcons\xcube.svg" />
-    <None Remove="Resources\Icons\FileIcons\xml.svg" />
-    <None Remove="Resources\Icons\Homelogo.png" />
-    <None Remove="Resources\Icons\HomeSickTransp.png" />
-    <None Remove="Resources\Icons\HomeSickTransp2.png" />
-    <None Remove="Resources\Icons\SeeTroughIcon.png" />
-    <None Remove="Resources\Icons\Somthlikedis.png" />
-    <None Remove="Resources\Icons\TinyTest.png" />
-    <None Remove="Resources\Icons\whitelogo.png" />
-    <None Remove="Resources\Icons\work.png" />
-    <None Remove="Wkit_Icon_Flattened_256x.ico" />
+    <Resource Include="Resources\Media\Images\Application\cloud.png" />
+    <Resource Include="Resources\Media\Images\Application\cp77proj.png" />
+    <Resource Include="Resources\Media\Images\Application\CpProj.png" />
+    <Resource Include="Resources\Media\Images\Application\HomeSickTransp.png" />
+    <Resource Include="Resources\Media\Images\Application\HomeSickTransp2.png" />
+    <Resource Include="Resources\Media\Images\Application\SeeTroughIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Icons\cloud.png" />
-    <Resource Include="Resources\Icons\FileIcons\aiarch3.svg" />
-    <Resource Include="Resources\Icons\FileIcons\animation.svg" />
-    <Resource Include="Resources\Icons\FileIcons\aningraph.svg" />
-    <Resource Include="Resources\Icons\FileIcons\app.svg" />
-    <Resource Include="Resources\Icons\FileIcons\audiometadata2.svg" />
-    <Resource Include="Resources\Icons\FileIcons\audiovehcurveset.svg" />
-    <Resource Include="Resources\Icons\FileIcons\behavior_graph3.svg" />
-    <Resource Include="Resources\Icons\FileIcons\bk2.svg" />
-    <Resource Include="Resources\Icons\FileIcons\bnk.svg" />
-    <Resource Include="Resources\Icons\FileIcons\camcurveset.svg" />
-    <Resource Include="Resources\Icons\FileIcons\cfoilage.svg" />
-    <Resource Include="Resources\Icons\FileIcons\cubemap.svg" />
-    <Resource Include="Resources\Icons\FileIcons\font.svg" />
-    <Resource Include="Resources\Icons\FileIcons\json.svg" />
-    <Resource Include="Resources\Icons\FileIcons\lights.svg" />
-    <Resource Include="Resources\Icons\FileIcons\materialinstance.svg" />
-    <Resource Include="Resources\Icons\FileIcons\mesh.svg" />
-    <Resource Include="Resources\Icons\FileIcons\nvmesh.svg" />
-    <Resource Include="Resources\Icons\FileIcons\particle.svg" />
-    <Resource Include="Resources\Icons\FileIcons\quest.svg" />
-    <Resource Include="Resources\Icons\FileIcons\scenesversions_Cutscene_versioning.svg" />
-    <Resource Include="Resources\Icons\FileIcons\scene_Cutscene.svg" />
-    <Resource Include="Resources\Icons\FileIcons\texarray.svg" />
-    <Resource Include="Resources\Icons\FileIcons\traffic_collisions.svg" />
-    <Resource Include="Resources\Icons\FileIcons\traffic_persistent.svg" />
-    <Resource Include="Resources\Icons\FileIcons\w2mesh.svg" />
-    <Resource Include="Resources\Icons\FileIcons\w2mi2.svg" />
-    <Resource Include="Resources\Icons\FileIcons\W3Dyng.svg" />
-    <Resource Include="Resources\Icons\FileIcons\W3Occulsion.svg" />
-    <Resource Include="Resources\Icons\FileIcons\wem.svg" />
-    <Resource Include="Resources\Icons\FileIcons\xbm.svg" />
-    <Resource Include="Resources\Icons\FileIcons\xcube.svg" />
-    <Resource Include="Resources\Icons\FileIcons\xml.svg" />
-    <Resource Include="Resources\Icons\HomeSickTransp.png" />
-    <Resource Include="Resources\Icons\HomeSickTransp2.png" />
-    <Resource Include="Resources\Icons\SeeTroughIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\Somthlikedis.png" />
+    <Resource Include="Resources\Media\Images\Application\Somthlikedis.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -139,12 +88,12 @@
     <PackageReference Include="Catel.MVVM" Version="5.12.11" />
     <PackageReference Include="Catel.Fody" Version="4.7.0-alpha0115" PrivateAssets="all" />
     <PackageReference Include="Dirkster.MWindowLib" Version="1.3.1.2" />
+    <PackageReference Include="Dirkster.WSF" Version="1.2.0" />
     <PackageReference Include="DiscordRichPresence" Version="1.0.175" />
     <PackageReference Include="Fody" Version="6.3.0" PrivateAssets="all" />
     <PackageReference Include="CsvHelper" Version="16.1.0" />
     <PackageReference Include="Dirkster.MLib" Version="1.3.1.2" />
     <PackageReference Include="FastMember" Version="1.5.0" />
-    <PackageReference Include="HandyControls" Version="3.1.1" />
     <PackageReference Include="MahApps.Metro" Version="2.4.3" />
     <PackageReference Include="MahApps.Metro.IconPacks.BootstrapIcons" Version="4.8.0" />
     <PackageReference Include="MahApps.Metro.IconPacks.BoxIcons" Version="4.8.0" />
@@ -157,8 +106,8 @@
     <PackageReference Include="NodeNetwork" Version="5.1.2" />
     <PackageReference Include="NodeNetworkToolkit" Version="5.1.2" />
     <PackageReference Include="Octokit" Version="0.48.0" />
+    <PackageReference Include="Open.ChannelExtensions" Version="3.5.0" />
     <PackageReference Include="Orc.CommandLine" Version="4.1.1" />
-    <PackageReference Include="Orc.Notifications" Version="4.1.0" />
     <PackageReference Include="Orc.ProjectManagement" Version="4.1.1" />
     <PackageReference Include="Orc.Squirrel" Version="4.1.0" />
     <PackageReference Include="Orc.Squirrel.Xaml" Version="4.1.0" />
@@ -166,7 +115,7 @@
     <PackageReference Include="Pfim" Version="0.9.1" />
     <PackageReference Include="protobuf-net" Version="3.0.73" />
     <PackageReference Include="SharpZipLib" Version="1.3.1" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -176,10 +125,13 @@
     <PackageReference Include="System.Security.Permissions" Version="5.0.0" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" NoWarn="NU1701" />
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
+    <PackageReference Include="WolvenKit.AssetBrowserBar" Version="1.0.1" />
     <PackageReference Include="WolvenKit.AvalonDock.Themes.VS2013" Version="4.50.4" />
     <PackageReference Include="WolvenKit.AvalonEdit" Version="6.1.1" />
-    <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.1" />
-    <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="4.2.1" />
+    <PackageReference Include="WolvenKit.ExplorerControl" Version="1.3.0" />
+    <PackageReference Include="WolvenKit.HandyControl" Version="3.1.4" />
+    <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.2" />
+    <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="4.2.5" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     <PackageReference Include="WpfAnalyzers" Version="3.5.2" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -187,215 +139,467 @@
     <PackageReference Include="WPFHexaEditor" Version="2.1.6" />
     <!--<PackageReference Update="NETStandard.Library" Version="2.0.1" />-->
   </ItemGroup>
-  
+
   <ItemGroup>
-    <Content Include="ManagerCache\__xbmdump_3768555366.csv">
+    <Content Include="Config\__xbmdump_3768555366.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\AvalonDock.Layout.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="Config\AvalonDock.Layout.config">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Images\git.png">
+    <Content Include="Resources\Old\Images\git.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\Close_16x.svg">
+    <Content Include="Resources\Old\Svg\Close_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\Close_red_16x.svg">
+    <Content Include="Resources\Old\Svg\Close_red_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\CollapseAll_16x.svg">
+    <Content Include="Resources\Old\Svg\CollapseAll_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\CollapseChevronUpGroup_16x.svg">
+    <Content Include="Resources\Old\Svg\CollapseChevronUpGroup_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\EventLog_16x.svg">
+    <Content Include="Resources\Old\Svg\EventLog_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\ExpandAll_16x.svg">
+    <Content Include="Resources\Old\Svg\ExpandAll_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\ExpandChevronDownGroup_16x.svg">
+    <Content Include="Resources\Old\Svg\ExpandChevronDownGroup_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\ImportFile_16x.svg">
+    <Content Include="Resources\Old\Svg\ImportFile_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\Method_16x.svg">
+    <Content Include="Resources\Old\Svg\Method_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\Method_left_16x.svg">
+    <Content Include="Resources\Old\Svg\Method_left_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\MoveToSubmodule2_16x.svg">
+    <Content Include="Resources\Old\Svg\MoveToSubmodule2_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\MoveToSubmodule_16x.svg">
+    <Content Include="Resources\Old\Svg\MoveToSubmodule_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\NewFile_16x.svg">
+    <Content Include="Resources\Old\Svg\NewFile_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\OpenFile_16x.svg">
+    <Content Include="Resources\Old\Svg\OpenFile_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\PackageProperty_16x.svg">
+    <Content Include="Resources\Old\Svg\PackageProperty_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\PlaybackPreview_16x.svg">
+    <Content Include="Resources\Old\Svg\PlaybackPreview_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\Property_left_16x.svg">
+    <Content Include="Resources\Old\Svg\Property_left_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\PushpinOutlineAngle_16x.svg">
+    <Content Include="Resources\Old\Svg\PushpinOutlineAngle_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\regex.svg">
+    <Content Include="Resources\Old\Svg\regex.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\RunTest_16x.svg">
+    <Content Include="Resources\Old\Svg\RunTest_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\Run_16x.svg">
+    <Content Include="Resources\Old\Svg\Run_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\SearchFolderClosed_16x.svg">
+    <Content Include="Resources\Old\Svg\SearchFolderClosed_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\SelectAllItems_inversed_16x.svg">
+    <Content Include="Resources\Old\Svg\SelectAllItems_inversed_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\SelectInverseItems_inversed_16x.svg">
+    <Content Include="Resources\Old\Svg\SelectInverseItems_inversed_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\SelectNoItems_inversed_16x.svg">
+    <Content Include="Resources\Old\Svg\SelectNoItems_inversed_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\SelectObject_16x.svg">
+    <Content Include="Resources\Old\Svg\SelectObject_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\Settings_16x.svg">
+    <Content Include="Resources\Old\Svg\Settings_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\SQLServerObjectExplorer_16x.svg">
+    <Content Include="Resources\Old\Svg\SQLServerObjectExplorer_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\TypeDefinition_16x.svg">
+    <Content Include="Resources\Old\Svg\TypeDefinition_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\UploadFile_16x.svg">
+    <Content Include="Resources\Old\Svg\UploadFile_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\whole-word.svg">
+    <Content Include="Resources\Old\Svg\whole-word.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\WK_Logo.svg">
+    <Content Include="Resources\Old\Svg\WK_Logo.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\ZoomOriginalSize_16x.svg">
+    <Content Include="Resources\Old\Svg\ZoomOriginalSize_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Fonts\fontawesome-webfont.ttf" />
-    <Resource Include="Resources\Icons\3.png" />
-    <Resource Include="Resources\Icons\Homelogo.png" />
-    <Resource Include="Resources\Icons\Logo.ico" />
-    <Resource Include="Resources\Icons\TinyTest.png" />
-    <Resource Include="Resources\Icons\whitelogo.png" />
-    <Resource Include="Resources\Icons\work.png" />
-    <Resource Include="Resources\Images\Files\apb_32x.png" />
-    <Resource Include="Resources\Images\Files\BlankFile_16x.png" />
-    <Resource Include="Resources\Images\Files\blend_32x.png" />
-    <Resource Include="Resources\Images\Files\fbx_32x.png" />
-    <Resource Include="Resources\Images\Files\FolderClosed_16x.png" />
-    <Resource Include="Resources\Images\Files\FolderOpened_16x.png" />
-    <Resource Include="Resources\Images\Files\image_32x.png" />
-    <Resource Include="Resources\Images\Files\Project_Explorer_Base_Dir_16x.png" />
-    <Resource Include="Resources\Images\Files\redcloth_32x.png" />
-    <Resource Include="Resources\Images\Files\w2mesh_32x.png" />
-    <Resource Include="Resources\Images\Files\xbm_32x.png" />
-    <Resource Include="Resources\Images\Files\xml_32x.png" />
-    <Resource Include="Resources\Images\Files\zip_32x.png" />
-    <Resource Include="Resources\Images\RedEngine\bird.png" />
-    <Resource Include="Resources\Images\RedEngine\csv.png" />
-    <Resource Include="Resources\Images\RedEngine\detail.png" />
-    <Resource Include="Resources\Images\RedEngine\env.png" />
-    <Resource Include="Resources\Images\RedEngine\ExitIcon.png" />
-    <Resource Include="Resources\Images\RedEngine\ExpandIcon.png" />
-    <Resource Include="Resources\Images\RedEngine\fev.png" />
-    <Resource Include="Resources\Images\RedEngine\journal.png" />
-    <Resource Include="Resources\Images\RedEngine\LayerGroupVisibled.png" />
-    <Resource Include="Resources\Images\RedEngine\redgame.png" />
-    <Resource Include="Resources\Images\RedEngine\redswf.png" />
-    <Resource Include="Resources\Images\RedEngine\spawntree.png" />
-    <Resource Include="Resources\Images\RedEngine\swf.png" />
-    <Resource Include="Resources\Images\RedEngine\vbrush.png" />
-    <Resource Include="Resources\Images\RedEngine\w2ainfo.png" />
-    <Resource Include="Resources\Images\RedEngine\w2am.png" />
-    <Resource Include="Resources\Images\RedEngine\w2anim.png" />
-    <Resource Include="Resources\Images\RedEngine\w2animev.png" />
-    <Resource Include="Resources\Images\RedEngine\w2anims.png" />
-    <Resource Include="Resources\Images\RedEngine\w2beh.png" />
-    <Resource Include="Resources\Images\RedEngine\w2behtree.png" />
-    <Resource Include="Resources\Images\RedEngine\w2blb.png" />
-    <Resource Include="Resources\Images\RedEngine\w2brix.png" />
-    <Resource Include="Resources\Images\RedEngine\w2cent.png" />
-    <Resource Include="Resources\Images\RedEngine\w2comm.png" />
-    <Resource Include="Resources\Images\RedEngine\w2conv.png" />
-    <Resource Include="Resources\Images\RedEngine\w2cube.png" />
-    <Resource Include="Resources\Images\RedEngine\w2cutscene.png" />
-    <Resource Include="Resources\Images\RedEngine\w2ds.png" />
-    <Resource Include="Resources\Images\RedEngine\w2dset.png" />
-    <Resource Include="Resources\Images\RedEngine\w2ent.png" />
-    <Resource Include="Resources\Images\RedEngine\w2expr.png" />
-    <Resource Include="Resources\Images\RedEngine\w2f.png" />
-    <Resource Include="Resources\Images\RedEngine\w2faces.png" />
-    <Resource Include="Resources\Images\RedEngine\w2fnt.png" />
-    <Resource Include="Resources\Images\RedEngine\w2goalcrv.png" />
-    <Resource Include="Resources\Images\RedEngine\w2guidesc.png" />
-    <Resource Include="Resources\Images\RedEngine\w2je.png" />
-    <Resource Include="Resources\Images\RedEngine\w2job.png" />
-    <Resource Include="Resources\Images\RedEngine\w2l.png" />
-    <Resource Include="Resources\Images\RedEngine\w2mesh.png" />
-    <Resource Include="Resources\Images\RedEngine\w2mg.png" />
-    <Resource Include="Resources\Images\RedEngine\w2mi.png" />
-    <Resource Include="Resources\Images\RedEngine\w2p.png" />
-    <Resource Include="Resources\Images\RedEngine\w2phase.png" />
-    <Resource Include="Resources\Images\RedEngine\w2pr.png" />
-    <Resource Include="Resources\Images\RedEngine\w2ps.png" />
-    <Resource Include="Resources\Images\RedEngine\w2qlog.png" />
-    <Resource Include="Resources\Images\RedEngine\w2quest.png" />
-    <Resource Include="Resources\Images\RedEngine\w2rag.png" />
-    <Resource Include="Resources\Images\RedEngine\w2ragdoll.png" />
-    <Resource Include="Resources\Images\RedEngine\w2react.png" />
-    <Resource Include="Resources\Images\RedEngine\w2rig.png" />
-    <Resource Include="Resources\Images\RedEngine\w2rigm.png" />
-    <Resource Include="Resources\Images\RedEngine\w2sbnk.png" />
-    <Resource Include="Resources\Images\RedEngine\w2scene.png" />
-    <Resource Include="Resources\Images\RedEngine\w2spwn.png" />
-    <Resource Include="Resources\Images\RedEngine\w2steer.png" />
-    <Resource Include="Resources\Images\RedEngine\w2surf.png" />
-    <Resource Include="Resources\Images\RedEngine\w2w.png" />
-    <Resource Include="Resources\Images\RedEngine\worldmap.png" />
-    <Resource Include="Wkit_Icon_Flattened_256x.ico">
+    <Resource Include="Resources\Media\Images\Application\3.png" />
+    <Resource Include="Resources\Media\Images\Application\Homelogo.png" />
+    <Resource Include="Resources\Media\Images\Application\thankyoumoonded.png" />
+    <Resource Include="Resources\Media\Images\Application\TinyTest.png" />
+    <Resource Include="Resources\Media\Images\Application\tw3proj.png" />
+    <Resource Include="Resources\Media\Images\Application\whitelogo.png" />
+    <Resource Include="Resources\Media\Images\Application\.cpmodproj.png" />
+    <Resource Include="Resources\Media\Images\Application\.w3modproj.png" />
+    <Resource Include="Resources\Media\Images\Icons\Files\aiarch3.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\animation.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\aningraph.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\app.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\audiometadata2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\audiovehcurveset.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\behavior_graph3.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\bk2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\bnk.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\camcurveset.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\camcurveset1.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\camcurveset2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\cfoilage.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\charcustpreset.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\cminimap.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\conversations.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\cookedanims.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\cookedapp.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\credits2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\cubemap.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\curveset.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\dat.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\Devices.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\Effect.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\envparam.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\envprob a.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\envprob b.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\facialsetup.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\file.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\folbrush.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\folderclosed.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\folderdefault.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\folderopened.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\foldest.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\fnt.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\gamedef.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\hp.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\inkanim2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\inkatlas3.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\inkcharcustomization.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\inkfont.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\inkgamesettings.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\inkhud.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\inklayers2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\inkmenu3.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\inkscreencomp.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\inkshapecollection2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\inkstyle.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\inktypography2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\inkwidget.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\Interaction.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\journal2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\journaldesc.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\json.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\lane_connections.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\lane_polygons.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\lights.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\location.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\loot.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\mappins.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\mesh.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\mi.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\navmesh.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\null_areas.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\opuspak.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\particle.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\poimappins.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\quest.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\questphase.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\resourcelist2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\rig.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\scenerid_Cutscene_info.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\scenesversions_Cutscene_versioning.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\scene_Cutscene.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\texarray.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\traffic_collisions.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\traffic_persistent.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\traffic_persistent2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\traffic_persistent3.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\VoiceTags.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2mesh.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2mi2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\W3Occulsion.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\wem.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\workspot3.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\xbm.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\xcube.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\xml.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Old\Images\RedEngine\bird.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\csv.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\detail.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\env.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\ExitIcon.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\ExpandIcon.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\fev.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\journal.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\LayerGroupVisibled.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\redgame.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\redswf.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\spawntree.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\swf.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\vbrush.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2ainfo.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2am.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2anim.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2animev.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2anims.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2beh.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2behtree.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2blb.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2brix.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2cent.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2comm.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2conv.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2cube.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2cutscene.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2ds.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2dset.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2ent.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2expr.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2f.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2faces.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2fnt.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2goalcrv.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2guidesc.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2je.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2job.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2l.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2mesh.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2mg.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2mi.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2p.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2phase.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2pr.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2ps.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2qlog.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2quest.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2rag.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2ragdoll.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2react.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2rig.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2rigm.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2sbnk.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2scene.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2spwn.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2steer.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2surf.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\w2w.png" />
+    <Resource Include="Resources\Old\Images\RedEngine\worldmap.png" />
+    <Resource Include="Resources\Media\Images\Icons\Application\TaskBarIcon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Content Include="Resources\Images\Preferences_light_64x.png">
+    <Content Include="Resources\Old\Images\Preferences_light_64x.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\case-sensitive.svg">
+    <Content Include="Resources\Old\Svg\case-sensitive.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\ImportTheme_16x.svg">
+    <Content Include="Resources\Old\Svg\ImportTheme_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\NewSolutionFolder_16x.svg">
+    <Content Include="Resources\Old\Svg\NewSolutionFolder_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Svg\OpenFolder_16x.svg">
+    <Content Include="Resources\Old\Svg\OpenFolder_16x.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -405,24 +609,34 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\Styles\CustomBase\" />
-    <Folder Include="Resources\Styles\Custom\" />
-    <Folder Include="ViewModels\SettingsPages\SubPages\Integration\" />
-    <Folder Include="ViewModels\SettingsPages\SubPages\Packaging\" />
-    <Folder Include="Views\Editors\VisualEditor\Nodes\Audio\" />
-    <Folder Include="Views\Editors\VisualEditor\Nodes\Scene\" />
-    <Folder Include="Views\Editors\VisualEditor\Nodes\Quest\" />
-    <Folder Include="Views\SettingsPages\SubPages\Integration\" />
-    <Folder Include="Views\SettingsPages\SubPages\Packaging\" />
+    <Folder Include="MVVM\ViewModels\Shell\HomePage\Pages\SettingsPages\SubPages\Integration\" />
+    <Folder Include="MVVM\ViewModels\Shell\HomePage\Pages\SettingsPages\SubPages\Packaging\" />
+    <Folder Include="MVVM\Views\Shell\HomePage\Pages\SettingsPages\SubPages\Integration\" />
+    <Folder Include="MVVM\Views\Shell\HomePage\Pages\SettingsPages\SubPages\Packaging\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Update="testmp3.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\cancerPC\.nuget\packages\microsoft.web.webview2\1.0.664.37\build\\..\runtimes\win-x64\native\WebView2Loader.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\Media\Images\Icons\Files\file.svg" />
   </ItemGroup>
 </Project>

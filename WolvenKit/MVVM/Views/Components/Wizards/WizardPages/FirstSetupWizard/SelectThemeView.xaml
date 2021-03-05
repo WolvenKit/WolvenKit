@@ -1,0 +1,46 @@
+<catel:UserControl
+ x:Class="WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard.SelectThemeView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ Initialized="UserControl_Initialized_1"
+ Loaded="UserControl_Loaded"
+ mc:Ignorable="av"
+ >
+
+    <Grid Grid.Row="3" VerticalAlignment="Center">
+        <Grid
+         Margin="5,5,5,5"
+         HorizontalAlignment="Stretch"
+         Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+         >
+            <Grid Grid.Row="1" HorizontalAlignment="Stretch">
+                <StackPanel
+                 Margin="0,10,0,0"
+                 VerticalAlignment="Top"
+                 Orientation="Vertical"
+                 >
+                    <Grid Margin="22,0,0,0">
+                        <TextBlock
+                         Margin="35,15,0,0"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Center"
+                         FontSize="14"
+                         Text="Theme"
+                         />
+                        <WrapPanel
+                         x:Name="CircleTest"
+                         Margin="140,15,10,0"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Center"
+                         FlowDirection="LeftToRight"
+                         />
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</catel:UserControl>

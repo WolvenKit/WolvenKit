@@ -1,9 +1,11 @@
-﻿using WolvenKit.W3Strings;
+using WolvenKit.W3Strings;
 
 namespace WolvenKit.W3Speech
 {
     public static class LanguageTools
     {
+        #region Methods
+
         /// <summary>
         /// Converts the language specific id as found in w3speech files to the language neutral id that is the same across all languages.
         /// </summary>
@@ -25,5 +27,7 @@ namespace WolvenKit.W3Speech
         {
             return new LanguageSpecificID(neutral_id.value ^ language.Magic.value);
         }
+
+        #endregion Methods
     }
 }

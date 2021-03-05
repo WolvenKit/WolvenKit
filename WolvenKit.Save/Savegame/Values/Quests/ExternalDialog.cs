@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using WolvenKit.W3SavegameEditor.Core.Savegame.Attributes;
 
 namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values.Quests
@@ -6,9 +6,14 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values.Quests
     [CSerializable("ExternalDialog")]
     public class ExternalDialog
     {
-        [CName("tag")]
-        public string Tag { get; set; }
+        #region Properties
+
         [CArray("dialogsCount")]
         public Guid[] Dialogs { get; set; }
+
+        [CName("tag")]
+        public string Tag { get; set; }
+
+        #endregion Properties
     }
 }

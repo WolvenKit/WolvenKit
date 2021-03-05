@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -11,10 +11,11 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.CodeDom;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W.Types
 {
-
+    [Editor(typeof(ICollectionEditor), typeof(IPropertyEditorBase))]
     [REDMeta()]
     public abstract class CArrayBase<T> : CVariable, IArrayAccessor<T>, IList<T> where T : IEditableVariable
     {
@@ -163,7 +164,9 @@ namespace CP77.CR2W.Types
             {
                 var ccopy = element.Copy(context);
                 if (ccopy is T copye)
+                {
                     copy.Elements.Add(copye);
+                }
             }
 
             return copy;

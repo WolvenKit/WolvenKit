@@ -168,13 +168,13 @@ namespace CR2WTests
             Console.WriteLine($"{ext} test completed...");
             Console.WriteLine("Results:");
             Console.WriteLine($"\t- Parsed {filecount} {ext} files");
-            Console.WriteLine($"\t- Parsing percentage => {((double)totalbytes - (double)unknownbytes) / (double)totalbytes:0.00%}" +
+            Console.WriteLine($"\t- Percentage parsed => {((double)totalbytes - (double)unknownbytes) / (double)totalbytes:0.00%}" +
                 $" | Couldn't parse: {unparsedfiles.Count} files!");
             Console.WriteLine($"Classes: ");
             UpdateRichTextBox2($"{ext} test completed...\r\n");
             UpdateRichTextBox2("Results:\r\n");
             UpdateRichTextBox2($"\t- Parsed {filecount} {ext} files\r\n");
-            UpdateRichTextBox2($"\t- Parsing percentage => {((double)totalbytes - (double)unknownbytes) / (double)totalbytes:0.00%}\r\n" +
+            UpdateRichTextBox2($"\t- Percentage parsed => {((double)totalbytes - (double)unknownbytes) / (double)totalbytes:0.00%}\r\n" +
                 $" | Couldn't parse: {unparsedfiles.Count} files!\r\n");
             UpdateRichTextBox2($"Classes: \r\n");
 
@@ -196,8 +196,8 @@ namespace CR2WTests
                 UpdateRichTextBox2($"\t-{f}\r\n");
             }
 
-            Console.WriteLine("Types unparsed:");
-            UpdateRichTextBox2("Types unparsed:\r\n");
+            Console.WriteLine("Types not parsed:");
+            UpdateRichTextBox2("Types not parsed:\r\n");
             foreach (var f in unknownclasses)
             {
                 Console.WriteLine($"\t-{f}");
@@ -282,7 +282,7 @@ namespace CR2WTests
                     }
                     else
                     {
-                        throw new InvalidBundleException(" Generated dictionary not equal actual dictionary.");
+                        throw new InvalidBundleException("Generated dictionary not identical to actual dictionary.");
                     }
                 }
                 #endregion
@@ -311,7 +311,7 @@ namespace CR2WTests
 
                     if (!Enumerable.SequenceEqual(buffer_testB_original, buffer_testB))
                     {
-                        throw new InvalidBundleException(" Generated cr2w file not equal to original file.");
+                        throw new InvalidBundleException("Generated CR2W file not binary equal to original file.");
                     }
                 }
                 #endregion

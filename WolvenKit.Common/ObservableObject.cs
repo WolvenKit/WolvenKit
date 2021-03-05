@@ -1,7 +1,7 @@
-﻿using System.ComponentModel;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace WolvenKit.Common
 {
@@ -13,8 +13,10 @@ namespace WolvenKit.Common
     public abstract class ObservableObject : INotifyPropertyChanged, INotifyPropertyChanging
     {
         #region NotifyPropertyChanged
+
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
+
         /// <summary>
         /// Invoke the PropertyChanged event using the caller property name with <see cref="CallerMemberNameAttribute"/>.
         /// </summary>
@@ -23,10 +25,13 @@ namespace WolvenKit.Common
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
+
+        #endregion NotifyPropertyChanged
 
         #region NotifyPropertyChanging
+
         public event PropertyChangingEventHandler PropertyChanging;
+
         /// <summary>
         /// Invoke the PropertyChanging event using the caller property name with <see cref="CallerMemberNameAttribute"/>.
         /// </summary>
@@ -35,13 +40,15 @@ namespace WolvenKit.Common
         {
             PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
         }
-        #endregion
+
+        #endregion NotifyPropertyChanging
 
         #region Explicit Methods
+
         // Not a fan of this style
         protected virtual bool ChangeProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
-            if(EqualityComparer<T>.Default.Equals(field, value))
+            if (EqualityComparer<T>.Default.Equals(field, value))
             {
                 return false;
             }
@@ -49,6 +56,7 @@ namespace WolvenKit.Common
             OnPropertyChanged(propertyName);
             return true;
         }
-        #endregion
+
+        #endregion Explicit Methods
     }
 }

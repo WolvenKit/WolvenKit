@@ -1,12 +1,17 @@
-﻿using System.IO;
+using System.IO;
 
 namespace WolvenKit.W3SavegameEditor.Core
 {
     internal static class ExtensionMethods
     {
-        public static string ReadString(this BinaryReader reader, int count)
+        #region Methods
+
+        public static byte PeekByte(this BinaryReader reader)
         {
-            return new string(reader.ReadChars(count));
+            long position = reader.BaseStream.Position;
+            byte value = reader.ReadByte();
+            reader.BaseStream.Position = position;
+            return value;
         }
 
         public static string PeekString(this BinaryReader reader, int count)
@@ -17,17 +22,16 @@ namespace WolvenKit.W3SavegameEditor.Core
             return value;
         }
 
-        public static byte PeekByte(this BinaryReader reader)
+        public static string ReadString(this BinaryReader reader, int count)
         {
-            long position = reader.BaseStream.Position;
-            byte value = reader.ReadByte();
-            reader.BaseStream.Position = position;
-            return value;
+            return new string(reader.ReadChars(count));
         }
 
         public static void Skip(this BinaryReader reader, int count)
         {
             reader.BaseStream.Position += count;
         }
+
+        #endregion Methods
     }
 }
