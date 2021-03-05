@@ -322,7 +322,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
         #region Properties
 
         public string Folder { get; set; }
-        public ImageSource Image { get; set; }
+        public Uri Image { get; set; }
 
         #endregion Properties
     }

@@ -194,13 +194,13 @@
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding SubDirectories}">
                                 <StackPanel Margin="2" Orientation="Horizontal">
-                                    <Image
+                                    <svgc:SvgViewbox
                                      Width="22"
                                      Height="15"
                                      Margin="0"
                                      HorizontalAlignment="Center"
                                      VerticalAlignment="Center"
-                                     Source="{Binding Extension, Converter={StaticResource ConvertExtensionAndSVGz}}"
+                                     Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
                                      Stretch="Uniform"
                                      />
                                     <TextBlock Text="{Binding Name}" />
@@ -269,13 +269,13 @@
                                         <GridViewColumn Width="Auto">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Image
-                                                     Width="26"
-                                                     Height="26"
+                                                    <svgc:SvgViewbox
+                                                     Width="22"
+                                                     Height="22"
                                                      Margin="-3"
                                                      HorizontalAlignment="Center"
                                                      VerticalAlignment="Center"
-                                                     Source="{Binding Extension, Converter={StaticResource ConvertExtensionAndSVGz}}"
+                                                     Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
                                                      Stretch="Uniform"
                                                      />
                                                 </DataTemplate>

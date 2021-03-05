@@ -105,10 +105,14 @@
                              MouseAction="LeftDoubleClick"
                              />
                         </StackPanel.InputBindings>
-                        <Image
-                         Height="16"
-                         Margin="0,1,8,1"
-                         Source="{Binding Extension, Converter={StaticResource ConvertExtensionAndSVG}}"
+                        <svgc:SvgViewbox
+                         Width="22"
+                         Height="15"
+                         Margin="0"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
+                         Stretch="Uniform"
                          />
                         <TextBlock Text="{Binding Path=Name}" />
                         <i1:Interaction.Triggers>
