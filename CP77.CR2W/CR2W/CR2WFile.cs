@@ -1192,7 +1192,7 @@ namespace CP77.CR2W
                     }
                     case IEnumAccessor {IsFlag: true} enumAccessor:
                     {
-                        foreach (var enumstring in enumAccessor.Value) AddUniqueToTable(enumstring);
+                        foreach (var enumstring in enumAccessor.EnumValueList) AddUniqueToTable(enumstring);
                         break;
                     }
                     case IEnumAccessor enumAccessor:

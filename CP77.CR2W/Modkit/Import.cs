@@ -86,9 +86,9 @@ namespace CP77.CR2W
             var cr2w = new CR2WFile();
             // create xbm chunk
             var xbm = new CBitmapTexture(cr2w, null, "CBitmapTexture");
-            xbm.Width = new CUInt32(cr2w, xbm, "width") { val = width, IsSerialized = true };
-            xbm.Height = new CUInt32(cr2w, xbm, "height") { val = height, IsSerialized = true };
-            xbm.CookingPlatform = new CEnum<Enums.ECookingPlatform>(cr2w, xbm, "cookingPlatform"){ WrappedEnum = Enums.ECookingPlatform.PLATFORM_PC, IsSerialized = true };
+            xbm.Width = new CUInt32(cr2w, xbm, "width") { Value = width, IsSerialized = true };
+            xbm.Height = new CUInt32(cr2w, xbm, "height") { Value = height, IsSerialized = true };
+            xbm.CookingPlatform = new CEnum<Enums.ECookingPlatform>(cr2w, xbm, "cookingPlatform"){ Value = Enums.ECookingPlatform.PLATFORM_PC, IsSerialized = true };
             xbm.Setup = new STextureGroupSetup(cr2w, xbm, "setup")
             {
                 IsSerialized = true
@@ -124,19 +124,19 @@ namespace CP77.CR2W
                         xbm.Setup.Group = new CEnum<Enums.GpuWrapApieTextureGroup>(cr2w, xbm, "group")
                         {
                             IsSerialized = true,
-                            WrappedEnum = eTextureGroup
+                            Value = eTextureGroup
                         };
                         if (flags == CommonFunctions.ETexGroupFlags.Both || flags == CommonFunctions.ETexGroupFlags.CompressionOnly)
                             xbm.Setup.Compression = new CEnum<Enums.ETextureCompression>(cr2w, xbm, "setup")
                             {
                                 IsSerialized = true,
-                                WrappedEnum = compression
+                                Value = compression
                             };
                         if (flags == CommonFunctions.ETexGroupFlags.Both || flags == CommonFunctions.ETexGroupFlags.RawFormatOnly)
                             xbm.Setup.RawFormat = new CEnum<Enums.ETextureRawFormat>(cr2w, xbm, "rawFormat")
                             {
                                 IsSerialized = true,
-                                WrappedEnum = rawformat
+                                Value = rawformat
                             };
                         return;
                     }

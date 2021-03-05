@@ -205,23 +205,23 @@ namespace CP77.CR2W
                 return false;
             }
 
-            var sliceCount = blob.Header.TextureInfo.SliceCount.val;
-            var mipCount = blob.Header.TextureInfo.MipCount.val;
-            var alignment = blob.Header.TextureInfo.DataAlignment.val;
+            var sliceCount = blob.Header.TextureInfo.SliceCount.Value;
+            var mipCount = blob.Header.TextureInfo.MipCount.Value;
+            var alignment = blob.Header.TextureInfo.DataAlignment.Value;
 
-            var height = blob.Header.SizeInfo.Height.val;
-            var width = blob.Header.SizeInfo.Width.val;
+            var height = blob.Header.SizeInfo.Height.Value;
+            var width = blob.Header.SizeInfo.Width.Value;
 
             var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
-            if (texa.Setup.RawFormat?.WrappedEnum != null)
+            if (texa.Setup.RawFormat?.Value != null)
             {
-                rawfmt = texa.Setup.RawFormat.WrappedEnum;
+                rawfmt = texa.Setup.RawFormat.Value;
             }
 
             var compression = Enums.ETextureCompression.TCM_None;
-            if (texa.Setup.Compression?.WrappedEnum != null)
+            if (texa.Setup.Compression?.Value != null)
             {
-                compression = texa.Setup.Compression.WrappedEnum;
+                compression = texa.Setup.Compression.Value;
             }
 
             var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt);
@@ -254,12 +254,12 @@ namespace CP77.CR2W
                 return false;
             }
 
-            var sliceCount = blob.Header.TextureInfo.SliceCount.val;
-            var mipCount = blob.Header.TextureInfo.MipCount.val;
-            var alignment = blob.Header.TextureInfo.DataAlignment.val;
+            var sliceCount = blob.Header.TextureInfo.SliceCount.Value;
+            var mipCount = blob.Header.TextureInfo.MipCount.Value;
+            var alignment = blob.Header.TextureInfo.DataAlignment.Value;
 
-            var height = blob.Header.SizeInfo.Height.val;
-            var width = blob.Header.SizeInfo.Width.val;
+            var height = blob.Header.SizeInfo.Height.Value;
+            var width = blob.Header.SizeInfo.Width.Value;
 
             const EFormat texformat = EFormat.R8G8B8A8_UNORM;
 
@@ -290,25 +290,25 @@ namespace CP77.CR2W
                 return false;
             }
 
-            var sliceCount = blob.Header.TextureInfo.SliceCount.val;
-            var mipCount = blob.Header.TextureInfo.MipCount.val;
-            var alignment = blob.Header.TextureInfo.DataAlignment.val;
+            var sliceCount = blob.Header.TextureInfo.SliceCount.Value;
+            var mipCount = blob.Header.TextureInfo.MipCount.Value;
+            var alignment = blob.Header.TextureInfo.DataAlignment.Value;
 
-            var height = blob.Header.SizeInfo.Height.val;
-            var width = blob.Header.SizeInfo.Width.val;
+            var height = blob.Header.SizeInfo.Height.Value;
+            var width = blob.Header.SizeInfo.Width.Value;
 
 
             var compression = Enums.ETextureCompression.TCM_None;
             var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
 
-            if (ctex.Setup.RawFormat?.WrappedEnum != null)
+            if (ctex.Setup.RawFormat?.Value != null)
             {
-                rawfmt = ctex.Setup.RawFormat.WrappedEnum;
+                rawfmt = ctex.Setup.RawFormat.Value;
             }
 
-            if (ctex.Setup.Compression?.WrappedEnum != null)
+            if (ctex.Setup.Compression?.Value != null)
             {
-                compression = ctex.Setup.Compression.WrappedEnum;
+                compression = ctex.Setup.Compression.Value;
             }
 
             var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt);
@@ -382,25 +382,25 @@ namespace CP77.CR2W
             var newpath = Path.ChangeExtension(cr2wFileName.FullName, "dds");
             #region get xbm data
 
-            var width = blob.Header.SizeInfo.Width.val;
-            var height = blob.Header.SizeInfo.Height.val;
-            var mips = blob.Header.TextureInfo.MipCount.val;
-            var slicecount = blob.Header.TextureInfo.SliceCount.val;
-            var alignment = blob.Header.TextureInfo.DataAlignment.val;
+            var width = blob.Header.SizeInfo.Width.Value;
+            var height = blob.Header.SizeInfo.Height.Value;
+            var mips = blob.Header.TextureInfo.MipCount.Value;
+            var slicecount = blob.Header.TextureInfo.SliceCount.Value;
+            var alignment = blob.Header.TextureInfo.DataAlignment.Value;
 
             var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
-            if (xbm.Setup.RawFormat?.WrappedEnum != null)
+            if (xbm.Setup.RawFormat?.Value != null)
             {
-                rawfmt = xbm.Setup.RawFormat.WrappedEnum;
+                rawfmt = xbm.Setup.RawFormat.Value;
             }
             else
             {
             }
 
             var compression = Enums.ETextureCompression.TCM_None;
-            if (xbm.Setup.Compression?.WrappedEnum != null)
+            if (xbm.Setup.Compression?.Value != null)
             {
-                compression = xbm.Setup.Compression.WrappedEnum;
+                compression = xbm.Setup.Compression.Value;
             }
             else
             {

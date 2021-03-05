@@ -352,7 +352,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             xbm.Width = new CUInt32(cr2w, xbm, "width") { val = width, IsSerialized = true };
             xbm.Height = new CUInt32(cr2w, xbm, "height") { val = height, IsSerialized = true };
             xbm.Compression = new CEnum<ETextureCompression>(cr2w, xbm, "compression")
-            { WrappedEnum = compression, IsSerialized = true };
+            { Value = compression, IsSerialized = true };
             xbm.TextureGroup = new CName(cr2w, xbm, "textureGroup") { Value = tg, IsSerialized = true };
             xbm.unk = new CUInt32(cr2w, xbm, "unk") { val = 0, IsSerialized = true };
             xbm.unk1 = new CUInt16(cr2w, xbm, "unk1") { val = 512, IsSerialized = true }; //TODO: find out what that is

@@ -239,11 +239,11 @@ namespace CP77Tools.Tasks
                                 var texinfoObj = new Cr2wTextureInfo()
                                 {
                                     Filename = filename,
-                                    width = blob.Header.SizeInfo.Width.val,
-                                    height = blob.Header.SizeInfo.Height.val,
-                                    mips = blob.Header.TextureInfo.MipCount.val,
-                                    slicecount = blob.Header.TextureInfo.SliceCount.val,
-                                    alignment = blob.Header.TextureInfo.DataAlignment.val,
+                                    width = blob.Header.SizeInfo.Width.Value,
+                                    height = blob.Header.SizeInfo.Height.Value,
+                                    mips = blob.Header.TextureInfo.MipCount.Value,
+                                    slicecount = blob.Header.TextureInfo.SliceCount.Value,
+                                    alignment = blob.Header.TextureInfo.DataAlignment.Value,
                                     compression = xbm.Setup.Compression,
                                     Group = xbm.Setup.Group,
                                     rawFormat = xbm.Setup.RawFormat,

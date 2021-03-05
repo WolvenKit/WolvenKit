@@ -50,18 +50,18 @@ namespace CP77.CR2W.Uncooker
             string filename = Path.GetFileNameWithoutExtension(outfile.FullName);
             string path = outfile.Directory.FullName;
 
-            uint atlasWidth = blob.Header.AtlasWidth.val;
-            uint atlasHeight = blob.Header.AtlasHeight.val;
+            uint atlasWidth = blob.Header.AtlasWidth.Value;
+            uint atlasHeight = blob.Header.AtlasHeight.Value;
 
-            uint maskWidth = blob.Header.MaskWidth.val;
-            uint maskHeight = blob.Header.MaskHeight.val;
+            uint maskWidth = blob.Header.MaskWidth.Value;
+            uint maskHeight = blob.Header.MaskHeight.Value;
 
-            uint maskWidthLow = blob.Header.MaskWidthLow.val;
-            uint maskHeightLow = blob.Header.MaskHeightLow.val;
+            uint maskWidthLow = blob.Header.MaskWidthLow.Value;
+            uint maskHeightLow = blob.Header.MaskHeightLow.Value;
 
-            uint maskTileSize = blob.Header.MaskTileSize.val;
+            uint maskTileSize = blob.Header.MaskTileSize.Value;
 
-            uint maskCount = blob.Header.NumLayers.val;
+            uint maskCount = blob.Header.NumLayers.Value;
 
             byte[] atlas;
             var atlasRaw = new byte[atlasWidth * atlasHeight];

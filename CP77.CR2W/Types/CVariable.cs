@@ -60,6 +60,14 @@ namespace CP77.CR2W.Types
         #endregion
 
         #region Properties
+
+#if DEBUG
+        [JsonIgnore] [Browsable(false)] public int GottenVarChunkIndex => LookUpChunkIndex();
+#endif
+        [JsonIgnore] [Browsable(false)] public List<IEditableVariable> ChildrEditableVariables => GetEditableVariables();
+
+        [JsonIgnore] [Browsable(false)] public List<IEditableVariable> ChildrExistingVariables => GetExistingVariables(false);
+
         [JsonIgnore] [Browsable(false)] public TypeAccessor accessor { get; }
 
         [JsonIgnore] [Browsable(false)] public List<CVariable> UnknownCVariables { get; set; } = new List<CVariable>();
@@ -247,16 +255,10 @@ namespace CP77.CR2W.Types
             }
             return currentcvar.VarChunkIndex;
         }
-#if DEBUG
-        [JsonIgnore]
-        public int GottenVarChunkIndex => LookUpChunkIndex();
-#endif
+
 
         #region Virtual
-        [JsonIgnore]
-        public List<IEditableVariable> ChildrEditableVariables => GetEditableVariables();
-        [JsonIgnore]
-        public List<IEditableVariable> ChildrExistingVariables => GetExistingVariables(false);
+
 
         /// <summary>
         /// Gets the list of RED and REDBuffer variables from a CVariable
@@ -672,15 +674,17 @@ namespace CP77.CR2W.Types
             return copy;
         }
 
-        public virtual CVariable SetValue(object val)
+        public virtual IEditableVariable SetValue(object val)
         {
             if (val is CVariable cvar)
             {
                 // set all REDProperties and REDBuffers
-                foreach (IEditableVariable item in cvar.GetEditableVariables())
+                foreach (var item in cvar.GetEditableVariables())
                 {
                     if (item is CVariable citem)
+                    {
                         this.TrySettingFastMemberAccessor(citem);
+                    }
                 }
             }
 
