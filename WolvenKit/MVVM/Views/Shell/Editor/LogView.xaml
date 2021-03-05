@@ -11,6 +11,27 @@
  mc:Ignorable="d"
  >
     <Grid>
-        <RichTextBox x:Name="LogRichTextBox" IsReadOnly="True" />
+
+
+        <RichTextBox
+         x:Name="LogRichTextBox"
+         Margin="0,0,0,0"
+         IsReadOnly="True"
+         />
+        <StackPanel
+         Margin="0,0,5,0"
+         HorizontalAlignment="Right"
+         VerticalAlignment="Bottom"
+         Orientation="Horizontal"
+         Visibility="Collapsed"
+         >
+            <Button
+             BorderThickness="1"
+             Content="Clear"
+             Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
+             />
+        </StackPanel>
+
+
     </Grid>
 </catel:UserControl>

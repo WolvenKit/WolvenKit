@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Loot</title>
+    <defs>
+        <radialGradient cx="50%" cy="0%" fx="50%" fy="0%" r="149.051679%" gradientTransform="translate(0.500000,0.000000),scale(1.000000,0.666656),rotate(90.000000),translate(-0.500000,-0.000000)" id="radialGradient-1">
+            <stop stop-color="#FFCC00" offset="0%"></stop>
+            <stop stop-color="#FF8800" offset="100%"></stop>
+        </radialGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" x="0" y="0" width="22" height="22"></rect>
+        <path d="M14.7559939,8.3526784 C16.1241783,10.0115862 17,12.3399453 17,14.1764182 C17,17.3926936 15.5,20 11,20 C6.5,20 5,17.3926936 5,14.1764182 C5,12.3403093 5.87547457,10.0125092 7.24336489,8.35280799 L14.7559939,8.3526784 Z M11,12 C9.8954305,12 9,12.8954305 9,14 C9,15.1045695 9.8954305,16 11,16 C12.1045695,16 13,15.1045695 13,14 C13,12.8954305 12.1045695,12 11,12 Z M14.9504751,1.99972333 C14.8238431,3.40882138 14.4607557,4.93627468 13.9351763,6.23638399 L8.06541423,6.23646795 C7.53943115,4.93706061 7.17618947,3.4091839 7.04952493,1.99972333 L14.9504751,1.99972333 Z" id="Combined-Shape" fill="url(#radialGradient-1)"></path>
+    </g>
+</svg>

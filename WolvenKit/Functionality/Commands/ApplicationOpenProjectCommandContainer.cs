@@ -76,6 +76,8 @@ namespace WolvenKit.Functionality.Commands
                 {
                     using (_pleaseWaitService.PushInScope())
                     {
+                        StaticReferences.MainView.OnLoadLayoutAsync();
+
                         await _projectManager.LoadAsync(location);
                         var btn = StaticReferences.GlobalShell.FindName("ProjectNameDisplay") as System.Windows.Controls.Button;
                         btn?.SetCurrentValue(ContentControl.ContentProperty, Path.GetFileNameWithoutExtension(location));
@@ -85,7 +87,6 @@ namespace WolvenKit.Functionality.Commands
 
                 StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.StartScreen.ShownProperty, false);
                 StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
-                StaticReferences.MainView.OnLoadLayoutAsync();
             }
             catch (Exception)
             {

@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Media;
 using Catel.IoC;
 using Catel.MVVM;
@@ -245,7 +248,22 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         #endregion Methods
     }
+    public class ValueConverterGroup : List<IValueConverter>, IValueConverter
+    {
+        #region IValueConverter Members
 
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return this.Aggregate(value, (current, converter) => converter.Convert(current, targetType, parameter, culture));
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
     public static class InternetHelper
     {
         #region Methods

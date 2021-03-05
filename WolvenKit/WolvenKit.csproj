@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <AssemblyName>WolvenKit</AssemblyName>
@@ -11,7 +11,7 @@
     <ProjectGuid>{1DD8B40B-2548-4663-B208-1D107EF47ACF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <StartupObject />
-    <ApplicationIcon>Resources\Media\Icons\Application\TaskBarIcon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Media\Images\Icons\Application\TaskBarIcon.ico</ApplicationIcon>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>false</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
@@ -60,6 +60,41 @@
     <Page Remove="Resources\Styles\Custom\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Resources\Media\Images\Icons\Files\apb.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\basedir.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\blankfile.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\blend.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\cookedanims.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\cookedapp.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\credits2.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\Devices.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\Effect.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\facialsetup.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\fbx.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\folbrush.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\folderclosed.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\folderdefault.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\folderopened.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\gamedef.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\hp.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\image.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\inkatlas3.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\inkscreencomp.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\inkshapecollection2.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\inkwidget.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\Interaction.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\journal2.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\journaldesc.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\lane_polygons.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\Location.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\Loot.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\null_areas.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\redcloth.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\resourcelist2.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\scenerid_Cutscene_info.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\VoiceTags.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\workspot3.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\zip.svg" />
     <None Remove="Resources\Old\Icons\3.png" />
     <None Remove="Resources\Old\Icons\cloud.png" />
     <None Remove="Resources\Old\Icons\cp77proj.ico" />
@@ -76,74 +111,104 @@
     <None Remove="Resources\Old\Icons\tw3proj.png" />
     <None Remove="Resources\Old\Icons\whitelogo.png" />
     <None Remove="Resources\Old\Icons\work.png" />
-    <None Remove="Resources\Old\Images\Files\.cpmodproj.png" />
-    <None Remove="Resources\Old\Images\Files\.w3modproj.png" />
+    <None Remove="Resources\Media\Images\Files\.cpmodproj.png" />
+    <None Remove="Resources\Media\Images\Files\.w3modproj.png" />
     <None Remove="Wkit_Icon_Flattened_256x.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Media\Images\Icons\Files\cookedanims.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\cookedapp.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\credits2.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\Devices.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\Effect.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\facialsetup.svg" />
+
+    <Resource Include="Resources\Media\Images\Icons\Files\folbrush.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\folderclosed.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\folderdefault.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\folderopened.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\gamedef.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\hp.svg" />
+
+    <Resource Include="Resources\Media\Images\Icons\Files\inkatlas3.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\inkscreencomp.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\inkshapecollection2.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\inkwidget.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\Interaction.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\journal2.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\journaldesc.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\lane_polygons.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\location.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\loot.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\null_areas.svg" />
+
+    <Resource Include="Resources\Media\Images\Icons\Files\resourcelist2.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\scenerid_Cutscene_info.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\VoiceTags.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\workspot3.svg" />
     <Resource Include="Resources\Media\Images\Application\cloud.png" />
     <Resource Include="Resources\Media\Images\Application\cp77proj.png" />
     <Resource Include="Resources\Media\Images\Application\CpProj.png" />
-    <Resource Include="Resources\Media\Icons\Files\aiarch3.svg" />
-    <Resource Include="Resources\Media\Icons\Files\animation.svg" />
-    <Resource Include="Resources\Media\Icons\Files\aningraph.svg" />
-    <Resource Include="Resources\Media\Icons\Files\app.svg" />
-    <Resource Include="Resources\Media\Icons\Files\audiometadata2.svg" />
-    <Resource Include="Resources\Media\Icons\Files\audiovehcurveset.svg" />
-    <Resource Include="Resources\Media\Icons\Files\behavior_graph3.svg" />
-    <Resource Include="Resources\Media\Icons\Files\bk2.svg" />
-    <Resource Include="Resources\Media\Icons\Files\bnk.svg" />
-    <Resource Include="Resources\Media\Icons\Files\camcurveset.svg" />
-    <Resource Include="Resources\Media\Icons\Files\camcurveset1.svg" />
-    <Resource Include="Resources\Media\Icons\Files\camcurveset2.svg" />
-    <Resource Include="Resources\Media\Icons\Files\cfoilage.svg" />
-    <Resource Include="Resources\Media\Icons\Files\charcustpreset.svg" />
-    <Resource Include="Resources\Media\Icons\Files\cminimap.svg" />
-    <Resource Include="Resources\Media\Icons\Files\conversations.svg" />
-    <Resource Include="Resources\Media\Icons\Files\cubemap.svg" />
-    <Resource Include="Resources\Media\Icons\Files\curveset.svg" />
-    <Resource Include="Resources\Media\Icons\Files\dat.svg" />
-    <Resource Include="Resources\Media\Icons\Files\envparam.svg" />
-    <Resource Include="Resources\Media\Icons\Files\envprob a.svg" />
-    <Resource Include="Resources\Media\Icons\Files\envprob b.svg" />
-    <Resource Include="Resources\Media\Icons\Files\foldest.svg" />
-    <Resource Include="Resources\Media\Icons\Files\font.svg" />
-    <Resource Include="Resources\Media\Icons\Files\inkanim2.svg" />
-    <Resource Include="Resources\Media\Icons\Files\inkcharcustomization.svg" />
-    <Resource Include="Resources\Media\Icons\Files\inkfont.svg" />
-    <Resource Include="Resources\Media\Icons\Files\inkgamesettings.svg" />
-    <Resource Include="Resources\Media\Icons\Files\inkhud.svg" />
-    <Resource Include="Resources\Media\Icons\Files\inklayers2.svg" />
-    <Resource Include="Resources\Media\Icons\Files\inkmenu3.svg" />
-    <Resource Include="Resources\Media\Icons\Files\inkstyle.svg" />
-    <Resource Include="Resources\Media\Icons\Files\inktypography2.svg" />
-    <Resource Include="Resources\Media\Icons\Files\json.svg" />
-    <Resource Include="Resources\Media\Icons\Files\lane_connections.svg" />
-    <Resource Include="Resources\Media\Icons\Files\lights.svg" />
-    <Resource Include="Resources\Media\Icons\Files\mappins.svg" />
-    <Resource Include="Resources\Media\Icons\Files\materialinstance.svg" />
-    <Resource Include="Resources\Media\Icons\Files\mesh.svg" />
-    <Resource Include="Resources\Media\Icons\Files\nvmesh.svg" />
-    <Resource Include="Resources\Media\Icons\Files\osupak.svg" />
-    <Resource Include="Resources\Media\Icons\Files\particle.svg" />
-    <Resource Include="Resources\Media\Icons\Files\poimappins.svg" />
-    <Resource Include="Resources\Media\Icons\Files\quest.svg" />
-    <Resource Include="Resources\Media\Icons\Files\questphase.svg" />
-    <Resource Include="Resources\Media\Icons\Files\rig.svg" />
-    <Resource Include="Resources\Media\Icons\Files\scenesversions_Cutscene_versioning.svg" />
-    <Resource Include="Resources\Media\Icons\Files\scene_Cutscene.svg" />
-    <Resource Include="Resources\Media\Icons\Files\texarray.svg" />
-    <Resource Include="Resources\Media\Icons\Files\traffic_collisions.svg" />
-    <Resource Include="Resources\Media\Icons\Files\traffic_persistent.svg" />
-    <Resource Include="Resources\Media\Icons\Files\traffic_persistent2.svg" />
-    <Resource Include="Resources\Media\Icons\Files\traffic_persistent3.svg" />
-    <Resource Include="Resources\Media\Icons\Files\w2mesh.svg" />
-    <Resource Include="Resources\Media\Icons\Files\w2mi2.svg" />
-    <Resource Include="Resources\Media\Icons\Files\W3Occulsion.svg" />
-    <Resource Include="Resources\Media\Icons\Files\wem.svg" />
-    <Resource Include="Resources\Media\Icons\Files\xbm.svg" />
-    <Resource Include="Resources\Media\Icons\Files\xcube.svg" />
-    <Resource Include="Resources\Media\Icons\Files\xml.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\aiarch3.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\animation.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\aningraph.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\app.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\audiometadata2.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\audiovehcurveset.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\behavior_graph3.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\bk2.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\bnk.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\camcurveset.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\camcurveset1.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\camcurveset2.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\cfoilage.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\charcustpreset.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\cminimap.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\conversations.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\cubemap.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\curveset.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\dat.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\envparam.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\envprob a.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\envprob b.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\foldest.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\font.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\inkanim2.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\inkcharcustomization.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\inkfont.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\inkgamesettings.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\inkhud.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\inklayers2.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\inkmenu3.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\inkstyle.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\inktypography2.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\json.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\lane_connections.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\lights.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\mappins.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\mi.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\mesh.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\navmesh.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\opuspak.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\particle.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\poimappins.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\quest.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\questphase.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\rig.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\scenesversions_Cutscene_versioning.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\scene_Cutscene.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\texarray.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\traffic_collisions.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\traffic_persistent.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\traffic_persistent2.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\traffic_persistent3.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\w2mesh.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\w2mi2.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\W3Occulsion.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\wem.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\xbm.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\xcube.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\xml.svg" />
     <Resource Include="Resources\Media\Images\Application\HomeSickTransp.png" />
     <Resource Include="Resources\Media\Images\Application\HomeSickTransp2.png" />
     <Resource Include="Resources\Media\Images\Application\SeeTroughIcon.png" />
@@ -334,27 +399,12 @@
   <ItemGroup>
     <Resource Include="Resources\Media\Images\Application\3.png" />
     <Resource Include="Resources\Media\Images\Application\Homelogo.png" />
-    <Resource Include="Resources\Media\Images\Application\Logo.ico" />
     <Resource Include="Resources\Media\Images\Application\thankyoumoonded.png" />
     <Resource Include="Resources\Media\Images\Application\TinyTest.png" />
     <Resource Include="Resources\Media\Images\Application\tw3proj.png" />
     <Resource Include="Resources\Media\Images\Application\whitelogo.png" />
-    <Resource Include="Resources\Media\Images\Application\work.png" />
     <Resource Include="Resources\Media\Images\Application\.cpmodproj.png" />
     <Resource Include="Resources\Media\Images\Application\.w3modproj.png" />
-    <Resource Include="Resources\Old\Images\Files\apb_32x.png" />
-    <Resource Include="Resources\Old\Images\Files\BlankFile_16x.png" />
-    <Resource Include="Resources\Old\Images\Files\blend_32x.png" />
-    <Resource Include="Resources\Old\Images\Files\fbx_32x.png" />
-    <Resource Include="Resources\Old\Images\Files\FolderClosed_16x.png" />
-    <Resource Include="Resources\Old\Images\Files\FolderOpened_16x.png" />
-    <Resource Include="Resources\Old\Images\Files\image_32x.png" />
-    <Resource Include="Resources\Old\Images\Files\Project_Explorer_Base_Dir_16x.png" />
-    <Resource Include="Resources\Old\Images\Files\redcloth_32x.png" />
-    <Resource Include="Resources\Old\Images\Files\w2mesh_32x.png" />
-    <Resource Include="Resources\Old\Images\Files\xbm_32x.png" />
-    <Resource Include="Resources\Old\Images\Files\xml_32x.png" />
-    <Resource Include="Resources\Old\Images\Files\zip_32x.png" />
     <Resource Include="Resources\Old\Images\RedEngine\bird.png" />
     <Resource Include="Resources\Old\Images\RedEngine\csv.png" />
     <Resource Include="Resources\Old\Images\RedEngine\detail.png" />
@@ -416,7 +466,7 @@
     <Resource Include="Resources\Old\Images\RedEngine\w2surf.png" />
     <Resource Include="Resources\Old\Images\RedEngine\w2w.png" />
     <Resource Include="Resources\Old\Images\RedEngine\worldmap.png" />
-    <Resource Include="Resources\Media\Icons\Application\TaskBarIcon.ico">
+    <Resource Include="Resources\Media\Images\Icons\Application\TaskBarIcon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Content Include="Resources\Old\Images\Preferences_light_64x.png">
