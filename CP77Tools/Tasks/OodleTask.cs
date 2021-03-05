@@ -1,20 +1,23 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common.Oodle;
 
 namespace CP77Tools.Tasks
 {
-
     public static partial class ConsoleFunctions
     {
+        #region Methods
 
         public static int OodleTask(string path, string outpath, bool decompress)
         {
             if (string.IsNullOrEmpty(path))
+            {
                 return 0;
+            }
 
-            if (string.IsNullOrEmpty(outpath)) { outpath = path; }
+            if (string.IsNullOrEmpty(outpath))
+            { outpath = path; }
 
             if (decompress)
             {
@@ -24,7 +27,10 @@ namespace CP77Tools.Tasks
 
                 var oodleCompression = br.ReadBytes(4);
                 if (!(oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
+                {
                     throw new NotImplementedException();
+                }
+
                 var size = br.ReadUInt32();
 
                 var buffer = br.ReadBytes(file.Length - 8);
@@ -39,8 +45,9 @@ namespace CP77Tools.Tasks
                 File.WriteAllBytes($"{outpath}.kark", msout.ToArray());
             }
 
-
             return 1;
         }
+
+        #endregion Methods
     }
 }

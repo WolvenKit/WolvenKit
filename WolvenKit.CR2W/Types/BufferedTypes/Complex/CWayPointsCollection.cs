@@ -36,7 +36,7 @@ namespace WolvenKit.CR2W.Types
 
             var d = CalculateBufferSize();
             if (buffersize != CalculateBufferSize())
-                throw new InvalidParsingException("Calculated buffersize is not equal actual buffersize.");
+                throw new InvalidParsingException("Calculated buffer size is not equal to actual buffer size.");
 
             using (var ms = new MemoryStream(file.ReadBytes((int)buffersize)))
             using (var br = new BinaryReader(ms))
@@ -76,7 +76,7 @@ namespace WolvenKit.CR2W.Types
 
                 int calcb = CalculateBufferSize();
                 if (buffersize != calcb)
-                    throw new InvalidParsingException("Calculated buffersize is not equal actual buffersize.");
+                    throw new InvalidParsingException("Calculated buffer size is not equal to actual buffer size.");
 
                 file.Write(buffersize);
                 file.Write(ms.ToArray());
@@ -137,7 +137,7 @@ namespace WolvenKit.CR2W.Types
     }
     #endregion
 
-    
+
 
 
 

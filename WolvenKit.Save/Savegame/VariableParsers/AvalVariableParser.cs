@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using WolvenKit.W3SavegameEditor.Core.Exceptions;
 using WolvenKit.W3SavegameEditor.Core.Savegame.Variables;
 
@@ -6,12 +6,22 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
 {
     public class AvalVariableParser : VariableParserBase<AvalVariable>
     {
+        #region Fields
+
         private const string FullMagicNumber = "AVAL";
-        
+
+        #endregion Fields
+
+        #region Properties
+
         public override string MagicNumber
         {
             get { return "AV"; }
         }
+
+        #endregion Properties
+
+        #region Methods
 
         public override AvalVariable ParseImpl(BinaryReader reader, ref int size)
         {
@@ -42,12 +52,14 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
             {
                 throw new ParseVariableException(
                     string.Format(
-                    "Expeced AVAL but read {0} at {1}",
+                    "Expected AVAL but read {0} at {1}",
                     magicNumber,
                     reader.BaseStream.Position - 4));
             }
 
             size -= bytesToRead;
         }
+
+        #endregion Methods
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using WolvenKit.W3SavegameEditor.Core.Exceptions;
 using WolvenKit.W3SavegameEditor.Core.Savegame.Variables;
@@ -7,19 +7,33 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
 {
     public class BlckVariableParser : VariableParserBase<BlckVariable>
     {
+        #region Fields
+
         private const string FullMagicNumber = "BLCK";
 
         private readonly VariableParser _parser;
-        
+
+        #endregion Fields
+
+        #region Constructors
+
         public BlckVariableParser(VariableParser parser)
         {
             _parser = parser;
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         public override string MagicNumber
         {
             get { return "BL"; }
         }
+
+        #endregion Properties
+
+        #region Methods
 
         public override BlckVariable ParseImpl(BinaryReader reader, ref int size)
         {
@@ -43,7 +57,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
                 debugLastVariable = variable;
                 debugIndex++;
             }
-            
+
             return new BlckVariable
             {
                 Name = name,
@@ -59,12 +73,14 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
             {
                 throw new ParseVariableException(
                     string.Format(
-                    "Expeced BLCK but read {0} at {1}",
+                    "Expected BLCK but read {0} at {1}",
                     magicNumber,
                     reader.BaseStream.Position - 4));
             }
 
             size -= bytesToRead;
         }
+
+        #endregion Methods
     }
 }

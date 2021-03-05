@@ -1,9 +1,13 @@
-﻿namespace WolvenKit.Scaleform
+namespace WolvenKit.Scaleform
 {
     public class OffsetDescription
     {
-        public string OffsetValue { set; get; }
-        public string OffsetSize { set; get; }
+        #region Properties
+
         public string OffsetByteOrder { set; get; }
+        public string OffsetSize { set; get; }
+        public string OffsetValue { set; get; }
+
+        #endregion Properties
     }
 }

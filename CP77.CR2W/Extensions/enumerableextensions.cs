@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace CP77.CR2W.Extensions
@@ -9,6 +8,8 @@ namespace CP77.CR2W.Extensions
     // https://stackoverflow.com/a/3102439
     public static class EnumerableExtensions
     {
+        #region Methods
+
         public static IEnumerable<T> MatchesWildcard<T>(this IEnumerable<T> sequence, Func<T, string> expression, string pattern)
         {
             var regEx = WildcardToRegex(pattern);
@@ -22,5 +23,7 @@ namespace CP77.CR2W.Extensions
                 Replace("\\*", ".*").
                 Replace("\\?", ".") + "$";
         }
+
+        #endregion Methods
     }
 }

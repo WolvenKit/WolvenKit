@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -8,10 +8,16 @@ namespace WolvenKit.Common
 {
     public class ObjectDumper
     {
-        private int _level;
+        #region Fields
+
+        private readonly List<int> _hashListOfFoundElements;
         private readonly int _indentSize;
         private readonly StringBuilder _stringBuilder;
-        private readonly List<int> _hashListOfFoundElements;
+        private int _level;
+
+        #endregion Fields
+
+        #region Constructors
 
         private ObjectDumper(int indentSize)
         {
@@ -19,6 +25,10 @@ namespace WolvenKit.Common
             _stringBuilder = new StringBuilder();
             _hashListOfFoundElements = new List<int>();
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public static string Dump(object element)
         {
@@ -29,6 +39,20 @@ namespace WolvenKit.Common
         {
             var instance = new ObjectDumper(indentSize);
             return instance.DumpElement(element);
+        }
+
+        private bool AlreadyTouched(object value)
+        {
+            if (value == null)
+                return false;
+
+            var hash = value.GetHashCode();
+            for (var i = 0; i < _hashListOfFoundElements.Count; i++)
+            {
+                if (_hashListOfFoundElements[i] == hash)
+                    return true;
+            }
+            return false;
         }
 
         private string DumpElement(object element)
@@ -112,30 +136,6 @@ namespace WolvenKit.Common
             return _stringBuilder.ToString();
         }
 
-        private bool AlreadyTouched(object value)
-        {
-            if (value == null)
-                return false;
-
-            var hash = value.GetHashCode();
-            for (var i = 0; i < _hashListOfFoundElements.Count; i++)
-            {
-                if (_hashListOfFoundElements[i] == hash)
-                    return true;
-            }
-            return false;
-        }
-
-        private void Write(string value, params object[] args)
-        {
-            var space = new string(' ', _level * _indentSize);
-
-            if (args != null)
-                value = string.Format(value, args);
-
-            _stringBuilder.AppendLine(space + value);
-        }
-
         private string FormatValue(object o)
         {
             if (o == null)
@@ -158,5 +158,17 @@ namespace WolvenKit.Common
 
             return ("{ }");
         }
+
+        private void Write(string value, params object[] args)
+        {
+            var space = new string(' ', _level * _indentSize);
+
+            if (args != null)
+                value = string.Format(value, args);
+
+            _stringBuilder.AppendLine(space + value);
+        }
+
+        #endregion Methods
     }
 }

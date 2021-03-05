@@ -1,0 +1,78 @@
+<catel:DataWindow
+ x:Class="WolvenKit.MVVM.Views.Others.DialogControlHostWindowView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ Title="{Binding Content.Tag, ElementName=DialogContentControl}"
+ AllowsTransparency="True"
+ BorderBrush="{x:Null}"
+ ShowInTaskbar="True"
+ WindowStartupLocation="CenterScreen"
+ WindowStyle="None"
+ >
+
+    <catel:DataWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources />
+                <hc:Theme />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </catel:DataWindow.Resources>
+    <Grid>
+        <Border
+         MaxWidth="1200"
+         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+         BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+         BorderThickness="1"
+         >
+
+            <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+
+                <Grid
+                 x:Name="DraggableTitleBar"
+                 Grid.ColumnSpan="2"
+                 VerticalAlignment="Top"
+                 Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                 MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown"
+                 >
+
+                    <!--  TitleBar  Please add onmousedown event to be able to drag the window  -->
+                    <Button
+                     Margin="3,3,5,3"
+                     HorizontalAlignment="Right"
+                     VerticalAlignment="Center"
+                     hc:IconElement.Geometry="{DynamicResource GlobalClose}"
+                     Background="Transparent"
+                     BorderBrush="{x:Null}"
+                     Click="ButtonClose"
+                     Style="{StaticResource ButtonIcon}"
+                     />
+
+                    <Button
+                     Width="40"
+                     Margin="3,3,45,3"
+                     HorizontalAlignment="Right"
+                     VerticalAlignment="Center"
+                     hc:IconElement.Geometry="{DynamicResource GlobalMinimize}"
+                     Background="Transparent"
+                     BorderBrush="{x:Null}"
+                     Click="ButtonMinimize"
+                     Style="{StaticResource ButtonIcon}"
+                     />
+
+                    <!--
+
+                    <TextBlock Margin="13,0,0,0" Height="23" Text="{Binding Content, ElementName=UserContentControl }"  HorizontalAlignment="Left" VerticalAlignment="Center" />
+                     No Title needed for Wizards imo-->
+                </Grid>
+
+                <Grid Margin="3,3,3,3">
+
+                    <ContentControl x:Name="UserContentControl" />
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</catel:DataWindow>

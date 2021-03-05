@@ -1,8 +1,6 @@
-﻿using System;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W
 {
@@ -10,10 +8,8 @@ namespace CP77.CR2W
     [System.Flags]
     public enum EBufferFlags
     {
-        
     };
-    
-    
+
     [StructLayout(LayoutKind.Explicit, Size = 24)]
     public struct CR2WBuffer
     {
@@ -38,7 +34,7 @@ namespace CP77.CR2W
         /// it's called disksize because buffers are compressed and appended to a cr2w file
         /// </summary>
         [FieldOffset(12)]
-        public uint diskSize;    
+        public uint diskSize;
 
         /// <summary>
         /// This is the uncompressed size of the buffer
@@ -46,26 +42,17 @@ namespace CP77.CR2W
         /// </summary>
         [FieldOffset(16)]
         public uint memSize;
-        
+
         /// <summary>
         /// crc32 over the compressed buffer
         /// </summary>
         [FieldOffset(20)]
         public uint crc32;
     }
-    
-    public class CR2WBufferWrapper
+
+    public class CR2WBufferWrapper : ICR2WBuffer
     {
-        private CR2WBuffer _buffer;
-        public CR2WBuffer Buffer {
-            get => _buffer;
-            set => _buffer = value;
-        }
-        private byte[] _data;
-        public byte[] Data {
-            get => _data;
-            set => _data = value;
-        }
+        #region ctor
 
         public CR2WBufferWrapper()
         {
@@ -77,25 +64,77 @@ namespace CP77.CR2W
             _buffer = buffer;
         }
 
-        public void SetOffset(uint offset) => _buffer.offset = offset;
+        #endregion ctor
+
+        #region Fields
+
+        private CR2WBuffer _buffer;
+
+        #endregion Fields
+
+        #region Properties
+
+        public CR2WBuffer Buffer => _buffer;
+
+        #endregion Properties
+
+        #region properties
+
+        private byte[] _data;
+
+        public uint Crc32
+        {
+            get => _buffer.crc32;
+            set => _buffer.crc32 = value;
+        }
+
+        public uint DiskSize
+        {
+            get => _buffer.diskSize;
+            set => _buffer.diskSize = value;
+        }
+
+        public uint Flags => _buffer.flags;
+        public uint Index => _buffer.index;
+
+        public uint MemSize
+        {
+            get => _buffer.memSize;
+            set => _buffer.memSize = value;
+        }
+
+        public uint Offset
+        {
+            get => _buffer.offset;
+            set => _buffer.offset = value;
+        }
+
+        #endregion properties
+
+        #region methods
 
         public void ReadData(BinaryReader file)
         {
             file.BaseStream.Seek(_buffer.offset, SeekOrigin.Begin);
-            Data = file.ReadBytes((int) _buffer.diskSize);
+            _data = file.ReadBytes((int)_buffer.diskSize);
         }
+
+        public void SetOffset(uint v) => _buffer.offset = v;
+
+        public override string ToString() => _buffer.index.ToString();
 
         public void WriteData(BinaryWriter file)
         {
-            _buffer.offset = (uint) file.BaseStream.Position;
-            if (Data == null) return;
-            file.Write(Data);
-            _buffer.diskSize = (uint)Data.Length;
+            _buffer.offset = (uint)file.BaseStream.Position;
+            if (_data == null)
+            {
+                return;
+            }
+
+            file.Write(_data);
+            _buffer.diskSize = (uint)_data.Length;
         }
 
-        public override string ToString()
-        {
-            return Buffer.index.ToString();
-        }
+        #endregion methods
     }
 }

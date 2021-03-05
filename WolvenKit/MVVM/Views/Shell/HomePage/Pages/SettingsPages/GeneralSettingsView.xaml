@@ -1,0 +1,52 @@
+<catel:UserControl
+ x:Class="WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.GeneralSettingsView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ xmlns:sp="clr-namespace:WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.General"
+ IsVisibleChanged="UserControl_IsVisibleChanged"
+ >
+
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+        <hc:SideMenu
+         Width="150"
+         HorizontalAlignment="Left"
+         ExpandMode="ShowOne"
+         SideBrush="{DynamicResource MahApps.Brushes.Accent}"
+         >
+
+            <hc:SideMenuItem x:Name="GlobalSubItem" Selected="GlobalSubItem_Selected">
+                <hc:SideMenuItem.Header>
+                    <TextBlock FontSize="10.5" Text="Global" />
+                </hc:SideMenuItem.Header>
+            </hc:SideMenuItem>
+
+            <hc:SideMenuItem x:Name="AccountSubItem" Selected="AccountSubItem_Selected">
+                <hc:SideMenuItem.Header>
+                    <TextBlock FontSize="10.5" Text="Account" />
+                </hc:SideMenuItem.Header>
+            </hc:SideMenuItem>
+
+            <hc:SideMenuItem x:Name="UpdatesSubItem" Selected="UpdatesSubItem_Selected">
+                <hc:SideMenuItem.Header>
+                    <TextBlock FontSize="10.5" Text="Updates" />
+                </hc:SideMenuItem.Header>
+            </hc:SideMenuItem>
+
+            <hc:SideMenuItem x:Name="ThemeSubItem" Selected="ThemeSubItem_Selected">
+                <hc:SideMenuItem.Header>
+                    <TextBlock FontSize="10.5" Text="Theme" />
+                </hc:SideMenuItem.Header>
+            </hc:SideMenuItem>
+
+            <hc:SideMenuItem x:Name="LoggingSubItem" Selected="LoggingSubItem_Selected">
+                <hc:SideMenuItem.Header>
+                    <TextBlock FontSize="10.5" Text="Logging" />
+                </hc:SideMenuItem.Header>
+            </hc:SideMenuItem>
+        </hc:SideMenu>
+
+        <Grid x:Name="SettingsViewer" Margin="150,1,0,0" />
+    </Grid>
+</catel:UserControl>

@@ -11,7 +11,7 @@ namespace WolvenKit.CR2W.Types
 {
     /// <summary>
     /// The reflection magic happens mostly here, with System.Activator.
-    /// A class is instantiated from its type and the properties are deserialized from 
+    /// A class is instantiated from its type and the properties are deserialized from
     /// cr2w later, in CVariable.Read and CR2WFile.ReadVariable
     /// </summary>
     public static class CR2WTypeManager
@@ -47,7 +47,7 @@ namespace WolvenKit.CR2W.Types
         public static CVariable Create(string typename, string varname, IWolvenkitFile icr2w, CVariable parentVariable, bool readUnknownAsBytes = true)
         {
             if (icr2w is not CR2WFile cr2w)
-                throw new InvalidGameContextException("tried parsing a cp77 file from tw3 context");
+                throw new InvalidGameContextException("Tried parsing a CP77 file in TW3 context.");
 
             typename = REDReflection.GetWKitBaseTypeFromREDBaseType(typename);
             var fullname = typename;
@@ -106,7 +106,7 @@ namespace WolvenKit.CR2W.Types
                         }
                     case "array":
                         {
-                            // match pattern e.g. 
+                            // match pattern e.g.
                             // array:            Array: (2),(0),(handle:CBitmapTexture)
                             // array:            Array: (2),(0),(Int32)
                             // array of array:   Array: (2),(0),(Array:133,0,EngineQsTransform)
@@ -149,7 +149,7 @@ namespace WolvenKit.CR2W.Types
                         {
                             typename = generictype;
 
-                            // match pattern e.g. 
+                            // match pattern e.g.
                             // static:  (4),(Uint32)
                             var regArrayType = new Regex(@"(\d+),(.+)");
                             var matchArrayType = regArrayType.Match(fullname);
@@ -163,7 +163,7 @@ namespace WolvenKit.CR2W.Types
                             }
                             else
                             {
-                                throw new InvalidParsingException($"Invalid static type format: typename: {typename}.");
+                                throw new InvalidParsingException($"Invalid static type format, typename {typename}.");
                             }
                         }
                     case "CBufferUInt16":
@@ -206,7 +206,7 @@ namespace WolvenKit.CR2W.Types
             else
             {
                 #region FIXED SIZE ARRAYS
-                // match pattern e.g. 
+                // match pattern e.g.
                 // [(1)](Bezier2dHandle)
                 var regFixedSizeArray = new Regex(@"^\[(\d+)\](.+)$");
                 var matchFixedSizeArray = regFixedSizeArray.Match(typename);
@@ -219,17 +219,17 @@ namespace WolvenKit.CR2W.Types
                     return arrayacc as CVariable;
                 }
                 #endregion
-                
+
                 if (fullname.Contains("@SItem"))
                 {
-                    cr2w.UnknownTypes.Add($"Congratulations! You have found one of the hidden e3 files! These files are special." +
-                        $" If you edited this file and are experiencing errors, please contact a member of the Wkit Team. ErrorCode: {fullname}");
+                    cr2w.UnknownTypes.Add($"Congratulations! You have found one of the hidden E3 files! These files are special." +
+                        $" If you edited this file and are experiencing errors, please contact a member of the WKit Team. Error code: {fullname}");
                     return new SItem(cr2w, parentVariable, varname);
                 }
                 else if (fullname.Contains("#CEnvironmentDefinition"))
                 {
-                    cr2w.UnknownTypes.Add($"Congratulations! You have found one of the hidden e3 files! These files are special." +
-                        $" If you edited this file and are experiencing errors, please contact a member of the Wkit Team. ErrorCode: {fullname}");
+                    cr2w.UnknownTypes.Add($"Congratulations! You have found one of the hidden E3 files! These files are special." +
+                        $" If you edited this file and are experiencing errors, please contact a member of the WKit Team. Error code: {fullname}");
                     return new CHandle<CEnvironmentDefinition>(cr2w, parentVariable, varname);
                 }
                 else
@@ -255,9 +255,9 @@ namespace WolvenKit.CR2W.Types
                     else
                         return null;
                 }
-                
-            }            
-                
+
+            }
+
 
             #region LOCAL FUNCTIONS
 
@@ -276,7 +276,7 @@ namespace WolvenKit.CR2W.Types
                 {
                     throw new NotImplementedException();
                 }
-                
+
 
                 var array = Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
 

@@ -1,0 +1,81 @@
+<catel:UserControl
+ x:Class="WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.General.ThemeSubSettingsView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ >
+
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <hc:ScrollViewer>
+                <StackPanel>
+
+                    <Border
+                     Margin="15,15,32,0"
+                     Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                     BorderThickness="4,0,0,6"
+                     Style="{StaticResource BorderTipPrimary}"
+                     >
+                        <Grid>
+                            <TextBlock
+                             Margin="0,0,50,0"
+                             VerticalAlignment="Center"
+                             FontSize="16"
+                             Text="Application"
+                             />
+                        </Grid>
+                    </Border>
+
+                    <Border
+                     Margin="15,15,32,10"
+                     Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                     BorderThickness="4,0,0,2"
+                     Style="{StaticResource BorderTipPrimary}"
+                     >
+                        <StackPanel>
+
+                            <Grid Margin="5">
+                                <TextBlock VerticalAlignment="Center" Text="Application theme" />
+                                <ComboBox
+                                 Width="250"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Center"
+                                 Text=""
+                                 />
+                            </Grid>
+
+                            <Grid Margin="5">
+                                <TextBlock VerticalAlignment="Center" Text="Create a theme" />
+                                <Button
+                                 Margin="0"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Center"
+                                 Command="{catel:CommandManagerBinding Application.ThemeWizard}"
+                                 >
+                                    <Grid Margin="0">
+                                        <iconPacks:PackIconBootstrapIcons Kind="BoxArrowUpRight" />
+                                        <TextBlock Margin="25,0,0,0" Text="Theme Creator" />
+                                    </Grid>
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </hc:ScrollViewer>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <hc:ScrollViewer>
+                <StackPanel />
+            </hc:ScrollViewer>
+        </Grid>
+    </Grid>
+</catel:UserControl>

@@ -1,20 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace WolvenKit.Radish.Model
 {
     public class RadishBatFileWrapper
     {
-        public string Path { get; set; }
-        public string Name { get => System.IO.Path.GetFileName(Path); }
-        public bool Interactive { get; set; }
+        #region Constructors
 
         public RadishBatFileWrapper(string path)
         {
             Path = path;
         }
+
+        #endregion Constructors
+
+        #region Properties
+
+        public bool Interactive { get; set; }
+        public string Name { get => System.IO.Path.GetFileName(Path); }
+        public string Path { get; set; }
+
+        #endregion Properties
     }
 }

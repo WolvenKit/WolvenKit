@@ -1,9 +1,7 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WolvenKit.Common.Services;
-using CP77.CR2W.Types;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W
 {
@@ -12,20 +10,36 @@ namespace CP77.CR2W
     /// </summary>
     public class CR2WCopyAction : ICR2WCopyAction
     {
-        public Dictionary<ICR2WExport, ICR2WExport> chunkTranslation; // source, target
+        #region Fields
+
+        public Dictionary<ICR2WExport, ICR2WExport> chunkTranslation;
+
+        #endregion Fields
+
+        // source, target
+
+        #region Constructors
 
         public CR2WCopyAction()
         {
             chunkTranslation = new Dictionary<ICR2WExport, ICR2WExport>();
         }
 
-        public ICR2WExport SourceChunk { get; set; }
+        #endregion Constructors
+
+        #region Properties
+
         public ICR2WExport DestinationChunk { get; set; }
-        public IEditableVariable SourceCVar => SourceChunk.data;
         public IEditableVariable DestinationCVar => DestinationChunk.data;
-        public CR2WFile SourceFile { get; set; }
         public CR2WFile DestinationFile { get; set; }
         public IEditableVariable Parent { get; set; }
+        public ICR2WExport SourceChunk { get; set; }
+        public IEditableVariable SourceCVar => SourceChunk.data;
+        public CR2WFile SourceFile { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         /// <summary>
         /// Used when pasting-in-place a chunk, takes care of (virtual) children.
@@ -89,7 +103,7 @@ namespace CP77.CR2W
                         sourcechunk.data.REDType,
                         CR2WFile.GetLastChildrenIndexRecursive(DestinationChunk) + 1);
 
-                if(!chunkTranslation.ContainsKey(sourcechunk))
+                if (!chunkTranslation.ContainsKey(sourcechunk))
                 {
                     chunkTranslation.Add(sourcechunk, newchunk);
                 }
@@ -99,7 +113,6 @@ namespace CP77.CR2W
 
                 DeepChunkCopy(sourcechunk, newchunk, false);
             }
-
 
             // Reparent full old chunk hierarchy to take into account the inserted children
             foreach (var achunk in DestinationFile.Chunks)
@@ -116,7 +129,7 @@ namespace CP77.CR2W
             {
                 var copy = chunktranslationentry.Key.data.Copy(this);
                 chunktranslationentry.Value.CreateDefaultData(copy);
-                
+
                 //TODO: no CComponent in cp77
                 // Corner cases :
                 // - add descending CNewNPC components
@@ -129,37 +142,6 @@ namespace CP77.CR2W
                 //    (uppercopy as IChunkPtrAccessor).Reference = chunktranslationentry.Value;
                 //    targetarray.AddVariable(uppercopy);
                 //}
-            }
-        }
-
-        /// <summary>
-        /// Recursive function used both by paste-in-place and paste-insert.
-        /// </summary>
-        /// <param name="sourcechunk"></param>
-        /// <param name="destinationchunk"></param>
-        /// <param name="inplace"></param>
-        private void DeepChunkCopy (ICR2WExport sourcechunk, ICR2WExport destinationchunk, bool inplace = true)
-        {
-            Parent = null;
-            foreach (var sourcevirtualchildchunk in sourcechunk.VirtualChildrenChunks)
-            {
-                var newchunk = DestinationFile.CreateChunk(
-                    sourcevirtualchildchunk.data.REDType,
-                    inplace ? destinationchunk.ChunkIndex + sourcevirtualchildchunk.ChunkIndex - SourceChunk.ChunkIndex
-                            : CR2WFile.GetLastChildrenIndexRecursive(destinationchunk) + 1);
-
-                if(!chunkTranslation.ContainsKey(sourcevirtualchildchunk))
-                {
-                    chunkTranslation.Add(sourcevirtualchildchunk, newchunk);
-                }
-
-                if (!inplace)
-                {
-                    newchunk.ParentChunk = TryLookupReference(sourcevirtualchildchunk.ParentChunk);
-                    newchunk.MountChunkVirtually(TryLookupReference(sourcevirtualchildchunk.VirtualParentChunk), true);
-                }
-
-                DeepChunkCopy(sourcevirtualchildchunk, newchunk, inplace);
             }
         }
 
@@ -198,7 +180,7 @@ namespace CP77.CR2W
 
             // Try last way
             string vardepstring = null;
-            if(targetVariable != null)
+            if (targetVariable != null)
             {
                 vardepstring = targetVariable.UniqueIdentifier;
             }
@@ -224,5 +206,38 @@ namespace CP77.CR2W
                 return null;
             }
         }
+
+        /// <summary>
+        /// Recursive function used both by paste-in-place and paste-insert.
+        /// </summary>
+        /// <param name="sourcechunk"></param>
+        /// <param name="destinationchunk"></param>
+        /// <param name="inplace"></param>
+        private void DeepChunkCopy(ICR2WExport sourcechunk, ICR2WExport destinationchunk, bool inplace = true)
+        {
+            Parent = null;
+            foreach (var sourcevirtualchildchunk in sourcechunk.VirtualChildrenChunks)
+            {
+                var newchunk = DestinationFile.CreateChunk(
+                    sourcevirtualchildchunk.data.REDType,
+                    inplace ? destinationchunk.ChunkIndex + sourcevirtualchildchunk.ChunkIndex - SourceChunk.ChunkIndex
+                            : CR2WFile.GetLastChildrenIndexRecursive(destinationchunk) + 1);
+
+                if (!chunkTranslation.ContainsKey(sourcevirtualchildchunk))
+                {
+                    chunkTranslation.Add(sourcevirtualchildchunk, newchunk);
+                }
+
+                if (!inplace)
+                {
+                    newchunk.ParentChunk = TryLookupReference(sourcevirtualchildchunk.ParentChunk);
+                    newchunk.MountChunkVirtually(TryLookupReference(sourcevirtualchildchunk.VirtualParentChunk), true);
+                }
+
+                DeepChunkCopy(sourcevirtualchildchunk, newchunk, inplace);
+            }
+        }
+
+        #endregion Methods
     }
 }
