@@ -8,7 +8,7 @@ using WolvenKit.Common.Services;
 namespace CP77.CR2W.Types
 {
     [Editor(typeof(ITextEditor<float>), typeof(IPropertyEditorBase))]
-    public class CFloat : CVariable, IREDPrimitive, IEditorBindable<float>
+    public class CFloat : CVariable, IREDIntegerType, IEditorBindable<float>
     {
         public CFloat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 

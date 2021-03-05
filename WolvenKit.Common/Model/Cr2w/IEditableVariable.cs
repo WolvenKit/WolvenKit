@@ -10,7 +10,7 @@ using WolvenKit.Common.Services;
 namespace WolvenKit.Common.Model.Cr2w
 {
     [Editor(typeof(IExpandableObjectEditor), typeof(IPropertyEditorBase))]
-    public interface IEditableVariable
+    public interface IEditableVariable : IEditorBindable
     {
         [Browsable(false)] string REDName { get; }
         [Browsable(false)] string REDType { get; }

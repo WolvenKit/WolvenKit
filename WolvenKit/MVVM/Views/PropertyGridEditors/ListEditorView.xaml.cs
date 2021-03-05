@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using CP77.CR2W.Types;
 using HandyControl.Controls;
 using WolvenKit.Common.Model.Cr2w;
 
@@ -29,16 +28,16 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
 
         public IEnumerable ItemsSource
         {
-            get => (IEnumerable) GetValue(ItemsSourceProperty);
+            get => (IEnumerable)GetValue(ItemsSourceProperty);
             set => SetValue(ItemsSourceProperty, value);
         }
 
         public static readonly DependencyProperty ItemsSourceProperty
             = DependencyProperty.Register(
-                nameof(ItemsSource), 
-                typeof(IEnumerable), 
+                nameof(ItemsSource),
+                typeof(IEnumerable),
                 typeof(ListEditorView),
-                new FrameworkPropertyMetadata((IEnumerable) null, OnItemsSourceChanged));
+                new FrameworkPropertyMetadata((IEnumerable)null, OnItemsSourceChanged));
 
         private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -63,7 +62,7 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
             // us the correct editor for the type
             switch (enumerable)
             {
-                case IEnumerable<IREDIntegerType> intwrapper:
+                case IEnumerable<IREDPrimitive> intwrapper:
                     InitNumericEditor(intwrapper);
                     break;
                 default:
@@ -86,7 +85,7 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
                 const string templateName = "PropertyGridEditor";
                 var treeViewItem = new TreeViewItem
                 {
-                    Template = (ControlTemplate) this.FindResource(templateName), 
+                    Template = (ControlTemplate)this.FindResource(templateName),
                     DataContext = obj
                 };
 
@@ -96,7 +95,7 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
             ContentControl.SetCurrentValue(ContentProperty, treeview);
         }
 
-         
+
 
     }
 }
