@@ -25,8 +25,6 @@ namespace WolvenKit.Functionality.Controllers
 
         #endregion Constructors
 
-
-
         #region Enums
 
         public enum ERadishStatus
@@ -59,8 +57,6 @@ namespace WolvenKit.Functionality.Controllers
 
         #endregion modname
 
-
-
         #region Properties
 
         public string WkitLoggedFiles
@@ -78,8 +74,6 @@ namespace WolvenKit.Functionality.Controllers
         }
 
         #endregion Properties
-
-
 
         #region Methods
 

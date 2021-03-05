@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class EntityManager_Node : UserControl
     {
+        #region Constructors
+
         public EntityManager_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

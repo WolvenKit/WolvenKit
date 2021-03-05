@@ -1,12 +1,18 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace WolvenKit.Scaleform
 {
     public class Mpeg1Stream : MpegStream
     {
+        #region Fields
+
         public const string DefaultAudioExtension = ".mp2";
         public const string DefaultVideoExtension = ".m1v";
+
+        #endregion Fields
+
+        #region Constructors
 
         public Mpeg1Stream(string path)
             : base(path)
@@ -16,6 +22,10 @@ namespace WolvenKit.Scaleform
 
             base.BlockIdDictionary[BitConverter.ToUInt32(MpegStream.PacketStartBytes, 0)] = new BlockSizeStruct(PacketSizeType.Static, 0xC); // Pack Header
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         protected override int GetAudioPacketHeaderSize(Stream readStream, long currentOffset)
         {
@@ -35,5 +45,7 @@ namespace WolvenKit.Scaleform
         {
             return 0xC;
         }
+
+        #endregion Methods
     }
 }

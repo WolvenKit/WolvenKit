@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using WolvenKit.W3SavegameEditor.Core.Exceptions;
 using WolvenKit.W3SavegameEditor.Core.Savegame.Variables;
 
@@ -6,30 +6,40 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
 {
     public class ManuVariableParser : VariableParserBase<ManuVariable>
     {
+        #region Fields
+
         private const string FullMagicNumber = "MANU";
+
+        #endregion Fields
+
+        #region Properties
 
         public override string MagicNumber
         {
             get { return "MA"; }
         }
 
+        #endregion Properties
+
+        #region Methods
+
         public override ManuVariable ParseImpl(BinaryReader reader, ref int size)
         {
             int stringCount = reader.ReadInt32();
             int unknown1 = reader.ReadInt32();
-            size -= 2*sizeof (int);
+            size -= 2 * sizeof(int);
 
             var strings = new string[stringCount];
             for (int i = 0; i < stringCount; i++)
             {
                 byte stringSize = reader.ReadByte();
                 strings[i] = reader.ReadString(stringSize);
-                size -= sizeof (byte) + stringSize;
+                size -= sizeof(byte) + stringSize;
             }
 
             int unknown2 = reader.ReadInt32();
             string doneMagicNumber = reader.ReadString(4);
-            size -= sizeof (int) + 4;
+            size -= sizeof(int) + 4;
             if (doneMagicNumber != "ENOD")
             {
                 throw new ParseVariableException();
@@ -56,5 +66,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
 
             size -= bytesToRead;
         }
+
+        #endregion Methods
     }
 }

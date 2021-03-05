@@ -9,17 +9,23 @@ namespace WolvenKit.MVVM.Views.Components.Tools
 {
     public partial class AssetBrowserView : INotifyPropertyChanged
     {
+        #region Constructors
+
         public AssetBrowserView()
         {
             InitializeComponent();
             NotifyPropertyChanged();
         }
 
+        #endregion Constructors
+
+        #region Events
+
         public new event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        #endregion Events
 
-        private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => base.OnMouseLeftButtonDown(e);// Begin dragging the window//this.DragMove();
+        #region Methods
 
         private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -29,6 +35,11 @@ namespace WolvenKit.MVVM.Views.Components.Tools
             }
         }
 
+        private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => base.OnMouseLeftButtonDown(e);
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        // Begin dragging the window//this.DragMove();
         private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (DataContext is AssetBrowserViewModel vm)
@@ -37,5 +48,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools
                 vm.CurrentNodeFiles = (e.NewValue as GameFileTreeNode)?.ToAssetBrowserData();
             }
         }
+
+        #endregion Methods
     }
 }

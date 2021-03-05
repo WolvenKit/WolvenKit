@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,13 +10,16 @@ namespace WolvenKit.Common.FNV1A
     /// </summary>
     public sealed class FNV1A64HashAlgorithm : HashAlgorithm
     {
-        private const ulong FnvHashPrime = 0x00000100000001B3;
+        #region Fields
+
         private const ulong FnvHashInitial = 0xCBF29CE484222325;
-
-        private ulong fnvhash;
+        private const ulong FnvHashPrime = 0x00000100000001B3;
         private Encoding encoding;
+        private ulong fnvhash;
 
-        public ulong HashUInt64 => fnvhash == FnvHashInitial ? 0 : fnvhash;
+        #endregion Fields
+
+        #region Constructors
 
         public FNV1A64HashAlgorithm()
             : this(Encoding.ASCII)
@@ -30,9 +33,68 @@ namespace WolvenKit.Common.FNV1A
             this.encoding = encoding ?? Encoding.ASCII;
         }
 
-        public override void Initialize()
+        #endregion Constructors
+
+        #region Properties
+
+        public ulong HashUInt64 => fnvhash == FnvHashInitial ? 0 : fnvhash;
+
+        #endregion Properties
+
+        #region Methods
+
+        public static ulong HashReadOnlySpan(ReadOnlySpan<char> source)
         {
-            this.fnvhash = FnvHashInitial;
+            var hash = FnvHashInitial;
+            foreach (var b in source)
+            {
+                unchecked
+                {
+                    hash = (hash ^ b) * FnvHashPrime;
+                }
+            }
+
+            return hash;
+        }
+
+        public static ulong HashReadOnlySpan(ReadOnlySpan<byte> source)
+        {
+            var hash = FnvHashInitial;
+            foreach (var b in source)
+            {
+                unchecked
+                {
+                    hash = (hash ^ b) * FnvHashPrime;
+                }
+            }
+
+            return hash;
+        }
+
+        public static ulong HashString(string value)
+        {
+            return HashString(value, Encoding.ASCII, false);
+        }
+
+        public static ulong HashString(string value, Encoding encoding, bool nullEnded = false)
+        {
+            var length = encoding.GetMaxByteCount(nullEnded ? value.Length + 1 : value.Length);
+            var buffer = ArrayPool<byte>.Shared.Rent(length);
+            try
+            {
+                var encodedLength = encoding.GetBytes(value.AsSpan(), buffer.AsSpan());
+                if (nullEnded)
+                {
+                    buffer[encodedLength] = 0;
+                    encodedLength++;
+                }
+
+                return HashReadOnlySpan(new ReadOnlySpan<byte>(buffer, 0, encodedLength));
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(buffer);
+            }
         }
 
         public void AppendString(string value)
@@ -64,6 +126,11 @@ namespace WolvenKit.Common.FNV1A
             }
         }
 
+        public override void Initialize()
+        {
+            this.fnvhash = FnvHashInitial;
+        }
+
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
             if (array == null)
@@ -91,59 +158,6 @@ namespace WolvenKit.Common.FNV1A
             return BitConverter.GetBytes(this.HashUInt64);
         }
 
-
-        public static ulong HashString(string value)
-        {
-            return HashString(value, Encoding.ASCII, false);
-        }
-
-        public static ulong HashString(string value, Encoding encoding, bool nullEnded = false)
-        {
-            var length = encoding.GetMaxByteCount(nullEnded ? value.Length + 1 : value.Length);
-            var buffer = ArrayPool<byte>.Shared.Rent(length);
-            try
-            {
-                var encodedLength = encoding.GetBytes(value.AsSpan(), buffer.AsSpan());
-                if (nullEnded)
-                {
-                    buffer[encodedLength] = 0;
-                    encodedLength++;
-                }
-
-                return HashReadOnlySpan(new ReadOnlySpan<byte>(buffer, 0, encodedLength));
-            }
-            finally
-            {
-                ArrayPool<byte>.Shared.Return(buffer);
-            }
-        }
-
-        public static ulong HashReadOnlySpan(ReadOnlySpan<char> source)
-        {
-            var hash = FnvHashInitial;
-            foreach (var b in source)
-            {
-                unchecked
-                {
-                    hash = (hash ^ b) * FnvHashPrime;
-                }
-            }
-
-            return hash;
-        }
-
-        public static ulong HashReadOnlySpan(ReadOnlySpan<byte> source)
-        {
-            var hash = FnvHashInitial;
-            foreach (var b in source)
-            {
-                unchecked
-                {
-                    hash = (hash ^ b) * FnvHashPrime;
-                }
-            }
-
-            return hash;
-        }
+        #endregion Methods
     }
 }

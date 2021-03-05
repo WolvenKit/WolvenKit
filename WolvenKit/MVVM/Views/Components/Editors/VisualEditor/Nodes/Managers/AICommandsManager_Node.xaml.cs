@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class AICommandsManager_Node : UserControl
     {
+        #region Constructors
+
         public AICommandsManager_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

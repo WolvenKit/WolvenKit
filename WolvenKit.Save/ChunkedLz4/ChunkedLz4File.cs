@@ -6,6 +6,8 @@ namespace WolvenKit.W3SavegameEditor.Core.ChunkedLz4
 {
     public static class ChunkedLz4File
     {
+        #region Methods
+
         public static Stream Decompress(Stream input)
         {
             ChunkedLz4FileHeader header = ChunkedLz4FileHeader.Read(input);
@@ -24,5 +26,7 @@ namespace WolvenKit.W3SavegameEditor.Core.ChunkedLz4
             memoryStream.Position = header.HeaderSize;
             return memoryStream;
         }
+
+        #endregion Methods
     }
 }

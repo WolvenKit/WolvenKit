@@ -14,7 +14,7 @@ using WolvenKit.Common.Services;
 
 namespace CP77Tools
 {
-    class Program
+    internal class Program
     {
         [STAThread]
         public static async Task Main(string[] args)
@@ -31,15 +31,19 @@ namespace CP77Tools
                     case Logtype.Error:
                         Console.ForegroundColor = ConsoleColor.Red;
                         break;
+
                     case Logtype.Important:
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         break;
+
                     case Logtype.Success:
                         Console.ForegroundColor = ConsoleColor.Green;
                         break;
+
                     case Logtype.Normal:
                     case Logtype.Wcc:
                         break;
+
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -84,7 +88,6 @@ namespace CP77Tools
                 while (true)
                 {
                     string line = System.Console.ReadLine();
-
 
                     if (line == "q()")
                     {
@@ -133,7 +136,6 @@ namespace CP77Tools
                     await WriteLog();
                     logger.PropertyChanged -= OnLoggerOnPropertyChanged;
                 }
-
             }
             else
             {
@@ -141,7 +143,6 @@ namespace CP77Tools
 
                 await WriteLog();
             }
-
 
             async Task WriteLog()
             {
@@ -168,10 +169,8 @@ namespace CP77Tools
                 }
                 else
                 {
-
                 }
             }
-
         }
 
         private delegate void StrDelegate(string value);
@@ -179,8 +178,6 @@ namespace CP77Tools
         private static string TryGetGameInstallDir()
         {
             var cp77BinDir = "";
-
-
 
 #pragma warning disable CA1416
 #if _WINDOWS

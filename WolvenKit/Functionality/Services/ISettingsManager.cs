@@ -32,8 +32,6 @@ namespace WolvenKit.Functionality.Services
 
         /*public*/
 
-
-
         #region Methods
 
         void Save();

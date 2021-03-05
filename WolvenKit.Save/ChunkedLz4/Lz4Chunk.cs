@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO;
 using LZ4PCL;
 
@@ -6,11 +6,17 @@ namespace WolvenKit.W3SavegameEditor.Core.ChunkedLz4
 {
     public class Lz4Chunk
     {
+        #region Properties
+
         public int CompressedChunkSize { get; set; }
 
         public int DecompressedChunkSize { get; set; }
 
         public int EndOfChunkOffset { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         public byte[] Read(Stream inputStream)
         {
@@ -32,5 +38,7 @@ namespace WolvenKit.W3SavegameEditor.Core.ChunkedLz4
 
             return outputData;
         }
+
+        #endregion Methods
     }
 }

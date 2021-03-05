@@ -12,7 +12,13 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
     /// </summary>
     public abstract class ViewModel : ViewModelBase
     {
+        #region Fields
+
         protected readonly IWindowFactory m_windowFactory;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ViewModel(IWindowFactory windowFactory)
         {
@@ -23,8 +29,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         {
         }
 
+        #endregion Constructors
+
+        #region Methods
+
         public virtual void Initialize()
         {
         }
+
+        #endregion Methods
     }
 }

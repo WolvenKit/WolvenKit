@@ -1,14 +1,20 @@
-﻿using System.IO;
+using System.IO;
 using WolvenKit.W3SavegameEditor.Core.Savegame.Variables;
 
 namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
 {
     public class VlVariableParser : VariableParserBase<VlVariable>
     {
+        #region Properties
+
         public override string MagicNumber
         {
             get { return "VL"; }
         }
+
+        #endregion Properties
+
+        #region Methods
 
         public override VlVariable ParseImpl(BinaryReader reader, ref int size)
         {
@@ -17,7 +23,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
             size -= 2 * sizeof(short);
             string name = Names[nameIndex - 1];
             string type = Names[typeIndex - 1];
-            
+
             var value = ReadValue(reader, type, ref size);
 
             return new VlVariable
@@ -27,5 +33,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
                 Value = value
             };
         }
+
+        #endregion Methods
     }
 }

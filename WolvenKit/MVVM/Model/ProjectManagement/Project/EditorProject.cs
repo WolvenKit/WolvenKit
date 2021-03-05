@@ -32,8 +32,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         #endregion Constructors
 
-
-
         #region Methods
 
         public abstract void Load(string path);
@@ -113,8 +111,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         #endregion not serialized
 
         #endregion properties
-
-
 
         #region Methods
 

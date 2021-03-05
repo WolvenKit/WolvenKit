@@ -23,6 +23,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.SettingsPages.SubPages.
         #region properties
 
         /// <summary>
+        /// Register the SettingsManagerProperty property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData SettingsManagerProperty = RegisterProperty("SettingsManager", typeof(ISettingsManager));
+
+        /// <summary>
         /// Gets or sets the SettingsManager.
         /// </summary>
         [Model]
@@ -35,11 +40,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.SettingsPages.SubPages.
             get => GetValue<ISettingsManager>(SettingsManagerProperty);
             set => SetValue(SettingsManagerProperty, value);
         }
-
-        /// <summary>
-        /// Register the SettingsManagerProperty property so it is known in the class.
-        /// </summary>
-        public static readonly PropertyData SettingsManagerProperty = RegisterProperty("SettingsManager", typeof(ISettingsManager));
 
         #endregion properties
     }

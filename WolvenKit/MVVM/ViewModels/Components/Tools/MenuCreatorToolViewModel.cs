@@ -46,15 +46,11 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
 
         #endregion Constructors
 
-
-
         #region Properties
 
         private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
 
         #endregion Properties
-
-
 
         #region Methods
 

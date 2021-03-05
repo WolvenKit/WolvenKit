@@ -1,159 +1,65 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 namespace WolvenKit.Wwise.Wwise
 {
-
-    
-    public class SoundStructure_Effect
-    {
-        public byte _index = 0;
-        public uint _id = 0;
-        public ushort _unk_field16_1 = 0;
-
-        public SoundStructure_Effect(FileRead fr = null)
-        {
-            if (fr != null)
-            {
-                _index = fr.read_one_byte();
-                _id = fr.read_uint32();
-                _unk_field16_1 = fr.read_uint16();
-            }
-        }
-    }
-
-    // need to check one value
-    // 
-    public class SoundStructure_Additional
-    {
-        public byte _type = 0;
-        public float _value_f = 0;
-        public uint _value_u = 0;
-
-        public SoundStructure_Additional(FileRead fr = null)
-        {
-            if (fr != null)
-            {
-                _type = fr.read_one_byte();
-            }
-        }
-    }
-
-    
-    public class SoundStructure_StateGroup
-    {
-        public uint _id = 0;
-        public byte _change_occurs = 0;
-        public ushort _different;
-        public List<uint> _ids = new List<uint>();
-        public List<uint> _ids_object_contain = new List<uint>();
-
-        public SoundStructure_StateGroup(FileRead fr = null)
-        {
-            if (fr != null)
-            {
-                _id = fr.read_uint32();
-                _change_occurs = fr.read_one_byte();
-                _different = fr.read_uint16();
-                for (int i = 0; i < _different; i++)
-                {
-                    _ids.Add(fr.read_uint32());
-                    _ids_object_contain.Add(fr.read_uint32());
-                }
-            }
-        }
-    }
-
-    
-    public class SoundStructure_RTPC
-    {
-        public uint _x_axis_id = 0;
-        public uint _y_axis_type = 0;
-        public uint _unk_field32_1 = 0;
-        public byte _unk_field8_1 = 0;
-        public byte _unk_field8_2 = 0;
-        public byte _points_count = 0;
-        public List<float> _x_coordinates = new List<float>();
-        public List<float> _y_coordinates = new List<float>();
-        public List<uint> _curve_shape = new List<uint>();
-
-        public SoundStructure_RTPC(FileRead fr = null)
-        {
-            if (fr != null)
-            {
-                _x_axis_id = fr.read_uint32();
-                _y_axis_type = fr.read_uint32();
-                _unk_field32_1 = fr.read_uint32();
-                _unk_field8_1 = fr.read_one_byte();
-                _points_count = fr.read_one_byte();
-                _unk_field8_2 = fr.read_one_byte();
-
-                for (int i = 0; i < _points_count; i++)
-                {
-                    _x_coordinates.Add(fr.read_float());
-                    _y_coordinates.Add(fr.read_float());
-                    _curve_shape.Add(fr.read_uint32());
-                }
-            }
-        }
-
-    }
-
-    
     public class SoundStructure
     {
-        public bool _effects_override = false;
-        public byte _effects_count = 0;
-        public List<SoundStructure_Effect> _effects = new List<SoundStructure_Effect>();
-        public byte _effects_bitmask = 0;
-        public uint _output_bus_id = 0;
-        public uint _parent_id = 0;
-        public bool _override_playback_priority = false;
-        public bool _offset_priority = false;
-        public byte _additional_parameters_count = 0;
+        #region Fields
+
         public List<SoundStructure_Additional> _additional_parameters = new List<SoundStructure_Additional>();
-        public byte _unk_field8_1 = 0;
-        public bool _has_positioning = false;
-        public byte _positioning_type = 0;
-        public bool _enable_panner = false;
-        public uint _position_source = 0;
+        public byte _additional_parameters_count = 0;
         public uint _attenuation_id = 0;
-        public bool _enable_spatialization = false;
-        public uint _play_type = 0;
-        public bool _do_loop = false;
-        public uint _transition_time = 0;
-        public bool _follow_listener_orientation = false;
-        public bool _update_at_each_frame = false;
-        public ushort _unk_field16_1 = 0;
-        public uint _unk_field32_1 = 0;
-        public uint _unk_field32_2 = 0;
-
-        public bool _override_game_auxiliary_sends = false;
-        public bool _use_game_auxiliary_sends = false;
-        public bool _override_user_auxiliary_sends = false;
-        public bool _user_auxiliary_sends_exists = false;
-
         public uint _auxiliary_bus_id0 = 0;
         public uint _auxiliary_bus_id1 = 0;
         public uint _auxiliary_bus_id2 = 0;
         public uint _auxiliary_bus_id3 = 0;
-        public bool _unk_field8_2 = false;
-        public byte _priority_equal = 0;
+        public bool _do_loop = false;
+        public List<SoundStructure_Effect> _effects = new List<SoundStructure_Effect>();
+        public byte _effects_bitmask = 0;
+        public byte _effects_count = 0;
+        public bool _effects_override = false;
+        public bool _enable_panner = false;
+        public bool _enable_spatialization = false;
+        public bool _follow_listener_orientation = false;
+        public bool _has_positioning = false;
+        public byte _how_to_limit_sound_instances = 0;
         public byte _limit_reached = 0;
         public ushort _limit_sound_instances = 0;
-
-        public byte _how_to_limit_sound_instances = 0;
-        public byte _virtual_voice_behavior = 0;
+        public bool _offset_priority = false;
+        public uint _output_bus_id = 0;
+        public bool _override_game_auxiliary_sends = false;
         public bool _override_playback_limit = false;
+        public bool _override_playback_priority = false;
+        public bool _override_user_auxiliary_sends = false;
         public bool _override_virtual_voice = false;
-        public uint _state_groups_count = 0;
-        public List<SoundStructure_StateGroup> _state_groups = new List<SoundStructure_StateGroup>();
+        public uint _parent_id = 0;
+        public uint _play_type = 0;
+        public uint _position_source = 0;
+        public byte _positioning_type = 0;
+        public byte _priority_equal = 0;
         public ushort _rtpc_count = 0;
         public List<SoundStructure_RTPC> _rtpcs = new List<SoundStructure_RTPC>();
-        public uint _unk_field32_3 = 0;
+        public List<SoundStructure_StateGroup> _state_groups = new List<SoundStructure_StateGroup>();
+        public uint _state_groups_count = 0;
+        public uint _transition_time = 0;
         public string _unk_data = "";
+        public ushort _unk_field16_1 = 0;
+        public uint _unk_field32_1 = 0;
+        public uint _unk_field32_2 = 0;
+        public uint _unk_field32_3 = 0;
+        public byte _unk_field8_1 = 0;
+        public bool _unk_field8_2 = false;
+        public bool _update_at_each_frame = false;
+        public bool _use_game_auxiliary_sends = false;
+        public bool _user_auxiliary_sends_exists = false;
+        public byte _virtual_voice_behavior = 0;
+
+        #endregion Fields
+
+        #region Constructors
 
         public SoundStructure(FileRead fr = null)
         {
@@ -186,7 +92,7 @@ namespace WolvenKit.Wwise.Wwise
                     }
                     foreach (SoundStructure_Additional sa in _additional_parameters)
                     {
-                        if(sa._type == 0x07)
+                        if (sa._type == 0x07)
                         {
                             sa._value_u = fr.read_uint32();
                         }
@@ -291,6 +197,10 @@ namespace WolvenKit.Wwise.Wwise
                 }
             }
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public string getData()
         {
@@ -428,7 +338,6 @@ namespace WolvenKit.Wwise.Wwise
                     fr._file.Write(sr._y_coordinates[i]);
                     fr._file.Write(sr._curve_shape[i]);
                 }
-
             }
 
             fr._file.Write(_unk_field32_3);
@@ -446,6 +355,130 @@ namespace WolvenKit.Wwise.Wwise
         {
             return getData().Length;
         }
+
+        #endregion Methods
     }
 
+    // need to check one value
+    //
+    public class SoundStructure_Additional
+    {
+        #region Fields
+
+        public byte _type = 0;
+        public float _value_f = 0;
+        public uint _value_u = 0;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public SoundStructure_Additional(FileRead fr = null)
+        {
+            if (fr != null)
+            {
+                _type = fr.read_one_byte();
+            }
+        }
+
+        #endregion Constructors
+    }
+
+    public class SoundStructure_Effect
+    {
+        #region Fields
+
+        public uint _id = 0;
+        public byte _index = 0;
+        public ushort _unk_field16_1 = 0;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public SoundStructure_Effect(FileRead fr = null)
+        {
+            if (fr != null)
+            {
+                _index = fr.read_one_byte();
+                _id = fr.read_uint32();
+                _unk_field16_1 = fr.read_uint16();
+            }
+        }
+
+        #endregion Constructors
+    }
+
+    public class SoundStructure_RTPC
+    {
+        #region Fields
+
+        public List<uint> _curve_shape = new List<uint>();
+        public byte _points_count = 0;
+        public uint _unk_field32_1 = 0;
+        public byte _unk_field8_1 = 0;
+        public byte _unk_field8_2 = 0;
+        public uint _x_axis_id = 0;
+        public List<float> _x_coordinates = new List<float>();
+        public uint _y_axis_type = 0;
+        public List<float> _y_coordinates = new List<float>();
+
+        #endregion Fields
+
+        #region Constructors
+
+        public SoundStructure_RTPC(FileRead fr = null)
+        {
+            if (fr != null)
+            {
+                _x_axis_id = fr.read_uint32();
+                _y_axis_type = fr.read_uint32();
+                _unk_field32_1 = fr.read_uint32();
+                _unk_field8_1 = fr.read_one_byte();
+                _points_count = fr.read_one_byte();
+                _unk_field8_2 = fr.read_one_byte();
+
+                for (int i = 0; i < _points_count; i++)
+                {
+                    _x_coordinates.Add(fr.read_float());
+                    _y_coordinates.Add(fr.read_float());
+                    _curve_shape.Add(fr.read_uint32());
+                }
+            }
+        }
+
+        #endregion Constructors
+    }
+
+    public class SoundStructure_StateGroup
+    {
+        #region Fields
+
+        public byte _change_occurs = 0;
+        public ushort _different;
+        public uint _id = 0;
+        public List<uint> _ids = new List<uint>();
+        public List<uint> _ids_object_contain = new List<uint>();
+
+        #endregion Fields
+
+        #region Constructors
+
+        public SoundStructure_StateGroup(FileRead fr = null)
+        {
+            if (fr != null)
+            {
+                _id = fr.read_uint32();
+                _change_occurs = fr.read_one_byte();
+                _different = fr.read_uint16();
+                for (int i = 0; i < _different; i++)
+                {
+                    _ids.Add(fr.read_uint32());
+                    _ids_object_contain.Add(fr.read_uint32());
+                }
+            }
+        }
+
+        #endregion Constructors
+    }
 }

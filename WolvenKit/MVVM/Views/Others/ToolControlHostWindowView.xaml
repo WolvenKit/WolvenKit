@@ -1,17 +1,17 @@
-<catel:DataWindow x:Class="WolvenKit.MVVM.Views.Others.ToolControlHostWindowView"
-                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:catel="http://schemas.catelproject.com"
-                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                  xmlns:hc="https://handyorg.github.io/handycontrol"
-
-                  ShowInTaskbar="True"
-                  AllowsTransparency="True"
-                  BorderBrush="{x:Null}"
-                  WindowStartupLocation="CenterScreen"
-
-                  WindowStyle="None"
-                  Title="{Binding Content.Tag, ElementName=UserContentControl}">
+<catel:DataWindow
+ x:Class="WolvenKit.MVVM.Views.Others.ToolControlHostWindowView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ Title="{Binding Content.Tag, ElementName=UserContentControl}"
+ AllowsTransparency="True"
+ BorderBrush="{x:Null}"
+ ShowInTaskbar="True"
+ WindowStartupLocation="CenterScreen"
+ WindowStyle="None"
+ >
 
     <catel:DataWindow.Resources>
         <ResourceDictionary>
@@ -22,13 +22,19 @@
         </ResourceDictionary>
     </catel:DataWindow.Resources>
     <Grid>
-        <Border hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Width="auto" Height="auto" BorderBrush="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="1">
+        <Border
+         Width="auto"
+         Height="auto"
+         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+         BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+         BorderThickness="1"
+         >
 
             <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
 
-                <Grid  Margin="3,3,3,3">
+                <Grid Margin="3,3,3,3">
 
-                    <ContentControl  x:Name="UserContentControl" />
+                    <ContentControl x:Name="UserContentControl" />
                 </Grid>
             </Grid>
         </Border>

@@ -1,11 +1,13 @@
-﻿using RED.CRC32;
 using System.IO;
 using System.Runtime.InteropServices;
+using RED.CRC32;
 
 namespace WolvenKit.CR2W
 {
     public static class StreamExtensions
     {
+        #region Methods
+
         public static T ReadStruct<T>(this Stream m_stream, Crc32Algorithm crc32 = null) where T : struct
         {
             var size = Marshal.SizeOf<T>();
@@ -23,6 +25,7 @@ namespace WolvenKit.CR2W
 
             return item;
         }
+
         public static T[] ReadStructs<T>(this Stream m_stream, uint count, Crc32Algorithm crc32 = null) where T : struct
         {
             var size = Marshal.SizeOf<T>();
@@ -44,6 +47,7 @@ namespace WolvenKit.CR2W
 
             return items;
         }
+
         public static void WriteStruct<T>(this Stream m_stream, T value, Crc32Algorithm crc32 = null) where T : struct
         {
             var m_temp = new byte[Marshal.SizeOf<T>()];
@@ -57,6 +61,7 @@ namespace WolvenKit.CR2W
 
             handle.Free();
         }
+
         public static void WriteStructs<T>(this Stream m_stream, T[] array, Crc32Algorithm crc32 = null) where T : struct
         {
             var size = Marshal.SizeOf<T>();
@@ -74,5 +79,7 @@ namespace WolvenKit.CR2W
                 handle.Free();
             }
         }
+
+        #endregion Methods
     }
 }

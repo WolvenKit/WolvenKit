@@ -23,8 +23,6 @@ namespace WolvenKit.Functionality.Layout
 
         #endregion Properties
 
-
-
         #region Methods
 
         public override System.Windows.Style SelectStyle(object item, System.Windows.DependencyObject container)

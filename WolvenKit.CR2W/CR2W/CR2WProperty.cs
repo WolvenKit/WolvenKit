@@ -1,4 +1,3 @@
-﻿using System.IO;
 using System.Runtime.InteropServices;
 
 namespace WolvenKit.CR2W
@@ -24,11 +23,13 @@ namespace WolvenKit.CR2W
 
     public class CR2WPropertyWrapper
     {
+        #region Fields
+
         private CR2WProperty _property;
-        public CR2WProperty Property {
-            get => _property;
-            set => _property = value;
-        }
+
+        #endregion Fields
+
+        #region Constructors
 
         public CR2WPropertyWrapper()
         {
@@ -38,6 +39,17 @@ namespace WolvenKit.CR2W
         {
             _property = property;
         }
-        
+
+        #endregion Constructors
+
+        #region Properties
+
+        public CR2WProperty Property
+        {
+            get => _property;
+            set => _property = value;
+        }
+
+        #endregion Properties
     }
 }

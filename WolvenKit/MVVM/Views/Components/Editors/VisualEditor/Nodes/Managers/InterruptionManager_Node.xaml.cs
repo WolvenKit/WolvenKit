@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class InterruptionManager_Node : UserControl
     {
+        #region Constructors
+
         public InterruptionManager_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

@@ -14,8 +14,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         #endregion Properties
 
-
-
         #region Methods
 
         public static void InitializeNotificationHelper() => Growl.NotificationCategory = ENotificationCategory.App;

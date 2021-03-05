@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class JournalManager_Node : UserControl
     {
+        #region Constructors
+
         public JournalManager_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

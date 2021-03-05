@@ -42,6 +42,8 @@ namespace WolvenKit
             AppHelper.ShowFirstTimeSetup();
             Log.Info("Initializing Discord RPC");
             DiscordHelper.InitializeDiscordRPC();
+            Log.Info("Initializing Github");
+            GithubHelper.InitializeGitHub();
             Log.Info("Calling base.OnStartup");
             base.OnStartup(e);
             Log.Info("Initializing NodeNetwork");

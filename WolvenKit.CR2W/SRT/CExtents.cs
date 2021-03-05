@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W.SRT
 {
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class CExtents
     {
+        #region Properties
+
         public float[] m_cExtents { get; set; } = new float[6];
+
+        #endregion Properties
+
+        #region Methods
 
         public void Write(BinaryWriter bw)
         {
@@ -21,5 +21,7 @@ namespace WolvenKit.CR2W.SRT
                 bw.Write(m_cExtents[i]);
             }
         }
+
+        #endregion Methods
     }
 }

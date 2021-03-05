@@ -16,8 +16,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 
         #endregion Constructors
 
-
-
         #region Events
 
         public event EventHandler ActivateRequest;
@@ -25,8 +23,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         public event EventHandler ClosingRequest;
 
         #endregion Events
-
-
 
         #region Methods
 

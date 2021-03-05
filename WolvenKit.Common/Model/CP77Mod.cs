@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using System;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace WolvenKit.Common.Model
 {
     public class CP77Mod : EditorProjectData, ICloneable
     {
+        #region Methods
+
         public object Clone()
         {
             var clone = new Common.W3Mod
@@ -46,21 +43,6 @@ namespace WolvenKit.Common.Model
             _ = RawDlcDirectory;
         }
 
-
-        /// <summary>
-        /// Returns the first relative folder path in the ActiveMod/dlc directory
-        /// Does not support multiple DLC
-        /// </summary>
-        /// <returns></returns>
-        public override string GetDlcName()
-        {
-            if (!string.IsNullOrEmpty(GetDlcCookedRelativePath()))
-                return GetDlcCookedRelativePath();
-            if (!string.IsNullOrEmpty(GetDlcUncookedRelativePath()))
-                return GetDlcUncookedRelativePath();
-            return "";
-        }
-
         /// <summary>
         /// Returns the first folder name in the DlcCookedDirectory.
         /// Does not support multiple dlc
@@ -94,6 +76,20 @@ namespace WolvenKit.Common.Model
         }
 
         /// <summary>
+        /// Returns the first relative folder path in the ActiveMod/dlc directory
+        /// Does not support multiple DLC
+        /// </summary>
+        /// <returns></returns>
+        public override string GetDlcName()
+        {
+            if (!string.IsNullOrEmpty(GetDlcCookedRelativePath()))
+                return GetDlcCookedRelativePath();
+            if (!string.IsNullOrEmpty(GetDlcUncookedRelativePath()))
+                return GetDlcUncookedRelativePath();
+            return "";
+        }
+
+        /// <summary>
         /// Returns the first folder name in the DlcUncookedDirectory.
         /// Does not support multiple dlc
         /// </summary>
@@ -124,5 +120,7 @@ namespace WolvenKit.Common.Model
             }
             return relpath;
         }
+
+        #endregion Methods
     }
 }

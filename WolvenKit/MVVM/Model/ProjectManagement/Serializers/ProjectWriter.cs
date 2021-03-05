@@ -26,8 +26,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
 
         #endregion Constructors
 
-
-
         #region Methods
 
         protected override Task<bool> WriteToLocationAsync(EditorProject project, string location)

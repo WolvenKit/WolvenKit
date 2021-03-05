@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Shell.Backstage
     /// </summary>
     public partial class BackStageView : UserControl
     {
+        #region Constructors
+
         public BackStageView()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

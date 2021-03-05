@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class InteractiveObjectManager_Node : UserControl
     {
+        #region Constructors
+
         public InteractiveObjectManager_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

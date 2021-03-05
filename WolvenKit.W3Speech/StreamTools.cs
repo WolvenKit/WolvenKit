@@ -1,12 +1,14 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace WolvenKit.W3Speech
 {
     public static class StreamTools
     {
+        #region Methods
+
         /// <summary>
-        /// Helper function to skip a lot of bytes quickly. 
+        /// Helper function to skip a lot of bytes quickly.
         /// </summary>
         /// <param name="amount">Total amount of bytes to skip in the stream.</param>
         /// <param name="stream">The stream.</param>
@@ -53,5 +55,7 @@ namespace WolvenKit.W3Speech
                 output.Write(buffer, 0, bytes_read);
             }
         }
+
+        #endregion Methods
     }
 }

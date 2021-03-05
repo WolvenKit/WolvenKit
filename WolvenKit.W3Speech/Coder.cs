@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace WolvenKit.W3Speech
           for each wemcr2w pair:
             4 bytes for language specific id (Number)
             4 bytes for some other id (Number)
-            4 bytes for absolute offset (Number), points at (a) down below 
+            4 bytes for absolute offset (Number), points at (a) down below
             4 bytes of zeros
             4 bytes of (wem size + 12) (Number) (c)
             4 bytes of zeros
@@ -33,6 +33,8 @@ namespace WolvenKit.W3Speech
             4 bytes of 04 00 00 00
             d bytes for cr2w (raw data) (b)
         */
+
+        #region Methods
 
         /// <summary>
         /// Parse information about the w3speech format from the BinaryReader.
@@ -144,5 +146,7 @@ namespace WolvenKit.W3Speech
                 cr2w.Close();
             });
         }
+
+        #endregion Methods
     }
 }

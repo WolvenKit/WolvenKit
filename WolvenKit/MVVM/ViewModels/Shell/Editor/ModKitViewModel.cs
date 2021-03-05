@@ -29,8 +29,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #endregion Constructors
 
-
-
         #region Fields
 
         private /*readonly*/ LoggerService Logger;

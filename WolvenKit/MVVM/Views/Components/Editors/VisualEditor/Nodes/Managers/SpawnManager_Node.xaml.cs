@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class SpawnManager_Node : UserControl
     {
+        #region Constructors
+
         public SpawnManager_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

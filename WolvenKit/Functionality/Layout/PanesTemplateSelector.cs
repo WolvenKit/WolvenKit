@@ -27,8 +27,6 @@ namespace WolvenKit.Functionality.Layout
 
         #endregion Constructors
 
-
-
         #region Properties
 
         /// <summary>
@@ -142,8 +140,6 @@ namespace WolvenKit.Functionality.Layout
         public DataTemplate WccToolTemplate { get; set; }
 
         #endregion Properties
-
-
 
         #region Methods
 

@@ -25,8 +25,6 @@ namespace WolvenKit.Functionality.Controllers
 
         #endregion Constructors
 
-
-
         #region Properties
 
         public static string ConfigurationPath
@@ -47,8 +45,6 @@ namespace WolvenKit.Functionality.Controllers
         public List<RadishWorkflow> Workflows { get; set; } = new List<RadishWorkflow>();
 
         #endregion Properties
-
-
 
         #region Methods
 

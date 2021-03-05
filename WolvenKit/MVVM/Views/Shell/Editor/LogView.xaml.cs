@@ -15,7 +15,13 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
     /// </summary>
     public partial class LogView
     {
+        #region Fields
+
         private readonly ILoggerService _loggerService;
+
+        #endregion Fields
+
+        #region Constructors
 
         public LogView()
         {
@@ -27,14 +33,15 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
             _loggerService.OnStringLogged += LoggerServiceOnOnStringLogged;
         }
 
+        #endregion Constructors
+
+        #region Delegates
+
         private delegate void LogDelegate(string t, Logtype type);
 
-        private async void LoggerServiceOnOnStringLogged(object sender, LogStringEventArgs e)
-        {
-            var logdel = new LogDelegate(AddText);
+        #endregion Delegates
 
-            await Task.Run(() => logdel(((LoggerService)sender).Log + "\n", ((LoggerService)sender).Logtype));
-        }
+        #region Methods
 
         private void AddText(string text, Logtype type = Logtype.Normal)
         {
@@ -81,6 +88,13 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
             LogRichTextBox.Invoke(() => LogRichTextBox.AppendText(text, color));
         }
 
+        private async void LoggerServiceOnOnStringLogged(object sender, LogStringEventArgs e)
+        {
+            var logdel = new LogDelegate(AddText);
+
+            await Task.Run(() => logdel(((LoggerService)sender).Log + "\n", ((LoggerService)sender).Logtype));
+        }
+
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (IsVisible)
@@ -88,5 +102,7 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
                 DiscordHelper.SetDiscordRPCStatus("Log View");
             }
         }
+
+        #endregion Methods
     }
 }

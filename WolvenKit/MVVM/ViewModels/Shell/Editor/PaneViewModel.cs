@@ -22,8 +22,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #endregion constructors
 
-
-
         #region Properties
 
         public string ContentId

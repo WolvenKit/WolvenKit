@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -13,8 +13,36 @@ namespace WolvenKit.W3SavegameEditor.Core.SaveModels
 {
     public class SavegameViewModel : INotifyPropertyChanged
     {
+        #region Fields
+
         private SavegameModel _selectedSavegame;
 
+        #endregion Fields
+
+        #region Constructors
+
+        public SavegameViewModel()
+        {
+            InitializeSavegames = new DelegateCommand(ExecuteInitializeSavegameList);
+            OpenSavegame = new DelegateCommand(ExecuteOpenSavegame);
+            Savegames = new ObservableCollection<SavegameModel>();
+            Progress = new ReadSavegameProgress();
+            ExecuteInitializeSavegameList(null);
+        }
+
+        #endregion Constructors
+
+        #region Events
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion Events
+
+        #region Properties
+
+        public ICommand InitializeSavegames { get; private set; }
+        public ICommand OpenSavegame { get; private set; }
+        public ReadSavegameProgress Progress { get; set; }
         public ObservableCollection<SavegameModel> Savegames { get; set; }
 
         public SavegameModel SelectedSavegame
@@ -33,27 +61,42 @@ namespace WolvenKit.W3SavegameEditor.Core.SaveModels
             }
         }
 
-        public ReadSavegameProgress Progress { get; set; }
+        #endregion Properties
 
-        public ICommand InitializeSavegames { get; private set; }
-
-        public ICommand OpenSavegame { get; private set; }
-
-        public SavegameViewModel()
-        {
-            InitializeSavegames = new DelegateCommand(ExecuteInitializeSavegameList);
-            OpenSavegame = new DelegateCommand(ExecuteOpenSavegame);
-            Savegames = new ObservableCollection<SavegameModel>();
-            Progress = new ReadSavegameProgress();
-            ExecuteInitializeSavegameList(null);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        #region Methods
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private static VariableModel ToVariableModel(Variable v, int i)
+        {
+            var set = v as VariableSet;
+            var children = set == null
+                ? new ObservableCollection<VariableModel>()
+                : new ObservableCollection<VariableModel>(set.Variables.Select(ToVariableModel));
+
+            var typed = v as TypedVariable;
+            var type = typed == null
+                ? "None"
+                : typed.Type;
+
+            var value = typed == null || typed.Value == null
+                ? ""
+                : typed.Value.ToString();
+
+            return new VariableModel
+            {
+                Index = i,
+                Name = v == null ? "" : v.Name,
+                Type = type,
+                Value = value,
+                DebugString = v == null ? "" : v.ToString(),
+                Children = children
+            };
         }
 
         private void ExecuteInitializeSavegameList(object obj)
@@ -87,7 +130,7 @@ namespace WolvenKit.W3SavegameEditor.Core.SaveModels
             {
                 throw new ArgumentException("parameter");
             }
-            
+
             SavegameFile.ReadAsync(savegame.Path, Progress)
                 .ContinueWith(t =>
                 {
@@ -109,32 +152,6 @@ namespace WolvenKit.W3SavegameEditor.Core.SaveModels
                 });
         }
 
-
-        private static VariableModel ToVariableModel(Variable v, int i)
-        {
-            var set = v as VariableSet;
-            var children = set == null
-                ? new ObservableCollection<VariableModel>()
-                : new ObservableCollection<VariableModel>(set.Variables.Select(ToVariableModel));
-
-            var typed = v as TypedVariable;
-            var type = typed == null
-                ? "None"
-                : typed.Type;
-
-            var value = typed == null || typed.Value == null
-                ? ""
-                : typed.Value.ToString();
-
-            return new VariableModel
-            {
-                Index = i,
-                Name = v == null ? "" : v.Name,
-                Type = type,
-                Value = value,
-                DebugString = v == null ? "" : v.ToString(),
-                Children = children
-            };
-        }
+        #endregion Methods
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 
 namespace WolvenKit.Common.Oodle
@@ -6,6 +6,26 @@ namespace WolvenKit.Common.Oodle
     public static class OodleNative
     {
         #region enums
+
+        public enum OodleLZ_CheckCRC : int
+        {
+            No = 0,
+            Yes = 1,
+        }
+
+        public enum OodleLZ_Compression : int
+        {
+            None = 0,
+            SuperFast = 1,
+            VeryFast = 2,
+            Fast = 3,
+            Normal = 4,
+            Optimal1 = 5,
+            Optimal2 = 6,
+            Optimal3 = 7,
+            Optimal4 = 8,
+            Optimal5 = 9,
+        }
 
         public enum OodleLZ_Compressor : int
         {
@@ -24,27 +44,14 @@ namespace WolvenKit.Common.Oodle
             Akkorokamui = 12,
         }
 
-        public enum OodleLZ_Compression : int
+        public enum OodleLZ_Decode : int
         {
-            None = 0,
-            SuperFast = 1,
-            VeryFast = 2,
-            Fast = 3,
-            Normal = 4,
-            Optimal1 = 5,
-            Optimal2 = 6,
-            Optimal3 = 7,
-            Optimal4 = 8,
-            Optimal5 = 9,
+            ThreadPhase1 = 1,
+            ThreadPhase2 = 2,
+            Unthreaded = 3,
         }
 
         public enum OodleLZ_FuzzSafe : int
-        {
-            No = 0,
-            Yes = 1,
-        }
-
-        public enum OodleLZ_CheckCRC : int
         {
             No = 0,
             Yes = 1,
@@ -55,27 +62,10 @@ namespace WolvenKit.Common.Oodle
             None = 0,
         }
 
-        public enum OodleLZ_Decode : int
-        {
-            ThreadPhase1 = 1,
-            ThreadPhase2 = 2,
-            Unthreaded = 3,
-        }
-
-        #endregion
+        #endregion enums
 
         #region windows
 
-        [DllImport("oo2ext_7_win64.dll")]
-        public static extern int OodleLZ_Decompress(byte[] buffer, long bufferSize, byte[] outputBuffer, long outputBufferSize,
-            OodleLZ_FuzzSafe fuzzSafetyFlag,
-            OodleLZ_CheckCRC crcCheckFlag,
-            OodleLZ_Verbosity logVerbosityFlag,
-            uint d, uint e, uint f, uint g, uint h, uint i, OodleLZ_Decode threadModule);
-        
-        [DllImport("oo2ext_7_win64.dll", EntryPoint = "OodleLZ_GetCompressedBufferSizeNeeded", CallingConvention = CallingConvention.StdCall)]
-        public static extern long GetCompressedBufferSizeNeeded(long size);
-        
         [DllImport("oo2ext_7_win64.dll", EntryPoint = "OodleLZ_Compress", CallingConvention = CallingConvention.StdCall)]
         public static extern long Compress(
             int algorithm,
@@ -89,6 +79,16 @@ namespace WolvenKit.Common.Oodle
             IntPtr a9,
             long a10);
 
-        #endregion
+        [DllImport("oo2ext_7_win64.dll", EntryPoint = "OodleLZ_GetCompressedBufferSizeNeeded", CallingConvention = CallingConvention.StdCall)]
+        public static extern long GetCompressedBufferSizeNeeded(long size);
+
+        [DllImport("oo2ext_7_win64.dll")]
+        public static extern int OodleLZ_Decompress(byte[] buffer, long bufferSize, byte[] outputBuffer, long outputBufferSize,
+            OodleLZ_FuzzSafe fuzzSafetyFlag,
+            OodleLZ_CheckCRC crcCheckFlag,
+            OodleLZ_Verbosity logVerbosityFlag,
+            uint d, uint e, uint f, uint g, uint h, uint i, OodleLZ_Decode threadModule);
+
+        #endregion windows
     }
 }

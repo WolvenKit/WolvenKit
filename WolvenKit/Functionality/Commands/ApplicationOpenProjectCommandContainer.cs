@@ -47,8 +47,6 @@ namespace WolvenKit.Functionality.Commands
 
         #endregion Constructors
 
-
-
         #region Methods
 
         protected override bool CanExecute(object parameter) => true;
@@ -78,6 +76,8 @@ namespace WolvenKit.Functionality.Commands
                 {
                     using (_pleaseWaitService.PushInScope())
                     {
+                        StaticReferences.MainView.OnLoadLayoutAsync();
+
                         await _projectManager.LoadAsync(location);
                         var btn = StaticReferences.GlobalShell.FindName("ProjectNameDisplay") as System.Windows.Controls.Button;
                         btn?.SetCurrentValue(ContentControl.ContentProperty, Path.GetFileNameWithoutExtension(location));

@@ -1,21 +1,29 @@
-﻿using System.IO;
+using System.IO;
 
 namespace WolvenKit.Scaleform
 {
     public class SofdecStream : Mpeg1Stream
     {
-        public new const string DefaultVideoExtension = ".m2v";
+        #region Fields
 
         public const string AdxAudioExtension = ".adx";
         public const string AixAudioExtension = ".aix";
+        public new const string DefaultVideoExtension = ".m2v";
+        public static readonly byte[] AixSignatureBytes = new byte[] { 0x41, 0x49, 0x58, 0x46 };
 
-        public static readonly byte[] AixSignatureBytes = new byte[] {0x41, 0x49, 0x58, 0x46};
+        #endregion Fields
+
+        #region Constructors
 
         public SofdecStream(string path) : base(path)
         {
             this.FileExtensionAudio = AdxAudioExtension;
             this.FileExtensionVideo = DefaultVideoExtension;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         protected override string GetAudioFileExtension(Stream readStream, long currentOffset)
         {
@@ -40,5 +48,7 @@ namespace WolvenKit.Scaleform
 
             return fileExtension;
         }
+
+        #endregion Methods
     }
 }

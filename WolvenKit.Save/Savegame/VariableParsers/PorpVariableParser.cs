@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO;
 using WolvenKit.W3SavegameEditor.Core.Exceptions;
 using WolvenKit.W3SavegameEditor.Core.Savegame.Variables;
@@ -7,12 +7,22 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
 {
     public class PorpVariableParser : VariableParserBase<PorpVariable>
     {
+        #region Fields
+
         private const string FullMagicNumber = "PORP";
+
+        #endregion Fields
+
+        #region Properties
 
         public override string MagicNumber
         {
             get { return "PO"; }
         }
+
+        #endregion Properties
+
+        #region Methods
 
         public override PorpVariable ParseImpl(BinaryReader reader, ref int size)
         {
@@ -55,5 +65,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
 
             size -= bytesToRead;
         }
+
+        #endregion Methods
     }
 }
