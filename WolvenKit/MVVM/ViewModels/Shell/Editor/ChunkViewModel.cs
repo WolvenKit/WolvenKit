@@ -31,7 +31,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #region Properties
 
-        [Editor(typeof(CollectionEditor), typeof(PropertyEditorBase))]
         public List<ChunkPropertyViewModel> Children => _property.ChildrEditableVariables.Select(_ => new ChunkPropertyViewModel(_)).ToList();
 
         public System.Windows.Media.Brush ForegroundColor => _property.IsSerialized

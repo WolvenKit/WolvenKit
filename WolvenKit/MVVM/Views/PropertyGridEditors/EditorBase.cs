@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using HandyControl.Controls;
@@ -30,17 +31,18 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
         public override DependencyProperty GetDependencyProperty() => WrapperProperty;
 
         // bind to this
-        public override void CreateBinding(PropertyItem propertyItem, DependencyObject element) =>
-            BindingOperations.SetBinding(this, GetDependencyProperty(), new Binding($"{propertyItem.PropertyName}")
-            {
-                Source = propertyItem.Value,
-                Mode = GetBindingMode(propertyItem),
-                UpdateSourceTrigger = GetUpdateSourceTrigger(propertyItem),
-                Converter = GetConverter(propertyItem)
-            });
+        public override void CreateBinding(PropertyItem propertyItem, DependencyObject element)
+        {
+            var b = new Binding($"{propertyItem.PropertyName}");
+            b.Source = propertyItem.Value;
+            b.Mode = GetBindingMode(propertyItem);
+            b.UpdateSourceTrigger = GetUpdateSourceTrigger(propertyItem);
+            b.Converter = GetConverter(propertyItem);
+            BindingOperations.SetBinding(this, GetDependencyProperty(), b);
+        }
 
         // bind the private dependency property to the UI element
-        protected void CreateInnerBinding(DependencyObject element) =>
+        public virtual void CreateInnerBinding(DependencyObject element) =>
             BindingOperations.SetBinding(
                 element,
                 GetInnerDependencyProperty(),
@@ -66,7 +68,12 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
                 nameof(Wrapper),
                 typeof(T1),
                 typeof(EditorBase<T1>),
-                new FrameworkPropertyMetadata(default(T1)));
+                new FrameworkPropertyMetadata(default(T1), OnWrapperChanged));
+
+        private static void OnWrapperChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+
+        }
 
         #endregion
     }

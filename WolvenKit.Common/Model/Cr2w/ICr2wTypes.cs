@@ -70,31 +70,23 @@ namespace WolvenKit.Common.Model.Cr2w
 
     #region REDtypes
 
-    public interface IChunkPtrAccessor : IEditableVariable
-    {
-        ICR2WExport Reference { get; set; }
-        string ReferenceType { get; }
-    }
+    #region editor interfaces
 
-    public interface IREDPrimitive
-    {
-
-    }
-
-    public interface IREDIntegerType : IREDPrimitive { }
-
-
-    public interface IEditorBindable
-    {
-    }
+    public interface IEditorBindable { }
     public interface IEditorBindable<T> : IEditorBindable
     {
         public T Value { get; set; } // ???
     }
 
-    public interface IREDBool : IREDPrimitive, IEditorBindable<bool>
-    {
-    }
+    #endregion
+
+    #region red primitives
+
+    public interface IREDPrimitive : IEditableVariable { }
+
+    public interface IREDIntegerType : IREDPrimitive { }
+    public interface IREDStringType : IREDPrimitive { }
+    public interface IREDBool : IREDPrimitive, IEditorBindable<bool> { }
 
     public interface IEnumAccessor : IEditorBindable
     {
@@ -106,15 +98,12 @@ namespace WolvenKit.Common.Model.Cr2w
 
     public interface IEnumAccessor<T> : IEditorBindable<T>, IEnumAccessor where T : Enum
     {
-        
-        
-
         string EnumToString();
         IEditableVariable SetValue(object val);
         Type GetEnumType();
-
-        
     }
+
+    #endregion
 
     public interface IArrayAccessor : IEditableVariable, IList
     {
@@ -122,10 +111,6 @@ namespace WolvenKit.Common.Model.Cr2w
 
         string Elementtype { get; set; }
         Type InnerType { get; }
-
-        //int Count { get; }
-
-
     }
 
     public interface IArrayAccessor<T> : IArrayAccessor
@@ -133,18 +118,19 @@ namespace WolvenKit.Common.Model.Cr2w
         List<T> Elements { get; set; }
     }
 
-    public interface IBufferAccessor : IArrayAccessor
-    {
-
-    }
+    public interface IBufferAccessor : IArrayAccessor { }
 
     public interface IVariantAccessor
     {
         IEditableVariable Variant { get; set; }
     }
 
-    public interface IBufferVariantAccessor : IVariantAccessor
+    public interface IBufferVariantAccessor : IVariantAccessor { }
+
+    public interface IChunkPtrAccessor : IEditableVariable
     {
+        ICR2WExport Reference { get; set; }
+        string ReferenceType { get; }
     }
 
     public interface IHandleAccessor : IChunkPtrAccessor
@@ -156,8 +142,6 @@ namespace WolvenKit.Common.Model.Cr2w
 
         void ChangeHandleType();
     }
-
-    
 
     #endregion
 
