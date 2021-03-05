@@ -33,7 +33,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
         /// <summary>
         /// Identifies the caption string used for this tool window.
         /// </summary>
-        public const string ToolTitle = "AssetBrowser";
+        public const string ToolTitle = "Asset Browser";
 
         #endregion constants
 

@@ -13,6 +13,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
@@ -115,7 +116,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 ProjectExplorerContextualTabGroupVisibility = tuple.Item2
                     ? ERibbonContextualTabGroupVisibility.Visible
                     : ERibbonContextualTabGroupVisibility.Collapsed;
+
             }
+
+            DiscordHelper.SetDiscordRPCStatus(tuple.Item1.Title); // Set status for discord RPC
+
+
         }
 
         #endregion commands
