@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Catel;
 using Catel.IoC;
+using Catel.Logging;
 using Catel.MVVM;
 using Catel.Reflection;
 using Catel.Services;
@@ -89,6 +90,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     ControlzEx.Theming.ThemeManager.Current.AddTheme(new ControlzEx.Theming.Theme(stringint, "asfasf", "Dark", "Red", value, color, true, false));
                     ControlzEx.Theming.ThemeManager.Current.AddTheme(ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", Colors.Red));
                     ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, stringint);
+                    ILog _logger = LogManager.GetCurrentClassLogger();
+
+                    _logger.Info("Changed theme : " + value.ToString());
+
                 }
             }
         }

@@ -108,12 +108,14 @@
     <PackageReference Include="Octokit" Version="0.48.0" />
     <PackageReference Include="Open.ChannelExtensions" Version="3.5.0" />
     <PackageReference Include="Orc.CommandLine" Version="4.1.1" />
+    <PackageReference Include="Orc.LogViewer" Version="4.1.0" />
     <PackageReference Include="Orc.ProjectManagement" Version="4.1.1" />
     <PackageReference Include="Orc.Squirrel" Version="4.1.0" />
     <PackageReference Include="Orc.Squirrel.Xaml" Version="4.1.0" />
     <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.1" />
     <PackageReference Include="Pfim" Version="0.9.1" />
     <PackageReference Include="protobuf-net" Version="3.0.73" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="SharpZipLib" Version="1.3.1" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0">

@@ -5,28 +5,57 @@
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:orclogviewer="http://schemas.wildgums.com/orc/logviewer"
+ xmlns:orclogviewer1="http://schemas.wildgums.com/orc/controls"
  d:DesignHeight="450"
  d:DesignWidth="800"
  IsVisibleChanged="UserControl_IsVisibleChanged"
  mc:Ignorable="d"
  >
+
+    <catel:UserControl.Resources>
+        <Geometry x:Key="LogDebugGeometry">M15.73,3L21,8.27L21,15.73L15.73,21L8.27,21L3,15.73L3,8.27L8.27,3L15.73,3ZM14.9,5L9.1,5L5,9.1L5,14.9L9.1,19L14.9,19L19,14.9L19,9.1L14.9,5ZM11,17L13,17L13,11L11,11L11,17ZM11,9L13,9L13,7L11,7L11,9Z</Geometry>
+        <Geometry x:Key="LogWarningGeometry">M4,2L20,2C21.1,2 22,2.9 22,4L22,20C22,21.1 21.1,22 20,22L4,22C2.9,22 2,21.1 2,20L2,4C2,2.9 2.9,2 4,2ZM4,4L4,20L20,20L20,4L4,4ZM13,15L11,15L11,17L13,17L13,15ZM13,7L11,7L11,13L13,13L13,7Z</Geometry>
+        <Geometry x:Key="LogErrorGeometry">M2,21.9997L12,2.00026L20.6247,19.2199L20.6291,19.2199L22,21.9997L22,21.9997L22,21.9997L2,21.9997ZM5.0287,19.9997L18.9638,19.9997L12,6.11526L5.0287,19.9997ZM12.9376,16.5456L11.2947,16.5456L11.2947,18.2081L12.9376,18.2081L12.9376,16.5456ZM12.9376,11.5581L11.2947,11.5581L11.2947,14.8831L12.9376,14.8831L12.9376,11.5581Z</Geometry>
+        <Geometry x:Key="LogInfoGeometry">M11,9L13,9L13,7L11,7M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2C6.51416,2 2,6.51416 2,12C2,17.4858 6.51416,22 12,22C17.4858,22 22,17.4858 22,12C22,6.51416 17.4858,2 12,2M11,17L13,17L13,11L11,11L11,17Z</Geometry>
+        <Geometry x:Key="LogClockGeometry">M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z</Geometry>
+
+    </catel:UserControl.Resources>
+
+
     <Grid>
 
-
-        <RichTextBox
+        <orclogviewer1:LogViewerControl
          x:Name="LogRichTextBox"
-         Margin="0,0,0,0"
-         IsReadOnly="True"
+         Margin="-3,0,-3,0"
+         AutoScroll="True"
+         Background="Transparent"
+         BorderBrush="Transparent"
+         BorderThickness="0"
+         DebugMessageBrush="Purple"
+         EnableTextColoring="True"
+         EnableTimestamp="True"
+         ErrorMessageBrush="Red"
+         IgnoreCatelLogging="True"
+         InfoMessageBrush="{DynamicResource MahApps.Brushes.SystemControlBackgroundAccent}"
+         ShowDebug="False"
+         ShowError="False"
+         ShowInfo="True"
+         ShowMultilineMessagesExpanded="True"
+         ShowWarning="True"
+         WarningMessageBrush="Orange"
          />
+
         <StackPanel
-         Margin="0,0,5,0"
+         Margin="0,0,15,0"
          HorizontalAlignment="Right"
          VerticalAlignment="Bottom"
          Orientation="Horizontal"
-         Visibility="Collapsed"
+         Visibility="Visible"
          >
             <Button
              BorderThickness="1"
+             Click="Button_Click"
              Content="Clear"
              Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
              />
