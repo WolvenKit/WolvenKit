@@ -95,14 +95,7 @@
                                 </Button.RenderTransform>
                             </Button>
 
-                            <controls1:BreadcrumbBar
-                             x:Name="bar"
-                             Background="Transparent"
-                             ImageBinding="{Binding Image}"
-                             Root="{Binding Path=CurrentNode.Name, Mode=OneWay}"
-                             TraceBinding="{Binding CurrentNode.Name}"
-                             Visibility="Hidden"
-                             />
+                          
                             <hc:TextBox Width="500" Text="{Binding Path=CurrentNode.FullPath, Mode=OneWay}" />
 
                             <Button
@@ -198,8 +191,6 @@
                                      Width="22"
                                      Height="15"
                                      Margin="0"
-                                     HorizontalAlignment="Center"
-                                     VerticalAlignment="Center"
                                      Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
                                      Stretch="Uniform"
                                      />
@@ -273,8 +264,6 @@
                                                      Width="22"
                                                      Height="22"
                                                      Margin="-3"
-                                                     HorizontalAlignment="Center"
-                                                     VerticalAlignment="Center"
                                                      Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
                                                      Stretch="Uniform"
                                                      />

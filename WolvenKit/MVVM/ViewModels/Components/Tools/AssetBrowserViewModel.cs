@@ -241,7 +241,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
             var ret = new Dictionary<string, IGameFile>();
             foreach (var f in root.FileList)
             {
-                if (f.Name.ToUpper().Contains(searchkeyword.ToUpper()))
+                if (f.Name.Contains(searchkeyword, StringComparison.OrdinalIgnoreCase))
                 {
                     if (!ret.ContainsKey(f.Name))
                     {
@@ -322,7 +322,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
         #region Properties
 
         public string Folder { get; set; }
-        public Uri Image { get; set; }
+        public ImageSource Image { get; set; }
 
         #endregion Properties
     }

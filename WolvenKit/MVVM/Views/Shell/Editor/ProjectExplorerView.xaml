@@ -109,8 +109,7 @@
                          Width="22"
                          Height="15"
                          Margin="0"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"
+                 
                          Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
                          Stretch="Uniform"
                          />
