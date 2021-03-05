@@ -1,14 +1,17 @@
 using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using CP77.CR2W.Reflection;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W.Types
 {
-    public class CDouble : CVariable, IREDPrimitive, IREDIntegerType
+    [Editor(typeof(ITextEditor<double>), typeof(IPropertyEditorBase))]
+    public class CDouble : CVariable, IREDIntegerType, IEditorBindable<double>
     {
         public CDouble()
         {
@@ -32,7 +35,7 @@ namespace CP77.CR2W.Types
             {
                 ulong o => o,
                 string s => double.Parse(s),
-                CUInt64 v => v.val,
+                CUInt64 v => v.Value,
                 _ => this.Value
             };
 
@@ -48,8 +51,9 @@ namespace CP77.CR2W.Types
 
         public override string ToString() => Value.ToString(CultureInfo.InvariantCulture);
     }
-    
-    public class CUInt64 : CVariable, IREDPrimitive, IREDIntegerType
+
+    [Editor(typeof(ITextEditor<ulong>), typeof(IPropertyEditorBase))]
+    public class CUInt64 : CVariable, IREDIntegerType, IEditorBindable<ulong>
     {
         public CUInt64()
         {
@@ -60,27 +64,21 @@ namespace CP77.CR2W.Types
         {
         }
 
-        public double Value
-        {
-            get => val;
-            set => val = (ulong)value;
-        }
-
         [DataMember]
-        public ulong val { get; set; }
+        public ulong Value { get; set; }
 
-        public override void Read(BinaryReader file, uint size) => val = file.ReadUInt64();
+        public override void Read(BinaryReader file, uint size) => Value = file.ReadUInt64();
 
-        public override void Write(BinaryWriter file) => file.Write(val);
+        public override void Write(BinaryWriter file) => file.Write(Value);
 
         public override CVariable SetValue(object val)
         {
-            this.val = val switch
+            this.Value = val switch
             {
                 ulong o => o,
                 string s => ulong.Parse(s),
-                CUInt64 v => v.val,
-                _ => this.val
+                CUInt64 v => v.Value,
+                _ => this.Value
             };
 
             return this;
@@ -89,14 +87,15 @@ namespace CP77.CR2W.Types
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CUInt64)base.Copy(context);
-            var.val = val;
+            var.Value = Value;
             return var;
         }
 
-        public override string ToString() => val.ToString();
+        public override string ToString() => Value.ToString();
     }
 
-    public class CUInt32 : CVariable, IREDPrimitive, IREDIntegerType
+    [Editor(typeof(ITextEditor<uint>), typeof(IPropertyEditorBase))]
+    public class CUInt32 : CVariable, IREDIntegerType, IEditorBindable<uint>
     {
         public CUInt32()
         {
@@ -108,27 +107,21 @@ namespace CP77.CR2W.Types
         {
         }
 
-        public double Value
-        {
-            get => val;
-            set => val = (uint)value;
-        }
-
         [DataMember]
-        public uint val { get; set; }
+        public uint Value { get; set; }
 
-        public override void Read(BinaryReader file, uint size) => val = file.ReadUInt32();
+        public override void Read(BinaryReader file, uint size) => Value = file.ReadUInt32();
 
-        public override void Write(BinaryWriter file) => file.Write(val);
+        public override void Write(BinaryWriter file) => file.Write(Value);
 
         public override CVariable SetValue(object val)
         {
-            this.val = val switch
+            this.Value = val switch
             {
                 uint o => o,
                 string s => uint.Parse(s),
-                CUInt32 v => v.val,
-                _ => this.val
+                CUInt32 v => v.Value,
+                _ => this.Value
             };
 
             return this;
@@ -137,14 +130,15 @@ namespace CP77.CR2W.Types
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CUInt32) base.Copy(context);
-            var.val = val;
+            var.Value = Value;
             return var;
         }
 
-        public override string ToString() => val.ToString();
+        public override string ToString() => Value.ToString();
     }
 
-    public class CUInt16 : CVariable, IREDPrimitive, IREDIntegerType
+    [Editor(typeof(ITextEditor<ushort>), typeof(IPropertyEditorBase))]
+    public class CUInt16 : CVariable, IREDIntegerType, IEditorBindable<ushort>
     {
         public CUInt16()
         {
@@ -155,27 +149,21 @@ namespace CP77.CR2W.Types
         {
         }
 
-        public double Value
-        {
-            get => val;
-            set => val = (ushort)value;
-        }
-
         [DataMember]
-        public ushort val { get; set; }
+        public ushort Value { get; set; }
 
-        public override void Read(BinaryReader file, uint size) => val = file.ReadUInt16();
+        public override void Read(BinaryReader file, uint size) => Value = file.ReadUInt16();
 
-        public override void Write(BinaryWriter file) => file.Write(val);
+        public override void Write(BinaryWriter file) => file.Write(Value);
 
         public override CVariable SetValue(object val)
         {
-            this.val = val switch
+            this.Value = val switch
             {
                 ushort o => o,
                 string s => ushort.Parse(s),
-                CUInt16 v => v.val,
-                _ => this.val
+                CUInt16 v => v.Value,
+                _ => this.Value
             };
 
             return this;
@@ -184,14 +172,15 @@ namespace CP77.CR2W.Types
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CUInt16)base.Copy(context);
-            var.val = val;
+            var.Value = Value;
             return var;
         }
 
-        public override string ToString() => val.ToString();
+        public override string ToString() => Value.ToString();
     }
 
-    public class CUInt8 : CVariable, IREDPrimitive, IREDIntegerType
+    [Editor(typeof(ITextEditor<byte>), typeof(IPropertyEditorBase))]
+    public class CUInt8 : CVariable, IREDIntegerType, IEditorBindable<byte>
     {
         public CUInt8()
         {
@@ -202,27 +191,21 @@ namespace CP77.CR2W.Types
         {
         }
 
-        public double Value
-        {
-            get => val;
-            set => val = (byte)value;
-        }
-
         [DataMember]
-        public byte val { get; set; }
+        public byte Value { get; set; }
 
-        public override void Read(BinaryReader file, uint size) => val = file.ReadByte();
+        public override void Read(BinaryReader file, uint size) => Value = file.ReadByte();
 
-        public override void Write(BinaryWriter file) => file.Write(val);
+        public override void Write(BinaryWriter file) => file.Write(Value);
 
         public override CVariable SetValue(object val)
         {
-            this.val = val switch
+            this.Value = val switch
             {
                 byte o => o,
                 string s => byte.Parse(s),
-                CUInt8 v => v.val,
-                _ => this.val
+                CUInt8 v => v.Value,
+                _ => this.Value
             };
 
             return this;
@@ -231,14 +214,15 @@ namespace CP77.CR2W.Types
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CUInt8) base.Copy(context);
-            var.val = val;
+            var.Value = Value;
             return var;
         }
 
-        public override string ToString() => val.ToString();
+        public override string ToString() => Value.ToString();
     }
 
-    public class CInt64 : CVariable, IREDPrimitive, IREDIntegerType
+    [Editor(typeof(ITextEditor<long>), typeof(IPropertyEditorBase))]
+    public class CInt64 : CVariable, IREDIntegerType, IEditorBindable<long>
     {
         public CInt64()
         {
@@ -249,27 +233,21 @@ namespace CP77.CR2W.Types
         {
         }
 
-        public double Value
-        {
-            get => val;
-            set => val = (long)value;
-        }
-
         [DataMember]
-        public long val { get; set; }
+        public long Value { get; set; }
 
-        public override void Read(BinaryReader file, uint size) => val = file.ReadInt64();
+        public override void Read(BinaryReader file, uint size) => Value = file.ReadInt64();
 
-        public override void Write(BinaryWriter file) => file.Write(val);
+        public override void Write(BinaryWriter file) => file.Write(Value);
 
         public override CVariable SetValue(object val)
         {
-            this.val = val switch
+            this.Value = val switch
             {
                 long o => o,
                 string s => long.Parse(s),
-                CInt64 v => v.val,
-                _ => this.val
+                CInt64 v => v.Value,
+                _ => this.Value
             };
 
             return this;
@@ -278,14 +256,15 @@ namespace CP77.CR2W.Types
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CInt64) base.Copy(context);
-            var.val = val;
+            var.Value = Value;
             return var;
         }
 
-        public override string ToString() => val.ToString();
+        public override string ToString() => Value.ToString();
     }
 
-    public class CInt32 : CVariable, IREDPrimitive, IREDIntegerType
+    [Editor(typeof(ITextEditor<int>), typeof(IPropertyEditorBase))]
+    public class CInt32 : CVariable, IREDIntegerType, IEditorBindable<int>
     {
         public CInt32()
         {
@@ -296,29 +275,23 @@ namespace CP77.CR2W.Types
         {
         }
 
-        public double Value
-        {
-            get => val;
-            set => val = (int)value;
-        }
-
         [DataMember]
-        public int val { get; set; }
+        public int Value { get; set; }
 
 
 
-        public override void Read(BinaryReader file, uint size) => val = file.ReadInt32();
+        public override void Read(BinaryReader file, uint size) => Value = file.ReadInt32();
 
-        public override void Write(BinaryWriter file) => file.Write(val);
+        public override void Write(BinaryWriter file) => file.Write(Value);
 
         public override CVariable SetValue(object val)
         {
-            this.val = val switch
+            this.Value = val switch
             {
                 int o => o,
                 string s => int.Parse(s),
-                CInt32 v => v.val,
-                _ => this.val
+                CInt32 v => v.Value,
+                _ => this.Value
             };
 
             return this;
@@ -327,14 +300,15 @@ namespace CP77.CR2W.Types
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CInt32) base.Copy(context);
-            var.val = val;
+            var.Value = Value;
             return var;
         }
 
-        public override string ToString() => val.ToString();
+        public override string ToString() => Value.ToString();
     }
 
-    public class CInt16 : CVariable, IREDPrimitive, IREDIntegerType
+    [Editor(typeof(ITextEditor<short>), typeof(IPropertyEditorBase))]
+    public class CInt16 : CVariable, IREDIntegerType, IEditorBindable<short>
     {
         public CInt16()
         {
@@ -345,27 +319,21 @@ namespace CP77.CR2W.Types
         {
         }
 
-        public double Value
-        {
-            get => val;
-            set => val = (short)value;
-        }
-
         [DataMember]
-        public short val { get; set; }
+        public short Value { get; set; }
 
-        public override void Read(BinaryReader file, uint size) => val = file.ReadInt16();
+        public override void Read(BinaryReader file, uint size) => Value = file.ReadInt16();
 
-        public override void Write(BinaryWriter file) => file.Write(val);
+        public override void Write(BinaryWriter file) => file.Write(Value);
 
         public override CVariable SetValue(object val)
         {
-            this.val = val switch
+            this.Value = val switch
             {
                 short o => o,
                 string s => short.Parse(s),
-                CInt16 v => v.val,
-                _ => this.val
+                CInt16 v => v.Value,
+                _ => this.Value
             };
 
             return this;
@@ -374,14 +342,15 @@ namespace CP77.CR2W.Types
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CInt16) base.Copy(context);
-            var.val = val;
+            var.Value = Value;
             return var;
         }
 
-        public override string ToString() => val.ToString();
+        public override string ToString() => Value.ToString();
     }
 
-    public class CInt8 : CVariable, IREDPrimitive, IREDIntegerType
+    [Editor(typeof(ITextEditor<sbyte>), typeof(IPropertyEditorBase))]
+    public class CInt8 : CVariable, IREDIntegerType, IEditorBindable<sbyte>
     {
         public CInt8()
         {
@@ -392,27 +361,21 @@ namespace CP77.CR2W.Types
         {
         }
 
-        public double Value
-        {
-            get => val;
-            set => val = (sbyte)value;
-        }
-
         [DataMember]
-        public sbyte val { get; set; }
+        public sbyte Value { get; set; }
 
-        public override void Read(BinaryReader file, uint size) => val = file.ReadSByte();
+        public override void Read(BinaryReader file, uint size) => Value = file.ReadSByte();
 
-        public override void Write(BinaryWriter file) => file.Write(val);
+        public override void Write(BinaryWriter file) => file.Write(Value);
 
         public override CVariable SetValue(object newval)
         {
-            this.val = newval switch
+            this.Value = newval switch
             {
                 sbyte o => o,
                 string s => sbyte.Parse(s),
-                CInt8 v => v.val,
-                _ => this.val
+                CInt8 v => v.Value,
+                _ => this.Value
             };
 
             return this;
@@ -421,14 +384,15 @@ namespace CP77.CR2W.Types
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CInt8) base.Copy(context);
-            var.val = val;
+            var.Value = Value;
             return var;
         }
 
-        public override string ToString() => val.ToString();
+        public override string ToString() => Value.ToString();
     }
 
-    public class CDynamicInt : CVariable, IREDPrimitive, IREDIntegerType
+    [Editor(typeof(ITextEditor<int>), typeof(IPropertyEditorBase))]
+    public class CDynamicInt : CVariable, IREDIntegerType, IEditorBindable<int>
     {
         public CDynamicInt()
         {
@@ -439,27 +403,21 @@ namespace CP77.CR2W.Types
         {
         }
 
-        public double Value
-        {
-            get => val;
-            set => val = (int)value;
-        }
-
         [DataMember]
-        public int val { get; set; }
+        public int Value { get; set; }
 
-        public override void Read(BinaryReader file, uint size) => val = file.ReadBit6();
+        public override void Read(BinaryReader file, uint size) => Value = file.ReadBit6();
 
-        public override void Write(BinaryWriter file) => file.WriteBit6(val);
+        public override void Write(BinaryWriter file) => file.WriteBit6(Value);
 
         public override CVariable SetValue(object val)
         {
-            this.val = val switch
+            this.Value = val switch
             {
                 sbyte o => o,
                 string s => sbyte.Parse(s),
-                CDynamicInt v => v.val,
-                _ => this.val
+                CDynamicInt v => v.Value,
+                _ => this.Value
             };
 
             return this;
@@ -468,20 +426,21 @@ namespace CP77.CR2W.Types
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CDynamicInt) base.Copy(context);
-            var.val = val;
+            var.Value = Value;
             return var;
         }
 
-        public override string ToString() => val.ToString();
+        public override string ToString() => Value.ToString();
 
         internal byte ToByte()
         {
-            byte.TryParse(val.ToString(), out var result);
+            byte.TryParse(Value.ToString(), out var result);
             return result;
         }
     }
 
-    public class CVLQInt32 : CVariable, IREDPrimitive, IREDIntegerType
+    [Editor(typeof(ITextEditor<int>), typeof(IPropertyEditorBase))]
+    public class CVLQInt32 : CVariable, IREDIntegerType, IEditorBindable<int>
     {
         public CVLQInt32()
         {
@@ -492,27 +451,21 @@ namespace CP77.CR2W.Types
         {
         }
 
-        public double Value
-        {
-            get => val;
-            set => val = (int)value;
-        }
-
         [DataMember]
-        public int val { get; set; }
+        public int Value { get; set; }
 
-        public override void Read(BinaryReader file, uint size) => val = file.ReadVLQInt32();
+        public override void Read(BinaryReader file, uint size) => Value = file.ReadVLQInt32();
 
-        public override void Write(BinaryWriter file) => file.WriteVLQInt32(val);
+        public override void Write(BinaryWriter file) => file.WriteVLQInt32(Value);
 
         public override CVariable SetValue(object val)
         {
-            this.val = val switch
+            this.Value = val switch
             {
                 sbyte o => o,
                 string s => sbyte.Parse(s),
-                CVLQInt32 v => v.val,
-                _ => this.val
+                CVLQInt32 v => v.Value,
+                _ => this.Value
             };
 
             return this;
@@ -521,10 +474,10 @@ namespace CP77.CR2W.Types
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CVLQInt32)base.Copy(context);
-            var.val = val;
+            var.Value = Value;
             return var;
         }
 
-        public override string ToString() => val.ToString();
+        public override string ToString() => Value.ToString();
     }
 }

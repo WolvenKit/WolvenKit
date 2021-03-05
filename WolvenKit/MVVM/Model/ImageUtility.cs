@@ -320,14 +320,14 @@ namespace WolvenKit.MVVM.Model
             var width = xbm.Mipdata.elements[residentMipIndex].Width.val;
             var height = xbm.Mipdata.elements[residentMipIndex].Height.val;
 
-            var compression = xbm.Compression.WrappedEnum;
+            var compression = xbm.Compression.Value;
 
             var ddsformat = ImageUtility.GetEFormatFromCompression(compression);
 
             // TODO: TEST THIS
             if (ddsformat == EFormat.R8G8B8A8_UNORM)
             {
-                var format = xbm.Format.WrappedEnum;
+                var format = xbm.Format.Value;
                 switch (format)
                 {
                     case Enums.ETextureRawFormat.TRF_Grayscale:   // only this is ever used

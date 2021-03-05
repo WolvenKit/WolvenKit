@@ -1416,7 +1416,7 @@ namespace WolvenKit.CR2W
                 }
                 else if (var is IEnumAccessor enumAccessor)
                 {
-                    foreach (var enumstring in enumAccessor.Value)
+                    foreach (var enumstring in enumAccessor.EnumValueList)
                     {
                         AddUniqueToTable(enumstring);
                     }

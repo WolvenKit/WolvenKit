@@ -81,17 +81,41 @@ namespace WolvenKit.Common.Model.Cr2w
 
     }
 
-    public interface IREDIntegerType
+    public interface IREDIntegerType : IREDPrimitive { }
+
+
+    public interface IEditorBindable
     {
-        public double Value { get; set; }
+    }
+    public interface IEditorBindable<T> : IEditorBindable
+    {
+        public T Value { get; set; } // ???
     }
 
-    public interface IREDBool
+    public interface IREDBool : IEditorBindable<bool>
     {
-        public bool Value { get; set; }
     }
 
-    [Editor(typeof(ICollectionEditor), typeof(IPropertyEditorBase))]
+    public interface IEnumAccessor
+    {
+        List<string> EnumValueList { get; set; }
+        bool IsFlag { get; }
+
+        string GetAttributeVal();
+    }
+
+    public interface IEnumAccessor<T> : IEditorBindable<T>, IEnumAccessor where T : Enum
+    {
+        
+        
+
+        string EnumToString();
+        IEditableVariable SetValue(object val);
+        Type GetEnumType();
+
+        
+    }
+
     public interface IArrayAccessor : IEditableVariable, IList
     {
         List<int> Flags { get; set; }
@@ -132,6 +156,9 @@ namespace WolvenKit.Common.Model.Cr2w
 
         void ChangeHandleType();
     }
+
+    
+
     #endregion
 
 }

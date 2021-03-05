@@ -1,3 +1,5 @@
+using Catel;
+using RED.CRC32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,21 +9,22 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
-using CP77.CR2W.Types;
-using Newtonsoft.Json;
-using RED.CRC32;
 using WolvenKit.Common;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Cr2w;
+using CP77.CR2W.Types;
+using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
+using Catel.Data;
 using WolvenKit.Common.Services;
+using WolvenKit.Common.FNV1A;
+using Newtonsoft.Json;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W
 {
     public class CR2WFile : Catel.Data.ObservableObject, IWolvenkitFile
     {
         #region Enums
-
         public enum EChunkDisplayMode
         {
             Linear,
@@ -29,19 +32,15 @@ namespace CP77.CR2W
             VirtualParent
         }
 
-        #endregion Enums
+        #endregion
 
         #region Constants
-
         public const uint MAGIC = 0x57325243; // "W2RC"
-        private const long FILEHEADER_SIZE = 36;
         private const long MAGIC_SIZE = 4;
+        private const long FILEHEADER_SIZE = 36;
         private const long TABLEHEADER_SIZE = 12 * 10;
         private readonly int[] TABLES_SIZES = new int[6] { 8, 8, 16, 24, 24, 24 };
-
-        #endregion Constants
-
-        #region Constructors
+        #endregion
 
         public CR2WFile()
         {
@@ -57,157 +56,80 @@ namespace CP77.CR2W
                 version = 162,
             };
 
+
             Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
             StringDictionary = new Dictionary<uint, string>();
             m_tableheaders = new CR2WTable[10];
         }
 
-        #endregion Constructors
-
         #region Fields
-
         // constants
-
-        public byte[] AdditionalCr2WFileBytes;
+        
         private const uint DEADBEEF = 0xDEADBEEF;
-
-        private CR2WFile additionalCr2WFile;
-
-        // misc
-        private uint headerOffset = 0;
 
         // IO
         private CR2WFileHeader m_fileheader;
-
-        private byte[] m_strings;
         private CR2WTable[] m_tableheaders;
+        private byte[] m_strings;
+        
+
+        // misc
+        private uint headerOffset = 0;
         //private bool m_hasInternalBuffer;
 
-        #endregion Fields
+        private CR2WFile additionalCr2WFile;
+        public byte[] AdditionalCr2WFileBytes;
+
+        #endregion
 
         #region Properties
-
-        public readonly List<string> UnknownTypes = new();
-
+        public CR2WFileHeader Header => m_fileheader;
+        
         [JsonIgnore]
-        public List<LocalizedString> LocalizedStrings = new List<LocalizedString>();
-
-        public List<ICR2WBuffer> Buffers { get; private set; }
-        public List<ICR2WExport> Chunks { get; private set; }
-
+        public ILoggerService Logger { get; }
         [JsonIgnore]
-        public Dictionary<int, ICR2WExport> Chunksdict { get; private set; }
-
+        public ILocalizedStringSource LocalizedStringSource { get; set; }
         [JsonIgnore]
         public IVariableEditor EditorController { get; set; }
 
-        public List<CR2WEmbeddedWrapper> Embedded { get; private set; }
+        [JsonIgnore]
+        public Dictionary<int, ICR2WExport> Chunksdict { get; private set; }
+        [JsonIgnore]
+        public List<LocalizedString> LocalizedStrings = new List<LocalizedString>();
+
+
         public string FileName { get; set; }
-        public CR2WFileHeader Header => m_fileheader;
+        public readonly List<string> UnknownTypes = new();
 
-        public List<ICR2WImport> Imports { get; private set; }
-
-        [JsonIgnore]
-        public ILocalizedStringSource LocalizedStringSource { get; set; }
-
-        [JsonIgnore]
-        public ILoggerService Logger { get; }
+        public Dictionary<uint, string> StringDictionary { get; private set; }
 
         [JsonIgnore]
         public List<CR2WNameWrapper> Names { get; private set; }
-
+        public List<ICR2WImport> Imports { get; private set; }
         public List<CR2WPropertyWrapper> Properties { get; private set; }
-        public Dictionary<uint, string> StringDictionary { get; private set; }
+        public List<ICR2WExport> Chunks { get; private set; }
+        public List<ICR2WBuffer> Buffers { get; private set; }
+        public List<CR2WEmbeddedWrapper> Embedded { get; private set; }
 
-        #endregion Properties
+
+        #endregion
 
         #region Supporting Functions
-
-        public static void FixBufferCRC32(Stream stream, ICR2WBuffer buffer)
+        public (List<string>, int) GetUnknownBytes()
         {
-            //This might throw errors, the way it should be checked for is by reading
-            //the object tree to find the deferred data buffers that will point to a buffer.
-            //The flag of the parent object indicates where to read the data from.
-            //For now this is a crude workaround.
-            // var m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
-            // if (m_hasInternalBuffer)
+            List<string> types = new();
+            foreach (var x in Chunks.Select(chunk => chunk.UnknownTypes)
+                .SelectMany(s => s.Where(x => !types.Contains(x))))
             {
-                stream.Seek(buffer.Offset, SeekOrigin.Begin);
-                var m_temp = new byte[buffer.DiskSize];
-                stream.Read(m_temp, 0, m_temp.Length);
-                buffer.Crc32 = Crc32Algorithm.Compute(m_temp);
+                types.Add(x);
             }
-            //else
-            {
-                /*var path = String.Format("{0}.{1}.buffer", m_filePath, buffer.index);
-                if (!File.Exists(path))
-                {
-                    return;
-                }
-                m_temp = File.ReadAllBytes(path);
-                buffer.crc32 = Crc32Algorithm.Compute(m_temp);*/
-            }
+
+            return (types, 
+                Chunks.Sum(chunk => (chunk.unknownBytes as CBytes).Bytes.Length));
         }
 
-        public static void FixExportCRC32(Stream stream, CR2WExport export)
-        {
-            stream.Seek(export.dataOffset, SeekOrigin.Begin);
-            var m_temp = new byte[export.dataSize];
-            stream.Read(m_temp, 0, m_temp.Length);
-            export.crc32 = Crc32Algorithm.Compute(m_temp);
-        }
-
-        public static int GetLastChildrenIndexRecursive(ICR2WExport chunk)
-        {
-            return !chunk.VirtualChildrenChunks.Any()
-                ? chunk.ChunkIndex
-                : GetLastChildrenIndexRecursive(chunk.VirtualChildrenChunks
-                    .FirstOrDefault(_ => _.ChunkIndex == chunk.VirtualChildrenChunks.Max(p => p.ChunkIndex)));
-        }
-
-        public static void WriteVariable(BinaryWriter file, IEditableVariable ivar)
-        {
-            if (ivar is CVariable cvar)
-            {
-                file.Write(cvar.GetnameId());
-                file.Write(cvar.GettypeId());
-
-                var pos = file.BaseStream.Position;
-                file.Write((uint)0); // size placeholder
-
-                cvar.Write(file);
-                var endpos = file.BaseStream.Position;
-
-                file.Seek((int)pos, SeekOrigin.Begin);
-                var actualsize = (uint)(endpos - pos);
-                file.Write(actualsize); // Write size
-                file.Seek((int)endpos, SeekOrigin.Begin);
-            }
-            else
-                throw new SerializationException();
-        }
-
-        public uint CalculateHeaderCRC32()
-        {
-            var hash = new Crc32Algorithm(false);
-            hash.Append(BitConverter.GetBytes(MAGIC));
-            hash.Append(BitConverter.GetBytes(m_fileheader.version));
-            hash.Append(BitConverter.GetBytes(m_fileheader.flags));
-            hash.Append(BitConverter.GetBytes(m_fileheader.timeStamp));
-            hash.Append(BitConverter.GetBytes(m_fileheader.buildVersion));
-            hash.Append(BitConverter.GetBytes(m_fileheader.objectsEnd));
-            hash.Append(BitConverter.GetBytes(m_fileheader.buffersEnd));
-            hash.Append(BitConverter.GetBytes(DEADBEEF));
-            hash.Append(BitConverter.GetBytes(m_fileheader.numChunks));
-            foreach (var h in m_tableheaders)
-            {
-                hash.Append(BitConverter.GetBytes(h.offset));
-                hash.Append(BitConverter.GetBytes(h.itemCount));
-                hash.Append(BitConverter.GetBytes(h.crc32));
-            }
-            return hash.HashUInt32;
-        }
+        public void GenerateChunksDict() => Chunksdict = Chunks.ToDictionary(_ => _.ChunkIndex, _ => _);
 
         // Does not reindex /TODO
         public CR2WExportWrapper CreateChunk(string type, int chunkindex = 0, CR2WExportWrapper parent = null, CR2WExportWrapper virtualparent = null, CVariable cvar = null)
@@ -256,80 +178,6 @@ namespace CP77.CR2W
 
             Chunks.Insert(chunkindex, chunk);
             return chunk;
-        }
-
-        public void GenerateChunksDict() => Chunksdict = Chunks.ToDictionary(_ => _.ChunkIndex, _ => _);
-
-        public CR2WFileHeader GetFileHeader() => m_fileheader;
-
-        public string GetLocalizedString(uint val)
-        {
-            return LocalizedStringSource?.GetLocalizedString(val);
-        }
-
-        public int GetStringIndex(string name, bool addnew = false)
-        {
-            for (var i = 0; i < Names.Count; i++)
-            {
-                if (Names[i].Str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(Names[i].Str)))
-                    return i;
-            }
-
-            throw new InvalidParsingException($"{nameof(GetStringIndex)}: {name}");
-        }
-
-        public CR2WTable[] GetTableHeaders() => m_tableheaders;
-
-        public (List<string>, int) GetUnknownBytes()
-        {
-            List<string> types = new();
-            foreach (var x in Chunks.Select(chunk => chunk.UnknownTypes)
-                .SelectMany(s => s.Where(x => !types.Contains(x))))
-            {
-                types.Add(x);
-            }
-
-            return (types,
-                Chunks.Sum(chunk => (chunk.unknownBytes as CBytes).Bytes.Length));
-        }
-
-        public CVariable ReadVariable(BinaryReader file, CVariable parent)
-        {
-            // Read Name
-            var nameId = file.ReadUInt16();
-            if (nameId == 0)
-            {
-                return null;
-            }
-            var varname = Names[nameId].Str;
-
-            // Read Type
-            var typeId = file.ReadUInt16();
-            var typename = Names[typeId].Str;
-
-            // Read Size
-            var sizepos = file.BaseStream.Position;
-            var size = file.ReadUInt32();
-
-            // Read Value
-            var parsedvar = CR2WTypeManager.Create(typename, varname, this, parent);
-            // The "size" variable read is something a bit strange : it takes itself into account.
-            parsedvar.Read(file, size - 4);
-
-            var afterVarPos = file.BaseStream.Position;
-
-            var bytesleft = size - (afterVarPos - sizepos);
-            if (bytesleft > 0)
-            {
-                var unreadBytes = file.ReadBytes((int)bytesleft);
-                throw new InvalidParsingException($"Parsing Variable read too short. Difference: {bytesleft}");
-            }
-            else if (bytesleft < 0)
-            {
-                throw new InvalidParsingException($"Parsing Variable read too far. Difference: {bytesleft}");
-            }
-
-            return parsedvar;
         }
 
         /// <summary>
@@ -463,6 +311,8 @@ namespace CP77.CR2W
                 }
             }
 
+
+
             // Reindex the tree from the root function call
             if (!reentrant && removed > 0)
             {
@@ -478,21 +328,195 @@ namespace CP77.CR2W
             return removed;
         }
 
-        #endregion Supporting Functions
+        public static int GetLastChildrenIndexRecursive(ICR2WExport chunk)
+        {
+            return !chunk.VirtualChildrenChunks.Any() 
+                ? chunk.ChunkIndex 
+                : GetLastChildrenIndexRecursive(chunk.VirtualChildrenChunks
+                    .FirstOrDefault(_ => _.ChunkIndex == chunk.VirtualChildrenChunks.Max(p => p.ChunkIndex)));
+        }
+
+        public int GetStringIndex(string name, bool addnew = false)
+        {
+            for (var i = 0; i < Names.Count; i++)
+            {
+                if (Names[i].Str == name || (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(Names[i].Str)))
+                    return i;
+            }
+
+            throw new InvalidParsingException($"{nameof(GetStringIndex)}: {name}");
+        }
+
+        public string GetLocalizedString(uint val)
+        {
+            return LocalizedStringSource?.GetLocalizedString(val);
+        }
+
+        public CR2WFileHeader GetFileHeader() => m_fileheader;
+        public CR2WTable[] GetTableHeaders() => m_tableheaders;
+
+        public CVariable ReadVariable(BinaryReader file, CVariable parent)
+        {
+
+            // Read Name
+            var nameId = file.ReadUInt16();
+            if (nameId == 0)
+            {
+                return null;
+            }
+            var varname = Names[nameId].Str;
+
+            // Read Type
+            var typeId = file.ReadUInt16();
+            var typename = Names[typeId].Str;
+
+            // Read Size
+            var sizepos = file.BaseStream.Position;
+            var size = file.ReadUInt32();
+
+            // Read Value
+            var parsedvar = CR2WTypeManager.Create(typename, varname, this, parent);
+            // The "size" variable read is something a bit strange : it takes itself into account.
+            parsedvar.Read(file, size - 4);
+
+            var afterVarPos = file.BaseStream.Position;
+
+            var bytesleft = size - (afterVarPos - sizepos);
+            if (bytesleft > 0)
+            {
+                var unreadBytes = file.ReadBytes((int)bytesleft);
+                throw new InvalidParsingException($"Parsing Variable read too short. Difference: {bytesleft}");
+            }
+            else if (bytesleft < 0)
+            {
+                throw new InvalidParsingException($"Parsing Variable read too far. Difference: {bytesleft}");
+            }
+
+            return parsedvar;
+        }
+
+        public static void WriteVariable(BinaryWriter file, IEditableVariable ivar)
+        {
+            if (ivar is CVariable cvar)
+            {
+                file.Write(cvar.GetnameId());
+                file.Write(cvar.GettypeId());
+
+                var pos = file.BaseStream.Position;
+                file.Write((uint)0); // size placeholder
+
+
+                cvar.Write(file);
+                var endpos = file.BaseStream.Position;
+
+                file.Seek((int)pos, SeekOrigin.Begin);
+                var actualsize = (uint)(endpos - pos);
+                file.Write(actualsize); // Write size
+                file.Seek((int)endpos, SeekOrigin.Begin);
+            }
+            else
+                throw new SerializationException();
+        }
+        
+        public static void FixExportCRC32(Stream stream, CR2WExport export)
+        {
+            stream.Seek(export.dataOffset, SeekOrigin.Begin);
+            var m_temp = new byte[export.dataSize];
+            stream.Read(m_temp, 0, m_temp.Length);
+            export.crc32 = Crc32Algorithm.Compute(m_temp);
+        }
+
+        public static void FixBufferCRC32(Stream stream, ICR2WBuffer buffer)
+        {
+            //This might throw errors, the way it should be checked for is by reading
+            //the object tree to find the deferred data buffers that will point to a buffer.
+            //The flag of the parent object indicates where to read the data from.
+            //For now this is a crude workaround.
+            // var m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
+            // if (m_hasInternalBuffer)
+            {
+                stream.Seek(buffer.Offset, SeekOrigin.Begin);
+                var m_temp = new byte[buffer.DiskSize];
+                stream.Read(m_temp, 0, m_temp.Length);
+                buffer.Crc32 = Crc32Algorithm.Compute(m_temp);
+            }
+            //else
+            {
+                /*var path = String.Format("{0}.{1}.buffer", m_filePath, buffer.index);
+                if (!File.Exists(path))
+                {
+                    return;
+                }
+                m_temp = File.ReadAllBytes(path);
+                buffer.crc32 = Crc32Algorithm.Compute(m_temp);*/
+            }
+        }
+
+        public uint CalculateHeaderCRC32()
+        {
+            var hash = new Crc32Algorithm(false);
+            hash.Append(BitConverter.GetBytes(MAGIC));
+            hash.Append(BitConverter.GetBytes(m_fileheader.version));
+            hash.Append(BitConverter.GetBytes(m_fileheader.flags));
+            hash.Append(BitConverter.GetBytes(m_fileheader.timeStamp));
+            hash.Append(BitConverter.GetBytes(m_fileheader.buildVersion));
+            hash.Append(BitConverter.GetBytes(m_fileheader.objectsEnd));
+            hash.Append(BitConverter.GetBytes(m_fileheader.buffersEnd));
+            hash.Append(BitConverter.GetBytes(DEADBEEF));
+            hash.Append(BitConverter.GetBytes(m_fileheader.numChunks));
+            foreach (var h in m_tableheaders)
+            {
+                hash.Append(BitConverter.GetBytes(h.offset));
+                hash.Append(BitConverter.GetBytes(h.itemCount));
+                hash.Append(BitConverter.GetBytes(h.crc32));
+            }
+            return hash.HashUInt32;
+        }
+        
+        
+        #endregion
 
         #region Read
-
-        public CR2WFile GetAdditionalCr2wFile()
+        public (List<ICR2WImport>, bool, List<ICR2WBuffer>) ReadImportsAndBuffers(BinaryReader file)
         {
-            if (AdditionalCr2WFileBytes == null)
-                return null;
-            using (var ms2 = new MemoryStream(AdditionalCr2WFileBytes))
-            using (var br2 = new BinaryReader(ms2))
-            {
-                additionalCr2WFile = new CR2WFile();
-                additionalCr2WFile.Read(br2);
-                return additionalCr2WFile;
-            }
+            #region Read Headers
+            // read file header
+            var id = file.BaseStream.ReadStruct<uint>();
+            if (id != MAGIC)
+                throw new FormatException($"Not a CR2W file, Magic read as 0x{id:X8}");
+
+            m_fileheader = file.BaseStream.ReadStruct<CR2WFileHeader>();
+
+            //TODO: CP77
+
+
+            if (m_fileheader.version > 195 || m_fileheader.version < 163)
+                throw new FormatException($"Unknown Version {m_fileheader.version}. Supported versions: 159 - 163.");
+
+            var dt = new CDateTime(m_fileheader.timeStamp, null, "");
+
+            m_tableheaders = file.BaseStream.ReadStructs<CR2WTable>(10);
+            //m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
+
+            // read strings
+            m_strings = ReadStringsBuffer(file.BaseStream);
+
+            // read tables
+            Names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
+            Imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this) as ICR2WImport).ToList();
+            Properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
+            Chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this) as ICR2WExport).ToList();
+            Buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_) as ICR2WBuffer).ToList();
+            //Embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
+            //{
+            //    ParentFile = this,
+            //    ParentImports = Imports,
+            //    Handle = StringDictionary[_.path],
+            //}).ToList();
+
+            #endregion
+
+            return (Imports, false, Buffers);
         }
 
         public EFileReadErrorCodes Read(byte[] data)
@@ -500,6 +524,13 @@ namespace CP77.CR2W
             using var ms = new MemoryStream(data);
             using var br = new BinaryReader(ms);
             return Read(br);
+        }
+
+        public async Task<EFileReadErrorCodes> ReadAsync(byte[] data)
+        {
+            await using var ms = new MemoryStream(data);
+            using var br = new BinaryReader(ms);
+            return await Task.Run(() => Read(br));
         }
 
         /// <summary>
@@ -562,7 +593,7 @@ namespace CP77.CR2W
             //if (Embedded.Count > 1)
             //    throw new NotImplementedException("Embedded files present?");
 
-            #endregion Read Headers
+            #endregion
 
             #region Read Data
 
@@ -599,8 +630,9 @@ namespace CP77.CR2W
                 //int percentprogress = (int)((float)i / (float)Embedded.Count * 100.0);
                 //Logger?.LogProgress(percentprogress, $"Reading embedded file {emb.ClassName}...");
             }
+            #endregion
 
-            #endregion Read Data
+
 
             // some w2ls have additional CLayerInfo packed behind the file
             var endpos = file.BaseStream.Position;
@@ -611,7 +643,10 @@ namespace CP77.CR2W
 
                 //var bytesleft = file.BaseStream.Length - readbytes;
                 //AdditionalCr2WFileBytes = file.ReadBytes((int)bytesleft);
+
+
             }
+
 
             //Logger?.LogString($"File {FileName} loaded in: {stopwatch1.Elapsed}\n", Logtype.Normal);
             stopwatch1.Stop();
@@ -619,55 +654,27 @@ namespace CP77.CR2W
             return 0;
         }
 
-        public async Task<EFileReadErrorCodes> ReadAsync(byte[] data)
+        public CR2WFile GetAdditionalCr2wFile()
         {
-            await using var ms = new MemoryStream(data);
-            using var br = new BinaryReader(ms);
-            return await Task.Run(() => Read(br));
+            if (AdditionalCr2WFileBytes == null) return null;
+            using (var ms2 = new MemoryStream(AdditionalCr2WFileBytes))
+            using (var br2 = new BinaryReader(ms2))
+            {
+                additionalCr2WFile = new CR2WFile();
+                additionalCr2WFile.Read(br2);
+                return additionalCr2WFile;
+            }
         }
 
-        public (List<ICR2WImport>, bool, List<ICR2WBuffer>) ReadImportsAndBuffers(BinaryReader file)
+        private T[] ReadTable<T>(Stream stream, int index) where T : struct
         {
-            #region Read Headers
+            //stream.Seek(m_tableheaders[index].offset, SeekOrigin.Begin);
 
-            // read file header
-            var id = file.BaseStream.ReadStruct<uint>();
-            if (id != MAGIC)
-                throw new FormatException($"Not a CR2W file, Magic read as 0x{id:X8}");
+            var hash = new Crc32Algorithm(false);
+            var table = stream.ReadStructs<T>(m_tableheaders[index].itemCount, hash);
 
-            m_fileheader = file.BaseStream.ReadStruct<CR2WFileHeader>();
-
-            //TODO: CP77
-
-            if (m_fileheader.version > 195 || m_fileheader.version < 163)
-                throw new FormatException($"Unknown Version {m_fileheader.version}. Supported versions: 159 - 163.");
-
-            var dt = new CDateTime(m_fileheader.timeStamp, null, "");
-
-            m_tableheaders = file.BaseStream.ReadStructs<CR2WTable>(10);
-            //m_hasInternalBuffer = m_fileheader.bufferSize > m_fileheader.fileSize;
-
-            // read strings
-            m_strings = ReadStringsBuffer(file.BaseStream);
-
-            // read tables
-            Names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
-            Imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this) as ICR2WImport).ToList();
-            Properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
-            Chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this) as ICR2WExport).ToList();
-            Buffers = ReadTable<CR2WBuffer>(file.BaseStream, 5).Select(_ => new CR2WBufferWrapper(_) as ICR2WBuffer).ToList();
-            //Embedded = ReadTable<CR2WEmbedded>(file.BaseStream, 6).Select(_ => new CR2WEmbeddedWrapper(_)
-            //{
-            //    ParentFile = this,
-            //    ParentImports = Imports,
-            //    Handle = StringDictionary[_.path],
-            //}).ToList();
-
-            #endregion Read Headers
-
-            return (Imports, false, Buffers);
+            return table;
         }
-
         private byte[] ReadStringsBuffer(Stream stream)
         {
             var start = m_tableheaders[0].offset;
@@ -676,6 +683,7 @@ namespace CP77.CR2W
 
             var m_temp = new byte[m_strings_size];
             stream.Read(m_temp, 0, m_temp.Length);
+
 
             uint offset = 0;
             var tempstring = new List<byte>();
@@ -697,20 +705,151 @@ namespace CP77.CR2W
 
             return m_temp;
         }
+        #endregion
 
-        private T[] ReadTable<T>(Stream stream, int index) where T : struct
-        {
-            //stream.Seek(m_tableheaders[index].offset, SeekOrigin.Begin);
+       
 
-            var hash = new Crc32Algorithm(false);
-            var table = stream.ReadStructs<T>(m_tableheaders[index].itemCount, hash);
-
-            return table;
-        }
-
-        #endregion Read
 
         #region Write
+        public void Write(BinaryWriter file)
+        {
+            // update data
+            //m_fileheader.timeStamp = CDateTime.Now.ToUInt64();    //this will change any vanilla assets simply by opening and saving in wkit
+            var nn = new List<CR2WNameWrapper>(Names);
+
+            #region Update Tables
+
+            #region Stringtable
+            StringDictionary.Clear();
+
+
+            List<byte> newstrings;
+            List<string> nameslist;
+            List<SImportEntry> importslist;
+            (StringDictionary, newstrings, nameslist, importslist) = GenerateStringtable();
+
+            uint stringbuffer_offset = 160; // always 160
+            m_tableheaders[0].offset = stringbuffer_offset;
+            m_strings = newstrings.ToArray();
+
+            m_tableheaders[0].itemCount = (uint)m_strings.Length;
+            m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
+
+
+
+            #endregion
+
+            var inverseDictionary = StringDictionary.ToDictionary(x => x.Value, x => x.Key);
+
+            #region Names
+            Names.Clear();
+            foreach (var name in nameslist)
+            {
+                var newoffset = inverseDictionary[name];
+
+                
+                
+                var hash64 = string.IsNullOrEmpty(name) 
+                    ? 0 
+                    : FNV1A64HashAlgorithm.HashString(name, Encoding.GetEncoding("iso-8859-1"));
+                uint hash = (uint)(hash64 & 0xffffffff);
+
+                Names.Add(new CR2WNameWrapper(new CR2WName()
+                {
+                    //me: Why hash and not name??
+                    hash = hash,
+                    value = newoffset
+                }, this));
+            }
+            #endregion
+            
+            #region Imports
+            Imports.Clear();
+            foreach (var import in importslist)
+            {
+                var nw = Names.First(_ => _.Str == import.ClassName);
+                ushort flag = (ushort)import.Flags;
+
+                Imports.Add(new CR2WImportWrapper(
+                    new CR2WImport()
+                    {
+                        className = (ushort)Names.IndexOf(nw),
+                        depotPath = inverseDictionary[import.Path],
+                        flags = (ushort)import.Flags    //TODO finish all flags
+                    }, this));
+            }
+            #endregion
+            
+            #region Embedded 
+            foreach (var emb in Embedded)
+            {
+                // update import index
+                int realidx = (int)emb.Embedded.importIndex - 1;
+                int chunkidx = (int)emb.Embedded.chunkIndex;
+                if (emb.ImportPath != Imports[realidx].DepotPathStr)
+                {
+                    var emb1 = emb;
+                    var importindex = Imports.FindIndex(_ => _.DepotPathStr == emb1.ImportPath);
+                    if (importindex != -1)
+                        emb.SetImportIndex((uint)importindex);
+                }
+                // update export index
+                if (emb.Export != Chunks[chunkidx])
+                {
+                    var chunkindex = Chunks.FindIndex(_ => _ == emb.Export);
+                    if (chunkindex != -1)
+                        emb.SetChunkIndex((uint)chunkindex);
+                }
+            }
+            #endregion
+            #endregion
+
+            // Write headers once to allocate the space for it
+            WriteHeader(file);
+            headerOffset = (uint)file.BaseStream.Position;
+
+            using (var ms = new MemoryStream())
+            using (var bw = new BinaryWriter(ms))
+            {
+                // first write the file to memory
+                // this also sets m_fileheader.fileSize and m_fileheader.bufferSize, offsets
+                WriteData(bw);
+
+                // Write buffers
+                ms.Seek(0, SeekOrigin.Begin);
+                ms.WriteTo(file.BaseStream);
+            }
+
+            #region Update Offsets
+            foreach (var ichunk in Chunks)
+            {
+                var chunk = ichunk as CR2WExportWrapper;
+                var newoffset = chunk.Export.dataOffset + headerOffset;
+                chunk.SetOffset(newoffset);
+                chunk.SetType((ushort)GetStringIndex(chunk.REDType));
+            }
+            foreach (var buffer in Buffers)
+            {
+                var newoffset = buffer.Offset + headerOffset;
+                buffer.SetOffset(newoffset);
+            }
+            m_fileheader.objectsEnd += headerOffset;
+            #endregion
+            
+            foreach (var chunk in Chunks)
+                FixExportCRC32(file.BaseStream, (chunk as CR2WExportWrapper).Export);
+            foreach (var buffer in Buffers)
+                FixBufferCRC32(file.BaseStream, buffer);
+
+            // Write headers again with fixed offsets
+            WriteHeader(file);
+
+            if (AdditionalCr2WFileBytes != null)
+            {
+                file.BaseStream.Seek(0, SeekOrigin.End);
+                file.Write(AdditionalCr2WFileBytes);
+            }
+        }
 
         /// <summary>
         /// How a REDEngine entity is to be serialized
@@ -723,6 +862,35 @@ namespace CP77.CR2W
             SkipNameAndType,
             TypeFirst
         }
+        // Those where before tuples, passed between functions. Got sick of them and made structs.
+        // Got lazy and did not rewrite elements in code, hence ItemN attributes. //FIXME unimportant
+        private readonly struct SNameArg
+        {
+            public readonly EStringTableMod Mod;
+            public readonly IEditableVariable Var;
+
+            public SNameArg(EStringTableMod mod, IEditableVariable var)
+            {
+                Mod = mod;
+                Var = var;
+            }
+        };
+
+        // Those where before tuples, passed between functions. Got sick of them and made structs.
+        // Got lazy and did not rewrite elements in code, hence ItemN attributes. //FIXME unimportant
+        public readonly struct SImportEntry
+        {
+            public readonly string ClassName;
+            public readonly string Path;
+            public readonly EImportFlags Flags;
+
+            public SImportEntry(string classname, string path, EImportFlags flags)
+            {
+                ClassName = classname;
+                Path = path;
+                Flags = flags;
+            }
+        };
 
         public (Dictionary<uint, string>, List<byte>, List<string>, List<SImportEntry>) GenerateStringtable()
         {
@@ -742,6 +910,7 @@ namespace CP77.CR2W
             }
             foreach (var emb in Embedded)
             {
+                
             }
 
             // create new stringslist
@@ -757,6 +926,7 @@ namespace CP77.CR2W
                     }
                 }
                 newstrings.Add((byte)0);
+
             }
 
             // build new stringsDictionary
@@ -788,202 +958,10 @@ namespace CP77.CR2W
             return (newstringtable, newstrings, nameslist, importslist);
         }
 
-        public void Write(BinaryWriter file)
-        {
-            // update data
-            //m_fileheader.timeStamp = CDateTime.Now.ToUInt64();    //this will change any vanilla assets simply by opening and saving in wkit
-            var nn = new List<CR2WNameWrapper>(Names);
-
-            #region Update Tables
-
-            #region Stringtable
-
-            StringDictionary.Clear();
-
-            List<byte> newstrings;
-            List<string> nameslist;
-            List<SImportEntry> importslist;
-            (StringDictionary, newstrings, nameslist, importslist) = GenerateStringtable();
-
-            uint stringbuffer_offset = 160; // always 160
-            m_tableheaders[0].offset = stringbuffer_offset;
-            m_strings = newstrings.ToArray();
-
-            m_tableheaders[0].itemCount = (uint)m_strings.Length;
-            m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
-
-            #endregion Stringtable
-
-            var inverseDictionary = StringDictionary.ToDictionary(x => x.Value, x => x.Key);
-
-            #region Names
-
-            Names.Clear();
-            foreach (var name in nameslist)
-            {
-                var newoffset = inverseDictionary[name];
-
-                var hash64 = string.IsNullOrEmpty(name)
-                    ? 0
-                    : FNV1A64HashAlgorithm.HashString(name, Encoding.GetEncoding("iso-8859-1"));
-                uint hash = (uint)(hash64 & 0xffffffff);
-
-                Names.Add(new CR2WNameWrapper(new CR2WName()
-                {
-                    //me: Why hash and not name??
-                    hash = hash,
-                    value = newoffset
-                }, this));
-            }
-
-            #endregion Names
-
-            #region Imports
-
-            Imports.Clear();
-            foreach (var import in importslist)
-            {
-                var nw = Names.First(_ => _.Str == import.ClassName);
-                ushort flag = (ushort)import.Flags;
-
-                Imports.Add(new CR2WImportWrapper(
-                    new CR2WImport()
-                    {
-                        className = (ushort)Names.IndexOf(nw),
-                        depotPath = inverseDictionary[import.Path],
-                        flags = (ushort)import.Flags    //TODO finish all flags
-                    }, this));
-            }
-
-            #endregion Imports
-
-            #region Embedded
-
-            foreach (var emb in Embedded)
-            {
-                // update import index
-                int realidx = (int)emb.Embedded.importIndex - 1;
-                int chunkidx = (int)emb.Embedded.chunkIndex;
-                if (emb.ImportPath != Imports[realidx].DepotPathStr)
-                {
-                    var emb1 = emb;
-                    var importindex = Imports.FindIndex(_ => _.DepotPathStr == emb1.ImportPath);
-                    if (importindex != -1)
-                        emb.SetImportIndex((uint)importindex);
-                }
-                // update export index
-                if (emb.Export != Chunks[chunkidx])
-                {
-                    var chunkindex = Chunks.FindIndex(_ => _ == emb.Export);
-                    if (chunkindex != -1)
-                        emb.SetChunkIndex((uint)chunkindex);
-                }
-            }
-
-            #endregion Embedded
-
-            #endregion Update Tables
-
-            // Write headers once to allocate the space for it
-            WriteHeader(file);
-            headerOffset = (uint)file.BaseStream.Position;
-
-            using (var ms = new MemoryStream())
-            using (var bw = new BinaryWriter(ms))
-            {
-                // first write the file to memory
-                // this also sets m_fileheader.fileSize and m_fileheader.bufferSize, offsets
-                WriteData(bw);
-
-                // Write buffers
-                ms.Seek(0, SeekOrigin.Begin);
-                ms.WriteTo(file.BaseStream);
-            }
-
-            #region Update Offsets
-
-            foreach (var ichunk in Chunks)
-            {
-                var chunk = ichunk as CR2WExportWrapper;
-                var newoffset = chunk.Export.dataOffset + headerOffset;
-                chunk.SetOffset(newoffset);
-                chunk.SetType((ushort)GetStringIndex(chunk.REDType));
-            }
-            foreach (var buffer in Buffers)
-            {
-                var newoffset = buffer.Offset + headerOffset;
-                buffer.SetOffset(newoffset);
-            }
-            m_fileheader.objectsEnd += headerOffset;
-
-            #endregion Update Offsets
-
-            foreach (var chunk in Chunks)
-                FixExportCRC32(file.BaseStream, (chunk as CR2WExportWrapper).Export);
-            foreach (var buffer in Buffers)
-                FixBufferCRC32(file.BaseStream, buffer);
-
-            // Write headers again with fixed offsets
-            WriteHeader(file);
-
-            if (AdditionalCr2WFileBytes != null)
-            {
-                file.BaseStream.Seek(0, SeekOrigin.End);
-                file.Write(AdditionalCr2WFileBytes);
-            }
-        }
-
-        public void WriteHeader(BinaryWriter file)
-        {
-            WriteFileHeader(file);
-
-            #region Write Tables
-
-            m_tableheaders[1].itemCount = (uint)Names.Count;
-            m_tableheaders[1].offset = (uint)file.BaseStream.Position;
-            WriteTable<CR2WName>(file.BaseStream, Names.Select(_ => _.Name).ToArray(), 1);
-
-            m_tableheaders[2].itemCount = (uint)Imports.Count;
-            m_tableheaders[2].offset = Imports.Count > 0 ? (uint)file.BaseStream.Position : 0;
-            WriteTable<CR2WImport>(file.BaseStream, Imports.Select(_ => (_ as CR2WImportWrapper).Import).ToArray(), 2);
-
-            m_tableheaders[3].itemCount = (uint)Properties.Count;
-            m_tableheaders[3].offset = (uint)file.BaseStream.Position;
-            WriteTable<CR2WProperty>(file.BaseStream, Properties.Select(_ => _.Property).ToArray(), 3);
-
-            m_tableheaders[4].itemCount = (uint)Chunks.Count;
-            m_tableheaders[4].offset = (uint)file.BaseStream.Position;
-            WriteTable<CR2WExport>(file.BaseStream, Chunks.Select(_ => (_ as CR2WExportWrapper).Export).ToArray(), 4);
-
-            if (Buffers.Count > 0)
-            {
-                m_tableheaders[5].itemCount = (uint)Buffers.Count;
-                m_tableheaders[5].offset = (uint)file.BaseStream.Position;
-                WriteTable<CR2WBuffer>(file.BaseStream, Buffers.Select(_ => (_ as CR2WBufferWrapper).Buffer).ToArray(), 5);
-            }
-
-            if (Embedded.Count > 0)
-            {
-                m_tableheaders[6].itemCount = (uint)Embedded.Count;
-                m_tableheaders[6].offset = (uint)file.BaseStream.Position;
-                WriteTable<CR2WEmbedded>(file.BaseStream, Embedded.Select(_ => _.Embedded).ToArray(), 6);
-            }
-
-            #endregion Write Tables
-
-            // calculate crc and write file header again
-            var headerEndPosition = (int)file.BaseStream.Position;
-            m_fileheader.crc32 = CalculateHeaderCRC32();
-            WriteFileHeader(file);
-
-            // move to end of fileheader
-            file.Seek(headerEndPosition, SeekOrigin.Begin);
-        }
-
         private (List<string>, List<SImportEntry>) GenerateStringtableInner()
         {
             var dbg_trace = new List<string>();
-            var newnameslist = new Dictionary<string, string> { { "", "" } };
+            var newnameslist = new Dictionary<string, string> {{"", ""}};
             var newimportslist = new List<SImportEntry>();
             var newsoftlist = new List<SImportEntry>();
             var idlist = new HashSet<string>();
@@ -1025,7 +1003,7 @@ namespace CP77.CR2W
 
                 var returnedVariables = new List<SNameArg>();
 
-                // if variable is generic type or some special case
+                // if variable is generic type or some special case 
                 switch (ivar)
                 {
                     case IArrayAccessor a:
@@ -1034,7 +1012,6 @@ namespace CP77.CR2W
                             case CArray<CName> cacn:
                                 returnedVariables.Add(new SNameArg(EStringTableMod.None, a)); //???
                                 break;
-
                             case CArray<CBool> cacb:
                             case CArray<CUInt16> cacu16:
                             case CArray<CInt16> caci16:
@@ -1043,7 +1020,6 @@ namespace CP77.CR2W
                             case CArray<CUInt64> cacu64:
                             case CArray<CInt64> caci64:
                                 break;
-
                             default:
                                 var elements = a.GetEditableVariables();
                                 foreach (var item in elements)
@@ -1051,73 +1027,71 @@ namespace CP77.CR2W
                                 break;
                         }
                         break;
-
                     case IHandleAccessor h:
                         if (h.ChunkHandle)
                             if (h.Reference != null)
                                 returnedVariables.Add(new SNameArg(EStringTableMod.None, h.Reference.data));
                         break;
-
                     case ISoftAccessor s:
                         break;
-
                     case IBufferVariantAccessor ivariant:
                         var mod = EStringTableMod.None;
                         returnedVariables.Add(new SNameArg(mod, ivariant.Variant));
                         break;
-
                     case CVariant cVariant:
                         returnedVariables.Add(new SNameArg(EStringTableMod.SkipName, cVariant.Variant));
                         break;
                     // check all other CVariables
                     case CVariable cvar:
-                    {
-                        // skip some custom buffers
-                        if (cvar is gameCookedDeviceDataCompressed)
                         {
-                            return null;
+                            // skip some custom buffers
+                            if (cvar is gameCookedDeviceDataCompressed)
+                            {
+                                return null;
+                            }
+
+
+                            // add parent if not already in guidlist
+                            // don't add array type parents, don't add IBufferVariantAccessor type parents
+                            if (cvar.ParentVar != null
+                                && !cvar.ParentVar.GetType().IsGenericType
+                                && !(cvar.ParentVar is IBufferVariantAccessor)
+                                && !idlist.Contains(cvar.ParentVar.UniqueIdentifier))
+                            {
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, cvar.ParentVar));
+                            }
+
+                            // add all normal REDProperties
+                            var props = cvar.GetExistingVariables(false);
+                            returnedVariables.AddRange(props
+                                .Select(_ => new SNameArg(EStringTableMod.None, _)));
+
+                            // get buffers
+                            var buffers = cvar.GetExistingVariables(true).Except(props).ToList();
+
+                            // custom serialization
+                            if (cvar is CMaterialInstance mi)
+                            {
+                                returnedVariables.AddRange(buffers
+                                    .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
+                            }
+
+                            if (cvar is physicsMaterialLibraryResource pmlr)
+                            {
+                                returnedVariables.AddRange(buffers
+                                    .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
+                            }
+
+                            if (cvar is gameDeviceResourceData gdrd)
+                            {
+                                returnedVariables.AddRange(gdrd.CookedDeviceData
+                                    .Select(_ => _.ClassName)
+                                    .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
+                            }
+
+
+                            break;
                         }
-
-                        // add parent if not already in guidlist
-                        // don't add array type parents, don't add IBufferVariantAccessor type parents
-                        if (cvar.ParentVar != null
-                            && !cvar.ParentVar.GetType().IsGenericType
-                            && !(cvar.ParentVar is IBufferVariantAccessor)
-                            && !idlist.Contains(cvar.ParentVar.UniqueIdentifier))
-                        {
-                            returnedVariables.Add(new SNameArg(EStringTableMod.None, cvar.ParentVar));
-                        }
-
-                        // add all normal REDProperties
-                        var props = cvar.GetExistingVariables(false);
-                        returnedVariables.AddRange(props
-                            .Select(_ => new SNameArg(EStringTableMod.None, _)));
-
-                        // get buffers
-                        var buffers = cvar.GetExistingVariables(true).Except(props).ToList();
-
-                        // custom serialization
-                        if (cvar is CMaterialInstance mi)
-                        {
-                            returnedVariables.AddRange(buffers
-                                .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
-                        }
-
-                        if (cvar is physicsMaterialLibraryResource pmlr)
-                        {
-                            returnedVariables.AddRange(buffers
-                                .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
-                        }
-
-                        if (cvar is gameDeviceResourceData gdrd)
-                        {
-                            returnedVariables.AddRange(gdrd.CookedDeviceData
-                                .Select(_ => _.ClassName)
-                                .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
-                        }
-
-                        break;
-                    }
                     default:
                         break;
                 }
@@ -1181,15 +1155,12 @@ namespace CP77.CR2W
                     case CName n:
                         AddUniqueToTable(n.Value);
                         break;
-
                     case IArrayAccessor when var is IBufferAccessor buffer:
                     {
                         foreach (var ivar in buffer.GetEditableVariables())
                         {
-                            if (ivar is not IHandleAccessor ha)
-                                continue;
-                            if (ha.ChunkHandle)
-                                continue;
+                            if (ivar is not IHandleAccessor ha) continue;
+                            if (ha.ChunkHandle) continue;
 
                             AddUniqueToTable(ha.ClassName);
                             var flags = EImportFlags.Default;
@@ -1200,6 +1171,7 @@ namespace CP77.CR2W
                             {
                                 newimportslist.Add(importtuple);
                             }
+
                         }
 
                         break;
@@ -1218,16 +1190,16 @@ namespace CP77.CR2W
 
                         break;
                     }
-                    case IEnumAccessor { IsFlag: true } enumAccessor:
+                    case IEnumAccessor {IsFlag: true} enumAccessor:
                     {
-                        foreach (var enumstring in enumAccessor.Value)
-                            AddUniqueToTable(enumstring);
+                        foreach (var enumstring in enumAccessor.EnumValueList) AddUniqueToTable(enumstring);
                         break;
                     }
                     case IEnumAccessor enumAccessor:
                         AddUniqueToTable(enumAccessor.GetAttributeVal());
                         break;
                 }
+
 
                 void CheckVarNameAndTypes()
                 {
@@ -1236,19 +1208,15 @@ namespace CP77.CR2W
                         case EStringTableMod.SkipType:
                             AddUniqueToTable(var.REDName);
                             break;
-
                         case EStringTableMod.SkipName:
                             AddUniqueToTable(var.REDType);
                             break;
-
                         case EStringTableMod.SkipNameAndType:
                             break;
-
                         case EStringTableMod.TypeFirst:
                             AddUniqueToTable(var.REDType);
                             AddUniqueToTable(var.REDName);
                             break;
-
                         case EStringTableMod.None:
                         default:
                             AddUniqueToTable(var.REDName);
@@ -1266,6 +1234,7 @@ namespace CP77.CR2W
                 }
                 else
                 {
+
                     if (!newnameslist.ContainsKey(str))
                     {
                         // hack for CApexClothResource *sigh*
@@ -1281,6 +1250,68 @@ namespace CP77.CR2W
                     }
                 }
             }
+        }
+
+        public void WriteHeader(BinaryWriter file)
+        {
+            WriteFileHeader(file);
+
+            #region Write Tables
+            m_tableheaders[1].itemCount = (uint)Names.Count;
+            m_tableheaders[1].offset = (uint)file.BaseStream.Position;
+            WriteTable<CR2WName>(file.BaseStream, Names.Select(_ => _.Name).ToArray(), 1);
+
+            m_tableheaders[2].itemCount = (uint)Imports.Count;
+            m_tableheaders[2].offset = Imports.Count > 0 ? (uint)file.BaseStream.Position : 0;
+            WriteTable<CR2WImport>(file.BaseStream, Imports.Select(_ => (_ as CR2WImportWrapper).Import).ToArray(), 2);
+
+            m_tableheaders[3].itemCount = (uint)Properties.Count;
+            m_tableheaders[3].offset = (uint)file.BaseStream.Position;
+            WriteTable<CR2WProperty>(file.BaseStream, Properties.Select(_ => _.Property).ToArray(), 3);
+
+            m_tableheaders[4].itemCount = (uint)Chunks.Count;
+            m_tableheaders[4].offset = (uint)file.BaseStream.Position;
+            WriteTable<CR2WExport>(file.BaseStream, Chunks.Select(_ => (_ as CR2WExportWrapper).Export).ToArray(), 4);
+
+            if (Buffers.Count > 0)
+            {
+                m_tableheaders[5].itemCount = (uint)Buffers.Count;
+                m_tableheaders[5].offset = (uint)file.BaseStream.Position;
+                WriteTable<CR2WBuffer>(file.BaseStream, Buffers.Select(_ => (_ as CR2WBufferWrapper).Buffer).ToArray(), 5);
+            }
+
+            if (Embedded.Count > 0)
+            {
+                m_tableheaders[6].itemCount = (uint)Embedded.Count;
+                m_tableheaders[6].offset = (uint)file.BaseStream.Position;
+                WriteTable<CR2WEmbedded>(file.BaseStream, Embedded.Select(_ => _.Embedded).ToArray(), 6);
+            }
+
+            #endregion
+            
+            // calculate crc and write file header again
+            var headerEndPosition = (int)file.BaseStream.Position;
+            m_fileheader.crc32 = CalculateHeaderCRC32();
+            WriteFileHeader(file);
+
+            // move to end of fileheader
+            file.Seek(headerEndPosition, SeekOrigin.Begin);
+        }
+
+        private void WriteFileHeader(BinaryWriter file)
+        {
+            file.BaseStream.Seek(0, SeekOrigin.Begin);
+
+            // calculate filesize again
+            m_fileheader.objectsEnd = (Chunks.Last() as CR2WExportWrapper).Export.dataOffset + (Chunks.Last() as CR2WExportWrapper).Export.dataSize; 
+            
+            // calculate buffersize again
+            m_fileheader.buffersEnd = (uint)Buffers.Sum(_ => _.DiskSize) + m_fileheader.objectsEnd;
+            
+            file.BaseStream.WriteStruct<uint>(MAGIC);
+            file.BaseStream.WriteStruct<CR2WFileHeader>(m_fileheader);
+            file.BaseStream.WriteStructs<CR2WTable>(m_tableheaders); // offsets change if stringtable changes
+            WriteStringBuffer(file.BaseStream);
         }
 
         private void WriteData(BinaryWriter bw)
@@ -1301,27 +1332,13 @@ namespace CP77.CR2W
             m_fileheader.buffersEnd = (uint)bw.BaseStream.Position;
         }
 
-        private void WriteFileHeader(BinaryWriter file)
-        {
-            file.BaseStream.Seek(0, SeekOrigin.Begin);
-
-            // calculate filesize again
-            m_fileheader.objectsEnd = (Chunks.Last() as CR2WExportWrapper).Export.dataOffset + (Chunks.Last() as CR2WExportWrapper).Export.dataSize;
-
-            // calculate buffersize again
-            m_fileheader.buffersEnd = (uint)Buffers.Sum(_ => _.DiskSize) + m_fileheader.objectsEnd;
-
-            file.BaseStream.WriteStruct<uint>(MAGIC);
-            file.BaseStream.WriteStruct<CR2WFileHeader>(m_fileheader);
-            file.BaseStream.WriteStructs<CR2WTable>(m_tableheaders); // offsets change if stringtable changes
-            WriteStringBuffer(file.BaseStream);
-        }
 
         private void WriteStringBuffer(Stream stream)
         {
             m_tableheaders[0].crc32 = Crc32Algorithm.Compute(m_strings);
             stream.Write(m_strings, 0, m_strings.Length);
         }
+
 
         private void WriteTable<T>(Stream stream, T[] array, int index) where T : struct
         {
@@ -1333,66 +1350,19 @@ namespace CP77.CR2W
             m_tableheaders[index].crc32 = crc.HashUInt32;
         }
 
-        // Those where before tuples, passed between functions. Got sick of them and made structs.
-        // Got lazy and did not rewrite elements in code, hence ItemN attributes. //FIXME unimportant
-        public readonly struct SImportEntry
-        {
-            #region Fields
 
-            public readonly string ClassName;
-            public readonly EImportFlags Flags;
-            public readonly string Path;
 
-            #endregion Fields
-
-            #region Constructors
-
-            public SImportEntry(string classname, string path, EImportFlags flags)
-            {
-                ClassName = classname;
-                Path = path;
-                Flags = flags;
-            }
-
-            #endregion Constructors
-        };
-
-        // Those where before tuples, passed between functions. Got sick of them and made structs.
-        // Got lazy and did not rewrite elements in code, hence ItemN attributes. //FIXME unimportant
-        private readonly struct SNameArg
-        {
-            #region Fields
-
-            public readonly EStringTableMod Mod;
-            public readonly IEditableVariable Var;
-
-            #endregion Fields
-
-            #region Constructors
-
-            public SNameArg(EStringTableMod mod, IEditableVariable var)
-            {
-                Mod = mod;
-                Var = var;
-            }
-
-            #endregion Constructors
-        };
-
-        #endregion Write
-
-        #region Methods
-
-        public void GetChunks()
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
 
         Task<EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
         {
             throw new NotImplementedException();
         }
 
-        #endregion Methods
+        public void GetChunks()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
+

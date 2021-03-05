@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -8,11 +9,12 @@ using System.Threading.Tasks;
 using CP77.CR2W;
 using CP77.CR2W.Types;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W.Types
 {
 
-    [DataContract(Namespace = "")]
+    [Editor(typeof(IBoolEditor), typeof(IPropertyEditorBase))]
     public class CBool : CVariable, IREDPrimitive, IREDBool
     {
         public CBool()

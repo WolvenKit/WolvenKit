@@ -1,4 +1,4 @@
-﻿using DotNetHelper.FastMember.Extension.Extension;
+using DotNetHelper.FastMember.Extension.Extension;
 using FastMember;
 using Newtonsoft.Json;
 using System;
@@ -618,7 +618,7 @@ namespace WolvenKit.CR2W.Types
             return copy;
         }
 
-        public virtual CVariable SetValue(object val)
+        public virtual IEditableVariable SetValue(object val)
         {
             if (val is CVariable cvar)
             {

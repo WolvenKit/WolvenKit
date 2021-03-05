@@ -1,48 +1,37 @@
-﻿using System.IO;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using CP77.CR2W.Reflection;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W.Types
 {
-    [REDMeta()]
-    public class CString : CVariable, IREDPrimitive
+    [Editor(typeof(ITextEditor<string>), typeof(IPropertyEditorBase))]
+    public class CString : CVariable, IREDPrimitive, IEditorBindable<string>
     {
-        private bool isWideChar;
+        private bool _isWideChar;
 
-        public CString()
-        {
-            
-        }
         public CString(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
-        public string val { get; set; }
+        public string Value { get; set; }
 
-        public override void Read(BinaryReader file, uint size)
-        {
-            val = file.ReadLengthPrefixedString();
-        }
+        public override void Read(BinaryReader file, uint size) => Value = file.ReadLengthPrefixedString();
 
-        public override void Write(BinaryWriter file)
-        {
-            file.WriteLengthPrefixedString(val);
-        }
+        public override void Write(BinaryWriter file) => file.WriteLengthPrefixedString(Value);
 
         public override CVariable SetValue(object val)
         {
-            switch (val)
+            this.Value = val switch
             {
-                case string s:
-                    this.val = s;
-                    break;
-                case CString cvar:
-                    this.val = cvar.val;
-                    break;
-            }
+                string s => s,
+                CString cvar => cvar.Value,
+                _ => this.Value
+            };
 
             return this;
         }
@@ -50,13 +39,13 @@ namespace CP77.CR2W.Types
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CString) base.Copy(context);
-            var.val = val;
-            var.isWideChar = isWideChar;
+            var.Value = Value;
+            var._isWideChar = _isWideChar;
             return var;
         }
 
 
 
-        public override string ToString() => val;
+        public override string ToString() => Value;
     }
 }

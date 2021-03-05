@@ -162,11 +162,11 @@ namespace CP77.CR2W
                 var firstString = vars
                         .Where(_ => _ is CString)
                         .Cast<CString>()
-                        .FirstOrDefault(_ => _.val != null)
+                        .FirstOrDefault(_ => _.Value != null)
                     ;
                 if (firstString != null)
                 {
-                    return firstString.val;
+                    return firstString.Value;
                 }
 
                 var firstName = vars
