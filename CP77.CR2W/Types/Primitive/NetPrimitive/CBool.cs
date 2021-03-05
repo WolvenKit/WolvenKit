@@ -15,7 +15,7 @@ namespace CP77.CR2W.Types
 {
 
     [Editor(typeof(IBoolEditor), typeof(IPropertyEditorBase))]
-    public class CBool : CVariable, IREDPrimitive, IREDBool
+    public class CBool : CVariable, IREDBool
     {
         public CBool()
         {

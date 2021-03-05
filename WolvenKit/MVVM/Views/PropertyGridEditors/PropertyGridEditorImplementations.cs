@@ -43,7 +43,7 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
     /// <summary>
     /// Propertygrid editor for CEnums
     /// </summary>
-    public class EnumEditor : EditorBase<IEnumAccessor<Enum>>, IEnumEditor
+    public class EnumEditor : EditorBase<IEnumAccessor>, IEnumEditor
     {
         private protected override FrameworkElement CreateInnerElement(PropertyItem propertyItem)
         {
@@ -62,7 +62,8 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
 
             var box = new System.Windows.Controls.ComboBox
             {
-                IsEnabled = !propertyItem.IsReadOnly, ItemsSource = Enum.GetValues(wrappedenumtype)
+                IsEnabled = !propertyItem.IsReadOnly,
+                ItemsSource = Enum.GetValues(wrappedenumtype)
             };
             return box;
         }
