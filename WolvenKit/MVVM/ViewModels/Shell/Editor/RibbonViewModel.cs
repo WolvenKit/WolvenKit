@@ -84,12 +84,13 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             {
                 if (_selectedTheme != value)
                 {
+
                     var stringint = "RandomTheme" + rnd.Next(0, 9999) + "Name";
                     _selectedTheme = value;
                     var color = new SolidColorBrush(value);
-                    ControlzEx.Theming.ThemeManager.Current.AddTheme(new ControlzEx.Theming.Theme(stringint, "asfasf", "Dark", "Red", value, color, true, false));
-                    ControlzEx.Theming.ThemeManager.Current.AddTheme(ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", Colors.Red));
-                    ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, stringint);
+                    ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", value, false));
+
+
                     ILog _logger = LogManager.GetCurrentClassLogger();
 
                     _logger.Info("Changed theme : " + value.ToString());
@@ -97,6 +98,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 }
             }
         }
+
+
+
 
         #endregion properties
 
