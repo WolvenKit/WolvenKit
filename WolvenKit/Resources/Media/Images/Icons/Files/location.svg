@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="21px" viewBox="0 0 22 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Location</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#F5515F" offset="0%"></stop>
+            <stop stop-color="#9F041B" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" x="0" y="-1" width="22" height="22"></rect>
+        <path d="M11,1 C14.3137085,1 17,3.68736173 17,7.00239043 C17,10.3174191 12.4288793,19 11,19 C9.57112066,19 5,10.3174191 5,7.00239043 C5,3.68736173 7.6862915,1 11,1 Z M11,4 C9.34314575,4 8,5.34314575 8,7 C8,8.65685425 9.34314575,10 11,10 C12.6568542,10 14,8.65685425 14,7 C14,5.34314575 12.6568542,4 11,4 Z" id="Combined-Shape" fill="url(#linearGradient-1)"></path>
+    </g>
+</svg>

@@ -1,16 +1,35 @@
-using RED.CRC32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using CP77.CR2W.Types;
 
 namespace CP77.CR2W
 {
     public static class W3WriterExtensions
     {
+        #region Methods
+
+        /// <summary>
+        /// Padds until next page
+        /// </summary>
+        /// <param name="bw"></param>
+        /// <param name="pagesize"></param>
+        /// <param name="paddingbyte"></param>
+        public static void PadUntilPage(this BinaryWriter bw, int pagesize = 4096, byte paddingbyte = 0xD9)
+        {
+            var pos = bw.BaseStream.Position;
+            var mod = pos / 4096;
+            var diff = ((mod + 1) * 4096) - pos;
+
+            var buffer = new byte[diff];
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                buffer[i] = paddingbyte;
+            }
+
+            bw.Write(buffer);
+        }
 
         public static void WriteBit6(this BinaryWriter stream, int c)
         {
@@ -38,7 +57,6 @@ namespace CP77.CR2W
                     left = left >> 7;
                 }
             }
-
 
             for (var i = 0; i < bytes.Count; i++)
             {
@@ -69,38 +87,6 @@ namespace CP77.CR2W
                 stream.Write((byte)bytes[i]);
             }
         }
-
-        public static void WriteVLQInt32(this BinaryWriter bw, int value)
-        {
-            bool negative = value < 0;
-            value = Math.Abs(value);
-            byte b = (byte)(value & 0x3F);
-            value >>= 6;
-            if (negative)
-            {
-                b |= 0x80;
-            }
-            bool cont = value != 0;
-            if (cont)
-            {
-                b |= 0x40;
-            }
-            bw.Write(b);
-            while (cont)
-            {
-                b = (byte)(value & 0x7F);
-                value >>= 7;
-                cont = value != 0;
-                if (cont)
-                {
-                    b |= 0x80;
-                }
-                bw.Write(b);
-            }
-
-            
-        }
-
 
         /// <summary>
         /// Writes a string to a BinaryWriter Stream
@@ -197,7 +183,7 @@ namespace CP77.CR2W
             }
             bw.Write(b);
 
-            // continue 
+            // continue
             if (cont)
                 bw.Write((byte)div);
 
@@ -210,27 +196,35 @@ namespace CP77.CR2W
             bw.Write((byte)0x00);
         }
 
-        /// <summary>
-        /// Padds until next page
-        /// </summary>
-        /// <param name="bw"></param>
-        /// <param name="pagesize"></param>
-        /// <param name="paddingbyte"></param>
-        public static void PadUntilPage(this BinaryWriter bw, int pagesize = 4096, byte paddingbyte = 0xD9)
+        public static void WriteVLQInt32(this BinaryWriter bw, int value)
         {
-            var pos = bw.BaseStream.Position;
-            var mod = pos / 4096;
-            var diff = ((mod + 1) * 4096) - pos;
-
-            var buffer = new byte[diff];
-            for (int i = 0; i < buffer.Length; i++)
+            bool negative = value < 0;
+            value = Math.Abs(value);
+            byte b = (byte)(value & 0x3F);
+            value >>= 6;
+            if (negative)
             {
-                buffer[i] = paddingbyte;
+                b |= 0x80;
             }
-
-            bw.Write(buffer);
+            bool cont = value != 0;
+            if (cont)
+            {
+                b |= 0x40;
+            }
+            bw.Write(b);
+            while (cont)
+            {
+                b = (byte)(value & 0x7F);
+                value >>= 7;
+                cont = value != 0;
+                if (cont)
+                {
+                    b |= 0x80;
+                }
+                bw.Write(b);
+            }
         }
 
+        #endregion Methods
     }
-
 }

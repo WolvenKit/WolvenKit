@@ -43,7 +43,7 @@ namespace WolvenKit.CR2W.Types
                     //    packedObject = new SBlockDataCollisionObject(cr2w, this, nameof(SBlockDataCollisionObject));
                     //    break;
                     //}
-               
+
                 case Enums.BlockDataObjectType.Particles:
                     //{
                     //    packedObject = new SBlockDataParticles(cr2w, this, nameof(SBlockDataLight));
@@ -93,7 +93,7 @@ namespace WolvenKit.CR2W.Types
                         break;
                     }
             }
-            
+
             packedObject.Read(file, size - 56);
 
             var endp = file.BaseStream.Position;
@@ -103,7 +103,7 @@ namespace WolvenKit.CR2W.Types
             }
             else if (read > size)
             {
-                throw new InvalidParsingException("read too far");
+                throw new InvalidParsingException("Read too far.");
             }
         }
 
@@ -148,7 +148,7 @@ namespace WolvenKit.CR2W.Types
                         {
                             copy.packedObject = packedObject.Copy(context) as SBlockDataDecal;
                             break;
-                        }                        
+                        }
                     case Enums.BlockDataObjectType.Dimmer:
                         {
                             copy.packedObject = packedObject.Copy(context) as SBlockDataDimmer;
@@ -203,7 +203,7 @@ namespace WolvenKit.CR2W.Types
                     //        break;
                     //    }
                     //TODO: Add here the differnt copy methods
-                    
+
                     case Enums.BlockDataObjectType.Collision:
                         //{
                         //    baseobj.Add((SBlockDataCollisionObject)packedObject);
@@ -253,7 +253,7 @@ namespace WolvenKit.CR2W.Types
                         break;
                 }
                 return baseobj;
-            }                
+            }
             else
                 return base.GetEditableVariables();
         }

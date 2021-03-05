@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,38 +8,15 @@ namespace WolvenKit.Common.Oodle
 {
     public static class OodleHelper
     {
-        public const uint KARK = 1263681867; // 0x4b, 0x41, 0x52, 0x4b
+        #region Fields
 
+        public const uint KARK = 1263681867;
 
-        /// <summary>
-        /// Wrapper around Oodle Kraken Decompress. Decompresses an inputBuffer to an outputBuffer of correct size
-        /// </summary>
-        /// <param name="inputBuffer"></param>
-        /// <param name="outputBuffer"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public static int Decompress(byte[] inputBuffer, byte[] outputBuffer)
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                var r = OodleNative.OodleLZ_Decompress(inputBuffer, inputBuffer.Length, outputBuffer,
-                    outputBuffer.Length, OodleNative.OodleLZ_FuzzSafe.No, OodleNative.OodleLZ_CheckCRC.No,
-                    OodleNative.OodleLZ_Verbosity.None, 0, 0, 0, 0, 0, 0, OodleNative.OodleLZ_Decode.Unthreaded);
-                return r;
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
+        #endregion Fields
 
-                var r = OozNative.Kraken_Decompress(inputBuffer, inputBuffer.Length, outputBuffer,
-                    outputBuffer.Length);
-                return r;
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-        }
+        // 0x4b, 0x41, 0x52, 0x4b
 
+        #region Methods
 
         /// <summary>
         ///
@@ -122,7 +99,6 @@ namespace WolvenKit.Common.Oodle
                 outputBuffer = inputBytes;
                 return outputBuffer.Count();
 
-
                 // try
                 // {
                 //     var result = OozNative.Compress(
@@ -150,31 +126,26 @@ namespace WolvenKit.Common.Oodle
         }
 
         /// <summary>
-        /// Gets the max buffer size needed for oodle compression
+        /// Wrapper around Oodle Kraken Decompress. Decompresses an inputBuffer to an outputBuffer of correct size
         /// </summary>
-        /// <param name="count"></param>
+        /// <param name="inputBuffer"></param>
+        /// <param name="outputBuffer"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static int GetCompressedBufferSizeNeeded(int count)
+        public static int Decompress(byte[] inputBuffer, byte[] outputBuffer)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                var n = ((count + 0x3ffff + ((uint)(count + 0x3ffff >> 0x3f) & 0x3ffff))
-                        >> 0x12) * 0x112 + count;
-                //var n  = OodleNative.GetCompressedBufferSizeNeeded((long)count);
-                return (int)n;
+                var r = OodleNative.OodleLZ_Decompress(inputBuffer, inputBuffer.Length, outputBuffer,
+                    outputBuffer.Length, OodleNative.OodleLZ_FuzzSafe.No, OodleNative.OodleLZ_CheckCRC.No,
+                    OodleNative.OodleLZ_Verbosity.None, 0, 0, 0, 0, 0, 0, OodleNative.OodleLZ_Decode.Unthreaded);
+                return r;
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                try
-                {
-                    return OozNative.GetCompressedBufferSizeNeeded(count);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
+                var r = OozNative.Kraken_Decompress(inputBuffer, inputBuffer.Length, outputBuffer,
+                    outputBuffer.Length);
+                return r;
             }
             else
             {
@@ -217,7 +188,7 @@ namespace WolvenKit.Common.Oodle
                     if (unpackedSize != size)
                     {
                         throw new DecompressionException(
-                            $"Unpacked size {unpackedSize} doesn't match real size {size}");
+                            $"Unpacked size {unpackedSize} doesn't match real size {size}.");
                     }
 
                     outStream.Write(outputBuffer);
@@ -234,7 +205,6 @@ namespace WolvenKit.Common.Oodle
                     //     //    Logtype.Error);
                     //     stream.CopyTo(outStream);
                     // }
-
                 }
                 else
                 {
@@ -243,5 +213,40 @@ namespace WolvenKit.Common.Oodle
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the max buffer size needed for oodle compression
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static int GetCompressedBufferSizeNeeded(int count)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                var n = ((count + 0x3ffff + ((uint)(count + 0x3ffff >> 0x3f) & 0x3ffff))
+                        >> 0x12) * 0x112 + count;
+                //var n  = OodleNative.GetCompressedBufferSizeNeeded((long)count);
+                return (int)n;
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                try
+                {
+                    return OozNative.GetCompressedBufferSizeNeeded(count);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        #endregion Methods
     }
 }

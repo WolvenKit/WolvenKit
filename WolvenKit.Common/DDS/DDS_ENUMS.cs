@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.Common.DDS
+namespace WolvenKit.Common.DDS
 {
     public enum D3D10_RESOURCE_DIMENSION
     {
@@ -9,7 +9,6 @@
         D3D10_RESOURCE_DIMENSION_TEXTURE3D
     }
 
-    
     public enum DXGI_FORMAT
     {
         DXGI_FORMAT_UNKNOWN,

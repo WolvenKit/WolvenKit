@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -7,63 +6,34 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
-using CP77.CR2W.Archive;
-using Newtonsoft.Json;
-using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using CP77.CR2W;
+using CP77.CR2W.Archive;
 using CP77.CR2W.Reflection;
 using CP77.CR2W.Types;
+using Newtonsoft.Json;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
-    public class ArchiveDumpObject
-    {
-        public ConcurrentDictionary<ulong, Cr2wChunkInfo> FileDictionary { get; set; }
-        public ConcurrentDictionary<ulong, Cr2wTextureInfo> TextureDictionary { get; set; }
-        public string Filename { get; set; }
-    }
-
-    public class Cr2wChunkInfo
-    {
-        public Dictionary<uint, string> Stringdict { get; set; }
-        public List<CR2WImportWrapper> Imports { get; set; }
-        public List<CR2WBufferWrapper> Buffers { get; set; }
-
-        public List<CR2WExportWrapper> Chunks { get; set; }
-
-        public List<CR2WExportWrapper.Cr2wVariableDumpObject> ChunkData { get; } = new();
-
-        public string Filename { get; set; }
-    }
-
-    public class Cr2wTextureInfo
-    {
-        public string Filename { get; set; }
-
-        public ushort width { get; set; }
-        public ushort height { get; set; }
-        public byte mips { get; set; }
-        public ushort slicecount { get; set; }
-        public uint alignment { get; set; }
-        public CEnum<Enums.ETextureCompression> compression { get; set; }
-        public CEnum<Enums.GpuWrapApieTextureGroup> Group { get; set; }
-        public CEnum<Enums.ETextureRawFormat> rawFormat { get; set; }
-    }
-
-
     public static partial class ConsoleFunctions
     {
-        private static byte[] MAGIC = {0x43, 0x52, 0x32, 0x57};
+        #region Fields
 
-        public static void DumpTask(string[] path, bool imports, bool missinghashes, 
+        private static byte[] MAGIC = { 0x43, 0x52, 0x32, 0x57 };
+
+        #endregion Fields
+
+        #region Methods
+
+        public static void DumpTask(string[] path, bool imports, bool missinghashes,
             bool texinfo, bool classinfo, bool dump, bool list)
         {
             if (path == null || path.Length < 1)
             {
-                logger.LogString("Please fill in an input path", Logtype.Error);
+                logger.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
@@ -71,17 +41,16 @@ namespace CP77Tools.Tasks
             {
                 DumpTaskInner(file, imports, missinghashes, texinfo, classinfo, dump, list);
             });
-
         }
 
-        public static int DumpTaskInner(string path, bool imports, bool missinghashes, 
+        public static int DumpTaskInner(string path, bool imports, bool missinghashes,
             bool texinfo, bool classinfo, bool dump, bool list)
         {
             #region checks
 
             if (string.IsNullOrEmpty(path))
             {
-                ConsoleFunctions.logger.LogString("Please fill in an input path",Logtype.Error);
+                ConsoleFunctions.logger.LogString("Please fill in an input path.", Logtype.Error);
                 return 0;
             }
 
@@ -91,12 +60,17 @@ namespace CP77Tools.Tasks
             if (!inputFileInfo.Exists)
             {
                 if (!inputDirInfo.Exists)
+                {
                     return 0;
+                }
                 else
+                {
                     isDirectory = true;
+                }
             }
-            #endregion
-            
+
+            #endregion checks
+
             var archives = new List<Archive>();
 
             if (isDirectory)
@@ -109,8 +83,6 @@ namespace CP77Tools.Tasks
             {
                 archives.Add(new Archive(inputFileInfo.FullName));
             }
-
-            
 
             var mainController = ServiceLocator.Default.ResolveType<IHashService>();
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
@@ -135,8 +107,6 @@ namespace CP77Tools.Tasks
                             File = fileinfo.Where(_ => Path.GetExtension(_.FileName) == ext)
                         }).ToList();
 
-
-
                     var total = query.Count;
                     logger.LogString($"Exporting {total} bundle entries ");
 
@@ -155,7 +125,9 @@ namespace CP77Tools.Tasks
                                 ar.CopyFileToStream(ms, fi.NameHash64, false);
                                 var cr2w = ModTools.TryReadCr2WFile(ms);
                                 if (cr2w == null)
+                                {
                                     return;
+                                }
 
                                 foreach (var o in cr2w.Chunks.Select(chunk => (chunk as CR2WExportWrapper).GetDumpObject(ms))
                                     .Where(o => o != null))
@@ -164,14 +136,12 @@ namespace CP77Tools.Tasks
                                 }
                             });
                         }
-                        
+
                         Interlocked.Increment(ref progress);
                         logger.LogProgress(progress / (float)total);
 
                         logger.LogString($"Dumped extension {result.Key}", Logtype.Normal);
                     });
-
-
                 }
                 if (imports || texinfo)
                 {
@@ -201,7 +171,9 @@ namespace CP77Tools.Tasks
                             ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
                             var cr2w = ModTools.TryReadCr2WFileHeaders(ms);
                             if (cr2w == null)
+                            {
                                 return;
+                            }
 
                             var obj = new Cr2wChunkInfo
                             {
@@ -222,17 +194,19 @@ namespace CP77Tools.Tasks
 
                                 if (cr2w?.Chunks.FirstOrDefault()?.data is not CBitmapTexture xbm ||
                                     !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+                                {
                                     return;
+                                }
 
                                 // create dds header
                                 var texinfoObj = new Cr2wTextureInfo()
                                 {
                                     Filename = filename,
-                                    width = blob.Header.SizeInfo.Width.val,
-                                    height = blob.Header.SizeInfo.Height.val,
-                                    mips = blob.Header.TextureInfo.MipCount.val,
-                                    slicecount = blob.Header.TextureInfo.SliceCount.val,
-                                    alignment = blob.Header.TextureInfo.DataAlignment.val,
+                                    width = blob.Header.SizeInfo.Width.Value,
+                                    height = blob.Header.SizeInfo.Height.Value,
+                                    mips = blob.Header.TextureInfo.MipCount.Value,
+                                    slicecount = blob.Header.TextureInfo.SliceCount.Value,
+                                    alignment = blob.Header.TextureInfo.DataAlignment.Value,
                                     compression = xbm.Setup.Compression,
                                     Group = xbm.Setup.Group,
                                     rawFormat = xbm.Setup.RawFormat,
@@ -263,28 +237,32 @@ namespace CP77Tools.Tasks
                         foreach (var (key, value) in arobj.FileDictionary)
                         {
                             if (value.Imports == null)
+                            {
                                 continue;
+                            }
+
                             allimports.AddRange(value.Imports.Select(import => import.DepotPathStr));
                         }
                         foreach (var str in allimports.Distinct())
                         {
                             var hash = FNV1A64HashAlgorithm.HashString(str);
                             if (!mainController.Contains(hash))
+                            {
                                 hwriter.WriteLine($"{str},{hash}");
+                            }
                         }
 
                         logger.LogString($"Finished. Dump file written to {ar.ArchiveAbsolutePath}.", Logtype.Success);
 
                         //write
-                        File.WriteAllText($"{ar.ArchiveAbsolutePath}.json",
+                        File.WriteAllText($"{ar.ArchiveAbsolutePath}.json.",
                             JsonConvert.SerializeObject(arobj, Formatting.Indented, new JsonSerializerSettings()
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                                 PreserveReferencesHandling = PreserveReferencesHandling.None,
                                 TypeNameHandling = TypeNameHandling.None
                             }));
-                        logger.LogString($"Finished. Dump file written to {inputFileInfo.FullName}.json", Logtype.Success);
-
+                        logger.LogString($"Finished. Dump file written to {inputFileInfo.FullName}.json.", Logtype.Success);
                     }
 
                     if (texinfo)
@@ -300,7 +278,7 @@ namespace CP77Tools.Tasks
                         logger.LogString($"Finished. Dump file written to {inputFileInfo.FullName}.json", Logtype.Success);
                     }
                 }
-                
+
                 // TODO: add this here
                 if (dump)
                 {
@@ -346,9 +324,15 @@ namespace CP77Tools.Tasks
                         var nam = variableslist[i].Split(' ').Last();
                         var wktype = REDReflection.GetWKitBaseTypeFromREDBaseType(typ);
 
-                        if (string.IsNullOrEmpty(nam)) nam = "Missing";
-                        if (string.IsNullOrEmpty(typ)) typ = "Missing";
+                        if (string.IsNullOrEmpty(nam))
+                        {
+                            nam = "Missing";
+                        }
 
+                        if (string.IsNullOrEmpty(typ))
+                        {
+                            typ = "Missing";
+                        }
 
                         sb.Append($"\t[Ordinal({i})]  [RED(\"{nam}\")] public {wktype} {nam.FirstCharToUpper()} {{ get; set; }}\r\n");
                     }
@@ -393,12 +377,14 @@ namespace CP77Tools.Tasks
                 }
             }
 
-
             return 1;
 
             void Register(CR2WExportWrapper.Cr2wVariableDumpObject o)
             {
-                if (o?.Type == null) return;
+                if (o?.Type == null)
+                {
+                    return;
+                }
 
                 o.Variables ??= new List<CR2WExportWrapper.Cr2wVariableDumpObject>();
 
@@ -407,7 +393,10 @@ namespace CP77Tools.Tasks
                 {
                     var existing = typedict[o.Type];
                     var newlist = o.Variables.Select(_ => _.ToSimpleString());
-                    if (existing != null) vars = existing.Union(newlist);
+                    if (existing != null)
+                    {
+                        vars = existing.Union(newlist);
+                    }
                 }
                 typedict.AddOrUpdate(o.Type, vars, (arg1, ol) => ol);
 
@@ -428,15 +417,56 @@ namespace CP77Tools.Tasks
                         {
                             continue;
                         }
-
-                        
                     }
 
                     Register(oVariable);
                 }
             }
-
         }
+
+        #endregion Methods
+    }
+
+    public class ArchiveDumpObject
+    {
+        #region Properties
+
+        public ConcurrentDictionary<ulong, Cr2wChunkInfo> FileDictionary { get; set; }
+        public string Filename { get; set; }
+        public ConcurrentDictionary<ulong, Cr2wTextureInfo> TextureDictionary { get; set; }
+
+        #endregion Properties
+    }
+
+    public class Cr2wChunkInfo
+    {
+        #region Properties
+
+        public List<ICR2WBuffer> Buffers { get; set; }
+        public List<CR2WExportWrapper.Cr2wVariableDumpObject> ChunkData { get; } = new();
+        public List<CR2WExportWrapper> Chunks { get; set; }
+        public string Filename { get; set; }
+        public List<ICR2WImport> Imports { get; set; }
+        public Dictionary<uint, string> Stringdict { get; set; }
+
+        #endregion Properties
+    }
+
+    public class Cr2wTextureInfo
+    {
+        #region Properties
+
+        public uint alignment { get; set; }
+        public CEnum<Enums.ETextureCompression> compression { get; set; }
+        public string Filename { get; set; }
+
+        public CEnum<Enums.GpuWrapApieTextureGroup> Group { get; set; }
+        public ushort height { get; set; }
+        public byte mips { get; set; }
+        public CEnum<Enums.ETextureRawFormat> rawFormat { get; set; }
+        public ushort slicecount { get; set; }
+        public ushort width { get; set; }
+
+        #endregion Properties
     }
 }
-

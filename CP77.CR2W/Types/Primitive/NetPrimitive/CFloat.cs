@@ -1,43 +1,31 @@
-﻿using System.IO;
+using System.ComponentModel;
+using System.IO;
 using System.Runtime.Serialization;
 using CP77.CR2W.Reflection;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W.Types
 {
-    [REDMeta]
-    public class CFloat : CVariable, IREDPrimitive
+    [Editor(typeof(ITextEditor<float>), typeof(IPropertyEditorBase))]
+    public class CFloat : CVariable, IREDIntegerType, IEditorBindable<float>
     {
-        public CFloat()
-        {
-            
-        }
         public CFloat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        [DataMember]
-        public float val { get; set; }
+        public float Value { get; set; }
 
-        public override void Read(BinaryReader file, uint size)
-        {
-            val = file.ReadSingle();
-        }
+        public override void Read(BinaryReader file, uint size) => Value = file.ReadSingle();
 
-        public override void Write(BinaryWriter file)
-        {
-            file.Write(val);
-        }
+        public override void Write(BinaryWriter file) => file.Write(Value);
 
         public override CVariable SetValue(object val)
         {
-            switch (val)
+            this.Value = val switch
             {
-                case float o:
-                    this.val = o;
-                    break;
-                case CFloat cvar:
-                    this.val = cvar.val;
-                    break;
-            }
+                float o => o,
+                CFloat cvar => cvar.Value,
+                _ => this.Value
+            };
 
             return this;
         }
@@ -45,13 +33,10 @@ namespace CP77.CR2W.Types
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CFloat) base.Copy(context);
-            var.val = val;
+            var.Value = Value;
             return var;
         }
 
-        public override string ToString()
-        {
-            return val.ToString();
-        }
+        public override string ToString() => Value.ToString();
     }
 }

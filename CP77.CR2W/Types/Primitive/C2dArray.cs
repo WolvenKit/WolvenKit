@@ -27,14 +27,14 @@ namespace CP77.CR2W.Types
 
             // write header
             if (Headers?.Elements == null) return;
-            string headerline = string.Join(seperator, Headers.Elements.Select(_ => _.val));
+            string headerline = string.Join(seperator, Headers.Elements.Select(_ => _.Value));
             writer.WriteLine(headerline);
             
             // write body
             if (Data?.Elements == null) return;
             foreach (var dataElement in Data.Elements)
             {
-                string dataline = string.Join(seperator, dataElement.Elements.Select(_ => _.val));
+                string dataline = string.Join(seperator, dataElement.Elements.Select(_ => _.Value));
                 writer.WriteLine(dataline);
             }
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
@@ -32,61 +32,27 @@ namespace CP77.CR2W.Archive
             ReadTables();
         }
 
-        #endregion
+        #endregion constructors
 
         #region properties
-        public EArchiveType TypeName => EArchiveType.Archive;
-
-        public Header Header { get; set; }
-
-
-        public Index Index { get; set; }
-
 
         public string ArchiveAbsolutePath { get; set; }
+        public int FileCount => Files?.Count ?? 0;
 
         [JsonIgnore]
         public Dictionary<ulong, FileEntry> Files => Index?.FileEntries;
 
-        public int FileCount => Files?.Count ?? 0;
+        public Header Header { get; set; }
+        public Index Index { get; set; }
 
         [JsonIgnore]
         public string Name => Path.GetFileName(ArchiveAbsolutePath);
-        #endregion
+
+        public EArchiveType TypeName => EArchiveType.Archive;
+
+        #endregion properties
 
         #region methods
-
-        /// <summary>
-        /// Reads the tables info to the archive.
-        /// </summary>
-        private void ReadTables()
-        {
-            using var mmf = MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open);
-
-            using (var vs = mmf.CreateViewStream(
-                0, Header.SIZE, MemoryMappedFileAccess.Read))
-            {
-                Header = new Header(new BinaryReader(vs));
-            }
-
-            using (var vs = mmf.CreateViewStream(
-                (long)Header.IndexPosition, Header.IndexSize, MemoryMappedFileAccess.Read))
-            {
-                Index = new Index(new BinaryReader(vs), this);
-            }
-        }
-
-        /// <summary>
-        /// Serializes this archive to a redengine .archive file
-        /// </summary>
-        public void Serialize()
-        {
-
-
-
-
-        }
-
 
         public bool CanUncook(ulong hash)
         {
@@ -99,7 +65,7 @@ namespace CP77.CR2W.Archive
             var hasBuffers = (archiveItem.SegmentsEnd - archiveItem.SegmentsStart) > 1;
 
             var values = Enum.GetNames(typeof(ECookedFileFormat));
-            var b = values.Any(e => e == Path.GetExtension(Files[hash].FileName)?[1..]) || hasBuffers ;
+            var b = values.Any(e => e == Path.GetExtension(Files[hash].FileName)?[1..]) || hasBuffers;
             return b;
         }
 
@@ -126,6 +92,13 @@ namespace CP77.CR2W.Archive
         }
 
         /// <summary>
+        /// Serializes this archive to a redengine .archive file
+        /// </summary>
+        public void Serialize()
+        {
+        }
+
+        /// <summary>
         /// Extracts a FileSegment from the archive to a stream
         /// </summary>
         /// <param name="outStream"></param>
@@ -149,9 +122,27 @@ namespace CP77.CR2W.Archive
                 vs.DecompressAndCopySegment(outStream, zSize, size);
             }
         }
-        #endregion
+
+        /// <summary>
+        /// Reads the tables info to the archive.
+        /// </summary>
+        private void ReadTables()
+        {
+            using var mmf = MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open);
+
+            using (var vs = mmf.CreateViewStream(
+                0, Header.SIZE, MemoryMappedFileAccess.Read))
+            {
+                Header = new Header(new BinaryReader(vs));
+            }
+
+            using (var vs = mmf.CreateViewStream(
+                (long)Header.IndexPosition, Header.IndexSize, MemoryMappedFileAccess.Read))
+            {
+                Index = new Index(new BinaryReader(vs), this);
+            }
+        }
+
+        #endregion methods
     }
 }
-
-
-

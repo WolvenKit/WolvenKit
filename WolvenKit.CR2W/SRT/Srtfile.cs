@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -14,12 +14,14 @@ using WolvenKit.Common.Model.Cr2w;
 namespace WolvenKit.CR2W.SRT
 {
     /// <summary>
-    /// kinda wrong to make it inherit from cr2w but that way I can force it into a frmCr2wdocument 
+    /// kinda wrong to make it inherit from cr2w but that way I can force it into a frmCr2wdocument
     /// otherwise design a new form *sigh*
-    /// better: have an IWitcherFile interface 
+    /// better: have an IWitcherFile interface
     /// </summary>
     public class Srtfile : ObservableObject, IWolvenkitFile
     {
+        #region Constructors
+
         public Srtfile()
         {
             Extents = new CExtents();
@@ -35,47 +37,47 @@ namespace WolvenKit.CR2W.SRT
             Geometry = new SGeometry();
         }
 
-
+        #endregion Constructors
 
         #region Properties
-        public CExtents Extents { get; set; }
-        public SLodProfile LodProfile { get; set; }
-        public CWind Wind { get; set; }
-        
 
-        public string[] StringTable { get; set; }
+        public List<ICR2WBuffer> Buffers => throw new NotImplementedException();
+        public List<ICR2WExport> Chunks => throw new NotImplementedException();
         public SCollisionObject[] CollisionObjects { get; set; }
-        public SVerticalBillboards VerticalBillboards { get; set; }
-        public SHorizontalBillboard HorizontalBillboard { get; set; }
-
-        public string[] PUserStrings { get; set; }
-
-        public SGeometry Geometry { get; set; }
-
+        public CExtents Extents { get; set; }
 
         [Browsable(false)]
         public string FileName { get; set; }
 
-        public List<ICR2WExport> Chunks => throw new NotImplementedException();
-        #endregion
+        public SGeometry Geometry { get; set; }
+        public SHorizontalBillboard HorizontalBillboard { get; set; }
+        public List<ICR2WImport> Imports => throw new NotImplementedException();
+        public SLodProfile LodProfile { get; set; }
+        public string[] PUserStrings { get; set; }
+        public string[] StringTable { get; set; }
+        public SVerticalBillboards VerticalBillboards { get; set; }
+        public CWind Wind { get; set; }
 
+        #endregion Properties
 
         #region Fields
-        private Stream m_stream;
+
+        private const int c_nFixedStringLength = 256;
+        private const int c_nSizeOfFloat = 4;
+        private const int c_nSizeOfInt = 4;
+        private const int c_nSrtHeaderLength = 16;
+        private const string c_pSrtHeader = "SRT 07.0.0";
         private bool m_bFileIsBigEndian;
         private bool m_bTexCoordsFlipped;
-        private const int c_nSrtHeaderLength = 16;
-        const string c_pSrtHeader = "SRT 07.0.0";
-        const int c_nSizeOfInt = 4;
-        const int c_nSizeOfFloat = 4;
-        const int c_nFixedStringLength = 256;
-        #endregion
+        private Stream m_stream;
+
+        #endregion Fields
 
         #region Read
+
         public EFileReadErrorCodes Read(BinaryReader br)
         {
             m_stream = br.BaseStream;
-
 
             if (ParseHeader(br) &&
                     ParsePlatform(br) &&
@@ -105,69 +107,9 @@ namespace WolvenKit.CR2W.SRT
         private long GetRemainingLength() => m_stream.Length - m_stream.Position;
 
         #region Block 1
-        ///////////////////////////////////////////////////////////////////////  
+
+        ///////////////////////////////////////////////////////////////////////
         //  CParser::ParseHeader
-
-        private bool ParseHeader(BinaryReader br)
-        {
-            bool bSuccess = false;
-            var startpos = br.BaseStream.Position;
-            if (GetRemainingLength() >= c_nSrtHeaderLength)
-            {
-                // 16 bytes reserved
-                string cHeader = Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(16));
-                if (cHeader.TrimEnd((char)0x00) == c_pSrtHeader)
-                {
-                    bSuccess = true;
-                }
-                //else
-                //CCore::SetError("CParser::ParseHeader, expected header [%s] but got [%s]\n", c_pSrtHeader, cHeader.c_str());
-
-                if (br.BaseStream.Position - startpos != c_nSrtHeaderLength)
-                    throw new NotImplementedException();
-            }
-            //else
-                //CCore::SetError("CParser::ParseHeader, premature end-of-file\n");
-
-            return bSuccess;
-        }
-
-        ///////////////////////////////////////////////////////////////////////  
-        //  CParser::ParsePlatform
-
-        private bool ParsePlatform(BinaryReader br)
-        {
-            bool bSuccess = false;
-            var startpos = br.BaseStream.Position;
-            if (GetRemainingLength() >= 2 * c_nSizeOfInt)   // parser.cpp uses 2 * size_of_int, but actually only 4 bytes are read?
-            {
-                m_bFileIsBigEndian = (br.ReadByte() != 0);
-
-                if (m_bFileIsBigEndian)
-                    throw new NotImplementedException();
-
-                // coordinate system
-                int nCoordSysEnum = (int)(br.ReadByte());
-                if (nCoordSysEnum != 0)
-                    throw new NotImplementedException();
-
-                // texcoords flipped flag
-                m_bTexCoordsFlipped = (br.ReadByte() == 1);
-
-                br.ReadByte();  // reserved
-
-                bSuccess = true;
-                if (br.BaseStream.Position - startpos !=  c_nSizeOfInt)     
-                    throw new NotImplementedException();
-            }
-            //else
-            //    CCore::SetError("CParser::ParsePlatform, premature end-of-file\n");
-
-            return bSuccess;
-        }
-
-        ///////////////////////////////////////////////////////////////////////  
-        //  CParser::ParseExtents
 
         private bool ParseExtents(BinaryReader br)
         {
@@ -175,7 +117,6 @@ namespace WolvenKit.CR2W.SRT
             var startpos = br.BaseStream.Position;
             if (GetRemainingLength() >= 6 * c_nSizeOfFloat)
             {
-
                 // min
                 Extents.m_cExtents[0] = br.ReadSingle();
                 Extents.m_cExtents[1] = br.ReadSingle();
@@ -199,8 +140,32 @@ namespace WolvenKit.CR2W.SRT
             return bSuccess;
         }
 
-        ///////////////////////////////////////////////////////////////////////  
-        //  CParser::ParseLOD
+        private bool ParseHeader(BinaryReader br)
+        {
+            bool bSuccess = false;
+            var startpos = br.BaseStream.Position;
+            if (GetRemainingLength() >= c_nSrtHeaderLength)
+            {
+                // 16 bytes reserved
+                string cHeader = Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(16));
+                if (cHeader.TrimEnd((char)0x00) == c_pSrtHeader)
+                {
+                    bSuccess = true;
+                }
+                //else
+                //CCore::SetError("CParser::ParseHeader, expected header [%s] but got [%s]\n", c_pSrtHeader, cHeader.c_str());
+
+                if (br.BaseStream.Position - startpos != c_nSrtHeaderLength)
+                    throw new NotImplementedException();
+            }
+            //else
+            //CCore::SetError("CParser::ParseHeader, premature end-of-file\n");
+
+            return bSuccess;
+        }
+
+        ///////////////////////////////////////////////////////////////////////
+        //  CParser::ParsePlatform
 
         private bool ParseLOD(BinaryReader br)
         {
@@ -224,7 +189,42 @@ namespace WolvenKit.CR2W.SRT
             return bSuccess;
         }
 
-        ///////////////////////////////////////////////////////////////////////  
+        private bool ParsePlatform(BinaryReader br)
+        {
+            bool bSuccess = false;
+            var startpos = br.BaseStream.Position;
+            if (GetRemainingLength() >= 2 * c_nSizeOfInt)   // parser.cpp uses 2 * size_of_int, but actually only 4 bytes are read?
+            {
+                m_bFileIsBigEndian = (br.ReadByte() != 0);
+
+                if (m_bFileIsBigEndian)
+                    throw new NotImplementedException();
+
+                // coordinate system
+                int nCoordSysEnum = (int)(br.ReadByte());
+                if (nCoordSysEnum != 0)
+                    throw new NotImplementedException();
+
+                // texcoords flipped flag
+                m_bTexCoordsFlipped = (br.ReadByte() == 1);
+
+                br.ReadByte();  // reserved
+
+                bSuccess = true;
+                if (br.BaseStream.Position - startpos != c_nSizeOfInt)
+                    throw new NotImplementedException();
+            }
+            //else
+            //    CCore::SetError("CParser::ParsePlatform, premature end-of-file\n");
+
+            return bSuccess;
+        }
+
+        ///////////////////////////////////////////////////////////////////////
+        //  CParser::ParseExtents
+        ///////////////////////////////////////////////////////////////////////
+        //  CParser::ParseLOD
+        ///////////////////////////////////////////////////////////////////////
         //  CParser::ParseWind
 
         private bool ParseWind(BinaryReader br)
@@ -279,12 +279,10 @@ namespace WolvenKit.CR2W.SRT
                             if (br.BaseStream.Position - startpos != (3 + 1) * c_nSizeOfFloat)
                                 throw new NotImplementedException();
                         }
-
                     }
                 }
                 catch (Exception)
                 {
-
                     bSuccess = false;
                 }
             }
@@ -293,362 +291,13 @@ namespace WolvenKit.CR2W.SRT
 
             return bSuccess;
         }
-        #endregion
+
+        #endregion Block 1
 
         #region Block 2
-        ///////////////////////////////////////////////////////////////////////  
+
+        ///////////////////////////////////////////////////////////////////////
         //  CParser::ParseStringTable
-
-        private bool ParseStringTable(BinaryReader br)
-        {
-            bool bSuccess = false;
-            if (GetRemainingLength() >= c_nSizeOfInt)
-            {
-                var m_nNumStringsInTable = br.ReadInt32();
-                if (GetRemainingLength() >= 256 * c_nSizeOfInt)
-                {
-                    // what's written here:
-                    //
-                    //	N = # strings (m_nNumStringsInTable above)
-                    //
-                    //	for each N
-                    //		<padded string length>
-                    //
-                    //	<padded string length> =
-                    //		<4-byte pad>
-                    //		<4-byte length of string>
-                    //
-                    //	for each N
-                    //		<characters of string>
-                    //		<padded for alignment>
-
-                    int[] stringlengths = new int[m_nNumStringsInTable];
-                    for (int i = 0; i < m_nNumStringsInTable; i++)
-                    {
-                        var pad = br.ReadInt32();
-                        var len = br.ReadInt32();
-                        stringlengths[i] = len;
-                    }
-
-                    var strings = new string[m_nNumStringsInTable];
-                    for (int i = 0; i < m_nNumStringsInTable; i++)
-                    {
-                        strings[i] = Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(stringlengths[i])).TrimEnd((char)0x00);
-                    }
-                    StringTable = new string[strings.Length];
-                    StringTable = strings;
-
-                    bSuccess = true;
-                }
-            }
-            //else
-            //    CCore::SetError("CParser::ParseStringTable, premature end-of-file\n");
-
-            return bSuccess;
-        }
-
-        ///////////////////////////////////////////////////////////////////////  
-        //  CParser::ParseCollisionObjects
-
-        private bool ParseCollisionObjects(BinaryReader br)
-        {
-            bool bSuccess = false;
-            var startpos = br.BaseStream.Position;
-            if (GetRemainingLength() >= c_nSizeOfInt)
-            {
-                var m_nNumCollisionObjects = br.ReadInt32();
-
-                if (m_nNumCollisionObjects == 0)
-                    return true;
-
-                if (br.BaseStream.Position - startpos != c_nSizeOfInt)
-                    throw new NotImplementedException();
-                startpos = br.BaseStream.Position;
-
-                if (GetRemainingLength() >= m_nNumCollisionObjects * Marshal.SizeOf<SCollisionObject>())
-                {
-                    CollisionObjects = new SCollisionObject[m_nNumCollisionObjects];
-                    for (int i = 0; i < m_nNumCollisionObjects; i++)
-                    {
-                        CollisionObjects[i] = br.BaseStream.ReadStruct<SCollisionObject>();
-                    }
-
-                    bSuccess = true;
-                    if (br.BaseStream.Position - startpos != m_nNumCollisionObjects * Marshal.SizeOf<SCollisionObject>())
-                        throw new NotImplementedException();
-                }
-
-            }
-            //else
-            //    CCore::SetError("CParser::ParseCollisionObjects, premature end-of-file\n");
-
-            return bSuccess;
-        }
-
-
-        ///////////////////////////////////////////////////////////////////////  
-        //  CParser::ParseBillboards
-
-        private bool ParseBillboards(BinaryReader br)
-        {
-            bool bSuccess = false;
-            var startpos = br.BaseStream.Position;
-
-            // vertical billboards
-            if (GetRemainingLength() >= 2 * c_nSizeOfInt + 3 * c_nSizeOfFloat)
-            {
-                SVerticalBillboards sBBs = new SVerticalBillboards();
-
-                // parse dimensions
-                sBBs.FWidth = br.ReadSingle();
-                sBBs.FTopPos = br.ReadSingle();
-                sBBs.FBottomPos = br.ReadSingle();
-                sBBs.NNumBillboards = br.ReadInt32();
-
-                // texcoord table
-                if (m_stream.Position % 4 != 0) throw new NotImplementedException(); // check alignment
-                sBBs.PTexCoords = new float[sBBs.NNumBillboards * 4];
-                for (int i = 0; i < sBBs.NNumBillboards * 4; i++)
-                {
-                    sBBs.PTexCoords[i] = br.ReadSingle();
-                    //sBBs.PTexCoords[1] = br.ReadSingle();
-                    //sBBs.PTexCoords[2] = br.ReadSingle();
-                    //sBBs.PTexCoords[3] = br.ReadSingle();
-                }
-
-                // rotated flags
-                sBBs.PRotated = new byte[sBBs.NNumBillboards];
-                for (int i = 0; i < sBBs.NNumBillboards; i++)
-                {
-                    sBBs.PRotated[i] = br.ReadByte();
-                }
-                ParseUntilAligned(br);
-
-                // cutout values
-                sBBs.NNumCutoutVertices = br.ReadInt32();
-                sBBs.NNumCutoutIndices = br.ReadInt32();
-                if (sBBs.NNumCutoutVertices > 0 && sBBs.NNumCutoutIndices > 0)
-                {
-                    // interp float pairs
-                    sBBs.PCutoutVertices = new float[2 * sBBs.NNumCutoutVertices];
-                    for (int i = 0; i < (2 * sBBs.NNumCutoutVertices); i++)
-                    {
-                        sBBs.PCutoutVertices[i] = br.ReadSingle();
-                    }
-
-                    // interp indices
-                    sBBs.PCutoutIndices = new ushort[sBBs.NNumCutoutIndices];
-                    for (int i = 0; i < sBBs.NNumCutoutIndices; i++)
-                    {
-                        sBBs.PCutoutIndices[i] = br.ReadUInt16();
-                    }
-                    ParseUntilAligned(br);
-                }
-
-                VerticalBillboards = sBBs;
-                bSuccess = true;
-
-                //if (br.BaseStream.Position - startpos != 2 * c_nSizeOfInt + 3 * c_nSizeOfFloat)
-                //    throw new NotImplementedException();
-            }
-            //else
-            //    CCore::SetError("CParser::ParseBillboards, premature end-of-file\n");
-
-
-            // horizontal billboards
-            startpos = br.BaseStream.Position;
-            if (GetRemainingLength() >= c_nSizeOfInt + (8 + 12) * c_nSizeOfFloat)
-            {
-                var sbb = new SHorizontalBillboard();
-                sbb.BPresent = (br.ReadInt32() != 0);
-
-                // texcoords
-                sbb.AfTexCoords = new float[8];
-                for (int i = 0; i < 8; i++)
-                {
-                    sbb.AfTexCoords[i] = br.ReadSingle();
-                }
-
-                // positions
-                sbb.AvPositions = new Vec3[4];
-                for (int i = 0; i < 4; i++)
-                {
-                    Vec3 vec = br.BaseStream.ReadStruct<Vec3>();
-                    sbb.AvPositions[i] = vec;
-                }
-                HorizontalBillboard = sbb;
-
-                if (br.BaseStream.Position - startpos != c_nSizeOfInt + (8 + 12) * c_nSizeOfFloat)
-                    throw new NotImplementedException();
-            }
-            else
-                bSuccess = false;
-            //    CCore::SetError("CParser::ParseBillboards, premature end-of-file\n");
-
-            return bSuccess;
-        }
-
-
-        ///////////////////////////////////////////////////////////////////////  
-        //  CParser::ParseCustomData
-
-        private bool ParseCustomData(BinaryReader br)
-        {
-            bool bSuccess = false;
-            var startpos = br.BaseStream.Position;
-            if (GetRemainingLength() >= c_nSizeOfInt * (int)EUserStringOrdinal.USER_STRING_COUNT)
-            {
-                bSuccess = true;
-                for (int i = 0; i < (int)EUserStringOrdinal.USER_STRING_COUNT; i++)
-                {
-                    int idx = br.ReadInt32();
-                    PUserStrings[i] = StringTable[idx];
-                }
-
-                if (br.BaseStream.Position - startpos != c_nSizeOfInt * (int)EUserStringOrdinal.USER_STRING_COUNT)
-                    throw new NotImplementedException();
-            }
-            //else
-            //    CCore::SetError("CParser::ParseCustomData, premature end-of-file\n");
-
-            return bSuccess;
-        }
-
-        ///////////////////////////////////////////////////////////////////////  
-        //  CParser::ParseRenderStates
-
-        private bool ParseRenderStates(BinaryReader br)
-        {
-            bool bSuccess = false;
-            var startpos = br.BaseStream.Position;
-            if (GetRemainingLength() >= 3 * c_nSizeOfInt)
-            {
-                Geometry.NNum3dRenderStates = br.ReadInt32();
-                Geometry.BDepthOnlyIncluded = (br.ReadInt32() == 1);
-                Geometry.BShadowCastIncluded = (br.ReadInt32() == 1);
-
-                // parse shader path
-                Geometry.StrShaderPath = StringTable[br.ReadInt32()];
-
-
-                // parse 3d lighting render states
-                Geometry.P3dRenderStateMain = new SRenderState[Geometry.NNum3dRenderStates];
-                Geometry.P3dRenderStateDepth = new SRenderState[Geometry.NNum3dRenderStates];
-                Geometry.P3dRenderStateShadow = new SRenderState[Geometry.NNum3dRenderStates];
-                Geometry.ABillboardRenderStateMain = new SRenderState();
-                Geometry.ABillboardRenderStateDepth = new SRenderState();
-                Geometry.ABillboardRenderStateShadow = new SRenderState();
-
-                bSuccess = ParseRenderStateBlock(ERenderPass.RENDER_PASS_MAIN, Geometry.NNum3dRenderStates, br);
-
-                // parse 3d depth-only render states
-                if (Geometry.BDepthOnlyIncluded)
-                    bSuccess &= ParseRenderStateBlock(ERenderPass.RENDER_PASS_DEPTH_PREPASS, Geometry.NNum3dRenderStates, br);
-
-                // parse 3d shadow cast render states
-                if (Geometry.BShadowCastIncluded)
-                    bSuccess &= ParseRenderStateBlock(ERenderPass.RENDER_PASS_SHADOW_CAST, Geometry.NNum3dRenderStates, br);
-
-                // billboard lighting render state
-                bSuccess &= ParseAndCopyRenderState(ERenderPass.RENDER_PASS_MAIN, br);
-
-                // billboard depth-only render state
-                if (Geometry.BDepthOnlyIncluded)
-                    bSuccess &= ParseAndCopyRenderState(ERenderPass.RENDER_PASS_DEPTH_PREPASS, br);
-
-                // billboard shadow cast render state
-                if (Geometry.BShadowCastIncluded)
-                    bSuccess &= ParseAndCopyRenderState(ERenderPass.RENDER_PASS_SHADOW_CAST, br);
-
-
-            }
-            //else
-            //    CCore::SetError("CParser::ParseRenderStates, premature end-of-file\n");
-
-            return bSuccess;
-        }
-
-        ///////////////////////////////////////////////////////////////////////  
-        //  CParser::ParseRenderStateBlock
-
-        bool ParseRenderStateBlock(ERenderPass blockid, int nNumStates, BinaryReader br)
-        {
-            bool bSuccess = false;
-            var startpos = m_stream.Position;
-            var t = Marshal.SizeOf<SRenderState>();
-            if (GetRemainingLength() >= 720 * nNumStates)
-            {
-                for (int i = 0; i < nNumStates; i++)
-                {
-                    switch (blockid)
-                    {
-                        case ERenderPass.RENDER_PASS_MAIN:
-                            Geometry.P3dRenderStateMain[i].Read(br, StringTable.ToList());
-                            break;
-                        case ERenderPass.RENDER_PASS_DEPTH_PREPASS:
-                            Geometry.P3dRenderStateDepth[i].Read(br, StringTable.ToList());
-                            break;
-                        case ERenderPass.RENDER_PASS_SHADOW_CAST:
-                            Geometry.P3dRenderStateShadow[i].Read(br, StringTable.ToList());
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                if (m_stream.Position - startpos != 720 * nNumStates)
-                    throw new NotImplementedException();
-                bSuccess = true;
-            }
-            //else
-            //    CCore::SetError("CParser::ParseRenderStateBlock, premature end-of-file\n");
-
-            return bSuccess;
-        }
-
-        ///////////////////////////////////////////////////////////////////////  
-        //  CParser::ParseAndCopyRenderState
-
-        bool ParseAndCopyRenderState(ERenderPass blockid, BinaryReader br)
-        {
-            bool bSuccess = false;
-            var startpos = m_stream.Position;
-            if (GetRemainingLength() >= /*Marshal.SizeOf<SRenderState>()*/720)
-            {
-                switch (blockid)
-                {
-                    case ERenderPass.RENDER_PASS_MAIN:
-                        var temp_renderstatem = new SRenderState();
-                        temp_renderstatem.Read(br, StringTable.ToList());
-                        Geometry.ABillboardRenderStateMain = temp_renderstatem;
-                        break;
-                    case ERenderPass.RENDER_PASS_DEPTH_PREPASS:
-                        var temp_renderstated = new SRenderState();
-                        temp_renderstated.Read(br, StringTable.ToList());
-                        Geometry.ABillboardRenderStateDepth = temp_renderstated;
-                        break;
-                    case ERenderPass.RENDER_PASS_SHADOW_CAST:
-                        var temp_renderstates = new SRenderState();
-                        temp_renderstates.Read(br, StringTable.ToList());
-                        Geometry.ABillboardRenderStateShadow = temp_renderstates;
-                        break;
-                    default:
-                        break;
-                }
-
-                if (m_stream.Position - startpos != /*Marshal.SizeOf<SRenderState>()*/720)
-                    throw new NotImplementedException();
-                bSuccess = true;
-            }
-            //else
-            //    CCore::SetError("CParser::ParseAndCopyRenderState, premature end-of-file\n");
-
-            return bSuccess;
-        }
-
-
-        ///////////////////////////////////////////////////////////////////////  
-        //  CParser::Parse3dGeometry
 
         private bool Parse3dGeometry(BinaryReader br)
         {
@@ -672,10 +321,10 @@ namespace WolvenKit.CR2W.SRT
                         // but since the serialized pointer data is just null bytes that's fine
 
                         SLod lod = new SLod();
-                        lod.NNumDrawCalls = br.ReadInt32();     
-                        br.ReadBytes(8);                        // CDrawCallPointer 
-                        lod.NNumBones = br.ReadInt32();         
-                        br.ReadBytes(8);                        // CBonePointer 
+                        lod.NNumDrawCalls = br.ReadInt32();
+                        br.ReadBytes(8);                        // CDrawCallPointer
+                        lod.NNumBones = br.ReadInt32();
+                        br.ReadBytes(8);                        // CBonePointer
 
                         Geometry.PLods[i] = lod;
                     }
@@ -725,17 +374,362 @@ namespace WolvenKit.CR2W.SRT
                     }
                     bSuccess = true;
                 }
-
             }
             //else
             //    CCore::SetError("CParser::Parse3dGeometry, premature end-of-file\n");
 
             return bSuccess;
         }
-        #endregion
+
+        private bool ParseAndCopyRenderState(ERenderPass blockid, BinaryReader br)
+        {
+            bool bSuccess = false;
+            var startpos = m_stream.Position;
+            if (GetRemainingLength() >= /*Marshal.SizeOf<SRenderState>()*/720)
+            {
+                switch (blockid)
+                {
+                    case ERenderPass.RENDER_PASS_MAIN:
+                        var temp_renderstatem = new SRenderState();
+                        temp_renderstatem.Read(br, StringTable.ToList());
+                        Geometry.ABillboardRenderStateMain = temp_renderstatem;
+                        break;
+
+                    case ERenderPass.RENDER_PASS_DEPTH_PREPASS:
+                        var temp_renderstated = new SRenderState();
+                        temp_renderstated.Read(br, StringTable.ToList());
+                        Geometry.ABillboardRenderStateDepth = temp_renderstated;
+                        break;
+
+                    case ERenderPass.RENDER_PASS_SHADOW_CAST:
+                        var temp_renderstates = new SRenderState();
+                        temp_renderstates.Read(br, StringTable.ToList());
+                        Geometry.ABillboardRenderStateShadow = temp_renderstates;
+                        break;
+
+                    default:
+                        break;
+                }
+
+                if (m_stream.Position - startpos != /*Marshal.SizeOf<SRenderState>()*/720)
+                    throw new NotImplementedException();
+                bSuccess = true;
+            }
+            //else
+            //    CCore::SetError("CParser::ParseAndCopyRenderState, premature end-of-file\n");
+
+            return bSuccess;
+        }
+
+        private bool ParseBillboards(BinaryReader br)
+        {
+            bool bSuccess = false;
+            var startpos = br.BaseStream.Position;
+
+            // vertical billboards
+            if (GetRemainingLength() >= 2 * c_nSizeOfInt + 3 * c_nSizeOfFloat)
+            {
+                SVerticalBillboards sBBs = new SVerticalBillboards();
+
+                // parse dimensions
+                sBBs.FWidth = br.ReadSingle();
+                sBBs.FTopPos = br.ReadSingle();
+                sBBs.FBottomPos = br.ReadSingle();
+                sBBs.NNumBillboards = br.ReadInt32();
+
+                // texcoord table
+                if (m_stream.Position % 4 != 0)
+                    throw new NotImplementedException(); // check alignment
+                sBBs.PTexCoords = new float[sBBs.NNumBillboards * 4];
+                for (int i = 0; i < sBBs.NNumBillboards * 4; i++)
+                {
+                    sBBs.PTexCoords[i] = br.ReadSingle();
+                    //sBBs.PTexCoords[1] = br.ReadSingle();
+                    //sBBs.PTexCoords[2] = br.ReadSingle();
+                    //sBBs.PTexCoords[3] = br.ReadSingle();
+                }
+
+                // rotated flags
+                sBBs.PRotated = new byte[sBBs.NNumBillboards];
+                for (int i = 0; i < sBBs.NNumBillboards; i++)
+                {
+                    sBBs.PRotated[i] = br.ReadByte();
+                }
+                ParseUntilAligned(br);
+
+                // cutout values
+                sBBs.NNumCutoutVertices = br.ReadInt32();
+                sBBs.NNumCutoutIndices = br.ReadInt32();
+                if (sBBs.NNumCutoutVertices > 0 && sBBs.NNumCutoutIndices > 0)
+                {
+                    // interp float pairs
+                    sBBs.PCutoutVertices = new float[2 * sBBs.NNumCutoutVertices];
+                    for (int i = 0; i < (2 * sBBs.NNumCutoutVertices); i++)
+                    {
+                        sBBs.PCutoutVertices[i] = br.ReadSingle();
+                    }
+
+                    // interp indices
+                    sBBs.PCutoutIndices = new ushort[sBBs.NNumCutoutIndices];
+                    for (int i = 0; i < sBBs.NNumCutoutIndices; i++)
+                    {
+                        sBBs.PCutoutIndices[i] = br.ReadUInt16();
+                    }
+                    ParseUntilAligned(br);
+                }
+
+                VerticalBillboards = sBBs;
+                bSuccess = true;
+
+                //if (br.BaseStream.Position - startpos != 2 * c_nSizeOfInt + 3 * c_nSizeOfFloat)
+                //    throw new NotImplementedException();
+            }
+            //else
+            //    CCore::SetError("CParser::ParseBillboards, premature end-of-file\n");
+
+            // horizontal billboards
+            startpos = br.BaseStream.Position;
+            if (GetRemainingLength() >= c_nSizeOfInt + (8 + 12) * c_nSizeOfFloat)
+            {
+                var sbb = new SHorizontalBillboard();
+                sbb.BPresent = (br.ReadInt32() != 0);
+
+                // texcoords
+                sbb.AfTexCoords = new float[8];
+                for (int i = 0; i < 8; i++)
+                {
+                    sbb.AfTexCoords[i] = br.ReadSingle();
+                }
+
+                // positions
+                sbb.AvPositions = new Vec3[4];
+                for (int i = 0; i < 4; i++)
+                {
+                    Vec3 vec = br.BaseStream.ReadStruct<Vec3>();
+                    sbb.AvPositions[i] = vec;
+                }
+                HorizontalBillboard = sbb;
+
+                if (br.BaseStream.Position - startpos != c_nSizeOfInt + (8 + 12) * c_nSizeOfFloat)
+                    throw new NotImplementedException();
+            }
+            else
+                bSuccess = false;
+            //    CCore::SetError("CParser::ParseBillboards, premature end-of-file\n");
+
+            return bSuccess;
+        }
+
+        private bool ParseCollisionObjects(BinaryReader br)
+        {
+            bool bSuccess = false;
+            var startpos = br.BaseStream.Position;
+            if (GetRemainingLength() >= c_nSizeOfInt)
+            {
+                var m_nNumCollisionObjects = br.ReadInt32();
+
+                if (m_nNumCollisionObjects == 0)
+                    return true;
+
+                if (br.BaseStream.Position - startpos != c_nSizeOfInt)
+                    throw new NotImplementedException();
+                startpos = br.BaseStream.Position;
+
+                if (GetRemainingLength() >= m_nNumCollisionObjects * Marshal.SizeOf<SCollisionObject>())
+                {
+                    CollisionObjects = new SCollisionObject[m_nNumCollisionObjects];
+                    for (int i = 0; i < m_nNumCollisionObjects; i++)
+                    {
+                        CollisionObjects[i] = br.BaseStream.ReadStruct<SCollisionObject>();
+                    }
+
+                    bSuccess = true;
+                    if (br.BaseStream.Position - startpos != m_nNumCollisionObjects * Marshal.SizeOf<SCollisionObject>())
+                        throw new NotImplementedException();
+                }
+            }
+            //else
+            //    CCore::SetError("CParser::ParseCollisionObjects, premature end-of-file\n");
+
+            return bSuccess;
+        }
+
+        private bool ParseCustomData(BinaryReader br)
+        {
+            bool bSuccess = false;
+            var startpos = br.BaseStream.Position;
+            if (GetRemainingLength() >= c_nSizeOfInt * (int)EUserStringOrdinal.USER_STRING_COUNT)
+            {
+                bSuccess = true;
+                for (int i = 0; i < (int)EUserStringOrdinal.USER_STRING_COUNT; i++)
+                {
+                    int idx = br.ReadInt32();
+                    PUserStrings[i] = StringTable[idx];
+                }
+
+                if (br.BaseStream.Position - startpos != c_nSizeOfInt * (int)EUserStringOrdinal.USER_STRING_COUNT)
+                    throw new NotImplementedException();
+            }
+            //else
+            //    CCore::SetError("CParser::ParseCustomData, premature end-of-file\n");
+
+            return bSuccess;
+        }
+
+        private bool ParseRenderStateBlock(ERenderPass blockid, int nNumStates, BinaryReader br)
+        {
+            bool bSuccess = false;
+            var startpos = m_stream.Position;
+            var t = Marshal.SizeOf<SRenderState>();
+            if (GetRemainingLength() >= 720 * nNumStates)
+            {
+                for (int i = 0; i < nNumStates; i++)
+                {
+                    switch (blockid)
+                    {
+                        case ERenderPass.RENDER_PASS_MAIN:
+                            Geometry.P3dRenderStateMain[i].Read(br, StringTable.ToList());
+                            break;
+
+                        case ERenderPass.RENDER_PASS_DEPTH_PREPASS:
+                            Geometry.P3dRenderStateDepth[i].Read(br, StringTable.ToList());
+                            break;
+
+                        case ERenderPass.RENDER_PASS_SHADOW_CAST:
+                            Geometry.P3dRenderStateShadow[i].Read(br, StringTable.ToList());
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                if (m_stream.Position - startpos != 720 * nNumStates)
+                    throw new NotImplementedException();
+                bSuccess = true;
+            }
+            //else
+            //    CCore::SetError("CParser::ParseRenderStateBlock, premature end-of-file\n");
+
+            return bSuccess;
+        }
+
+        private bool ParseRenderStates(BinaryReader br)
+        {
+            bool bSuccess = false;
+            var startpos = br.BaseStream.Position;
+            if (GetRemainingLength() >= 3 * c_nSizeOfInt)
+            {
+                Geometry.NNum3dRenderStates = br.ReadInt32();
+                Geometry.BDepthOnlyIncluded = (br.ReadInt32() == 1);
+                Geometry.BShadowCastIncluded = (br.ReadInt32() == 1);
+
+                // parse shader path
+                Geometry.StrShaderPath = StringTable[br.ReadInt32()];
+
+                // parse 3d lighting render states
+                Geometry.P3dRenderStateMain = new SRenderState[Geometry.NNum3dRenderStates];
+                Geometry.P3dRenderStateDepth = new SRenderState[Geometry.NNum3dRenderStates];
+                Geometry.P3dRenderStateShadow = new SRenderState[Geometry.NNum3dRenderStates];
+                Geometry.ABillboardRenderStateMain = new SRenderState();
+                Geometry.ABillboardRenderStateDepth = new SRenderState();
+                Geometry.ABillboardRenderStateShadow = new SRenderState();
+
+                bSuccess = ParseRenderStateBlock(ERenderPass.RENDER_PASS_MAIN, Geometry.NNum3dRenderStates, br);
+
+                // parse 3d depth-only render states
+                if (Geometry.BDepthOnlyIncluded)
+                    bSuccess &= ParseRenderStateBlock(ERenderPass.RENDER_PASS_DEPTH_PREPASS, Geometry.NNum3dRenderStates, br);
+
+                // parse 3d shadow cast render states
+                if (Geometry.BShadowCastIncluded)
+                    bSuccess &= ParseRenderStateBlock(ERenderPass.RENDER_PASS_SHADOW_CAST, Geometry.NNum3dRenderStates, br);
+
+                // billboard lighting render state
+                bSuccess &= ParseAndCopyRenderState(ERenderPass.RENDER_PASS_MAIN, br);
+
+                // billboard depth-only render state
+                if (Geometry.BDepthOnlyIncluded)
+                    bSuccess &= ParseAndCopyRenderState(ERenderPass.RENDER_PASS_DEPTH_PREPASS, br);
+
+                // billboard shadow cast render state
+                if (Geometry.BShadowCastIncluded)
+                    bSuccess &= ParseAndCopyRenderState(ERenderPass.RENDER_PASS_SHADOW_CAST, br);
+            }
+            //else
+            //    CCore::SetError("CParser::ParseRenderStates, premature end-of-file\n");
+
+            return bSuccess;
+        }
+
+        private bool ParseStringTable(BinaryReader br)
+        {
+            bool bSuccess = false;
+            if (GetRemainingLength() >= c_nSizeOfInt)
+            {
+                var m_nNumStringsInTable = br.ReadInt32();
+                if (GetRemainingLength() >= 256 * c_nSizeOfInt)
+                {
+                    // what's written here:
+                    //
+                    //	N = # strings (m_nNumStringsInTable above)
+                    //
+                    //	for each N
+                    //		<padded string length>
+                    //
+                    //	<padded string length> =
+                    //		<4-byte pad>
+                    //		<4-byte length of string>
+                    //
+                    //	for each N
+                    //		<characters of string>
+                    //		<padded for alignment>
+
+                    int[] stringlengths = new int[m_nNumStringsInTable];
+                    for (int i = 0; i < m_nNumStringsInTable; i++)
+                    {
+                        var pad = br.ReadInt32();
+                        var len = br.ReadInt32();
+                        stringlengths[i] = len;
+                    }
+
+                    var strings = new string[m_nNumStringsInTable];
+                    for (int i = 0; i < m_nNumStringsInTable; i++)
+                    {
+                        strings[i] = Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(stringlengths[i])).TrimEnd((char)0x00);
+                    }
+                    StringTable = new string[strings.Length];
+                    StringTable = strings;
+
+                    bSuccess = true;
+                }
+            }
+            //else
+            //    CCore::SetError("CParser::ParseStringTable, premature end-of-file\n");
+
+            return bSuccess;
+        }
+
+        ///////////////////////////////////////////////////////////////////////
+        //  CParser::ParseCollisionObjects
+        ///////////////////////////////////////////////////////////////////////
+        //  CParser::ParseBillboards
+        ///////////////////////////////////////////////////////////////////////
+        //  CParser::ParseCustomData
+        ///////////////////////////////////////////////////////////////////////
+        //  CParser::ParseRenderStates
+        ///////////////////////////////////////////////////////////////////////
+        //  CParser::ParseRenderStateBlock
+        ///////////////////////////////////////////////////////////////////////
+        //  CParser::ParseAndCopyRenderState
+        ///////////////////////////////////////////////////////////////////////
+        //  CParser::Parse3dGeometry
+
+        #endregion Block 2
 
         #region Block 3
-        ///////////////////////////////////////////////////////////////////////  
+
+        ///////////////////////////////////////////////////////////////////////
         //  CParser::ParseVertexAndIndexData
 
         private bool ParseVertexAndIndexData(BinaryReader br)
@@ -784,14 +778,15 @@ namespace WolvenKit.CR2W.SRT
             }
             bSuccess = true;
 
-
             //else
             //    CCore::SetError("CParser::ParseVertexAndIndexData, premature end-of-file\n");
 
             return bSuccess;
         }
-        #endregion
-        #endregion
+
+        #endregion Block 3
+
+        #endregion Read
 
         #region Write
 
@@ -814,22 +809,6 @@ namespace WolvenKit.CR2W.SRT
                     { }
                 }
             }
-
-        }
-
-        private bool WriteVertexAndIndexData(BinaryWriter file)
-        {
-            for (int i = 0; i < Geometry.NNumLods; i++)
-            {
-                for (int j = 0; j < Geometry.PLods[i].NNumDrawCalls; j++)
-                {
-                    file.Write(Geometry.PLods[i].PDrawCalls[j].PVertexData);
-                    file.Write(Geometry.PLods[i].PDrawCalls[j].PIndexData);
-                }
-            }
-
-
-            return true;
         }
 
         private bool Write3dGeometry(BinaryWriter file)
@@ -867,65 +846,6 @@ namespace WolvenKit.CR2W.SRT
             return true;
         }
 
-        private bool WriteRenderStates(BinaryWriter file)
-        {
-            file.Write(Geometry.NNum3dRenderStates);
-            file.Write(Geometry.BDepthOnlyIncluded ? (int)1 : (int)0);
-            file.Write(Geometry.BShadowCastIncluded ? (int)1 : (int)0);
-            int id = 0;
-            for (int j = 0; j < StringTable.Length; j++)
-            {
-                if (StringTable[j] == Geometry.StrShaderPath)
-                {
-                    id = j;
-                    break;
-                }
-            }
-            file.Write(id);
-            for (int i = 0; i < Geometry.NNum3dRenderStates; i++)
-            {
-                Geometry.P3dRenderStateMain[i].Write(file, StringTable.ToList());
-            }
-            if (Geometry.BDepthOnlyIncluded)
-                for (int i = 0; i < Geometry.NNum3dRenderStates; i++)
-                {
-                    Geometry.P3dRenderStateDepth[i].Write(file, StringTable.ToList());
-                }
-            if (Geometry.BShadowCastIncluded)
-                for (int i = 0; i < Geometry.NNum3dRenderStates; i++)
-                {
-                    Geometry.P3dRenderStateShadow[i].Write(file, StringTable.ToList());
-                }
-
-
-            Geometry.ABillboardRenderStateMain.Write(file, StringTable.ToList());
-            if (Geometry.BDepthOnlyIncluded)
-                Geometry.ABillboardRenderStateDepth.Write(file, StringTable.ToList());
-
-            if (Geometry.BShadowCastIncluded)
-                Geometry.ABillboardRenderStateShadow.Write(file, StringTable.ToList());
-
-            return true;
-        }
-
-        private bool WriteCustomData(BinaryWriter file)
-        {
-            for (int i = 0; i < (int)EUserStringOrdinal.USER_STRING_COUNT; i++)
-            {
-                int id = 0;
-                for (int j = 0; j < StringTable.Length; j++)
-                {
-                    if (StringTable[j] == PUserStrings[i])
-                    {
-                        id = j;
-                        break;
-                    }
-                }
-                file.Write(id);
-            }
-            return true;
-        }
-
         private bool WriteBillboards(BinaryWriter file)
         {
             // parse dimensions
@@ -956,7 +876,6 @@ namespace WolvenKit.CR2W.SRT
                 file.Write(VerticalBillboards.PCutoutIndices[i]);
             }
             file.WriteUntilAligned();
-
 
             file.Write(HorizontalBillboard.BPresent ? (int)1 : (int)0);
 
@@ -991,6 +910,102 @@ namespace WolvenKit.CR2W.SRT
             return true;
         }
 
+        private bool WriteCustomData(BinaryWriter file)
+        {
+            for (int i = 0; i < (int)EUserStringOrdinal.USER_STRING_COUNT; i++)
+            {
+                int id = 0;
+                for (int j = 0; j < StringTable.Length; j++)
+                {
+                    if (StringTable[j] == PUserStrings[i])
+                    {
+                        id = j;
+                        break;
+                    }
+                }
+                file.Write(id);
+            }
+            return true;
+        }
+
+        private bool WriteExtents(BinaryWriter file)
+        {
+            if (Extents == null)
+                return true;
+            Extents.Write(file);
+            return true;
+        }
+
+        private bool WriteHeader(BinaryWriter file)
+        {
+            file.Write(c_pSrtHeader);
+            file.Write(new byte[15 - c_pSrtHeader.Length]);
+
+            return true;
+        }
+
+        private bool WriteLOD(BinaryWriter file)
+        {
+            if (LodProfile == null)
+                return true;
+            file.Write(LodProfile.m_bLodIsPresent ? (int)1 : (int)0);
+            file.Write(LodProfile.m_fHighDetail3dDistance);
+            file.Write(LodProfile.m_fLowDetail3dDistance);
+            file.Write(LodProfile.m_fBillboardStartDistance);
+            file.Write(LodProfile.m_fBillboardFinalDistance);
+            return true;
+        }
+
+        private bool WritePlatform(BinaryWriter file)
+        {
+            file.Write((byte)0x00);
+            file.Write((byte)0x00);
+            file.Write((byte)0x00);
+            file.Write((byte)0x00);
+
+            return true;
+        }
+
+        private bool WriteRenderStates(BinaryWriter file)
+        {
+            file.Write(Geometry.NNum3dRenderStates);
+            file.Write(Geometry.BDepthOnlyIncluded ? (int)1 : (int)0);
+            file.Write(Geometry.BShadowCastIncluded ? (int)1 : (int)0);
+            int id = 0;
+            for (int j = 0; j < StringTable.Length; j++)
+            {
+                if (StringTable[j] == Geometry.StrShaderPath)
+                {
+                    id = j;
+                    break;
+                }
+            }
+            file.Write(id);
+            for (int i = 0; i < Geometry.NNum3dRenderStates; i++)
+            {
+                Geometry.P3dRenderStateMain[i].Write(file, StringTable.ToList());
+            }
+            if (Geometry.BDepthOnlyIncluded)
+                for (int i = 0; i < Geometry.NNum3dRenderStates; i++)
+                {
+                    Geometry.P3dRenderStateDepth[i].Write(file, StringTable.ToList());
+                }
+            if (Geometry.BShadowCastIncluded)
+                for (int i = 0; i < Geometry.NNum3dRenderStates; i++)
+                {
+                    Geometry.P3dRenderStateShadow[i].Write(file, StringTable.ToList());
+                }
+
+            Geometry.ABillboardRenderStateMain.Write(file, StringTable.ToList());
+            if (Geometry.BDepthOnlyIncluded)
+                Geometry.ABillboardRenderStateDepth.Write(file, StringTable.ToList());
+
+            if (Geometry.BShadowCastIncluded)
+                Geometry.ABillboardRenderStateShadow.Write(file, StringTable.ToList());
+
+            return true;
+        }
+
         private bool WriteStringTable(BinaryWriter file)
         {
             if (StringTable == null)
@@ -1011,6 +1026,20 @@ namespace WolvenKit.CR2W.SRT
                 file.Write((byte)0x00);
                 file.WriteUntilAligned();
             }
+            return true;
+        }
+
+        private bool WriteVertexAndIndexData(BinaryWriter file)
+        {
+            for (int i = 0; i < Geometry.NNumLods; i++)
+            {
+                for (int j = 0; j < Geometry.PLods[i].NNumDrawCalls; j++)
+                {
+                    file.Write(Geometry.PLods[i].PDrawCalls[j].PVertexData);
+                    file.Write(Geometry.PLods[i].PDrawCalls[j].PIndexData);
+                }
+            }
+
             return true;
         }
 
@@ -1036,49 +1065,12 @@ namespace WolvenKit.CR2W.SRT
             return true;
         }
 
-        private bool WriteLOD(BinaryWriter file)
-        {
-            if (LodProfile == null)
-                return true;
-            file.Write(LodProfile.m_bLodIsPresent ? (int)1 : (int)0);
-            file.Write(LodProfile.m_fHighDetail3dDistance);
-            file.Write(LodProfile.m_fLowDetail3dDistance);
-            file.Write(LodProfile.m_fBillboardStartDistance);
-            file.Write(LodProfile.m_fBillboardFinalDistance);
-            return true;
-        }
-
-        private bool WriteExtents(BinaryWriter file)
-        {
-            if (Extents == null)
-                return true;
-            Extents.Write(file);
-            return true;
-        }
-
-        private bool WritePlatform(BinaryWriter file)
-        {
-            file.Write((byte)0x00);
-            file.Write((byte)0x00);
-            file.Write((byte)0x00);
-            file.Write((byte)0x00);
-
-            return true;
-        }
-
-        private bool WriteHeader(BinaryWriter file)
-        {
-            file.Write(c_pSrtHeader);
-            file.Write(new byte[15 - c_pSrtHeader.Length]);
-
-            return true;
-        }
-        #endregion
-
+        #endregion Write
 
         #region Enums
+
         // user data
-        enum EUserStringOrdinal
+        private enum EUserStringOrdinal
         {
             USER_STRING_0,
             USER_STRING_1,
@@ -1088,8 +1080,23 @@ namespace WolvenKit.CR2W.SRT
             USER_STRING_COUNT
         }
 
+        #endregion Enums
 
-        #endregion
+        #region Methods
+
+        public void GetChunks()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Common.EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SerializeToXml(Stream writer)
+        {
+        }
 
         private void ParseUntilAligned(BinaryReader br)
         {
@@ -1099,19 +1106,6 @@ namespace WolvenKit.CR2W.SRT
                 br.ReadBytes(uiPadSize);
         }
 
-        public void SerializeToXml(Stream writer)
-        {
-
-        }
-
-        Task<Common.EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void GetChunks()
-        {
-            throw new NotImplementedException();
-        }
+        #endregion Methods
     }
 }

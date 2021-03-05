@@ -1,24 +1,30 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using CP77.CR2W.Archive;
 using Catel.IoC;
 using CP77.CR2W;
+using CP77.CR2W.Archive;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
     public static partial class ConsoleFunctions
     {
+        #region Fields
+
         private static readonly ILoggerService logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+
+        #endregion Fields
+
+        #region Methods
 
         public static void UnbundleTask(string[] path, string outpath,
             string hash, string pattern, string regex)
         {
             if (path == null || path.Length < 1)
             {
-                logger.LogString("Please fill in an input path", Logtype.Error);
+                logger.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
@@ -26,46 +32,43 @@ namespace CP77Tools.Tasks
             {
                 UnbundleTaskInner(file, outpath, hash, pattern, regex);
             });
-
         }
 
-
-        private static void UnbundleTaskInner(string path, string outpath, 
+        private static void UnbundleTaskInner(string path, string outpath,
             string hash, string pattern, string regex)
         {
             #region checks
 
             if (string.IsNullOrEmpty(path))
             {
-                logger.LogString("Please fill in an input path", Logtype.Error);
+                logger.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
             var inputFileInfo = new FileInfo(path);
             var inputDirInfo = new DirectoryInfo(path);
-            
 
             if (!inputFileInfo.Exists && !inputDirInfo.Exists)
             {
-                logger.LogString("Input path does not exist", Logtype.Error);
+                logger.LogString("Input path does not exist.", Logtype.Error);
                 return;
             }
 
             if (inputFileInfo.Exists && inputFileInfo.Extension != ".archive")
             {
-                logger.LogString("Input file is not an .archive", Logtype.Error);
+                logger.LogString("Input file is not an .archive.", Logtype.Error);
                 return;
             }
             else if (inputDirInfo.Exists && inputDirInfo.GetFiles().All(_ => _.Extension != ".archive"))
             {
-                logger.LogString("No .archive file to process in the input directory", Logtype.Error);
+                logger.LogString("No .archive file to process in the input directory.", Logtype.Error);
                 return;
             }
 
             var isDirectory = !inputFileInfo.Exists;
             var basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
 
-            #endregion
+            #endregion checks
 
             List<FileInfo> archiveFileInfos;
             if (isDirectory)
@@ -76,9 +79,8 @@ namespace CP77Tools.Tasks
             }
             else
             {
-                archiveFileInfos = new List<FileInfo> {inputFileInfo};
+                archiveFileInfos = new List<FileInfo> { inputFileInfo };
             }
-
 
             foreach (var processedarchive in archiveFileInfos)
             {
@@ -124,7 +126,7 @@ namespace CP77Tools.Tasks
                         logger.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hash_num}", Logtype.Success);
                     }
 
-                    logger.LogString($"Bulk extraction from hashlist file completed!", Logtype.Success);
+                    logger.LogString($"Bulk extraction from hashlist file completed.", Logtype.Success);
                 }
                 else if (isHash && hashNumber != 0)
                 {
@@ -137,13 +139,11 @@ namespace CP77Tools.Tasks
                     logger.LogString($"{ar.ArchiveAbsolutePath}: Extracted {r.Item1.Count}/{r.Item2} files.",
                         Logtype.Success);
                 }
-
-
-
-
             }
 
             return;
         }
+
+        #endregion Methods
     }
 }

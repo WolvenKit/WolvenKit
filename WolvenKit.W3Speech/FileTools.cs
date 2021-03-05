@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -9,6 +9,8 @@ namespace WolvenKit.W3Speech
 {
     public static class FileTools
     {
+        #region Methods
+
         /// <summary>
         /// Parse all files in the directory path to input pairs.
         /// </summary>
@@ -41,6 +43,32 @@ namespace WolvenKit.W3Speech
                 .OrderBy(input_pair => input_pair.id.value)
                 .ToList()
                 .AsReadOnly();
+        }
+
+        /// <summary>
+        /// Parse the w3speech file to input pairs.
+        /// </summary>
+        /// <param name="w3speech_file_path">The path to the w3speech file.</param>
+        /// <returns>All wem and cr2w pairs found in the file.</returns>
+        /// <exception cref="Exception">Something happened.</exception>
+        public static IEnumerable<WemCr2wInputPair> CollectW3SpeechFile(String w3speech_file_path)
+        {
+            var w3speech_stream = new BinaryReader(new FileStream(w3speech_file_path, FileMode.Open));
+            var info = Coder.Decode(new W3Speech(w3speech_file_path), w3speech_stream);
+            w3speech_stream.Close();
+            return info.item_infos.Select(item_info =>
+                new WemCr2wInputPair(item_info.id, item_info.id_high, () =>
+                {
+                    var reader = new BinaryReader(new FileStream(w3speech_file_path, FileMode.Open));
+                    reader.BaseStream.Seek(item_info.wem_offs, SeekOrigin.Begin);
+                    return reader.BaseStream;
+                }, item_info.wem_size, item_info.duration, () =>
+                {
+                    var reader = new BinaryReader(new FileStream(w3speech_file_path, FileMode.Open));
+                    reader.BaseStream.Seek(item_info.cr2w_offs, SeekOrigin.Begin);
+                    return reader.BaseStream;
+                }, item_info.cr2w_size)
+            ).ToList().AsReadOnly();
         }
 
         /// <summary>
@@ -115,30 +143,6 @@ namespace WolvenKit.W3Speech
             input.Close();
         }
 
-        /// <summary>
-        /// Parse the w3speech file to input pairs.
-        /// </summary>
-        /// <param name="w3speech_file_path">The path to the w3speech file.</param>
-        /// <returns>All wem and cr2w pairs found in the file.</returns>
-        /// <exception cref="Exception">Something happened.</exception>
-        public static IEnumerable<WemCr2wInputPair> CollectW3SpeechFile(String w3speech_file_path)
-        {
-            var w3speech_stream = new BinaryReader(new FileStream(w3speech_file_path, FileMode.Open));
-            var info = Coder.Decode(new W3Speech(w3speech_file_path), w3speech_stream);
-            w3speech_stream.Close();
-            return info.item_infos.Select(item_info =>
-                new WemCr2wInputPair(item_info.id, item_info.id_high, () =>
-                {
-                    var reader = new BinaryReader(new FileStream(w3speech_file_path, FileMode.Open));
-                    reader.BaseStream.Seek(item_info.wem_offs, SeekOrigin.Begin);
-                    return reader.BaseStream;
-                }, item_info.wem_size, item_info.duration, () =>
-                {
-                    var reader = new BinaryReader(new FileStream(w3speech_file_path, FileMode.Open));
-                    reader.BaseStream.Seek(item_info.cr2w_offs, SeekOrigin.Begin);
-                    return reader.BaseStream;
-                }, item_info.cr2w_size)
-            ).ToList().AsReadOnly();
-        }
+        #endregion Methods
     }
 }

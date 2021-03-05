@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,21 +9,13 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame
 {
     public class VariableValueParser
     {
-        private class VariablePropertyInfo
-        {
-            public string CName { get; set; }
-            public string CType { get; set; }
-
-            public bool IsArray { get; set; }
-            public string ArrayCountName { get; set; }
-            public string ArrayElementName { get; set; }
-            public string ArrayElementCType { get; set; }
-            public Type ArrayElementType { get; set; }
-
-            public PropertyInfo Info { get; set; }
-        }
+        #region Fields
 
         private readonly Dictionary<string, Func<Stack<Variable>, object>> _factories;
+
+        #endregion Fields
+
+        #region Constructors
 
         public VariableValueParser()
         {
@@ -37,72 +29,10 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame
             }
         }
 
-        private static void SkipName(Stack<Variable> variables, string name)
-        {
-            var variable = variables.Peek() as BsVariable;
-            if (variable != null && variable.Name == name)
-            {
-                variables.Pop();
-            }
-        }
+        #endregion Constructors
 
-        private object Deserialize(string typeName, Type type, Stack<Variable> variables)
-        {
-            var instance = Activator.CreateInstance(type);
-            SkipName(variables, typeName);
-            
-            foreach (var serializableProperty in GetNamedOrArrayProperties(type))
-            {
-                object propertyValue = null;
-                if (serializableProperty.CType != null)
-                {
-                    SkipName(variables, serializableProperty.CName);
+        #region Methods
 
-                    propertyValue = _factories[serializableProperty.CType](variables);
-                }
-                else
-                {
-                    var typedVariable = variables.Peek() as TypedVariable;
-                    if(typedVariable == null)
-                    {
-                        continue;
-                    }
-                    
-                    if (serializableProperty.IsArray && typedVariable.Name == serializableProperty.ArrayCountName)
-                    {
-                        variables.Pop();
-                        uint count = (uint) typedVariable.Value.Object;
-                        var array = Array.CreateInstance(serializableProperty.ArrayElementType, count);
-                        for (int i = 0; i < count; i++)
-                        {
-                            object element;
-                            if (serializableProperty.ArrayElementCType == null)
-                            {
-                                // TODO: Check the element type name (e.g. CGUID)
-                                element = ((TypedVariable) variables.Pop()).Value.Object;
-                            }
-                            else
-                            {
-                                SkipName(variables, serializableProperty.ArrayElementName);
-                                element = Deserialize(serializableProperty.ArrayElementCType, serializableProperty.ArrayElementType, variables);
-                            }
-
-                            array.SetValue(element, i);
-                        }
-                        propertyValue = array;
-                    }
-                    else if (typedVariable.Name == serializableProperty.CName)
-                    {
-                        variables.Pop();
-                        propertyValue = typedVariable.Value.Object;
-                    }
-                }
-
-                serializableProperty.Info.SetValue(instance, propertyValue);
-            }
-            return instance;
-        }
-        
         public object Parse(string type, Stack<Variable> variables)
         {
             return _factories[type](variables);
@@ -110,7 +40,12 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame
 
         public T Parse<T>(Stack<Variable> variables)
         {
-            return (T)Deserialize(null, typeof (T), variables);
+            return (T)Deserialize(null, typeof(T), variables);
+        }
+
+        private static CSerializableAttribute GetCSerializableAttribute(Type type)
+        {
+            return type.GetCustomAttributes(typeof(CSerializableAttribute), true).SingleOrDefault() as CSerializableAttribute;
         }
 
         private static IEnumerable<VariablePropertyInfo> GetNamedOrArrayProperties(Type serializableType)
@@ -151,9 +86,93 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame
             }
         }
 
-        private static CSerializableAttribute GetCSerializableAttribute(Type type)
+        private static void SkipName(Stack<Variable> variables, string name)
         {
-            return type.GetCustomAttributes(typeof(CSerializableAttribute), true).SingleOrDefault() as CSerializableAttribute;
+            var variable = variables.Peek() as BsVariable;
+            if (variable != null && variable.Name == name)
+            {
+                variables.Pop();
+            }
         }
+
+        private object Deserialize(string typeName, Type type, Stack<Variable> variables)
+        {
+            var instance = Activator.CreateInstance(type);
+            SkipName(variables, typeName);
+
+            foreach (var serializableProperty in GetNamedOrArrayProperties(type))
+            {
+                object propertyValue = null;
+                if (serializableProperty.CType != null)
+                {
+                    SkipName(variables, serializableProperty.CName);
+
+                    propertyValue = _factories[serializableProperty.CType](variables);
+                }
+                else
+                {
+                    var typedVariable = variables.Peek() as TypedVariable;
+                    if (typedVariable == null)
+                    {
+                        continue;
+                    }
+
+                    if (serializableProperty.IsArray && typedVariable.Name == serializableProperty.ArrayCountName)
+                    {
+                        variables.Pop();
+                        uint count = (uint)typedVariable.Value.Object;
+                        var array = Array.CreateInstance(serializableProperty.ArrayElementType, count);
+                        for (int i = 0; i < count; i++)
+                        {
+                            object element;
+                            if (serializableProperty.ArrayElementCType == null)
+                            {
+                                // TODO: Check the element type name (e.g. CGUID)
+                                element = ((TypedVariable)variables.Pop()).Value.Object;
+                            }
+                            else
+                            {
+                                SkipName(variables, serializableProperty.ArrayElementName);
+                                element = Deserialize(serializableProperty.ArrayElementCType, serializableProperty.ArrayElementType, variables);
+                            }
+
+                            array.SetValue(element, i);
+                        }
+                        propertyValue = array;
+                    }
+                    else if (typedVariable.Name == serializableProperty.CName)
+                    {
+                        variables.Pop();
+                        propertyValue = typedVariable.Value.Object;
+                    }
+                }
+
+                serializableProperty.Info.SetValue(instance, propertyValue);
+            }
+            return instance;
+        }
+
+        #endregion Methods
+
+        #region Classes
+
+        private class VariablePropertyInfo
+        {
+            #region Properties
+
+            public string ArrayCountName { get; set; }
+            public string ArrayElementCType { get; set; }
+            public string ArrayElementName { get; set; }
+            public Type ArrayElementType { get; set; }
+            public string CName { get; set; }
+            public string CType { get; set; }
+
+            public PropertyInfo Info { get; set; }
+            public bool IsArray { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }

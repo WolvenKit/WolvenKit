@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.Common
+namespace WolvenKit.Common
 {
     public enum EArchiveType
     {
@@ -10,20 +10,6 @@
         Speech,
         Archive,
         Shader,
-    }
-
-    public enum EProjectFolders
-    {
-        Cooked,
-        Uncooked,
-        Raw
-    }
-
-    public enum EFileReadErrorCodes
-    {
-        NoError,
-        NoCr2w,
-        UnsupportedVersion,
     }
 
     /// <summary>
@@ -39,6 +25,36 @@
         cubemap,
         envprobe,
         texarray
+    }
+
+    public enum ECustomImageKeys
+    {
+        OpenDirImageKey, //= "<ODIR>";
+        ClosedDirImageKey, //= "<CDIR>";
+        ModImageKey, //= "<MOD>";
+        DlcImageKey, //= "<DLC>";
+        DlcCookedImageKey, //= "<DLCC>";
+        DlcUncookedImageKey, //= "<DLCU>";
+        ModCookedImageKey, //= "<MODC>";
+        ModUncookedImageKey, //= "<MODU>";
+        RawImageKey, //= "<RAW>";
+        RadishImageKey,
+        RawModImageKey,
+        RawDlcImageKey
+    }
+
+    public enum EFileReadErrorCodes
+    {
+        NoError,
+        NoCr2w,
+        UnsupportedVersion,
+    }
+
+    public enum EProjectFolders
+    {
+        Cooked,
+        Uncooked,
+        Raw
     }
 
     /// <summary>

@@ -1,12 +1,17 @@
-﻿using System.IO;
-using System.Collections.Generic;
+using System.IO;
 
 namespace WolvenKit.W3Strings
 {
     public class W3StringBlock2
     {
+        #region Fields
+
         public uint str_id;
         public uint str_key_hex;
+
+        #endregion Fields
+
+        #region Constructors
 
         public W3StringBlock2()
         {
@@ -21,6 +26,10 @@ namespace WolvenKit.W3Strings
         {
             Read(stream, magic);
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public void Create(uint id, string str_key, string s)
         {
@@ -56,5 +65,7 @@ namespace WolvenKit.W3Strings
             }
             return hash;
         }
+
+        #endregion Methods
     }
 }

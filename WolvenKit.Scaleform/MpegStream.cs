@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -6,8 +6,15 @@ namespace WolvenKit.Scaleform
 {
     public abstract class MpegStream
     {
-        protected static readonly byte[] PacketStartBytes = new byte[] { 0x00, 0x00, 0x01, 0xBA };
+        #region Fields
+
         protected static readonly byte[] PacketEndBytes = new byte[] { 0x00, 0x00, 0x01, 0xB9 };
+        protected static readonly byte[] PacketStartBytes = new byte[] { 0x00, 0x00, 0x01, 0xBA };
+        protected Dictionary<byte, string> StreamIdFileType = new Dictionary<byte, string>();
+
+        #endregion Fields
+
+        #region Constructors
 
         public MpegStream(string path)
         {
@@ -17,7 +24,7 @@ namespace WolvenKit.Scaleform
             this.BlockSizeIsLittleEndian = false;
 
             //********************
-            // Add Slice Packets 
+            // Add Slice Packets
             //********************
             byte[] sliceBytes;
             uint sliceBytesValue;
@@ -31,6 +38,10 @@ namespace WolvenKit.Scaleform
             }
         }
 
+        #endregion Constructors
+
+        #region Enums
+
         public enum PacketSizeType
         {
             Static,
@@ -38,167 +49,60 @@ namespace WolvenKit.Scaleform
             Eof
         }
 
-        public struct MpegDemuxOptions
-        {
-            public bool AddHeader { set; get; }
-        }
+        #endregion Enums
 
-        public struct BlockSizeStruct
-        {
-            public PacketSizeType SizeType;
-            public int Size;
-
-            public BlockSizeStruct(PacketSizeType sizeTypeValue, int sizeValue)
-            {
-                this.SizeType = sizeTypeValue;
-                this.Size = sizeValue;
-            }
-        }
-
-        public struct DemuxOptionsStruct
-        {
-            public bool ExtractVideo { set; get; }
-            public bool ExtractAudio { set; get; }
-
-            public bool AddHeader { set; get; }
-            public bool SplitAudioStreams { set; get; }
-            public bool AddPlaybackHacks { set; get; }
-        }
-
-        #region Dictionary Initialization
-
-        protected Dictionary<uint, BlockSizeStruct> BlockIdDictionary =
-            new Dictionary<uint, BlockSizeStruct>
-            {                                                
-                //********************
-                // System Packets
-                //********************
-                {BitConverter.ToUInt32(MpegStream.PacketEndBytes, 0), new BlockSizeStruct(PacketSizeType.Eof, -1)},   // Program End
-                {BitConverter.ToUInt32(MpegStream.PacketStartBytes, 0), new BlockSizeStruct(PacketSizeType.Static, 0xE)}, // Pack Header
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xBB }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // System Header, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xBD }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Private Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xBE }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Padding Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xBF }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Private Stream, two bytes following equal length (Big Endian)
-
-                //****************************
-                // Audio Streams
-                //****************************
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC0 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC1 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC2 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC3 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC4 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC5 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC6 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC7 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC8 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC9 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xCA }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xCB }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xCC }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xCD }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xCE }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xCF }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD0 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD1 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD2 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD3 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD4 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD5 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD6 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD7 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD8 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD9 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xDA }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xDB }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xDC }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xDD }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xDE }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xDF }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
-
-                //****************************
-                // Video Streams
-                //****************************
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE0 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE1 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE2 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE3 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE4 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE5 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE6 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE7 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE8 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE9 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xEA }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xEB }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xEC }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xED }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xEE }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
-                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xEF }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
-            };
-        #endregion
-
-        public string FilePath { get; set; }
-        public string FileExtensionAudio { get; set; }
-        public string FileExtensionVideo { get; set; }
-
-        protected Dictionary<byte, string> StreamIdFileType = new Dictionary<byte, string>();
-
-        public bool UsesSameIdForMultipleAudioTracks { set; get; } // for PMF/PAM/DVD, who use 000001BD for all audio tracks
-        public bool SubTitleExtractionSupported { set; get; } // assume not supported.
+        #region Properties
 
         public bool BlockSizeIsLittleEndian { set; get; }
 
-        protected virtual byte[] GetPacketStartBytes() { return MpegStream.PacketStartBytes; }
+        public string FileExtensionAudio { get; set; }
 
-        protected virtual byte[] GetPacketEndBytes() { return MpegStream.PacketEndBytes; }
+        public string FileExtensionVideo { get; set; }
 
-        protected abstract int GetAudioPacketHeaderSize(Stream readStream, long currentOffset);
+        public string FilePath { get; set; }
 
-        protected virtual int GetAudioPacketSubHeaderSize(Stream readStream, long currentOffset, byte streamId) { return 0; }
+        public bool SubTitleExtractionSupported { set; get; }
 
-        protected abstract int GetVideoPacketHeaderSize(Stream readStream, long currentOffset);
+        public bool UsesSameIdForMultipleAudioTracks { set; get; }
 
-        protected virtual int GetAudioPacketFooterSize(Stream readStream, long currentOffset) { return 0; }
+        #endregion Properties
 
-        protected virtual int GetVideoPacketFooterSize(Stream readStream, long currentOffset) { return 0; }
+        #region Methods
 
-        protected virtual bool IsThisAnAudioBlock(byte[] blockToCheck)
+        public static int GetMpegStreamType(string path)
         {
-            return ((blockToCheck[3] >= 0xC0) &&
-                    (blockToCheck[3] <= 0xDF));
+            int mpegType = -1;
+
+            using (FileStream fs = File.OpenRead(path))
+            {
+                // look for first packet
+                long currentOffset = ParseFile.GetNextOffset(fs, 0, MpegStream.PacketStartBytes);
+
+                if (currentOffset != -1)
+                {
+                    currentOffset += 4;
+                    fs.Position = currentOffset;
+                    byte idByte = (byte)fs.ReadByte();
+
+                    if ((int)ByteConversion.GetHighNibble(idByte) == 2)
+                    {
+                        mpegType = 1;
+                    }
+                    else if ((int)ByteConversion.GetHighNibble(idByte) == 4)
+                    {
+                        mpegType = 2;
+                    }
+                }
+                else
+                {
+                    throw new FormatException(String.Format("Cannot find Pack Header for file: {0}{1}", Path.GetFileName(path), Environment.NewLine));
+                }
+            }
+
+            return mpegType;
         }
 
-        protected virtual bool IsThisAVideoBlock(byte[] blockToCheck)
-        {
-            return ((blockToCheck[3] >= 0xE0) && (blockToCheck[3] <= 0xEF));
-        }
-
-        protected virtual bool IsThisASubPictureBlock(byte[] blockToCheck)
-        {
-            return ((blockToCheck[3] >= 0xE0) && (blockToCheck[3] <= 0xEF));
-        }
-
-        protected virtual string GetAudioFileExtension(Stream readStream, long currentOffset)
-        {
-            return this.FileExtensionAudio;
-        }
-
-        protected virtual string GetVideoFileExtension(Stream readStream, long currentOffset)
-        {
-            return this.FileExtensionVideo;
-        }
-
-        protected virtual byte GetStreamId(Stream readStream, long currentOffset) { return 0; }
-
-        protected virtual long GetStartOffset(Stream readStream, long currentOffset) { return 0; }
-
-        protected virtual Dictionary<string, byte[]> DoFinalTasks(FileStream sourceFileStream,Dictionary<uint,string> filenametable, Dictionary<uint, MemoryStream> outputFiles, bool addHeader)
-        {
-            return null;
-        }
-
-        public virtual Dictionary<string,byte[]> DemultiplexStreams(DemuxOptionsStruct demuxOptions)
+        public virtual Dictionary<string, byte[]> DemultiplexStreams(DemuxOptionsStruct demuxOptions)
         {
             using (FileStream fs = File.OpenRead(this.FilePath))
             {
@@ -224,7 +128,7 @@ namespace WolvenKit.Scaleform
                 bool eofFlagFound = false;
 
                 Dictionary<uint, MemoryStream> streamOutputWriters = new Dictionary<uint, MemoryStream>();
-                Dictionary<uint,string> FilenameTable = new Dictionary<uint, string>();
+                Dictionary<uint, string> FilenameTable = new Dictionary<uint, string>();
 
                 string outputFileName;
 
@@ -288,16 +192,18 @@ namespace WolvenKit.Scaleform
                                             case 4:
                                                 blockSize = (uint)BitConverter.ToUInt32(blockSizeArray, 0);
                                                 break;
+
                                             case 2:
                                                 blockSize = (uint)BitConverter.ToUInt16(blockSizeArray, 0);
                                                 break;
+
                                             case 1:
                                                 blockSize = (uint)blockSizeArray[0];
                                                 break;
+
                                             default:
                                                 throw new ArgumentOutOfRangeException(String.Format("Unhandled size block size.{0}", Environment.NewLine));
                                         }
-
 
                                         // if block type is audio or video, extract it
                                         isAudioBlock = this.IsThisAnAudioBlock(currentBlockId);
@@ -308,7 +214,7 @@ namespace WolvenKit.Scaleform
                                             // reset stream id
                                             streamId = 0;
 
-                                            // if audio block, get the stream number from the queue                                                                                
+                                            // if audio block, get the stream number from the queue
                                             if (isAudioBlock && this.UsesSameIdForMultipleAudioTracks)
                                             {
                                                 streamId = this.GetStreamId(fs, currentOffset);
@@ -382,6 +288,7 @@ namespace WolvenKit.Scaleform
                                         currentOffset += currentBlockId.Length + blockSizeArray.Length + blockSize;
                                         blockSizeArray = new byte[] { };
                                         break;
+
                                     default:
                                         break;
                                 }
@@ -411,8 +318,77 @@ namespace WolvenKit.Scaleform
                     this.CloseAllWriters(streamOutputWriters);
                     throw new FormatException(String.Format("Cannot find Pack Header for file: {0}{1}", Path.GetFileName(this.FilePath), Environment.NewLine));
                 }
-                return this.DoFinalTasks(fs,FilenameTable, streamOutputWriters, demuxOptions.AddHeader);
+                return this.DoFinalTasks(fs, FilenameTable, streamOutputWriters, demuxOptions.AddHeader);
             }
+        }
+
+        protected virtual Dictionary<string, byte[]> DoFinalTasks(FileStream sourceFileStream, Dictionary<uint, string> filenametable, Dictionary<uint, MemoryStream> outputFiles, bool addHeader)
+        {
+            return null;
+        }
+
+        protected virtual string GetAudioFileExtension(Stream readStream, long currentOffset)
+        {
+            return this.FileExtensionAudio;
+        }
+
+        protected virtual int GetAudioPacketFooterSize(Stream readStream, long currentOffset)
+        {
+            return 0;
+        }
+
+        protected abstract int GetAudioPacketHeaderSize(Stream readStream, long currentOffset);
+
+        protected virtual int GetAudioPacketSubHeaderSize(Stream readStream, long currentOffset, byte streamId)
+        {
+            return 0;
+        }
+
+        protected virtual byte[] GetPacketEndBytes()
+        {
+            return MpegStream.PacketEndBytes;
+        }
+
+        // for PMF/PAM/DVD, who use 000001BD for all audio tracks
+        // assume not supported.
+        protected virtual byte[] GetPacketStartBytes() { return MpegStream.PacketStartBytes; }
+
+        protected virtual long GetStartOffset(Stream readStream, long currentOffset)
+        {
+            return 0;
+        }
+
+        protected virtual byte GetStreamId(Stream readStream, long currentOffset)
+        {
+            return 0;
+        }
+
+        protected virtual string GetVideoFileExtension(Stream readStream, long currentOffset)
+        {
+            return this.FileExtensionVideo;
+        }
+
+        protected virtual int GetVideoPacketFooterSize(Stream readStream, long currentOffset)
+        {
+            return 0;
+        }
+
+        protected abstract int GetVideoPacketHeaderSize(Stream readStream, long currentOffset);
+
+        protected virtual bool IsThisAnAudioBlock(byte[] blockToCheck)
+        {
+            return ((blockToCheck[3] >= 0xC0) &&
+                    (blockToCheck[3] <= 0xDF));
+        }
+
+        protected virtual bool IsThisASubPictureBlock(byte[] blockToCheck)
+        {
+            return ((blockToCheck[3] >= 0xE0) && (blockToCheck[3] <= 0xEF));
+        }
+
+        protected virtual bool IsThisAVideoBlock(byte[] blockToCheck)
+        {
+            return ((blockToCheck[3] >= 0xE0) && (blockToCheck[3] <= 0xEF));
         }
 
         private void CloseAllWriters(Dictionary<uint, MemoryStream> writers)
@@ -430,37 +406,126 @@ namespace WolvenKit.Scaleform
             }
         }
 
-        public static int GetMpegStreamType(string path)
+        #endregion Methods
+
+        #region Structs
+
+        public struct BlockSizeStruct
         {
-            int mpegType = -1;
+            #region Fields
 
-            using (FileStream fs = File.OpenRead(path))
+            public int Size;
+            public PacketSizeType SizeType;
+
+            #endregion Fields
+
+            #region Constructors
+
+            public BlockSizeStruct(PacketSizeType sizeTypeValue, int sizeValue)
             {
-                // look for first packet
-                long currentOffset = ParseFile.GetNextOffset(fs, 0, MpegStream.PacketStartBytes);
-
-                if (currentOffset != -1)
-                {
-                    currentOffset += 4;
-                    fs.Position = currentOffset;
-                    byte idByte = (byte)fs.ReadByte();
-
-                    if ((int)ByteConversion.GetHighNibble(idByte) == 2)
-                    {
-                        mpegType = 1;
-                    }
-                    else if ((int)ByteConversion.GetHighNibble(idByte) == 4)
-                    {
-                        mpegType = 2;
-                    }
-                }
-                else
-                {
-                    throw new FormatException(String.Format("Cannot find Pack Header for file: {0}{1}", Path.GetFileName(path), Environment.NewLine));
-                }
+                this.SizeType = sizeTypeValue;
+                this.Size = sizeValue;
             }
 
-            return mpegType;
+            #endregion Constructors
         }
+
+        public struct DemuxOptionsStruct
+        {
+            #region Properties
+
+            public bool AddHeader { set; get; }
+            public bool AddPlaybackHacks { set; get; }
+            public bool ExtractAudio { set; get; }
+            public bool ExtractVideo { set; get; }
+            public bool SplitAudioStreams { set; get; }
+
+            #endregion Properties
+        }
+
+        public struct MpegDemuxOptions
+        {
+            #region Properties
+
+            public bool AddHeader { set; get; }
+
+            #endregion Properties
+        }
+
+        #endregion Structs
+
+        #region Dictionary Initialization
+
+        protected Dictionary<uint, BlockSizeStruct> BlockIdDictionary =
+            new Dictionary<uint, BlockSizeStruct>
+            {
+                //********************
+                // System Packets
+                //********************
+                {BitConverter.ToUInt32(MpegStream.PacketEndBytes, 0), new BlockSizeStruct(PacketSizeType.Eof, -1)},   // Program End
+                {BitConverter.ToUInt32(MpegStream.PacketStartBytes, 0), new BlockSizeStruct(PacketSizeType.Static, 0xE)}, // Pack Header
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xBB }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // System Header, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xBD }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Private Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xBE }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Padding Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xBF }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Private Stream, two bytes following equal length (Big Endian)
+
+                //****************************
+                // Audio Streams
+                //****************************
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC0 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC1 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC2 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC3 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC4 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC5 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC6 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC7 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC8 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xC9 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xCA }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xCB }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xCC }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xCD }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xCE }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xCF }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD0 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD1 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD2 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD3 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD4 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD5 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD6 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD7 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD8 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xD9 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xDA }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xDB }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xDC }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xDD }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xDE }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xDF }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Audio Stream, two bytes following equal length (Big Endian)
+
+                //****************************
+                // Video Streams
+                //****************************
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE0 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE1 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE2 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE3 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE4 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE5 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE6 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE7 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE8 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xE9 }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xEA }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xEB }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xEC }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xED }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xEE }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
+                {BitConverter.ToUInt32(new byte[] { 0x00, 0x00, 0x01, 0xEF }, 0), new BlockSizeStruct(PacketSizeType.SizeBytes, 2)}, // Video Stream, two bytes following equal length (Big Endian)
+            };
+
+        #endregion Dictionary Initialization
     }
 }

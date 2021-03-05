@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -11,41 +12,28 @@ using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W.Types
 {
-    public interface IEnumAccessor
-    {
-        List<string> Value { get; set; }
-        bool IsFlag { get; }
-
-        string EnumToString();
-        CVariable SetValue(object val);
-        Type GetEnumType();
-
-        string GetAttributeVal();
-    }
-
-
-    [DataContract(Namespace = "")]
-    [REDMeta()]
-    public class CEnum<T> : CVariable, IEnumAccessor where T : Enum
+    [REDMeta]
+    [Editor(typeof(IEnumEditor), typeof(IPropertyEditorBase))]
+    public class CEnum<T> : CVariable, IEnumAccessor<T> where T : Enum
     {
         public CEnum(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
 
-        private T wrappedEnum;
-        public T WrappedEnum
+        private T _value;
+        public T Value
         {
-            get => wrappedEnum;
+            get => _value;
             set
             {
-                wrappedEnum = value;
+                _value = value;
                 UpdateStringList();
             }
         }
 
         [DataMember]
-        public List<string> Value { get; set; } = new();
+        public List<string> EnumValueList { get; set; } = new();
 
-        public bool IsFlag => WrappedEnum.GetType().IsDefined(typeof(FlagsAttribute), false);
+        public bool IsFlag => Value.GetType().IsDefined(typeof(FlagsAttribute), false);
 
         private void UpdateStringList()
         {
@@ -56,10 +44,10 @@ namespace CP77.CR2W.Types
             }
             else
             {
-                strings.Add(WrappedEnum.ToString());
+                strings.Add(Value.ToString());
             }
 
-            Value = strings;
+            EnumValueList = strings;
         }
 
         public string GetAttributeVal()
@@ -71,7 +59,7 @@ namespace CP77.CR2W.Types
             }
 
             var type = typeof(T);
-            var memInfo = type.GetMember(WrappedEnum.ToString());
+            var memInfo = type.GetMember(Value.ToString());
             if (memInfo.Length < 1)
             {
 
@@ -79,18 +67,18 @@ namespace CP77.CR2W.Types
             var att = memInfo[0].GetCustomAttributes(typeof(REDAttribute), false);
 
             if (att.Length < 1)
-                return WrappedEnum.ToString();
+                return Value.ToString();
 
             if (!(att.First() is REDAttribute attribute) || attribute.Name == null)
-                return WrappedEnum.ToString();
+                return Value.ToString();
             else
                 return attribute.Name;
         }
 
-        public Type GetEnumType() => WrappedEnum.GetType();
-        public string EnumToString() => WrappedEnum.ToString();
+        public Type GetEnumType() => Value.GetType();
+        public string EnumToString() => Value.ToString();
 
-        public override string REDType => WrappedEnum.GetType().Name;
+        public override string REDType => Value.GetType().Name;
 
         private static void SetFlag<T1>(ref T1 value, T1 flag) where T1 : Enum
         {
@@ -143,7 +131,7 @@ namespace CP77.CR2W.Types
             //TODO
             if (IsFlag)
             {
-                foreach (var item in Value)
+                foreach (var item in EnumValueList)
                 {
                     var nw = cr2w.Names.First(_ => _.Str == item);
                     val = (ushort)cr2w.Names.IndexOf(nw);
@@ -159,7 +147,7 @@ namespace CP77.CR2W.Types
 
                 file.Write(val);
             }
-                
+
             if (IsFlag)
                 file.Write((ushort)0x00);
         }
@@ -167,40 +155,40 @@ namespace CP77.CR2W.Types
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CEnum<T>)base.Copy(context);
+            var.EnumValueList = EnumValueList;
             var.Value = Value;
-            var.WrappedEnum = WrappedEnum;
             return var;
         }
 
-        public override CVariable SetValue(object val)
+        public override IEditableVariable SetValue(object val)
         {
             if (val is not List<string> l)
                 return this;
 
-            Value = l;
+            EnumValueList = l;
 
             if (IsFlag)
             {
-                foreach (var item in WrappedEnum.GetType().GetEnumNames())
+                foreach (var item in Value.GetType().GetEnumNames())
                 {
                     //handle EnumValues with Spaces in them. facepalm.
                     string finalvalue = item.Replace(" ", string.Empty);
                     finalvalue = finalvalue.Replace("'", string.Empty);
                     finalvalue = finalvalue.Replace("/", string.Empty);
                     finalvalue = finalvalue.Replace(".", string.Empty);
-                    var en = (T)Enum.Parse(WrappedEnum.GetType(), finalvalue);
+                    var en = (T)Enum.Parse(Value.GetType(), finalvalue);
 
                     // flag is set
-                    if (Value.Contains(item))
-                        SetFlag<T>(ref wrappedEnum, en);
+                    if (EnumValueList.Contains(item))
+                        SetFlag<T>(ref _value, en);
                     // flag is not set
                     else
-                        ClearFlag<T>(ref wrappedEnum, en);
+                        ClearFlag<T>(ref _value, en);
                 }
             }
             else
             {
-                var s = Value.Last();
+                var s = EnumValueList.Last();
                 var finalvalue = CVariable.NormalizeName(s);
 
                 if (s == "GenericRole")
@@ -208,13 +196,13 @@ namespace CP77.CR2W.Types
 
                 }
 
-                if (Enum.TryParse(WrappedEnum.GetType(), finalvalue, out var par))
-                    WrappedEnum = (T) par;
+                if (Enum.TryParse(Value.GetType(), finalvalue, out var par))
+                    Value = (T) par;
                 else
                 {
                     //throw new InvalidParsingException($"Tried setting enum value {s} in {WrappedEnum.GetType().Name}");
                     var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-                    Logger.LogString($"Tried setting enum value {s} in {WrappedEnum.GetType().Name}", Logtype.Error);
+                    Logger.LogString($"Tried setting enum value {s} in {Value.GetType().Name}", Logtype.Error);
 
                 }
             }
@@ -222,7 +210,7 @@ namespace CP77.CR2W.Types
             return this;
         }
 
-        public override string ToString() => string.Join(",", this.Value);
-        
+        public override string ToString() => string.Join(",", this.EnumValueList);
+
     }
 }

@@ -189,9 +189,9 @@ namespace CP77.CR2W
 
                 var bufferpath = $"{cr2wFileName}.{i}.buffer";
                 using var fs = new FileStream(bufferpath, FileMode.Create, FileAccess.Write);
-                var b = buffers[i].Buffer;
-                cr2wStream.Seek(b.offset, SeekOrigin.Begin);
-                cr2wStream.DecompressAndCopySegment(fs, b.diskSize, b.memSize);
+                var b = buffers[i];
+                cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
+                cr2wStream.DecompressAndCopySegment(fs, b.DiskSize, b.MemSize);
             }
 
             return true;
@@ -205,23 +205,23 @@ namespace CP77.CR2W
                 return false;
             }
 
-            var sliceCount = blob.Header.TextureInfo.SliceCount.val;
-            var mipCount = blob.Header.TextureInfo.MipCount.val;
-            var alignment = blob.Header.TextureInfo.DataAlignment.val;
+            var sliceCount = blob.Header.TextureInfo.SliceCount.Value;
+            var mipCount = blob.Header.TextureInfo.MipCount.Value;
+            var alignment = blob.Header.TextureInfo.DataAlignment.Value;
 
-            var height = blob.Header.SizeInfo.Height.val;
-            var width = blob.Header.SizeInfo.Width.val;
+            var height = blob.Header.SizeInfo.Height.Value;
+            var width = blob.Header.SizeInfo.Width.Value;
 
             var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
-            if (texa.Setup.RawFormat?.WrappedEnum != null)
+            if (texa.Setup.RawFormat?.Value != null)
             {
-                rawfmt = texa.Setup.RawFormat.WrappedEnum;
+                rawfmt = texa.Setup.RawFormat.Value;
             }
 
             var compression = Enums.ETextureCompression.TCM_None;
-            if (texa.Setup.Compression?.WrappedEnum != null)
+            if (texa.Setup.Compression?.Value != null)
             {
-                compression = texa.Setup.Compression.WrappedEnum;
+                compression = texa.Setup.Compression.Value;
             }
 
             var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt);
@@ -239,9 +239,9 @@ namespace CP77.CR2W
                 new DDSMetadata(width, height, mipCount, texformat, alignment, false, sliceCount,
                     true));
 
-            var b = cr2w.Buffers[0].Buffer;
-            cr2wStream.Seek(b.offset, SeekOrigin.Begin);
-            cr2wStream.DecompressAndCopySegment(ddsStream, b.diskSize, b.memSize);
+            var b = cr2w.Buffers[0];
+            cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
+            cr2wStream.DecompressAndCopySegment(ddsStream, b.DiskSize, b.MemSize);
 
             return true;
         }
@@ -254,12 +254,12 @@ namespace CP77.CR2W
                 return false;
             }
 
-            var sliceCount = blob.Header.TextureInfo.SliceCount.val;
-            var mipCount = blob.Header.TextureInfo.MipCount.val;
-            var alignment = blob.Header.TextureInfo.DataAlignment.val;
+            var sliceCount = blob.Header.TextureInfo.SliceCount.Value;
+            var mipCount = blob.Header.TextureInfo.MipCount.Value;
+            var alignment = blob.Header.TextureInfo.DataAlignment.Value;
 
-            var height = blob.Header.SizeInfo.Height.val;
-            var width = blob.Header.SizeInfo.Width.val;
+            var height = blob.Header.SizeInfo.Height.Value;
+            var width = blob.Header.SizeInfo.Width.Value;
 
             const EFormat texformat = EFormat.R8G8B8A8_UNORM;
 
@@ -275,9 +275,9 @@ namespace CP77.CR2W
             DDSUtils.GenerateAndWriteHeader(ddsStream,
                 new DDSMetadata(width, height, mipCount, texformat, alignment, false, sliceCount,
                     true));
-            var b = cr2w.Buffers[0].Buffer;
-            cr2wStream.Seek(b.offset, SeekOrigin.Begin);
-            cr2wStream.DecompressAndCopySegment(ddsStream, b.diskSize, b.memSize);
+            var b = cr2w.Buffers[0];
+            cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
+            cr2wStream.DecompressAndCopySegment(ddsStream, b.DiskSize, b.MemSize);
 
             return true;
         }
@@ -290,25 +290,25 @@ namespace CP77.CR2W
                 return false;
             }
 
-            var sliceCount = blob.Header.TextureInfo.SliceCount.val;
-            var mipCount = blob.Header.TextureInfo.MipCount.val;
-            var alignment = blob.Header.TextureInfo.DataAlignment.val;
+            var sliceCount = blob.Header.TextureInfo.SliceCount.Value;
+            var mipCount = blob.Header.TextureInfo.MipCount.Value;
+            var alignment = blob.Header.TextureInfo.DataAlignment.Value;
 
-            var height = blob.Header.SizeInfo.Height.val;
-            var width = blob.Header.SizeInfo.Width.val;
+            var height = blob.Header.SizeInfo.Height.Value;
+            var width = blob.Header.SizeInfo.Width.Value;
 
 
             var compression = Enums.ETextureCompression.TCM_None;
             var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
 
-            if (ctex.Setup.RawFormat?.WrappedEnum != null)
+            if (ctex.Setup.RawFormat?.Value != null)
             {
-                rawfmt = ctex.Setup.RawFormat.WrappedEnum;
+                rawfmt = ctex.Setup.RawFormat.Value;
             }
 
-            if (ctex.Setup.Compression?.WrappedEnum != null)
+            if (ctex.Setup.Compression?.Value != null)
             {
-                compression = ctex.Setup.Compression.WrappedEnum;
+                compression = ctex.Setup.Compression.Value;
             }
 
             var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt);
@@ -325,9 +325,9 @@ namespace CP77.CR2W
             DDSUtils.GenerateAndWriteHeader(ddsStream,
                 new DDSMetadata(width, height, mipCount, texformat, alignment, false, sliceCount,
                     true));
-            var b = cr2w.Buffers[0].Buffer;
-            cr2wStream.Seek(b.offset, SeekOrigin.Begin);
-            cr2wStream.DecompressAndCopySegment(ddsStream, b.diskSize, b.memSize);
+            var b = cr2w.Buffers[0];
+            cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
+            cr2wStream.DecompressAndCopySegment(ddsStream, b.DiskSize, b.MemSize);
 
             return true;
         }
@@ -382,25 +382,25 @@ namespace CP77.CR2W
             var newpath = Path.ChangeExtension(cr2wFileName.FullName, "dds");
             #region get xbm data
 
-            var width = blob.Header.SizeInfo.Width.val;
-            var height = blob.Header.SizeInfo.Height.val;
-            var mips = blob.Header.TextureInfo.MipCount.val;
-            var slicecount = blob.Header.TextureInfo.SliceCount.val;
-            var alignment = blob.Header.TextureInfo.DataAlignment.val;
+            var width = blob.Header.SizeInfo.Width.Value;
+            var height = blob.Header.SizeInfo.Height.Value;
+            var mips = blob.Header.TextureInfo.MipCount.Value;
+            var slicecount = blob.Header.TextureInfo.SliceCount.Value;
+            var alignment = blob.Header.TextureInfo.DataAlignment.Value;
 
             var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
-            if (xbm.Setup.RawFormat?.WrappedEnum != null)
+            if (xbm.Setup.RawFormat?.Value != null)
             {
-                rawfmt = xbm.Setup.RawFormat.WrappedEnum;
+                rawfmt = xbm.Setup.RawFormat.Value;
             }
             else
             {
             }
 
             var compression = Enums.ETextureCompression.TCM_None;
-            if (xbm.Setup.Compression?.WrappedEnum != null)
+            if (xbm.Setup.Compression?.Value != null)
             {
-                compression = xbm.Setup.Compression.WrappedEnum;
+                compression = xbm.Setup.Compression.Value;
             }
             else
             {
@@ -416,9 +416,9 @@ namespace CP77.CR2W
                 DDSUtils.GenerateAndWriteHeader(ddsStream,
                     new DDSMetadata(width, height, mips, texformat, alignment, false, slicecount,
                         true));
-                var b = cr2w.Buffers[0].Buffer;
-                cr2wStream.Seek(b.offset, SeekOrigin.Begin);
-                cr2wStream.DecompressAndCopySegment(ddsStream, b.diskSize, b.memSize);
+                var b = cr2w.Buffers[0];
+                cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
+                cr2wStream.DecompressAndCopySegment(ddsStream, b.DiskSize, b.MemSize);
             }
 
             if (flip && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

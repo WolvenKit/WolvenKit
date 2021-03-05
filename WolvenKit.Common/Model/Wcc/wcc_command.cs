@@ -1,19 +1,24 @@
-﻿using System;
-using System.IO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Configuration;
 
 namespace WolvenKit.Common.Wcc
 {
     #region Wcc_lite Command class
+
     public abstract class WCC_Command
     {
+        #region Properties
+
         [Browsable(false)]
         public string Name { get; set; }
+
+        #endregion Properties
+
+
 
         #region Properties
 
@@ -22,18 +27,22 @@ namespace WolvenKit.Common.Wcc
         [Browsable(false)]
         public string Arguments => ConstructArgs();
 
-        #endregion
+        #endregion Properties
 
         #region Overrides
+
         public override string ToString() => Name;
-        #endregion
+
+        #endregion Overrides
 
         #region Methods
+
         /// <summary>
         /// Runs the wcc lite command
         /// </summary>
         /// <returns></returns>
         public EWccStatus Run() => EWccStatus.Finished;
+
         /// <summary>
         /// returns a string constructed from the variables of the wcc_lite command class
         /// </summary>
@@ -56,6 +65,23 @@ namespace WolvenKit.Common.Wcc
             }
 
             return procArgs;
+        }
+
+        /// <summary>
+        /// Function to pass the outfile variable - if existing.
+        /// </summary>
+        private string GetOutfile()
+        {
+            var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            string ret = "";
+
+            foreach (PropertyInfo prop in this.GetType().GetProperties(bindingFlags).Where(x => x.Name.Equals("outfile")))
+            {
+                var val = Convert.ToString(prop.GetValue(this));
+                if (prop.PropertyType == typeof(string) && !string.IsNullOrEmpty(val))
+                    ret = val;
+            }
+            return ret;
         }
 
         /// <summary>
@@ -97,7 +123,6 @@ namespace WolvenKit.Common.Wcc
                         && tag.tag.Contains("Path")
                         && val.First() != '"') //check for alrady declared paths
                     {
-
                         if (Path.GetExtension(val) == "") //is a directory
                         {
                             val = Path.GetFullPath(val).ToString() + "\\";
@@ -105,7 +130,8 @@ namespace WolvenKit.Common.Wcc
                         }
                         val = $"=\"{val}\"";
                         //The end of the atomic dumpfile horror :
-                        if (val == "=\"\\\\\\\\?\\\\\\\\\"") val = "=" + @"\\?\";
+                        if (val == "=\"\\\\\\\\?\\\\\\\\\"")
+                            val = "=" + @"\\?\";
                     }
                     // other strings
                     else
@@ -144,27 +170,8 @@ namespace WolvenKit.Common.Wcc
             return dict;
         }
 
-        /// <summary>
-        /// Function to pass the outfile variable - if existing. 
-        /// </summary>
-        private string GetOutfile()
-        {
-            var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-            string ret = "";
-
-            foreach (PropertyInfo prop in this.GetType().GetProperties(bindingFlags).Where(x => x.Name.Equals("outfile")))
-            {
-                var val = Convert.ToString(prop.GetValue(this));
-                if (prop.PropertyType == typeof(string) && !string.IsNullOrEmpty(val))
-                    ret = val;
-            }
-            return ret;
-        }
-        #endregion
-
+        #endregion Methods
     }
-    #endregion
 
-
-
+    #endregion Wcc_lite Command class
 }

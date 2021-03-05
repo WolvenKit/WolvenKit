@@ -18,13 +18,13 @@ namespace CP77.CR2W.Types
 
         public Color Color
         {
-            get { return Color.FromArgb(Alpha.val, Red.val, Green.val, Blue.val); }
+            get { return Color.FromArgb(Alpha.Value, Red.Value, Green.Value, Blue.Value); }
             set
             {
-                Red.val = value.R;
-                Green.val = value.G;
-                Blue.val = value.B;
-                Alpha.val = value.A;
+                Red.Value = value.R;
+                Green.Value = value.G;
+                Blue.Value = value.B;
+                Alpha.Value = value.A;
             }
         }
 

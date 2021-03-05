@@ -1,11 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace WolvenKit.Common.WinFormsEnums
 {
+    public enum DialogResult
+    {
+        None,
+        OK,
+        Cancel,
+        Abort,
+        Retry,
+        Ignore,
+        Yes,
+        No,
+    }
+
     public enum MessageBoxButtons
     {
         OK,
@@ -15,6 +21,7 @@ namespace WolvenKit.Common.WinFormsEnums
         YesNo,
         RetryCancel,
     }
+
     public enum MessageBoxIcon
     {
         None = 0,
@@ -26,16 +33,5 @@ namespace WolvenKit.Common.WinFormsEnums
         Warning = 48, // 0x00000030
         Asterisk = 64, // 0x00000040
         Information = 64, // 0x00000040
-    }
-    public enum DialogResult
-    {
-        None,
-        OK,
-        Cancel,
-        Abort,
-        Retry,
-        Ignore,
-        Yes,
-        No,
     }
 }

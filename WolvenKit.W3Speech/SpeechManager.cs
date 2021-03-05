@@ -1,18 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using WolvenKit.Common;
-using WolvenKit.Common.Model;
 
 namespace WolvenKit.W3Speech
 {
     public class SpeechManager : IGameArchiveManager
     {
-
         public SpeechManager()
         {
             Items = new Dictionary<string, List<IGameFile>>();
@@ -88,7 +83,7 @@ namespace WolvenKit.W3Speech
 #pragma warning restore CS0168
 #pragma warning restore IDE0051
             {
-                //TODO: Log                
+                //TODO: Log
             }
         }
 

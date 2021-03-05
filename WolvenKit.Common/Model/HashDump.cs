@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace WolvenKit.Common.Model
 {
     public class HashDump
     {
-        public string Path { get; set; }
+        #region Properties
+
         public ulong HashInt { get; set; }
+        public string Path { get; set; }
+
+        #endregion Properties
     }
 }

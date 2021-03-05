@@ -1,0 +1,28 @@
+<catel:UserControl
+ x:Class="WolvenKit.MVVM.Views.Components.Dialogs.StringsGUIImporterIDDialog"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ >
+
+    <catel:UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources />
+                <hc:Theme />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </catel:UserControl.Resources>
+
+    <Grid Width="800" Height="450">
+        <DataGrid>
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="400" Header="ID" />
+                <DataGridTextColumn Header="Text" />
+            </DataGrid.Columns>
+
+            <hc:Row />
+        </DataGrid>
+    </Grid>
+</catel:UserControl>
