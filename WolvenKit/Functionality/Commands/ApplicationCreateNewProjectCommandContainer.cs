@@ -45,15 +45,11 @@ namespace WolvenKit.Functionality.Commands
 
         #endregion Constructors
 
-
-
         #region Events
 
         public event Action OnCommandCompleted;
 
         #endregion Events
-
-
 
         #region Methods
 
@@ -144,9 +140,12 @@ namespace WolvenKit.Functionality.Commands
                                 break;
                         }
                     }
+                    StaticReferences.MainView.OnLoadLayoutAsync();
+
                     await _projectManager.LoadAsync(location);
                     StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.StartScreen.ShownProperty, false);
                     StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
+
                 }
             }
             catch (Exception ex)

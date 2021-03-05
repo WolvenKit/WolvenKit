@@ -1,11 +1,13 @@
-<catel:UserControl x:Class="WolvenKit.MVVM.Views.Components.Wizards.BugReportWizard"
-                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com"
-                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                   xmlns:hc="https://handyorg.github.io/handycontrol"
-                   xmlns:wiz1="clr-namespace:WolvenKit.MVVM.Views.Components.Wizards.WizardPages.BugReportWizard"
-                   IsVisibleChanged="UserControl_IsVisibleChanged">
+<catel:UserControl
+ x:Class="WolvenKit.MVVM.Views.Components.Wizards.BugReportWizard"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ xmlns:wiz1="clr-namespace:WolvenKit.MVVM.Views.Components.Wizards.WizardPages.BugReportWizard"
+ IsVisibleChanged="UserControl_IsVisibleChanged"
+ >
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -15,26 +17,59 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </catel:UserControl.Resources>
-    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch"  Margin="5,5,2,5">
+    <Grid
+     Margin="5,5,2,5"
+     HorizontalAlignment="Stretch"
+     VerticalAlignment="Stretch"
+     hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+     >
 
         <Grid.RowDefinitions>
             <RowDefinition Height="15*" />
             <RowDefinition Height="90*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15,15,0,0">
+        <StackPanel
+         Margin="15,15,0,0"
+         HorizontalAlignment="Left"
+         VerticalAlignment="Center"
+         Orientation="Horizontal"
+         >
             <Grid>
-                <iconPacks:PackIconCodicons  Grid.Row="0"   Kind="Hubot" Spin="False" SpinAutoReverse="False" Height="50" Width="50" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                <iconPacks:PackIconCodicons
+                 Grid.Row="0"
+                 Width="50"
+                 Height="50"
+                 Margin="0,0,0,0"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                 Kind="Hubot"
+                 Spin="False"
+                 SpinAutoReverse="False"
+                 />
             </Grid>
-            <StackPanel  VerticalAlignment="Center" Orientation="Vertical">
+            <StackPanel VerticalAlignment="Center" Orientation="Vertical">
 
-                <TextBlock Text="Let's get rid of those bugs!"  FontSize="20" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,0,0,0"></TextBlock>
-                <hc:Divider  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,5,0,0"></hc:Divider>
+                <TextBlock
+                 Grid.Row="0"
+                 Margin="10,0,0,0"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Center"
+                 FontSize="20"
+                 Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                 Text="Let's get rid of those bugs!"
+                 />
+                <hc:Divider
+                 Margin="0,5,0,0"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch"
+                 />
             </StackPanel>
         </StackPanel>
 
         <Grid x:Name="PageGrid" Grid.Row="1">
-            <wiz1:SendBugView></wiz1:SendBugView>
+            <wiz1:SendBugView />
         </Grid>
     </Grid>
 </catel:UserControl>

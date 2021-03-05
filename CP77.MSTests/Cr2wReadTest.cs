@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using CP77.CR2W;
 using CP77.CR2W.Archive;
-using CP77.CR2W.Types;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common;
 
@@ -16,12 +15,15 @@ namespace CP77.MSTests
     [TestClass]
     public class Cr2wReadTest : GameUnitTest
     {
+        #region Methods
+
         [ClassInitialize]
         public static void SetupClass(TestContext context)
         {
             Setup(context);
         }
 
+        #endregion Methods
 
         #region test methods
 
@@ -775,69 +777,7 @@ namespace CP77.MSTests
             Test_Extension(".xcube");
         }
 
-        #endregion
-
-        private static void Test_Extension(string extension)
-        {
-            var resultDir = Path.Combine(Environment.CurrentDirectory, TestResultsDirectory);
-            Directory.CreateDirectory(resultDir);
-
-            // Run Test
-            var results = Read_Archive_Items(GroupedFiles[extension]).ToList();
-
-            
-
-            // Write
-            if (WriteToFile)
-            {
-                if (results.Any(r => !r.Success))
-                {
-                    var resultPath = Path.Combine(resultDir, $"{extension[1..]}.csv");
-                    var csv = TestResultAsCsv(results.Where(r => !r.Success));
-                    File.WriteAllText(resultPath, csv);
-                    Console.Write(csv);
-                }
-            }
-            
-
-            // Logging
-            // Evaluate
-            var successCount = results.Count(r => r.Success);
-            int totalCount = GroupedFiles[extension].Count;
-            var sb = new StringBuilder();
-            var msg = "";
-
-            bool successRead = results.All(r => r.Success);
-            bool successUB = !results.All(r => r.UnknownBytes > 0);
-            
-            if (!successUB || !successRead)
-            {
-                if (!successRead)
-                    msg += $"{extension} -> Successful Reads: {successCount} / {totalCount} ({(int)(((double)successCount / (double)totalCount) * 100)}%)";
-                var unknownBytes = results.Sum(r => r.UnknownBytes);
-                var additionalBytes = results.Sum(r => r.AdditionalBytes);
-                if (unknownBytes > 0)
-                {
-                    msg += $" UnknownBytes: {unknownBytes}. ";
-                    var unkownTypes = string.Join('\n', results.SelectMany(_ => _.UnknownTypes).Distinct());
-                    msg += $" UnknownTypes: {unkownTypes}";
-                }
-
-                if (additionalBytes > 0)
-                    msg += $" UnknownBytes: {additionalBytes}. ";
-
-                sb.AppendLine(
-                    $"{extension} -> Successful Reads: {successCount} / {totalCount} ({(int) (((double) successCount / (double) totalCount) * 100)}%)");
-                sb.AppendLine(msg);
-                var logPath = Path.Combine(resultDir, $"logfile_{(string.IsNullOrEmpty(extension) ? string.Empty : $"{extension[1..]}_")}{DateTime.Now:yyyyMMddHHmmss}.log");
-                File.WriteAllText(logPath, sb.ToString());
-                Console.WriteLine(sb.ToString());
-
-                Assert.Fail(msg);
-            }
-
-            
-        }
+        #endregion test methods
 
         private static IEnumerable<ReadTestResult> Read_Archive_Items(IEnumerable<FileEntry> files)
         {
@@ -854,7 +794,7 @@ namespace CP77.MSTests
                     using var ms = new MemoryStream();
                     ar.CopyFileToStream(ms, file.NameHash64, false);
 
-                    var c = new CR2WFile {FileName = file.NameOrHash};
+                    var c = new CR2WFile { FileName = file.NameOrHash };
                     ms.Seek(0, SeekOrigin.Begin);
                     var readResult = c.Read(ms);
 
@@ -868,6 +808,7 @@ namespace CP77.MSTests
                                 ReadResult = ReadTestResult.ReadResultType.NoCr2W
                             });
                             break;
+
                         case EFileReadErrorCodes.UnsupportedVersion:
                             results.Add(new ReadTestResult
                             {
@@ -877,6 +818,7 @@ namespace CP77.MSTests
                                 Message = $"Unsupported Version ({c.GetFileHeader().version})"
                             });
                             break;
+
                         case EFileReadErrorCodes.NoError:
                             var hasAdditionalBytes =
                                 c.AdditionalCr2WFileBytes != null && c.AdditionalCr2WFileBytes.Any();
@@ -910,6 +852,7 @@ namespace CP77.MSTests
                             });
 
                             break;
+
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
@@ -928,6 +871,63 @@ namespace CP77.MSTests
             });
 
             return results;
+        }
+
+        private static void Test_Extension(string extension)
+        {
+            var resultDir = Path.Combine(Environment.CurrentDirectory, TestResultsDirectory);
+            Directory.CreateDirectory(resultDir);
+
+            // Run Test
+            var results = Read_Archive_Items(GroupedFiles[extension]).ToList();
+
+            // Write
+            if (WriteToFile)
+            {
+                if (results.Any(r => !r.Success))
+                {
+                    var resultPath = Path.Combine(resultDir, $"{extension[1..]}.csv");
+                    var csv = TestResultAsCsv(results.Where(r => !r.Success));
+                    File.WriteAllText(resultPath, csv);
+                    Console.Write(csv);
+                }
+            }
+
+            // Logging
+            // Evaluate
+            var successCount = results.Count(r => r.Success);
+            int totalCount = GroupedFiles[extension].Count;
+            var sb = new StringBuilder();
+            var msg = "";
+
+            bool successRead = results.All(r => r.Success);
+            bool successUB = !results.All(r => r.UnknownBytes > 0);
+
+            if (!successUB || !successRead)
+            {
+                if (!successRead)
+                    msg += $"{extension} -> Successful Reads: {successCount} / {totalCount} ({(int)(((double)successCount / (double)totalCount) * 100)}%)";
+                var unknownBytes = results.Sum(r => r.UnknownBytes);
+                var additionalBytes = results.Sum(r => r.AdditionalBytes);
+                if (unknownBytes > 0)
+                {
+                    msg += $" UnknownBytes: {unknownBytes}. ";
+                    var unkownTypes = string.Join('\n', results.SelectMany(_ => _.UnknownTypes).Distinct());
+                    msg += $" UnknownTypes: {unkownTypes}";
+                }
+
+                if (additionalBytes > 0)
+                    msg += $" UnknownBytes: {additionalBytes}. ";
+
+                sb.AppendLine(
+                    $"{extension} -> Successful Reads: {successCount} / {totalCount} ({(int)(((double)successCount / (double)totalCount) * 100)}%)");
+                sb.AppendLine(msg);
+                var logPath = Path.Combine(resultDir, $"logfile_{(string.IsNullOrEmpty(extension) ? string.Empty : $"{extension[1..]}_")}{DateTime.Now:yyyyMMddHHmmss}.log");
+                File.WriteAllText(logPath, sb.ToString());
+                Console.WriteLine(sb.ToString());
+
+                Assert.Fail(msg);
+            }
         }
 
         private static string TestResultAsCsv(IEnumerable<ReadTestResult> results)
@@ -961,10 +961,5 @@ namespace CP77.MSTests
 
             return sb.ToString();
         }
-
-        
-
-
-        
     }
 }

@@ -65,18 +65,14 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         public List<ChunkViewModel> Children => _export.VirtualChildrenChunks.Select(_ => new ChunkViewModel(_)).ToList();
 
-        
         public List<ChunkPropertyViewModel> ChildrenProperties =>
             Data.ChildrEditableVariables.Select(_ => new ChunkPropertyViewModel(_)).ToList();
 
         public IEditableVariable Data => _export.data;
 
+        public bool IsSelected { get; set; }
         public string Name => _export.REDName;
 
-        public bool IsSelected { get; set; }
-
         #endregion Properties
-
-
     }
 }

@@ -85,8 +85,6 @@ namespace WolvenKit.MVVM.Model.Wizards
 
         #endregion properties
 
-
-
         #region Classes
 
         public class TypeAndPath

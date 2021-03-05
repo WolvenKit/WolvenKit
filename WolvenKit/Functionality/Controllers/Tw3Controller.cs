@@ -39,8 +39,6 @@ namespace WolvenKit.Functionality.Controllers
 
         #endregion Fields
 
-
-
         #region Methods
 
         public static BundleManager LoadBundleManager()

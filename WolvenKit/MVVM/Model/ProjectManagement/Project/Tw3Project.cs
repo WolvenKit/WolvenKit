@@ -37,8 +37,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         #endregion fields
 
-
-
         #region Constructors
 
         public Tw3Project(string location) : base(location)
@@ -601,8 +599,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         }
 
         #endregion methods
-
-
 
         #region Methods
 

@@ -26,10 +26,10 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
         }
 
         protected override void OnViewModelChanged() => base.OnViewModelChanged();
+
 #pragma warning disable WPF0041
         //backstageTabControl.DataContext = ViewModel;
 #pragma warning restore WPF0041
-
 
         protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
         {

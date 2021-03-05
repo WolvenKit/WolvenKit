@@ -1,33 +1,76 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using CP77.CR2W.Reflection;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools;
-using CP77.CR2W.Reflection;
-using CP77.CR2W.Types;
 
 namespace CP77.CR2W
 {
     public sealed class CR2WManager
     {
+        #region Fields
+
+        private const string footer = @"
+		public override void Read(BinaryReader file, uint size)
+		{
+			base.Read(file, size);
+		}
+
+		public override void Write(BinaryWriter file)
+		{
+			base.Write(file);
+		}
+	}
+
+";
+
+        private const string header = @"
+using System.IO;
+using FastMember;
+using CP77.CR2W.Reflection;
+using static CP77.CR2W.Types.Enums;
+
+namespace CP77.CR2W.Types
+{
+";
+
+        private static readonly Func<string, string> funcCtor = (x) => $"\t\tpublic {x}(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)\r\n\t\t{{\r\n\t\t}}\r\n";
         private static readonly CR2WManager instance = new CR2WManager();
-        static CR2WManager() { }
+        private static Assembly m_assembly;
+
+        private static Dictionary<string, Type> m_enums;
+
+        private static LoggerService m_logger;
+
+        private static DirectoryInfo m_projectinfo;
+
+        private static Dictionary<string, Type> m_types;
+
+        #endregion Fields
+
+        #region Constructors
+
+        static CR2WManager()
+        {
+        }
 
         private CR2WManager()
         {
-            
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public static CR2WManager Instance => instance;
 
-        private static Assembly m_assembly;
-        private static LoggerService m_logger;
-        private static DirectoryInfo m_projectinfo;
-        private static Dictionary<string, Type> m_types;
-        private static Dictionary<string, Type> m_enums;
+        #endregion Properties
+
+        #region Methods
 
         /// <summary>
         /// Gets all available types, custom and vanilla for a given typename
@@ -73,30 +116,18 @@ namespace CP77.CR2W
             return availableTypes.Distinct();
         }
 
-        private static List<Type> GetSubClassesOf(Type type) => m_types?.Values.Where(_ => _.IsSubclassOf(type)).ToList();
-
         public static Type GetTypeByName(string typeName)
         {
             m_types.TryGetValue(typeName, out Type type);
             return type;
         }
 
-        public static bool TypeExists(string typeName) => m_types?.ContainsKey(typeName) ?? false;
-
-        private static void LoadTypes()
+        public static void Init(string projectpath, LoggerService logger)
         {
-            m_types = new Dictionary<string, Type>();
+            m_logger = logger;
+            m_projectinfo = new DirectoryInfo(projectpath);
 
-            foreach (Type type in m_assembly.GetTypes())
-            {
-                if (!type.IsPublic)
-                    continue;
-
-                if (m_types.ContainsKey(type.Name))
-                    continue;
-
-                m_types.Add(type.Name, type);
-            }
+            ReloadAssembly(logger);
         }
 
         /// <summary>
@@ -107,9 +138,9 @@ namespace CP77.CR2W
         {
             if (m_projectinfo != null && m_projectinfo.Exists)
             {
-
                 var (count, csharpstring) = InterpretScriptClasses();
-                if (count <= 0) return;
+                if (count <= 0)
+                    return;
                 m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(csharpstring, m_assembly, logger);
                 if (m_assembly != null)
                 {
@@ -122,71 +153,104 @@ namespace CP77.CR2W
             }
         }
 
-        #region Enums
-        private static void LoadEnums()
+        public static bool TypeExists(string typeName) => m_types?.ContainsKey(typeName) ?? false;
+
+        private static string GetCsTypeRecursive(string input, List<string> customenums)
         {
-            m_enums = new Dictionary<string, Type>();
-
-            if (!m_types.ContainsKey("Enums"))
-                return;
-
-
-            foreach (Type type in CR2WManager.GetTypeByName("Enums").GetNestedTypes())
+            if (input.Contains("array")) // TODO: support for more generics?
             {
-                if (!type.IsEnum)
-                    continue;
+                string returntype = input;
 
-                if (m_enums.ContainsKey(type.Name))
-                    continue;
-
-                m_enums.Add(type.Name, type);
+                // array types
+                // [Ordinal(18)] [RED("editorCachedIkEffectorsID", 2, 0)] public CArray<CInt32> EditorCachedIkEffectorsID { get; set; }
+                var regarray = new Regex(@"(?:.*)array\s*<\s*(?<TYPE>\w+)\s*>.*");
+                var matchIsArray = regarray.Match(input);
+                if (matchIsArray.Success)
+                {
+                    var typename = matchIsArray.Groups["TYPE"].Value;
+                    returntype = $"CArray<{GetCsTypeRecursive(typename, customenums)}>";
+                }
+                else
+                {
+                }
+                return returntype;
+            }
+            else
+            {
+                input = input.Trim(' ');
+                if (AssemblyDictionary.EnumExists(input) || customenums.Contains(input))
+                    input = $"CEnum<{input}>";
+                return REDReflection.GetWKitBaseTypeFromREDBaseType(input);
             }
         }
 
-        public static Type GetEnumByName(string typeName)
+        private static List<Type> GetSubClassesOf(Type type) => m_types?.Values.Where(_ => _.IsSubclassOf(type)).ToList();
+
+        private static string InterpretClassLine(string input, ref string classname)
         {
-            m_enums.TryGetValue(typeName, out Type type);
-            return type;
+            string csline = "";
+
+            // check if class
+            var regClass = new Regex(@"(.*)class\s+(\w+)(.*)");
+            var matchIsClass = regClass.Match(input);
+            if (matchIsClass.Success)
+            {
+                csline += "\t[REDMeta]\r\n";
+                classname = matchIsClass.Groups[2].Value;
+
+                // check if class extends
+                string rest = matchIsClass.Groups[3].Value;
+                var regExtends = new Regex(@"(.*)extends\s+(\w+)(.*)");
+                var matchExtends = regExtends.Match(rest);
+                if (matchExtends.Success)
+                {
+                    string parentclassname = matchExtends.Groups[2].Value;
+                    csline += $"\tpublic class {classname} : {parentclassname}\r\n\t{{";
+
+                    //// interpret the rest
+                    //rest = matchExtends.Groups[3].Value;
+                    //csline += InterpretLine(rest);
+                }
+                else
+                {
+                    csline += $"\tpublic class {classname}\r\n\t\t{{";
+                }
+            }
+            else
+            {
+            }
+
+            return csline;
         }
 
-        public static bool EnumExists(string typeName) => m_enums?.ContainsKey(typeName) ?? false;
-        #endregion
+        private static string InterpretEnumLine(string input, ref string enumname)
+        {
+            string csline = "";
 
+            // check if class
+            var regClass = new Regex(@"(.*)enum\s+(\w+)(.*)");
+            var matchIsClass = regClass.Match(input);
+            if (matchIsClass.Success)
+            {
+                enumname = matchIsClass.Groups[2].Value;
+                csline += $"\tpublic enum {enumname}\r\n\t\t{{";
+            }
 
+            return csline;
+        }
 
+        private static string InterpretEnumVarLine(string input)
+        {
+            string csline = "";
+            var regvar = new Regex(@"\.*(?<VARNAME>\w+)\.*");
+            var matchIsVar = regvar.Match(input);
+            if (matchIsVar.Success)
+            {
+                csline = $"{matchIsVar.Groups["VARNAME"].Value},";
+            }
 
-
-
-
-
-
-
-        private const string header = @"
-using System.IO;
-using FastMember;
-using CP77.CR2W.Reflection;
-using static CP77.CR2W.Types.Enums;
-
-
-namespace CP77.CR2W.Types
-{
-";
-
-        private const string footer = @"
-		public override void Read(BinaryReader file, uint size)
-		{
-			base.Read(file, size);
-		}
-
-		public override void Write(BinaryWriter file)
-		{
-			base.Write(file);
-		}
-	}
-
-";
-
-        private static readonly Func<string, string> funcCtor = (x) => $"\t\tpublic {x}(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)\r\n\t\t{{\r\n\t\t}}\r\n";
+            return csline;
+        }
 
         private static (int, string) InterpretScriptClasses()
         {
@@ -201,11 +265,12 @@ namespace CP77.CR2W.Types
 
                 FileInfo[] projectScriptFiles = m_projectinfo.GetFiles("*.ws", SearchOption.AllDirectories);
 
-
                 sw.WriteLine("\tpublic static partial class Enums");
                 sw.WriteLine("\t{\r\n");
                 // interpret enums
+
                 #region Enums
+
                 foreach (var file in projectScriptFiles)
                 {
                     int depth = 0;
@@ -219,7 +284,6 @@ namespace CP77.CR2W.Types
                         // check if should start reading
                         if (line.Contains("enum "))
                         {
-
                             // interpret line
                             string intline = InterpretEnumLine(line, ref enumname);
                             if (!string.IsNullOrEmpty(intline))
@@ -274,11 +338,15 @@ namespace CP77.CR2W.Types
                         }
                     }
                 }
-                #endregion
+
+                #endregion Enums
+
                 sw.WriteLine("\t}\r\n");
 
                 // interpret classes
+
                 #region Classes
+
                 foreach (var file in projectScriptFiles)
                 {
                     int depth = 0;
@@ -293,7 +361,6 @@ namespace CP77.CR2W.Types
                         // check if should start reading
                         if (line.Contains("class "))
                         {
-
                             // interpret line
                             string intline = InterpretClassLine(line, ref classname);
                             if (!string.IsNullOrEmpty(intline))
@@ -348,8 +415,8 @@ namespace CP77.CR2W.Types
                         }
                     }
                 }
-                #endregion
 
+                #endregion Classes
 
                 // namespace end
                 sw.WriteLine("}");
@@ -357,11 +424,11 @@ namespace CP77.CR2W.Types
             }
 
             if (importedClasses.Count > 0)
-                if (m_logger != null) m_logger.LogString($"Sucessfully parsed {importedClasses.Count} custom classes: " +
-                $"{string.Join(", ", importedClasses)}", Logtype.Success);
+                if (m_logger != null)
+                    m_logger.LogString($"Sucessfully parsed {importedClasses.Count} custom classes: " +
+$"{string.Join(", ", importedClasses)}", Logtype.Success);
             return (importedClasses.Count, output);
         }
-
 
         private static string InterpretVarLine(string input, int counter, List<string> customenums)
         {
@@ -393,117 +460,58 @@ namespace CP77.CR2W.Types
             }
             else
             {
-                
             }
 
             return csline;
         }
 
-        private static string InterpretEnumVarLine(string input)
+        private static void LoadTypes()
         {
-            string csline = "";
-            var regvar = new Regex(@"\.*(?<VARNAME>\w+)\.*");
-            var matchIsVar = regvar.Match(input);
-            if (matchIsVar.Success)
-            {
-                csline = $"{matchIsVar.Groups["VARNAME"].Value},";
-            }
+            m_types = new Dictionary<string, Type>();
 
-            return csline;
-        }
-
-        private static string GetCsTypeRecursive(string input, List<string> customenums)
-        {
-            if (input.Contains("array")) // TODO: support for more generics?
+            foreach (Type type in m_assembly.GetTypes())
             {
-                string returntype = input;
+                if (!type.IsPublic)
+                    continue;
 
-                // array types
-                // [Ordinal(18)] [RED("editorCachedIkEffectorsID", 2, 0)] public CArray<CInt32> EditorCachedIkEffectorsID { get; set; }
-                var regarray = new Regex(@"(?:.*)array\s*<\s*(?<TYPE>\w+)\s*>.*");
-                var matchIsArray = regarray.Match(input);
-                if (matchIsArray.Success)
-                {
-                    var typename = matchIsArray.Groups["TYPE"].Value;
-                    returntype = $"CArray<{GetCsTypeRecursive(typename, customenums)}>";
-                }
-                else
-                {
-                    
-                }
-                return returntype;
-            }
-            else
-            {
-                input = input.Trim(' ');
-                if (AssemblyDictionary.EnumExists(input) || customenums.Contains(input))
-                    input = $"CEnum<{input}>";
-                return REDReflection.GetWKitBaseTypeFromREDBaseType(input);
+                if (m_types.ContainsKey(type.Name))
+                    continue;
+
+                m_types.Add(type.Name, type);
             }
         }
 
-        private static string InterpretClassLine(string input, ref string classname)
+        #endregion Methods
+
+        #region Enums
+
+        public static bool EnumExists(string typeName) => m_enums?.ContainsKey(typeName) ?? false;
+
+        public static Type GetEnumByName(string typeName)
         {
-            string csline = "";
-
-            // check if class
-            var regClass = new Regex(@"(.*)class\s+(\w+)(.*)");
-            var matchIsClass = regClass.Match(input);
-            if (matchIsClass.Success)
-            {
-                csline += "\t[REDMeta]\r\n";
-                classname = matchIsClass.Groups[2].Value;
-
-                // check if class extends
-                string rest = matchIsClass.Groups[3].Value;
-                var regExtends = new Regex(@"(.*)extends\s+(\w+)(.*)");
-                var matchExtends = regExtends.Match(rest);
-                if (matchExtends.Success)
-                {
-                    string parentclassname = matchExtends.Groups[2].Value;
-                    csline += $"\tpublic class {classname} : {parentclassname}\r\n\t{{";
-
-                    //// interpret the rest
-                    //rest = matchExtends.Groups[3].Value;
-                    //csline += InterpretLine(rest);
-                }
-                else
-                {
-                    csline += $"\tpublic class {classname}\r\n\t\t{{";
-                }
-            }
-            else
-            {
-
-            }
-
-
-            return csline;
+            m_enums.TryGetValue(typeName, out Type type);
+            return type;
         }
 
-        private static string InterpretEnumLine(string input, ref string enumname)
+        private static void LoadEnums()
         {
-            string csline = "";
+            m_enums = new Dictionary<string, Type>();
 
-            // check if class
-            var regClass = new Regex(@"(.*)enum\s+(\w+)(.*)");
-            var matchIsClass = regClass.Match(input);
-            if (matchIsClass.Success)
+            if (!m_types.ContainsKey("Enums"))
+                return;
+
+            foreach (Type type in CR2WManager.GetTypeByName("Enums").GetNestedTypes())
             {
-                enumname = matchIsClass.Groups[2].Value;
-                csline += $"\tpublic enum {enumname}\r\n\t\t{{";
+                if (!type.IsEnum)
+                    continue;
+
+                if (m_enums.ContainsKey(type.Name))
+                    continue;
+
+                m_enums.Add(type.Name, type);
             }
-
-            return csline;
         }
 
-        public static void Init(string projectpath, LoggerService logger)
-        {
-            m_logger = logger;
-            m_projectinfo = new DirectoryInfo(projectpath);
-
-            ReloadAssembly(logger);
-        }
-
+        #endregion Enums
     }
 }

@@ -5,12 +5,16 @@ namespace WolvenKit.MVVM.Views.Components.Editors
 {
     public partial class CodeEditorView
     {
+        #region Constructors
+
         public CodeEditorView()
         {
             InitializeComponent();
         }
 
-        private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => base.OnMouseLeftButtonDown(e);// Begin dragging the window
+        #endregion Constructors
+
+        #region Methods
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -27,5 +31,11 @@ namespace WolvenKit.MVVM.Views.Components.Editors
                 DiscordHelper.SetDiscordRPCStatus("Code Editor");
             }
         }
+
+        private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => base.OnMouseLeftButtonDown(e);
+
+        #endregion Methods
+
+        // Begin dragging the window
     }
 }

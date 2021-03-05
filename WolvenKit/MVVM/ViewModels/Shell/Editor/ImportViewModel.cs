@@ -81,8 +81,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         //void Importableobjects_ListChanged(object sender, ListChangedEventArgs e) => OnPropertyChanged(nameof(Importableobjects));
 
-
-
         #region Properties
 
         #region SelectedItem
@@ -280,8 +278,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         }
 
         #endregion Commands Implementation
-
-
 
         #region Methods
 

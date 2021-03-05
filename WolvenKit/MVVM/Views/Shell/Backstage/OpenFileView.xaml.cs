@@ -19,6 +19,8 @@ namespace WolvenKit.MVVM.Views.Shell.Backstage
 
         #endregion Constructors
 
+        #region Methods
+
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
             if (IsVisible)
@@ -26,5 +28,7 @@ namespace WolvenKit.MVVM.Views.Shell.Backstage
                 DiscordHelper.SetDiscordRPCStatus("Backstage - Open File");
             }
         }
+
+        #endregion Methods
     }
 }

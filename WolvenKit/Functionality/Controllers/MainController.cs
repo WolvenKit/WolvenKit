@@ -48,8 +48,6 @@ namespace WolvenKit.Functionality.Controllers
 
         #endregion Constructors
 
-
-
         #region Methods
 
         public static MainController Get()

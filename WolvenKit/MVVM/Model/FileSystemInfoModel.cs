@@ -345,65 +345,65 @@ namespace WolvenKit.MVVM.Model
         private string GetFileExtension()
         {
             var node = FileSystemInfo;
-            if (node as DirectoryInfo != null)
+            if (node is DirectoryInfo)
             {
                 if (_projectManager.ActiveProject is Tw3Project tw3Project)
                 {
                     // check for base dirs
                     if (node.FullName == tw3Project.ModDirectory)
                     {
-                        return ECustomImageKeys.ModImageKey.ToString();
+                        return nameof(ECustomImageKeys.ModImageKey);
                     }
 
                     if (node.FullName == tw3Project.ModCookedDirectory)
                     {
-                        return ECustomImageKeys.ModCookedImageKey.ToString();
+                        return nameof(ECustomImageKeys.ModCookedImageKey);
                     }
 
                     if (node.FullName == tw3Project.ModUncookedDirectory)
                     {
-                        return ECustomImageKeys.ModUncookedImageKey.ToString();
+                        return nameof(ECustomImageKeys.ModUncookedImageKey);
                     }
 
                     if (node.FullName == tw3Project.DlcDirectory)
                     {
-                        return ECustomImageKeys.DlcImageKey.ToString();
+                        return nameof(ECustomImageKeys.DlcImageKey);
                     }
 
                     if (node.FullName == tw3Project.DlcCookedDirectory)
                     {
-                        return ECustomImageKeys.DlcCookedImageKey.ToString();
+                        return nameof(ECustomImageKeys.DlcCookedImageKey);
                     }
 
                     if (node.FullName == tw3Project.DlcUncookedDirectory)
                     {
-                        return ECustomImageKeys.DlcUncookedImageKey.ToString();
+                        return nameof(ECustomImageKeys.DlcUncookedImageKey);
                     }
 
                     if (node.FullName == tw3Project.RawDirectory)
                     {
-                        return ECustomImageKeys.RawImageKey.ToString();
+                        return nameof(ECustomImageKeys.RawImageKey);
                     }
 
                     if (node.FullName == tw3Project.RawModDirectory)
                     {
-                        return ECustomImageKeys.RawModImageKey.ToString();
+                        return nameof(ECustomImageKeys.RawModImageKey);
                     }
 
                     if (node.FullName == tw3Project.RawDlcDirectory)
                     {
-                        return ECustomImageKeys.RawDlcImageKey.ToString();
+                        return nameof(ECustomImageKeys.RawDlcImageKey);
                     }
 
                     if (node.FullName == tw3Project.RadishDirectory)
                     {
-                        return ECustomImageKeys.RadishImageKey.ToString();
+                        return nameof(ECustomImageKeys.RadishImageKey);
                     }
                 }
 
                 return IsExpanded
-                    ? ECustomImageKeys.OpenDirImageKey.ToString()
-                    : ECustomImageKeys.ClosedDirImageKey.ToString();
+                    ? nameof(ECustomImageKeys.OpenDirImageKey)
+                    : nameof(ECustomImageKeys.ClosedDirImageKey);
             }
             else
             {

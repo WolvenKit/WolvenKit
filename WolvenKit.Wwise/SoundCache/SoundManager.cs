@@ -1,20 +1,25 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using WolvenKit.Common;
-using WolvenKit.Cache;
-using WolvenKit.Wwise;
-using WolvenKit.Common.Model;
 using System.Reflection;
+using WolvenKit.Common;
+using WolvenKit.Wwise;
 
 namespace WolvenKit.Cache
 {
     public class SoundManager : IGameArchiveManager
     {
+        #region Fields
+
+        public SoundBanksInfoXML soundBanksInfo;
+
+        private readonly string[] vanillaDLClist = new string[] { "DLC1", "DLC2", "DLC3", "DLC4", "DLC5", "DLC6", "DLC7", "DLC8", "DLC9", "DLC10", "DLC11", "DLC12", "DLC13", "DLC14", "DLC15", "DLC16", "bob", "ep1" };
+
+        #endregion Fields
+
+        #region Constructors
+
         public SoundManager()
         {
             Items = new Dictionary<string, List<IGameFile>>();
@@ -22,67 +27,25 @@ namespace WolvenKit.Cache
             FileList = new List<IGameFile>();
             Extensions = new List<string>();
             AutocompleteSource = new List<string>();
-            soundBanksInfo = new SoundBanksInfoXML(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "SoundCache","soundbanksinfo.xml"));
+            soundBanksInfo = new SoundBanksInfoXML(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "SoundCache", "soundbanksinfo.xml"));
         }
 
-        public Dictionary<string, List<IGameFile>> Items { get; set; }
-        public Dictionary<string, SoundCache> Archives { get; set; }
-        public GameFileTreeNode RootNode { get; set; }
-        public List<IGameFile> FileList { get; set; }
-        public EArchiveType TypeName => EArchiveType.SoundCache;
-        public List<string> Extensions { get; set; }
-        public List<string> AutocompleteSource { get; set; }
+        #endregion Constructors
+
+        #region Properties
 
         public static string SerializationVersion => "1.0";
+        public Dictionary<string, SoundCache> Archives { get; set; }
+        public List<string> AutocompleteSource { get; set; }
+        public List<string> Extensions { get; set; }
+        public List<IGameFile> FileList { get; set; }
+        public Dictionary<string, List<IGameFile>> Items { get; set; }
+        public GameFileTreeNode RootNode { get; set; }
+        public EArchiveType TypeName => EArchiveType.SoundCache;
 
-        public SoundBanksInfoXML soundBanksInfo;
+        #endregion Properties
 
-        private readonly string[] vanillaDLClist = new string[] { "DLC1", "DLC2", "DLC3", "DLC4", "DLC5", "DLC6", "DLC7", "DLC8", "DLC9", "DLC10", "DLC11", "DLC12", "DLC13", "DLC14", "DLC15", "DLC16", "bob", "ep1" };
-
-
-        /// <summary>
-        ///     Load a single mod soundcache
-        /// </summary>
-        /// <param name="filename"></param>
-        private void LoadModBundle(string filename)
-        {
-            if (Archives.ContainsKey(filename))
-                return;
-
-            var bundle = new SoundCache(filename);
-
-            foreach (var item in bundle.Files)
-            {
-                if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Name))
-                    Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IGameFile>());
-
-                Items[GetModFolder(filename) + "\\" + item.Name].Add(item);
-            }
-
-            Archives.Add(filename, bundle);
-        }
-
-        /// <summary>
-        ///     Load a single soundcache
-        /// </summary>
-        /// <param name="filename"></param>
-        private void LoadBundle(string filename)
-        {
-            if (Archives.ContainsKey(filename))
-                return;
-
-            var bundle = new SoundCache(filename);
-
-            foreach (var item in bundle.Files)
-            {
-                if (!Items.ContainsKey(item.Name))
-                    Items.Add(item.Name, new List<IGameFile>());
-
-                Items[item.Name].Add(item);
-            }
-
-            Archives.Add(filename, bundle);
-        }
+        #region Methods
 
         /// <summary>
         ///     Load every non-mod bundle it can find in ..\..\content and ..\..\DLC, also calls RebuildRootNode()
@@ -172,6 +135,107 @@ namespace WolvenKit.Cache
         }
 
         /// <summary>
+        /// Since File.GetFileName() only works for real paths we need to have this
+        /// </summary>
+        /// <param name="s">Path/Name of the file</param>
+        /// <returns></returns>
+        private string GetFileName(string s)
+        {
+            return s.Contains('\\') ? s.Split('\\').Last() : s;
+        }
+
+        /// <summary>
+        /// Deep search for files
+        /// </summary>
+        /// <param name="mainnode">The rootnode to get the files from</param>
+        /// <returns></returns>
+        private List<IGameFile> GetFiles(GameFileTreeNode mainnode)
+        {
+            var bundfiles = new List<IGameFile>();
+            if (mainnode?.Files != null)
+            {
+                foreach (var wfile in mainnode.Files)
+                {
+                    bundfiles.AddRange(wfile.Value);
+                }
+                bundfiles.AddRange(mainnode.Directories.Values.SelectMany(GetFiles));
+            }
+            return bundfiles;
+        }
+
+        /// <summary>
+        ///     Load a single soundcache
+        /// </summary>
+        /// <param name="filename"></param>
+        private void LoadBundle(string filename)
+        {
+            if (Archives.ContainsKey(filename))
+                return;
+
+            var bundle = new SoundCache(filename);
+
+            foreach (var item in bundle.Files)
+            {
+                if (!Items.ContainsKey(item.Name))
+                    Items.Add(item.Name, new List<IGameFile>());
+
+                Items[item.Name].Add(item);
+            }
+
+            Archives.Add(filename, bundle);
+        }
+
+        /// <summary>
+        ///     Load a single mod soundcache
+        /// </summary>
+        /// <param name="filename"></param>
+        private void LoadModBundle(string filename)
+        {
+            if (Archives.ContainsKey(filename))
+                return;
+
+            var bundle = new SoundCache(filename);
+
+            foreach (var item in bundle.Files)
+            {
+                if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Name))
+                    Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IGameFile>());
+
+                Items[GetModFolder(filename) + "\\" + item.Name].Add(item);
+            }
+
+            Archives.Add(filename, bundle);
+        }
+
+        /// <summary>
+        /// Gets the distinct filenames from the loaded bundles so they can be used for autocomplete
+        /// </summary>
+        private void RebuildAutoCompleteSource()
+        {
+            AutocompleteSource.AddRange(FileList.Select(x => GetFileName(x.Name)).Distinct().ToArray());
+        }
+
+        /// <summary>
+        /// Gets the avaliable extensions in the files
+        /// </summary>
+        private void RebuildExtensions()
+        {
+            foreach (var file in FileList.Where(file => !Extensions.Contains(file.Name.Split('.').Last())))
+            {
+                Extensions.Add(file.Name.Split('.').Last());
+            }
+            Extensions.Sort();
+        }
+
+        /// <summary>
+        /// Calls GetFiles on the rootnode
+        /// </summary>
+        private void RebuildFileList()
+        {
+            FileList = GetFiles(RootNode);
+        }
+
+        /// <summary>
         ///     Rebuilds the soundcache tree structure also rebuilds NOTE: Filelist,autocomplete,extensions
         /// </summary>
         private void RebuildRootNode()
@@ -209,61 +273,6 @@ namespace WolvenKit.Cache
             RebuildAutoCompleteSource();
         }
 
-        /// <summary>
-        /// Calls GetFiles on the rootnode
-        /// </summary>
-        private void RebuildFileList()
-        {
-            FileList = GetFiles(RootNode);
-        }
-
-        /// <summary>
-        /// Gets the avaliable extensions in the files
-        /// </summary>
-        private void RebuildExtensions()
-        {
-            foreach (var file in FileList.Where(file => !Extensions.Contains(file.Name.Split('.').Last())))
-            {
-                Extensions.Add(file.Name.Split('.').Last());
-            }
-            Extensions.Sort();
-        }
-
-        /// <summary>
-        /// Gets the distinct filenames from the loaded bundles so they can be used for autocomplete
-        /// </summary>
-        private void RebuildAutoCompleteSource()
-        {
-            AutocompleteSource.AddRange(FileList.Select(x => GetFileName(x.Name)).Distinct().ToArray());
-        }
-
-        /// <summary>
-        /// Deep search for files
-        /// </summary>
-        /// <param name="mainnode">The rootnode to get the files from</param>
-        /// <returns></returns>
-        private List<IGameFile> GetFiles(GameFileTreeNode mainnode)
-        {
-            var bundfiles = new List<IGameFile>();
-            if (mainnode?.Files != null)
-            {
-                foreach (var wfile in mainnode.Files)
-                {
-                    bundfiles.AddRange(wfile.Value);
-                }
-                bundfiles.AddRange(mainnode.Directories.Values.SelectMany(GetFiles));
-            }
-            return bundfiles;
-        }
-
-        /// <summary>
-        /// Since File.GetFileName() only works for real paths we need to have this
-        /// </summary>
-        /// <param name="s">Path/Name of the file</param>
-        /// <returns></returns>
-        private string GetFileName(string s)
-        {
-            return s.Contains('\\') ? s.Split('\\').Last() : s;
-        }
+        #endregion Methods
     }
 }

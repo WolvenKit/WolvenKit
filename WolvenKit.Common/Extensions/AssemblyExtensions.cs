@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Reflection;
 
@@ -6,6 +6,8 @@ namespace WolvenKit.Common
 {
     public static class AssemblyExtensions
     {
+        #region Methods
+
         public static DateTime GetLinkerTime(this Assembly assembly, TimeZoneInfo target = null)
         {
             var filePath = assembly.Location;
@@ -28,5 +30,7 @@ namespace WolvenKit.Common
 
             return localTime;
         }
+
+        #endregion Methods
     }
 }

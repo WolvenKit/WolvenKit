@@ -12,7 +12,8 @@ namespace CP77.CR2W
     /// </summary>
     public static partial class ModTools
     {
-        
+        #region Methods
+
         /// <summary>
         /// Imports a raw File to a RedEngine file (e.g. .dds to .xbm, .fbx to .mesh)
         /// </summary>
@@ -22,19 +23,23 @@ namespace CP77.CR2W
         public static CR2WFile Import(FileInfo rawFile, string textureGroup = null)
         {
             #region checks
-            
-            if (rawFile == null) return null;
-            if (!rawFile.Exists) return null;
-            if (rawFile.Directory != null && !rawFile.Directory.Exists) return null;
-            if (!Enum.GetNames(typeof(ERawFileFormat)).Contains(rawFile.Extension[1..])) return null;
+
+            if (rawFile == null)
+                return null;
+            if (!rawFile.Exists)
+                return null;
+            if (rawFile.Directory != null && !rawFile.Directory.Exists)
+                return null;
+            if (!Enum.GetNames(typeof(ERawFileFormat)).Contains(rawFile.Extension[1..]))
+                return null;
             // if (existingCr2w != null)
             // {
             //     if (!existingCr2w.Exists) return null;
             //     if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(rawFile.Extension[1..])) return null;
             // }
-            
-            #endregion
-            
+
+            #endregion checks
+
             //switch ERawFileFormat
             if (!Enum.TryParse(rawFile.Extension, out ERawFileFormat rawFileFormat))
                 return null;
@@ -43,6 +48,7 @@ namespace CP77.CR2W
                 case ERawFileFormat.tga:
                 case ERawFileFormat.dds:
                     return ImportXbm(rawFile);
+
                 case ERawFileFormat.fbx:
                     throw new NotImplementedException();
                 default:
@@ -67,20 +73,15 @@ namespace CP77.CR2W
                     //TODO: proper exception handling
                     return null;
                 }
-                
-                if (!File.Exists(ddsPath)) return null;
+
+                if (!File.Exists(ddsPath))
+                    return null;
             }
-                
+
             // read dds metadata
             var metadata = DDSUtils.ReadHeader(ddsPath);
             var width = metadata.Width;
             var height = metadata.Height;
-            
-            
-            
-
-            
-            
 
             // create cr2wfile
             var cr2w = new CR2WFile();
@@ -94,23 +95,20 @@ namespace CP77.CR2W
                 IsSerialized = true
             };
             SetTextureGroupSetup();
-            
-            
-                
+
             // populate with dds metadata
-            
+
             // kraken ddsfile
             // remove dds header
-            
+
             // compress file
-            
+
             // append to cr2wfile
-            
+
             // update cr2w headers
 
             throw new NotImplementedException();
 
-            
             #region local functions
 
             void SetTextureGroupSetup()
@@ -118,7 +116,7 @@ namespace CP77.CR2W
                 // first check the user-texture group
                 if (!string.IsNullOrEmpty(textureGroup))
                 {
-                    if (Enum.TryParse(textureGroup, out Enums.GpuWrapApieTextureGroup eTextureGroup)) 
+                    if (Enum.TryParse(textureGroup, out Enums.GpuWrapApieTextureGroup eTextureGroup))
                     {
                         var (compression, rawformat, flags) = CommonFunctions.GetRedFormatsFromTextureGroup(eTextureGroup);
                         xbm.Setup.Group = new CEnum<Enums.GpuWrapApieTextureGroup>(cr2w, xbm, "group")
@@ -141,38 +139,39 @@ namespace CP77.CR2W
                         return;
                     }
                 }
-                
+
                 // if that didn't work, interpret the filename suffix
                 if (string.IsNullOrEmpty(textureGroup) && rawFile.Name.Contains('_'))
                 {
                     // try interpret suffix
                     switch (rawFile.Name.Split('_').Last())
                     {
-                        case "d": 
-                        case "d01": 
-                         
+                        case "d":
+                        case "d01":
+
                             break;
+
                         case "e":
-                        
+
                             break;
+
                         case "r":
                         case "r01":
-                        
+
                             break;
+
                         default:
                             break;
                     }
                 }
-                
+
                 // if that also didn't work, just use default or skip
                 //TODO
             }
 
-            #endregion
-            
+            #endregion local functions
         }
-        
-        
-        
+
+        #endregion Methods
     }
 }

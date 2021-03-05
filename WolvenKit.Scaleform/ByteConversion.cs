@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Text;
 
@@ -9,52 +9,34 @@ namespace WolvenKit.Scaleform
     /// </summary>
     public sealed class ByteConversion
     {
+        #region Fields
+
         /// <summary>
         /// Codepage value for Shift JIS (Jp)
         /// </summary>
         public const int CodePageJapan = 932;
-        /// <summary>
-        /// Codepage value for Cyrillic (US)
-        /// </summary>
-        public const int CodePageUnitedStates = 1251;
 
         /// <summary>
         /// Codepage value for OEM DOS
         /// </summary>
         public const int CodePageOEM = 437;
 
-        private ByteConversion() { }
+        /// <summary>
+        /// Codepage value for Cyrillic (US)
+        /// </summary>
+        public const int CodePageUnitedStates = 1251;
 
-        /// <summary>
-        /// Get string from bytes.
-        /// </summary>
-        /// <param name="pBytes">Bytes to convert to a string.</param>
-        /// <param name="codePage">Codepage to use in converting bytes.</param>
-        /// <returns>String encoding using the input Codepage.</returns>
-        public static string GetEncodedText(byte[] value, int codePage)
+        #endregion Fields
+
+        #region Constructors
+
+        private ByteConversion()
         {
-            //return Encoding.Unicode.GetString(value);
-            return System.Text.Encoding.GetEncoding(codePage).GetString(value);
         }
 
-        /// <summary>
-        /// Get text encoded in Shift JIS
-        /// </summary>
-        /// <param name="pBytes">Bytes to decode.</param>
-        /// <returns>String encoded using the Shift JIS codepage.</returns>
-        public static string GetJapaneseEncodedText(byte[] value)
-        {
-            return GetEncodedText(value, CodePageJapan);
-        }
-        /// <summary>
-        /// Get text encoded in Cyrillic
-        /// </summary>
-        /// <param name="pBytes">Bytes to decode.</param>
-        /// <returns>String encoded using the Cyrillic codepage.</returns>
-        public static string GetUnitedStatesEncodedText(byte[] value)
-        {
-            return GetEncodedText(value, CodePageUnitedStates);
-        }
+        #endregion Constructors
+
+        #region Methods
 
         /// <summary>
         /// Get text encoded in ASCII
@@ -93,12 +75,75 @@ namespace WolvenKit.Scaleform
             return sb.ToString();
         }
 
-        public static string GetUtf16LeText(byte[] value)
+        public static byte[] GetBytesBigEndian(uint value)
         {
-            System.Text.Encoding encoding = System.Text.Encoding.Unicode;
-            return encoding.GetString(value);
+            byte[] ret = BitConverter.GetBytes(value);
+            Array.Reverse(ret);
+            return ret;
         }
 
+        public static byte[] GetBytesFromHexString(string hexValue)
+        {
+            int j = 0;
+            byte[] bytes = new byte[hexValue.Length / 2];
+
+            // convert the string to bytes
+            for (int i = 0; i < hexValue.Length; i += 2)
+            {
+                bytes[j] = BitConverter.GetBytes(Int16.Parse(hexValue.Substring(i, 2), System.Globalization.NumberStyles.AllowHexSpecifier, CultureInfo.CurrentCulture))[0];
+                j++;
+            }
+
+            return bytes;
+        }
+
+        public static DateTime GetDateTimeFromFAT32Date(int value)
+        {
+            short xDate = (short)(value >> 0x10);
+            short xTime = (short)(value & 0xFFFF);
+
+            if (xDate == 0 && xTime == 0)
+            {
+                return DateTime.Now;
+            }
+            else
+            {
+                return new DateTime(
+                    (((xDate & 0xFE00) >> 9) + 0x7BC),
+                    ((xDate & 0x1E0) >> 5),
+                    (xDate & 0x1F),
+                    ((xTime & 0xF800) >> 0xB),
+                    ((xTime & 0x7E0) >> 5),
+                    ((xTime & 0x1F) * 2));
+            }
+        }
+
+        /// <summary>
+        /// Get string from bytes.
+        /// </summary>
+        /// <param name="pBytes">Bytes to convert to a string.</param>
+        /// <param name="codePage">Codepage to use in converting bytes.</param>
+        /// <returns>String encoding using the input Codepage.</returns>
+        public static string GetEncodedText(byte[] value, int codePage)
+        {
+            //return Encoding.Unicode.GetString(value);
+            return System.Text.Encoding.GetEncoding(codePage).GetString(value);
+        }
+
+        public static byte GetHighNibble(byte value)
+        {
+            return (byte)(((value) >> 4) & 0x0F);
+        }
+
+        /// <summary>
+        /// Get text encoded in Shift JIS
+        /// </summary>
+        /// <param name="pBytes">Bytes to decode.</param>
+        /// <returns>String encoded using the Shift JIS codepage.</returns>
+        public static string GetJapaneseEncodedText(byte[] value)
+        {
+            return GetEncodedText(value, CodePageJapan);
+        }
 
         /// <summary>
         /// Convert input string to a long.  Works for Decimal and Hexidecimal (use 0x prefix).
@@ -139,38 +184,9 @@ namespace WolvenKit.Scaleform
             return ret;
         }
 
-        /// <summary>
-        /// Get the UInt32 Value of the Incoming Byte Array, which is in Big Endian order.
-        /// </summary>
-        /// <param name="pBytes">Bytes to convert.</param>
-        /// <returns>The UInt32 Value of the Incoming Byte Array.</returns>
-        public static UInt32 GetUInt32BigEndian(byte[] value)
+        public static byte GetLowNibble(byte value)
         {
-            byte[] workingArray = new byte[value.Length];
-            Array.Copy(value, 0, workingArray, 0, value.Length);
-
-            if (BitConverter.IsLittleEndian)
-            {
-                Array.Reverse(workingArray);
-            }
-            return BitConverter.ToUInt32(workingArray, 0);
-        }
-
-        /// <summary>
-        /// Get the UInt16 Value of the Incoming Byte Array, which is in Big Endian order.
-        /// </summary>
-        /// <param name="pBytes">Bytes to convert.</param>
-        /// <returns>The UInt16 Value of the Incoming Byte Array.</returns>
-        public static UInt16 GetUInt16BigEndian(byte[] value)
-        {
-            byte[] workingArray = new byte[value.Length];
-            Array.Copy(value, 0, workingArray, 0, value.Length);
-
-            if (BitConverter.IsLittleEndian)
-            {
-                Array.Reverse(workingArray);
-            }
-            return BitConverter.ToUInt16(workingArray, 0);
+            return (byte)((value) & 0x0F);
         }
 
         /// <summary>
@@ -194,58 +210,56 @@ namespace WolvenKit.Scaleform
             return predictedCodePage;
         }
 
-        public static byte GetHighNibble(byte value)
+        /// <summary>
+        /// Get the UInt16 Value of the Incoming Byte Array, which is in Big Endian order.
+        /// </summary>
+        /// <param name="pBytes">Bytes to convert.</param>
+        /// <returns>The UInt16 Value of the Incoming Byte Array.</returns>
+        public static UInt16 GetUInt16BigEndian(byte[] value)
         {
-            return (byte)(((value) >> 4) & 0x0F);
-        }
+            byte[] workingArray = new byte[value.Length];
+            Array.Copy(value, 0, workingArray, 0, value.Length);
 
-        public static byte GetLowNibble(byte value)
-        {
-            return (byte)((value) & 0x0F);
-        }
-
-        public static byte[] GetBytesFromHexString(string hexValue)
-        {
-            int j = 0;
-            byte[] bytes = new byte[hexValue.Length / 2];
-
-            // convert the string to bytes
-            for (int i = 0; i < hexValue.Length; i += 2)
+            if (BitConverter.IsLittleEndian)
             {
-                bytes[j] = BitConverter.GetBytes(Int16.Parse(hexValue.Substring(i, 2), System.Globalization.NumberStyles.AllowHexSpecifier, CultureInfo.CurrentCulture))[0];
-                j++;
+                Array.Reverse(workingArray);
             }
-
-            return bytes;
+            return BitConverter.ToUInt16(workingArray, 0);
         }
 
-        public static byte[] GetBytesBigEndian(uint value)
+        /// <summary>
+        /// Get the UInt32 Value of the Incoming Byte Array, which is in Big Endian order.
+        /// </summary>
+        /// <param name="pBytes">Bytes to convert.</param>
+        /// <returns>The UInt32 Value of the Incoming Byte Array.</returns>
+        public static UInt32 GetUInt32BigEndian(byte[] value)
         {
-            byte[] ret = BitConverter.GetBytes(value);
-            Array.Reverse(ret);
-            return ret;
+            byte[] workingArray = new byte[value.Length];
+            Array.Copy(value, 0, workingArray, 0, value.Length);
+
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(workingArray);
+            }
+            return BitConverter.ToUInt32(workingArray, 0);
         }
 
-        public static DateTime GetDateTimeFromFAT32Date(int value)
+        /// <summary>
+        /// Get text encoded in Cyrillic
+        /// </summary>
+        /// <param name="pBytes">Bytes to decode.</param>
+        /// <returns>String encoded using the Cyrillic codepage.</returns>
+        public static string GetUnitedStatesEncodedText(byte[] value)
         {
-            short xDate = (short)(value >> 0x10);
-            short xTime = (short)(value & 0xFFFF);
-
-            if (xDate == 0 && xTime == 0)
-            {
-                return DateTime.Now;
-            }
-            else
-            {
-                return new DateTime(
-                    (((xDate & 0xFE00) >> 9) + 0x7BC),
-                    ((xDate & 0x1E0) >> 5),
-                    (xDate & 0x1F),
-                    ((xTime & 0xF800) >> 0xB),
-                    ((xTime & 0x7E0) >> 5),
-                    ((xTime & 0x1F) * 2));
-            }
+            return GetEncodedText(value, CodePageUnitedStates);
         }
 
+        public static string GetUtf16LeText(byte[] value)
+        {
+            System.Text.Encoding encoding = System.Text.Encoding.Unicode;
+            return encoding.GetString(value);
+        }
+
+        #endregion Methods
     }
 }

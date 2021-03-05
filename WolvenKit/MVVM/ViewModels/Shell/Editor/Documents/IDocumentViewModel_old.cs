@@ -15,8 +15,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 
         #endregion Properties
 
-
-
         #region Methods
 
         void Close();

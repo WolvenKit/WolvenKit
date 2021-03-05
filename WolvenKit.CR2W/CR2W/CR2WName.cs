@@ -1,8 +1,6 @@
-﻿using System;
-using System.IO;
+using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace WolvenKit.CR2W
@@ -20,12 +18,15 @@ namespace WolvenKit.CR2W
     [DataContract(Namespace = "")]
     public class CR2WNameWrapper
     {
-        public CR2WName Name { get; set; }
+        #region Fields
+
         [XmlIgnore]
         [NonSerialized()]
         private readonly CR2WFile _cr2w;
 
-        public string Str => _cr2w.StringDictionary[Name.value];
+        #endregion Fields
+
+        #region Constructors
 
         public CR2WNameWrapper(CR2WName name, CR2WFile cr2w)
         {
@@ -33,6 +34,19 @@ namespace WolvenKit.CR2W
             _cr2w = cr2w;
         }
 
+        #endregion Constructors
+
+        #region Properties
+
+        public CR2WName Name { get; set; }
+        public string Str => _cr2w.StringDictionary[Name.value];
+
+        #endregion Properties
+
+        #region Methods
+
         public override string ToString() => Str;
+
+        #endregion Methods
     }
 }

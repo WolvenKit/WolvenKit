@@ -4,12 +4,16 @@ namespace WolvenKit.MVVM.Views.Components.Tools
 {
     public partial class PluginManagerView
     {
+        #region Constructors
+
         public PluginManagerView()
         {
             InitializeComponent();
         }
 
-        private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => base.OnMouseLeftButtonDown(e);// Begin dragging the window
+        #endregion Constructors
+
+        #region Methods
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -26,5 +30,11 @@ namespace WolvenKit.MVVM.Views.Components.Tools
                 DiscordHelper.SetDiscordRPCStatus("Plugin Manager");
             }
         }
+
+        private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => base.OnMouseLeftButtonDown(e);
+
+        #endregion Methods
+
+        // Begin dragging the window
     }
 }

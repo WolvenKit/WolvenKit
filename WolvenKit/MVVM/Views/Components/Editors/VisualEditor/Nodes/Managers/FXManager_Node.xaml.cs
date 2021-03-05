@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class FXManager_Node : UserControl
     {
+        #region Constructors
+
         public FXManager_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

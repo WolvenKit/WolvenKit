@@ -5,7 +5,7 @@ using Catel.MVVM;
 using Catel.MVVM.Views;
 using Catel.Windows.Controls;
 
-namespace WolvenKit.MVVM.ViewModels.Others
+namespace WolvenKit.ViewModels
 {
     public class UserControlHostWindowViewModel : ViewModelBase
     {
@@ -44,8 +44,6 @@ namespace WolvenKit.MVVM.ViewModels.Others
 
         #endregion Constructors
 
-
-
         #region Properties
 
         public IView ContentUserControl { get; internal set; }
@@ -55,8 +53,6 @@ namespace WolvenKit.MVVM.ViewModels.Others
         #endregion Properties
 
         // TODO: Register commands with the vmcommand or vmcommandwithcanexecute codesnippets
-
-
 
         #region Methods
 

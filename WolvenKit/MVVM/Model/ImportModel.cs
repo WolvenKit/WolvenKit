@@ -28,8 +28,6 @@ namespace WolvenKit.MVVM.Model
 
         #endregion Constructors
 
-
-
         #region Enums
 
         public enum EObjectState
@@ -85,8 +83,6 @@ namespace WolvenKit.MVVM.Model
 
         #endregion ImportType
 
-
-
         #region Properties
 
         /// <summary>
@@ -95,8 +91,6 @@ namespace WolvenKit.MVVM.Model
         public string Name => Path.GetFileName(GetRelativePath());
 
         #endregion Properties
-
-
 
         #region Methods
 

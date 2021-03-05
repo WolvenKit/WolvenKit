@@ -54,8 +54,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         //void Importableobjects_ListChanged(object sender, ListChangedEventArgs e) => OnPropertyChanged(nameof(Importableobjects));
 
-
-
         #region Properties
 
         /// <summary>
@@ -64,8 +62,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         public ChunkViewModel SelectedChunk { get; set; }
 
         #endregion Properties
-
-
 
         #region Methods
 

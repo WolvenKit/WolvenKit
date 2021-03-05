@@ -21,10 +21,20 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
             PropertyResolver = new MyPropertyResolver();
         }
 
-        #endregion
+        #endregion ctor
 
-        public PropertyResolver PropertyResolver { get; }
+        #region Fields
 
+        public static readonly DependencyProperty ItemsSourceProperty
+            = DependencyProperty.Register(
+                nameof(ItemsSource),
+                typeof(IEnumerable),
+                typeof(ListEditorView),
+                new FrameworkPropertyMetadata((IEnumerable)null, OnItemsSourceChanged));
+
+        #endregion Fields
+
+        #region Properties
 
         public IEnumerable ItemsSource
         {
@@ -47,16 +57,6 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
             }
         }
 
-        private void OnSetItemSourceChanged(object oldValue, object newValue)
-        {
-            if (newValue is not IEnumerable enumerable)
-            {
-                return;
-            }
-
-            GetEditor(enumerable);
-        }
-
         private void GetEditor(IEnumerable enumerable)
         {
             // us the correct editor for the type
@@ -65,16 +65,11 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
                 case IEnumerable<IREDPrimitive> intwrapper:
                     InitNumericEditor(intwrapper);
                     break;
+
                 default:
                     InitDefaultEditor(enumerable);
                     break;
             }
-        }
-
-        private void InitNumericEditor(IEnumerable enumerable)
-        {
-            ContentControl.SetCurrentValue(TemplateProperty, (ControlTemplate)this.FindResource("NumericEditor"));
-            ContentControl.DataContext = enumerable;
         }
 
         private void InitDefaultEditor(IEnumerable enumerable)
@@ -97,5 +92,6 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
 
 
 
+        #endregion Methods
     }
 }

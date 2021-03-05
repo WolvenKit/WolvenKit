@@ -1,31 +1,29 @@
-﻿using System;
-using System.CodeDom.Compiler;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
-using System.Runtime;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.Common.Tools
 {
     public static class CSharpCompilerTools
     {
+        #region Methods
+
         /// <summary>
         /// Compiles a source string with Roslyn
         /// </summary>
         /// <param name="sourceString"></param>
         /// <returns></returns>
-        public static Assembly CompileAssemblyFromStrings(string sourceString, Assembly currentCustomAssembly, ILoggerService logger  = null)
+        public static Assembly CompileAssemblyFromStrings(string sourceString, Assembly currentCustomAssembly, ILoggerService logger = null)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(sourceString);
             string assemblyName = Guid.NewGuid().ToString();
-            
+
             var references = GetAssemblyReferences(currentCustomAssembly);
 
             var compilation = CSharpCompilation.Create(
@@ -47,17 +45,6 @@ namespace WolvenKit.Common.Tools
             return assembly;
         }
 
-        private static IEnumerable<MetadataReference> GetAssemblyReferences(Assembly currentCustomAssembly)
-        {
-            var assemblies = AppDomain.CurrentDomain
-                .GetAssemblies()
-                .Where(a => !a.IsDynamic)
-                .Where(a => !string.IsNullOrEmpty(a.Location))
-                .Select(a => MetadataReference.CreateFromFile(a.Location));
-
-            return assemblies;
-        }
-
         //https://gist.github.com/GeorgDangl/4a9982a3b520f056a9e890635b3695e0
         private static Assembly CompileAndLoadAssembly(CSharpCompilation _compilation)
         {
@@ -71,6 +58,16 @@ namespace WolvenKit.Common.Tools
             }
         }
 
+        private static IEnumerable<MetadataReference> GetAssemblyReferences(Assembly currentCustomAssembly)
+        {
+            var assemblies = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .Where(a => !a.IsDynamic)
+                .Where(a => !string.IsNullOrEmpty(a.Location))
+                .Select(a => MetadataReference.CreateFromFile(a.Location));
+
+            return assemblies;
+        }
 
         //https://gist.github.com/GeorgDangl/4a9982a3b520f056a9e890635b3695e0
         private static void ThrowExceptionIfCompilationFailure(EmitResult result)
@@ -91,5 +88,7 @@ namespace WolvenKit.Common.Tools
                 }
             }
         }
+
+        #endregion Methods
     }
 }

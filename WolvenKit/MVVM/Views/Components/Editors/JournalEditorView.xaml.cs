@@ -4,10 +4,16 @@ namespace WolvenKit.MVVM.Views.Components.Editors
 {
     public partial class JournalEditorView
     {
+        #region Constructors
+
         public JournalEditorView()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         private void DataWindow_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
@@ -16,5 +22,7 @@ namespace WolvenKit.MVVM.Views.Components.Editors
                 DiscordHelper.SetDiscordRPCStatus("Journal Editor");
             }
         }
+
+        #endregion Methods
     }
 }

@@ -7,7 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard
 {
     public partial class FinalizeSetupView
     {
+        #region Fields
+
         private ProjectWizardViewModel _pwvm;
+
+        #endregion Fields
+
+        #region Constructors
 
         public FinalizeSetupView()
         {
@@ -18,6 +24,27 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard
 
             _pwvm = ServiceLocator.Default.ResolveType<ProjectWizardViewModel>();
             imgSelector.CommandBindings[0].Executed += imgSelector_Executed;
+        }
+
+        #endregion Constructors
+
+        #region Methods
+
+        private void CancelProjectBtn_Click(object sender, System.Windows.RoutedEventArgs e) => _pwvm.CloseViewModelAsync(null);
+
+        private void imgSelector_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        {
+            var imgBrush = imgSelector.PreviewBrush as System.Windows.Media.ImageBrush;
+            if (imgBrush != null)
+            {
+                _pwvm.ProfileImageBrush = imgBrush;
+                _pwvm.ProfileImageBrushPath = imgSelector.Uri.AbsoluteUri;
+            }
+            else
+            {
+                _pwvm.ProfileImageBrush = default(System.Windows.Media.ImageBrush);
+                _pwvm.ProfileImageBrushPath = "";
+            }
         }
 
         private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -38,21 +65,6 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard
             }
         }
 
-        private void imgSelector_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
-        {
-            var imgBrush = imgSelector.PreviewBrush as System.Windows.Media.ImageBrush;
-            if (imgBrush != null)
-            {
-                _pwvm.ProfileImageBrush = imgBrush;
-                _pwvm.ProfileImageBrushPath = imgSelector.Uri.AbsoluteUri;
-            }
-            else
-            {
-                _pwvm.ProfileImageBrush = default(System.Windows.Media.ImageBrush);
-                _pwvm.ProfileImageBrushPath = "";
-            }
-        }
-
-        private void CancelProjectBtn_Click(object sender, System.Windows.RoutedEventArgs e) => _pwvm.CloseViewModelAsync(null);
+        #endregion Methods
     }
 }

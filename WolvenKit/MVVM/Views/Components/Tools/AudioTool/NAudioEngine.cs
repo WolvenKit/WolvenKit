@@ -17,37 +17,37 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         #region Fields
 
         private static NAudioEngine instance;
+        private readonly int fftDataSize = (int)FFTDataSize.FFT2048;
         private readonly DispatcherTimer positionTimer = new DispatcherTimer(DispatcherPriority.ApplicationIdle);
         private readonly BackgroundWorker waveformGenerateWorker = new BackgroundWorker();
-        private readonly int fftDataSize = (int)FFTDataSize.FFT2048;
-        private bool disposed;
-        private bool canPlay;
+        private WaveStream activeStream;
         private bool canPause;
+        private bool canPlay;
         private bool canStop;
-        private bool isPlaying;
-        private bool inChannelTimerUpdate;
         private double channelLength;
         private double channelPosition;
-        private bool inChannelSet;
-        private WaveOut waveOutDevice;
-        private WaveStream activeStream;
-        private NAudio.Wave.WaveChannel32 inputStream;
-        private SampleAggregator sampleAggregator;
-        private SampleAggregator waveformAggregator;
-        private string pendingWaveformPath;
-        private float[] fullLevelData;
-        private float[] waveformData;
+        private bool disposed;
         private TagLib.File fileTag;
+        private float[] fullLevelData;
+        private bool inChannelSet;
+        private bool inChannelTimerUpdate;
+        private NAudio.Wave.WaveChannel32 inputStream;
+        private bool inRepeatSet;
+        private bool isPlaying;
+        private string pendingWaveformPath;
         private TimeSpan repeatStart;
         private TimeSpan repeatStop;
-        private bool inRepeatSet;
+        private SampleAggregator sampleAggregator;
+        private SampleAggregator waveformAggregator;
+        private float[] waveformData;
+        private WaveOut waveOutDevice;
 
         #endregion Fields
 
         #region Constants
 
-        private const int waveformCompressedPointCount = 2000;
         private const int repeatThreshold = 200;
+        private const int waveformCompressedPointCount = 2000;
 
         #endregion Constants
 
@@ -132,6 +132,46 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         #region IWaveformPlayer
 
+        public double ChannelLength
+        {
+            get => channelLength;
+            protected set
+            {
+                var oldValue = channelLength;
+                channelLength = value;
+                if (oldValue != channelLength)
+                {
+                    NotifyPropertyChanged("ChannelLength");
+                }
+            }
+        }
+
+        public double ChannelPosition
+        {
+            get => channelPosition;
+            set
+            {
+                if (!inChannelSet)
+                {
+                    inChannelSet = true; // Avoid recursion
+                    var oldValue = channelPosition;
+                    var position = Math.Max(0, Math.Min(value, ChannelLength));
+                    if (!inChannelTimerUpdate && ActiveStream != null)
+                    {
+                        ActiveStream.Position = (long)(position / ActiveStream.TotalTime.TotalSeconds * ActiveStream.Length);
+                    }
+
+                    channelPosition = position;
+                    if (oldValue != channelPosition)
+                    {
+                        NotifyPropertyChanged("ChannelPosition");
+                    }
+
+                    inChannelSet = false;
+                }
+            }
+        }
+
         public TimeSpan SelectionBegin
         {
             get => repeatStart;
@@ -186,46 +226,6 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             }
         }
 
-        public double ChannelLength
-        {
-            get => channelLength;
-            protected set
-            {
-                var oldValue = channelLength;
-                channelLength = value;
-                if (oldValue != channelLength)
-                {
-                    NotifyPropertyChanged("ChannelLength");
-                }
-            }
-        }
-
-        public double ChannelPosition
-        {
-            get => channelPosition;
-            set
-            {
-                if (!inChannelSet)
-                {
-                    inChannelSet = true; // Avoid recursion
-                    var oldValue = channelPosition;
-                    var position = Math.Max(0, Math.Min(value, ChannelLength));
-                    if (!inChannelTimerUpdate && ActiveStream != null)
-                    {
-                        ActiveStream.Position = (long)(position / ActiveStream.TotalTime.TotalSeconds * ActiveStream.Length);
-                    }
-
-                    channelPosition = position;
-                    if (oldValue != channelPosition)
-                    {
-                        NotifyPropertyChanged("ChannelPosition");
-                    }
-
-                    inChannelSet = false;
-                }
-            }
-        }
-
         #endregion IWaveformPlayer
 
         #region INotifyPropertyChanged
@@ -244,18 +244,6 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         #region Waveform Generation
 
-        private class WaveformGenerationParams
-        {
-            public WaveformGenerationParams(int points, string path)
-            {
-                Points = points;
-                Path = path;
-            }
-
-            public int Points { get; protected set; }
-            public string Path { get; protected set; }
-        }
-
         private void GenerateWaveformData(string path)
         {
             if (waveformGenerateWorker.IsBusy)
@@ -268,17 +256,6 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             if (!waveformGenerateWorker.IsBusy && waveformCompressedPointCount != 0)
             {
                 waveformGenerateWorker.RunWorkerAsync(new WaveformGenerationParams(waveformCompressedPointCount, path));
-            }
-        }
-
-        private void waveformGenerateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Cancelled)
-            {
-                if (!waveformGenerateWorker.IsBusy && waveformCompressedPointCount != 0)
-                {
-                    waveformGenerateWorker.RunWorkerAsync(new WaveformGenerationParams(waveformCompressedPointCount, pendingWaveformPath));
-                }
             }
         }
 
@@ -360,6 +337,37 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             waveformMp3Stream = null;
         }
 
+        private void waveformGenerateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+            {
+                if (!waveformGenerateWorker.IsBusy && waveformCompressedPointCount != 0)
+                {
+                    waveformGenerateWorker.RunWorkerAsync(new WaveformGenerationParams(waveformCompressedPointCount, pendingWaveformPath));
+                }
+            }
+        }
+
+        private class WaveformGenerationParams
+        {
+            #region Constructors
+
+            public WaveformGenerationParams(int points, string path)
+            {
+                Points = points;
+                Path = path;
+            }
+
+            #endregion Constructors
+
+            #region Properties
+
+            public string Path { get; protected set; }
+            public int Points { get; protected set; }
+
+            #endregion Properties
+        }
+
         #endregion Waveform Generation
 
         #region Private Utility Methods
@@ -387,41 +395,6 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         #endregion Private Utility Methods
 
         #region Public Methods
-
-        public void Stop()
-        {
-            if (waveOutDevice != null)
-            {
-                waveOutDevice.Stop();
-            }
-            IsPlaying = false;
-            CanStop = false;
-            CanPlay = true;
-            CanPause = false;
-        }
-
-        public void Pause()
-        {
-            if (IsPlaying && CanPause)
-            {
-                waveOutDevice.Pause();
-                IsPlaying = false;
-                CanPlay = true;
-                CanPause = false;
-            }
-        }
-
-        public void Play()
-        {
-            if (CanPlay)
-            {
-                waveOutDevice.Play();
-                IsPlaying = true;
-                CanPause = true;
-                CanPlay = false;
-                CanStop = true;
-            }
-        }
 
         public void OpenFile(string path)
         {
@@ -462,23 +435,44 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             }
         }
 
+        public void Pause()
+        {
+            if (IsPlaying && CanPause)
+            {
+                waveOutDevice.Pause();
+                IsPlaying = false;
+                CanPlay = true;
+                CanPause = false;
+            }
+        }
+
+        public void Play()
+        {
+            if (CanPlay)
+            {
+                waveOutDevice.Play();
+                IsPlaying = true;
+                CanPause = true;
+                CanPlay = false;
+                CanStop = true;
+            }
+        }
+
+        public void Stop()
+        {
+            if (waveOutDevice != null)
+            {
+                waveOutDevice.Stop();
+            }
+            IsPlaying = false;
+            CanStop = false;
+            CanPlay = true;
+            CanPause = false;
+        }
+
         #endregion Public Methods
 
         #region Public Properties
-
-        public TagLib.File FileTag
-        {
-            get => fileTag;
-            set
-            {
-                var oldValue = fileTag;
-                fileTag = value;
-                if (oldValue != fileTag)
-                {
-                    NotifyPropertyChanged("FileTag");
-                }
-            }
-        }
 
         public WaveStream ActiveStream
         {
@@ -490,20 +484,6 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 if (oldValue != activeStream)
                 {
                     NotifyPropertyChanged("ActiveStream");
-                }
-            }
-        }
-
-        public bool CanPlay
-        {
-            get => canPlay;
-            protected set
-            {
-                var oldValue = canPlay;
-                canPlay = value;
-                if (oldValue != canPlay)
-                {
-                    NotifyPropertyChanged("CanPlay");
                 }
             }
         }
@@ -522,6 +502,20 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             }
         }
 
+        public bool CanPlay
+        {
+            get => canPlay;
+            protected set
+            {
+                var oldValue = canPlay;
+                canPlay = value;
+                if (oldValue != canPlay)
+                {
+                    NotifyPropertyChanged("CanPlay");
+                }
+            }
+        }
+
         public bool CanStop
         {
             get => canStop;
@@ -532,6 +526,20 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 if (oldValue != canStop)
                 {
                     NotifyPropertyChanged("CanStop");
+                }
+            }
+        }
+
+        public TagLib.File FileTag
+        {
+            get => fileTag;
+            set
+            {
+                var oldValue = fileTag;
+                fileTag = value;
+                if (oldValue != fileTag)
+                {
+                    NotifyPropertyChanged("FileTag");
                 }
             }
         }
@@ -568,14 +576,14 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             }
         }
 
-        private void waveStream_Sample(object sender, SampleEventArgs e) => waveformAggregator.Add(e.Left, e.Right);
-
         private void positionTimer_Tick(object sender, EventArgs e)
         {
             inChannelTimerUpdate = true;
             ChannelPosition = (double)ActiveStream.Position / (double)ActiveStream.Length * ActiveStream.TotalTime.TotalSeconds;
             inChannelTimerUpdate = false;
         }
+
+        private void waveStream_Sample(object sender, SampleEventArgs e) => waveformAggregator.Add(e.Left, e.Right);
 
         #endregion Event Handlers
     }

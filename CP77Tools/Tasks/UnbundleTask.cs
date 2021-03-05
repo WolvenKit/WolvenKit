@@ -1,17 +1,23 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using CP77.CR2W.Archive;
 using Catel.IoC;
 using CP77.CR2W;
+using CP77.CR2W.Archive;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
     public static partial class ConsoleFunctions
     {
+        #region Fields
+
         private static readonly ILoggerService logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+
+        #endregion Fields
+
+        #region Methods
 
         public static void UnbundleTask(string[] path, string outpath,
             string hash, string pattern, string regex)
@@ -26,9 +32,7 @@ namespace CP77Tools.Tasks
             {
                 UnbundleTaskInner(file, outpath, hash, pattern, regex);
             });
-
         }
-
 
         private static void UnbundleTaskInner(string path, string outpath,
             string hash, string pattern, string regex)
@@ -43,7 +47,6 @@ namespace CP77Tools.Tasks
 
             var inputFileInfo = new FileInfo(path);
             var inputDirInfo = new DirectoryInfo(path);
-
 
             if (!inputFileInfo.Exists && !inputDirInfo.Exists)
             {
@@ -65,7 +68,7 @@ namespace CP77Tools.Tasks
             var isDirectory = !inputFileInfo.Exists;
             var basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
 
-            #endregion
+            #endregion checks
 
             List<FileInfo> archiveFileInfos;
             if (isDirectory)
@@ -76,9 +79,8 @@ namespace CP77Tools.Tasks
             }
             else
             {
-                archiveFileInfos = new List<FileInfo> {inputFileInfo};
+                archiveFileInfos = new List<FileInfo> { inputFileInfo };
             }
-
 
             foreach (var processedarchive in archiveFileInfos)
             {
@@ -137,13 +139,11 @@ namespace CP77Tools.Tasks
                     logger.LogString($"{ar.ArchiveAbsolutePath}: Extracted {r.Item1.Count}/{r.Item2} files.",
                         Logtype.Success);
                 }
-
-
-
-
             }
 
             return;
         }
+
+        #endregion Methods
     }
 }

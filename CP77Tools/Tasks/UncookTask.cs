@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using CP77.CR2W.Archive;
 using CP77.CR2W;
+using CP77.CR2W.Archive;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Services;
 
@@ -11,6 +11,7 @@ namespace CP77Tools.Tasks
 {
     public static partial class ConsoleFunctions
     {
+        #region Methods
 
         public static void UncookTask(string[] path, string outpath,
             EUncookExtension uext, bool flip, ulong hash, string pattern, string regex)
@@ -25,9 +26,7 @@ namespace CP77Tools.Tasks
             {
                 UncookTaskInner(file, outpath, uext, flip, hash, pattern, regex);
             });
-
         }
-
 
         private static void UncookTaskInner(string path, string outpath,
             EUncookExtension uext, bool flip, ulong hash, string pattern, string regex)
@@ -42,7 +41,6 @@ namespace CP77Tools.Tasks
 
             var inputFileInfo = new FileInfo(path);
             var inputDirInfo = new DirectoryInfo(path);
-
 
             if (!inputFileInfo.Exists && !inputDirInfo.Exists)
             {
@@ -64,7 +62,7 @@ namespace CP77Tools.Tasks
             var isDirectory = !inputFileInfo.Exists;
             var basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
 
-            #endregion
+            #endregion checks
 
             List<FileInfo> archiveFileInfos;
             if (isDirectory)
@@ -75,9 +73,8 @@ namespace CP77Tools.Tasks
             }
             else
             {
-                archiveFileInfos = new List<FileInfo> {inputFileInfo};
+                archiveFileInfos = new List<FileInfo> { inputFileInfo };
             }
-
 
             foreach (var processedarchive in archiveFileInfos)
             {
@@ -124,5 +121,7 @@ namespace CP77Tools.Tasks
 
             return;
         }
+
+        #endregion Methods
     }
 }

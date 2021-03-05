@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -12,11 +12,12 @@ namespace CP77.CR2W.Types
 {
     /// <summary>
     /// The reflection magic happens mostly here, with System.Activator.
-    /// A class is instantiated from its type and the properties are deserialized from 
+    /// A class is instantiated from its type and the properties are deserialized from
     /// cr2w later, in CVariable.Read and CR2WFile.ReadVariable
     /// </summary>
     public static class CR2WTypeManager
     {
+        #region Properties
 
         public static IEnumerable<string> AvailableTypes => AvailableVanillaTypes;
 
@@ -34,6 +35,10 @@ namespace CP77.CR2W.Types
                 return vanillaclassNames;
             }
         }
+
+        #endregion Properties
+
+        #region Methods
 
         /// <summary>
         /// The instantiation step of the RedEngine-4 reflection.
@@ -90,6 +95,7 @@ namespace CP77.CR2W.Types
             else if (typename.Contains(':'))
             {
                 #region GENERIC TYPES
+
                 string[] splits = typename.Split(':');
                 string generictype = splits.First();
                 string innertype = string.Join(":", splits.Skip(1));
@@ -135,17 +141,16 @@ namespace CP77.CR2W.Types
                         return MakeGenericType(typeof(raRef<>), innerobject);
                     }
                     case "array":
-                        {
-                            // match pattern e.g. 
-                            // array:            (array:)Float
-                            // array of array:   (array:)handle:meshMeshAppearance
+                    {
+                        // match pattern e.g.
+                        // array:            (array:)Float
+                        // array of array:   (array:)handle:meshMeshAppearance
 
-
-                            CVariable innerobject = Create(innertype, "", cr2w, null);
-                            IArrayAccessor arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
-                            arrayacc.Elementtype = innertype;
-                            return arrayacc as CVariable;
-                        }
+                        CVariable innerobject = Create(innertype, "", cr2w, null);
+                        IArrayAccessor arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
+                        arrayacc.Elementtype = innertype;
+                        return arrayacc as CVariable;
+                    }
                     case "CArrayVLQInt32":
                     {
                         var innerobject = Create(innertype, "", cr2w, null);
@@ -161,41 +166,41 @@ namespace CP77.CR2W.Types
                         return arrayacc as CVariable;
                     }
                     case "static":
-                        {
-                            typename = generictype;
+                    {
+                        typename = generictype;
 
-                            // match pattern e.g. 
-                            // static:  (4),(Uint32)
-                            var regArrayType = new Regex(@"(\d+),(.+)");
-                            var matchArrayType = regArrayType.Match(fullname);
-                            if (matchArrayType.Success)
-                            {
-                                CVariable innerobject = Create(matchArrayType.Groups[2].Value, "", cr2w, null);
-                                var arrayacc = MakeArray(typeof(CStatic<>), innerobject.GetType());
-                                arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value) };
-                                arrayacc.Elementtype = matchArrayType.Groups[2].Value;
-                                return arrayacc as CVariable;
-                            }
-                            else
-                            {
-                                throw new InvalidParsingException($"Invalid static type format: typename: {typename}.");
-                            }
-                        }
-                    case "CEnum":
+                        // match pattern e.g.
+                        // static:  (4),(Uint32)
+                        var regArrayType = new Regex(@"(\d+),(.+)");
+                        var matchArrayType = regArrayType.Match(fullname);
+                        if (matchArrayType.Success)
                         {
-                            Enum innerobject = CreateEnum(innertype);
-                            return MakeGenericEnumType(typeof(CEnum<>), innerobject);
+                            CVariable innerobject = Create(matchArrayType.Groups[2].Value, "", cr2w, null);
+                            var arrayacc = MakeArray(typeof(CStatic<>), innerobject.GetType());
+                            arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value) };
+                            arrayacc.Elementtype = matchArrayType.Groups[2].Value;
+                            return arrayacc as CVariable;
                         }
+                        else
+                        {
+                            throw new InvalidParsingException($"Invalid static type format: typename: {typename}.");
+                        }
+                    }
+                    case "CEnum":
+                    {
+                        Enum innerobject = CreateEnum(innertype);
+                        return MakeGenericEnumType(typeof(CEnum<>), innerobject);
+                    }
                     default:
                     {
                         throw new MissingTypeException(generictype);
                     }
                 }
-                #endregion
+
+                #endregion GENERIC TYPES
             }
             else
             {
-
                 // check if custom type
                 if (CR2WManager.TypeExists(typename))
                 {
@@ -203,7 +208,6 @@ namespace CP77.CR2W.Types
                     object instance = System.Activator.CreateInstance(type, cr2w, parentVariable, varname);
                     return instance as CVariable;
                 }
-
 
                 // this should never happen
 
@@ -213,19 +217,15 @@ namespace CP77.CR2W.Types
                 var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
                 Logger.LogString($"UNKNOWN:{typename}:{varname}", Logtype.Error);
 
-
                 if (readUnknownAsBytes)
                 {
                     return new CBytes(cr2w, parentVariable, $"UNKNOWN:{typename}:{varname}");
                 }
                 else
                     return null;
-
-            }            
-                
+            }
 
             #region LOCAL FUNCTIONS
-
 
             IArrayAccessor MakeArray(Type arraytype, Type generictype)
             {
@@ -243,13 +243,11 @@ namespace CP77.CR2W.Types
                 {
                     throw new InvalidParsingException($"Could not create array type for {arraytype.Name}");
                 }
-                
 
                 var array = System.Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
 
                 return array as IArrayAccessor;
             }
-
 
             CVariable MakeGenericType(Type gentype, CVariable innerobject)
             {
@@ -278,7 +276,8 @@ namespace CP77.CR2W.Types
                     throw new Exception();
                 }
             }
-            #endregion
+
+            #endregion LOCAL FUNCTIONS
         }
 
         private static Enum CreateEnum(string value)
@@ -300,5 +299,7 @@ namespace CP77.CR2W.Types
 
             return null;
         }
+
+        #endregion Methods
     }
 }

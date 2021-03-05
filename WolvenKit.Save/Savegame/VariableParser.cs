@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -9,9 +9,15 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame
 {
     public class VariableParser
     {
-        private readonly string[] _names;
+        #region Fields
+
         private readonly Dictionary<string, VariableParserBase> _magicNumberToParserDictionary;
+        private readonly string[] _names;
         private readonly Dictionary<Type, VariableParserBase> _typeToParserDictionary;
+
+        #endregion Fields
+
+        #region Constructors
 
         public VariableParser(string[] names)
         {
@@ -20,19 +26,13 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame
             _typeToParserDictionary = new Dictionary<Type, VariableParserBase>();
         }
 
-        public void RegisterParsers(IEnumerable<VariableParserBase> parsers)
-        {
-            foreach (var parser in parsers)
-            {
-                parser.Names = _names;
-                _magicNumberToParserDictionary[parser.MagicNumber] = parser;
-                _typeToParserDictionary[parser.SupportedType] = parser;
-            }
-        }
+        #endregion Constructors
+
+        #region Methods
 
         public T Parse<T>(BinaryReader reader, ref int size) where T : Variable
         {
-            var parser = _typeToParserDictionary[typeof (T)];
+            var parser = _typeToParserDictionary[typeof(T)];
             parser.Verify(reader, ref size);
             return (T)parser.Parse(reader, ref size);
         }
@@ -66,6 +66,17 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame
                 return unknownVariable;
             }
         }
-    }
 
+        public void RegisterParsers(IEnumerable<VariableParserBase> parsers)
+        {
+            foreach (var parser in parsers)
+            {
+                parser.Names = _names;
+                _magicNumberToParserDictionary[parser.MagicNumber] = parser;
+                _typeToParserDictionary[parser.SupportedType] = parser;
+            }
+        }
+
+        #endregion Methods
+    }
 }

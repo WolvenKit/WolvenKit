@@ -1,10 +1,9 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using CP77.Common.Image;
 using CP77.CR2W.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Runtime.InteropServices;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Oodle;
 
@@ -12,25 +11,7 @@ namespace CP77.CR2W.Uncooker
 {
     public static class Mlmask
     {
-        private static uint CountBits(uint v)
-        {
-            uint t = v;
-            uint count = 0;
-            for (uint i = 0; i < 32; i++)
-            {
-                if ((t & 1) == 1)
-                {
-                    count++;
-                }
-                t >>= 1;
-            }
-            return count;
-        }
-
-        private static uint DivCeil(uint l, uint r)
-        {
-            return (l + r - 1) / r;
-        }
+        #region Methods
 
         public static bool Uncook(Stream cr2wStream, CR2WFile cr2w, EUncookExtension uncookext)
         {
@@ -109,7 +90,6 @@ namespace CP77.CR2W.Uncooker
 
             byte[] maskData = new byte[maskWidth * maskHeight];
 
-
             Directory.CreateDirectory(path);
             for (int i = 0; i < maskCount; i++)
             {
@@ -138,6 +118,45 @@ namespace CP77.CR2W.Uncooker
             return true;
         }
 
+        private static byte BilinearInterpolation(byte q00, byte q10, byte q01, byte q11, int x, int x1, int y, int y1)
+        {
+            const int sc = 256;
+
+            if (x1 == 0 || y1 == 0)
+                return q00;
+
+            int q00s = q00 * sc;
+            int q10s = q10 * sc;
+            int q01s = q01 * sc;
+            int q11s = q11 * sc;
+
+            int a0 = q00s;
+            int a1 = (q10s - q00s) * x / x1;
+            int a2 = (q01s - q00s) * y / y1;
+            int a3 = (q00s - q01s - q10s + q11s) * x * y / x1 / y1;
+
+            int a = a0 + a1 + a2 + a3;
+            int r = a / sc;
+            if (r > 255)
+                r = 255;
+            return (byte)r;
+        }
+
+        private static uint CountBits(uint v)
+        {
+            uint t = v;
+            uint count = 0;
+            for (uint i = 0; i < 32; i++)
+            {
+                if ((t & 1) == 1)
+                {
+                    count++;
+                }
+                t >>= 1;
+            }
+            return count;
+        }
+
         private static void Decode(ref byte[] maskData, uint maskWidth, uint maskHeight, uint mWidthLow, uint mHeightLow, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint[] tileData, uint maskTileSize, int maskIndex)
         {
             uint widthInTiles0 = DivCeil(maskWidth, maskTileSize);
@@ -154,7 +173,6 @@ namespace CP77.CR2W.Uncooker
                     DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight, x, y, tileData, maskTileSize, maskIndex, 0, 1);
                 }
             }
-
         }
 
         private static void DecodeSingle(ref byte[] maskData, uint maskWidth, uint maskHeight, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint x, uint y, uint[] tilesData, uint maskTileSize, int maskIndex, uint tilesOffset, uint smallScale)
@@ -201,31 +219,13 @@ namespace CP77.CR2W.Uncooker
             byte p = BilinearInterpolation(q00, q10, q01, q11, xi, x1, yi, y1);
 
             maskData[x + y * maskWidth] = p;
-
         }
 
-        private static byte BilinearInterpolation(byte q00, byte q10, byte q01, byte q11, int x, int x1, int y, int y1)
+        private static uint DivCeil(uint l, uint r)
         {
-            const int sc = 256;
-
-            if (x1 == 0 || y1 == 0)
-                return q00;
-
-            int q00s = q00 * sc;
-            int q10s = q10 * sc;
-            int q01s = q01 * sc;
-            int q11s = q11 * sc;
-
-            int a0 = q00s;
-            int a1 = (q10s - q00s) * x / x1;
-            int a2 = (q01s - q00s) * y / y1;
-            int a3 = (q00s - q01s - q10s + q11s) * x * y / x1 / y1;
-
-            int a = a0 + a1 + a2 + a3;
-            int r = a / sc;
-            if (r > 255)
-                r = 255;
-            return (byte)r;
+            return (l + r - 1) / r;
         }
+
+        #endregion Methods
     }
 }

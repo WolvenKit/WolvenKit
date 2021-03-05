@@ -8,6 +8,8 @@ namespace CP77.MSTests
     [TestClass]
     public class FNV1A64Tests
     {
+        #region Methods
+
         [TestMethod]
         [DataRow("", 0xcbf29ce484222325UL)]
         [DataRow("a", 0xaf63dc4c8601ec8cUL)]
@@ -35,37 +37,25 @@ namespace CP77.MSTests
         }
 
         [TestMethod]
-        [DataRow("", 0xaf63bd4c8601b7dfUL)]
-        [DataRow("a", 0x089be207b544f1e4UL)]
-        [DataRow("hi", 0x337354193006cb6eUL)]
-        [DataRow("hello", 0xa9bc8acca21f39b1UL)]
-        [DataRow("foobar", 0x34531ca7168b8f38UL)]
-        [DataRow("feedfacedeadbeef", 0xa7a4c9f3edebf0d8UL)]
-        public void TestFNV1a64_NullEnded(string test, ulong result)
-        {
-            Assert.AreEqual(FNV1A64HashAlgorithm.HashString(test, Encoding.ASCII, true), result);
-        }
-
-        [TestMethod]
-        [DataRow(new byte[] {0xff, 0x00, 0x00, 0x01}, 0x6961196491cc682dUL)]
-        [DataRow(new byte[] {0x01, 0x00, 0x00, 0xff}, 0xad2bb1774799dfe9UL)]
-        [DataRow(new byte[] {0xff, 0x00, 0x00, 0x02}, 0x6961166491cc6314UL)]
-        [DataRow(new byte[] {0x02, 0x00, 0x00, 0xff}, 0x8d1bb3904a3b1236UL)]
-        [DataRow(new byte[] {0xff, 0x00, 0x00, 0x03}, 0x6961176491cc64c7UL)]
-        [DataRow(new byte[] {0x03, 0x00, 0x00, 0xff}, 0xed205d87f40434c7UL)]
-        [DataRow(new byte[] {0xff, 0x00, 0x00, 0x04}, 0x6961146491cc5faeUL)]
-        [DataRow(new byte[] {0x04, 0x00, 0x00, 0xff}, 0xcd3baf5e44f8ad9cUL)]
-        [DataRow(new byte[] {0x40, 0x51, 0x4e, 0x44}, 0xe3b36596127cd6d8UL)]
-        [DataRow(new byte[] {0x44, 0x4e, 0x51, 0x40}, 0xf77f1072c8e8a646UL)]
-        [DataRow(new byte[] {0x40, 0x51, 0x4e, 0x4a}, 0xe3b36396127cd372UL)]
-        [DataRow(new byte[] {0x4a, 0x4e, 0x51, 0x40}, 0x6067dce9932ad458UL)]
-        [DataRow(new byte[] {0x40, 0x51, 0x4e, 0x54}, 0xe3b37596127cf208UL)]
-        [DataRow(new byte[] {0x54, 0x4e, 0x51, 0x40}, 0x4b7b10fa9fe83936UL)]
+        [DataRow(new byte[] { 0xff, 0x00, 0x00, 0x01 }, 0x6961196491cc682dUL)]
+        [DataRow(new byte[] { 0x01, 0x00, 0x00, 0xff }, 0xad2bb1774799dfe9UL)]
+        [DataRow(new byte[] { 0xff, 0x00, 0x00, 0x02 }, 0x6961166491cc6314UL)]
+        [DataRow(new byte[] { 0x02, 0x00, 0x00, 0xff }, 0x8d1bb3904a3b1236UL)]
+        [DataRow(new byte[] { 0xff, 0x00, 0x00, 0x03 }, 0x6961176491cc64c7UL)]
+        [DataRow(new byte[] { 0x03, 0x00, 0x00, 0xff }, 0xed205d87f40434c7UL)]
+        [DataRow(new byte[] { 0xff, 0x00, 0x00, 0x04 }, 0x6961146491cc5faeUL)]
+        [DataRow(new byte[] { 0x04, 0x00, 0x00, 0xff }, 0xcd3baf5e44f8ad9cUL)]
+        [DataRow(new byte[] { 0x40, 0x51, 0x4e, 0x44 }, 0xe3b36596127cd6d8UL)]
+        [DataRow(new byte[] { 0x44, 0x4e, 0x51, 0x40 }, 0xf77f1072c8e8a646UL)]
+        [DataRow(new byte[] { 0x40, 0x51, 0x4e, 0x4a }, 0xe3b36396127cd372UL)]
+        [DataRow(new byte[] { 0x4a, 0x4e, 0x51, 0x40 }, 0x6067dce9932ad458UL)]
+        [DataRow(new byte[] { 0x40, 0x51, 0x4e, 0x54 }, 0xe3b37596127cf208UL)]
+        [DataRow(new byte[] { 0x54, 0x4e, 0x51, 0x40 }, 0x4b7b10fa9fe83936UL)]
         public void TestFNV1a64_ByteSpan(byte[] test, ulong result)
         {
             Assert.AreEqual(FNV1A64HashAlgorithm.HashReadOnlySpan(test), result);
-        }       
-        
+        }
+
         [TestMethod]
         [DataRow("\xff\x00\x00\x01", 0x6961196491cc682dUL)]
         [DataRow("\x01\x00\x00\xff", 0xad2bb1774799dfe9UL)]
@@ -104,5 +94,19 @@ namespace CP77.MSTests
         {
             Assert.AreEqual(FNV1A64HashAlgorithm.HashReadOnlySpan(test.AsSpan()), result);
         }
+
+        [TestMethod]
+        [DataRow("", 0xaf63bd4c8601b7dfUL)]
+        [DataRow("a", 0x089be207b544f1e4UL)]
+        [DataRow("hi", 0x337354193006cb6eUL)]
+        [DataRow("hello", 0xa9bc8acca21f39b1UL)]
+        [DataRow("foobar", 0x34531ca7168b8f38UL)]
+        [DataRow("feedfacedeadbeef", 0xa7a4c9f3edebf0d8UL)]
+        public void TestFNV1a64_NullEnded(string test, ulong result)
+        {
+            Assert.AreEqual(FNV1A64HashAlgorithm.HashString(test, Encoding.ASCII, true), result);
+        }
+
+        #endregion Methods
     }
 }

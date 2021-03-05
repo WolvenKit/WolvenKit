@@ -21,9 +21,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
     {
         #region Fields
 
+        private readonly IConfigurationService _configurationService;
         private readonly IProjectManager _projectManager;
         private readonly IServiceLocator _serviceLocator;
-        private readonly IConfigurationService _configurationService;
         private readonly IUpdateService _updateService;
 
         #endregion Fields
@@ -48,19 +48,28 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #region Properties
 
-        public string ReceivingAutomaticUpdates { get; private set; }
-        public bool IsUpdatedInstalled { get; private set; }
-        public string Version { get; private set; }
         public int Column { get; private set; }
         public string Heading { get; private set; }
-        public int Line { get; private set; }
         public string InternetConnected { get; private set; }
-        public string LoadingString { get; set; }
         public bool IsLoading { get; set; }
+        public bool IsUpdatedInstalled { get; private set; }
+        public int Line { get; private set; }
+        public string LoadingString { get; set; }
+        public string ReceivingAutomaticUpdates { get; private set; }
+        public string Version { get; private set; }
 
         #endregion Properties
 
         #region Methods
+
+        protected override async Task CloseAsync()
+        {
+            _configurationService.ConfigurationChanged -= OnConfigurationChanged;
+            _updateService.UpdateInstalled -= OnUpdateInstalled;
+            _projectManager.ProjectActivatedAsync -= OnProjectActivatedAsync;
+
+            await base.CloseAsync();
+        }
 
         protected override async Task InitializeAsync()
         {
@@ -82,21 +91,23 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             UpdateAutoUpdateInfo();
         }
 
-        protected override async Task CloseAsync()
-        {
-            _configurationService.ConfigurationChanged -= OnConfigurationChanged;
-            _updateService.UpdateInstalled -= OnUpdateInstalled;
-            _projectManager.ProjectActivatedAsync -= OnProjectActivatedAsync;
-
-            await base.CloseAsync();
-        }
-
         private void OnConfigurationChanged(object sender, ConfigurationChangedEventArgs e)
         {
             if (e.Key.Contains("Updates"))
             {
                 UpdateAutoUpdateInfo();
             }
+        }
+
+        private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs args)
+        {
+            var activeProject = args.NewProject;
+            if (activeProject == null)
+            {
+                return TaskHelper.Completed;
+            }
+
+            return TaskHelper.Completed;
         }
 
         private void OnUpdateInstalled(object sender, EventArgs e) => IsUpdatedInstalled = _updateService.IsUpdatedInstalled;
@@ -117,17 +128,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
 
             ReceivingAutomaticUpdates = updateInfo;
-        }
-
-        private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs args)
-        {
-            var activeProject = args.NewProject;
-            if (activeProject == null)
-            {
-                return TaskHelper.Completed;
-            }
-
-            return TaskHelper.Completed;
         }
 
         #endregion Methods

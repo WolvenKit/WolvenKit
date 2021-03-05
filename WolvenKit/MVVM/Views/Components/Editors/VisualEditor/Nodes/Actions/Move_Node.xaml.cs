@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class Move_Node : UserControl
     {
+        #region Constructors
+
         public Move_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

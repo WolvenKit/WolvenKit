@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.Serialization;
 
 namespace WolvenKit.CR2W.Types
@@ -6,6 +6,8 @@ namespace WolvenKit.CR2W.Types
     [Serializable]
     internal class InvalidPtrException : Exception
     {
+        #region Constructors
+
         public InvalidPtrException()
         {
         }
@@ -21,5 +23,7 @@ namespace WolvenKit.CR2W.Types
         protected InvalidPtrException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
+
+        #endregion Constructors
     }
 }

@@ -10,14 +10,20 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 {
     public class SampleAggregator
     {
+        #region Fields
+
+        private int binaryExponentitation;
+        private int bufferSize;
+        private Complex[] channelData;
+        private int channelDataPosition;
         private float volumeLeftMaxValue;
         private float volumeLeftMinValue;
         private float volumeRightMaxValue;
         private float volumeRightMinValue;
-        private Complex[] channelData;
-        private int bufferSize;
-        private int binaryExponentitation;
-        private int channelDataPosition;
+
+        #endregion Fields
+
+        #region Constructors
 
         public SampleAggregator(int bufferSize)
         {
@@ -26,14 +32,21 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             channelData = new Complex[bufferSize];
         }
 
-        public void Clear()
-        {
-            volumeLeftMaxValue = float.MinValue;
-            volumeRightMaxValue = float.MinValue;
-            volumeLeftMinValue = float.MaxValue;
-            volumeRightMinValue = float.MaxValue;
-            channelDataPosition = 0;
-        }
+        #endregion Constructors
+
+        #region Properties
+
+        public float LeftMaxVolume => volumeLeftMaxValue;
+
+        public float LeftMinVolume => volumeLeftMinValue;
+
+        public float RightMaxVolume => volumeRightMaxValue;
+
+        public float RightMinVolume => volumeRightMinValue;
+
+        #endregion Properties
+
+        #region Methods
 
         /// <summary>
         /// Add a sample value to the aggregator.
@@ -65,6 +78,15 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             }
         }
 
+        public void Clear()
+        {
+            volumeLeftMaxValue = float.MinValue;
+            volumeRightMaxValue = float.MinValue;
+            volumeLeftMinValue = float.MaxValue;
+            volumeRightMinValue = float.MaxValue;
+            channelDataPosition = 0;
+        }
+
         /// <summary>
         /// Performs an FFT calculation on the channel data upon request.
         /// </summary>
@@ -81,12 +103,6 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             }
         }
 
-        public float LeftMaxVolume => volumeLeftMaxValue;
-
-        public float LeftMinVolume => volumeLeftMinValue;
-
-        public float RightMaxVolume => volumeRightMaxValue;
-
-        public float RightMinVolume => volumeRightMinValue;
+        #endregion Methods
     }
 }

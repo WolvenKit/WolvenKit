@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Media;
 using Catel.IoC;
 using Catel.MVVM;
@@ -20,7 +23,6 @@ using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWizard;
 using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.ProjectWizard;
 using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.PublishWizard;
 using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.UserWizard;
-using WolvenKit.MVVM.ViewModels.Others;
 using WolvenKit.MVVM.ViewModels.Shell.Backstage;
 using WolvenKit.MVVM.ViewModels.Shell.Editor;
 using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
@@ -44,7 +46,6 @@ using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard;
 using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard;
 using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.PublishWizard;
 using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.UserWizard;
-using WolvenKit.MVVM.Views.Others;
 using WolvenKit.MVVM.Views.Shell.Backstage;
 using WolvenKit.MVVM.Views.Shell.Editor;
 using WolvenKit.MVVM.Views.Shell.Homepage.Pages.IntegratedToolsPages.CyberCAT;
@@ -54,6 +55,8 @@ using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages;
 using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Editor;
 using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.General;
 using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Tool;
+using WolvenKit.ViewModels;
+using WolvenKit.Views;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
@@ -245,7 +248,22 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         #endregion Methods
     }
+    public class ValueConverterGroup : List<IValueConverter>, IValueConverter
+    {
+        #region IValueConverter Members
 
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return this.Aggregate(value, (current, converter) => converter.Convert(current, targetType, parameter, culture));
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
     public static class InternetHelper
     {
         #region Methods

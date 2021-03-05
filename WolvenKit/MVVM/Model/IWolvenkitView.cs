@@ -13,8 +13,6 @@ namespace WolvenKit.MVVM.Model
 
         #endregion Properties
 
-
-
         #region Methods
 
         void Activate();

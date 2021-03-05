@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CP77.CR2W
 {
     public static class TypeExtensions
     {
+        #region Methods
 
         public static string GetPrettyGenericTypes(this Type t)
         {
@@ -30,5 +28,7 @@ namespace CP77.CR2W
             }
             return t.Name;
         }
+
+        #endregion Methods
     }
 }

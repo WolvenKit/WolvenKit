@@ -1,27 +1,26 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace WolvenKit.W3SavegameEditor.Core.Common
 {
     public class ReadSavegameProgress : IReadSavegameProgress, INotifyPropertyChanged
     {
-        private bool _running;
-        private bool _indeterministic;
-        private int _value;
-        private int _max;
+        #region Fields
 
-        public bool Running
-        {
-            get { return _running; }
-            set
-            {
-                if (_running != value)
-                {
-                    _running = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        private bool _indeterministic;
+        private int _max;
+        private bool _running;
+        private int _value;
+
+        #endregion Fields
+
+        #region Events
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion Events
+
+        #region Properties
 
         public bool Indeterministic
         {
@@ -31,19 +30,6 @@ namespace WolvenKit.W3SavegameEditor.Core.Common
                 if (_indeterministic != value)
                 {
                     _indeterministic = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public int Value
-        {
-            get { return _value; }
-            set
-            {
-                if (_value != value)
-                {
-                    _value = value;
                     OnPropertyChanged();
                 }
             }
@@ -62,6 +48,36 @@ namespace WolvenKit.W3SavegameEditor.Core.Common
             }
         }
 
+        public bool Running
+        {
+            get { return _running; }
+            set
+            {
+                if (_running != value)
+                {
+                    _running = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int Value
+        {
+            get { return _value; }
+            set
+            {
+                if (_value != value)
+                {
+                    _value = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        #endregion Properties
+
+        #region Methods
+
         public void Report(bool running, bool indeterministic, int value, int max)
         {
             Running = running;
@@ -70,12 +86,13 @@ namespace WolvenKit.W3SavegameEditor.Core.Common
             Max = max;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        #endregion Methods
     }
 }

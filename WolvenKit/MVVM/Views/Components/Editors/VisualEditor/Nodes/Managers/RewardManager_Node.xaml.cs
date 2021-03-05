@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class RewardManager_Node : UserControl
     {
+        #region Constructors
+
         public RewardManager_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

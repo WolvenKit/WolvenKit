@@ -27,8 +27,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
 
         #endregion Constructors
 
-
-
         #region Methods
 
         protected override async Task<IProject> ReadFromLocationAsync(string location)

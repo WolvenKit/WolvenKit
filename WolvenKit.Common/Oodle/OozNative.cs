@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 
 namespace WolvenKit.Common.Oodle
@@ -6,16 +6,6 @@ namespace WolvenKit.Common.Oodle
     public static class OozNative
     {
         #region osx
-
-        [DllImport("lib/liboodle.dylib", CallingConvention = CallingConvention.StdCall)]
-        public static extern int Kraken_Decompress(
-            byte[] buffer, 
-            long bufferSize, 
-            byte[] outputBuffer, 
-            long outputBufferSize);
-        
-        [DllImport("lib/liboodle.dylib", CallingConvention = CallingConvention.StdCall)]
-        public static extern int GetCompressedBufferSizeNeeded(int size);
 
         [DllImport("lib/liboodle.dylib", CallingConvention = CallingConvention.StdCall)]
         public static extern int Compress(
@@ -26,8 +16,16 @@ namespace WolvenKit.Common.Oodle
             IntPtr src_window_base,
             IntPtr lrm_org);
 
+        [DllImport("lib/liboodle.dylib", CallingConvention = CallingConvention.StdCall)]
+        public static extern int GetCompressedBufferSizeNeeded(int size);
 
+        [DllImport("lib/liboodle.dylib", CallingConvention = CallingConvention.StdCall)]
+        public static extern int Kraken_Decompress(
+            byte[] buffer,
+            long bufferSize,
+            byte[] outputBuffer,
+            long outputBufferSize);
 
-        #endregion
+        #endregion osx
     }
 }

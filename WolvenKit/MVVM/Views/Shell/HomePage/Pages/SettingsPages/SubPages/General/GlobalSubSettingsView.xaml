@@ -1,8 +1,10 @@
-<catel:UserControl x:Class="WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.General.GlobalSubSettingsView"
-                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:hc="https://handyorg.github.io/handycontrol"
-                   xmlns:catel="http://schemas.catelproject.com">
+<catel:UserControl
+ x:Class="WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.General.GlobalSubSettingsView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ >
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
@@ -15,43 +17,97 @@
             <hc:ScrollViewer>
                 <StackPanel>
 
-                    <!--Basic Header-->
-                    <Border BorderThickness="4,0,0,6" Margin="15,15,32,0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                    <!--  Basic Header  -->
+                    <Border
+                     Margin="15,15,32,0"
+                     Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                     BorderThickness="4,0,0,6"
+                     Style="{StaticResource BorderTipPrimary}"
+                     >
                         <Grid>
-                            <TextBlock Text="Notifications" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0" />
+                            <TextBlock
+                             Margin="0,0,50,0"
+                             VerticalAlignment="Center"
+                             FontSize="16"
+                             Text="Notifications"
+                             />
                         </Grid>
                     </Border>
 
-                    <!--Application Language-->
-                    <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                    <!--  Application Language  -->
+                    <Border
+                     Margin="15,15,32,10"
+                     Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                     BorderThickness="4,0,0,2"
+                     Style="{StaticResource BorderTipPrimary}"
+                     >
                         <Grid>
-                            <TextBlock Text="Receive desktop notifications" VerticalAlignment="Center" Margin="0,0,50,0"/>
+                            <TextBlock
+                             Margin="0,0,50,0"
+                             VerticalAlignment="Center"
+                             Text="Receive desktop notifications"
+                             />
 
-                            <ToggleButton HorizontalAlignment="Right" BorderThickness="0" IsEnabled="True"  VerticalAlignment="Center"   Style="{StaticResource ToggleButtonFlip}">
+                            <ToggleButton
+                             HorizontalAlignment="Right"
+                             VerticalAlignment="Center"
+                             BorderThickness="0"
+                             IsEnabled="True"
+                             Style="{StaticResource ToggleButtonFlip}"
+                             >
                                 <hc:StatusSwitchElement.CheckedElement>
                                     <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
-                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="On" Foreground="{DynamicResource TextIconBrush}" />
+                                        <TextBlock
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"
+                                         Foreground="{DynamicResource TextIconBrush}"
+                                         Text="On"
+                                         />
                                     </Border>
                                 </hc:StatusSwitchElement.CheckedElement>
                                 <Border Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
-                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Off" Foreground="{DynamicResource TextIconBrush}" />
+                                    <TextBlock
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Foreground="{DynamicResource TextIconBrush}"
+                                     Text="Off"
+                                     />
                                 </Border>
                             </ToggleButton>
                         </Grid>
                     </Border>
 
-                    <!--Language Header-->
-                    <Border BorderThickness="4,0,0,6" Margin="15,50,32,0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                    <!--  Language Header  -->
+                    <Border
+                     Margin="15,50,32,0"
+                     Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                     BorderThickness="4,0,0,6"
+                     Style="{StaticResource BorderTipPrimary}"
+                     >
                         <Grid>
-                            <TextBlock Text="Language" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0" />
+                            <TextBlock
+                             Margin="0,0,50,0"
+                             VerticalAlignment="Center"
+                             FontSize="16"
+                             Text="Language"
+                             />
                         </Grid>
                     </Border>
 
-                    <!--Application Language-->
-                    <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                    <!--  Application Language  -->
+                    <Border
+                     Margin="15,15,32,10"
+                     Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                     BorderThickness="4,0,0,2"
+                     Style="{StaticResource BorderTipPrimary}"
+                     >
                         <Grid>
-                            <TextBlock Text="Application Language" VerticalAlignment="Center" Margin="0,0,50,0" />
-                            <hc:ComboBox HorizontalAlignment="Right" Width="250" />
+                            <TextBlock
+                             Margin="0,0,50,0"
+                             VerticalAlignment="Center"
+                             Text="Application Language"
+                             />
+                            <hc:ComboBox Width="250" HorizontalAlignment="Right" />
                         </Grid>
                     </Border>
                 </StackPanel>
@@ -60,8 +116,7 @@
 
         <Grid Grid.Column="1">
             <hc:ScrollViewer>
-                <StackPanel>
-                </StackPanel>
+                <StackPanel />
             </hc:ScrollViewer>
         </Grid>
     </Grid>

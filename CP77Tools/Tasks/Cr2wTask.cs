@@ -1,19 +1,20 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using CP77.CR2W;
-using CP77.CR2W.Archive;
 using CP77.CR2W.Extensions;
+using Newtonsoft.Json;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
     public static partial class ConsoleFunctions
     {
+        #region Methods
+
         public static void Cr2wTask(string[] path, string outpath, bool chunks, string pattern, string regex)
         {
             if (path == null || path.Length < 1)
@@ -26,7 +27,6 @@ namespace CP77Tools.Tasks
             {
                 Cr2wTaskInner(file, outpath, chunks, pattern, regex);
             });
-
         }
 
         private static void Cr2wTaskInner(string path, string outpath, bool chunks, string pattern = "", string regex = "")
@@ -49,7 +49,8 @@ namespace CP77Tools.Tasks
                 logger.LogString("Input file does not exist.", Logtype.Error);
                 return;
             }
-            #endregion
+
+            #endregion checks
 
             Stopwatch watch = new();
             watch.Restart();
@@ -124,5 +125,7 @@ namespace CP77Tools.Tasks
                 $"Finished. Dumped {finalMatchesList.Count} files to JSON in {watch.ElapsedMilliseconds.ToString()}ms.",
                 Logtype.Success);
         }
+
+        #endregion Methods
     }
 }

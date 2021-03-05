@@ -29,8 +29,6 @@ namespace WolvenKit.Functionality.Controllers
 
         #endregion Properties
 
-
-
         #region Methods
 
         public override List<IGameArchiveManager> GetArchiveManagersManagers() =>

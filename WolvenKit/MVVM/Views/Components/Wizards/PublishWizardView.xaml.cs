@@ -5,6 +5,18 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
 {
     public partial class PublishWizardView
     {
+        #region Fields
+
+        private FinalizeSetupView FSV;
+
+        private OptionalSettingsView OSV;
+
+        private RequiredSettingsView RSV;
+
+        #endregion Fields
+
+        #region Constructors
+
         public PublishWizardView()
         {
             RSV = new RequiredSettingsView();
@@ -15,9 +27,21 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
             ShowPage();
         }
 
-        private RequiredSettingsView RSV;
-        private OptionalSettingsView OSV;
-        private FinalizeSetupView FSV;
+        #endregion Constructors
+
+        #region Methods
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            StepMain.Next();
+            ShowPage();
+        }
+
+        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
+        {
+            StepMain.Prev();
+            ShowPage();
+        }
 
         private void ShowPage()
         {
@@ -40,18 +64,6 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
             }
         }
 
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            StepMain.Next();
-            ShowPage();
-        }
-
-        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
-        {
-            StepMain.Prev();
-            ShowPage();
-        }
-
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
             if (IsVisible)
@@ -59,5 +71,7 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
                 DiscordHelper.SetDiscordRPCStatus("User Wizard");
             }
         }
+
+        #endregion Methods
     }
 }

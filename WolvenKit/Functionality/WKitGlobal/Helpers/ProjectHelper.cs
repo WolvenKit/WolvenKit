@@ -12,8 +12,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         #endregion Enums
 
-
-
         #region Methods
 
         public static void InitializeProjectHelper()

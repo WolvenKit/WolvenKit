@@ -1,21 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WolvenKit.Bundles
 {
-    interface ISerializable
+    internal interface ICsvSerializable
     {
-        void Deserialize(BinaryReader reader);
-        void Serialize(BinaryWriter writer);
+        #region Methods
+
+        void DeserializeFromCsv(StreamReader reader);
+
+        void SerializeToCsv(StreamWriter writer);
+
+        #endregion Methods
     }
 
-    interface ICsvSerializable
+    internal interface ISerializable
     {
-        void DeserializeFromCsv(StreamReader reader);
-        void SerializeToCsv(StreamWriter writer);
+        #region Methods
+
+        void Deserialize(BinaryReader reader);
+
+        void Serialize(BinaryWriter writer);
+
+        #endregion Methods
     }
 }

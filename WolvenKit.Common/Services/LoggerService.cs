@@ -1,7 +1,6 @@
-﻿﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Catel.Data;
 
 namespace WolvenKit.Common.Services
 {
@@ -14,32 +13,33 @@ namespace WolvenKit.Common.Services
         Wcc
     }
 
-    public class LogStringEventArgs
-    {
-        public LogStringEventArgs(string message, Logtype logtype)
-        {
-            Message = message;
-            Logtype = logtype;
-        }
-        public string Message { get; private set; }
-        public Logtype Logtype { get; private set; }
-    }
-
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class LoggerService : ObservableObject, ILoggerService
     {
+        #region Fields
+
+        private const int LOGLENGTH = 16384;
+
+        #endregion Fields
+
+        #region Constructors
+
         public LoggerService()
         {
             ErrorLog = new ObservableCollection<InterpretedLogMessage>();
         }
 
-        private const int LOGLENGTH = 16384;
+        #endregion Constructors
 
         #region Properties
+
         public ObservableCollection<InterpretedLogMessage> ErrorLog { get; set; }
 
         #region Log
+
         private string _errorLogStr;
+        private string _log;
+
         public string ErrorLogStr
         {
             get => _errorLogStr;
@@ -57,7 +57,6 @@ namespace WolvenKit.Common.Services
             }
         }
 
-        private string _log;
         public string Log
         {
             get => _log;
@@ -70,9 +69,13 @@ namespace WolvenKit.Common.Services
                 }
             }
         }
-        #endregion
+
+        #endregion Log
+
         #region progress
+
         private Tuple<float, string> _progress;
+
         public Tuple<float, string> Progress
         {
             get => _progress;
@@ -85,18 +88,68 @@ namespace WolvenKit.Common.Services
                 }
             }
         }
-        #endregion
+
+        #endregion progress
 
         public Logtype Logtype { get; private set; } = Logtype.Normal;
-        #endregion
+
+        #endregion Properties
 
         #region Overrides
+
         public override string ToString() => Log;
-        #endregion
+
+        #endregion Overrides
 
         #region Methods
+
         public event EventHandler<LogStringEventArgs> OnStringLogged;
+
         //public event PropertyChangingEventHandler PropertyChanging;
+
+        public void Clear()
+        {
+            Log = "";
+            ErrorLog.Clear();
+        }
+
+        /// <summary>
+        /// Log an Interpretable LogMessage
+        /// </summary>
+        public void LogExtended(SystemLogFlag sflag, ToolLogFlag tool, string cmdName, string value)
+        {
+            if (sflag == SystemLogFlag.SLF_Interpretable)
+            {
+                InterpretLogMessage(sflag, tool, cmdName, value);
+            }
+        }
+
+        /// <summary>
+        /// Log progress value
+        /// </summary>
+        /// <param name="value"></param>
+        public void LogProgress(float value)
+        {
+            Progress = new Tuple<float, string>(value, "");
+        }
+
+        /// <summary>
+        /// Log progress value
+        /// </summary>
+        /// <param name="value"></param>
+        public void LogProgress(float value, string str)
+        {
+            Progress = new Tuple<float, string>(value, str);
+        }
+
+        /// <summary>
+        /// Log progress incrementally
+        /// </summary>
+        /// <param name="value"></param>
+        public void LogProgressInc(float value, string str)
+        {
+            Progress = new Tuple<float, string>(Progress.Item1 + value, str);
+        }
 
         /// <summary>
         /// Log string
@@ -114,40 +167,40 @@ namespace WolvenKit.Common.Services
             if (type == Logtype.Error)
                 ErrorLogStr += value + "\r\n";
         }
-        /// <summary>
-        /// Log progress value
-        /// </summary>
-        /// <param name="value"></param>
-        public void LogProgress(float value)
-        {
-            Progress = new Tuple<float, string>(value, "");
-        }
-        /// <summary>
-        /// Log progress value
-        /// </summary>
-        /// <param name="value"></param>
-        public void LogProgress(float value, string str)
-        {
-            Progress = new Tuple<float, string>(value, str);
-        }
-        /// <summary>
-        /// Log progress incrementally
-        /// </summary>
-        /// <param name="value"></param>
-        public void LogProgressInc(float value, string str)
-        {
-            Progress = new Tuple<float, string>(Progress.Item1 + value, str);
-        }
 
-
-        /// <summary>
-        /// Log an Interpretable LogMessage
-        /// </summary>
-        public void LogExtended(SystemLogFlag sflag, ToolLogFlag tool, string cmdName, string value)
+        private WccLogFlag GetRFlagFromString(string rflag)
         {
-            if (sflag == SystemLogFlag.SLF_Interpretable)
+            switch (rflag)
             {
-                InterpretLogMessage(sflag, tool, cmdName, value);
+                case "WARNING":
+                    return WccLogFlag.WLF_Warning;
+
+                case "ERROR":
+                    return WccLogFlag.WLF_Error;
+
+                case "INFO":
+                    return WccLogFlag.WLF_Info;
+
+                default:
+                    return WccLogFlag.WLF_Info;
+            }
+        }
+
+        private WccLogFlag GetWFlagFromString(string wflag)
+        {
+            switch (wflag)
+            {
+                case "Warning":
+                    return WccLogFlag.WLF_Warning;
+
+                case "Error":
+                    return WccLogFlag.WLF_Error;
+
+                case "Info":
+                    return WccLogFlag.WLF_Info;
+
+                default:
+                    return WccLogFlag.WLF_Info;
             }
         }
 
@@ -198,7 +251,6 @@ namespace WolvenKit.Common.Services
                 // read LogMessage
                 string message = value?.Substring(1);
                 data.Value = message;
-
             }
             catch (Exception)
             {
@@ -250,36 +302,26 @@ namespace WolvenKit.Common.Services
             }
         }
 
+        #endregion Methods
+    }
 
-        private WccLogFlag GetWFlagFromString(string wflag)
+    public class LogStringEventArgs
+    {
+        #region Constructors
+
+        public LogStringEventArgs(string message, Logtype logtype)
         {
-            switch (wflag)
-            {
-                case "Warning": return WccLogFlag.WLF_Warning;
-                case "Error": return WccLogFlag.WLF_Error;
-                case "Info": return WccLogFlag.WLF_Info;
-                default: return WccLogFlag.WLF_Info;
-            }
-        }
-        private WccLogFlag GetRFlagFromString(string rflag)
-        {
-            switch (rflag)
-            {
-                case "WARNING": return WccLogFlag.WLF_Warning;
-                case "ERROR": return WccLogFlag.WLF_Error;
-                case "INFO": return WccLogFlag.WLF_Info;
-                default: return WccLogFlag.WLF_Info;
-            }
+            Message = message;
+            Logtype = logtype;
         }
 
-        public void Clear()
-        {
-            Log = "";
-            ErrorLog.Clear();
-        }
-        #endregion
+        #endregion Constructors
 
+        #region Properties
 
+        public Logtype Logtype { get; private set; }
+        public string Message { get; private set; }
 
+        #endregion Properties
     }
 }

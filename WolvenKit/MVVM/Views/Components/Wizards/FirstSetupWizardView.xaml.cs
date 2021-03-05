@@ -7,6 +7,22 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
 {
     public partial class FirstSetupWizardView
     {
+        #region Fields
+
+        private CreateUserView CUV;
+
+        private FinalizeSetupView FSV;
+
+        private LocateGameDateView LGDV;
+
+        private SetInitialPreferencesView SIPV;
+
+        private SelectThemeView STV;
+
+        #endregion Fields
+
+        #region Constructors
+
         public FirstSetupWizardView()
         {
             ServiceLocator.Default.RegisterTypeAndInstantiate<Model.Wizards.ProjectWizardModel>();
@@ -14,29 +30,21 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
             InitializeComponent();
         }
 
-        private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
+        #endregion Constructors
+
+        #region Methods
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (ViewModel == null)
-            {
-                return;
-            }
-
-            ServiceLocator.Default.RegisterInstance(ViewModel as FirstSetupWizardViewModel);
-
-            CUV = new CreateUserView();
-            STV = new SelectThemeView();
-            LGDV = new LocateGameDateView();
-            FSV = new FinalizeSetupView();
-            SIPV = new SetInitialPreferencesView();
-
+            StepMain.Next();
             ShowPage();
         }
 
-        private CreateUserView CUV;
-        private SelectThemeView STV;
-        private LocateGameDateView LGDV;
-        private FinalizeSetupView FSV;
-        private SetInitialPreferencesView SIPV;
+        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
+        {
+            StepMain.Prev();
+            ShowPage();
+        }
 
         private void ShowPage()
         {
@@ -69,18 +77,6 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
             }
         }
 
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            StepMain.Next();
-            ShowPage();
-        }
-
-        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
-        {
-            StepMain.Prev();
-            ShowPage();
-        }
-
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
             if (IsVisible)
@@ -88,5 +84,25 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
                 DiscordHelper.SetDiscordRPCStatus("First Setup Wizard");
             }
         }
+
+        private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
+        {
+            if (ViewModel == null)
+            {
+                return;
+            }
+
+            ServiceLocator.Default.RegisterInstance(ViewModel as FirstSetupWizardViewModel);
+
+            CUV = new CreateUserView();
+            STV = new SelectThemeView();
+            LGDV = new LocateGameDateView();
+            FSV = new FinalizeSetupView();
+            SIPV = new SetInitialPreferencesView();
+
+            ShowPage();
+        }
+
+        #endregion Methods
     }
 }
