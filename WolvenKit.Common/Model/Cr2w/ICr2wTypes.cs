@@ -92,11 +92,11 @@ namespace WolvenKit.Common.Model.Cr2w
         public T Value { get; set; } // ???
     }
 
-    public interface IREDBool : IEditorBindable<bool>
+    public interface IREDBool : IREDPrimitive, IEditorBindable<bool>
     {
     }
 
-    public interface IEnumAccessor
+    public interface IEnumAccessor : IEditorBindable
     {
         List<string> EnumValueList { get; set; }
         bool IsFlag { get; }
