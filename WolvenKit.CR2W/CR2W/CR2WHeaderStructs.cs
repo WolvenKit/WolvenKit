@@ -1,9 +1,10 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
 namespace WolvenKit.CR2W
 {
     #region Header Structs
+
     [DataContract(Namespace = "")]
     [StructLayout(LayoutKind.Explicit, Size = 36)]
     public struct CR2WFileHeader
@@ -54,7 +55,5 @@ namespace WolvenKit.CR2W
         public uint crc32;
     }
 
-    
-    #endregion
-
+    #endregion Header Structs
 }

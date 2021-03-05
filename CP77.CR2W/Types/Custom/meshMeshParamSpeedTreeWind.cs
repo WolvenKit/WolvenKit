@@ -19,7 +19,7 @@ namespace CP77.CR2W.Types
         {
             base.Read(file, size);
 
-            if (Unk1.val != 1)
+            if (Unk1.Value != 1)
             {
                 throw new InvalidParsingException(nameof(meshMeshParamSpeedTreeWind));
             }
@@ -42,7 +42,7 @@ namespace CP77.CR2W.Types
             {
                 for (int i = elementCount; i < 246; i++)
                 {
-                    Unk2.AddVariable(new CFloat(cr2w, Unk2, i.ToString()) {IsSerialized = true, val = 0});
+                    Unk2.AddVariable(new CFloat(cr2w, Unk2, i.ToString()) {IsSerialized = true, Value = 0});
                 }
             }
             else if (elementCount > 246)

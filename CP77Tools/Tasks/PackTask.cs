@@ -1,13 +1,14 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading.Tasks;
 using CP77.CR2W;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
-
     public static partial class ConsoleFunctions
     {
+        #region Methods
+
         /// <summary>
         /// Packs a folder or list of folders to .archive files.
         /// </summary>
@@ -17,7 +18,7 @@ namespace CP77Tools.Tasks
         {
             if (path == null || path.Length < 1)
             {
-                logger.LogString("Please fill in an input path", Logtype.Error);
+                logger.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
@@ -25,7 +26,6 @@ namespace CP77Tools.Tasks
             {
                 PackTaskInner(file, outpath);
             });
-
         }
 
         private static void PackTaskInner(string path, string outpath, int cp = 0)
@@ -34,19 +34,22 @@ namespace CP77Tools.Tasks
 
             if (string.IsNullOrEmpty(path))
             {
-                logger.LogString("Please fill in an input path", Logtype.Error);
+                logger.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
             var inputDirInfo = new DirectoryInfo(path);
             if (!Directory.Exists(path) || !inputDirInfo.Exists)
             {
-                logger.LogString("Input path does not exist", Logtype.Error);
+                logger.LogString("Input path does not exist.", Logtype.Error);
                 return;
             }
 
             var basedir = inputDirInfo;
-            if (basedir?.Parent == null) return;
+            if (basedir?.Parent == null)
+            {
+                return;
+            }
 
             DirectoryInfo outDir;
             if (string.IsNullOrEmpty(outpath))
@@ -56,19 +59,27 @@ namespace CP77Tools.Tasks
             else
             {
                 outDir = new DirectoryInfo(outpath);
-                if (!outDir.Exists) 
+                if (!outDir.Exists)
+                {
                     outDir = Directory.CreateDirectory(outpath);
+                }
             }
 
-            #endregion
+            #endregion checks
 
             var ar = ModTools.Pack(basedir, outDir);
             if (ar != null)
+            {
                 logger.LogString($"Finished packing {ar.ArchiveAbsolutePath}.", Logtype.Success);
+            }
             else
+            {
                 logger.LogString($"Packing failed.", Logtype.Error);
+            }
 
             return;
         }
+
+        #endregion Methods
     }
 }

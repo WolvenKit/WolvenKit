@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
@@ -46,10 +46,10 @@ namespace WolvenKit.CR2W.Types
             {
                 DepotPath = cr2w.Imports[value - 1].DepotPathStr;
 
-                var filetype = cr2w.Imports[value - 1].Import.className;
+                var filetype = cr2w.Imports[value - 1].ClassName;
                 ClassName = cr2w.Names[filetype].Str;
 
-                Flags = cr2w.Imports[value - 1].Import.flags;
+                Flags = cr2w.Imports[value - 1].Flags;
             }
             else
             {

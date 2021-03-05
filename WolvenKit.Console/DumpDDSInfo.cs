@@ -105,7 +105,7 @@ namespace WolvenKit.Console
                                             );
                                         }
                                     }
-                                    
+
                                 }
                             }
                         }
@@ -120,14 +120,14 @@ namespace WolvenKit.Console
                     p1.Report(perc, $"Loading bundle entries: {progress}/{files1.Count}");
                 });
             }
-            System.Console.WriteLine($@"Loaded {bundlexbmDict.Values.Count} bundle entries");
+            System.Console.WriteLine($@"Loaded {bundlexbmDict.Values.Count} bundle entries.");
             #endregion
 
             #region DUMP TEXCACHE
             // Dump texture cache infos
             using (StreamWriter writer = File.CreateText(Path.Combine(outDir, $"__ddsdump_{idx}.txt")))
             {
-                string head = 
+                string head =
                     "Format1\t" +
                     "Format2\t" +
                     "BPP\t" +
@@ -150,7 +150,7 @@ namespace WolvenKit.Console
                     ;
                 writer.WriteLine(head);
 
-                
+
                 using (var pb = new ConsoleProgressBar.ProgressBar())
                 using (var p1 = pb.Progress.Fork())
                 {
@@ -212,7 +212,7 @@ namespace WolvenKit.Console
                     });
                     System.Console.WriteLine($"Finished dumping info from {files.Count} texture caches.\r\n");
                 }
-                
+
             }
 
             #endregion

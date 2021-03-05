@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using Catel.IoC;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
-
     public static partial class ConsoleFunctions
     {
+        #region Methods
 
         public static int HashTask(string[] input, bool missing)
         {
@@ -19,10 +17,12 @@ namespace CP77Tools.Tasks
             foreach (var s in input)
             {
                 if (!string.IsNullOrEmpty(s))
+                {
                     logger.LogString(FNV1A64HashAlgorithm.HashString(s).ToString(), Logtype.Normal);
+                }
             }
 
-            #endregion
+            #endregion checks
 
             if (missing)
             {
@@ -30,7 +30,6 @@ namespace CP77Tools.Tasks
                 var lines = File.ReadAllLines(@"X:\cp77\langs-work.txt");
                 var Hashdict = new Dictionary<ulong, string>();
                 var bad = new Dictionary<ulong, string>();
-               
 
                 foreach (var line in lines)
                 {
@@ -39,22 +38,23 @@ namespace CP77Tools.Tasks
                     if (missingh.Contains(hash.ToString()))
                     {
                         if (!Hashdict.ContainsKey(hash))
+                        {
                             Hashdict.Add(hash, line);
+                        }
                     }
                     else
                     {
                         if (!bad.ContainsKey(hash))
+                        {
                             bad.Add(hash, line);
+                        }
                     }
-                    
                 }
-
-
-
             }
-            
 
             return 1;
         }
+
+        #endregion Methods
     }
 }

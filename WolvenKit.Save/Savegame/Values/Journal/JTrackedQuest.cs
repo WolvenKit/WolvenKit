@@ -5,7 +5,11 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values.Journal
 {
     public class JTrackedQuest
     {
+        #region Properties
+
         [CName("guid")]
         public Guid Guid { get; set; }
+
+        #endregion Properties
     }
 }

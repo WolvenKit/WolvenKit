@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 
@@ -6,8 +6,14 @@ namespace WolvenKit.W3SavegameEditor.Core.ChunkedLz4
 {
     public class ChunkedLz4FileHeader
     {
+        #region Properties
+
         public int ChunkCount { get; set; }
         public int HeaderSize { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         public static ChunkedLz4FileHeader Read(Stream input)
         {
@@ -32,5 +38,7 @@ namespace WolvenKit.W3SavegameEditor.Core.ChunkedLz4
                 };
             }
         }
+
+        #endregion Methods
     }
 }

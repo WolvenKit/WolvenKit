@@ -1,23 +1,30 @@
-﻿using System.ComponentModel;
-using System.Collections.Generic;
-using System.Reflection;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace VanWassenhove.Util
 {
     public class SortableBindingList<T> : BindingList<T>
     {
-        private PropertyDescriptor propertyDescriptor;
-        private ListSortDirection listSortDirection;
-        private bool isSorted;
+        #region Fields
 
-        protected override bool SupportsSortingCore => true;
+        private bool isSorted;
+        private ListSortDirection listSortDirection;
+        private PropertyDescriptor propertyDescriptor;
+
+        #endregion Fields
+
+        #region Properties
 
         protected override bool IsSortedCore => this.isSorted;
-
-        protected override PropertyDescriptor SortPropertyCore => this.propertyDescriptor;
-
         protected override ListSortDirection SortDirectionCore => this.listSortDirection;
+        protected override PropertyDescriptor SortPropertyCore => this.propertyDescriptor;
+        protected override bool SupportsSortingCore => true;
+
+        #endregion Properties
+
+        #region Methods
 
         protected override void ApplySortCore(PropertyDescriptor prop, ListSortDirection direction)
         {
@@ -62,5 +69,7 @@ namespace VanWassenhove.Util
             this.propertyDescriptor = base.SortPropertyCore;
             this.listSortDirection = base.SortDirectionCore;
         }
+
+        #endregion Methods
     }
 }

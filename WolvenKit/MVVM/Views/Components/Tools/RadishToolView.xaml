@@ -1,0 +1,53 @@
+<catel:UserControl
+ x:Class="WolvenKit.MVVM.Views.Components.Tools.RadishToolView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ >
+    <catel:UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources />
+                <hc:Theme />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </catel:UserControl.Resources>
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <ToolBar HorizontalAlignment="Left" VerticalAlignment="Top" />
+
+        <hc:PropertyGrid
+         Grid.Row="1"
+         Grid.RowSpan="2"
+         HorizontalAlignment="Stretch"
+         VerticalAlignment="Stretch"
+         />
+
+        <hc:PropertyGrid
+         Grid.Row="2"
+         Grid.Column="2"
+         HorizontalAlignment="Stretch"
+         VerticalAlignment="Stretch"
+         />
+
+        <ListView
+         Grid.Row="1"
+         Grid.RowSpan="1"
+         Grid.Column="1"
+         Grid.ColumnSpan="1"
+         />
+    </Grid>
+</catel:UserControl>

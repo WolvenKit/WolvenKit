@@ -1,13 +1,14 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W
 {
     public static class W3ReaderExtensions
     {
+        #region Methods
+
         public static IEditableVariable CopyViaBuffer(IEditableVariable source, IEditableVariable destination)
         {
             using (MemoryStream ms = new MemoryStream())
@@ -23,47 +24,7 @@ namespace WolvenKit.CR2W
                 }
             }
 
-
             return destination;
-        }
-
-
-
-
-        public static float ReadHalfFloat(this BinaryReader stream)
-        {
-            ushort data = stream.ReadUInt16();
-            // half (binary16) format IEEE 754-2008
-            uint dataSign = (uint)data >> 15;
-            uint dataExp = ((uint)data >> 10) & 0x001F;
-            uint dataFrac = (uint)data & 0x03FF;
-
-            uint floatExp = 0;
-            uint floatFrac = 0;
-
-            switch (dataExp)
-            {
-                case 0: // subnormal : (-1)^sign * 2^-14 * 0.frac
-                    if (dataFrac != 0) // subnormals but non-zeros -> normals in float32
-                    {
-                        floatExp = -15 + 127;
-                        while ((dataFrac & 0x200) == 0) { dataFrac <<= 1; floatExp--; }
-                        floatFrac = (dataFrac & 0x1FF) << 14;
-                    }
-                    else { floatFrac = 0; floatExp = 0; } // ± 0 -> ± 0
-                    break;
-                case 31: // infinity or NaNs : frac ? NaN : (-1)^sign * infinity
-                    floatExp = 255;
-                    floatFrac = dataFrac != 0 ? (uint)0x200000 : 0; // signaling Nan or zero
-                    break;
-                default: // normal : (-1)^sign * 2^(exp-15) * 1.frac
-                    floatExp = dataExp - 15 + 127;
-                    floatFrac = dataFrac << 13;
-                    break;
-            }
-            // single precision floating point (binary32) format IEEE 754-2008
-            uint floatNum = dataSign << 31 | floatExp << 23 | floatFrac;
-            return BitConverter.ToSingle(BitConverter.GetBytes(floatNum), 0);
         }
 
         public static int ReadBit6(this BinaryReader stream)
@@ -100,21 +61,44 @@ namespace WolvenKit.CR2W
             return result;
         }
 
-        public static int ReadVLQInt32(this BinaryReader br)
+        public static float ReadHalfFloat(this BinaryReader stream)
         {
-            var b1 = br.ReadByte();
-            var sign = (b1 & 128) == 128;
-            var next = (b1 & 64) == 64;
-            var size = b1 % 128 % 64;
-            var offset = 6;
-            while (next)
+            ushort data = stream.ReadUInt16();
+            // half (binary16) format IEEE 754-2008
+            uint dataSign = (uint)data >> 15;
+            uint dataExp = ((uint)data >> 10) & 0x001F;
+            uint dataFrac = (uint)data & 0x03FF;
+
+            uint floatExp = 0;
+            uint floatFrac = 0;
+
+            switch (dataExp)
             {
-                var b = br.ReadByte();
-                size = (b % 128) << offset | size;
-                next = (b & 128) == 128;
-                offset += 7;
+                case 0: // subnormal : (-1)^sign * 2^-14 * 0.frac
+                    if (dataFrac != 0) // subnormals but non-zeros -> normals in float32
+                    {
+                        floatExp = -15 + 127;
+                        while ((dataFrac & 0x200) == 0)
+                        { dataFrac <<= 1; floatExp--; }
+                        floatFrac = (dataFrac & 0x1FF) << 14;
+                    }
+                    else
+                    { floatFrac = 0; floatExp = 0; } // ± 0 -> ± 0
+                    break;
+
+                case 31: // infinity or NaNs : frac ? NaN : (-1)^sign * infinity
+                    floatExp = 255;
+                    floatFrac = dataFrac != 0 ? (uint)0x200000 : 0; // signaling Nan or zero
+                    break;
+
+                default: // normal : (-1)^sign * 2^(exp-15) * 1.frac
+                    floatExp = dataExp - 15 + 127;
+                    floatFrac = dataFrac << 13;
+                    break;
             }
-            return sign ? size * -1 : size;
+            // single precision floating point (binary32) format IEEE 754-2008
+            uint floatNum = dataSign << 31 | floatExp << 23 | floatFrac;
+            return BitConverter.ToSingle(BitConverter.GetBytes(floatNum), 0);
         }
 
         /// <summary>
@@ -132,7 +116,6 @@ namespace WolvenKit.CR2W
                 return null;
             if (b == 0x00)
                 throw new NotImplementedException();//return "";
-            
 
             var nxt = (b & (1 << 6)) != 0;
             var widechar = (b & (1 << 7)) == 0;
@@ -148,9 +131,8 @@ namespace WolvenKit.CR2W
             else
             {
                 readstring = Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(len));
-
             }
-                
+
             return readstring;
         }
 
@@ -191,5 +173,24 @@ namespace WolvenKit.CR2W
                 throw new NullReferenceException();
             return readstring;
         }
+
+        public static int ReadVLQInt32(this BinaryReader br)
+        {
+            var b1 = br.ReadByte();
+            var sign = (b1 & 128) == 128;
+            var next = (b1 & 64) == 64;
+            var size = b1 % 128 % 64;
+            var offset = 6;
+            while (next)
+            {
+                var b = br.ReadByte();
+                size = (b % 128) << offset | size;
+                next = (b & 128) == 128;
+                offset += 7;
+            }
+            return sign ? size * -1 : size;
+        }
+
+        #endregion Methods
     }
 }

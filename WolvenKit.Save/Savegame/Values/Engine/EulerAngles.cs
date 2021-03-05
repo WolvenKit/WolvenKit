@@ -1,10 +1,14 @@
-﻿namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values.Engine
+namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values.Engine
 {
     public class EulerAngles
     {
-        public byte[] Unknown1 { get; set; }
+        #region Properties
+
         public double Pitch { get; set; }
-        public double Yaw { get; set; }
         public double Roll { get; set; }
+        public byte[] Unknown1 { get; set; }
+        public double Yaw { get; set; }
+
+        #endregion Properties
     }
 }

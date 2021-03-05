@@ -5,6 +5,8 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values
     [CSerializable("SaveInfoItem", Custom = true)]
     public class SaveInfoItem
     {
+        #region Properties
+
         [CName("time")]
         public ulong Time { get; set; }
 
@@ -13,5 +15,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values
 
         [CName("v")]
         public ushort V { get; set; }
+
+        #endregion Properties
     }
 }

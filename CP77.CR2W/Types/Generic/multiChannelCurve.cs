@@ -59,10 +59,10 @@ namespace CP77.CR2W.Types
             base.Read(file, size);
 
             var interPolationTypeByte = (int)file.ReadByte();
-            InterPolationType.WrappedEnum = (EInterPolationType) interPolationTypeByte;
+            InterPolationType.Value = (EInterPolationType) interPolationTypeByte;
 
             var linkTypeByte = (int)file.ReadByte();
-            LinkType.WrappedEnum = (ELinkType) linkTypeByte;
+            LinkType.Value = (ELinkType) linkTypeByte;
 
             Alignment.Read(file, 4);
             Data.Read(file, 0);
@@ -72,8 +72,8 @@ namespace CP77.CR2W.Types
         {
             base.Write(file);
 
-            file.Write((byte)InterPolationType.WrappedEnum);
-            file.Write((byte)LinkType.WrappedEnum);
+            file.Write((byte)InterPolationType.Value);
+            file.Write((byte)LinkType.Value);
 
             Alignment.Write(file);
             Data.Write(file);

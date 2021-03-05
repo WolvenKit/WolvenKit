@@ -1,37 +1,52 @@
-﻿using System.IO;
+using System.IO;
 using System.IO.MemoryMappedFiles;
 using WolvenKit.Common;
-using WolvenKit.Common.Model;
 
 namespace WolvenKit.Wwise
 {
     public class SoundCacheItem : IGameFile
     {
-        public IGameArchive Archive { get; set; }
-        /// <summary>
-        /// Name of the bundled item in the archive.
-        /// </summary>
-        public string Name { get; set; }
+        #region Fields
+
+        public long NameOffset;
+
         /// <summary>
         /// Name of the cache file this file is in. (Needed for Extracting the file)
         /// </summary>
         public string ParentFile;
 
+        #endregion Fields
 
-        public long NameOffset;
-        /// <summary>
-        /// !!! Double check when writing !!! Some files use 64bit, older files may use 32bit.
-        /// </summary>
-        public long PageOffset { get; set; }
-        public uint Size { get; set; }
-        public uint ZSize { get; set; }
+        #region Constructors
 
         public SoundCacheItem(IGameArchive Parent)
         {
             this.Archive = Parent;
         }
 
+        #endregion Constructors
+
+        #region Properties
+
+        public IGameArchive Archive { get; set; }
         public string CompressionType => "None";
+
+        /// <summary>
+        /// Name of the bundled item in the archive.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// !!! Double check when writing !!! Some files use 64bit, older files may use 32bit.
+        /// </summary>
+        public long PageOffset { get; set; }
+
+        public uint Size { get; set; }
+        public uint ZSize { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         public void Extract(Stream output)
         {
@@ -43,5 +58,7 @@ namespace WolvenKit.Wwise
                 }
             }
         }
+
+        #endregion Methods
     }
 }

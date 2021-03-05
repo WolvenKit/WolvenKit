@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using WolvenKit.W3SavegameEditor.Core.Exceptions;
 using WolvenKit.W3SavegameEditor.Core.Savegame.Variables;
 
@@ -6,13 +6,22 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
 {
     public class SxapVariableParser : VariableParserBase<SxapVariable>
     {
+        #region Fields
 
         private const string FullMagicNumber = "SXAP";
+
+        #endregion Fields
+
+        #region Properties
 
         public override string MagicNumber
         {
             get { return "SX"; }
         }
+
+        #endregion Properties
+
+        #region Methods
 
         public override SxapVariable ParseImpl(BinaryReader reader, ref int size)
         {
@@ -37,12 +46,14 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.VariableParsers
             {
                 throw new ParseVariableException(
                     string.Format(
-                    "Expeced SXAP but read {0} at {1}",
+                    "Expected SXAP but read {0} at {1}",
                     magicNumber,
                     reader.BaseStream.Position - 4));
             }
 
             size -= bytesToRead;
         }
+
+        #endregion Methods
     }
 }

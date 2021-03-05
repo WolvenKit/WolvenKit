@@ -1,24 +1,25 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using CP77.CR2W;
-using CP77.CR2W.Archive;
 using CP77.CR2W.Extensions;
+using Newtonsoft.Json;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
     public static partial class ConsoleFunctions
     {
+        #region Methods
+
         public static void Cr2wTask(string[] path, string outpath, bool chunks, string pattern, string regex)
         {
             if (path == null || path.Length < 1)
             {
-                logger.LogString("Please fill in an input path", Logtype.Error);
+                logger.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
@@ -26,7 +27,6 @@ namespace CP77Tools.Tasks
             {
                 Cr2wTaskInner(file, outpath, chunks, pattern, regex);
             });
-
         }
 
         private static void Cr2wTaskInner(string path, string outpath, bool chunks, string pattern = "", string regex = "")
@@ -49,20 +49,24 @@ namespace CP77Tools.Tasks
                 logger.LogString("Input file does not exist.", Logtype.Error);
                 return;
             }
-            #endregion
+
+            #endregion checks
 
             Stopwatch watch = new();
             watch.Restart();
 
             // get all files
-            var fileInfos = isDirectory 
-                ? inDirInfo.GetFiles("*", SearchOption.AllDirectories).ToList() 
+            var fileInfos = isDirectory
+                ? inDirInfo.GetFiles("*", SearchOption.AllDirectories).ToList()
                 : new List<FileInfo> { inFileInfo };
 
             // check search pattern then regex
             IEnumerable<FileInfo> finalmatches = fileInfos;
             if (!string.IsNullOrEmpty(pattern))
+            {
                 finalmatches = fileInfos.MatchesWildcard(item => item.FullName, pattern);
+            }
+
             if (!string.IsNullOrEmpty(regex))
             {
                 var searchTerm = new System.Text.RegularExpressions.Regex($@"{regex}");
@@ -88,7 +92,7 @@ namespace CP77Tools.Tasks
                     : new DirectoryInfo(outpath);
                 if (outputDirInfo == null || !outputDirInfo.Exists)
                 {
-                    logger.LogString("Output directory is not valid.", Logtype.Error);
+                    logger.LogString("Invalid output directory.", Logtype.Error);
                     return;
                 }
 
@@ -98,7 +102,9 @@ namespace CP77Tools.Tasks
                     using var fs = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read);
                     var cr2w = ModTools.TryReadCr2WFile(fs);
                     if (cr2w == null)
+                    {
                         return;
+                    }
 
                     //write
                     File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.json"),
@@ -116,8 +122,10 @@ namespace CP77Tools.Tasks
 
             watch.Stop();
             logger.LogString(
-                $"Finished. Dumped {finalMatchesList.Count} files to json in {watch.ElapsedMilliseconds.ToString()}ms.",
+                $"Finished. Dumped {finalMatchesList.Count} files to JSON in {watch.ElapsedMilliseconds.ToString()}ms.",
                 Logtype.Success);
         }
+
+        #endregion Methods
     }
 }

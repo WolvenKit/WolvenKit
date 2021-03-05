@@ -120,8 +120,8 @@ namespace WolvenKit.Forms
                 }
             }
             config.DepotPath = textBoxDepot.Text;
-            config.GameModDir = textBoxModDir.Text;
-            config.GameDlcDir = textBoxDlcDir.Text;
+            config.W3GameModDir = textBoxModDir.Text;
+            config.W3GameDlcDir = textBoxDlcDir.Text;
 
             config.TextLanguage = txTextLanguage.Text;
             config.VoiceLanguage = txVoiceLanguage.Text;
@@ -389,7 +389,7 @@ namespace WolvenKit.Forms
             if (string.IsNullOrEmpty(executablePath))
                 executablePath = witcherexe;
 
-            if (string.IsNullOrEmpty(config.GameModDir) || !Directory.Exists(config.GameModDir))
+            if (string.IsNullOrEmpty(config.W3GameModDir) || !Directory.Exists(config.W3GameModDir))
             {
                 if (File.Exists(executablePath) && Path.GetExtension(executablePath) == ".exe" && executablePath.Contains("witcher3.exe"))
                 {
@@ -400,12 +400,12 @@ namespace WolvenKit.Forms
                         string gamemoddir = Path.Combine(tw3Directory.FullName, "Mods");
                         if (Directory.Exists(gamemoddir))
                         {
-                            config.GameModDir = gamemoddir;
+                            config.W3GameModDir = gamemoddir;
                         }
                     }
                 }
             }
-            textBoxModDir.Text = config.GameModDir;
+            textBoxModDir.Text = config.W3GameModDir;
         }
 
         private void SetDefaultDlcDir()
@@ -415,7 +415,7 @@ namespace WolvenKit.Forms
             if (string.IsNullOrEmpty(executablePath))
                 executablePath = witcherexe;
 
-            if (string.IsNullOrEmpty(config.GameDlcDir) || !Directory.Exists(config.GameDlcDir))
+            if (string.IsNullOrEmpty(config.W3GameDlcDir) || !Directory.Exists(config.W3GameDlcDir))
             {
                 if (File.Exists(executablePath) && Path.GetExtension(executablePath) == ".exe" && executablePath.Contains("witcher3.exe"))
                 {
@@ -426,12 +426,12 @@ namespace WolvenKit.Forms
                         string gamedlcdir = Path.Combine(tw3Directory.FullName, "DLC");
                         if (Directory.Exists(gamedlcdir))
                         {
-                            config.GameDlcDir = gamedlcdir;
+                            config.W3GameDlcDir = gamedlcdir;
                         }
                     }
                 }
             }
-            textBoxDlcDir.Text = config.GameDlcDir;
+            textBoxDlcDir.Text = config.W3GameDlcDir;
         }
 
         private void exeSearcherSlave_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)

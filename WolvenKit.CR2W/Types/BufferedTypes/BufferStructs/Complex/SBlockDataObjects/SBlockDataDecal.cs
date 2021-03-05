@@ -43,7 +43,7 @@ namespace WolvenKit.CR2W.Types
             }
             else if (read > size)
             {
-                throw new InvalidParsingException("read too far");
+                throw new InvalidParsingException("Read too far.");
             }
         }
 

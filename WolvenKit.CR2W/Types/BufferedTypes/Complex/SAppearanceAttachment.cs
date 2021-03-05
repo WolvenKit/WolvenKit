@@ -38,18 +38,18 @@ namespace WolvenKit.CR2W.Types
 
                 var parsedvar = CR2WTypeManager.Create(ClassName.Value, "", cr2w, Data);
                 parsedvar.Read(file, size);
-                
+
 
                 Data.AddVariable(parsedvar);
             }
 
-           
+
             //check
             var endpos = file.BaseStream.Position;
             var bytesread = endpos - startpos;
             if (bytesread != bytecount)
             {
-                throw new InvalidParsingException($"Error in parsing SAppearanceAttachment: Data Variable. Bytes read: {bytesread} out of {bytecount}.");
+                throw new InvalidParsingException($"Error in parsing SAppearanceAttachment: Data Variable. {bytesread} bytes read out of {bytecount}.");
             }
         }
 

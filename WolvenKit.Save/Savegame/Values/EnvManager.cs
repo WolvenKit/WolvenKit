@@ -1,16 +1,14 @@
-﻿using WolvenKit.W3SavegameEditor.Core.Savegame.Attributes;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Attributes;
 
 namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values
 {
     [CName("envManager")]
     public class EnvManager
     {
-        [CName("sepiaActive")]
-        public uint SepiaActive { get; set; }
+        #region Properties
 
-        [CName("weatherConditionName")]
-        //[CType("CName")]
-        public string WeatherConditionName { get; set; }
+        [CName("QuestEnvBlendFactor")]
+        public float QuestEnvBlendFactor { get; set; }
 
         [CName("QuestEnvDepotPath")]
         public string QuestEnvDepotPath { get; set; }
@@ -18,7 +16,13 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values
         [CName("QuestEnvPriority")]
         public int QuestEnvPriority { get; set; }
 
-        [CName("QuestEnvBlendFactor")]
-        public float QuestEnvBlendFactor { get; set; }
+        [CName("sepiaActive")]
+        public uint SepiaActive { get; set; }
+
+        [CName("weatherConditionName")]
+        //[CType("CName")]
+        public string WeatherConditionName { get; set; }
+
+        #endregion Properties
     }
 }

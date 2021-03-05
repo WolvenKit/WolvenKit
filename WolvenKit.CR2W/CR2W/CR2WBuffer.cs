@@ -1,8 +1,7 @@
-﻿using System;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.CR2W
 {
@@ -27,19 +26,17 @@ namespace WolvenKit.CR2W
         [FieldOffset(20)]
         public uint crc32;
     }
-    
-    public class CR2WBufferWrapper
+
+    public class CR2WBufferWrapper : ICR2WBuffer
     {
+        #region Fields
+
         private CR2WBuffer _buffer;
-        public CR2WBuffer Buffer {
-            get => _buffer;
-            set => _buffer = value;
-        }
         private byte[] _data;
-        public byte[] Data {
-            get => _data;
-            set => _data = value;
-        }
+
+        #endregion Fields
+
+        #region Constructors
 
         public CR2WBufferWrapper()
         {
@@ -51,41 +48,86 @@ namespace WolvenKit.CR2W
             _buffer = buffer;
         }
 
-        public void SetOffset(uint offset) => _buffer.offset = offset;
+        #endregion Constructors
+
+        #region Properties
+
+        public CR2WBuffer Buffer => _buffer;
+
+        public uint Crc32
+        {
+            get => _buffer.crc32;
+            set => _buffer.crc32 = value;
+        }
+
+        public byte[] Data
+        {
+            get => _data;
+            set => _data = value;
+        }
+
+        public uint DiskSize
+        {
+            get => _buffer.diskSize;
+            set => _buffer.diskSize = value;
+        }
+
+        public uint Flags => _buffer.flags;
+
+        public uint Index => _buffer.index;
+
+        public uint MemSize
+        {
+            get => _buffer.memSize;
+            set => _buffer.memSize = value;
+        }
+
+        public uint Offset
+        {
+            get => _buffer.offset;
+            set => _buffer.offset = value;
+        }
+
+        #endregion Properties
+
+        #region Methods
 
         public void ReadData(BinaryReader file)
         {
             file.BaseStream.Seek(_buffer.offset, SeekOrigin.Begin);
-            Data = file.ReadBytes((int) _buffer.memSize);
+            Data = file.ReadBytes((int)_buffer.memSize);
         }
 
         public /*async Task*/ void ReadData(MemoryMappedFile mmf)
         {
             //await Task.Run(() =>
             //{
-                using (MemoryMappedViewStream vs = mmf.CreateViewStream(_buffer.offset, _buffer.memSize, MemoryMappedFileAccess.Read))
-                using (BinaryReader br = new BinaryReader(vs))
-                {
-                    Data = br.ReadBytes((int)_buffer.memSize);
-                }
+            using (MemoryMappedViewStream vs = mmf.CreateViewStream(_buffer.offset, _buffer.memSize, MemoryMappedFileAccess.Read))
+            using (BinaryReader br = new BinaryReader(vs))
+            {
+                Data = br.ReadBytes((int)_buffer.memSize);
+            }
             //}
             //);
         }
 
+        public void SetOffset(uint offset) => _buffer.offset = offset;
+
+        public override string ToString()
+        {
+            return _buffer.index.ToString();
+        }
+
         public void WriteData(BinaryWriter file)
         {
-            _buffer.offset = (uint) file.BaseStream.Position;
+            _buffer.offset = (uint)file.BaseStream.Position;
             if (Data != null)
             {
                 file.Write(Data);
                 _buffer.memSize = (uint)Data.Length;
             }
-            
         }
 
-        public override string ToString()
-        {
-            return Buffer.index.ToString();
-        }
+        #endregion Methods
     }
 }

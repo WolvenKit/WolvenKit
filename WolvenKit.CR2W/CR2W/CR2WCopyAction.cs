@@ -1,7 +1,6 @@
-﻿using Catel.IoC;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Catel.IoC;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
@@ -14,20 +13,36 @@ namespace WolvenKit.CR2W
     /// </summary>
     public class CR2WCopyAction : ICR2WCopyAction
     {
-        public Dictionary<ICR2WExport, ICR2WExport> chunkTranslation; // source, target
+        #region Fields
+
+        public Dictionary<ICR2WExport, ICR2WExport> chunkTranslation;
+
+        #endregion Fields
+
+        // source, target
+
+        #region Constructors
 
         public CR2WCopyAction()
         {
             chunkTranslation = new Dictionary<ICR2WExport, ICR2WExport>();
         }
 
-        public ICR2WExport SourceChunk { get; set; }
+        #endregion Constructors
+
+        #region Properties
+
         public ICR2WExport DestinationChunk { get; set; }
-        public IEditableVariable SourceCVar => SourceChunk.data;
         public IEditableVariable DestinationCVar => DestinationChunk.data;
-        public IWolvenkitFile SourceFile { get; set; }
         public IWolvenkitFile DestinationFile { get; set; }
         public IEditableVariable Parent { get; set; }
+        public ICR2WExport SourceChunk { get; set; }
+        public IEditableVariable SourceCVar => SourceChunk.data;
+        public IWolvenkitFile SourceFile { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         /// <summary>
         /// Used when pasting-in-place a chunk, takes care of (virtual) children.
@@ -91,7 +106,7 @@ namespace WolvenKit.CR2W
                         sourcechunk.data.REDType,
                         (DestinationFile as CR2WFile).GetLastChildrenIndexRecursive(DestinationChunk) + 1);
 
-                if(!chunkTranslation.ContainsKey(sourcechunk))
+                if (!chunkTranslation.ContainsKey(sourcechunk))
                 {
                     chunkTranslation.Add(sourcechunk, newchunk);
                 }
@@ -101,7 +116,6 @@ namespace WolvenKit.CR2W
 
                 DeepChunkCopy(sourcechunk, newchunk, false);
             }
-
 
             // Reparent full old chunk hierarchy to take into account the inserted children
             foreach (var achunk in DestinationFile.Chunks)
@@ -130,37 +144,6 @@ namespace WolvenKit.CR2W
                     (uppercopy as IChunkPtrAccessor).Reference = chunktranslationentry.Value;
                     targetarray.AddVariable(uppercopy);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Recursive function used both by paste-in-place and paste-insert.
-        /// </summary>
-        /// <param name="sourcechunk"></param>
-        /// <param name="destinationchunk"></param>
-        /// <param name="inplace"></param>
-        private void DeepChunkCopy (ICR2WExport sourcechunk, ICR2WExport destinationchunk, bool inplace = true)
-        {
-            Parent = null;
-            foreach (var sourcevirtualchildchunk in sourcechunk.VirtualChildrenChunks)
-            {
-                var newchunk = (DestinationFile as CR2WFile).CreateChunk(
-                    sourcevirtualchildchunk.data.REDType,
-                    inplace ? destinationchunk.ChunkIndex + sourcevirtualchildchunk.ChunkIndex - SourceChunk.ChunkIndex
-                            : (destinationchunk.data.Cr2wFile as CR2WFile).GetLastChildrenIndexRecursive(destinationchunk) + 1);
-
-                if(!chunkTranslation.ContainsKey(sourcevirtualchildchunk))
-                {
-                    chunkTranslation.Add(sourcevirtualchildchunk, newchunk);
-                }
-
-                if (!inplace)
-                {
-                    newchunk.ParentChunk = TryLookupReference(sourcevirtualchildchunk.ParentChunk);
-                    newchunk.MountChunkVirtually(TryLookupReference(sourcevirtualchildchunk.VirtualParentChunk), true);
-                }
-
-                DeepChunkCopy(sourcevirtualchildchunk, newchunk, inplace);
             }
         }
 
@@ -199,7 +182,7 @@ namespace WolvenKit.CR2W
 
             // Try last way
             string vardepstring = null;
-            if(targetVariable != null)
+            if (targetVariable != null)
             {
                 vardepstring = targetVariable.UniqueIdentifier;
             }
@@ -217,14 +200,47 @@ namespace WolvenKit.CR2W
             }
             else if (targetchunk.Count > 1)
             {
-                logger?.LogString($"More than one chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}", Logtype.Error);
+                logger?.LogString($"More than one chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}.", Logtype.Error);
                 return null;
             }
             else
             {
-                logger?.LogString($"No chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}", Logtype.Error);
+                logger?.LogString($"No chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}.", Logtype.Error);
                 return null;
             }
         }
+
+        /// <summary>
+        /// Recursive function used both by paste-in-place and paste-insert.
+        /// </summary>
+        /// <param name="sourcechunk"></param>
+        /// <param name="destinationchunk"></param>
+        /// <param name="inplace"></param>
+        private void DeepChunkCopy(ICR2WExport sourcechunk, ICR2WExport destinationchunk, bool inplace = true)
+        {
+            Parent = null;
+            foreach (var sourcevirtualchildchunk in sourcechunk.VirtualChildrenChunks)
+            {
+                var newchunk = (DestinationFile as CR2WFile).CreateChunk(
+                    sourcevirtualchildchunk.data.REDType,
+                    inplace ? destinationchunk.ChunkIndex + sourcevirtualchildchunk.ChunkIndex - SourceChunk.ChunkIndex
+                            : (destinationchunk.data.Cr2wFile as CR2WFile).GetLastChildrenIndexRecursive(destinationchunk) + 1);
+
+                if (!chunkTranslation.ContainsKey(sourcevirtualchildchunk))
+                {
+                    chunkTranslation.Add(sourcevirtualchildchunk, newchunk);
+                }
+
+                if (!inplace)
+                {
+                    newchunk.ParentChunk = TryLookupReference(sourcevirtualchildchunk.ParentChunk);
+                    newchunk.MountChunkVirtually(TryLookupReference(sourcevirtualchildchunk.VirtualParentChunk), true);
+                }
+
+                DeepChunkCopy(sourcevirtualchildchunk, newchunk, inplace);
+            }
+        }
+
+        #endregion Methods
     }
 }

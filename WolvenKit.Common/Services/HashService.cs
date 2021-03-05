@@ -10,17 +10,26 @@ namespace WolvenKit.Common.Services
 {
     public class HashService : IHashService
     {
-        private const string HashZipName = "WolvenKit.Common.Resources.archivehashes.zip";
-        private const string HashFileName = "archivehashes.txt";
+        #region Fields
 
-        private readonly ILoggerService _loggerService;
+        private const string HashFileName = "archivehashes.txt";
+        private const string HashZipName = "WolvenKit.Common.Resources.archivehashes.zip";
         private readonly Dictionary<ulong, string> _hashes = new();
+        private readonly ILoggerService _loggerService;
+
+        #endregion Fields
+
+        #region Constructors
 
         public HashService(ILoggerService loggerService)
         {
             _loggerService = loggerService;
             Load();
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public bool Contains(ulong key)
         {
@@ -31,6 +40,21 @@ namespace WolvenKit.Common.Services
         {
             _hashes.TryGetValue(key, out var value);
             return value;
+        }
+
+        public void ReloadLocally()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void AddHashesFromStream(Stream stream)
+        {
+            string line;
+            using var sr = new StreamReader(stream, Encoding.UTF8);
+            while ((line = sr.ReadLine()) != null)
+            {
+                _hashes[FNV1A64HashAlgorithm.HashString(line)] = line;
+            }
         }
 
         private void Load()
@@ -62,19 +86,6 @@ namespace WolvenKit.Common.Services
             _loggerService.LogString($"Loaded {_hashes.Count} hashes in {stopwatch.ElapsedMilliseconds}ms.", Logtype.Success);
         }
 
-        private void AddHashesFromStream(Stream stream)
-        {
-            string line;
-            using var sr = new StreamReader(stream, Encoding.UTF8);
-            while ((line = sr.ReadLine()) != null)
-            {
-                _hashes[FNV1A64HashAlgorithm.HashString(line)] = line;
-            }
-        }
-
-        public void ReloadLocally()
-        {
-            throw new System.NotImplementedException();
-        }
+        #endregion Methods
     }
 }

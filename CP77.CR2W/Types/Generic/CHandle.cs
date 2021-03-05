@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
@@ -98,10 +98,10 @@ namespace CP77.CR2W.Types
             {
                 DepotPath = cr2w.Imports[-val - 1].DepotPathStr;
 
-                var filetype = cr2w.Imports[-val - 1].Import.className;
+                var filetype = cr2w.Imports[-val - 1].ClassName;
                 ClassName = cr2w.Names[filetype].Str;
 
-                Flags = cr2w.Imports[-val - 1].Import.flags;
+                Flags = cr2w.Imports[-val - 1].Flags;
             }
         }
 

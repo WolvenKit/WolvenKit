@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -6,20 +6,22 @@ namespace WolvenKit.Scaleform
 {
     public class CriUsmStream : MpegStream
     {
+        #region Fields
+
         public const string DefaultAudioExtension = ".adx";
         public const string DefaultVideoExtension = ".m2v";
         public const string HcaAudioExtension = ".hca";
 
-        static readonly byte[] HCA_SIG_BYTES = new byte[] { 0x48, 0x43, 0x41, 0x00 };
-
         protected static readonly byte[] ALP_BYTES = new byte[] { 0x40, 0x41, 0x4C, 0x50 };
-        protected static readonly byte[] CRID_BYTES = new byte[] { 0x43, 0x52, 0x49, 0x44 };
-        protected static readonly byte[] SFV_BYTES = new byte[] { 0x40, 0x53, 0x46, 0x56 };
-        protected static readonly byte[] SFA_BYTES = new byte[] { 0x40, 0x53, 0x46, 0x41 };
-        protected static readonly byte[] SBT_BYTES = new byte[] { 0x40, 0x53, 0x42, 0x54 };
-        protected static readonly byte[] CUE_BYTES = new byte[] { 0x40, 0x43, 0x55, 0x45 };
 
-        protected static readonly byte[] UTF_BYTES = new byte[] { 0x40, 0x55, 0x54, 0x46 };
+        protected static readonly byte[] CONTENTS_END_BYTES =
+            new byte[] { 0x23, 0x43, 0x4F, 0x4E, 0x54, 0x45, 0x4E, 0x54,
+                         0x53, 0x20, 0x45, 0x4E, 0x44, 0x20, 0x20, 0x20,
+                         0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D,
+                         0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x00 };
+
+        protected static readonly byte[] CRID_BYTES = new byte[] { 0x43, 0x52, 0x49, 0x44 };
+        protected static readonly byte[] CUE_BYTES = new byte[] { 0x40, 0x43, 0x55, 0x45 };
 
         protected static readonly byte[] HEADER_END_BYTES =
             new byte[] { 0x23, 0x48, 0x45, 0x41, 0x44, 0x45, 0x52, 0x20,
@@ -33,11 +35,15 @@ namespace WolvenKit.Scaleform
                          0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D,
                          0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x00 };
 
-        protected static readonly byte[] CONTENTS_END_BYTES =
-            new byte[] { 0x23, 0x43, 0x4F, 0x4E, 0x54, 0x45, 0x4E, 0x54,
-                         0x53, 0x20, 0x45, 0x4E, 0x44, 0x20, 0x20, 0x20,
-                         0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D,
-                         0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0x00 };
+        protected static readonly byte[] SBT_BYTES = new byte[] { 0x40, 0x53, 0x42, 0x54 };
+        protected static readonly byte[] SFA_BYTES = new byte[] { 0x40, 0x53, 0x46, 0x41 };
+        protected static readonly byte[] SFV_BYTES = new byte[] { 0x40, 0x53, 0x46, 0x56 };
+        protected static readonly byte[] UTF_BYTES = new byte[] { 0x40, 0x55, 0x54, 0x46 };
+        private static readonly byte[] HCA_SIG_BYTES = new byte[] { 0x48, 0x43, 0x41, 0x00 };
+
+        #endregion Fields
+
+        #region Constructors
 
         public CriUsmStream(string path)
             : base(path)
@@ -55,82 +61,11 @@ namespace WolvenKit.Scaleform
             base.BlockIdDictionary[BitConverter.ToUInt32(CUE_BYTES, 0)] = new BlockSizeStruct(PacketSizeType.SizeBytes, 4); // @CUE
         }
 
-        protected override byte[] GetPacketStartBytes() { return CRID_BYTES; }
+        #endregion Constructors
 
-        protected override int GetAudioPacketHeaderSize(Stream readStream, long currentOffset)
-        {
-            UInt16 checkBytes;
-            OffsetDescription od = new OffsetDescription();
+        #region Methods
 
-            od.OffsetByteOrder = Constants.BigEndianByteOrder;
-            od.OffsetSize = "2";
-            od.OffsetValue = "8";
-
-            checkBytes = (UInt16)ParseFile.GetVaryingByteValueAtRelativeOffset(readStream, od, currentOffset);
-
-            return checkBytes;
-        }
-        protected override int GetVideoPacketHeaderSize(Stream readStream, long currentOffset)
-        {
-            UInt16 checkBytes;
-            OffsetDescription od = new OffsetDescription();
-
-            od.OffsetByteOrder = Constants.BigEndianByteOrder;
-            od.OffsetSize = "2";
-            od.OffsetValue = "8";
-
-            checkBytes = (UInt16)ParseFile.GetVaryingByteValueAtRelativeOffset(readStream, od, currentOffset);
-
-            return checkBytes;
-        }
-
-        protected override bool IsThisAnAudioBlock(byte[] blockToCheck)
-        {
-            return ParseFile.CompareSegment(blockToCheck, 0, SFA_BYTES);
-        }
-        protected override bool IsThisAVideoBlock(byte[] blockToCheck)
-        {
-            return ParseFile.CompareSegment(blockToCheck, 0, SFV_BYTES);
-        }
-
-        protected override byte GetStreamId(Stream readStream, long currentOffset)
-        {
-            byte streamId;
-
-            streamId = ParseFile.ParseSimpleOffset(readStream, currentOffset + 0xC, 1)[0];
-
-            return streamId;
-        }
-
-        protected override int GetAudioPacketFooterSize(Stream readStream, long currentOffset)
-        {
-            UInt16 checkBytes;
-            OffsetDescription od = new OffsetDescription();
-
-            od.OffsetByteOrder = Constants.BigEndianByteOrder;
-            od.OffsetSize = "2";
-            od.OffsetValue = "0xA";
-
-            checkBytes = (UInt16)ParseFile.GetVaryingByteValueAtRelativeOffset(readStream, od, currentOffset);
-
-            return checkBytes;
-        }
-
-        protected override int GetVideoPacketFooterSize(Stream readStream, long currentOffset)
-        {
-            UInt16 checkBytes;
-            OffsetDescription od = new OffsetDescription();
-
-            od.OffsetByteOrder = Constants.BigEndianByteOrder;
-            od.OffsetSize = "2";
-            od.OffsetValue = "0xA";
-
-            checkBytes = (UInt16)ParseFile.GetVaryingByteValueAtRelativeOffset(readStream, od, currentOffset);
-
-            return checkBytes;
-        }
-
-        protected override Dictionary<string,byte[]> DoFinalTasks(FileStream sourceFileStream,Dictionary<uint,string> Filenametable, Dictionary<uint, MemoryStream> outputFiles, bool addHeader)
+        protected override Dictionary<string, byte[]> DoFinalTasks(FileStream sourceFileStream, Dictionary<uint, string> Filenametable, Dictionary<uint, MemoryStream> outputFiles, bool addHeader)
         {
             long headerEndOffset;
             long metadataEndOffset;
@@ -142,7 +77,7 @@ namespace WolvenKit.Scaleform
             string sourceFileName;
             byte[] workingFile;
             string fileExtension;
-            Dictionary<string,byte[]> Files = new Dictionary<string, byte[]>();
+            Dictionary<string, byte[]> Files = new Dictionary<string, byte[]>();
             foreach (uint streamId in outputFiles.Keys)
             {
                 sourceFileName = Filenametable[streamId];
@@ -199,11 +134,93 @@ namespace WolvenKit.Scaleform
 
                 workingFile = FileUtil.RemoveChunkFromStream(outputFiles[streamId], 0, headerSize);
                 workingFile = FileUtil.RemoveChunkFromStream(new MemoryStream(workingFile), footerOffset, footerSize);
-                Files.Add(Path.ChangeExtension(Filenametable[streamId],fileExtension), workingFile);
+                Files.Add(Path.ChangeExtension(Filenametable[streamId], fileExtension), workingFile);
                 outputFiles[streamId].Close();
                 outputFiles[streamId].Dispose();
             }
             return Files;
         }
+
+        protected override int GetAudioPacketFooterSize(Stream readStream, long currentOffset)
+        {
+            UInt16 checkBytes;
+            OffsetDescription od = new OffsetDescription();
+
+            od.OffsetByteOrder = Constants.BigEndianByteOrder;
+            od.OffsetSize = "2";
+            od.OffsetValue = "0xA";
+
+            checkBytes = (UInt16)ParseFile.GetVaryingByteValueAtRelativeOffset(readStream, od, currentOffset);
+
+            return checkBytes;
+        }
+
+        protected override int GetAudioPacketHeaderSize(Stream readStream, long currentOffset)
+        {
+            UInt16 checkBytes;
+            OffsetDescription od = new OffsetDescription();
+
+            od.OffsetByteOrder = Constants.BigEndianByteOrder;
+            od.OffsetSize = "2";
+            od.OffsetValue = "8";
+
+            checkBytes = (UInt16)ParseFile.GetVaryingByteValueAtRelativeOffset(readStream, od, currentOffset);
+
+            return checkBytes;
+        }
+
+        protected override byte[] GetPacketStartBytes()
+        {
+            return CRID_BYTES;
+        }
+
+        protected override byte GetStreamId(Stream readStream, long currentOffset)
+        {
+            byte streamId;
+
+            streamId = ParseFile.ParseSimpleOffset(readStream, currentOffset + 0xC, 1)[0];
+
+            return streamId;
+        }
+
+        protected override int GetVideoPacketFooterSize(Stream readStream, long currentOffset)
+        {
+            UInt16 checkBytes;
+            OffsetDescription od = new OffsetDescription();
+
+            od.OffsetByteOrder = Constants.BigEndianByteOrder;
+            od.OffsetSize = "2";
+            od.OffsetValue = "0xA";
+
+            checkBytes = (UInt16)ParseFile.GetVaryingByteValueAtRelativeOffset(readStream, od, currentOffset);
+
+            return checkBytes;
+        }
+
+        protected override int GetVideoPacketHeaderSize(Stream readStream, long currentOffset)
+        {
+            UInt16 checkBytes;
+            OffsetDescription od = new OffsetDescription();
+
+            od.OffsetByteOrder = Constants.BigEndianByteOrder;
+            od.OffsetSize = "2";
+            od.OffsetValue = "8";
+
+            checkBytes = (UInt16)ParseFile.GetVaryingByteValueAtRelativeOffset(readStream, od, currentOffset);
+
+            return checkBytes;
+        }
+
+        protected override bool IsThisAnAudioBlock(byte[] blockToCheck)
+        {
+            return ParseFile.CompareSegment(blockToCheck, 0, SFA_BYTES);
+        }
+
+        protected override bool IsThisAVideoBlock(byte[] blockToCheck)
+        {
+            return ParseFile.CompareSegment(blockToCheck, 0, SFV_BYTES);
+        }
+
+        #endregion Methods
     }
 }

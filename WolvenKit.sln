@@ -32,6 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		doxygen.conf = doxygen.conf
+		Solution Changes.txt = Solution Changes.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Common", "WolvenKit.Common\WolvenKit.Common.csproj", "{93A10F45-1846-4AE7-939B-5B5E39B260BE}"
@@ -50,7 +51,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AvalonEdit", "AvalonEdit", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project Tools", "Project Tools", "{7EF84774-B230-4947-AD95-B262BA3F78D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextEditLib", "TextEditLib\TextEditLib.csproj", "{99CAC070-176B-4176-A4FE-A815D1CA9BF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextEditLib", "TextEditLib\TextEditLib.csproj", "{99CAC070-176B-4176-A4FE-A815D1CA9BF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

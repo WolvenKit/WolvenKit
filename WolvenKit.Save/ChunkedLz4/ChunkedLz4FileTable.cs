@@ -1,11 +1,17 @@
-﻿using System.IO;
+using System.IO;
 using System.Text;
 
 namespace WolvenKit.W3SavegameEditor.Core.ChunkedLz4
 {
     public class ChunkedLz4FileTable
     {
+        #region Properties
+
         public Lz4Chunk[] Chunks { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         public static ChunkedLz4FileTable Read(Stream input, int chunkCount)
         {
@@ -21,12 +27,14 @@ namespace WolvenKit.W3SavegameEditor.Core.ChunkedLz4
                         EndOfChunkOffset = reader.ReadInt32()
                     };
                 }
-                
+
                 return new ChunkedLz4FileTable
                 {
                     Chunks = chunks,
                 };
             }
         }
+
+        #endregion Methods
     }
 }

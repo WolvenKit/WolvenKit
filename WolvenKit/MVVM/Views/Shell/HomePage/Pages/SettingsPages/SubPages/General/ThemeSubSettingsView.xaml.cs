@@ -1,0 +1,10 @@
+namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.General
+{
+    public partial class ThemeSubSettingsView
+    {
+        public ThemeSubSettingsView()
+        {
+            InitializeComponent();
+        }
+    }
+}

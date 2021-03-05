@@ -1,16 +1,12 @@
-﻿using WolvenKit.W3SavegameEditor.Core.Savegame.Attributes;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Attributes;
 using WolvenKit.W3SavegameEditor.Core.Savegame.Values.Engine;
 
 namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values
 {
-    public class Universe
-    {
-        [CName("Player")]
-        public Player Player { get; set; } 
-    }
-
     public class Player
     {
+        #region Properties
+
         [CName("id")]
         public IdTag Id { get; set; }
 
@@ -23,5 +19,18 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values
 
         [CName("template")]
         public string Template { get; set; }
+
+        #endregion Properties
+    }
+
+    public class Universe
+    {
+        #region Properties
+
+        [CName("Player")]
+        public Player Player { get; set; }
+
+        #endregion Properties
+
     }
 }

@@ -1,0 +1,206 @@
+<catel:UserControl
+ x:Class="WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard.LocateGameDateView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ >
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Themes/TextBoxExtendedCustom.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Grid.Row="3" VerticalAlignment="Center">
+        <Grid
+         Margin="5,5,5,5"
+         HorizontalAlignment="Stretch"
+         Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+         >
+            <Grid Grid.Row="1" HorizontalAlignment="Stretch">
+                <StackPanel
+                 Margin="0,10,0,0"
+                 VerticalAlignment="Top"
+                 Orientation="Vertical"
+                 >
+                    <Grid Margin="22,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="60" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel>
+
+                            <StackPanel Visibility="{Binding CreateModForW3, Converter={StaticResource Boolean2VisibilityConverter}}">
+                                <hc:Divider
+                                 Margin="0,32,0,0"
+                                 HorizontalContentAlignment="Left"
+                                 Content="The Witcher 3"
+                                 />
+
+                                <hc:TextBox
+                                 x:Name="w3ExeTxtb"
+                                 Margin="0,32,0,0"
+                                 hc:InfoElement.Necessary="True"
+                                 hc:InfoElement.Title="Executable Path"
+                                 hc:InfoElement.TitlePlacement="Left"
+                                 hc:InfoElement.TitleWidth="200"
+                                 Style="{StaticResource TextBoxExtendCustom}"
+                                 Text="{Binding W3ExePath}"
+                                 TextChanged="Field_TextChanged"
+                                 VerifyFunc="VerifyFile"
+                                 />
+                                <hc:TextBox
+                                 x:Name="wccLiteExeTxtb"
+                                 Margin="0,32,0,0"
+                                 hc:InfoElement.Necessary="True"
+                                 hc:InfoElement.Title="WCC_Lite.exe Path"
+                                 hc:InfoElement.TitlePlacement="Left"
+                                 hc:InfoElement.TitleWidth="200"
+                                 Style="{StaticResource TextBoxExtendCustom}"
+                                 Text="{Binding WccLitePath}"
+                                 TextChanged="Field_TextChanged"
+                                 VerifyFunc="VerifyFile"
+                                 />
+                                <hc:TextBox
+                                 x:Name="uncookedDepTxtb"
+                                 Margin="0,32,0,0"
+                                 hc:InfoElement.Necessary="True"
+                                 hc:InfoElement.Title="Uncooked Depot Path"
+                                 hc:InfoElement.TitlePlacement="Left"
+                                 hc:InfoElement.TitleWidth="200"
+                                 Style="{StaticResource TextBoxExtendCustom}"
+                                 Text="{Binding DepotPath}"
+                                 TextChanged="Field_TextChanged"
+                                 VerifyFunc="VerifyFolder"
+                                 />
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding CreateModForCP77, Converter={StaticResource Boolean2VisibilityConverter}}">
+                                <hc:Divider
+                                 Margin="0,32,0,0"
+                                 HorizontalContentAlignment="Left"
+                                 Content="Cyberpunk 2077"
+                                 />
+                                <hc:TextBox
+                                 x:Name="cp77ExeTxtb"
+                                 Margin="0,32,0,0"
+                                 hc:InfoElement.Necessary="True"
+                                 hc:InfoElement.Title="Executable Path"
+                                 hc:InfoElement.TitlePlacement="Left"
+                                 hc:InfoElement.TitleWidth="200"
+                                 Style="{StaticResource TextBoxExtendCustom}"
+                                 Text="{Binding CP77ExePath}"
+                                 TextChanged="Field_TextChanged"
+                                 VerifyFunc="VerifyFile"
+                                 />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1">
+                            <StackPanel Visibility="{Binding CreateModForW3, Converter={StaticResource Boolean2VisibilityConverter}}">
+                                <hc:Divider Margin="0,42,0,0" />
+
+                                <Button
+                                 Grid.Column="1"
+                                 Width="50"
+                                 Height="34"
+                                 Margin="5,50,0,0"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Bottom"
+                                 Click="W3ExecutablePathBtn_Click"
+                                 >
+                                    <iconPacks:PackIconCodicons
+                                     Grid.Row="0"
+                                     Width="15"
+                                     Height="15"
+                                     Margin="0,0,0,0"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                     Kind="FolderOpened"
+                                     Spin="False"
+                                     SpinAutoReverse="False"
+                                     />
+                                </Button>
+                                <Button
+                                 Grid.Column="1"
+                                 Width="50"
+                                 Height="34"
+                                 Margin="5,42,0,0"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Bottom"
+                                 Click="WccLitePathBtn_Click"
+                                 >
+                                    <iconPacks:PackIconCodicons
+                                     Grid.Row="0"
+                                     Width="15"
+                                     Height="15"
+                                     Margin="0,0,0,0"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                     Kind="FolderOpened"
+                                     Spin="False"
+                                     SpinAutoReverse="False"
+                                     />
+                                </Button>
+                                <Button
+                                 Grid.Column="1"
+                                 Width="50"
+                                 Height="34"
+                                 Margin="5,42,0,0"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Bottom"
+                                 Click="DepotPathBtn_Click"
+                                 >
+                                    <iconPacks:PackIconCodicons
+                                     Grid.Row="0"
+                                     Width="15"
+                                     Height="15"
+                                     Margin="0,0,0,0"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                     Kind="FolderOpened"
+                                     Spin="False"
+                                     SpinAutoReverse="False"
+                                     />
+                                </Button>
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding CreateModForCP77, Converter={StaticResource Boolean2VisibilityConverter}}">
+                                <hc:Divider Margin="0,43,0,0" />
+
+                                <Button
+                                 Grid.Column="1"
+                                 Width="50"
+                                 Height="34"
+                                 Margin="5,50,0,0"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Bottom"
+                                 Click="CP77ExecutablePathBtn_Click"
+                                 >
+                                    <iconPacks:PackIconCodicons
+                                     Grid.Row="0"
+                                     Width="15"
+                                     Height="15"
+                                     Margin="0,0,0,0"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                     Kind="FolderOpened"
+                                     Spin="False"
+                                     SpinAutoReverse="False"
+                                     />
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</catel:UserControl>
