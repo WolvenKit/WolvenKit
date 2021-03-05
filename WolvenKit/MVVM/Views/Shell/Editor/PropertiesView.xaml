@@ -21,94 +21,30 @@
                 <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
+            <ControlTemplate x:Key="as" TargetType="TreeViewItem">
+                <StackPanel>
+                    <Expander Header="{Binding BTitle}">
+                        <ListBox ItemsSource="{Binding BTitle}" />
+                    </Expander>
+                </StackPanel>
+            </ControlTemplate>
         </ResourceDictionary>
+
+
     </catel:UserControl.Resources>
 
-    <Grid xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters">
-        <Grid.Resources>
-            <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
-        </Grid.Resources>
+    <Grid>
 
-        <TreeView
-         Name="TreeView"
-         ItemsSource="{Binding Properties}"
-         Style="{DynamicResource TreeView}"
-         >
-            <ei:Interaction.Behaviors>
-                <behavior:TreeViewBehavior />
-            </ei:Interaction.Behaviors>
 
-            <TreeView.ContextMenu>
-                <ContextMenu>
-                    <MenuItem
-                     Command="{catel:CommandManagerBinding Application.OpenFile}"
-                     CommandParameter="{Binding SelectedItem}"
-                     Header="Open"
-                     />
-                    <Separator />
 
-                    <MenuItem Header="Actions">
-                        <MenuItem Command="{Binding AddAllCommand}" Header="Add all dependencies" />
-                        <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
-                    </MenuItem>
+        <TreeViewItem Header="{Binding BTitle}" Template="{StaticResource as}" />
 
-                    <MenuItem Header="Export">
-                        <MenuItem Command="{Binding ExportMeshCommand}" Header="Export with WCC" />
-                        <MenuItem Command="{Binding ExportJsonCommand}" Header="Export to JSON" />
-                    </MenuItem>
 
-                    <Separator />
-                    <!--<MenuItem Header="Cut" Command="{Binding CutFileCommand}" />-->
-                    <MenuItem Command="{Binding CopyCommand}" Header="Copy" />
-                    <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" />
-                    <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" />
-                    <Separator />
-                    <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
-                    <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
-                    <MenuItem Command="{Binding OpenInAssetBrowserCommand}" Header="Open in asset browser" />
-                    <Separator />
-                    <MenuItem Command="{Binding ExpandCommand}" Header="Expand children" />
-                    <MenuItem Command="{Binding CollapseCommand}" Header="Collapse children" />
-                    <Separator />
-                </ContextMenu>
-            </TreeView.ContextMenu>
+        <TextBlock
+         HorizontalAlignment="Center"
+         VerticalAlignment="Top"
+         Text="{Binding BTitle}"
+         />
 
-            <TreeView.ItemContainerStyle>
-                <Style BasedOn="{StaticResource TreeViewItemBaseStyle}" TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                    <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
-                </Style>
-            </TreeView.ItemContainerStyle>
-
-            <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type model:FileSystemInfoModel}" ItemsSource="{Binding Children}">
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel.InputBindings>
-                            <MouseBinding
-                             Command="{catel:CommandManagerBinding Application.OpenFile}"
-                             CommandParameter="{Binding}"
-                             MouseAction="LeftDoubleClick"
-                             />
-                        </StackPanel.InputBindings>
-                        <Image
-                         Height="16"
-                         Margin="0,1,8,1"
-                         Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
-                         />
-                        <TextBlock Text="{Binding Path=Name}" />
-                        <ei:Interaction.Triggers>
-                            <ei:EventTrigger EventName="PreviewMouseRightButtonDown">
-                                <ei:ChangePropertyAction
-                                 PropertyName="IsSelected"
-                                 TargetObject="{Binding}"
-                                 Value="true"
-                                 />
-                            </ei:EventTrigger>
-                        </ei:Interaction.Triggers>
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-            </TreeView.Resources>
-        </TreeView>
     </Grid>
 </catel:UserControl>

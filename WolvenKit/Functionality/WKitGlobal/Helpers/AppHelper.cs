@@ -8,7 +8,6 @@ using System.Windows.Data;
 using System.Windows.Media;
 using Catel.IoC;
 using Catel.MVVM;
-using ControlzEx.Theming;
 using Orc.Squirrel;
 using Orchestra.Services;
 using Orchestra.Views;
@@ -212,10 +211,9 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             StaticReferences.GlobalShell.SetCurrentValue(MahApps.Metro.Controls.MetroWindow.TitleBarHeightProperty, 25);
             StaticReferences.GlobalShell.SetCurrentValue(Window.TitleProperty, "");
 
-            var color = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DF2935"));
-            ThemeManager.Current.AddTheme(new Theme("CustomLightRed", "CustomLightRed", "Dark", "Red", (Color)ColorConverter.ConvertFromString("#DF2935"), color, true, false));
-            ThemeManager.Current.AddTheme(RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", Colors.Red));
-            ThemeManager.Current.ChangeTheme(Application.Current, "CustomLightRed");
+
+
+            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", (Color)ColorConverter.ConvertFromString("#DF2935"), false));
 
             //  GlobalShell.SetCurrentValue(FrameworkElement.MinHeightProperty, (double)810);
             //  GlobalShell.SetCurrentValue(FrameworkElement.MinWidthProperty, (double)1060);
