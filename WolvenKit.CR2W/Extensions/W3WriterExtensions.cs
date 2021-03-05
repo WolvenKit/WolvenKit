@@ -1,16 +1,14 @@
-﻿using RED.CRC32;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using WolvenKit.CR2W.Types;
 
 namespace WolvenKit.CR2W
 {
     public static class W3WriterExtensions
     {
+        #region Methods
 
         public static void WriteBit6(this BinaryWriter stream, int c)
         {
@@ -38,7 +36,6 @@ namespace WolvenKit.CR2W
                     left = left >> 7;
                 }
             }
-
 
             for (var i = 0; i < bytes.Count; i++)
             {
@@ -69,38 +66,6 @@ namespace WolvenKit.CR2W
                 stream.Write((byte)bytes[i]);
             }
         }
-
-        public static void WriteVLQInt32(this BinaryWriter bw, int value)
-        {
-            bool negative = value < 0;
-            value = Math.Abs(value);
-            byte b = (byte)(value & 0x3F);
-            value >>= 6;
-            if (negative)
-            {
-                b |= 0x80;
-            }
-            bool cont = value != 0;
-            if (cont)
-            {
-                b |= 0x40;
-            }
-            bw.Write(b);
-            while (cont)
-            {
-                b = (byte)(value & 0x7F);
-                value >>= 7;
-                cont = value != 0;
-                if (cont)
-                {
-                    b |= 0x80;
-                }
-                bw.Write(b);
-            }
-
-            
-        }
-
 
         /// <summary>
         /// Writes a string to a BinaryWriter Stream
@@ -147,7 +112,7 @@ namespace WolvenKit.CR2W
             }
             bw.Write(b);
 
-            // continue 
+            // continue
             if (cont)
                 bw.Write((byte)div);
             //while (cont)
@@ -213,7 +178,7 @@ namespace WolvenKit.CR2W
             }
             bw.Write(b);
 
-            // continue 
+            // continue
             if (cont)
                 bw.Write((byte)div);
 
@@ -225,6 +190,36 @@ namespace WolvenKit.CR2W
             // null terminated
             bw.Write((byte)0x00);
         }
-    }
 
+        public static void WriteVLQInt32(this BinaryWriter bw, int value)
+        {
+            bool negative = value < 0;
+            value = Math.Abs(value);
+            byte b = (byte)(value & 0x3F);
+            value >>= 6;
+            if (negative)
+            {
+                b |= 0x80;
+            }
+            bool cont = value != 0;
+            if (cont)
+            {
+                b |= 0x40;
+            }
+            bw.Write(b);
+            while (cont)
+            {
+                b = (byte)(value & 0x7F);
+                value >>= 7;
+                cont = value != 0;
+                if (cont)
+                {
+                    b |= 0x80;
+                }
+                bw.Write(b);
+            }
+        }
+
+        #endregion Methods
+    }
 }

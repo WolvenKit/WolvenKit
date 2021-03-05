@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Linq;
-using System.Threading.Tasks;
-using WolvenKit.Common;
-using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 
 namespace CP77.CR2W
@@ -25,6 +19,14 @@ namespace CP77.CR2W
 
     public class CR2WEmbeddedWrapper : ICR2WEmbedded
     {
+        #region Fields
+
+        private CR2WEmbedded _embedded;
+
+        #endregion Fields
+
+        #region Constructors
+
         public CR2WEmbeddedWrapper()
         {
             _embedded = new CR2WEmbedded();
@@ -35,21 +37,23 @@ namespace CP77.CR2W
             _embedded = embedded;
         }
 
-        public CR2WFile ParentFile { get; internal init; }
-        private CR2WEmbedded _embedded;
+        #endregion Constructors
+
+        #region Properties
+
         public CR2WEmbedded Embedded
         {
             get => _embedded;
             set => _embedded = value;
         }
 
-        public string ImportPath { get; private set; } = "<failed to get import path>";
         public ICR2WExport Export { get; private set; }
+        public string ImportPath { get; private set; } = "<failed to get import path>";
+        public CR2WFile ParentFile { get; internal init; }
 
+        #endregion Properties
 
-        public void SetChunkIndex(uint offset) => _embedded.chunkIndex = offset;
-        //public void SetPathHash(ulong hash) => _embedded.pathHash = hash;
-        public void SetImportIndex(uint idx) => _embedded.importIndex = idx;
+        #region Methods
 
         public void ReadData(BinaryReader file)
         {
@@ -57,9 +61,16 @@ namespace CP77.CR2W
             Export = ParentFile.Chunks[(int)Embedded.chunkIndex];
         }
 
+        public void SetChunkIndex(uint offset) => _embedded.chunkIndex = offset;
+
+        //public void SetPathHash(ulong hash) => _embedded.pathHash = hash;
+        public void SetImportIndex(uint idx) => _embedded.importIndex = idx;
+
         public override string ToString()
         {
             return $"{Export.ChunkIndex}:{ImportPath}";
         }
+
+        #endregion Methods
     }
 }

@@ -1,21 +1,23 @@
-<catel:UserControl x:Class="WolvenKit.MVVM.Views.Shell.Editor.StatusBarView"
-                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                   
-                   xmlns:catel="http://schemas.catelproject.com"
-                   xmlns:orchestra="http://schemas.wildgums.com/orchestra"
-                   xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
-                   xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
-                   xmlns:WolvenKit="clr-namespace:WolvenKit"
-                   xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                   mc:Ignorable="d">
+<catel:UserControl
+ x:Class="WolvenKit.MVVM.Views.Shell.Editor.StatusBarView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:WolvenKit="clr-namespace:WolvenKit"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
+ xmlns:orchestra="http://schemas.wildgums.com/orchestra"
+ xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
+ mc:Ignorable="d"
+ >
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources  RequestedTheme="Dark" />
+                <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="{x:Type StackPanel}">
@@ -26,31 +28,51 @@
         </ResourceDictionary>
     </catel:UserControl.Resources>
 
-        <Grid HorizontalAlignment="Stretch" Width="auto">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+    <Grid Width="auto" HorizontalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-            <StackPanel MaxHeight="20" x:Name="stackPanel">
-                <StackPanel>
-                    <Separator Background="{DynamicResource RegionBrush}" Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
-                        <Separator.LayoutTransform>
-                            <RotateTransform Angle="90" />
-                        </Separator.LayoutTransform>
-                    </Separator>
-                    <Grid>
+        <StackPanel x:Name="stackPanel" MaxHeight="20">
+            <StackPanel>
+                <Separator
+                 Width="{Binding ElementName=stackPanel, Path=ActualHeight}"
+                 Margin="3,0,3,0"
+                 Background="{DynamicResource RegionBrush}"
+                 >
+                    <Separator.LayoutTransform>
+                        <RotateTransform Angle="90" />
+                    </Separator.LayoutTransform>
+                </Separator>
+                <Grid>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="5,0,5,0" x:Name="LoadingTextStatusBar" Text="{Binding LoadingString}" /> <!-- FIRSTRELEASE -->
-                        <hc:LoadingIndicator IsEnabled="True" Visibility="{Binding IsLoading,Converter={StaticResource Boolean2VisibilityConverter}}" Foreground="{DynamicResource RegionBrush}"  MaxHeight="25" Width="25" Style="{StaticResource  LoadingIndicatorGridsStyle}"></hc:LoadingIndicator>
+                        <TextBlock
+                         x:Name="LoadingTextStatusBar"
+                         Margin="5,0,5,0"
+                         Text="{Binding LoadingString}"
+                         /> 
+                        <!--  FIRSTRELEASE  -->
+                        <hc:LoadingIndicator
+                         Width="25"
+                         MaxHeight="25"
+                         Foreground="{DynamicResource RegionBrush}"
+                         IsEnabled="True"
+                         Style="{StaticResource LoadingIndicatorGridsStyle}"
+                         Visibility="{Binding IsLoading, Converter={StaticResource Boolean2VisibilityConverter}}"
+                         />
                     </StackPanel>
-                    </Grid>
-                    <Separator Background="{DynamicResource RegionBrush}" Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
-                        <Separator.LayoutTransform>
-                            <RotateTransform Angle="90" />
-                        </Separator.LayoutTransform>
-                    </Separator>
+                </Grid>
+                <Separator
+                 Width="{Binding ElementName=stackPanel, Path=ActualHeight}"
+                 Margin="3,0,3,0"
+                 Background="{DynamicResource RegionBrush}"
+                 >
+                    <Separator.LayoutTransform>
+                        <RotateTransform Angle="90" />
+                    </Separator.LayoutTransform>
+                </Separator>
 
-               <!--     <TextBlock Text="Line " />
+                <!--     <TextBlock Text="Line " />
                     <TextBlock Text="{Binding Line}" />
 
                     <TextBlock Text="Column " />
@@ -63,41 +85,68 @@
                     </Separator>
 
                     <TextBlock FontWeight="Bold" Text="{Binding Heading}" />
-                    -->
+                -->
                 <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconBootstrapIcons  Grid.Row="0"   Kind="Wifi" Spin="False" SpinAutoReverse="False" Height="15" Width="15" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
+                    <iconPacks:PackIconBootstrapIcons
+                     Grid.Row="0"
+                     Width="15"
+                     Height="15"
+                     Margin="0,0,0,0"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Center"
+                     Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                     Kind="Wifi"
+                     Spin="False"
+                     SpinAutoReverse="False"
+                     />
                     <TextBlock Text="{Binding InternetConnected}" />
                 </StackPanel>
 
-                <Separator Background="{DynamicResource RegionBrush}" Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
-                        <Separator.LayoutTransform>
-                            <RotateTransform Angle="90" />
-                        </Separator.LayoutTransform>
-                    </Separator>
-                </StackPanel>
-
-                <StackPanel Visibility="{Binding IsUpdatedInstalled, Converter={StaticResource BooleanToCollapsingVisibilityConverter}}">
-                    <Image Width="16" Height="16" Source="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"
-                    ToolTip="Update is installed, restart to enable new features" />
-
-                    <Separator Background="{DynamicResource RegionBrush}" Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
-                        <Separator.LayoutTransform>
-                            <RotateTransform Angle="90" />
-                        </Separator.LayoutTransform>
-                    </Separator>
-                </StackPanel>
-
-                <StackPanel>
-                    <TextBlock Text="{Binding ReceivingAutomaticUpdates}" />
-
-                    <Separator Background="{DynamicResource RegionBrush}" Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
-                        <Separator.LayoutTransform>
-                            <RotateTransform Angle="90" />
-                        </Separator.LayoutTransform>
-                    </Separator>
-
-                    <TextBlock Text="{Binding Version}" />
-                </StackPanel>
+                <Separator
+                 Width="{Binding ElementName=stackPanel, Path=ActualHeight}"
+                 Margin="3,0,3,0"
+                 Background="{DynamicResource RegionBrush}"
+                 >
+                    <Separator.LayoutTransform>
+                        <RotateTransform Angle="90" />
+                    </Separator.LayoutTransform>
+                </Separator>
             </StackPanel>
-        </Grid>
+
+            <StackPanel Visibility="{Binding IsUpdatedInstalled, Converter={StaticResource BooleanToCollapsingVisibilityConverter}}">
+                <Image
+                 Width="16"
+                 Height="16"
+                 Source="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"
+                 ToolTip="Update is installed, restart to enable new features"
+                 />
+
+                <Separator
+                 Width="{Binding ElementName=stackPanel, Path=ActualHeight}"
+                 Margin="3,0,3,0"
+                 Background="{DynamicResource RegionBrush}"
+                 >
+                    <Separator.LayoutTransform>
+                        <RotateTransform Angle="90" />
+                    </Separator.LayoutTransform>
+                </Separator>
+            </StackPanel>
+
+            <StackPanel>
+                <TextBlock Text="{Binding ReceivingAutomaticUpdates}" />
+
+                <Separator
+                 Width="{Binding ElementName=stackPanel, Path=ActualHeight}"
+                 Margin="3,0,3,0"
+                 Background="{DynamicResource RegionBrush}"
+                 >
+                    <Separator.LayoutTransform>
+                        <RotateTransform Angle="90" />
+                    </Separator.LayoutTransform>
+                </Separator>
+
+                <TextBlock Text="{Binding Version}" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
 </catel:UserControl>

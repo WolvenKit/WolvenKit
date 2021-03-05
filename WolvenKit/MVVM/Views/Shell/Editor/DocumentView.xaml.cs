@@ -10,7 +10,13 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
     /// </summary>
     public partial class DocumentView
     {
+        #region Fields
+
         private bool _viewInitialized;
+
+        #endregion Fields
+
+        #region Constructors
 
         /// <summary>
         /// Class constructor
@@ -23,18 +29,9 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
                 .AddHandler(this, "Loaded", View_LoadedAsync);
         }
 
-        /// <summary>
-        /// Initializes the viewmodel and view as soon as the view is loaded.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void View_LoadedAsync(object sender, RoutedEventArgs e)
-        {
-            if (Visibility == Visibility.Visible && _viewInitialized == false)
-            {
-                await LoadContentAsync();
-            }
-        }
+        #endregion Constructors
+
+        #region Methods
 
         private async Task LoadContentAsync()
         {
@@ -68,5 +65,20 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
                 DiscordHelper.SetDiscordRPCStatus("Document View");
             }
         }
+
+        /// <summary>
+        /// Initializes the viewmodel and view as soon as the view is loaded.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void View_LoadedAsync(object sender, RoutedEventArgs e)
+        {
+            if (Visibility == Visibility.Visible && _viewInitialized == false)
+            {
+                await LoadContentAsync();
+            }
+        }
+
+        #endregion Methods
     }
 }

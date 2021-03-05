@@ -21,8 +21,6 @@ namespace WolvenKit.Functionality.Controllers
 
         #endregion Properties
 
-
-
         #region Methods
 
         public static string GetManagerPath(EManagerType type)

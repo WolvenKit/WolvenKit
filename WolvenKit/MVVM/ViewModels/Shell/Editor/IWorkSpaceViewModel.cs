@@ -20,8 +20,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #endregion Events
 
-
-
         #region Properties
 
         /// <summary>Gets/sets the currently active document.</summary>

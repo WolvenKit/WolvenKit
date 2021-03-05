@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Catel.IoC;
-using WolvenKit.Common.Services;
 using WolvenKit.Common;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W
 {
@@ -14,7 +13,7 @@ namespace CP77.CR2W
     /// </summary>
     public static partial class ModTools
     {
-
+        #region Methods
 
         /// <summary>
         ///
@@ -43,8 +42,10 @@ namespace CP77.CR2W
             // get all buffers and textures to recombine
             // if both buffers and textures is selected and a file has both buffers and textures
             // then the texture has priority
-            if (useBuffers) GetBuffers();
-            if (useTextures) GetTextures();
+            if (useBuffers)
+                GetBuffers();
+            if (useTextures)
+                GetTextures();
             Logger.LogString($"Found {buffersDict.Count.ToString()} file(s) to rebuild.", Logtype.Important);
 
             Thread.Sleep(1000);
@@ -76,15 +77,12 @@ namespace CP77.CR2W
                     Logger.LogString("Deleting raw files after rebuilding is not yet implemented.", Logtype.Error);
                 }
 
-
                 Interlocked.Increment(ref progress);
                 Logger.LogProgress(progress / (float)buffersDict.Count);
             }
 
-
             Logger.LogString($"Successfully rebuilt {buffersDict.Count.ToString()} file(s).", Logtype.Success);
             return true;
-
 
             #region local methods
 
@@ -153,7 +151,6 @@ namespace CP77.CR2W
                         .ToList();
                 }
 
-
                 if (keep)
                 {
                     // remove old buffers
@@ -173,7 +170,8 @@ namespace CP77.CR2W
                             throw new FileNotFoundException($"Could not find file {buffer.FullName} anymore.");
 
                         var inbuffer = ReadBuffer(buffer);
-                        if (inbuffer.Length < 1) continue;
+                        if (inbuffer.Length < 1)
+                            continue;
 
                         var offset = (uint)fileWriter.BaseStream.Position;
                         var (zsize, crc) = fileWriter.CompressAndWrite(inbuffer);
@@ -223,7 +221,6 @@ namespace CP77.CR2W
                 // if dds file, delete the
                 if (unsaferaw && bext != ".buffer")
                 {
-
                     switch (bext)
                     {
                         case ".dds":
@@ -251,8 +248,9 @@ namespace CP77.CR2W
                 return Array.Empty<byte>();
             }
 
-            #endregion
-
+            #endregion local methods
         }
+
+        #endregion Methods
     }
 }

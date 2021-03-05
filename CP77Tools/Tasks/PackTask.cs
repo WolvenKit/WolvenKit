@@ -1,13 +1,14 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading.Tasks;
 using CP77.CR2W;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
-
     public static partial class ConsoleFunctions
     {
+        #region Methods
+
         /// <summary>
         /// Packs a folder or list of folders to .archive files.
         /// </summary>
@@ -25,7 +26,6 @@ namespace CP77Tools.Tasks
             {
                 PackTaskInner(file, outpath);
             });
-
         }
 
         private static void PackTaskInner(string path, string outpath, int cp = 0)
@@ -65,7 +65,7 @@ namespace CP77Tools.Tasks
                 }
             }
 
-            #endregion
+            #endregion checks
 
             var ar = ModTools.Pack(basedir, outDir);
             if (ar != null)
@@ -79,5 +79,7 @@ namespace CP77Tools.Tasks
 
             return;
         }
+
+        #endregion Methods
     }
 }

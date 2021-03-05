@@ -1,10 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using ICSharpCode.SharpZipLib.Core;
@@ -14,10 +11,15 @@ namespace WolvenKit.Common.Model.Packaging
 {
     public class WKPackage
     {
+        #region Fields
+
+        public string RootFolder;
         private XDocument Assembly;
         private string Icon;
 
-        public string RootFolder;
+        #endregion Fields
+
+        #region Constructors
 
         /// <summary>
         /// Collects the info and the files from an already created WolveKit package.
@@ -41,60 +43,31 @@ namespace WolvenKit.Common.Model.Packaging
             RootFolder = rootfolder;
         }
 
-        /// <summary>
-        /// Saves the package to the specified output path.
-        /// </summary>
-        /// <param name="OutputPath">The path to save the file to.</param>
-        public void Save(string OutputPath)
-        {
-            if (Icon != null && Assembly != null)
-            {
-                FileStream fsOut = File.Create(OutputPath);
-                ZipOutputStream zipStream = new ZipOutputStream(fsOut);
-                int folderOffset = RootFolder.Length + (RootFolder.EndsWith("\\") ? 0 : 1);
-                CompressFolder(RootFolder, zipStream, folderOffset);
-                CompressFile(Icon, zipStream, "Icon" + Path.GetExtension(Icon));
-                CompressStream(XDocToByteArray(Assembly), "Assembly.xml", zipStream);
-                zipStream.Close();
-            }
-            else
-            {
-                throw new Exception("Missing parameters.");
-            }
-        }
+        #endregion Constructors
+
+        #region Methods
 
         /// <summary>
-        /// Converts an XDocuments to a byte array.
+        /// Compresses a file into a zipstream.
         /// </summary>
-        /// <param name="xdoc">The xdocument which we want to convert.</param>
-        /// <returns>The byte contents of the array.</returns>
-        public static byte[] XDocToByteArray(XDocument xdoc)
+        /// <param name="filename">Path to the file.</param>
+        /// <param name="zipStream">The zipstream to output to.</param>
+        /// <param name="nameOverride">Rename the file to a costum name.</param>
+        public static void CompressFile(string filename, ZipOutputStream zipStream, string nameOverride = "")
         {
-            MemoryStream ms = new MemoryStream();
-            XmlWriterSettings xws = new XmlWriterSettings();
-            xws.OmitXmlDeclaration = true;
-            xws.Indent = true;
+            FileInfo fi = new FileInfo(filename);
 
-            using (XmlWriter xw = XmlWriter.Create(ms, xws))
-            {
-                xdoc.WriteTo(xw);
-            }
-            return ms.ToArray();
-        }
-
-        /// <summary>
-        /// Compresses a byte array to a zipstream.
-        /// </summary>
-        /// <param name="file">The byte array to compress.</param>
-        /// <param name="filename">The entry name.</param>
-        /// <param name="zipStream">The zipstream which we want to output this file to.</param>
-        public static void CompressStream(byte[] file, string filename, ZipOutputStream zipStream)
-        {
-            filename = ZipEntry.CleanName(filename);
-            ZipEntry newEntry = new ZipEntry(filename) { DateTime = DateTime.Now, Size = file.Length };
+            string entryName = Path.GetFileName(filename);
+            if (nameOverride != "")
+                entryName = nameOverride;
+            entryName = ZipEntry.CleanName(entryName);
+            ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
             zipStream.PutNextEntry(newEntry);
             byte[] buffer = new byte[4096];
-            StreamUtils.Copy(new MemoryStream(file), zipStream, buffer);
+            using (FileStream streamReader = File.OpenRead(filename))
+            {
+                StreamUtils.Copy(streamReader, zipStream, buffer);
+            }
             zipStream.CloseEntry();
         }
 
@@ -106,7 +79,6 @@ namespace WolvenKit.Common.Model.Packaging
         /// <param name="folderOffset">The folderoffset.</param>
         public static void CompressFolder(string path, ZipOutputStream zipStream, int folderOffset)
         {
-
             string[] files = Directory.GetFiles(path);
 
             foreach (string filename in files)
@@ -131,26 +103,18 @@ namespace WolvenKit.Common.Model.Packaging
         }
 
         /// <summary>
-        /// Compresses a file into a zipstream.
+        /// Compresses a byte array to a zipstream.
         /// </summary>
-        /// <param name="filename">Path to the file.</param>
-        /// <param name="zipStream">The zipstream to output to.</param>
-        /// <param name="nameOverride">Rename the file to a costum name.</param>
-        public static void CompressFile(string filename, ZipOutputStream zipStream, string nameOverride = "")
+        /// <param name="file">The byte array to compress.</param>
+        /// <param name="filename">The entry name.</param>
+        /// <param name="zipStream">The zipstream which we want to output this file to.</param>
+        public static void CompressStream(byte[] file, string filename, ZipOutputStream zipStream)
         {
-            FileInfo fi = new FileInfo(filename);
-
-            string entryName = Path.GetFileName(filename);
-            if (nameOverride != "")
-                entryName = nameOverride;
-            entryName = ZipEntry.CleanName(entryName);
-            ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
+            filename = ZipEntry.CleanName(filename);
+            ZipEntry newEntry = new ZipEntry(filename) { DateTime = DateTime.Now, Size = file.Length };
             zipStream.PutNextEntry(newEntry);
             byte[] buffer = new byte[4096];
-            using (FileStream streamReader = File.OpenRead(filename))
-            {
-                StreamUtils.Copy(streamReader, zipStream, buffer);
-            }
+            StreamUtils.Copy(new MemoryStream(file), zipStream, buffer);
             zipStream.CloseEntry();
         }
 
@@ -206,5 +170,48 @@ namespace WolvenKit.Common.Model.Packaging
             rootnode.Add(new XElement("content", Contents));
             return new XDocument(new XDeclaration("1.0", "UTF-8", "True"), rootnode);
         }
+
+        /// <summary>
+        /// Converts an XDocuments to a byte array.
+        /// </summary>
+        /// <param name="xdoc">The xdocument which we want to convert.</param>
+        /// <returns>The byte contents of the array.</returns>
+        public static byte[] XDocToByteArray(XDocument xdoc)
+        {
+            MemoryStream ms = new MemoryStream();
+            XmlWriterSettings xws = new XmlWriterSettings();
+            xws.OmitXmlDeclaration = true;
+            xws.Indent = true;
+
+            using (XmlWriter xw = XmlWriter.Create(ms, xws))
+            {
+                xdoc.WriteTo(xw);
+            }
+            return ms.ToArray();
+        }
+
+        /// <summary>
+        /// Saves the package to the specified output path.
+        /// </summary>
+        /// <param name="OutputPath">The path to save the file to.</param>
+        public void Save(string OutputPath)
+        {
+            if (Icon != null && Assembly != null)
+            {
+                FileStream fsOut = File.Create(OutputPath);
+                ZipOutputStream zipStream = new ZipOutputStream(fsOut);
+                int folderOffset = RootFolder.Length + (RootFolder.EndsWith("\\") ? 0 : 1);
+                CompressFolder(RootFolder, zipStream, folderOffset);
+                CompressFile(Icon, zipStream, "Icon" + Path.GetExtension(Icon));
+                CompressStream(XDocToByteArray(Assembly), "Assembly.xml", zipStream);
+                zipStream.Close();
+            }
+            else
+            {
+                throw new Exception("Missing parameters.");
+            }
+        }
+
+        #endregion Methods
     }
 }

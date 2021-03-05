@@ -1,21 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Transactions;
-using Catel.IoC;
-using WolvenKit.Common.Services;
-using CP77.CR2W.Archive;
-using CP77.CR2W.Extensions;
-using CP77.CR2W.Types;
-using CP77Tools.Model;
-using RED.CRC32;
-using WolvenKit.Common;
 using WolvenKit.Common.DDS;
-using WolvenKit.Common.Oodle;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W
 {
@@ -24,7 +9,7 @@ namespace CP77.CR2W
     /// </summary>
     public static partial class ModTools
     {
-        
+        #region Methods
 
         /// <summary>
         /// Exports (Uncooks) a REDEngine file into it's raw counterpart
@@ -35,11 +20,15 @@ namespace CP77.CR2W
         {
             #region checks
 
-            if (cr2wfile == null) return false;
-            if (!cr2wfile.Exists) return false;
-            if (cr2wfile.Directory != null && !cr2wfile.Directory.Exists) return false;
+            if (cr2wfile == null)
+                return false;
+            if (!cr2wfile.Exists)
+                return false;
+            if (cr2wfile.Directory != null && !cr2wfile.Directory.Exists)
+                return false;
             var ext = Path.GetExtension(cr2wfile.FullName)[1..];
-            #endregion
+
+            #endregion checks
 
             // read file
             using var fs = new FileStream(cr2wfile.FullName, FileMode.Open, FileAccess.Read);
@@ -54,11 +43,8 @@ namespace CP77.CR2W
             cr2w.FileName = cr2wfile.FullName;
 
             return Uncook(fs, cr2wfile, ext, uncookext, flip);
-
         }
 
-
-
-
+        #endregion Methods
     }
 }

@@ -1,8 +1,12 @@
-﻿namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values
+namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values
 {
     public class TagList
     {
-        public bool Flag { get; set; }
+        #region Properties
+
         public short[] Entities { get; set; }
+        public bool Flag { get; set; }
+
+        #endregion Properties
     }
 }

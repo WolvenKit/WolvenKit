@@ -9,20 +9,34 @@ namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages
 {
     public class DebugPageViewModel : ViewModelBase
     {
-        public static ObservableCollection<UserControl> _DialogsUC = new ObservableCollection<UserControl>();
-        public static ObservableCollection<UserControl> _WizardsUC = new ObservableCollection<UserControl>();
-        public static ObservableCollection<UserControl> _ToolsUC = new ObservableCollection<UserControl>();
-        public static ObservableCollection<UserControl> _EditorsUC = new ObservableCollection<UserControl>();
+        #region Fields
 
-        public ObservableCollection<UserControl> DialogsUC => _DialogsUC;
-        public ObservableCollection<UserControl> WizardsUC => _WizardsUC;
-        public ObservableCollection<UserControl> ToolsUC => _ToolsUC;
-        public ObservableCollection<UserControl> EditorsUC => _EditorsUC;
+        public static ObservableCollection<UserControl> _DialogsUC = new ObservableCollection<UserControl>();
+        public static ObservableCollection<UserControl> _EditorsUC = new ObservableCollection<UserControl>();
+        public static ObservableCollection<UserControl> _ToolsUC = new ObservableCollection<UserControl>();
+        public static ObservableCollection<UserControl> _WizardsUC = new ObservableCollection<UserControl>();
+
+        #endregion Fields
+
+        #region Constructors
 
         public DebugPageViewModel()
         {
             InitThis();
         }
+
+        #endregion Constructors
+
+        #region Properties
+
+        public ObservableCollection<UserControl> DialogsUC => _DialogsUC;
+        public ObservableCollection<UserControl> EditorsUC => _EditorsUC;
+        public ObservableCollection<UserControl> ToolsUC => _ToolsUC;
+        public ObservableCollection<UserControl> WizardsUC => _WizardsUC;
+
+        #endregion Properties
+
+        #region Methods
 
         public void InitThis()
         {
@@ -47,5 +61,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages
             _ToolsUC.Add(new RadishToolView());
             _ToolsUC.Add(new WccToolView());
         }
+
+        #endregion Methods
     }
 }

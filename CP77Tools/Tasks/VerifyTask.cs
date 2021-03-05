@@ -1,27 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
+using System;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Catel.IoC;
 using CP77.CR2W;
 using CP77.CR2W.Archive;
 using WolvenKit.Common;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using StreamExtensions = Catel.IO.StreamExtensions;
 
 namespace CP77Tools.Tasks
 {
-
     public static partial class ConsoleFunctions
     {
+        #region Methods
 
         public static int VerifyTask(string[] path, ulong[] hashes)
         {
-
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
             var CP77_DIR = System.Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
             var gameDirectory = new DirectoryInfo(CP77_DIR);
@@ -81,7 +75,6 @@ namespace CP77Tools.Tasks
                 }
             }
 
-
             static bool VerifyFile(Stream ms, string infilepath = "")
             {
                 var c = new CR2WFile();// { FileName = fileEntry.NameOrHash };
@@ -89,16 +82,15 @@ namespace CP77Tools.Tasks
                 ms.Seek(0, SeekOrigin.Begin);
                 var readResult = c.Read(ms);
 
-
                 switch (readResult)
                 {
                     case EFileReadErrorCodes.NoCr2w:
                     case EFileReadErrorCodes.UnsupportedVersion:
                         break;
+
                     case EFileReadErrorCodes.NoError:
                         var hasAdditionalBytes =
                             c.AdditionalCr2WFileBytes != null && c.AdditionalCr2WFileBytes.Any();
-
 
                         var oldst = c.StringDictionary.Values.ToList();
                         var newst = c.GenerateStringtable().Item1.Values.ToList();
@@ -152,9 +144,8 @@ namespace CP77Tools.Tasks
                             return false;
                         }
 
-
-
                         return true;
+
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -162,12 +153,9 @@ namespace CP77Tools.Tasks
                 return false;
             }
 
-
             return 1;
         }
 
-
-
-
+        #endregion Methods
     }
 }

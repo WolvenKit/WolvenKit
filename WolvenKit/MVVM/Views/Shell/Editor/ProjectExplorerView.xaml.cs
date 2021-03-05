@@ -8,12 +8,18 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
     /// </summary>
     public partial class ProjectExplorerView
     {
+        #region Constructors
+
         public ProjectExplorerView()
         {
             InitializeComponent();
 
             //ControlzEx.Theming.ThemeManager.Current.ChangeTheme(this, "Dark.Blue");
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -22,5 +28,7 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
                 DiscordHelper.SetDiscordRPCStatus("Project Explorer");
             }
         }
+
+        #endregion Methods
     }
 }

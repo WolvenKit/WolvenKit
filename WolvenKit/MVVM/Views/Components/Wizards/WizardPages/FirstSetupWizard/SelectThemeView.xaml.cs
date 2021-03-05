@@ -12,31 +12,24 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
 {
     public partial class SelectThemeView
     {
+        #region Fields
+
+        private bool filled = false;
+
+        private Brush lastaccent;
+
+        #endregion Fields
+
+        #region Constructors
+
         public SelectThemeView()
         {
             InitializeComponent();
         }
 
-        private void ThemeColorsHoney_Loaded(object sender, RoutedEventArgs e)
-        {
-        }
+        #endregion Constructors
 
-        private bool filled = false;
-
-        private void Circle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var a = (Ellipse)sender;
-
-            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "Dark." + a.Name.ToString());
-        }
-
-        private void Circle_MouseLeave(object sender, MouseEventArgs e)
-        {
-            var a = (Ellipse)sender;
-            a.Fill = lastaccent;
-        }
-
-        private Brush lastaccent;
+        #region Methods
 
         private void Circle_MouseEnter(object sender, MouseEventArgs e)
         {
@@ -45,7 +38,24 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
             a.Fill = new SolidColorBrush(Colors.AliceBlue);
         }
 
+        private void Circle_MouseLeave(object sender, MouseEventArgs e)
+        {
+            var a = (Ellipse)sender;
+            a.Fill = lastaccent;
+        }
+
+        private void Circle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var a = (Ellipse)sender;
+
+            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "Dark." + a.Name.ToString());
+        }
+
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+        }
+
+        private void ThemeColorsHoney_Loaded(object sender, RoutedEventArgs e)
         {
         }
 
@@ -90,5 +100,7 @@ namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e) => ServiceLocator.Default.ResolveType<FirstSetupWizardViewModel>().AllFieldIsValid = true;
+
+        #endregion Methods
     }
 }

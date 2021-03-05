@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -14,17 +14,20 @@ namespace CP77.MSTests
     [TestClass]
     public class GameUnitTest
     {
-        private const string GameDirectorySetting = "GameDirectory";
-        private const string WriteToFileSetting = "WriteToFile";
-
-        internal static ArchiveManager bm;
-        internal static Dictionary<string, List<FileEntry>> GroupedFiles;
-
-        private static IConfigurationRoot _config;
+        #region Fields
 
         internal const string TestResultsDirectory = "_CR2WTestResults";
-        private static string _gameDirectoryPath;
+        internal static ArchiveManager bm;
+        internal static Dictionary<string, List<FileEntry>> GroupedFiles;
         internal static bool WriteToFile;
+        private const string GameDirectorySetting = "GameDirectory";
+        private const string WriteToFileSetting = "WriteToFile";
+        private static IConfigurationRoot _config;
+        private static string _gameDirectoryPath;
+
+        #endregion Fields
+
+        #region Methods
 
         protected static void Setup(TestContext context)
         {
@@ -79,5 +82,7 @@ namespace CP77.MSTests
             bm = new ArchiveManager(gameArchiveDir);
             GroupedFiles = bm.GroupedFiles;
         }
+
+        #endregion Methods
     }
 }

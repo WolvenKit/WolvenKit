@@ -9,6 +9,18 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
 {
     public partial class ProjectWizardView
     {
+        #region Fields
+
+        private FinalizeSetupView FSV;
+
+        private ProjectConfigurationView PCV;
+
+        private SelectProjectTypeView SPTV;
+
+        #endregion Fields
+
+        #region Constructors
+
         public ProjectWizardView()
         {
             ServiceLocator.Default.RegisterTypeAndInstantiate<FirstSetupWizardModel>();
@@ -16,25 +28,21 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
             InitializeComponent();
         }
 
-        private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
+        #endregion Constructors
+
+        #region Methods
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (ViewModel == null)
-            {
-                return;
-            }
-
-            ServiceLocator.Default.RegisterInstance(ViewModel as ProjectWizardViewModel);
-
-            SPTV = new SelectProjectTypeView();
-            PCV = new ProjectConfigurationView();
-            FSV = new FinalizeSetupView();
-
+            StepMain.Next();
             ShowPage();
         }
 
-        private SelectProjectTypeView SPTV;
-        private ProjectConfigurationView PCV;
-        private FinalizeSetupView FSV;
+        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
+        {
+            StepMain.Prev();
+            ShowPage();
+        }
 
         private void ShowPage()
         {
@@ -57,18 +65,6 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
             }
         }
 
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            StepMain.Next();
-            ShowPage();
-        }
-
-        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
-        {
-            StepMain.Prev();
-            ShowPage();
-        }
-
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
             if (IsVisible)
@@ -76,5 +72,23 @@ namespace WolvenKit.MVVM.Views.Components.Wizards
                 DiscordHelper.SetDiscordRPCStatus("Project Wizard");
             }
         }
+
+        private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
+        {
+            if (ViewModel == null)
+            {
+                return;
+            }
+
+            ServiceLocator.Default.RegisterInstance(ViewModel as ProjectWizardViewModel);
+
+            SPTV = new SelectProjectTypeView();
+            PCV = new ProjectConfigurationView();
+            FSV = new FinalizeSetupView();
+
+            ShowPage();
+        }
+
+        #endregion Methods
     }
 }

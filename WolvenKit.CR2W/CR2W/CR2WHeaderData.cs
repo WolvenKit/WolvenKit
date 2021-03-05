@@ -1,12 +1,18 @@
-﻿using System.IO;
+using System.IO;
 
 namespace WolvenKit.CR2W
 {
     public class CR2WHeaderData
     {
+        #region Fields
+
         public uint crc;
         public uint offset;
         public uint size;
+
+        #endregion Fields
+
+        #region Constructors
 
         public CR2WHeaderData()
         {
@@ -16,6 +22,10 @@ namespace WolvenKit.CR2W
         {
             Read(file);
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public void Read(BinaryReader file)
         {
@@ -36,5 +46,7 @@ namespace WolvenKit.CR2W
             file.Write(size);
             file.Write(crc);
         }
+
+        #endregion Methods
     }
 }

@@ -1,9 +1,13 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 
 namespace WolvenKit.W3SavegameEditor.Models
 {
     public class VariableModel
     {
+        #region Properties
+
+        public ObservableCollection<VariableModel> Children { get; set; }
+        public string DebugString { get; set; }
         public int Index { get; set; }
 
         public string Name { get; set; }
@@ -12,13 +16,15 @@ namespace WolvenKit.W3SavegameEditor.Models
 
         public string Value { get; set; }
 
-        public string DebugString { get; set; }
+        #endregion Properties
 
-        public ObservableCollection<VariableModel> Children { get; set; }
+        #region Methods
 
         public override string ToString()
         {
             return DebugString;
         }
+
+        #endregion Methods
     }
 }

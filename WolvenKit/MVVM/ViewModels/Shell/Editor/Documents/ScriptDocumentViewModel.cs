@@ -16,8 +16,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 
         #endregion Constructors
 
-
-
         #region Properties
 
         public string FileName => Path.GetFileName(FilePath);
@@ -71,8 +69,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
         #endregion FormTitle
 
         #endregion Properties
-
-
 
         #region Methods
 

@@ -1,13 +1,14 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading.Tasks;
 using CP77.CR2W;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
-
     public static partial class ConsoleFunctions
     {
+        #region Methods
+
         /// <summary>
         /// Recombine split buffers and textures in a folder.
         /// </summary>
@@ -32,7 +33,6 @@ namespace CP77Tools.Tasks
             {
                 RebuildTaskInner(p, buffers, textures, import, keep, clean, unsaferaw);
             });
-
         }
 
         private static void RebuildTaskInner(string path,
@@ -65,12 +65,13 @@ namespace CP77Tools.Tasks
                 return;
             }
 
-            #endregion
-
+            #endregion checks
 
             ModTools.Recombine(basedir, buffers, textures, import, keep, clean, unsaferaw);
 
             return;
         }
+
+        #endregion Methods
     }
 }

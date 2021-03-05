@@ -1,7 +1,10 @@
-<catel:UserControl x:Class="WolvenKit.MVVM.Views.Components.Editors.CR2WEditorView"
-                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol">
+<catel:UserControl
+ x:Class="WolvenKit.MVVM.Views.Components.Editors.CR2WEditorView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ >
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -19,32 +22,31 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0">
-            <hc:TabControl IsTabFillEnabled="True" ShowCloseButton="False" IsAnimationEnabled="True">
+            <hc:TabControl
+             IsAnimationEnabled="True"
+             IsTabFillEnabled="True"
+             ShowCloseButton="False"
+             >
                 <hc:TabItem Header="CHUNKS">
-                    <TreeView>
-                    </TreeView>
+                    <TreeView />
                 </hc:TabItem>
 
-                <hc:TabItem  Header="IMPORTS">
-                    <TreeView>
-                    </TreeView>
+                <hc:TabItem Header="IMPORTS">
+                    <TreeView />
                 </hc:TabItem>
 
                 <hc:TabItem Header="BUFFERS">
-                    <TreeView>
-                    </TreeView>
+                    <TreeView />
                 </hc:TabItem>
 
                 <hc:TabItem Header="PREVIEW">
-                    <TreeView>
-                    </TreeView>
+                    <TreeView />
                 </hc:TabItem>
             </hc:TabControl>
         </Grid>
 
         <Grid Grid.Column="1">
-            <hc:PropertyGrid>
-            </hc:PropertyGrid>
+            <hc:PropertyGrid />
         </Grid>
     </Grid>
 </catel:UserControl>

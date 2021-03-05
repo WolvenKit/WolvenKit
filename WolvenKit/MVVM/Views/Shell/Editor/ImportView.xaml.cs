@@ -8,10 +8,16 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
     /// </summary>
     public partial class ImportView
     {
+        #region Constructors
+
         public ImportView()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -20,5 +26,7 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
                 DiscordHelper.SetDiscordRPCStatus("Import View");
             }
         }
+
+        #endregion Methods
     }
 }

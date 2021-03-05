@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using CP77.CR2W.Types;
 
@@ -23,6 +23,8 @@ namespace CP77.CR2W.Reflection
         //    }
         //}
 
+        #region Methods
+
         /// <summary>
         /// Convert an enumerable collection of CName values into a Enum value.
         /// </summary>
@@ -45,5 +47,7 @@ namespace CP77.CR2W.Reflection
                 return Enum.ToObject(enumType, 0);
             }
         }
+
+        #endregion Methods
     }
 }

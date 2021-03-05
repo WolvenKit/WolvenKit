@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Catel.IoC;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 
@@ -12,6 +8,8 @@ namespace CP77.CR2W
 {
     public class Cp77FileService : IWolvenkitFileService
     {
+        #region Methods
+
         /// <summary>
         /// Try reading a cr2w file from a stream, returns null if unsuccesful
         /// </summary>
@@ -22,7 +20,6 @@ namespace CP77.CR2W
             using var br = new BinaryReader(stream, Encoding.Default, true);
             return TryReadCr2WFile(br);
         }
-
 
         public IWolvenkitFile TryReadCr2WFile(BinaryReader br)
         {
@@ -61,7 +58,6 @@ namespace CP77.CR2W
             return TryReadCr2WFileHeaders(br);
         }
 
-
         public IWolvenkitFile TryReadCr2WFileHeaders(BinaryReader br)
         {
             // peak if cr2w
@@ -87,5 +83,7 @@ namespace CP77.CR2W
 
             return cr2w;
         }
+
+        #endregion Methods
     }
 }

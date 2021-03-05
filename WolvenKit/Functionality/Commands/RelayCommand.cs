@@ -39,8 +39,6 @@ namespace WolvenKit.Functionality.Commands
 
         #endregion Constructors
 
-
-
         #region Methods
 
         /// <summary>

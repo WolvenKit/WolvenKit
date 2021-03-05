@@ -44,8 +44,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         #endregion Constructors
 
-
-
         #region Properties
 
         public List<ProjectWorkFlowAction> FlowActions { get; set; }
@@ -53,8 +51,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
         public string Name { get; set; }
 
         #endregion Properties
-
-
 
         #region Methods
 
@@ -79,16 +75,12 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         #endregion Constructors
 
-
-
         #region Properties
 
         public Command ProjectWorkFlowActionCommand { get; set; }
         public ProjectWorkFlowActionStatus ProjectWorkFlowActionStatus { get; set; }
 
         #endregion Properties
-
-
 
         #region Methods
 

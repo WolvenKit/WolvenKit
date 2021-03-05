@@ -6,9 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using FastMember;
-using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
@@ -46,8 +45,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         }
 
         #endregion Enums
-
-
 
         #region Properties
 
@@ -113,15 +110,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #endregion Constructors
 
-
-
         #region Events
 
         public event EventHandler PerformStep = delegate { };
 
         #endregion Events
-
-
 
         #region Methods
 
@@ -500,8 +493,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         }
 
         #endregion Value
-
-
 
         #region Constructors
 

@@ -1,7 +1,10 @@
-<catel:UserControl x:Class="WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Tool.PluginManagerSubSettingsView"
-                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com" xmlns:hc="https://handyorg.github.io/handycontrol">
+<catel:UserControl
+ x:Class="WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Tool.PluginManagerSubSettingsView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ >
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
@@ -14,19 +17,39 @@
             <hc:ScrollViewer>
                 <StackPanel>
 
-                    <Border BorderThickness="4,0,0,6" Margin="15,15,32,0" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                    <Border
+                     Margin="15,15,32,0"
+                     Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                     BorderThickness="4,0,0,6"
+                     Style="{StaticResource BorderTipPrimary}"
+                     >
                         <Grid>
-                            <TextBlock Text="General" FontSize="16" VerticalAlignment="Center" Margin="0,0,50,0" />
+                            <TextBlock
+                             Margin="0,0,50,0"
+                             VerticalAlignment="Center"
+                             FontSize="16"
+                             Text="General"
+                             />
                         </Grid>
                     </Border>
 
-                    <Border BorderThickness="4,0,0,2" Margin="15,15,32,10" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Style="{StaticResource BorderTipPrimary}">
+                    <Border
+                     Margin="15,15,32,10"
+                     Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                     BorderThickness="4,0,0,2"
+                     Style="{StaticResource BorderTipPrimary}"
+                     >
                         <StackPanel>
 
                             <Grid Margin="5">
-                                <TextBlock Text="Open mode" VerticalAlignment="Center"/>
-                                <ComboBox HorizontalAlignment="Right" VerticalAlignment="Center" Width="250" Text=""/>
-                                <!-- Discussed with rfuzzo that each tool should be dockable even if it takes the full editor view. But a personal settings to open it in a window should be setable (This is that option) -->
+                                <TextBlock VerticalAlignment="Center" Text="Open mode" />
+                                <ComboBox
+                                 Width="250"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Center"
+                                 Text=""
+                                 />
+                                <!--  Discussed with rfuzzo that each tool should be dockable even if it takes the full editor view. But a personal settings to open it in a window should be setable (This is that option)  -->
                             </Grid>
                         </StackPanel>
                     </Border>
@@ -36,8 +59,7 @@
 
         <Grid Grid.Column="1">
             <hc:ScrollViewer>
-                <StackPanel>
-                </StackPanel>
+                <StackPanel />
             </hc:ScrollViewer>
         </Grid>
     </Grid>

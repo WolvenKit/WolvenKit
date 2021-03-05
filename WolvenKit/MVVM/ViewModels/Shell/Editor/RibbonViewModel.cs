@@ -21,10 +21,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         #region fields
 
         private readonly ILoggerService _loggerService;
-        private readonly IProjectManager _projectManager;
         private readonly INavigationService _navigationService;
-        private readonly IUIVisualizerService _uiVisualizerService;
+        private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
+        private readonly IUIVisualizerService _uiVisualizerService;
 
         #endregion fields
 
@@ -60,6 +60,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #region properties
 
+        public Random rnd = new Random();
+
+        private Color _selectedTheme;
+
         public enum ERibbonContextualTabGroupVisibility
         {
             Collapsed,
@@ -70,9 +74,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         public string ProjectExplorerContextualTabGroupVisibilityStr =>
             ProjectExplorerContextualTabGroupVisibility.ToString();
-
-        private Color _selectedTheme;
-        public Random rnd = new Random();
 
         public Color SelectedTheme
         {
@@ -121,6 +122,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #region methods
 
+        protected override Task CloseAsync() =>
+            // TODO: Unsubscribe from events
+
+            base.CloseAsync();
+
         protected override async Task InitializeAsync()
         {
             await base.InitializeAsync();
@@ -130,11 +136,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             ServiceLocator.Default.ResolveType<ICommandManager>()
                 .RegisterCommand(AppCommands.Application.ViewSelected, ViewSelectedCommand, this);
         }
-
-        protected override Task CloseAsync() =>
-            // TODO: Unsubscribe from events
-
-            base.CloseAsync();
 
         #endregion methods
     }

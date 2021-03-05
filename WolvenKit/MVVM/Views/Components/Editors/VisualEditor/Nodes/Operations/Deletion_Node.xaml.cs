@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class Deletion_Node : UserControl
     {
+        #region Constructors
+
         public Deletion_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

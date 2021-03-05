@@ -1,4 +1,4 @@
-﻿using WolvenKit.W3SavegameEditor.Core.Savegame.Attributes;
+using WolvenKit.W3SavegameEditor.Core.Savegame.Attributes;
 using WolvenKit.W3SavegameEditor.Core.Savegame.Values.Engine;
 
 namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values
@@ -6,31 +6,7 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values
     [CName("gameProp")]
     public class GameProp
     {
-        [CName("EngineTime")]
-        public double EngineTime { get; set; }
-
-        [CName("nP")]
-        public uint Np { get; set; }
-
-
-        /* CR4Game */
-
-        [CName("zoneName")]
-        public W3Enum ZoneName { get; set; }
-
-        [CName("recentDialogOrCutsceneEndGameTime")]
-        public GameTime RecentDialogOrCutsceneEndGameTime { get; set; }
-
-        public object Unknown1 { get; set; }
-
-        [CName("gameplayFactsForRemoval")]
-        public SGameplayFactRemoval[] GameplayFactsForRemoval { get; set; }
-        
-        [CName("gameplayFacts")]
-        public SGameplayFact[] GameplayFacts { get; set; }
-
-        [CName("tutorialManagerHandle")]
-        public EntityHandle TutorialManagerHandle { get; set; }
+        #region Properties
 
         [CName("diffChangePostponed")]
         [EnumName("EDifficultyMode")]
@@ -41,12 +17,39 @@ namespace WolvenKit.W3SavegameEditor.Core.Savegame.Values
 
         [CName("dynamicallySpawnedBoats")]
         public EntityHandle[] DynamicallySpawnedBoatsToDestroy { get; set; }
-        
-        /* /CR4Game */
+
+        [CName("EngineTime")]
+        public double EngineTime { get; set; }
 
         [CName("envMgr")]
         public Handle<W3EnvironmentManager> EnvMgr { get; set; }
 
+        [CName("gameplayFacts")]
+        public SGameplayFact[] GameplayFacts { get; set; }
+
+        [CName("gameplayFactsForRemoval")]
+        public SGameplayFactRemoval[] GameplayFactsForRemoval { get; set; }
+
+        [CName("nP")]
+        public uint Np { get; set; }
+
+        /* CR4Game */
+
+        [CName("recentDialogOrCutsceneEndGameTime")]
+        public GameTime RecentDialogOrCutsceneEndGameTime { get; set; }
+
+        [CName("tutorialManagerHandle")]
+        public EntityHandle TutorialManagerHandle { get; set; }
+
+        public object Unknown1 { get; set; }
+
         public object Unknown2 { get; set; }
+
+        [CName("zoneName")]
+        public W3Enum ZoneName { get; set; }
+
+        #endregion Properties
+
+        /* /CR4Game */
     }
 }

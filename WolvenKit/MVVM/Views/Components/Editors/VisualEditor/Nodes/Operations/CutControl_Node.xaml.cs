@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class CutControl_Node : UserControl
     {
+        #region Constructors
+
         public CutControl_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

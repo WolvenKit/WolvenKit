@@ -1,16 +1,20 @@
-<catel:UserControl x:Class="WolvenKit.MVVM.Views.Shell.Backstage.RecentlyUsedItemsView"
-                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                   
-                   xmlns:global="clr-namespace:WolvenKit"
-                   xmlns:catel="http://schemas.catelproject.com"
-                   xmlns:orchestra="http://schemas.wildgums.com/orchestra"
-                   xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
-                   xmlns:orctheming="http://schemas.wildgums.com/orc/theming" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                   mc:Ignorable="d"
-                   d:DesignHeight="300" d:DesignWidth="300" IsVisibleChanged="UserControl_IsVisibleChanged">
+<catel:UserControl
+ x:Class="WolvenKit.MVVM.Views.Shell.Backstage.RecentlyUsedItemsView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+ xmlns:global="clr-namespace:WolvenKit"
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
+ xmlns:orchestra="http://schemas.wildgums.com/orchestra"
+ xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
+ d:DesignHeight="300"
+ d:DesignWidth="300"
+ IsVisibleChanged="UserControl_IsVisibleChanged"
+ mc:Ignorable="d"
+ >
 
     <Grid x:Name="topGrid">
         <Grid.RowDefinitions>
@@ -20,15 +24,26 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <orchestra:RibbonBackstageTabItemHeader Foreground="Gray"  Grid.Row="0" HeaderText="Recent documents" Height="60" />
+        <orchestra:RibbonBackstageTabItemHeader
+         Grid.Row="0"
+         Height="60"
+         Foreground="Gray"
+         HeaderText="Recent documents"
+         />
 
-        <ItemsControl Grid.Row="1"
-                      ItemsSource="{Binding PinnedItems}"
-                      Visibility="{Binding PinnedItems, Converter={catel:CollectionToCollapsingVisibilityConverter}}">
+        <ItemsControl
+         Grid.Row="1"
+         ItemsSource="{Binding PinnedItems}"
+         Visibility="{Binding PinnedItems, Converter={catel:CollectionToCollapsingVisibilityConverter}}"
+         >
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <orchestra:RibbonBackstageButton Command="{catel:CommandManagerBinding File.Open}"
-                                                     CommandParameter="{Binding Name}" ToolTip="{Binding Name}" ShowBorder="False">
+                    <orchestra:RibbonBackstageButton
+                     Command="{catel:CommandManagerBinding File.Open}"
+                     CommandParameter="{Binding Name}"
+                     ShowBorder="False"
+                     ToolTip="{Binding Name}"
+                     >
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -37,27 +52,47 @@
                                 <ColumnDefinition Width="6" />
                             </Grid.ColumnDefinitions>
 
-                            <orchestra:RibbonBackstageButton Grid.Column="0"
-                                                             Command="{Binding ElementName=topGrid, Path=DataContext.UnpinItem}"
-                                                             CommandParameter="{Binding Name}"
-                                                             Width="24"
-                                                             Height="24"
-                                                             Foreground="{DynamicResource MahApps.Brushes.AccentBase}"
-                                                             ShowBorder="False">
-                                <iconPacks:PackIconCodicons Kind="Pinned" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,0,0" />
+                            <orchestra:RibbonBackstageButton
+                             Grid.Column="0"
+                             Width="24"
+                             Height="24"
+                             Command="{Binding ElementName=topGrid, Path=DataContext.UnpinItem}"
+                             CommandParameter="{Binding Name}"
+                             Foreground="{DynamicResource MahApps.Brushes.AccentBase}"
+                             ShowBorder="False"
+                             >
+                                <iconPacks:PackIconCodicons
+                                 Width="20"
+                                 Height="20"
+                                 Margin="0,0,0,0"
+                                 VerticalAlignment="Center"
+                                 Kind="Pinned"
+                                 />
                             </orchestra:RibbonBackstageButton>
 
-                            <TextBlock  Margin="5" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Grid.Column="1"
-                                   Text="{Binding Name, Converter={orchestra:PathToStringConverter}, ConverterParameter=100}" />
+                            <TextBlock
+                             Grid.Column="1"
+                             Margin="5"
+                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                             Text="{Binding Name, Converter={orchestra:PathToStringConverter}, ConverterParameter=100}"
+                             />
 
-                            <orchestra:RibbonBackstageButton Grid.Column="2"
-                                                             Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
-                                                             CommandParameter="{Binding Name}"
-                                                             Width="24"
-                                                             Height="24"
-                                                             ToolTip="Open in explorer"
-                                                             ShowBorder="False">
-                                <iconPacks:PackIconCodicons Kind="FolderOpened" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,0,0" />
+                            <orchestra:RibbonBackstageButton
+                             Grid.Column="2"
+                             Width="24"
+                             Height="24"
+                             Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
+                             CommandParameter="{Binding Name}"
+                             ShowBorder="False"
+                             ToolTip="Open in explorer"
+                             >
+                                <iconPacks:PackIconCodicons
+                                 Width="20"
+                                 Height="20"
+                                 Margin="0,0,0,0"
+                                 VerticalAlignment="Center"
+                                 Kind="FolderOpened"
+                                 />
                             </orchestra:RibbonBackstageButton>
                         </Grid>
                     </orchestra:RibbonBackstageButton>
@@ -65,20 +100,25 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <Border Grid.Row="2"
-                Height="1"
+        <Border
+         Grid.Row="2"
+         Height="1"
+         Visibility="{Binding PinnedItems, Converter={catel:CollectionToCollapsingVisibilityConverter}}"
+         />
 
-                Visibility="{Binding PinnedItems, Converter={catel:CollectionToCollapsingVisibilityConverter}}" />
-
-        <ItemsControl Grid.Row="3"
-                      ItemsSource="{Binding RecentlyUsedItems}"
-                      Visibility="{Binding RecentlyUsedItems, Converter={catel:CollectionToCollapsingVisibilityConverter}}">
+        <ItemsControl
+         Grid.Row="3"
+         ItemsSource="{Binding RecentlyUsedItems}"
+         Visibility="{Binding RecentlyUsedItems, Converter={catel:CollectionToCollapsingVisibilityConverter}}"
+         >
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <orchestra:RibbonBackstageButton  Command="{catel:CommandManagerBinding Application.OpenProject}"
-                                                      CommandParameter="{Binding Name}"
-                                                      ToolTip="{Binding Name}"
-                                                      ShowBorder="False">
+                    <orchestra:RibbonBackstageButton
+                     Command="{catel:CommandManagerBinding Application.OpenProject}"
+                     CommandParameter="{Binding Name}"
+                     ShowBorder="False"
+                     ToolTip="{Binding Name}"
+                     >
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="60" />
@@ -87,26 +127,47 @@
                                 <ColumnDefinition Width="6" />
                             </Grid.ColumnDefinitions>
 
-                            <orchestra:RibbonBackstageButton Grid.Column="0"  VerticalAlignment="Center"
-                                                             Command="{Binding ElementName=topGrid, Path=DataContext.PinItem}"
-                                                             CommandParameter="{Binding Name}"
-                                                             Width="24"
-                                                             Height="24"
-                                                             ShowBorder="False">
-                                <iconPacks:PackIconCodicons Kind="pin" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,0,0" />
+                            <orchestra:RibbonBackstageButton
+                             Grid.Column="0"
+                             Width="24"
+                             Height="24"
+                             VerticalAlignment="Center"
+                             Command="{Binding ElementName=topGrid, Path=DataContext.PinItem}"
+                             CommandParameter="{Binding Name}"
+                             ShowBorder="False"
+                             >
+                                <iconPacks:PackIconCodicons
+                                 Width="20"
+                                 Height="20"
+                                 Margin="0,0,0,0"
+                                 VerticalAlignment="Center"
+                                 Kind="pin"
+                                 />
                             </orchestra:RibbonBackstageButton>
 
-                            <TextBlock VerticalAlignment="Center" Margin="5" Grid.Column="1"
-                                   Text="{Binding Name, Converter={orchestra:PathToStringConverter}, ConverterParameter=100}" />
+                            <TextBlock
+                             Grid.Column="1"
+                             Margin="5"
+                             VerticalAlignment="Center"
+                             Text="{Binding Name, Converter={orchestra:PathToStringConverter}, ConverterParameter=100}"
+                             />
 
-                            <orchestra:RibbonBackstageButton Grid.Column="2"
-                                                             Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
-                                                             CommandParameter="{Binding Name}"
-                                                             Width="24"
-                                                             Height="24"
-                                                             ToolTip="Open in explorer"
-                                                             ShowBorder="False">
-                                <iconPacks:PackIconCodicons Kind="FolderOpened" VerticalAlignment="Center" Height="20" Width="20" Margin="0,0,0,0" />
+                            <orchestra:RibbonBackstageButton
+                             Grid.Column="2"
+                             Width="24"
+                             Height="24"
+                             Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
+                             CommandParameter="{Binding Name}"
+                             ShowBorder="False"
+                             ToolTip="Open in explorer"
+                             >
+                                <iconPacks:PackIconCodicons
+                                 Width="20"
+                                 Height="20"
+                                 Margin="0,0,0,0"
+                                 VerticalAlignment="Center"
+                                 Kind="FolderOpened"
+                                 />
                             </orchestra:RibbonBackstageButton>
                         </Grid>
                     </orchestra:RibbonBackstageButton>

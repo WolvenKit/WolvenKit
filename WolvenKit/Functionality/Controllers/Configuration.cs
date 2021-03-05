@@ -17,8 +17,6 @@ namespace WolvenKit.Functionality.Controllers
 
         #endregion Destructors
 
-
-
         #region Properties
 
         public static string ConfigurationPath
@@ -82,8 +80,6 @@ namespace WolvenKit.Functionality.Controllers
         public string WccLite { get; set; }
 
         #endregion Properties
-
-
 
         #region Methods
 

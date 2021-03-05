@@ -21,8 +21,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 
         #endregion Constructors
 
-
-
         #region Fields
 
         public event EventHandler<FileSavedEventArgs> OnFileSaved;
@@ -62,6 +60,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
 
         #endregion Properties
 
+        #region Methods
+
         // Propagate changed event from cr2wfile
         private void File_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -73,6 +73,8 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
                 }
             }
         }
+
+        #endregion Methods
 
         #region Methods
 

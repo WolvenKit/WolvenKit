@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class FactsManager : UserControl
     {
+        #region Constructors
+
         public FactsManager()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

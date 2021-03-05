@@ -1,20 +1,48 @@
-﻿using System;
+using System;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace WolvenKit.Common.FNV1A
 {
-
     /// <summary>
     /// Implementation of the Fowler–Noll–Vo 32 bit hash algorithm.
     /// </summary>
     public sealed class FNV1A32HashAlgorithm : HashAlgorithm
     {
-        private const uint FnvHashPrime = 0x01000193;
-        private const uint FnvHashInitial = 0x811C9DC5;
+        #region Fields
 
-        private uint fnvhash;
+        private const uint FnvHashInitial = 0x811C9DC5;
+        private const uint FnvHashPrime = 0x01000193;
         private Encoding encoding;
+        private uint fnvhash;
+
+        #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initialise a new instance of the <see cref="FNV1A32HashAlgorithm"/> class,
+        /// using the default <see cref="ASCIIEncoding"/> class for characters.
+        /// </summary>
+        public FNV1A32HashAlgorithm()
+            : this(Encoding.ASCII)
+        {
+        }
+
+        /// <summary>
+        /// Initialise a new instance of the <see cref="FNV1A32HashAlgorithm"/> class, using custom encoding for characters.
+        /// </summary>
+        /// <param name="encoding">The encoding class to use for characters and strings.</param>
+        public FNV1A32HashAlgorithm(Encoding encoding)
+        {
+            this.Initialize();
+            this.HashSizeValue = 32;
+            this.encoding = encoding ?? Encoding.ASCII;
+        }
+
+        #endregion Constructors
+
+        #region Properties
 
         /// <summary>
         /// Current hash value as a 32 bit unsigned integer.
@@ -31,59 +59,9 @@ namespace WolvenKit.Common.FNV1A
             }
         }
 
-        /// <summary>
-        /// Initialise a new instance of the <see cref="FNV1A32HashAlgorithm"/> class, 
-        /// using the default <see cref="ASCIIEncoding"/> class for characters.
-        /// </summary>
-        public FNV1A32HashAlgorithm()
-            : this(Encoding.ASCII)
-        {
+        #endregion Properties
 
-        }
-        /// <summary>
-        /// Initialise a new instance of the <see cref="FNV1A32HashAlgorithm"/> class, using custom encoding for characters.
-        /// </summary>
-        /// <param name="encoding">The encoding class to use for characters and strings.</param>
-        public FNV1A32HashAlgorithm(Encoding encoding)
-        {
-            this.Initialize();
-            this.HashSizeValue = 32;
-            this.encoding = encoding ?? Encoding.ASCII;
-        }
-
-        /// <summary>
-        /// Initialise this instance and reset the current hash value.
-        /// </summary>
-        public override void Initialize()
-        {
-            this.fnvhash = FnvHashInitial;
-        }
-
-        /// <summary>
-        /// Append a string to the current hash value using the encoding for this instance.
-        /// </summary>
-        /// <param name="value">The string to append to the current hash value.</param>
-        public void AppendString(string value)
-        {
-            AppendString(value, false);
-        }
-        /// <summary>
-        /// Append a string to the current hash value using the encoding for this instance,
-        /// and specify if a null characters should be appended before hashing.
-        /// </summary>
-        /// <param name="value">The string to append to the current hash value.</param>
-        /// <param name="nullEnded">Append a null character to the end of the string.</param>
-        public void AppendString(string value, bool nullEnded)
-        {
-            if (String.IsNullOrEmpty(value))
-                return;
-
-            var buffer = nullEnded ? new char[value.Length + 1] : new char[value.Length];
-            value.CopyTo(0, buffer, 0, value.Length);
-            var data = encoding.GetBytes(buffer);
-
-            HashCore(data, 0, data.Length);
-        }
+        #region Methods
 
         /// <summary>
         /// Hash a string using the default <see cref="ASCIIEncoding"/> class.
@@ -94,6 +72,7 @@ namespace WolvenKit.Common.FNV1A
         {
             return HashString(value, Encoding.ASCII, false);
         }
+
         /// <summary>
         /// Hash a string using a custom encoding class.
         /// </summary>
@@ -104,6 +83,7 @@ namespace WolvenKit.Common.FNV1A
         {
             return HashString(value, encoding, false);
         }
+
         /// <summary>
         /// Hash a string using a custom encoding class, and specify if a null character should be appended before hashing.
         /// </summary>
@@ -124,6 +104,41 @@ namespace WolvenKit.Common.FNV1A
 
             fnv1a.HashCore(data, 0, data.Length);
             return fnv1a.HashUInt32;
+        }
+
+        /// <summary>
+        /// Append a string to the current hash value using the encoding for this instance.
+        /// </summary>
+        /// <param name="value">The string to append to the current hash value.</param>
+        public void AppendString(string value)
+        {
+            AppendString(value, false);
+        }
+
+        /// <summary>
+        /// Append a string to the current hash value using the encoding for this instance,
+        /// and specify if a null characters should be appended before hashing.
+        /// </summary>
+        /// <param name="value">The string to append to the current hash value.</param>
+        /// <param name="nullEnded">Append a null character to the end of the string.</param>
+        public void AppendString(string value, bool nullEnded)
+        {
+            if (String.IsNullOrEmpty(value))
+                return;
+
+            var buffer = nullEnded ? new char[value.Length + 1] : new char[value.Length];
+            value.CopyTo(0, buffer, 0, value.Length);
+            var data = encoding.GetBytes(buffer);
+
+            HashCore(data, 0, data.Length);
+        }
+
+        /// <summary>
+        /// Initialise this instance and reset the current hash value.
+        /// </summary>
+        public override void Initialize()
+        {
+            this.fnvhash = FnvHashInitial;
         }
 
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
@@ -157,5 +172,7 @@ namespace WolvenKit.Common.FNV1A
         {
             return BitConverter.GetBytes(this.HashUInt32);
         }
+
+        #endregion Methods
     }
 }

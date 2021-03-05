@@ -2,26 +2,21 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using CP77.CR2W.Types;
+using System.Linq;
 using System.Runtime.InteropServices;
+
 //using System.Linq;
 using System.Runtime.Serialization;
-using System.Xml;
-using System.Linq;
-using System.IO.MemoryMappedFiles;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using System.Text;
+using CP77.CR2W.Reflection;
+using CP77.CR2W.Types;
 using Newtonsoft.Json;
 using WolvenKit.Common.Extensions;
-using CP77.CR2W.Reflection;
 using WolvenKit.Common.Model.Cr2w;
 
 [assembly: ContractNamespaceAttribute("", ClrNamespace = "CP77.CR2W")]
 
 namespace CP77.CR2W
 {
-
     [StructLayout(LayoutKind.Explicit, Size = 24)]
     public struct CR2WExport
     {
@@ -35,12 +30,6 @@ namespace CP77.CR2W
 
         [DataMember]
         [FieldOffset(4)]
-        // 0 means no parent, 1 is chunkID 0
-        // CDPR had the horrendous idea to put an uint here.
-        // So parentID really is [1;n], with 0 to denote a null parent...
-        // ... when it could have been the usual int [0;n], with -1 for null parent.
-        // We will thus touch this stupidity as little as possible, and rather interact with the wrapper
-        // CR2WExportWrapper.ParentChunkIndex.
         public uint parentID;
 
         [DataMember]
@@ -62,8 +51,8 @@ namespace CP77.CR2W
 
     public class CR2WExportWrapper : ICR2WExport
     {
+        #region Constructors
 
-        #region  Constructors
         /// <summary>
         /// This constructor should be used when manually creating chunks
         /// </summary>
@@ -99,74 +88,20 @@ namespace CP77.CR2W
             AdReferences = new List<IChunkPtrAccessor>();
             AbReferences = new List<IChunkPtrAccessor>();
         }
-        #endregion
+
+        #endregion Constructors
 
         #region Fields
+
         private CR2WExport _export;
 
-
-        #endregion
+        #endregion Fields
 
         #region Properties
-        [JsonIgnore]
-        public CR2WFile cr2w { get; }
-
-
-        public CR2WExport Export => _export;
-        public IEditableVariable data { get; private set; }
-        public string REDType { get; private set; }
-        public string REDName => REDType + " #" + (ChunkIndex);
-
-        /// <summary>
-        /// This property is used as BindingProperty in frmChunkProperties
-        /// Do not delete!
-        /// </summary>
-        [JsonIgnore]
-        public string REDValue => this.ToString();
-
-        IEditableVariable ICR2WExport.unknownBytes => unknownBytes;
-
-        List<string> ICR2WExport.UnknownTypes => UnknownTypes;
 
         [NonSerialized] [JsonIgnore] public CBytes unknownBytes;
 
         [NonSerialized] [JsonIgnore] public List<string> UnknownTypes = new();
-
-
-        /// <summary>
-        /// Main CR2WExport.parentId wrapper
-        /// </summary>
-        public int ParentChunkIndex
-        {
-            get => (int)_export.parentID - 1;
-            private set => _export.parentID = (uint)(value + 1);
-        }
-
-        [JsonIgnore]
-        public ICR2WExport ParentChunk
-        {
-            get => ParentChunkIndex == -1 ? null : cr2w.Chunks[ParentChunkIndex];
-            set => ParentChunkIndex = value == null ? -1 : cr2w.Chunks.IndexOf(value);
-        }
-        [JsonIgnore]
-        public ICR2WExport VirtualParentChunk { get; set; }
-
-        [JsonIgnore]
-        public int VirtualParentChunkIndex => cr2w.Chunks.IndexOf(VirtualParentChunk);
-
-        [JsonIgnore]
-        public List<ICR2WExport> ChildrenChunks => cr2w.Chunks.Where(_ => _.ParentChunk == this).ToList();
-
-        [JsonIgnore]
-        public List<ICR2WExport> VirtualChildrenChunks => cr2w.Chunks.Where(_ => _.VirtualParentChunk == this).ToList();
-
-        /// <summary>
-        /// Playing with latin here, ab means toward, ab away from.
-        /// This is the directed-graph in-edge list :
-        /// CVariables, being CPtr or CHandle, which reference this chunk.
-        /// </summary>
-        [JsonIgnore]
-        public List<IChunkPtrAccessor> AdReferences { get; }
 
         /// <summary>
         /// Playing with latin here, ab means toward, ab away from.
@@ -176,8 +111,43 @@ namespace CP77.CR2W
         [JsonIgnore]
         public List<IChunkPtrAccessor> AbReferences { get; }
 
+        /// <summary>
+        /// Playing with latin here, ab means toward, ab away from.
+        /// This is the directed-graph in-edge list :
+        /// CVariables, being CPtr or CHandle, which reference this chunk.
+        /// </summary>
+        [JsonIgnore]
+        public List<IChunkPtrAccessor> AdReferences { get; }
+
+        [JsonIgnore]
+        public List<ICR2WExport> ChildrenChunks => cr2w.Chunks.Where(_ => _.ParentChunk == this).ToList();
 
         public int ChunkIndex => cr2w.Chunks.IndexOf(this);
+
+        [JsonIgnore]
+        public CR2WFile cr2w { get; }
+
+        public IEditableVariable data { get; private set; }
+        public CR2WExport Export => _export;
+
+        [JsonIgnore]
+        public bool IsSerialized => true;
+
+        [JsonIgnore]
+        public ICR2WExport ParentChunk
+        {
+            get => ParentChunkIndex == -1 ? null : cr2w.Chunks[ParentChunkIndex];
+            set => ParentChunkIndex = value == null ? -1 : cr2w.Chunks.IndexOf(value);
+        }
+
+        /// <summary>
+        /// Main CR2WExport.parentId wrapper
+        /// </summary>
+        public int ParentChunkIndex
+        {
+            get => (int)_export.parentID - 1;
+            private set => _export.parentID = (uint)(value + 1);
+        }
 
         /// <summary>
         /// This property is used as BindingProperty in frmChunkProperties
@@ -208,33 +178,69 @@ namespace CP77.CR2W
             }
         }
 
+        public string REDName => REDType + " #" + (ChunkIndex);
+        public string REDType { get; private set; }
+
+        /// <summary>
+        /// This property is used as BindingProperty in frmChunkProperties
+        /// Do not delete!
+        /// </summary>
         [JsonIgnore]
-        public bool IsSerialized => true;
+        public string REDValue => this.ToString();
 
-        
+        IEditableVariable ICR2WExport.unknownBytes => unknownBytes;
 
-        #endregion
+        List<string> ICR2WExport.UnknownTypes => UnknownTypes;
+
+        [JsonIgnore]
+        public List<ICR2WExport> VirtualChildrenChunks => cr2w.Chunks.Where(_ => _.VirtualParentChunk == this).ToList();
+
+        [JsonIgnore]
+        public ICR2WExport VirtualParentChunk { get; set; }
+
+        [JsonIgnore]
+        public int VirtualParentChunkIndex => cr2w.Chunks.IndexOf(VirtualParentChunk);
+
+        #endregion Properties
 
         #region Methods
 
-        public class Cr2wVariableDumpObject
+        public virtual void AddVariable(CVariable var)
         {
-            public string Name { get; set; }
-            public string Type { get; set; }
-            public int Size { get; set; }
-            public long Offset { get; set; }
+        }
 
-            public List<Cr2wVariableDumpObject> Variables { get; set; } = new List<Cr2wVariableDumpObject>();
+        public virtual bool CanAddVariable(IEditableVariable newvar)
+        {
+            return false;
+        }
 
+        public virtual bool CanRemoveVariable(IEditableVariable child)
+        {
+            return false;
+        }
 
+        public CVariable Copy(CR2WCopyAction context)
+        {
+            throw new NotImplementedException(nameof(Copy));
+        }
 
-            public string ToVarString()
+        /// <summary>
+        /// Needs the parentChunk idx to be set!
+        /// </summary>
+        public void CreateDefaultData(IEditableVariable cvar = null)
+        {
+            //if (Export.className != 1 && GetParentChunk() == null)
+            //    throw new InvalidChunkTypeException("No parent chunk set!");
+
+            data = cvar ?? CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.data as CVariable);
+
+            if (data == null || data is not CVariable cdata)
             {
-                var wktype = REDReflection.GetWKitBaseTypeFromREDBaseType(Type);
-                return $"[RED(\"{Name}\")] public {wktype} {Name.FirstCharToUpper()} {{ get; set; }}";
+                throw new InvalidParsingException($"{nameof(CreateDefaultData)} failed: {this.REDName}");
             }
 
-            public string ToSimpleString() => $"{Type} {Name}";
+            data.IsSerialized = true;
+            cdata.SetREDFlags(Export.objectFlags);
         }
 
         public Cr2wVariableDumpObject GetDumpObject(Stream stream)
@@ -249,7 +255,6 @@ namespace CP77.CR2W
                 Offset = br.BaseStream.Position
             };
 
-
             var zero = br.ReadByte();
             if (zero != 0)
                 return null;
@@ -259,51 +264,47 @@ namespace CP77.CR2W
                 try
                 {
                     var nameId = br.ReadUInt16();
-                if (nameId == 0)
-                    break;
+                    if (nameId == 0)
+                        break;
 
-                var variable = new Cr2wVariableDumpObject();
-                variable.Offset = br.BaseStream.Position - 3;
-                
+                    var variable = new Cr2wVariableDumpObject();
+                    variable.Offset = br.BaseStream.Position - 3;
+
                     var typeId = (int)br.ReadUInt16();
                     variable.Size = br.ReadInt32();
-                
 
-                var endoffset = br.BaseStream.Position + variable.Size - 4;
+                    var endoffset = br.BaseStream.Position + variable.Size - 4;
 
-                try
-                {
-                    variable.Name = cr2w.StringDictionary.Values.ToList()[(int)nameId];
-                    variable.Type = cr2w.StringDictionary.Values.ToList()[typeId];
-
-
-                    if (variable.Type.Contains("array:"))
+                    try
                     {
+                        variable.Name = cr2w.StringDictionary.Values.ToList()[(int)nameId];
+                        variable.Type = cr2w.StringDictionary.Values.ToList()[typeId];
 
-                        var count = br.ReadUInt32();
-                        for (int i = 0; i < count; i++)
+                        if (variable.Type.Contains("array:"))
                         {
-                            // dbg for now
-                            var elementsize = (variable.Size - 8) / count;
-                            if (elementsize > 9)
-                                variable.Variables = TryGetClassVariables((int)elementsize);
+                            var count = br.ReadUInt32();
+                            for (int i = 0; i < count; i++)
+                            {
+                                // dbg for now
+                                var elementsize = (variable.Size - 8) / count;
+                                if (elementsize > 9)
+                                    variable.Variables = TryGetClassVariables((int)elementsize);
+                            }
+                        }
+                        // may be another class:
+                        else if (variable.Size > 9)
+                        {
+                            variable.Variables = TryGetClassVariables(variable.Size);
                         }
                     }
-                    // may be another class:
-                    else if (variable.Size > 9)
+                    catch (Exception)
                     {
-                        variable.Variables = TryGetClassVariables(variable.Size);
+                        // TODO: Are we intentionally swallowing this?
                     }
-                }
-                catch (Exception)
-                {
-                    // TODO: Are we intentionally swallowing this?
-                }
-                
 
-                // go to variable end
-                br.BaseStream.Seek(endoffset, SeekOrigin.Begin);
-                o.Variables.Add(variable);
+                    // go to variable end
+                    br.BaseStream.Seek(endoffset, SeekOrigin.Begin);
+                    o.Variables.Add(variable);
                 }
                 catch (Exception)
                 {
@@ -312,7 +313,6 @@ namespace CP77.CR2W
             }
 
             return o;
-
 
             List<Cr2wVariableDumpObject> TryGetClassVariables(int innersize)
             {
@@ -330,7 +330,6 @@ namespace CP77.CR2W
                         var nameId = br.ReadUInt16();
                         if (nameId == 0)
                             return ret;
-
 
                         var variable = new Cr2wVariableDumpObject
                         {
@@ -369,12 +368,21 @@ namespace CP77.CR2W
                     }
                 }
             }
-
         }
 
-
-
-
+        public virtual List<IEditableVariable> GetEditableVariables()
+        {
+            var vars = new List<IEditableVariable>
+            {
+                //ParentPtr,
+                data
+            };
+            if (unknownBytes != null && unknownBytes.Bytes != null && unknownBytes.Bytes.Length != 0)
+            {
+                vars.Add(unknownBytes);
+            }
+            return vars;
+        }
 
         /// <summary>
         /// We can use something like this for hashing
@@ -393,24 +401,6 @@ namespace CP77.CR2W
             return depstr;
         }
 
-        public void SetType(ushort val) => _export.className = val;
-
-        public void SetOffset(uint offset) => _export.dataOffset = offset;
-
-        public virtual List<IEditableVariable> GetEditableVariables()
-        {
-            var vars = new List<IEditableVariable>
-            {
-                //ParentPtr,
-                data
-            };
-            if (unknownBytes != null && unknownBytes.Bytes != null && unknownBytes.Bytes.Length != 0)
-            {
-                vars.Add(unknownBytes);
-            }
-            return vars;
-        }
-
         public void MountChunkVirtually(int virtualparentchunkindex, bool force = false)
         {
             if (VirtualParentChunk == null || force)
@@ -419,12 +409,18 @@ namespace CP77.CR2W
                 //cr2w.Logger.LogString($"Mounted {this.REDName} to {VirtualParentChunk.REDName}.");
             }
         }
+
         public void MountChunkVirtually(ICR2WExport virtualparentchunk, bool force = false)
         {
             if (VirtualParentChunk == null || force)
             {
                 VirtualParentChunk = virtualparentchunk;
             }
+        }
+
+        public void Read(BinaryReader file, uint size)
+        {
+            throw new NotImplementedException(nameof(Read));
         }
 
         public void ReadData(BinaryReader file)
@@ -445,7 +441,7 @@ namespace CP77.CR2W
                 unknownBytes.Read(file, (uint)bytesLeft);
                 if (!UnknownTypes.Contains(data.REDType))
                     UnknownTypes.Add(data.REDType);
-                    //UnknownTypes.Add($"Type: {data.REDType}, File: {cr2w.FileName}, Offset: {file.BaseStream.Position}, UnknownBytes: {bytesLeft}");
+                //UnknownTypes.Add($"Type: {data.REDType}, File: {cr2w.FileName}, Offset: {file.BaseStream.Position}, UnknownBytes: {bytesLeft}");
             }
             else if (bytesLeft < 0)
             {
@@ -455,6 +451,27 @@ namespace CP77.CR2W
             {
                 unknownBytes.Bytes = new byte[0];
             }
+        }
+
+        public virtual bool RemoveVariable(IEditableVariable child)
+        {
+            return false;
+        }
+
+        public void SetOffset(uint offset) => _export.dataOffset = offset;
+
+        public void SetREDName(string val)
+        {
+            throw new NotImplementedException(nameof(SetREDName));
+        }
+
+        public void SetType(ushort val) => _export.className = val;
+
+        public override string ToString() => REDName;
+
+        public void Write(BinaryWriter file)
+        {
+            throw new NotImplementedException(nameof(Write));
         }
 
         public void WriteData(BinaryWriter file)
@@ -479,65 +496,31 @@ namespace CP77.CR2W
             _export.dataSize = newsize;
         }
 
-        /// <summary>
-        /// Needs the parentChunk idx to be set!
-        /// </summary>
-        public void CreateDefaultData(IEditableVariable cvar = null)
+        public class Cr2wVariableDumpObject
         {
-            //if (Export.className != 1 && GetParentChunk() == null)
-            //    throw new InvalidChunkTypeException("No parent chunk set!");
+            #region Properties
 
-            data = cvar ?? CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.data as CVariable);
+            public string Name { get; set; }
+            public long Offset { get; set; }
+            public int Size { get; set; }
+            public string Type { get; set; }
+            public List<Cr2wVariableDumpObject> Variables { get; set; } = new List<Cr2wVariableDumpObject>();
 
-            if (data == null || data is not CVariable cdata)
+            #endregion Properties
+
+            #region Methods
+
+            public string ToSimpleString() => $"{Type} {Name}";
+
+            public string ToVarString()
             {
-                throw new InvalidParsingException($"{nameof(CreateDefaultData)} failed: {this.REDName}");
+                var wktype = REDReflection.GetWKitBaseTypeFromREDBaseType(Type);
+                return $"[RED(\"{Name}\")] public {wktype} {Name.FirstCharToUpper()} {{ get; set; }}";
             }
 
-            data.IsSerialized = true;
-            cdata.SetREDFlags(Export.objectFlags);
+            #endregion Methods
         }
 
-        public override string ToString() => REDName;
-
-        public virtual bool CanRemoveVariable(IEditableVariable child)
-        {
-            return false;
-        }
-
-        public virtual bool CanAddVariable(IEditableVariable newvar)
-        {
-            return false;
-        }
-
-        public virtual void AddVariable(CVariable var)
-        {
-        }
-
-        public virtual bool RemoveVariable(IEditableVariable child)
-        {
-            return false;
-        }
-
-        public void SetREDName(string val)
-        {
-            throw new NotImplementedException(nameof(SetREDName));
-        }
-
-        public void Read(BinaryReader file, uint size)
-        {
-            throw new NotImplementedException(nameof(Read));
-        }
-
-        public void Write(BinaryWriter file)
-        {
-            throw new NotImplementedException(nameof(Write));
-        }
-
-        public CVariable Copy(CR2WCopyAction context)
-        {
-            throw new NotImplementedException(nameof(Copy));
-        }
-        #endregion
+        #endregion Methods
     }
 }

@@ -6,54 +6,94 @@ namespace WolvenKit.Common.DDS
 {
     public static class DDSUtils
     {
-        const uint DDS_MAGIC = 0x20534444; // "DDS "
+        #region Fields
+
+        private const uint DDS_MAGIC = 0x20534444;
+
+        #endregion Fields
+
+        // "DDS "
 
         // constants
+
         #region DDS_HEADER
-
-        // dwsize
-        const uint HEADER_SIZE = 124;
-
-        // dwflags
-        const uint DDSD_CAPS = 0x00000001;          //required
-        const uint DDSD_HEIGHT = 0x00000002;        //required
-        const uint DDSD_WIDTH = 0x00000004;         //required
-        const uint DDSD_PITCH = 0x00000008;
-        const uint DDSD_PIXELFORMAT = 0x00001000;   //required
-        const uint DDSD_MIPMAPCOUNT = 0x00020000;
-        const uint DDSD_LINEARSIZE = 0x00080000;
-        const uint DDSD_DEPTH = 0x00800000;
-
-        const uint DDS_HEADER_FLAGS_TEXTURE = 0x00001007;  // DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT
-
-        // dwCaps
-        const uint DDSCAPS_COMPLEX = 0x00000008;
-        const uint DDSCAPS_MIPMAP = 0x00400000;
-        const uint DDSCAPS_TEXTURE = 0x00001000;
 
         // dwCaps2
         public const uint DDSCAPS2_CUBEMAP = 0x00000200;
-        const uint DDS_CUBEMAP_POSITIVEX = 0x00000600; // DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_POSITIVEX
-        const uint DDS_CUBEMAP_NEGATIVEX = 0x00000a00; // DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_NEGATIVEX
-        const uint DDS_CUBEMAP_POSITIVEY = 0x00001200; // DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_POSITIVEY
-        const uint DDS_CUBEMAP_NEGATIVEY = 0x00002200; // DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_NEGATIVEY
-        const uint DDS_CUBEMAP_POSITIVEZ = 0x00004200; // DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_POSITIVEZ
-        const uint DDS_CUBEMAP_NEGATIVEZ = 0x00008200;// DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_NEGATIVEZ
+
         public const uint DDSCAPS2_CUBEMAP_ALL_FACES = DDS_CUBEMAP_POSITIVEX | DDS_CUBEMAP_NEGATIVEX |
-                                                DDS_CUBEMAP_POSITIVEY | DDS_CUBEMAP_NEGATIVEY |
-                                                DDS_CUBEMAP_POSITIVEZ | DDS_CUBEMAP_NEGATIVEZ;
-        const uint DDSCAPS2_VOLUME = 0x00200000;
-        #endregion
+                                                        DDS_CUBEMAP_POSITIVEY | DDS_CUBEMAP_NEGATIVEY |
+                                                        DDS_CUBEMAP_POSITIVEZ | DDS_CUBEMAP_NEGATIVEZ;
+
+        private const uint DDS_CUBEMAP_NEGATIVEX = 0x00000a00;
+
+        private const uint DDS_CUBEMAP_NEGATIVEY = 0x00002200;
+
+        private const uint DDS_CUBEMAP_NEGATIVEZ = 0x00008200;
+
+        private const uint DDS_CUBEMAP_POSITIVEX = 0x00000600;
+
+        // DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_POSITIVEX
+        // DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_NEGATIVEX
+        private const uint DDS_CUBEMAP_POSITIVEY = 0x00001200;
+
+        // DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_POSITIVEY
+        // DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_NEGATIVEY
+        private const uint DDS_CUBEMAP_POSITIVEZ = 0x00004200;
+
+        private const uint DDS_HEADER_FLAGS_TEXTURE = 0x00001007;
+
+        // dwCaps
+        private const uint DDSCAPS_COMPLEX = 0x00000008;
+
+        // DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT
+        private const uint DDSCAPS_MIPMAP = 0x00400000;
+
+        private const uint DDSCAPS_TEXTURE = 0x00001000;
+
+        // DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_POSITIVEZ
+        // DDSCAPS2_CUBEMAP | DDSCAPS2_CUBEMAP_NEGATIVEZ
+        private const uint DDSCAPS2_VOLUME = 0x00200000;
+
+        // dwflags
+        private const uint DDSD_CAPS = 0x00000001;
+
+        private const uint DDSD_DEPTH = 0x00800000;
+
+        //required
+        private const uint DDSD_HEIGHT = 0x00000002;
+
+        private const uint DDSD_LINEARSIZE = 0x00080000;
+
+        private const uint DDSD_MIPMAPCOUNT = 0x00020000;
+
+        private const uint DDSD_PITCH = 0x00000008;
+
+        private const uint DDSD_PIXELFORMAT = 0x00001000;
+
+        //required
+        private const uint DDSD_WIDTH = 0x00000004;
+
+        // dwsize
+        private const uint HEADER_SIZE = 124;
+
+        //required
+        //required
+
+        #endregion DDS_HEADER
 
         #region DDS_HEADER_DXT10
-        const uint D3D10_RESOURCE_MISC_GENERATE_MIPS = 0x00000001;
-        const uint DDS_RESOURCE_MISC_TEXTURECUBE = 0x00000004;
 
-        const uint DDS_ALPHA_MODE_UNKNOWN = 0x00000000;
+        private const uint D3D10_RESOURCE_MISC_GENERATE_MIPS = 0x00000001;
+        private const uint DDS_ALPHA_MODE_UNKNOWN = 0x00000000;
+        private const uint DDS_RESOURCE_MISC_TEXTURECUBE = 0x00000004;
 
-        #endregion
+        #endregion DDS_HEADER_DXT10
+
+        #region Methods
 
         private static uint MAKEFOURCC(char ch0, char ch1, char ch2, char ch3) => (uint)(ch0 | ch1 << 8 | ch2 << 16 | ch3 << 24);
+
         private static void SetPixelmask(Func<uint[]> pfmtfactory, ref DDS_PIXELFORMAT pfmt)
         {
             uint[] masks = pfmtfactory.Invoke();
@@ -64,34 +104,57 @@ namespace WolvenKit.Common.DDS
             pfmt.dwABitMask = masks[4];
         }
 
+        #endregion Methods
+
         #region DDS_PIXELFORMAT
-        // dwSize
-        const uint PIXELFORMAT_SIZE = 32;
+
+        private const uint DDPF_ALPHA = 0x00000002;
+
         // dwFlags
-        const uint DDPF_ALPHAPIXELS = 0x00000001;
-        const uint DDPF_LUMINANCE = 0x00020000;
-        const uint DDPF_ALPHA = 0x00000002;
-        const uint DDPF_FOURCC = 0x00000004;
-        const uint DDPF_RGB = 0x00000040;
-        const uint DDPF_NORMAL = 0x80000000; // Custom nv flag
+        private const uint DDPF_ALPHAPIXELS = 0x00000001;
+
+        private const uint DDPF_FOURCC = 0x00000004;
+
+        private const uint DDPF_LUMINANCE = 0x00020000;
+
+        private const uint DDPF_NORMAL = 0x80000000;
+
+        private const uint DDPF_RGB = 0x00000040;
+
+        // dwSize
+        private const uint PIXELFORMAT_SIZE = 32;
+
+        // Custom nv flag
+
+        private static uint[] DDSPF_A1R5G5B5() => new uint[5] { 16, 0x00007c00, 0x000003e0, 0x0000001f, 0x00000000 };
+
+        private static uint[] DDSPF_A4R4G4B4() => new uint[5] { 16, 0x00000f00, 0x000000f0, 0x0000000f, 0x0000f000 };
+
+        private static uint[] DDSPF_A8() => new uint[5] { 8, 0x00, 0x00, 0x00, 0xff };
+
+        private static uint[] DDSPF_A8B8G8R8() => new uint[5] { 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 };
+
+        private static uint[] DDSPF_A8L8() => new uint[5] { 16, 0x00ff, 0x0000, 0x0000, 0xff00 };
 
         //dwRGBBitCount     dwRBitMask      dwGBitMask      dwBBitMask      dwABitMask
-        static uint[] DDSPF_A8R8G8B8() => new uint[5] { 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000 };
-        static uint[] DDSPF_X8R8G8B8() => new uint[5] { 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000 };
-        static uint[] DDSPF_A8B8G8R8() => new uint[5] { 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 };
-        static uint[] DDSPF_X8B8G8R8() => new uint[5] { 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0x00000000 };
-        static uint[] DDSPF_G16R16() => new uint[5] { 32, 0x0000ffff, 0xffff0000, 0x00000000, 0x00000000 };
-        static uint[] DDSPF_R5G6B5() => new uint[5] { 16, 0x0000f800, 0x000007e0, 0x0000001f, 0x00000000 };
-        static uint[] DDSPF_A1R5G5B5() => new uint[5] { 16, 0x00007c00, 0x000003e0, 0x0000001f, 0x00000000 };
-        static uint[] DDSPF_A4R4G4B4() => new uint[5] { 16, 0x00000f00, 0x000000f0, 0x0000000f, 0x0000f000 };
-        static uint[] DDSPF_R8G8B8() => new uint[5] { 24, 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000 };
+        private static uint[] DDSPF_A8R8G8B8() => new uint[5] { 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000 };
 
-        static uint[] DDSPF_L8() => new uint[5] { 8, 0xff, 0x00, 0x00, 0x00 };
-        static uint[] DDSPF_A8() => new uint[5] { 8, 0x00, 0x00, 0x00, 0xff };
-        static uint[] DDSPF_A8L8() => new uint[5] { 16, 0x00ff, 0x0000, 0x0000, 0xff00 };
-        #endregion
+        private static uint[] DDSPF_G16R16() => new uint[5] { 32, 0x0000ffff, 0xffff0000, 0x00000000, 0x00000000 };
+
+        private static uint[] DDSPF_L8() => new uint[5] { 8, 0xff, 0x00, 0x00, 0x00 };
+
+        private static uint[] DDSPF_R5G6B5() => new uint[5] { 16, 0x0000f800, 0x000007e0, 0x0000001f, 0x00000000 };
+
+        private static uint[] DDSPF_R8G8B8() => new uint[5] { 24, 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000 };
+
+        private static uint[] DDSPF_X8B8G8R8() => new uint[5] { 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0x00000000 };
+
+        private static uint[] DDSPF_X8R8G8B8() => new uint[5] { 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000 };
+
+        #endregion DDS_PIXELFORMAT
 
         #region Writing
+
         public static void GenerateAndWriteHeader(Stream stream, DDSMetadata metadata)
         {
             var (header, dxt10header) = GenerateHeader(metadata);
@@ -160,7 +223,6 @@ namespace WolvenKit.Common.DDS
             if (mipscount > 0)
                 header.dwMipMapCount = mipscount;
 
-
             // pixelformat
             {
                 // dwFourCC
@@ -171,36 +233,62 @@ namespace WolvenKit.Common.DDS
                     switch (format)
                     {
                         case EFormat.R32G32B32A32_FLOAT:
-                            ddspf.dwFourCC = 116; break;
+                            ddspf.dwFourCC = 116;
+                            break;
+
                         case EFormat.R16G16B16A16_FLOAT:
-                            ddspf.dwFourCC = 113; break;
+                            ddspf.dwFourCC = 113;
+                            break;
+
                         case EFormat.R10G10B10A2_UNORM:
                             throw new NotImplementedException();
                         case EFormat.R32_UINT:
                             throw new NotImplementedException();
                         case EFormat.R8G8_UNORM:
-                            SetPixelmask(DDSPF_A8L8, ref ddspf); break;
+                            SetPixelmask(DDSPF_A8L8, ref ddspf);
+                            break;
+
                         case EFormat.R16_FLOAT:
-                            ddspf.dwFourCC = 111; break;
+                            ddspf.dwFourCC = 111;
+                            break;
+
                         case EFormat.R8_UNORM:
                         case EFormat.R8_UINT:
-                            SetPixelmask(DDSPF_L8, ref ddspf); break;
+                            SetPixelmask(DDSPF_L8, ref ddspf);
+                            break;
+
                         case EFormat.A8_UNORM:
-                            SetPixelmask(DDSPF_A8, ref ddspf); break;
+                            SetPixelmask(DDSPF_A8, ref ddspf);
+                            break;
+
                         case EFormat.R8G8B8A8_UNORM:
-                            SetPixelmask(DDSPF_A8R8G8B8, ref ddspf); break;
+                            SetPixelmask(DDSPF_A8R8G8B8, ref ddspf);
+                            break;
+
                         case EFormat.BC1_UNORM:
-                            ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '1'); break;
+                            ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '1');
+                            break;
+
                         case EFormat.BC2_UNORM:
-                            ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '3'); break;
+                            ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '3');
+                            break;
+
                         case EFormat.BC3_UNORM:
-                            ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '5'); break;
+                            ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '5');
+                            break;
+
                         case EFormat.BC4_UNORM:
-                            ddspf.dwFourCC = MAKEFOURCC('B', 'C', '4', 'U'); break;
+                            ddspf.dwFourCC = MAKEFOURCC('B', 'C', '4', 'U');
+                            break;
+
                         case EFormat.BC5_UNORM:
-                            ddspf.dwFourCC = MAKEFOURCC('B', 'C', '5', 'U'); break;
+                            ddspf.dwFourCC = MAKEFOURCC('B', 'C', '5', 'U');
+                            break;
+
                         case EFormat.BC7_UNORM:
-                            dxt10 = true; break;
+                            dxt10 = true;
+                            break;
+
                         default:
                             throw new MissingFormatException($"Missing format: {format}");
                     }
@@ -229,6 +317,7 @@ namespace WolvenKit.Common.DDS
                 case EFormat.R8_UNORM:
                     header.dwPitchOrLinearSize = (width * bpp + 7) / 8;
                     break;
+
                 case EFormat.R32G32B32A32_FLOAT:
                 case EFormat.R16G16B16A16_FLOAT:
                 case EFormat.R10G10B10A2_UNORM:
@@ -241,12 +330,14 @@ namespace WolvenKit.Common.DDS
                     header.dwPitchOrLinearSize = (width * bpp + 7) / 8;
                     header.dwFlags |= DDSD_PITCH;
                     break;
+
                 case EFormat.BC1_UNORM:
                 case EFormat.BC4_UNORM:
                     p = width * height / 2; //max(1,width ?4)x max(1,height ?4)x 8 (DXT1)
                     header.dwPitchOrLinearSize = (uint)(p);
                     header.dwFlags |= DDSD_LINEARSIZE;
                     break;
+
                 case EFormat.BC2_UNORM:
                 case EFormat.BC3_UNORM:
                 case EFormat.BC5_UNORM:
@@ -255,6 +346,7 @@ namespace WolvenKit.Common.DDS
                     header.dwPitchOrLinearSize = (uint)(p);
                     header.dwFlags |= DDSD_LINEARSIZE;
                     break;
+
                 default:
                     throw new MissingFormatException($"Missing format: {format}");
             }
@@ -264,7 +356,6 @@ namespace WolvenKit.Common.DDS
             // depth
             //if (slicecount > 0  && !iscubemap)
             //    header.dwDepth = slicecount;
-
 
             // caps
             if (iscubemap || mipscount > 0)
@@ -290,22 +381,70 @@ namespace WolvenKit.Common.DDS
                 // dxgiFormat
                 switch (format)
                 {
-                    case EFormat.R32G32B32A32_FLOAT: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT; break;
-                    case EFormat.R16G16B16A16_FLOAT: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT; break;
-                    case EFormat.R10G10B10A2_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R10G10B10A2_UNORM; break;
-                    case EFormat.R8G8B8A8_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM; break;
-                    case EFormat.R32_UINT: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R32_UINT; break;
-                    case EFormat.R8G8_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM; break;
-                    case EFormat.R16_FLOAT: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT; break;
-                    case EFormat.R8_UINT: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8_UINT; break;
-                    case EFormat.R8_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8_UNORM; break;
-                    case EFormat.A8_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_A8_UNORM; break;
-                    case EFormat.BC1_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM; break;
-                    case EFormat.BC2_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM; break;
-                    case EFormat.BC3_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM; break;
-                    case EFormat.BC4_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM; break;
-                    case EFormat.BC7_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM; break;
-                    case EFormat.BC5_UNORM: dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM; break;
+                    case EFormat.R32G32B32A32_FLOAT:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT;
+                        break;
+
+                    case EFormat.R16G16B16A16_FLOAT:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT;
+                        break;
+
+                    case EFormat.R10G10B10A2_UNORM:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R10G10B10A2_UNORM;
+                        break;
+
+                    case EFormat.R8G8B8A8_UNORM:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+                        break;
+
+                    case EFormat.R32_UINT:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R32_UINT;
+                        break;
+
+                    case EFormat.R8G8_UNORM:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM;
+                        break;
+
+                    case EFormat.R16_FLOAT:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT;
+                        break;
+
+                    case EFormat.R8_UINT:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8_UINT;
+                        break;
+
+                    case EFormat.R8_UNORM:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8_UNORM;
+                        break;
+
+                    case EFormat.A8_UNORM:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_A8_UNORM;
+                        break;
+
+                    case EFormat.BC1_UNORM:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM;
+                        break;
+
+                    case EFormat.BC2_UNORM:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM;
+                        break;
+
+                    case EFormat.BC3_UNORM:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM;
+                        break;
+
+                    case EFormat.BC4_UNORM:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM;
+                        break;
+
+                    case EFormat.BC7_UNORM:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM;
+                        break;
+
+                    case EFormat.BC5_UNORM:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM;
+                        break;
+
                     default:
                     {
                         throw new MissingFormatException($"Missing format: {format}");
@@ -323,7 +462,6 @@ namespace WolvenKit.Common.DDS
                 //if (iscubemap)
                 //    dxt10header.arraySize = metadata.Slicecount;
                 // miscFlags2
-
             }
 
             return (header, dx10header);
@@ -336,31 +474,14 @@ namespace WolvenKit.Common.DDS
             if (header.ddspf.dwFourCC == MAKEFOURCC('D', 'X', '1', '0'))
                 stream.WriteStruct(dxt10header);
         }
-        #endregion
+
+        #endregion Writing
 
         #region Reading
-        public static DDSMetadata ReadHeader(string ddsfile)
-        {
-            var metadata = new DDSMetadata();
-            using var fs = new FileStream(ddsfile, FileMode.Open, FileAccess.Read);
-            using var reader = new BinaryReader(fs);
-
-            if (fs.Length < 128) return metadata;
-
-            // check if DDS file
-            var buffer = reader.ReadBytes(4);
-            if (!buffer.SequenceEqual(BitConverter.GetBytes(DDS_MAGIC))) return metadata;
-
-            var id = reader.BaseStream.ReadStruct<DDS_HEADER>();
-            metadata = new DDSMetadata(id);
-
-            return metadata;
-        }
 
         public static uint CalculateMipMapSize(uint width, uint height, EFormat format)
         {
             //TODO: dword align, check if sizes are not pow2
-
 
             switch (format)
             {
@@ -379,7 +500,26 @@ namespace WolvenKit.Common.DDS
             }
         }
 
-        #endregion
+        public static DDSMetadata ReadHeader(string ddsfile)
+        {
+            var metadata = new DDSMetadata();
+            using var fs = new FileStream(ddsfile, FileMode.Open, FileAccess.Read);
+            using var reader = new BinaryReader(fs);
 
+            if (fs.Length < 128)
+                return metadata;
+
+            // check if DDS file
+            var buffer = reader.ReadBytes(4);
+            if (!buffer.SequenceEqual(BitConverter.GetBytes(DDS_MAGIC)))
+                return metadata;
+
+            var id = reader.BaseStream.ReadStruct<DDS_HEADER>();
+            metadata = new DDSMetadata(id);
+
+            return metadata;
+        }
+
+        #endregion Reading
     }
 }

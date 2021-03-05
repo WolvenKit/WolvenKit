@@ -26,8 +26,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         #endregion fields
 
-
-
         #region Constructors
 
         public Cp77Project(string location) : base(location)
@@ -274,8 +272,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         }
 
         #endregion methods
-
-
 
         #region Methods
 

@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class Scene_Node : UserControl
     {
+        #region Constructors
+
         public Scene_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

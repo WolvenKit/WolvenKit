@@ -12,8 +12,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         #endregion Fields
 
-
-
         #region Methods
 
         // Setup theming defaults.

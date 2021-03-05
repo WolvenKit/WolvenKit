@@ -1,34 +1,40 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public abstract class CyberArchiveManager : IGameArchiveManager
     {
-        public GameFileTreeNode RootNode { get; set; }
-        public List<IGameFile> FileList { get; set; }
-        public Dictionary<string, List<IGameFile>> Items { get; set; }
-        public List<string> AutocompleteSource { get; set; }
-        public List<string> Extensions { get; set; } = new();
-
-
-        public abstract EArchiveType TypeName { get; }
-
-        public abstract void LoadModArchive(string filename);
-        public abstract void LoadArchive(string filename, bool ispatch = false);
-        public abstract void LoadAll(string exedir);
-        public abstract void LoadModsArchives(string mods, string dlc);
-
+        #region Fields
 
         protected readonly string[] VanillaDlClist = new string[] { "DLC1", "DLC2", "DLC3", "DLC4", "DLC5", "DLC6", "DLC7", "DLC8", "DLC9", "DLC10", "DLC11", "DLC12", "DLC13", "DLC14", "DLC15", "DLC16", "bob", "ep1" };
+
+        #endregion Fields
+
+        #region Properties
+
+        public List<string> AutocompleteSource { get; set; }
+        public List<string> Extensions { get; set; } = new();
+        public List<IGameFile> FileList { get; set; }
+        public Dictionary<string, List<IGameFile>> Items { get; set; }
+        public GameFileTreeNode RootNode { get; set; }
+        public abstract EArchiveType TypeName { get; }
+
+        #endregion Properties
+
+        #region Methods
+
+        public abstract void LoadAll(string exedir);
+
+        public abstract void LoadArchive(string filename, bool ispatch = false);
+
+        public abstract void LoadModArchive(string filename);
+
+        public abstract void LoadModsArchives(string mods, string dlc);
 
         protected static string GetModFolder(string path)
         {
@@ -79,32 +85,13 @@ namespace WolvenKit.Common
         }
 
         /// <summary>
-        /// Calls GetFiles on the rootnode
+        /// Since File.GetFileName() only works for real paths we need to have this
         /// </summary>
-        private void RebuildFileList()
+        /// <param name="s">Path/Name of the file</param>
+        /// <returns></returns>
+        private static string GetFileName(string s)
         {
-            FileList = GetFiles(RootNode);
-        }
-
-        /// <summary>
-        /// Gets the avaliable extensions in the files
-        /// </summary>
-        private void RebuildExtensions()
-        {
-            foreach (var file in FileList.Where(file => !Extensions.Contains(file.Name.Split('.').Last())))
-            {
-                Extensions.Add(file.Name.Split('.').Last());
-            }
-            Extensions.Sort();
-        }
-
-        /// <summary>
-        /// Gets the distinct filenames from the loaded bundles so they can be used for autocomplete
-        /// </summary>
-        private void RebuildAutoCompleteSource()
-        {
-            AutocompleteSource = new List<string>();
-            AutocompleteSource.AddRange(FileList.Select(x => GetFileName(x.Name)).Distinct().ToArray());
+            return s.Contains('\\') ? s.Split('\\').Last() : s;
         }
 
         /// <summary>
@@ -127,15 +114,34 @@ namespace WolvenKit.Common
         }
 
         /// <summary>
-        /// Since File.GetFileName() only works for real paths we need to have this
+        /// Gets the distinct filenames from the loaded bundles so they can be used for autocomplete
         /// </summary>
-        /// <param name="s">Path/Name of the file</param>
-        /// <returns></returns>
-        private static string GetFileName(string s)
+        private void RebuildAutoCompleteSource()
         {
-            return s.Contains('\\') ? s.Split('\\').Last() : s;
+            AutocompleteSource = new List<string>();
+            AutocompleteSource.AddRange(FileList.Select(x => GetFileName(x.Name)).Distinct().ToArray());
         }
+
+        /// <summary>
+        /// Gets the avaliable extensions in the files
+        /// </summary>
+        private void RebuildExtensions()
+        {
+            foreach (var file in FileList.Where(file => !Extensions.Contains(file.Name.Split('.').Last())))
+            {
+                Extensions.Add(file.Name.Split('.').Last());
+            }
+            Extensions.Sort();
+        }
+
+        /// <summary>
+        /// Calls GetFiles on the rootnode
+        /// </summary>
+        private void RebuildFileList()
+        {
+            FileList = GetFiles(RootNode);
+        }
+
+        #endregion Methods
     }
-
-
 }

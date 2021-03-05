@@ -241,7 +241,7 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
             var ret = new Dictionary<string, IGameFile>();
             foreach (var f in root.FileList)
             {
-                if (f.Name.ToUpper().Contains(searchkeyword.ToUpper()))
+                if (f.Name.Contains(searchkeyword, StringComparison.OrdinalIgnoreCase))
                 {
                     if (!ret.ContainsKey(f.Name))
                     {
@@ -318,8 +318,6 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
         }
 
         #endregion Constructors
-
-
 
         #region Properties
 

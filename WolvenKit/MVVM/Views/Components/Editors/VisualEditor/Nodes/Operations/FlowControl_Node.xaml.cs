@@ -7,9 +7,13 @@ namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
     /// </summary>
     public partial class FlowControl_Node : UserControl
     {
+        #region Constructors
+
         public FlowControl_Node()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

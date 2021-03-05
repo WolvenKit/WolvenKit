@@ -23,15 +23,11 @@ namespace WolvenKit.MVVM.Model.ProjectManagement
 
         #endregion Constructors
 
-
-
         #region Events
 
         public event AsyncEventHandler<ProjectEventArgs> ProjectRefresherUpdatedAsync;
 
         #endregion Events
-
-
 
         #region Methods
 

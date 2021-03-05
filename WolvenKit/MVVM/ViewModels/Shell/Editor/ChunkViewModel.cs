@@ -71,9 +71,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         public IEditableVariable Data => _export.data;
 
+        public bool IsSelected { get; set; }
         public string Name => _export.REDName;
 
-        public bool IsSelected { get; set; }
 
         #endregion Properties
 

@@ -1,26 +1,15 @@
-﻿using System;
+using System;
 using System.IO;
 using WolvenKit.Wwise.Wwise;
 
 namespace WolvenKit.Wwise
 {
-    class Program
+    internal static class Program
     {
-        static void show_usage()
-        {
-            string s = AppDomain.CurrentDomain.FriendlyName;
-            Console.WriteLine("Usage: " + s + " <BNK> <FOLDER>");
-            Console.WriteLine("Usage: " + s + " --music <BNK> <WEM>");
-            Console.WriteLine("Usage: " + s + " --playlist-id-from-track <BNK> <TRACK ID>");
-            Console.WriteLine("Usage: " + s + " --export-playlist <BNK> <PLAYLIST ID>");
-            Console.WriteLine("Usage: " + s + " --reimport-playlist <BNK> <PLAYLIST ID>");
-            Console.WriteLine("Usage: " + s + " --debug <BNK>");
-            Console.WriteLine("Usage: " + s + " --cue <WAV>");
-            Console.WriteLine("Usage: " + s + " --merge-headers <ORIGINAL WEM> <MODIFIED WEM>");
-            Environment.Exit(0);
-        }
+        #region Methods
+
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             int mode = -1;
             string bnk = "";
@@ -64,7 +53,6 @@ namespace WolvenKit.Wwise
                     wavinput.Calculate_Riff_Size();
                     wavinput.WriteToFile(wav + ".cued");
                     Console.WriteLine("Done.");
-
                 }
                 else if (argc != 2)
                 {
@@ -185,7 +173,6 @@ namespace WolvenKit.Wwise
             else if (mode == Soundbank.MODE_ADD_NEW_MUSIC)
             {
                 Console.WriteLine("Adding new music...");
-
             }
             else if (mode == Soundbank.MODE_PLAYLIST_ID)
             {
@@ -195,7 +182,6 @@ namespace WolvenKit.Wwise
                     Console.WriteLine("Extracting playlist...");
                     bank.get_playlist_ids((uint)wid);
                 }
-
             }
             else if (mode == Soundbank.MODE_EXPORT_PLAYLIST)
             {
@@ -226,11 +212,27 @@ namespace WolvenKit.Wwise
                 Console.WriteLine("Rebuilding sounds...");
                 bank.read_wems(folder);
                 bank.rebuild_data();
-                if(File.Exists(bnk + ".rebuilt"))
+                if (File.Exists(bnk + ".rebuilt"))
                     File.Delete(bnk + ".rebuilt");
                 bank.build_bnk(bnk + ".rebuilt");
                 Console.WriteLine("Done.");
             }
         }
+
+        private static void show_usage()
+        {
+            string s = AppDomain.CurrentDomain.FriendlyName;
+            Console.WriteLine("Usage: " + s + " <BNK> <FOLDER>");
+            Console.WriteLine("Usage: " + s + " --music <BNK> <WEM>");
+            Console.WriteLine("Usage: " + s + " --playlist-id-from-track <BNK> <TRACK ID>");
+            Console.WriteLine("Usage: " + s + " --export-playlist <BNK> <PLAYLIST ID>");
+            Console.WriteLine("Usage: " + s + " --reimport-playlist <BNK> <PLAYLIST ID>");
+            Console.WriteLine("Usage: " + s + " --debug <BNK>");
+            Console.WriteLine("Usage: " + s + " --cue <WAV>");
+            Console.WriteLine("Usage: " + s + " --merge-headers <ORIGINAL WEM> <MODIFIED WEM>");
+            Environment.Exit(0);
+        }
+
+        #endregion Methods
     }
 }
