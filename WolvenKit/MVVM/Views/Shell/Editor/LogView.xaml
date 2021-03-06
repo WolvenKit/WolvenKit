@@ -38,6 +38,7 @@
          ErrorMessageBrush="Red"
          IgnoreCatelLogging="True"
          InfoMessageBrush="{DynamicResource MahApps.Brushes.SystemControlBackgroundAccent}"
+         ScrollMode="AutoScrollPriority"
          ShowDebug="False"
          ShowError="False"
          ShowInfo="True"

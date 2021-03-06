@@ -13,6 +13,7 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
         public PropertiesView()
         {
             InitializeComponent();
+            StaticReferences.GlobalPropertiesView = this;
         }
 
         #endregion Constructors
