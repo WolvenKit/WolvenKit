@@ -1,3 +1,4 @@
+using System.Windows.Media;
 using System.Xml.Serialization;
 using MLib.Interfaces;
 
@@ -18,6 +19,9 @@ namespace WolvenKit.Functionality.Services
         public System.Windows.Media.ImageBrush ProfileImageBrush { get; set; }
 
         string TextLanguage { get; set; }
+
+        Color ThemeAccent { get; set; }
+
 
         [XmlIgnore]
         IThemeInfos Themes { get; }
