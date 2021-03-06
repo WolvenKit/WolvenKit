@@ -1,15 +1,70 @@
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using Catel.IoC;
+using CP77.CR2W.Types;
 using HandyControl.Controls;
 using HandyControl.Tools;
+using Orchestra.Services;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.MVVM.Views.PropertyGridEditors
 {
+    #region IoC
+
+    public static class PropertyGridResolver
+    {
+        public static void Initialize()
+        {
+            var serviceLocator = ServiceLocator.Default;
+            
+            // Register PropertyEditor services here to the UI
+            serviceLocator.RegisterType<ICollectionEditor, REDArrayEditor>();
+            serviceLocator.RegisterType<IExpandableObjectEditor, ExpandableObjectEditor>();
+
+            serviceLocator.RegisterType(typeof(ITextEditor<double>), typeof(TextEditor<CDouble>));
+            serviceLocator.RegisterType(typeof(ITextEditor<float>), typeof(TextEditor<CFloat>));
+
+            serviceLocator.RegisterType(typeof(ITextEditor<ulong>), typeof(TextEditor<CUInt64>));
+            serviceLocator.RegisterType(typeof(ITextEditor<long>), typeof(TextEditor<CInt64>));
+
+            serviceLocator.RegisterType(typeof(ITextEditor<uint>), typeof(TextEditor<CUInt32>));
+            serviceLocator.RegisterType(typeof(ITextEditor<int>), typeof(TextEditor<CInt32>));
+
+            serviceLocator.RegisterType(typeof(ITextEditor<ushort>), typeof(TextEditor<CUInt16>));
+            serviceLocator.RegisterType(typeof(ITextEditor<short>), typeof(TextEditor<CInt16>));
+
+            serviceLocator.RegisterType(typeof(ITextEditor<byte>), typeof(TextEditor<CUInt8>));
+            serviceLocator.RegisterType(typeof(ITextEditor<sbyte>), typeof(TextEditor<CInt8>));
+
+            serviceLocator.RegisterType(typeof(ITextEditor<string>), typeof(TextEditor<CString>));
+            serviceLocator.RegisterType(typeof(INameEditor), typeof(TextEditor<CName>));
+
+            serviceLocator.RegisterType(typeof(IBoolEditor), typeof(BoolEditor));
+            serviceLocator.RegisterType(typeof(IEnumEditor), typeof(EnumEditor));
+            serviceLocator.RegisterType(typeof(IColorEditor), typeof(ColorEditor));
+        }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Propertygrid editor for numeric values
+    /// </summary>
+    [Editor(typeof(IColorEditor), typeof(IPropertyEditorBase))]
+    public class ColorEditor : EditorBase<IREDColor>, IColorEditor
+    {
+        private protected override FrameworkElement CreateInnerElement(PropertyItem propertyItem) =>
+            new ColorPicker();
+
+        private protected override DependencyProperty GetInnerDependencyProperty() => ColorPicker.SelectedBrushProperty;
+    }
+
     /// <summary>
     /// Propertygrid editor for numeric values
     /// </summary>
