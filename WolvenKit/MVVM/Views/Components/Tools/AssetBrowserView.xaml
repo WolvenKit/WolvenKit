@@ -25,6 +25,10 @@
                 <converters:ExtensionToImageConverter />
                 <svgc:SvgImageConverter />
             </c:ValueConverterGroup>
+
+            <Style TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            </Style>
         </ResourceDictionary>
     </catel:UserControl.Resources>
     <Border
@@ -120,17 +124,20 @@
                             <!--  Bind Header to selected item in treeview  -->
                             <ListView
                              xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters"
+                             x:Name="InnerList"
                              Background="Transparent"
                              BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
                              ItemsSource="{Binding CurrentNodeFiles}"
                              SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
+                             SelectionChanged="ListView_SelectionChanged"
                              >
                                 <ListView.Resources>
                                     <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
                                 </ListView.Resources>
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Width="Auto">
+
+                                        <GridViewColumn Width="30">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <svgc:SvgViewbox
@@ -143,16 +150,26 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn
-                                         Width="500"
-                                         DisplayMemberBinding="{Binding Name}"
-                                         Header="Name"
-                                         />
-                                        <GridViewColumn
-                                         Width="Auto"
-                                         DisplayMemberBinding="{Binding Size}"
-                                         Header="Size"
-                                         />
+                                        <GridViewColumn Width="350" Header="Name">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock x:Name="SizeHelper" Text="{Binding Name}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Width="250" Header="Size">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <WrapPanel>
+                                                        <TextBlock
+                                                         Width="auto"
+                                                         Margin="0,0,0,0"
+                                                         Text="{Binding Size}"
+                                                         />
+                                                    </WrapPanel>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
                                     </GridView>
                                 </ListView.View>
                                 <hc:Interaction.Triggers>

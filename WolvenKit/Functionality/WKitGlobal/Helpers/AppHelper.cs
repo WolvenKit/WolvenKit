@@ -213,7 +213,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
 
 
-            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", (Color)ColorConverter.ConvertFromString("#DF2935"), false));
+          
 
             //  GlobalShell.SetCurrentValue(FrameworkElement.MinHeightProperty, (double)810);
             //  GlobalShell.SetCurrentValue(FrameworkElement.MinWidthProperty, (double)1060);

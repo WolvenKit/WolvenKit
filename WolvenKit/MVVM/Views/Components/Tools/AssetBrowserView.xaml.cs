@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using WolvenKit.Common;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.ViewModels.Components.Tools;
@@ -50,5 +51,15 @@ namespace WolvenKit.MVVM.Views.Components.Tools
         }
 
         #endregion Methods
+
+        private void ListView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            StaticReferences.GlobalPropertiesView.ExplorerBind.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            StaticReferences.GlobalPropertiesView.AssetsBind.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+
+
+            StaticReferences.GlobalPropertiesView.fish.SetValue(Panel.DataContextProperty, DataContext);
+
+        }
     }
 }

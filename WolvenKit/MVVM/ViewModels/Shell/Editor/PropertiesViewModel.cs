@@ -37,7 +37,6 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
 
 
-            Title = "Pinok";
 
 
 
