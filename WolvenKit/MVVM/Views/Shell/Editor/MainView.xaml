@@ -152,13 +152,11 @@
                     </ad:PanesTemplateSelector.VisualEditorTemplate>
                     -->
 
-                    <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.AudioToolTemplate>
                         <DataTemplate>
                             <audiotoolz:AudioToolView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.AudioToolTemplate>
-                    -->
 
                     <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.CR2WToTextToolTemplate>

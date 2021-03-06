@@ -576,8 +576,17 @@
                                  MinWidth="250"
                                  Margin="2,20,2,20"
                                  Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
-                                 BorderBrush="Transparent"
-                                 />
+                                 BorderBrush="Transparent" PreviewMouseLeftButtonUp="PlayListView_OnPreviewMouseLeftButtonUp" ItemsSource="{Binding AudioFileList}">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn
+                                                Width="500"
+                                                DisplayMemberBinding="{Binding Text}"
+                                                Header="Name"
+                                            />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
                             </Border>
                         </Grid>
                     </Border>
