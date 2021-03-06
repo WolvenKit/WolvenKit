@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.Common.Model.Cr2w
@@ -72,7 +73,10 @@ namespace WolvenKit.Common.Model.Cr2w
 
     #region editor interfaces
 
-    public interface IEditorBindable { }
+    public interface IEditorBindable
+    {
+        [JsonIgnore] [Browsable(false)] bool IsSerialized { get; set; }
+    }
     public interface IEditorBindable<T> : IEditorBindable
     {
         public T Value { get; set; } // ???

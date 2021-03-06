@@ -1,21 +1,19 @@
-﻿using System;
+using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Linq;
 using CP77.CR2W.Reflection;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W.Types
 {
     [REDMeta()]
+    [Editor(typeof(ITextEditor<string>), typeof(IPropertyEditorBase))]
     public class CName : CVariable, IREDPrimitive
     {
-        public CName()
-        {
-
-        }
-
         public CName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }

@@ -145,7 +145,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Config\AvalonDock.Layout.config">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Old\Images\git.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

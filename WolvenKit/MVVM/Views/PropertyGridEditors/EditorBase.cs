@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using HandyControl.Controls;
 using WolvenKit.Common.Model.Cr2w;
@@ -7,7 +8,7 @@ using WolvenKit.Common.Model.Cr2w;
 namespace WolvenKit.MVVM.Views.PropertyGridEditors
 {
     /// <summary>
-    /// Abstract base for property grid editorss.
+    /// Abstract base for property grid editors.
     /// T1 ... Wrapper (e.g. CDouble)
     /// </summary>
     /// <typeparam name="T1"></typeparam>
@@ -22,7 +23,33 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
             var control = CreateInnerElement(propertyItem);
             CreateInnerBinding(control);
 
+            BindingOperations.SetBinding(
+                control,
+                Control.BackgroundProperty,
+                new Binding($"{nameof(Wrapper)}.IsSerialized")
+                {
+                    Source = this,
+                    Mode = BindingMode.OneWay,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                    Converter = new BoolToBrushConverter(),
+                    NotifyOnTargetUpdated = true,
+                    NotifyOnSourceUpdated = true,
+                });
+            control.TargetUpdated += ControlOnTargetUpdated;
+            control.SourceUpdated += ControlOnSourceUpdated;
             return control;
+        }
+
+        private void ControlOnSourceUpdated(object sender, DataTransferEventArgs e)
+        {
+
+
+        }
+
+        private void ControlOnTargetUpdated(object sender, DataTransferEventArgs e)
+        {
+
+
         }
 
         #region bindings
@@ -31,18 +58,18 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
         public override DependencyProperty GetDependencyProperty() => WrapperProperty;
 
         // bind to this
-        public override void CreateBinding(PropertyItem propertyItem, DependencyObject element)
-        {
-            var b = new Binding($"{propertyItem.PropertyName}");
-            b.Source = propertyItem.Value;
-            b.Mode = GetBindingMode(propertyItem);
-            b.UpdateSourceTrigger = GetUpdateSourceTrigger(propertyItem);
-            b.Converter = GetConverter(propertyItem);
-            BindingOperations.SetBinding(this, GetDependencyProperty(), b);
-        }
+        public override void CreateBinding(PropertyItem propertyItem, DependencyObject element) =>
+            BindingOperations.SetBinding(this, GetDependencyProperty(), new Binding($"{propertyItem.PropertyName}")
+            {
+                Source = propertyItem.Value,
+                Mode = GetBindingMode(propertyItem),
+                UpdateSourceTrigger = GetUpdateSourceTrigger(propertyItem),
+                Converter = GetConverter(propertyItem)
+            });
 
         // bind the private dependency property to the UI element
-        public virtual void CreateInnerBinding(DependencyObject element) =>
+        protected virtual void CreateInnerBinding(FrameworkElement element)
+        {
             BindingOperations.SetBinding(
                 element,
                 GetInnerDependencyProperty(),
@@ -51,7 +78,18 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
                     Source = this,
                     Mode = BindingMode.TwoWay,
                     UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                    NotifyOnSourceUpdated = true
                 });
+            element.SourceUpdated += FrameworkElementOnSourceUpdated;
+        }
+
+        private void FrameworkElementOnSourceUpdated(object sender, DataTransferEventArgs e)
+        {
+            if (!Wrapper.IsSerialized)
+            {
+                Wrapper.IsSerialized = true;
+            }
+        }
 
         #endregion
 
@@ -68,12 +106,12 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
                 nameof(Wrapper),
                 typeof(T1),
                 typeof(EditorBase<T1>),
-                new FrameworkPropertyMetadata(default(T1), OnWrapperChanged));
+                new FrameworkPropertyMetadata(default(T1)/*, OnWrapperChanged*/));
 
-        private static void OnWrapperChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
+        //private static void OnWrapperChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        //{
+            
+        //}
 
         #endregion
     }

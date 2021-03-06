@@ -18,10 +18,10 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
             // Setting default values
             SolidColorBrush color;
             var colorIfTrue = Colors.DarkOliveGreen;
-            var colorIfFalse = Colors.Red;
+            var colorIfFalse = Colors.Transparent;
 
             // Creating Color Brush
-            if ((bool)value)
+            if (value != null && (bool)value)
             {
                 color = new SolidColorBrush(colorIfTrue);
             }
@@ -32,7 +32,6 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
             return color;
         }
 
-        // needs to be double to be able to convert from the Numeric Converter
         public object ConvertBack(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture) =>
             throw new NotImplementedException();
@@ -92,7 +91,7 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
         }
 
         // bind the private dependency property to the UI element
-        public override void CreateInnerBinding(DependencyObject element)
+        protected override void CreateInnerBinding(FrameworkElement element)
         {
             BindingOperations.SetBinding(
                 element,
