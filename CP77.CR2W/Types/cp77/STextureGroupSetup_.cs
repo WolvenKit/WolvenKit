@@ -13,9 +13,9 @@ namespace CP77.CR2W.Types
 		[Ordinal(3)] [RED("isStreamable")] public CBool IsStreamable { get; set; }
 		[Ordinal(4)] [RED("hasMipchain")] public CBool HasMipchain { get; set; }
 		[Ordinal(5)] [RED("isGamma")] public CBool IsGamma { get; set; }
-		[Ordinal(7)] [RED("platformMipBiasPC")] public CUInt8 PlatformMipBiasPC { get; set; }
-		[Ordinal(8)] [RED("platformMipBiasConsole")] public CUInt8 PlatformMipBiasConsole { get; set; }
-		[Ordinal(9)] [RED("allowTextureDowngrade")] public CBool AllowTextureDowngrade { get; set; }
+		[Ordinal(6)] [RED("platformMipBiasPC")] public CUInt8 PlatformMipBiasPC { get; set; }
+		[Ordinal(7)] [RED("platformMipBiasConsole")] public CUInt8 PlatformMipBiasConsole { get; set; }
+		[Ordinal(8)] [RED("allowTextureDowngrade")] public CBool AllowTextureDowngrade { get; set; }
 
 		public STextureGroupSetup_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

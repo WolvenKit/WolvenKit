@@ -7,7 +7,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_LODBegin : animAnimNode_OnePoseInput
 	{
-		[Ordinal(2)] [RED("levelOfDetail")] public CUInt32 LevelOfDetail { get; set; }
+		[Ordinal(12)] [RED("levelOfDetail")] public CUInt32 LevelOfDetail { get; set; }
 
 		public animAnimNode_LODBegin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
