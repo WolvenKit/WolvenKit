@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Windows.Media;
 using System.Xml.Serialization;
 using Catel.Data;
 using MLib.Interfaces;
@@ -105,6 +106,8 @@ namespace WolvenKit.Functionality.Services
         /// </summary>
         [XmlIgnore]
         public IThemeInfos Themes { get; private set; }
+
+        public Color ThemeAccent { get; set; }
 
         public string W3ExecutablePath
         {

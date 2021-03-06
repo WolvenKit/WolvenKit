@@ -95,6 +95,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
                     _logger.Info("Changed theme : " + value.ToString());
 
+                    _settingsManager.ThemeAccent = value;
+                    _settingsManager.Save();
+
                 }
             }
         }
