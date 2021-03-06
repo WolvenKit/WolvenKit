@@ -1,11 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Catel.IoC;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.MVVM.ViewModels.Components.Tools;
 
 namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 {
@@ -32,6 +36,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public void AddAudioItem(string path) => TempConvertToWemWav(path);
 
+
         public void Reinit()
         {
             var themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
@@ -55,9 +60,14 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public void TempConvertToWemWav(string path)
         {
+            //Clean directory
+            foreach (var f in Directory.GetFiles(wdir))
+            {
+                File.Delete(f);
+            }
             Directory.CreateDirectory(wdir);
 
-            var outf = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Path.GetFileNameWithoutExtension(path) + ".wav");
+            var outf = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, wdir, Path.GetFileNameWithoutExtension(path) + ".wav");
             var arg = path + " -o " + outf;
             var si = new ProcessStartInfo(
                     "vgmstream\\test.exe",
@@ -71,21 +81,12 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             var proc = Process.Start(si);
             proc.WaitForExit();
 
-            foreach (var f in Directory.GetFiles(wdir))
+            var lvi = new TextBlock()
             {
-                var lvi = new TextBlock()
-                {
-                    Text = Path.GetFullPath(f),
-                    Tag = Path.GetFileName(f)
-                };
-                PlayListView.Items.Add(lvi);
-                PlayListView.Items.Add(lvi);
-                PlayListView.Items.Add(lvi);
-                PlayListView.Items.Add(lvi);
-                PlayListView.Items.Add(lvi);
-            }
-
-            Trace.WriteLine("WeDiDThis");
+                Text = Path.GetFullPath(outf),
+                Tag = Path.GetFileName(outf)
+            };
+            ServiceLocator.Default.ResolveType<AudioToolViewModel>().AudioFileList.Add(lvi);
         }
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e) => OpenFile();
@@ -300,5 +301,22 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         //   }
 
         // Begin dragging the window
+        private void PlayListView_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var item = (sender as ListView).SelectedItem;
+            if (item != null)
+            {
+                if (NAudioEngine.Instance.CanStop)
+                {
+                    NAudioEngine.Instance.Stop();
+                }
+
+                var path = (item as TextBlock).Text;
+                RunnerText.SetCurrentValue(ContentProperty, path);
+                NAudioEngine.Instance.OpenFile(path);
+                //FileText.SetCurrentValue(TextBox.TextProperty, openDialog.FileName);
+                NAudioEngine.Instance.Play(); //TODO: Doesn't play it
+            }
+        }
     }
 }
