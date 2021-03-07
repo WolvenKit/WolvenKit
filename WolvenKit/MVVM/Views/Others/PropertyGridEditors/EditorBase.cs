@@ -1,9 +1,11 @@
+using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using HandyControl.Controls;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Functionality.Layout.Converters;
 
 namespace WolvenKit.MVVM.Views.PropertyGridEditors
 {
@@ -14,9 +16,25 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
     /// <typeparam name="T1"></typeparam>
     public abstract class EditorBase<T1> : PropertyEditorBase where T1 : class, IEditorBindable
     {
+        /// <summary>
+        /// Specify the dependency property of the propertygrid editor.
+        /// </summary>
+        /// <returns></returns>
         private protected abstract DependencyProperty GetInnerDependencyProperty();
 
+        /// <summary>
+        /// Create the custom propertygrid editor.
+        /// </summary>
+        /// <param name="propertyItem"></param>
+        /// <returns></returns>
         private protected abstract FrameworkElement CreateInnerElement(PropertyItem propertyItem);
+
+        /// <summary>
+        /// Overrride this to specify the wrapped bound property, default is "Value".
+        /// </summary>
+        /// <returns></returns>
+        private protected virtual string GetBoundPropertyName() => "Value";
+
 
         public override FrameworkElement CreateElement(PropertyItem propertyItem)
         {
@@ -32,24 +50,8 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
                     Mode = BindingMode.OneWay,
                     UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                     Converter = new BoolToBrushConverter(),
-                    NotifyOnTargetUpdated = true,
-                    NotifyOnSourceUpdated = true,
                 });
-            control.TargetUpdated += ControlOnTargetUpdated;
-            control.SourceUpdated += ControlOnSourceUpdated;
             return control;
-        }
-
-        private void ControlOnSourceUpdated(object sender, DataTransferEventArgs e)
-        {
-
-
-        }
-
-        private void ControlOnTargetUpdated(object sender, DataTransferEventArgs e)
-        {
-
-
         }
 
         #region bindings
@@ -73,7 +75,7 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
             BindingOperations.SetBinding(
                 element,
                 GetInnerDependencyProperty(),
-                new Binding($"{nameof(Wrapper)}.Value") //this is guaranteed by IEditorBindable? not really
+                new Binding($"{nameof(Wrapper)}.{GetBoundPropertyName()}")
                 {
                     Source = this,
                     Mode = BindingMode.TwoWay,

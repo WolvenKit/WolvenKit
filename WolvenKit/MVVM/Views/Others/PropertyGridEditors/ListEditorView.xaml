@@ -47,7 +47,10 @@
                 <TreeViewItem>
                     <TreeViewItem.Header>
                         <Grid>
-                            <TextBlock Margin="30,0" Text="{Binding String}" DataContext="{Binding}"/>
+                            <TextBlock
+                                Margin="30,0"
+                                Text="{Binding HeaderText}"
+                                DataContext="{Binding}"/>
                         </Grid>
                     </TreeViewItem.Header>
                     <hc:PropertyGrid PropertyResolver="{Binding PropertyResolver}"

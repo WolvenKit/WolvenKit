@@ -103,7 +103,6 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
         private protected override FrameworkElement CreateInnerElement(PropertyItem propertyItem)
         {
             var t = propertyItem.PropertyType;
-
             if (!typeof(IEnumAccessor).IsAssignableFrom(t))
             {
                 throw new NotImplementedException();

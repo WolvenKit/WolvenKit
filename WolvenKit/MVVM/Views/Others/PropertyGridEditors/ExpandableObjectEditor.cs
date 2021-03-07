@@ -6,45 +6,14 @@ using System.Windows.Media;
 using HandyControl.Controls;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Layout.Converters;
 
 namespace WolvenKit.MVVM.Views.PropertyGridEditors
 {
-    [ValueConversion(typeof(bool), typeof(SolidColorBrush))]
-    public class BoolToBrushConverter : IValueConverter
-    {
-        public object
-            Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            // Setting default values
-            SolidColorBrush color;
-            var colorIfTrue = Colors.DarkOliveGreen;
-            var colorIfFalse = Colors.Transparent;
-
-            // Creating Color Brush
-            if (value != null && (bool)value)
-            {
-                color = new SolidColorBrush(colorIfTrue);
-            }
-            else
-            {
-                color = new SolidColorBrush(colorIfFalse);
-            }
-            return color;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter,
-            System.Globalization.CultureInfo culture) =>
-            throw new NotImplementedException();
-    }
-
-
     public class ExpandableObjectEditor : EditorBase<IEditableVariable>, IExpandableObjectEditor
     {
         private protected override DependencyProperty GetInnerDependencyProperty() => PropertyGrid.SelectedObjectProperty;
-        private protected override FrameworkElement CreateInnerElement(PropertyItem propertyItem)
-        {
-            throw new System.NotImplementedException();
-        }
+        private protected override FrameworkElement CreateInnerElement(PropertyItem propertyItem) => throw new System.NotImplementedException();
 
         // creates a treeview
         public override FrameworkElement CreateElement(PropertyItem propertyItem)
@@ -91,8 +60,7 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
         }
 
         // bind the private dependency property to the UI element
-        protected override void CreateInnerBinding(FrameworkElement element)
-        {
+        protected override void CreateInnerBinding(FrameworkElement element) =>
             BindingOperations.SetBinding(
                 element,
                 GetInnerDependencyProperty(),
@@ -102,10 +70,5 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
                     Mode = BindingMode.TwoWay,
                     UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 });
-        }
-
-
-
-
     }
 }

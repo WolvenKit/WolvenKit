@@ -11,8 +11,6 @@ namespace CP77.CR2W.Types
     [REDMeta()]
     public class CColor : CColor_, IREDColor
     {
-        
-
         public CColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Red = new CUInt8(cr2w, this, nameof(Red));

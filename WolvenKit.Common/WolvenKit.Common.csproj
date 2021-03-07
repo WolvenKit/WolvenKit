@@ -49,10 +49,4 @@
     <Folder Include="Extensions\PropertyGridEditors\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="PresentationCore">
-      <HintPath>..\..\..\..\..\Program Files\dotnet\packs\Microsoft.WindowsDesktop.App.Ref\5.0.0\ref\net5.0\PresentationCore.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

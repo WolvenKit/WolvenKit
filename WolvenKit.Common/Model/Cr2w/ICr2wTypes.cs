@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media;
 using Newtonsoft.Json;
 using WolvenKit.Common.Services;
 
@@ -89,7 +88,8 @@ namespace WolvenKit.Common.Model.Cr2w
 
     public interface IREDPrimitive : IEditableVariable { }
 
-    public interface IREDColor : IREDPrimitive, IEditorBindable<SolidColorBrush> { }
+    public interface IREDColor : IREDPrimitive { }
+
     public interface IREDIntegerType<T> : IREDPrimitive, IEditorBindable<T> { }
     public interface IREDString : IREDPrimitive, IEditorBindable<string> { }
     public interface IREDBool : IREDPrimitive, IEditorBindable<bool> { }
