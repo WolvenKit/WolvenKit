@@ -6,7 +6,6 @@
              xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:WolvenKit.MVVM.Views.PropertyGridEditors"
-             d:DataContext="{d:DesignInstance Type=local:ListEditorView}"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="800"
              
@@ -49,8 +48,9 @@
                         <Grid>
                             <TextBlock
                                 Margin="30,0"
+                                DataContext="{Binding}"
                                 Text="{Binding HeaderText}"
-                                DataContext="{Binding}"/>
+                                />
                         </Grid>
                     </TreeViewItem.Header>
                     <hc:PropertyGrid PropertyResolver="{Binding PropertyResolver}"

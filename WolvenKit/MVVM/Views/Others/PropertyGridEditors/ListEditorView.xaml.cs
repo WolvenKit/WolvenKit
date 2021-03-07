@@ -26,7 +26,7 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
         #region properties
 
         public PropertyResolver PropertyResolver { get; }
-        public string HeaderText { get; }
+        public string HeaderText { get => "TEST"; } 
 
         public IEnumerable ItemsSource
         {

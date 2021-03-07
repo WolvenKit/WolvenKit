@@ -13,17 +13,18 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
         private protected override DependencyProperty GetInnerDependencyProperty() => ListEditorView.ItemsSourceProperty;
         private protected override FrameworkElement CreateInnerElement(PropertyItem propertyItem) => new ListEditorView();
 
+        private protected override string GetBoundPropertyName() => "Elements";
 
-        // bind the dependency property to the UI element
-        protected override void CreateInnerBinding(FrameworkElement element) =>
-            BindingOperations.SetBinding(
-                element,
-                GetInnerDependencyProperty(),
-                new Binding($"{nameof(Wrapper)}.Value")
-                {
-                    Source = this,
-                    Mode = BindingMode.TwoWay,
-                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                });
+        //// bind the dependency property to the UI element
+        //protected override void CreateInnerBinding(FrameworkElement element) =>
+        //    BindingOperations.SetBinding(
+        //        element,
+        //        GetInnerDependencyProperty(),
+        //        new Binding($"{nameof(Wrapper)}.Value")
+        //        {
+        //            Source = this,
+        //            Mode = BindingMode.TwoWay,
+        //            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+        //        });
     }
 }
