@@ -11,7 +11,7 @@ using WolvenKit.Common.Services;
 namespace CP77.CR2W.Types
 {
     [Editor(typeof(ITextEditor<double>), typeof(IPropertyEditorBase))]
-    public class CDouble : CVariable, IREDIntegerType, IEditorBindable<double>
+    public class CDouble : CVariable, IREDIntegerType<double>
     {
         public CDouble()
         {
@@ -53,7 +53,7 @@ namespace CP77.CR2W.Types
     }
 
     [Editor(typeof(ITextEditor<ulong>), typeof(IPropertyEditorBase))]
-    public class CUInt64 : CVariable, IREDIntegerType, IEditorBindable<ulong>
+    public class CUInt64 : CVariable, IREDIntegerType<ulong>
     {
         public CUInt64()
         {
@@ -95,7 +95,7 @@ namespace CP77.CR2W.Types
     }
 
     [Editor(typeof(ITextEditor<uint>), typeof(IPropertyEditorBase))]
-    public class CUInt32 : CVariable, IREDIntegerType, IEditorBindable<uint>
+    public class CUInt32 : CVariable, IREDIntegerType<uint>
     {
         public CUInt32()
         {
@@ -138,7 +138,7 @@ namespace CP77.CR2W.Types
     }
 
     [Editor(typeof(ITextEditor<ushort>), typeof(IPropertyEditorBase))]
-    public class CUInt16 : CVariable, IREDIntegerType, IEditorBindable<ushort>
+    public class CUInt16 : CVariable, IREDIntegerType<ushort>
     {
         public CUInt16()
         {
@@ -180,7 +180,7 @@ namespace CP77.CR2W.Types
     }
 
     [Editor(typeof(ITextEditor<byte>), typeof(IPropertyEditorBase))]
-    public class CUInt8 : CVariable, IREDIntegerType, IEditorBindable<byte>
+    public class CUInt8 : CVariable, IREDIntegerType<byte>
     {
         public CUInt8()
         {
@@ -222,7 +222,7 @@ namespace CP77.CR2W.Types
     }
 
     [Editor(typeof(ITextEditor<long>), typeof(IPropertyEditorBase))]
-    public class CInt64 : CVariable, IREDIntegerType, IEditorBindable<long>
+    public class CInt64 : CVariable, IREDIntegerType<long>
     {
         public CInt64()
         {
@@ -264,7 +264,7 @@ namespace CP77.CR2W.Types
     }
 
     [Editor(typeof(ITextEditor<int>), typeof(IPropertyEditorBase))]
-    public class CInt32 : CVariable, IREDIntegerType, IEditorBindable<int>
+    public class CInt32 : CVariable, IREDIntegerType<int>
     {
         public CInt32()
         {
@@ -308,7 +308,7 @@ namespace CP77.CR2W.Types
     }
 
     [Editor(typeof(ITextEditor<short>), typeof(IPropertyEditorBase))]
-    public class CInt16 : CVariable, IREDIntegerType, IEditorBindable<short>
+    public class CInt16 : CVariable, IREDIntegerType<short>
     {
         public CInt16()
         {
@@ -350,7 +350,7 @@ namespace CP77.CR2W.Types
     }
 
     [Editor(typeof(ITextEditor<sbyte>), typeof(IPropertyEditorBase))]
-    public class CInt8 : CVariable, IREDIntegerType, IEditorBindable<sbyte>
+    public class CInt8 : CVariable, IREDIntegerType<sbyte>
     {
         public CInt8()
         {
@@ -392,7 +392,7 @@ namespace CP77.CR2W.Types
     }
 
     [Editor(typeof(ITextEditor<int>), typeof(IPropertyEditorBase))]
-    public class CDynamicInt : CVariable, IREDIntegerType, IEditorBindable<int>
+    public class CDynamicInt : CVariable, IREDIntegerType<int>
     {
         public CDynamicInt()
         {
@@ -440,7 +440,7 @@ namespace CP77.CR2W.Types
     }
 
     [Editor(typeof(ITextEditor<int>), typeof(IPropertyEditorBase))]
-    public class CVLQInt32 : CVariable, IREDIntegerType, IEditorBindable<int>
+    public class CVLQInt32 : CVariable, IREDIntegerType<int>
     {
         public CVLQInt32()
         {

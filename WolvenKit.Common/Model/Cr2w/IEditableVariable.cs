@@ -20,7 +20,7 @@ namespace WolvenKit.Common.Model.Cr2w
         [JsonIgnore] [Browsable(false)] string UniqueIdentifier { get; }
 
         [JsonIgnore] [Browsable(false)] IEditableVariable ParentVar { get; }
-        [JsonIgnore] [Browsable(false)] bool IsSerialized { get; set; }
+        
         [JsonIgnore] [Browsable(false)] int VarChunkIndex { get; set; }
         
 

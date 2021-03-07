@@ -4,7 +4,7 @@ using System.Windows;
 using Catel.MVVM.Converters;
 using WolvenKit.Common;
 
-namespace WolvenKit.Functionality.Layout.Converters
+namespace WolvenKit.Functionality.Converters
 {
     public class ExtensionToImageConverter : IValueConverter
     {
