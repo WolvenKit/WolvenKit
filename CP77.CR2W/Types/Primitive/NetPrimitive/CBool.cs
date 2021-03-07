@@ -28,7 +28,6 @@ namespace CP77.CR2W.Types
 
         private byte _backingField;
 
-        [DataMember]
         public bool Value
         {
             get => _backingField != 0;

@@ -3,13 +3,13 @@
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:behavior="clr-namespace:WolvenKit.Functionality.Behavior"
- xmlns:c="clr-namespace:WolvenKit.Functionality.WKitGlobal.Helpers"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
  xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
- xmlns:model="clr-namespace:WolvenKit.MVVM.Model"
+ xmlns:model="clr-namespace:WolvenKit.MVVM.Model" 
+ xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters"
  d:DesignHeight="450"
  d:DesignWidth="800"
  IsVisibleChanged="UserControl_IsVisibleChanged"
@@ -22,350 +22,94 @@
                 <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
-            <c:ValueConverterGroup x:Key="DateTimeVisi">
-                <hc:Object2StringConverter />
-                <hc:String2VisibilityConverter />
-            </c:ValueConverterGroup>
-
         </ResourceDictionary>
-
-
     </catel:UserControl.Resources>
-    <hc:ScrollViewer x:Name="fish">
 
-        <Grid>
+    <Grid>
+        <Grid.Resources>
+            <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
+        </Grid.Resources>
 
-            <StackPanel>
+        <TreeView
+         Name="TreeView"
+         ItemsSource="{Binding Properties}"
+         Style="{DynamicResource TreeView}"
+         >
+            <ei:Interaction.Behaviors>
+                <behavior:TreeViewBehavior />
+            </ei:Interaction.Behaviors>
 
+            <TreeView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem
+                     Command="{catel:CommandManagerBinding Application.OpenFile}"
+                     CommandParameter="{Binding SelectedItem}"
+                     Header="Open"
+                     />
+                    <Separator />
 
+                    <MenuItem Header="Actions">
+                        <MenuItem Command="{Binding AddAllCommand}" Header="Add all dependencies" />
+                        <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
+                    </MenuItem>
 
+                    <MenuItem Header="Export">
+                        <MenuItem Command="{Binding ExportMeshCommand}" Header="Export with WCC" />
+                        <MenuItem Command="{Binding ExportJsonCommand}" Header="Export to JSON" />
+                    </MenuItem>
 
+                    <Separator />
+                    <!--<MenuItem Header="Cut" Command="{Binding CutFileCommand}" />-->
+                    <MenuItem Command="{Binding CopyCommand}" Header="Copy" />
+                    <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" />
+                    <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" />
+                    <Separator />
+                    <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
+                    <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
+                    <MenuItem Command="{Binding OpenInAssetBrowserCommand}" Header="Open in asset browser" />
+                    <Separator />
+                    <MenuItem Command="{Binding ExpandCommand}" Header="Expand children" />
+                    <MenuItem Command="{Binding CollapseCommand}" Header="Collapse children" />
+                    <Separator />
+                </ContextMenu>
+            </TreeView.ContextMenu>
 
+            <TreeView.ItemContainerStyle>
+                <Style BasedOn="{StaticResource TreeViewItemBaseStyle}" TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
+                </Style>
+            </TreeView.ItemContainerStyle>
 
-                <Border
-                 Margin="3,3,3,3"
-                 HorizontalAlignment="Stretch"
-                 Background="Transparent"
-                 BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                 BorderThickness="2,1,2,0"
-                 Style="{StaticResource BorderTipPrimary}"
-                 >
-                    <StackPanel>
-                        <TextBlock
-                         Margin="0"
-                         HorizontalAlignment="Center"
-                         FontWeight="Bold"
-                         Text="{Binding Name}"
-                         TextAlignment="Center"
-                         TextWrapping="Wrap"
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type model:FileSystemInfoModel}" ItemsSource="{Binding Children}">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.InputBindings>
+                            <MouseBinding
+                             Command="{catel:CommandManagerBinding Application.OpenFile}"
+                             CommandParameter="{Binding}"
+                             MouseAction="LeftDoubleClick"
+                             />
+                        </StackPanel.InputBindings>
+                        <Image
+                         Height="16"
+                         Margin="0,1,8,1"
+                         Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
                          />
-                        <TextBlock
-                         HorizontalAlignment="Center"
-                         Text="{Binding FullName}"
-                         TextAlignment="Center"
-                         TextWrapping="Wrap"
-                         />
-
+                        <TextBlock Text="{Binding Path=Name}" />
+                        <ei:Interaction.Triggers>
+                            <ei:EventTrigger EventName="PreviewMouseRightButtonDown">
+                                <ei:ChangePropertyAction
+                                 PropertyName="IsSelected"
+                                 TargetObject="{Binding}"
+                                 Value="true"
+                                 />
+                            </ei:EventTrigger>
+                        </ei:Interaction.Triggers>
                     </StackPanel>
-                </Border>
-
-                <Expander
-                 x:Name="ExplorerBind"
-                 Header="File Info"
-                 IsExpanded="True"
-                 >
-                    <StackPanel>
-
-
-                        <Grid>
-
-                            <Border
-                             Margin="3,3,3,3"
-                             HorizontalAlignment="Stretch"
-                             Background="Transparent"
-                             BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                             BorderThickness="2,0,2,0"
-                             Style="{StaticResource BorderTipPrimary}"
-                             Visibility="{Binding FileSystemInfo.Name, Converter={StaticResource String2VisibilityConverter}}"
-                             >
-                                <StackPanel Orientation="Horizontal">
-
-                                    <TextBlock Text="File Name" />
-                                    <hc:Shield
-                                     Margin="10,0,0,0"
-                                     Status="{Binding FileSystemInfo.Name}"
-                                     Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
-                                </StackPanel>
-                            </Border>
-
-
-
-                        </Grid>
-
-                        <Grid>
-
-                            <Border
-                             Margin="3,3,3,3"
-                             HorizontalAlignment="Stretch"
-                             Background="Transparent"
-                             BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                             BorderThickness="2,0,2,0"
-                             Style="{StaticResource BorderTipPrimary}"
-                             Visibility="{Binding FileSystemInfo.Extension, Converter={StaticResource String2VisibilityConverter}}"
-                             >
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Extension" />
-                                    <hc:Shield
-                                     Margin="10,0,0,0"
-                                     Status="{Binding FileSystemInfo.Extension}"
-                                     Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
-                                </StackPanel>
-
-
-                            </Border>
-
-
-
-                        </Grid>
-
-                        <Grid>
-
-                            <Border
-                             Margin="3,3,3,3"
-                             HorizontalAlignment="Stretch"
-                             Background="Transparent"
-                             BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                             BorderThickness="2,0,2,0"
-                             Style="{StaticResource BorderTipPrimary}"
-                             Visibility="{Binding FileSystemInfo.CreationTime, Converter={StaticResource Object2VisibilityConverter}}"
-                             >
-                                <StackPanel Orientation="Horizontal">
-
-                                    <TextBlock Text="Created at" />
-                                    <hc:Shield
-                                     Margin="10,0,0,0"
-                                     Status="{Binding FileSystemInfo.CreationTime}"
-                                     Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
-                                </StackPanel>
-                            </Border>
-
-
-
-                        </Grid>
-
-                        <Grid>
-
-                            <Border
-                             Margin="3,3,3,3"
-                             HorizontalAlignment="Stretch"
-                             Background="Transparent"
-                             BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                             BorderThickness="2,0,2,0"
-                             Style="{StaticResource BorderTipPrimary}"
-                             Visibility="{Binding FileSystemInfo.LastWriteTime, Converter={StaticResource Object2VisibilityConverter}}"
-                             >
-                                <StackPanel Orientation="Horizontal">
-
-                                    <TextBlock Text="Last Modified" />
-                                    <hc:Shield
-                                     Margin="10,0,0,0"
-                                     Status="{Binding FileSystemInfo.LastWriteTime}"
-                                     Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
-                                </StackPanel>
-                            </Border>
-
-
-
-                        </Grid>
-
-                        <Grid>
-
-                            <Border
-                             Margin="3,3,3,3"
-                             HorizontalAlignment="Stretch"
-                             Background="Transparent"
-                             BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                             BorderThickness="2,0,2,0"
-                             Style="{StaticResource BorderTipPrimary}"
-                             Visibility="{Binding FileSystemInfo.LastAccessTime, Converter={StaticResource Object2VisibilityConverter}}"
-                             >
-                                <StackPanel Orientation="Horizontal">
-
-                                    <TextBlock Text="Last Accessed" />
-                                    <hc:Shield
-                                     Margin="10,0,0,0"
-                                     Status="{Binding FileSystemInfo.LastAccessTime}"
-                                     Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
-                                </StackPanel>
-                            </Border>
-
-
-
-                        </Grid>
-
-
-                    </StackPanel>
-
-
-                </Expander>
-                <Expander
-                 x:Name="AssetsBind"
-                 Header="File Info"
-                 IsExpanded="True"
-                 >
-                    <StackPanel>
-
-
-                        <Grid>
-
-                            <Border
-                             Margin="3,3,3,3"
-                             HorizontalAlignment="Stretch"
-                             Background="Transparent"
-                             BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                             BorderThickness="2,0,2,0"
-                             Style="{StaticResource BorderTipPrimary}"
-                             >
-                                <StackPanel Orientation="Horizontal">
-
-                                    <TextBlock Text="File Name" />
-                                    <hc:Shield
-                                     Margin="10,0,0,0"
-                                     Status="{Binding SelectedNode.Name}"
-                                     Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
-                                </StackPanel>
-                            </Border>
-
-
-
-                        </Grid>
-                        <Grid>
-
-                            <Border
-                             Margin="3,3,3,3"
-                             HorizontalAlignment="Stretch"
-                             Background="Transparent"
-                             BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                             BorderThickness="2,0,2,0"
-                             Style="{StaticResource BorderTipPrimary}"
-                             >
-                                <StackPanel Orientation="Horizontal">
-
-                                    <TextBlock Text="File Size" />
-                                    <hc:Shield
-                                     Margin="10,0,0,0"
-                                     Status="{Binding SelectedNode.Size}"
-                                     Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
-                                </StackPanel>
-                            </Border>
-
-
-
-                        </Grid>
-                        <Grid>
-
-                            <Border
-                             Margin="3,3,3,3"
-                             HorizontalAlignment="Stretch"
-                             Background="Transparent"
-                             BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                             BorderThickness="2,0,2,0"
-                             Style="{StaticResource BorderTipPrimary}"
-                             Visibility="{Binding FileSystemInfo.Extension, Converter={StaticResource String2VisibilityConverter}}"
-                             >
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Extension" />
-                                    <hc:Shield
-                                     Margin="10,0,0,0"
-                                     Status="{Binding SelectedNode.Extension}"
-                                     Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
-                                </StackPanel>
-
-
-                            </Border>
-
-
-
-                        </Grid>
-                        <Grid>
-
-                            <Border
-                             Margin="3,3,3,3"
-                             HorizontalAlignment="Stretch"
-                             Background="Transparent"
-                             BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                             BorderThickness="2,0,2,0"
-                             Style="{StaticResource BorderTipPrimary}"
-                             >
-                                <StackPanel Orientation="Horizontal">
-
-                                    <TextBlock Text="Type" />
-                                    <hc:Shield
-                                     Margin="10,0,0,0"
-                                     Status="{Binding SelectedNode.Type}"
-                                     Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
-                                </StackPanel>
-                            </Border>
-
-
-
-                        </Grid>
-                        <Grid>
-
-                            <Border
-                             Margin="3,3,3,3"
-                             HorizontalAlignment="Stretch"
-                             Background="Transparent"
-                             BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                             BorderThickness="2,0,2,0"
-                             Style="{StaticResource BorderTipPrimary}"
-                             >
-                                <StackPanel Orientation="Horizontal">
-
-                                    <TextBlock Text="Parent Folder" />
-                                    <hc:Shield
-                                     Margin="10,0,0,0"
-                                     Status="{Binding SelectedNode.Parent.Name}"
-                                     Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
-
-
-                                </StackPanel>
-                            </Border>
-
-
-
-                        </Grid>
-                    </StackPanel>
-                </Expander>
-
-
-            </StackPanel>
-
-
-
-
-
-        </Grid>
-    </hc:ScrollViewer>
-
+                </HierarchicalDataTemplate>
+            </TreeView.Resources>
+        </TreeView>
+    </Grid>
 </catel:UserControl>
