@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using HandyControl.Controls;
 using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.Functionality.Layout.Converters;
+using WolvenKit.Functionality.Converters;
 
 namespace WolvenKit.MVVM.Views.PropertyGridEditors
 {
@@ -35,6 +35,11 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
         /// <returns></returns>
         private protected virtual string GetBoundPropertyName() => "Value";
 
+        /// <summary>
+        /// Specify the converter, default is null.
+        /// </summary>
+        /// <returns></returns>
+        private protected virtual IValueConverter GetInnerConverter() => null;
 
         public override FrameworkElement CreateElement(PropertyItem propertyItem)
         {
@@ -80,9 +85,18 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
                     Source = this,
                     Mode = BindingMode.TwoWay,
                     UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                    NotifyOnSourceUpdated = true
+                    Converter = GetInnerConverter(),
+                    NotifyOnSourceUpdated = true,
+                    NotifyOnTargetUpdated = true
                 });
             element.SourceUpdated += FrameworkElementOnSourceUpdated;
+            element.TargetUpdated += ElementOnTargetUpdated;
+        }
+
+        private void ElementOnTargetUpdated(object sender, DataTransferEventArgs e)
+        {
+
+
         }
 
         private void FrameworkElementOnSourceUpdated(object sender, DataTransferEventArgs e)

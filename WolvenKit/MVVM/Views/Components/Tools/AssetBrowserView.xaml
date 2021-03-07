@@ -6,10 +6,10 @@
  xmlns:c="clr-namespace:WolvenKit.Functionality.WKitGlobal.Helpers"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:controls1="clr-namespace:WolvenKit.AssetBrowserBar.Controls;assembly=WolvenKit.AssetBrowserBar"
- xmlns:converters="clr-namespace:WolvenKit.Functionality.Layout.Converters"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+ xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters"
  BorderBrush="{x:Null}"
  IsVisibleChanged="DataWindow_IsVisibleChanged"
  >
@@ -174,9 +174,9 @@
                     <ColumnDefinition Width="4*" />
                 </Grid.ColumnDefinitions>
 
-                <Grid xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters" Grid.Column="0">
+                <Grid Grid.Column="0">
                     <Grid.Resources>
-                        <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
+                        <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
                     </Grid.Resources>
                     <TreeView
                      Margin="0"
@@ -246,14 +246,13 @@
                         <hc:TabItem Header="Depot">
                             <!--  Bind Header to selected item in treeview  -->
                             <ListView
-                             xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters"
-                             Background="Transparent"
+                                Background="Transparent"
                              BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
                              ItemsSource="{Binding CurrentNodeFiles}"
                              SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
                              >
                                 <ListView.Resources>
-                                    <conv:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
+                                    <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
                                 </ListView.Resources>
                                 <ListView.View>
                                     <GridView>

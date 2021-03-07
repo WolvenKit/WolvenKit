@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
         <TargetFrameworks>net5.0;net5.0-windows</TargetFrameworks>
@@ -35,12 +35,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Reference Include="PresentationCore">
-	    <HintPath>..\..\..\..\..\Program Files\dotnet\packs\Microsoft.WindowsDesktop.App.Ref\5.0.0\ref\net5.0\PresentationCore.dll</HintPath>
-	  </Reference>
 	</ItemGroup>
 
 </Project>

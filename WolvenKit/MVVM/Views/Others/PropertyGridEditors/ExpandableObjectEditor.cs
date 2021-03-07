@@ -6,7 +6,7 @@ using System.Windows.Media;
 using HandyControl.Controls;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Layout.Converters;
+using WolvenKit.Functionality.Converters;
 
 namespace WolvenKit.MVVM.Views.PropertyGridEditors
 {

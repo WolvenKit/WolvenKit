@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Media;
 using Catel.IoC;
 using CP77.CR2W.Types;
@@ -11,6 +12,7 @@ using HandyControl.Tools;
 using Orchestra.Services;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Converters;
 using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.MVVM.Views.PropertyGridEditors
@@ -63,6 +65,8 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
             new ColorPicker();
 
         private protected override DependencyProperty GetInnerDependencyProperty() => ColorPicker.SelectedBrushProperty;
+
+        private protected override IValueConverter GetInnerConverter() => new ColorToSolidColorBrushConverter();
     }
 
     /// <summary>

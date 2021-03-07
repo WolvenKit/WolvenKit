@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -88,7 +89,7 @@ namespace WolvenKit.Common.Model.Cr2w
 
     public interface IREDPrimitive : IEditableVariable { }
 
-    public interface IREDColor : IREDPrimitive { }
+    public interface IREDColor : IEditorBindable<Color> { }
 
     public interface IREDIntegerType<T> : IREDPrimitive, IEditorBindable<T> { }
     public interface IREDString : IREDPrimitive, IEditorBindable<string> { }
