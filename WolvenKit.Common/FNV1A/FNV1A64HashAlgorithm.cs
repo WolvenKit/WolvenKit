@@ -89,6 +89,15 @@ namespace WolvenKit.Common.FNV1A
                     encodedLength++;
                 }
 
+                // fix hash generation for (invalid?) utf-8 chars
+                for (var i = 0; i < buffer.Length; i++)
+                {
+                    if (buffer[i] > 0x7F)
+                    {
+                        buffer[i] = (byte) (~buffer[i] | 1);
+                    }
+                }
+
                 return HashReadOnlySpan(new ReadOnlySpan<byte>(buffer, 0, encodedLength));
             }
             finally
