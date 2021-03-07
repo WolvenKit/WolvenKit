@@ -7,7 +7,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldCrowdNullAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(4)] [RED("IsForBlockade")] public CBool IsForBlockade { get; set; }
+		[Ordinal(6)] [RED("IsForBlockade")] public CBool IsForBlockade { get; set; }
 
 		public worldCrowdNullAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

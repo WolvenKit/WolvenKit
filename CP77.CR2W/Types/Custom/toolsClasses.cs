@@ -70,7 +70,7 @@ namespace CP77.CR2W.Types
     [REDMeta]
 	public class toolsIGraphNodeDescriptor : CVariable
 	{
-		
+
 
         public toolsIGraphNodeDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
@@ -90,7 +90,7 @@ namespace CP77.CR2W.Types
 
         public toolsAudioDurationEventDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-    
+
     [REDMeta]
     public class toolsSocketDescription : CVariable
     {
@@ -123,7 +123,7 @@ namespace CP77.CR2W.Types
         [Ordinal(4)] [RED("pathDeformed")] public CString PathDeformed { get; set; }
         [Ordinal(5)] [RED("meshes")] public CArray<CString> Meshes { get; set; }
         [Ordinal(6)] [RED("extraMeshes")] public CArray<houdiniVehicleDestructionMeshEntry> ExtraMeshes { get; set; }
-        
+
 
         public houdiniVehicleGridSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
@@ -132,7 +132,7 @@ namespace CP77.CR2W.Types
 	{
         public toolsPresetsData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-   
+
 	[REDMeta]
 	public class houdiniVehicleDestructionSettings : CVariable
 	{
@@ -148,8 +148,8 @@ namespace CP77.CR2W.Types
 
         public toolsSceneEventID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-	
-	
+
+
 	[REDMeta]
 	public class toolsScreenplaySection : CVariable
 	{
@@ -159,8 +159,8 @@ namespace CP77.CR2W.Types
 
         public toolsScreenplaySection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-	
-	
+
+
 	[REDMeta]
 	public class toolsUniqueNodeData : CVariable
 	{
@@ -173,7 +173,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class toolsSocketVisibilityData : CVariable
 	{
-        
+
         [Ordinal(0)] [RED("socketId")] public CUInt32 socketId { get; set; }
         [Ordinal(1)] [RED("name")] public CName name { get; set; }
         [Ordinal(2)] [RED("placement")] public CEnum<toolsSocketPlacement> placement { get; set; }
@@ -208,7 +208,7 @@ namespace CP77.CR2W.Types
 
         public toolsScreenplayLine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-	
+
 	[REDMeta]
 	public class toolsRagdollExportData : CVariable
 	{
@@ -263,7 +263,7 @@ namespace CP77.CR2W.Types
 
         public toolsVisualTagsSchema(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-	
+
 	[REDMeta]
 	public class toolsAppearancesConfig : CVariable
 	{
@@ -271,7 +271,7 @@ namespace CP77.CR2W.Types
 
         public toolsAppearancesConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-	
+
 	[REDMeta]
 	public class toolsVisualTagsDefinition : CVariable
 	{
@@ -323,9 +323,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class toolsAnimTimelineEvent : toolsTimeLineTrackBaseItem
     {
-        [Ordinal(0)] [RED] public CUInt64 trackId { get; set; }
-        [Ordinal(1)] [RED] public CFloat startTime { get; set; }
-        [Ordinal(2)] [RED] public CHandle<animAnimEvent> runtimeEvent { get; set; }
+        [Ordinal(6)] [RED] public CUInt64 trackId { get; set; }
+        [Ordinal(7)] [RED] public CFloat startTime { get; set; }
+        [Ordinal(8)] [RED] public CHandle<animAnimEvent> runtimeEvent { get; set; }
 
         public toolsAnimTimelineEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
@@ -352,7 +352,7 @@ namespace CP77.CR2W.Types
         [Ordinal(3)] [RED("caption")] public CString caption { get; set; }
         [Ordinal(4)] [RED("parentId")] public CUInt64 parentId { get; set; }
         [Ordinal(5)] [RED("children")] public CArray<CUInt64> children { get; set; }
-        
+
         public toolsTimeLineTrackBaseItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

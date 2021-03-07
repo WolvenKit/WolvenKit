@@ -197,13 +197,31 @@ namespace CP77.CR2W.Types
                 }
 
                 if (Enum.TryParse(Value.GetType(), finalvalue, out var par))
+                {
                     Value = (T) par;
+                }
                 else
                 {
-                    //throw new InvalidParsingException($"Tried setting enum value {s} in {WrappedEnum.GetType().Name}");
-                    var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-                    Logger.LogString($"Tried setting enum value {s} in {Value.GetType().Name}", Logtype.Error);
+                    var found = false;
+                    foreach (var field in typeof(T).GetFields())
+                    {
+                        if (Attribute.GetCustomAttribute(field, typeof(REDAttribute)) is REDAttribute attr)
+                        {
+                            if (attr.Name == s)
+                            {
+                                Value = (T) field.GetValue(null);
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
 
+                    if (!found)
+                    {
+                        //throw new InvalidParsingException($"Tried setting enum value {s} in {WrappedEnum.GetType().Name}");
+                        var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+                        Logger.LogString($"Tried setting enum value {s} in {Value.GetType().Name}", Logtype.Error);
+                    }
                 }
             }
 

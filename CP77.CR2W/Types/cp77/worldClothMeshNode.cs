@@ -7,8 +7,8 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldClothMeshNode : worldMeshNode
 	{
-		[Ordinal(13)] [RED("affectedByWind")] public CBool AffectedByWind { get; set; }
-		[Ordinal(14)] [RED("collisionMask")] public CEnum<physicsEClothCollisionMaskEnum> CollisionMask { get; set; }
+		[Ordinal(15)] [RED("affectedByWind")] public CBool AffectedByWind { get; set; }
+		[Ordinal(16)] [RED("collisionMask")] public CEnum<physicsEClothCollisionMaskEnum> CollisionMask { get; set; }
 
 		public worldClothMeshNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

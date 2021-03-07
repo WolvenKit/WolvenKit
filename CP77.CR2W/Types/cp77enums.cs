@@ -10,7 +10,7 @@ namespace CP77.CR2W.Types
     {
 		// flags
 
-        
+
 		public enum EGameplayRole
         {
             [RED("")]
@@ -197,7 +197,7 @@ namespace CP77.CR2W.Types
 			Censor_Chinese
 
 		}
-		
+
 		[Flags]
 		public enum worldEDeniedAreaFlags
 		{
@@ -223,7 +223,7 @@ namespace CP77.CR2W.Types
             BODY
 		}
 
-		
+
 
         public enum toolsSocketDirection
 		{
@@ -298,7 +298,7 @@ namespace CP77.CR2W.Types
             Sample_Bitfield_Option_2_2_0
 		}
 
-        
+
 
         public enum gameLootSlotState
         {
@@ -306,16 +306,16 @@ namespace CP77.CR2W.Types
             Unavailable
 		}
 
-        
-
-        
-
-        
-
-		
 
 
-		
+
+
+
+
+
+
+
+
 
 	    public enum EMeshChunkRenderMask
 	    {
@@ -331,17 +331,17 @@ namespace CP77.CR2W.Types
 		    MCR_PrefabProxy,
 		    MCR_Cascades
 	    }
-	    
-		
 
-	    
-		
-		
 
-	    
-	    
-	    
-        
+
+
+
+
+
+
+
+
+
 	    public enum ActiveMode
 		{
 			UNINITIALIZED = 0,
@@ -3096,7 +3096,7 @@ namespace CP77.CR2W.Types
 			HARD = 3,
 			IMPOSSIBLE = 4
 		}
-		
+
 		public enum EGameSessionDataType
 		{
 			NONE = 0,
@@ -13425,6 +13425,7 @@ namespace CP77.CR2W.Types
 		}
 		public enum visWorldOccluderType
 		{
+            [RED("")]
 			Default = 0,
 			None = 1,
 			Detail = 2,
