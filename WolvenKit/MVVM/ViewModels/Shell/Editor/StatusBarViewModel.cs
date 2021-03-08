@@ -82,7 +82,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             IsUpdatedInstalled = _updateService.IsUpdatedInstalled;
             //Version = VersionHelper.GetCurrentVersion(); //TODO
             Version = "Version 0.8.1"; // TempFix
-            var Connected = InternetHelper.IsConnectedToInternet();
+            var Connected = HandyControl.Tools.ApplicationHelper.IsConnectedToInternet();
             if (Connected)
             { InternetConnected = "Connected"; }
 
