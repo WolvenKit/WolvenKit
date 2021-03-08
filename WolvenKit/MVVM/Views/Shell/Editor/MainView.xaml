@@ -10,6 +10,7 @@
  xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
  xmlns:views1="clr-namespace:WolvenKit.MVVM.Views.Shell.Editor"
  xmlns:visualeditorz="clr-namespace:WolvenKit.MVVM.Views.Components.Editors.VisualEditor"
+ xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters"
  IsVisibleChanged="UserControl_IsVisibleChanged_1"
  >
 
@@ -36,9 +37,9 @@
         </DrawingBrush>
     </catel:UserControl.Resources>
 
-    <Grid xmlns:conv="clr-namespace:WolvenKit.Functionality.Layout.Converters" Background="{DynamicResource CloudDrawingBrushMain}">
+    <Grid Background="{DynamicResource CloudDrawingBrushMain}">
         <Grid.Resources>
-            <conv:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
+            <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
             <BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         </Grid.Resources>
 

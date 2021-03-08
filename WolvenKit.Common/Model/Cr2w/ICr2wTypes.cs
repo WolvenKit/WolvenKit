@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.Common.Model.Cr2w
@@ -72,7 +74,10 @@ namespace WolvenKit.Common.Model.Cr2w
 
     #region editor interfaces
 
-    public interface IEditorBindable { }
+    public interface IEditorBindable
+    {
+        [JsonIgnore] [Browsable(false)] bool IsSerialized { get; set; }
+    }
     public interface IEditorBindable<T> : IEditorBindable
     {
         public T Value { get; set; } // ???
@@ -84,8 +89,10 @@ namespace WolvenKit.Common.Model.Cr2w
 
     public interface IREDPrimitive : IEditableVariable { }
 
-    public interface IREDIntegerType : IREDPrimitive { }
-    public interface IREDStringType : IREDPrimitive { }
+    public interface IREDColor : IEditorBindable<Color> { }
+
+    public interface IREDIntegerType<T> : IREDPrimitive, IEditorBindable<T> { }
+    public interface IREDString : IREDPrimitive, IEditorBindable<string> { }
     public interface IREDBool : IREDPrimitive, IEditorBindable<bool> { }
 
     public interface IEnumAccessor : IEditorBindable

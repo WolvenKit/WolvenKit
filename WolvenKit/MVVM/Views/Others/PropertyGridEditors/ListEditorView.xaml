@@ -6,7 +6,6 @@
              xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:WolvenKit.MVVM.Views.PropertyGridEditors"
-             d:DataContext="{d:DesignInstance Type=local:ListEditorView}"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="800"
              
@@ -47,7 +46,11 @@
                 <TreeViewItem>
                     <TreeViewItem.Header>
                         <Grid>
-                            <TextBlock Margin="30,0" Text="{Binding String}" DataContext="{Binding}"/>
+                            <TextBlock
+                                Margin="30,0"
+                                DataContext="{Binding}"
+                                Text="{Binding HeaderText}"
+                                />
                         </Grid>
                     </TreeViewItem.Header>
                     <hc:PropertyGrid PropertyResolver="{Binding PropertyResolver}"
@@ -60,42 +63,42 @@
 
     <Grid Background="Transparent">
         <!-- Main Layout -->
-        <TreeView>
-            <TreeViewItem>
+        <hc:ScrollViewer>
+            <TreeView>
+                <TreeViewItem>
 
-                <!--Header -->
-                <TreeViewItem.Header>
-                    <Grid >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                    <!--Header -->
+                    <TreeViewItem.Header>
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                        <!-- Add Item Box -->
-                        <hc:ComboBox Grid.Column="0" 
-                                     ToolTip="Press ENTER to add an item." 
-                                     IsEditable="True" 
-                                     Width="Auto" 
-                                     ShowClearButton="True" 
-                                     Margin="0,5,10,5" 
-                                     MaxHeight="50" />
+                            <!-- Add Item Box -->
+                            <hc:ComboBox Grid.Column="0" 
+                                         ToolTip="Press ENTER to add an item." 
+                                         IsEditable="True" 
+                                         Width="Auto" 
+                                         ShowClearButton="True" 
+                                         Margin="0,5,10,5" 
+                                         MaxHeight="50" />
 
-                        <!-- Open Special Editor Button -->
-                        <Button Grid.Column="1" 
-                                Margin="0,5,5,5" 
-                                HorizontalAlignment="Right" 
-                                hc:IconElement.Geometry="{DynamicResource DragHorizontalGeometry}"/>
+                            <!-- Open Special Editor Button -->
+                            <Button Grid.Column="1" 
+                                    Margin="0,5,5,5" 
+                                    HorizontalAlignment="Right" 
+                                    hc:IconElement.Geometry="{DynamicResource DragHorizontalGeometry}"/>
 
-                    </Grid>
-                </TreeViewItem.Header>
+                        </Grid>
+                    </TreeViewItem.Header>
 
-                <!-- Control Body -->
-                <ContentControl Name="ContentControl"/>
+                    <!-- Control Body -->
+                    <ContentControl Name="ContentControl"/>
 
-            </TreeViewItem>
-        </TreeView>
-
-        
+                </TreeViewItem>
+            </TreeView>
+        </hc:ScrollViewer>
     </Grid>
 
 </UserControl>

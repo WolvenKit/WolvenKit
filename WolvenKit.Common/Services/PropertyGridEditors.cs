@@ -12,7 +12,7 @@ namespace WolvenKit.Common.Services
     // Register PropertyEditor implementations to the UI at ModuleInitializer
     // PropertyEditor implementations are in the UI part of the project and are resolved with IoC
     // IEditable variables use the IExpandableObjectEditor by default, 
-    // specific classes must override this with [Editor(typeof(INumericEditor), typeof(IPropertyEditorBase))]
+    // specific classes must override this with e.g. [Editor(typeof(ITextEditor<double>), typeof(IPropertyEditorBase))]
 
     public interface IPropertyEditorBase { }
 
@@ -35,6 +35,16 @@ namespace WolvenKit.Common.Services
     /// Editors for CBool
     /// </summary>
     public interface IEnumEditor : IPropertyEditorBase { }
+
+    /// <summary>
+    /// Editors for CColor
+    /// </summary>
+    public interface INameEditor : IPropertyEditorBase { }
+
+    /// <summary>
+    /// Editors for CColor
+    /// </summary>
+    public interface IColorEditor : IPropertyEditorBase { }
 
 
 }
