@@ -60,6 +60,7 @@
                      BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
                      ItemsSource="{Binding RootNode.SubDirectories}"
                      SelectedItemChanged="TreeView_OnSelectedItemChanged"
+                     Style="{DynamicResource TreeView}"
                      >
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding SubDirectories}">

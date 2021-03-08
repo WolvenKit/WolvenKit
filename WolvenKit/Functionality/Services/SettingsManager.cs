@@ -101,13 +101,13 @@ namespace WolvenKit.Functionality.Services
 
         public string TextLanguage { get; set; }
 
+        public Color ThemeAccent { get; set; }
+
         /// <summary>
         /// Gets the internal name and Uri source for all available themes.
         /// </summary>
         [XmlIgnore]
         public IThemeInfos Themes { get; private set; }
-
-        public Color ThemeAccent { get; set; }
 
         public string W3ExecutablePath
         {

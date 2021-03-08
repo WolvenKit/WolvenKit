@@ -8,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using Catel.IoC;
 using Catel.MVVM;
+using HandyControl.Tools;
 using Orc.Squirrel;
 using Orchestra.Services;
 using Orchestra.Views;
@@ -66,6 +67,8 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         public static async Task InitializeMVVM()
         {
+            ApplicationHelper.StartProfileOptimization();
+
             var uri = new Uri("pack://application:,,,/WolvenKit.Resources;component/Resources/Media/Images/git.png");
 
             await SquirrelHelper.HandleSquirrelAutomaticallyAsync();
@@ -277,15 +280,5 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         #endregion
     }
-    public static class InternetHelper
-    {
-        #region Methods
 
-        public static bool IsConnectedToInternet() => InternetGetConnectedState(out var Desc, 0);
-
-        [DllImport("wininet.dll")]
-        private static extern bool InternetGetConnectedState(out int Description, int ReservedValue);
-
-        #endregion Methods
-    }
 }
