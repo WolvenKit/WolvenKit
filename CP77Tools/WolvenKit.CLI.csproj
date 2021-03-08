@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -35,7 +35,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CP77.CR2W\WolvenKit.Cyberformats.csproj" />
-    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
   </ItemGroup>
 
 </Project>
