@@ -45,6 +45,33 @@ namespace CP77.CR2W.Types
 
             
             accessor = TypeAccessor.Create(this.GetType());
+
+            // instantiate all REDproperties
+            InstantiateAllRedProps();
+        }
+
+        private void InstantiateAllRedProps()
+        {
+            foreach (var item in this.GetREDMembers(true))
+            {
+                var o = accessor[this, item.Name];
+                if (o is CVariable cvar)
+                {
+                }
+                else // is null
+                {
+                    var att = item.GetMemberAttribute<REDAttribute>();
+                    // instantiate
+                    var vartype = REDReflection.GetREDTypeString(item.Type, att.Flags);
+                    var varname = REDReflection.GetREDNameString(item);
+
+                    var newvar = CR2WTypeManager.Create(vartype, varname, this.cr2w, this);     // create new variable and parent to this 
+                    if (newvar != null)
+                    {
+                        accessor[this, item.Name] = newvar;
+                    }
+                }
+            }
         }
 
         #endregion
@@ -87,15 +114,26 @@ namespace CP77.CR2W.Types
         /// Is set upon read
         /// Must also be set when a variable is edited in the editor
         /// </summary>
-        [JsonIgnore] [Browsable(false)] public bool IsSerialized { get; set; }
-        public void SetIsSerialized()
+        [JsonIgnore]
+        [Browsable(false)]
+        public bool IsSerialized
         {
-            IsSerialized = true;
-
-            if (ParentVar != null)
-                if (ParentVar is CVariable cparent)
-                    cparent.SetIsSerialized();
+            get => _isSerialized;
+            set
+            {
+                if (_isSerialized != value)
+                {
+                    var oldValue = _isSerialized;
+                    _isSerialized = value;
+                    if (ParentVar != null && !ParentVar.IsSerialized)
+                    {
+                        ParentVar.IsSerialized = true;
+                    }
+                    RaisePropertyChanged(() => IsSerialized, oldValue, value);
+                }
+            }
         }
+
 
         [JsonIgnore] [Browsable(false)] public bool IsNulled { get; set; }
 
@@ -132,6 +170,8 @@ namespace CP77.CR2W.Types
 
 
         private string name;
+        private bool _isSerialized;
+
         /// <summary>
         /// AspectName in frmChunkProperties
         /// Name of the Variable, is set upon read
@@ -149,7 +189,9 @@ namespace CP77.CR2W.Types
                     //return "<NO NAME SET>";
                 }
                 else
+                {
                     return name;
+                }
             }
             private set => name = value;
         }
@@ -267,26 +309,14 @@ namespace CP77.CR2W.Types
         /// <returns></returns>
         public virtual List<IEditableVariable> GetEditableVariables()
         {
-            List<IEditableVariable> redvariables = new List<IEditableVariable>(UnknownCVariables);
+            var redvariables = new List<IEditableVariable>(UnknownCVariables);
 
-            foreach (Member item in this.GetREDMembers(true))
+            foreach (var item in this.GetREDMembers(true))
             {
-                object o = accessor[this, item.Name];
+                var o = accessor[this, item.Name];
                 if (o is CVariable cvar)
-                    redvariables.Add(cvar);
-                else // is null
                 {
-                    REDAttribute att = item.GetMemberAttribute<REDAttribute>();
-                    // instantiate
-                    string vartype = REDReflection.GetREDTypeString(item.Type, att.Flags);
-                    string varname = REDReflection.GetREDNameString(item);
-
-                    var newvar = CR2WTypeManager.Create(vartype, varname, this.cr2w, this);     // create new variable and parent to this 
-                    if (newvar != null)
-                    {
-                        accessor[this, item.Name] = newvar;
-                        redvariables.Add(newvar);
-                    }
+                    redvariables.Add(cvar);
                 }
             }
 
@@ -327,9 +357,13 @@ namespace CP77.CR2W.Types
         public virtual void ReadAsFixedSize(BinaryReader file, uint size)
         {
             if (this is IREDPrimitive)
+            {
                 Read(file, size);
+            }
             else
+            {
                 ReadAllRedVariables<REDAttribute>(file);
+            }
         }
 
         /// <summary>
@@ -339,7 +373,9 @@ namespace CP77.CR2W.Types
         public virtual void WriteAsFixedSize(BinaryWriter file)
         {
             if (this is IREDPrimitive)
+            {
                 Write(file);
+            }
             else
             {
                 // write all CVariables
@@ -356,7 +392,9 @@ namespace CP77.CR2W.Types
 
                     // just write the RedBuffer without variable id
                     if (this.accessor[this, item.Name] is CVariable av)
+                    {
                         av.Write(file);
+                    }
                 }
             }
         }

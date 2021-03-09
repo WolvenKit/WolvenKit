@@ -1,12 +1,15 @@
+using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.Serialization;
 using CP77.CR2W.Reflection;
+using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W.Types
 {
-    [DataContract(Namespace = "")]
+    [Editor(typeof(IColorEditor), typeof(IPropertyEditorBase))]
     [REDMeta()]
-    public class CColor : CColor_
+    public class CColor : CColor_, IREDColor
     {
         public CColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
@@ -16,9 +19,9 @@ namespace CP77.CR2W.Types
             Alpha = new CUInt8(cr2w, this, nameof(Alpha));
         }
 
-        public Color Color
+        public Color Value
         {
-            get { return Color.FromArgb(Alpha.Value, Red.Value, Green.Value, Blue.Value); }
+            get => Color.FromArgb(Alpha.Value, Red.Value, Green.Value, Blue.Value);
             set
             {
                 Red.Value = value.R;
@@ -30,14 +33,16 @@ namespace CP77.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is Color)
+            Value = val switch
             {
-                Color = (Color)val;
-            }
-            else if (val is CColor cvar)
-                Color = cvar.Color;
+                Color => Value,
+                CColor cvar => cvar.Value,
+                _ => Value
+            };
 
             return this;
         }
+
+        
     }
 }

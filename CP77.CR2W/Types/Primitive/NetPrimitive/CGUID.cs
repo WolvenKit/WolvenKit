@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
@@ -8,7 +8,7 @@ using WolvenKit.Common.Model.Cr2w;
 namespace CP77.CR2W.Types
 {
     [REDMeta()]
-    public class CGUID : CVariable
+    public class CGUID : CVariable, IREDPrimitive
     {
         public byte[] guid;
 

@@ -23,8 +23,10 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
 
         #endregion
 
-        public PropertyResolver PropertyResolver { get; }
+        #region properties
 
+        public PropertyResolver PropertyResolver { get; }
+        public string HeaderText { get => "TEST"; } 
 
         public IEnumerable ItemsSource
         {
@@ -38,6 +40,10 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
                 typeof(IEnumerable),
                 typeof(ListEditorView),
                 new FrameworkPropertyMetadata((IEnumerable)null, OnItemsSourceChanged));
+
+        #endregion
+
+        #region methods
 
         private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -95,7 +101,6 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
             ContentControl.SetCurrentValue(ContentProperty, treeview);
         }
 
-
-
+        #endregion
     }
 }

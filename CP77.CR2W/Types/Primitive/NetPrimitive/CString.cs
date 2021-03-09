@@ -9,8 +9,9 @@ using WolvenKit.Common.Services;
 
 namespace CP77.CR2W.Types
 {
+    [REDMeta()]
     [Editor(typeof(ITextEditor<string>), typeof(IPropertyEditorBase))]
-    public class CString : CVariable, IREDPrimitive, IEditorBindable<string>
+    public class CString : CVariable, IREDString
     {
         private bool _isWideChar;
 
