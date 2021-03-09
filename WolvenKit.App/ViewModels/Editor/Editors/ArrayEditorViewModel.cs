@@ -2,7 +2,7 @@ using Catel.MVVM;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Editors
 {
-    internal class ArrayEditorViewModel : ViewModelBase
+    public class ArrayEditorViewModel : ViewModelBase
     {
     }
 }

@@ -2,7 +2,7 @@ using Catel.MVVM;
 
 namespace WolvenKit.MVVM.ViewModels.Components.Tools
 {
-    internal class RadioPlayerViewModel : ViewModelBase
+    public class RadioPlayerViewModel : ViewModelBase
     {
         #region Methods
 
