@@ -16,19 +16,9 @@ namespace WolvenKit.Functionality.Converters
                 : new SolidColorBrush();
 
         public object ConvertBack(object value, Type targetType, object parameter,
-            System.Globalization.CultureInfo culture)
-        {
-            if (value is SolidColorBrush brush)
-            {
-                var mcolor = brush.Color;
-                return System.Drawing.Color.FromArgb(mcolor.A, mcolor.R, mcolor.G, mcolor.B);
-            }
-            else
-            {
-                return new System.Drawing.Color();
-            }
-        }
-
-        #endregion Methods
+            System.Globalization.CultureInfo culture) =>
+            value is SolidColorBrush brush
+                ? System.Drawing.Color.FromArgb(brush.Color.A, brush.Color.R, brush.Color.G, brush.Color.B)
+                : new System.Drawing.Color();
     }
 }
