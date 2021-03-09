@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Xaml.Behaviors;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Models;
 using WolvenKit.MVVM.Model;
 using WolvenKit.MVVM.ViewModels.Shell.Editor;
 using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;

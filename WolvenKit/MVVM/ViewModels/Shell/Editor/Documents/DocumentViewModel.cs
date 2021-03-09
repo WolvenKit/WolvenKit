@@ -17,6 +17,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.CR2W.SRT;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Extensions;
+using WolvenKit.Models;
 using WolvenKit.MVVM.Model;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.MVVM.Views.PropertyGridEditors;

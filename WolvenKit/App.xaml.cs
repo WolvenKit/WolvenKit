@@ -1,6 +1,9 @@
 using System.Windows;
+using Catel.IoC;
 using Catel.Logging;
 using NodeNetwork;
+using Orchestra.Services;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit
@@ -29,6 +32,10 @@ namespace WolvenKit
 
         protected override async void OnStartup(StartupEventArgs e)
         {
+            var serviceLocator = ServiceLocator.Default;
+
+            serviceLocator.RegisterType<IRibbonService, RibbonService>();
+
 #if DEBUG
             LogManager.AddDebugListener();
 #endif
@@ -48,6 +55,7 @@ namespace WolvenKit
             base.OnStartup(e);
             Log.Info("Initializing NodeNetwork");
             NNViewRegistrar.RegisterSplat();
+            
             NotificationHelper.InitializeNotificationHelper();
 
             // Temp Fix for MainViewModel.OnClosing
