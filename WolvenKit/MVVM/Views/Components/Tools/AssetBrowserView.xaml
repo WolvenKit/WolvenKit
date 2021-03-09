@@ -6,10 +6,10 @@
  xmlns:c="clr-namespace:WolvenKit.Functionality.WKitGlobal.Helpers"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:controls1="clr-namespace:WolvenKit.AssetBrowserBar.Controls;assembly=WolvenKit.AssetBrowserBar"
+ xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
- xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters"
  BorderBrush="{x:Null}"
  IsVisibleChanged="DataWindow_IsVisibleChanged"
  >
@@ -21,13 +21,15 @@
                 <hc:ThemeResources />
                 <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
-            <c:ValueConverterGroup x:Key="ConvertExtensionAndSVGz">
-                <converters:ExtensionToImageConverter />
-                <svgc:SvgImageConverter />
-            </c:ValueConverterGroup>
+
+
+            <Style TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            </Style>
         </ResourceDictionary>
     </catel:UserControl.Resources>
     <Border
+     MinWidth="890"
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
      BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
      BorderThickness="1"
@@ -36,138 +38,10 @@
         <Grid>
             <Grid.RowDefinitions>
 
-                <RowDefinition Height="auto" />
                 <RowDefinition Height="9*" />
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" VerticalAlignment="Top">
-                <ToolBarTray Style="{DynamicResource MahApps.Styles.ToolBarTray}">
-                    <ToolBar
-                     Padding="6"
-                     Band="0"
-                     Style="{StaticResource ToolBarBaseStyle}"
-                     Visibility="Collapsed"
-                     >
-                        <Menu VerticalAlignment="Center" Background="Transparent">
-                            <MenuItem Header="View">
-                                <MenuItem Header="Empty" />
-                                <MenuItem Header="Empty" />
-                            </MenuItem>
-                            <MenuItem Header="Edit">
-                                <MenuItem Header="Empty" />
-                                <MenuItem Header="Empty" />
-                                <MenuItem Header="Empty" />
-                            </MenuItem>
-                            <MenuItem Header="Bookmarks" />
-                            <MenuItem Header="Tabs" />
-                        </Menu>
-                    </ToolBar>
 
-                    <ToolBar
-                     Padding="6"
-                     Band="0"
-                     Style="{StaticResource ToolBarBaseStyle}"
-                     >
-                        <Menu VerticalAlignment="Center" Background="Transparent">
-                            <Button
-                             Width="40"
-                             hc:IconElement.Geometry="{DynamicResource GlobalLeftArrow}"
-                             Background="Transparent"
-                             BorderBrush="{x:Null}"
-                             Style="{StaticResource ButtonIcon}"
-                             />
-                            <Button
-                             Width="40"
-                             hc:IconElement.Geometry="{DynamicResource AssetBrowserHome}"
-                             Background="Transparent"
-                             BorderBrush="{x:Null}"
-                             Command="{Binding HomeCommand}"
-                             RenderTransformOrigin="0.5,0.5"
-                             Style="{StaticResource ButtonIcon}"
-                             >
-                                <Button.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform />
-                                        <SkewTransform />
-                                        <RotateTransform Angle="180" />
-                                        <TranslateTransform />
-                                    </TransformGroup>
-                                </Button.RenderTransform>
-                            </Button>
-
-                          
-                            <hc:TextBox Width="500" Text="{Binding Path=CurrentNode.FullPath, Mode=OneWay}" />
-
-                            <Button
-                             Width="40"
-                             hc:IconElement.Geometry="{DynamicResource AssetBrowserStar}"
-                             Background="Transparent"
-                             BorderBrush="{x:Null}"
-                             Style="{StaticResource ButtonIcon}"
-                             />
-                        </Menu>
-                    </ToolBar>
-
-                    <ToolBar
-                     Padding="6"
-                     Band="0"
-                     Style="{StaticResource ToolBarBaseStyle}"
-                     Visibility="Collapsed"
-                     >
-                        <Menu VerticalAlignment="Center" Background="Transparent">
-                            <TextBlock Text="Class :" />
-                            <hc:ComboBox
-                             MinWidth="100"
-                             ItemsSource="{Binding Classes}"
-                             SelectedItem="{Binding SelectedClass}"
-                             >
-                                <ComboBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <VirtualizingStackPanel />
-                                    </ItemsPanelTemplate>
-                                </ComboBox.ItemsPanel>
-                            </hc:ComboBox>
-                        </Menu>
-                    </ToolBar>
-
-                    <ToolBar
-                     Padding="6"
-                     Band="0"
-                     Style="{StaticResource ToolBarBaseStyle}"
-                     >
-                        <Menu VerticalAlignment="Center" Background="Transparent">
-                            <hc:SearchBar MinWidth="100" hc:InfoElement.Placeholder="Search something">
-                                <hc:Interaction.Triggers>
-                                    <hc:EventTrigger EventName="SearchStarted">
-                                        <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
-                                    </hc:EventTrigger>
-                                </hc:Interaction.Triggers>
-                            </hc:SearchBar>
-                        </Menu>
-                    </ToolBar>
-
-                    <ToolBar
-                     Padding="6"
-                     Band="0"
-                     Style="{StaticResource ToolBarBaseStyle}"
-                     Visibility="Collapsed"
-                     >
-                        <Menu VerticalAlignment="Center" Background="Transparent">
-                            <hc:ComboBox
-                             MinWidth="100"
-                             ItemsSource="{Binding Extensions}"
-                             SelectedItem="{Binding SelectedExtension}"
-                             >
-                                <ComboBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <VirtualizingStackPanel />
-                                    </ItemsPanelTemplate>
-                                </ComboBox.ItemsPanel>
-                            </hc:ComboBox>
-                        </Menu>
-                    </ToolBar>
-                </ToolBarTray>
-            </StackPanel>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
@@ -183,6 +57,7 @@
                      BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
                      ItemsSource="{Binding RootNode.SubDirectories}"
                      SelectedItemChanged="TreeView_OnSelectedItemChanged"
+                     Style="{DynamicResource TreeView}"
                      >
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding SubDirectories}">
@@ -246,17 +121,20 @@
                         <hc:TabItem Header="Depot">
                             <!--  Bind Header to selected item in treeview  -->
                             <ListView
-                                Background="Transparent"
+                             x:Name="InnerList"
+                             Background="Transparent"
                              BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
                              ItemsSource="{Binding CurrentNodeFiles}"
                              SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
+                             SelectionChanged="ListView_SelectionChanged"
                              >
                                 <ListView.Resources>
                                     <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
                                 </ListView.Resources>
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Width="Auto">
+
+                                        <GridViewColumn Width="30">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <svgc:SvgViewbox
@@ -269,16 +147,26 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn
-                                         Width="500"
-                                         DisplayMemberBinding="{Binding Name}"
-                                         Header="Name"
-                                         />
-                                        <GridViewColumn
-                                         Width="Auto"
-                                         DisplayMemberBinding="{Binding Size}"
-                                         Header="Size"
-                                         />
+                                        <GridViewColumn Width="350" Header="Name">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock x:Name="SizeHelper" Text="{Binding Name}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Width="250" Header="Size">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <WrapPanel>
+                                                        <TextBlock
+                                                         Width="auto"
+                                                         Margin="0,0,0,0"
+                                                         Text="{Binding Size}"
+                                                         />
+                                                    </WrapPanel>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
                                     </GridView>
                                 </ListView.View>
                                 <hc:Interaction.Triggers>
@@ -311,6 +199,202 @@
                         </Button.RenderTransform>
                     </Button>
                 </Grid>
+
+
+            </Grid>
+            <Grid
+             Grid.Row="0"
+             HorizontalAlignment="Right"
+             VerticalAlignment="Top"
+             Background="Transparent"
+             FlowDirection="RightToLeft"
+             >
+
+
+
+                <ToolBarTray
+                 MaxWidth="900"
+                 Margin="0,-3,0,0"
+                 AllowDrop="False"
+                 Background="Transparent"
+                 FlowDirection="LeftToRight"
+                 IsLocked="True"
+                 Style="{DynamicResource MahApps.Styles.ToolBarTray}"
+                 >
+                    <ToolBarTray.RenderTransform>
+                        <ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+                    </ToolBarTray.RenderTransform>
+                    <ToolBar
+                     Padding="6"
+                     Band="0"
+                     Style="{StaticResource MahApps.Styles.ToolBar}"
+                     Visibility="Collapsed"
+                     >
+                        <Menu VerticalAlignment="Center" Background="Transparent">
+                            <MenuItem Header="View">
+                                <MenuItem Header="Empty" />
+                                <MenuItem Header="Empty" />
+                            </MenuItem>
+                            <MenuItem Header="Edit">
+                                <MenuItem Header="Empty" />
+                                <MenuItem Header="Empty" />
+                                <MenuItem Header="Empty" />
+                            </MenuItem>
+                            <MenuItem Header="Bookmarks" />
+                            <MenuItem Header="Tabs" />
+                        </Menu>
+                    </ToolBar>
+
+                    <ToolBar
+                     Padding="6"
+                     Background="Transparent"
+                     Band="0"
+                     Style="{StaticResource MahApps.Styles.ToolBar}"
+                     >
+                        <StackPanel
+                         Margin="0,3"
+                         VerticalAlignment="Center"
+                         Background="Transparent"
+                         Orientation="Horizontal"
+                         >
+                            <Button
+                             Width="40"
+                             hc:IconElement.Geometry="{DynamicResource GlobalLeftArrow}"
+                             Background="Transparent"
+                             BorderBrush="{x:Null}"
+                             Style="{StaticResource ButtonIcon}"
+                             />
+                            <Button
+                             Width="40"
+                             hc:IconElement.Geometry="{DynamicResource AssetBrowserHome}"
+                             Background="Transparent"
+                             BorderBrush="{x:Null}"
+                             Command="{Binding HomeCommand}"
+                             RenderTransformOrigin="0.5,0.5"
+                             Style="{StaticResource ButtonIcon}"
+                             >
+                                <Button.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform />
+                                        <SkewTransform />
+                                        <RotateTransform Angle="180" />
+                                        <TranslateTransform />
+                                    </TransformGroup>
+                                </Button.RenderTransform>
+                            </Button>
+
+
+                            <hc:TextBox
+                             Width="500"
+                             Margin="0,4,0,0"
+                             VerticalAlignment="Center"
+                             Text="{Binding Path=CurrentNode.FullPath, Mode=OneWay}"
+                             />
+
+                            <Button
+                             Width="40"
+                             hc:IconElement.Geometry="{DynamicResource AssetBrowserStar}"
+                             Background="Transparent"
+                             BorderBrush="{x:Null}"
+                             Style="{StaticResource ButtonIcon}"
+                             />
+                        </StackPanel>
+                    </ToolBar>
+
+                    <ToolBar
+                     Padding="6"
+                     Background="Transparent"
+                     Band="0"
+                     Style="{StaticResource MahApps.Styles.ToolBar}"
+                     Visibility="Collapsed"
+                     >
+                        <Menu VerticalAlignment="Center" Background="Transparent">
+                            <TextBlock Text="Class :" />
+                            <hc:ComboBox
+                             MinWidth="100"
+                             ItemsSource="{Binding Classes}"
+                             SelectedItem="{Binding SelectedClass}"
+                             >
+                                <ComboBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel />
+                                    </ItemsPanelTemplate>
+                                </ComboBox.ItemsPanel>
+                            </hc:ComboBox>
+                        </Menu>
+                    </ToolBar>
+
+
+
+                    <ToolBar
+                     Padding="6"
+                     Background="Transparent"
+                     Band="0"
+                     Style="{StaticResource MahApps.Styles.ToolBar}"
+                     Visibility="Collapsed"
+                     >
+                        <Menu VerticalAlignment="Center" Background="Transparent">
+                            <hc:ComboBox
+                             MinWidth="100"
+                             ItemsSource="{Binding Extensions}"
+                             SelectedItem="{Binding SelectedExtension}"
+                             >
+                                <ComboBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel />
+                                    </ItemsPanelTemplate>
+                                </ComboBox.ItemsPanel>
+                            </hc:ComboBox>
+                        </Menu>
+                    </ToolBar>
+                </ToolBarTray>
+                <Grid
+                 Margin="15,7,0,0"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Top"
+                 >
+
+                    <ToolBarTray
+                     Width="auto"
+                     MaxWidth="900"
+                     Margin="0,-3,0,0"
+                     AllowDrop="False"
+                     Background="Transparent"
+                     FlowDirection="RightToLeft"
+                     IsLocked="True"
+                     Style="{DynamicResource MahApps.Styles.ToolBarTray}"
+                     >
+                        <ToolBarTray.RenderTransform>
+                            <ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+                        </ToolBarTray.RenderTransform>
+                        <ToolBar Height="36" Style="{StaticResource MahApps.Styles.ToolBar}" />
+                        <ToolBar
+                         Width="auto "
+                         Margin="0,15,0,0"
+                         Padding="6"
+                         HorizontalAlignment="Right"
+                         Background="Transparent"
+                         Band="1"
+                         BandIndex="1"
+                         Style="{StaticResource MahApps.Styles.ToolBar}"
+                         >
+                            <hc:SearchBar
+                             Width="auto"
+                             MinWidth="250"
+                             MaxWidth="400"
+                             hc:InfoElement.Placeholder="Search something"
+                             FlowDirection="LeftToRight"
+                             >
+                                <hc:Interaction.Triggers>
+                                    <hc:EventTrigger EventName="SearchStarted">
+                                        <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
+                                    </hc:EventTrigger>
+                                </hc:Interaction.Triggers>
+                            </hc:SearchBar>
+                        </ToolBar>
+                    </ToolBarTray>
+                </Grid>
+
             </Grid>
         </Grid>
     </Border>
