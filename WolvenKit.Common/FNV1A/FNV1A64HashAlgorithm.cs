@@ -71,34 +71,48 @@ namespace WolvenKit.Common.FNV1A
             return hash;
         }
 
-        public static ulong HashString(string value)
+        public static ulong HashReadOnlySpan(ReadOnlySpan<sbyte> source)
         {
-            return HashString(value, Encoding.ASCII, false);
+            var hash = FnvHashInitial;
+            foreach (var b in source)
+            {
+                unchecked
+                {
+                    hash = (hash ^ (uint)b) * (uint)FnvHashPrime;
+                }
+            }
+
+            return hash;
         }
 
-        public static ulong HashString(string value, Encoding encoding, bool nullEnded = false)
+        public static ulong HashString(string value)
+        {
+            return HashString(value, Encoding.ASCII, false, false);
+        }
+
+        public static ulong HashString(string value, Encoding encoding, bool nullEnded = false, bool useSignedBuffer = false)
         {
             var length = encoding.GetMaxByteCount(nullEnded ? value.Length + 1 : value.Length);
             var buffer = ArrayPool<byte>.Shared.Rent(length);
             try
             {
                 var encodedLength = encoding.GetBytes(value.AsSpan(), buffer.AsSpan());
+
                 if (nullEnded)
                 {
                     buffer[encodedLength] = 0;
                     encodedLength++;
                 }
 
-                // fix hash generation for (invalid?) utf-8 chars
-                for (var i = 0; i < buffer.Length; i++)
+                if (useSignedBuffer)
                 {
-                    if (buffer[i] > 0x7F)
-                    {
-                        buffer[i] = (byte) (~buffer[i] | 1);
-                    }
+                    var signedBuffer = (sbyte[])(Array)buffer;
+                    return HashReadOnlySpan(new ReadOnlySpan<sbyte>(signedBuffer, 0, encodedLength));
                 }
-
-                return HashReadOnlySpan(new ReadOnlySpan<byte>(buffer, 0, encodedLength));
+                else
+                {
+                    return HashReadOnlySpan(new ReadOnlySpan<byte>(buffer, 0, encodedLength));
+                }
             }
             finally
             {

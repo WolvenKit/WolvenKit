@@ -751,7 +751,7 @@ namespace CP77.CR2W
 
                 var hash64 = string.IsNullOrEmpty(name)
                     ? 0
-                    : FNV1A64HashAlgorithm.HashString(name, Encoding.GetEncoding("iso-8859-1"));
+                    : FNV1A64HashAlgorithm.HashString(name, Encoding.GetEncoding("iso-8859-1"), false, true);
                 uint hash = (uint)(hash64 & 0xffffffff);
 
                 Names.Add(new CR2WNameWrapper(new CR2WName()
