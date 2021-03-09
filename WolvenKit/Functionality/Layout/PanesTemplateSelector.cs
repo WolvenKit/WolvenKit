@@ -55,6 +55,12 @@ namespace WolvenKit.Functionality.Layout
         public DataTemplate BulkEditorTemplate { get; set; }
 
         /// <summary>
+        /// Gets/sets the view instance of the Properties.
+        /// </summary>
+        public DataTemplate PropertiesTemplate { get; set; }
+
+
+        /// <summary>
         /// Gets/sets the view instance of the CodeEditor.
         /// </summary>
         public DataTemplate CodeEditorTemplate { get; set; }
@@ -153,6 +159,7 @@ namespace WolvenKit.Functionality.Layout
             AnimsViewModel _ => AnimsViewTemplate,
             MimicsViewModel _ => MimicsViewTemplate,
             IDocumentViewModel _ => FileViewTemplate,
+            PropertiesViewModel _ => PropertiesTemplate,
             LogViewModel _ => LogViewTemplate,
             ProjectExplorerViewModel _ => ProjectExplorerTemplate,
             AssetBrowserViewModel _ => AssetBrowserTemplate,

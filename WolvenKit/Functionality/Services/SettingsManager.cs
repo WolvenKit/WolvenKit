@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Windows.Media;
 using System.Xml.Serialization;
 using Catel.Data;
 using MLib.Interfaces;
@@ -99,6 +100,8 @@ namespace WolvenKit.Functionality.Services
         }
 
         public string TextLanguage { get; set; }
+
+        public Color ThemeAccent { get; set; }
 
         /// <summary>
         /// Gets the internal name and Uri source for all available themes.

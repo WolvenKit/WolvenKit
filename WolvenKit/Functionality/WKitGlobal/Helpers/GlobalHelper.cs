@@ -18,6 +18,8 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
         public static MainView MainView;
         public static RibbonView RibbonViewInstance;
 
+        public static PropertiesView GlobalPropertiesView;
+
         #endregion Fields
     }
 

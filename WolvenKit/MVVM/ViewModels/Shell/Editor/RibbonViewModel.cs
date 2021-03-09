@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Catel;
 using Catel.IoC;
+using Catel.Logging;
 using Catel.MVVM;
 using Catel.Reflection;
 using Catel.Services;
@@ -13,6 +14,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {
@@ -60,6 +62,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #region properties
 
+        public bool BackstageIsOpen { get; set; }
+        public bool StartScreenShown { get; set; }
+
+
+
+
+
+
+
+
+
         public Random rnd = new Random();
 
         private Color _selectedTheme;
@@ -85,16 +98,23 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     var stringint = "RandomTheme" + rnd.Next(0, 9999) + "Name";
                     _selectedTheme = value;
                     var color = new SolidColorBrush(value);
-                    ControlzEx.Theming.ThemeManager.Current.AddTheme(new ControlzEx.Theming.Theme(stringint, "asfasf", "Dark", "Red", value, color, true, false));
-                    ControlzEx.Theming.ThemeManager.Current.AddTheme(ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", Colors.Red));
-                    ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, stringint);
+                    ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", value, false));
+                    ILog _logger = LogManager.GetCurrentClassLogger();
+                    _logger.Info("Changed theme : " + value.ToString());
+                    _settingsManager.ThemeAccent = value;
+                    _settingsManager.Save();
+
                 }
             }
         }
 
+
+
+
         #endregion properties
 
         #region commands
+
 
         /// <summary>
         /// Is raised when a PaneView is selected: shows the contextual ribbon tab
@@ -115,7 +135,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                 ProjectExplorerContextualTabGroupVisibility = tuple.Item2
                     ? ERibbonContextualTabGroupVisibility.Visible
                     : ERibbonContextualTabGroupVisibility.Collapsed;
+
             }
+
+            DiscordHelper.SetDiscordRPCStatus(tuple.Item1.Title); // Set status for discord RPC
+
+
         }
 
         #endregion commands

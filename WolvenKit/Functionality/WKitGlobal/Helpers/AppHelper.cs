@@ -8,10 +8,11 @@ using System.Windows.Data;
 using System.Windows.Media;
 using Catel.IoC;
 using Catel.MVVM;
-using ControlzEx.Theming;
+using HandyControl.Tools;
 using Orc.Squirrel;
 using Orchestra.Services;
 using Orchestra.Views;
+using WolvenKit.Functionality.Services;
 using WolvenKit.MVVM.ViewModels.Components.Dialogs;
 using WolvenKit.MVVM.ViewModels.Components.Editors;
 using WolvenKit.MVVM.ViewModels.Components.Editors.VisualEditor;
@@ -66,6 +67,8 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         public static async Task InitializeMVVM()
         {
+            ApplicationHelper.StartProfileOptimization();
+
             var uri = new Uri("pack://application:,,,/WolvenKit.Resources;component/Resources/Media/Images/git.png");
 
             await SquirrelHelper.HandleSquirrelAutomaticallyAsync();
@@ -97,7 +100,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.Register(typeof(MimicsView), typeof(MimicsViewModel));
             viewModelLocator.Register(typeof(BulkEditorView), typeof(MVVM.ViewModels.Components.Editors.BulkEditorViewModel));
             viewModelLocator.Register(typeof(CR2WToTextToolView), typeof(CR2WToTextToolViewModel));
-            viewModelLocator.Register(typeof(CsvEditorViewModel), typeof(CsvEditorViewModel));
+            viewModelLocator.Register(typeof(CsvEditorView), typeof(CsvEditorViewModel));
             //-- Category : EditorBars
             viewModelLocator.Register(typeof(ArrayEditorView), typeof(ArrayEditorViewModel));
             viewModelLocator.Register(typeof(ByteArrayEditorView), typeof(ByteArrayEditorViewModel));
@@ -196,9 +199,17 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         public static async Task InitializeShell()
         {
-            var serviceLocator = ServiceLocator.Default;
+            await ShellInnerInit();
+            ThemeInnerInit();
+
+
+        }
+
+        private static async Task ShellInnerInit()
+        {
             HandyControl.Tools.ConfigHelper.Instance.SetLang("en");
-            var shellService = serviceLocator.ResolveType<IShellService>();
+            var shellService = ServiceLocator.Default.ResolveType<IShellService>();
+
             await shellService.CreateAsync<ShellWindow>();
             var sh = (ShellWindow)shellService.Shell;
             StaticReferences.GlobalShell = sh;
@@ -211,14 +222,19 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
             StaticReferences.GlobalShell.SetCurrentValue(MahApps.Metro.Controls.MetroWindow.TitleBarHeightProperty, 25);
             StaticReferences.GlobalShell.SetCurrentValue(Window.TitleProperty, "");
+        }
 
-            var color = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DF2935"));
-            ThemeManager.Current.AddTheme(new Theme("CustomLightRed", "CustomLightRed", "Dark", "Red", (Color)ColorConverter.ConvertFromString("#DF2935"), color, true, false));
-            ThemeManager.Current.AddTheme(RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", Colors.Red));
-            ThemeManager.Current.ChangeTheme(Application.Current, "CustomLightRed");
-
-            //  GlobalShell.SetCurrentValue(FrameworkElement.MinHeightProperty, (double)810);
-            //  GlobalShell.SetCurrentValue(FrameworkElement.MinWidthProperty, (double)1060);
+        private static void ThemeInnerInit()
+        {
+            var SettingsManag = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            if (SettingsManag.ThemeAccent != default)
+            {
+                ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", SettingsManag.ThemeAccent, false));
+            }
+            else
+            {
+                ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", (Color)ColorConverter.ConvertFromString("#DF2935"), false));
+            }
         }
 
         public static void ShowFirstTimeSetup()
@@ -264,15 +280,5 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         #endregion
     }
-    public static class InternetHelper
-    {
-        #region Methods
 
-        public static bool IsConnectedToInternet() => InternetGetConnectedState(out var Desc, 0);
-
-        [DllImport("wininet.dll")]
-        private static extern bool InternetGetConnectedState(out int Description, int ReservedValue);
-
-        #endregion Methods
-    }
 }

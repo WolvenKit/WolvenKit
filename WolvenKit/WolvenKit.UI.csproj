@@ -8,7 +8,7 @@
     <XamlDebuggingInformation>true</XamlDebuggingInformation>
     <ExtrasEnableImplicitWpfReferences>true</ExtrasEnableImplicitWpfReferences>
     <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
-    <ProjectGuid>{1DD8B40B-2548-4663-B208-1D107EF47ACF}</ProjectGuid>
+    <ProjectGuid>{283EA282-F15F-4978-8FF4-43EFE7A9EF69}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <StartupObject />
     <ApplicationIcon>Resources\Media\Images\Icons\Application\TaskBarIcon.ico</ApplicationIcon>
@@ -108,12 +108,14 @@
     <PackageReference Include="Octokit" Version="0.48.0" />
     <PackageReference Include="Open.ChannelExtensions" Version="3.5.0" />
     <PackageReference Include="Orc.CommandLine" Version="4.1.1" />
+    <PackageReference Include="Orc.LogViewer" Version="4.1.0" />
     <PackageReference Include="Orc.ProjectManagement" Version="4.1.1" />
     <PackageReference Include="Orc.Squirrel" Version="4.1.0" />
     <PackageReference Include="Orc.Squirrel.Xaml" Version="4.1.0" />
     <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.1" />
     <PackageReference Include="Pfim" Version="0.9.1" />
     <PackageReference Include="protobuf-net" Version="3.0.73" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="SharpZipLib" Version="1.3.1" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0">
@@ -129,7 +131,7 @@
     <PackageReference Include="WolvenKit.AvalonDock.Themes.VS2013" Version="4.50.4" />
     <PackageReference Include="WolvenKit.AvalonEdit" Version="6.1.1" />
     <PackageReference Include="WolvenKit.ExplorerControl" Version="1.3.0" />
-    <PackageReference Include="WolvenKit.HandyControl" Version="3.1.4" />
+    <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
     <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.2" />
     <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="4.2.5" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />

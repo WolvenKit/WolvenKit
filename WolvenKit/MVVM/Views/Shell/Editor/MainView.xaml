@@ -77,6 +77,13 @@
                         </DataTemplate>
                     </ad:PanesTemplateSelector.FileViewTemplate>
 
+                       <!--  LogView  -->
+                    <ad:PanesTemplateSelector.PropertiesTemplate>
+                        <DataTemplate>
+                            <views1:PropertiesView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.PropertiesTemplate>
+
                     <!--  LogView  -->
                     <ad:PanesTemplateSelector.LogViewTemplate>
                         <DataTemplate>
@@ -146,13 +153,11 @@
                     </ad:PanesTemplateSelector.VisualEditorTemplate>
                     -->
 
-                    <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.AudioToolTemplate>
                         <DataTemplate>
                             <audiotoolz:AudioToolView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.AudioToolTemplate>
-                    -->
 
                     <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.CR2WToTextToolTemplate>

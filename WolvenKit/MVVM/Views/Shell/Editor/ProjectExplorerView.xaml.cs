@@ -30,5 +30,11 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
         }
 
         #endregion Methods
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+
+
+        }
     }
 }

@@ -24,10 +24,7 @@
                 <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
-            <c:ValueConverterGroup x:Key="ConvertExtensionAndSVG">
-                <converters:ExtensionToImageConverter />
-                <svgc:SvgImageConverter />
-            </c:ValueConverterGroup>
+
         </ResourceDictionary>
     </catel:UserControl.Resources>
 
@@ -45,6 +42,7 @@
          Margin="0,33,0,0"
          BorderBrush="Transparent"
          ItemsSource="{Binding Treenodes}"
+         SelectedItemChanged="TreeView_SelectedItemChanged"
          Style="{DynamicResource TreeView}"
          >
             <i1:Interaction.Behaviors>
@@ -88,7 +86,7 @@
             </TreeView.ContextMenu>
 
             <TreeView.ItemContainerStyle>
-                <Style BasedOn="{StaticResource TreeViewItemBaseStyle}" TargetType="{x:Type TreeViewItem}">
+                <Style BasedOn="{StaticResource MahApps.Styles.TreeViewItem}" TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                     <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
@@ -109,7 +107,6 @@
                          Width="22"
                          Height="15"
                          Margin="0"
-                 
                          Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
                          Stretch="Uniform"
                          />

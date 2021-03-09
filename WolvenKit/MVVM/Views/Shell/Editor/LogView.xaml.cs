@@ -1,11 +1,9 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using Catel.IoC;
+using Catel.Logging;
 using ControlzEx.Theming;
-using MahApps.Metro.Controls;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Extensions;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.MVVM.Views.Shell.Editor
@@ -17,7 +15,9 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
     {
         #region Fields
 
-        private readonly ILoggerService _loggerService;
+#pragma warning disable IDE0051 // Remove unused private members
+        //  private readonly ILoggerService _loggerService;
+#pragma warning restore IDE0051 // Remove unused private members
 
         #endregion Fields
 
@@ -29,8 +29,7 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
             { return; } // Prevents Designer from trying to do the below.
 
-            _loggerService = ServiceLocator.Default.ResolveType<ILoggerService>();
-            _loggerService.OnStringLogged += LoggerServiceOnOnStringLogged;
+            ILog _loggerService = LogManager.GetCurrentClassLogger();
         }
 
         #endregion Constructors
@@ -85,7 +84,7 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
                     break;
             }
 
-            LogRichTextBox.Invoke(() => LogRichTextBox.AppendText(text, color));
+            // LogRichTextBox.Invoke(() => LogRichTextBox.AppendText(text, color));
         }
 
         private async void LoggerServiceOnOnStringLogged(object sender, LogStringEventArgs e)
@@ -104,5 +103,10 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
         }
 
         #endregion Methods
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            LogRichTextBox.Clear();
+        }
     }
 }

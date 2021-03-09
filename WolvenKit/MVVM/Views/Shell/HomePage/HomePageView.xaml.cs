@@ -13,7 +13,10 @@ namespace WolvenKit.MVVM.Views.Shell.HomePage
         {
             InitializeComponent();
             GlobalHomePage = this;
+
         }
+
+        
 
 
         private void Grid_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)

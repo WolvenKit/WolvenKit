@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using Catel;
 using Catel.Services;
 using Orc.ProjectManagement;
@@ -25,6 +27,9 @@ namespace WolvenKit.MVVM.ViewModels.Components.Tools
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
+
+        public List<TextBlock> AudioFileList { get; set; } = new List<TextBlock>();
+
 
         #endregion Fields
 

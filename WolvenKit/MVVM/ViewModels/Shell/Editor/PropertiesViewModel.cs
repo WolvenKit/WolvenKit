@@ -30,6 +30,20 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             SetupCommands();
             SetupToolDefaults();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
 
         #endregion constructors
@@ -85,10 +99,24 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         {
         }
 
+        public string BTitle { get; set; }
+
+
+
+
+
+
+
         /// <summary>
         /// Initialize Avalondock specific defaults that are specific to this tool window.
         /// </summary>
-        private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
+        private void SetupToolDefaults() => ContentId = ToolContentId;
+        // Define a unique contentid for this toolwindow
+        //BitmapImage bi = new BitmapImage();
+        // Define an icon for this toolwindow
+        //bi.BeginInit();
+        //bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
+        //bi.EndInit();//IconSource = bi;
 
         #endregion Methods
     }

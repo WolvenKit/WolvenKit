@@ -42,7 +42,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// <summary>
         /// Identifies the caption string used for this tool window.
         /// </summary>
-        public const string ToolTitle = "ProjectExplorer";
+        public const string ToolTitle = "Project Explorer";
 
         private readonly ICommandManager _commandManager;
         private readonly ConcurrentDictionary<ulong, FileSystemInfoModel> _flatNodeDictionary;

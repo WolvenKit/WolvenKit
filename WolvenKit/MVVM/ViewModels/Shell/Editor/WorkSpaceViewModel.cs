@@ -356,7 +356,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         private bool CanShowAssetBrowser() => AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
 
-        private bool CanShowAudioTool() => false;
+        private bool CanShowAudioTool() => true;
 
         private bool CanShowBulkEditor() => false;
 
@@ -1077,7 +1077,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
             void OpenAudioFile(string full)
             {
-                var z = (AudioToolView)ServiceLocator.Default.ResolveType(typeof(AudioToolView));
+                var z = (AudioToolView)ServiceLocator.Default.ResolveType<AudioToolView>();
                 ExecuteAudioTool();
                 z.AddAudioItem(full);
             }
