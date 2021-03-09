@@ -24,8 +24,10 @@ namespace WolvenKit.Functionality.Commands
             StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
             StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.StartScreen.ShownProperty, false);
             StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, true);
-            HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
-            HomePageView.GlobalHomePage.PageViewGrid.Children.Add(HomePageViewModel.GlobalHomePageVM.AboutPV);
+          //  HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
+
+            
+          //  HomePageView.GlobalHomePage.PageViewGrid.Children.Add(HomePageViewModel.GlobalHomePageVM.AboutPV);
         }
 
         #endregion Methods

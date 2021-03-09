@@ -9,9 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 using Catel;
 using Catel.Data;
 using Catel.MVVM;
@@ -129,9 +127,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
                     if (!IsThere)
                     { newfi = "pack://application:,,,/Resources/Media/Images/Application/CpProj.png"; }
                     NewItem = new FancyProjectObject(fi.Name, cd, "Cyberpunk 2077", p, newfi);
-                    Application.Current.Dispatcher.BeginInvoke(
-                                            DispatcherPriority.Background,
-                                            new Action(() => FancyProjects.Add(NewItem)));
+                    FancyProjects.Add(NewItem);
                 }
                 if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.w3modproj.ToString())
                 {
@@ -139,9 +135,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
                     { newfi = "pack://application:,,,/Resources/Media/Images/Application/tw3proj.png"; }
 
                     NewItem = new FancyProjectObject(n, cd, "The Witcher 3", p, newfi);
-                    Application.Current.Dispatcher.BeginInvoke(
-                                           DispatcherPriority.Background,
-                                           new Action(() => FancyProjects.Add(NewItem)));
+                    FancyProjects.Add(NewItem);
                 }
             }
         }
