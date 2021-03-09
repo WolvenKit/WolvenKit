@@ -6,6 +6,7 @@ using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.Extensions.PropertyGridEditors;
 using WolvenKit.Functionality.Converters;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace WolvenKit.Views.Others.PropertyGridEditors
 {
@@ -13,11 +14,19 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
     {
         #region Methods
 
+        public string HeaderText
+        {
+            get => string.IsNullOrEmpty(Wrapper?.REDValue) ? "NOT SET" : Wrapper.REDValue;
+            set => throw new NotImplementedException();
+        }
+
         // creates a treeview
         public override FrameworkElement CreateElement(PropertyItem propertyItem)
         {
-            var (tree, pg) = CreateCustomInnerElement(propertyItem);
+            var (tree, pg) = CreateCustomInnerElement();
             CreateInnerBinding(pg);
+
+            
 
             BindingOperations.SetBinding(
                 tree,
@@ -59,7 +68,7 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
 
         private protected override DependencyProperty GetInnerDependencyProperty() => PropertyGrid.SelectedObjectProperty;
 
-        private (FrameworkElement, FrameworkElement) CreateCustomInnerElement(PropertyItem propertyItem)
+        private (FrameworkElement, FrameworkElement) CreateCustomInnerElement()
         {
             var tree = new TreeView();
             var treeviewitem = new TreeViewItem();
@@ -67,8 +76,24 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
             {
                 PropertyResolver = new MyPropertyResolver()
             };
-            treeviewitem.Items.Add(
-                pg);
+            treeviewitem.Items.Add(pg);
+
+            //var grid = new Grid();
+            var header = new TextBlock();
+            BindingOperations.SetBinding(
+                header,
+                TextBlock.TextProperty,
+                new Binding($"{nameof(HeaderText)}")
+                {
+                    Source = this,
+                    Mode = BindingMode.TwoWay,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                });
+
+            //grid.Children.Add(header);
+
+            treeviewitem.Header = header;
+
             tree.Items.Add(treeviewitem);
             return (tree, pg);
         }

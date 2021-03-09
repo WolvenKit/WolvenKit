@@ -2,7 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using Catel.Linq;
+using System.Linq;
+using Catel.Collections;
 using HandyControl.Controls;
+using HandyControl.Tools.Extension;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Extensions.PropertyGridEditors;
 
@@ -33,7 +37,21 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
                 typeof(ListEditorView),
                 new FrameworkPropertyMetadata((IEnumerable)null, OnItemsSourceChanged));
 
-        public string HeaderText { get => "TEST"; }
+        public PropertyResolver PropertyResolver { get; }
+
+
+
+        public string HeaderText
+        {
+            get
+            {
+                var x = $"[{ItemSourceCount}]";
+                return x;
+            }
+            set => throw new System.NotImplementedException();
+        }
+
+        private int ItemSourceCount => (ItemsSource is IList list) ?  list.Count : 0;
 
         public IEnumerable ItemsSource
         {
