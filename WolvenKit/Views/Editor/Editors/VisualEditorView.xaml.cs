@@ -9,8 +9,10 @@ using WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes;
 
 namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor
 {
+    
     public partial class VisualEditorView
     {
+        
         #region Constructors
 
         public VisualEditorView()
