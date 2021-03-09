@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <AssemblyName>WolvenKit</AssemblyName>
@@ -603,6 +603,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="MVVM\ViewModels\Components\Dialogs\" />
+    <Folder Include="MVVM\ViewModels\Components\Editors\" />
+    <Folder Include="MVVM\ViewModels\Components\Tools\" />
     <Folder Include="MVVM\ViewModels\Shell\HomePage\Pages\SettingsPages\SubPages\Integration\" />
     <Folder Include="MVVM\ViewModels\Shell\HomePage\Pages\SettingsPages\SubPages\Packaging\" />
   </ItemGroup>
