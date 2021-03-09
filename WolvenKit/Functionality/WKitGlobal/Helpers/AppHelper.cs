@@ -100,7 +100,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.Register(typeof(MimicsView), typeof(MimicsViewModel));
             viewModelLocator.Register(typeof(BulkEditorView), typeof(MVVM.ViewModels.Components.Editors.BulkEditorViewModel));
             viewModelLocator.Register(typeof(CR2WToTextToolView), typeof(CR2WToTextToolViewModel));
-            viewModelLocator.Register(typeof(CsvEditorViewModel), typeof(CsvEditorViewModel));
+            viewModelLocator.Register(typeof(CsvEditorView), typeof(CsvEditorViewModel));
             //-- Category : EditorBars
             viewModelLocator.Register(typeof(ArrayEditorView), typeof(ArrayEditorViewModel));
             viewModelLocator.Register(typeof(ByteArrayEditorView), typeof(ByteArrayEditorViewModel));

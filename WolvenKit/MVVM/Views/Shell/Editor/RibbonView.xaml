@@ -30,7 +30,11 @@
 
             <!--  StartScreen  -->
             <fluent:Ribbon.StartScreen>
-                <fluent:StartScreen x:Name="startScreen" IsOpen="True">
+                <fluent:StartScreen
+                 x:Name="startScreen"
+                 IsOpen="True"
+                 Visibility="{Binding StartScreenShown}"
+                 >
                     <HomeView:HomePageView />
                 </fluent:StartScreen>
             </fluent:Ribbon.StartScreen>
@@ -41,6 +45,7 @@
                  x:Name="BackstageX"
                  Margin="70,0,0,0"
                  MouseLeftButtonDown="Backstage_MouseLeftButtonDown"
+                 Visibility="{Binding BackstageIsOpen}"
                  >
                     <views1:BackStageView />
                 </fluent:Backstage>

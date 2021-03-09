@@ -1,6 +1,6 @@
 <Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net5.0-windows7</TargetFrameworks>
+    <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <AssemblyName>WolvenKit</AssemblyName>
     <RootNamespace>WolvenKit</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -8,7 +8,7 @@
     <XamlDebuggingInformation>true</XamlDebuggingInformation>
     <ExtrasEnableImplicitWpfReferences>true</ExtrasEnableImplicitWpfReferences>
     <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
-    <ProjectGuid>{1DD8B40B-2548-4663-B208-1D107EF47ACF}</ProjectGuid>
+    <ProjectGuid>{283EA282-F15F-4978-8FF4-43EFE7A9EF69}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <StartupObject />
     <ApplicationIcon>Resources\Media\Images\Icons\Application\TaskBarIcon.ico</ApplicationIcon>

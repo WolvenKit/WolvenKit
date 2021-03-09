@@ -62,6 +62,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 
         #region properties
 
+        public bool BackstageIsOpen { get; set; }
+        public bool StartScreenShown { get; set; }
+
+
+
+
+
+
+
+
+
         public Random rnd = new Random();
 
         private Color _selectedTheme;
@@ -84,17 +95,12 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             {
                 if (_selectedTheme != value)
                 {
-
                     var stringint = "RandomTheme" + rnd.Next(0, 9999) + "Name";
                     _selectedTheme = value;
                     var color = new SolidColorBrush(value);
                     ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", value, false));
-
-
                     ILog _logger = LogManager.GetCurrentClassLogger();
-
                     _logger.Info("Changed theme : " + value.ToString());
-
                     _settingsManager.ThemeAccent = value;
                     _settingsManager.Save();
 
@@ -108,6 +114,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         #endregion properties
 
         #region commands
+
 
         /// <summary>
         /// Is raised when a PaneView is selected: shows the contextual ribbon tab
