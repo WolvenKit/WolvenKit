@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -47,6 +46,7 @@ using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard;
 using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard;
 using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.PublishWizard;
 using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.UserWizard;
+using WolvenKit.MVVM.Views.PropertyGridEditors;
 using WolvenKit.MVVM.Views.Shell.Backstage;
 using WolvenKit.MVVM.Views.Shell.Editor;
 using WolvenKit.MVVM.Views.Shell.Homepage.Pages.IntegratedToolsPages.CyberCAT;
@@ -57,6 +57,10 @@ using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Editor;
 using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.General;
 using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Tool;
 using WolvenKit.ViewModels;
+using WolvenKit.ViewModels.HomePage;
+using WolvenKit.ViewModels.Shell;
+
+
 using WolvenKit.Views;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
@@ -67,6 +71,8 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         public static async Task InitializeMVVM()
         {
+            PropertyGridResolver.Initialize();
+
             ApplicationHelper.StartProfileOptimization();
 
             var uri = new Uri("pack://application:,,,/WolvenKit.Resources;component/Resources/Media/Images/git.png");

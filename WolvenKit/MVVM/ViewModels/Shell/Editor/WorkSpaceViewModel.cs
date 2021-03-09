@@ -20,6 +20,7 @@ using WolvenKit.CR2W;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.Models;
 using WolvenKit.MVVM.Model;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.MVVM.ViewModels.Components.Editors;

@@ -50,6 +50,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{13670C98-1505-4617-89CF-65B5F7217369}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.UI", "WolvenKit\WolvenKit.UI.csproj", "{283EA282-F15F-4978-8FF4-43EFE7A9EF69}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B850C5FC-1B02-4735-854F-2D45778B856C} = {B850C5FC-1B02-4735-854F-2D45778B856C}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{7DED2833-D255-4CAA-A82F-8DC2D32E9F4F}"
 EndProject
@@ -58,6 +61,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Networking", "Networking", "{D3683074-E94B-4B29-B898-63672E4AD752}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other", "Other", "{487EA06E-77DB-4964-BE28-76141D241E06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.App", "WolvenKit.App\WolvenKit.App.csproj", "{B850C5FC-1B02-4735-854F-2D45778B856C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -714,6 +719,48 @@ Global
 		{283EA282-F15F-4978-8FF4-43EFE7A9EF69}.Static lib - Release|x64.Build.0 = Release|Any CPU
 		{283EA282-F15F-4978-8FF4-43EFE7A9EF69}.Static lib - Release|x86.ActiveCfg = Release|Any CPU
 		{283EA282-F15F-4978-8FF4-43EFE7A9EF69}.Static lib - Release|x86.Build.0 = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Debug|x64.Build.0 = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Debug|x86.Build.0 = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Release - Fast FPU|Any CPU.ActiveCfg = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Release - Fast FPU|Any CPU.Build.0 = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Release - Fast FPU|x64.ActiveCfg = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Release - Fast FPU|x64.Build.0 = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Release - Fast FPU|x86.ActiveCfg = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Release - Fast FPU|x86.Build.0 = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Release|x64.ActiveCfg = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Release|x64.Build.0 = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Release|x86.ActiveCfg = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Release|x86.Build.0 = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.SDL-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.SDL-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.SDL-Debug|x64.ActiveCfg = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.SDL-Debug|x64.Build.0 = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.SDL-Debug|x86.ActiveCfg = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.SDL-Debug|x86.Build.0 = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Debug|x64.ActiveCfg = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Debug|x64.Build.0 = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Debug|x86.ActiveCfg = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Debug|x86.Build.0 = Debug|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Release - Fast FPU|Any CPU.ActiveCfg = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Release - Fast FPU|Any CPU.Build.0 = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Release - Fast FPU|x64.ActiveCfg = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Release - Fast FPU|x64.Build.0 = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Release - Fast FPU|x86.ActiveCfg = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Release - Fast FPU|x86.Build.0 = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Release|Any CPU.Build.0 = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Release|x64.ActiveCfg = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Release|x64.Build.0 = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Release|x86.ActiveCfg = Release|Any CPU
+		{B850C5FC-1B02-4735-854F-2D45778B856C}.Static lib - Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -739,6 +786,7 @@ Global
 		{2EA6F0B1-7000-4E49-8629-97F69A30142C} = {B0D24D17-3F30-4E38-808F-491B25F437DA}
 		{D3683074-E94B-4B29-B898-63672E4AD752} = {B0D24D17-3F30-4E38-808F-491B25F437DA}
 		{487EA06E-77DB-4964-BE28-76141D241E06} = {B0D24D17-3F30-4E38-808F-491B25F437DA}
+		{B850C5FC-1B02-4735-854F-2D45778B856C} = {13670C98-1505-4617-89CF-65B5F7217369}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7E26A334-EB40-465D-85F1-2AEE9D65F46A}
