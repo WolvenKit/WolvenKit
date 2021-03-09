@@ -26,28 +26,24 @@
     <Description>WPF</Description>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="MVVM\ViewModels\Components\Wizards\WizardPages\InstallerWizard\**" />
     <Compile Remove="Views\Editor\Editors\Nodes\Audio\**" />
     <Compile Remove="Views\Editor\Editors\Nodes\Quest\**" />
     <Compile Remove="Views\Editor\Editors\Nodes\Scene\**" />
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="Resources\Styles\CustomBase\**" />
     <Compile Remove="Resources\Styles\Custom\**" />
-    <EmbeddedResource Remove="MVVM\ViewModels\Components\Wizards\WizardPages\InstallerWizard\**" />
     <EmbeddedResource Remove="Views\Editor\Editors\Nodes\Audio\**" />
     <EmbeddedResource Remove="Views\Editor\Editors\Nodes\Quest\**" />
     <EmbeddedResource Remove="Views\Editor\Editors\Nodes\Scene\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="Resources\Styles\CustomBase\**" />
     <EmbeddedResource Remove="Resources\Styles\Custom\**" />
-    <None Remove="MVVM\ViewModels\Components\Wizards\WizardPages\InstallerWizard\**" />
     <None Remove="Views\Editor\Editors\Nodes\Audio\**" />
     <None Remove="Views\Editor\Editors\Nodes\Quest\**" />
     <None Remove="Views\Editor\Editors\Nodes\Scene\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="Resources\Styles\CustomBase\**" />
     <None Remove="Resources\Styles\Custom\**" />
-    <Page Remove="MVVM\ViewModels\Components\Wizards\WizardPages\InstallerWizard\**" />
     <Page Remove="Views\Editor\Editors\Nodes\Audio\**" />
     <Page Remove="Views\Editor\Editors\Nodes\Quest\**" />
     <Page Remove="Views\Editor\Editors\Nodes\Scene\**" />
