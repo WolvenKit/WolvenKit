@@ -48,19 +48,12 @@ using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.UserWizard;
 using WolvenKit.MVVM.Views.PropertyGridEditors;
 using WolvenKit.MVVM.Views.Shell.Backstage;
 using WolvenKit.MVVM.Views.Shell.Editor;
-using WolvenKit.MVVM.Views.Shell.Homepage.Pages.IntegratedToolsPages.CyberCAT;
 using WolvenKit.MVVM.Views.Shell.HomePage;
-using WolvenKit.MVVM.Views.Shell.HomePage.Pages;
-using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages;
-using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Editor;
-using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.General;
-using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Tool;
 using WolvenKit.ViewModels;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shell;
-
-
 using WolvenKit.Views;
+using WolvenKit.Views.HomePage.Pages;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {

@@ -1,7 +1,7 @@
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.Editor;
+using WolvenKit.Views.HomePage.Pages;
 
-namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages
+namespace WolvenKit.Views.HomePage.Pages
 {
     public partial class EditorSettingsView
     {

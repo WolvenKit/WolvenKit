@@ -1,4 +1,4 @@
-namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages.SettingsPages.SubPages.General
+namespace WolvenKit.Views.HomePage.Pages
 {
     public partial class LoggingSubSettingsView
     {
