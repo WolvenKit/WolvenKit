@@ -4,8 +4,9 @@ using Catel.Services;
 using Catel.Threading;
 using Orc.ProjectManagement;
 using WolvenKit.Common.Services;
+using WolvenKit.MVVM.ViewModels.Shell.Editor;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor
+namespace WolvenKit.ViewModels.Editor
 {
     public class PropertiesViewModel : ToolViewModel
     {

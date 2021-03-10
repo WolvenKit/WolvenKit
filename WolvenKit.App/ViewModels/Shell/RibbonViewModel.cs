@@ -16,6 +16,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.ViewModels.Shell.Editor;
+using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.ViewModels.Shell
 { // #MVVM

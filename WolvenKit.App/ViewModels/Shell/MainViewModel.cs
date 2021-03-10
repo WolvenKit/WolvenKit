@@ -22,7 +22,7 @@ using WolvenKit.CR2W.Types;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.MVVM.Model;
-using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
+using WolvenKit.ViewModels.Editor;
 using WolvenKit.Wwise;
 using WolvenKit.Wwise.Wwise;
 

@@ -1,4 +1,4 @@
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
+namespace WolvenKit.ViewModels.Editor
 {
     /// <summary>
     /// Represents a viewmodel

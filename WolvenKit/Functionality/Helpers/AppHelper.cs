@@ -13,9 +13,6 @@ using Orchestra.Services;
 using Orchestra.Views;
 using WolvenKit.Functionality.Services;
 using WolvenKit.MVVM.ViewModels.Components.Dialogs;
-using WolvenKit.MVVM.ViewModels.Components.Editors;
-using WolvenKit.MVVM.ViewModels.Components.Editors.VisualEditor;
-using WolvenKit.MVVM.ViewModels.Components.Tools;
 using WolvenKit.MVVM.ViewModels.Components.Wizards;
 using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.BugReportWizard;
 using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FeedbackWizard;
@@ -25,7 +22,6 @@ using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.PublishWizard;
 using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.UserWizard;
 using WolvenKit.MVVM.ViewModels.Shell.Backstage;
 using WolvenKit.MVVM.ViewModels.Shell.Editor;
-using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
 using WolvenKit.MVVM.Views.Components.Dialogs;
 using WolvenKit.MVVM.Views.Components.Editors;
 using WolvenKit.MVVM.Views.Components.Editors.VisualEditor;
@@ -36,6 +32,7 @@ using WolvenKit.MVVM.Views.PropertyGridEditors;
 using WolvenKit.MVVM.Views.Shell.Backstage;
 using WolvenKit.MVVM.Views.Shell.Editor;
 using WolvenKit.ViewModels;
+using WolvenKit.ViewModels.Editor;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.HomePage.Pages;
 using WolvenKit.ViewModels.Shell;
@@ -70,7 +67,16 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             // Register Viewmodels & Views
             var viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
             var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
+            viewLocator.NamingConventions.Add("WolvenKit.Views.[VM]View");
+            viewLocator.NamingConventions.Add("WolvenKit.Views.HomePage.[VM]View");
+            viewLocator.NamingConventions.Add("WolvenKit.Views.HomePage.Pages.[VM]View");
 
+
+            viewLocator.NamingConventions.Add("WolvenKit.ViewModels.[VM]ViewModel");
+            viewLocator.NamingConventions.Add("WolvenKit.ViewModels.HomePage.[VM]ViewModel");
+            viewLocator.NamingConventions.Add("WolvenKit.ViewModels.HomePage.Pages.[VM]ViewModel");
+
+            // I guess teh above does nothing or im doing it wrong whaever we got the below stuff already anyway.
 
 
             //TODO: rename later to MainViewModel
@@ -102,7 +108,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.Register(typeof(VisualEditorView), typeof(VisualEditorViewModel));
             viewModelLocator.Register(typeof(AnimsView), typeof(AnimsViewModel));
             viewModelLocator.Register(typeof(MimicsView), typeof(MimicsViewModel));
-            viewModelLocator.Register(typeof(BulkEditorView), typeof(MVVM.ViewModels.Components.Editors.BulkEditorViewModel));
+            viewModelLocator.Register(typeof(BulkEditorView), typeof(BulkEditorViewModel));
             viewModelLocator.Register(typeof(CR2WToTextToolView), typeof(CR2WToTextToolViewModel));
             viewModelLocator.Register(typeof(CsvEditorView), typeof(CsvEditorViewModel));
             //-- Category : EditorBars

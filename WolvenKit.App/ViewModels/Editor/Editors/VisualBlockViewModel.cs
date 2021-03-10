@@ -1,6 +1,6 @@
 using Catel.MVVM;
 
-namespace WolvenKit.MVVM.ViewModels.Components.Editors.VisualEditor.Blocks
+namespace WolvenKit.ViewModels.Editor
 {
     internal class VisualBlockViewModel : ViewModelBase
     {

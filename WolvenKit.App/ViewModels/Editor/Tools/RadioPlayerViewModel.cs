@@ -1,6 +1,6 @@
 using Catel.MVVM;
 
-namespace WolvenKit.MVVM.ViewModels.Components.Tools
+namespace WolvenKit.ViewModels.Editor
 {
     public class RadioPlayerViewModel : ViewModelBase
     {

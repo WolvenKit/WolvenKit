@@ -10,9 +10,10 @@ using System.Windows.Input;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.MVVM.ViewModels.Shell.Editor;
 using WolvenKit.Radish.Model;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor
+namespace WolvenKit.ViewModels.Editor
 {
     public class RadishViewModel : ViewModel
     {

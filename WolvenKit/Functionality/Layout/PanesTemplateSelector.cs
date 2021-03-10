@@ -1,10 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
-using WolvenKit.MVVM.ViewModels.Components.Editors;
-using WolvenKit.MVVM.ViewModels.Components.Editors.VisualEditor;
-using WolvenKit.MVVM.ViewModels.Components.Tools;
-using WolvenKit.MVVM.ViewModels.Shell.Editor;
-using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
+using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Functionality.Layout
 {
@@ -163,7 +159,7 @@ namespace WolvenKit.Functionality.Layout
             LogViewModel _ => LogViewTemplate,
             ProjectExplorerViewModel _ => ProjectExplorerTemplate,
             AssetBrowserViewModel _ => AssetBrowserTemplate,
-            MVVM.ViewModels.Components.Editors.BulkEditorViewModel _ => BulkEditorTemplate,
+            BulkEditorViewModel _ => BulkEditorTemplate,
             CodeEditorViewModel _ => CodeEditorTemplate,
             CsvEditorViewModel _ => CsvEditorTemplate,
             HexEditorViewModel _ => HexEditorTemplate,

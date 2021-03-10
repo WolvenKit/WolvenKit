@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor
+namespace WolvenKit.ViewModels.Editor
 {
     /// <summary>
     /// Implements the viewmodel that drives the log view.

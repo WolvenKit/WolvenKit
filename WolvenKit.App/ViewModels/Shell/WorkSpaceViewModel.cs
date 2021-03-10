@@ -22,10 +22,7 @@ using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.MVVM.ViewModels.Components.Editors;
-using WolvenKit.MVVM.ViewModels.Components.Editors.VisualEditor;
-using WolvenKit.MVVM.ViewModels.Components.Tools;
-using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
+using WolvenKit.ViewModels.Editor;
 using WolvenKit.ViewModels;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
@@ -510,7 +507,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
-        private Components.Editors.BulkEditorViewModel _BulkEditorVM = null;
+        private BulkEditorViewModel _BulkEditorVM = null;
 
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
@@ -650,11 +647,11 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             }
         }
 
-        public Components.Editors.BulkEditorViewModel BulkEditorVM
+        public BulkEditorViewModel BulkEditorVM
         {
             get
             {
-                _BulkEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<Components.Editors.BulkEditorViewModel>();
+                _BulkEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<BulkEditorViewModel>();
                 _BulkEditorVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _BulkEditorVM;
             }

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
+namespace WolvenKit.ViewModels.Editor
 {
     public interface IDocumentViewModel
     {

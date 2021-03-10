@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model;
-using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
+using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.MVVM.ViewModels.Shell.Editor
 {

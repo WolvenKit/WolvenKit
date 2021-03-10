@@ -29,7 +29,7 @@ using WolvenKit.MVVM.Model;
 using WolvenKit.MVVM.Model.ProjectManagement;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor
+namespace WolvenKit.ViewModels.Editor
 {
     public class ProjectExplorerViewModel : ToolViewModel
     {
@@ -419,7 +419,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             var filename = SelectedItem.FullName;
 
             var visualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();
-            var viewModel = new Components.Dialogs.InputDialogViewModel() { Text = filename };
+            var viewModel = new MVVM.ViewModels.Components.Dialogs.InputDialogViewModel() { Text = filename };
             await visualizerService.ShowDialogAsync(viewModel, delegate (object sender, UICompletedEventArgs args)
             {
                 if (args.Result != true)
@@ -427,7 +427,7 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
                     return;
                 }
 
-                if (args.DataContext is not Components.Dialogs.InputDialogViewModel vm)
+                if (args.DataContext is not MVVM.ViewModels.Components.Dialogs.InputDialogViewModel vm)
                 {
                     return;
                 }

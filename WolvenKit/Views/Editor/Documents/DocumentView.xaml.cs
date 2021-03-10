@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
+using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.MVVM.Views.Shell.Editor
 {

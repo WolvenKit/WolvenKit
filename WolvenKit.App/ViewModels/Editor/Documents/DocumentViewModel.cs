@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,13 +15,12 @@ using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W.SRT;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Extensions;
 using WolvenKit.Models;
-using WolvenKit.MVVM.Model;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.MVVM.ViewModels.Shell.Editor;
 using WolvenKit.MVVM.Views.PropertyGridEditors;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
+namespace WolvenKit.ViewModels.Editor
 {
     public enum Gender
     {

@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using WolvenKit.Common;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.MVVM.ViewModels.Components.Tools;
+using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.MVVM.Views.Components.Tools
 {
