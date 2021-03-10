@@ -29,6 +29,7 @@ namespace WolvenKit.ViewModels.Shell
         private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
         private readonly IUIVisualizerService _uiVisualizerService;
+        public static RibbonViewModel GlobalRibbonVM;
 
         #endregion fields
 
@@ -54,6 +55,9 @@ namespace WolvenKit.ViewModels.Shell
             _uiVisualizerService = uiVisualizerService;
             _settingsManager = settingsManager;
 
+            StartScreenShown = false;
+            BackstageIsOpen = true;
+            GlobalRibbonVM = this;
             ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
 
             var assembly = AssemblyHelper.GetEntryAssembly();

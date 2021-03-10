@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Media;
 using Catel.Data;
 using Catel.IoC;
-using Fluent;
 using Orchestra;
 using Orchestra.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -11,6 +10,7 @@ using WolvenKit.MVVM.Views.Components.Editors;
 using WolvenKit.MVVM.Views.Components.Editors.VisualEditor;
 using WolvenKit.MVVM.Views.Components.Tools;
 using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.MVVM.Views.Shell.Editor
 {
@@ -125,9 +125,10 @@ namespace WolvenKit.MVVM.Views.Shell.Editor
 
         private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
+            RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = true;
 
-            StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
-            StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, true);
+
         }
 
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
