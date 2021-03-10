@@ -9,8 +9,8 @@
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:local1="clr-namespace:WolvenKit.MVVM.Views.Shell.Backstage"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
- xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
- d:DesignHeight="450"
+ xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" xmlns:local11="clr-namespace:WolvenKit.Views.Shared"
+    d:DesignHeight="450"
  d:DesignWidth="800"
  mc:Ignorable="d"
  >
@@ -103,7 +103,7 @@
                      CornerRadius="10"
                      >
                         <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
-                            <local1:RecentlyUsedItemsView Margin="5,-56,5,0" FontSize="18" />
+                            <local11:RecentlyUsedItemsView Margin="5,-56,5,0" FontSize="18" />
                         </hc:TransitioningContentControl>
                     </Border>
                 </Border>

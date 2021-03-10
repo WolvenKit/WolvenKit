@@ -2,7 +2,7 @@ using System.Windows;
 using Catel.Windows;
 using WolvenKit.ViewModels.Others;
 
-namespace WolvenKit.Views
+namespace WolvenKit.Views.Others
 {
     public partial class UserControlHostWindowView : DataWindow
     {

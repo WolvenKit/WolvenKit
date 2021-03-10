@@ -4,8 +4,9 @@ using System.Windows;
 using System.Windows.Controls;
 using HandyControl.Controls;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.MVVM.Views.PropertyGridEditors;
 
-namespace WolvenKit.MVVM.Views.PropertyGridEditors
+namespace WolvenKit.Views.Others.PropertyGridEditors
 {
     /// <summary>
     /// Interaction logic for ListEditor.xaml
@@ -26,7 +27,7 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
         #region properties
 
         public PropertyResolver PropertyResolver { get; }
-        public string HeaderText { get => "TEST"; } 
+        public string HeaderText { get => "TEST"; }
 
         public IEnumerable ItemsSource
         {
