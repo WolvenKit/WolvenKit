@@ -22,7 +22,7 @@ using WolvenKit.Functionality.Controllers;
 using WolvenKit.MVVM.Model;
 using static WolvenKit.CR2W.Types.Enums;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor
+namespace WolvenKit.ViewModels.Editor
 {
     public class ImportViewModel : ToolViewModel
     {

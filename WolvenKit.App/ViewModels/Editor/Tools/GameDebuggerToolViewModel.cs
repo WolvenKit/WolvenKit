@@ -6,7 +6,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.MVVM.ViewModels.Shell.Editor;
 
-namespace WolvenKit.MVVM.ViewModels.Components.Tools
+namespace WolvenKit.ViewModels.Editor
 {
     public class GameDebuggerToolViewModel : ToolViewModel
     {

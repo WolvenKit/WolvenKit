@@ -1,4 +1,6 @@
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor
+using WolvenKit.MVVM.ViewModels.Shell.Editor;
+
+namespace WolvenKit.ViewModels.Editor
 {
     public class ToolViewModel : PaneViewModel
     {

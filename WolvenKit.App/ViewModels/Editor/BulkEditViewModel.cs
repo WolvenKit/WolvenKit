@@ -13,8 +13,9 @@ using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.MVVM.ViewModels.Shell.Editor;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor
+namespace WolvenKit.ViewModels.Editor.Old
 {
     public class BulkEditOptions
     {

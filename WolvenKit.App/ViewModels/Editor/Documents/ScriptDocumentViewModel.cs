@@ -4,7 +4,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
 using WolvenKit.Functionality.Controllers;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
+namespace WolvenKit.ViewModels.Editor
 {
     public class ScriptDocumentViewModel : CloseableViewModel, Old_IDocumentViewModel
     {

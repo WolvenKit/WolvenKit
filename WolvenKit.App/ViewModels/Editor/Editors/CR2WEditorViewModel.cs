@@ -1,4 +1,4 @@
-namespace WolvenKit.MVVM.ViewModels.Components.Editors
+namespace WolvenKit.ViewModels.Editor
 {
     public class CR2WEditorViewModel
     {

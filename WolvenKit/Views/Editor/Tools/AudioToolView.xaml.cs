@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -9,7 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Catel.IoC;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.MVVM.ViewModels.Components.Tools;
+using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 {

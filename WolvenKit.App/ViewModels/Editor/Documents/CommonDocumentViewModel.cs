@@ -9,7 +9,7 @@ using WolvenKit.CR2W;
 using WolvenKit.CR2W.SRT;
 using WolvenKit.Functionality.Controllers;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor.Documents
+namespace WolvenKit.ViewModels.Editor
 {
     public class CommonDocumentViewModel : CloseableViewModel, Old_IDocumentViewModel
     {
