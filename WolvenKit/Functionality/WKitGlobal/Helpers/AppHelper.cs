@@ -26,7 +26,6 @@ using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.UserWizard;
 using WolvenKit.MVVM.ViewModels.Shell.Backstage;
 using WolvenKit.MVVM.ViewModels.Shell.Editor;
 using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
-using WolvenKit.MVVM.ViewModels.Shell.HomePage;
 using WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages;
 using WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.IntegratedToolsPages.CyberCAT;
 using WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.SettingsPages;
@@ -127,7 +126,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.Register(typeof(RecentlyUsedItemsView), typeof(RecentlyUsedItemsViewModel));
             //-- Category : Homepage
             viewModelLocator.Register(typeof(HomePageView), typeof(HomePageViewModel));
-            viewModelLocator.Register(typeof(TopicView), typeof(TopicViewModel));
             viewModelLocator.Register(typeof(AboutPageView), typeof(AboutPageViewModel));
             viewModelLocator.Register(typeof(GithubPageView), typeof(GithubPageViewModel));
             viewModelLocator.Register(typeof(RecentProjectView), typeof(RecentlyUsedItemsViewModel));

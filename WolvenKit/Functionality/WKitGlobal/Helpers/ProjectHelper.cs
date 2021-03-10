@@ -4,11 +4,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
     {
         #region Enums
 
-        public enum EProjectType
-        {
-            cpmodproj,
-            w3modproj
-        }
 
         #endregion Enums
 

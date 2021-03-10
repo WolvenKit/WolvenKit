@@ -603,13 +603,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MVVM\ViewModels\Components\Dialogs\" />
-    <Folder Include="MVVM\ViewModels\Components\Editors\" />
-    <Folder Include="MVVM\ViewModels\Components\Tools\" />
-    <Folder Include="MVVM\ViewModels\Shell\HomePage\Pages\SettingsPages\SubPages\Integration\" />
-    <Folder Include="MVVM\ViewModels\Shell\HomePage\Pages\SettingsPages\SubPages\Packaging\" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
     </Compile>
@@ -633,5 +626,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\Media\Images\Icons\Files\file.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Functionality\Controllers\" />
   </ItemGroup>
 </Project>
