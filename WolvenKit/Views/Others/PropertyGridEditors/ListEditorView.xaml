@@ -47,7 +47,7 @@
                             <TextBlock
                              Margin="30,0"
                              DataContext="{Binding}"
-                             Text="{Binding HeaderText}" />
+                             Text="{Binding }" />
                         </Grid>
                     </TreeViewItem.Header>
                     <hc:PropertyGrid PropertyResolver="{Binding PropertyResolver}" SelectedObject="{Binding}" />
@@ -66,13 +66,21 @@
                     <TreeViewItem.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
+                            <TextBlock Grid.Column="0"
+                                       DataContext="{Binding
+                                Mode=OneWay,
+                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ListEditorView}}}"
+                                       Text="{Binding HeaderText}"
+                                />
+
                             <!--  Add Item Box  -->
                             <hc:ComboBox
-                             Grid.Column="0"
+                             Grid.Column="1"
                              Width="Auto"
                              MaxHeight="50"
                              Margin="0,5,10,5"
@@ -82,7 +90,7 @@
 
                             <!--  Open Special Editor Button  -->
                             <Button
-                             Grid.Column="1"
+                             Grid.Column="2"
                              Margin="0,5,5,5"
                              HorizontalAlignment="Right"
                              hc:IconElement.Geometry="{DynamicResource DragHorizontalGeometry}" />
