@@ -10,12 +10,14 @@
     xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
     xmlns:cmodel="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:propertyGridEditors="clr-namespace:WolvenKit.Extensions.PropertyGridEditors"
     d:DesignHeight="450"
  d:DesignWidth="800"
  IsVisibleChanged="UserControl_IsVisibleChanged"
  mc:Ignorable="d">
     <catel:UserControl.Resources>
         <ResourceDictionary>
+            <propertyGridEditors:MyPropertyResolver x:Key="MyPropertyResolver"/>
             <ResourceDictionary.MergedDictionaries>
                 <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
@@ -136,7 +138,7 @@
          HorizontalAlignment="Stretch" />
 
         <Grid Grid.Column="2">
-            <hc:PropertyGrid PropertyResolver="{Binding PropertyResolver}" SelectedObject="{Binding SelectedChunk.Data}" />
+            <hc:PropertyGrid PropertyResolver="{DynamicResource MyPropertyResolver}" SelectedObject="{Binding SelectedChunk.Data}" />
         </Grid>
     </Grid>
 </catel:UserControl>
