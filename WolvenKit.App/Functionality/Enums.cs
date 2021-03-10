@@ -13,4 +13,12 @@ namespace WolvenKit.Functionality.WKitGlobal
         ArchiveManager = 5,
         Max = 6
     }
+
+
+    public enum EProjectType
+    {
+        cpmodproj,
+        w3modproj
+    }
+
 }

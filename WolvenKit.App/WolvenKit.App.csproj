@@ -37,6 +37,8 @@
       <PackageReference Include="NodeNetwork" Version="5.1.2" />
     <PackageReference Include="NodeNetworkToolkit" Version="5.1.2" />
     <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="4.2.5" />
+        <PackageReference Include="Pfim" Version="0.9.1" />
+
 
 
   </ItemGroup>
