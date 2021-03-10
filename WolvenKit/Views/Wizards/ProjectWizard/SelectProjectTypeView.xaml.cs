@@ -1,7 +1,7 @@
 using Catel.IoC;
 using WolvenKit.MVVM.ViewModels.Components.Wizards;
 
-namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard
+namespace WolvenKit.Views.Wizards.WizardPages.ProjectWizard
 {
     public partial class SelectProjectTypeView
     {

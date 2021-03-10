@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using Catel.MVVM;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages
+namespace WolvenKit.ViewModels.HomePage.Pages
 {
     public class DebugPageViewModel : ViewModelBase
     {

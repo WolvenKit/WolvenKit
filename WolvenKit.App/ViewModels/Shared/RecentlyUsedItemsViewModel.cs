@@ -20,7 +20,6 @@ using Orchestra.Models;
 using Orchestra.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.MVVM.ViewModels.Shell.HomePage;
 using WolvenKit.ViewModels.HomePage;
 using RelayCommand = WolvenKit.Functionality.Commands.RelayCommand;
 

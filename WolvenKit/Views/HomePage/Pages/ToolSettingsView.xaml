@@ -11,6 +11,7 @@
         <hc:SideMenu
          Width="150"
          HorizontalAlignment="Left"
+         ExpandMode="ShowOne"
          SideBrush="{DynamicResource MahApps.Brushes.Accent}"
          >
 

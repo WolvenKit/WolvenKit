@@ -1,6 +1,6 @@
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.MVVM.Views.Components.Wizards
+namespace WolvenKit.Views.Wizards
 {
     public partial class InstallerWizardView
     {

@@ -1,6 +1,6 @@
 using Catel.MVVM;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.SettingsPages.SubPages.Editor
+namespace WolvenKit.ViewModels.HomePage.Pages
 {
     public class GeneralSubSettingsViewModel : ViewModelBase
     {

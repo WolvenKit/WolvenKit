@@ -1,4 +1,4 @@
-namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.UserWizard
+namespace WolvenKit.Views.Wizards.WizardPages.UserWizard
 {
     public partial class UserWizardPageView
     {

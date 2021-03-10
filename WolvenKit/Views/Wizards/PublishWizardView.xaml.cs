@@ -1,7 +1,7 @@
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.PublishWizard;
+using WolvenKit.Views.Wizards.WizardPages.PublishWizard;
 
-namespace WolvenKit.MVVM.Views.Components.Wizards
+namespace WolvenKit.Views.Wizards
 {
     public partial class PublishWizardView
     {
