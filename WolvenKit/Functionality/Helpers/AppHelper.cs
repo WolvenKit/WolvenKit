@@ -76,6 +76,11 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
             //TODO: rename later to MainViewModel
 
+
+
+
+            viewModelLocator.Register(typeof(UserControlHostWindowView), typeof(UserControlHostWindowViewModel));
+
             // ---- HeadCategory : Extras
             //-- Category : Radio
             viewModelLocator.Register(typeof(RadioPlayerView), typeof(RadioPlayerViewModel));
