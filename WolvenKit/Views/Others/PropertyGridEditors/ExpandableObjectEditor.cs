@@ -1,14 +1,13 @@
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media;
 using HandyControl.Controls;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.Extensions.PropertyGridEditors;
 using WolvenKit.Functionality.Converters;
 
-namespace WolvenKit.MVVM.Views.PropertyGridEditors
+namespace WolvenKit.Views.Others.PropertyGridEditors
 {
     public class ExpandableObjectEditor : EditorBase<IEditableVariable>, IExpandableObjectEditor
     {

@@ -7,7 +7,7 @@ using HandyControl.Controls;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Functionality.Converters;
 
-namespace WolvenKit.MVVM.Views.PropertyGridEditors
+namespace WolvenKit.Views.Others.PropertyGridEditors
 {
     /// <summary>
     /// Abstract base for property grid editors.
