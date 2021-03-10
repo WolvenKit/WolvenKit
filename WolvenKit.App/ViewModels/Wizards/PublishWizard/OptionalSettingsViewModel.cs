@@ -1,6 +1,6 @@
 using Catel.MVVM;
 
-namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.PublishWizard
+namespace WolvenKit.ViewModels.Wizards.PublishWizard
 {
     public class OptionalSettingsViewModel : ViewModelBase
     {

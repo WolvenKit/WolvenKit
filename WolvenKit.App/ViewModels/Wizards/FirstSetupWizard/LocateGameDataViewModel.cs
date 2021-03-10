@@ -6,7 +6,7 @@ using Catel.MVVM;
 using WolvenKit.Functionality.Services;
 using WolvenKit.MVVM.Model.Wizards;
 
-namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWizard
+namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
 {
     public class LocateGameDataViewModel : ViewModelBase
     {

@@ -1,6 +1,6 @@
 using Catel.MVVM;
 
-namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.UserWizard
+namespace WolvenKit.ViewModels.Wizards.UserWizard
 {
     public class UserWizardPageViewModel : ViewModelBase
     {

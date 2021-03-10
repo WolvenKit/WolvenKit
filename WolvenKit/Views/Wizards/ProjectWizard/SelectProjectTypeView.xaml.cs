@@ -1,5 +1,5 @@
 using Catel.IoC;
-using WolvenKit.MVVM.ViewModels.Components.Wizards;
+using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards.WizardPages.ProjectWizard
 {

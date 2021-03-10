@@ -1,6 +1,6 @@
 using Catel.MVVM;
 
-namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FeedbackWizard
+namespace WolvenKit.ViewModels.Wizards.FeedbackWizard
 {
     public class RateViewModel : ViewModelBase
     {

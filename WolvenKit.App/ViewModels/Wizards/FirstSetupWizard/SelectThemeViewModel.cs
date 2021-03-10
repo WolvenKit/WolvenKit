@@ -1,6 +1,6 @@
 using Catel.MVVM;
 
-namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWizard
+namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
 {
     public class SelectThemeViewModel : ViewModelBase
     {

@@ -6,7 +6,7 @@ using WolvenKit.Common;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
-namespace WolvenKit.MVVM.ViewModels.Components.Wizards
+namespace WolvenKit.ViewModels.Wizards
 {
     public class PublishWizardViewModel : ViewModelBase
     {

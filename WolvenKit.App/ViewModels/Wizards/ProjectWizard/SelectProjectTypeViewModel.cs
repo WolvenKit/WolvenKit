@@ -5,7 +5,7 @@ using Catel.IoC;
 using Catel.MVVM;
 using WolvenKit.MVVM.Model.Wizards;
 
-namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.ProjectWizard
+namespace WolvenKit.ViewModels.Wizards.ProjectWizard
 {
     /// <summary>
     /// The SelectProjectTypeViewModel implements project selection wizard's window viewmodel.

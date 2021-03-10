@@ -5,7 +5,7 @@ using Catel.IoC;
 using Catel.MVVM;
 using WolvenKit.MVVM.Model.Wizards;
 
-namespace WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWizard
+namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
 {
     public class CreateUserViewModel : ViewModelBase
     {

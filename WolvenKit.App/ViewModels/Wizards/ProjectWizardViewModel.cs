@@ -1,7 +1,7 @@
 using System.Windows.Media;
 using Catel.MVVM;
 
-namespace WolvenKit.MVVM.ViewModels.Components.Wizards
+namespace WolvenKit.ViewModels.Wizards
 {
     public class ProjectWizardViewModel : ViewModelBase
     {

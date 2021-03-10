@@ -1,7 +1,7 @@
 using Catel.IoC;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.Model.Wizards;
-using WolvenKit.MVVM.ViewModels.Components.Wizards;
+using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Wizards.WizardPages.ProjectWizard;
 using FinalizeSetupView = WolvenKit.Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView;
 
