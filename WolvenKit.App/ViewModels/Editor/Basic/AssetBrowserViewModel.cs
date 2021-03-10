@@ -17,7 +17,6 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.MVVM.ViewModels.Shell.Editor;
 
 namespace WolvenKit.ViewModels.Editor
 {

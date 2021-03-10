@@ -4,7 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:behavior="clr-namespace:WolvenKit.Functionality.Behavior"
  xmlns:catel="http://schemas.catelproject.com"
- xmlns:cmodel="clr-namespace:WolvenKit.MVVM.ViewModels.Shell.Editor;assembly=WolvenKit.App"
+ xmlns:cmodel="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
  xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
  xmlns:cr2W="clr-namespace:WolvenKit.CR2W;assembly=WolvenKit.CR2W"
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"

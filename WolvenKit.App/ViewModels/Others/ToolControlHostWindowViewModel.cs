@@ -5,7 +5,7 @@ using Catel.IoC;
 using Catel.MVVM;
 using Catel.MVVM.Views;
 
-namespace WolvenKit.MVVM.ViewModels.Others
+namespace WolvenKit.ViewModels.Others
 { // #MVVM
     public class ToolControlHostWindowViewModel : ViewModelBase
     {

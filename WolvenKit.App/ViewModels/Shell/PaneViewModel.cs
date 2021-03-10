@@ -1,7 +1,7 @@
 using System.Windows.Media;
 using Catel.MVVM;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor
+namespace WolvenKit.ViewModels.Shell
 {
     public class PaneViewModel : ViewModelBase
     { // #MVVM

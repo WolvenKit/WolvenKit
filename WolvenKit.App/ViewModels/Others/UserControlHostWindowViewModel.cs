@@ -5,7 +5,7 @@ using Catel.MVVM;
 using Catel.MVVM.Views;
 using Catel.Windows.Controls;
 
-namespace WolvenKit.ViewModels
+namespace WolvenKit.ViewModels.Others
 {
     public class UserControlHostWindowViewModel : ViewModelBase
     { // #MVVM

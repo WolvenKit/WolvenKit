@@ -9,7 +9,7 @@ using Catel.Data;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Layout.MLib;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.MVVM.ViewModels.Shell.Editor;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.MVVM.Views.Shell.Editor
 {

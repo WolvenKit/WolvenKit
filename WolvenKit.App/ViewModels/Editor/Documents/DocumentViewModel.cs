@@ -17,8 +17,8 @@ using WolvenKit.CR2W.SRT;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.MVVM.ViewModels.Shell.Editor;
 using WolvenKit.MVVM.Views.PropertyGridEditors;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Editor
 {

@@ -18,12 +18,11 @@ using HandyControl.Tools;
 using Orc.FileSystem;
 using Orchestra.Models;
 using Orchestra.Services;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.ViewModels.HomePage;
 using RelayCommand = WolvenKit.Functionality.Commands.RelayCommand;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
+namespace WolvenKit.ViewModels.Shared
 {
     public class RecentlyUsedItemsViewModel : ViewModelBase
     {
