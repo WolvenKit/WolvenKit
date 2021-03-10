@@ -19,6 +19,7 @@ using WolvenKit.Common.Wcc;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.Models;
 using WolvenKit.MVVM.Model;
 using WolvenKit.W3Speech;
 using WolvenKit.W3Strings;

@@ -21,6 +21,7 @@ using WolvenKit.CR2W.Reflection;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Models;
 using WolvenKit.MVVM.Model;
 using WolvenKit.ViewModels.Editor;
 using WolvenKit.Wwise;

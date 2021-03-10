@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace WolvenKit.MVVM.Views.Components.Editors
+namespace WolvenKit.Views.Editors
 {
     public partial class BulkEditorView : INotifyPropertyChanged
     {

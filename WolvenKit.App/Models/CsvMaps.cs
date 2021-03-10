@@ -1,6 +1,6 @@
 using CsvHelper.Configuration;
 
-namespace WolvenKit.MVVM.Model
+namespace WolvenKit.Models
 {
     public class CBoolMap : ClassMap<CR2W.Types.CBool>
     {

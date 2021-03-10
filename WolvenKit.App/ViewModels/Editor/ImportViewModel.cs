@@ -19,7 +19,7 @@ using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
-using WolvenKit.MVVM.Model;
+using WolvenKit.Models;
 using static WolvenKit.CR2W.Types.Enums;
 
 namespace WolvenKit.ViewModels.Editor

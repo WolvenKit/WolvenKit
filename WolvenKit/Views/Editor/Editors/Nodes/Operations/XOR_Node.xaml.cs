@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace WolvenKit.MVVM.Views.Components.Editors.VisualEditor.Nodes
+namespace WolvenKit.Views.Editors.VisualEditor.Nodes
 {
     /// <summary>
     /// Interaction logic for XOR_Node.xaml

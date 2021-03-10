@@ -1,4 +1,4 @@
-namespace WolvenKit.MVVM.Views.Shell.Editor
+namespace WolvenKit.Views.Shell
 {
     public partial class StatusBarView
     {

@@ -8,7 +8,7 @@ using WolvenKit.Common.DDS;
 using WolvenKit.CR2W.Types;
 using ImageFormat = Pfim.ImageFormat;
 
-namespace WolvenKit.MVVM.Model
+namespace WolvenKit.Models
 {
     public static class ImageUtility
     {

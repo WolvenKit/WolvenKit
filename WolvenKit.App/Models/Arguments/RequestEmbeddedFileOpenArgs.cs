@@ -2,7 +2,7 @@ using System;
 using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 
-namespace WolvenKit.MVVM.Model.Arguments
+namespace WolvenKit.Models.Arguments
 {
     public class RequestByteArrayFileOpenArgs : EventArgs
     {

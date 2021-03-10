@@ -1,6 +1,7 @@
 using System.Windows;
 using Orchestra.Services;
-using WolvenKit.MVVM.Views.Shell.Editor;
+using WolvenKit.Views.Editor;
+using WolvenKit.Views.Shell;
 
 namespace WolvenKit.Functionality.Services
 {

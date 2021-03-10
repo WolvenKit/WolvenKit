@@ -12,15 +12,11 @@ using Orc.Squirrel;
 using Orchestra.Services;
 using Orchestra.Views;
 using WolvenKit.Functionality.Services;
-using WolvenKit.MVVM.Views.Components.Dialogs;
-using WolvenKit.MVVM.Views.Components.Editors;
-using WolvenKit.MVVM.Views.Components.Editors.VisualEditor;
 using WolvenKit.MVVM.Views.Components.Tools;
 using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
 using WolvenKit.MVVM.Views.Components.Tools.AudioTool.Radio;
 using WolvenKit.MVVM.Views.PropertyGridEditors;
 using WolvenKit.MVVM.Views.Shell.Backstage;
-using WolvenKit.MVVM.Views.Shell.Editor;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Editor;
 using WolvenKit.ViewModels.HomePage;
@@ -36,8 +32,13 @@ using WolvenKit.ViewModels.Wizards.ProjectWizard;
 using WolvenKit.ViewModels.Wizards.PublishWizard;
 using WolvenKit.ViewModels.Wizards.UserWizard;
 using WolvenKit.Views;
+using WolvenKit.Views.Dialogs;
+using WolvenKit.Views.Editor;
+using WolvenKit.Views.Editors;
+using WolvenKit.Views.Editors.VisualEditor;
 using WolvenKit.Views.HomePage;
 using WolvenKit.Views.HomePage.Pages;
+using WolvenKit.Views.Shell;
 using WolvenKit.Views.Wizards;
 using WolvenKit.Views.Wizards.WizardPages.BugReportWizard;
 using WolvenKit.Views.Wizards.WizardPages.FeedbackWizard;
@@ -45,7 +46,6 @@ using WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard;
 using WolvenKit.Views.Wizards.WizardPages.ProjectWizard;
 using WolvenKit.Views.Wizards.WizardPages.PublishWizard;
 using WolvenKit.Views.Wizards.WizardPages.UserWizard;
-
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {

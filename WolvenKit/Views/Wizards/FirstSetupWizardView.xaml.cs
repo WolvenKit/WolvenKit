@@ -1,5 +1,6 @@
 using Catel.IoC;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Models.Wizards;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard;
 
@@ -25,7 +26,7 @@ namespace WolvenKit.Views.Wizards
 
         public FirstSetupWizardView()
         {
-            ServiceLocator.Default.RegisterTypeAndInstantiate<MVVM.Model.Wizards.ProjectWizardModel>();
+            ServiceLocator.Default.RegisterTypeAndInstantiate<ProjectWizardModel>();
 
             InitializeComponent();
         }

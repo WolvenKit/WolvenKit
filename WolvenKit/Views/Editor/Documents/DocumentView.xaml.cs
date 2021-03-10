@@ -3,7 +3,7 @@ using System.Windows;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Editor;
 
-namespace WolvenKit.MVVM.Views.Shell.Editor
+namespace WolvenKit.Views.Editor
 {
     /// <summary>
     /// Interaction logic for TextDocumentView.xaml
