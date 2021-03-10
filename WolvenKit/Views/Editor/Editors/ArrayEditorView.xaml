@@ -1,5 +1,5 @@
 <catel:UserControl
- x:Class="WolvenKit.Views.Editors.ArrayEditorView"
+ x:Class="WolvenKit.Views.Editor.ArrayEditorView"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"

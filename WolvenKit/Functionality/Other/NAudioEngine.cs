@@ -8,9 +8,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Threading;
 using NAudio.Wave;
+using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
 using WPFSoundVisualizationLib;
 
-namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
+namespace WolvenKit.Views.Editor.AudioTool
 {
     internal class NAudioEngine : INotifyPropertyChanged, ISpectrumPlayer, IWaveformPlayer, IDisposable
     {

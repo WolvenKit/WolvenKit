@@ -1,6 +1,6 @@
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.MVVM.Views.Components.Tools
+namespace WolvenKit.Views.Editor
 {
     public partial class MimicsView
     {

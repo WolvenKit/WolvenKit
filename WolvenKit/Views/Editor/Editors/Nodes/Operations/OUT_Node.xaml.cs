@@ -2,7 +2,7 @@ using System.Reactive.Disposables;
 using System.Windows;
 using ReactiveUI;
 
-namespace WolvenKit.Views.Editors.VisualEditor.Nodes
+namespace WolvenKit.Views.Editor.VisualEditor.Nodes
 {
     /// <summary>
     /// Interaction logic for OUT_Node.xaml

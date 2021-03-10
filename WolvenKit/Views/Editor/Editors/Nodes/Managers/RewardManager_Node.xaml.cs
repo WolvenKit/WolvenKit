@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace WolvenKit.Views.Editors.VisualEditor.Nodes
+namespace WolvenKit.Views.Editor.VisualEditor.Nodes
 {
     /// <summary>
     /// Interaction logic for RewardManager_Node.xaml

@@ -10,7 +10,7 @@ using Catel.IoC;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Editor;
 
-namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
+namespace WolvenKit.Views.Editor.AudioTool
 {
     public partial class AudioToolView
     {
