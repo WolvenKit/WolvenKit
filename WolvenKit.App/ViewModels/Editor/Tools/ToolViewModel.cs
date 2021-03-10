@@ -1,4 +1,4 @@
-using WolvenKit.MVVM.ViewModels.Shell.Editor;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Editor
 {

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Catel.MVVM;
 
-namespace WolvenKit.MVVM.ViewModels.Components.Dialogs
+namespace WolvenKit.ViewModels.Dialogs
 {
     /// <summary>
     /// Implements the viewmodel that drives the log view.

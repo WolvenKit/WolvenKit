@@ -15,7 +15,7 @@ using Orc.ProjectManagement;
 using Orc.Squirrel;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor
+namespace WolvenKit.ViewModels.Shell
 {
     public class StatusBarViewModel : ViewModelBase
     {

@@ -23,10 +23,9 @@ using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Editor;
-using WolvenKit.ViewModels;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor
+namespace WolvenKit.ViewModels.Shell
 {
     /// <summary>
     /// The WorkSpaceViewModel implements AvalonDock demo specific properties, events and methods.
@@ -449,17 +448,17 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         private void ExecutePublishMod()
         {                // #convert2MVVMSoon
 
-          //  try
-          //  {
-          //      var vm = new UserControlHostWindowViewModel(new PublishWizardView(), 600, 1200);
+            //  try
+            //  {
+            //      var vm = new UserControlHostWindowViewModel(new PublishWizardView(), 600, 1200);
 
-          //      ServiceLocator.Default.ResolveType<IUIVisualizerService>().ShowDialogAsync(vm);
-           // }
-          //  catch (Exception ex)
-           // {
-          //      _loggerService.LogString(ex.Message, Logtype.Error);
-           //     _loggerService.LogString("Failed to publish project!", Logtype.Error);
-          //  }
+            //      ServiceLocator.Default.ResolveType<IUIVisualizerService>().ShowDialogAsync(vm);
+            // }
+            //  catch (Exception ex)
+            // {
+            //      _loggerService.LogString(ex.Message, Logtype.Error);
+            //     _loggerService.LogString("Failed to publish project!", Logtype.Error);
+            //  }
         }
 
         private void ExecuteRadishTool() => RadishToolVM.IsVisible = !RadishToolVM.IsVisible;
@@ -469,10 +468,10 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
         private void ExecuteShowInstaller()
         {                // #convert2MVVMSoon
 
-          //  var rpv = new InstallerWizardView();
-          //  var zxc = new UserControlHostWindowViewModel(rpv);
-          //  var uchwv = new UserControlHostWindowView(zxc);
-          //  uchwv.Show();
+            //  var rpv = new InstallerWizardView();
+            //  var zxc = new UserControlHostWindowViewModel(rpv);
+            //  var uchwv = new UserControlHostWindowView(zxc);
+            //  uchwv.Show();
         }
 
         private void ExecuteShowLog() => Log.IsVisible = !Log.IsVisible;
@@ -1074,9 +1073,9 @@ namespace WolvenKit.MVVM.ViewModels.Shell.Editor
             void OpenAudioFile(string full)
             {
                 // #convert2MVVMSoon
-             //   var z = (AudioToolView)ServiceLocator.Default.ResolveType<AudioToolView>();
-             //   ExecuteAudioTool();
-             //   z.AddAudioItem(full);
+                //   var z = (AudioToolView)ServiceLocator.Default.ResolveType<AudioToolView>();
+                //   ExecuteAudioTool();
+                //   z.AddAudioItem(full);
             }
 
             void ShellExecute(string path)

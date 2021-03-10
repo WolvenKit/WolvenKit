@@ -1,5 +1,5 @@
 using Orchestra.Views;
-using WolvenKit.MVVM.ViewModels.Shell.Editor;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {

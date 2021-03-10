@@ -26,7 +26,7 @@ using WolvenKit.ViewModels.Editor;
 using WolvenKit.Wwise;
 using WolvenKit.Wwise.Wwise;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor
+namespace WolvenKit.ViewModels.Shell
 {
     /// <summary>
     ///

@@ -5,7 +5,7 @@ using Catel.MVVM;
 using Catel.MVVM.Views;
 using Catel.Windows.Controls;
 
-namespace WolvenKit.MVVM.ViewModels.Others
+namespace WolvenKit.ViewModels.Others
 {
     public class DialogControlHostWindowViewModel : ViewModelBase
     { // #MVVM

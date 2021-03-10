@@ -13,7 +13,7 @@ using WolvenKit.CR2W;
 using WolvenKit.CR2W.Types;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
-using WolvenKit.MVVM.ViewModels.Shell.Editor;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Editor.Old
 {

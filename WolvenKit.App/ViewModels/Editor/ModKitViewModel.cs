@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Controllers;
-using WolvenKit.MVVM.ViewModels.Shell.Editor;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Editor
 {

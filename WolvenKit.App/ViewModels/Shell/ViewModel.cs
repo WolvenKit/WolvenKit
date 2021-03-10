@@ -5,7 +5,7 @@ using WolvenKit.Common.Services;
 //using Ninject.Activation;
 //using Ninject.Syntax;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor
+namespace WolvenKit.ViewModels.Shell
 {
     /// <summary>
     /// Base abstract class for all viewmodels.

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using WolvenKit.Models;
-using WolvenKit.MVVM.Model;
 using WolvenKit.ViewModels.Editor;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Editor
+namespace WolvenKit.ViewModels.Shell
 {
     /// <summary>
     /// Defines the interface to the <see cref="WorkSpaceViewModel"/> which implements

@@ -1,6 +1,6 @@
 using System.Windows;
 using Catel.Windows;
-using WolvenKit.MVVM.ViewModels.Others;
+using WolvenKit.ViewModels.Others;
 
 namespace WolvenKit.MVVM.Views.Others
 {

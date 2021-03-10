@@ -6,7 +6,7 @@
 
 using Catel.MVVM;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.Backstage
+namespace WolvenKit.ViewModels.Shared
 {
     public class OpenFileViewModel : ViewModelBase
     {

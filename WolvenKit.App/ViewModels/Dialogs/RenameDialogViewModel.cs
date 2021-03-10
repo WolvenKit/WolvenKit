@@ -1,6 +1,6 @@
 using Catel.MVVM;
 
-namespace WolvenKit.MVVM.ViewModels.Components.Dialogs
+namespace WolvenKit.ViewModels.Dialogs
 {
     public class RenameDialogViewModel : ViewModelBase
     {
