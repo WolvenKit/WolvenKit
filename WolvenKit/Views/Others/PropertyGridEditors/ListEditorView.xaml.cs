@@ -59,8 +59,6 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
             set => SetValue(ItemsSourceProperty, value);
         }
 
-        public PropertyResolver PropertyResolver { get; }
-
         #endregion properties
 
         #region methods
