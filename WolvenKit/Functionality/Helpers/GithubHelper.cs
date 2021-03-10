@@ -17,7 +17,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
     {
         #region Fields
 
-        private static GitHubClient GhubClient;
+        public static GitHubClient GhubClient;
 
         #endregion Fields
 
@@ -89,16 +89,8 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             catch { }
         }
 
-        public static async void InitializeGitHub()
-        {
-            GhubClient = new GitHubClient(new ProductHeaderValue("WolvenKit"))
-            {
-                Credentials = GhubAuth("wolvenbot", "botwolven1")
-            };
-            await GhubLastReleaseAsync();
-        }
 
-        private static string[] ResolveBody(string unresolvedbody)
+        public static string[] ResolveBody(string unresolvedbody)
         {
             var step1 = Regex.Replace(unresolvedbody, @"^\s+$[\r\n]*", string.Empty, RegexOptions.Multiline);
             var result = Regex.Split(step1, "\r\n|\r|\n");

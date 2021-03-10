@@ -43,19 +43,19 @@ namespace WolvenKit
             Log.Info("Initializing MVVM");
             await AppHelper.InitializeMVVM();
             Log.Info("Initializing Theme Helper");
-            ThemeHelper.InitializeThemeHelper();
+            Initializations.InitializeThemeHelper();
             Log.Info("Initializing Shell");
             await AppHelper.InitializeShell();
             AppHelper.ShowFirstTimeSetup();
             Log.Info("Initializing Discord RPC");
             DiscordHelper.InitializeDiscordRPC();
             Log.Info("Initializing Github");
-            GithubHelper.InitializeGitHub();
+            Initializations.InitializeGitHub();
             Log.Info("Calling base.OnStartup");
             base.OnStartup(e);
             Log.Info("Initializing NodeNetwork");
             NNViewRegistrar.RegisterSplat();
-            
+
             NotificationHelper.InitializeNotificationHelper();
 
             // Temp Fix for MainViewModel.OnClosing
