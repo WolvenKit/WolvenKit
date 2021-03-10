@@ -1,9 +1,8 @@
 <ResourceDictionary
- xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
- xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
- xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:system="clr-namespace:System;assembly=mscorlib"
- >
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:hc="https://handyorg.github.io/handycontrol">
 
     <ControlTemplate x:Key="TextBoxExtendLeftTemplateCustom" TargetType="hc:TextBox">
         <hc:Badge
@@ -13,8 +12,7 @@
          DockPanel.Dock="Right"
          Status="Processing"
          TextElement.Foreground="{DynamicResource DangerBrush}"
-         Visibility="{Binding Path=(hc:InfoElement.Necessary), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource Boolean2VisibilityConverter}}"
-         >
+         Visibility="{Binding Path=(hc:InfoElement.Necessary), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource Boolean2VisibilityConverter}}">
             <Grid Height="{Binding Path=(hc:InfoElement.ContentHeight), RelativeSource={RelativeSource TemplatedParent}}" MinHeight="{Binding Path=(hc:InfoElement.MinContentHeight), RelativeSource={RelativeSource TemplatedParent}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{Binding Path=(hc:InfoElement.TitleWidth), RelativeSource={RelativeSource TemplatedParent}}" />
@@ -24,14 +22,12 @@
                  Margin="0,7,6,7"
                  VerticalAlignment="{Binding Path=(hc:TitleElement.VerticalAlignment), RelativeSource={RelativeSource TemplatedParent}}"
                  LastChildFill="True"
-                 Visibility="{Binding Path=(hc:InfoElement.Title), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource String2VisibilityConverter}}"
-                 >
+                 Visibility="{Binding Path=(hc:InfoElement.Title), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource String2VisibilityConverter}}">
                     <TextBlock
                      hc:TextBlockAttach.AutoTooltip="True"
                      Text="{Binding Path=(hc:InfoElement.Title), RelativeSource={RelativeSource TemplatedParent}}"
                      TextTrimming="CharacterEllipsis"
-                     TextWrapping="NoWrap"
-                     />
+                     TextWrapping="NoWrap" />
                 </DockPanel>
                 <Border
                  x:Name="border"
@@ -40,8 +36,7 @@
                  BorderBrush="{TemplateBinding BorderBrush}"
                  BorderThickness="{TemplateBinding BorderThickness}"
                  CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
-                 SnapsToDevicePixels="True"
-                 />
+                 SnapsToDevicePixels="True" />
                 <TextBlock
                  x:Name="Placeholder"
                  Grid.Column="1"
@@ -52,8 +47,7 @@
                  Style="{StaticResource TextBlockDefaultThiLight}"
                  Text="{Binding Path=(hc:InfoElement.Placeholder), RelativeSource={RelativeSource TemplatedParent}}"
                  Visibility="{TemplateBinding Text,
-                                              Converter={StaticResource String2VisibilityReConverter}}"
-                 />
+                                              Converter={StaticResource String2VisibilityReConverter}}" />
                 <ScrollViewer
                  x:Name="PART_ContentHost"
                  Grid.Column="1"
@@ -61,8 +55,7 @@
                  Padding="{TemplateBinding Padding}"
                  Focusable="false"
                  HorizontalScrollBarVisibility="Hidden"
-                 VerticalScrollBarVisibility="Hidden"
-                 />
+                 VerticalScrollBarVisibility="Hidden" />
             </Grid>
         </hc:Badge>
         <ControlTemplate.Triggers>
@@ -93,8 +86,7 @@
     <Style
      x:Key="TextBoxExtendBaseStyleCustom"
      BasedOn="{StaticResource TextBoxBaseStyle}"
-     TargetType="hc:TextBox"
-     >
+     TargetType="hc:TextBox">
         <Setter Property="hc:InfoElement.ContentHeight" Value="{x:Static system:Double.NaN}" />
         <Setter Property="hc:InfoElement.MinContentHeight" Value="{StaticResource DefaultControlHeight}" />
         <Setter Property="Height" Value="Auto" />
@@ -107,6 +99,5 @@
     <Style
      x:Key="TextBoxExtendCustom"
      BasedOn="{StaticResource TextBoxExtendBaseStyleCustom}"
-     TargetType="hc:TextBox"
-     />
+     TargetType="hc:TextBox" />
 </ResourceDictionary>

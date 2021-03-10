@@ -6,8 +6,8 @@ using Orc.ProjectManagement;
 using Orchestra.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.MVVM.Views.Components.Wizards;
-using WolvenKit.ViewModels;
+using WolvenKit.ViewModels.Others;
+using WolvenKit.Views.Wizards;
 
 namespace WolvenKit.Functionality.Commands
 {

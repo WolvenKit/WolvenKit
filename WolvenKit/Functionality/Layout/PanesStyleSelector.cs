@@ -1,7 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
-using WolvenKit.MVVM.ViewModels.Shell.Editor;
-using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
+using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Functionality.Layout
 {

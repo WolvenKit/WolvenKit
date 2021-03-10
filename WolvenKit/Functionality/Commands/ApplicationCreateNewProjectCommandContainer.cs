@@ -11,9 +11,10 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Models.Wizards;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.MVVM.Model.Wizards;
-using WolvenKit.MVVM.ViewModels.Components.Wizards;
+using WolvenKit.ViewModels.Shell;
+using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Functionality.Commands
 {
@@ -143,9 +144,9 @@ namespace WolvenKit.Functionality.Commands
                     StaticReferences.MainView.OnLoadLayoutAsync();
 
                     await _projectManager.LoadAsync(location);
-                    StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.StartScreen.ShownProperty, false);
-                    StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
 
+                    RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
+                    RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
                 }
             }
             catch (Exception ex)

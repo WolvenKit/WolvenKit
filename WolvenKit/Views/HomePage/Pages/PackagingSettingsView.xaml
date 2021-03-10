@@ -1,0 +1,18 @@
+<catel:UserControl
+ x:Class="WolvenKit.Views.HomePage.Pages.PackagingSettingsView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ IsVisibleChanged="UserControl_IsVisibleChanged">
+
+    <Grid>
+
+        <Label
+         Grid.Row="1"
+         VerticalAlignment="Center"
+         Background="Transparent"
+         BorderBrush="Transparent"
+         Content="COMING SOON"
+         FontSize="50" />
+    </Grid>
+</catel:UserControl>

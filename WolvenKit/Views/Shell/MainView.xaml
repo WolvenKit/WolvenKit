@@ -1,0 +1,258 @@
+<catel:UserControl
+ x:Class="WolvenKit.Views.Shell.MainView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:ad="clr-namespace:WolvenKit.Functionality.Layout"
+ xmlns:audiotoolz="clr-namespace:WolvenKit.Views.Editor.AudioTool"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
+ xmlns:cr2weditor1="clr-namespace:WolvenKit.Views.Editor"
+ xmlns:editor="clr-namespace:WolvenKit.Views.Editor"
+ xmlns:importertool1="clr-namespace:WolvenKit.Views.Editor"
+ xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+ xmlns:views1="clr-namespace:WolvenKit.Views.Editor"
+ xmlns:visualeditorz="clr-namespace:WolvenKit.Views.Editor.VisualEditor"
+ IsVisibleChanged="UserControl_IsVisibleChanged_1">
+
+    <catel:UserControl.Resources>
+        <DrawingBrush
+         x:Key="CloudDrawingBrushMain"
+         o:Freeze="True"
+         Opacity=".02"
+         RenderOptions.CacheInvalidationThresholdMaximum="2.0"
+         RenderOptions.CacheInvalidationThresholdMinimum="0.5"
+         RenderOptions.CachingHint="Cache"
+         Stretch="Uniform"
+         TileMode="Tile"
+         Viewport="0,0,90,90"
+         ViewportUnits="Absolute">
+            <DrawingBrush.Drawing>
+                <ImageDrawing
+                 o:Freeze="True"
+                 ImageSource="pack://application:,,,/Resources/Media/Images/Application/SeeTroughIcon.png"
+                 Rect="0,0,70,80" />
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+    </catel:UserControl.Resources>
+
+    <Grid Background="{DynamicResource CloudDrawingBrushMain}">
+        <Grid.Resources>
+            <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
+            <BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <DockingManager
+         x:Name="dockManager"
+         Grid.Row="0"
+         ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}"
+         AnchorablesSource="{Binding Tools}"
+         Background="Transparent"
+         DataContext="{Binding}"
+         DocumentsSource="{Binding Files}"
+         IsEnabled="True"
+         IsVirtualizingAnchorable="True"
+         IsVirtualizingDocument="True"
+         Visibility="Visible">
+            <!--  Global Theme  -->
+            <DockingManager.Theme>
+                <Vs2013DarkTheme />
+            </DockingManager.Theme>
+
+            <!--  Register Views here  -->
+            <DockingManager.LayoutItemTemplateSelector>
+
+                <ad:PanesTemplateSelector>
+
+                    <!--  DocumentView  -->
+                    <ad:PanesTemplateSelector.FileViewTemplate>
+                        <DataTemplate>
+                            <editor:DocumentView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.FileViewTemplate>
+
+                    <!--  LogView  -->
+                    <ad:PanesTemplateSelector.PropertiesTemplate>
+                        <DataTemplate>
+                            <views1:PropertiesView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.PropertiesTemplate>
+
+                    <!--  LogView  -->
+                    <ad:PanesTemplateSelector.LogViewTemplate>
+                        <DataTemplate>
+                            <views1:LogView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.LogViewTemplate>
+
+                    <!--  ProjectExplorerView  -->
+                    <ad:PanesTemplateSelector.ProjectExplorerTemplate>
+                        <DataTemplate>
+                            <views1:ProjectExplorerView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.ProjectExplorerTemplate>
+
+                    <!--  Assetbrowser  -->
+                    <ad:PanesTemplateSelector.AssetBrowserTemplate>
+                        <DataTemplate>
+                            <views1:AssetBrowserView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.AssetBrowserTemplate>
+
+                    <!--  Bulk Editor WIP
+                    <ad:PanesTemplateSelector.BulkEditorTemplate>
+                        <DataTemplate>
+                            <cr2weditor1:BulkEditorView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.BulkEditorTemplate>
+                    -->
+
+                    <!--  Code Editor WIP
+                    <ad:PanesTemplateSelector.CodeEditorTemplate>
+                        <DataTemplate>
+                            <cr2weditor1:CodeEditorView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.CodeEditorTemplate>
+                    -->
+
+                    <!--  ProjectExplorerView
+                    <ad:PanesTemplateSelector.CsvEditorTemplate>
+                        <DataTemplate>
+                            <cr2weditor1:CsvEditorView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.CsvEditorTemplate>
+                    -->
+
+                    <!--  ProjectExplorerView
+                    <ad:PanesTemplateSelector.HexEditorTemplate>
+                        <DataTemplate>
+                            <cr2weditor1:HexEditorView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.HexEditorTemplate>
+                    -->
+
+                    <!--  ProjectExplorerView
+                    <ad:PanesTemplateSelector.JournalEditorTemplate>
+                        <DataTemplate>
+                            <cr2weditor1:JournalEditorView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.JournalEditorTemplate>
+                    -->
+
+                    <!--  ProjectExplorerView
+                    <ad:PanesTemplateSelector.VisualEditorTemplate>
+                        <DataTemplate>
+                            <visualeditorz:VisualEditorView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.VisualEditorTemplate>
+                    -->
+
+                    <ad:PanesTemplateSelector.AudioToolTemplate>
+                        <DataTemplate>
+                            <audiotoolz:AudioToolView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.AudioToolTemplate>
+
+                    <!--  ProjectExplorerView
+                    <ad:PanesTemplateSelector.CR2WToTextToolTemplate>
+                        <DataTemplate>
+                            <importertool1:CR2WToTextToolView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.CR2WToTextToolTemplate>
+                    -->
+
+                    <!--  ProjectExplorerView
+                    <ad:PanesTemplateSelector.GameDebuggerToolTemplate>
+                        <DataTemplate>
+                            <importertool1:GameDebuggerToolView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.GameDebuggerToolTemplate>
+                    -->
+
+                    <!--  ProjectExplorerView
+                    <ad:PanesTemplateSelector.ImporterToolTemplate>
+                        <DataTemplate>
+                            <importertool1:ImporterToolView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.ImporterToolTemplate>
+                    -->
+
+                    <!--  ProjectExplorerView
+                    <ad:PanesTemplateSelector.MenuToolTemplate>
+                        <DataTemplate>
+                            <importertool1:MenuCreatorToolView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.MenuToolTemplate>
+                    -->
+
+                    <!--  ProjectExplorerView
+                    <ad:PanesTemplateSelector.WccToolTemplate>
+                        <DataTemplate>
+                            <importertool1:WccToolView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.WccToolTemplate>
+                    -->
+
+                    <!--  ProjectExplorerView
+                    <ad:PanesTemplateSelector.RadishToolTemplate>
+                        <DataTemplate>
+                            <importertool1:RadishToolView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.RadishToolTemplate>
+                    -->
+
+                    <!--  ProjectExplorerView
+                    <ad:PanesTemplateSelector.PluginManagerTemplate>
+                        <DataTemplate>
+                            <importertool1:PluginManagerView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.PluginManagerTemplate>
+                    -->
+                </ad:PanesTemplateSelector>
+            </DockingManager.LayoutItemTemplateSelector>
+
+            <!--  Register Styles here  -->
+            <DockingManager.LayoutItemContainerStyleSelector>
+                <ad:PanesStyleSelector>
+                    <ad:PanesStyleSelector.ToolStyle>
+                        <!--  Define Style of a Tool Window View  -->
+                        <Style TargetType="{x:Type LayoutAnchorableItem}">
+                            <Setter Property="Title" Value="{Binding Model.Title, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Setter Property="IconSource" Value="{Binding Model.IconSource, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Setter Property="Visibility" Value="{Binding Model.IsVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={x:Static Visibility.Hidden}}" />
+                            <Setter Property="ContentId" Value="{Binding Model.ContentId, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Setter Property="IsSelected" Value="{Binding Model.IsSelected, Mode=TwoWay}" />
+                            <Setter Property="IsActive" Value="{Binding Model.IsActive, Mode=TwoWay}" />
+                            <Setter Property="CanHide" Value="True" />
+                        </Style>
+                    </ad:PanesStyleSelector.ToolStyle>
+                    <ad:PanesStyleSelector.FileStyle>
+                        <!--  Define Style of a Document View  -->
+                        <Style TargetType="{x:Type LayoutDocumentItem}">
+                            <Setter Property="Title" Value="{Binding Model.Title, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Setter Property="ToolTip" Value="{Binding Model.FilePath, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}" />
+                            <Setter Property="IconSource" Value="{Binding Model.IconSource, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Setter Property="ContentId" Value="{Binding Model.ContentId, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </Style>
+                    </ad:PanesStyleSelector.FileStyle>
+                </ad:PanesStyleSelector>
+            </DockingManager.LayoutItemContainerStyleSelector>
+            <DockingManager.LayoutUpdateStrategy>
+                <ad:LayoutInitializer />
+            </DockingManager.LayoutUpdateStrategy>
+
+            <!--  Virtualized Layout  -->
+            <LayoutRoot>
+                <LayoutPanel>
+                    <LayoutDocumentPane />
+                    <!--  Use DockMinWidth="250" to limit the size of a LayoutAnchorable  -->
+                    <LayoutAnchorablePane Name="ToolsPane" DockMinWidth="375" />
+                </LayoutPanel>
+            </LayoutRoot>
+        </DockingManager>
+    </Grid>
+</catel:UserControl>

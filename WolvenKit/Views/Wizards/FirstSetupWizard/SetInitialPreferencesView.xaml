@@ -1,0 +1,145 @@
+<catel:UserControl
+ x:Class="WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard.SetInitialPreferencesView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol">
+
+    <Grid Grid.Row="3" VerticalAlignment="Center">
+        <Grid
+         Margin="5,5,5,5"
+         HorizontalAlignment="Stretch"
+         Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+            <Grid Grid.Row="1" HorizontalAlignment="Stretch">
+                <StackPanel
+                 Margin="0,10,0,0"
+                 VerticalAlignment="Top"
+                 Orientation="Vertical">
+                    <Grid Margin="22,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock
+                             Margin="35,35,5,5"
+                             FontSize="14"
+                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                             Text="What game(s) do you want to create mods for?" />
+
+                            <TextBlock
+                             Margin="35,40,5,5"
+                             VerticalAlignment="Center"
+                             FontSize="14"
+                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                             Text="Auto-install mods upon creation?" />
+                            <TextBlock
+                             Margin="35,40,5,5"
+                             VerticalAlignment="Center"
+                             FontSize="14"
+                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                             Text="Automatically receive WolvenKit updates?" />
+                        </StackPanel>
+
+                        <StackPanel
+                         Grid.Column="1"
+                         Margin="0,0,0,0"
+                         Orientation="Vertical">
+
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox
+                                 x:Name="w3Checkbox"
+                                 Margin="10,35,5,5"
+                                 HorizontalAlignment="Left"
+                                 Background="{DynamicResource MahApps.Brushes.Accent3}"
+                                 BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
+                                 Checked="CheckBox_Checked"
+                                 Content="The Witcher 3"
+                                 Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                 IsChecked="{Binding CreateModForW3}"
+                                 Unchecked="CheckBox_Checked" />
+                                <hc:Divider
+                                 MaxHeight="20"
+                                 Margin="5,35,5,5"
+                                 Orientation="Vertical" />
+                                <CheckBox
+                                 x:Name="cp77Checkbox"
+                                 Margin="5,35,5,5"
+                                 HorizontalAlignment="Left"
+                                 Background="{DynamicResource MahApps.Brushes.Accent3}"
+                                 BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
+                                 Checked="CheckBox_Checked"
+                                 Content="Cyberpunk 2077"
+                                 Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                 IsChecked="{Binding CreateModForCP77}"
+                                 Unchecked="CheckBox_Checked" />
+                            </StackPanel>
+                            <ToggleButton
+                             Margin="5,35,5,5"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Center"
+                             BorderThickness="0"
+                             IsChecked="{Binding AutoInstallMods}"
+                             IsEnabled="True"
+                             Style="{StaticResource ToggleButtonFlip}">
+                                <hc:StatusSwitchElement.CheckedElement>
+                                    <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
+                                        <TextBlock
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"
+                                         Foreground="{DynamicResource TextIconBrush}"
+                                         Text="On" />
+                                    </Border>
+                                </hc:StatusSwitchElement.CheckedElement>
+                                <Border Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
+                                    <TextBlock
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Foreground="{DynamicResource TextIconBrush}"
+                                     Text="Off" />
+                                </Border>
+                            </ToggleButton>
+                            <StackPanel Orientation="Vertical">
+                                <ToggleButton
+                                 Margin="5,30,5,15"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 BorderThickness="0"
+                                 IsChecked="{Binding AutoUpdatesEnabled}"
+                                 IsEnabled="True"
+                                 Style="{StaticResource ToggleButtonFlip}">
+                                    <hc:StatusSwitchElement.CheckedElement>
+                                        <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
+                                            <TextBlock
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"
+                                             Foreground="{DynamicResource TextIconBrush}"
+                                             Text="On" />
+                                        </Border>
+                                    </hc:StatusSwitchElement.CheckedElement>
+                                    <Border Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
+                                        <TextBlock
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"
+                                         Foreground="{DynamicResource TextIconBrush}"
+                                         Text="Off" />
+                                    </Border>
+                                </ToggleButton>
+                                <ComboBox
+                                 Width="320"
+                                 Margin="5"
+                                 HorizontalAlignment="Left"
+                                 hc:InfoElement.Title="Update Channel"
+                                 hc:InfoElement.TitlePlacement="Left"
+                                 hc:InfoElement.TitleWidth="100"
+                                 Style="{StaticResource ComboBoxExtend}"
+                                 Text="" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</catel:UserControl>

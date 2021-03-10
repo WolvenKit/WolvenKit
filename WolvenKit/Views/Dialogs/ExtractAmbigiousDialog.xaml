@@ -1,0 +1,40 @@
+<catel:UserControl
+ x:Class="WolvenKit.Views.Dialogs.ExtractAmbigiousDialog"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol">
+    <catel:UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources />
+                <hc:Theme />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </catel:UserControl.Resources>
+    <Grid Width="600">
+        <StackPanel>
+            <TextBlock Text="The name of the file you're trying to extract exists in more than one archive, please select the item of your preference." />
+            <Grid>
+                <ListBox Height="300" />
+            </Grid>
+            <Grid Margin="0,50,0,0">
+                <Button
+                 Width="150"
+                 HorizontalAlignment="Left"
+                 Content="Cancel" />
+
+                <Button
+                 Width="150"
+                 HorizontalAlignment="Right"
+                 Content="Confirm" />
+                <CheckBox
+                 Margin="0,0,155,0"
+                 HorizontalAlignment="Right"
+                 Background="{DynamicResource accent3}"
+                 BorderBrush="Transparent"
+                 Content="Do not ask me again" />
+            </Grid>
+        </StackPanel>
+    </Grid>
+</catel:UserControl>

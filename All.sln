@@ -53,6 +53,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Net", "WolvenKit.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wolvenkit.Radish", "Wolvenkit.Radish\Wolvenkit.Radish.csproj", "{73450280-2B7A-4BA7-88F8-C23AD80CC042}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.App", "WolvenKit.App\WolvenKit.App.csproj", "{A6AF197F-9D48-41A1-B114-9ACD4F18CB3F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -197,6 +199,14 @@ Global
 		{73450280-2B7A-4BA7-88F8-C23AD80CC042}.Release|Any CPU.Build.0 = Release|Any CPU
 		{73450280-2B7A-4BA7-88F8-C23AD80CC042}.Release|x64.ActiveCfg = Release|x64
 		{73450280-2B7A-4BA7-88F8-C23AD80CC042}.Release|x64.Build.0 = Release|x64
+		{A6AF197F-9D48-41A1-B114-9ACD4F18CB3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6AF197F-9D48-41A1-B114-9ACD4F18CB3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6AF197F-9D48-41A1-B114-9ACD4F18CB3F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A6AF197F-9D48-41A1-B114-9ACD4F18CB3F}.Debug|x64.Build.0 = Debug|Any CPU
+		{A6AF197F-9D48-41A1-B114-9ACD4F18CB3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6AF197F-9D48-41A1-B114-9ACD4F18CB3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6AF197F-9D48-41A1-B114-9ACD4F18CB3F}.Release|x64.ActiveCfg = Release|Any CPU
+		{A6AF197F-9D48-41A1-B114-9ACD4F18CB3F}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -223,6 +233,7 @@ Global
 		{43800A68-B25D-4D52-9FC4-9E3F247A8020} = {825169A9-0548-4A0A-A1F1-B99BE7D0C23F}
 		{EE7C13FD-10C5-4527-A821-B4FB0C6EB3E8} = {2304D155-E6AB-4AE0-969B-C6D0CDC0CD6D}
 		{73450280-2B7A-4BA7-88F8-C23AD80CC042} = {7199D583-CA10-4035-9014-65158344B33D}
+		{A6AF197F-9D48-41A1-B114-9ACD4F18CB3F} = {BE958494-0BB3-4401-93DB-65458FED482B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DAAF993-E8B7-47A4-AB0E-C159CB499F45}
