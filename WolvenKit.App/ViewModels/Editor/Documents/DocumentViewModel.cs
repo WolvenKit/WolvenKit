@@ -14,7 +14,6 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W.SRT;
-using WolvenKit.Extensions.PropertyGridEditors;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
@@ -255,8 +254,6 @@ namespace WolvenKit.ViewModels.Editor
                 }
             }
         }
-
-        public PropertyResolver PropertyResolver => new MyPropertyResolver();
 
         /// <summary>
         /// Bound to the View via TreeViewBehavior.cs

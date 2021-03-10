@@ -7,8 +7,6 @@ namespace WolvenKit.Functionality.Converters
     [ValueConversion(typeof(System.Drawing.Color), typeof(SolidColorBrush))]
     public class ColorToSolidColorBrushConverter : IValueConverter
     {
-        #region Methods
-
         public object
             Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) =>
             value is System.Drawing.Color color
