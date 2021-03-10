@@ -24,12 +24,12 @@ namespace WolvenKit.ViewModels.Shell
     {
         #region fields
 
+        public static RibbonViewModel GlobalRibbonVM;
         private readonly ILoggerService _loggerService;
         private readonly INavigationService _navigationService;
         private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
         private readonly IUIVisualizerService _uiVisualizerService;
-        public static RibbonViewModel GlobalRibbonVM;
 
         #endregion fields
 
@@ -68,19 +68,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #region properties
 
-        public bool BackstageIsOpen { get; set; }
-        public bool StartScreenShown { get; set; }
-
-
-
-
-
-
-
-
-
         public Random rnd = new Random();
-
         private Color _selectedTheme;
 
         public enum ERibbonContextualTabGroupVisibility
@@ -89,6 +77,7 @@ namespace WolvenKit.ViewModels.Shell
             Visible,
         }
 
+        public bool BackstageIsOpen { get; set; }
         public ERibbonContextualTabGroupVisibility ProjectExplorerContextualTabGroupVisibility { get; set; }
 
         public string ProjectExplorerContextualTabGroupVisibilityStr =>
@@ -109,18 +98,15 @@ namespace WolvenKit.ViewModels.Shell
                     _logger.Info("Changed theme : " + value.ToString());
                     _settingsManager.ThemeAccent = value;
                     _settingsManager.Save();
-
                 }
             }
         }
 
-
-
+        public bool StartScreenShown { get; set; }
 
         #endregion properties
 
         #region commands
-
 
         /// <summary>
         /// Is raised when a PaneView is selected: shows the contextual ribbon tab
@@ -141,12 +127,9 @@ namespace WolvenKit.ViewModels.Shell
                 ProjectExplorerContextualTabGroupVisibility = tuple.Item2
                     ? ERibbonContextualTabGroupVisibility.Visible
                     : ERibbonContextualTabGroupVisibility.Collapsed;
-
             }
 
             DiscordHelper.SetDiscordRPCStatus(tuple.Item1.Title); // Set status for discord RPC
-
-
         }
 
         #endregion commands

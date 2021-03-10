@@ -6,6 +6,7 @@ namespace WolvenKit.ViewModels.Shell
     public class PaneViewModel : ViewModelBase
     { // #MVVM
         // #SortNameSpace
+
         #region fields
 
         private string _contentId = null;

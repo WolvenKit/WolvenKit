@@ -9,8 +9,7 @@
  xmlns:s="clr-namespace:System;assembly=mscorlib"
  d:DesignHeight="150"
  d:DesignWidth="800"
- mc:Ignorable="d"
- >
+ mc:Ignorable="d">
 
     <!--  Resources  -->
     <UserControl.Resources>
@@ -30,8 +29,7 @@
                          MinWidth="100"
                          Binding="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          CanUserResize="True"
-                         Header="VALUE"
-                         />
+                         Header="VALUE" />
                     </DataGrid.Columns>
                 </DataGrid>
             </ControlTemplate>
@@ -49,15 +47,13 @@
                             <TextBlock
                              Margin="30,0"
                              DataContext="{Binding}"
-                             Text="{Binding HeaderText}"
-                             />
+                             Text="{Binding HeaderText}" />
                         </Grid>
                     </TreeViewItem.Header>
                     <hc:PropertyGrid PropertyResolver="{Binding PropertyResolver}" SelectedObject="{Binding}" />
                 </TreeViewItem>
             </ControlTemplate>
         </ResourceDictionary>
-
     </UserControl.Resources>
 
     <Grid Background="Transparent">
@@ -82,26 +78,21 @@
                              Margin="0,5,10,5"
                              IsEditable="True"
                              ShowClearButton="True"
-                             ToolTip="Press ENTER to add an item."
-                             />
+                             ToolTip="Press ENTER to add an item." />
 
                             <!--  Open Special Editor Button  -->
                             <Button
                              Grid.Column="1"
                              Margin="0,5,5,5"
                              HorizontalAlignment="Right"
-                             hc:IconElement.Geometry="{DynamicResource DragHorizontalGeometry}"
-                             />
-
+                             hc:IconElement.Geometry="{DynamicResource DragHorizontalGeometry}" />
                         </Grid>
                     </TreeViewItem.Header>
 
                     <!--  Control Body  -->
                     <ContentControl Name="ContentControl" />
-
                 </TreeViewItem>
             </TreeView>
         </hc:ScrollViewer>
     </Grid>
-
 </UserControl>

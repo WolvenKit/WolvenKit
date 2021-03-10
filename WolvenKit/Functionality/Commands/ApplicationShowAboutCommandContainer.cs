@@ -27,7 +27,6 @@ namespace WolvenKit.Functionality.Commands
 
             //  HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
 
-
             //  HomePageView.GlobalHomePage.PageViewGrid.Children.Add(HomePageViewModel.GlobalHomePageVM.AboutPV);
         }
 

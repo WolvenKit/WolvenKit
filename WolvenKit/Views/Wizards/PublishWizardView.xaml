@@ -5,8 +5,7 @@
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- IsVisibleChanged="UserControl_IsVisibleChanged"
- >
+ IsVisibleChanged="UserControl_IsVisibleChanged">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -21,8 +20,7 @@
      MinHeight="300"
      Margin="5,5,2,5"
      HorizontalAlignment="Stretch"
-     VerticalAlignment="Center"
-     >
+     VerticalAlignment="Center">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="15*" />
@@ -34,8 +32,7 @@
          Margin="15,15,0,0"
          HorizontalAlignment="Left"
          VerticalAlignment="Center"
-         Orientation="Horizontal"
-         >
+         Orientation="Horizontal">
             <Grid>
                 <iconPacks:PackIconCodicons
                  Grid.Row="0"
@@ -47,8 +44,7 @@
                  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                  Kind="Hubot"
                  Spin="False"
-                 SpinAutoReverse="False"
-                 />
+                 SpinAutoReverse="False" />
             </Grid>
             <StackPanel VerticalAlignment="Center" Orientation="Vertical">
 
@@ -59,13 +55,11 @@
                  VerticalAlignment="Center"
                  FontSize="20"
                  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                 Text="Let's publish the project!"
-                 />
+                 Text="Let's publish the project!" />
                 <hc:Divider
                  Margin="0,5,0,0"
                  HorizontalAlignment="Stretch"
-                 VerticalAlignment="Stretch"
-                 />
+                 VerticalAlignment="Stretch" />
             </StackPanel>
         </StackPanel>
 
@@ -75,8 +69,7 @@
          Grid.Row="2"
          Height="95"
          Margin="0,0,0,0"
-         VerticalAlignment="Bottom"
-         >
+         VerticalAlignment="Bottom">
 
             <Button
              Width="50"
@@ -87,8 +80,7 @@
              BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}"
              Click="Button_Click_1"
              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-             IsEnabled="True"
-             >
+             IsEnabled="True">
                 <iconPacks:PackIconCodicons Kind="ArrowLeft" />
             </Button>
             <hc:StepBar
@@ -97,8 +89,7 @@
              Grid.Column="0"
              Grid.ColumnSpan="2"
              Margin="50,0,50,3"
-             Dock="Bottom"
-             >
+             Dock="Bottom">
                 <hc:StepBarItem Content="Required settings" />
                 <hc:StepBarItem Content="Additional settings" />
                 <hc:StepBarItem Content="Finalize setup" />
@@ -114,8 +105,7 @@
              Command="{Binding NextCmd}"
              CommandParameter="{Binding ElementName=StepMain}"
              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-             IsEnabled="True"
-             >
+             IsEnabled="True">
                 <iconPacks:PackIconCodicons Kind="ArrowRight" />
             </Button>
         </Grid>

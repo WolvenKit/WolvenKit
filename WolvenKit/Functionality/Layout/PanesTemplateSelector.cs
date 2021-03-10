@@ -51,12 +51,6 @@ namespace WolvenKit.Functionality.Layout
         public DataTemplate BulkEditorTemplate { get; set; }
 
         /// <summary>
-        /// Gets/sets the view instance of the Properties.
-        /// </summary>
-        public DataTemplate PropertiesTemplate { get; set; }
-
-
-        /// <summary>
         /// Gets/sets the view instance of the CodeEditor.
         /// </summary>
         public DataTemplate CodeEditorTemplate { get; set; }
@@ -125,6 +119,11 @@ namespace WolvenKit.Functionality.Layout
         /// Gets/sets the view instance of the ProjectExplorerView.
         /// </summary>
         public DataTemplate ProjectExplorerTemplate { get; set; }
+
+        /// <summary>
+        /// Gets/sets the view instance of the Properties.
+        /// </summary>
+        public DataTemplate PropertiesTemplate { get; set; }
 
         /// <summary>
         /// Gets/sets the view instance of the RadishTool.

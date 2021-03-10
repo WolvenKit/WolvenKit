@@ -4,8 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- IsVisibleChanged="DataWindow_IsVisibleChanged"
- >
+ IsVisibleChanged="DataWindow_IsVisibleChanged">
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -31,8 +30,7 @@
                  Width="auto"
                  Height="auto"
                  HorizontalAlignment="Stretch"
-                 VerticalAlignment="Stretch"
-                 />
+                 VerticalAlignment="Stretch" />
             </Grid>
         </Grid>
 
@@ -40,8 +38,7 @@
             <Image
              Width="150"
              Height="150"
-             HorizontalAlignment="Left"
-             />
+             HorizontalAlignment="Left" />
             <hc:CheckTreeView Margin="150,0,0,0" />
         </Grid>
 

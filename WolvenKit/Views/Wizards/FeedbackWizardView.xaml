@@ -6,8 +6,7 @@
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:rv1="clr-namespace:WolvenKit.Views.Wizards.WizardPages.FeedbackWizard"
- IsVisibleChanged="UserControl_IsVisibleChanged"
- >
+ IsVisibleChanged="UserControl_IsVisibleChanged">
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -21,8 +20,7 @@
      Margin="5,5,2,5"
      HorizontalAlignment="Stretch"
      VerticalAlignment="Center"
-     hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
-     >
+     hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="15*" />
@@ -33,8 +31,7 @@
         <StackPanel
          Margin="5,0,5,0"
          HorizontalAlignment="Stretch"
-         Orientation="Horizontal"
-         >
+         Orientation="Horizontal">
             <Grid>
                 <iconPacks:PackIconCodicons
                  Grid.Row="0"
@@ -46,15 +43,13 @@
                  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                  Kind="Hubot"
                  Spin="False"
-                 SpinAutoReverse="False"
-                 />
+                 SpinAutoReverse="False" />
             </Grid>
 
             <StackPanel
              HorizontalAlignment="Stretch"
              VerticalAlignment="Bottom"
-             Orientation="Vertical"
-             >
+             Orientation="Vertical">
 
                 <TextBlock
                  Grid.Row="0"
@@ -63,13 +58,11 @@
                  VerticalAlignment="Center"
                  FontSize="20"
                  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                 Text="Rate your WolvenKit experience!"
-                 />
+                 Text="Rate your WolvenKit experience!" />
                 <hc:Divider
                  Margin="0,10,0,0"
                  HorizontalAlignment="Stretch"
-                 VerticalAlignment="Stretch"
-                 />
+                 VerticalAlignment="Stretch" />
             </StackPanel>
         </StackPanel>
 

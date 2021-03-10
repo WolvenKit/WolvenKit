@@ -68,22 +68,13 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewLocator.NamingConventions.Add("WolvenKit.Views.HomePage.[VM]View");
             viewLocator.NamingConventions.Add("WolvenKit.Views.HomePage.Pages.[VM]View");
 
-
             viewLocator.NamingConventions.Add("WolvenKit.ViewModels.[VM]ViewModel");
             viewLocator.NamingConventions.Add("WolvenKit.ViewModels.HomePage.[VM]ViewModel");
             viewLocator.NamingConventions.Add("WolvenKit.ViewModels.HomePage.Pages.[VM]ViewModel");
 
             // I guess teh above does nothing or im doing it wrong whaever we got the below stuff already anyway.
 
-
             //TODO: rename later to MainViewModel
-
-
-
-
-
-
-
 
             // ---- HeadCategory : Extras
             //-- Category : Radio
@@ -194,7 +185,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.Register(typeof(BugReportWizard), typeof(BugReportWizardViewModel));
             viewModelLocator.Register(typeof(SendBugView), typeof(SendBugViewModel));
 
-
             // ---- HeadCategory : Dialogs
             viewModelLocator.Register(typeof(AddChunkDialog), typeof(AddChunkDialogViewModel));
             viewModelLocator.Register(typeof(ExtractAmbigiousDialog), typeof(ExtractAmbigiousDialogViewModel));
@@ -208,8 +198,31 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
         {
             await ShellInnerInit();
             ThemeInnerInit();
+        }
 
+        public static void ShowFirstTimeSetup()
+        {
+            if (Functionality.Services.SettingsManager.FirstTimeSetupForUser)
+            {
+                Task.Run(() =>
+                    //await Task.Delay(5000);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var rpv = new FirstSetupWizardView();
+                        var zxc = new UserControlHostWindowViewModel(rpv);
+                        var uchwv = new UserControlHostWindowView(zxc);
+                        rpv.ViewModelChanged += (_s, _e) =>
+                        {
+                            if (rpv.ViewModel == null)
+                            {
+                                return;
+                            }
 
+                            rpv.ViewModel.ClosedAsync += async (s, e) => await Task.Run(() => Application.Current.Dispatcher.Invoke(() => uchwv.Close()));
+                        };
+                        uchwv.Show();
+                    }));
+            }
         }
 
         private static async Task ShellInnerInit()
@@ -251,33 +264,9 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             }
         }
 
-        public static void ShowFirstTimeSetup()
-        {
-            if (Functionality.Services.SettingsManager.FirstTimeSetupForUser)
-            {
-                Task.Run(() =>
-                    //await Task.Delay(5000);
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        var rpv = new FirstSetupWizardView();
-                        var zxc = new UserControlHostWindowViewModel(rpv);
-                        var uchwv = new UserControlHostWindowView(zxc);
-                        rpv.ViewModelChanged += (_s, _e) =>
-                        {
-                            if (rpv.ViewModel == null)
-                            {
-                                return;
-                            }
-
-                            rpv.ViewModel.ClosedAsync += async (s, e) => await Task.Run(() => Application.Current.Dispatcher.Invoke(() => uchwv.Close()));
-                        };
-                        uchwv.Show();
-                    }));
-            }
-        }
-
         #endregion Methods
     }
+
     public class ValueConverterGroup : List<IValueConverter>, IValueConverter
     {
         #region IValueConverter Members
@@ -292,7 +281,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             throw new NotImplementedException();
         }
 
-        #endregion
+        #endregion IValueConverter Members
     }
-
 }

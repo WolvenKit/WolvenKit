@@ -37,7 +37,6 @@ namespace WolvenKit.ViewModels.HomePage.Pages
 
         public void InitThis()
         {
-
         }
 
         #endregion Methods

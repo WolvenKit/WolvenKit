@@ -4,8 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- IsVisibleChanged="UserControl_IsVisibleChanged"
- >
+ IsVisibleChanged="UserControl_IsVisibleChanged">
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -22,8 +21,7 @@
             <RichTextBox
              Width="650"
              Height="150"
-             AcceptsReturn="False"
-             >
+             AcceptsReturn="False">
                 <FlowDocument>
                     <Paragraph>
                         This tool will dump all CR2W files (w2ent, w2l, w2scene, w2p, etc) in the specified folder and all its subfolders, into a human-readable text format.
@@ -39,13 +37,11 @@
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center"
                  Orientation="Vertical"
-                 Spacing="15"
-                 >
+                 Spacing="15">
                     <StackPanel
                      Margin="10,0,0,0"
                      HorizontalAlignment="Center"
-                     Orientation="Horizontal"
-                     >
+                     Orientation="Horizontal">
                         <hc:ComboBox
                          Width="450"
                          VerticalAlignment="Top"
@@ -53,33 +49,28 @@
                          hc:InfoElement.TitlePlacement="Left"
                          hc:InfoElement.TitleWidth="140"
                          IsEditable="True"
-                         Text="None"
-                         />
+                         Text="None" />
                         <Button
                          Width="50"
                          Margin="5,0,0,0"
-                         Content="Browse"
-                         />
+                         Content="Browse" />
                     </StackPanel>
                     <hc:UniformSpacingPanel
                      HorizontalAlignment="Right"
                      Orientation="Horizontal"
-                     Spacing="15"
-                     >
+                     Spacing="15">
                         <RadioButton
                          Width="150"
                          Margin="10,0,0,0"
                          BorderThickness="1"
                          Content="One per source file"
-                         Style="{StaticResource RadioButtonIcon}"
-                         />
+                         Style="{StaticResource RadioButtonIcon}" />
                         <RadioButton
                          Width="150"
                          Margin="10,0,0,0"
                          BorderThickness="1"
                          Content="Single file"
-                         Style="{StaticResource RadioButtonIcon}"
-                         />
+                         Style="{StaticResource RadioButtonIcon}" />
                     </hc:UniformSpacingPanel>
 
                     <hc:NumericUpDown
@@ -90,13 +81,11 @@
                      hc:InfoElement.Title="Number of Threads"
                      hc:InfoElement.TitlePlacement="Left"
                      hc:InfoElement.TitleWidth="140"
-                     Style="{StaticResource NumericUpDownPlus}"
-                     />
+                     Style="{StaticResource NumericUpDownPlus}" />
                     <StackPanel
                      Margin="10,0,0,0"
                      HorizontalAlignment="Center"
-                     Orientation="Horizontal"
-                     >
+                     Orientation="Horizontal">
                         <hc:ComboBox
                          Width="450"
                          VerticalAlignment="Top"
@@ -104,13 +93,11 @@
                          hc:InfoElement.TitlePlacement="Left"
                          hc:InfoElement.TitleWidth="140"
                          IsEditable="True"
-                         Text="None"
-                         />
+                         Text="None" />
                         <Button
                          Width="50"
                          Margin="5,0,0,0"
-                         Content="Browse"
-                         />
+                         Content="Browse" />
                     </StackPanel>
 
                     <hc:CheckComboBox
@@ -121,28 +108,24 @@
                      ItemsSource="{Binding DataList}"
                      ShowClearButton="True"
                      ShowSelectAllButton="True"
-                     Style="{StaticResource CheckComboBoxPlus}"
-                     />
+                     Style="{StaticResource CheckComboBoxPlus}" />
 
                     <hc:UniformSpacingPanel
                      HorizontalAlignment="Right"
                      Orientation="Horizontal"
-                     Spacing="15"
-                     >
+                     Spacing="15">
                         <RadioButton
                          Width="150"
                          Margin="10,0,0,0"
                          BorderThickness="1"
                          Content="Overwrite existing files"
-                         Style="{StaticResource RadioButtonIcon}"
-                         />
+                         Style="{StaticResource RadioButtonIcon}" />
                         <RadioButton
                          Width="150"
                          Margin="10,0,0,0"
                          BorderThickness="1"
                          Content="Skip existing files"
-                         Style="{StaticResource RadioButtonIcon}"
-                         />
+                         Style="{StaticResource RadioButtonIcon}" />
                     </hc:UniformSpacingPanel>
                 </hc:UniformSpacingPanel>
             </Grid>
@@ -150,8 +133,7 @@
              Margin="35"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Bottom"
-             Content="Run CR2W Dump"
-             />
+             Content="Run CR2W Dump" />
         </StackPanel>
     </Grid>
 </catel:UserControl>

@@ -12,8 +12,7 @@
  xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" xmlns:local11="clr-namespace:WolvenKit.Views.Shared"
     d:DesignHeight="450"
  d:DesignWidth="800"
- mc:Ignorable="d"
- >
+ mc:Ignorable="d">
 
     <UserControl.Resources>
         <DrawingBrush
@@ -26,14 +25,12 @@
          Stretch="Uniform"
          TileMode="Tile"
          Viewport="0,0,44,44"
-         ViewportUnits="Absolute"
-         >
+         ViewportUnits="Absolute">
             <DrawingBrush.Drawing>
                 <ImageDrawing
                  o:Freeze="True"
                  ImageSource="pack://application:,,,/Resources/Media/Images/Application/SeeTroughIcon.png"
-                 Rect="0,0,70,80"
-                 />
+                 Rect="0,0,70,80" />
             </DrawingBrush.Drawing>
         </DrawingBrush>
     </UserControl.Resources>
@@ -53,19 +50,16 @@
              Grid.Row="1"
              Margin="15,15,0,15"
              HorizontalAlignment="Stretch"
-             VerticalAlignment="Stretch"
-             >
+             VerticalAlignment="Stretch">
 
                 <Border
                  Background="{DynamicResource RegionBrush}"
                  CornerRadius="10"
-                 Effect="{DynamicResource MahApps.DropShadowEffect.Menu}"
-                 >
+                 Effect="{DynamicResource MahApps.DropShadowEffect.Menu}">
                     <Border
                      Margin="1,50,1,15"
                      Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                     CornerRadius="10"
-                     >
+                     CornerRadius="10">
                         <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
                             <Grid>
                                 <TextBlock
@@ -73,8 +67,7 @@
                                  HorizontalAlignment="Center"
                                  FontSize="20"
                                  Foreground="Gray"
-                                 Text="Templates"
-                                 />
+                                 Text="Templates" />
                                 <StackPanel>
                                     <Image Margin="35" Source="pack://application:,,,/Resources/Media/Images/Application/.cpmodproj.png" />
                                     <Image Margin="35" Source="pack://application:,,,/Resources/Media/Images/Application/.w3modproj.png" />
@@ -90,18 +83,15 @@
              Grid.Column="1"
              Margin="15"
              HorizontalAlignment="Stretch"
-             VerticalAlignment="Stretch"
-             >
+             VerticalAlignment="Stretch">
                 <Border
                  Background="{DynamicResource RegionBrush}"
                  CornerRadius="10"
-                 Effect="{DynamicResource MahApps.DropShadowEffect.Menu}"
-                 >
+                 Effect="{DynamicResource MahApps.DropShadowEffect.Menu}">
                     <Border
                      Margin="1,50,1,15"
                      Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                     CornerRadius="10"
-                     >
+                     CornerRadius="10">
                         <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
                             <local11:RecentlyUsedItemsView Margin="5,-56,5,0" FontSize="18" />
                         </hc:TransitioningContentControl>
@@ -114,43 +104,37 @@
              Grid.Column="1"
              Margin="15,15,15,0"
              HorizontalAlignment="Stretch"
-             VerticalAlignment="Stretch"
-             >
+             VerticalAlignment="Stretch">
                 <Border
                  Background="{DynamicResource RegionBrush}"
                  CornerRadius="10"
-                 Effect="{DynamicResource MahApps.DropShadowEffect.Menu}"
-                 >
+                 Effect="{DynamicResource MahApps.DropShadowEffect.Menu}">
                     <Border
                      Margin="1,5,1,5"
                      VerticalAlignment="Center"
                      Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                     CornerRadius="10"
-                     >
+                     CornerRadius="10">
                         <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
                             <Grid Grid.Row="0" Grid.ColumnSpan="2">
 
                                 <hc:UniformSpacingPanel
                                  HorizontalAlignment="Center"
                                  VerticalAlignment="Center"
-                                 Orientation="Horizontal"
-                                 >
+                                 Orientation="Horizontal">
                                     <Button
                                      Width="150"
                                      Height="70"
                                      BorderBrush="{DynamicResource RegionBrush}"
                                      Command="{catel:CommandManagerBinding Application.OpenProject}"
                                      FontSize="20"
-                                     Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
-                                     >
+                                     Style="{DynamicResource MahApps.Styles.Button.Chromeless}">
                                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                             <iconPacks:PackIconCodicons
                                              Width="20"
                                              Height="20"
                                              Margin="0,0,5,0"
                                              VerticalAlignment="Center"
-                                             Kind="GoToFile"
-                                             />
+                                             Kind="GoToFile" />
                                             <TextBlock Text="Open" />
                                         </StackPanel>
                                     </Button>
@@ -160,16 +144,14 @@
                                      BorderBrush="{DynamicResource RegionBrush}"
                                      Command="{catel:CommandManagerBinding Application.NewProject}"
                                      FontSize="20"
-                                     Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
-                                     >
+                                     Style="{DynamicResource MahApps.Styles.Button.Chromeless}">
                                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                             <iconPacks:PackIconCodicons
                                              Width="20"
                                              Height="20"
                                              Margin="0,0,5,0"
                                              VerticalAlignment="Center"
-                                             Kind="NewFile"
-                                             />
+                                             Kind="NewFile" />
                                             <TextBlock Text="New" />
                                         </StackPanel>
                                     </Button>
@@ -179,16 +161,14 @@
                                      BorderBrush="{DynamicResource RegionBrush}"
                                      Command="{catel:CommandManagerBinding Application.SaveProject}"
                                      FontSize="20"
-                                     Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
-                                     >
+                                     Style="{DynamicResource MahApps.Styles.Button.Chromeless}">
                                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                             <iconPacks:PackIconCodicons
                                              Width="20"
                                              Height="20"
                                              Margin="0,0,5,0"
                                              VerticalAlignment="Center"
-                                             Kind="Save"
-                                             />
+                                             Kind="Save" />
                                             <TextBlock Text="Save" />
                                         </StackPanel>
                                     </Button>
@@ -198,16 +178,14 @@
                                      BorderBrush="{DynamicResource RegionBrush}"
                                      Command="{catel:CommandManagerBinding Application.SaveAsProject}"
                                      FontSize="20"
-                                     Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
-                                     >
+                                     Style="{DynamicResource MahApps.Styles.Button.Chromeless}">
                                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                             <iconPacks:PackIconCodicons
                                              Width="20"
                                              Height="20"
                                              Margin="0,0,5,0"
                                              VerticalAlignment="Center"
-                                             Kind="SaveAs"
-                                             />
+                                             Kind="SaveAs" />
                                             <TextBlock Text="Save As" />
                                         </StackPanel>
                                     </Button>
@@ -217,16 +195,14 @@
                                      BorderBrush="{DynamicResource RegionBrush}"
                                      Command="{catel:CommandManagerBinding Application.PublishMod}"
                                      FontSize="20"
-                                     Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
-                                     >
+                                     Style="{DynamicResource MahApps.Styles.Button.Chromeless}">
                                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                             <iconPacks:PackIconCodicons
                                              Width="20"
                                              Height="20"
                                              Margin="0,0,5,0"
                                              VerticalAlignment="Center"
-                                             Kind="Package"
-                                             />
+                                             Kind="Package" />
                                             <TextBlock Text="Publish" />
                                         </StackPanel>
                                     </Button>
@@ -239,16 +215,14 @@
                                      FontSize="20"
                                      IsEnabled="False"
                                      Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
-                                     Visibility="Collapsed"
-                                     >
+                                     Visibility="Collapsed">
                                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                             <iconPacks:PackIconCodicons
                                              Width="20"
                                              Height="20"
                                              Margin="0,0,5,0"
                                              VerticalAlignment="Center"
-                                             Kind="Bug"
-                                             />
+                                             Kind="Bug" />
                                             <TextBlock Text="Bug Report" />
                                         </StackPanel>
                                     </Button>
@@ -262,18 +236,15 @@
             <Grid
              Margin="15,15,0,0"
              HorizontalAlignment="Stretch"
-             VerticalAlignment="Stretch"
-             >
+             VerticalAlignment="Stretch">
                 <Border
                  Background="{DynamicResource RegionBrush}"
                  CornerRadius="10"
-                 Effect="{DynamicResource MahApps.DropShadowEffect.Menu}"
-                 >
+                 Effect="{DynamicResource MahApps.DropShadowEffect.Menu}">
                     <Border
                      Margin="1,5,1,5"
                      Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                     CornerRadius="10"
-                     >
+                     CornerRadius="10">
                         <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
                             <Fluent:Button
                              Grid.RowSpan="1"
@@ -290,8 +261,7 @@
                              FontSize="20"
                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                              IsDefinitive="True"
-                             Style="{StaticResource ButtonIcon}"
-                             />
+                             Style="{StaticResource ButtonIcon}" />
                         </hc:TransitioningContentControl>
                     </Border>
                 </Border>

@@ -9,8 +9,7 @@
  BorderBrush="{x:Null}"
  ShowInTaskbar="True"
  WindowStartupLocation="CenterScreen"
- WindowStyle="None"
- >
+ WindowStyle="None">
 
     <catel:DataWindow.Resources>
         <ResourceDictionary>
@@ -25,8 +24,7 @@
          MaxWidth="1200"
          hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
          BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-         BorderThickness="1"
-         >
+         BorderThickness="1">
 
             <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
 
@@ -35,8 +33,7 @@
                  Grid.ColumnSpan="2"
                  VerticalAlignment="Top"
                  Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
-                 MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown"
-                 >
+                 MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown">
 
                     <!--  TitleBar  Please add onmousedown event to be able to drag the window  -->
                     <Button
@@ -47,8 +44,7 @@
                      Background="Transparent"
                      BorderBrush="{x:Null}"
                      Click="ButtonClose"
-                     Style="{StaticResource ButtonIcon}"
-                     />
+                     Style="{StaticResource ButtonIcon}" />
 
                     <Button
                      Width="40"
@@ -59,8 +55,7 @@
                      Background="Transparent"
                      BorderBrush="{x:Null}"
                      Click="ButtonMinimize"
-                     Style="{StaticResource ButtonIcon}"
-                     />
+                     Style="{StaticResource ButtonIcon}" />
 
                     <!--
 

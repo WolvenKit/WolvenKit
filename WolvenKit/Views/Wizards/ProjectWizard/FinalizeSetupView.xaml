@@ -4,8 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- Loaded="UserControl_Loaded"
- >
+ Loaded="UserControl_Loaded">
     <catel:UserControl.Resources>
         <catel:BooleanToOppositeBooleanConverter x:Key="booleanToOppositeBooleanConverter" />
         <ResourceDictionary x:Key="resourceDictionary">
@@ -21,14 +20,12 @@
         <Grid
          Margin="5,5,5,5"
          HorizontalAlignment="Stretch"
-         Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-         >
+         Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
             <Grid Grid.Row="1" HorizontalAlignment="Stretch">
                 <StackPanel
                  Margin="0,10,0,0"
                  VerticalAlignment="Top"
-                 Orientation="Vertical"
-                 >
+                 Orientation="Vertical">
                     <TextBlock
                      Grid.Row="0"
                      Margin="10,10,0,10"
@@ -36,8 +33,7 @@
                      VerticalAlignment="Center"
                      FontSize="14"
                      Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                     Text="Does This Look Right?"
-                     />
+                     Text="Does This Look Right?" />
                     <Grid Margin="22,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="6*" />
@@ -57,8 +53,7 @@
                                      Width="100"
                                      Height="100"
                                      Margin="100,0,0,0"
-                                     HorizontalAlignment="Left"
-                                     />
+                                     HorizontalAlignment="Left" />
                                 </Grid>
                                 <Grid Margin="5,32,0,0">
 
@@ -68,8 +63,7 @@
                                      HorizontalAlignment="Stretch"
                                      VerticalAlignment="Stretch"
                                      IsEnabled="False"
-                                     Text="{Binding ProjectName}"
-                                     />
+                                     Text="{Binding ProjectName}" />
                                 </Grid>
 
                                 <Grid Margin="5,32,0,0">
@@ -80,8 +74,7 @@
                                      HorizontalAlignment="Stretch"
                                      VerticalAlignment="Stretch"
                                      IsEnabled="False"
-                                     Text="{Binding ProjectType}"
-                                     />
+                                     Text="{Binding ProjectType}" />
                                 </Grid>
                                 <Grid Margin="5,32,0,0">
 
@@ -91,8 +84,7 @@
                                      HorizontalAlignment="Stretch"
                                      VerticalAlignment="Stretch"
                                      IsEnabled="False"
-                                     Text="{Binding ProjectPath}"
-                                     />
+                                     Text="{Binding ProjectPath}" />
                                 </Grid>
 
                                 <hc:Divider Margin="10" />
@@ -100,23 +92,20 @@
                                  Margin="0"
                                  HorizontalAlignment="Right"
                                  VerticalAlignment="Bottom"
-                                 Orientation="Horizontal"
-                                 >
+                                 Orientation="Horizontal">
                                     <Button
                                      Height="45"
                                      Margin="0,0,0,0"
                                      Command="{catel:CommandManagerBinding Application.CreateNewProject}"
                                      CommandParameter="{Binding ProjectTypeAndPath}"
                                      Content="Yes, create project."
-                                     IsEnabled="{Binding HasErrors, Converter={StaticResource booleanToOppositeBooleanConverter}}"
-                                     />
+                                     IsEnabled="{Binding HasErrors, Converter={StaticResource booleanToOppositeBooleanConverter}}" />
 
                                     <Button
                                      Height="45"
                                      Margin="15,0,0,0"
                                      Click="CancelProjectBtn_Click"
-                                     Content="No, cancel project creation."
-                                     />
+                                     Content="No, cancel project creation." />
                                 </StackPanel>
                             </StackPanel>
                         </AdornerDecorator>

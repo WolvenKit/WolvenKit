@@ -1,10 +1,25 @@
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Views.HomePage.Pages;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
     public partial class GeneralSettingsView
     {
+        #region Fields
+
+        private AccountSubSettingsView ASSV;
+
+        private GlobalSubSettingsView GSSV;
+
+        private LoggingSubSettingsView LSSV;
+
+        private ThemeSubSettingsView TSSV;
+
+        private UpdatesSubSettingsView USSV;
+
+        #endregion Fields
+
+        #region Constructors
+
         public GeneralSettingsView()
         {
             GSSV = new GlobalSubSettingsView();
@@ -19,20 +34,9 @@ namespace WolvenKit.Views.HomePage.Pages
             GlobalSubItem.IsSelected = true;
         }
 
-        private GlobalSubSettingsView GSSV;
-        private AccountSubSettingsView ASSV;
-        private UpdatesSubSettingsView USSV;
-        private ThemeSubSettingsView TSSV;
-        private LoggingSubSettingsView LSSV;
+        #endregion Constructors
 
-        private void GlobalSubItem_Selected(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (IsLoaded && IsVisible && IsInitialized)
-            {
-                SettingsViewer.Children.Clear();
-                SettingsViewer.Children.Add(GSSV);
-            }
-        }
+        #region Methods
 
         private void AccountSubItem_Selected(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -43,21 +47,12 @@ namespace WolvenKit.Views.HomePage.Pages
             }
         }
 
-        private void UpdatesSubItem_Selected(object sender, System.Windows.RoutedEventArgs e)
+        private void GlobalSubItem_Selected(object sender, System.Windows.RoutedEventArgs e)
         {
             if (IsLoaded && IsVisible && IsInitialized)
             {
                 SettingsViewer.Children.Clear();
-                SettingsViewer.Children.Add(USSV);
-            }
-        }
-
-        private void ThemeSubItem_Selected(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (IsLoaded && IsVisible && IsInitialized)
-            {
-                SettingsViewer.Children.Clear();
-                SettingsViewer.Children.Add(TSSV);
+                SettingsViewer.Children.Add(GSSV);
             }
         }
 
@@ -70,6 +65,24 @@ namespace WolvenKit.Views.HomePage.Pages
             }
         }
 
+        private void ThemeSubItem_Selected(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (IsLoaded && IsVisible && IsInitialized)
+            {
+                SettingsViewer.Children.Clear();
+                SettingsViewer.Children.Add(TSSV);
+            }
+        }
+
+        private void UpdatesSubItem_Selected(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (IsLoaded && IsVisible && IsInitialized)
+            {
+                SettingsViewer.Children.Clear();
+                SettingsViewer.Children.Add(USSV);
+            }
+        }
+
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
             if (IsVisible)
@@ -77,5 +90,7 @@ namespace WolvenKit.Views.HomePage.Pages
                 DiscordHelper.SetDiscordRPCStatus("Setting - General");
             }
         }
+
+        #endregion Methods
     }
 }

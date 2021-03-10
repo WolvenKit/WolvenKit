@@ -7,12 +7,11 @@
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  MinWidth="250"
  BorderBrush="{x:Null}"
- IsVisibleChanged="DataWindow_IsVisibleChanged"
- >
+ IsVisibleChanged="DataWindow_IsVisibleChanged">
 
     <!--
         Plugin Manager MVVM TODOLIST (REMOVE ITEM IF DONE)
-        
+
         - Convert Click events for Close and minimize to MVVM
         - Convert MouseDownEvent for CustomTitlebar to MVVM
         - Add bindings for the PluginListBoxItemContent Templates (Install and uninstall)
@@ -36,8 +35,7 @@
                      HorizontalContentAlignment="Left"
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                      Content="TEMPLATEPLUGINTITLE"
-                     ShowCloseButton="False"
-                     >
+                     ShowCloseButton="False">
                         <hc:Tag.Header>
                             <iconPacks:PackIconBoxIcons Kind="RegularPlug" />
                         </hc:Tag.Header>
@@ -46,8 +44,7 @@
                      Width="90"
                      Margin="0,0,-45,0"
                      HorizontalAlignment="Right"
-                     Content="Install"
-                     />
+                     Content="Install" />
                 </Grid>
             </DataTemplate>
 
@@ -60,8 +57,7 @@
                      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                      Content="TEMPLATEPLUGINTITLE"
-                     ShowCloseButton="False"
-                     >
+                     ShowCloseButton="False">
                         <hc:Tag.Header>
                             <iconPacks:PackIconBoxIcons Kind="RegularPlug" />
                         </hc:Tag.Header>
@@ -70,8 +66,7 @@
                      Width="90"
                      Margin="0,0,-45,0"
                      HorizontalAlignment="Right"
-                     Content="Uninstall"
-                     />
+                     Content="Uninstall" />
                 </Grid>
             </DataTemplate>
         </ResourceDictionary>
@@ -80,8 +75,7 @@
     <Border
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
      BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-     BorderThickness="1"
-     >
+     BorderThickness="1">
         <Grid>
 
             <Grid.RowDefinitions>
@@ -96,8 +90,7 @@
              Grid.ColumnSpan="2"
              VerticalAlignment="Top"
              Background="{DynamicResource RegionBrush}"
-             MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown"
-             >
+             MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown">
 
                 <!--  TitleBar  Please add onmousedown event to be able to drag the window  -->
                 <Button
@@ -108,8 +101,7 @@
                  Background="Transparent"
                  BorderBrush="{x:Null}"
                  Click="Button_Click"
-                 Style="{StaticResource ButtonIcon}"
-                 />
+                 Style="{StaticResource ButtonIcon}" />
 
                 <Button
                  Width="40"
@@ -120,21 +112,18 @@
                  Background="Transparent"
                  BorderBrush="{x:Null}"
                  Click="Button_Click_1"
-                 Style="{StaticResource ButtonIcon}"
-                 />
+                 Style="{StaticResource ButtonIcon}" />
                 <TextBlock
                  Margin="5,0,0,0"
                  HorizontalAlignment="Left"
                  VerticalAlignment="Center"
-                 Text="Plugin Manager"
-                 />
+                 Text="Plugin Manager" />
             </Grid>
 
             <hc:TabControl
              Grid.Row="2"
              Style="{StaticResource TabControlInLine}"
-             TabStripPlacement="Bottom"
-             >
+             TabStripPlacement="Bottom">
 
                 <hc:TabItem Header="Available">
                     <Grid>
@@ -149,8 +138,7 @@
                              Height="300"
                              Margin="0"
                              Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
-                             Style="{StaticResource ListBoxModernStyle}"
-                             >
+                             Style="{StaticResource ListBoxModernStyle}">
                                 <ListBoxItem ContentTemplate="{DynamicResource PluginListBoxItemContentInstall}" />
                                 <ListBoxItem ContentTemplate="{DynamicResource PluginListBoxItemContentInstall}" />
                                 <ListBoxItem ContentTemplate="{DynamicResource PluginListBoxItemContentInstall}" />
@@ -167,15 +155,13 @@
                                  Margin="10"
                                  HorizontalAlignment="Left"
                                  VerticalAlignment="Top"
-                                 Text="PLUGIN TITLEBINDME"
-                                 />
+                                 Text="PLUGIN TITLEBINDME" />
                                 <TextBlock
                                  MinHeight="150"
                                  Margin="15"
                                  HorizontalAlignment="Left"
                                  VerticalAlignment="Top"
-                                 Text="PLUGIN DESCRIPTIONBINDME"
-                                 />
+                                 Text="PLUGIN DESCRIPTIONBINDME" />
                             </StackPanel>
                         </hc:ScrollViewer>
                     </Grid>
@@ -194,8 +180,7 @@
                              Height="300"
                              Margin="0"
                              Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
-                             Style="{StaticResource ListBoxModernStyle}"
-                             >
+                             Style="{StaticResource ListBoxModernStyle}">
                                 <ListBoxItem ContentTemplate="{DynamicResource PluginListBoxItemContentUninstall}" />
                             </ListBox>
                         </hc:ScrollViewer>
@@ -206,15 +191,13 @@
                                  Margin="10"
                                  HorizontalAlignment="Left"
                                  VerticalAlignment="Top"
-                                 Text="PLUGIN TITLE"
-                                 />
+                                 Text="PLUGIN TITLE" />
                                 <TextBlock
                                  MinHeight="150"
                                  Margin="15"
                                  HorizontalAlignment="Left"
                                  VerticalAlignment="Top"
-                                 Text="PLUGIN DESCRIPTION"
-                                 />
+                                 Text="PLUGIN DESCRIPTION" />
                             </StackPanel>
                         </hc:ScrollViewer>
                     </Grid>

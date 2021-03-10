@@ -9,8 +9,7 @@
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  BorderBrush="{x:Null}"
- IsVisibleChanged="DataWindow_IsVisibleChanged"
- >
+ IsVisibleChanged="DataWindow_IsVisibleChanged">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -26,8 +25,7 @@
      Height="auto"
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
      BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-     BorderThickness="1"
-     >
+     BorderThickness="1">
 
         <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
 
@@ -36,14 +34,12 @@
              Grid.ColumnSpan="2"
              VerticalAlignment="Top"
              Background="{DynamicResource RegionBrush}"
-             MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown"
-             >
+             MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown">
 
                 <Menu
                  Margin="50,0,0,0"
                  HorizontalAlignment="Left"
-                 Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
-                 >
+                 Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
                     <MenuItem Header="File" />
                     <MenuItem Header="Edit" />
                     <MenuItem Header="View" />
@@ -56,8 +52,7 @@
                  Margin="13,0,0,0"
                  HorizontalAlignment="Left"
                  VerticalAlignment="Center"
-                 Kind="Code"
-                 />
+                 Kind="Code" />
             </Grid>
 
             <Grid Margin="3,33,3,3">

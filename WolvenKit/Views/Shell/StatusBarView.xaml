@@ -11,8 +11,7 @@
  xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
  xmlns:orchestra="http://schemas.wildgums.com/orchestra"
  xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
- mc:Ignorable="d"
- >
+ mc:Ignorable="d">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -38,8 +37,7 @@
                 <Separator
                  Width="{Binding ElementName=stackPanel, Path=ActualHeight}"
                  Margin="3,0,3,0"
-                 Background="{DynamicResource RegionBrush}"
-                 >
+                 Background="{DynamicResource RegionBrush}">
                     <Separator.LayoutTransform>
                         <RotateTransform Angle="90" />
                     </Separator.LayoutTransform>
@@ -49,8 +47,7 @@
                         <TextBlock
                          x:Name="LoadingTextStatusBar"
                          Margin="5,0,5,0"
-                         Text="{Binding LoadingString}"
-                         />
+                         Text="{Binding LoadingString}" />
                         <!--  FIRSTRELEASE  -->
                         <hc:LoadingIndicator
                          Width="25"
@@ -58,15 +55,13 @@
                          Foreground="{DynamicResource RegionBrush}"
                          IsEnabled="True"
                          Style="{StaticResource LoadingIndicatorGridsStyle}"
-                         Visibility="{Binding IsLoading, Converter={StaticResource Boolean2VisibilityConverter}}"
-                         />
+                         Visibility="{Binding IsLoading, Converter={StaticResource Boolean2VisibilityConverter}}" />
                     </StackPanel>
                 </Grid>
                 <Separator
                  Width="{Binding ElementName=stackPanel, Path=ActualHeight}"
                  Margin="3,0,3,0"
-                 Background="{DynamicResource RegionBrush}"
-                 >
+                 Background="{DynamicResource RegionBrush}">
                     <Separator.LayoutTransform>
                         <RotateTransform Angle="90" />
                     </Separator.LayoutTransform>
@@ -97,16 +92,14 @@
                      Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                      Kind="Wifi"
                      Spin="False"
-                     SpinAutoReverse="False"
-                     />
+                     SpinAutoReverse="False" />
                     <TextBlock Text="{Binding InternetConnected}" />
                 </StackPanel>
 
                 <Separator
                  Width="{Binding ElementName=stackPanel, Path=ActualHeight}"
                  Margin="3,0,3,0"
-                 Background="{DynamicResource RegionBrush}"
-                 >
+                 Background="{DynamicResource RegionBrush}">
                     <Separator.LayoutTransform>
                         <RotateTransform Angle="90" />
                     </Separator.LayoutTransform>
@@ -118,14 +111,12 @@
                  Width="16"
                  Height="16"
                  Source="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"
-                 ToolTip="Update is installed, restart to enable new features"
-                 />
+                 ToolTip="Update is installed, restart to enable new features" />
 
                 <Separator
                  Width="{Binding ElementName=stackPanel, Path=ActualHeight}"
                  Margin="3,0,3,0"
-                 Background="{DynamicResource RegionBrush}"
-                 >
+                 Background="{DynamicResource RegionBrush}">
                     <Separator.LayoutTransform>
                         <RotateTransform Angle="90" />
                     </Separator.LayoutTransform>
@@ -138,8 +129,7 @@
                 <Separator
                  Width="{Binding ElementName=stackPanel, Path=ActualHeight}"
                  Margin="3,0,3,0"
-                 Background="{DynamicResource RegionBrush}"
-                 >
+                 Background="{DynamicResource RegionBrush}">
                     <Separator.LayoutTransform>
                         <RotateTransform Angle="90" />
                     </Separator.LayoutTransform>

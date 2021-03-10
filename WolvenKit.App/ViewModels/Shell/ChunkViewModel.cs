@@ -62,7 +62,6 @@ namespace WolvenKit.ViewModels.Shell
 
         public List<ChunkViewModel> Children => _export.VirtualChildrenChunks.Select(_ => new ChunkViewModel(_)).ToList();
 
-
         public List<ChunkPropertyViewModel> ChildrenProperties =>
             Data.ChildrEditableVariables.Select(_ => new ChunkPropertyViewModel(_)).ToList();
 
@@ -71,9 +70,6 @@ namespace WolvenKit.ViewModels.Shell
         public bool IsSelected { get; set; }
         public string Name => _export.REDName;
 
-
         #endregion Properties
-
-
     }
 }

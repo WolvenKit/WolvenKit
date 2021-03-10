@@ -147,8 +147,6 @@ namespace WolvenKit.Functionality.Commands
 
                     RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
                     RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
-
-
                 }
             }
             catch (Exception ex)

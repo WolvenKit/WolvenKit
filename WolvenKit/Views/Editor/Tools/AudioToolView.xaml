@@ -7,8 +7,7 @@
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:svl1="clr-namespace:WPFSoundVisualizationLib;assembly=WPFSoundVisualizationLibNet5"
  BorderBrush="{x:Null}"
- IsVisibleChanged="DataWindow_IsVisibleChanged"
- >
+ IsVisibleChanged="DataWindow_IsVisibleChanged">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -30,8 +29,7 @@
                             <Border
                              Width="{TemplateBinding Width}"
                              Height="{TemplateBinding Height}"
-                             Background="Transparent"
-                             >
+                             Background="Transparent">
                                 <Rectangle Height="2" Fill="{TemplateBinding Background}" />
                             </Border>
                         </ControlTemplate>
@@ -50,8 +48,7 @@
                             <Border
                              Width="{TemplateBinding Width}"
                              Height="{TemplateBinding Height}"
-                             Background="Transparent"
-                             >
+                             Background="Transparent">
                                 <Rectangle Width="2" Fill="{TemplateBinding Background}" />
                             </Border>
                         </ControlTemplate>
@@ -68,8 +65,7 @@
                  BorderBrush="{DynamicResource PrimaryBrush}"
                  BorderThickness="0"
                  CornerRadius="9"
-                 Effect="{StaticResource EffectShadow1}"
-                 />
+                 Effect="{StaticResource EffectShadow1}" />
                 <ControlTemplate.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Effect" Value="{StaticResource EffectShadow2}" />
@@ -82,8 +78,7 @@
                                      Storyboard.TargetName="BorderDot"
                                      Storyboard.TargetProperty="BorderThickness"
                                      To="2"
-                                     Duration="0:0:.1"
-                                     />
+                                     Duration="0:0:.1" />
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger.Actions>
@@ -96,8 +91,7 @@
                                      Storyboard.TargetName="BorderDot"
                                      Storyboard.TargetProperty="BorderThickness"
                                      To="1"
-                                     Duration="0:0:.1"
-                                     />
+                                     Duration="0:0:.1" />
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger.Actions>
@@ -112,15 +106,13 @@
                      Height="2"
                      Margin="9,0"
                      VerticalAlignment="center"
-                     Background="{TemplateBinding Background}"
-                     />
+                     Background="{TemplateBinding Background}" />
                     <Track x:Name="PART_Track" Margin="9,0">
                         <Track.DecreaseRepeatButton>
                             <RepeatButton
                              Background="{DynamicResource PrimaryBrush}"
                              Command="{x:Static Slider.DecreaseLarge}"
-                             Style="{StaticResource PreviewSliderRepeatButtonHorizontalStyle}"
-                             />
+                             Style="{StaticResource PreviewSliderRepeatButtonHorizontalStyle}" />
                         </Track.DecreaseRepeatButton>
                         <Track.IncreaseRepeatButton>
                             <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource PreviewSliderRepeatButtonHorizontalStyle}" />
@@ -134,8 +126,7 @@
                              VerticalAlignment="Center"
                              Focusable="False"
                              OverridesDefaultStyle="True"
-                             Template="{StaticResource PreviewSliderThumb}"
-                             />
+                             Template="{StaticResource PreviewSliderThumb}" />
                         </Track.Thumb>
                     </Track>
                 </hc:SimplePanel>
@@ -148,15 +139,13 @@
                      Width="2"
                      Margin="0,9"
                      HorizontalAlignment="center"
-                     Background="{TemplateBinding Background}"
-                     />
+                     Background="{TemplateBinding Background}" />
                     <Track x:Name="PART_Track" Margin="0,9">
                         <Track.DecreaseRepeatButton>
                             <RepeatButton
                              Background="{DynamicResource PrimaryBrush}"
                              Command="{x:Static Slider.DecreaseLarge}"
-                             Style="{StaticResource PreviewSliderRepeatButtonVerticalStyle}"
-                             />
+                             Style="{StaticResource PreviewSliderRepeatButtonVerticalStyle}" />
                         </Track.DecreaseRepeatButton>
                         <Track.IncreaseRepeatButton>
                             <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource PreviewSliderRepeatButtonVerticalStyle}" />
@@ -170,8 +159,7 @@
                              HorizontalAlignment="Center"
                              Focusable="False"
                              OverridesDefaultStyle="True"
-                             Template="{StaticResource PreviewSliderThumb}"
-                             />
+                             Template="{StaticResource PreviewSliderThumb}" />
                         </Track.Thumb>
                     </Track>
                 </hc:SimplePanel>
@@ -202,8 +190,7 @@
      Height="auto"
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
      BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-     BorderThickness="1"
-     >
+     BorderThickness="1">
 
         <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
 
@@ -217,31 +204,27 @@
                 <Grid
                  Grid.Column="1"
                  Margin="0"
-                 Background="{DynamicResource RegionBrush}"
-                 >
+                 Background="{DynamicResource RegionBrush}">
 
                     <Border
                      Margin="5"
                      VerticalAlignment="Bottom"
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
-                     CornerRadius="15"
-                     >
+                     CornerRadius="15">
                         <Grid>
                             <Border
                              Height="35"
                              Margin="10"
                              VerticalAlignment="Bottom"
                              Background="{DynamicResource RegionBrush}"
-                             CornerRadius="5"
-                             >
+                             CornerRadius="5">
                                 <Grid>
                                     <hc:PreviewSlider
                                      Margin="130,0,100,0"
                                      Maximum="100"
                                      Minimum="0"
                                      Style="{StaticResource PreviewSliderBaseStyle}"
-                                     Value="100"
-                                     >
+                                     Value="100">
                                         <!--  Volume Slider  -->
                                     </hc:PreviewSlider>
 
@@ -249,8 +232,7 @@
                                      Margin="5,0,0,0"
                                      HorizontalAlignment="Left"
                                      VerticalAlignment="Center"
-                                     Orientation="Horizontal"
-                                     >
+                                     Orientation="Horizontal">
                                         <Button
                                          x:Name="PlayButton"
                                          Width="35"
@@ -260,13 +242,11 @@
                                          Background="Transparent"
                                          BorderBrush="Transparent"
                                          Click="PlayButton_Click"
-                                         Style="{StaticResource ButtonIcon}"
-                                         />
+                                         Style="{StaticResource ButtonIcon}" />
                                         <hc:Divider
                                          Height="10"
                                          LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
-                                         Orientation="Vertical"
-                                         />
+                                         Orientation="Vertical" />
                                         <Button
                                          x:Name="PauseButton"
                                          Width="35"
@@ -276,13 +256,11 @@
                                          Background="Transparent"
                                          BorderBrush="Transparent"
                                          Click="PauseButton_Click"
-                                         Style="{StaticResource ButtonIcon}"
-                                         />
+                                         Style="{StaticResource ButtonIcon}" />
                                         <hc:Divider
                                          Height="10"
                                          LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
-                                         Orientation="Vertical"
-                                         />
+                                         Orientation="Vertical" />
                                         <Button
                                          x:Name="StopButton"
                                          Width="35"
@@ -292,8 +270,7 @@
                                          Background="Transparent"
                                          BorderBrush="Transparent"
                                          Click="StopButton_Click"
-                                         Style="{StaticResource ButtonIcon}"
-                                         />
+                                         Style="{StaticResource ButtonIcon}" />
                                     </StackPanel>
 
                                     <svl1:DigitalClock
@@ -303,8 +280,7 @@
                                      Margin="5,5,15,5"
                                      HorizontalAlignment="Right"
                                      ShowHours="False"
-                                     ShowSubSeconds="True"
-                                     />
+                                     ShowSubSeconds="True" />
                                 </Grid>
                             </Border>
 
@@ -313,14 +289,12 @@
                              Margin="10,10,10,55"
                              VerticalAlignment="Bottom"
                              Background="{DynamicResource RegionBrush}"
-                             CornerRadius="5"
-                             >
+                             CornerRadius="5">
                                 <Grid>
                                     <svl1:WaveformTimeline
                                      x:Name="waveformTimeline"
                                      Margin="5"
-                                     BorderThickness="1"
-                                     />
+                                     BorderThickness="1" />
                                 </Grid>
                             </Border>
 
@@ -329,14 +303,12 @@
                              Margin="10,10,10,130"
                              VerticalAlignment="Bottom"
                              Background="{DynamicResource RegionBrush}"
-                             CornerRadius="5"
-                             >
+                             CornerRadius="5">
                                 <Grid>
                                     <svl1:SpectrumAnalyzer
                                      x:Name="spectrumAnalyzer"
                                      Margin="0"
-                                     BarCount="16"
-                                     />
+                                     BarCount="16" />
                                 </Grid>
                             </Border>
 
@@ -345,8 +317,7 @@
                              Margin="10,10,10,205"
                              VerticalAlignment="Bottom"
                              Background="{DynamicResource RegionBrush}"
-                             CornerRadius="5"
-                             >
+                             CornerRadius="5">
                                 <Grid>
 
                                     <hc:RunningBlock
@@ -355,8 +326,7 @@
                                      BorderBrush="Transparent"
                                      Content="{Binding SelectedItem, ElementName=PlayListView}"
                                      Runaway="False"
-                                     Duration="00:00:30"
-                                     />
+                                     Duration="00:00:30" />
                                 </Grid>
                             </Border>
                         </Grid>
@@ -365,28 +335,24 @@
                     <Border
                      Margin="5,5,5,265"
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
-                     CornerRadius="15"
-                     >
+                     CornerRadius="15">
                         <Grid>
                             <Border
                              x:Name="StepOne"
                              Margin="15,15,15,55"
                              Background="{DynamicResource RegionBrush}"
-                             CornerRadius="15"
-                             >
+                             CornerRadius="15">
                                 <Grid>
                                     <StackPanel>
                                         <TextBlock
                                          Margin="10"
                                          HorizontalAlignment="Center"
-                                         Text="Convert"
-                                         />
+                                         Text="Convert" />
                                         <hc:Divider Margin="5" />
                                         <TextBlock
                                          Margin="10"
                                          HorizontalAlignment="Center"
-                                         TextAlignment="Center"
-                                         >
+                                         TextAlignment="Center">
                                             <Run Text="To convert an audio file to .wav," />
                                             <LineBreak />
                                             <Run Text="It's recommended to use the following converter." />
@@ -398,8 +364,7 @@
                                      HorizontalAlignment="Center"
                                      VerticalAlignment="Bottom"
                                      Background="{DynamicResource MahApps.Brushes.Accent3}"
-                                     Style="{StaticResource ButtonPrimary}"
-                                     >
+                                     Style="{StaticResource ButtonPrimary}">
                                         <StackPanel Orientation="Horizontal">
                                             <iconPacks:PackIconBootstrapIcons Kind="BoxArrowUpRight" />
                                             <TextBlock Margin="5,0,0,0" Text="Converter" />
@@ -412,21 +377,18 @@
                              x:Name="StepTwo"
                              Margin="15,15,15,55"
                              Background="{DynamicResource RegionBrush}"
-                             CornerRadius="15"
-                             >
+                             CornerRadius="15">
                                 <Grid>
                                     <StackPanel>
                                         <TextBlock
                                          Margin="10"
                                          HorizontalAlignment="Center"
-                                         Text="Prepare"
-                                         />
+                                         Text="Prepare" />
                                         <hc:Divider Margin="5" />
                                         <TextBlock
                                          Margin="10"
                                          HorizontalAlignment="Center"
-                                         TextAlignment="Center"
-                                         >
+                                         TextAlignment="Center">
                                             <Run Text="Prepare your .wav file for Wwise." />
                                             <LineBreak />
                                         </TextBlock>
@@ -437,8 +399,7 @@
                                      HorizontalAlignment="Center"
                                      VerticalAlignment="Bottom"
                                      Background="{DynamicResource MahApps.Brushes.Accent3}"
-                                     Style="{StaticResource ButtonPrimary}"
-                                     >
+                                     Style="{StaticResource ButtonPrimary}">
                                         <StackPanel Orientation="Horizontal">
                                             <iconPacks:PackIconBootstrapIcons Kind="BoxArrowUpRight" />
                                             <TextBlock Margin="5,0,0,0" Text="Prepare" />
@@ -451,21 +412,18 @@
                              x:Name="StepThree"
                              Margin="15,15,15,55"
                              Background="{DynamicResource RegionBrush}"
-                             CornerRadius="15"
-                             >
+                             CornerRadius="15">
                                 <Grid>
                                     <StackPanel>
                                         <TextBlock
                                          Margin="10"
                                          HorizontalAlignment="Center"
-                                         Text="Edit"
-                                         />
+                                         Text="Edit" />
                                         <hc:Divider Margin="5" />
                                         <TextBlock
                                          Margin="10"
                                          HorizontalAlignment="Center"
-                                         TextAlignment="Center"
-                                         >
+                                         TextAlignment="Center">
                                             <Run Text="1. Open the file in Wwise." />
                                             <LineBreak />
                                             <Run Text="2. Set the project setting to high Vorbis." />
@@ -480,21 +438,18 @@
                              x:Name="StepFour"
                              Margin="15,15,15,55"
                              Background="{DynamicResource RegionBrush}"
-                             CornerRadius="15"
-                             >
+                             CornerRadius="15">
                                 <Grid>
                                     <StackPanel>
                                         <TextBlock
                                          Margin="10"
                                          HorizontalAlignment="Center"
-                                         Text="Replace"
-                                         />
+                                         Text="Replace" />
                                         <hc:Divider Margin="5" />
                                         <TextBlock
                                          Margin="10"
                                          HorizontalAlignment="Center"
-                                         TextAlignment="Center"
-                                         >
+                                         TextAlignment="Center">
                                             <Run Text="Replace the file with the one converted in Wwise." />
                                             <LineBreak />
                                             <Run Text="It's recommended to use the following converter." />
@@ -506,8 +461,7 @@
                                      HorizontalAlignment="Center"
                                      VerticalAlignment="Bottom"
                                      Background="{DynamicResource MahApps.Brushes.Accent3}"
-                                     Style="{StaticResource ButtonPrimary}"
-                                     >
+                                     Style="{StaticResource ButtonPrimary}">
                                         <StackPanel Orientation="Horizontal">
                                             <iconPacks:PackIconBootstrapIcons Kind="BoxArrowUpRight" />
                                             <TextBlock Margin="5,0,0,0" Text="Replace File" />
@@ -528,14 +482,12 @@
                              Click="PreviousPage"
                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                              IsEnabled="True"
-                             Style="{StaticResource ButtonIcon}"
-                             />
+                             Style="{StaticResource ButtonIcon}" />
                             <hc:StepBar
                              x:Name="StepMain"
                              Margin="35,15,35,15"
                              VerticalAlignment="Bottom"
-                             Dock="Top"
-                             >
+                             Dock="Top">
                                 <hc:StepBarItem Content="Convert" />
                                 <hc:StepBarItem Content="Prepare" />
                                 <hc:StepBarItem Content="Edit" />
@@ -552,8 +504,7 @@
                              Click="NextPage"
                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                              IsEnabled="True"
-                             Style="{StaticResource ButtonIcon}"
-                             />
+                             Style="{StaticResource ButtonIcon}" />
 
                             <Border Height="250" />
                         </Grid>
@@ -568,8 +519,7 @@
                             <Border
                              Margin="5,5,0,5"
                              Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
-                             CornerRadius="15"
-                             >
+                             CornerRadius="15">
 
                                 <ListView
                                  x:Name="PlayListView"
@@ -582,8 +532,7 @@
                                             <GridViewColumn
                                                 Width="500"
                                                 DisplayMemberBinding="{Binding Text}"
-                                                Header="Name"
-                                            />
+                                                Header="Name" />
                                         </GridView>
                                     </ListView.View>
                                 </ListView>

@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Windows.Media;
-using System.Xml.Serialization;
 using Catel.Data;
 using Newtonsoft.Json;
 using WolvenKit.Functionality.Controllers;
@@ -105,7 +104,6 @@ namespace WolvenKit.Functionality.Services
         /// <summary>
         /// Gets the internal name and Uri source for all available themes.
         /// </summary>
-   
 
         public string W3ExecutablePath
         {

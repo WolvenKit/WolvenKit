@@ -4,10 +4,16 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
     public static class DiscordHelper
     {
-        public static string DiscordAppID = "807752124078620732";
+        #region Fields
+
         public static DiscordRPC.DiscordRpcClient client;
+        public static string DiscordAppID = "807752124078620732";
         public static bool DiscordRPCEnabled = true;
         public static bool DiscordRPCInitizialized = false;
+
+        #endregion Fields
+
+        #region Methods
 
         public static void InitializeDiscordRPC()
         {
@@ -42,5 +48,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             }
         }
 
+        #endregion Methods
     }
 }

@@ -4,15 +4,13 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- >
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
     <Grid Grid.Row="3" VerticalAlignment="Center">
         <Grid
          Margin="5,5,5,5"
          HorizontalAlignment="Stretch"
-         Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-         >
+         Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
             <Grid Grid.Row="1" HorizontalAlignment="Stretch">
                 <Grid Margin="0,10,0,0" VerticalAlignment="Top">
                     <hc:ScrollViewer>
@@ -24,8 +22,7 @@
                              VerticalAlignment="Top"
                              FontSize="14"
                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                             Text="Additional settings"
-                             />
+                             Text="Additional settings" />
 
                             <StackPanel>
                                 <Grid Margin="0,32,0,0">
@@ -36,8 +33,7 @@
                                             <TextBlock
                                              Margin="30,0,0,0"
                                              VerticalAlignment="Center"
-                                             Text="Youtube"
-                                             />
+                                             Text="Youtube" />
                                             <iconPacks:PackIconBoxIcons
                                              Grid.Row="0"
                                              Width="15"
@@ -48,16 +44,14 @@
                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                              Kind="LogosYoutube"
                                              Spin="False"
-                                             SpinAutoReverse="False"
-                                             />
+                                             SpinAutoReverse="False" />
                                             <TextBox Margin="100,0,0,0" />
                                         </Grid>
                                         <Grid Margin="0,5,0,5">
                                             <TextBlock
                                              Margin="30,0,0,0"
                                              VerticalAlignment="Center"
-                                             Text="Twitch"
-                                             />
+                                             Text="Twitch" />
 
                                             <iconPacks:PackIconBoxIcons
                                              Grid.Row="0"
@@ -69,16 +63,14 @@
                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                              Kind="LogosTwitch"
                                              Spin="False"
-                                             SpinAutoReverse="False"
-                                             />
+                                             SpinAutoReverse="False" />
                                             <TextBox Margin="100,0,0,0" />
                                         </Grid>
                                         <Grid Margin="0,5,0,5">
                                             <TextBlock
                                              Margin="30,0,0,0"
                                              VerticalAlignment="Center"
-                                             Text="Twitter"
-                                             />
+                                             Text="Twitter" />
 
                                             <iconPacks:PackIconBoxIcons
                                              Grid.Row="0"
@@ -90,16 +82,14 @@
                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                              Kind="LogosTwitter"
                                              Spin="False"
-                                             SpinAutoReverse="False"
-                                             />
+                                             SpinAutoReverse="False" />
                                             <TextBox Margin="100,0,0,0" />
                                         </Grid>
                                         <Grid Margin="0,5,0,5">
                                             <TextBlock
                                              Margin="30,0,0,0"
                                              VerticalAlignment="Center"
-                                             Text="Facebook"
-                                             />
+                                             Text="Facebook" />
 
                                             <iconPacks:PackIconBoxIcons
                                              Grid.Row="0"
@@ -111,16 +101,14 @@
                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                              Kind="LogosFacebook"
                                              Spin="False"
-                                             SpinAutoReverse="False"
-                                             />
+                                             SpinAutoReverse="False" />
                                             <TextBox Margin="100,0,0,0" />
                                         </Grid>
                                         <Grid Margin="0,5,0,5">
                                             <TextBlock
                                              Margin="30,0,0,0"
                                              VerticalAlignment="Center"
-                                             Text="Discord"
-                                             />
+                                             Text="Discord" />
 
                                             <iconPacks:PackIconBoxIcons
                                              Grid.Row="0"
@@ -132,16 +120,14 @@
                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                              Kind="LogosDiscord"
                                              Spin="False"
-                                             SpinAutoReverse="False"
-                                             />
+                                             SpinAutoReverse="False" />
                                             <TextBox Margin="100,0,0,0" />
                                         </Grid>
                                         <Grid Margin="0,5,0,5">
                                             <TextBlock
                                              Margin="30,0,0,0"
                                              VerticalAlignment="Center"
-                                             Text="Website"
-                                             />
+                                             Text="Website" />
 
                                             <iconPacks:PackIconCodicons
                                              Grid.Row="0"
@@ -153,16 +139,14 @@
                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                              Kind="Cloud"
                                              Spin="False"
-                                             SpinAutoReverse="False"
-                                             />
+                                             SpinAutoReverse="False" />
                                             <TextBox Margin="100,0,0,0" />
                                         </Grid>
                                         <Grid Margin="0,5,0,5">
                                             <TextBlock
                                              Margin="30,0,0,0"
                                              VerticalAlignment="Center"
-                                             Text="Donate"
-                                             />
+                                             Text="Donate" />
 
                                             <iconPacks:PackIconBoxIcons
                                              Grid.Row="0"
@@ -174,8 +158,7 @@
                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                              Kind="RegularDonateHeart"
                                              Spin="False"
-                                             SpinAutoReverse="False"
-                                             />
+                                             SpinAutoReverse="False" />
                                             <TextBox Margin="100,0,0,0" />
                                         </Grid>
                                     </StackPanel>
@@ -189,56 +172,47 @@
                                  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                  SelectionBrush="{DynamicResource MahApps.Brushes.Accent}"
                                  Style="{StaticResource TextBoxExtend}"
-                                 Text="test"
-                                 />
+                                 Text="test" />
                                 <Grid Margin="0,32,0,5">
                                     <TextBlock
                                      Margin="0,0,0,0"
                                      VerticalAlignment="Center"
-                                     Text="Header background"
-                                     />
+                                     Text="Header background" />
                                     <Button
                                      Margin="120,0,0,0"
                                      HorizontalAlignment="Left"
-                                     Content="None"
-                                     />
+                                     Content="None" />
                                 </Grid>
                                 <Grid Margin="0,32,0,5">
                                     <TextBlock
                                      Margin="0,0,0,0"
                                      VerticalAlignment="Center"
-                                     Text="Icon background"
-                                     />
+                                     Text="Icon background" />
                                     <Button
                                      Margin="120,0,0,0"
                                      HorizontalAlignment="Left"
-                                     Content="None"
-                                     />
+                                     Content="None" />
                                 </Grid>
                                 <Grid Margin="0,32,0,5">
                                     <TextBlock
                                      Margin="0,0,0,0"
                                      VerticalAlignment="Center"
-                                     Text="Use black text"
-                                     />
+                                     Text="Use black text" />
                                     <CheckBox
                                      Margin="120,0,0,0"
                                      HorizontalAlignment="Left"
-                                     Content="None"
-                                     />
+                                     Content="None" />
                                 </Grid>
                                 <Grid>
                                     <RichTextBox
                                      Height="200"
                                      Margin="100,32,0,0"
-                                     HorizontalAlignment="Stretch"
-                                     />
+                                     HorizontalAlignment="Stretch" />
 
                                     <TextBlock
                                      Margin="2,32,0,0"
                                      VerticalAlignment="Center"
-                                     Text="Large description"
-                                     />
+                                     Text="Large description" />
                                 </Grid>
                             </StackPanel>
                         </Grid>

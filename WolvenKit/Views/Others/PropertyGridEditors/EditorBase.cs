@@ -1,5 +1,3 @@
-using System;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,11 +14,25 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
     /// <typeparam name="T1"></typeparam>
     public abstract class EditorBase<T1> : PropertyEditorBase where T1 : class, IEditorBindable
     {
-        /// <summary>
-        /// Specify the dependency property of the propertygrid editor.
-        /// </summary>
-        /// <returns></returns>
-        private protected abstract DependencyProperty GetInnerDependencyProperty();
+        #region Methods
+
+        public override FrameworkElement CreateElement(PropertyItem propertyItem)
+        {
+            var control = CreateInnerElement(propertyItem);
+            CreateInnerBinding(control);
+
+            BindingOperations.SetBinding(
+                control,
+                Control.BackgroundProperty,
+                new Binding($"{nameof(Wrapper)}.IsSerialized")
+                {
+                    Source = this,
+                    Mode = BindingMode.OneWay,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                    Converter = new BoolToBrushConverter(),
+                });
+            return control;
+        }
 
         /// <summary>
         /// Create the custom propertygrid editor.
@@ -41,28 +53,15 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
         /// <returns></returns>
         private protected virtual IValueConverter GetInnerConverter() => null;
 
-        public override FrameworkElement CreateElement(PropertyItem propertyItem)
-        {
-            var control = CreateInnerElement(propertyItem);
-            CreateInnerBinding(control);
+        /// <summary>
+        /// Specify the dependency property of the propertygrid editor.
+        /// </summary>
+        /// <returns></returns>
+        private protected abstract DependencyProperty GetInnerDependencyProperty();
 
-            BindingOperations.SetBinding(
-                control,
-                Control.BackgroundProperty,
-                new Binding($"{nameof(Wrapper)}.IsSerialized")
-                {
-                    Source = this,
-                    Mode = BindingMode.OneWay,
-                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                    Converter = new BoolToBrushConverter(),
-                });
-            return control;
-        }
+        #endregion Methods
 
         #region bindings
-
-        // bind to the private dependency property 
-        public override DependencyProperty GetDependencyProperty() => WrapperProperty;
 
         // bind to this
         public override void CreateBinding(PropertyItem propertyItem, DependencyObject element) =>
@@ -73,6 +72,9 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
                 UpdateSourceTrigger = GetUpdateSourceTrigger(propertyItem),
                 Converter = GetConverter(propertyItem)
             });
+
+        // bind to the private dependency property
+        public override DependencyProperty GetDependencyProperty() => WrapperProperty;
 
         // bind the private dependency property to the UI element
         protected virtual void CreateInnerBinding(FrameworkElement element)
@@ -95,8 +97,6 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
 
         private void ElementOnTargetUpdated(object sender, DataTransferEventArgs e)
         {
-
-
         }
 
         private void FrameworkElementOnSourceUpdated(object sender, DataTransferEventArgs e)
@@ -107,15 +107,9 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
             }
         }
 
-        #endregion
+        #endregion bindings
 
         #region dependency properties
-
-        protected T1 Wrapper
-        {
-            get => (T1)GetValue(WrapperProperty);
-            set => SetValue(WrapperProperty, value);
-        }
 
         private static readonly DependencyProperty WrapperProperty
             = DependencyProperty.Register(
@@ -124,11 +118,16 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
                 typeof(EditorBase<T1>),
                 new FrameworkPropertyMetadata(default(T1)/*, OnWrapperChanged*/));
 
+        protected T1 Wrapper
+        {
+            get => (T1)GetValue(WrapperProperty);
+            set => SetValue(WrapperProperty, value);
+        }
+
         //private static void OnWrapperChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         //{
-            
         //}
 
-        #endregion
+        #endregion dependency properties
     }
 }

@@ -12,8 +12,7 @@
  xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
  xmlns:views1="clr-namespace:WolvenKit.Views.Editor"
  xmlns:visualeditorz="clr-namespace:WolvenKit.Views.Editor.VisualEditor"
- IsVisibleChanged="UserControl_IsVisibleChanged_1"
- >
+ IsVisibleChanged="UserControl_IsVisibleChanged_1">
 
     <catel:UserControl.Resources>
         <DrawingBrush
@@ -26,14 +25,12 @@
          Stretch="Uniform"
          TileMode="Tile"
          Viewport="0,0,90,90"
-         ViewportUnits="Absolute"
-         >
+         ViewportUnits="Absolute">
             <DrawingBrush.Drawing>
                 <ImageDrawing
                  o:Freeze="True"
                  ImageSource="pack://application:,,,/Resources/Media/Images/Application/SeeTroughIcon.png"
-                 Rect="0,0,70,80"
-                 />
+                 Rect="0,0,70,80" />
             </DrawingBrush.Drawing>
         </DrawingBrush>
     </catel:UserControl.Resources>
@@ -59,8 +56,7 @@
          IsEnabled="True"
          IsVirtualizingAnchorable="True"
          IsVirtualizingDocument="True"
-         Visibility="Visible"
-         >
+         Visibility="Visible">
             <!--  Global Theme  -->
             <DockingManager.Theme>
                 <Vs2013DarkTheme />

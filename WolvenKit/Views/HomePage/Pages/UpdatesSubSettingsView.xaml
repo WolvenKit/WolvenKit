@@ -3,8 +3,7 @@
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
- xmlns:hc="https://handyorg.github.io/handycontrol"
- >
+ xmlns:hc="https://handyorg.github.io/handycontrol">
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.ColumnDefinitions>
@@ -20,15 +19,13 @@
                      Margin="15,15,32,0"
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                      BorderThickness="4,0,0,6"
-                     Style="{StaticResource BorderTipPrimary}"
-                     >
+                     Style="{StaticResource BorderTipPrimary}">
                         <Grid>
                             <TextBlock
                              Margin="0,0,50,0"
                              VerticalAlignment="Center"
                              FontSize="16"
-                             Text="Application"
-                             />
+                             Text="Application" />
                         </Grid>
                     </Border>
 
@@ -36,31 +33,27 @@
                      Margin="15,15,32,10"
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                      BorderThickness="4,0,0,2"
-                     Style="{StaticResource BorderTipPrimary}"
-                     >
+                     Style="{StaticResource BorderTipPrimary}">
                         <StackPanel>
 
                             <Grid Margin="5">
                                 <TextBlock
                                  Margin="0,0,50,0"
                                  VerticalAlignment="Center"
-                                 Text="Auto-update WolvenKit"
-                                 />
+                                 Text="Auto-update WolvenKit" />
                                 <ToggleButton
                                  HorizontalAlignment="Right"
                                  VerticalAlignment="Center"
                                  BorderThickness="0"
                                  IsEnabled="True"
-                                 Style="{StaticResource ToggleButtonFlip}"
-                                 >
+                                 Style="{StaticResource ToggleButtonFlip}">
                                     <hc:StatusSwitchElement.CheckedElement>
                                         <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
                                             <TextBlock
                                              HorizontalAlignment="Center"
                                              VerticalAlignment="Center"
                                              Foreground="{DynamicResource TextIconBrush}"
-                                             Text="On"
-                                             />
+                                             Text="On" />
                                         </Border>
                                     </hc:StatusSwitchElement.CheckedElement>
                                     <Border Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
@@ -68,8 +61,7 @@
                                          HorizontalAlignment="Center"
                                          VerticalAlignment="Center"
                                          Foreground="{DynamicResource TextIconBrush}"
-                                         Text="Off"
-                                         />
+                                         Text="Off" />
                                     </Border>
                                 </ToggleButton>
                             </Grid>
@@ -78,14 +70,12 @@
                                 <TextBlock
                                  Margin="0,0,50,0"
                                  VerticalAlignment="Center"
-                                 Text="Update channel"
-                                 />
+                                 Text="Update channel" />
                                 <ComboBox
                                  Width="250"
                                  HorizontalAlignment="Right"
                                  VerticalAlignment="Center"
-                                 Text=""
-                                 />
+                                 Text="" />
                             </Grid>
                         </StackPanel>
                     </Border>

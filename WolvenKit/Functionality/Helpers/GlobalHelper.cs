@@ -14,12 +14,11 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
     {
         #region Fields
 
+        public static PropertiesView GlobalPropertiesView;
         public static ShellWindow GlobalShell;
         public static StatusBarViewModel GlobalStatusBar;
         public static MainView MainView;
         public static RibbonView RibbonViewInstance;
-
-        public static PropertiesView GlobalPropertiesView;
 
         #endregion Fields
     }

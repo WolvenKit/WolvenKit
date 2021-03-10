@@ -403,11 +403,13 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecuteCsvEditor() => CsvEditorVM.IsVisible = false;
 
         private void ExecuteGameDebuggerTool() => GameDebuggerToolVM.IsVisible = false;
+
         private void ExecuteHexEditor() => HexEditorVM.IsVisible = false;
 
         private void ExecuteImporterTool() => ImporterToolVM.IsVisible = false;
 
         private void ExecuteJournalEditor() => JournalEditorVM.IsVisible = false;
+
         private void ExecuteMenuCreatorTool() => MenuCreatorToolVM.IsVisible = false;
 
         private void ExecuteMimicsTool() => MimicsToolVM.IsVisible = false;
@@ -447,7 +449,6 @@ namespace WolvenKit.ViewModels.Shell
 
         private void ExecutePublishMod()
         {                // #convert2MVVMSoon
-
             //  try
             //  {
             //      var vm = new UserControlHostWindowViewModel(new PublishWizardView(), 600, 1200);
@@ -467,7 +468,6 @@ namespace WolvenKit.ViewModels.Shell
 
         private void ExecuteShowInstaller()
         {                // #convert2MVVMSoon
-
             //  var rpv = new InstallerWizardView();
             //  var zxc = new UserControlHostWindowViewModel(rpv);
             //  var uchwv = new UserControlHostWindowView(zxc);

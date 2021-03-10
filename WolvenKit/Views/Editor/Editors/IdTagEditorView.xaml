@@ -3,8 +3,7 @@
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
- xmlns:hc="https://handyorg.github.io/handycontrol"
- >
+ xmlns:hc="https://handyorg.github.io/handycontrol">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -22,16 +21,14 @@
              hc:InfoElement.Title="Type"
              hc:InfoElement.TitlePlacement="Left"
              hc:InfoElement.TitleWidth="50"
-             Text=""
-             />
+             Text="" />
             <hc:TextBox
              Width="400"
              Margin="15,0,0,0"
              hc:InfoElement.Title="Guid Tag"
              hc:InfoElement.TitlePlacement="Left"
              hc:InfoElement.TitleWidth="50"
-             Text=""
-             />
+             Text="" />
         </StackPanel>
     </Grid>
 </catel:UserControl>

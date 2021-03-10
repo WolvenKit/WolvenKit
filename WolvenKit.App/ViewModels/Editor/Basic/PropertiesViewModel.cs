@@ -31,20 +31,6 @@ namespace WolvenKit.ViewModels.Editor
 
             SetupCommands();
             SetupToolDefaults();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
 
         #endregion constructors
@@ -80,6 +66,8 @@ namespace WolvenKit.ViewModels.Editor
 
         #region Methods
 
+        public string BTitle { get; set; }
+
         private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs args)
         {
             var activeProject = args.NewProject;
@@ -100,18 +88,11 @@ namespace WolvenKit.ViewModels.Editor
         {
         }
 
-        public string BTitle { get; set; }
-
-
-
-
-
-
-
         /// <summary>
         /// Initialize Avalondock specific defaults that are specific to this tool window.
         /// </summary>
         private void SetupToolDefaults() => ContentId = ToolContentId;
+
         // Define a unique contentid for this toolwindow
         //BitmapImage bi = new BitmapImage();
         // Define an icon for this toolwindow

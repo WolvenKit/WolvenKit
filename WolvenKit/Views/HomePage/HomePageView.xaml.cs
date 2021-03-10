@@ -5,27 +5,29 @@ namespace WolvenKit.Views.HomePage
 {
     public partial class HomePageView
     {
+        #region Fields
+
         public static HomePageView GlobalHomePage;
 
+        #endregion Fields
 
+        #region Constructors
 
         public HomePageView()
         {
             InitializeComponent();
             GlobalHomePage = this;
-
         }
 
-        
+        #endregion Constructors
 
+        #region Methods
 
         private void Grid_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
             StaticReferences.GlobalShell.DragMove();
         }
-
-
 
         private void Grid_MouseLeftButtonDown_2(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -49,5 +51,7 @@ namespace WolvenKit.Views.HomePage
                 StaticReferences.GlobalShell.DragMove();
             }
         }
+
+        #endregion Methods
     }
 }

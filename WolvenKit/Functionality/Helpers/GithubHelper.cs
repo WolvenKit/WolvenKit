@@ -89,7 +89,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             catch { }
         }
 
-
         public static string[] ResolveBody(string unresolvedbody)
         {
             var step1 = Regex.Replace(unresolvedbody, @"^\s+$[\r\n]*", string.Empty, RegexOptions.Multiline);

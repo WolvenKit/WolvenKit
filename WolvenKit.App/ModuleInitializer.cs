@@ -19,7 +19,6 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<IApplicationInitializationService, ApplicationInitializationService>();
         serviceLocator.RegisterType<IHashService, HashService>();
         serviceLocator.RegisterType<ILoggerService, LoggerService>();
-
     }
 
     #endregion Methods

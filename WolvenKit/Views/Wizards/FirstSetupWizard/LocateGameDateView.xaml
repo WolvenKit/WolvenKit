@@ -4,8 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- >
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -19,14 +18,12 @@
         <Grid
          Margin="5,5,5,5"
          HorizontalAlignment="Stretch"
-         Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-         >
+         Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
             <Grid Grid.Row="1" HorizontalAlignment="Stretch">
                 <StackPanel
                  Margin="0,10,0,0"
                  VerticalAlignment="Top"
-                 Orientation="Vertical"
-                 >
+                 Orientation="Vertical">
                     <Grid Margin="22,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="3*" />
@@ -39,8 +36,7 @@
                                 <hc:Divider
                                  Margin="0,32,0,0"
                                  HorizontalContentAlignment="Left"
-                                 Content="The Witcher 3"
-                                 />
+                                 Content="The Witcher 3" />
 
                                 <hc:TextBox
                                  x:Name="w3ExeTxtb"
@@ -52,8 +48,7 @@
                                  Style="{StaticResource TextBoxExtendCustom}"
                                  Text="{Binding W3ExePath}"
                                  TextChanged="Field_TextChanged"
-                                 VerifyFunc="VerifyFile"
-                                 />
+                                 VerifyFunc="VerifyFile" />
                                 <hc:TextBox
                                  x:Name="wccLiteExeTxtb"
                                  Margin="0,32,0,0"
@@ -64,8 +59,7 @@
                                  Style="{StaticResource TextBoxExtendCustom}"
                                  Text="{Binding WccLitePath}"
                                  TextChanged="Field_TextChanged"
-                                 VerifyFunc="VerifyFile"
-                                 />
+                                 VerifyFunc="VerifyFile" />
                                 <hc:TextBox
                                  x:Name="uncookedDepTxtb"
                                  Margin="0,32,0,0"
@@ -76,15 +70,13 @@
                                  Style="{StaticResource TextBoxExtendCustom}"
                                  Text="{Binding DepotPath}"
                                  TextChanged="Field_TextChanged"
-                                 VerifyFunc="VerifyFolder"
-                                 />
+                                 VerifyFunc="VerifyFolder" />
                             </StackPanel>
                             <StackPanel Visibility="{Binding CreateModForCP77, Converter={StaticResource Boolean2VisibilityConverter}}">
                                 <hc:Divider
                                  Margin="0,32,0,0"
                                  HorizontalContentAlignment="Left"
-                                 Content="Cyberpunk 2077"
-                                 />
+                                 Content="Cyberpunk 2077" />
                                 <hc:TextBox
                                  x:Name="cp77ExeTxtb"
                                  Margin="0,32,0,0"
@@ -95,8 +87,7 @@
                                  Style="{StaticResource TextBoxExtendCustom}"
                                  Text="{Binding CP77ExePath}"
                                  TextChanged="Field_TextChanged"
-                                 VerifyFunc="VerifyFile"
-                                 />
+                                 VerifyFunc="VerifyFile" />
                             </StackPanel>
                         </StackPanel>
 
@@ -111,8 +102,7 @@
                                  Margin="5,50,0,0"
                                  HorizontalAlignment="Right"
                                  VerticalAlignment="Bottom"
-                                 Click="W3ExecutablePathBtn_Click"
-                                 >
+                                 Click="W3ExecutablePathBtn_Click">
                                     <iconPacks:PackIconCodicons
                                      Grid.Row="0"
                                      Width="15"
@@ -123,8 +113,7 @@
                                      Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                      Kind="FolderOpened"
                                      Spin="False"
-                                     SpinAutoReverse="False"
-                                     />
+                                     SpinAutoReverse="False" />
                                 </Button>
                                 <Button
                                  Grid.Column="1"
@@ -133,8 +122,7 @@
                                  Margin="5,42,0,0"
                                  HorizontalAlignment="Right"
                                  VerticalAlignment="Bottom"
-                                 Click="WccLitePathBtn_Click"
-                                 >
+                                 Click="WccLitePathBtn_Click">
                                     <iconPacks:PackIconCodicons
                                      Grid.Row="0"
                                      Width="15"
@@ -145,8 +133,7 @@
                                      Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                      Kind="FolderOpened"
                                      Spin="False"
-                                     SpinAutoReverse="False"
-                                     />
+                                     SpinAutoReverse="False" />
                                 </Button>
                                 <Button
                                  Grid.Column="1"
@@ -155,8 +142,7 @@
                                  Margin="5,42,0,0"
                                  HorizontalAlignment="Right"
                                  VerticalAlignment="Bottom"
-                                 Click="DepotPathBtn_Click"
-                                 >
+                                 Click="DepotPathBtn_Click">
                                     <iconPacks:PackIconCodicons
                                      Grid.Row="0"
                                      Width="15"
@@ -167,8 +153,7 @@
                                      Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                      Kind="FolderOpened"
                                      Spin="False"
-                                     SpinAutoReverse="False"
-                                     />
+                                     SpinAutoReverse="False" />
                                 </Button>
                             </StackPanel>
                             <StackPanel Visibility="{Binding CreateModForCP77, Converter={StaticResource Boolean2VisibilityConverter}}">
@@ -181,8 +166,7 @@
                                  Margin="5,50,0,0"
                                  HorizontalAlignment="Right"
                                  VerticalAlignment="Bottom"
-                                 Click="CP77ExecutablePathBtn_Click"
-                                 >
+                                 Click="CP77ExecutablePathBtn_Click">
                                     <iconPacks:PackIconCodicons
                                      Grid.Row="0"
                                      Width="15"
@@ -193,8 +177,7 @@
                                      Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                      Kind="FolderOpened"
                                      Spin="False"
-                                     SpinAutoReverse="False"
-                                     />
+                                     SpinAutoReverse="False" />
                                 </Button>
                             </StackPanel>
                         </StackPanel>

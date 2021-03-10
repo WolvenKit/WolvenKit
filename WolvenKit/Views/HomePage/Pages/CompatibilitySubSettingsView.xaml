@@ -4,8 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- >
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -28,15 +27,13 @@
                  Margin="15,15,32,0"
                  Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                  BorderThickness="4,0,0,6"
-                 Style="{StaticResource BorderTipPrimary}"
-                 >
+                 Style="{StaticResource BorderTipPrimary}">
                     <Grid>
                         <TextBlock
                          Margin="0,0,50,0"
                          VerticalAlignment="Center"
                          FontSize="16"
-                         Text="Cyberpunk 2077"
-                         />
+                         Text="Cyberpunk 2077" />
                     </Grid>
                 </Border>
 
@@ -44,19 +41,16 @@
                  Margin="15,15,32,10"
                  Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                  BorderThickness="4,0,0,2"
-                 Style="{StaticResource BorderTipPrimary}"
-                 >
+                 Style="{StaticResource BorderTipPrimary}">
                     <Grid>
                         <TextBlock
                          Margin="0,0,50,0"
                          VerticalAlignment="Center"
-                         Text="Executable path"
-                         />
+                         Text="Executable path" />
                         <Button
                          Margin="0,0,250,0"
                          HorizontalAlignment="Right"
-                         Click="CP77ExecutablePathBtn_Click"
-                         >
+                         Click="CP77ExecutablePathBtn_Click">
                             <iconPacks:PackIconCodicons Kind="FolderOpened" />
                         </Button>
 
@@ -69,8 +63,7 @@
                          Style="{StaticResource TextBoxExtendCustom}"
                          Text="{Binding CP77ExecutablePath, Mode=OneWay}"
                          TextChanged="TextBox_TextChanged"
-                         VerifyFunc="VerifyFile"
-                         />
+                         VerifyFunc="VerifyFile" />
                     </Grid>
                 </Border>
             </StackPanel>
@@ -83,15 +76,13 @@
                  Margin="15,15,32,0"
                  Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                  BorderThickness="4,0,0,6"
-                 Style="{StaticResource BorderTipPrimary}"
-                 >
+                 Style="{StaticResource BorderTipPrimary}">
                     <Grid>
                         <TextBlock
                          Margin="0,0,50,0"
                          VerticalAlignment="Center"
                          FontSize="16"
-                         Text="The Witcher 3"
-                         />
+                         Text="The Witcher 3" />
                     </Grid>
                 </Border>
 
@@ -99,21 +90,18 @@
                  Margin="15,15,32,10"
                  Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                  BorderThickness="4,0,0,2"
-                 Style="{StaticResource BorderTipPrimary}"
-                 >
+                 Style="{StaticResource BorderTipPrimary}">
                     <StackPanel>
 
                         <Grid Margin="5">
                             <TextBlock
                              Margin="0,0,50,0"
                              VerticalAlignment="Center"
-                             Text="Executable path"
-                             />
+                             Text="Executable path" />
                             <Button
                              Margin="0,0,250,0"
                              HorizontalAlignment="Right"
-                             Click="W3ExecutablePathBtn_Click"
-                             >
+                             Click="W3ExecutablePathBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened" />
                             </Button>
                             <hc:TextBox
@@ -125,21 +113,18 @@
                              Style="{StaticResource TextBoxExtendCustom}"
                              Text="{Binding W3ExecutablePath, Mode=OneWay}"
                              TextChanged="TextBox_TextChanged"
-                             VerifyFunc="VerifyFile"
-                             />
+                             VerifyFunc="VerifyFile" />
                         </Grid>
 
                         <Grid Margin="5">
                             <TextBlock
                              Margin="0,0,50,0"
                              VerticalAlignment="Center"
-                             Text="ModKit (wcc_lite.exe) path"
-                             />
+                             Text="ModKit (wcc_lite.exe) path" />
                             <Button
                              Margin="0,0,250,0"
                              HorizontalAlignment="Right"
-                             Click="WccLitePathBtn_Click"
-                             >
+                             Click="WccLitePathBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened" />
                             </Button>
                             <hc:TextBox
@@ -151,21 +136,18 @@
                              Style="{StaticResource TextBoxExtendCustom}"
                              Text="{Binding WccLitePath, Mode=OneWay}"
                              TextChanged="TextBox_TextChanged"
-                             VerifyFunc="VerifyFile"
-                             />
+                             VerifyFunc="VerifyFile" />
                         </Grid>
 
                         <Grid Margin="5">
                             <TextBlock
                              Margin="0,0,50,0"
                              VerticalAlignment="Center"
-                             Text="Uncooked depot path"
-                             />
+                             Text="Uncooked depot path" />
                             <Button
                              Margin="0,0,250,0"
                              HorizontalAlignment="Right"
-                             Click="DepotPathBtn_Click"
-                             >
+                             Click="DepotPathBtn_Click">
                                 <iconPacks:PackIconCodicons Kind="FolderOpened" />
                             </Button>
                             <hc:TextBox
@@ -177,8 +159,7 @@
                              Style="{StaticResource TextBoxExtendCustom}"
                              Text="{Binding DepotPath, Mode=OneWay}"
                              TextChanged="TextBox_TextChanged"
-                             VerifyFunc="VerifyFolder"
-                             />
+                             VerifyFunc="VerifyFolder" />
                         </Grid>
                     </StackPanel>
                 </Border>
