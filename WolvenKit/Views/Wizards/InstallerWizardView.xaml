@@ -5,8 +5,7 @@
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- IsVisibleChanged="UserControl_IsVisibleChanged"
- >
+ IsVisibleChanged="UserControl_IsVisibleChanged">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -23,8 +22,7 @@
      MaxWidth="450"
      Margin="5,5,2,5"
      HorizontalAlignment="Stretch"
-     hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
-     >
+     hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="15*" />
@@ -41,15 +39,13 @@
          Stretch="Fill"
          Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}"
          StrokeThickness="1"
-         Style="{DynamicResource Path}"
-         />
+         Style="{DynamicResource Path}" />
 
         <StackPanel
          Margin="15,25,0,0"
          HorizontalAlignment="Left"
          VerticalAlignment="Top"
-         Orientation="Horizontal"
-         />
+         Orientation="Horizontal" />
 
         <Grid x:Name="PageGrid" Grid.Row="1">
 
@@ -61,8 +57,7 @@
                      Height="128"
                      Background="Transparent"
                      BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
-                     BorderThickness="1"
-                     >
+                     BorderThickness="1">
                         <Image Source="{iconPacks:BootstrapIconsImage Kind=Question}" />
                     </hc:Gravatar>
                     <StackPanel VerticalAlignment="Top" Orientation="Vertical">
@@ -75,34 +70,29 @@
                          FontSize="20"
                          Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                          Text="Package Title"
-                         TextWrapping="Wrap"
-                         />
+                         TextWrapping="Wrap" />
 
                         <TextBlock
                          Margin="5,15,0,0"
                          FontSize="16"
                          Text="Created by _UserName"
-                         TextWrapping="Wrap"
-                         />
+                         TextWrapping="Wrap" />
 
                         <TextBlock
                          Margin="5,5,0,0"
                          FontSize="10"
-                         Text="For Cyberpunk 2077 "
-                         /> 
+                         Text="For Cyberpunk 2077 " />
                         <!--  Replace CP77 with gametype  -->
 
                         <TextBlock
                          Margin="5,5,0,0"
                          FontSize="10"
-                         Text="Package Created : 2/5/2021"
-                         />
+                         Text="Package Created : 2/5/2021" />
 
                         <TextBlock
                          Margin="5,5,0,0"
                          FontSize="10"
-                         Text="Package Size : 512KB"
-                         />
+                         Text="Package Size : 512KB" />
                     </StackPanel>
                 </StackPanel>
                 <Border
@@ -110,14 +100,12 @@
                  Background="{DynamicResource RegionBrush}"
                  BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
                  BorderThickness="1"
-                 CornerRadius="5"
-                 >
+                 CornerRadius="5">
 
                     <TextBlock
                      Margin="5"
                      FontSize="10"
-                     TextWrapping="Wrap"
-                     >
+                     TextWrapping="Wrap">
                         <Run FontWeight="Bold" Text="Description" />
                         <!--  Remove the line below this one completely once its hooked up its just to test wrapping  -->
                         <LineBreak /><Run Text="My Description My DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy DescriptionMy Description " />
@@ -130,8 +118,7 @@
                      Background="{DynamicResource RegionBrush}"
                      BorderBrush="{DynamicResource BorderBrush}"
                      BorderThickness="1,0,1,1"
-                     CornerRadius="0,0,4,4"
-                     >
+                     CornerRadius="0,0,4,4">
 
                         <ListBox>
                             <ListBoxItem Content="this" />
@@ -146,8 +133,7 @@
                      Background="{DynamicResource RegionBrush}"
                      BorderBrush="{DynamicResource BorderBrush}"
                      BorderThickness="1,0,1,1"
-                     CornerRadius="0,0,4,4"
-                     >
+                     CornerRadius="0,0,4,4">
 
                         <ListBox>
                             <ListBoxItem Content="this" />
@@ -162,8 +148,7 @@
                      Background="{DynamicResource RegionBrush}"
                      BorderBrush="{DynamicResource BorderBrush}"
                      BorderThickness="1,0,1,1"
-                     CornerRadius="0,0,4,4"
-                     >
+                     CornerRadius="0,0,4,4">
 
                         <ListBox>
                             <ListBoxItem Content="this" />
@@ -177,8 +162,7 @@
                  HorizontalAlignment="Stretch"
                  Background="{DynamicResource MahApps.Brushes.Accent4}"
                  Content="Install"
-                 Progress="25"
-                 />
+                 Progress="25" />
             </StackPanel>
         </Grid>
     </Grid>

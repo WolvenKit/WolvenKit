@@ -4,8 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- IsVisibleChanged="UserControl_IsVisibleChanged"
- >
+ IsVisibleChanged="UserControl_IsVisibleChanged">
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
         <hc:SideMenu
@@ -13,8 +12,7 @@
          Width="150"
          HorizontalAlignment="Left"
          ExpandMode="ShowOne"
-         SideBrush="{DynamicResource MahApps.Brushes.Accent}"
-         >
+         SideBrush="{DynamicResource MahApps.Brushes.Accent}">
 
             <hc:SideMenuItem x:Name="GeneralSubItem" Selected="GeneralSubItem_Selected">
                 <hc:SideMenuItem.Header>

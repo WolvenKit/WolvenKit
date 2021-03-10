@@ -29,7 +29,6 @@ namespace WolvenKit.ViewModels.Editor
 
         public List<TextBlock> AudioFileList { get; set; } = new List<TextBlock>();
 
-
         #endregion Fields
 
         #region Constructors

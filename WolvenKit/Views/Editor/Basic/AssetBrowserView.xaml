@@ -11,8 +11,7 @@
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
  BorderBrush="{x:Null}"
- IsVisibleChanged="DataWindow_IsVisibleChanged"
- >
+ IsVisibleChanged="DataWindow_IsVisibleChanged">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -21,7 +20,6 @@
                 <hc:ThemeResources />
                 <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
-
 
             <Style TargetType="ListViewItem">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -32,15 +30,13 @@
      MinWidth="890"
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
      BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-     BorderThickness="1"
-     >
+     BorderThickness="1">
 
         <Grid>
             <Grid.RowDefinitions>
 
                 <RowDefinition Height="9*" />
             </Grid.RowDefinitions>
-
 
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
@@ -57,8 +53,7 @@
                      BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
                      ItemsSource="{Binding RootNode.SubDirectories}"
                      SelectedItemChanged="TreeView_OnSelectedItemChanged"
-                     Style="{DynamicResource TreeView}"
-                     >
+                     Style="{DynamicResource TreeView}">
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding SubDirectories}">
                                 <StackPanel Margin="2" Orientation="Horizontal">
@@ -67,8 +62,7 @@
                                      Height="15"
                                      Margin="0"
                                      Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
-                                     Stretch="Uniform"
-                                     />
+                                     Stretch="Uniform" />
                                     <TextBlock Text="{Binding Name}" />
                                 </StackPanel>
                             </HierarchicalDataTemplate>
@@ -81,8 +75,7 @@
                  Margin="2,0,2,0"
                  VerticalAlignment="Stretch"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
-                 ShowsPreview="False"
-                 />
+                 ShowsPreview="False" />
                 <Grid Grid.Column="1">
 
                     <Grid.ColumnDefinitions>
@@ -90,8 +83,7 @@
                         <ColumnDefinition
                          Width="{Binding PreviewWidth}"
                          MinWidth="8"
-                         MaxWidth="500"
-                         />
+                         MaxWidth="500" />
                         <ColumnDefinition Width="0" />
                     </Grid.ColumnDefinitions>
 
@@ -110,14 +102,12 @@
                      HorizontalAlignment="Left"
                      VerticalAlignment="Stretch"
                      Background="{DynamicResource MahApps.Brushes.Accent3}"
-                     ShowsPreview="False"
-                     />
+                     ShowsPreview="False" />
                     <hc:TabControl
                      Grid.Column="0"
                      IsAnimationEnabled="True"
                      IsDraggable="True"
-                     ShowCloseButton="True"
-                     >
+                     ShowCloseButton="True">
                         <hc:TabItem Header="Depot">
                             <!--  Bind Header to selected item in treeview  -->
                             <ListView
@@ -126,8 +116,7 @@
                              BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
                              ItemsSource="{Binding CurrentNodeFiles}"
                              SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
-                             SelectionChanged="ListView_SelectionChanged"
-                             >
+                             SelectionChanged="ListView_SelectionChanged">
                                 <ListView.Resources>
                                     <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
                                 </ListView.Resources>
@@ -142,8 +131,7 @@
                                                      Height="22"
                                                      Margin="-3"
                                                      Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
-                                                     Stretch="Uniform"
-                                                     />
+                                                     Stretch="Uniform" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
@@ -161,8 +149,7 @@
                                                         <TextBlock
                                                          Width="auto"
                                                          Margin="0,0,0,0"
-                                                         Text="{Binding Size}"
-                                                         />
+                                                         Text="{Binding Size}" />
                                                     </WrapPanel>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
@@ -187,8 +174,7 @@
                      BorderBrush="Transparent"
                      Command="{Binding TogglePreviewCommand}"
                      RenderTransformOrigin="0.5,0.5"
-                     Style="{StaticResource ButtonIcon}"
-                     >
+                     Style="{StaticResource ButtonIcon}">
                         <Button.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform />
@@ -199,18 +185,13 @@
                         </Button.RenderTransform>
                     </Button>
                 </Grid>
-
-
             </Grid>
             <Grid
              Grid.Row="0"
              HorizontalAlignment="Right"
              VerticalAlignment="Top"
              Background="Transparent"
-             FlowDirection="RightToLeft"
-             >
-
-
+             FlowDirection="RightToLeft">
 
                 <ToolBarTray
                  MaxWidth="900"
@@ -219,8 +200,7 @@
                  Background="Transparent"
                  FlowDirection="LeftToRight"
                  IsLocked="True"
-                 Style="{DynamicResource MahApps.Styles.ToolBarTray}"
-                 >
+                 Style="{DynamicResource MahApps.Styles.ToolBarTray}">
                     <ToolBarTray.RenderTransform>
                         <ScaleTransform ScaleX="0.8" ScaleY="0.8" />
                     </ToolBarTray.RenderTransform>
@@ -228,8 +208,7 @@
                      Padding="6"
                      Band="0"
                      Style="{StaticResource MahApps.Styles.ToolBar}"
-                     Visibility="Collapsed"
-                     >
+                     Visibility="Collapsed">
                         <Menu VerticalAlignment="Center" Background="Transparent">
                             <MenuItem Header="View">
                                 <MenuItem Header="Empty" />
@@ -249,21 +228,18 @@
                      Padding="6"
                      Background="Transparent"
                      Band="0"
-                     Style="{StaticResource MahApps.Styles.ToolBar}"
-                     >
+                     Style="{StaticResource MahApps.Styles.ToolBar}">
                         <StackPanel
                          Margin="0,3"
                          VerticalAlignment="Center"
                          Background="Transparent"
-                         Orientation="Horizontal"
-                         >
+                         Orientation="Horizontal">
                             <Button
                              Width="40"
                              hc:IconElement.Geometry="{DynamicResource GlobalLeftArrow}"
                              Background="Transparent"
                              BorderBrush="{x:Null}"
-                             Style="{StaticResource ButtonIcon}"
-                             />
+                             Style="{StaticResource ButtonIcon}" />
                             <Button
                              Width="40"
                              hc:IconElement.Geometry="{DynamicResource AssetBrowserHome}"
@@ -271,8 +247,7 @@
                              BorderBrush="{x:Null}"
                              Command="{Binding HomeCommand}"
                              RenderTransformOrigin="0.5,0.5"
-                             Style="{StaticResource ButtonIcon}"
-                             >
+                             Style="{StaticResource ButtonIcon}">
                                 <Button.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform />
@@ -283,21 +258,18 @@
                                 </Button.RenderTransform>
                             </Button>
 
-
                             <hc:TextBox
                              Width="500"
                              Margin="0,4,0,0"
                              VerticalAlignment="Center"
-                             Text="{Binding Path=CurrentNode.FullPath, Mode=OneWay}"
-                             />
+                             Text="{Binding Path=CurrentNode.FullPath, Mode=OneWay}" />
 
                             <Button
                              Width="40"
                              hc:IconElement.Geometry="{DynamicResource AssetBrowserStar}"
                              Background="Transparent"
                              BorderBrush="{x:Null}"
-                             Style="{StaticResource ButtonIcon}"
-                             />
+                             Style="{StaticResource ButtonIcon}" />
                         </StackPanel>
                     </ToolBar>
 
@@ -306,15 +278,13 @@
                      Background="Transparent"
                      Band="0"
                      Style="{StaticResource MahApps.Styles.ToolBar}"
-                     Visibility="Collapsed"
-                     >
+                     Visibility="Collapsed">
                         <Menu VerticalAlignment="Center" Background="Transparent">
                             <TextBlock Text="Class :" />
                             <hc:ComboBox
                              MinWidth="100"
                              ItemsSource="{Binding Classes}"
-                             SelectedItem="{Binding SelectedClass}"
-                             >
+                             SelectedItem="{Binding SelectedClass}">
                                 <ComboBox.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <VirtualizingStackPanel />
@@ -324,21 +294,17 @@
                         </Menu>
                     </ToolBar>
 
-
-
                     <ToolBar
                      Padding="6"
                      Background="Transparent"
                      Band="0"
                      Style="{StaticResource MahApps.Styles.ToolBar}"
-                     Visibility="Collapsed"
-                     >
+                     Visibility="Collapsed">
                         <Menu VerticalAlignment="Center" Background="Transparent">
                             <hc:ComboBox
                              MinWidth="100"
                              ItemsSource="{Binding Extensions}"
-                             SelectedItem="{Binding SelectedExtension}"
-                             >
+                             SelectedItem="{Binding SelectedExtension}">
                                 <ComboBox.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <VirtualizingStackPanel />
@@ -351,8 +317,7 @@
                 <Grid
                  Margin="15,7,0,0"
                  HorizontalAlignment="Left"
-                 VerticalAlignment="Top"
-                 >
+                 VerticalAlignment="Top">
 
                     <ToolBarTray
                      Width="auto"
@@ -362,8 +327,7 @@
                      Background="Transparent"
                      FlowDirection="RightToLeft"
                      IsLocked="True"
-                     Style="{DynamicResource MahApps.Styles.ToolBarTray}"
-                     >
+                     Style="{DynamicResource MahApps.Styles.ToolBarTray}">
                         <ToolBarTray.RenderTransform>
                             <ScaleTransform ScaleX="0.8" ScaleY="0.8" />
                         </ToolBarTray.RenderTransform>
@@ -376,15 +340,13 @@
                          Background="Transparent"
                          Band="1"
                          BandIndex="1"
-                         Style="{StaticResource MahApps.Styles.ToolBar}"
-                         >
+                         Style="{StaticResource MahApps.Styles.ToolBar}">
                             <hc:SearchBar
                              Width="auto"
                              MinWidth="250"
                              MaxWidth="400"
                              hc:InfoElement.Placeholder="Search something"
-                             FlowDirection="LeftToRight"
-                             >
+                             FlowDirection="LeftToRight">
                                 <hc:Interaction.Triggers>
                                     <hc:EventTrigger EventName="SearchStarted">
                                         <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
@@ -394,7 +356,6 @@
                         </ToolBar>
                     </ToolBarTray>
                 </Grid>
-
             </Grid>
         </Grid>
     </Border>

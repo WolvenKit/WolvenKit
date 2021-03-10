@@ -7,6 +7,8 @@ namespace WolvenKit.Functionality.Converters
     [ValueConversion(typeof(bool), typeof(SolidColorBrush))]
     public class BoolToBrushConverter : IValueConverter
     {
+        #region Methods
+
         public object
             Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
@@ -30,5 +32,7 @@ namespace WolvenKit.Functionality.Converters
         public object ConvertBack(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture) =>
             throw new NotImplementedException();
+
+        #endregion Methods
     }
 }

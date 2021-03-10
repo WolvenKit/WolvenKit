@@ -35,7 +35,6 @@ namespace WolvenKit.Views.Editor.AudioTool
 
         public void AddAudioItem(string path) => TempConvertToWemWav(path);
 
-
         public void Reinit()
         {
             var themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
@@ -286,19 +285,6 @@ namespace WolvenKit.Views.Editor.AudioTool
 
         #endregion NAudio Engine Events
 
-        private void StopButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (NAudioEngine.Instance.CanStop)
-            {
-                NAudioEngine.Instance.Stop();
-            }
-        }
-
-        //  protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
-        //    {
-        //       NAudioEngine.Instance.Dispose();
-        //   }
-
         // Begin dragging the window
         private void PlayListView_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -317,5 +303,18 @@ namespace WolvenKit.Views.Editor.AudioTool
                 NAudioEngine.Instance.Play(); //TODO: Doesn't play it
             }
         }
+
+        private void StopButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (NAudioEngine.Instance.CanStop)
+            {
+                NAudioEngine.Instance.Stop();
+            }
+        }
+
+        //  protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        //    {
+        //       NAudioEngine.Instance.Dispose();
+        //   }
     }
 }

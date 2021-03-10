@@ -1,5 +1,4 @@
 using System;
-using Catel.MVVM;
 
 namespace WolvenKit.Functionality.Commands
 {

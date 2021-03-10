@@ -4,8 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:iconpacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- >
+ xmlns:iconpacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
     <catel:UserControl.Resources>
 
         <Geometry x:Key="Wolf">
@@ -47,8 +46,7 @@
                          x:Name="CanvasRoot"
                          Margin="0,0,0,0"
                          Background="Transparent"
-                         RenderTransformOrigin="0.5,0.5"
-                         >
+                         RenderTransformOrigin="0.5,0.5">
                             <Canvas.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform />
@@ -59,8 +57,7 @@
                              Height="{Binding ActualHeight, ElementName=CanvasRoot}"
                              Data="{TemplateBinding Icon}"
                              Fill="{TemplateBinding Background}"
-                             Stretch="Uniform"
-                             >
+                             Stretch="Uniform">
                                 <Path.LayoutTransform>
                                     <TransformGroup>
                                         <ScaleTransform ScaleX="1" ScaleY="-1" />
@@ -75,8 +72,7 @@
                                  HorizontalAlignment="Left"
                                  Data="{TemplateBinding Icon}"
                                  Fill="{TemplateBinding Foreground}"
-                                 Stretch="Uniform"
-                                 >
+                                 Stretch="Uniform">
                                     <Path.LayoutTransform>
                                         <TransformGroup>
                                             <ScaleTransform ScaleX="1" ScaleY="-1" />
@@ -115,15 +111,13 @@
                             <StackPanel
                              x:Name="PART_Panel"
                              Margin="5,0"
-                             Orientation="Vertical"
-                             />
+                             Orientation="Vertical" />
                             <TextBlock
                              Margin="10,0,0,0"
                              VerticalAlignment="Center"
                              Text="{TemplateBinding Text}"
                              Visibility="{TemplateBinding ShowText,
-                                                          Converter={StaticResource Boolean2VisibilityConverter}}"
-                             />
+                                                          Converter={StaticResource Boolean2VisibilityConverter}}" />
                         </StackPanel>
                     </ControlTemplate>
                 </Setter.Value>
@@ -135,8 +129,7 @@
         <Grid
          Margin="5,5,5,5"
          HorizontalAlignment="Stretch"
-         Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-         >
+         Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
             <Grid Grid.Row="1" HorizontalAlignment="Stretch">
                 <Grid>
 
@@ -149,8 +142,7 @@
                          hc:InfoElement.Title="Review (Optional)"
                          hc:InfoElement.TitlePlacement="Left"
                          hc:InfoElement.TitleWidth="130"
-                         Text="??"
-                         />
+                         Text="??" />
 
                         <RichTextBox Margin="10,45,80,0" />
 
@@ -160,8 +152,7 @@
                          VerticalAlignment="Center"
                          Background="{DynamicResource RegionBrush}"
                          BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
-                         BorderThickness="0,2,2,2"
-                         >
+                         BorderThickness="0,2,2,2">
                             <hc:Rate
                              AllowHalf="True"
                              Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
@@ -169,8 +160,7 @@
                              Foreground="{DynamicResource MahApps.Brushes.Accent2}"
                              ItemMargin="3.4"
                              ShowText="True"
-                             Style="{StaticResource RateBaseStyle}"
-                             >
+                             Style="{StaticResource RateBaseStyle}">
                                 <hc:Rate.LayoutTransform>
                                     <TransformGroup>
                                         <ScaleTransform ScaleX="2" ScaleY="2" />
@@ -185,8 +175,7 @@
                      Margin="0,0,10,-40"
                      HorizontalAlignment="Right"
                      VerticalAlignment="Bottom"
-                     Content="Send review"
-                     />
+                     Content="Send review" />
                 </Grid>
             </Grid>
         </Grid>

@@ -41,10 +41,10 @@ namespace WolvenKit.ViewModels.Editor
         private bool _isInitialized;
         private ICommand _saveAsCommand = null;
         private ICommand _saveCommand = null;
+        private ChunkViewModel _selectedChunk;
         private string _textContent = string.Empty;
         private IWorkSpaceViewModel _workSpaceViewModel = null;
         private FileSystemInfoModel fileinfo;
-        private ChunkViewModel _selectedChunk;
 
         #endregion fields
 
@@ -91,27 +91,6 @@ namespace WolvenKit.ViewModels.Editor
         public ICommand OpenEditorCommand { get; private set; }
         public ICommand OpenImportCommand { get; private set; }
 
-        private bool CanOpenBuffer() => true;
-
-        private bool CanOpenEditor() => true;
-
-        private bool CanOpenImport() => true;
-
-        private void ExecuteOpenBuffer()
-        {
-            // TODO: Handle command logic here
-        }
-
-        private void ExecuteOpenEditor()
-        {
-            // TODO: Handle command logic here
-        }
-
-        private void ExecuteOpenImport()
-        {
-            // TODO: Handle command logic here
-        }
-
         /// <summary>Gets a command to save this document's content into another file in the file system.</summary>
         public ICommand SaveAsCommand
         {
@@ -140,11 +119,30 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
+        private bool CanOpenBuffer() => true;
+
+        private bool CanOpenEditor() => true;
+
+        private bool CanOpenImport() => true;
+
+        private void ExecuteOpenBuffer()
+        {
+            // TODO: Handle command logic here
+        }
+
+        private void ExecuteOpenEditor()
+        {
+            // TODO: Handle command logic here
+        }
+
+        private void ExecuteOpenImport()
+        {
+            // TODO: Handle command logic here
+        }
+
         #endregion commands
 
         #region Properties
-
-        public PropertyResolver PropertyResolver => new MyPropertyResolver();
 
         /// <summary>
         /// Bound to the View
@@ -215,21 +213,6 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public List<ICR2WImport> Imports => File.Imports;
 
-        //      public List<ChunkPropertyViewModel> _selectEditableVariables;
-        //public List<ChunkPropertyViewModel> SelectEditableVariables
-        //      {
-        //          get => _selectEditableVariables;
-        //          set
-        //          {
-        //              if (_selectEditableVariables != value)
-        //              {
-        //                  var oldValue = _selectEditableVariables;
-        //                  _selectEditableVariables = value;
-        //                  RaisePropertyChanged(() => SelectEditableVariables, oldValue, value);
-        //              }
-        //          }
-        //      }
-
         /// <summary>Gets/sets whether the documents content has been changed without saving into file system or not.</summary>
         public new bool IsDirty
         {
@@ -245,6 +228,20 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
+        //      public List<ChunkPropertyViewModel> _selectEditableVariables;
+        //public List<ChunkPropertyViewModel> SelectEditableVariables
+        //      {
+        //          get => _selectEditableVariables;
+        //          set
+        //          {
+        //              if (_selectEditableVariables != value)
+        //              {
+        //                  var oldValue = _selectEditableVariables;
+        //                  _selectEditableVariables = value;
+        //                  RaisePropertyChanged(() => SelectEditableVariables, oldValue, value);
+        //              }
+        //          }
+        //      }
         /// <summary>Gets/sets whether the documents content has been changed without saving into file system or not.</summary>
         public bool IsExistingInFileSystem
         {
@@ -258,6 +255,8 @@ namespace WolvenKit.ViewModels.Editor
                 }
             }
         }
+
+        public PropertyResolver PropertyResolver => new MyPropertyResolver();
 
         /// <summary>
         /// Bound to the View via TreeViewBehavior.cs
@@ -426,8 +425,6 @@ namespace WolvenKit.ViewModels.Editor
         }
 
         #endregion Constructors
-
-
 
         #region Properties
 

@@ -10,8 +10,7 @@
  BorderBrush="{x:Null}"
  ShowInTaskbar="True"
  WindowStartupLocation="CenterScreen"
- WindowStyle="None"
- >
+ WindowStyle="None">
 
     <catel:DataWindow.Resources>
         <ResourceDictionary>
@@ -27,8 +26,7 @@
          Height="auto"
          hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
          BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-         BorderThickness="1"
-         >
+         BorderThickness="1">
 
             <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
 

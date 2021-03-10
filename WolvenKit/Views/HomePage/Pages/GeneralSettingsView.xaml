@@ -5,16 +5,14 @@
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:sp="clr-namespace:WolvenKit.Views.HomePage.Pages"
- IsVisibleChanged="UserControl_IsVisibleChanged"
- >
+ IsVisibleChanged="UserControl_IsVisibleChanged">
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
         <hc:SideMenu
          Width="150"
          HorizontalAlignment="Left"
          ExpandMode="ShowOne"
-         SideBrush="{DynamicResource MahApps.Brushes.Accent}"
-         >
+         SideBrush="{DynamicResource MahApps.Brushes.Accent}">
 
             <hc:SideMenuItem x:Name="GlobalSubItem" Selected="GlobalSubItem_Selected">
                 <hc:SideMenuItem.Header>

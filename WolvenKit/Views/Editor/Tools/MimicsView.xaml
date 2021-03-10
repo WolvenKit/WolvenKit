@@ -4,8 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- IsVisibleChanged="UserControl_IsVisibleChanged"
- >
+ IsVisibleChanged="UserControl_IsVisibleChanged">
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -26,13 +25,11 @@
                  hc:InfoElement.TitlePlacement="Left"
                  hc:InfoElement.TitleWidth="140"
                  IsEditable="True"
-                 Text="None"
-                 />
+                 Text="None" />
                 <Button
                  Width="50"
                  Margin="5,0,0,0"
-                 Content="Browse"
-                 />
+                 Content="Browse" />
             </StackPanel>
             <StackPanel Margin="0,15,0,0" Orientation="Horizontal">
                 <hc:ComboBox
@@ -42,13 +39,11 @@
                  hc:InfoElement.TitlePlacement="Left"
                  hc:InfoElement.TitleWidth="140"
                  IsEditable="True"
-                 Text="None"
-                 />
+                 Text="None" />
                 <Button
                  Width="50"
                  Margin="5,0,0,0"
-                 Content="Browse"
-                 />
+                 Content="Browse" />
             </StackPanel>
             <hc:ComboBox
              Width="auto"
@@ -57,19 +52,16 @@
              hc:InfoElement.TitlePlacement="Left"
              hc:InfoElement.TitleWidth="140"
              IsEditable="True"
-             Text=""
-             />
+             Text="" />
             <Grid Margin="0,0,0,0" VerticalAlignment="Bottom">
                 <Button
                  Width="150"
                  HorizontalAlignment="Right"
-                 Content="Export"
-                 />
+                 Content="Export" />
                 <Button
                  Width="150"
                  HorizontalAlignment="Left"
-                 Content="Cancel"
-                 />
+                 Content="Cancel" />
             </Grid>
         </StackPanel>
     </Grid>

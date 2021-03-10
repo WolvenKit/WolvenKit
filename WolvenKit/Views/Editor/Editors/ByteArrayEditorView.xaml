@@ -3,8 +3,7 @@
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
- xmlns:hc="https://handyorg.github.io/handycontrol"
- >
+ xmlns:hc="https://handyorg.github.io/handycontrol">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -20,23 +19,19 @@
             <Button
              Width="75"
              Margin="2"
-             Content="Export"
-             />
+             Content="Export" />
             <Button
              Width="75"
              Margin="2"
-             Content="Import"
-             />
+             Content="Import" />
             <Button
              Width="75"
              Margin="2"
-             Content="Open"
-             />
+             Content="Open" />
             <TextBlock
              Width="320"
              VerticalAlignment="Center"
-             Text="-"
-             />
+             Text="-" />
         </StackPanel>
     </Grid>
 </catel:UserControl>

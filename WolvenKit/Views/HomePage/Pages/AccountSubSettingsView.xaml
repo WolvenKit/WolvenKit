@@ -4,8 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- >
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.ColumnDefinitions>
@@ -21,15 +20,13 @@
                      Margin="15,15,32,0"
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                      BorderThickness="4,0,0,6"
-                     Style="{StaticResource BorderTipPrimary}"
-                     >
+                     Style="{StaticResource BorderTipPrimary}">
                         <Grid>
                             <TextBlock
                              Margin="0,0,50,0"
                              VerticalAlignment="Center"
                              FontSize="16"
-                             Text="WolvenKit"
-                             />
+                             Text="WolvenKit" />
                         </Grid>
                     </Border>
 
@@ -38,16 +35,14 @@
                      Margin="15,15,32,10"
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                      BorderThickness="4,0,0,2"
-                     Style="{StaticResource BorderTipPrimary}"
-                     >
+                     Style="{StaticResource BorderTipPrimary}">
 
                         <StackPanel>
 
                             <Grid
                              x:Name="WKProfileNotCreatedPanel"
                              Margin="35"
-                             Visibility="Visible"
-                             > 
+                             Visibility="Visible">
                                 <!--  Set to collapes if account is available  -->
                                 <TextBlock HorizontalAlignment="Left" Text="No WolvenKit profile created." />
                                 <Button HorizontalAlignment="Right" VerticalAlignment="Center">
@@ -58,20 +53,18 @@
                                 </Button>
                             </Grid>
 
-                            <Grid x:Name="WKProfileCreatedPanel" Visibility="Collapsed"> 
+                            <Grid x:Name="WKProfileCreatedPanel" Visibility="Collapsed">
                                 <!--  Set to visisble if account is available  -->
 
                                 <Grid Margin="5">
                                     <TextBlock
                                      Margin="0,0,50,0"
                                      VerticalAlignment="Center"
-                                     Text="WolvenKit profile"
-                                     />
+                                     Text="WolvenKit profile" />
                                     <hc:Tag
                                      HorizontalAlignment="Right"
                                      Content="UserName"
-                                     ShowCloseButton="False"
-                                     >
+                                     ShowCloseButton="False">
                                         <hc:Tag.Header>
                                             <Image Source="{DynamicResource Fluent.Ribbon.Images.DefaultPlaceholder}" />
                                         </hc:Tag.Header>
@@ -81,38 +74,32 @@
                                     <TextBlock
                                      Margin="0,0,50,0"
                                      VerticalAlignment="Center"
-                                     Text="Email"
-                                     />
+                                     Text="Email" />
                                     <hc:TextBox
                                      Width="250"
                                      HorizontalAlignment="Right"
-                                     IsEnabled="False"
-                                     />
+                                     IsEnabled="False" />
                                 </Grid>
                                 <Grid Margin="5">
                                     <TextBlock
                                      Margin="0,0,50,0"
                                      VerticalAlignment="Center"
-                                     Text="Donation link"
-                                     />
+                                     Text="Donation link" />
                                     <hc:TextBox
                                      Width="250"
                                      HorizontalAlignment="Right"
-                                     IsEnabled="False"
-                                     />
+                                     IsEnabled="False" />
                                 </Grid>
                                 <Grid Margin="5">
                                     <TextBlock
                                      Margin="0,0,50,0"
                                      VerticalAlignment="Center"
-                                     Text="Default description"
-                                     />
+                                     Text="Default description" />
                                     <RichTextBox
                                      Width="250"
                                      Height="150"
                                      HorizontalAlignment="Right"
-                                     IsEnabled="False"
-                                     />
+                                     IsEnabled="False" />
                                 </Grid>
                             </Grid>
                         </StackPanel>
@@ -123,15 +110,13 @@
                      Margin="15,50,32,0"
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                      BorderThickness="4,0,0,6"
-                     Style="{StaticResource BorderTipPrimary}"
-                     >
+                     Style="{StaticResource BorderTipPrimary}">
                         <Grid>
                             <TextBlock
                              Margin="0,0,50,0"
                              VerticalAlignment="Center"
                              FontSize="16"
-                             Text="Nexus"
-                             />
+                             Text="Nexus" />
                         </Grid>
                     </Border>
 
@@ -140,15 +125,13 @@
                      Margin="15,15,32,10"
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                      BorderThickness="4,0,0,2"
-                     Style="{StaticResource BorderTipPrimary}"
-                     >
+                     Style="{StaticResource BorderTipPrimary}">
                         <StackPanel>
 
                             <Grid
                              x:Name="NexusNotLinkedPanel"
                              Margin="35"
-                             Visibility="Visible"
-                             >  
+                             Visibility="Visible">
                                 <!--  Set to Collapsed if linked  -->
                                 <TextBlock HorizontalAlignment="Left" Text="No NexusMods account linked." />
                                 <Button HorizontalAlignment="Right" VerticalAlignment="Center">
@@ -159,19 +142,17 @@
                                 </Button>
                             </Grid>
 
-                            <Grid x:Name="NexusLinkedPanel" Visibility="Collapsed"> 
+                            <Grid x:Name="NexusLinkedPanel" Visibility="Collapsed">
                                 <!--  Set to visible if linked  -->
                                 <Grid Margin="5">
                                     <TextBlock
                                      Margin="0,0,50,0"
                                      VerticalAlignment="Center"
-                                     Text="NexusMods account"
-                                     />
+                                     Text="NexusMods account" />
                                     <hc:Tag
                                      HorizontalAlignment="Right"
                                      Content="UserName"
-                                     ShowCloseButton="False"
-                                     >
+                                     ShowCloseButton="False">
                                         <hc:Tag.Header>
                                             <Image Source="{DynamicResource Fluent.Ribbon.Images.DefaultPlaceholder}" />
                                         </hc:Tag.Header>
@@ -181,25 +162,21 @@
                                     <TextBlock
                                      Margin="0,0,50,0"
                                      VerticalAlignment="Center"
-                                     Text="UserID"
-                                     />
+                                     Text="UserID" />
                                     <hc:TextBox
                                      Width="250"
                                      HorizontalAlignment="Right"
-                                     IsEnabled="False"
-                                     />
+                                     IsEnabled="False" />
                                 </Grid>
                                 <Grid Margin="5">
                                     <TextBlock
                                      Margin="0,0,50,0"
                                      VerticalAlignment="Center"
-                                     Text="Email"
-                                     />
+                                     Text="Email" />
                                     <hc:TextBox
                                      Width="250"
                                      HorizontalAlignment="Right"
-                                     IsEnabled="False"
-                                     />
+                                     IsEnabled="False" />
                                 </Grid>
                             </Grid>
                         </StackPanel>
@@ -217,15 +194,13 @@
                      Margin="15,15,32,0"
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                      BorderThickness="4,0,0,6"
-                     Style="{StaticResource BorderTipPrimary}"
-                     >
+                     Style="{StaticResource BorderTipPrimary}">
                         <Grid>
                             <TextBlock
                              Margin="0,0,50,0"
                              VerticalAlignment="Center"
                              FontSize="16"
-                             Text="Personalize"
-                             />
+                             Text="Personalize" />
                         </Grid>
                     </Border>
 
@@ -234,14 +209,12 @@
                      Margin="15,15,32,10"
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                      BorderThickness="4,0,0,2"
-                     Style="{StaticResource BorderTipPrimary}"
-                     >
+                     Style="{StaticResource BorderTipPrimary}">
                         <Grid>
                             <TextBlock
                              Margin="0,0,50,0"
                              VerticalAlignment="Center"
-                             Text="Preferred Application Account"
-                             />
+                             Text="Preferred Application Account" />
                             <hc:ComboBox Width="250" HorizontalAlignment="Right" />
                         </Grid>
                     </Border>

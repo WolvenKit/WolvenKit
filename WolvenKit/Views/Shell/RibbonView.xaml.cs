@@ -126,8 +126,6 @@ namespace WolvenKit.Views.Shell
         {
             RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
             RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = true;
-
-
         }
 
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)

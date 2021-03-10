@@ -14,8 +14,7 @@
  d:DesignHeight="450"
  d:DesignWidth="800"
  IsVisibleChanged="UserControl_IsVisibleChanged"
- mc:Ignorable="d"
- >
+ mc:Ignorable="d">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -27,10 +26,7 @@
                 <hc:Object2StringConverter />
                 <hc:String2VisibilityConverter />
             </c:ValueConverterGroup>
-
         </ResourceDictionary>
-
-
     </catel:UserControl.Resources>
     <hc:ScrollViewer x:Name="fish">
 
@@ -38,19 +34,13 @@
 
             <StackPanel>
 
-
-
-
-
-
                 <Border
                  Margin="3,3,3,3"
                  HorizontalAlignment="Stretch"
                  Background="Transparent"
                  BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderThickness="2,1,2,0"
-                 Style="{StaticResource BorderTipPrimary}"
-                 >
+                 Style="{StaticResource BorderTipPrimary}">
                     <StackPanel>
                         <TextBlock
                          Margin="0"
@@ -58,25 +48,20 @@
                          FontWeight="Bold"
                          Text="{Binding Name}"
                          TextAlignment="Center"
-                         TextWrapping="Wrap"
-                         />
+                         TextWrapping="Wrap" />
                         <TextBlock
                          HorizontalAlignment="Center"
                          Text="{Binding FullName}"
                          TextAlignment="Center"
-                         TextWrapping="Wrap"
-                         />
-
+                         TextWrapping="Wrap" />
                     </StackPanel>
                 </Border>
 
                 <Expander
                  x:Name="ExplorerBind"
                  Header="File Info"
-                 IsExpanded="True"
-                 >
+                 IsExpanded="True">
                     <StackPanel>
-
 
                         <Grid>
 
@@ -87,8 +72,7 @@
                              BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
                              BorderThickness="2,0,2,0"
                              Style="{StaticResource BorderTipPrimary}"
-                             Visibility="{Binding FileSystemInfo.Name, Converter={StaticResource String2VisibilityConverter}}"
-                             >
+                             Visibility="{Binding FileSystemInfo.Name, Converter={StaticResource String2VisibilityConverter}}">
                                 <StackPanel Orientation="Horizontal">
 
                                     <TextBlock Text="File Name" />
@@ -96,13 +80,9 @@
                                      Margin="10,0,0,0"
                                      Status="{Binding FileSystemInfo.Name}"
                                      Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
+                                     Color="{DynamicResource MahApps.Brushes.Accent3}" />
                                 </StackPanel>
                             </Border>
-
-
-
                         </Grid>
 
                         <Grid>
@@ -114,23 +94,16 @@
                              BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
                              BorderThickness="2,0,2,0"
                              Style="{StaticResource BorderTipPrimary}"
-                             Visibility="{Binding FileSystemInfo.Extension, Converter={StaticResource String2VisibilityConverter}}"
-                             >
+                             Visibility="{Binding FileSystemInfo.Extension, Converter={StaticResource String2VisibilityConverter}}">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Extension" />
                                     <hc:Shield
                                      Margin="10,0,0,0"
                                      Status="{Binding FileSystemInfo.Extension}"
                                      Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
+                                     Color="{DynamicResource MahApps.Brushes.Accent3}" />
                                 </StackPanel>
-
-
                             </Border>
-
-
-
                         </Grid>
 
                         <Grid>
@@ -142,8 +115,7 @@
                              BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
                              BorderThickness="2,0,2,0"
                              Style="{StaticResource BorderTipPrimary}"
-                             Visibility="{Binding FileSystemInfo.CreationTime, Converter={StaticResource Object2VisibilityConverter}}"
-                             >
+                             Visibility="{Binding FileSystemInfo.CreationTime, Converter={StaticResource Object2VisibilityConverter}}">
                                 <StackPanel Orientation="Horizontal">
 
                                     <TextBlock Text="Created at" />
@@ -151,13 +123,9 @@
                                      Margin="10,0,0,0"
                                      Status="{Binding FileSystemInfo.CreationTime}"
                                      Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
+                                     Color="{DynamicResource MahApps.Brushes.Accent3}" />
                                 </StackPanel>
                             </Border>
-
-
-
                         </Grid>
 
                         <Grid>
@@ -169,8 +137,7 @@
                              BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
                              BorderThickness="2,0,2,0"
                              Style="{StaticResource BorderTipPrimary}"
-                             Visibility="{Binding FileSystemInfo.LastWriteTime, Converter={StaticResource Object2VisibilityConverter}}"
-                             >
+                             Visibility="{Binding FileSystemInfo.LastWriteTime, Converter={StaticResource Object2VisibilityConverter}}">
                                 <StackPanel Orientation="Horizontal">
 
                                     <TextBlock Text="Last Modified" />
@@ -178,13 +145,9 @@
                                      Margin="10,0,0,0"
                                      Status="{Binding FileSystemInfo.LastWriteTime}"
                                      Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
+                                     Color="{DynamicResource MahApps.Brushes.Accent3}" />
                                 </StackPanel>
                             </Border>
-
-
-
                         </Grid>
 
                         <Grid>
@@ -196,8 +159,7 @@
                              BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
                              BorderThickness="2,0,2,0"
                              Style="{StaticResource BorderTipPrimary}"
-                             Visibility="{Binding FileSystemInfo.LastAccessTime, Converter={StaticResource Object2VisibilityConverter}}"
-                             >
+                             Visibility="{Binding FileSystemInfo.LastAccessTime, Converter={StaticResource Object2VisibilityConverter}}">
                                 <StackPanel Orientation="Horizontal">
 
                                     <TextBlock Text="Last Accessed" />
@@ -205,27 +167,17 @@
                                      Margin="10,0,0,0"
                                      Status="{Binding FileSystemInfo.LastAccessTime}"
                                      Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
+                                     Color="{DynamicResource MahApps.Brushes.Accent3}" />
                                 </StackPanel>
                             </Border>
-
-
-
                         </Grid>
-
-
                     </StackPanel>
-
-
                 </Expander>
                 <Expander
                  x:Name="AssetsBind"
                  Header="File Info"
-                 IsExpanded="True"
-                 >
+                 IsExpanded="True">
                     <StackPanel>
-
 
                         <Grid>
 
@@ -235,8 +187,7 @@
                              Background="Transparent"
                              BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
                              BorderThickness="2,0,2,0"
-                             Style="{StaticResource BorderTipPrimary}"
-                             >
+                             Style="{StaticResource BorderTipPrimary}">
                                 <StackPanel Orientation="Horizontal">
 
                                     <TextBlock Text="File Name" />
@@ -244,13 +195,9 @@
                                      Margin="10,0,0,0"
                                      Status="{Binding SelectedNode.Name}"
                                      Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
+                                     Color="{DynamicResource MahApps.Brushes.Accent3}" />
                                 </StackPanel>
                             </Border>
-
-
-
                         </Grid>
                         <Grid>
 
@@ -260,8 +207,7 @@
                              Background="Transparent"
                              BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
                              BorderThickness="2,0,2,0"
-                             Style="{StaticResource BorderTipPrimary}"
-                             >
+                             Style="{StaticResource BorderTipPrimary}">
                                 <StackPanel Orientation="Horizontal">
 
                                     <TextBlock Text="File Size" />
@@ -269,13 +215,9 @@
                                      Margin="10,0,0,0"
                                      Status="{Binding SelectedNode.Size}"
                                      Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
+                                     Color="{DynamicResource MahApps.Brushes.Accent3}" />
                                 </StackPanel>
                             </Border>
-
-
-
                         </Grid>
                         <Grid>
 
@@ -286,23 +228,16 @@
                              BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
                              BorderThickness="2,0,2,0"
                              Style="{StaticResource BorderTipPrimary}"
-                             Visibility="{Binding FileSystemInfo.Extension, Converter={StaticResource String2VisibilityConverter}}"
-                             >
+                             Visibility="{Binding FileSystemInfo.Extension, Converter={StaticResource String2VisibilityConverter}}">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Extension" />
                                     <hc:Shield
                                      Margin="10,0,0,0"
                                      Status="{Binding SelectedNode.Extension}"
                                      Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
+                                     Color="{DynamicResource MahApps.Brushes.Accent3}" />
                                 </StackPanel>
-
-
                             </Border>
-
-
-
                         </Grid>
                         <Grid>
 
@@ -312,8 +247,7 @@
                              Background="Transparent"
                              BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
                              BorderThickness="2,0,2,0"
-                             Style="{StaticResource BorderTipPrimary}"
-                             >
+                             Style="{StaticResource BorderTipPrimary}">
                                 <StackPanel Orientation="Horizontal">
 
                                     <TextBlock Text="Type" />
@@ -321,13 +255,9 @@
                                      Margin="10,0,0,0"
                                      Status="{Binding SelectedNode.Type}"
                                      Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
+                                     Color="{DynamicResource MahApps.Brushes.Accent3}" />
                                 </StackPanel>
                             </Border>
-
-
-
                         </Grid>
                         <Grid>
 
@@ -337,8 +267,7 @@
                              Background="Transparent"
                              BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
                              BorderThickness="2,0,2,0"
-                             Style="{StaticResource BorderTipPrimary}"
-                             >
+                             Style="{StaticResource BorderTipPrimary}">
                                 <StackPanel Orientation="Horizontal">
 
                                     <TextBlock Text="Parent Folder" />
@@ -346,27 +275,13 @@
                                      Margin="10,0,0,0"
                                      Status="{Binding SelectedNode.Parent.Name}"
                                      Subject=":"
-                                     Color="{DynamicResource MahApps.Brushes.Accent3}"
-                                     />
-
-
+                                     Color="{DynamicResource MahApps.Brushes.Accent3}" />
                                 </StackPanel>
                             </Border>
-
-
-
                         </Grid>
                     </StackPanel>
                 </Expander>
-
-
             </StackPanel>
-
-
-
-
-
         </Grid>
     </hc:ScrollViewer>
-
 </catel:UserControl>

@@ -1,10 +1,23 @@
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Views.HomePage.Pages;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
     public partial class ToolSettingsView
     {
+        #region Fields
+
+        private AssetBrowserSubSettingsView ABSSV;
+
+        private CodeEditorSubSettingsView CESSV;
+
+        private PluginManagerSubSettingsView PMSSV;
+
+        private VisualEditorSubSettingsView VESSV;
+
+        #endregion Fields
+
+        #region Constructors
+
         public ToolSettingsView()
         {
             ABSSV = new AssetBrowserSubSettingsView();
@@ -18,10 +31,9 @@ namespace WolvenKit.Views.HomePage.Pages
             AssetBrowserSubItem.IsSelected = true;
         }
 
-        private AssetBrowserSubSettingsView ABSSV;
-        private PluginManagerSubSettingsView PMSSV;
-        private CodeEditorSubSettingsView CESSV;
-        private VisualEditorSubSettingsView VESSV;
+        #endregion Constructors
+
+        #region Methods
 
         private void AssetBrowserSubItem_Selected(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -29,15 +41,6 @@ namespace WolvenKit.Views.HomePage.Pages
             {
                 SettingsViewer.Children.Clear();
                 SettingsViewer.Children.Add(ABSSV);
-            }
-        }
-
-        private void PluginManagerSubItem_Selected(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (IsLoaded && IsVisible && IsInitialized)
-            {
-                SettingsViewer.Children.Clear();
-                SettingsViewer.Children.Add(PMSSV);
             }
         }
 
@@ -50,12 +53,12 @@ namespace WolvenKit.Views.HomePage.Pages
             }
         }
 
-        private void VisualEditorSubItem_Selected(object sender, System.Windows.RoutedEventArgs e)
+        private void PluginManagerSubItem_Selected(object sender, System.Windows.RoutedEventArgs e)
         {
             if (IsLoaded && IsVisible && IsInitialized)
             {
                 SettingsViewer.Children.Clear();
-                SettingsViewer.Children.Add(VESSV);
+                SettingsViewer.Children.Add(PMSSV);
             }
         }
 
@@ -66,5 +69,16 @@ namespace WolvenKit.Views.HomePage.Pages
                 DiscordHelper.SetDiscordRPCStatus("Setting - Tools");
             }
         }
+
+        private void VisualEditorSubItem_Selected(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (IsLoaded && IsVisible && IsInitialized)
+            {
+                SettingsViewer.Children.Clear();
+                SettingsViewer.Children.Add(VESSV);
+            }
+        }
+
+        #endregion Methods
     }
 }

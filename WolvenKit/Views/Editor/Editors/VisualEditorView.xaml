@@ -7,8 +7,7 @@
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:nodenetwork="clr-namespace:NodeNetwork.Views;assembly=NodeNetwork"
  BorderBrush="{x:Null}"
- IsVisibleChanged="DataWindow_IsVisibleChanged"
- >
+ IsVisibleChanged="DataWindow_IsVisibleChanged">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -22,8 +21,7 @@
     <Border
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
      BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-     BorderThickness="1"
-     >
+     BorderThickness="1">
         <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
 
             <hc:TabControl>
@@ -40,8 +38,7 @@
                         <nodenetwork:NetworkView
                          x:Name="networkView"
                          Grid.Row="2"
-                         Margin="3,33,3,3"
-                         >
+                         Margin="3,33,3,3">
 
                             <nodenetwork:NetworkView.NetworkBackground>
                                 <DrawingBrush
@@ -49,8 +46,7 @@
                                  Viewbox="0,0,96,96"
                                  ViewboxUnits="Absolute"
                                  Viewport="0,0,96,96"
-                                 ViewportUnits="Absolute"
-                                 >
+                                 ViewportUnits="Absolute">
                                     <DrawingBrush.Drawing>
                                         <GeometryDrawing Brush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
                                             <GeometryDrawing.Geometry>
@@ -65,8 +61,7 @@
                                 <ContextMenu
                                  Background="Transparent"
                                  HorizontalOffset="75"
-                                 VerticalOffset="-75"
-                                 >
+                                 VerticalOffset="-75">
                                     <ContextMenu.Template>
                                         <ControlTemplate>
                                             <Grid Width="150" Height="150">
@@ -78,8 +73,7 @@
                                                  VerticalAlignment="Center"
                                                  Fill="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                                                  Stroke="{DynamicResource MahApps.Brushes.Accent3}"
-                                                 StrokeThickness="5"
-                                                 />
+                                                 StrokeThickness="5" />
 
                                                 <Ellipse
                                                  Width="100"
@@ -87,61 +81,53 @@
                                                  HorizontalAlignment="Center"
                                                  VerticalAlignment="Center"
                                                  Stroke="{DynamicResource MahApps.Brushes.Accent3}"
-                                                 StrokeThickness="5"
-                                                 />
+                                                 StrokeThickness="5" />
                                                 <Ellipse
                                                  Width="100"
                                                  Height="100"
                                                  HorizontalAlignment="Center"
                                                  VerticalAlignment="Center"
                                                  Stroke="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
-                                                 StrokeThickness="4"
-                                                 />
+                                                 StrokeThickness="4" />
                                                 <hc:CirclePanel
                                                  Margin="0"
                                                  HorizontalAlignment="Center"
                                                  VerticalAlignment="Center"
                                                  Diameter="60"
-                                                 KeepVertical="False"
-                                                 >
+                                                 KeepVertical="False">
                                                     <Button
                                                      Margin="0"
                                                      Background="{x:Null}"
                                                      BorderBrush="{x:Null}"
-                                                     Style="{DynamicResource CirclePanelButton}"
-                                                     >
+                                                     Style="{DynamicResource CirclePanelButton}">
                                                         <iconPacks:PackIconBootstrapIcons Kind="NodePlus" />
                                                     </Button>
                                                     <Button
                                                      Margin="0"
                                                      Background="{x:Null}"
                                                      BorderBrush="{x:Null}"
-                                                     Style="{DynamicResource CirclePanelButton}"
-                                                     >
+                                                     Style="{DynamicResource CirclePanelButton}">
                                                         <iconPacks:PackIconBootstrapIcons Kind="NodePlus" />
                                                     </Button>
                                                     <Button
                                                      Margin="0"
                                                      Background="{x:Null}"
                                                      BorderBrush="{x:Null}"
-                                                     Style="{DynamicResource CirclePanelButton}"
-                                                     >
+                                                     Style="{DynamicResource CirclePanelButton}">
                                                         <iconPacks:PackIconBootstrapIcons Kind="NodePlus" />
                                                     </Button>
                                                     <Button
                                                      Margin="0"
                                                      Background="{x:Null}"
                                                      BorderBrush="{x:Null}"
-                                                     Style="{DynamicResource CirclePanelButton}"
-                                                     >
+                                                     Style="{DynamicResource CirclePanelButton}">
                                                         <iconPacks:PackIconBootstrapIcons Kind="NodePlus" />
                                                     </Button>
                                                     <Button
                                                      Margin="0"
                                                      Background="{x:Null}"
                                                      BorderBrush="{x:Null}"
-                                                     Style="{DynamicResource CirclePanelButton}"
-                                                     >
+                                                     Style="{DynamicResource CirclePanelButton}">
                                                         <iconPacks:PackIconBootstrapIcons Kind="NodePlus" />
                                                     </Button>
                                                 </hc:CirclePanel>
@@ -158,22 +144,19 @@
                     <TextBlock
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center"
-                     Text="Coming Soon"
-                     />
+                     Text="Coming Soon" />
                 </hc:TabItem>
             </hc:TabControl>
 
             <hc:UniformSpacingPanel
              Margin="15"
              VerticalAlignment="Bottom"
-             Spacing="10"
-             >
+             Spacing="10">
 
                 <hc:Tag
                  Margin="0"
                  Content="Nodes"
-                 ShowCloseButton="False"
-                 >
+                 ShowCloseButton="False">
                     <hc:Tag.Header>
                         <iconPacks:PackIconBootstrapIcons Margin="0" Kind="NodePlus" />
                     </hc:Tag.Header>
@@ -183,13 +166,11 @@
                  MaxHeight="16"
                  LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
                  LineStrokeThickness="2"
-                 Orientation="Vertical"
-                 />
+                 Orientation="Vertical" />
                 <hc:Tag
                  Margin="0"
                  Content="Add Node"
-                 ShowCloseButton="False"
-                 >
+                 ShowCloseButton="False">
                     <hc:Tag.Header>
                         <iconPacks:PackIconBootstrapIcons Margin="0" Kind="NodePlus" />
                     </hc:Tag.Header>
@@ -206,8 +187,7 @@
              Stretch="Uniform"
              Stroke="{DynamicResource MahApps.Brushes.Accent2}"
              StrokeThickness="1"
-             Duration="0:0:16"
-             />
+             Duration="0:0:16" />
         </Grid>
     </Border>
 </catel:UserControl>

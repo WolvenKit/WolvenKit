@@ -5,14 +5,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
     public static class Initializations
     {
-        public static void InitializeThemeHelper()
-        {
-            HandyControl.Themes.ThemeManager.Current.SetCurrentValue(HandyControl.Themes.ThemeManager.ApplicationThemeProperty, HandyControl.Themes.ApplicationTheme.Dark);
-            var tr = new HandyControl.Themes.ThemeResources
-            {
-                AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3")
-            };
-        }
+        #region Methods
 
         public static async void InitializeGitHub()
         {
@@ -23,5 +16,15 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             await GithubHelper.GhubLastReleaseAsync();
         }
 
+        public static void InitializeThemeHelper()
+        {
+            HandyControl.Themes.ThemeManager.Current.SetCurrentValue(HandyControl.Themes.ThemeManager.ApplicationThemeProperty, HandyControl.Themes.ApplicationTheme.Dark);
+            var tr = new HandyControl.Themes.ThemeResources
+            {
+                AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3")
+            };
+        }
+
+        #endregion Methods
     }
 }

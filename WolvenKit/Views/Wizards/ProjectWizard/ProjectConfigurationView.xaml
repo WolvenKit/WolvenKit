@@ -5,8 +5,7 @@
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- Loaded="UserControl_Loaded"
- >
+ Loaded="UserControl_Loaded">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -19,22 +18,19 @@
     <Grid
      Grid.Row="3"
      MinWidth="370"
-     VerticalAlignment="Center"
-     >
+     VerticalAlignment="Center">
 
         <Grid
          Margin="5,5,5,5"
          HorizontalAlignment="Stretch"
-         Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-         >
+         Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
 
             <Grid Grid.Row="1" HorizontalAlignment="Stretch">
 
                 <StackPanel
                  Margin="0,10,0,0"
                  VerticalAlignment="Top"
-                 Orientation="Vertical"
-                 >
+                 Orientation="Vertical">
 
                     <Grid Margin="22,0,0,0">
 
@@ -52,8 +48,7 @@
                                  Width="100"
                                  Height="100"
                                  Margin="10,0,0,0"
-                                 HorizontalAlignment="Left"
-                                 />
+                                 HorizontalAlignment="Left" />
                             </StackPanel>
 
                             <hc:TextBox
@@ -66,8 +61,7 @@
                              hc:InfoElement.TitleWidth="140"
                              Style="{StaticResource TextBoxExtendCustom}"
                              Text="{Binding ProjectName}"
-                             TextChanged="TextBox_TextChanged"
-                             />
+                             TextChanged="TextBox_TextChanged" />
                             <hc:TextBox
                              x:Name="projectPathTxtbx"
                              Margin="0,32,50,0"
@@ -80,8 +74,7 @@
                              Style="{StaticResource TextBoxExtendCustom}"
                              Text="{Binding ProjectPath}"
                              TextChanged="TextBox_TextChanged"
-                             VerifyFunc="VerifyFolder"
-                             />
+                             VerifyFunc="VerifyFolder" />
                         </StackPanel>
 
                         <Button
@@ -90,8 +83,7 @@
                          Margin="5,5,0,0"
                          HorizontalAlignment="Right"
                          VerticalAlignment="Bottom"
-                         Click="ProjectPathBtn_Click"
-                         >
+                         Click="ProjectPathBtn_Click">
                             <iconPacks:PackIconCodicons
                              Grid.Row="0"
                              Width="15"
@@ -102,8 +94,7 @@
                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                              Kind="FolderOpened"
                              Spin="False"
-                             SpinAutoReverse="False"
-                             />
+                             SpinAutoReverse="False" />
                         </Button>
                     </Grid>
                 </StackPanel>

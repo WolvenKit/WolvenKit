@@ -56,15 +56,11 @@ namespace WolvenKit.Views.Editor
         {
             if (StaticReferences.GlobalPropertiesView != null)
             {
-
                 StaticReferences.GlobalPropertiesView.ExplorerBind.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                 StaticReferences.GlobalPropertiesView.AssetsBind.SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
-
                 StaticReferences.GlobalPropertiesView.fish.SetValue(Panel.DataContextProperty, DataContext);
             }
-
-
         }
     }
 }

@@ -3,8 +3,7 @@
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
- xmlns:hc="https://handyorg.github.io/handycontrol"
- >
+ xmlns:hc="https://handyorg.github.io/handycontrol">
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
@@ -21,15 +20,13 @@
                      Margin="15,15,32,10"
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                      BorderThickness="4,0,0,2"
-                     Style="{StaticResource BorderTipPrimary}"
-                     >
+                     Style="{StaticResource BorderTipPrimary}">
                         <StackPanel>
                             <Grid Margin="5">
                                 <TextBlock
                                  Margin="0,0,50,0"
                                  VerticalAlignment="Center"
-                                 Text="Auto-install mods upon creation"
-                                 />
+                                 Text="Auto-install mods upon creation" />
                                 <StackPanel Orientation="Horizontal">
                                     <ToggleButton
                                      Margin="250,0,0,0"
@@ -37,16 +34,14 @@
                                      VerticalAlignment="Center"
                                      BorderThickness="0"
                                      IsEnabled="True"
-                                     Style="{StaticResource ToggleButtonFlip}"
-                                     >
+                                     Style="{StaticResource ToggleButtonFlip}">
                                         <hc:StatusSwitchElement.CheckedElement>
                                             <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
                                                 <TextBlock
                                                  HorizontalAlignment="Center"
                                                  VerticalAlignment="Center"
                                                  Foreground="{DynamicResource TextIconBrush}"
-                                                 Text="On"
-                                                 />
+                                                 Text="On" />
                                             </Border>
                                         </hc:StatusSwitchElement.CheckedElement>
                                         <Border Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
@@ -54,8 +49,7 @@
                                              HorizontalAlignment="Center"
                                              VerticalAlignment="Center"
                                              Foreground="{DynamicResource TextIconBrush}"
-                                             Text="Off"
-                                             />
+                                             Text="Off" />
                                         </Border>
                                     </ToggleButton>
                                 </StackPanel>
@@ -65,8 +59,7 @@
                                 <TextBlock
                                  Margin="0,0,50,0"
                                  VerticalAlignment="Center"
-                                 Text="Project auto-saving"
-                                 />
+                                 Text="Project auto-saving" />
                                 <StackPanel Margin="250,0,0,0" Orientation="Horizontal">
                                     <CheckBox
                                      Margin="5,0,0,0"
@@ -76,20 +69,17 @@
                                      BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
                                      Content="AutoSave Project"
                                      Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                     IsChecked="True"
-                                     />
+                                     IsChecked="True" />
                                     <hc:Divider
                                      Height="15"
                                      VerticalAlignment="Center"
                                      LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
                                      LineStrokeThickness="2"
-                                     Orientation="Vertical"
-                                     />
+                                     Orientation="Vertical" />
                                     <ComboBox
                                      Width="116"
                                      VerticalAlignment="Center"
-                                     SelectedIndex="0"
-                                     >
+                                     SelectedIndex="0">
                                         <ComboBoxItem Content="Interval" />
                                     </ComboBox>
                                 </StackPanel>
@@ -99,18 +89,15 @@
                                 <TextBlock
                                  Margin="0,0,50,0"
                                  VerticalAlignment="Center"
-                                 Text="Default project folder"
-                                 />
+                                 Text="Default project folder" />
                                 <StackPanel Orientation="Horizontal">
                                     <TextBox
                                      Width="250"
                                      Margin="250,0,0,0"
-                                     Text=""
-                                     />
+                                     Text="" />
                                 </StackPanel>
                             </Grid>
                         </StackPanel>
-
                     </Border>
                 </StackPanel>
             </hc:ScrollViewer>

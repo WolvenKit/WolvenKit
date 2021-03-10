@@ -1,10 +1,19 @@
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Views.HomePage.Pages;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
     public partial class EditorSettingsView
     {
+        #region Fields
+
+        private CompatibilitySubSettingsView CSSV;
+
+        private GeneralSubSettingsView GSSV;
+
+        #endregion Fields
+
+        #region Constructors
+
         public EditorSettingsView()
         {
             GSSV = new GeneralSubSettingsView();
@@ -16,8 +25,9 @@ namespace WolvenKit.Views.HomePage.Pages
             GeneralSubItem.IsSelected = true;
         }
 
-        private GeneralSubSettingsView GSSV;
-        private CompatibilitySubSettingsView CSSV;
+        #endregion Constructors
+
+        #region Methods
 
         private void CompatibilitySubItem_Selected(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -44,5 +54,7 @@ namespace WolvenKit.Views.HomePage.Pages
                 DiscordHelper.SetDiscordRPCStatus("Setting - Editor");
             }
         }
+
+        #endregion Methods
     }
 }

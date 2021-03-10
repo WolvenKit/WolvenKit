@@ -11,8 +11,7 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
 {
     public class ExpandableObjectEditor : EditorBase<IEditableVariable>, IExpandableObjectEditor
     {
-        private protected override DependencyProperty GetInnerDependencyProperty() => PropertyGrid.SelectedObjectProperty;
-        private protected override FrameworkElement CreateInnerElement(PropertyItem propertyItem) => throw new System.NotImplementedException();
+        #region Methods
 
         // creates a treeview
         public override FrameworkElement CreateElement(PropertyItem propertyItem)
@@ -44,6 +43,22 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
             return tree;
         }
 
+        // bind the private dependency property to the UI element
+        protected override void CreateInnerBinding(FrameworkElement element) =>
+            BindingOperations.SetBinding(
+                element,
+                GetInnerDependencyProperty(),
+                new Binding($"{nameof(Wrapper)}")
+                {
+                    Source = this,
+                    Mode = BindingMode.TwoWay,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                });
+
+        private protected override FrameworkElement CreateInnerElement(PropertyItem propertyItem) => throw new System.NotImplementedException();
+
+        private protected override DependencyProperty GetInnerDependencyProperty() => PropertyGrid.SelectedObjectProperty;
+
         private (FrameworkElement, FrameworkElement) CreateCustomInnerElement(PropertyItem propertyItem)
         {
             var tree = new TreeView();
@@ -58,16 +73,6 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
             return (tree, pg);
         }
 
-        // bind the private dependency property to the UI element
-        protected override void CreateInnerBinding(FrameworkElement element) =>
-            BindingOperations.SetBinding(
-                element,
-                GetInnerDependencyProperty(),
-                new Binding($"{nameof(Wrapper)}")
-                {
-                    Source = this,
-                    Mode = BindingMode.TwoWay,
-                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                });
+        #endregion Methods
     }
 }

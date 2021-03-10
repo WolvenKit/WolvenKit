@@ -3,8 +3,7 @@
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
- xmlns:hc="https://handyorg.github.io/handycontrol"
- >
+ xmlns:hc="https://handyorg.github.io/handycontrol">
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
@@ -21,15 +20,13 @@
                      Margin="15,15,32,0"
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                      BorderThickness="4,0,0,6"
-                     Style="{StaticResource BorderTipPrimary}"
-                     >
+                     Style="{StaticResource BorderTipPrimary}">
                         <Grid>
                             <TextBlock
                              Margin="0,0,50,0"
                              VerticalAlignment="Center"
                              FontSize="16"
-                             Text="General"
-                             />
+                             Text="General" />
                         </Grid>
                     </Border>
 
@@ -37,8 +34,7 @@
                      Margin="15,15,32,10"
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                      BorderThickness="4,0,0,2"
-                     Style="{StaticResource BorderTipPrimary}"
-                     >
+                     Style="{StaticResource BorderTipPrimary}">
                         <StackPanel>
 
                             <Grid Margin="5">
@@ -47,8 +43,7 @@
                                  Width="250"
                                  HorizontalAlignment="Right"
                                  VerticalAlignment="Center"
-                                 Text=""
-                                 />
+                                 Text="" />
                                 <!--  Discussed with rfuzzo that each tool should be dockable even if it takes the full editor view. But a personal settings to open it in a window should be setable (This is that option)  -->
                             </Grid>
                         </StackPanel>

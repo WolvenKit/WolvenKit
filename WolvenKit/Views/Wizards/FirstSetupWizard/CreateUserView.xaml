@@ -5,8 +5,7 @@
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- Loaded="UserControl_Loaded"
- >
+ Loaded="UserControl_Loaded">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -20,14 +19,12 @@
         <Grid
          Margin="5,5,5,5"
          HorizontalAlignment="Stretch"
-         Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-         >
+         Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
             <Grid Grid.Row="1" HorizontalAlignment="Stretch">
                 <StackPanel
                  Margin="0,10,0,0"
                  VerticalAlignment="Top"
-                 Orientation="Vertical"
-                 >
+                 Orientation="Vertical">
                     <Grid Margin="22,0,0,0">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
@@ -37,8 +34,7 @@
                                  Width="100"
                                  Height="100"
                                  Margin="64,0,0,0"
-                                 HorizontalAlignment="Left"
-                                 />
+                                 HorizontalAlignment="Left" />
                             </StackPanel>
                             <hc:TextBox
                              x:Name="NameTb"
@@ -50,8 +46,7 @@
                              hc:InfoElement.TitleWidth="140"
                              Style="{StaticResource TextBoxExtendCustom}"
                              Text="{Binding Author}"
-                             TextChanged="Field_TextChanged"
-                             />
+                             TextChanged="Field_TextChanged" />
                             <hc:TextBox
                              x:Name="EmailTb"
                              Margin="0,32,0,0"
@@ -63,8 +58,7 @@
                              Style="{StaticResource TextBoxExtendCustom}"
                              Text="{Binding Email}"
                              TextChanged="Field_TextChanged"
-                             VerifyFunc="IsValidEmail"
-                             />
+                             VerifyFunc="IsValidEmail" />
                             <hc:TextBox
                              x:Name="DonateTb"
                              Margin="0,32,0,0"
@@ -75,8 +69,7 @@
                              hc:InfoElement.TitleWidth="140"
                              Style="{StaticResource TextBoxExtendCustom}"
                              Text="{Binding DonateLink}"
-                             TextChanged="Field_TextChanged"
-                             />
+                             TextChanged="Field_TextChanged" />
                             <hc:TextBox
                              Height="100"
                              Margin="0,32,10,0"
@@ -85,8 +78,7 @@
                              hc:InfoElement.Title="Description"
                              hc:InfoElement.TitlePlacement="Left"
                              hc:InfoElement.TitleWidth="140"
-                             Text="{Binding DefaultDescription}"
-                             />
+                             Text="{Binding DefaultDescription}" />
                         </StackPanel>
                     </Grid>
                 </StackPanel>

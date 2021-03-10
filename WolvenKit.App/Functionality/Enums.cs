@@ -14,11 +14,9 @@ namespace WolvenKit.Functionality.WKitGlobal
         Max = 6
     }
 
-
     public enum EProjectType
     {
         cpmodproj,
         w3modproj
     }
-
 }

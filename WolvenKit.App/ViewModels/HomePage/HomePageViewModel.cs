@@ -14,6 +14,13 @@ namespace WolvenKit.ViewModels.HomePage
     {
         // #needs_MVVM
 
+        #region Fields
+
+        public static HomePageViewModel GlobalHomePageVM;
+
+        #endregion Fields
+
+        #region Constructors
 
         public HomePageViewModel()
         {
@@ -22,8 +29,75 @@ namespace WolvenKit.ViewModels.HomePage
             SetCurrentPage("Welcome");
         }
 
+        #endregion Constructors
 
+        #region Properties
 
+        // Static Reference of self for page switching.
+        public bool AboutPV { get; set; }
+
+        // Close HomePage (Navigates to Project Editor
+        public ICommand CloseHomePage { get; private set; }
+
+        // Closes any open page on the homepage and returns to the welcome page.
+        public ICommand ClosePage { get; private set; }
+
+        public WindowState CurrentWindowState { get; set; }
+
+        public bool DebugPV { get; set; }
+
+        public bool FirstSWV { get; set; }
+
+        public bool GithubPV { get; set; }
+
+        public bool IntegratedTPV { get; set; }
+
+        // Minimize Shell Window
+        public ICommand MinimizeWindow { get; set; }
+
+        public bool ProjectWV { get; set; }
+
+        public bool RecentPV { get; set; }
+
+        // Restore Shell Window.
+        public ICommand RestoreWindow { get; set; }
+
+        public bool ReturnButtonVisibile { get; set; }
+
+        public bool SettingsPV { get; set; }
+
+        // Helps with switching pages , Listens to the selectionchanged on a sidemenu.  , SetCurrentPage deals with the actual "Decision" of what page needs to be shown.
+        public Command<FunctionEventArgs<object>> SwitchItemCmd => new Lazy<Command<FunctionEventArgs<object>>>(() =>
+            new Command<FunctionEventArgs<object>>(SwitchItem)).Value;
+
+        public bool UserPV { get; set; }
+
+        public bool WebsitePV { get; set; }
+
+        public bool WelcomePV { get; set; }
+
+        public bool WikitPV { get; set; }
+
+        #endregion Properties
+
+        #region Methods
+
+        public bool CanMinimizeWindow() => true;
+
+        public bool CanRestoreWindow() => true;
+
+        public void ExecuteMinimizeWindow()
+        {
+            CurrentWindowState = WindowState.Minimized;
+        }
+
+        public void ExecuteRestoreWindow()
+        {
+            if (CurrentWindowState == WindowState.Maximized)
+            { CurrentWindowState = WindowState.Normal; }
+            else
+            { CurrentWindowState = WindowState.Maximized; }
+        }
 
         // Register VM commands
         public void RegisterCommands()
@@ -34,83 +108,6 @@ namespace WolvenKit.ViewModels.HomePage
             MinimizeWindow = new RelayCommand(ExecuteMinimizeWindow, CanMinimizeWindow);
         }
 
-
-        public static HomePageViewModel GlobalHomePageVM;  // Static Reference of self for page switching.
-        public bool AboutPV { get; set; }
-        public bool DebugPV { get; set; }
-        public bool FirstSWV { get; set; }
-        public bool GithubPV { get; set; }
-        public bool IntegratedTPV { get; set; }
-        public bool ProjectWV { get; set; }
-        public bool RecentPV { get; set; }
-        public bool SettingsPV { get; set; }
-        public bool UserPV { get; set; }
-        public bool WebsitePV { get; set; }
-        public bool WelcomePV { get; set; }
-        public bool WikitPV { get; set; }
-        public bool ReturnButtonVisibile { get; set; }
-        public WindowState CurrentWindowState { get; set; }
-
-
-
-
-
-        // Restore Shell Window.
-        public ICommand RestoreWindow { get; set; }
-        public bool CanRestoreWindow() => true;
-        public void ExecuteRestoreWindow()
-        {
-            if (CurrentWindowState == WindowState.Maximized)
-            { CurrentWindowState = WindowState.Normal; }
-            else
-            { CurrentWindowState = WindowState.Maximized; }
-        }
-
-
-
-
-        // Minimize Shell Window
-        public ICommand MinimizeWindow { get; set; }
-        public bool CanMinimizeWindow() => true;
-        public void ExecuteMinimizeWindow()
-        {
-            CurrentWindowState = WindowState.Minimized;
-        }
-
-
-
-
-
-        // Close HomePage (Navigates to Project Editor
-        public ICommand CloseHomePage { get; private set; }
-        private bool CanHome() => true;
-        private void ExecuteHome()
-        {
-            RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
-            RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
-
-        }
-
-
-
-
-        // Closes any open page on the homepage and returns to the welcome page.
-        public ICommand ClosePage { get; private set; }
-        private bool CanPage() => true;
-        private void ExecPage()
-        {
-            SetCurrentPage("Welcome");
-        }
-
-
-
-
-
-
-        // Helps with switching pages , Listens to the selectionchanged on a sidemenu.  , SetCurrentPage deals with the actual "Decision" of what page needs to be shown.
-        public Command<FunctionEventArgs<object>> SwitchItemCmd => new Lazy<Command<FunctionEventArgs<object>>>(() =>
-            new Command<FunctionEventArgs<object>>(SwitchItem)).Value;
-        private void SwitchItem(FunctionEventArgs<object> info) => SetCurrentPage((info.Info as SideMenuItem)?.Header.ToString());
         public void SetCurrentPage(string page)
         {
             AboutPV = false;
@@ -201,8 +198,23 @@ namespace WolvenKit.ViewModels.HomePage
             }
         }
 
+        private bool CanHome() => true;
 
+        private bool CanPage() => true;
 
+        private void ExecPage()
+        {
+            SetCurrentPage("Welcome");
+        }
 
+        private void ExecuteHome()
+        {
+            RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
+            RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
+        }
+
+        private void SwitchItem(FunctionEventArgs<object> info) => SetCurrentPage((info.Info as SideMenuItem)?.Header.ToString());
+
+        #endregion Methods
     }
 }

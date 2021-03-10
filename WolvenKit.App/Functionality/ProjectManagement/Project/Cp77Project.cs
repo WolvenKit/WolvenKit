@@ -10,7 +10,6 @@ using Catel.Logging;
 
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;

@@ -4,8 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- >
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ControlTemplate x:Key="GroupBoxBaseTopTemplate" TargetType="GroupBox">
@@ -20,8 +19,7 @@
                      Background="{Binding Path=(hc:TitleElement.Background), RelativeSource={RelativeSource TemplatedParent}}"
                      BorderBrush="{TemplateBinding BorderBrush}"
                      BorderThickness="{TemplateBinding BorderThickness}"
-                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
-                     >
+                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
                         <ContentPresenter
                          Margin="10,0"
                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -29,16 +27,14 @@
                          ContentSource="Header"
                          RecognizesAccessKey="True"
                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                         TextElement.Foreground="{TemplateBinding Foreground}"
-                         />
+                         TextElement.Foreground="{TemplateBinding Foreground}" />
                     </Border>
                     <Border
                      Grid.Row="1"
                      Background="{DynamicResource MahApps.Brushes.Accent}"
                      BorderBrush="{TemplateBinding BorderBrush}"
                      BorderThickness="{TemplateBinding BorderThickness}"
-                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
-                     >
+                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
                         <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
                 </Grid>
@@ -57,8 +53,7 @@
                      BorderBrush="{TemplateBinding BorderBrush}"
                      BorderThickness="{TemplateBinding BorderThickness}"
                      ClipToBounds="False"
-                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
-                     >
+                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
                         <ContentPresenter
                          Margin="0,10"
                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -67,8 +62,7 @@
                          RecognizesAccessKey="True"
                          RenderTransformOrigin="0.5,0.5"
                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                         TextElement.Foreground="{TemplateBinding Foreground}"
-                         >
+                         TextElement.Foreground="{TemplateBinding Foreground}">
                             <ContentPresenter.LayoutTransform>
                                 <TransformGroup>
                                     <RotateTransform Angle="-90" />
@@ -81,8 +75,7 @@
                      Background="{TemplateBinding Background}"
                      BorderBrush="{TemplateBinding BorderBrush}"
                      BorderThickness="{TemplateBinding BorderThickness}"
-                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
-                     >
+                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
                         <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
                 </Grid>
@@ -118,8 +111,7 @@
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                      BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
                      BorderThickness="{TemplateBinding BorderThickness}"
-                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CornerRadiusSplitConverter}, ConverterParameter='0,0,1,1'}"
-                     >
+                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CornerRadiusSplitConverter}, ConverterParameter='0,0,1,1'}">
                         <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
                     <Border
@@ -128,8 +120,7 @@
                      Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                      BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
                      BorderThickness="{Binding BorderThickness, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ThicknessSplitConverter}, ConverterParameter='1,1,1,0'}"
-                     CornerRadius="15,2,2,2"
-                     >
+                     CornerRadius="15,2,2,2">
                         <ContentPresenter
                          Margin="0,0"
                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -137,8 +128,7 @@
                          ContentSource="Header"
                          RecognizesAccessKey="True"
                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                         TextElement.Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
-                         />
+                         TextElement.Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" />
                     </Border>
                 </Grid>
             </ControlTemplate>
@@ -154,8 +144,7 @@
                      Background="{TemplateBinding Background}"
                      BorderBrush="{TemplateBinding BorderBrush}"
                      BorderThickness="{TemplateBinding BorderThickness}"
-                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CornerRadiusSplitConverter}, ConverterParameter='0,1,1,0'}"
-                     >
+                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CornerRadiusSplitConverter}, ConverterParameter='0,1,1,0'}">
                         <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
                     <Border
@@ -164,8 +153,7 @@
                      Background="{Binding Path=(hc:TitleElement.Background), RelativeSource={RelativeSource TemplatedParent}}"
                      BorderBrush="{TemplateBinding BorderBrush}"
                      BorderThickness="{Binding BorderThickness, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ThicknessSplitConverter}, ConverterParameter='1,1,0,1'}"
-                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CornerRadiusSplitConverter}, ConverterParameter='1,0,0,1'}"
-                     >
+                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CornerRadiusSplitConverter}, ConverterParameter='1,0,0,1'}">
                         <ContentPresenter
                          Margin="0,10"
                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -173,8 +161,7 @@
                          ContentSource="Header"
                          RecognizesAccessKey="True"
                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                         TextElement.Foreground="{TemplateBinding Foreground}"
-                         >
+                         TextElement.Foreground="{TemplateBinding Foreground}">
                             <ContentPresenter.LayoutTransform>
                                 <TransformGroup>
                                     <RotateTransform Angle="-90" />
@@ -188,8 +175,7 @@
             <Style
              x:Key="GroupBoxTabBaseStyle"
              BasedOn="{StaticResource GroupBoxBaseStyle}"
-             TargetType="GroupBox"
-             >
+             TargetType="GroupBox">
                 <Setter Property="Template" Value="{StaticResource GroupBoxTabTopTemplate}" />
                 <Style.Triggers>
                     <Trigger Property="hc:TitleElement.TitlePlacement" Value="Left">
@@ -215,8 +201,7 @@
                  ItemMargin="15,8,15,8"
                  ItemWidth="350"
                  ItemsSource="{Binding FancyProjects}"
-                 ShowContent="False"
-                 >
+                 ShowContent="False">
 
                     <hc:CoverView.ItemHeaderTemplate>
                         <DataTemplate>
@@ -231,16 +216,14 @@
                                          HorizontalAlignment="Left"
                                          HorizontalContentAlignment="Left"
                                          Background="{x:Null}"
-                                         ShowCloseButton="False"
-                                         >
+                                         ShowCloseButton="False">
                                             <hc:Tag.Content>
                                                 <TextBlock
                                                  Margin="0,0,0,0"
                                                  HorizontalAlignment="Left"
                                                  FontSize="16"
                                                  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                                 Text="{Binding Path=Name}"
-                                                 />
+                                                 Text="{Binding Path=Name}" />
                                             </hc:Tag.Content>
                                             <hc:Tag.Header>
                                                 <Border>
@@ -261,8 +244,7 @@
                                  Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                                  BorderBrush="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"
                                  BorderThickness="1,0,1,1"
-                                 CornerRadius="0,0,4,4"
-                                 >
+                                 CornerRadius="0,0,4,4">
 
                                     <Grid>
                                         <StackPanel Margin="5" Orientation="Vertical">
@@ -271,28 +253,24 @@
                                                  Width="15"
                                                  Margin="5,15"
                                                  LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
-                                                 LineStrokeThickness="2"
-                                                 />
+                                                 LineStrokeThickness="2" />
 
                                                 <Border
                                                  Height="25"
                                                  VerticalAlignment="Center"
                                                  Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"
-                                                 CornerRadius="5,2,2,2"
-                                                 >
+                                                 CornerRadius="5,2,2,2">
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock
                                                          Width="74"
                                                          Margin="5"
                                                          VerticalAlignment="Center"
-                                                         Text="Project Type : "
-                                                         />
+                                                         Text="Project Type : " />
                                                         <TextBlock
                                                          Width="280"
                                                          Margin="5"
                                                          VerticalAlignment="Center"
-                                                         Text="{Binding Type}"
-                                                         />
+                                                         Text="{Binding Type}" />
                                                     </StackPanel>
                                                 </Border>
                                             </StackPanel>
@@ -301,27 +279,23 @@
                                                  Width="15"
                                                  Margin="5,15"
                                                  LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
-                                                 LineStrokeThickness="2"
-                                                 />
+                                                 LineStrokeThickness="2" />
                                                 <Border
                                                  Height="25"
                                                  VerticalAlignment="Center"
                                                  Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"
-                                                 CornerRadius="5,2,2,2"
-                                                 >
+                                                 CornerRadius="5,2,2,2">
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock
                                                          Width="50"
                                                          Margin="5"
                                                          VerticalAlignment="Center"
-                                                         Text="Created : "
-                                                         />
+                                                         Text="Created : " />
                                                         <TextBlock
                                                          Width="280"
                                                          Margin="5"
                                                          VerticalAlignment="Center"
-                                                         Text="{Binding CreationDate}"
-                                                         />
+                                                         Text="{Binding CreationDate}" />
                                                     </StackPanel>
                                                 </Border>
                                             </StackPanel>
@@ -331,27 +305,23 @@
                                                  Width="15"
                                                  Margin="5,15"
                                                  LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
-                                                 LineStrokeThickness="2"
-                                                 />
+                                                 LineStrokeThickness="2" />
                                                 <Border
                                                  Height="25"
                                                  VerticalAlignment="Center"
                                                  Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"
-                                                 CornerRadius="5,2,2,2"
-                                                 >
+                                                 CornerRadius="5,2,2,2">
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock
                                                          Width="30"
                                                          Margin="5"
                                                          VerticalAlignment="Center"
-                                                         Text="Path : "
-                                                         />
+                                                         Text="Path : " />
                                                         <TextBlock
                                                          Width="280"
                                                          Margin="5"
                                                          VerticalAlignment="Center"
-                                                         Text="{Binding ProjectPath}"
-                                                         />
+                                                         Text="{Binding ProjectPath}" />
                                                     </StackPanel>
                                                 </Border>
                                             </StackPanel>
@@ -361,42 +331,36 @@
                                          Margin="15"
                                          HorizontalAlignment="Right"
                                          VerticalAlignment="Bottom"
-                                         Orientation="Horizontal"
-                                         >
+                                         Orientation="Horizontal">
                                             <Button
                                              Height="35"
                                              HorizontalAlignment="Left"
                                              Command="{catel:CommandManagerBinding Application.OpenProject}"
-                                             CommandParameter="{Binding ProjectPath}"
-                                             >
+                                             CommandParameter="{Binding ProjectPath}">
                                                 <iconPacks:PackIconCodicons Kind="Edit" />
                                             </Button>
                                             <hc:Divider
                                              MaxHeight="16"
                                              LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
                                              LineStrokeThickness="2"
-                                             Orientation="Vertical"
-                                             />
+                                             Orientation="Vertical" />
                                             <Button
                                              Height="35"
                                              HorizontalAlignment="Left"
                                              Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
-                                             CommandParameter="{Binding ProjectPath}"
-                                             >
+                                             CommandParameter="{Binding ProjectPath}">
                                                 <iconPacks:PackIconCodicons Kind="FolderOpened" />
                                             </Button>
                                             <hc:Divider
                                              MaxHeight="16"
                                              LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
                                              LineStrokeThickness="2"
-                                             Orientation="Vertical"
-                                             />
+                                             Orientation="Vertical" />
                                             <Button
                                              Height="35"
                                              HorizontalAlignment="Left"
                                              Command="{catel:CommandManagerBinding Application.DeleteProject}"
-                                             CommandParameter="{Binding ProjectPath}"
-                                             >
+                                             CommandParameter="{Binding ProjectPath}">
                                                 <iconPacks:PackIconCodicons Kind="Trash" />
                                             </Button>
                                         </StackPanel>
@@ -415,22 +379,19 @@
              Margin="5"
              HorizontalAlignment="Right"
              VerticalAlignment="Top"
-             Orientation="Horizontal"
-             >
+             Orientation="Horizontal">
 
                 <TextBlock
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center "
                  FontSize="20"
-                 Text="Recent Projects"
-                 />
+                 Text="Recent Projects" />
                 <hc:Divider
                  Height="45"
                  Margin="15"
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center"
-                 Orientation="Vertical"
-                 />
+                 Orientation="Vertical" />
                 <hc:AnimationPath
                  Width="45"
                  Height="45"
@@ -442,8 +403,7 @@
                  Stretch="Uniform"
                  Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}"
                  StrokeThickness="1.5"
-                 Duration="00:00:08"
-                 />
+                 Duration="00:00:08" />
             </StackPanel>
         </hc:TransitioningContentControl>
     </Grid>

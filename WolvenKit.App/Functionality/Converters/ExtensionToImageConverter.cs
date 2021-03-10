@@ -12,7 +12,6 @@ namespace WolvenKit.Functionality.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-
             if (value == null)
             {
                 return DependencyProperty.UnsetValue;
@@ -25,7 +24,6 @@ namespace WolvenKit.Functionality.Converters
                 var result = GetSmallIconForFileType(extension);
                 var uri = new Uri("pack://application:,,,/WolvenKit;component/Resources/Media/Images/" + result);
 
-
                 return uri;
             }
 
@@ -37,23 +35,19 @@ namespace WolvenKit.Functionality.Converters
 
         private static string GetSmallIconForFileType(string extension)
         {
-
-
             extension = extension.TrimStart('.').Trim();
             if (!Enum.IsDefined(typeof(ECustomImageKeys), extension))
             {
                 extension = extension.ToLower();
-
             }
 
             switch (extension)
             {
                 case nameof(ECustomImageKeys.OpenDirImageKey):
                     return $"Icons/Files/folderopened.svg";
+
                 case nameof(ECustomImageKeys.ClosedDirImageKey):
                     return $"Icons/Files/folderdefault.svg";
-
-
 
                 case nameof(ECustomImageKeys.RawImageKey):
                 case nameof(ECustomImageKeys.RawModImageKey):
@@ -67,64 +61,87 @@ namespace WolvenKit.Functionality.Converters
                 case nameof(ECustomImageKeys.DlcUncookedImageKey):
                     return $"Icons/Files/folderclosed.svg";
 
-
-
-
-
                 case "aiarch":
                     return $"Icons/Files/aiarch3.svg";
+
                 case "animgraph":
                     return $"Icons/Files/aningraph.svg";
+
                 case "anims":
                     return $"Icons/Files/animation.svg";
+
                 case "audio_metadata":
                     return $"Icons/Files/audiometadata2.svg";
+
                 case "behavior":
                     return $"Icons/Files/behavior_graph3.svg";
+
                 case "camcurveset":
                     return $"Icons/Files/camcurveset2.svg";
+
                 case "credits":
                     return $"Icons/Files/credits2.svg";
+
                 case "devices":
                     return $"Icons/Files/Devices.svg";
+
                 case "effect":
                     return $"Icons/Files/Effect.svg";
+
                 case "envprobe":
                     return $"Icons/Files/envprob a.svg";
+
                 case "inkanim":
                     return $"Icons/Files/inkanim2.svg";
+
                 case "inkatlas":
                     return $"Icons/Files/inkatlas3.svg";
+
                 case "inkfontfamily":
                     return $"Icons/Files/inkfont.svg";
+
                 case "inkfullscreencomposition":
                     return $"Icons/Files/inkscreencomp.svg";
+
                 case "inklayers":
                     return $"Icons/Files/inklayers2.svg";
+
                 case "inkmenu":
                     return $"Icons/Files/inkmenu3.svg";
+
                 case "inkshapecollection":
                     return $"Icons/Files/inkshapecollection2.svg";
+
                 case "inktypography":
                     return $"Icons/Files/inktypography2.svg";
+
                 case "interaction":
                     return $"Icons/Files/Interaction.svg";
+
                 case "journal":
                     return $"Icons/Files/journal2.svg";
+
                 case "reslist":
                     return $"Icons/Files/resourcelist2.svg";
+
                 case "scene":
                     return $"Icons/Files/scene_Cutscene.svg";
+
                 case "scenerid":
                     return $"Icons/Files/scenerid_Cutscene_info.svg";
+
                 case "scenesversions":
                     return $"Icons/Files/scenesversions_Cutscene_versioning.svg";
+
                 case "traffic_persistent":
                     return $"Icons/Files/traffic_persistent2.svg";
+
                 case "voicetags":
                     return $"Icons/Files/VoiceTags.svg";
+
                 case "w3occulsion":
                     return $"Icons/Files/W3Occulsion.svg";
+
                 case "workspot":
                     return $"Icons/Files/workspot3.svg";
 
@@ -183,6 +200,7 @@ namespace WolvenKit.Functionality.Converters
 
                 case "w2cutscene":
                     return $"RedEngine/{extension}.png";
+
                 case "w2mi":
                     return $"Icons/Files/{extension}2.svg";
 
@@ -310,10 +328,6 @@ namespace WolvenKit.Functionality.Converters
                 case "wizdef":
                 case "xcf":
                 case "zip":
-
-
-
-
 
                 default:
                     return $"Icons/Files/file.svg";

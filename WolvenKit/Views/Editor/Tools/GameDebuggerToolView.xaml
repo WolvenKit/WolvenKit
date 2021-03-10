@@ -4,8 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- IsVisibleChanged="UserControl_IsVisibleChanged"
- >
+ IsVisibleChanged="UserControl_IsVisibleChanged">
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -24,39 +23,33 @@
                      Width="250"
                      Margin="35"
                      HorizontalAlignment="Left"
-                     Orientation="Vertical"
-                     >
+                     Orientation="Vertical">
                         <Button
                          x:Name="ConnectButton"
                          HorizontalAlignment="Stretch"
                          HorizontalContentAlignment="Left"
-                         Content="Connect"
-                         />
+                         Content="Connect" />
                         <Button
                          x:Name="StartGameMinusNetButton"
                          HorizontalAlignment="Stretch"
                          HorizontalContentAlignment="Left"
-                         Content="Start game with -net"
-                         />
+                         Content="Start game with -net" />
                         <Button
                          x:Name="TaskKillGameButton"
                          HorizontalAlignment="Stretch"
                          HorizontalContentAlignment="Left"
-                         Content="TaskKill Game"
-                         />
+                         Content="TaskKill Game" />
                         <Button
                          x:Name="StartGameWithCustomCommandsButton"
                          HorizontalAlignment="Stretch"
                          HorizontalContentAlignment="Left"
-                         Content="Start Game With Custom Commands"
-                         />
+                         Content="Start Game With Custom Commands" />
                     </StackPanel>
 
                     <TextBlock
                      Margin="15,40,0,0"
                      HorizontalAlignment="Center"
-                     VerticalAlignment="Top"
-                     >
+                     VerticalAlignment="Top">
                         STATUS
                     </TextBlock>
                 </Grid>
@@ -68,32 +61,27 @@
                      Margin="35"
                      HorizontalAlignment="Left"
                      Orientation="Vertical"
-                     Spacing="5"
-                     >
+                     Spacing="5">
                         <Button
                          x:Name="SendConsoleCommandButton"
                          HorizontalAlignment="Stretch"
                          HorizontalContentAlignment="Left"
-                         Content="Send Console Command"
-                         />
+                         Content="Send Console Command" />
                         <Button
                          x:Name="GetOpCodeButton"
                          HorizontalAlignment="Stretch"
                          HorizontalContentAlignment="Left"
-                         Content="Get Opcode"
-                         />
+                         Content="Get Opcode" />
                         <Button
                          x:Name="VarlistButton"
                          HorizontalAlignment="Stretch"
                          HorizontalContentAlignment="Left"
-                         Content="Varlist"
-                         />
+                         Content="Varlist" />
                         <Button
                          x:Name="ListInstalledModsButton"
                          HorizontalAlignment="Stretch"
                          HorizontalContentAlignment="Left"
-                         Content="List Installed Mods"
-                         />
+                         Content="List Installed Mods" />
                     </hc:UniformSpacingPanel>
 
                     <hc:UniformSpacingPanel
@@ -101,43 +89,37 @@
                      Margin="35"
                      HorizontalAlignment="Right"
                      Orientation="Vertical"
-                     Spacing="5"
-                     >
+                     Spacing="5">
                         <hc:TextBox
                          Width="325"
                          hc:InfoElement.Title="Command"
                          hc:InfoElement.TitlePlacement="Left"
                          hc:InfoElement.TitleWidth="100"
-                         Text=""
-                         />
+                         Text="" />
                         <hc:TextBox
                          Width="325"
                          hc:InfoElement.Title="Funcname"
                          hc:InfoElement.TitlePlacement="Left"
                          hc:InfoElement.TitleWidth="100"
-                         Text=""
-                         />
+                         Text="" />
                         <hc:TextBox
                          Width="325"
                          hc:InfoElement.Title="Classname"
                          hc:InfoElement.TitlePlacement="Left"
                          hc:InfoElement.TitleWidth="100"
-                         Text=""
-                         />
+                         Text="" />
                         <hc:TextBox
                          Width="325"
                          hc:InfoElement.Title="Section"
                          hc:InfoElement.TitlePlacement="Left"
                          hc:InfoElement.TitleWidth="100"
-                         Text=""
-                         />
+                         Text="" />
                         <hc:TextBox
                          Width="325"
                          hc:InfoElement.Title="Name"
                          hc:InfoElement.TitlePlacement="Left"
                          hc:InfoElement.TitleWidth="100"
-                         Text=""
-                         />
+                         Text="" />
                     </hc:UniformSpacingPanel>
                 </Grid>
             </hc:TabItem>
@@ -147,8 +129,7 @@
                      Margin="15,0"
                      HorizontalAlignment="Left"
                      VerticalAlignment="Top"
-                     Content="Help"
-                     />
+                     Content="Help" />
                     <DataGrid Margin="15,35,15,15" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" />
                 </Grid>
             </hc:TabItem>

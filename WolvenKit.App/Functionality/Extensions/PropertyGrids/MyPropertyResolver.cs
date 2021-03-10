@@ -7,6 +7,8 @@ namespace WolvenKit.Extensions.PropertyGridEditors
 {
     public class MyPropertyResolver : PropertyResolver
     {
+        #region Methods
+
         public override PropertyEditorBase CreateEditor(Type type, Type baseType)
         {
             // support editor services
@@ -23,7 +25,8 @@ namespace WolvenKit.Extensions.PropertyGridEditors
             }
 
             return base.CreateEditor(type, baseType);
-
         }
+
+        #endregion Methods
     }
 }

@@ -4,15 +4,13 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- >
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
     <Grid
      MinWidth="300"
      MinHeight="300"
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
-     Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-     >
+     Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
 
         <Grid Margin="3,75,3,0">
             <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
@@ -23,8 +21,7 @@
                  IsAnimationEnabled="True"
                  IsDraggable="False"
                  IsTabFillEnabled="True"
-                 ShowCloseButton="False"
-                 >
+                 ShowCloseButton="False">
                     <hc:TabItem x:Name="GeneralTabItem" IsSelected="True">
                         <hc:TabItem.Header>
                             <StackPanel Orientation="Horizontal">
@@ -43,22 +40,19 @@
              Margin="5"
              HorizontalAlignment="Right"
              VerticalAlignment="Top"
-             Orientation="Horizontal"
-             >
+             Orientation="Horizontal">
 
                 <TextBlock
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center "
                  FontSize="20"
-                 Text="Integrated tools"
-                 />
+                 Text="Integrated tools" />
                 <hc:Divider
                  Height="45"
                  Margin="15"
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center"
-                 Orientation="Vertical"
-                 />
+                 Orientation="Vertical" />
                 <hc:AnimationPath
                  Width="45"
                  Height="45"
@@ -70,8 +64,7 @@
                  Stretch="Uniform"
                  Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}"
                  StrokeThickness="1.5"
-                 Duration="00:00:06"
-                 >
+                 Duration="00:00:06">
                     <hc:AnimationPath.LayoutTransform>
                         <ScaleTransform ScaleY="-1" />
                     </hc:AnimationPath.LayoutTransform>

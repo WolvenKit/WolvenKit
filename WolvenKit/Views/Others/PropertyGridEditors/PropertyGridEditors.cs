@@ -18,6 +18,8 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
 
     public static class PropertyGridResolver
     {
+        #region Methods
+
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
@@ -48,43 +50,19 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
             serviceLocator.RegisterType(typeof(IEnumEditor), typeof(EnumEditor));
             serviceLocator.RegisterType(typeof(IColorEditor), typeof(ColorEditor));
         }
+
+        #endregion Methods
     }
 
-    #endregion
-
-    /// <summary>
-    /// Propertygrid editor for numeric values
-    /// </summary>
-    [Editor(typeof(IColorEditor), typeof(IPropertyEditorBase))]
-    public class ColorEditor : EditorBase<IREDColor>, IColorEditor
-    {
-        private protected override FrameworkElement CreateInnerElement(PropertyItem propertyItem) =>
-            new ColorPicker();
-
-        private protected override DependencyProperty GetInnerDependencyProperty() => ColorPicker.SelectedBrushProperty;
-
-        private protected override IValueConverter GetInnerConverter() => new ColorToSolidColorBrushConverter();
-    }
-
-    /// <summary>
-    /// Propertygrid editor for numeric values
-    /// </summary>
-    public class TextEditor<T> : EditorBase<T>, ITextEditor<T> where T : class, IEditorBindable
-    {
-        private protected override FrameworkElement CreateInnerElement(PropertyItem propertyItem) =>
-            new System.Windows.Controls.TextBox()
-            {
-                IsReadOnly = propertyItem.IsReadOnly,
-            };
-
-        private protected override DependencyProperty GetInnerDependencyProperty() => System.Windows.Controls.TextBox.TextProperty;
-    }
+    #endregion IoC
 
     /// <summary>
     /// Propertygrid editor for CBools
     /// </summary>
     public class BoolEditor : EditorBase<IREDBool>, IBoolEditor
     {
+        #region Methods
+
         private protected override FrameworkElement CreateInnerElement(PropertyItem propertyItem) =>
             new ToggleButton
             {
@@ -94,6 +72,26 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
             };
 
         private protected override DependencyProperty GetInnerDependencyProperty() => ToggleButton.IsCheckedProperty;
+
+        #endregion Methods
+    }
+
+    /// <summary>
+    /// Propertygrid editor for numeric values
+    /// </summary>
+    [Editor(typeof(IColorEditor), typeof(IPropertyEditorBase))]
+    public class ColorEditor : EditorBase<IREDColor>, IColorEditor
+    {
+        #region Methods
+
+        private protected override FrameworkElement CreateInnerElement(PropertyItem propertyItem) =>
+            new ColorPicker();
+
+        private protected override IValueConverter GetInnerConverter() => new ColorToSolidColorBrushConverter();
+
+        private protected override DependencyProperty GetInnerDependencyProperty() => ColorPicker.SelectedBrushProperty;
+
+        #endregion Methods
     }
 
     /// <summary>
@@ -101,6 +99,8 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
     /// </summary>
     public class EnumEditor : EditorBase<IEnumAccessor>, IEnumEditor
     {
+        #region Methods
+
         private protected override FrameworkElement CreateInnerElement(PropertyItem propertyItem)
         {
             var t = propertyItem.PropertyType;
@@ -124,5 +124,25 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
         }
 
         private protected override DependencyProperty GetInnerDependencyProperty() => Selector.SelectedValueProperty;
+
+        #endregion Methods
+    }
+
+    /// <summary>
+    /// Propertygrid editor for numeric values
+    /// </summary>
+    public class TextEditor<T> : EditorBase<T>, ITextEditor<T> where T : class, IEditorBindable
+    {
+        #region Methods
+
+        private protected override FrameworkElement CreateInnerElement(PropertyItem propertyItem) =>
+            new System.Windows.Controls.TextBox()
+            {
+                IsReadOnly = propertyItem.IsReadOnly,
+            };
+
+        private protected override DependencyProperty GetInnerDependencyProperty() => System.Windows.Controls.TextBox.TextProperty;
+
+        #endregion Methods
     }
 }

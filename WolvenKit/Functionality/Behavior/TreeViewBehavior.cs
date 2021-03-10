@@ -3,8 +3,8 @@ using System.Windows.Controls;
 using Microsoft.Xaml.Behaviors;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models;
-using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Editor;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Functionality.Behavior
 {

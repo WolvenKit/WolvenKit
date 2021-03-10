@@ -54,14 +54,12 @@ namespace WolvenKit.Views.Shell
         {
             base.OnLoaded(e);
 
-
             // Testing Some shit
             await LayoutLoader.LoadLayoutAsync();
             // Loads empty layout?? Causes bug still ? (Not yet?)
             // Load and layout AvalonDock elements when MainWindow has loaded .... False info :kek:
             //
             // Layout shouldn't load directly mhm . . . .   // Load this when project opens ? :D
-
         }
 
         protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
@@ -105,6 +103,20 @@ namespace WolvenKit.Views.Shell
             }
         }
 
+        // Hijacking this for purposes beyond my knowledge :O
+        public async void OnLoadLayoutAsync(object parameter = null)
+        {
+            if (DataContext is WorkSpaceViewModel wspace)
+            {
+                wspace.CloseAllDocuments();
+            }
+
+            var loaderResult = await LayoutLoader.GetLayoutString(OnLayoutLoaded_Event);
+
+            // Call this even with null to ensure standard initialization takes place
+            OnLayoutLoaded_Event(null, loaderResult == null ? null : new LayoutLoadedEventArgs(loaderResult));
+        }
+
         private bool CanLoadLayout(object parameter) => LayoutLoader.CanLoadLayout();
 
         private void OnLayoutLoaded_Event(object sender, LayoutLoadedEventArgs layoutLoadedEvent) => Application.Current.Dispatcher.Invoke(() =>
@@ -145,21 +157,6 @@ namespace WolvenKit.Views.Shell
                                                                                                            //    .SafeExecute(true);
                                                                                                        }
                                                                                                    }, System.Windows.Threading.DispatcherPriority.Background);
-
-
-        // Hijacking this for purposes beyond my knowledge :O
-        public async void OnLoadLayoutAsync(object parameter = null)
-        {
-            if (DataContext is WorkSpaceViewModel wspace)
-            {
-                wspace.CloseAllDocuments();
-            }
-
-            var loaderResult = await LayoutLoader.GetLayoutString(OnLayoutLoaded_Event);
-
-            // Call this even with null to ensure standard initialization takes place
-            OnLayoutLoaded_Event(null, loaderResult == null ? null : new LayoutLoadedEventArgs(loaderResult));
-        }
 
         #endregion LoadLayoutCommand
 

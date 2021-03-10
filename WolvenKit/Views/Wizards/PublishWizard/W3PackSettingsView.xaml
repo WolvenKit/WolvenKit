@@ -4,8 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- >
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -22,8 +21,7 @@
      MaxWidth="450"
      Margin="5"
      HorizontalAlignment="Stretch"
-     hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
-     >
+     hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="15*" />
@@ -41,22 +39,19 @@
          Stretch="Fill"
          Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}"
          StrokeThickness="1"
-         Style="{DynamicResource Path}"
-         />
+         Style="{DynamicResource Path}" />
 
         <StackPanel
          Margin="35,0,0,0"
          HorizontalAlignment="Left"
          VerticalAlignment="Top"
-         Orientation="Horizontal"
-         >
+         Orientation="Horizontal">
 
             <TextBlock
              Margin="0"
              FontSize="15"
              FontWeight="Bold"
-             Text="TW3 Pack Settings"
-             />
+             Text="TW3 Pack Settings" />
         </StackPanel>
 
         <Grid x:Name="PageGrid" Grid.Row="1">
@@ -75,23 +70,20 @@
             <Grid
              Grid.Row="1"
              Grid.ColumnSpan="10"
-             Margin="0,35,0,0"
-             >
+             Margin="0,35,0,0">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
 
                     <Button
                      Width="170"
                      Background="{DynamicResource MahApps.Brushes.Gray10}"
-                     Content="Cancel"
-                     />
+                     Content="Cancel" />
 
                     <hc:Divider Height="25" Orientation="Vertical" />
 
                     <Button
                      Width="170"
                      Background="{DynamicResource MahApps.Brushes.Accent4}"
-                     Content="Confirm"
-                     />
+                     Content="Confirm" />
                 </StackPanel>
             </Grid>
 
@@ -113,78 +105,67 @@
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod"
-                 />
+                 Content="Mod" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod"
-                 />
+                 Content="Mod" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod"
-                 />
+                 Content="Mod" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod"
-                 />
+                 Content="Mod" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod"
-                 />
+                 Content="Mod" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod"
-                 />
+                 Content="Mod" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod"
-                 />
+                 Content="Mod" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod"
-                 />
+                 Content="Mod" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod"
-                 />
+                 Content="Mod" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod"
-                 />
+                 Content="Mod" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,9,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="All"
-                 />
+                 Content="All" />
             </StackPanel>
 
             <StackPanel Grid.Column="2" Margin="0,15,0,0">
@@ -205,78 +186,67 @@
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC"
-                 />
+                 Content="DLC" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC"
-                 />
+                 Content="DLC" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC"
-                 />
+                 Content="DLC" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC"
-                 />
+                 Content="DLC" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC"
-                 />
+                 Content="DLC" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC"
-                 />
+                 Content="DLC" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC"
-                 />
+                 Content="DLC" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC"
-                 />
+                 Content="DLC" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC"
-                 />
+                 Content="DLC" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC"
-                 />
+                 Content="DLC" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,9,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="All"
-                 />
+                 Content="All" />
             </StackPanel>
 
             <StackPanel Grid.Column="0" Margin="0,15,0,0">
