@@ -1,4 +1,4 @@
-namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.BugReportWizard
+namespace WolvenKit.Views.Wizards.WizardPages.BugReportWizard
 {
     public partial class SendBugView
     {

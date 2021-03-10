@@ -1,6 +1,6 @@
 using Catel.MVVM;
 
-namespace WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.IntegratedToolsPages.CyberCAT
+namespace WolvenKit.ViewModels.HomePage.Pages
 {
     public class CyberCATPageViewModel : ViewModelBase
     {

@@ -1,4 +1,4 @@
-namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FeedbackWizard
+namespace WolvenKit.Views.Wizards.WizardPages.FeedbackWizard
 {
     public partial class RateView
     {

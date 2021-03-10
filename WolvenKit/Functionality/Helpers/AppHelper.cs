@@ -26,34 +26,29 @@ using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.UserWizard;
 using WolvenKit.MVVM.ViewModels.Shell.Backstage;
 using WolvenKit.MVVM.ViewModels.Shell.Editor;
 using WolvenKit.MVVM.ViewModels.Shell.Editor.Documents;
-using WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages;
-using WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.IntegratedToolsPages.CyberCAT;
-using WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.SettingsPages;
-using WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.SettingsPages.SubPages.Editor;
-using WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.SettingsPages.SubPages.General;
-using WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages.SettingsPages.SubPages.Tool;
 using WolvenKit.MVVM.Views.Components.Dialogs;
 using WolvenKit.MVVM.Views.Components.Editors;
 using WolvenKit.MVVM.Views.Components.Editors.VisualEditor;
 using WolvenKit.MVVM.Views.Components.Tools;
 using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
 using WolvenKit.MVVM.Views.Components.Tools.AudioTool.Radio;
-using WolvenKit.MVVM.Views.Components.Wizards;
-using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.BugReportWizard;
-using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FeedbackWizard;
-using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard;
-using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.ProjectWizard;
-using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.PublishWizard;
-using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.UserWizard;
 using WolvenKit.MVVM.Views.PropertyGridEditors;
 using WolvenKit.MVVM.Views.Shell.Backstage;
 using WolvenKit.MVVM.Views.Shell.Editor;
 using WolvenKit.ViewModels;
 using WolvenKit.ViewModels.HomePage;
+using WolvenKit.ViewModels.HomePage.Pages;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views;
 using WolvenKit.Views.HomePage;
 using WolvenKit.Views.HomePage.Pages;
+using WolvenKit.Views.Wizards;
+using WolvenKit.Views.Wizards.WizardPages.BugReportWizard;
+using WolvenKit.Views.Wizards.WizardPages.FeedbackWizard;
+using WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard;
+using WolvenKit.Views.Wizards.WizardPages.ProjectWizard;
+using WolvenKit.Views.Wizards.WizardPages.PublishWizard;
+using WolvenKit.Views.Wizards.WizardPages.UserWizard;
 
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
@@ -72,10 +67,20 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
             await SquirrelHelper.HandleSquirrelAutomaticallyAsync();
 
-            // Register Viewmodels
+            // Register Viewmodels & Views
             var viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
-            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels");
+            var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
+
+
+
             //TODO: rename later to MainViewModel
+
+
+
+
+
+
+
 
             // ---- HeadCategory : Extras
             //-- Category : Radio
@@ -163,12 +168,12 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.Register(typeof(ProjectWizardView), typeof(ProjectWizardViewModel));
             viewModelLocator.Register(typeof(SelectProjectTypeView), typeof(SelectProjectTypeViewModel));
             viewModelLocator.Register(typeof(ProjectConfigurationView), typeof(ProjectConfigurationViewModel));
-            viewModelLocator.Register(typeof(MVVM.Views.Components.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(MVVM.ViewModels.Components.Wizards.WizardPages.ProjectWizard.FinalizeSetupViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(MVVM.ViewModels.Components.Wizards.WizardPages.ProjectWizard.FinalizeSetupViewModel));
             //-- Category : PublishWizard
             viewModelLocator.Register(typeof(PublishWizardView), typeof(PublishWizardViewModel));
             viewModelLocator.Register(typeof(RequiredSettingsView), typeof(RequiredSettingsViewModel));
             viewModelLocator.Register(typeof(OptionalSettingsView), typeof(OptionalSettingsViewModel));
-            viewModelLocator.Register(typeof(MVVM.Views.Components.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(MVVM.ViewModels.Components.Wizards.WizardPages.PublishWizard.FinalizeSetupViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(MVVM.ViewModels.Components.Wizards.WizardPages.PublishWizard.FinalizeSetupViewModel));
             viewModelLocator.Register(typeof(W3PackSettingsView), typeof(W3PackSettingsViewModel));
             //-- Category : FirstSetupWizard
             viewModelLocator.Register(typeof(FirstSetupWizardView), typeof(FirstSetupWizardViewModel));
@@ -176,7 +181,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.Register(typeof(SelectThemeView), typeof(SelectThemeViewModel));
             viewModelLocator.Register(typeof(SetInitialPreferencesView), typeof(SetInitialPreferencesViewModel));
             viewModelLocator.Register(typeof(LocateGameDateView), typeof(LocateGameDataViewModel));
-            viewModelLocator.Register(typeof(MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard.FinalizeSetupView), typeof(MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWizard.FinalizeSetupViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.FirstSetupWizard.FinalizeSetupView), typeof(MVVM.ViewModels.Components.Wizards.WizardPages.FirstSetupWizard.FinalizeSetupViewModel));
             //-- Category : FeedBackWizard
             viewModelLocator.Register(typeof(FeedbackWizardView), typeof(FeedbackWizardViewModel));
             viewModelLocator.Register(typeof(RateView), typeof(RateViewModel));
@@ -185,7 +190,8 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             //-- Category : BugReportWizard
             viewModelLocator.Register(typeof(BugReportWizard), typeof(BugReportWizardViewModel));
             viewModelLocator.Register(typeof(SendBugView), typeof(SendBugViewModel));
-            var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
+
+
             // ---- HeadCategory : Dialogs
             viewModelLocator.Register(typeof(AddChunkDialog), typeof(AddChunkDialogViewModel));
             viewModelLocator.Register(typeof(ExtractAmbigiousDialog), typeof(ExtractAmbigiousDialogViewModel));
@@ -214,8 +220,9 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             sh.MinWidth = 1;
             sh.MinHeight = 1;
             sh.Height = 830;
-            sh.Width = 1081;
+            sh.Width = 1540;
             sh.WindowState = WindowState.Normal;
+            sh.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             Binding ws = new Binding();
             ws.Source = HomePageViewModel.GlobalHomePageVM;
             ws.Path = new PropertyPath("CurrentWindowState");

@@ -3,7 +3,7 @@ using HandyControl.Controls;
 using WolvenKit.MVVM.Model.Wizards;
 using WolvenKit.MVVM.ViewModels.Components.Wizards;
 
-namespace WolvenKit.MVVM.Views.Components.Wizards.WizardPages.FirstSetupWizard
+namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
 {
     public partial class CreateUserView
     {
