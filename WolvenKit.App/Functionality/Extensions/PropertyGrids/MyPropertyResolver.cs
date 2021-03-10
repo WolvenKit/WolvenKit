@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Catel.IoC;
 using HandyControl.Controls;
 using WolvenKit.Common.Services;
 
-namespace WolvenKit.MVVM.Views.PropertyGridEditors
+namespace WolvenKit.Extensions.PropertyGridEditors
 {
     public class MyPropertyResolver : PropertyResolver
     {

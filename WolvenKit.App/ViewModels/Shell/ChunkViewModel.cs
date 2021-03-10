@@ -1,10 +1,7 @@
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using HandyControl.Controls;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
-using WolvenKit.MVVM.Views.PropertyGridEditors;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -65,7 +62,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public List<ChunkViewModel> Children => _export.VirtualChildrenChunks.Select(_ => new ChunkViewModel(_)).ToList();
 
-        
+
         public List<ChunkPropertyViewModel> ChildrenProperties =>
             Data.ChildrEditableVariables.Select(_ => new ChunkPropertyViewModel(_)).ToList();
 

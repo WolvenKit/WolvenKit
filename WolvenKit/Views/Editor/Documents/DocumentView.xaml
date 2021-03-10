@@ -12,7 +12,7 @@
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
- xmlns:propertyGridEditors="clr-namespace:WolvenKit.MVVM.Views.PropertyGridEditors"
+ xmlns:propertyGridEditors="clr-namespace:WolvenKit.Views.Others.PropertyGridEditors"
  xmlns:types="clr-namespace:WolvenKit.Common.Model.Cr2w;assembly=WolvenKit.Common"
  d:DesignHeight="450"
  d:DesignWidth="800"

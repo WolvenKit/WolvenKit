@@ -14,10 +14,10 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W.SRT;
+using WolvenKit.Extensions.PropertyGridEditors;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.MVVM.Views.PropertyGridEditors;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Editor

@@ -4,18 +4,15 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Media;
 using Catel.IoC;
 using CP77.CR2W.Types;
 using HandyControl.Controls;
 using HandyControl.Tools;
-using Orchestra.Services;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Converters;
-using WolvenKit.Functionality.Services;
 
-namespace WolvenKit.MVVM.Views.PropertyGridEditors
+namespace WolvenKit.Views.Others.PropertyGridEditors
 {
     #region IoC
 
@@ -24,7 +21,7 @@ namespace WolvenKit.MVVM.Views.PropertyGridEditors
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-            
+
             // Register PropertyEditor services here to the UI
             serviceLocator.RegisterType<ICollectionEditor, REDArrayEditor>();
             serviceLocator.RegisterType<IExpandableObjectEditor, ExpandableObjectEditor>();
