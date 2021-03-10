@@ -1,4 +1,4 @@
-namespace WolvenKit.Views.Editors
+namespace WolvenKit.Views.Editor
 {
     public partial class CR2WEditorView
     {

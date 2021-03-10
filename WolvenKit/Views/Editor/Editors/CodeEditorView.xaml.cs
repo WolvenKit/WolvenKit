@@ -1,7 +1,7 @@
 using System.Windows;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.Views.Editors
+namespace WolvenKit.Views.Editor
 {
     public partial class CodeEditorView
     {

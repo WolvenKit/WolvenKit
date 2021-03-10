@@ -1,6 +1,6 @@
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool.Radio
+namespace WolvenKit.Views.Editor.AudioTool.Radio
 {
     public partial class RadioPlayerView
     {

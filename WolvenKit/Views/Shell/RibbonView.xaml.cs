@@ -6,11 +6,10 @@ using Catel.IoC;
 using Orchestra;
 using Orchestra.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Views.Editors;
-using WolvenKit.Views.Editors.VisualEditor;
-using WolvenKit.MVVM.Views.Components.Tools;
-using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
 using WolvenKit.ViewModels.Shell;
+using WolvenKit.Views.Editor;
+using WolvenKit.Views.Editor.AudioTool;
+using WolvenKit.Views.Editor.VisualEditor;
 
 namespace WolvenKit.Views.Shell
 {
