@@ -5,12 +5,12 @@
  xmlns:ad="clr-namespace:WolvenKit.Functionality.Layout"
  xmlns:audiotoolz="clr-namespace:WolvenKit.MVVM.Views.Components.Tools.AudioTool"
  xmlns:catel="http://schemas.catelproject.com"
+ xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
  xmlns:cr2weditor1="clr-namespace:WolvenKit.MVVM.Views.Components.Editors"
  xmlns:importertool1="clr-namespace:WolvenKit.MVVM.Views.Components.Tools"
  xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
  xmlns:views1="clr-namespace:WolvenKit.MVVM.Views.Shell.Editor"
  xmlns:visualeditorz="clr-namespace:WolvenKit.MVVM.Views.Components.Editors.VisualEditor"
- xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters"
  IsVisibleChanged="UserControl_IsVisibleChanged_1"
  >
 
@@ -77,7 +77,7 @@
                         </DataTemplate>
                     </ad:PanesTemplateSelector.FileViewTemplate>
 
-                       <!--  LogView  -->
+                    <!--  LogView  -->
                     <ad:PanesTemplateSelector.PropertiesTemplate>
                         <DataTemplate>
                             <views1:PropertiesView />

@@ -627,7 +627,4 @@
   <ItemGroup>
     <None Remove="Resources\Media\Images\Icons\Files\file.svg" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Functionality\Controllers\" />
-  </ItemGroup>
 </Project>
