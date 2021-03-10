@@ -6,6 +6,7 @@ using HandyControl.Controls;
 using HandyControl.Data;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.HomePage
 {
@@ -85,8 +86,9 @@ namespace WolvenKit.ViewModels.HomePage
         private bool CanHome() => true;
         private void ExecuteHome()
         {
-            // StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(StartScreen.ShownProperty, false);
-            //  StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
+            RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
+            RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
+
         }
 
 
@@ -128,38 +130,51 @@ namespace WolvenKit.ViewModels.HomePage
                 case "Get Started":
                 case "Welcome":
                     WelcomePV = true;
+                    ReturnButtonVisibile = false;
                     DiscordHelper.SetDiscordRPCStatus("Home");
                     break;
 
                 case "Project":
                 case "Open Recent Project":
                     RecentPV = true;
+                    ReturnButtonVisibile = true;
+
                     DiscordHelper.SetDiscordRPCStatus("Recent projects.");
                     break;
 
                 case "Integrated Tools":
                     IntegratedTPV = true;
+                    ReturnButtonVisibile = true;
+
                     DiscordHelper.SetDiscordRPCStatus("Integrated tools.");
                     break;
 
                 case "Settings":
                     SettingsPV = true;
+                    ReturnButtonVisibile = true;
+
                     DiscordHelper.SetDiscordRPCStatus("Adjusting settings.");
                     break;
 
                 case "Account":
                     UserPV = true;
+                    ReturnButtonVisibile = true;
+
                     DiscordHelper.SetDiscordRPCStatus("Profile.");
                     break;
 
                 case "Information":
                 case "Wiki":
                     WikitPV = true;
+                    ReturnButtonVisibile = true;
+
                     DiscordHelper.SetDiscordRPCStatus("Integrated Wiki.");
                     break;
 
                 case "Github":
                     GithubPV = true;
+                    ReturnButtonVisibile = true;
+
                     DiscordHelper.SetDiscordRPCStatus("Github page.");
                     break;
 
@@ -168,11 +183,15 @@ namespace WolvenKit.ViewModels.HomePage
 
                 case "About":
                     AboutPV = true;
+                    ReturnButtonVisibile = true;
+
                     DiscordHelper.SetDiscordRPCStatus("About section.");
                     break;
 
                 case "Website":
                     WebsitePV = true;
+                    ReturnButtonVisibile = true;
+
                     DiscordHelper.SetDiscordRPCStatus("Integrated website.");
                     break;
 

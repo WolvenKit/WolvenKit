@@ -1,8 +1,7 @@
 using Catel.MVVM;
 using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.MVVM.ViewModels.Shell.HomePage;
-using WolvenKit.MVVM.Views.Shell.HomePage;
+using WolvenKit.ViewModels.HomePage;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Functionality.Commands
 {
@@ -21,11 +20,13 @@ namespace WolvenKit.Functionality.Commands
 
         protected override void Execute(object parameter)
         {
-            StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, false);
-            StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.StartScreen.ShownProperty, false);
-            StaticReferences.RibbonViewInstance.startScreen.SetCurrentValue(Fluent.Backstage.IsOpenProperty, true);
-          //  HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
-           // HomePageView.GlobalHomePage.PageViewGrid.Children.Add(HomePageViewModel.GlobalHomePageVM.SettingsPV);
+            RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
+            RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
+            RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = true;
+            HomePageViewModel.GlobalHomePageVM.SetCurrentPage("Settings");
+
+            //  HomePageView.GlobalHomePage.PageViewGrid.Children.Clear();
+            // HomePageView.GlobalHomePage.PageViewGrid.Children.Add(HomePageViewModel.GlobalHomePageVM.SettingsPV);
         }
 
         #endregion Methods
