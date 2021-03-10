@@ -54,11 +54,16 @@ namespace WolvenKit.MVVM.Views.Components.Tools
 
         private void ListView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            StaticReferences.GlobalPropertiesView.ExplorerBind.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-            StaticReferences.GlobalPropertiesView.AssetsBind.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            if (StaticReferences.GlobalPropertiesView != null)
+            {
+
+                StaticReferences.GlobalPropertiesView.ExplorerBind.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                StaticReferences.GlobalPropertiesView.AssetsBind.SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
 
-            StaticReferences.GlobalPropertiesView.fish.SetValue(Panel.DataContextProperty, DataContext);
+                StaticReferences.GlobalPropertiesView.fish.SetValue(Panel.DataContextProperty, DataContext);
+            }
+
 
         }
     }

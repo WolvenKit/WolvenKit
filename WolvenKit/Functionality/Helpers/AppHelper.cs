@@ -48,12 +48,13 @@ using WolvenKit.MVVM.Views.Components.Wizards.WizardPages.UserWizard;
 using WolvenKit.MVVM.Views.PropertyGridEditors;
 using WolvenKit.MVVM.Views.Shell.Backstage;
 using WolvenKit.MVVM.Views.Shell.Editor;
-using WolvenKit.MVVM.Views.Shell.HomePage;
 using WolvenKit.ViewModels;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views;
+using WolvenKit.Views.HomePage;
 using WolvenKit.Views.HomePage.Pages;
+
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
