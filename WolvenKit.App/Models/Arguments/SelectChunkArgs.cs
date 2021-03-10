@@ -1,6 +1,6 @@
 using WolvenKit.CR2W;
 
-namespace WolvenKit.MVVM.Model.Arguments
+namespace WolvenKit.Models.Arguments
 {
     public class SelectChunkArgs
     {

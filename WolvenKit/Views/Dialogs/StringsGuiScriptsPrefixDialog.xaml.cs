@@ -1,4 +1,4 @@
-namespace WolvenKit.MVVM.Views.Components.Dialogs
+namespace WolvenKit.Views.Dialogs
 {
     public partial class StringsGuiScriptsPrefixDialog
     {

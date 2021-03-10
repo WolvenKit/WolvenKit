@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using WolvenKit.Common.Model.Cr2w;
 
-namespace WolvenKit.MVVM.Model
+namespace WolvenKit.Models
 {
     public static class CopyController
     {

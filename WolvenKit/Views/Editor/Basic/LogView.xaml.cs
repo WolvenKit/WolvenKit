@@ -6,7 +6,7 @@ using ControlzEx.Theming;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.MVVM.Views.Shell.Editor
+namespace WolvenKit.Views.Editor
 {
     /// <summary>
     /// Interaction logic for LogView.xaml

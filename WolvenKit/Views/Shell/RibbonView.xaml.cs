@@ -6,13 +6,13 @@ using Catel.IoC;
 using Orchestra;
 using Orchestra.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.MVVM.Views.Components.Editors;
-using WolvenKit.MVVM.Views.Components.Editors.VisualEditor;
+using WolvenKit.Views.Editors;
+using WolvenKit.Views.Editors.VisualEditor;
 using WolvenKit.MVVM.Views.Components.Tools;
 using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
 using WolvenKit.ViewModels.Shell;
 
-namespace WolvenKit.MVVM.Views.Shell.Editor
+namespace WolvenKit.Views.Shell
 {
     public partial class RibbonView
     {

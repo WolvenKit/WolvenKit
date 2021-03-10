@@ -4,7 +4,7 @@ using Catel.Fody;
 using Catel.IoC;
 using Catel.MVVM;
 using WolvenKit.Functionality.Services;
-using WolvenKit.MVVM.Model.Wizards;
+using WolvenKit.Models.Wizards;
 
 namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
 {

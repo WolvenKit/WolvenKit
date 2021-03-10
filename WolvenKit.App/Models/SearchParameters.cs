@@ -3,7 +3,7 @@ using System.Windows.Input;
 using WolvenKit.Common;
 using WolvenKit.Functionality.Commands;
 
-namespace WolvenKit.MVVM.Model
+namespace WolvenKit.Models
 {
     public class SearchParameters : ObservableObject, INotifyPropertyChanged, INotifyPropertyChanging
     {

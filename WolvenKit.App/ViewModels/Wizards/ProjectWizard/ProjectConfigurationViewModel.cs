@@ -3,7 +3,7 @@ using Catel.Data;
 using Catel.Fody;
 using Catel.IoC;
 using Catel.MVVM;
-using WolvenKit.MVVM.Model.Wizards;
+using WolvenKit.Models.Wizards;
 
 namespace WolvenKit.ViewModels.Wizards.ProjectWizard
 {

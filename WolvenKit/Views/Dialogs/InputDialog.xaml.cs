@@ -1,6 +1,6 @@
 using Catel.Windows;
 
-namespace WolvenKit.MVVM.Views.Components.Dialogs
+namespace WolvenKit.Views.Dialogs
 {
     /// <summary>
     /// Interaction logic for InputDialog.xaml

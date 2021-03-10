@@ -5,7 +5,7 @@ using System.IO;
 using System.Xml.Linq;
 using ICSharpCode.SharpZipLib.Zip;
 
-namespace WolvenKit.MVVM.Model
+namespace WolvenKit.Models
 {
     public class WKPackage
     {

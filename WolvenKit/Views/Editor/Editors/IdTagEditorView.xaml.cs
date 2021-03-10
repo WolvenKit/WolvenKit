@@ -1,4 +1,4 @@
-namespace WolvenKit.MVVM.Views.Components.Editors
+namespace WolvenKit.Views.Editors
 {
     public partial class IdTagEditorView
     {

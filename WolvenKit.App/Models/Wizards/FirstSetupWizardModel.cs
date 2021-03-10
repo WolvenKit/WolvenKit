@@ -1,7 +1,7 @@
 using System.Windows.Media;
 using Catel.Data;
 
-namespace WolvenKit.MVVM.Model.Wizards
+namespace WolvenKit.Models.Wizards
 {
     /// <summary>
     /// Keeps track of which settings was selected by the user during the first time setup wizard.

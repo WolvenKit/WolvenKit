@@ -3,7 +3,7 @@ using System.IO;
 using WolvenKit.Common;
 using WolvenKit.Common.Wcc;
 
-namespace WolvenKit.MVVM.Model
+namespace WolvenKit.Models
 {
     public class ImportableFile : ObservableObject
     {

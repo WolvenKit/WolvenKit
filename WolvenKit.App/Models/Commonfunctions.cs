@@ -9,7 +9,7 @@ using System.Xml.Linq;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 
-namespace WolvenKit.MVVM.Model
+namespace WolvenKit.Models
 {
     public static class Commonfunctions
     {

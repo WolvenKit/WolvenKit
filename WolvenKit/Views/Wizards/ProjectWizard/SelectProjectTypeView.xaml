@@ -4,7 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:local="clr-namespace:WolvenKit.MVVM.Model.Wizards;assembly=WolvenKit.App"
+ xmlns:local="clr-namespace:WolvenKit.Models.Wizards;assembly=WolvenKit.App"
  Loaded="UserControl_Loaded"
  >
 
