@@ -1,7 +1,7 @@
 using System.Windows;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.MVVM.Views.Shell.HomePage
+namespace WolvenKit.Views.HomePage
 {
     public partial class HomePageView
     {
