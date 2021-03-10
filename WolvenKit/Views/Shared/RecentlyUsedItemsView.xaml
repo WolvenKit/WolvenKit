@@ -1,5 +1,5 @@
 <catel:UserControl
- x:Class="WolvenKit.MVVM.Views.Shell.Backstage.RecentlyUsedItemsView"
+ x:Class="WolvenKit.Views.Shared.RecentlyUsedItemsView"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"

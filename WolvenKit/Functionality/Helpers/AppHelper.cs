@@ -36,6 +36,8 @@ using WolvenKit.Views.Editor.AudioTool.Radio;
 using WolvenKit.Views.Editor.VisualEditor;
 using WolvenKit.Views.HomePage;
 using WolvenKit.Views.HomePage.Pages;
+using WolvenKit.Views.Others;
+using WolvenKit.Views.Shared;
 using WolvenKit.Views.Shell;
 using WolvenKit.Views.Wizards;
 using WolvenKit.Views.Wizards.WizardPages.BugReportWizard;

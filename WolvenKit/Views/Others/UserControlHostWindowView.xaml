@@ -1,5 +1,5 @@
 <catel:DataWindow
- x:Class="WolvenKit.Views.UserControlHostWindowView"
+ x:Class="WolvenKit.Views.Others.UserControlHostWindowView"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"

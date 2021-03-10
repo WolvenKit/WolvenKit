@@ -4,6 +4,7 @@ using System.Windows.Data;
 using HandyControl.Controls;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.Views.Others.PropertyGridEditors;
 
 namespace WolvenKit.MVVM.Views.PropertyGridEditors
 {

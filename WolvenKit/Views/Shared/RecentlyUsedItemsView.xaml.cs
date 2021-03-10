@@ -6,7 +6,7 @@
 
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.MVVM.Views.Shell.Backstage
+namespace WolvenKit.Views.Shared
 {
     public partial class RecentlyUsedItemsView
     {
