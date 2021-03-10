@@ -9,7 +9,7 @@ using HandyControl.Data;
 using HandyControl.Tools;
 using Octokit;
 using WolvenKit.MVVM.ViewModels.Shell.HomePage.Pages;
-using WolvenKit.MVVM.Views.Shell.HomePage.Pages;
+using WolvenKit.Views.HomePage.Pages;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {

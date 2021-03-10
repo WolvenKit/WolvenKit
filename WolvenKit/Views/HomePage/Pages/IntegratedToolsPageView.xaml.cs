@@ -1,7 +1,7 @@
 using System.Windows;
-using WolvenKit.MVVM.Views.Shell.Homepage.Pages.IntegratedToolsPages.CyberCAT;
+using WolvenKit.Views.HomePage.Pages;
 
-namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
+namespace WolvenKit.Views.HomePage.Pages
 {
     public partial class IntegratedToolsPageView
     {

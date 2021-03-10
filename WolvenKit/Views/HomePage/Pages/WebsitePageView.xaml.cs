@@ -1,4 +1,4 @@
-namespace WolvenKit.MVVM.Views.Shell.HomePage.Pages
+namespace WolvenKit.Views.HomePage.Pages
 {
     public partial class WebsitePageView
     {

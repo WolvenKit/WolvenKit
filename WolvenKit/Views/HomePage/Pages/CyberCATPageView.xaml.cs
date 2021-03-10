@@ -1,6 +1,6 @@
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
-namespace WolvenKit.MVVM.Views.Shell.Homepage.Pages.IntegratedToolsPages.CyberCAT
+namespace WolvenKit.Views.HomePage.Pages
 {
     public partial class CyberCATPageView
     {
