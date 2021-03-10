@@ -1,6 +1,6 @@
 using Catel.MVVM;
 
-namespace WolvenKit.MVVM.ViewModels.Components.Wizards
+namespace WolvenKit.ViewModels.Wizards
 {
     public class BugReportWizardViewModel : ViewModelBase
     {

@@ -1,8 +1,8 @@
 using Catel.IoC;
 using Catel.Services;
 using HandyControl.Controls;
-using WolvenKit.MVVM.ViewModels.Components.Wizards;
-using WolvenKit.MVVM.ViewModels.Components.Wizards.WizardPages.ProjectWizard;
+using WolvenKit.ViewModels.Wizards;
+using WolvenKit.ViewModels.Wizards.ProjectWizard;
 
 namespace WolvenKit.Views.Wizards.WizardPages.ProjectWizard
 {

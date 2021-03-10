@@ -1,6 +1,6 @@
 using Catel.IoC;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.MVVM.ViewModels.Components.Wizards;
+using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard;
 
 namespace WolvenKit.Views.Wizards
