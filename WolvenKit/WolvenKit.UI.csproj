@@ -84,9 +84,7 @@
     <PackageReference Include="Dirkster.MLib" Version="1.3.1.2" />
     <PackageReference Include="FastMember" Version="1.5.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.3" />
-    <PackageReference Include="MahApps.Metro.IconPacks.BootstrapIcons" Version="4.8.0" />
-    <PackageReference Include="MahApps.Metro.IconPacks.BoxIcons" Version="4.8.0" />
-    <PackageReference Include="MahApps.Metro.IconPacks.Codicons" Version="4.8.0" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
     <PackageReference Include="MarkerMetro.Unity.Ionic.Zlib" Version="2.0.0.14" NoWarn="NU1701" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.664.37" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
