@@ -39,11 +39,11 @@
             <!--  Backstage  -->
             <fluent:Ribbon.Menu>
                 <fluent:Backstage
-                    Header="Home"
+                    Header="File"
                     x:Name="BackstageX"
                  Margin="70,0,0,0"
                  MouseLeftButtonDown="Backstage_MouseLeftButtonDown">
-                    <!--<views1:BackStageView />-->
+                    <views1:BackStageView />
                 </fluent:Backstage>
             </fluent:Ribbon.Menu>
 

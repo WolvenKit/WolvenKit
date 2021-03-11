@@ -91,16 +91,11 @@ namespace WolvenKit.Views.Shell
 
         private void Backstage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
-            RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = true;
+            //RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
+            //RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = true;
 
-            //base.OnMouseLeftButtonDown(e);
-
-            //var serviceLocator = ServiceLocator.Default;
-
-            //var shellService = serviceLocator.ResolveType<IShellService>();
-
-            //StaticReferences.GlobalShell.DragMove();
+            base.OnMouseLeftButtonDown(e);
+            StaticReferences.GlobalShell.DragMove();
         }
 
         private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
