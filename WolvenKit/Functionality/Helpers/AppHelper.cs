@@ -86,31 +86,33 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.[VW]ViewModel");
 
 
-            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizard.WizardPages.BugReportWizard[VM]View");
-            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.WizardPages.BugReportWizard[VW]ViewModel");
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizards.WizardPages.BugReportWizard.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.BugReportWizard.[VW]ViewModel");
 
 
-            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizard.WizardPages.FeedbackWizard[VM]View");
-            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.WizardPages.FeedbackWizard[VW]ViewModel");
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizards.WizardPages.FeedbackWizard.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.FeedbackWizard.[VW]ViewModel");
 
 
-            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizard.WizardPages.FirstSetupWizard[VM]View");
-            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.WizardPages.FirstSetupWizard[VW]ViewModel");
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.FirstSetupWizard.[VW]ViewModel");
 
 
-            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizard.WizardPages.ProjectWizard[VM]View");
-            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard[VW]ViewModel");
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizards.WizardPages.ProjectWizard.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.ProjectWizard.[VW]ViewModel");
+
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizards.WizardPages.ProjectWizard.[VM]TypeView");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.ProjectWizard.[VW]TypeViewModel");
+
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizards.WizardPages.PublishWizard.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.PublishWizard.[VW]ViewModel");
+
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizards.WizardPages.UserWizard.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.UserWizard.[VW]ViewModel");
 
 
-            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizard.WizardPages.PublishWizard[VM]View");
-            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.WizardPages.PublishWizard[VW]ViewModel");
-
-            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizard.WizardPages.UserWizard[VM]View");
-            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.WizardPages.UserWizard[VW]ViewModel");
-
-
-            viewLocator.NamingConventions.Add("WolvenKit.Views.Others.PropertyGridEditors[VM]View");
-            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Others.PropertyGridEditors[VW]ViewModel");
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Others.PropertyGridEditors.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Others.PropertyGridEditors.[VW]ViewModel");
 
 
 
