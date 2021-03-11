@@ -46,5 +46,10 @@ namespace WolvenKit.Common.Services
     /// </summary>
     public interface IColorEditor : IPropertyEditorBase { }
 
+    /// <summary>
+    /// Editors for Handles and Weak handles
+    /// </summary>
+    public interface IHandleEditor : IPropertyEditorBase { }
+
 
 }

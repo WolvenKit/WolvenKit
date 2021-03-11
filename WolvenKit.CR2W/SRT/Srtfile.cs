@@ -52,6 +52,7 @@ namespace WolvenKit.CR2W.SRT
         public SGeometry Geometry { get; set; }
         public SHorizontalBillboard HorizontalBillboard { get; set; }
         public List<ICR2WImport> Imports => throw new NotImplementedException();
+        public bool IsDirty { get; set; }
         public SLodProfile LodProfile { get; set; }
         public string[] PUserStrings { get; set; }
         public string[] StringTable { get; set; }

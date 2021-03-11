@@ -101,10 +101,14 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
 
         private void FrameworkElementOnSourceUpdated(object sender, DataTransferEventArgs e)
         {
+            // set the property to be serialized
             if (!Wrapper.IsSerialized)
             {
                 Wrapper.IsSerialized = true;
             }
+
+            // set the DocumentViewModel to dirty
+            Wrapper.Cr2wFile.IsDirty = true;
         }
 
         #endregion bindings

@@ -76,6 +76,8 @@ namespace WolvenKit.Common.Model.Cr2w
 
     public interface IEditorBindable
     {
+        [JsonIgnore] [Browsable(false)] IWolvenkitFile Cr2wFile { get; set; }
+
         [JsonIgnore] [Browsable(false)] bool IsSerialized { get; set; }
     }
     public interface IEditorBindable<T> : IEditorBindable

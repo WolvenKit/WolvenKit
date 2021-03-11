@@ -1,12 +1,13 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.Serialization;
 using System.Linq;
 using CP77.CR2W.Reflection;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System.ComponentModel;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W.Types
 {
@@ -19,34 +20,48 @@ namespace CP77.CR2W.Types
     /// if ImportHandle: A string Handle, string Filetype and ushort Flags
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [Editor(typeof(IHandleEditor), typeof(IPropertyEditorBase))]
     [REDMeta()]
-    public class CHandle<T> : CVariable, IHandleAccessor where T : CVariable
+    public class CHandle<T> : CVariable, IHandleAccessor where T : IEditableVariable
     {
+        private ICR2WExport _reference;
+
         public CHandle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
         #region Properties
-        [DataMember(EmitDefaultValue = false)]
-        public bool ChunkHandle { get; set; }
+        [Browsable(false)] public bool ChunkHandle { get; set; }
 
-        // Soft
-        [DataMember(EmitDefaultValue = false)]
-        public string DepotPath { get; set; }
+        [Browsable(false)] public string DepotPath { get; set; }
 
-        [DataMember(EmitDefaultValue = false)]
-        public string ClassName { get; set; }
+        [Browsable(false)] public string ClassName { get; set; }
 
+        [Browsable(false)] public ushort Flags { get; set; }
 
+        [Browsable(false)]
+        public ICR2WExport Reference
+        {
+            get => _reference;
+            set
+            {
+                _reference = value;
 
-        [DataMember(EmitDefaultValue = false)]
-        public ushort Flags { get; set; }
+                if (value != null)
+                {
+                    //Populate the reverse-lookups
+                    Reference.AdReferences.Add(this);
+                    cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
+                    //Soft mount the chunk except root chunk
+                    if (Reference.ChunkIndex != 0)
+                    {
+                        Reference.MountChunkVirtually(LookUpChunkIndex());
+                    }
+                }
+            }
+        }
 
-        // Pointer
-        [DataMember(EmitDefaultValue = false)]
-        public ICR2WExport Reference { get; set; }
-
-        public string ReferenceType => REDType.Split(':').Last();
+        [Browsable(false)] public string ReferenceType => REDType.Split(':').Last();
         #endregion
 
         #region Methods
@@ -66,33 +81,19 @@ namespace CP77.CR2W.Types
             }
         }
 
-        public override void Read(BinaryReader file, uint size)
-        {
-            SetValueInternal(file.ReadInt32());
-        }
+        public override void Read(BinaryReader file, uint size) => SetValueInternal(file.ReadInt32());
 
         private void SetValueInternal(int val)
         {
             if (val >= 0)
-                this.ChunkHandle = true;
+            {
+                ChunkHandle = true;
+            }
 
 
             if (ChunkHandle)
             {
-                if (val == 0)
-                    Reference = null;
-                else
-                {
-                    Reference = cr2w.Chunks[val - 1];
-                    //Populate the reverse-lookups
-                    Reference.AdReferences.Add(this);
-                    cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
-                    //Soft mount the chunk except root chunk
-                    if (Reference.ChunkIndex != 0)
-                    {
-                        Reference.MountChunkVirtually(LookUpChunkIndex());
-                    }
-                }
+                Reference = val == 0 ? null : cr2w.Chunks[val - 1];
             }
             else
             {
@@ -102,6 +103,9 @@ namespace CP77.CR2W.Types
                 ClassName = cr2w.Names[filetype].Str;
 
                 Flags = cr2w.Imports[-val - 1].Flags;
+
+                //TODO are non-chunk handles used in cp77?
+                throw new NotImplementedException();
             }
         }
 
@@ -178,6 +182,7 @@ namespace CP77.CR2W.Types
 
             return ClassName + ": " + DepotPath;
         }
+
         public override string REDLeanValue()
         {
             if (Reference == null)

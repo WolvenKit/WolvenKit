@@ -48,6 +48,7 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
 
             serviceLocator.RegisterType(typeof(IBoolEditor), typeof(BoolEditor));
             serviceLocator.RegisterType(typeof(IEnumEditor), typeof(EnumEditor));
+            serviceLocator.RegisterType(typeof(IHandleEditor), typeof(HandleEditor));
             serviceLocator.RegisterType(typeof(IColorEditor), typeof(ColorEditor));
         }
 
@@ -142,6 +143,31 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
             };
 
         private protected override DependencyProperty GetInnerDependencyProperty() => System.Windows.Controls.TextBox.TextProperty;
+
+        #endregion Methods
+    }
+
+    /// <summary>
+    /// Propertygrid editor for Handles
+    /// </summary>
+    public class HandleEditor : EditorBase<IHandleAccessor>, IEnumEditor
+    {
+        #region Methods
+
+        private protected override FrameworkElement CreateInnerElement(PropertyItem propertyItem)
+        {
+            var chunks = (propertyItem.Value as IEditableVariable)?.Cr2wFile.Chunks;
+            var box = new System.Windows.Controls.ComboBox
+            {
+                IsEnabled = !propertyItem.IsReadOnly,
+                ItemsSource = chunks
+            };
+            return box;
+        }
+
+        private protected override DependencyProperty GetInnerDependencyProperty() => Selector.SelectedValueProperty;
+
+        private protected override string GetBoundPropertyName() => nameof(IHandleAccessor.Reference);
 
         #endregion Methods
     }

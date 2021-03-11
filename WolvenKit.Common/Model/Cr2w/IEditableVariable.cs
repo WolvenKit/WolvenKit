@@ -24,7 +24,7 @@ namespace WolvenKit.Common.Model.Cr2w
         [JsonIgnore] [Browsable(false)] int VarChunkIndex { get; set; }
         
 
-        [JsonIgnore] [Browsable(false)] IWolvenkitFile Cr2wFile { get; set; }
+        
 
         [Browsable(false)] public TypeAccessor accessor { get; }
 

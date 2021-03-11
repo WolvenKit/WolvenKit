@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using Catel.Data;
 using Catel.IoC;
 using Catel.MVVM;
 using HandyControl.Controls;
@@ -29,7 +30,7 @@ namespace WolvenKit.ViewModels.Editor
         private ICommand _closeCommand = null;
         private string _filePath = null;
         private string _initialPath;
-        private bool _isDirty = false;
+        
         private bool _IsExistingInFileSystem;
         private bool _isInitialized;
         private ICommand _saveAsCommand = null;
@@ -74,6 +75,8 @@ namespace WolvenKit.ViewModels.Editor
             OpenEditorCommand = new RelayCommand(ExecuteOpenEditor, CanOpenEditor);
             OpenBufferCommand = new RelayCommand(ExecuteOpenBuffer, CanOpenBuffer);
             OpenImportCommand = new RelayCommand(ExecuteOpenImport, CanOpenImport);
+
+
         }
 
         #endregion ctors
@@ -138,6 +141,23 @@ namespace WolvenKit.ViewModels.Editor
         #region Properties
 
         /// <summary>
+        /// Gets or sets the editable File.
+        /// </summary>
+        [Model]
+        public IWolvenkitFile File
+        {
+            get => GetValue<IWolvenkitFile>(FileProperty);
+            private set => SetValue(FileProperty, value);
+        }
+
+        /// <summary>
+        /// Register the dependency property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData FileProperty = RegisterProperty(nameof(File), typeof(IWolvenkitFile));
+
+        //private IWolvenkitFile File { get; set; }
+
+        /// <summary>
         /// Bound to the View
         /// </summary>
         public List<ICR2WBuffer> Buffers => File.Buffers;
@@ -168,7 +188,7 @@ namespace WolvenKit.ViewModels.Editor
                     return "Noname" + (IsDirty ? "*" : "");
                 }
 
-                return System.IO.Path.GetFileName(FilePath) + (IsDirty ? "*" : "");
+                return Path.GetFileName(FilePath) + (IsDirty ? "*" : "");
             }
         }
 
@@ -196,22 +216,11 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public List<ICR2WImport> Imports => File.Imports;
 
-        /// <summary>Gets/sets whether the documents content has been changed without saving into file system or not.</summary>
-        public new bool IsDirty
-        {
-            get => _isDirty;
-            set
-            {
-                if (_isDirty != value)
-                {
-                    _isDirty = value;
-                    RaisePropertyChanged(nameof(IsDirty));
-                    RaisePropertyChanged(nameof(FileName));
-                }
-            }
-        }
+        public void SetIsDirty(bool b) => IsDirty = b;
 
-        /// <summary>Gets/sets whether the documents content has been changed without saving into file system or not.</summary>
+        /// <summary>
+        /// Gets/sets whether the documents content has been changed without saving into file system or not.
+        /// </summary>
         public bool IsExistingInFileSystem
         {
             get => _IsExistingInFileSystem;
@@ -244,11 +253,7 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        [Model]
-        private IWolvenkitFile File { get; set; }
+        
 
         private List<EditorViewModel> GetEditorsForFile(IWolvenkitFile file) => new();
 
@@ -311,6 +316,9 @@ namespace WolvenKit.ViewModels.Editor
                                 cr2w.FileName = path;
 
                                 File = cr2w;
+
+                                // events
+                                
 
                                 break;
 
@@ -378,17 +386,19 @@ namespace WolvenKit.ViewModels.Editor
 
         private void OnSave(object parameter)
         {
-            using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.Write);
+            using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
             using var bw = new BinaryWriter(fs);
             File.Write(bw);
         }
 
         private void OnSaveAs(object parameter)
         {
-            
+            throw new NotImplementedException();
         }
 
         #endregion methods
+
+        
     }
 
     public class EditorViewModel

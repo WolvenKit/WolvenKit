@@ -507,7 +507,8 @@ namespace WolvenKit.ViewModels.Shell
 
         private void ExecuteWccTool() => WccToolVM.IsVisible = !WccToolVM.IsVisible;
 
-        private bool CanSaveAll() => _projectManager.ActiveProject is EditorProject proj && Files?.Count > 0;
+        private bool CanSaveAll() => _projectManager.ActiveProject is EditorProject proj
+                                     && Files?.Count > 0;
         private void ExecuteSaveAll()
         {
             foreach (var file in Files)
@@ -516,7 +517,8 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private bool CanSaveFile() => _projectManager.ActiveProject is EditorProject proj && ActiveDocument != null;
+        private bool CanSaveFile() => _projectManager.ActiveProject is EditorProject proj
+                                      && ActiveDocument != null;
         private void ExecuteSaveFile() => Save(ActiveDocument);
 
         #endregion commands
@@ -975,7 +977,7 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             ActiveDocument.SaveCommand.SafeExecute();
-            ActiveDocument.IsDirty = false;
+            ActiveDocument.SetIsDirty(false);
         }
 
         private Task OnProjectActivationAsync(object sender, ProjectUpdatingCancelEventArgs e)

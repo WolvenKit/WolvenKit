@@ -106,6 +106,7 @@ namespace WolvenKit.CR2W
 
         public string FileName { get; set; }
         public List<ICR2WImport> Imports { get; private set; }
+        public bool IsDirty { get; set; }
 
         /// <summary>
         ///     LocalizedStringSource

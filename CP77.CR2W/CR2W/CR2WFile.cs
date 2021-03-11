@@ -84,6 +84,7 @@ namespace CP77.CR2W
         #endregion
 
         #region Properties
+
         public CR2WFileHeader Header => m_fileheader;
         
         [JsonIgnore]
@@ -107,6 +108,7 @@ namespace CP77.CR2W
         [JsonIgnore]
         public List<CR2WNameWrapper> Names { get; private set; }
         public List<ICR2WImport> Imports { get; private set; }
+        public bool IsDirty { get; set; }
         public List<CR2WPropertyWrapper> Properties { get; private set; }
         public List<ICR2WExport> Chunks { get; private set; }
         public List<ICR2WBuffer> Buffers { get; private set; }
