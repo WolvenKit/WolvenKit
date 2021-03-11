@@ -12,38 +12,15 @@ using Orc.Squirrel;
 using Orchestra.Services;
 using Orchestra.Views;
 using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.Editor;
 using WolvenKit.ViewModels.HomePage;
-using WolvenKit.ViewModels.HomePage.Pages;
 using WolvenKit.ViewModels.Others;
 using WolvenKit.ViewModels.Shared;
 using WolvenKit.ViewModels.Shell;
-using WolvenKit.ViewModels.Wizards;
-using WolvenKit.ViewModels.Wizards.BugReportWizard;
-using WolvenKit.ViewModels.Wizards.FeedbackWizard;
-using WolvenKit.ViewModels.Wizards.FirstSetupWizard;
-using WolvenKit.ViewModels.Wizards.ProjectWizard;
-using WolvenKit.ViewModels.Wizards.PublishWizard;
-using WolvenKit.ViewModels.Wizards.UserWizard;
-using WolvenKit.Views.Dialogs;
-using WolvenKit.Views.Editor;
-using WolvenKit.Views.Editor.AudioTool;
-using WolvenKit.Views.Editor.AudioTool.Radio;
-using WolvenKit.Views.Editor.VisualEditor;
-using WolvenKit.Views.HomePage;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Others;
 using WolvenKit.Views.Others.PropertyGridEditors;
-using WolvenKit.Views.Shared;
 using WolvenKit.Views.Shell;
 using WolvenKit.Views.Wizards;
-using WolvenKit.Views.Wizards.WizardPages.BugReportWizard;
-using WolvenKit.Views.Wizards.WizardPages.FeedbackWizard;
-using WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard;
-using WolvenKit.Views.Wizards.WizardPages.ProjectWizard;
-using WolvenKit.Views.Wizards.WizardPages.PublishWizard;
-using WolvenKit.Views.Wizards.WizardPages.UserWizard;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
@@ -64,139 +41,85 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             // Register Viewmodels & Views
             var viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
             var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
-            viewLocator.NamingConventions.Add("WolvenKit.Views.[VM]View");
+
             viewLocator.NamingConventions.Add("WolvenKit.Views.HomePage.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.HomePage.[VW]ViewModel");
+
+
             viewLocator.NamingConventions.Add("WolvenKit.Views.HomePage.Pages.[VM]View");
-
-            viewLocator.NamingConventions.Add("WolvenKit.ViewModels.[VM]ViewModel");
-            viewLocator.NamingConventions.Add("WolvenKit.ViewModels.HomePage.[VM]ViewModel");
-            viewLocator.NamingConventions.Add("WolvenKit.ViewModels.HomePage.Pages.[VM]ViewModel");
-
-            // I guess teh above does nothing or im doing it wrong whaever we got the below stuff already anyway.
-
-            //TODO: rename later to MainViewModel
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.HomePage.Pages.[VW]ViewModel");
 
 
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Editor.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Editor.[VW]ViewModel");
 
 
-            viewModelLocator.Register(typeof(UserControlHostWindowView), typeof(UserControlHostWindowViewModel));
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Editor.AudioTool.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Editor.AudioTool.[VW]ViewModel");
 
-            // ---- HeadCategory : Extras
-            //-- Category : Radio
-            viewModelLocator.Register(typeof(RadioPlayerView), typeof(RadioPlayerViewModel));
-            // ---- HeadCategory : ProjectView
-            viewModelLocator.Register(typeof(DocumentView), typeof(DocumentViewModel));
-            viewModelLocator.Register(typeof(PropertiesView), typeof(PropertiesViewModel));
 
-            viewModelLocator.Register(typeof(LogView), typeof(LogViewModel));
-            viewModelLocator.Register(typeof(ProjectExplorerView), typeof(ProjectExplorerViewModel));
-            viewModelLocator.Register(typeof(StatusBarView), typeof(StatusBarViewModel));
+            viewLocator.NamingConventions.Add("WolvenKit.Views.AudioTool.Radio.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.AudioTool.Radio.[VW]ViewModel");
+
+
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Editor.VisualEditor.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Editor.VisualEditor.[VW]ViewModel");
+
+
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Dialogs.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Dialogs.[VW]ViewModel");
+
+
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Others.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Others.[VW]ViewModel");
+
+
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Shared.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Shared.[VW]ViewModel");
+
+
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Shell.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Shell.[VW]ViewModel");
+
+
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizards.[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.[VW]ViewModel");
+
+
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizard.WizardPages.BugReportWizard[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.WizardPages.BugReportWizard[VW]ViewModel");
+
+
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizard.WizardPages.FeedbackWizard[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.WizardPages.FeedbackWizard[VW]ViewModel");
+
+
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizard.WizardPages.FirstSetupWizard[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.WizardPages.FirstSetupWizard[VW]ViewModel");
+
+
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizard.WizardPages.ProjectWizard[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.WizardPages.ProjectWizard[VW]ViewModel");
+
+
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizard.WizardPages.PublishWizard[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.WizardPages.PublishWizard[VW]ViewModel");
+
+
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Wizard.WizardPages.UserWizard[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.WizardPages.UserWizard[VW]ViewModel");
+
+
+            viewLocator.NamingConventions.Add("WolvenKit.Views.Others.PropertyGridEditors[VM]View");
+            viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Others.PropertyGridEditors[VW]ViewModel");
+
+
+
+            // Custom Registrations
+
             viewModelLocator.Register(typeof(MainView), typeof(WorkSpaceViewModel));
-            viewModelLocator.Register(typeof(AssetBrowserView), typeof(AssetBrowserViewModel));
-            viewModelLocator.Register(typeof(JournalEditorView), typeof(JournalEditorViewModel));
-            viewModelLocator.Register(typeof(AudioToolView), typeof(AudioToolViewModel));
-            viewModelLocator.Register(typeof(CR2WEditorView), typeof(CR2WEditorViewModel));
-            viewModelLocator.Register(typeof(CodeEditorView), typeof(CodeEditorViewModel));
-            viewModelLocator.Register(typeof(PluginManagerView), typeof(PluginManagerViewModel));
-            viewModelLocator.Register(typeof(VisualEditorView), typeof(VisualEditorViewModel));
-            viewModelLocator.Register(typeof(AnimsView), typeof(AnimsViewModel));
-            viewModelLocator.Register(typeof(MimicsView), typeof(MimicsViewModel));
-            viewModelLocator.Register(typeof(BulkEditorView), typeof(BulkEditorViewModel));
-            viewModelLocator.Register(typeof(CR2WToTextToolView), typeof(CR2WToTextToolViewModel));
-            viewModelLocator.Register(typeof(CsvEditorView), typeof(CsvEditorViewModel));
-            //-- Category : EditorBars
-            viewModelLocator.Register(typeof(ArrayEditorView), typeof(ArrayEditorViewModel));
-            viewModelLocator.Register(typeof(ByteArrayEditorView), typeof(ByteArrayEditorViewModel));
-            viewModelLocator.Register(typeof(IdTagEditorView), typeof(IdTagEditorViewModel));
-            viewModelLocator.Register(typeof(PtrEditorView), typeof(PtrEditorViewModel));
-            viewModelLocator.Register(typeof(GameDebuggerToolView), typeof(GameDebuggerToolViewModel));
-            viewModelLocator.Register(typeof(HexEditorView), typeof(HexEditorViewModel));
-            viewModelLocator.Register(typeof(ImporterToolView), typeof(ImporterToolViewModel));
-            viewModelLocator.Register(typeof(RadishToolView), typeof(RadishToolViewModel));
-            viewModelLocator.Register(typeof(WccToolView), typeof(WccToolViewModel));
-            viewModelLocator.Register(typeof(MenuCreatorToolView), typeof(MenuCreatorToolViewModel));
-            viewModelLocator.Register(typeof(RibbonView), typeof(RibbonViewModel));
-            viewModelLocator.Register(typeof(StatusBarView), typeof(StatusBarViewModel));
-
-            // ---- HeadCategory : FluentBackstage
-            //-- Category : Backstage
-            viewModelLocator.Register(typeof(OpenFileView), typeof(OpenFileViewModel));
-            viewModelLocator.Register(typeof(RecentlyUsedItemsView), typeof(RecentlyUsedItemsViewModel));
-            //-- Category : Homepage
-            viewModelLocator.Register(typeof(HomePageView), typeof(HomePageViewModel));
-            viewModelLocator.Register(typeof(AboutPageView), typeof(AboutPageViewModel));
-            viewModelLocator.Register(typeof(GithubPageView), typeof(GithubPageViewModel));
             viewModelLocator.Register(typeof(RecentProjectView), typeof(RecentlyUsedItemsViewModel));
-            viewModelLocator.Register(typeof(WikiPageView), typeof(WikiPageViewModel));
             viewModelLocator.Register(typeof(WelcomePageView), typeof(RecentlyUsedItemsViewModel));
-            viewModelLocator.Register(typeof(WebsitePageView), typeof(WebsitePageViewModel));
-            viewModelLocator.Register(typeof(SettingsPageView), typeof(SettingsPageViewModel));
-            viewModelLocator.Register(typeof(UserPageView), typeof(UserPageViewModel));
-            viewModelLocator.Register(typeof(DebugPageView), typeof(DebugPageViewModel));
-            //-- Category : Integrated Tools
-            viewModelLocator.Register(typeof(IntegratedToolsPageView), typeof(IntegratedToolsPageViewModel));
-            viewModelLocator.Register(typeof(CyberCATPageView), typeof(CyberCATPageViewModel));
-            //-- Category : Settings Pages
-            viewModelLocator.Register(typeof(GeneralSettingsView), typeof(GeneralSettingsViewModel));
-            viewModelLocator.Register(typeof(GlobalSubSettingsView), typeof(GlobalSubSettingsViewModel));
-            viewModelLocator.Register(typeof(AccountSubSettingsView), typeof(AccountSubSettingsViewModel));
-            viewModelLocator.Register(typeof(UpdatesSubSettingsView), typeof(UpdatesSubSettingsViewModel));
-            viewModelLocator.Register(typeof(ThemeSubSettingsView), typeof(ThemeSubSettingsViewModel));
-            viewModelLocator.Register(typeof(LoggingSubSettingsView), typeof(LoggingSubSettingsViewModel));
-            // - Tools
-            viewModelLocator.Register(typeof(ToolSettingsView), typeof(ToolSettingsViewModel));
-            viewModelLocator.Register(typeof(AssetBrowserSubSettingsView), typeof(AssetBrowserSubSettingsViewModel));
-            viewModelLocator.Register(typeof(CodeEditorSubSettingsView), typeof(CodeEditorSubSettingsViewModel));
-            viewModelLocator.Register(typeof(PluginManagerSubSettingsView), typeof(PluginManagerSubSettingsViewModel));
-            viewModelLocator.Register(typeof(VisualEditorSubSettingsView), typeof(VisualEditorSubSettingsViewModel));
-            // - Editor
-            viewModelLocator.Register(typeof(EditorSettingsView), typeof(EditorSettingsViewModel));
-            viewModelLocator.Register(typeof(GeneralSubSettingsView), typeof(GeneralSubSettingsViewModel));
-            viewModelLocator.Register(typeof(CompatibilitySubSettingsView), typeof(CompatibilitySubSettingsViewModel));
-            // - Packaging
-            viewModelLocator.Register(typeof(PackagingSettingsView), typeof(PackagingSettingsViewModel));
-            viewModelLocator.Register(typeof(IntegrationsSettingsView), typeof(IntegrationsSettingsViewModel));
-
-            // ---- HeadCategory : Wizards
-            //-- Category : UserWizard
-            viewModelLocator.Register(typeof(UserWizardView), typeof(UserWizardViewModel));
-            viewModelLocator.Register(typeof(UserWizardPageView), typeof(UserWizardPageViewModel));
-            //-- Category : ThemeWizard
-
-            //-- Category : ProjectWizard
-            viewModelLocator.Register(typeof(ProjectWizardView), typeof(ProjectWizardViewModel));
-            viewModelLocator.Register(typeof(SelectProjectTypeView), typeof(SelectProjectTypeViewModel));
-            viewModelLocator.Register(typeof(ProjectConfigurationView), typeof(ProjectConfigurationViewModel));
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(ViewModels.Wizards.ProjectWizard.FinalizeSetupViewModel));
-            //-- Category : PublishWizard
-            viewModelLocator.Register(typeof(PublishWizardView), typeof(PublishWizardViewModel));
-            viewModelLocator.Register(typeof(RequiredSettingsView), typeof(RequiredSettingsViewModel));
-            viewModelLocator.Register(typeof(OptionalSettingsView), typeof(OptionalSettingsViewModel));
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.PublishWizard.FinalizeSetupViewModel));
-            viewModelLocator.Register(typeof(W3PackSettingsView), typeof(W3PackSettingsViewModel));
-            //-- Category : FirstSetupWizard
-            viewModelLocator.Register(typeof(FirstSetupWizardView), typeof(FirstSetupWizardViewModel));
-            viewModelLocator.Register(typeof(CreateUserView), typeof(CreateUserViewModel));
-            viewModelLocator.Register(typeof(SelectThemeView), typeof(SelectThemeViewModel));
-            viewModelLocator.Register(typeof(SetInitialPreferencesView), typeof(SetInitialPreferencesViewModel));
-            viewModelLocator.Register(typeof(LocateGameDateView), typeof(LocateGameDataViewModel));
-            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.FirstSetupWizard.FinalizeSetupView), typeof(ViewModels.Wizards.FirstSetupWizard.FinalizeSetupViewModel));
-            //-- Category : FeedBackWizard
-            viewModelLocator.Register(typeof(FeedbackWizardView), typeof(FeedbackWizardViewModel));
-            viewModelLocator.Register(typeof(RateView), typeof(RateViewModel));
-            //-- Category : InstallerWizard
-            viewModelLocator.Register(typeof(InstallerWizardView), typeof(InstallerWizardViewModel));
-            //-- Category : BugReportWizard
-            viewModelLocator.Register(typeof(BugReportWizard), typeof(BugReportWizardViewModel));
-            viewModelLocator.Register(typeof(SendBugView), typeof(SendBugViewModel));
-
-            // ---- HeadCategory : Dialogs
-            viewModelLocator.Register(typeof(AddChunkDialog), typeof(AddChunkDialogViewModel));
-            viewModelLocator.Register(typeof(ExtractAmbigiousDialog), typeof(ExtractAmbigiousDialogViewModel));
-            viewModelLocator.Register(typeof(RenameDialog), typeof(RenameDialogViewModel));
-            viewModelLocator.Register(typeof(StringsGUIImporterIDDialog), typeof(StringsGUIImporterIDDialogViewModel));
-            viewModelLocator.Register(typeof(StringsGuiScriptsPrefixDialog), typeof(StringsGuiScriptsPrefixDialogViewModel));
-            viewLocator.Register(typeof(InputDialogViewModel), typeof(InputDialog));
         }
 
         public static async Task InitializeShell()
