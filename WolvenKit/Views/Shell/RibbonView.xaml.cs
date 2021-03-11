@@ -91,13 +91,22 @@ namespace WolvenKit.Views.Shell
 
         private void Backstage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            base.OnMouseLeftButtonDown(e);
+            RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
+            RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = true;
 
-            var serviceLocator = ServiceLocator.Default;
+            //base.OnMouseLeftButtonDown(e);
 
-            var shellService = serviceLocator.ResolveType<IShellService>();
+            //var serviceLocator = ServiceLocator.Default;
 
-            StaticReferences.GlobalShell.DragMove();
+            //var shellService = serviceLocator.ResolveType<IShellService>();
+
+            //StaticReferences.GlobalShell.DragMove();
+        }
+
+        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
+            RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = true;
         }
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -110,23 +119,19 @@ namespace WolvenKit.Views.Shell
 
         private void Border_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            var brush = (Brush)App.Current.FindResource("MahApps.Brushes.Accent3");
+            var brush = (Brush)Application.Current.FindResource("MahApps.Brushes.Accent3");
 
             HomeHighLighter.SetCurrentValue(System.Windows.Controls.Panel.BackgroundProperty, brush);
         }
 
         private void Border_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            var brush = (Brush)App.Current.FindResource("MahApps.Brushes.AccentBase");
+            var brush = (Brush)Application.Current.FindResource("MahApps.Brushes.AccentBase");
 
             HomeHighLighter.SetCurrentValue(System.Windows.Controls.Panel.BackgroundProperty, brush);
         }
 
-        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
-            RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = true;
-        }
+
 
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
         {
