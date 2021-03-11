@@ -69,6 +69,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewLocator.NamingConventions.Add("WolvenKit.Views.HomePage.Pages.[VM]View");
 
             viewLocator.NamingConventions.Add("WolvenKit.ViewModels.[VM]ViewModel");
+            viewLocator.NamingConventions.Add("WolvenKit.ViewModels.Others.[VM]ViewModel");
             viewLocator.NamingConventions.Add("WolvenKit.ViewModels.HomePage.[VM]ViewModel");
             viewLocator.NamingConventions.Add("WolvenKit.ViewModels.HomePage.Pages.[VM]ViewModel");
 

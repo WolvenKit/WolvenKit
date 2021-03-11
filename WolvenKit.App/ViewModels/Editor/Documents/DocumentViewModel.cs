@@ -21,12 +21,6 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Editor
 {
-    public enum Gender
-    {
-        Male,
-        Female
-    }
-
     public class DocumentViewModel : PaneViewModel, IDocumentViewModel
     {
         #region fields
@@ -156,18 +150,8 @@ namespace WolvenKit.ViewModels.Editor
             .Select(_ => new ChunkViewModel(_)).ToList();
 
         /// <summary>Gets a command to close this document.</summary>
-        public ICommand CloseCommand
-        {
-            get
-            {
-                if (_closeCommand == null)
-                {
-                    _closeCommand = new DelegateCommand<object>((p) => OnClose(), (p) => CanClose());
-                }
-
-                return _closeCommand;
-            }
-        }
+        public ICommand CloseCommand =>
+            _closeCommand ??= new DelegateCommand<object>((p) => OnClose(), (p) => CanClose());
 
         /// <summary>
         /// Bound to the View
@@ -227,20 +211,6 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        //      public List<ChunkPropertyViewModel> _selectEditableVariables;
-        //public List<ChunkPropertyViewModel> SelectEditableVariables
-        //      {
-        //          get => _selectEditableVariables;
-        //          set
-        //          {
-        //              if (_selectEditableVariables != value)
-        //              {
-        //                  var oldValue = _selectEditableVariables;
-        //                  _selectEditableVariables = value;
-        //                  RaisePropertyChanged(() => SelectEditableVariables, oldValue, value);
-        //              }
-        //          }
-        //      }
         /// <summary>Gets/sets whether the documents content has been changed without saving into file system or not.</summary>
         public bool IsExistingInFileSystem
         {
@@ -372,7 +342,7 @@ namespace WolvenKit.ViewModels.Editor
         }
 
         /// <summary>
-        /// Attempts to read the contents of a text file defined via initialPath
+        /// Attempts to read the contents of a text file fined via initialPath
         /// and assigns it to text content of this viewmodel.
         /// </summary>
         /// <returns>True if file read was successful, otherwise false</returns>
@@ -406,9 +376,17 @@ namespace WolvenKit.ViewModels.Editor
 
         private void OnClose() => _workSpaceViewModel.Close(this);
 
-        private void OnSave(object parameter) => _workSpaceViewModel.Save(this, false);
+        private void OnSave(object parameter)
+        {
+            using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.Write);
+            using var bw = new BinaryWriter(fs);
+            File.Write(bw);
+        }
 
-        private void OnSaveAs(object parameter) => _workSpaceViewModel.Save(this, true);
+        private void OnSaveAs(object parameter)
+        {
+            
+        }
 
         #endregion methods
     }

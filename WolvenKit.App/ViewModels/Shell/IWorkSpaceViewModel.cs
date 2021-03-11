@@ -26,7 +26,7 @@ namespace WolvenKit.ViewModels.Shell
         DocumentViewModel ActiveDocument { get; set; }
 
         /// <summary>Gets an enumeration of all currently available document viewmodels.</summary>
-        IEnumerable<DocumentViewModel> Files { get; }
+        ObservableCollection<DocumentViewModel> Files { get; }
 
         /// <summary>Gets an enumeration of all currently available tool window viewmodels.</summary>
         ObservableCollection<ToolViewModel> Tools { get; }
