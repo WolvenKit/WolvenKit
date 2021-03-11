@@ -37,7 +37,7 @@ namespace WolvenKit
             serviceLocator.RegisterType<IRibbonService, RibbonService>();
 
 #if DEBUG
-            LogManager.AddDebugListener();
+            LogManager.AddDebugListener(false);
 #endif
             Log.Info("Starting application");
             Log.Info("Initializing MVVM");
