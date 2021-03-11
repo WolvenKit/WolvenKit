@@ -115,7 +115,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Others.PropertyGridEditors.[VW]ViewModel");
 
 
-
+            // Fixes
             // Custom Registrations
 
             viewModelLocator.Register(typeof(MainView), typeof(WorkSpaceViewModel));
