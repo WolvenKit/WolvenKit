@@ -77,15 +77,16 @@ namespace CP77.CR2W.Types
 	{
         [Ordinal(0)] [RED] public toolsSceneEventID id { get; set; }
         [Ordinal(1)] [RED] public toolsSceneTrackID trackId { get; set; }
-        [Ordinal(2)] [RED] public CBool endActionBreak { get; set; }
-        [Ordinal(3)] [RED] public CBool fullyRewindable { get; set; }
-        [Ordinal(4)] [RED] public NodeRef nodeRef { get; set; }
-        [Ordinal(5)] [RED] public scnbEffectEntry effect { get; set; }
-        [Ordinal(6)] [RED] public scnbEffectEntry glitchEffect { get; set; }
-        [Ordinal(7)] [RED] public toolsSceneEventIdsPool internalSceneEventIdsPool { get; set; }
-        [Ordinal(8)] [RED] public CUInt32 duration { get; set; }
-        [Ordinal(9)] [RED] public CUInt32 startTime { get; set; }
-        [Ordinal(10)] [RED] public CRUID performer { get; set; }
+        [Ordinal(2)] [RED] public CUInt32 startTime { get; set; }
+        [Ordinal(3)] [RED] public CUInt32 duration { get; set; }
+        [Ordinal(4)] [RED] public toolsSceneEventIdsPool internalSceneEventIdsPool { get; set; }
+        [Ordinal(5)] [RED] public CRUID performer { get; set; }
+        [Ordinal(6)] [RED] public NodeRef nodeRef { get; set; }
+        [Ordinal(7)] [RED] public scnbEffectEntry effect { get; set; }
+        [Ordinal(8)] [RED] public CHandle<entEffectDesc> effectDesc { get; set; }
+        [Ordinal(9)] [RED] public CBool endActionBreak { get; set; }
+        [Ordinal(10)] [RED] public CBool fullyRewindable { get; set; }
+        [Ordinal(11)] [RED] public scnbEffectEntry glitchEffect { get; set; }
 
         public scnbeventsVFXBraindanceEventDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
@@ -94,15 +95,17 @@ namespace CP77.CR2W.Types
 	{
         [Ordinal(0)] [RED] public toolsSceneEventID id { get; set; }
         [Ordinal(1)] [RED] public toolsSceneTrackID trackId { get; set; }
-        [Ordinal(2)] [RED] public CUInt32 startTime { get; set; }
-        [Ordinal(3)] [RED] public CUInt32 performer { get; set; }
-        [Ordinal(4)] [RED] public CArray<scnbSceneEventsGroupID> eventsGroupIds { get; set; }
+        [Ordinal(2)] [RED] public CArray<scnbSceneEventsGroupID> eventsGroupIds { get; set; }
+        [Ordinal(3)] [RED] public CUInt32 startTime { get; set; }
+        [Ordinal(4)] [RED] public CBool mute { get; set; }
         [Ordinal(5)] [RED] public toolsSceneEventIdsPool internalSceneEventIdsPool { get; set; }
-        [Ordinal(6)] [RED] public CEnum<scneventsVFXActionType> action { get; set; }
-        [Ordinal(7)] [RED] public CBool mute { get; set; }
-        [Ordinal(8)] [RED] public NodeRef nodeRef { get; set; }
+        [Ordinal(6)] [RED] public CRUID performer { get; set; }
+        [Ordinal(7)] [RED] public NodeRef nodeRef { get; set; }
+        [Ordinal(8)] [RED] public CEnum<scneventsVFXActionType> action { get; set; }
         [Ordinal(9)] [RED] public scnbEffectEntry effect { get; set; }
-        [Ordinal(10)] [RED] public CHandle<entEffectDesc> effectDesc { get; set; }
+        [Ordinal(10)] [RED] public CUInt32 sequenceShift { get; set; }
+        [Ordinal(11)] [RED] public CHandle<entEffectDesc> effectDesc { get; set; }
+        [Ordinal(12)] [RED] public CBool muteSound { get; set; }
 
         public scnbeventsVFXEventDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
@@ -195,9 +198,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scnbAudioLayerNodeData : CVariable
 	{
-        [Ordinal(0)] [RED] public CHandle<toolsAudioEventDescriptor> audioEvent { get; set; }
         [Ordinal(1)] [RED] public scnNodeId nodeId { get; set; }
         [Ordinal(2)] [RED] public toolsSceneTrackID parentTrackId { get; set; }
+        [Ordinal(3)] [RED] public CHandle<toolsAudioEventDescriptor> audioEvent { get; set; }
 
         public scnbAudioLayerNodeData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
@@ -206,17 +209,20 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class scnbeventsVFXDurationEventDescriptor : CVariable
 	{
-        [Ordinal(0)] [RED] public CRUID performer { get; set; }
-        [Ordinal(1)] [RED] public CUInt32 duration { get; set; }
-        [Ordinal(2)] [RED] public toolsSceneTrackID trackId { get; set; }
-        [Ordinal(3)] [RED] public toolsSceneEventIdsPool internalSceneEventIdsPool { get; set; }
-        [Ordinal(4)] [RED] public toolsSceneEventID id { get; set; }
-        [Ordinal(5)] [RED] public CEnum<scneventsVFXActionType> endAction { get; set; }
-        [Ordinal(6)] [RED] public scnbEffectEntry effect { get; set; }
-        [Ordinal(7)] [RED] public CHandle<entEffectDesc> effectDesc { get; set; }
-        [Ordinal(8)] [RED] public CUInt32 startTime { get; set; }
-        [Ordinal(9)] [RED] public NodeRef nodeRef { get; set; }
-        [Ordinal(10)] [RED] public CArray<scnbSceneEventsGroupID> eventsGroupIds { get; set; }
+        [Ordinal(0)] [RED] public toolsSceneEventID id { get; set; }
+        [Ordinal(1)] [RED] public toolsSceneTrackID trackId { get; set; }
+        [Ordinal(2)] [RED] public CArray<scnbSceneEventsGroupID> eventsGroupIds { get; set; }
+        [Ordinal(3)] [RED] public CUInt32 startTime { get; set; }
+        [Ordinal(4)] [RED] public CUInt32 duration { get; set; }
+        [Ordinal(5)] [RED] public toolsSceneEventIdsPool internalSceneEventIdsPool { get; set; }
+        [Ordinal(6)] [RED] public CRUID performer { get; set; }
+        [Ordinal(7)] [RED] public NodeRef nodeRef { get; set; }
+        [Ordinal(8)] [RED] public CEnum<scneventsVFXActionType> action { get; set; }
+        [Ordinal(9)] [RED] public CBool mute { get; set; }
+        [Ordinal(10)] [RED] public scnbEffectEntry effect { get; set; }
+        [Ordinal(11)] [RED] public CHandle<entEffectDesc> effectDesc { get; set; }
+        
+        [Ordinal(12)] [RED] public CEnum<scneventsVFXActionType> endAction { get; set; }
 
 
         public scnbeventsVFXDurationEventDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

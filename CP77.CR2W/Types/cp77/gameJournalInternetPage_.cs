@@ -5,7 +5,7 @@ using static CP77.CR2W.Types.Enums;
 namespace CP77.CR2W.Types
 {
 	[REDMeta]
-	public class gameJournalInternetPage : gameJournalEntry
+	public class gameJournalInternetPage_ : gameJournalEntry
 	{
 		[Ordinal(1)] [RED("address")] public CString Address { get; set; }
 		[Ordinal(2)] [RED("factsToSet")] public CArray<gameJournalFactNameValue> FactsToSet { get; set; }
@@ -17,6 +17,6 @@ namespace CP77.CR2W.Types
 		[Ordinal(8)] [RED("images")] public CArray<CHandle<gameJournalInternetImage>> Images { get; set; }
 		[Ordinal(9)] [RED("videos")] public CArray<CHandle<gameJournalInternetVideo>> Videos { get; set; }
 
-		public gameJournalInternetPage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameJournalInternetPage_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

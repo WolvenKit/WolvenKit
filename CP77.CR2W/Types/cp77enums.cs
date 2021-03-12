@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using CP77.CR2W.Reflection;
@@ -10,9 +10,10 @@ namespace CP77.CR2W.Types
     {
 		// flags
 
-        
+
 		public enum EGameplayRole
         {
+            [RED("")]
             UnAssigned = 0,
             None = 1,
             Alarm = 2,
@@ -196,7 +197,7 @@ namespace CP77.CR2W.Types
 			Censor_Chinese
 
 		}
-		
+
 		[Flags]
 		public enum worldEDeniedAreaFlags
 		{
@@ -222,7 +223,7 @@ namespace CP77.CR2W.Types
             BODY
 		}
 
-		
+
 
         public enum toolsSocketDirection
 		{
@@ -233,6 +234,16 @@ namespace CP77.CR2W.Types
 		    Bottom,
 		    Right,
 		}
+        public enum toolsAudioPlaybackDirectionSupport
+        {
+            Forward,
+            Backward
+        }
+        public enum toolsAudioFastForwardSupport
+        {
+            MuteDuringFastForward,
+            DontMuteDuringFastForward
+        }
         public enum scnbPerformerAcquisitionPlanType
 		{
 		    Community,
@@ -287,7 +298,7 @@ namespace CP77.CR2W.Types
             Sample_Bitfield_Option_2_2_0
 		}
 
-        
+
 
         public enum gameLootSlotState
         {
@@ -295,16 +306,16 @@ namespace CP77.CR2W.Types
             Unavailable
 		}
 
-        
-
-        
-
-        
-
-		
 
 
-		
+
+
+
+
+
+
+
+
 
 	    public enum EMeshChunkRenderMask
 	    {
@@ -320,17 +331,17 @@ namespace CP77.CR2W.Types
 		    MCR_PrefabProxy,
 		    MCR_Cascades
 	    }
-	    
-		
 
-	    
-		
-		
 
-	    
-	    
-	    
-        
+
+
+
+
+
+
+
+
+
 	    public enum ActiveMode
 		{
 			UNINITIALIZED = 0,
@@ -3085,7 +3096,7 @@ namespace CP77.CR2W.Types
 			HARD = 3,
 			IMPOSSIBLE = 4
 		}
-		
+
 		public enum EGameSessionDataType
 		{
 			NONE = 0,
@@ -12589,8 +12600,7 @@ namespace CP77.CR2W.Types
 			Facial = 1,
 			Cyberware = 2
 		}
-		[Flags]
-		public enum scnAnimNameType
+        public enum scnAnimNameType
 		{
 			direct = 0,
 			reference = 1,
@@ -13415,6 +13425,7 @@ namespace CP77.CR2W.Types
 		}
 		public enum visWorldOccluderType
 		{
+            [RED("")]
 			Default = 0,
 			None = 1,
 			Detail = 2,

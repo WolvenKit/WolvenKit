@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 using CP77.CR2W.Types;
@@ -111,25 +111,29 @@ namespace CP77.CR2W
         /// <returns></returns>
         public static string ReadLengthPrefixedString(this BinaryReader br)
         {
-            var b = br.ReadByte();
-            if (b == 0x80)
+            // ReadVLQInt32 but highest bit is widechar instead of sign
+            var b1 = br.ReadByte();
+            if (b1 == 0x80)
                 return null;
-            if (b == 0x00)
+            if (b1 == 0x00)
                 return "";
 
-            var nxt = (b & (1 << 6)) != 0;
-            var widechar = (b & (1 << 7)) == 0;
-            int len = b & ((1 << 6) - 1); // null terminated?
-            if (nxt)
+            var widechar = (b1 & 128) == 0;
+            var next = (b1 & 64) == 64;
+            var size = b1 % 128 % 64;
+            var offset = 6;
+            while (next)
             {
-                var bb = br.ReadByte();
-                len += 64 * bb;
+                var b = br.ReadByte();
+                size = (b % 128) << offset | size;
+                next = (b & 128) == 128;
+                offset += 7;
             }
 
             string readstring;
             readstring = widechar
-                ? Encoding.Unicode.GetString(br.ReadBytes(len * 2))
-                : Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(len));
+                ? Encoding.Unicode.GetString(br.ReadBytes(size * 2))
+                : Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(size));
 
             return readstring;
         }

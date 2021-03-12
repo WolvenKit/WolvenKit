@@ -7,7 +7,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldSmartObjectNode : worldNode
 	{
-		[Ordinal(2)] [RED("object")] public CHandle<gameSmartObjectDefinition> Object { get; set; }
+		[Ordinal(4)] [RED("object")] public CHandle<gameSmartObjectDefinition> Object { get; set; }
 
 		public worldSmartObjectNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
