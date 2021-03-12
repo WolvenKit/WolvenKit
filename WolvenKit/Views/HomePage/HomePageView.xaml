@@ -84,7 +84,7 @@
                         <hc:SideMenuItem
                          Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
                          Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                         Header="Project">
+                         Header="Project" Visibility="Collapsed">
                             <hc:SideMenuItem.Icon>
                                 <iconPacks:Codicons
                                  Width="25"
@@ -140,7 +140,8 @@
                          Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
                          Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                          Header="Account"
-                         IsSelected="False">
+                         IsSelected="False"
+                            Visibility="Collapsed">
                             <hc:SideMenuItem.Icon>
                                 <iconPacks:Codicons
                                  Width="25"

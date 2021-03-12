@@ -11,7 +11,8 @@
  xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
  xmlns:orchestra="http://schemas.wildgums.com/orchestra"
  xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
- mc:Ignorable="d">
+ mc:Ignorable="d"
+ >
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -27,116 +28,42 @@
         </ResourceDictionary>
     </catel:UserControl.Resources>
 
-    <Grid Width="auto" HorizontalAlignment="Stretch">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <hc:UniformSpacingPanel Height="30" Margin="-5,-13,0,-15">
+        <hc:UniformSpacingPanel.LayoutTransform>
+            <ScaleTransform ScaleX="0.85" ScaleY="0.85" />
 
-        <StackPanel x:Name="stackPanel" MaxHeight="20">
-            <StackPanel>
-                <Separator
-                 Width="{Binding ElementName=stackPanel, Path=ActualHeight}"
-                 Margin="3,0,3,0"
-                 Background="{DynamicResource RegionBrush}">
-                    <Separator.LayoutTransform>
-                        <RotateTransform Angle="90" />
-                    </Separator.LayoutTransform>
-                </Separator>
-                <Grid>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock
-                         x:Name="LoadingTextStatusBar"
-                         Margin="5,0,5,0"
-                         Text="{Binding LoadingString}" />
-                        <!--  FIRSTRELEASE  -->
-                        <hc:LoadingIndicator
-                         Width="25"
-                         MaxHeight="25"
-                         Foreground="{DynamicResource RegionBrush}"
-                         IsEnabled="True"
-                         Style="{StaticResource LoadingIndicatorGridsStyle}"
-                         Visibility="{Binding IsLoading, Converter={StaticResource Boolean2VisibilityConverter}}" />
-                    </StackPanel>
-                </Grid>
-                <Separator
-                 Width="{Binding ElementName=stackPanel, Path=ActualHeight}"
-                 Margin="3,0,3,0"
-                 Background="{DynamicResource RegionBrush}">
-                    <Separator.LayoutTransform>
-                        <RotateTransform Angle="90" />
-                    </Separator.LayoutTransform>
-                </Separator>
+        </hc:UniformSpacingPanel.LayoutTransform>
 
-                <!--     <TextBlock Text="Line " />
-                    <TextBlock Text="{Binding Line}" />
 
-                    <TextBlock Text="Column " />
-                    <TextBlock Text="{Binding Column}" />
+        <hc:Tag
+         Height="28"
+         Margin="15,0,15,0"
+         hc:TitleElement.Background="{DynamicResource RegionBrush}"
+         Background="{DynamicResource GrayBrush10}"
+         Content="ProjectNameHere"
+         FontSize="11"
+         ShowCloseButton="False"
+         >
+            <hc:Tag.Header>
+                <iconPacks:PackIconFontAwesome Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="ProjectDiagramSolid" />
+            </hc:Tag.Header>
 
-                    <Separator Background="{DynamicResource RegionBrush}" Margin="3,0,3,0" Width="{Binding ElementName=stackPanel, Path=ActualHeight}">
-                        <Separator.LayoutTransform>
-                            <RotateTransform Angle="90" />
-                        </Separator.LayoutTransform>
-                    </Separator>
+        </hc:Tag>
 
-                    <TextBlock FontWeight="Bold" Text="{Binding Heading}" />
-                -->
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconBootstrapIcons
-                     Grid.Row="0"
-                     Width="15"
-                     Height="15"
-                     Margin="0,0,0,0"
-                     HorizontalAlignment="Left"
-                     VerticalAlignment="Center"
-                     Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                     Kind="Wifi"
-                     Spin="False"
-                     SpinAutoReverse="False" />
-                    <TextBlock Text="{Binding InternetConnected}" />
-                </StackPanel>
+        <hc:Tag
+         Height="28"
+         Margin="0"
+         hc:TitleElement.Background="{DynamicResource RegionBrush}"
+         Background="{DynamicResource GrayBrush10}"
+         Content="8.0.1"
+         FontSize="11"
+         ShowCloseButton="False"
+         >
+            <hc:Tag.Header>
+                <iconPacks:PackIconCodicons Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="Versions" />
+            </hc:Tag.Header>
 
-                <Separator
-                 Width="{Binding ElementName=stackPanel, Path=ActualHeight}"
-                 Margin="3,0,3,0"
-                 Background="{DynamicResource RegionBrush}">
-                    <Separator.LayoutTransform>
-                        <RotateTransform Angle="90" />
-                    </Separator.LayoutTransform>
-                </Separator>
-            </StackPanel>
+        </hc:Tag>
 
-            <StackPanel Visibility="{Binding IsUpdatedInstalled, Converter={StaticResource BooleanToCollapsingVisibilityConverter}}">
-                <Image
-                 Width="16"
-                 Height="16"
-                 Source="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"
-                 ToolTip="Update is installed, restart to enable new features" />
-
-                <Separator
-                 Width="{Binding ElementName=stackPanel, Path=ActualHeight}"
-                 Margin="3,0,3,0"
-                 Background="{DynamicResource RegionBrush}">
-                    <Separator.LayoutTransform>
-                        <RotateTransform Angle="90" />
-                    </Separator.LayoutTransform>
-                </Separator>
-            </StackPanel>
-
-            <StackPanel>
-                <TextBlock Text="{Binding ReceivingAutomaticUpdates}" />
-
-                <Separator
-                 Width="{Binding ElementName=stackPanel, Path=ActualHeight}"
-                 Margin="3,0,3,0"
-                 Background="{DynamicResource RegionBrush}">
-                    <Separator.LayoutTransform>
-                        <RotateTransform Angle="90" />
-                    </Separator.LayoutTransform>
-                </Separator>
-
-                <TextBlock Text="{Binding Version}" />
-            </StackPanel>
-        </StackPanel>
-    </Grid>
+    </hc:UniformSpacingPanel>
 </catel:UserControl>
