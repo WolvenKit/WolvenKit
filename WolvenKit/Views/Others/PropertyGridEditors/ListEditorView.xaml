@@ -104,11 +104,11 @@
                                 <GroupBox.Header>
                                     <Border
                                      Width="auto"
-                                     Margin="-8,0,0,-6.6"
+                                     Margin="-8,0,0,-8"
                                      Padding="15,0,15,0"
                                      HorizontalAlignment="Center"
                                      Background="{DynamicResource MahApps.Brushes.Accent3}"
-                                     CornerRadius="15,5,0,0"
+                                     CornerRadius="10,5,0,0"
                                      >
                                         <TextBlock
                                          HorizontalAlignment="Center"

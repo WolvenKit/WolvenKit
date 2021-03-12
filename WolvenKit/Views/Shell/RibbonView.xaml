@@ -645,7 +645,7 @@
          Name="DrawerTop"
          Dock="Bottom"
          IsEnabled="True"
-         IsOpen="True"
+         IsOpen="False"
          ShowMode="Cover"
          Visibility="Visible"
          >
