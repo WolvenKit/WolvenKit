@@ -7,9 +7,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldCollisionAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(4)] [RED("material")] public CName Material { get; set; }
-		[Ordinal(5)] [RED("navigationSetting")] public NavGenNavigationSetting NavigationSetting { get; set; }
-		[Ordinal(6)] [RED("filterData")] public CHandle<physicsFilterData> FilterData { get; set; }
+		[Ordinal(6)] [RED("material")] public CName Material { get; set; }
+		[Ordinal(7)] [RED("navigationSetting")] public NavGenNavigationSetting NavigationSetting { get; set; }
+		[Ordinal(8)] [RED("filterData")] public CHandle<physicsFilterData> FilterData { get; set; }
 
 		public worldCollisionAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

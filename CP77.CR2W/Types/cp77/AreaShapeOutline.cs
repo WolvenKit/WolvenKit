@@ -1,3 +1,4 @@
+using System.IO;
 using CP77.CR2W.Reflection;
 using FastMember;
 using static CP77.CR2W.Types.Enums;
@@ -9,7 +10,19 @@ namespace CP77.CR2W.Types
 	{
 		[Ordinal(0)] [RED("points")] public CArray<Vector3> Points { get; set; }
 		[Ordinal(1)] [RED("height")] public CFloat Height { get; set; }
+        private byte[] _unknown;
 
 		public AreaShapeOutline(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-	}
+
+        public override void Read(BinaryReader file, uint size)
+        {
+            // TODO: WIP
+            _unknown = file.ReadBytes((int) size);
+        }
+
+        public override void Write(BinaryWriter file)
+        {
+            file.Write(_unknown);
+        }
+    }
 }

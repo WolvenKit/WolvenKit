@@ -7,7 +7,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_SkSpeedAnim : animAnimNode_SkAnim
 	{
-		[Ordinal(18)] [RED("Speed")] public animFloatLink Speed { get; set; }
+		[Ordinal(30)] [RED("Speed")] public animFloatLink Speed { get; set; }
 
 		public animAnimNode_SkSpeedAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
