@@ -6,9 +6,6 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using Catel.IoC;
-using CP77.CR2W;
-using CP77.CR2W.Reflection;
-using CP77.CR2W.Types;
 using FastMember;
 using HandyControl.Controls;
 using HandyControl.Tools;
@@ -32,23 +29,23 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
             serviceLocator.RegisterType<ICollectionEditor, REDArrayEditor>();
             serviceLocator.RegisterType<IExpandableObjectEditor, ExpandableObjectEditor>();
 
-            serviceLocator.RegisterType(typeof(ITextEditor<double>), typeof(TextEditor<CDouble>));
-            serviceLocator.RegisterType(typeof(ITextEditor<float>), typeof(TextEditor<CFloat>));
+            serviceLocator.RegisterType(typeof(ITextEditor<double>), typeof(TextEditor<IREDIntegerType<double>>));
+            serviceLocator.RegisterType(typeof(ITextEditor<float>), typeof(TextEditor<IREDIntegerType<float>>));
 
-            serviceLocator.RegisterType(typeof(ITextEditor<ulong>), typeof(TextEditor<CUInt64>));
-            serviceLocator.RegisterType(typeof(ITextEditor<long>), typeof(TextEditor<CInt64>));
+            serviceLocator.RegisterType(typeof(ITextEditor<ulong>), typeof(TextEditor<IREDIntegerType<ulong>>));
+            serviceLocator.RegisterType(typeof(ITextEditor<long>), typeof(TextEditor<IREDIntegerType<long>>));
 
-            serviceLocator.RegisterType(typeof(ITextEditor<uint>), typeof(TextEditor<CUInt32>));
-            serviceLocator.RegisterType(typeof(ITextEditor<int>), typeof(TextEditor<CInt32>));
+            serviceLocator.RegisterType(typeof(ITextEditor<uint>), typeof(TextEditor<IREDIntegerType<uint>>));
+            serviceLocator.RegisterType(typeof(ITextEditor<int>), typeof(TextEditor<IREDIntegerType<int>>));
 
-            serviceLocator.RegisterType(typeof(ITextEditor<ushort>), typeof(TextEditor<CUInt16>));
-            serviceLocator.RegisterType(typeof(ITextEditor<short>), typeof(TextEditor<CInt16>));
+            serviceLocator.RegisterType(typeof(ITextEditor<ushort>), typeof(TextEditor<IREDIntegerType<ushort>>));
+            serviceLocator.RegisterType(typeof(ITextEditor<short>), typeof(TextEditor<IREDIntegerType<short>>));
 
-            serviceLocator.RegisterType(typeof(ITextEditor<byte>), typeof(TextEditor<CUInt8>));
-            serviceLocator.RegisterType(typeof(ITextEditor<sbyte>), typeof(TextEditor<CInt8>));
+            serviceLocator.RegisterType(typeof(ITextEditor<byte>), typeof(TextEditor<IREDIntegerType<byte>>));
+            serviceLocator.RegisterType(typeof(ITextEditor<sbyte>), typeof(TextEditor<IREDIntegerType<sbyte>>));
 
-            serviceLocator.RegisterType(typeof(ITextEditor<string>), typeof(TextEditor<CString>));
-            serviceLocator.RegisterType(typeof(INameEditor), typeof(TextEditor<CName>));
+            serviceLocator.RegisterType(typeof(ITextEditor<string>), typeof(TextEditor<IREDString>));
+            serviceLocator.RegisterType(typeof(INameEditor), typeof(TextEditor<IREDString>));
 
             serviceLocator.RegisterType(typeof(IBoolEditor), typeof(BoolEditor));
             serviceLocator.RegisterType(typeof(IEnumEditor), typeof(EnumEditor));

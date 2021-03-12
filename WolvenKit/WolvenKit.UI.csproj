@@ -65,7 +65,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.App\WolvenKit.App.csproj" />
-    <ProjectReference Include="..\WolvenKit.Bundles\WolvenKit.Bundles.csproj" />
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\WolvenKit.Radish\WolvenKit.Radish.csproj" />
   </ItemGroup>

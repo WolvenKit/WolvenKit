@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Cyberformats", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.CR2W", "WolvenKit.CR2W\WolvenKit.CR2W.csproj", "{EAD9C049-8885-4501-9371-3C79A9156ABA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Witcher3Formats", "WolvenKit.Witcher3Formats\WolvenKit.Witcher3Formats.csproj", "{B557D831-3888-4702-9E84-E74D4925D053}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,14 +41,6 @@ Global
 		{EAD9C049-8885-4501-9371-3C79A9156ABA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EAD9C049-8885-4501-9371-3C79A9156ABA}.Release|x64.ActiveCfg = Release|x64
 		{EAD9C049-8885-4501-9371-3C79A9156ABA}.Release|x64.Build.0 = Release|x64
-		{B557D831-3888-4702-9E84-E74D4925D053}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B557D831-3888-4702-9E84-E74D4925D053}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B557D831-3888-4702-9E84-E74D4925D053}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B557D831-3888-4702-9E84-E74D4925D053}.Debug|x64.Build.0 = Debug|Any CPU
-		{B557D831-3888-4702-9E84-E74D4925D053}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B557D831-3888-4702-9E84-E74D4925D053}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B557D831-3888-4702-9E84-E74D4925D053}.Release|x64.ActiveCfg = Release|Any CPU
-		{B557D831-3888-4702-9E84-E74D4925D053}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

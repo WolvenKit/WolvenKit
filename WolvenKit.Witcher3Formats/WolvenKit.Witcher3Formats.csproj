@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -78,7 +78,6 @@
         <PackageReference Include="Snappy.NET" Version="1.1.1.8" NoWarn="NU1701" />
         <PackageReference Include="Crc32C.NET" Version="1.0.5" NoWarn="NU1701" />
         <PackageReference Include="ini-parser" Version="2.5.2" NoWarn="NU1701" />
-        <PackageReference Include="WolvenKit.Witcher3Game" Version="1.0.0" />
     </ItemGroup>
 
 
@@ -99,6 +98,13 @@
 
     <ItemGroup>
       <Folder Include="Save\" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Reference Include="WolvenKit.CR2W">
+        <HintPath>..\WolvenKit.CR2W\bin\Release\net5.0\WolvenKit.CR2W.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>
