@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WolvenKit.Cyberformats" Version="1.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
+    <ProjectReference Include="..\WolvenKit.Witcher3Formats\WolvenKit.Witcher3Formats.csproj" />
+  </ItemGroup>
+
+</Project>

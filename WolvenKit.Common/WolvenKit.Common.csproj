@@ -13,6 +13,7 @@
     <PackageTags>wolvenkit</PackageTags>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <TargetFrameworks>net5.0;net5.0-windows</TargetFrameworks>
+      <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

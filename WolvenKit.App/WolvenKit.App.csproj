@@ -5,9 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CP77.CR2W\WolvenKit.Cyberformats.csproj" />
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
-    <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj" />
+    <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
     <ProjectReference Include="..\WolvenKit.Radish\WolvenKit.Radish.csproj" />
     <ProjectReference Include="..\WolvenKit.Witcher3Formats\WolvenKit.Witcher3Formats.csproj" />
   </ItemGroup>
@@ -22,6 +21,7 @@
     <PackageReference Include="Orc.CommandLine" Version="4.1.1" />
     <PackageReference Include="Orc.Squirrel" Version="4.1.0" />
     <PackageReference Include="Serilog" Version="2.10.0" />
+    <PackageReference Include="WolvenKit.Cyberformats" Version="1.1.0" />
     <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
     <PackageReference Include="Catel.Fody" Version="4.7.0-alpha0115" PrivateAssets="all" />
     <PackageReference Include="Orc.ProjectManagement" Version="4.1.1" />
@@ -35,6 +35,7 @@
     <PackageReference Include="NodeNetworkToolkit" Version="5.1.2" />
     <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="4.2.5" />
         <PackageReference Include="Pfim" Version="0.9.1" />
+        <PackageReference Include="WolvenKit.Witcher3Game" Version="1.0.0" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
 

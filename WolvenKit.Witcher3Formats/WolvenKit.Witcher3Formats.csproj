@@ -78,12 +78,12 @@
         <PackageReference Include="Snappy.NET" Version="1.1.1.8" NoWarn="NU1701" />
         <PackageReference Include="Crc32C.NET" Version="1.0.5" NoWarn="NU1701" />
         <PackageReference Include="ini-parser" Version="2.5.2" NoWarn="NU1701" />
+        <PackageReference Include="WolvenKit.Witcher3Game" Version="1.0.0" />
     </ItemGroup>
 
 
     <ItemGroup>
         <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
-        <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj" />
     </ItemGroup>
 
 

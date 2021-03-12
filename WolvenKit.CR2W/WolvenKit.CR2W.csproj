@@ -4,6 +4,17 @@
     <TargetFrameworks>net5.0;net5.0-windows</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <PackageId>WolvenKit.Witcher3Game</PackageId>
+    <Authors>Hambalkó Bence, Moritz Baron</Authors>
+    <Company>WolvenKit</Company>
+    <Product>WolvenKit.Witcher3Game</Product>
+    <Description>File formats (The Witcher 3) for the WolvenKit Mod Editor.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/WolvenKit/Wolven-kit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>wolvenkit, witcher3</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
