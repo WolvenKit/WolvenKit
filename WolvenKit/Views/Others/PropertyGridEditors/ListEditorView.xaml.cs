@@ -94,7 +94,7 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
                 const string templateName = "PropertyGridEditor";
                 var treeViewItem = new TreeViewItem
                 {
-                    Template = (ControlTemplate)this.FindResource(templateName),
+                    Template = (ControlTemplate)FindResource(templateName),
                     DataContext = obj
                 };
 
