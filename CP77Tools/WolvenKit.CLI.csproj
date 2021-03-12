@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CP77.CR2W\WolvenKit.Cyberformats.csproj" />
+    <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
   </ItemGroup>
 
 </Project>
