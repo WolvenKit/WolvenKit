@@ -5,7 +5,7 @@ using static CP77.CR2W.Types.Enums;
 namespace CP77.CR2W.Types
 {
 	[REDMeta]
-	public class STextureGroupSetup : CVariable
+	public class STextureGroupSetup_ : CVariable
 	{
 		[Ordinal(0)] [RED("group")] public CEnum<GpuWrapApieTextureGroup> Group { get; set; }
 		[Ordinal(1)] [RED("rawFormat")] public CEnum<ETextureRawFormat> RawFormat { get; set; }
@@ -17,6 +17,6 @@ namespace CP77.CR2W.Types
 		[Ordinal(7)] [RED("platformMipBiasConsole")] public CUInt8 PlatformMipBiasConsole { get; set; }
 		[Ordinal(8)] [RED("allowTextureDowngrade")] public CBool AllowTextureDowngrade { get; set; }
 
-		public STextureGroupSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public STextureGroupSetup_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

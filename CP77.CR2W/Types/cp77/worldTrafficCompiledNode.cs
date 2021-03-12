@@ -7,7 +7,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class worldTrafficCompiledNode : worldNode
 	{
-		[Ordinal(2)] [RED("aabb")] public Box Aabb { get; set; }
+		[Ordinal(4)] [RED("aabb")] public Box Aabb { get; set; }
 
 		public worldTrafficCompiledNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

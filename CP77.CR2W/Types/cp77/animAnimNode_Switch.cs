@@ -7,15 +7,15 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_Switch : animAnimNode_MotionTableSwitch
 	{
-		[Ordinal(1)] [RED("numInputs")] public CUInt32 NumInputs { get; set; }
-		[Ordinal(2)] [RED("blendTime")] public CFloat BlendTime { get; set; }
-		[Ordinal(3)] [RED("timeWarpingEnabled")] public CBool TimeWarpingEnabled { get; set; }
-		[Ordinal(4)] [RED("syncMethod")] public CHandle<animISyncMethod> SyncMethod { get; set; }
-		[Ordinal(5)] [RED("motionProvider")] public CHandle<animIMotionTableProvider> MotionProvider { get; set; }
-		[Ordinal(6)] [RED("weightNode")] public animFloatLink WeightNode { get; set; }
-		[Ordinal(7)] [RED("inputNodes")] public CArray<animPoseLink> InputNodes { get; set; }
-		[Ordinal(8)] [RED("pushDataByTag")] public CName PushDataByTag { get; set; }
-		[Ordinal(9)] [RED("canRequestInertialization")] public CBool CanRequestInertialization { get; set; }
+		[Ordinal(11)] [RED("numInputs")] public CUInt32 NumInputs { get; set; }
+		[Ordinal(12)] [RED("blendTime")] public CFloat BlendTime { get; set; }
+		[Ordinal(13)] [RED("timeWarpingEnabled")] public CBool TimeWarpingEnabled { get; set; }
+		[Ordinal(14)] [RED("syncMethod")] public CHandle<animISyncMethod> SyncMethod { get; set; }
+		[Ordinal(15)] [RED("motionProvider")] public CHandle<animIMotionTableProvider> MotionProvider { get; set; }
+		[Ordinal(16)] [RED("weightNode")] public animFloatLink WeightNode { get; set; }
+		[Ordinal(17)] [RED("inputNodes")] public CArray<animPoseLink> InputNodes { get; set; }
+		[Ordinal(18)] [RED("pushDataByTag")] public CName PushDataByTag { get; set; }
+		[Ordinal(19)] [RED("canRequestInertialization")] public CBool CanRequestInertialization { get; set; }
 
 		public animAnimNode_Switch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

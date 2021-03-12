@@ -29,16 +29,17 @@ namespace CP77.CR2W.Types
 	{
         [Ordinal(0)] [RED] public toolsSceneEventID id { get; set; }
         [Ordinal(1)] [RED]public toolsSceneTrackID trackId { get; set; }
-        [Ordinal(2)] [RED] public toolsSceneEventIdsPool internalSceneEventIdsPool { get; set; }
-        [Ordinal(3)] [RED] public CName audioEventName { get; set; }
-        [Ordinal(4)] [RED] public CRUID performer { get; set; }
-        [Ordinal(5)] [RED] public CUInt32 startTime { get; set; }
-        [Ordinal(6)] [RED] public CRUID actor { get; set; }
-        [Ordinal(7)] [RED] public CName emitterName { get; set; }
-        [Ordinal(8)] [RED] public CArray<scnbSceneEventsGroupID> eventsGroupIds { get; set; }
-        [Ordinal(9)] [RED] public CName ambientUniqueName { get; set; }
-        [Ordinal(10)] [RED] public CBool mute { get; set; }
-        [Ordinal(11)] [RED] public CRUID prop { get; set; }
+        [Ordinal(2)] [RED] public CArray<scnbSceneEventsGroupID> eventsGroupIds { get; set; }
+        [Ordinal(3)] [RED] public CUInt32 startTime { get; set; }
+        [Ordinal(4)] [RED] public CBool mute { get; set; }
+        [Ordinal(5)] [RED] public toolsSceneEventIdsPool internalSceneEventIdsPool { get; set; }
+        [Ordinal(6)] [RED] public CName audioEventName { get; set; }
+        [Ordinal(7)] [RED] public CName ambientUniqueName { get; set; }
+        [Ordinal(8)] [RED] public CName emitterName { get; set; }
+        [Ordinal(9)] [RED] public CRUID performer { get; set; }
+        [Ordinal(10)] [RED] public CEnum<toolsAudioFastForwardSupport> fastForwardSupport { get; set; }
+        [Ordinal(11)] [RED] public CRUID actor { get; set; }
+        [Ordinal(12)] [RED] public CRUID prop { get; set; }
 
         public toolsAudioEventDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
@@ -59,40 +60,37 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class toolsPartsCategory : CVariable
 	{
-        [Ordinal(0)] [RED] public CArray<CString> parts { get; set; }
-        [Ordinal(1)] [RED] public CName logicName { get; set; }
-        [Ordinal(2)] [RED] public CName name { get; set; }
+        [Ordinal(1)] [RED] public CName name { get; set; }
+        [Ordinal(2)] [RED] public CName logicName { get; set; }
+        [Ordinal(3)] [RED] public CArray<CString> parts { get; set; }
 
         public toolsPartsCategory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-	[REDMeta]
-	public class toolsAudioPlaybackDirectionSupport : CVariable
-	{
-		
 
-        public toolsAudioPlaybackDirectionSupport(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    }
-	[REDMeta]
+    [REDMeta]
 	public class toolsIGraphNodeDescriptor : CVariable
 	{
-		
+
 
         public toolsIGraphNodeDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class toolsAudioDurationEventDescriptor : CVariable
 	{
-        [Ordinal(0)] [RED("trackId")] public toolsSceneTrackID trackId { get; set; }
-        [Ordinal(1)] [RED("startTime")] public CUInt32 startTime { get; set; }
-        [Ordinal(2)] [RED("duration")] public CUInt32 duration { get; set; }
-        [Ordinal(3)] [RED] public toolsSceneEventIdsPool internalSceneEventIdsPool { get; set; }
-        [Ordinal(4)] [RED] public CName audioEventName { get; set; }
-        [Ordinal(5)] [RED] public CRUID performer { get; set; }
-        [Ordinal(5)] [RED] public toolsSceneEventID id { get; set; }
+        [Ordinal(0)] [RED] public toolsSceneEventID id { get; set; }
+        [Ordinal(1)] [RED("trackId")] public toolsSceneTrackID trackId { get; set; }
+        [Ordinal(2)] [RED] public CArray<scnbSceneEventsGroupID> eventsGroupIds { get; set; }
+        [Ordinal(3)] [RED("startTime")] public CUInt32 startTime { get; set; }
+        [Ordinal(4)] [RED("duration")] public CUInt32 duration { get; set; }
+        [Ordinal(5)] [RED] public CBool mute { get; set; }
+        [Ordinal(6)] [RED] public toolsSceneEventIdsPool internalSceneEventIdsPool { get; set; }
+        [Ordinal(7)] [RED] public CName audioEventName { get; set; }
+        [Ordinal(8)] [RED] public CRUID performer { get; set; }
+        [Ordinal(9)] [RED] public CEnum<toolsAudioPlaybackDirectionSupport> playbackDirectionSupport { get; set; }
 
         public toolsAudioDurationEventDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-    
+
     [REDMeta]
     public class toolsSocketDescription : CVariable
     {
@@ -110,7 +108,8 @@ namespace CP77.CR2W.Types
     [REDMeta]
 	public class houdiniVehicleDestructionMeshEntry : CVariable
 	{
-        
+        [Ordinal(0)] [RED("path")] public CString Path { get; set; }
+        [Ordinal(1)] [RED("position", 3)] public CStatic<CFloat> Position { get; set; }
 
         public houdiniVehicleDestructionMeshEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
@@ -119,10 +118,12 @@ namespace CP77.CR2W.Types
 	{
         [Ordinal(0)] [RED("capturePointsMin")] public CUInt32 capturePointsMin { get; set; }
         [Ordinal(1)] [RED("capturePointsMax")] public CUInt32 capturePointsMax { get; set; }
-        [Ordinal(2)] [RED] public CArray<CString> meshes { get; set; }
-        [Ordinal(3)] [RED] public CString captureRadius { get; set; }
-        [Ordinal(4)] [RED] public CString pathDeformed { get; set; }
-        [Ordinal(5)] [RED] public CString pathRest { get; set; }
+        [Ordinal(2)] [RED("captureRadius")] public CFloat CaptureRadius { get; set; }
+        [Ordinal(3)] [RED("pathRest")] public CString PathRest { get; set; }
+        [Ordinal(4)] [RED("pathDeformed")] public CString PathDeformed { get; set; }
+        [Ordinal(5)] [RED("meshes")] public CArray<CString> Meshes { get; set; }
+        [Ordinal(6)] [RED("extraMeshes")] public CArray<houdiniVehicleDestructionMeshEntry> ExtraMeshes { get; set; }
+
 
         public houdiniVehicleGridSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
@@ -131,11 +132,12 @@ namespace CP77.CR2W.Types
 	{
         public toolsPresetsData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-   
+
 	[REDMeta]
 	public class houdiniVehicleDestructionSettings : CVariable
 	{
         [Ordinal(0)] [RED("entity")] public CString entity { get; set; }
+        [Ordinal(1)] [RED("grids")] public CArray<houdiniVehicleGridSettings> Grids { get; set; }
 
         public houdiniVehicleDestructionSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
@@ -146,8 +148,8 @@ namespace CP77.CR2W.Types
 
         public toolsSceneEventID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-	
-	
+
+
 	[REDMeta]
 	public class toolsScreenplaySection : CVariable
 	{
@@ -157,8 +159,8 @@ namespace CP77.CR2W.Types
 
         public toolsScreenplaySection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-	
-	
+
+
 	[REDMeta]
 	public class toolsUniqueNodeData : CVariable
 	{
@@ -171,7 +173,7 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class toolsSocketVisibilityData : CVariable
 	{
-        
+
         [Ordinal(0)] [RED("socketId")] public CUInt32 socketId { get; set; }
         [Ordinal(1)] [RED("name")] public CName name { get; set; }
         [Ordinal(2)] [RED("placement")] public CEnum<toolsSocketPlacement> placement { get; set; }
@@ -206,7 +208,7 @@ namespace CP77.CR2W.Types
 
         public toolsScreenplayLine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-	
+
 	[REDMeta]
 	public class toolsRagdollExportData : CVariable
 	{
@@ -237,22 +239,17 @@ namespace CP77.CR2W.Types
 
         public toolsAppearanceNamingParser(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-	[REDMeta]
-	public class toolsAudioFastForwardSupport : CVariable
-	{
-        public toolsAudioFastForwardSupport(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-    }
-	[REDMeta]
+    [REDMeta]
 	public class toolsAppearanceConfigMapping : CVariable
 	{
         [Ordinal(0)] [RED] public  CName name { get; set; }
-        [Ordinal(1)] [RED] public  CString baseTypePrefix { get; set; }
-        [Ordinal(2)] [RED] public  CString baseTypesFile { get; set; }
+        [Ordinal(1)] [RED] public CString baseTypesFile { get; set; }
+        [Ordinal(2)] [RED] public  CString baseTypePrefix { get; set; }
         [Ordinal(3)] [RED] public  CString categoriesFile { get; set; }
-        [Ordinal(4)] [RED] public  CString filenameParsingRules { get; set; }
+        [Ordinal(4)] [RED] public CString partsFile { get; set; }
         [Ordinal(5)] [RED] public  CString partsCategoriesFile { get; set; }
-        [Ordinal(6)] [RED] public  CString partsFile { get; set; }
-        [Ordinal(7)] [RED] public  CString scanDirectory { get; set; }
+        [Ordinal(6)] [RED] public  CString scanDirectory { get; set; }
+        [Ordinal(7)] [RED] public CString filenameParsingRules { get; set; }
 
 
         public toolsAppearanceConfigMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
@@ -266,7 +263,7 @@ namespace CP77.CR2W.Types
 
         public toolsVisualTagsSchema(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-	
+
 	[REDMeta]
 	public class toolsAppearancesConfig : CVariable
 	{
@@ -274,7 +271,7 @@ namespace CP77.CR2W.Types
 
         public toolsAppearancesConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
-	
+
 	[REDMeta]
 	public class toolsVisualTagsDefinition : CVariable
 	{
@@ -292,9 +289,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class toolsSceneRecorderPresetData : CVariable
 	{
-        [Ordinal(0)] [RED] public CArray<CString> scenePaths { get; set; }
-        [Ordinal(1)] [RED] public CArray<toolsPresetSectionData> sectionData { get; set; }
-        [Ordinal(2)] [RED] public CString name { get; set; }
+        [Ordinal(0)] [RED("name")] public CString Name { get; set; }
+        [Ordinal(1)] [RED("scenePaths")] public CArray<CString> ScenePaths { get; set; }
+        [Ordinal(2)] [RED("sectionData")] public CArray<toolsPresetSectionData> SectionData { get; set; }
 
         public toolsSceneRecorderPresetData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
@@ -309,11 +306,11 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class toolsAppearanceNamingCaptureGroup : CVariable
 	{
-        [Ordinal(0)] [RED] public CArray<CArray<CString>> externalComponent { get; set; }
-        [Ordinal(1)] [RED] public CArray<CArray<CString>> mapOfNames { get; set; }
-        [Ordinal(2)] [RED] public CString editorTagPrefix { get; set; }
-        [Ordinal(3)] [RED] public CString allowedValueType { get; set; }
-        [Ordinal(4)] [RED("case")] public CString case_ { get; set; }
+        [Ordinal(0)] [RED] public CString editorTagPrefix { get; set; }
+        [Ordinal(1)] [RED] public CArray<CArray<CString>> externalComponent { get; set; }
+        [Ordinal(2)] [RED] public CArray<CArray<CString>> mapOfNames { get; set; }
+        [Ordinal(3)] [RED("case")] public CString case_ { get; set; }
+        [Ordinal(4)] [RED] public CString allowedValueType { get; set; }
 
         public toolsAppearanceNamingCaptureGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
@@ -326,9 +323,9 @@ namespace CP77.CR2W.Types
 	[REDMeta]
 	public class toolsAnimTimelineEvent : toolsTimeLineTrackBaseItem
     {
-        [Ordinal(0)] [RED] public CUInt64 trackId { get; set; }
-        [Ordinal(1)] [RED] public CFloat startTime { get; set; }
-        [Ordinal(2)] [RED] public CHandle<animAnimEvent> runtimeEvent { get; set; }
+        [Ordinal(6)] [RED] public CUInt64 trackId { get; set; }
+        [Ordinal(7)] [RED] public CFloat startTime { get; set; }
+        [Ordinal(8)] [RED] public CHandle<animAnimEvent> runtimeEvent { get; set; }
 
         public toolsAnimTimelineEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
@@ -355,7 +352,7 @@ namespace CP77.CR2W.Types
         [Ordinal(3)] [RED("caption")] public CString caption { get; set; }
         [Ordinal(4)] [RED("parentId")] public CUInt64 parentId { get; set; }
         [Ordinal(5)] [RED("children")] public CArray<CUInt64> children { get; set; }
-        
+
         public toolsTimeLineTrackBaseItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

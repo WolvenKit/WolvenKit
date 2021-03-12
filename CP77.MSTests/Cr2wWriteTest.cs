@@ -13,6 +13,9 @@ using CP77.CR2W.Archive;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+#if IS_PARALLEL
+using System.Threading.Tasks;
+#endif
 
 namespace CP77.MSTests
 {
@@ -923,10 +926,12 @@ namespace CP77.MSTests
                                 var filename = Path.Combine(resultDir, Path.GetFileName(cr2wFile.FileName));
 
                                 using var oFile = new FileStream($"{filename}.o.bin", FileMode.OpenOrCreate, FileAccess.Write);
+                                originalStream.Seek(0, SeekOrigin.Begin);
                                 originalStream.CopyTo(oFile);
                                 oFile.Flush();
 
                                 using var nFile = new FileStream($"{filename}.n.bin", FileMode.OpenOrCreate, FileAccess.Write);
+                                writeStream.Seek(0, SeekOrigin.Begin);
                                 writeStream.CopyTo(nFile);
                                 nFile.Flush();
                             }
