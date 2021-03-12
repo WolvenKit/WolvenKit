@@ -66,6 +66,15 @@ namespace CP77.CR2W.Types
 
         #region Methods
 
+        public IEnumerable<ICR2WExport> GetReferenceChunks()
+        {
+            var refType = AssemblyDictionary.GetTypeByName(ReferenceType);
+            var types = AssemblyDictionary.GetSubClassesOf(refType)
+                .Select(_ => _.Name).ToList();
+
+            return Cr2wFile.Chunks.Where(cr2WExport => types.Contains(cr2WExport.REDType)).ToList();
+        }
+
         public void ChangeHandleType()
         {
             ChunkHandle = !ChunkHandle;

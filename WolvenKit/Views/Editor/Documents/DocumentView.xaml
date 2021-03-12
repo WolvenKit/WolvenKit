@@ -138,11 +138,14 @@
          HorizontalAlignment="Stretch" />
 
         <Grid Grid.Column="2">
-            <hc:PropertyGrid
-                PropertyResolver="{DynamicResource MyPropertyResolver}"
-                SelectedObject="{Binding SelectedChunk.Data}"
+            
+                <hc:PropertyGrid
+                    PropertyResolver="{DynamicResource MyPropertyResolver}"
+                    SelectedObject="{Binding SelectedChunk.Data}"
                 
                 />
+            
+            
         </Grid>
     </Grid>
 </catel:UserControl>

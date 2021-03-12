@@ -13,8 +13,11 @@ namespace WolvenKit.Common.Model.Cr2w
     public interface IEditableVariable : IEditorBindable
     {
         [Browsable(false)] string REDName { get; }
+
         [Browsable(false)] string REDType { get; }
+
         [JsonIgnore] [Browsable(false)] string REDValue { get; }
+
         [JsonIgnore] [Browsable(false)] ushort REDFlags { get; }
 
         [JsonIgnore] [Browsable(false)] string UniqueIdentifier { get; }
@@ -22,18 +25,15 @@ namespace WolvenKit.Common.Model.Cr2w
         [JsonIgnore] [Browsable(false)] IEditableVariable ParentVar { get; }
         
         [JsonIgnore] [Browsable(false)] int VarChunkIndex { get; set; }
-        
 
-        
-
-        [Browsable(false)] public TypeAccessor accessor { get; }
+        [JsonIgnore] [Browsable(false)] public TypeAccessor accessor { get; }
 
         [JsonIgnore] [Browsable(false)] List<IEditableVariable> ChildrEditableVariables { get; }
 
 
 
-        [Browsable(false)] List<IEditableVariable> GetExistingVariables(bool includebuffers);
-        [Browsable(false)] List<IEditableVariable> GetEditableVariables();
+        List<IEditableVariable> GetExistingVariables(bool includebuffers);
+        List<IEditableVariable> GetEditableVariables();
 
         void SetREDName(string val);
         int LookUpChunkIndex();

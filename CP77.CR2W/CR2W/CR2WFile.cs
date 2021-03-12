@@ -602,7 +602,7 @@ namespace CP77.CR2W
             // Read object data //block 5
             for (int i = 0; i < Chunks.Count; i++)
             {
-                ICR2WExport chunk = Chunks[i];
+                var chunk = Chunks[i];
 
                 chunk.ReadData(file);
 

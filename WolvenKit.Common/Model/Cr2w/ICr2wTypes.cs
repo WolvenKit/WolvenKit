@@ -150,6 +150,7 @@ namespace WolvenKit.Common.Model.Cr2w
         ushort Flags { get; set; }
 
         void ChangeHandleType();
+        public IEnumerable<ICR2WExport> GetReferenceChunks();
     }
 
     #endregion

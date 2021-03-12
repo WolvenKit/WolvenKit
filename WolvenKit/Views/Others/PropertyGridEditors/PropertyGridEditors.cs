@@ -1,11 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using Catel.IoC;
+using CP77.CR2W;
+using CP77.CR2W.Reflection;
 using CP77.CR2W.Types;
+using FastMember;
 using HandyControl.Controls;
 using HandyControl.Tools;
 using WolvenKit.Common.Model.Cr2w;
@@ -53,6 +57,20 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
         }
 
         #endregion Methods
+
+        public static IEditableVariable GetObjectFromPropertyItem(PropertyItem propertyItem)
+        {
+            dynamic parent = propertyItem.Value;
+            if (parent.accessor is TypeAccessor accessor)
+            {
+                if (accessor[parent, $"{propertyItem.PropertyName}"] is IEditableVariable instance)
+                {
+                    return instance;
+                }
+            }
+
+            return null;
+        }
     }
 
     #endregion IoC
@@ -156,7 +174,13 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
 
         private protected override FrameworkElement CreateInnerElement(PropertyItem propertyItem)
         {
-            var chunks = (propertyItem.Value as IEditableVariable)?.Cr2wFile.Chunks;
+            var chunks = new List<ICR2WExport>();
+
+            if (PropertyGridResolver.GetObjectFromPropertyItem(propertyItem) is IHandleAccessor instance)
+            {
+                chunks = instance.GetReferenceChunks().ToList();
+            }
+
             var box = new System.Windows.Controls.ComboBox
             {
                 IsEnabled = !propertyItem.IsReadOnly,
