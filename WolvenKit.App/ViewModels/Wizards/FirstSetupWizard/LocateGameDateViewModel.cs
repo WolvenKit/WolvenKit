@@ -8,11 +8,11 @@ using WolvenKit.Models.Wizards;
 
 namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
 {
-    public class LocateGameDataViewModel : ViewModelBase
+    public class LocateGameDateViewModel : ViewModelBase
     {
         #region constructors
 
-        public LocateGameDataViewModel(IServiceLocator serviceLocator)
+        public LocateGameDateViewModel(IServiceLocator serviceLocator)
         {
             Argument.IsNotNull(() => serviceLocator);
 
