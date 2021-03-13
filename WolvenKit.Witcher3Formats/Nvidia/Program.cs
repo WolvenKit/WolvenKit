@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using WolvenKit.CR2W;
+using WolvenKit.RED3.CR2W;
 using WolvenKit.Nvidia.HairWorks;
 
 namespace WolvenKit.Nvidia

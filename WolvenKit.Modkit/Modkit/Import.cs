@@ -1,9 +1,10 @@
 using System;
 using System.IO;
 using System.Linq;
-using CP77.CR2W.Types;
+using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.RED4.CR2W;
 
 namespace CP77.CR2W
 {

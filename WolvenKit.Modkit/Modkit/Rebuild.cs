@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.CR2W;
 
 namespace CP77.CR2W
 {

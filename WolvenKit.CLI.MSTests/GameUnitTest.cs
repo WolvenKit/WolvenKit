@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using Catel.IoC;
-using CP77.CR2W.Archive;
+using WolvenKit.RED4.CR2W.Archive;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common.Oodle;

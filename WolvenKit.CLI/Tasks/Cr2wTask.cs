@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CP77.CR2W;
-using CP77.CR2W.Extensions;
+using WolvenKit.RED4.CR2W.Extensions;
 using Newtonsoft.Json;
 using WolvenKit.Common.Services;
 

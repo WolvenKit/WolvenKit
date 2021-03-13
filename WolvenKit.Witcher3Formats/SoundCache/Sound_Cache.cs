@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using WolvenKit.Common;
-using WolvenKit.CR2W;
+using WolvenKit.RED3.CR2W;
 
 namespace WolvenKit.Wwise
 {

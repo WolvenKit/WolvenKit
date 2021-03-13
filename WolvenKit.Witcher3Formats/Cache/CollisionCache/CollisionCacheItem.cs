@@ -4,7 +4,7 @@ using System.IO.MemoryMappedFiles;
 using System.Linq;
 using Ionic.Zlib;
 using WolvenKit.Common;
-using WolvenKit.CR2W;
+using WolvenKit.RED3.CR2W;
 
 namespace WolvenKit.Cache
 {

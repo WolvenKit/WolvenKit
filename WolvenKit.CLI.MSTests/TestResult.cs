@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using CP77.CR2W.Archive;
+using WolvenKit.RED4.CR2W.Archive;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 

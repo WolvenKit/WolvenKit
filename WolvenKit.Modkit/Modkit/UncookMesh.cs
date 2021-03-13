@@ -1,11 +1,11 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using CP77.CR2W.Types;
+using WolvenKit.RED4.CR2W.Types;
 using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
-using CP77.CR2W;
+using WolvenKit.RED4.CR2W;
 
 namespace CP77.CR2W.Uncooker
 {

@@ -8,13 +8,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
 using WolvenKit.Common.Services;
-using CP77.CR2W.Archive;
-using CP77.CR2W.Extensions;
-using CP77.CR2W.Types;
+using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.CR2W.Extensions;
+using WolvenKit.RED4.CR2W.Types;
 using CP77.CR2W.Uncooker;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Oodle;
+using WolvenKit.RED4.CR2W;
 
 namespace CP77.CR2W
 {
@@ -32,7 +33,7 @@ namespace CP77.CR2W
         /// <param name="uncookext"></param>
         /// <param name="flip"></param>
         /// <returns></returns>
-        public static bool UncookSingle(this Archive.Archive ar, ulong hash, DirectoryInfo outDir,
+        public static bool UncookSingle(this Archive ar, ulong hash, DirectoryInfo outDir,
             EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
         {
             // checks
@@ -71,7 +72,7 @@ namespace CP77.CR2W
         /// <param name="uncookext"></param>
         /// <param name="flip"></param>
         /// <returns></returns>
-        public static (List<string>, int) UncookAll(this Archive.Archive ar, DirectoryInfo outDir, string pattern = "",
+        public static (List<string>, int) UncookAll(this Archive ar, DirectoryInfo outDir, string pattern = "",
             string regex = "", EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
         {
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();

@@ -7,14 +7,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
 using CP77.CR2W;
-using CP77.CR2W.Archive;
-using CP77.CR2W.Reflection;
-using CP77.CR2W.Types;
+using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.CR2W.Reflection;
+using WolvenKit.RED4.CR2W.Types;
 using Newtonsoft.Json;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.CR2W;
 
 namespace CP77Tools.Tasks
 {
