@@ -77,6 +77,15 @@
                              Kind="GoToFile"
                              />
                         </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Stretch"
+                             Kind="GoToFile"
+                             />
+                        </fluent:Button.Icon>
                     </fluent:Button>
                     <fluent:Button Command="{catel:CommandManagerBinding Application.NewProject}" Header="New Project">
                         <fluent:Button.LargeIcon>
@@ -88,6 +97,15 @@
                              Kind="NewFile"
                              />
                         </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Stretch"
+                             Kind="NewFile"
+                             />
+                        </fluent:Button.Icon>
                     </fluent:Button>
 
                 </fluent:RibbonGroupBox>
@@ -104,6 +122,15 @@
                              Kind="Save"
                              />
                         </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Stretch"
+                             Kind="Save"
+                             />
+                        </fluent:Button.Icon>
                     </fluent:Button>
                     <fluent:Button Command="{catel:CommandManagerBinding Application.SaveAll}" Header="Save All">
                         <fluent:Button.LargeIcon>
@@ -115,6 +142,15 @@
                              Kind="SaveAll"
                              />
                         </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Stretch"
+                             Kind="SaveAll"
+                             />
+                        </fluent:Button.Icon>
                     </fluent:Button>
                 </fluent:RibbonGroupBox>
 
@@ -130,6 +166,15 @@
                              Kind="Play"
                              />
                         </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Stretch"
+                             Kind="Play"
+                             />
+                        </fluent:Button.Icon>
                     </fluent:Button>
 
                     <fluent:Button
@@ -180,6 +225,13 @@
                              Kind="UiRadiosGrid"
                              />
                         </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons
+                             Width="25"
+                             Height="25"
+                             Kind="UiRadiosGrid"
+                             />
+                        </fluent:Button.Icon>
                     </fluent:Button>
                     <fluent:Button Command="{catel:CommandManagerBinding Application.ShowCodeEditor}" Header="Code Editor">
                         <fluent:Button.LargeIcon>
@@ -272,6 +324,15 @@
                              Kind="Notebook"
                              />
                         </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Stretch"
+                             Kind="Notebook"
+                             />
+                        </fluent:Button.Icon>
                     </fluent:Button>
                     <fluent:Button Command="{catel:CommandManagerBinding Application.ShowProjectExplorer}" Header="Project Explorer">
                         <fluent:Button.LargeIcon>
@@ -283,6 +344,15 @@
                              Kind="Note"
                              />
                         </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Stretch"
+                             Kind="Note"
+                             />
+                        </fluent:Button.Icon>
                     </fluent:Button>
                     <fluent:Button Command="{catel:CommandManagerBinding Application.ShowProperties}" Header="Properties Window">
                         <fluent:Button.LargeIcon>
@@ -294,6 +364,15 @@
                              Kind="SymbolProperty"
                              />
                         </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Stretch"
+                             Kind="SymbolProperty"
+                             />
+                        </fluent:Button.Icon>
                     </fluent:Button>
 
                     <fluent:Button
@@ -327,6 +406,15 @@
                              Kind="InboxesFill"
                              />
                         </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Stretch"
+                             Kind="InboxesFill"
+                             />
+                        </fluent:Button.Icon>
                     </fluent:Button>
 
                     <fluent:Button
@@ -492,6 +580,15 @@
                              Kind="Settings"
                              />
                         </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             Kind="Settings"
+                             />
+                        </fluent:Button.Icon>
                     </fluent:Button>
                 </fluent:RibbonGroupBox>
 
@@ -511,6 +608,7 @@
                      Command="{catel:CommandManagerBinding Application.BugReport}"
                      Header="Bug Report"
                      IsEnabled="False"
+                     Visibility="Collapsed"
                      >
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons
@@ -527,6 +625,7 @@
                      Command="{catel:CommandManagerBinding Application.ShowFeedback}"
                      Header="Feedback"
                      IsEnabled="False"
+                     Visibility="Collapsed"
                      >
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons
@@ -549,6 +648,15 @@
                              Kind="Info"
                              />
                         </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             Kind="Info"
+                             />
+                        </fluent:Button.Icon>
                     </fluent:Button>
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
