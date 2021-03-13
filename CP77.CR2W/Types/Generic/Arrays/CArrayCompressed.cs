@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -27,7 +27,7 @@ namespace CP77.CR2W.Types
         /// <param name="size"></param>
         public override void Read(BinaryReader file, uint size)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("CArrayCompressed.Read");
         }
 
         public override void Write(BinaryWriter file)

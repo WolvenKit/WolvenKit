@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,7 +16,6 @@ namespace CP77.CR2W.Types
     /// A generic wrapper class for a single CVariable
     /// Format: [uint size] [ushort nameID] [ushort typeID] [byte[size] data]
     /// </summary>
-    [DataContract(Namespace = "")]
     [REDMeta()]
     public class CVariantSizeNameType : CVariable, IBufferVariantAccessor
     {
@@ -76,7 +75,7 @@ namespace CP77.CR2W.Types
 
         public override string ToString()
         {
-            return Variant == null ? "NULL" : Variant.ToString();
+            return Variant == null ? "NULL" : $"{Variant.REDName} :{Variant}";
         }
 
         public override CVariable Copy(ICR2WCopyAction context)

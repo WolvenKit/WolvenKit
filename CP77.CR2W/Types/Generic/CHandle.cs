@@ -114,7 +114,7 @@ namespace CP77.CR2W.Types
                 Flags = cr2w.Imports[-val - 1].Flags;
 
                 //TODO are non-chunk handles used in cp77?
-                throw new NotImplementedException();
+                throw new NotImplementedException("CHandle.Read");
             }
         }
 

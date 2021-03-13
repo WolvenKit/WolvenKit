@@ -222,13 +222,25 @@ namespace CP77.CR2W.Types
                 var generictype = GetGenericType(innertypename, cr2w);
 
                 if (arraytype == typeof(CStatic<>))
+                {
                     elementType = typeof(CStatic<>).MakeGenericType(generictype);
+                }
                 else if (arraytype == typeof(CArrayFixedSize<>))
+                {
                     elementType = typeof(CArrayFixedSize<>).MakeGenericType(generictype);
+                }
                 else if (arraytype == typeof(CArray<>))
+                {
                     elementType = typeof(CArray<>).MakeGenericType(generictype);
+                }
                 else if (arraytype == typeof(CArrayVLQInt32<>))
+                {
                     elementType = typeof(CArrayVLQInt32<>).MakeGenericType(generictype);
+                }
+                else if (arraytype == typeof(CArrayCompressed<>))
+                {
+                    elementType = typeof(CArrayCompressed<>).MakeGenericType(generictype);
+                }
                 else
                 {
                     throw new InvalidParsingException($"Could not create array type for {arraytype.Name}");

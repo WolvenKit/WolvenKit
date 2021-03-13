@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -46,7 +46,7 @@ namespace CP77.CR2W.Types
         /// <param name="seperator"></param>
         public void FromCsvStream(Stream stream, char seperator = ',')
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("FromCsvStream");
         }
 
         public override void Read(BinaryReader file, uint size)

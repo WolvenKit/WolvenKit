@@ -8,10 +8,25 @@ namespace CP77.CR2W.Types
 {
     public static partial class Enums
     {
-		// flags
+        // flags
 
+        public enum EInterPolationType
+        {
+            Constant,
+            Linear,
+            BezierQuadratic,
+            BezierCubic,
+            Hermite
+        }
 
-		public enum EGameplayRole
+        public enum EChannelLinkType
+        {
+            Normal,
+            Smooth,
+            SmoothSymmertric
+        }
+
+        public enum EGameplayRole
         {
             [RED("")]
             UnAssigned = 0,
@@ -13819,8 +13834,5 @@ namespace CP77.CR2W.Types
 			ForceShow = 1,
 			ForceHide = 2
 		}
-
-
-
     }
 }

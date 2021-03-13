@@ -1,4 +1,4 @@
-﻿using Catel;
+using Catel;
 using RED.CRC32;
 using System;
 using System.Collections.Generic;
@@ -641,7 +641,7 @@ namespace CP77.CR2W
             var readbytes = endpos - startpos;
             if (readbytes != file.BaseStream.Length)
             {
-                throw new NotImplementedException("additional files for cp77 are not implemented");
+                //throw new NotImplementedException("additional files for cp77 are not implemented");
 
                 //var bytesleft = file.BaseStream.Length - readbytes;
                 //AdditionalCr2WFileBytes = file.ReadBytes((int)bytesleft);
@@ -1370,12 +1370,12 @@ namespace CP77.CR2W
 
         Task<EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("IWolvenkitFile.Read");
         }
 
         public void GetChunks()
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("GetChunks");
         }
     }
 }

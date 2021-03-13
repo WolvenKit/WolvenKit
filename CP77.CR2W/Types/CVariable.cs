@@ -185,7 +185,7 @@ namespace CP77.CR2W.Types
             {
                 if (string.IsNullOrEmpty(name))
                 {
-                    throw new NotImplementedException();
+                    throw new NotImplementedException("REDName");
                     //return "<NO NAME SET>";
                 }
                 else
@@ -731,7 +731,7 @@ namespace CP77.CR2W.Types
 
         public virtual void AddVariable(IEditableVariable var)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("AddVariable");
         }
 
         public virtual bool CanRemoveVariable(IEditableVariable child)

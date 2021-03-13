@@ -44,7 +44,7 @@ namespace CP77.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("CArrayBase.Read");
         }
 
         protected void Read(BinaryReader file, uint size, int elementcount)
@@ -206,13 +206,13 @@ namespace CP77.CR2W.Types
 
         public void Insert(int index, T item)
         {
-            throw new NotImplementedException(); 
+            throw new NotImplementedException("CarrayBase.Insert"); 
             //((IList<T>)elements).Insert(index, item);
         }
 
         public void RemoveAt(int index)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("CarrayBase.RemoveAt");
             //((IList<T>)elements).RemoveAt(index);
         }
 
@@ -263,7 +263,7 @@ namespace CP77.CR2W.Types
 
         public void Insert(int index, object value)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("CarrayBase.Insert");
             //((IList)elements).Insert(index, value);
         }
 

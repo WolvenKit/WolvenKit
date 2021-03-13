@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -16,35 +16,21 @@ namespace CP77.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class multiChannelCurve<T> : CVariable, ICurveDataAccessor where T : CVariable
     {
-        public enum EInterPolationType
-        {
-            Constant,
-            Linear, 
-            BezierQuadratic,
-            BezierCubic,
-            Hermite
-        }
-
-        public enum ELinkType
-        {
-            Normal,
-            Smooth,
-            SmoothSymmertric
-        }
+        
 
         public multiChannelCurve(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             //NumChannels = new CUInt32(cr2w, this, nameof(NumChannels));
-            InterPolationType = new CEnum<EInterPolationType>(cr2w, this, nameof(InterPolationType));
-            LinkType = new CEnum<ELinkType>(cr2w, this, nameof(LinkType));
+            InterPolationType = new CEnum<Enums.EInterPolationType>(cr2w, this, nameof(InterPolationType));
+            LinkType = new CEnum<Enums.EChannelLinkType>(cr2w, this, nameof(LinkType));
             Alignment = new CUInt32(cr2w, this, nameof(Alignment));
             Data = new CByteArray(cr2w, this, nameof(Data));
         }
 
 
         [Ordinal(1)] [REDBuffer] public CUInt32 NumChannels { get; set; }
-        [Ordinal(2)] [REDBuffer(true)] public CEnum<EInterPolationType> InterPolationType { get; set; }
-        [Ordinal(3)] [REDBuffer(true)] public CEnum<ELinkType> LinkType { get; set; }
+        [Ordinal(2)] [REDBuffer(true)] public CEnum<Enums.EInterPolationType> InterPolationType { get; set; }
+        [Ordinal(3)] [REDBuffer(true)] public CEnum<Enums.EChannelLinkType> LinkType { get; set; }
         [Ordinal(4)] [REDBuffer(true)] public CUInt32 Alignment { get; set; }
         [Ordinal(5)] [REDBuffer(true)] public CByteArray Data { get; set; }
 
@@ -59,10 +45,10 @@ namespace CP77.CR2W.Types
             base.Read(file, size);
 
             var interPolationTypeByte = (int)file.ReadByte();
-            InterPolationType.Value = (EInterPolationType) interPolationTypeByte;
+            InterPolationType.Value = (Enums.EInterPolationType) interPolationTypeByte;
 
             var linkTypeByte = (int)file.ReadByte();
-            LinkType.Value = (ELinkType) linkTypeByte;
+            LinkType.Value = (Enums.EChannelLinkType) linkTypeByte;
 
             Alignment.Read(file, 4);
             Data.Read(file, 0);
