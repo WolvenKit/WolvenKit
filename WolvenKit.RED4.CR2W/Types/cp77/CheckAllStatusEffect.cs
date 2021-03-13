@@ -1,0 +1,16 @@
+using WolvenKit.RED4.CR2W.Reflection;
+using FastMember;
+using static WolvenKit.RED4.CR2W.Types.Enums;
+
+namespace WolvenKit.RED4.CR2W.Types
+{
+	[REDMeta]
+	public class CheckAllStatusEffect : AIStatusEffectCondition
+	{
+		[Ordinal(0)] [RED("behaviorArgumentNameTag")] public CName BehaviorArgumentNameTag { get; set; }
+		[Ordinal(1)] [RED("behaviorArgumentFloatPriority")] public CName BehaviorArgumentFloatPriority { get; set; }
+		[Ordinal(2)] [RED("behaviorArgumentNameFlag")] public CName BehaviorArgumentNameFlag { get; set; }
+
+		public CheckAllStatusEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+	}
+}

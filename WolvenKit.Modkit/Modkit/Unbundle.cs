@@ -5,8 +5,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Catel.IoC;
-using CP77.CR2W.Archive;
-using CP77.CR2W.Extensions;
+using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.CR2W.Extensions;
 using WolvenKit.Common.Services;
 
 namespace CP77.CR2W
@@ -26,7 +26,7 @@ namespace CP77.CR2W
         /// <param name="pattern"></param>
         /// <param name="regex"></param>
         /// <returns></returns>
-        public static (List<string>, int) ExtractAll(this Archive.Archive ar, DirectoryInfo outDir, string pattern = "", string regex = "")
+        public static (List<string>, int) ExtractAll(this Archive ar, DirectoryInfo outDir, string pattern = "", string regex = "")
         {
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             var extractedList = new ConcurrentBag<string>();
@@ -79,7 +79,7 @@ namespace CP77.CR2W
         /// <param name="hash"></param>
         /// <param name="outDir"></param>
         /// <returns></returns>
-        public static int ExtractSingle(this Archive.Archive ar, ulong hash, DirectoryInfo outDir)
+        public static int ExtractSingle(this Archive ar, ulong hash, DirectoryInfo outDir)
         {
             if (!ar.Files.ContainsKey(hash))
                 return -1;

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using CP77.CR2W.Archive;
+using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Bundles;
 using WolvenKit.Cache;
 using WolvenKit.Common;

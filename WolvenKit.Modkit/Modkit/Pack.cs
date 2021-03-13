@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using CP77.CR2W.Archive;
-using CP77.CR2W.Extensions;
+using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.CR2W.Extensions;
 using CP77Tools.Model;
 using RED.CRC32;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.CR2W;
 using Index = CP77Tools.Model.Index;
 
 namespace CP77.CR2W
@@ -62,7 +63,7 @@ namespace CP77.CR2W
         /// <param name="infolder"></param>
         /// <param name="outpath"></param>
         /// <returns></returns>
-        public static Archive.Archive Pack(DirectoryInfo infolder, DirectoryInfo outpath)
+        public static Archive Pack(DirectoryInfo infolder, DirectoryInfo outpath)
         {
             if (!infolder.Exists)
                 return null;
@@ -70,7 +71,7 @@ namespace CP77.CR2W
                 return null;
 
             var outfile = Path.Combine(outpath.FullName, $"basegame_{infolder.Name}.archive");
-            var ar = new Archive.Archive
+            var ar = new Archive
             {
                 ArchiveAbsolutePath = outfile,
                 Index = new Index()

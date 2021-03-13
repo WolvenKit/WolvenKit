@@ -3,9 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using CP77.Common.Image;
-using CP77.CR2W.Types;
+using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Oodle;
+using WolvenKit.RED4.CR2W;
 
 namespace CP77.CR2W.Uncooker
 {

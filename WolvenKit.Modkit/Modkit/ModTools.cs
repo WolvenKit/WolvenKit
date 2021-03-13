@@ -1,6 +1,7 @@
 using System.IO;
 using Catel.IoC;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.CR2W;
 
 namespace CP77.CR2W
 {
