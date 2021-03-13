@@ -107,15 +107,6 @@ namespace CP77Tools.Tasks
                     }
 
                     //write
-                    //string content = System.Text.Json.JsonSerializer.Serialize(cr2w,
-                    //    new System.Text.Json.JsonSerializerOptions()
-                    //    {
-                    //        WriteIndented = true,
-                    //        ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve,
-                    //    });
-                    //File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.net5.json"), content);
-
-                    //write
                     File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.json"),
                         JsonConvert.SerializeObject(cr2w, Formatting.Indented, new JsonSerializerSettings()
                         {

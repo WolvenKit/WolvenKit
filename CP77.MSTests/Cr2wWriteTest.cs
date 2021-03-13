@@ -1,5 +1,5 @@
 #define IS_PARALLEL
-//#undef IS_PARALLEL
+#undef IS_PARALLEL
 
 using System;
 using System.Collections.Concurrent;
@@ -29,7 +29,7 @@ namespace CP77.MSTests
         }
 
         private const bool TEST_EXISTING = true;
-        private const bool WRITE_FAILED = false;
+        private const bool WRITE_FAILED = true;
 
         #region test methods
 
