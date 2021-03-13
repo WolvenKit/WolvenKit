@@ -43,6 +43,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.App", "WolvenKit.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Witcher3Formats", "WolvenKit.Witcher3Formats\WolvenKit.Witcher3Formats.csproj", "{28422882-41ED-4813-8890-3DE362D82182}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Modkit", "WolvenKit.Modkit\WolvenKit.Modkit.csproj", "{D019CB01-9948-418A-8C1C-DB66D38BFCDF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -147,6 +149,14 @@ Global
 		{28422882-41ED-4813-8890-3DE362D82182}.Release|Any CPU.Build.0 = Release|Any CPU
 		{28422882-41ED-4813-8890-3DE362D82182}.Release|x64.ActiveCfg = Release|Any CPU
 		{28422882-41ED-4813-8890-3DE362D82182}.Release|x64.Build.0 = Release|Any CPU
+		{D019CB01-9948-418A-8C1C-DB66D38BFCDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D019CB01-9948-418A-8C1C-DB66D38BFCDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D019CB01-9948-418A-8C1C-DB66D38BFCDF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D019CB01-9948-418A-8C1C-DB66D38BFCDF}.Debug|x64.Build.0 = Debug|Any CPU
+		{D019CB01-9948-418A-8C1C-DB66D38BFCDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D019CB01-9948-418A-8C1C-DB66D38BFCDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D019CB01-9948-418A-8C1C-DB66D38BFCDF}.Release|x64.ActiveCfg = Release|Any CPU
+		{D019CB01-9948-418A-8C1C-DB66D38BFCDF}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -168,6 +178,7 @@ Global
 		{73450280-2B7A-4BA7-88F8-C23AD80CC042} = {7199D583-CA10-4035-9014-65158344B33D}
 		{A6AF197F-9D48-41A1-B114-9ACD4F18CB3F} = {BE958494-0BB3-4401-93DB-65458FED482B}
 		{28422882-41ED-4813-8890-3DE362D82182} = {A84C71C3-E7BD-4E88-847B-B743E549429A}
+		{D019CB01-9948-418A-8C1C-DB66D38BFCDF} = {BE958494-0BB3-4401-93DB-65458FED482B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DAAF993-E8B7-47A4-AB0E-C159CB499F45}

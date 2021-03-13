@@ -1,11 +1,27 @@
-name: WolvenKit-Check-Build
+name: WolvenKit-Draft-release
 on:
   workflow_dispatch:
-  pull_request:
+  push:
     branches:
       - master
  
 jobs:
+
+  create_release:
+    runs-on: windows-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+
+    steps:
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: commit-${{ github.sha }}
+        draft: true
+
   build-dll-win:
     runs-on: windows-latest
 
@@ -64,7 +80,7 @@ jobs:
       
   wkit-win:
     runs-on: windows-latest
-    needs: build-dll-win
+    needs: [build-dll-win, create_release]
 
     steps:
     - name: checkout
@@ -88,19 +104,34 @@ jobs:
       with:
         name: artifact_wkit-win-red4
         path: WolvenKit.RED4.CR2W/bin/Release/net5.0/WolvenKit.RED4.CR2W.dll
-        
 
     - name: dotnet build WolvenKit.sln
       run: dotnet build ./WolvenKit.sln --configuration Release --no-restore
+      
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.1
       with:
         name: artifact_wkit-windows
         path: ./WolvenKit/bin/Release/net5.0-windows
 
-  console-win:
+    - name: zip
+      uses: papeloto/action-zip@v1
+      with:
+        files: ./WolvenKit/bin/Release/net5.0-windows
+        dest: wolvenkit.zip
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{needs.create_release.outputs.upload_url }}
+        asset_path: ./wolvenkit.zip
+        asset_name: wolvenkit.zip
+        asset_content_type: application/zip
+
+  console-windows:
     runs-on: windows-latest
-    needs: build-dll-win
+    needs: [build-dll-win, create_release]
 
     steps:
     - name: checkout
@@ -116,15 +147,31 @@ jobs:
 
     - name: dotnet build CP77Tools.sln
       run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
+
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.1
       with:
         name: artifact_console-windows
         path: ./CP77Tools/bin/Release/net5.0-windows
+
+    - name: zip
+      uses: papeloto/action-zip@v1
+      with:
+        files: ./CP77Tools/bin/Release/net5.0-windows
+        dest: wolvenkit_console.zip
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{needs.create_release.outputs.upload_url }}
+        asset_path: ./wolvenkit_console.zip
+        asset_name: wolvenkit_console.zip
+        asset_content_type: application/zip
       
-  console-osx:
+  console-OSX:
     runs-on: macos-latest
-    needs: build-dll-osx
+    needs: [build-dll-osx, create_release]
 
     steps:
     - name: checkout
@@ -140,8 +187,24 @@ jobs:
     
     - name: dotnet build CP77Tools.sln
       run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
+
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.1
       with:
         name: artifact_console-OSX
-        path: ./CP77Tools/bin/Release/net5.0 
+        path: ./CP77Tools/bin/Release/net5.0
+
+    - name: zip
+      uses: papeloto/action-zip@v1
+      with:
+        files: ./CP77Tools/bin/Release/net5.0
+        dest: wolvenkit_console_osx.zip
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{needs.create_release.outputs.upload_url }}
+        asset_path: ./wolvenkit_console_osx.zip
+        asset_name: wolvenkit_console_osx.zip
+        asset_content_type: application/zip     
