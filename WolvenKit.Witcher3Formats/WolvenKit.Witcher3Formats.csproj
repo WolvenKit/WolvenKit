@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
+    <ItemGroup>
     <None Remove="bnkext\bnkextr.exe" />
     <None Remove="SoundCache\soundbanksinfo.xml" />
     <None Remove="vgmstream\avcodec-vgmstream-58.dll" />
@@ -93,11 +93,6 @@
       <None Update="vgmstream\README.md">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-    </ItemGroup>
-
-
-    <ItemGroup>
-      <Folder Include="Save\" />
     </ItemGroup>
 
 
