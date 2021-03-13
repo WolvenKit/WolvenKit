@@ -43,8 +43,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="WolvenKit.CR2W">
-      <HintPath>..\WolvenKit.CR2W\bin\Release\net5.0\WolvenKit.CR2W.dll</HintPath>
+    <Reference Include="WolvenKit.RED3.CR2W">
+      <HintPath>..\WolvenKit.RED3.CR2W\bin\Release\net5.0\WolvenKit.RED3.CR2W.dll</HintPath>
     </Reference>
     <Reference Include="WolvenKit.RED4.CR2W">
       <HintPath>..\WWolvenKit.RED4.CR2W\bin\Release\net5.0\WolvenKit.RED4.CR2W.dll</HintPath>

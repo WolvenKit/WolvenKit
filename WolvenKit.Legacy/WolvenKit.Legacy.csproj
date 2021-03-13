@@ -1149,9 +1149,9 @@
       <Project>{93a10f45-1846-4ae7-939b-5b5e39b260be}</Project>
       <Name>WolvenKit.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj">
+    <ProjectReference Include="..\WolvenKit.RED3.CR2W\WolvenKit.RED3.CR2W.csproj">
       <Project>{f3129e02-31ad-4327-a9ef-7c52d777c71f}</Project>
-      <Name>WolvenKit.CR2W</Name>
+      <Name>WolvenKit.RED3.CR2W</Name>
     </ProjectReference>
     <ProjectReference Include="..\WolvenKit.IrrlichtLime\IrrlichtLime.vcxproj">
       <Project>{4f6ef8e3-f26f-49db-867d-fd10fb083b0d}</Project>

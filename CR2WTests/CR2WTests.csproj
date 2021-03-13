@@ -107,9 +107,9 @@
       <Project>{17cf5901-6e1f-467f-afe0-3cc04dc9688a}</Project>
       <Name>WolvenKit.Cache</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj">
+    <ProjectReference Include="..\WolvenKit.RED3.CR2W\WolvenKit.RED3.CR2W.csproj">
       <Project>{4C97CC2D-7033-42A9-8359-8960B7380654}</Project>
-      <Name>WolvenKit.CR2W</Name>
+      <Name>WolvenKit.RED3.CR2W</Name>
     </ProjectReference>
     <ProjectReference Include="..\WolvenKit.Net\WolvenKit.Net.csproj">
       <Project>{f60b8974-617d-45b5-bd33-68a9f739de4f}</Project>

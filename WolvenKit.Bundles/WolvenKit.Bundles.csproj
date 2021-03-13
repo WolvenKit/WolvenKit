@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
-    <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj" />
+    <ProjectReference Include="..\WolvenKit.RED3.CR2W\WolvenKit.RED3.CR2W.csproj" />
   </ItemGroup>
 
 

@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Bundles", "Wolven
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Cache", "WolvenKit.Cache\WolvenKit.Cache.csproj", "{1F390381-36B7-45D9-9D6D-F290C692592D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.CR2W", "WolvenKit.CR2W\WolvenKit.CR2W.csproj", "{4C97CC2D-7033-42A9-8359-8960B7380654}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED3.CR2W", "WolvenKit.RED3.CR2W\WolvenKit.RED3.CR2W.csproj", "{4C97CC2D-7033-42A9-8359-8960B7380654}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Nvidia", "WolvenKit.Nvidia\WolvenKit.Nvidia.csproj", "{5E24EB10-AB32-460B-8E49-F4BB6761CCE9}"
 EndProject
