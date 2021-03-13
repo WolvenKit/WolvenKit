@@ -98,16 +98,18 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: artifact_wkit-win-red3
-        path: WolvenKit.RED3.CR2W/bin/Release/net5.0/WolvenKit.RED3.CR2W.dll
+        path: ./WolvenKit.RED3.CR2W/bin/Release/net5.0
     - name: Download Artifact RED4 CR2W
       uses: actions/download-artifact@v2
       with:
         name: artifact_wkit-win-red4
-        path: WolvenKit.RED4.CR2W/bin/Release/net5.0/WolvenKit.RED4.CR2W.dll
+        path: ./WolvenKit.RED4.CR2W/bin/Release/net5.0
+    - name: Display structure of downloaded files
+      run: ls -R
 
     - name: dotnet build WolvenKit.sln
       run: dotnet build ./WolvenKit.sln --configuration Release --no-restore
-      
+
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.1
       with:
@@ -129,7 +131,7 @@ jobs:
         asset_name: wolvenkit.zip
         asset_content_type: application/zip
 
-  console-windows:
+  console-win:
     runs-on: windows-latest
     needs: [build-dll-win, create_release]
 
@@ -144,6 +146,19 @@ jobs:
       run: dotnet clean ./CP77Tools.sln --configuration Release && dotnet nuget locals all --clear
     - name: dotnet restore
       run: dotnet restore ./CP77Tools.sln
+
+    - name: Download Artifact RED3 CR2W
+      uses: actions/download-artifact@v2
+      with:
+        name: artifact_wkit-win-red3
+        path: ./WolvenKit.RED3.CR2W/bin/Release/net5.0/
+    - name: Download Artifact RED4 CR2W
+      uses: actions/download-artifact@v2
+      with:
+        name: artifact_wkit-win-red4
+        path: ./WolvenKit.RED4.CR2W/bin/Release/net5.0
+    - name: Display structure of downloaded files
+      run: ls -R
 
     - name: dotnet build CP77Tools.sln
       run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
@@ -169,7 +184,7 @@ jobs:
         asset_name: wolvenkit_console.zip
         asset_content_type: application/zip
       
-  console-OSX:
+  console-osx:
     runs-on: macos-latest
     needs: [build-dll-osx, create_release]
 
@@ -185,6 +200,19 @@ jobs:
     - name: dotnet restore
       run: dotnet restore ./CP77Tools.sln
     
+    - name: Download Artifact RED3 CR2W
+      uses: actions/download-artifact@v2
+      with:
+        name: artifact_wkit-osx-red3
+        path: ./WolvenKit.RED3.CR2W/bin/Release/net5.0
+    - name: Download Artifact RED4 CR2W
+      uses: actions/download-artifact@v2
+      with:
+        name: artifact_wkit-osx-red4
+        path: ./WolvenKit.RED4.CR2W/bin/Release/net5.0
+    - name: Display structure of downloaded files
+      run: ls -R
+
     - name: dotnet build CP77Tools.sln
       run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
 

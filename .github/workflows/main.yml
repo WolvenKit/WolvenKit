@@ -82,12 +82,12 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: artifact_wkit-win-red3
-        path: WolvenKit.RED3.CR2W/bin/Release/net5.0/WolvenKit.RED3.CR2W.dll
+        path: ./WolvenKit.RED3.CR2W/bin/Release/net5.0
     - name: Download Artifact RED4 CR2W
       uses: actions/download-artifact@v2
       with:
         name: artifact_wkit-win-red4
-        path: WolvenKit.RED4.CR2W/bin/Release/net5.0/WolvenKit.RED4.CR2W.dll
+        path: ./WolvenKit.RED4.CR2W/bin/Release/net5.0
     - name: Display structure of downloaded files
       run: ls -R
 
@@ -119,12 +119,12 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: artifact_wkit-win-red3
-        path: WolvenKit.RED3.CR2W/bin/Release/net5.0/WolvenKit.RED3.CR2W.dll
+        path: ./WolvenKit.RED3.CR2W/bin/Release/net5.0
     - name: Download Artifact RED4 CR2W
       uses: actions/download-artifact@v2
       with:
         name: artifact_wkit-win-red4
-        path: WolvenKit.RED4.CR2W/bin/Release/net5.0/WolvenKit.RED4.CR2W.dll
+        path: ./WolvenKit.RED4.CR2W/bin/Release/net5.0
     - name: Display structure of downloaded files
       run: ls -R
 
@@ -156,15 +156,15 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: artifact_wkit-osx-red3
-        path: WolvenKit.RED3.CR2W/bin/Release/net5.0/WolvenKit.RED3.CR2W.dll
+        path: ./WolvenKit.RED3.CR2W/bin/Release/net5.0
     - name: Download Artifact RED4 CR2W
       uses: actions/download-artifact@v2
       with:
         name: artifact_wkit-osx-red4
-        path: WolvenKit.RED4.CR2W/bin/Release/net5.0/WolvenKit.RED4.CR2W.dll
+        path: ./WolvenKit.RED4.CR2W/bin/Release/net5.0
     - name: Display structure of downloaded files
       run: ls -R
-          
+
     - name: dotnet build CP77Tools.sln
       run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
     - name: Upload a Build Artifact
