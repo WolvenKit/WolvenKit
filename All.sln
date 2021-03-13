@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Cyberformats", "WolvenKit.Cyberformats\WolvenKit.Cyberformats.csproj", "{9A7C09A8-112A-4324-9B48-931AA835E9B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED4.CR2W", "WolvenKit.RED4.CR2W\WolvenKit.RED4.CR2W.csproj", "{9A7C09A8-112A-4324-9B48-931AA835E9B5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{6BC8815E-BFF9-46A5-9535-0E89A765D75A}"
 EndProject

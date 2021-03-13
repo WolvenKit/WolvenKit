@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="WolvenKit.Cyberformats">
-      <HintPath>..\WolvenKit.Cyberformats\bin\Release\net5.0\WolvenKit.Cyberformats.dll</HintPath>
+    <Reference Include="WolvenKit.RED4.CR2W">
+      <HintPath>..\WolvenKit.RED4.CR2W\bin\Release\net5.0\WolvenKit.RED4.CR2W.dll</HintPath>
     </Reference>
   </ItemGroup>
 

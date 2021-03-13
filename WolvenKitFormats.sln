@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31025.218
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Common", "WolvenKit.Common\WolvenKit.Common.csproj", "{35BC70CF-5120-4D8A-9437-CBA48FBAA23D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Cyberformats", "WolvenKit.Cyberformats\WolvenKit.Cyberformats.csproj", "{9FDA6C86-2C2D-469F-9077-A8871FDDA51F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED4.CR2W", "WolvenKit.RED4.CR2W\WolvenKit.RED4.CR2W.csproj", "{9FDA6C86-2C2D-469F-9077-A8871FDDA51F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.CR2W", "WolvenKit.CR2W\WolvenKit.CR2W.csproj", "{EAD9C049-8885-4501-9371-3C79A9156ABA}"
 EndProject

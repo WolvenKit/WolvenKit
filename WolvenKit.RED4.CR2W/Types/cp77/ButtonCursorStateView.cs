@@ -1,0 +1,16 @@
+using WolvenKit.RED4.CR2W.Reflection;
+using FastMember;
+using static WolvenKit.RED4.CR2W.Types.Enums;
+
+namespace WolvenKit.RED4.CR2W.Types
+{
+	[REDMeta]
+	public class ButtonCursorStateView : BaseButtonView
+	{
+		[Ordinal(2)] [RED("HoverStateName")] public CName HoverStateName { get; set; }
+		[Ordinal(3)] [RED("PressStateName")] public CName PressStateName { get; set; }
+		[Ordinal(4)] [RED("DefaultStateName")] public CName DefaultStateName { get; set; }
+
+		public ButtonCursorStateView(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+	}
+}
