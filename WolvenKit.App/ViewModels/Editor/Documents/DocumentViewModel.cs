@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using Catel.Data;
 using Catel.IoC;
 using Catel.MVVM;
 using HandyControl.Controls;
@@ -21,12 +22,6 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Editor
 {
-    public enum Gender
-    {
-        Male,
-        Female
-    }
-
     public class DocumentViewModel : PaneViewModel, IDocumentViewModel
     {
         #region fields
@@ -35,7 +30,7 @@ namespace WolvenKit.ViewModels.Editor
         private ICommand _closeCommand = null;
         private string _filePath = null;
         private string _initialPath;
-        private bool _isDirty = false;
+        
         private bool _IsExistingInFileSystem;
         private bool _isInitialized;
         private ICommand _saveAsCommand = null;
@@ -80,6 +75,8 @@ namespace WolvenKit.ViewModels.Editor
             OpenEditorCommand = new RelayCommand(ExecuteOpenEditor, CanOpenEditor);
             OpenBufferCommand = new RelayCommand(ExecuteOpenBuffer, CanOpenBuffer);
             OpenImportCommand = new RelayCommand(ExecuteOpenImport, CanOpenImport);
+
+
         }
 
         #endregion ctors
@@ -144,6 +141,23 @@ namespace WolvenKit.ViewModels.Editor
         #region Properties
 
         /// <summary>
+        /// Gets or sets the editable File.
+        /// </summary>
+        [Model]
+        public IWolvenkitFile File
+        {
+            get => GetValue<IWolvenkitFile>(FileProperty);
+            private set => SetValue(FileProperty, value);
+        }
+
+        /// <summary>
+        /// Register the dependency property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData FileProperty = RegisterProperty(nameof(File), typeof(IWolvenkitFile));
+
+        //private IWolvenkitFile File { get; set; }
+
+        /// <summary>
         /// Bound to the View
         /// </summary>
         public List<ICR2WBuffer> Buffers => File.Buffers;
@@ -156,18 +170,8 @@ namespace WolvenKit.ViewModels.Editor
             .Select(_ => new ChunkViewModel(_)).ToList();
 
         /// <summary>Gets a command to close this document.</summary>
-        public ICommand CloseCommand
-        {
-            get
-            {
-                if (_closeCommand == null)
-                {
-                    _closeCommand = new DelegateCommand<object>((p) => OnClose(), (p) => CanClose());
-                }
-
-                return _closeCommand;
-            }
-        }
+        public ICommand CloseCommand =>
+            _closeCommand ??= new DelegateCommand<object>((p) => OnClose(), (p) => CanClose());
 
         /// <summary>
         /// Bound to the View
@@ -184,7 +188,7 @@ namespace WolvenKit.ViewModels.Editor
                     return "Noname" + (IsDirty ? "*" : "");
                 }
 
-                return System.IO.Path.GetFileName(FilePath) + (IsDirty ? "*" : "");
+                return Path.GetFileName(FilePath) + (IsDirty ? "*" : "");
             }
         }
 
@@ -212,36 +216,11 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public List<ICR2WImport> Imports => File.Imports;
 
-        /// <summary>Gets/sets whether the documents content has been changed without saving into file system or not.</summary>
-        public new bool IsDirty
-        {
-            get => _isDirty;
-            set
-            {
-                if (_isDirty != value)
-                {
-                    _isDirty = value;
-                    RaisePropertyChanged(nameof(IsDirty));
-                    RaisePropertyChanged(nameof(FileName));
-                }
-            }
-        }
+        public void SetIsDirty(bool b) => IsDirty = b;
 
-        //      public List<ChunkPropertyViewModel> _selectEditableVariables;
-        //public List<ChunkPropertyViewModel> SelectEditableVariables
-        //      {
-        //          get => _selectEditableVariables;
-        //          set
-        //          {
-        //              if (_selectEditableVariables != value)
-        //              {
-        //                  var oldValue = _selectEditableVariables;
-        //                  _selectEditableVariables = value;
-        //                  RaisePropertyChanged(() => SelectEditableVariables, oldValue, value);
-        //              }
-        //          }
-        //      }
-        /// <summary>Gets/sets whether the documents content has been changed without saving into file system or not.</summary>
+        /// <summary>
+        /// Gets/sets whether the documents content has been changed without saving into file system or not.
+        /// </summary>
         public bool IsExistingInFileSystem
         {
             get => _IsExistingInFileSystem;
@@ -274,11 +253,7 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        [Model]
-        private IWolvenkitFile File { get; set; }
+        
 
         private List<EditorViewModel> GetEditorsForFile(IWolvenkitFile file) => new();
 
@@ -342,6 +317,9 @@ namespace WolvenKit.ViewModels.Editor
 
                                 File = cr2w;
 
+                                // events
+                                
+
                                 break;
 
                             case Tw3Project tw3proj:
@@ -372,7 +350,7 @@ namespace WolvenKit.ViewModels.Editor
         }
 
         /// <summary>
-        /// Attempts to read the contents of a text file defined via initialPath
+        /// Attempts to read the contents of a text file fined via initialPath
         /// and assigns it to text content of this viewmodel.
         /// </summary>
         /// <returns>True if file read was successful, otherwise false</returns>
@@ -406,11 +384,21 @@ namespace WolvenKit.ViewModels.Editor
 
         private void OnClose() => _workSpaceViewModel.Close(this);
 
-        private void OnSave(object parameter) => _workSpaceViewModel.Save(this, false);
+        private void OnSave(object parameter)
+        {
+            using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
+            using var bw = new BinaryWriter(fs);
+            File.Write(bw);
+        }
 
-        private void OnSaveAs(object parameter) => _workSpaceViewModel.Save(this, true);
+        private void OnSaveAs(object parameter)
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion methods
+
+        
     }
 
     public class EditorViewModel

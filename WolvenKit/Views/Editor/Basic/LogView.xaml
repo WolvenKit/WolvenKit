@@ -12,7 +12,8 @@
  d:DesignHeight="450"
  d:DesignWidth="800"
  IsVisibleChanged="UserControl_IsVisibleChanged"
- mc:Ignorable="d">
+ mc:Ignorable="d"
+ >
 
     <catel:UserControl.Resources>
         <Geometry x:Key="LogDebugGeometry">M15.73,3L21,8.27L21,15.73L15.73,21L8.27,21L3,15.73L3,8.27L8.27,3L15.73,3ZM14.9,5L9.1,5L5,9.1L5,14.9L9.1,19L14.9,19L19,14.9L19,9.1L14.9,5ZM11,17L13,17L13,11L11,11L11,17ZM11,9L13,9L13,7L11,7L11,9Z</Geometry>
@@ -20,7 +21,11 @@
         <Geometry x:Key="LogErrorGeometry">M2,21.9997L12,2.00026L20.6247,19.2199L20.6291,19.2199L22,21.9997L22,21.9997L22,21.9997L2,21.9997ZM5.0287,19.9997L18.9638,19.9997L12,6.11526L5.0287,19.9997ZM12.9376,16.5456L11.2947,16.5456L11.2947,18.2081L12.9376,18.2081L12.9376,16.5456ZM12.9376,11.5581L11.2947,11.5581L11.2947,14.8831L12.9376,14.8831L12.9376,11.5581Z</Geometry>
         <Geometry x:Key="LogInfoGeometry">M11,9L13,9L13,7L11,7M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2C6.51416,2 2,6.51416 2,12C2,17.4858 6.51416,22 12,22C17.4858,22 22,17.4858 22,12C22,6.51416 17.4858,2 12,2M11,17L13,17L13,11L11,11L11,17Z</Geometry>
         <Geometry x:Key="LogClockGeometry">M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z</Geometry>
+
+
         <Geometry x:Key="PaintRoller">M768 874.667h-469.333c-47.061 0-85.333-38.272-85.333-85.333v-128c0-47.061 38.272-85.333 85.333-85.333h469.333c47.061 0 85.333 38.272 85.333 85.333v128c0 47.061-38.272 85.333-85.333 85.333zM298.667 661.333v128h469.333l0.085-128h-469.419zM554.667 320v85.333c0 47.061-38.272 85.333-85.333 85.333h-298.667v256c-47.061 0-85.333-38.272-85.333-85.333v-170.667c0-47.061 38.272-85.333 85.333-85.333h298.667v-85.333c-23.595 0-42.667-19.072-42.667-42.667v-213.333c0-23.595 19.072-42.667 42.667-42.667h85.333c23.595 0 42.667 19.072 42.667 42.667v213.333c0 23.595-19.072 42.667-42.667 42.667z</Geometry>
+
+
     </catel:UserControl.Resources>
 
     <Grid>
@@ -48,31 +53,56 @@
          ShowInfo="True"
          ShowMultilineMessagesExpanded="True"
          ShowWarning="True"
-         WarningMessageBrush="Orange" />
+         WarningMessageBrush="Orange"
+         />
 
-        <StackPanel
+        <hc:UniformSpacingPanel
          Grid.Row="1"
-         Margin="0,0,15,0"
+         Margin="0,5,5,5"
          HorizontalAlignment="Right"
          VerticalAlignment="Bottom"
+         FlowDirection="RightToLeft"
          Orientation="Horizontal"
-         Visibility="Visible">
+         Spacing="15"
+         Visibility="Visible"
+         >
             <Button
-             hc:IconElement.Geometry="{StaticResource PaintRoller}"
              BorderThickness="1"
              Click="Button_Click"
-             Style="{StaticResource ButtonIcon}">
-                <Button.RenderTransform>
-                    <RotateTransform Angle="180" CenterX="20" CenterY="15" />
-                </Button.RenderTransform>
+             Style="{StaticResource MahApps.Styles.Button.Chromeless}"
+             >
+                <iconPacks:PackIconCodicons
+                 Width="15"
+                 Height="15"
+                 Kind="ClearAll"
+                 />
             </Button>
 
             <Button
              BorderThickness="1"
              Click="Button_Click"
-             Style="{StaticResource MahApps.Styles.Button.Chromeless}">
-                <iconPacks:PackIconCodicons Kind="ClearAll" Width="25" Height="25" />
+             Style="{StaticResource MahApps.Styles.Button.Chromeless}"
+             Visibility="Collapsed"
+             >
+                <iconPacks:PackIconOcticons
+                 Width="15"
+                 Height="15"
+                 Kind="Clippy"
+                 />
             </Button>
-        </StackPanel>
+
+            <Button
+             BorderThickness="1"
+             Click="Button_Click"
+             Style="{StaticResource MahApps.Styles.Button.Chromeless}"
+             Visibility="Collapsed"
+             >
+                <iconPacks:PackIconUnicons
+                 Width="15"
+                 Height="15"
+                 Kind="PaintTool"
+                 />
+            </Button>
+        </hc:UniformSpacingPanel>
     </Grid>
 </catel:UserControl>

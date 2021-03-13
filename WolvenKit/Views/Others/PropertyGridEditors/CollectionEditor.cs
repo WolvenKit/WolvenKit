@@ -17,17 +17,5 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
         private protected override DependencyProperty GetInnerDependencyProperty() => ListEditorView.ItemsSourceProperty;
 
         #endregion Methods
-
-        //// bind the dependency property to the UI element
-        //protected override void CreateInnerBinding(FrameworkElement element) =>
-        //    BindingOperations.SetBinding(
-        //        element,
-        //        GetInnerDependencyProperty(),
-        //        new Binding($"{nameof(Wrapper)}.Value")
-        //        {
-        //            Source = this,
-        //            Mode = BindingMode.TwoWay,
-        //            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-        //        });
     }
 }

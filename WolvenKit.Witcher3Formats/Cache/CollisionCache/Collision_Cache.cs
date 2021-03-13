@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using Ionic.Zlib;
 using WolvenKit.Common;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Types;
+using WolvenKit.RED3.CR2W;
+using WolvenKit.RED3.CR2W.Types;
 
 namespace WolvenKit.Cache
 {

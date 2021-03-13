@@ -15,19 +15,11 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
     {
         #region Methods
 
-        public string HeaderText
-        {
-            get => string.IsNullOrEmpty(Wrapper?.REDValue) ? "NOT SET" : Wrapper.REDValue;
-            set => throw new NotImplementedException();
-        }
-
         // creates a treeview
         public override FrameworkElement CreateElement(PropertyItem propertyItem)
         {
             var (tree, pg) = CreateCustomInnerElement();
             CreateInnerBinding(pg);
-
-            
 
             BindingOperations.SetBinding(
                 tree,
@@ -79,19 +71,17 @@ namespace WolvenKit.Views.Others.PropertyGridEditors
             };
             treeviewitem.Items.Add(pg);
 
-            //var grid = new Grid();
+            // bind the header
             var header = new TextBlock();
             BindingOperations.SetBinding(
                 header,
                 TextBlock.TextProperty,
-                new Binding($"{nameof(HeaderText)}")
+                new Binding($"{nameof(Wrapper)}.{nameof(IEditableVariable.REDValue)}")
                 {
                     Source = this,
-                    Mode = BindingMode.TwoWay,
+                    Mode = BindingMode.OneWay,
                     UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 });
-
-            //grid.Children.Add(header);
 
             treeviewitem.Header = header;
 

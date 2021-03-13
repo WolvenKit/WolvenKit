@@ -181,6 +181,11 @@ namespace WolvenKit.Models
         public void CollapseChildren(bool recursive)
         {
             IsExpanded = false;
+            if (Children == null)
+            {
+                return;
+            }
+
             foreach (var info in Children)
             {
                 info.IsExpanded = false;
@@ -191,6 +196,11 @@ namespace WolvenKit.Models
         public void ExpandChildren(bool recursive)
         {
             IsExpanded = true;
+            if (Children == null)
+            {
+                return;
+            }
+
             foreach (var info in Children)
             {
                 info.IsExpanded = true;

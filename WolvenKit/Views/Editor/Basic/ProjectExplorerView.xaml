@@ -15,7 +15,8 @@
  d:DesignHeight="450"
  d:DesignWidth="800"
  IsVisibleChanged="UserControl_IsVisibleChanged"
- mc:Ignorable="d">
+ mc:Ignorable="d"
+ >
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -31,17 +32,18 @@
             <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
         </Grid.Resources>
 
-        <Grid VerticalAlignment="Top">
+        <Grid VerticalAlignment="Top" Visibility="Collapsed">
             <hc:SearchBar Margin="3" />
         </Grid>
 
         <TreeView
          Name="TreeView"
-         Margin="0,33,0,0"
+         Margin="0,0,0,0"
          BorderBrush="Transparent"
          ItemsSource="{Binding Treenodes}"
          SelectedItemChanged="TreeView_SelectedItemChanged"
-         Style="{DynamicResource TreeView}">
+         Style="{DynamicResource TreeView}"
+         >
             <i1:Interaction.Behaviors>
                 <behavior:TreeViewBehavior />
             </i1:Interaction.Behaviors>
@@ -51,7 +53,8 @@
                     <MenuItem
                      Command="{catel:CommandManagerBinding Application.OpenFile}"
                      CommandParameter="{Binding SelectedItem}"
-                     Header="Open" />
+                     Header="Open"
+                     />
                     <Separator />
 
                     <MenuItem Header="Actions">
@@ -96,21 +99,24 @@
                             <MouseBinding
                              Command="{catel:CommandManagerBinding Application.OpenFile}"
                              CommandParameter="{Binding}"
-                             MouseAction="LeftDoubleClick" />
+                             MouseAction="LeftDoubleClick"
+                             />
                         </StackPanel.InputBindings>
                         <svgc:SvgViewbox
                          Width="22"
                          Height="15"
                          Margin="0"
                          Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
-                         Stretch="Uniform" />
+                         Stretch="Uniform"
+                         />
                         <TextBlock Text="{Binding Path=Name}" />
                         <i1:Interaction.Triggers>
                             <i1:EventTrigger EventName="PreviewMouseRightButtonDown">
                                 <i1:ChangePropertyAction
                                  PropertyName="IsSelected"
                                  TargetObject="{Binding}"
-                                 Value="true" />
+                                 Value="true"
+                                 />
                             </i1:EventTrigger>
                         </i1:Interaction.Triggers>
                     </StackPanel>

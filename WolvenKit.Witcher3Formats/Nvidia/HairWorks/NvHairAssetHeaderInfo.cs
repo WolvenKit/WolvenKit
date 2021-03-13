@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
-using WolvenKit.CR2W.Types;
+using WolvenKit.RED3.CR2W.Types;
 
 namespace WolvenKit.Nvidia.HairWorks
 {

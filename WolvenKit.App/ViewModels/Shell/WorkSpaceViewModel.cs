@@ -34,7 +34,7 @@ namespace WolvenKit.ViewModels.Shell
     {
         #region fields
 
-        private readonly ObservableCollection<DocumentViewModel> _files = new ObservableCollection<DocumentViewModel>();
+        private readonly ObservableCollection<DocumentViewModel> _files = new();
 
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
@@ -104,6 +104,9 @@ namespace WolvenKit.ViewModels.Shell
             PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
             BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
             PublishModCommand = new RelayCommand(ExecutePublishMod, CanPublishMod);
+
+            SaveFileFileCommand = new RelayCommand(ExecuteSaveFile, CanSaveFile);
+            SaveAllCommand = new RelayCommand(ExecuteSaveAll, CanSaveAll);
 
             addfiledel = vm => _files.Add(vm);
 
@@ -192,6 +195,9 @@ namespace WolvenKit.ViewModels.Shell
             commandManager.RegisterCommand(AppCommands.Application.ShowWccTool, ShowWccToolCommand, this);
 
             // Home Tab
+            commandManager.RegisterCommand(AppCommands.Application.SaveFile, SaveFileFileCommand, this);
+            commandManager.RegisterCommand(AppCommands.Application.SaveAll, SaveAllCommand, this);
+
             commandManager.RegisterCommand(AppCommands.Application.OpenFile, OpenFileCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.NewFile, NewFileCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.PackMod, PackModCommand, this);
@@ -203,6 +209,16 @@ namespace WolvenKit.ViewModels.Shell
         #endregion init
 
         #region commands
+
+        /// <summary>
+        /// Saves the active Documents
+        /// </summary>
+        public ICommand SaveFileFileCommand { get; private set; }
+
+        /// <summary>
+        /// Saves all open Documents
+        /// </summary>
+        public ICommand SaveAllCommand { get; private set; }
 
         /// <summary>
         /// Git-backup current mod project
@@ -224,6 +240,9 @@ namespace WolvenKit.ViewModels.Shell
         /// </summary>
         public ICommand PackModCommand { get; private set; }
 
+        /// <summary>
+        /// ???
+        /// </summary>
         public ICommand PublishModCommand { get; private set; }
 
         /// <summary>
@@ -330,6 +349,10 @@ namespace WolvenKit.ViewModels.Shell
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowWccToolCommand { get; private set; }
+
+        #endregion
+
+        #region command implementation
 
         public void ExecuteAudioTool() => AudioToolVM.IsVisible = !AudioToolVM.IsVisible;
 
@@ -484,13 +507,29 @@ namespace WolvenKit.ViewModels.Shell
 
         private void ExecuteWccTool() => WccToolVM.IsVisible = !WccToolVM.IsVisible;
 
+        private bool CanSaveAll() => _projectManager.ActiveProject is EditorProject proj
+                                     && Files?.Count > 0;
+        private void ExecuteSaveAll()
+        {
+            foreach (var file in Files)
+            {
+                Save(file);
+            }
+        }
+
+        private bool CanSaveFile() => _projectManager.ActiveProject is EditorProject proj
+                                      && ActiveDocument != null;
+        private void ExecuteSaveFile() => Save(ActiveDocument);
+
         #endregion commands
 
         #region properties
 
+        #region ToolViewModels
+
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
-        ///
+        /// </summary>
         private AnimsViewModel _AnimationToolVM = null;
 
         /// <summary>
@@ -593,29 +632,6 @@ namespace WolvenKit.ViewModels.Shell
         /// </summary>
         private WccToolViewModel _WccToolVM = null;
 
-        /// <summary>
-        /// Event is raised when AvalonDock (or the user) selects a new document.
-        /// </summary>
-        public event EventHandler ActiveDocumentChanged;
-
-        /// <summary>
-        /// Gets/Sets the currently active document.
-        /// </summary>
-        public DocumentViewModel ActiveDocument
-        {
-            get => _activeDocument;
-            set             // This can also be set by the user via the view
-            {
-                if (_activeDocument != value)
-                {
-                    _activeDocument = value;
-                    RaisePropertyChanged(nameof(ActiveDocument));
-
-                    ActiveDocumentChanged?.Invoke(this, EventArgs.Empty);
-                }
-            }
-        }
-
         public AnimsViewModel AnimationToolVM
         {
             get
@@ -685,13 +701,6 @@ namespace WolvenKit.ViewModels.Shell
                 return _CsvEditorVM;
             }
         }
-
-        public EditorProject EditorProject { get; set; }
-
-        /// <summary>
-        /// Gets a collection of all currently available document viewmodels
-        /// </summary>
-        public IEnumerable<DocumentViewModel> Files => _files;
 
         public GameDebuggerToolViewModel GameDebuggerToolVM
         {
@@ -804,11 +813,6 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        /// <summary>
-        /// Gets an enumeration of all currently available tool window viewmodels.
-        /// </summary>
-        public ObservableCollection<ToolViewModel> Tools { get; set; }
-
         public VisualEditorViewModel VisualEditorVM
         {
             get
@@ -828,6 +832,43 @@ namespace WolvenKit.ViewModels.Shell
                 return _WccToolVM;
             }
         }
+        #endregion
+
+        /// <summary>
+        /// Event is raised when AvalonDock (or the user) selects a new document.
+        /// </summary>
+        public event EventHandler ActiveDocumentChanged;
+
+        /// <summary>
+        /// Gets/Sets the currently active document.
+        /// </summary>
+        public DocumentViewModel ActiveDocument
+        {
+            get => _activeDocument;
+            set             // This can also be set by the user via the view
+            {
+                if (_activeDocument != value)
+                {
+                    _activeDocument = value;
+                    RaisePropertyChanged(nameof(ActiveDocument));
+
+                    ActiveDocumentChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of all currently available document viewmodels
+        /// </summary>
+        public ObservableCollection<DocumentViewModel> Files => _files;
+
+        public EditorProject EditorProject { get; set; }
+
+
+        /// <summary>
+        /// Gets an enumeration of all currently available tool window viewmodels.
+        /// </summary>
+        public ObservableCollection<ToolViewModel> Tools { get; set; }
 
         #endregion properties
 
@@ -918,9 +959,6 @@ namespace WolvenKit.ViewModels.Shell
             return null;
         }
 
-        //
-        // https://github.com/Dirkster99/AvalonDock/blob/5032524bae6e342dbb648a4c1d3fc3264f449db9/source/MLibTest/MLibTest/Demos/ViewModels/WorkSpaceViewModel.cs
-        //
         /// <summary>
         /// Saves a document and resets the dirty flag.
         /// </summary>
@@ -928,6 +966,7 @@ namespace WolvenKit.ViewModels.Shell
         /// <param name="saveAsFlag"></param>
         public void Save(DocumentViewModel fileToSave, bool saveAsFlag = false)
         {
+            // remove this?
             if (fileToSave.FilePath == null || saveAsFlag)
             {
                 var dlg = new SaveFileDialog();
@@ -937,9 +976,8 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
 
-            // TODO
-
-            ActiveDocument.IsDirty = false;
+            ActiveDocument.SaveCommand.SafeExecute();
+            ActiveDocument.SetIsDirty(false);
         }
 
         private Task OnProjectActivationAsync(object sender, ProjectUpdatingCancelEventArgs e)
@@ -1107,27 +1145,6 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
         }
-
-        #region NewCommand
-
-        /// <summary>
-        /// Determines if application can currently create a new document or not.
-        /// </summary>
-        /// <param name="parameter"></param>
-        /// <returns></returns>
-        private bool CanNew(object parameter) => true;
-
-        private void OnNew(object parameter)
-        {
-            //TODO
-            //string path = string.Format("Untitled{0}.txt", _newDocumentCounter++);
-
-            //var newFile = new DocumentViewModel(this as IWorkSpaceViewModel, path, false);
-            //_files.Add(newFile);
-            //ActiveDocument = newFile;
-        }
-
-        #endregion NewCommand
 
         #endregion methods
     }

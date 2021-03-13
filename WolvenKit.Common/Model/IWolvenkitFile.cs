@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.Common.Model
@@ -18,6 +19,8 @@ namespace WolvenKit.Common.Model
         List<ICR2WExport> Chunks { get; }
         string FileName { get; set; }
         List<ICR2WImport> Imports { get; }
+
+        public bool IsDirty { get; set; }
 
         #endregion Properties
 

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -83,7 +83,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
-        <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj" />
     </ItemGroup>
 
 
@@ -99,6 +98,13 @@
 
     <ItemGroup>
       <Folder Include="Save\" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Reference Include="WolvenKit.RED3.CR2W">
+        <HintPath>..\WolvenKit.RED3.CR2W\bin\Release\net5.0\WolvenKit.RED3.CR2W.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

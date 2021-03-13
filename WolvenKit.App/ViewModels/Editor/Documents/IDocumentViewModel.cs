@@ -22,10 +22,10 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         string FilePath { get; }
 
-        /// <summary>
-		/// Gets/sets whether the documents content has been changed without saving into file system or not.
-		/// </summary>
-		bool IsDirty { get; set; }
+  //      /// <summary>
+		///// Gets/sets whether the documents content has been changed without saving into file system or not.
+		///// </summary>
+		//bool IsDirty { get; set; }
 
         /// <summary>
         /// Gets a command to save this document's content into another file in the file system.
