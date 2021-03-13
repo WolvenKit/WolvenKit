@@ -1186,9 +1186,9 @@
       <Name>WolvenKit.W3Strings</Name>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.Save\WolvenKit.Save.csproj">
+    <ProjectReference Include="..\WolvenKit.RED3.Save\WolvenKit.RED3.Save.csproj">
       <Project>{9c026da7-481d-43c6-8c18-635d69fdb423}</Project>
-      <Name>WolvenKit.Save</Name>
+      <Name>WolvenKit.RED3.Save</Name>
     </ProjectReference>
     <ProjectReference Include="..\WolvenKit.Wwise\WolvenKit.Wwise.csproj">
       <Project>{dcbbe807-cd6e-493e-8c04-db976a1591ea}</Project>

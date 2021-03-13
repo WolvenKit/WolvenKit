@@ -119,9 +119,9 @@
       <Project>{8be56f4f-3b98-4bd8-8052-2b5e630af3d7}</Project>
       <Name>WolvenKit.Render</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WolvenKit.Save\WolvenKit.Save.csproj">
-      <Project>{9c026da7-481d-43c6-8c18-635d69fdb423}</Project>
-      <Name>WolvenKit.Save</Name>
+    <ProjectReference Include="..\WolvenKit.RED3.Save\WolvenKit.RED3.Save.csproj">
+      <Project>{A7F79601-9B7A-493F-A376-0D37C95D08C4}</Project>
+      <Name>WolvenKit.RED3.Save</Name>
     </ProjectReference>
     <ProjectReference Include="..\WolvenKit.Scaleform\WolvenKit.Scaleform.csproj">
       <Project>{031dd6da-b643-4c2a-a30d-a2e2212724c2}</Project>

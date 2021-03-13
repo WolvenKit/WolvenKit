@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED3.CR2W", "Wolv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Nvidia", "WolvenKit.Nvidia\WolvenKit.Nvidia.csproj", "{5E24EB10-AB32-460B-8E49-F4BB6761CCE9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Save", "WolvenKit.Save\WolvenKit.Save.csproj", "{A7F79601-9B7A-493F-A376-0D37C95D08C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED3.Save", "WolvenKit.RED3.Save\WolvenKit.RED3.Save.csproj", "{A7F79601-9B7A-493F-A376-0D37C95D08C4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Scaleform", "WolvenKit.Scaleform\WolvenKit.Scaleform.csproj", "{FF107440-49DC-4456-9BBF-09C4C396F5F8}"
 EndProject
