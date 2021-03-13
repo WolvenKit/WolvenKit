@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30709.64
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Cyberformats", "CP77.CR2W\WolvenKit.Cyberformats.csproj", "{A612A200-90D5-41A7-9ADE-F90AD2274022}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Cyberformats", "WolvenKit.Cyberformats\WolvenKit.Cyberformats.csproj", "{A612A200-90D5-41A7-9ADE-F90AD2274022}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Common", "WolvenKit.Common\WolvenKit.Common.csproj", "{2B13DF78-8441-49F3-8212-06935A5D7AE0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.CLI.MSTests", "CP77.MSTests\WolvenKit.CLI.MSTests.csproj", "{FCE00216-C338-4E05-B6C3-344ED1273AF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.CLI.MSTests", "WolvenKit.CLI.MSTests\WolvenKit.CLI.MSTests.csproj", "{FCE00216-C338-4E05-B6C3-344ED1273AF8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.CLI", "CP77Tools\WolvenKit.CLI.csproj", "{6DF88652-D9FE-4BAE-AB0F-A37C8159C8A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.CLI", "WolvenKit.CLI\WolvenKit.CLI.csproj", "{6DF88652-D9FE-4BAE-AB0F-A37C8159C8A4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Modkit", "WolvenKit.Modkit\WolvenKit.Modkit.csproj", "{EA5E25AA-DD58-4DD5-A99C-C4457392A4B8}"
 EndProject

@@ -47,7 +47,7 @@
       <HintPath>..\WolvenKit.CR2W\bin\Release\net5.0\WolvenKit.CR2W.dll</HintPath>
     </Reference>
     <Reference Include="WolvenKit.Cyberformats">
-      <HintPath>..\CP77.CR2W\bin\Release\net5.0\WolvenKit.Cyberformats.dll</HintPath>
+      <HintPath>..\WolvenKit.Cyberformats\bin\Release\net5.0\WolvenKit.Cyberformats.dll</HintPath>
     </Reference>
   </ItemGroup>
 

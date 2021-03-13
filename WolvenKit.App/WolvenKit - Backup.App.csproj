@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CP77.CR2W\WolvenKit.Cyberformats.csproj" />
+    <ProjectReference Include="..\WolvenKit.Cyberformats\WolvenKit.Cyberformats.csproj" />
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj" />
     <ProjectReference Include="..\WolvenKit.Radish\WolvenKit.Radish.csproj" />

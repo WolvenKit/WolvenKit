@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Cyberformats", "CP77.CR2W\WolvenKit.Cyberformats.csproj", "{9A7C09A8-112A-4324-9B48-931AA835E9B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Cyberformats", "WolvenKit.Cyberformats\WolvenKit.Cyberformats.csproj", "{9A7C09A8-112A-4324-9B48-931AA835E9B5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{6BC8815E-BFF9-46A5-9535-0E89A765D75A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Formats", "Formats", "{A84C71C3-E7BD-4E88-847B-B743E549429A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.CLI.MSTests", "CP77.MSTests\WolvenKit.CLI.MSTests.csproj", "{FB8035CF-9C35-4672-BA3E-384E3E4F2ECA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.CLI.MSTests", "WolvenKit.CLI.MSTests\WolvenKit.CLI.MSTests.csproj", "{FB8035CF-9C35-4672-BA3E-384E3E4F2ECA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B904A345-E6CF-4D6A-9F10-C04F02340B63}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.CLI", "CP77Tools\WolvenKit.CLI.csproj", "{A78BEC35-33F4-4E4E-BC0F-D98FE381CFB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.CLI", "WolvenKit.CLI\WolvenKit.CLI.csproj", "{A78BEC35-33F4-4E4E-BC0F-D98FE381CFB6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WolvenKit.CLI", "WolvenKit.CLI", "{E0ED641B-A0A2-4BB7-B266-DE5AD06D6AAB}"
 EndProject
