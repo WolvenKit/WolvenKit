@@ -1,19 +1,28 @@
-﻿
+using WolvenKit.Functionality.WKitGlobal.Helpers;
+
 namespace WolvenKit.Views.Wizards
 {
     public partial class InstallerWizardView
     {
+        #region Constructors
+
         public InstallerWizardView()
         {
             InitializeComponent();
         }
 
+        #endregion Constructors
+
+        #region Methods
+
         private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
+            if (IsVisible)
             {
-                DiscordRPCHelper.WhatAmIDoing("Installer Wizard");
+                DiscordHelper.SetDiscordRPCStatus("Installer Wizard");
             }
         }
+
+        #endregion Methods
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.IO;
+using System;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace WolvenKit.Common
@@ -6,6 +7,21 @@ namespace WolvenKit.Common
 {
     public static class StreamExtensions
     {
+        #region Methods
+
+        //https://stackoverflow.com/a/13022108
+        public static void CopyToWithLength(this Stream input, Stream output, int bytes)
+        {
+            var buffer = new byte[4096];
+            int read;
+            while (bytes > 0 &&
+                   (read = input.Read(buffer, 0, Math.Min(buffer.Length, bytes))) > 0)
+            {
+                output.Write(buffer, 0, read);
+                bytes -= read;
+            }
+        }
+
         public static T ReadStruct<T>(this Stream m_stream) where T : struct
         {
             var size = Marshal.SizeOf<T>();
@@ -20,6 +36,7 @@ namespace WolvenKit.Common
 
             return item;
         }
+
         public static T[] ReadStructs<T>(this Stream m_stream, uint count) where T : struct
         {
             var size = Marshal.SizeOf<T>();
@@ -38,6 +55,7 @@ namespace WolvenKit.Common
 
             return items;
         }
+
         public static void WriteStruct<T>(this Stream m_stream, T value) where T : struct
         {
             var m_temp = new byte[Marshal.SizeOf<T>()];
@@ -48,6 +66,7 @@ namespace WolvenKit.Common
 
             handle.Free();
         }
+
         public static void WriteStructs<T>(this Stream m_stream, T[] array) where T : struct
         {
             var size = Marshal.SizeOf<T>();
@@ -62,5 +81,7 @@ namespace WolvenKit.Common
                 handle.Free();
             }
         }
+
+        #endregion Methods
     }
 }

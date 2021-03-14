@@ -1,0 +1,249 @@
+<catel:UserControl
+ x:Class="WolvenKit.Views.Editor.AssetBrowserView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:Fluent="urn:fluent-ribbon"
+ xmlns:c="clr-namespace:WolvenKit.Functionality.WKitGlobal.Helpers"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:controls1="clr-namespace:WolvenKit.AssetBrowserBar.Controls;assembly=WolvenKit.AssetBrowserBar"
+ xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+ BorderBrush="{x:Null}"
+ IsVisibleChanged="DataWindow_IsVisibleChanged"
+ >
+
+    <catel:UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+                <hc:ThemeResources />
+                <hc:Theme />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="GridViewColumnHeader">
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+            </Style>
+        </ResourceDictionary>
+    </catel:UserControl.Resources>
+    <Border
+     hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+     BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+     BorderThickness="1"
+     >
+
+        <Grid>
+            <Grid.RowDefinitions>
+
+                <RowDefinition Height="9*" />
+            </Grid.RowDefinitions>
+
+
+            <hc:FlexPanel>
+                <Grid hc:FlexPanel.AlignSelf="Auto" hc:FlexPanel.FlexGrow="0">
+                    <Grid Grid.Column="0">
+                        <Grid.Resources>
+                            <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
+                        </Grid.Resources>
+                        <TreeView
+                         Margin="0"
+                         BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+                         ItemsSource="{Binding RootNode.SubDirectories}"
+                         SelectedItemChanged="TreeView_OnSelectedItemChanged"
+                         Style="{DynamicResource TreeView}"
+                         >
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding SubDirectories}">
+                                    <StackPanel Margin="2" Orientation="Horizontal">
+                                        <svgc:SvgViewbox
+                                         Width="22"
+                                         Height="15"
+                                         Margin="0"
+                                         Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
+                                         Stretch="Uniform"
+                                         />
+                                        <TextBlock Text="{Binding Name}" />
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                    </Grid>
+
+                </Grid>
+
+
+
+                <Grid hc:FlexPanel.FlexGrow="1">
+
+                    <DockPanel
+                     Height="40"
+                     VerticalAlignment="Top"
+                     Background="Transparent"
+                     >
+                        <hc:UniformSpacingPanel>
+                            <Button
+                             Width="40"
+                             hc:IconElement.Geometry="{DynamicResource GlobalLeftArrow}"
+                             Background="Transparent"
+                             BorderBrush="{x:Null}"
+                             Style="{StaticResource ButtonIcon}"
+                             />
+                            <Button
+                             Width="40"
+                             hc:IconElement.Geometry="{DynamicResource AssetBrowserHome}"
+                             Background="Transparent"
+                             BorderBrush="{x:Null}"
+                             Command="{Binding HomeCommand}"
+                             RenderTransformOrigin="0.5,0.5"
+                             Style="{StaticResource ButtonIcon}"
+                             >
+                                <Button.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform />
+                                        <SkewTransform />
+                                        <RotateTransform Angle="180" />
+                                        <TranslateTransform />
+                                    </TransformGroup>
+                                </Button.RenderTransform>
+                            </Button>
+
+
+                            <Button
+                             Width="40"
+                             hc:IconElement.Geometry="{DynamicResource AssetBrowserStar}"
+                             Background="Transparent"
+                             BorderBrush="{x:Null}"
+                             Style="{StaticResource ButtonIcon}"
+                             />
+
+
+                            <hc:TextBox
+                             Width="auto"
+                             Margin="0,5,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             IsManipulationEnabled="False"
+                             IsReadOnly="True"
+                             Text="{Binding Path=CurrentNode.FullPath, Mode=OneWay}"
+                             />
+
+
+
+
+
+
+
+                            <hc:SearchBar
+                             Width="auto"
+                             MinWidth="88"
+                             Margin="5"
+                             hc:InfoElement.Placeholder="Search something"
+                             FlowDirection="LeftToRight"
+                             >
+                                <hc:Interaction.Triggers>
+                                    <hc:EventTrigger EventName="SearchStarted">
+                                        <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
+                                    </hc:EventTrigger>
+                                </hc:Interaction.Triggers>
+                            </hc:SearchBar>
+
+
+                            <hc:ComboBox
+                             MinWidth="0"
+                             ItemsSource="{Binding Classes}"
+                             SelectedItem="{Binding SelectedClass}"
+                             Visibility="Collapsed"
+                             >
+                                <ComboBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel />
+                                    </ItemsPanelTemplate>
+                                </ComboBox.ItemsPanel>
+                            </hc:ComboBox>
+
+
+                            <hc:ComboBox
+                             MinWidth="100"
+                             ItemsSource="{Binding Extensions}"
+                             SelectedItem="{Binding SelectedExtension}"
+                             Visibility="Collapsed"
+                             >
+                                <ComboBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel />
+                                    </ItemsPanelTemplate>
+                                </ComboBox.ItemsPanel>
+                            </hc:ComboBox>
+                        </hc:UniformSpacingPanel>
+
+
+                    </DockPanel>
+
+
+                    <hc:TabControl
+                     Grid.Column="0"
+                     Margin="0,40,0,0"
+                     IsAnimationEnabled="True"
+                     IsDraggable="True"
+                     ShowCloseButton="True"
+                     >
+                        <hc:TabItem Header="Depot">
+                            <Grid>
+                                <DataGrid
+                                 x:Name="InnerList"
+                                 AutoGenerateColumns="False"
+                                 BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+                                 CanUserSortColumns="False"
+                                 ColumnHeaderStyle="{DynamicResource Fluent.Ribbon.Styles.RibbonGroupBox.TwoLineHeaderContentControl}"
+                                 IsManipulationEnabled="False"
+                                 ItemsSource="{Binding CurrentNodeFiles}"
+                                 SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
+                                 SelectionChanged="ListView_SelectionChanged"
+                                 >
+
+                                    <DataGrid.Resources>
+                                        <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
+                                    </DataGrid.Resources>
+
+                                    <DataGrid.Columns>
+
+                                        <DataGridTemplateColumn Width="60" CanUserResize="False">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <svgc:SvgViewbox
+                                                     Width="22"
+                                                     Height="22"
+                                                     Margin="-3"
+                                                     Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
+                                                     Stretch="Uniform"
+                                                     />
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTextColumn
+                                         Binding="{Binding Name}"
+                                         Header="Name"
+                                         IsReadOnly="True"
+                                         />
+                                        <DataGridTextColumn
+                                         Binding="{Binding Size}"
+                                         Header="Size"
+                                         IsReadOnly="True"
+                                         />
+
+                                    </DataGrid.Columns>
+                                    <hc:Interaction.Triggers>
+                                        <hc:EventTrigger EventName="MouseDoubleClick">
+                                            <hc:EventToCommand Command="{Binding ImportFileCommand}" />
+                                        </hc:EventTrigger>
+                                    </hc:Interaction.Triggers>
+                                </DataGrid>
+                            </Grid>
+                        </hc:TabItem>
+                    </hc:TabControl>
+                </Grid>
+            </hc:FlexPanel>
+        </Grid>
+    </Border>
+</catel:UserControl>

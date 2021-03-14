@@ -1,0 +1,111 @@
+<catel:UserControl
+ x:Class="WolvenKit.Views.HomePage.Pages.GlobalSubSettingsView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol">
+
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <hc:ScrollViewer>
+                <StackPanel>
+
+                    <!--  Basic Header  -->
+                    <Border
+                     Margin="15,15,32,0"
+                     Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                     BorderThickness="4,0,0,6"
+                     Style="{StaticResource BorderTipPrimary}">
+                        <Grid>
+                            <TextBlock
+                             Margin="0,0,50,0"
+                             VerticalAlignment="Center"
+                             FontSize="16"
+                             Text="Notifications" />
+                        </Grid>
+                    </Border>
+
+                    <!--  Application Language  -->
+                    <Border
+                     Margin="15,15,32,10"
+                     Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                     BorderThickness="4,0,0,2"
+                     Style="{StaticResource BorderTipPrimary}">
+                        <Grid>
+                            <TextBlock
+                             Margin="0,0,50,0"
+                             VerticalAlignment="Center"
+                             Text="Receive desktop notifications" />
+
+                            <ToggleButton
+                             HorizontalAlignment="Right"
+                             VerticalAlignment="Center"
+                             BorderThickness="0"
+                             IsEnabled="True"
+                             Style="{StaticResource ToggleButtonFlip}">
+                                <hc:StatusSwitchElement.CheckedElement>
+                                    <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
+                                        <TextBlock
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"
+                                         Foreground="{DynamicResource TextIconBrush}"
+                                         Text="On" />
+                                    </Border>
+                                </hc:StatusSwitchElement.CheckedElement>
+                                <Border Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
+                                    <TextBlock
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Foreground="{DynamicResource TextIconBrush}"
+                                     Text="Off" />
+                                </Border>
+                            </ToggleButton>
+                        </Grid>
+                    </Border>
+
+                    <!--  Language Header  -->
+                    <Border
+                     Margin="15,50,32,0"
+                     Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                     BorderThickness="4,0,0,6"
+                     Style="{StaticResource BorderTipPrimary}">
+                        <Grid>
+                            <TextBlock
+                             Margin="0,0,50,0"
+                             VerticalAlignment="Center"
+                             FontSize="16"
+                             Text="Language" />
+                        </Grid>
+                    </Border>
+
+                    <!--  Application Language  -->
+                    <Border
+                     Margin="15,15,32,10"
+                     Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                     BorderThickness="4,0,0,2"
+                     Style="{StaticResource BorderTipPrimary}">
+                        <Grid>
+                            <TextBlock
+                             Margin="0,0,50,0"
+                             VerticalAlignment="Center"
+                             Text="Application Language" />
+                            <hc:ComboBox Width="250" HorizontalAlignment="Right" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </hc:ScrollViewer>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <hc:ScrollViewer>
+                <StackPanel />
+            </hc:ScrollViewer>
+        </Grid>
+    </Grid>
+</catel:UserControl>

@@ -1,0 +1,50 @@
+<catel:UserControl
+ x:Class="WolvenKit.Views.Editor.CR2WEditorView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol">
+
+    <catel:UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources />
+                <hc:Theme />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </catel:UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <hc:TabControl
+             IsAnimationEnabled="True"
+             IsTabFillEnabled="True"
+             ShowCloseButton="False">
+                <hc:TabItem Header="CHUNKS">
+                    <TreeView />
+                </hc:TabItem>
+
+                <hc:TabItem Header="IMPORTS">
+                    <TreeView />
+                </hc:TabItem>
+
+                <hc:TabItem Header="BUFFERS">
+                    <TreeView />
+                </hc:TabItem>
+
+                <hc:TabItem Header="PREVIEW">
+                    <TreeView />
+                </hc:TabItem>
+            </hc:TabControl>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <hc:PropertyGrid />
+        </Grid>
+    </Grid>
+</catel:UserControl>

@@ -1,43 +1,40 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Xml;
 using FastMember;
 using Newtonsoft.Json;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Common.Model.Cr2w
 {
-    public interface IEditableVariable
+    [Editor(typeof(IExpandableObjectEditor), typeof(IPropertyEditorBase))]
+    public interface IEditableVariable : IEditorBindable
     {
-        string REDName { get; }
-        string REDType { get; }
-        [JsonIgnore]
-        string REDValue { get; }
-        [JsonIgnore]
-        ushort REDFlags { get; }
+        [Browsable(false)] string REDName { get; }
 
-        [JsonIgnore] string UniqueIdentifier { get; }
+        [Browsable(false)] string REDType { get; }
 
-        [JsonIgnore]
-        IEditableVariable ParentVar { get; }
-        [JsonIgnore]
-        bool IsSerialized { get; set; }
-        [JsonIgnore]
-        int VarChunkIndex { get; set; }
+        [JsonIgnore] [Browsable(false)] string REDValue { get; }
+
+        [JsonIgnore] [Browsable(false)] ushort REDFlags { get; }
+
+        [JsonIgnore] [Browsable(false)] string UniqueIdentifier { get; }
+
+        [JsonIgnore] [Browsable(false)] IEditableVariable ParentVar { get; }
         
+        [JsonIgnore] [Browsable(false)] int VarChunkIndex { get; set; }
 
-        [JsonIgnore]
-        IWolvenkitFile Cr2wFile { get; set; }
+        [JsonIgnore] [Browsable(false)] public TypeAccessor accessor { get; }
 
-        public TypeAccessor accessor { get; }
-
-        [JsonIgnore]
-        List<IEditableVariable> ChildrEditableVariables { get; }
+        [JsonIgnore] [Browsable(false)] List<IEditableVariable> ChildrEditableVariables { get; }
 
 
 
         List<IEditableVariable> GetExistingVariables(bool includebuffers);
         List<IEditableVariable> GetEditableVariables();
+
         void SetREDName(string val);
         int LookUpChunkIndex();
         bool CanRemoveVariable(IEditableVariable child);

@@ -1,23 +1,66 @@
-﻿<catel:UserControl x:Class="WolvenKit.Views.HomePage.Pages.WelcomePageView"
-                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://schemas.catelproject.com"
-                   xmlns:hc="https://handyorg.github.io/handycontrol"
-                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:kapow="clr-namespace:WolvenKit.Views.HomePage.Pages"
-                   IsVisibleChanged="UserControl_IsVisibleChanged">
+<catel:UserControl
+ x:Class="WolvenKit.Views.HomePage.Pages.WelcomePageView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+ >
     <catel:UserControl.Resources>
         <ResourceDictionary>
+            <DrawingBrush
+             x:Key="CloudDrawingBrushMain"
+             o:Freeze="True"
+             Opacity="0.3"
+             RenderOptions.CacheInvalidationThresholdMaximum="2.0"
+             RenderOptions.CacheInvalidationThresholdMinimum="0.5"
+             RenderOptions.CachingHint="Cache"
+             Stretch="Uniform"
+             TileMode="Tile"
+             Viewport="0,0,77,77"
+             ViewportUnits="Absolute"
+             >
+                <DrawingBrush.Drawing>
+                    <ImageDrawing
+                     o:Freeze="True"
+                     ImageSource="pack://application:,,,/Resources/Media/Images/Application/cloud.png"
+                     Rect="0,0,15,15"
+                     />
+                </DrawingBrush.Drawing>
+            </DrawingBrush>
             <ControlTemplate x:Key="GroupBoxBaseTopTemplate" TargetType="GroupBox">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" MinHeight="30"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="Auto" MinHeight="30" />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Border MinHeight="30" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{Binding Path=(hc:TitleElement.Background),RelativeSource={RelativeSource TemplatedParent}}" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" Margin="0,0,0,6">
-                        <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}"  Margin="10,0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" ContentSource="Header" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    <Border
+                     MinHeight="30"
+                     Margin="0,0,0,6"
+                     Background="{Binding Path=(hc:TitleElement.Background), RelativeSource={RelativeSource TemplatedParent}}"
+                     BorderBrush="{TemplateBinding BorderBrush}"
+                     BorderThickness="{TemplateBinding BorderThickness}"
+                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                     >
+                        <ContentPresenter
+                         Margin="10,0"
+                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                         ContentSource="Header"
+                         RecognizesAccessKey="True"
+                         SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                         TextElement.Foreground="{TemplateBinding Foreground}"
+                         />
                     </Border>
-                    <Border Grid.Row="1" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" Background="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
-                        <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    <Border
+                     Grid.Row="1"
+                     Background="{DynamicResource MahApps.Brushes.Accent}"
+                     BorderBrush="{TemplateBinding BorderBrush}"
+                     BorderThickness="{TemplateBinding BorderThickness}"
+                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                     >
+                        <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
                 </Grid>
             </ControlTemplate>
@@ -25,39 +68,62 @@
             <ControlTemplate x:Key="GroupBoxBaseLeftTemplate" TargetType="GroupBox">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" MinWidth="30"/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto" MinWidth="30" />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Border MinWidth="30" BorderThickness="{TemplateBinding BorderThickness}" ClipToBounds="False" BorderBrush="{TemplateBinding BorderBrush}" Background="{Binding Path=(hc:TitleElement.Background),RelativeSource={RelativeSource TemplatedParent}}" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" Margin="0,0,6,0">
-                        <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}"  Margin="0,10" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" ContentSource="Header" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" RenderTransformOrigin="0.5,0.5">
+                    <Border
+                     MinWidth="30"
+                     Margin="0,0,6,0"
+                     Background="{Binding Path=(hc:TitleElement.Background), RelativeSource={RelativeSource TemplatedParent}}"
+                     BorderBrush="{TemplateBinding BorderBrush}"
+                     BorderThickness="{TemplateBinding BorderThickness}"
+                     ClipToBounds="False"
+                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                     >
+                        <ContentPresenter
+                         Margin="0,10"
+                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                         ContentSource="Header"
+                         RecognizesAccessKey="True"
+                         RenderTransformOrigin="0.5,0.5"
+                         SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                         TextElement.Foreground="{TemplateBinding Foreground}"
+                         >
                             <ContentPresenter.LayoutTransform>
                                 <TransformGroup>
-                                    <RotateTransform Angle="-90"/>
+                                    <RotateTransform Angle="-90" />
                                 </TransformGroup>
                             </ContentPresenter.LayoutTransform>
                         </ContentPresenter>
                     </Border>
-                    <Border Grid.Column="1" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
-                        <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    <Border
+                     Grid.Column="1"
+                     Background="{TemplateBinding Background}"
+                     BorderBrush="{TemplateBinding BorderBrush}"
+                     BorderThickness="{TemplateBinding BorderThickness}"
+                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                     >
+                        <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
                 </Grid>
             </ControlTemplate>
 
             <Style x:Key="GroupBoxBaseStyle" TargetType="GroupBox">
-                <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
-                <Setter Property="Background" Value="{DynamicResource SecondaryRegionBrush}"/>
-                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
-                <Setter Property="hc:TitleElement.Background" Value="{DynamicResource SecondaryRegionBrush}"/>
-                <Setter Property="hc:TitleElement.TitlePlacement" Value="Top"/>
-                <Setter Property="hc:BorderElement.CornerRadius" Value="{StaticResource DefaultCornerRadius}"/>
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="Padding" Value="4"/>
-                <Setter Property="Template" Value="{StaticResource GroupBoxBaseTopTemplate}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+                <Setter Property="Background" Value="{DynamicResource SecondaryRegionBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+                <Setter Property="hc:TitleElement.Background" Value="{DynamicResource SecondaryRegionBrush}" />
+                <Setter Property="hc:TitleElement.TitlePlacement" Value="Top" />
+                <Setter Property="hc:BorderElement.CornerRadius" Value="{StaticResource DefaultCornerRadius}" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Padding" Value="4" />
+                <Setter Property="Template" Value="{StaticResource GroupBoxBaseTopTemplate}" />
                 <Style.Triggers>
                     <Trigger Property="hc:TitleElement.TitlePlacement" Value="Left">
-                        <Setter Property="Template" Value="{StaticResource GroupBoxBaseLeftTemplate}"/>
+                        <Setter Property="Template" Value="{StaticResource GroupBoxBaseLeftTemplate}" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -65,14 +131,35 @@
             <ControlTemplate x:Key="GroupBoxTabTopTemplate" TargetType="GroupBox">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" MinHeight="30"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="Auto" MinHeight="30" />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Border Grid.Row="1" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource CornerRadiusSplitConverter},ConverterParameter='0,0,1,1'}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
-                        <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    <Border
+                     Grid.Row="1"
+                     Background="{DynamicResource RegionBrush}"
+                     BorderBrush="{DynamicResource RegionBrush}"
+                     BorderThickness="{TemplateBinding BorderThickness}"
+                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CornerRadiusSplitConverter}, ConverterParameter='0,0,1,1'}"
+                     >
+                        <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
-                    <Border Grid.Row="0" MinHeight="30" BorderThickness="{Binding BorderThickness,RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource ThicknessSplitConverter},ConverterParameter='1,1,1,0'}" BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" CornerRadius="15,2,2,2">
-                        <ContentPresenter TextElement.Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  Margin="0,0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" ContentSource="Header" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    <Border
+                     Grid.Row="0"
+                     MinHeight="30"
+                     Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                     BorderBrush="{DynamicResource RegionBrush}"
+                     BorderThickness="{Binding BorderThickness, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ThicknessSplitConverter}, ConverterParameter='1,1,1,0'}"
+                     CornerRadius="15,2,2,2"
+                     >
+                        <ContentPresenter
+                         Margin="0,0"
+                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                         ContentSource="Header"
+                         RecognizesAccessKey="True"
+                         SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                         TextElement.Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+                         />
                     </Border>
                 </Grid>
             </ControlTemplate>
@@ -80,17 +167,38 @@
             <ControlTemplate x:Key="GroupBoxTabLeftTemplate" TargetType="GroupBox">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" MinWidth="30"/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto" MinWidth="30" />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Border Grid.Column="1" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource CornerRadiusSplitConverter},ConverterParameter='0,1,1,0'}" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
-                        <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    <Border
+                     Grid.Column="1"
+                     Background="{TemplateBinding Background}"
+                     BorderBrush="{TemplateBinding BorderBrush}"
+                     BorderThickness="{TemplateBinding BorderThickness}"
+                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CornerRadiusSplitConverter}, ConverterParameter='0,1,1,0'}"
+                     >
+                        <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
-                    <Border Grid.Column="0" MinWidth="30" BorderThickness="{Binding BorderThickness,RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource ThicknessSplitConverter},ConverterParameter='1,1,0,1'}" BorderBrush="{TemplateBinding BorderBrush}" Background="{Binding Path=(hc:TitleElement.Background),RelativeSource={RelativeSource TemplatedParent}}" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource CornerRadiusSplitConverter},ConverterParameter='1,0,0,1'}">
-                        <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}" Margin="0,10" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" ContentSource="Header" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                    <Border
+                     Grid.Column="0"
+                     MinWidth="30"
+                     Background="{Binding Path=(hc:TitleElement.Background), RelativeSource={RelativeSource TemplatedParent}}"
+                     BorderBrush="{TemplateBinding BorderBrush}"
+                     BorderThickness="{Binding BorderThickness, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ThicknessSplitConverter}, ConverterParameter='1,1,0,1'}"
+                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CornerRadiusSplitConverter}, ConverterParameter='1,0,0,1'}"
+                     >
+                        <ContentPresenter
+                         Margin="0,10"
+                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                         ContentSource="Header"
+                         RecognizesAccessKey="True"
+                         SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                         TextElement.Foreground="{TemplateBinding Foreground}"
+                         >
                             <ContentPresenter.LayoutTransform>
                                 <TransformGroup>
-                                    <RotateTransform Angle="-90"/>
+                                    <RotateTransform Angle="-90" />
                                 </TransformGroup>
                             </ContentPresenter.LayoutTransform>
                         </ContentPresenter>
@@ -98,258 +206,692 @@
                 </Grid>
             </ControlTemplate>
 
-            <Style x:Key="GroupBoxTabBaseStyle" BasedOn="{StaticResource GroupBoxBaseStyle}" TargetType="GroupBox">
-                <Setter Property="Template" Value="{StaticResource GroupBoxTabTopTemplate}"/>
+            <Style
+             x:Key="GroupBoxTabBaseStyle"
+             BasedOn="{StaticResource GroupBoxBaseStyle}"
+             TargetType="GroupBox"
+             >
+                <Setter Property="Template" Value="{StaticResource GroupBoxTabTopTemplate}" />
                 <Style.Triggers>
                     <Trigger Property="hc:TitleElement.TitlePlacement" Value="Left">
-                        <Setter Property="Template" Value="{StaticResource GroupBoxTabLeftTemplate}"/>
+                        <Setter Property="Template" Value="{StaticResource GroupBoxTabLeftTemplate}" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
         </ResourceDictionary>
     </catel:UserControl.Resources>
 
-   
-        <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"  MinWidth="300" MinHeight="300" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,2,5">
-
+    <Grid
+     x:Name="topGrid"
+     MinWidth="300"
+     MinHeight="300"
+     Margin="5,5,2,5"
+     HorizontalAlignment="Stretch"
+     VerticalAlignment="Stretch"
+     hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+     >
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="4*"/>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="1*"/>
-
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="60" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
-
-            
-
-        <Grid Grid.Column="0" Grid.Row="0" >
+        <Grid Grid.Row="0" Grid.Column="0">
             <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
                 <StackPanel>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,5,0,0">
-                    <Grid>
-                        <iconPacks:PackIconCodicons  Grid.Row="0"   Kind="Hubot" Spin="False" SpinAutoReverse="False" Height="50" Width="50" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="0,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" />
-
-                    </Grid>
-                    <StackPanel  VerticalAlignment="Center" Orientation="Vertical">
-                        <TextBlock Text="Welcome to WolvenKit!"  FontSize="20" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Margin="10,10,0,0"></TextBlock>
-                        <hc:Divider  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,5,0,0"></hc:Divider>
-                    </StackPanel>
-                </StackPanel>
-                <TextBlock Margin="15" TextWrapping="Wrap">
-                    <Run  Text="If this is your first time using Wolvenkit, It is recommended to get yourself started by using our First Use Setup."> </Run>
-                    <LineBreak/> <LineBreak/>
-                    <Run Text="You can find the First Use Setup in the left SideMenu by clicking Get Started."/> 
-                    <LineBreak/>
-                    <Run Text="After setting yourself up you can start creating your own mod by creating a new project!"/>                    
-                    <LineBreak/><LineBreak/><LineBreak/>     
-                    <Run Text="Have fun modding!,"/>
-                    <LineBreak/><LineBreak/><LineBreak/>                   
-                    <Run Text="The WolvenKit Team."/>
-
-                </TextBlock>
-
-            </StackPanel>
-
-            </hc:TransitioningContentControl>
-
-
-        </Grid>
-        
-        
-        
-        
-        
-        <Grid Grid.Column="1" Grid.Row="0" >
-            <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
-
-                <StackPanel Margin="0,15,10,0" HorizontalAlignment="Right">
-                <StackPanel Margin="0,0,15,0" FlowDirection="RightToLeft" Orientation="Horizontal">
-                    <iconPacks:PackIconBoxIcons   Grid.Row="0"   Kind="RegularBoltCircle" Spin="False" SpinAutoReverse="False" Height="25" Width="25" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"  />
-
-                    <TextBlock  VerticalAlignment="Center" Text="Quick Access" HorizontalAlignment="Right" Margin="10,0,5,0" FontSize="18"/>
-
-                </StackPanel>
-                <hc:Divider Margin="15,5,15,5"/>
-                        <hc:ButtonGroup Margin="5,5,5,5" Style="{DynamicResource ButtonGroupSolid}" Orientation="Vertical">
-                    <Button x:Name="CreateProjectButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalFirst}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.NewProject}" >
-                        
-                        <Grid Width="125" >
-                            <iconPacks:PackIconCodicons Kind="Add" HorizontalAlignment="Right"/>
-                            <TextBlock Margin="5,0,35,0" Text="Create Project" HorizontalAlignment="Right"/>
-                        </Grid>                      
-                    </Button>
-
-                    <Button x:Name="OpenProjectButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch"  Command="{catel:CommandManagerBinding Application.OpenProject}"  >
-                        <Grid Width="125" >
-                            <iconPacks:PackIconCodicons Kind="GoToFile" HorizontalAlignment="Right"/>
-                            <TextBlock Margin="5,0,35,0" Text="Open Project" HorizontalAlignment="Right"/>
+                    <StackPanel
+                     Margin="0,5,0,0"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top"
+                     Orientation="Horizontal"
+                     >
+                        <Grid>
+                            <iconPacks:PackIconCodicons
+                             Grid.Row="0"
+                             Width="50"
+                             Height="50"
+                             Margin="0,0,0,0"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                             Kind="Hubot"
+                             Spin="False"
+                             SpinAutoReverse="False"
+                             />
                         </Grid>
-                    </Button>
-                    <Button x:Name="SettingsButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Click="SettingsButton_Click" >
-                        <Grid Width="125" >
-                            <iconPacks:PackIconCodicons Kind="Settings" HorizontalAlignment="Right"/>
-                            <TextBlock Margin="5,0,35,0" Text="Settings" HorizontalAlignment="Right"/>
-                        </Grid>
-                    </Button>
-
-                    <Button x:Name="TutorialsButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemDefault}" HorizontalAlignment="Stretch" Click="TutorialsButton_Click" >
-                        <Grid Width="125" >
-                            <iconPacks:PackIconCodicons Kind="Question" HorizontalAlignment="Right"/>
-                            <TextBlock Margin="5,0,35,0" Text="Tutorials" HorizontalAlignment="Right"/>
-                        </Grid>
-                    </Button>
-                    <Button x:Name="WikiButton" Margin="0.3" Width="200" Height="55" BorderBrush="Transparent" Style="{DynamicResource ButtonGroupItemVerticalLast}" HorizontalAlignment="Stretch" Click="WikiButton_Click" >
-                        <Grid Width="125" >
-                            <iconPacks:PackIconCodicons Kind="Info" HorizontalAlignment="Right"/>
-                            <TextBlock Margin="5,0,35,0" Text="Wiki" HorizontalAlignment="Right"/>
-                        </Grid>
-                    </Button>
-
-
-                </hc:ButtonGroup>
-            </StackPanel>
-            </hc:TransitioningContentControl>
-
-        </Grid>
-
-        <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" >
-            <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
-
-                <Grid  hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"  Background="{DynamicResource MahApps.Brushes.ThemeBackground}"  >
-                <Grid Margin="3,0,3,0">
-                        <StackPanel>
-                            
-                        <StackPanel Orientation="Horizontal" Margin="32,0,32,5">
-                            <iconPacks:PackIconCodicons   Grid.Row="0"   Kind="GoToFile" Spin="False" SpinAutoReverse="False" Height="25" Width="25" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"  />
-
-                            <TextBlock  Margin="10,0,0,0" Text="Recent Projects" FontSize="18"/>
-
+                        <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                            <TextBlock
+                             Grid.Row="0"
+                             Margin="10,10,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Center"
+                             FontSize="20"
+                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                             Text="Welcome to WolvenKit"
+                             />
+                            <hc:Divider
+                             Margin="0,5,0,0"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             />
                         </StackPanel>
-                        <hc:Divider Margin="32,0,32,0"></hc:Divider>
-                    <hc:TransitioningContentControl MinHeight="250" MaxHeight="200" Margin="0,0,0,0">
-                                <hc:CoverView                        ItemsSource="{Binding RecentlyUsedItems}"  ShowContent="False" BorderBrush="{x:Null}"  Grid.RowSpan="1" ItemContentHeight="55" Background="{DynamicResource MahApps.Brushes.ThemeBackground}" Margin="15" BorderThickness="1,1,1,1" ItemMargin="15,8,15,8" ItemHeight="200"  ItemWidth="350">
+                    </StackPanel>
+                    <TextBlock Margin="15" TextWrapping="Wrap">
+                        We would like to thank every person and enitity who helped and contributed to this ambitious project,<LineBreak />
+                        whom, without their support it wouldn't exist.<LineBreak /><LineBreak />
+                        Happy Modding!<LineBreak /><LineBreak /><LineBreak />
+                        - RED Modding Tools team</TextBlock>
+                </StackPanel>
+            </hc:TransitioningContentControl>
+        </Grid>
 
-                                <hc:CoverView.ItemHeaderTemplate>
-                                    <DataTemplate>
-                                        <GroupBox  Style="{StaticResource GroupBoxTabBaseStyle}" >
-                                            <GroupBox.Header >
-                                                <Border Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}" CornerRadius="15,2,2,2">
-                                                    <hc:Tag  Height="40" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Background="{x:Null}"  MinWidth="350" MaxWidth="350" Margin="3" ShowCloseButton="False">
-                                                        <hc:Tag.Content>
-                                                            <TextBlock HorizontalAlignment="Left" Margin="0,0,0,0" Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" FontSize="16"   Text="{Binding Name}"></TextBlock>
-                                                        </hc:Tag.Content>
-                                                        <hc:Tag.Header>
-                                                            <Border>
-                                                                <Border.Effect>
-                                                                    <hc:GrayScaleEffect/>
-                                                                </Border.Effect>
-                                                                <Image Source="{StaticResource  Fluent.Ribbon.Images.DefaultPlaceholder}">
-                                                                    <Image.Effect>
+        <Grid Grid.Row="0" Grid.Column="1">
+            <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
+                <Grid>
 
-                                                                        <hc:BrightnessEffect Brightness="0.3"/>
-                                                                    </Image.Effect>
-                                                                </Image>
-                                                            </Border>
-                                                            <!--Bind to project Image-->
-                                                        </hc:Tag.Header>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
 
-                                                    </hc:Tag>
-                                                </Border>
 
-                                            </GroupBox.Header>
-                                            <Border   BorderThickness="1,0,1,1" BorderBrush="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}" Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"  CornerRadius="0,0,4,4">
 
-                                                <Grid>
-                                                    <StackPanel Margin="5" Orientation="Vertical">
-                                                        <StackPanel Margin="5" Orientation="Horizontal">
-                                                            <hc:Divider Margin="5,15" LineStroke="{DynamicResource MahApps.Brushes.Accent3}" LineStrokeThickness="2" Width="15"/>
 
-                                                            <Border VerticalAlignment="Center" Height="25" Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}" CornerRadius="5,2,2,2">
+
+
+
+
+
+
+                    <hc:FlexPanel
+                     Grid.RowSpan="2"
+                     AlignContent="FlexEnd"
+                     AlignItems="Stretch"
+                     FlexDirection="Row"
+                     FlexWrap="Wrap"
+                     JustifyContent="FlexEnd"
+                     >
+                        <StackPanel
+                         Grid.Row="0"
+                         Grid.RowSpan="2"
+                         Margin="-20,15,10,0"
+                         HorizontalAlignment="Left"
+                         >
+                            <StackPanel
+                             Margin="0,0,15,0"
+                             FlowDirection="RightToLeft"
+                             Orientation="Horizontal"
+                             >
+                                <iconPacks:PackIconBoxIcons
+                                 Grid.Row="0"
+                                 Width="25"
+                                 Height="25"
+                                 Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                 Kind="RegularNetworkChart"
+                                 Spin="False"
+                                 SpinAutoReverse="False"
+                                 />
+
+                                <TextBlock
+                                 Margin="10,0,5,0"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Center"
+                                 FontSize="18"
+                                 Text="Social Media"
+                                 />
+                            </StackPanel>
+                            <hc:Divider Margin="15,5,15,5" />
+                            <hc:ButtonGroup
+                             Margin="5,5,5,5"
+                             Orientation="Vertical"
+                             Style="{DynamicResource ButtonGroupSolid}"
+                             >
+                                <Button
+                                 x:Name="irathernot"
+                                 Width="200"
+                                 Height="55"
+                                 Margin="0.3"
+                                 HorizontalAlignment="Stretch"
+                                 BorderBrush="Transparent"
+                                 Command="{catel:CommandManagerBinding Application.OpenLink}"
+                                 CommandParameter="{Binding DiscordLink}"
+                                 Style="{DynamicResource ButtonGroupItemVerticalFirst}"
+                                 >
+
+                                    <Grid Width="125">
+                                        <iconPacks:PackIconBoxIcons HorizontalAlignment="Right" Kind="LogosDiscord" />
+                                        <TextBlock
+                                         Margin="5,0,35,0"
+                                         HorizontalAlignment="Right"
+                                         Text="Discord"
+                                         />
+                                    </Grid>
+                                </Button>
+
+                                <Button
+                                 Width="200"
+                                 Height="55"
+                                 Margin="0.3"
+                                 HorizontalAlignment="Stretch"
+                                 BorderBrush="Transparent"
+                                 Command="{catel:CommandManagerBinding Application.OpenLink}"
+                                 CommandParameter="{Binding TwitterLink}"
+                                 Style="{DynamicResource ButtonGroupItemDefault}"
+                                 >
+                                    <Grid Width="125">
+                                        <iconPacks:PackIconBoxIcons HorizontalAlignment="Right" Kind="LogosTwitter" />
+                                        <TextBlock
+                                         Margin="5,0,35,0"
+                                         HorizontalAlignment="Right"
+                                         Text="Twitter"
+                                         />
+                                    </Grid>
+                                </Button>
+                            </hc:ButtonGroup>
+
+                            <StackPanel Grid.Row="1" HorizontalAlignment="Left">
+                                <StackPanel
+                                 Margin="0,10,15,0"
+                                 FlowDirection="RightToLeft"
+                                 Orientation="Horizontal"
+                                 >
+                                    <iconPacks:PackIconBoxIcons
+                                     Grid.Row="0"
+                                     Width="25"
+                                     Height="25"
+                                     Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                     Kind="RegularDonateHeart"
+                                     Spin="False"
+                                     SpinAutoReverse="False"
+                                     />
+
+                                    <TextBlock
+                                     Margin="10,0,5,0"
+                                     HorizontalAlignment="Right"
+                                     VerticalAlignment="Center"
+                                     FontSize="18"
+                                     Text="Support Us"
+                                     />
+                                </StackPanel>
+                                <hc:Divider Margin="15,5,15,5" />
+                                <hc:ButtonGroup
+                                 Margin="5,5,5,5"
+                                 Orientation="Vertical"
+                                 Style="{DynamicResource ButtonGroupSolid}"
+                                 >
+                                    <Button
+                                     Width="200"
+                                     Height="55"
+                                     Margin="0.3"
+                                     HorizontalAlignment="Stretch"
+                                     BorderBrush="Transparent"
+                                     Command="{catel:CommandManagerBinding Application.OpenLink}"
+                                     CommandParameter="{Binding OpenCollectiveLink}"
+                                     Style="{DynamicResource ButtonGroupItemVerticalFirst}"
+                                     >
+
+                                        <Grid Width="125">
+                                            <iconPacks:PackIconBoxIcons HorizontalAlignment="Right" Kind="SolidDonateHeart" />
+                                            <TextBlock
+                                             Margin="5,0,35,0"
+                                             HorizontalAlignment="Right"
+                                             Text="Open Collective"
+                                             />
+                                        </Grid>
+                                    </Button>
+
+                                    <Button
+                                     Width="200"
+                                     Height="55"
+                                     Margin="0.3"
+                                     HorizontalAlignment="Stretch"
+                                     BorderBrush="Transparent"
+                                     Command="{catel:CommandManagerBinding Application.OpenLink}"
+                                     CommandParameter="{Binding PatreonLink}"
+                                     Style="{DynamicResource ButtonGroupItemDefault}"
+                                     >
+                                        <Grid Width="125">
+                                            <iconPacks:PackIconBoxIcons HorizontalAlignment="Right" Kind="LogosPatreon" />
+                                            <TextBlock
+                                             Margin="5,0,35,0"
+                                             HorizontalAlignment="Right"
+                                             Text="Patreon"
+                                             />
+                                        </Grid>
+                                    </Button>
+                                </hc:ButtonGroup>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel
+                         Grid.RowSpan="2"
+                         Margin="5,15,10,0"
+                         HorizontalAlignment="Right"
+                         >
+                            <StackPanel
+                             Margin="0,0,15,0"
+                             FlowDirection="RightToLeft"
+                             Orientation="Horizontal"
+                             >
+                                <iconPacks:PackIconBoxIcons
+                                 Grid.Row="0"
+                                 Width="25"
+                                 Height="25"
+                                 Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                 Kind="RegularBoltCircle"
+                                 Spin="False"
+                                 SpinAutoReverse="False"
+                                 />
+
+                                <TextBlock
+                                 Margin="10,0,5,0"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Center"
+                                 FontSize="18"
+                                 Text="Quick Access"
+                                 />
+                            </StackPanel>
+                            <hc:Divider Margin="15,5,15,5" />
+                            <hc:ButtonGroup
+                             Margin="5,5,5,5"
+                             Orientation="Vertical"
+                             Style="{DynamicResource ButtonGroupSolid}"
+                             >
+                                <Button
+                                 x:Name="sdasd"
+                                 Width="200"
+                                 Height="55"
+                                 Margin="0.3"
+                                 HorizontalAlignment="Stretch"
+                                 BorderBrush="Transparent"
+                                 Command="{catel:CommandManagerBinding Application.NewProject}"
+                                 Style="{DynamicResource ButtonGroupItemVerticalFirst}"
+                                 >
+
+                                    <Grid Width="125">
+                                        <iconPacks:PackIconCodicons HorizontalAlignment="Right" Kind="Add" />
+                                        <TextBlock
+                                         Margin="5,0,35,0"
+                                         HorizontalAlignment="Right"
+                                         Text="Create Project"
+                                         />
+                                    </Grid>
+                                </Button>
+
+                                <Button
+                                 x:Name="asd"
+                                 Width="200"
+                                 Height="55"
+                                 Margin="0.3"
+                                 HorizontalAlignment="Stretch"
+                                 BorderBrush="Transparent"
+                                 Command="{catel:CommandManagerBinding Application.OpenProject}"
+                                 Style="{DynamicResource ButtonGroupItemDefault}"
+                                 >
+                                    <Grid Width="125">
+                                        <iconPacks:PackIconCodicons HorizontalAlignment="Right" Kind="GoToFile" />
+                                        <TextBlock
+                                         Margin="5,0,35,0"
+                                         HorizontalAlignment="Right"
+                                         Text="Open Project"
+                                         />
+                                    </Grid>
+                                </Button>
+                                <Button
+                                 x:Name="asad"
+                                 Width="200"
+                                 Height="55"
+                                 Margin="0.3"
+                                 HorizontalAlignment="Stretch"
+                                 BorderBrush="Transparent"
+                                 Command="{Binding SettingsCommand}"
+                                 Style="{DynamicResource ButtonGroupItemDefault}"
+                                 >
+                                    <Grid Width="125">
+                                        <iconPacks:PackIconCodicons HorizontalAlignment="Right" Kind="Settings" />
+                                        <TextBlock
+                                         Margin="5,0,35,0"
+                                         HorizontalAlignment="Right"
+                                         Text="Settings"
+                                         />
+                                    </Grid>
+                                </Button>
+
+                                <Button
+                                 x:Name="asda"
+                                 Width="200"
+                                 Height="55"
+                                 Margin="0.3"
+                                 HorizontalAlignment="Stretch"
+                                 BorderBrush="Transparent"
+                                 Command="{Binding TutorialsCommand}"
+                                 Style="{DynamicResource ButtonGroupItemDefault}"
+                                 >
+                                    <Grid Width="125">
+                                        <iconPacks:PackIconCodicons HorizontalAlignment="Right" Kind="Question" />
+                                        <TextBlock
+                                         Margin="5,0,35,0"
+                                         HorizontalAlignment="Right"
+                                         Text="Tutorials"
+                                         />
+                                    </Grid>
+                                </Button>
+                                <Button
+                                 x:Name="asdasd"
+                                 Width="200"
+                                 Height="55"
+                                 Margin="0.3"
+                                 HorizontalAlignment="Stretch"
+                                 BorderBrush="Transparent"
+                                 Command="{Binding WikiCommand}"
+                                 Style="{DynamicResource ButtonGroupItemVerticalLast}"
+                                 >
+                                    <Grid Width="125">
+                                        <iconPacks:PackIconCodicons HorizontalAlignment="Right" Kind="Info" />
+                                        <TextBlock
+                                         Margin="5,0,35,0"
+                                         HorizontalAlignment="Right"
+                                         Text="Wiki"
+                                         />
+                                    </Grid>
+                                </Button>
+                            </hc:ButtonGroup>
+                        </StackPanel>
+                    </hc:FlexPanel>
+
+
+
+
+                </Grid>
+            </hc:TransitioningContentControl>
+        </Grid>
+
+        <Grid
+         Grid.Row="1"
+         Grid.Column="0"
+         Grid.ColumnSpan="2"
+         >
+            <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
+
+                <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+                    <Grid Margin="3,0,3,0">
+                        <StackPanel>
+
+                            <StackPanel Margin="32,0,32,5" Orientation="Horizontal">
+                                <iconPacks:PackIconCodicons
+                                 Grid.Row="0"
+                                 Width="25"
+                                 Height="25"
+                                 Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                 Kind="GoToFile"
+                                 Spin="False"
+                                 SpinAutoReverse="False"
+                                 />
+
+                                <TextBlock
+                                 Margin="10,0,0,0"
+                                 FontSize="18"
+                                 Text="Recent Projects"
+                                 />
+                            </StackPanel>
+                            <hc:Divider Margin="32,0,32,0" />
+                            <hc:TransitioningContentControl
+                             MinHeight="280"
+                             MaxHeight="280"
+                             Margin="0,0,0,0"
+                             >
+                                <hc:CoverView
+                                 Grid.RowSpan="1"
+                                 Margin="15"
+                                 Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                                 BorderBrush="{x:Null}"
+                                 BorderThickness="1,1,1,1"
+                                 ItemContentHeight="55"
+                                 ItemHeight="240"
+                                 ItemMargin="15,8,15,8"
+                                 ItemWidth="350"
+                                 ItemsSource="{Binding FancyProjects}"
+                                 ShowContent="False"
+                                 >
+
+                                    <hc:CoverView.ItemHeaderTemplate>
+                                        <DataTemplate>
+                                            <GroupBox Style="{StaticResource GroupBoxTabBaseStyle}">
+                                                <GroupBox.Header>
+                                                    <Border Background="{DynamicResource MahApps.Brushes.Accent4}" CornerRadius="15,2,2,2">
+
+
+                                                        <Border Background="{StaticResource CloudDrawingBrushMain}" CornerRadius="15,2,2,2">
+                                                            <hc:Tag
+                                                             Height="40"
+                                                             MinWidth="350"
+                                                             MaxWidth="350"
+                                                             Margin="3"
+                                                             HorizontalAlignment="Left"
+                                                             HorizontalContentAlignment="Left"
+                                                             Background="{x:Null}"
+                                                             Selectable="False"
+                                                             ShowCloseButton="False"
+                                                             >
+                                                                <hc:Tag.Content>
+                                                                    <TextBlock
+                                                                     Margin="0,0,0,0"
+                                                                     HorizontalAlignment="Left"
+                                                                     FontSize="16"
+                                                                     Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                                                     Text="{Binding Path=Name}"
+                                                                     />
+                                                                </hc:Tag.Content>
+                                                                <hc:Tag.Header>
+                                                                    <Border>
+
+                                                                        <Image Source="{Binding Image}" Stretch="Fill">
+                                                                            <Image.Effect>
+
+                                                                                <hc:BrightnessEffect Brightness="0.9" />
+                                                                            </Image.Effect>
+                                                                        </Image>
+                                                                    </Border>
+                                                                    <!--  Bind to project Image  -->
+                                                                </hc:Tag.Header>
+                                                            </hc:Tag>
+                                                        </Border>
+                                                    </Border>
+                                                </GroupBox.Header>
+                                                <Border
+                                                 Background="{DynamicResource RegionBrush}"
+                                                 BorderBrush="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"
+                                                 BorderThickness="1,0,1,1"
+                                                 CornerRadius="0,0,4,4"
+                                                 >
+
+                                                    <Grid>
+                                                        <StackPanel Margin="5" Orientation="Vertical">
+                                                            <StackPanel Margin="5" Orientation="Horizontal">
+                                                                <hc:Divider
+                                                                 Width="15"
+                                                                 Margin="5,15"
+                                                                 LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
+                                                                 LineStrokeThickness="2"
+                                                                 />
+
+                                                                <Border
+                                                                 Height="25"
+                                                                 VerticalAlignment="Center"
+                                                                 Background="{DynamicResource RegionBrush}"
+                                                                 CornerRadius="5,2,2,2"
+                                                                 >
                                                                     <StackPanel Orientation="Horizontal">
-                                                                        <TextBlock Width="74" Margin="5" VerticalAlignment="Center"  Text="Project Type : "/>
-                                                                        <TextBlock Width="280" Margin="5" VerticalAlignment="Center"  Text="NOTHING TO BIND"/>
-
-                                                                    </StackPanel>
-                                                            </Border>
-
-                                                        </StackPanel>
-                                                        <StackPanel Margin="5" Orientation="Horizontal">
-                                                            <hc:Divider Margin="5,15" LineStroke="{DynamicResource MahApps.Brushes.Accent3}" LineStrokeThickness="2" Width="15"/>
-                                                            <Border VerticalAlignment="Center" Height="25" Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}" CornerRadius="5,2,2,2">
-                                                                    <StackPanel Orientation="Horizontal">
-                                                                        <TextBlock Width="80" Margin="5" VerticalAlignment="Center"  Text="Last Modified : "/>
-                                                                        <TextBlock Width="280" Margin="5" VerticalAlignment="Center"  Text="{Binding DateTime}"/>
-
+                                                                        <TextBlock
+                                                                         Width="74"
+                                                                         Margin="5"
+                                                                         VerticalAlignment="Center"
+                                                                         Text="Project Type : "
+                                                                         />
+                                                                        <TextBlock
+                                                                         Width="280"
+                                                                         Margin="5"
+                                                                         VerticalAlignment="Center"
+                                                                         Text="{Binding Type}"
+                                                                         />
                                                                     </StackPanel>
                                                                 </Border>
+                                                            </StackPanel>
+                                                            <StackPanel Margin="5" Orientation="Horizontal">
+                                                                <hc:Divider
+                                                                 Width="15"
+                                                                 Margin="5,15"
+                                                                 LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
+                                                                 LineStrokeThickness="2"
+                                                                 />
+                                                                <Border
+                                                                 Height="25"
+                                                                 VerticalAlignment="Center"
+                                                                 Background="{DynamicResource RegionBrush}"
+                                                                 CornerRadius="5,2,2,2"
+                                                                 >
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <TextBlock
+                                                                         Width="50"
+                                                                         Margin="5"
+                                                                         VerticalAlignment="Center"
+                                                                         Text="Created : "
+                                                                         />
+                                                                        <TextBlock
+                                                                         Width="280"
+                                                                         Margin="5"
+                                                                         VerticalAlignment="Center"
+                                                                         Text="{Binding CreationDate}"
+                                                                         />
+                                                                    </StackPanel>
+                                                                </Border>
+                                                            </StackPanel>
+
+                                                            <StackPanel Margin="5" Orientation="Horizontal">
+                                                                <hc:Divider
+                                                                 Width="15"
+                                                                 Margin="5,15"
+                                                                 LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
+                                                                 LineStrokeThickness="2"
+                                                                 />
+                                                                <Border
+                                                                 Height="25"
+                                                                 VerticalAlignment="Center"
+                                                                 Background="{DynamicResource RegionBrush}"
+                                                                 CornerRadius="5,2,2,2"
+                                                                 >
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <TextBlock
+                                                                         Width="30"
+                                                                         Margin="5"
+                                                                         VerticalAlignment="Center"
+                                                                         Text="Path : "
+                                                                         />
+                                                                        <TextBlock
+                                                                         Width="280"
+                                                                         Margin="5"
+                                                                         VerticalAlignment="Center"
+                                                                         Text="{Binding ProjectPath}"
+                                                                         />
+                                                                    </StackPanel>
+                                                                </Border>
+                                                            </StackPanel>
                                                         </StackPanel>
 
-                                                    </StackPanel>
-
-                                                    <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="15">
-                                                        <Button Height="35"  HorizontalAlignment="Left">
-                                                            <iconPacks:PackIconCodicons Kind="Edit"></iconPacks:PackIconCodicons>
-                                                        </Button>
-                                                        <hc:Divider LineStrokeThickness="2" LineStroke="{DynamicResource MahApps.Brushes.Accent3}" Orientation="Vertical" MaxHeight="16"/>
-                                                        <Button Height="35"  HorizontalAlignment="Left">
-                                                            <iconPacks:PackIconCodicons Kind="FolderOpened"></iconPacks:PackIconCodicons>
-
-                                                        </Button>
-                                                        <hc:Divider LineStrokeThickness="2" LineStroke="{DynamicResource MahApps.Brushes.Accent3}" Orientation="Vertical" MaxHeight="16"/>
-                                                        <Button Height="35"  HorizontalAlignment="Left">
-                                                            <iconPacks:PackIconCodicons Kind="Trash"></iconPacks:PackIconCodicons>
-
-                                                        </Button>
-                                                    </StackPanel>
-                                                </Grid>
-
-
-                                            </Border>
-                                        </GroupBox>
-
-
-                                    </DataTemplate>
-
-                                </hc:CoverView.ItemHeaderTemplate>
-                          
-                            </hc:CoverView>
+                                                        <StackPanel
+                                                         Margin="15"
+                                                         HorizontalAlignment="Right"
+                                                         VerticalAlignment="Bottom"
+                                                         Orientation="Horizontal"
+                                                         >
+                                                            <Button
+                                                             Height="35"
+                                                             HorizontalAlignment="Left"
+                                                             Command="{catel:CommandManagerBinding Application.OpenProject}"
+                                                             CommandParameter="{Binding ProjectPath}"
+                                                             >
+                                                                <iconPacks:PackIconCodicons Kind="Edit" />
+                                                            </Button>
+                                                            <hc:Divider
+                                                             MaxHeight="16"
+                                                             LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
+                                                             LineStrokeThickness="2"
+                                                             Orientation="Vertical"
+                                                             />
+                                                            <Button
+                                                             Height="35"
+                                                             HorizontalAlignment="Left"
+                                                             Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
+                                                             CommandParameter="{Binding ProjectPath}"
+                                                             >
+                                                                <iconPacks:PackIconCodicons Kind="FolderOpened" />
+                                                            </Button>
+                                                            <hc:Divider
+                                                             MaxHeight="16"
+                                                             LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
+                                                             LineStrokeThickness="2"
+                                                             Orientation="Vertical"
+                                                             />
+                                                            <Button
+                                                             Height="35"
+                                                             HorizontalAlignment="Left"
+                                                             Command="{catel:CommandManagerBinding Application.DeleteProject}"
+                                                             CommandParameter="{Binding ProjectPath}"
+                                                             >
+                                                                <iconPacks:PackIconCodicons Kind="Trash" />
+                                                            </Button>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                            </GroupBox>
+                                        </DataTemplate>
+                                    </hc:CoverView.ItemHeaderTemplate>
+                                </hc:CoverView>
                             </hc:TransitioningContentControl>
                         </StackPanel>
-
                     </Grid>
-            </Grid>
+                </Grid>
             </hc:TransitioningContentControl>
-
         </Grid>
 
+        <Grid
+         Grid.Row="2"
+         Grid.RowSpan="10"
+         Grid.ColumnSpan="5"
+         >
 
+            <hc:UniformSpacingPanel
+             HorizontalAlignment="Left"
+             VerticalAlignment="Bottom"
+             Spacing="20"
+             />
+            <iconPacks:PackIconCodicons
+             Width="20"
+             Height="20"
+             Margin="0,0,5,0"
+             HorizontalAlignment="Right"
+             VerticalAlignment="Bottom"
+             Foreground="{DynamicResource Fluent.Ribbon.Brushes.IdealForegroundDisabledBrush}"
+             Kind="Versions"
+             />
 
-
-        <Grid   Grid.ColumnSpan="5" Grid.RowSpan="10" Grid.Row="2" >
-
-            <hc:UniformSpacingPanel HorizontalAlignment="Left" Spacing="20" VerticalAlignment="Bottom">
-
-
-
-            </hc:UniformSpacingPanel>
-            <iconPacks:PackIconCodicons Foreground="{DynamicResource Fluent.Ribbon.Brushes.IdealForegroundDisabledBrush}"  HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Bottom" Kind="Versions" Width="20" Height="20"/>
-
-            <TextBlock FontSize="10" Foreground="{DynamicResource Fluent.Ribbon.Brushes.IdealForegroundDisabledBrush}" IsEnabled="False" FlowDirection="LeftToRight" Text="V1.032323230.0" Margin="5,5,30,4" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+            <TextBlock
+             Margin="5,5,30,4"
+             HorizontalAlignment="Right"
+             VerticalAlignment="Bottom"
+             FlowDirection="LeftToRight"
+             FontSize="10"
+             Foreground="{DynamicResource Fluent.Ribbon.Brushes.IdealForegroundDisabledBrush}"
+             IsEnabled="False"
+             Text="{Binding VersionWkit}"
+             />
         </Grid>
-
-
-
-
-
-
-
-
     </Grid>
 </catel:UserControl>

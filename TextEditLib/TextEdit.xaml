@@ -1,71 +1,70 @@
 <ResourceDictionary
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
-	xmlns:editing="clr-namespace:ICSharpCode.AvalonEdit.Editing;assembly=ICSharpCode.AvalonEdit"
-	xmlns:local="clr-namespace:TextEditLib"
-	xmlns:rendering="clr-namespace:ICSharpCode.AvalonEdit.Rendering;assembly=ICSharpCode.AvalonEdit"
-	xmlns:reskeys="clr-namespace:TextEditLib.Themes"
-	xmlns:unit="clr-namespace:UnitComboLib;assembly=UnitComboLib">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:editing="clr-namespace:ICSharpCode.AvalonEdit.Editing;assembly=ICSharpCode.AvalonEdit"
+    xmlns:rendering="clr-namespace:ICSharpCode.AvalonEdit.Rendering;assembly=ICSharpCode.AvalonEdit"
+    xmlns:local="clr-namespace:TextEditLib"
+    xmlns:reskeys="clr-namespace:TextEditLib.Themes"
+    xmlns:unit="clr-namespace:UnitComboLib;assembly=UnitComboLib">
 
-	<Style TargetType="{x:Type local:TextEdit}">
-		<Setter Property="FlowDirection" Value="LeftToRight" />
-		<Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.EditorBackground}}" />
-		<Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.EditorForeground}}" />
-		<Setter Property="LineNumbersForeground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.EditorLineNumbersForeground}}" />
-		<Setter Property="EditorCurrentLineBorder" Value="{DynamicResource {x:Static reskeys:ResourceKeys.EditorCurrentLineBorderBrushKey}}" />
-		<Setter Property="VerticalScrollBarVisibility" Value="Auto" />
-		<Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type local:TextEdit}">
-					<ControlTemplate.Resources>
-						<Style TargetType="{x:Type rendering:TextView}">
-							<Setter Property="NonPrintableCharacterBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.EditorNonPrintableCharacterBrush}}" />
-							<Setter Property="LinkTextForegroundBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.EditorLinkTextForegroundBrush}}" />
-							<!--  Style hyperlink displayed within text in text editor  -->
-							<Setter Property="LinkTextBackgroundBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.EditorLinkTextBackgroundBrush}}" />
-						</Style>
+    <Style TargetType="{x:Type local:TextEdit}">
+        <Setter Property="FlowDirection" Value="LeftToRight" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.EditorBackground}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.EditorForeground}}" />
+        <Setter Property="LineNumbersForeground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.EditorLineNumbersForeground}}" />
+        <Setter Property="EditorCurrentLineBorder" Value="{DynamicResource {x:Static reskeys:ResourceKeys.EditorCurrentLineBorderBrushKey}}" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:TextEdit}">
+                    <ControlTemplate.Resources>
+                        <Style TargetType="{x:Type rendering:TextView}">
+                            <Setter Property="NonPrintableCharacterBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.EditorNonPrintableCharacterBrush}}" />
+                            <Setter Property="LinkTextForegroundBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.EditorLinkTextForegroundBrush}}" />
+                            <!--  Style hyperlink displayed within text in text editor  -->
+                            <Setter Property="LinkTextBackgroundBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.EditorLinkTextBackgroundBrush}}" />
+                        </Style>
 
-						<Style TargetType="{x:Type editing:TextArea}">
-							<Setter Property="FocusVisualStyle" Value="{x:Null}" />
-							<Setter Property="SelectionBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.EditorSelectionBrush}}" />
-							<Setter Property="SelectionBorder">
-								<Setter.Value>
-									<Pen Brush="{DynamicResource {x:Static reskeys:ResourceKeys.EditorSelectionBorder}}" Thickness="0" />
-								</Setter.Value>
-							</Setter>
-							<Setter Property="SelectionCornerRadius" Value="0" />
-							<Setter Property="SelectionForeground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.HighlightTextBrushKey}}" />
-							<Setter Property="Template">
-								<Setter.Value>
-									<ControlTemplate TargetType="{x:Type editing:TextArea}">
-										<DockPanel Focusable="False">
-											<ItemsControl
+                        <Style TargetType="{x:Type editing:TextArea}">
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                            <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.EditorSelectionBrush}}" />
+                            <Setter Property="SelectionBorder">
+                                <Setter.Value>
+                                    <Pen Brush="{DynamicResource {x:Static reskeys:ResourceKeys.EditorSelectionBorder}}" Thickness="0" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="SelectionCornerRadius" Value="0" />
+                            <Setter Property="SelectionForeground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.HighlightTextBrushKey}}" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type editing:TextArea}">
+                                        <DockPanel Focusable="False">
+                                            <ItemsControl
 												DockPanel.Dock="Left"
 												Focusable="False"
 												ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=LeftMargins}">
-												<ItemsControl.ItemsPanel>
-													<ItemsPanelTemplate>
-														<StackPanel Orientation="Horizontal" />
-													</ItemsPanelTemplate>
-												</ItemsControl.ItemsPanel>
-											</ItemsControl>
-											<ContentPresenter
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                            </ItemsControl>
+                                            <ContentPresenter
 												Panel.ZIndex="-1"
 												Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TextView}"
 												Focusable="False" />
-										</DockPanel>
-									</ControlTemplate>
-								</Setter.Value>
-							</Setter>
-						</Style>
-					</ControlTemplate.Resources>
-					<Border
+                                        </DockPanel>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ControlTemplate.Resources>
+                    <Border
 						Background="Transparent"
 						BorderBrush="{TemplateBinding BorderBrush}"
 						BorderThickness="{TemplateBinding BorderThickness}">
-						<ScrollViewer
+                        <ScrollViewer
 							Name="PART_ScrollViewer"
 							Padding="{TemplateBinding Padding}"
 							HorizontalContentAlignment="Left"
@@ -78,43 +77,43 @@
 							Focusable="False"
 							HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
 							VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}">
-							<ScrollViewer.Template>
-								<ControlTemplate TargetType="{x:Type ScrollViewer}">
-									<Border
+                            <ScrollViewer.Template>
+                                <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                                    <Border
 										HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
 										VerticalAlignment="{TemplateBinding VerticalAlignment}"
 										BorderBrush="{TemplateBinding BorderBrush}"
 										BorderThickness="{TemplateBinding BorderThickness}">
-										<Grid
+                                        <Grid
 											HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
 											VerticalAlignment="{TemplateBinding VerticalAlignment}"
 											Background="Transparent">
-											<Grid.ColumnDefinitions>
-												<ColumnDefinition Width="*" />
-												<ColumnDefinition Width="Auto" />
-											</Grid.ColumnDefinitions>
-											<Grid.RowDefinitions>
-												<RowDefinition Height="*" />
-												<RowDefinition Height="Auto" />
-											</Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
 
-											<!--  Ensure correct background color for TextEditor area only  -->
-											<Border
+                                            <!--  Ensure correct background color for TextEditor area only  -->
+                                            <Border
 												Grid.Row="0"
 												Grid.Column="0"
 												Background="{DynamicResource {x:Static reskeys:ResourceKeys.EditorBackground}}"
 												BorderThickness="0">
-												<!--  Display TextEditor content in upper left corner  -->
-												<ScrollContentPresenter
+                                                <!--  Display TextEditor content in upper left corner  -->
+                                                <ScrollContentPresenter
 													CanContentScroll="True"
 													CanHorizontallyScroll="True"
 													CanVerticallyScroll="True"
 													Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TextEdit}}, Path=TextArea}"
 													KeyboardNavigation.DirectionalNavigation="Local" />
-											</Border>
+                                            </Border>
 
-											<!--  Display Vertical Scrollbar to the right  -->
-											<ScrollBar
+                                            <!--  Display Vertical Scrollbar to the right  -->
+                                            <ScrollBar
 												Name="PART_VerticalScrollBar"
 												Grid.Column="1"
 												Maximum="{TemplateBinding ScrollableHeight}"
@@ -122,17 +121,17 @@
 												Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
 												Value="{TemplateBinding VerticalOffset}" />
 
-											<!--  Display mini-toolbar and Horizontal scrollbar at the bottom of the view  -->
-											<Grid
+                                            <!--  Display mini-toolbar and Horizontal scrollbar at the bottom of the view  -->
+                                            <Grid
 												Grid.Row="1"
 												Grid.Column="0"
 												Background="Transparent">
-												<Grid.ColumnDefinitions>
-													<ColumnDefinition Width="Auto" />
-													<ColumnDefinition Width="*" />
-												</Grid.ColumnDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
 
-												<unit:UnitCombobox
+                                                <unit:UnitCombobox
 													Grid.Column="0"
 													Height="{Binding ElementName=PART_HorizontalScrollBar, Path=ActualHeight}"
 													Margin="3,0"
@@ -147,15 +146,15 @@
 													IsEditable="True"
 													ItemsSource="{Binding SelectedItem.DefaultValues}"
 													ToolTip="{Binding ValueTip}">
-													<unit:UnitCombobox.Text>
-														<Binding
+                                                    <unit:UnitCombobox.Text>
+                                                        <Binding
 															Mode="TwoWay"
 															Path="StringValue"
 															ValidatesOnDataErrors="True" />
-													</unit:UnitCombobox.Text>
-												</unit:UnitCombobox>
+                                                    </unit:UnitCombobox.Text>
+                                                </unit:UnitCombobox>
 
-												<ScrollBar
+                                                <ScrollBar
 													Name="PART_HorizontalScrollBar"
 													Grid.Column="1"
 													VerticalAlignment="Center"
@@ -164,38 +163,37 @@
 													ViewportSize="{TemplateBinding ViewportWidth}"
 													Visibility="Visible"
 													Value="{TemplateBinding HorizontalOffset}" />
-											</Grid>
-											<!--  Using DialogBackgroundBrush since Editor can use a WPF Theme independent background color  -->
-											<DockPanel
+                                            </Grid>
+                                            <!--  Using DialogBackgroundBrush since Editor can use a WPF Theme independent background color  -->
+                                            <DockPanel
 												Grid.Row="1"
 												Grid.Column="1"
 												Background="{Binding ElementName=PART_HorizontalScrollBar, Path=Background}"
 												LastChildFill="false">
-												<Rectangle
+                                                <Rectangle
 													Width="1"
 													DockPanel.Dock="Left"
 													Fill="{Binding ElementName=PART_HorizontalScrollBar, Path=Background}"
 													Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
-												<Rectangle
+                                                <Rectangle
 													Height="1"
 													DockPanel.Dock="Top"
 													Fill="{Binding ElementName=PART_HorizontalScrollBar, Path=Background}"
 													Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" />
-											</DockPanel>
-										</Grid>
-									</Border>
-								</ControlTemplate>
-							</ScrollViewer.Template>
-						</ScrollViewer>
-					</Border>
-					<ControlTemplate.Triggers>
-						<Trigger Property="WordWrap" Value="True">
-							<Setter TargetName="PART_ScrollViewer" Property="HorizontalScrollBarVisibility" Value="Disabled" />
-						</Trigger>
-					</ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
-
+                                            </DockPanel>
+                                        </Grid>
+                                    </Border>
+                                </ControlTemplate>
+                            </ScrollViewer.Template>
+                        </ScrollViewer>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="WordWrap" Value="True">
+                            <Setter TargetName="PART_ScrollViewer" Property="HorizontalScrollBarVisibility" Value="Disabled" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

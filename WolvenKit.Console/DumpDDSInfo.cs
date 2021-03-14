@@ -43,13 +43,13 @@ namespace WolvenKit.Console
             var W3_DIR = System.Environment.GetEnvironmentVariable("W3_DIR", EnvironmentVariableTarget.User);
             if (!Directory.Exists(W3_DIR)) return 0;
             txc.LoadAll(W3_DIR);
-            System.Console.WriteLine($"Loaded TextureManager");
+            System.Console.WriteLine($"Loaded texture manager.");
 
             // load BundleManager
             var bundlexbmDict = new Dictionary<uint, XBMBundleInfo>();
             var bm = new BundleManager();
             bm.LoadAll(W3_DIR);
-            System.Console.WriteLine($"Loaded BundleManager");
+            System.Console.WriteLine($"Loaded bundle manager.");
 
             var memorymappedbundles = new Dictionary<string, MemoryMappedFile>();
             foreach (var b in bm.Bundles.Values)
@@ -105,7 +105,7 @@ namespace WolvenKit.Console
                                             );
                                         }
                                     }
-                                    
+
                                 }
                             }
                         }
@@ -120,14 +120,14 @@ namespace WolvenKit.Console
                     p1.Report(perc, $"Loading bundle entries: {progress}/{files1.Count}");
                 });
             }
-            System.Console.WriteLine($@"Loaded {bundlexbmDict.Values.Count} Bundle Entries");
+            System.Console.WriteLine($@"Loaded {bundlexbmDict.Values.Count} bundle entries.");
             #endregion
 
             #region DUMP TEXCACHE
             // Dump texture cache infos
             using (StreamWriter writer = File.CreateText(Path.Combine(outDir, $"__ddsdump_{idx}.txt")))
             {
-                string head = 
+                string head =
                     "Format1\t" +
                     "Format2\t" +
                     "BPP\t" +
@@ -150,7 +150,7 @@ namespace WolvenKit.Console
                     ;
                 writer.WriteLine(head);
 
-                
+
                 using (var pb = new ConsoleProgressBar.ProgressBar())
                 using (var p1 = pb.Progress.Fork())
                 {
@@ -210,9 +210,9 @@ namespace WolvenKit.Console
                         var perc = progress / (double)files.Count;
                         p1.Report(perc, $"Loading cache entries: {progress}/{files.Count}");
                     });
-                    System.Console.WriteLine($"Finished dumping {files.Count} texture cache infos.\r\n");
+                    System.Console.WriteLine($"Finished dumping info from {files.Count} texture caches.\r\n");
                 }
-                
+
             }
 
             #endregion

@@ -1,56 +1,39 @@
-﻿
+using Catel.IoC;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Models.Wizards;
+using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard;
 
 namespace WolvenKit.Views.Wizards
 {
     public partial class FirstSetupWizardView
     {
-        public FirstSetupWizardView()
-        {
+        #region Fields
 
-            CUV = new CreateUserView();
-            STV = new SelectThemeView();
-            LGDV = new LocateGameDateView();
-            FSV = new FinalizeSetupView();
-            SIPV = new SetInitialPreferencesView();
+        private CreateUserView CUV;
 
-            InitializeComponent();
-            ShowPage();
-        }
+        private FinalizeSetupView FSV;
 
+        private LocateGameDateView LGDV;
 
-        private CreateUserView CUV ;
-        private SelectThemeView STV ;
-        private LocateGameDateView LGDV ;
-        private FinalizeSetupView FSV ;
         private SetInitialPreferencesView SIPV;
 
-        private void ShowPage()
+        private SelectThemeView STV;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public FirstSetupWizardView()
         {
-            switch (StepMain.StepIndex)
-            {
-                case 0:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(CUV);
-                    break;
-                case 1:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(STV);
-                    break;
-                case 2:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(SIPV);
-                    break;
-                case 3:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(LGDV);
-                    break;
-                case 4:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(FSV);
-                    break;
-            }
+            ServiceLocator.Default.RegisterTypeAndInstantiate<ProjectWizardModel>();
+
+            InitializeComponent();
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -64,12 +47,63 @@ namespace WolvenKit.Views.Wizards
             ShowPage();
         }
 
-        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        private void ShowPage()
         {
-            if (this.IsVisible )
+            switch (StepMain.StepIndex)
             {
-                DiscordRPCHelper.WhatAmIDoing("First Setup Wizard");
+                case 0:
+                    PageGrid.Children.Clear();
+                    PageGrid.Children.Add(CUV);
+                    break;
+
+                case 1:
+                    PageGrid.Children.Clear();
+                    PageGrid.Children.Add(STV);
+                    break;
+
+                case 2:
+                    PageGrid.Children.Clear();
+                    PageGrid.Children.Add(SIPV);
+                    break;
+
+                case 3:
+                    PageGrid.Children.Clear();
+                    PageGrid.Children.Add(LGDV);
+                    break;
+
+                case 4:
+                    PageGrid.Children.Clear();
+                    PageGrid.Children.Add(FSV);
+                    break;
             }
         }
+
+        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if (IsVisible)
+            {
+                DiscordHelper.SetDiscordRPCStatus("First Setup Wizard");
+            }
+        }
+
+        private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
+        {
+            if (ViewModel == null)
+            {
+                return;
+            }
+
+            ServiceLocator.Default.RegisterInstance(ViewModel as FirstSetupWizardViewModel);
+
+            CUV = new CreateUserView();
+            STV = new SelectThemeView();
+            LGDV = new LocateGameDateView();
+            FSV = new FinalizeSetupView();
+            SIPV = new SetInitialPreferencesView();
+
+            ShowPage();
+        }
+
+        #endregion Methods
     }
 }

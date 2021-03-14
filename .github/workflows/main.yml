@@ -1,78 +1,174 @@
 name: WolvenKit-Check-Build
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
  
 jobs:
-  build:
+  build-dll-win:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: checkout
+      uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.100
-        
-    - name: Clean
+    - name: dotnet clean
+      run: dotnet clean ./WolvenKitFormats.sln --configuration Release && dotnet nuget locals all --clear
+    - name: dotnet restore
+      run: dotnet restore ./WolvenKitFormats.sln 
+    - name: dotnet build WolvenKitFormats.sln
+      run: dotnet build ./WolvenKitFormats.sln --configuration Release --no-restore
+
+    - name: Build Artifact RED3 CR2W
+      uses: actions/upload-artifact@v2.2.1
+      with:
+        name: artifact_wkit-win-red3
+        path: ./WolvenKit.RED3.CR2W/bin/Release/net5.0/WolvenKit.RED3.CR2W.dll
+    - name: Build Artifact RED4 CR2W
+      uses: actions/upload-artifact@v2.2.1
+      with:
+        name: artifact_wkit-win-red4
+        path: ./WolvenKit.RED4.CR2W/bin/Release/net5.0/WolvenKit.RED4.CR2W.dll
+
+  build-dll-osx:
+    runs-on: macos-latest
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.100
+    - name: dotnet clean
+      run: dotnet clean ./WolvenKitFormats.sln --configuration Release && dotnet nuget locals all --clear
+    - name: dotnet restore
+      run: dotnet restore ./WolvenKitFormats.sln 
+    - name: dotnet build WolvenKitFormats.sln
+      run: dotnet build ./WolvenKitFormats.sln --configuration Release --no-restore
+
+    - name: Build Artifact RED3 CR2W
+      uses: actions/upload-artifact@v2.2.1
+      with:
+        name: artifact_wkit-osx-red3
+        path: ./WolvenKit.RED3.CR2W/bin/Release/net5.0/WolvenKit.RED3.CR2W.dll
+    - name: Build Artifact RED4 CR2W
+      uses: actions/upload-artifact@v2.2.1
+      with:
+        name: artifact_wkit-osx-red4
+        path: ./WolvenKit.RED4.CR2W/bin/Release/net5.0/WolvenKit.RED4.CR2W.dll
+      
+  wkit-win:
+    runs-on: windows-latest
+    needs: build-dll-win
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.100
+    - name: dotnet clean
       run: dotnet clean ./WolvenKit.sln --configuration Release && dotnet nuget locals all --clear
-    - name: Install dependencies
+    - name: dotnet restore
       run: dotnet restore ./WolvenKit.sln 
-    - name: Build
+
+    - name: Download Artifact RED3 CR2W
+      uses: actions/download-artifact@v2
+      with:
+        name: artifact_wkit-win-red3
+        path: ./WolvenKit.RED3.CR2W/bin/Release/net5.0
+    - name: Download Artifact RED4 CR2W
+      uses: actions/download-artifact@v2
+      with:
+        name: artifact_wkit-win-red4
+        path: ./WolvenKit.RED4.CR2W/bin/Release/net5.0
+    - name: Display structure of downloaded files
+      run: ls -R
+
+    - name: dotnet build WolvenKit.sln
       run: dotnet build ./WolvenKit.sln --configuration Release --no-restore
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.1
       with:
-        name: artifact
+        name: artifact_wkit-windows
         path: ./WolvenKit/bin/Release/net5.0-windows
-    - uses: papeloto/action-zip@v1
+
+  console-win:
+    runs-on: windows-latest
+    needs: build-dll-win
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
       with:
-        files: ./WolvenKit/bin/Release/net5.0-windows
-        dest: wolvenkit.zip
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: commit-${{ github.sha }}
-        draft: true
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./wolvenkit.zip
-        asset_name: wolvenkit.zip
-        asset_content_type: application/zip
-        
-    - name: Clean
+        dotnet-version: 5.0.100
+    - name: dotnet clean
       run: dotnet clean ./CP77Tools.sln --configuration Release && dotnet nuget locals all --clear
-    - name: Install dependencies
-      run: dotnet restore ./CP77Tools.sln 
-    - name: Build
+    - name: dotnet restore
+      run: dotnet restore ./CP77Tools.sln
+
+    - name: Download Artifact RED3 CR2W
+      uses: actions/download-artifact@v2
+      with:
+        name: artifact_wkit-win-red3
+        path: ./WolvenKit.RED3.CR2W/bin/Release/net5.0
+    - name: Download Artifact RED4 CR2W
+      uses: actions/download-artifact@v2
+      with:
+        name: artifact_wkit-win-red4
+        path: ./WolvenKit.RED4.CR2W/bin/Release/net5.0
+    - name: Display structure of downloaded files
+      run: ls -R
+
+    - name: dotnet build CP77Tools.sln
       run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.1
       with:
-        name: artifact
+        name: artifact_console-windows
         path: ./CP77Tools/bin/Release/net5.0-windows
-    - uses: papeloto/action-zip@v1
+      
+  console-osx:
+    runs-on: macos-latest
+    needs: build-dll-osx
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
       with:
-        files: ./CP77Tools/bin/Release/net5.0-windows
-        dest: wolvenkit_console.zip
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        dotnet-version: 5.0.100
+    - name: dotnet clean
+      run: dotnet clean ./CP77Tools.sln --configuration Release && dotnet nuget locals all --clear
+    - name: dotnet restore
+      run: dotnet restore ./CP77Tools.sln
+
+    - name: Download Artifact RED3 CR2W
+      uses: actions/download-artifact@v2
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./wolvenkit_console.zip
-        asset_name: wolvenkit_console.zip
-        asset_content_type: application/zip
+        name: artifact_wkit-osx-red3
+        path: ./WolvenKit.RED3.CR2W/bin/Release/net5.0
+    - name: Download Artifact RED4 CR2W
+      uses: actions/download-artifact@v2
+      with:
+        name: artifact_wkit-osx-red4
+        path: ./WolvenKit.RED4.CR2W/bin/Release/net5.0
+    - name: Display structure of downloaded files
+      run: ls -R
+
+    - name: dotnet build CP77Tools.sln
+      run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.1
+      with:
+        name: artifact_console-OSX
+        path: ./CP77Tools/bin/Release/net5.0 

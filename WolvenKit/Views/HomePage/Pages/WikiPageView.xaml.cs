@@ -1,23 +1,24 @@
-﻿
 using System.Windows;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
     public partial class WikiPageView
     {
+        #region Constructors
+
         public WikiPageView()
         {
-            InitializeComponent(); 
-
+            InitializeComponent();
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.IsVisible )
-            {
-                DiscordRPCHelper.WhatAmIDoing("Wiki");
-            }
-
         }
+
+        #endregion Methods
     }
 }

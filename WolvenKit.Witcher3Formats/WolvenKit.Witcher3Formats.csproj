@@ -1,0 +1,105 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+    <ItemGroup>
+    <None Remove="bnkext\bnkextr.exe" />
+    <None Remove="SoundCache\soundbanksinfo.xml" />
+    <None Remove="vgmstream\avcodec-vgmstream-58.dll" />
+    <None Remove="vgmstream\avformat-vgmstream-58.dll" />
+    <None Remove="vgmstream\avutil-vgmstream-56.dll" />
+    <None Remove="vgmstream\in_vgmstream.dll" />
+    <None Remove="vgmstream\libatrac9.dll" />
+    <None Remove="vgmstream\libcelt-0061.dll" />
+    <None Remove="vgmstream\libcelt-0110.dll" />
+    <None Remove="vgmstream\libg719_decode.dll" />
+    <None Remove="vgmstream\libmpg123-0.dll" />
+    <None Remove="vgmstream\libvorbis.dll" />
+    <None Remove="vgmstream\swresample-vgmstream-3.dll" />
+    <None Remove="vgmstream\test.exe" />
+    <None Remove="vgmstream\xmp-vgmstream.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bnkext\bnkextr.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SoundCache\soundbanksinfo.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="vgmstream\avcodec-vgmstream-58.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="vgmstream\avformat-vgmstream-58.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="vgmstream\avutil-vgmstream-56.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="vgmstream\in_vgmstream.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="vgmstream\libatrac9.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="vgmstream\libcelt-0061.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="vgmstream\libcelt-0110.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="vgmstream\libg719_decode.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="vgmstream\libmpg123-0.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="vgmstream\libvorbis.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="vgmstream\swresample-vgmstream-3.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="vgmstream\test.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="vgmstream\xmp-vgmstream.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="doboz4net" Version="1.0.1" NoWarn="NU1701" />
+        <PackageReference Include="lz4net" Version="1.0.15.93" />
+        <PackageReference Include="MarkerMetro.Unity.Ionic.Zlib" Version="2.0.0.14" NoWarn="NU1701" />
+        <PackageReference Include="protobuf-net" Version="3.0.73" />
+        <PackageReference Include="Snappy.NET" Version="1.1.1.8" NoWarn="NU1701" />
+        <PackageReference Include="Crc32C.NET" Version="1.0.5" NoWarn="NU1701" />
+        <PackageReference Include="ini-parser" Version="2.5.2" NoWarn="NU1701" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <None Update="vgmstream\COPYING">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="vgmstream\README.md">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Reference Include="WolvenKit.RED3.CR2W">
+        <HintPath>..\WolvenKit.RED3.CR2W\bin\Release\net5.0\WolvenKit.RED3.CR2W.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

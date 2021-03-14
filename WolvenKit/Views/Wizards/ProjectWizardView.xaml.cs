@@ -1,47 +1,36 @@
-﻿
-using Catel;
 using Catel.IoC;
-using Catel.MVVM;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Models.Wizards;
+using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Wizards.WizardPages.ProjectWizard;
+using FinalizeSetupView = WolvenKit.Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView;
 
 namespace WolvenKit.Views.Wizards
 {
     public partial class ProjectWizardView
     {
-        public ProjectWizardView()
-        {
-            ServiceLocator.Default.RegisterInstance(new Model.Wizards.ProjectWizardModel());
+        #region Fields
 
-            SPTV = new SelectProjectTypeView();
-            PCV = new ProjectConfigurationView();
-            FSV = new FinalizeSetupView(this);
-
-            InitializeComponent();
-            ShowPage();
-        }
-
-        private SelectProjectTypeView SPTV;
-        private ProjectConfigurationView PCV;
         private FinalizeSetupView FSV;
 
-        private void ShowPage()
+        private ProjectConfigurationView PCV;
+
+        private SelectProjectTypeView SPTV;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ProjectWizardView()
         {
-            switch(StepMain.StepIndex)
-            {
-                case 0:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(SPTV);
-                    break;
-                case 1:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(PCV);
-                    break;
-                case 2:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(FSV);
-                    break;
-            }
+            ServiceLocator.Default.RegisterTypeAndInstantiate<FirstSetupWizardModel>();
+
+            InitializeComponent();
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -55,12 +44,51 @@ namespace WolvenKit.Views.Wizards
             ShowPage();
         }
 
-        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        private void ShowPage()
         {
-            if (this.IsVisible )
+            switch (StepMain.StepIndex)
             {
-                DiscordRPCHelper.WhatAmIDoing("Project Wizard");
+                case 0:
+                    PageGrid.Children.Clear();
+                    PageGrid.Children.Add(SPTV);
+                    break;
+
+                case 1:
+                    PageGrid.Children.Clear();
+                    PageGrid.Children.Add(PCV);
+                    break;
+
+                case 2:
+                    PageGrid.Children.Clear();
+                    PageGrid.Children.Add(FSV);
+                    break;
             }
         }
+
+        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if (IsVisible)
+            {
+                DiscordHelper.SetDiscordRPCStatus("Project Wizard");
+            }
+        }
+
+        private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
+        {
+            if (ViewModel == null)
+            {
+                return;
+            }
+
+            ServiceLocator.Default.RegisterInstance(ViewModel as ProjectWizardViewModel);
+
+            SPTV = new SelectProjectTypeView();
+            PCV = new ProjectConfigurationView();
+            FSV = new FinalizeSetupView();
+
+            ShowPage();
+        }
+
+        #endregion Methods
     }
 }

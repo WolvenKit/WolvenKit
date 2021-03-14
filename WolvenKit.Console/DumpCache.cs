@@ -35,7 +35,7 @@ namespace WolvenKit.Console
                     return 0;
                 if (inputFileInfo.Name != "texture.cache")
                 {
-                    System.Console.WriteLine($@"Only texture.caches are currently suported. {options.path}.");
+                    System.Console.WriteLine($@"Only texture caches currently suported.");
                     return 0;
                 }
 
@@ -55,7 +55,7 @@ namespace WolvenKit.Console
                     {
                         string fullpath = Path.Combine(outDir.FullName, x.Name);
                         x.Extract(new BundleFileExtractArgs(fullpath, EUncookExtension.dds));
-                        System.Console.WriteLine($@"Finished extracting {x.Name}");
+                        System.Console.WriteLine($@"Finished extracting {x.Name}.");
                     }
                     System.Console.WriteLine($@"Finished extracting {options.path}.");
                 }
@@ -71,8 +71,8 @@ namespace WolvenKit.Console
 
                 System.Console.WriteLine($@"Finished creating {options.path}.");
             }
-            
-            
+
+
             return 1;
         }
     }

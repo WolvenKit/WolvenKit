@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <PackageId>WolvenKit.Witcher3Game</PackageId>
+    <Authors>Hambalkó Bence, Moritz Baron</Authors>
+    <Company>WolvenKit</Company>
+    <Product>WolvenKit.Witcher3Game</Product>
+    <Description>File formats (The Witcher 3) for the WolvenKit Mod Editor.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/WolvenKit/Wolven-kit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>wolvenkit, witcher3</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>2.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ViewModels\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
+    <None Remove="ViewModels\**" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Catel.Core" Version="5.12.11" />
+    <PackageReference Include="DotNetHelper.FastMember.Extension" Version="2.0.0" />
+    <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
+    <PackageReference Include="FastMember" Version="1.5.0" />
+    <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
+  </ItemGroup>
+
+</Project>

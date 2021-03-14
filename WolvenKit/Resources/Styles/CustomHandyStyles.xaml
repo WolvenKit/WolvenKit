@@ -1,10 +1,8 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"           
-                    xmlns:system="clr-namespace:System;assembly=mscorlib"
-                    xmlns:hc="https://handyorg.github.io/handycontrol">
-
-
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    xmlns:hc="https://handyorg.github.io/handycontrol">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary>
@@ -19,7 +17,6 @@
             <Geometry x:Key="IntegratedGeo">M479.375 80H523.7499999999999L631.25 187.5H781.25L812.5 218.75V370L921.25 477.5V521.875L814.3750000000001 629.375V781.875L783.1250000000001 812.5H631.25L523.75 919.375H479.3750000000001L375 812.5H220.625L187.5 781.25V629.375L81.875 521.875V477.5L187.5 370V218.75L220.625 187.5H375L479.375 80zM385 250H250V383.125L242.5 405L148.125 500L240.625 594.375L250 616.25V750H385L407.5000000000001 758.75L500 853.125L596.25 758.75L618.1249999999999 750H750V616.25L760.625 594.375L855.625 500L758.7499999999999 405L749.9999999999999 383.125V250H618.125L594.375 240.625L500 146.25L407.5 241.25L385 250zM420.625 345H465L700.625 580.625L656.25 625L443.125 411.25L356.875 497.5000000000001L312.5 453.125L420.625 345z</Geometry>
             <Geometry x:Key="HomeArrow">M750 8q0 -17 -12 -29t-30 -12q-21 0 -34 19q-48 74 -110.5 106.5t-146.5 38.5v-60q0 -34 -25 -59q-24 -24 -59 -23.5t-58 23.5l-263 258q-12 12 -12 30t12 30l262 258q23 23 58.5 23.5t59.5 -23.5q25 -25 25 -59v-71q145 -29 239 -144t94 -264v-42zM376 216 q179 -4 282 -88q-24 101 -103 171t-185 82l-37 2v146l-232 -229l232 -229v146z</Geometry>
             <Geometry x:Key="Try">m 687.97411,781.33185 c -7.25256,-13.20479 -13.83575,-25.099 -14.6293,-26.43159 -0.86392,-1.45075 -3.92685,-3.89081 -7.63382,-6.08144 -10.20646,-6.03151 -21.77416,-15.12112 -31.44354,-24.70756 -8.10754,-8.038 -9.3254,-8.96963 -10.92925,-8.3606 -9.84495,3.73842 -19.76892,-9.39426 -13.21747,-17.49107 1.396,-1.72528 1.36259,-1.84733 -2.09978,-7.67293 -24.29125,-40.87122 -29.06655,-99.32234 -11.78627,-144.26763 6.5663,-17.07868 18.20573,-36.27273 30.17394,-49.75847 4.31032,-4.85685 5.32846,-23.2218 1.28741,-23.2218 -11.19932,0 -25.62406,-9.33371 -31.51304,-20.39091 -4.17711,-7.84297 -4.68566,-11.0284 -4.69592,-29.41378 -0.0119,-21.24608 -0.90426,-21.03672 16.27704,-3.81872 12.7556,12.78284 12.7556,12.78284 23.02061,13.20222 18.88052,0.77136 34.78757,8.60817 43.75343,21.55568 2.13894,3.08883 2.13894,3.08883 8.64099,0.0396 41.26881,-19.35382 99.14181,-18.97579 138.67055,0.90581 4.37071,2.19832 4.37071,2.19832 8.21084,-2.63608 10.32109,-12.99339 26.34836,-20.06878 45.46003,-20.06878 7.55164,0 7.55164,0 20.41479,-12.89063 16.6811,-16.71673 15.61321,-17.00092 15.61321,4.15508 0,30.46185 -9.89813,45.23831 -32.7113,48.83322 -7.67461,1.20936 -8.60125,16.32358 -1.49772,24.42921 6.05961,6.91445 12.845,16.29449 17.28795,23.89868 3.68364,6.3046 4.11401,6.75497 6.07916,6.36164 10.31988,-2.06553 17.65091,14.41389 9.08366,20.41916 -1.62812,1.14123 -1.62812,1.14123 0.87114,9.569 8.83321,29.78643 8.27089,72.46009 -1.33856,101.58226 -12.13053,36.76249 -37.26437,68.31137 -71.15641,89.31806 -7.41627,4.59669 -7.41627,4.59669 -21.81888,30.78863 -17.40825,31.65786 -12.46343,29.59242 -43.13828,18.01874 -21.63052,-8.16123 -21.63052,-8.16123 -43.31525,0.006 -30.5721,11.5145 -25.90926,13.27986 -41.91996,-15.87094 z m 29.39429,18.21429 c 7.4015,-2.77344 17.63875,-6.64063 22.74944,-8.59375 12.01451,-4.5915 9.84891,-4.89427 36.33446,5.0799 12.60541,4.74706 23.15561,8.35058 23.44488,8.00781 0.28927,-0.34276 6.80381,-12.04899 14.47675,-26.01383 14.68857,-26.73337 16.18243,-29.19384 17.17846,-28.29382 0.34052,0.30769 0.36807,0.12265 0.0612,-0.41122 -0.32473,-0.56496 2.92753,-7.25915 7.7809,-16.01563 8.33883,-15.04496 8.33883,-15.04496 3.70131,-31.25075 -2.55063,-8.91318 -4.4397,-16.48585 -4.19793,-16.82816 0.24178,-0.34231 6.99152,-4.2601 14.99943,-8.70622 14.55985,-8.08384 14.55985,-8.08384 17.34161,-17.93746 1.52997,-5.4195 6.01435,-21.10363 9.9653,-34.85363 10.44881,-36.36379 9.52894,-44.58664 -5.79414,-51.79477 -3.6752,-1.72886 -3.6752,-1.72886 -3.6449,-10.51392 0.0166,-4.83178 -0.0712,-26.85166 -0.19517,-48.93306 -0.19687,-35.05643 -0.077,-40.2229 0.94553,-40.73854 0.64404,-0.3248 3.45442,-0.93666 6.24528,-1.35969 20.72739,-3.14181 30.39812,-17.32802 31.00927,-45.48814 0.34757,-16.01562 0.34757,-16.01562 -12.80207,-2.92969 -13.14964,13.08594 -13.14964,13.08594 -22.167,13.08594 -28.73985,0 -50.07217,17.62872 -54.40425,44.95887 -0.71192,4.49137 -1.65967,8.16065 -2.1061,8.15394 -0.44642,-0.007 -15.66748,-3.12749 -33.82455,-6.93507 -33.01287,-6.92287 -33.01287,-6.92287 -65.95412,0.0253 -18.11769,3.82151 -33.30944,6.8068 -33.75944,6.63399 -0.45,-0.17281 -1.26571,-3.41184 -1.8127,-7.19785 -3.94341,-27.29471 -23.71381,-44.2834 -53.00756,-45.54936 -11.11745,-0.48045 -11.11745,-0.48045 -23.61498,-12.9713 -12.49753,-12.49084 -12.49753,-12.49084 -12.49156,2.73438 0.005,12.68725 0.25204,16.03498 1.48217,20.08297 4.14815,13.6503 16.60186,24.17291 30.44605,25.72503 2.40159,0.26925 4.80587,0.83643 5.34285,1.2604 0.77573,0.61247 1.05043,96.33791 0.28133,98.03562 -0.0477,0.10522 -1.64027,0.92215 -3.53911,1.81538 -12.70201,5.97516 -15.83415,17.03052 -10.27709,36.27456 1.61304,5.58594 6.07553,21.2288 9.91665,34.76191 3.84112,13.53311 7.4121,25.02333 7.93551,25.53383 0.52342,0.51049 6.74807,4.13322 13.83256,8.05053 7.08449,3.9173 13.40784,7.41454 14.05189,7.77164 1.66187,0.92146 1.49253,1.84665 -3.41094,18.63529 -5.09139,17.43208 -5.84561,13.0461 5.84001,33.96103 3.81637,6.83053 6.93885,12.55283 6.93885,12.71621 0,0.16338 0.80219,1.48003 1.78263,2.92589 0.98044,1.44586 7.90545,13.76616 15.38889,27.37845 7.48345,13.61228 13.71131,24.74961 13.83969,24.74961 0.12839,0 6.28921,-2.26918 13.69071,-5.04263 z M 690.61308,715.8657 c -9.87063,-20.00862 -17.9466,-36.88362 -17.9466,-37.50001 0,-0.91942 1.93983,-1.12068 10.80121,-1.12068 10.80121,0 10.80121,0 18.73585,7.49078 7.93464,7.49078 7.93464,7.49078 7.93464,20.75577 0,13.265 0,13.265 1.75649,12.75735 4.23674,-1.2245 8.20387,-5.52425 9.08788,-9.84984 0.97243,-4.75825 60.00532,-4.02264 61.41797,0.76533 1.19793,4.06021 3.6674,6.93328 7.28321,8.47356 3.77681,1.60886 3.95938,0.98581 3.97316,-13.55973 0.0119,-12.61991 0.0119,-12.61991 7.62339,-19.70536 7.61144,-7.08546 7.61144,-7.08546 18.34552,-7.10666 10.22828,-0.0202 10.73408,0.0526 10.73408,1.54463 0,2.618 -35.76098,73.43418 -37.08303,73.43418 -0.98139,0 -1.16933,-1.70909 -1.16933,-10.63382 0,-10.63382 0,-10.63382 -2.92748,-10.09065 -6.85869,1.27259 -12.92324,6.20748 -16.34768,13.30259 -0.91047,1.88639 -1.95339,3.01838 -2.6313,2.856 -0.61766,-0.14794 -3.72612,-0.93896 -6.90768,-1.75781 -7.52223,-1.93602 -17.32504,-1.9265 -25.44176,0.0247 -3.4349,0.82572 -6.3366,1.26243 -6.44821,0.97047 -3.01216,-7.87948 -9.995,-13.96979 -17.66892,-15.4105 -2.81565,-0.52861 -2.81565,-0.52861 -2.81565,10.10521 0,15.66095 0.32258,16.06995 -20.30576,-25.7455 z m 18.69135,23.37123 c 0.1253,-10.75675 0.11971,-10.74338 4.21644,-10.08779 7.41633,1.18681 14.40972,6.13314 17.5401,12.40588 1.74524,3.49713 1.74524,3.49713 5.43894,2.2943 5.6249,-1.83171 21.78904,-1.73596 28.23232,0.16724 4.81121,1.42111 5.0571,1.42479 5.85496,0.0875 3.94253,-6.60821 5.56558,-8.53811 9.1865,-10.92326 4.30244,-2.83407 10.66051,-4.88323 12.70976,-4.09626 0.95043,0.36498 1.18539,1.9995 1.18539,8.24613 0,4.285 0.31578,7.98622 0.70172,8.22492 0.53416,0.33039 33.64734,-65.06785 33.64734,-66.45319 0,-0.16218 -3.9521,-0.28532 -8.78243,-0.27366 -8.78243,0.0212 -8.78243,0.0212 -16.39387,7.10666 -7.61144,7.08545 -7.61144,7.08545 -7.61144,20.70644 0,15.46248 7.3e-4,15.46085 -5.84801,13.22551 -4.14624,-1.58466 -7.7933,-5.52274 -9.07289,-9.79686 -1.40211,-4.68334 -56.37214,-5.0261 -57.24742,-0.35697 -0.69357,3.69986 -5.18234,8.53514 -9.43088,10.15889 -5.83434,2.22984 -5.83476,2.22888 -5.83476,-13.24245 0,-13.63287 0,-13.63287 -7.60366,-20.72764 -7.60365,-7.09478 -7.60365,-7.09478 -16.39611,-7.09478 -8.79245,0 -8.79245,0 -7.81438,2.35062 0.9464,2.27452 32.86745,67.00461 33.10076,67.12231 0.0635,0.0321 0.16332,-4.0375 0.22162,-9.04351 z M 673.83747,629.88257 c -25.64094,-14.67172 -23.84744,-12.79246 -18.78139,-19.6794 9.05026,-12.30319 19.87632,-16.51437 42.51672,-16.53835 12.80608,-0.0136 12.80608,-0.0136 25.52127,-12.58773 6.99336,-6.91578 13.08689,-12.34425 13.54121,-12.06326 2.44521,1.51236 0.94937,25.14686 -1.99176,31.47006 -1.54977,3.3319 -4.91383,10.6283 -7.47569,16.21424 -5.78364,12.61077 -3.10649,10.75428 -22.60199,15.67353 -20.42951,5.15492 -16.86471,5.44368 -30.72837,-2.48909 z m 31.40591,0.007 c 15.01203,-3.81647 15.01203,-3.81647 22.44398,-19.75009 7.43195,-15.93362 7.43195,-15.93362 7.43195,-27.14626 0,-11.21265 0,-11.21265 -11.8927,0.50393 -11.89268,11.71658 -11.89268,11.71658 -22.83431,11.72248 -17.7224,0.01 -27.36689,2.24321 -35.4738,8.21569 -4.10147,3.02161 -11.70224,11.67573 -10.90212,12.41297 2.76425,2.54705 32.7225,18.45087 34.26331,18.18924 1.07341,-0.18226 8.70706,-2.04882 16.96369,-4.1479 z m -10.95659,-3.50117 c -11.18875,-5.9088 -9.47966,-25.3625 2.43776,-27.74779 1.36641,-0.27343 2.48438,-0.80481 2.48438,-1.18079 0,-0.83141 6.00865,-0.92345 6.3754,-0.0977 0.14312,0.32227 1.63678,1.28907 3.31924,2.14844 10.78859,5.51064 11.05034,21.37504 0.44657,27.0662 -3.71304,1.99283 -11.10821,1.90036 -15.06335,-0.18835 z m 13.61158,-1.95943 c 2.98372,-1.50241 6.00437,-5.4151 6.58926,-8.53517 2.3348,-12.45496 -11.52925,-20.71471 -20.76055,-12.36847 -11.25549,10.17633 0.63704,27.71862 14.17129,20.90364 z m -8.95877,-4.0815 c -2.13814,-2.3644 -1.82234,-12.17345 0.44304,-13.76138 4.65904,-3.26578 8.34239,-0.25186 8.28725,6.78108 -0.0603,7.69522 -4.71692,11.41839 -8.73029,6.9803 z m 5.07912,-7.04269 c 0.23369,-4.03337 0.10537,-4.52328 -1.10165,-4.20576 -0.75138,0.19767 -1.40117,1.1094 -1.44397,2.02608 -0.0702,1.50302 -0.1392,1.47489 -0.70284,-0.28643 -1.00019,-3.12543 -0.87274,-0.36693 0.1619,3.50442 1.3361,4.99925 2.76459,4.51871 3.08656,-1.03831 z m 102.92135,21.25486 c -29.71339,-7.68487 -24.4321,-3.37599 -36.36852,-29.67221 -4.94545,-10.89496 -7.60917,-33.75298 -4.18047,-35.87363 0.45432,-0.28099 6.54785,5.14748 13.54121,12.06326 12.71519,12.57417 12.71519,12.57417 25.52127,12.58773 22.89099,0.0242 33.85725,4.36627 43.20157,17.10541 4.40364,6.00348 5.46166,5.00384 -21.46885,20.28408 -11.0241,6.25501 -10.17989,6.10885 -20.24621,3.50536 z m 25.85036,-9.34716 c 8.75324,-4.98506 16.05498,-9.19744 16.2261,-9.36085 0.56976,-0.54406 -3.98578,-6.52554 -7.29434,-9.57757 -8.68113,-8.00804 -16.30399,-10.32866 -35.67718,-10.86121 -14.55662,-0.40015 -14.55662,-0.40015 -26.34729,-12.01621 -11.79067,-11.61607 -11.79067,-11.61607 -11.79067,-0.68219 0,10.93386 0,10.93386 5.51171,22.84938 3.03144,6.55354 6.39186,13.85576 7.4676,16.22715 1.95589,4.31165 1.95589,4.31165 15.76129,7.732 7.59296,1.88121 14.50798,3.69798 15.36671,4.03729 3.25932,1.28784 5.28875,0.47242 20.77607,-8.34779 z m -39.31867,1.23913 c -10.84018,-5.88258 -9.32877,-24.90922 2.2089,-27.80718 1.04031,-0.2613 1.89148,-0.78854 1.89148,-1.17165 0,-0.3831 1.58084,-0.69655 3.51297,-0.69655 1.93214,0 3.51298,0.31345 3.51298,0.69655 0,0.38311 0.8718,0.91553 1.93733,1.18317 5.08569,1.27739 10.13509,8.46764 10.20134,14.52653 0.12071,11.03832 -13.28563,18.68458 -23.265,13.26913 z m 13.46831,-1.96087 c 10.64439,-5.47342 8.47656,-21.27673 -3.32294,-24.22397 -5.41084,-1.3515 -12.79293,3.04142 -14.66857,8.72895 -3.55526,10.78069 7.92743,20.67005 17.99151,15.49502 z M 796.82373,620.246 c -2.32458,-2.32634 -1.86665,-11.35147 0.6807,-13.41574 5.58045,-4.5222 9.60415,1.52526 7.95795,11.96047 -0.46514,2.9485 -6.18389,3.91188 -8.63865,1.45527 z m 6.20108,-4.30423 c -0.01,-1.27496 -0.1539,-1.36282 -0.73312,-0.44642 -0.52419,0.82937 -0.70191,0.4633 -0.65067,-1.34029 0.0388,-1.36471 0.36868,-2.29686 0.73312,-2.07145 0.36444,0.22541 0.66262,-0.10387 0.66262,-0.73173 0,-0.62785 -0.96606,-1.47943 -2.14681,-1.8924 -2.14682,-0.75086 -2.14682,-0.75086 -1.88304,3.81539 0.27218,4.71166 4.05219,7.22066 4.0179,2.6669 z m -57.36658,-72.34773 c -20.22418,-16.94195 -18.00282,-16.00067 -29.48999,-12.4962 -15.15977,4.62488 -14.36625,5.30064 -10.28991,-8.76285 3.22147,-11.11415 3.5695,-11.51598 12.3422,-14.24988 22.37244,-6.97211 49.80292,-6.51006 70.2037,1.18254 5.45547,2.05712 5.96525,2.81582 9.05675,13.47928 3.88555,13.4023 4.48263,12.92872 -10.5033,8.33057 -10.42515,-3.19875 -10.42515,-3.19875 -22.35068,6.64062 -13.68816,11.29368 -12.82177,11.02531 -18.96877,5.87592 z m 16.87989,-7.0565 c 5.74377,-4.77192 11.2013,-9.18568 12.12785,-9.80836 1.8321,-1.23125 3.43283,-0.91131 16.60652,3.31919 7.13332,2.29074 6.76504,2.97761 3.84196,-7.1654 -2.99353,-10.38748 -2.52881,-9.87101 -11.52376,-12.80702 -26.85561,-8.76583 -69.837,-4.65081 -73.67814,7.0539 -3.12544,9.52383 -4.40917,14.95081 -3.45276,14.59649 16.66874,-6.17521 20.58694,-6.36262 26.73547,-1.27876 12.98192,10.73397 17.94688,14.70737 18.41361,14.73618 0.26732,0.0165 5.18549,-3.8743 10.92925,-8.64622 z m -18.05088,-1.24977 c -6.76208,-4.50448 -11.28446,-15.49979 -7.80661,-18.98026 0.21468,-0.21485 0.96991,-1.44531 1.67828,-2.73437 6.75366,-12.29 26.97039,-7.99296 28.5542,6.06916 1.36273,12.09924 -12.85699,22.01968 -22.42587,15.64547 z m 13.22366,-2.54972 c 10.32628,-5.27207 7.69222,-21.89993 -3.77642,-23.839 -8.69988,-1.47094 -15.40199,4.78621 -14.75243,13.77302 0.67083,9.28112 10.06744,14.38592 18.52885,10.06598 z m -9.7163,-4.718 c -2.34845,-2.59696 -2.32788,-10.62019 0.0333,-12.98314 4.39066,-4.39398 8.73977,-1.10818 8.76907,6.62511 0.0274,7.23373 -4.83464,10.74563 -8.80237,6.35803 z m 5.19391,-6.29492 c -0.44975,-6.53772 -2.91208,-6.15783 -3.35985,0.51836 -0.2618,3.90338 -0.22856,3.97252 1.66553,3.4645 1.73929,-0.4665 1.9088,-0.86496 1.69432,-3.98286 z m -84.52814,224.85582 c -0.51612,-0.96679 -4.22434,-7.69446 -8.24047,-14.95035 -7.30208,-13.19254 -7.30208,-13.19254 -2.99221,-28.12501 2.37043,-8.21286 4.30979,-15.51761 4.30971,-16.23279 -1.1e-4,-0.87061 -4.31458,-3.70806 -13.05539,-8.58598 -17.1007,-9.54327 -15.63564,-7.73737 -20.50065,-25.26994 -2.26541,-8.16406 -6.55119,-23.42084 -9.52397,-33.90397 -2.97278,-10.48311 -5.72837,-20.76632 -6.12353,-22.85156 -1.88766,-9.96112 4.33248,-21.91751 13.7845,-26.4966 3.4118,-1.65288 3.4118,-1.65288 3.4118,-37.62969 0,-35.97681 0,-35.97681 -4.73827,-30.20374 -43.11405,52.52977 -49.11067,127.8028 -14.85726,186.49702 2.86445,4.90832 3.46445,5.51839 4.75012,4.82981 9.69706,-5.19364 20.30432,7.29343 14.68898,17.29213 -1.71775,3.05863 -1.71775,3.05863 5.26946,10.1136 8.96711,9.05407 31.37212,26.72663 34.53295,27.23881 0.12245,0.0198 -0.19965,-0.75494 -0.71577,-1.72174 z m 182.38701,-10.24321 c 54.28036,-41.16058 77.06762,-112.84393 56.84446,-178.8193 -2.09539,-6.83593 -2.09539,-6.83593 -5.65979,-6.83885 -10.79173,-0.009 -15.95418,-13.36775 -7.96278,-20.60533 1.88129,-1.70383 1.3849,-2.7966 -6.96332,-15.32925 -13.70657,-20.57683 -13.23125,-21.24092 -13.20895,18.45535 0.0201,35.84152 0.0201,35.84152 3.24575,37.33191 6.43595,2.97373 11.18571,9.31607 13.113,17.50977 1.24927,5.31113 0.93684,7.09871 -4.79754,27.44954 -11.83091,41.98682 -15.5071,54.25501 -16.43718,54.85432 -0.54952,0.35408 -7.09036,4.02611 -14.5352,8.16006 -15.82536,8.78745 -14.69198,5.43588 -8.70131,25.73091 2.14053,7.25162 3.89187,13.49194 3.89187,13.86737 0,0.5811 -8.21148,15.74922 -14.58425,26.93982 -2.19337,3.85155 2.92329,1.0241 15.75524,-8.70632 z m -226.79046,-23.5414 c 6.47702,-3.35192 6.47702,-13.06325 0,-16.41517 -6.7545,-3.49552 -13.65294,0.78055 -13.65294,8.46293 0,7.00187 7.28741,11.24648 13.65294,7.95224 z M 907.6637,546.76311 c 6.2528,-4.45574 3.87724,-15.34126 -3.65662,-16.75569 -6.3974,-1.20107 -11.19437,2.71549 -11.19437,9.13982 0,7.68382 8.58063,12.08413 14.85099,7.61587 z M 702.72191,482.36194 c 7.29917,-1.49772 18.36503,-3.80874 24.5908,-5.13561 26.66912,-5.68383 21.63724,-5.68017 48.40094,-0.0352 14.84746,3.1316 41.53743,8.64764 41.84256,8.64764 0.17221,0 0.3131,-1.67104 0.3131,-3.71342 0,-5.2819 3.28397,-15.95155 6.80741,-22.11728 0.73656,-1.28892 -21.60838,-9.6928 -34.04685,-12.80493 -15.47005,-3.87064 -38.55923,-5.89959 -50.27625,-4.41801 -3.95228,0.49975 -10.17198,1.28816 -13.82157,1.75203 -12.54337,1.59427 -27.80784,6.02137 -40.98467,11.88663 -7.11106,3.16527 -7.07286,3.06296 -3.92799,10.52217 1.91656,4.54582 2.83254,8.23743 3.96228,15.96886 0.3705,2.53554 0.66324,2.8833 2.14897,2.55284 0.94602,-0.21042 7.69209,-1.60799 14.99127,-3.10571 z M 613.3359,748.9247 c -9.82665,-6.71263 -5.26222,-20.89843 6.72429,-20.89843 11.67158,0 15.38352,16.10355 4.95585,21.49998 -3.36983,1.74392 -8.64426,1.47228 -11.68014,-0.60155 z m 9.91953,-0.95632 c 7.96624,-2.28678 7.23271,-15.23994 -0.99172,-17.51253 -11.43178,-3.15886 -16.9879,13.80125 -5.77774,17.6366 2.64205,0.90393 3.22551,0.89325 6.76946,-0.12407 z m 275.268,-232.52172 c -10.22043,-2.95946 -10.59063,-18.50773 -0.51986,-21.8339 11.52186,-3.80543 20.58594,9.36346 12.6616,18.3956 -3.24358,3.69702 -7.29054,4.84305 -12.14174,3.4383 z m 10.04461,-4.35354 c 4.20113,-4.02798 3.31712,-12.10929 -1.60318,-14.65559 -6.81113,-3.52484 -14.15215,0.70338 -14.15215,8.15123 0,8.08333 9.86206,12.15473 15.75533,6.50436 z</Geometry>
-
 
             <Geometry x:Key="InstallerIcon">M19.059,10.898l-3.171-7.927C15.654,2.384,15.086,2,14.454,2H12.02l0.38,4.065h2.7L10,10.293L4.9,6.065h2.7L7.98,2H5.546  C4.914,2,4.346,2.384,4.112,2.971l-3.171,7.927c-0.288,0.721-0.373,1.507-0.246,2.272l0.59,3.539C1.409,17.454,2.053,18,2.808,18  h14.383c0.755,0,1.399-0.546,1.523-1.291l0.59-3.539C19.433,12.405,19.348,11.619,19.059,10.898z M16.959,15.245  C16.887,15.681,16.51,16,16.068,16H3.932c-0.442,0-0.819-0.319-0.891-0.755l-0.365-2.193C2.583,12.501,3.008,12,3.567,12h12.867  c0.558,0,0.983,0.501,0.891,1.052L16.959,15.245z</Geometry>
             <Geometry x:Key="PackerIcon">M425.7 256c-16.9 0-32.8-9-41.4-23.4L320 126l-64.2 106.6c-8.7 14.5-24.6 23.5-41.5 23.5-4.5 0-9-.6-13.3-1.9L64 215v178c0 14.7 10 27.5 24.2 31l216.2 54.1c10.2 2.5 20.9 2.5 31 0L551.8 424c14.2-3.6 24.2-16.4 24.2-31V215l-137 39.1c-4.3 1.3-8.8 1.9-13.3 1.9zm212.6-112.2L586.8 41c-3.1-6.2-9.8-9.8-16.7-8.9L320 64l91.7 152.1c3.8 6.3 11.4 9.3 18.5 7.3l197.9-56.5c9.9-2.9 14.7-13.9 10.2-23.1zM53.2 41L1.7 143.8c-4.6 9.2.3 20.2 10.1 23l197.9 56.5c7.1 2 14.7-1 18.5-7.3L320 64 69.8 32.1c-6.9-.8-13.5 2.7-16.6 8.9z</Geometry>
@@ -37,19 +34,31 @@
             <Geometry x:Key="AssetBrowserStar">M22,9.67A1,1,0,0,0,21.14,9l-5.69-.83L12.9,3a1,1,0,0,0-1.8,0L8.55,8.16,2.86,9a1,1,0,0,0-.81.68,1,1,0,0,0,.25,1l4.13,4-1,5.68A1,1,0,0,0,6.9,21.44L12,18.77l5.1,2.67a.93.93,0,0,0,.46.12,1,1,0,0,0,.59-.19,1,1,0,0,0,.4-1l-1-5.68,4.13-4A1,1,0,0,0,22,9.67Zm-6.15,4a1,1,0,0,0-.29.88l.72,4.2-3.76-2a1.06,1.06,0,0,0-.94,0l-3.76,2,.72-4.2a1,1,0,0,0-.29-.88l-3-3,4.21-.61a1,1,0,0,0,.76-.55L12,5.7l1.88,3.82a1,1,0,0,0,.76.55l4.21.61Z</Geometry>
             <Geometry x:Key="AssetBrowserOpenPreview">M187.5 937.5H875L937.5 875V543.75A200.625 200.625 0 0 1 875 562.5V875H562.5V195L492.5 125H187.5L125 187.5V875L187.5 937.5zM187.5 187.5H500V875H187.5V187.5zM836.1875 499.8750000000001A158.125 158.125 0 0 1 761.8125 478.125H759.9375A156.875 156.875 0 0 1 710.0000000000001 257.5000000000001L562.5 110.625L606.875 66.2499999999999L753.75 213.7499999999999C774.0625 199.9999999999999 797.5 191.3749999999999 821.875 188.7499999999999A154.37500000000003 154.37500000000003 0 0 1 893.1250000000001 196.8749999999999A156.875 156.875 0 0 1 955.6250000000002 236.25A153.75 153.75 0 0 1 991.8750000000002 298.75A164.37499999999997 164.37499999999997 0 0 1 996.2500000000002 370.625A158.125 158.125 0 0 1 911.8750000000002 483.75A158.125 158.125 0 0 1 836.1875000000001 499.8750000000001zM851.1875 250.375A93.75 93.75 0 0 0 790 265.625A96.875 96.875 0 0 0 755 308.125A93.125 93.125 0 0 0 750 361.875A93.125 93.125 0 0 0 823.75 435.6249999999999A93.125 93.125 0 0 0 877.5 430.6249999999999C894.7499999999999 423.3124999999999 909.5 411.1874999999999 919.9999999999998 395.6249999999999A93.75 93.75 0 0 0 851.25 250.3749999999999z</Geometry>
         </ResourceDictionary>
-
     </ResourceDictionary.MergedDictionaries>
-
-
 
     <DrawingBrush x:Key="SortByCategoryDrawingBrush" o:Freeze="True">
         <DrawingBrush.Drawing>
             <DrawingGroup o:Freeze="True">
-                <GeometryDrawing o:Freeze="True" Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
-                <GeometryDrawing o:Freeze="True" Brush="#FFF6F6F6" Geometry="F1M0.9999,-0.000199999999999534L0.9999,15.9998 10.9999,15.9998 10.9999,13.4148 11.9999,14.4138 15.9999,10.4138 15.9999,5.5858 14.0009,7.5858 14.0009,3.0008 10.9999,3.0008 10.9999,-0.000199999999999534z" />
-                <GeometryDrawing o:Freeze="True" Brush="{DynamicResource MahApps.Brushes.ThemeBackground}" Geometry="F1M10,12.4141L10,15.0001 2,15.0001 2,1.0001 10,1.0001 10,3.0001 10,7.5861 8.414,6.0001 9,6.0001 9,3.0001 3,3.0001 3,6.0001 8,6.0001 8,7.0001 3,7.0001 3,10.0001 8,10.0001 8,10.4141 8.586,11.0001 3,11.0001 3,14.0001 9,14.0001 9,11.4141z" />
-                <GeometryDrawing o:Freeze="True" Brush="#FFEFEFF0" Geometry="F1M8.5859,11L2.9999,11 2.9999,14 8.9999,14 8.9999,11.414z M7.9999,7L2.9999,7 2.9999,10 7.9999,10z M7.9999,6L2.9999,6 2.9999,3 8.9999,3 8.9999,6 8.4139,6 7.9999,5.586z" />
-                <GeometryDrawing o:Freeze="True" Brush="{DynamicResource MahApps.Brushes.ThemeBackground}" Geometry="F1M13,10L13,4 11,4 11,10 9,8 9,10 12,13 15,10 15,8z" />
+                <GeometryDrawing
+                 o:Freeze="True"
+                 Brush="#00FFFFFF"
+                 Geometry="F1M16,16L0,16 0,0 16,0z" />
+                <GeometryDrawing
+                 o:Freeze="True"
+                 Brush="#FFF6F6F6"
+                 Geometry="F1M0.9999,-0.000199999999999534L0.9999,15.9998 10.9999,15.9998 10.9999,13.4148 11.9999,14.4138 15.9999,10.4138 15.9999,5.5858 14.0009,7.5858 14.0009,3.0008 10.9999,3.0008 10.9999,-0.000199999999999534z" />
+                <GeometryDrawing
+                 o:Freeze="True"
+                 Brush="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                 Geometry="F1M10,12.4141L10,15.0001 2,15.0001 2,1.0001 10,1.0001 10,3.0001 10,7.5861 8.414,6.0001 9,6.0001 9,3.0001 3,3.0001 3,6.0001 8,6.0001 8,7.0001 3,7.0001 3,10.0001 8,10.0001 8,10.4141 8.586,11.0001 3,11.0001 3,14.0001 9,14.0001 9,11.4141z" />
+                <GeometryDrawing
+                 o:Freeze="True"
+                 Brush="#FFEFEFF0"
+                 Geometry="F1M8.5859,11L2.9999,11 2.9999,14 8.9999,14 8.9999,11.414z M7.9999,7L2.9999,7 2.9999,10 7.9999,10z M7.9999,6L2.9999,6 2.9999,3 8.9999,3 8.9999,6 8.4139,6 7.9999,5.586z" />
+                <GeometryDrawing
+                 o:Freeze="True"
+                 Brush="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                 Geometry="F1M13,10L13,4 11,4 11,10 9,8 9,10 12,13 15,10 15,8z" />
             </DrawingGroup>
         </DrawingBrush.Drawing>
     </DrawingBrush>
@@ -57,49 +66,76 @@
     <DrawingBrush x:Key="SortByNameDrawingBrush" o:Freeze="True">
         <DrawingBrush.Drawing>
             <DrawingGroup o:Freeze="True">
-                <GeometryDrawing o:Freeze="True" Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
-                <GeometryDrawing o:Freeze="True" Brush="#FFF6F6F6" Geometry="F1M0,-0.000199999999999534L0,8.9998 1,8.9998 1,12.0008 2.586,12.0008 1,13.5858 1,15.9998 8,15.9998 8,13.0008 6.449,13.0008 8,12.0008 8,10.9998 12,14.9998 16,10.9998 16,4.9998 14,6.9998 14,3.0008 10,3.0008 10,6.9998 9,5.9998 9,-0.000199999999999534z" />
-                <GeometryDrawing o:Freeze="True" Brush="{DynamicResource MahApps.Brushes.ThemeBackground}" Geometry="F1M7,7L5,2 4,2 2,7 3,7 3.399,6 5.601,6 6,7z M8,8L1,8 1,1 8,1z M4.5,3.25L5.2,5 3.8,5z M2,11L5,11 2,14 2,15 7,15 7,14 4.013,14 7,11.051 6.952,11 7,11 7,10 2,10z" />
-                <GeometryDrawing o:Freeze="True" Brush="#FFEFEFF0" Geometry="F1M3.7998,5L4.4998,3.25 5.1998,5z M5.9998,7L6.9998,7 4.9998,2 3.9998,2 1.9998,7 2.9998,7 3.3998,6 5.6008,6z" />
-                <GeometryDrawing o:Freeze="True" Brush="{DynamicResource MahApps.Brushes.ThemeBackground}" Geometry="F1M15,8L15,10 12,13 9,10 9,8 11,10 11,4 13,4 13,10z" />
+                <GeometryDrawing
+                 o:Freeze="True"
+                 Brush="#00FFFFFF"
+                 Geometry="F1M16,16L0,16 0,0 16,0z" />
+                <GeometryDrawing
+                 o:Freeze="True"
+                 Brush="#FFF6F6F6"
+                 Geometry="F1M0,-0.000199999999999534L0,8.9998 1,8.9998 1,12.0008 2.586,12.0008 1,13.5858 1,15.9998 8,15.9998 8,13.0008 6.449,13.0008 8,12.0008 8,10.9998 12,14.9998 16,10.9998 16,4.9998 14,6.9998 14,3.0008 10,3.0008 10,6.9998 9,5.9998 9,-0.000199999999999534z" />
+                <GeometryDrawing
+                 o:Freeze="True"
+                 Brush="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                 Geometry="F1M7,7L5,2 4,2 2,7 3,7 3.399,6 5.601,6 6,7z M8,8L1,8 1,1 8,1z M4.5,3.25L5.2,5 3.8,5z M2,11L5,11 2,14 2,15 7,15 7,14 4.013,14 7,11.051 6.952,11 7,11 7,10 2,10z" />
+                <GeometryDrawing
+                 o:Freeze="True"
+                 Brush="#FFEFEFF0"
+                 Geometry="F1M3.7998,5L4.4998,3.25 5.1998,5z M5.9998,7L6.9998,7 4.9998,2 3.9998,2 1.9998,7 2.9998,7 3.3998,6 5.6008,6z" />
+                <GeometryDrawing
+                 o:Freeze="True"
+                 Brush="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                 Geometry="F1M15,8L15,10 12,13 9,10 9,8 11,10 11,4 13,4 13,10z" />
             </DrawingGroup>
         </DrawingBrush.Drawing>
     </DrawingBrush>
 
+    <Style BasedOn="{StaticResource ButtonGroupBaseStyle}" TargetType="hc:ButtonGroup" />
 
-    <Style BasedOn="{StaticResource ButtonGroupBaseStyle}" TargetType="hc:ButtonGroup"/>
-
-    <Style x:Key="ButtonGroupSolid" BasedOn="{StaticResource ButtonGroupBaseStyle}" TargetType="hc:ButtonGroup">
-        <Setter Property="hc:VisualElement.HighlightBorderBrush" Value="{DynamicResource MahApps.Brushes.Accent}"/>
-        <Setter Property="hc:VisualElement.HighlightBackground" Value="{DynamicResource MahApps.Brushes.ThemeBackground}"/>
-        <Setter Property="hc:VisualElement.HighlightForeground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}"/>
+    <Style
+     x:Key="ButtonGroupSolid"
+     BasedOn="{StaticResource ButtonGroupBaseStyle}"
+     TargetType="hc:ButtonGroup">
+        <Setter Property="hc:VisualElement.HighlightBorderBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
+        <Setter Property="hc:VisualElement.HighlightBackground" Value="{DynamicResource MahApps.Brushes.ThemeBackground}" />
+        <Setter Property="hc:VisualElement.HighlightForeground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
     </Style>
 
-    <Style x:Key="PropertyItemToolTipBaseStyle" BasedOn="{StaticResource {x:Type ToolTip}}" TargetType="ToolTip">
-        <Setter Property="Padding" Value="10"/>
-        <Setter Property="hc:BorderElement.CornerRadius" Value="2"/>
+    <Style
+     x:Key="PropertyItemToolTipBaseStyle"
+     BasedOn="{StaticResource {x:Type ToolTip}}"
+     TargetType="ToolTip">
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="hc:BorderElement.CornerRadius" Value="2" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToolTip">
-                    <Border Effect="{StaticResource EffectShadow2}" Margin="8" Background="{DynamicResource RegionBrush}" Padding="{TemplateBinding Padding}" BorderThickness="1" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" BorderBrush="{DynamicResource BorderBrush}">
+                    <Border
+                     Margin="8"
+                     Padding="{TemplateBinding Padding}"
+                     Background="{DynamicResource RegionBrush}"
+                     BorderBrush="{DynamicResource BorderBrush}"
+                     BorderThickness="1"
+                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                     Effect="{StaticResource EffectShadow2}">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <ContentPresenter x:Name="Presenter" Margin="0,0,0,10"/>
+                            <ContentPresenter x:Name="Presenter" Margin="0,0,0,10" />
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                <TextBlock FontWeight="Bold" Text="{Binding PropertyTypeName,RelativeSource={RelativeSource AncestorType=hc:PropertyItem}}"/>
-                                <TextBlock Text="{Binding PropertyName,RelativeSource={RelativeSource AncestorType=hc:PropertyItem}}" Margin="6,0,0,0"/>
+                                <TextBlock FontWeight="Bold" Text="{Binding PropertyTypeName, RelativeSource={RelativeSource AncestorType=hc:PropertyItem}}" />
+                                <TextBlock Margin="6,0,0,0" Text="{Binding PropertyName, RelativeSource={RelativeSource AncestorType=hc:PropertyItem}}" />
                             </StackPanel>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="Content" Value="{x:Null}">
-                            <Setter TargetName="Presenter" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="Presenter" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                         <Trigger Property="Content" Value="">
-                            <Setter TargetName="Presenter" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="Presenter" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -108,20 +144,24 @@
     </Style>
 
     <Style x:Key="PropertyItemBaseStyle" TargetType="hc:PropertyItem">
-        <Setter Property="Focusable" Value="False"/>
-        <Setter Property="Margin" Value="0,0,0,6"/>
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Margin" Value="0,0,0,6" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="hc:PropertyItem">
-                    <GroupBox Style="{StaticResource GroupBoxOriginal}" hc:TitleElement.TitlePlacement="Left">
+                    <GroupBox hc:TitleElement.TitlePlacement="Left" Style="{StaticResource GroupBoxOriginal}">
                         <GroupBox.Header>
-                            <TextBlock Padding="0,0,10,0" Width="{Binding Path=(hc:TitleElement.TitleWidth).Value,RelativeSource={RelativeSource TemplatedParent}}" Text="{TemplateBinding DisplayName}" TextTrimming="CharacterEllipsis">
+                            <TextBlock
+                             Width="{Binding Path=(hc:TitleElement.TitleWidth).Value, RelativeSource={RelativeSource TemplatedParent}}"
+                             Padding="0,0,10,0"
+                             Text="{TemplateBinding DisplayName}"
+                             TextTrimming="CharacterEllipsis">
                                 <TextBlock.ToolTip>
-                                    <ToolTip Style="{StaticResource PropertyItemToolTipBaseStyle}" Content="{TemplateBinding Description}"/>
+                                    <ToolTip Content="{TemplateBinding Description}" Style="{StaticResource PropertyItemToolTipBaseStyle}" />
                                 </TextBlock.ToolTip>
                             </TextBlock>
                         </GroupBox.Header>
-                        <ContentPresenter ContentSource="EditorElement"/>
+                        <ContentPresenter ContentSource="EditorElement" />
                     </GroupBox>
                 </ControlTemplate>
             </Setter.Value>
@@ -129,33 +169,43 @@
     </Style>
 
     <Style x:Key="PropertyItemsControlBaseStyle" TargetType="hc:PropertyItemsControl">
-        <Setter Property="ItemContainerStyle" Value="{StaticResource PropertyItemBaseStyle}"/>
-        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource PropertyItemBaseStyle}" />
+        <Setter Property="Focusable" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="hc:PropertyItemsControl">
                     <hc:ScrollViewer Focusable="false" HorizontalScrollBarVisibility="Disabled">
-                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </hc:ScrollViewer>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsGrouping" Value="False">
-                <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+                <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <Style x:Key="PropertyGroupItemBaseStyle" TargetType="GroupItem">
-        <Setter Property="Margin" Value="0,0,0,6"/>
-        <Setter Property="Padding" Value="10,6,6,0"/>
+        <Setter Property="Margin" Value="0,0,0,6" />
+        <Setter Property="Padding" Value="10,6,6,0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="GroupItem">
-                    <Expander BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" Header="{Binding Name}" IsExpanded="True" Background="{DynamicResource SecondaryRegionBrush}" Foreground="{DynamicResource PrimaryTextBrush}">
-                        <Border BorderThickness="1,0,1,1" BorderBrush="{DynamicResource BorderBrush}" Background="{DynamicResource RegionBrush}" CornerRadius="0,0,4,4">
-                            <ItemsPresenter Margin="{TemplateBinding Padding}"/>
+                    <Expander
+                     Background="{DynamicResource SecondaryRegionBrush}"
+                     BorderBrush="{DynamicResource BorderBrush}"
+                     BorderThickness="1"
+                     Foreground="{DynamicResource PrimaryTextBrush}"
+                     Header="{Binding Name}"
+                     IsExpanded="True">
+                        <Border
+                         Background="{DynamicResource RegionBrush}"
+                         BorderBrush="{DynamicResource BorderBrush}"
+                         BorderThickness="1,0,1,1"
+                         CornerRadius="0,0,4,4">
+                            <ItemsPresenter Margin="{TemplateBinding Padding}" />
                         </Border>
                     </Expander>
                 </ControlTemplate>
@@ -164,35 +214,54 @@
     </Style>
 
     <Style x:Key="PropertyGridBaseStyle" TargetType="hc:PropertyGrid">
-        <Setter Property="MaxTitleWidth" Value="200"/>
-        <Setter Property="MinTitleWidth" Value="120"/>
-        <Setter Property="Focusable" Value="False"/>
-        <Setter Property="Padding" Value="10"/>
-        <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+        <Setter Property="MaxTitleWidth" Value="200" />
+        <Setter Property="MinTitleWidth" Value="120" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="Background" Value="{DynamicResource RegionBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="hc:PropertyGrid">
-                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border
+                     Background="{TemplateBinding Background}"
+                     BorderBrush="{TemplateBinding BorderBrush}"
+                     BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid Margin="{TemplateBinding Padding}">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition/>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
-                            <DockPanel LastChildFill="True" Margin="0,0,0,6">
-                                <hc:ButtonGroup Margin="0,0,6,0" Visibility="{Binding ShowSortButton,RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource Boolean2VisibilityConverter}}" Style="{StaticResource ButtonGroupSolid}">
+                            <DockPanel Margin="0,0,0,6" LastChildFill="True">
+                                <hc:ButtonGroup
+                                 Margin="0,0,6,0"
+                                 Style="{StaticResource ButtonGroupSolid}"
+                                 Visibility="{Binding ShowSortButton, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource Boolean2VisibilityConverter}}">
                                     <RadioButton Command="hc:ControlCommands.SortByCategory" IsChecked="True">
-                                        <Rectangle Width="16" Height="16" Fill="{StaticResource SortByCategoryDrawingBrush}"/>
+                                        <Rectangle
+                                         Width="16"
+                                         Height="16"
+                                         Fill="{StaticResource SortByCategoryDrawingBrush}" />
                                     </RadioButton>
                                     <RadioButton Command="hc:ControlCommands.SortByName">
-                                        <Rectangle Width="16" Height="16" Fill="{StaticResource SortByNameDrawingBrush}"/>
+                                        <Rectangle
+                                         Width="16"
+                                         Height="16"
+                                         Fill="{StaticResource SortByNameDrawingBrush}" />
                                     </RadioButton>
                                 </hc:ButtonGroup>
-                                <hc:SearchBar x:Name="PART_SearchBar" IsRealTime="True" ShowClearButton="True" Style="{StaticResource SearchBarPlus}"/>
+                                <hc:SearchBar
+                                 x:Name="PART_SearchBar"
+                                 IsRealTime="True"
+                                 ShowClearButton="True"
+                                 Style="{StaticResource SearchBarPlus}" />
                             </DockPanel>
-                            <hc:PropertyItemsControl Grid.Row="1" x:Name="PART_ItemsControl" Style="{StaticResource PropertyItemsControlBaseStyle}">
+                            <hc:PropertyItemsControl
+                             x:Name="PART_ItemsControl"
+                             Grid.Row="1"
+                             Style="{StaticResource PropertyItemsControlBaseStyle}">
                                 <hc:PropertyItemsControl.GroupStyle>
-                                    <GroupStyle ContainerStyle="{StaticResource PropertyGroupItemBaseStyle}"/>
+                                    <GroupStyle ContainerStyle="{StaticResource PropertyGroupItemBaseStyle}" />
                                 </hc:PropertyItemsControl.GroupStyle>
                             </hc:PropertyItemsControl>
                         </Grid>
@@ -202,30 +271,15 @@
         </Setter>
     </Style>
 
+    <Style BasedOn="{StaticResource WatermarkTextBoxBaseStyle}" TargetType="hc:WatermarkTextBox" />
 
-    <Style BasedOn="{StaticResource WatermarkTextBoxBaseStyle}" TargetType="hc:WatermarkTextBox"/>
+    <Style BasedOn="{StaticResource TextBoxBaseStyle}" TargetType="TextBox" />
 
-    <Style BasedOn="{StaticResource TextBoxBaseStyle}" TargetType="TextBox"/>
+    <Style
+     x:Key="TextBoxExtend"
+     BasedOn="{StaticResource TextBoxExtendBaseStyle}"
+     TargetType="TextBox" />
 
-    <Style x:Key="TextBoxExtend" BasedOn="{StaticResource TextBoxExtendBaseStyle}" TargetType="TextBox"/>
-
-    <Style BasedOn="{StaticResource TextBoxPlusBaseStyle}" TargetType="hc:TextBox"/>
-    <Style BasedOn="{StaticResource TextBoxPlusBaseStyle}" TargetType="hc:MaskedTextBox"/>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <Style BasedOn="{StaticResource TextBoxPlusBaseStyle}" TargetType="hc:TextBox" />
+    <Style BasedOn="{StaticResource TextBoxPlusBaseStyle}" TargetType="hc:MaskedTextBox" />
 </ResourceDictionary>

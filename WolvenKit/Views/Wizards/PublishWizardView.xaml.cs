@@ -1,10 +1,22 @@
-﻿
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Views.Wizards.WizardPages.PublishWizard;
 
 namespace WolvenKit.Views.Wizards
 {
     public partial class PublishWizardView
     {
+        #region Fields
+
+        private FinalizeSetupView FSV;
+
+        private OptionalSettingsView OSV;
+
+        private RequiredSettingsView RSV;
+
+        #endregion Fields
+
+        #region Constructors
+
         public PublishWizardView()
         {
             RSV = new RequiredSettingsView();
@@ -15,28 +27,9 @@ namespace WolvenKit.Views.Wizards
             ShowPage();
         }
 
-        private RequiredSettingsView RSV;
-        private OptionalSettingsView OSV;
-        private FinalizeSetupView FSV;
+        #endregion Constructors
 
-        private void ShowPage()
-        {
-            switch (StepMain.StepIndex)
-            {
-                case 0:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(RSV);
-                    break;
-                case 1:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(OSV);
-                    break;
-                case 2:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(FSV);
-                    break;
-            }
-        }
+        #region Methods
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -50,12 +43,35 @@ namespace WolvenKit.Views.Wizards
             ShowPage();
         }
 
-        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        private void ShowPage()
         {
-            if (this.IsVisible )
+            switch (StepMain.StepIndex)
             {
-                DiscordRPCHelper.WhatAmIDoing("User Wizard");
+                case 0:
+                    PageGrid.Children.Clear();
+                    PageGrid.Children.Add(RSV);
+                    break;
+
+                case 1:
+                    PageGrid.Children.Clear();
+                    PageGrid.Children.Add(OSV);
+                    break;
+
+                case 2:
+                    PageGrid.Children.Clear();
+                    PageGrid.Children.Add(FSV);
+                    break;
             }
         }
+
+        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if (IsVisible)
+            {
+                DiscordHelper.SetDiscordRPCStatus("User Wizard");
+            }
+        }
+
+        #endregion Methods
     }
 }

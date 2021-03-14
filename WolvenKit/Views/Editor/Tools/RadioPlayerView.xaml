@@ -1,0 +1,84 @@
+<catel:UserControl
+ x:Class="WolvenKit.Views.Editor.AudioTool.Radio.RadioPlayerView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:catel="http://schemas.catelproject.com"
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ IsVisibleChanged="UserControl_IsVisibleChanged">
+
+    <Grid>
+        <Border
+         Height="35"
+         Margin="10"
+         VerticalAlignment="Bottom"
+         Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
+         CornerRadius="5">
+            <Grid>
+
+                <StackPanel
+                 Margin="5,0,0,0"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Center"
+                 Orientation="Horizontal">
+                    <hc:Divider
+                     Height="10"
+                     LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
+                     Orientation="Vertical" />
+                    <Button Click="Button_Click" Content="Import Local Music Library" />
+                    <hc:Divider
+                     Height="10"
+                     LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
+                     Orientation="Vertical" />
+
+                    <Button
+                     x:Name="PlayButton"
+                     Width="35"
+                     Height="25"
+                     Margin="0"
+                     hc:IconElement.Geometry="{DynamicResource AudioPlay}"
+                     Background="Transparent"
+                     BorderBrush="Transparent"
+                     Click="PlayButton_Click"
+                     Style="{StaticResource ButtonIcon}" />
+                    <hc:Divider
+                     Height="10"
+                     LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
+                     Orientation="Vertical" />
+                    <Button
+                     x:Name="PauseButton"
+                     Width="35"
+                     Height="25"
+                     Margin="0"
+                     hc:IconElement.Geometry="{DynamicResource AudioPause}"
+                     Background="Transparent"
+                     BorderBrush="Transparent"
+                     Click="PauseButton_Click"
+                     Style="{StaticResource ButtonIcon}" />
+                    <hc:Divider
+                     Height="10"
+                     LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
+                     Orientation="Vertical" />
+                    <Button
+                     x:Name="StopButton"
+                     Width="35"
+                     Height="25"
+                     Margin="0"
+                     hc:IconElement.Geometry="{DynamicResource AudioStop}"
+                     Background="Transparent"
+                     BorderBrush="Transparent"
+                     Click="StopButton_Click"
+                     Style="{StaticResource ButtonIcon}" />
+                    <hc:PreviewSlider
+                     Width="200"
+                     HorizontalAlignment="Right"
+                     Maximum="100"
+                     Minimum="0"
+                     Style="{StaticResource PreviewSliderBaseStyle}"
+                     Value="{Binding RadioVolume, Mode=TwoWay}">
+                        <!--  Volume Slider  -->
+                    </hc:PreviewSlider>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</catel:UserControl>

@@ -74,7 +74,7 @@ namespace CR2WTests
                     Assert.IsFalse(true, "Aborting test. No valid Wicther 3 directory found.");
             }
 
-            
+
             memorymappedbundles = new Dictionary<string, MemoryMappedFile>();
             bm = new BundleManager();
             bm.LoadAll(tw3Finaldir);
@@ -83,7 +83,7 @@ namespace CR2WTests
             foreach (var b in bm.Bundles.Values)
             {
                 var e = b.ArchiveAbsolutePath.GetHashMD5();
-            
+
                 memorymappedbundles.Add(e, MemoryMappedFile.CreateFromFile(b.ArchiveAbsolutePath, FileMode.Open, e, 0, MemoryMappedFileAccess.Read));
 
             }
@@ -572,12 +572,12 @@ namespace CR2WTests
                 frm.ShowDialog();
 
                 var result = frm.GetResult();
-                
-                Assert.AreEqual(0, result.Item1, $"Unknown bytes remained -> {result.Item1}bytes");
-                Assert.AreEqual(0, result.Item2, $"Unparsed files -> {result.Item2}");
+
+                Assert.AreEqual(0, result.Item1, $"Unknown bytes remaining -> {result.Item1}bytes");
+                Assert.AreEqual(0, result.Item2, $"Files not parsed -> {result.Item2}");
             }
         }
-        
+
 
     }
 }

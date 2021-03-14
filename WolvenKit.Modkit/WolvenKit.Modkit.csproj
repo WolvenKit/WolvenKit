@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0020" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
+    <ProjectReference Include="..\WolvenKit.Witcher3Formats\WolvenKit.Witcher3Formats.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="WolvenKit.RED4.CR2W">
+      <HintPath>..\WolvenKit.RED4.CR2W\bin\Release\net5.0\WolvenKit.RED4.CR2W.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

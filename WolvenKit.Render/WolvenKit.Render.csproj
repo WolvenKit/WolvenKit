@@ -56,7 +56,7 @@
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Bundles\WolvenKit.Bundles.csproj" />
     <ProjectReference Include="..\WolvenKit.Cache\WolvenKit.Cache.csproj" />
-    <ProjectReference Include="..\WolvenKit.CR2W\WolvenKit.CR2W.csproj" />
+    <ProjectReference Include="..\WolvenKit.RED3.CR2W\WolvenKit.RED3.CR2W.csproj" />
     <ProjectReference Include="..\WolvenKit.IrrlichtLime\IrrlichtLime.vcxproj" />
     <ProjectReference Include="..\WolvenKit.Irrlicht\Irrlicht15.0.vcxproj" />
   </ItemGroup>
