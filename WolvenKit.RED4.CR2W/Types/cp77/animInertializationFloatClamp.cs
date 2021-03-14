@@ -7,9 +7,78 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animInertializationFloatClamp : CVariable
 	{
-		[Ordinal(0)] [RED("isActive")] public CBool IsActive { get; set; }
-		[Ordinal(1)] [RED("min")] public CFloat Min { get; set; }
-		[Ordinal(2)] [RED("max")] public CFloat Max { get; set; }
+		private CBool _isActive;
+		private CFloat _min;
+		private CFloat _max;
+
+		[Ordinal(0)] 
+		[RED("isActive")] 
+		public CBool IsActive
+		{
+			get
+			{
+				if (_isActive == null)
+				{
+					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
+				}
+				return _isActive;
+			}
+			set
+			{
+				if (_isActive == value)
+				{
+					return;
+				}
+				_isActive = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(1)] 
+		[RED("min")] 
+		public CFloat Min
+		{
+			get
+			{
+				if (_min == null)
+				{
+					_min = (CFloat) CR2WTypeManager.Create("Float", "min", cr2w, this);
+				}
+				return _min;
+			}
+			set
+			{
+				if (_min == value)
+				{
+					return;
+				}
+				_min = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(2)] 
+		[RED("max")] 
+		public CFloat Max
+		{
+			get
+			{
+				if (_max == null)
+				{
+					_max = (CFloat) CR2WTypeManager.Create("Float", "max", cr2w, this);
+				}
+				return _max;
+			}
+			set
+			{
+				if (_max == value)
+				{
+					return;
+				}
+				_max = value;
+				PropertySet(this);
+			}
+		}
 
 		public animInertializationFloatClamp(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

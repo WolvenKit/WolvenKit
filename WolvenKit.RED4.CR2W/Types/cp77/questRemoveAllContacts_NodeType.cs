@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questRemoveAllContacts_NodeType : questIPhoneManagerNodeType
 	{
-		[Ordinal(0)] [RED("excludedContacts")] public CArray<CHandle<gameJournalPath>> ExcludedContacts { get; set; }
+		private CArray<CHandle<gameJournalPath>> _excludedContacts;
+
+		[Ordinal(0)] 
+		[RED("excludedContacts")] 
+		public CArray<CHandle<gameJournalPath>> ExcludedContacts
+		{
+			get
+			{
+				if (_excludedContacts == null)
+				{
+					_excludedContacts = (CArray<CHandle<gameJournalPath>>) CR2WTypeManager.Create("array:handle:gameJournalPath", "excludedContacts", cr2w, this);
+				}
+				return _excludedContacts;
+			}
+			set
+			{
+				if (_excludedContacts == value)
+				{
+					return;
+				}
+				_excludedContacts = value;
+				PropertySet(this);
+			}
+		}
 
 		public questRemoveAllContacts_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

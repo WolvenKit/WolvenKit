@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamestateMachineeventRemoveOnDemandStateMachine : redEvent
 	{
-		[Ordinal(0)] [RED("stateMachineIdentifier")] public gamestateMachineStateMachineIdentifier StateMachineIdentifier { get; set; }
+		private gamestateMachineStateMachineIdentifier _stateMachineIdentifier;
+
+		[Ordinal(0)] 
+		[RED("stateMachineIdentifier")] 
+		public gamestateMachineStateMachineIdentifier StateMachineIdentifier
+		{
+			get
+			{
+				if (_stateMachineIdentifier == null)
+				{
+					_stateMachineIdentifier = (gamestateMachineStateMachineIdentifier) CR2WTypeManager.Create("gamestateMachineStateMachineIdentifier", "stateMachineIdentifier", cr2w, this);
+				}
+				return _stateMachineIdentifier;
+			}
+			set
+			{
+				if (_stateMachineIdentifier == value)
+				{
+					return;
+				}
+				_stateMachineIdentifier = value;
+				PropertySet(this);
+			}
+		}
 
 		public gamestateMachineeventRemoveOnDemandStateMachine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

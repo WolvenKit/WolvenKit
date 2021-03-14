@@ -7,8 +7,54 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VehicleDoorInteraction : ActionBool
 	{
-		[Ordinal(25)] [RED("slotID")] public CName SlotID { get; set; }
-		[Ordinal(26)] [RED("isInteractionSource")] public CBool IsInteractionSource { get; set; }
+		private CName _slotID;
+		private CBool _isInteractionSource;
+
+		[Ordinal(25)] 
+		[RED("slotID")] 
+		public CName SlotID
+		{
+			get
+			{
+				if (_slotID == null)
+				{
+					_slotID = (CName) CR2WTypeManager.Create("CName", "slotID", cr2w, this);
+				}
+				return _slotID;
+			}
+			set
+			{
+				if (_slotID == value)
+				{
+					return;
+				}
+				_slotID = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(26)] 
+		[RED("isInteractionSource")] 
+		public CBool IsInteractionSource
+		{
+			get
+			{
+				if (_isInteractionSource == null)
+				{
+					_isInteractionSource = (CBool) CR2WTypeManager.Create("Bool", "isInteractionSource", cr2w, this);
+				}
+				return _isInteractionSource;
+			}
+			set
+			{
+				if (_isInteractionSource == value)
+				{
+					return;
+				}
+				_isInteractionSource = value;
+				PropertySet(this);
+			}
+		}
 
 		public VehicleDoorInteraction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

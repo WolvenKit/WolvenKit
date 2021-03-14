@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class QuestLookAtTarget : ActionEntityReference
 	{
-		[Ordinal(25)] [RED("ForcedTarget")] public entEntityID ForcedTarget { get; set; }
+		private entEntityID _forcedTarget;
+
+		[Ordinal(25)] 
+		[RED("ForcedTarget")] 
+		public entEntityID ForcedTarget
+		{
+			get
+			{
+				if (_forcedTarget == null)
+				{
+					_forcedTarget = (entEntityID) CR2WTypeManager.Create("entEntityID", "ForcedTarget", cr2w, this);
+				}
+				return _forcedTarget;
+			}
+			set
+			{
+				if (_forcedTarget == value)
+				{
+					return;
+				}
+				_forcedTarget = value;
+				PropertySet(this);
+			}
+		}
 
 		public QuestLookAtTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

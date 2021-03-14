@@ -7,10 +7,102 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questSetHUDEntryVisibility_NodeType : questIUIManagerNodeType
 	{
-		[Ordinal(0)] [RED("hudEntryName")] public CArray<CName> HudEntryName { get; set; }
-		[Ordinal(1)] [RED("usePreset")] public CBool UsePreset { get; set; }
-		[Ordinal(2)] [RED("hudVisibilityPreset")] public TweakDBID HudVisibilityPreset { get; set; }
-		[Ordinal(3)] [RED("visibility")] public CBool Visibility { get; set; }
+		private CArray<CName> _hudEntryName;
+		private CBool _usePreset;
+		private TweakDBID _hudVisibilityPreset;
+		private CBool _visibility;
+
+		[Ordinal(0)] 
+		[RED("hudEntryName")] 
+		public CArray<CName> HudEntryName
+		{
+			get
+			{
+				if (_hudEntryName == null)
+				{
+					_hudEntryName = (CArray<CName>) CR2WTypeManager.Create("array:CName", "hudEntryName", cr2w, this);
+				}
+				return _hudEntryName;
+			}
+			set
+			{
+				if (_hudEntryName == value)
+				{
+					return;
+				}
+				_hudEntryName = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(1)] 
+		[RED("usePreset")] 
+		public CBool UsePreset
+		{
+			get
+			{
+				if (_usePreset == null)
+				{
+					_usePreset = (CBool) CR2WTypeManager.Create("Bool", "usePreset", cr2w, this);
+				}
+				return _usePreset;
+			}
+			set
+			{
+				if (_usePreset == value)
+				{
+					return;
+				}
+				_usePreset = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(2)] 
+		[RED("hudVisibilityPreset")] 
+		public TweakDBID HudVisibilityPreset
+		{
+			get
+			{
+				if (_hudVisibilityPreset == null)
+				{
+					_hudVisibilityPreset = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "hudVisibilityPreset", cr2w, this);
+				}
+				return _hudVisibilityPreset;
+			}
+			set
+			{
+				if (_hudVisibilityPreset == value)
+				{
+					return;
+				}
+				_hudVisibilityPreset = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(3)] 
+		[RED("visibility")] 
+		public CBool Visibility
+		{
+			get
+			{
+				if (_visibility == null)
+				{
+					_visibility = (CBool) CR2WTypeManager.Create("Bool", "visibility", cr2w, this);
+				}
+				return _visibility;
+			}
+			set
+			{
+				if (_visibility == value)
+				{
+					return;
+				}
+				_visibility = value;
+				PropertySet(this);
+			}
+		}
 
 		public questSetHUDEntryVisibility_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

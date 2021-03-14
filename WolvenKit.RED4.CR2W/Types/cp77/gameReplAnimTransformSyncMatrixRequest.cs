@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameReplAnimTransformSyncMatrixRequest : gameReplAnimTransformRequestBase
 	{
-		[Ordinal(1)] [RED("transform")] public Transform Transform { get; set; }
+		private Transform _transform;
+
+		[Ordinal(1)] 
+		[RED("transform")] 
+		public Transform Transform
+		{
+			get
+			{
+				if (_transform == null)
+				{
+					_transform = (Transform) CR2WTypeManager.Create("Transform", "transform", cr2w, this);
+				}
+				return _transform;
+			}
+			set
+			{
+				if (_transform == value)
+				{
+					return;
+				}
+				_transform = value;
+				PropertySet(this);
+			}
+		}
 
 		public gameReplAnimTransformSyncMatrixRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

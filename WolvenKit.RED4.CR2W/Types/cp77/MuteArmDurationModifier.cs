@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MuteArmDurationModifier : gameEffectDurationModifier_Scripted
 	{
-		[Ordinal(0)] [RED("initialDuration")] public CFloat InitialDuration { get; set; }
+		private CFloat _initialDuration;
+
+		[Ordinal(0)] 
+		[RED("initialDuration")] 
+		public CFloat InitialDuration
+		{
+			get
+			{
+				if (_initialDuration == null)
+				{
+					_initialDuration = (CFloat) CR2WTypeManager.Create("Float", "initialDuration", cr2w, this);
+				}
+				return _initialDuration;
+			}
+			set
+			{
+				if (_initialDuration == value)
+				{
+					return;
+				}
+				_initialDuration = value;
+				PropertySet(this);
+			}
+		}
 
 		public MuteArmDurationModifier(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EnableFields : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("actionMask")] public SBraindanceInputMask ActionMask { get; set; }
+		private SBraindanceInputMask _actionMask;
+
+		[Ordinal(0)] 
+		[RED("actionMask")] 
+		public SBraindanceInputMask ActionMask
+		{
+			get
+			{
+				if (_actionMask == null)
+				{
+					_actionMask = (SBraindanceInputMask) CR2WTypeManager.Create("SBraindanceInputMask", "actionMask", cr2w, this);
+				}
+				return _actionMask;
+			}
+			set
+			{
+				if (_actionMask == value)
+				{
+					return;
+				}
+				_actionMask = value;
+				PropertySet(this);
+			}
+		}
 
 		public EnableFields(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimDataChunk : CVariable
 	{
-		[Ordinal(0)] [RED("buffer")] public serializationDeferredDataBuffer Buffer { get; set; }
+		private serializationDeferredDataBuffer _buffer;
+
+		[Ordinal(0)] 
+		[RED("buffer")] 
+		public serializationDeferredDataBuffer Buffer
+		{
+			get
+			{
+				if (_buffer == null)
+				{
+					_buffer = (serializationDeferredDataBuffer) CR2WTypeManager.Create("serializationDeferredDataBuffer", "buffer", cr2w, this);
+				}
+				return _buffer;
+			}
+			set
+			{
+				if (_buffer == value)
+				{
+					return;
+				}
+				_buffer = value;
+				PropertySet(this);
+			}
+		}
 
 		public animAnimDataChunk(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

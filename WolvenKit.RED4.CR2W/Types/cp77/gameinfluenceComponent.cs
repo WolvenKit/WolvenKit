@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameinfluenceComponent : entIPlacedComponent
 	{
-		[Ordinal(5)] [RED("isEnabled")] public CBool IsEnabled { get; set; }
+		private CBool _isEnabled;
+
+		[Ordinal(5)] 
+		[RED("isEnabled")] 
+		public CBool IsEnabled
+		{
+			get
+			{
+				if (_isEnabled == null)
+				{
+					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
+				}
+				return _isEnabled;
+			}
+			set
+			{
+				if (_isEnabled == value)
+				{
+					return;
+				}
+				_isEnabled = value;
+				PropertySet(this);
+			}
+		}
 
 		public gameinfluenceComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

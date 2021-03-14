@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamestateMachineTransitionDefinition : graphGraphConnectionDefinition
 	{
-		[Ordinal(2)] [RED("priority")] public CFloat Priority { get; set; }
+		private CFloat _priority;
+
+		[Ordinal(2)] 
+		[RED("priority")] 
+		public CFloat Priority
+		{
+			get
+			{
+				if (_priority == null)
+				{
+					_priority = (CFloat) CR2WTypeManager.Create("Float", "priority", cr2w, this);
+				}
+				return _priority;
+			}
+			set
+			{
+				if (_priority == value)
+				{
+					return;
+				}
+				_priority = value;
+				PropertySet(this);
+			}
+		}
 
 		public gamestateMachineTransitionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamedataInAirGravityModifier_Record : gamedataDriveHelper_Record
 	{
+
 		public gamedataInAirGravityModifier_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

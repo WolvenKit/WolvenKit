@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InterestingFactsListenersFunctions : CVariable
 	{
-		[Ordinal(0)] [RED("zone")] public CName Zone { get; set; }
+		private CName _zone;
+
+		[Ordinal(0)] 
+		[RED("zone")] 
+		public CName Zone
+		{
+			get
+			{
+				if (_zone == null)
+				{
+					_zone = (CName) CR2WTypeManager.Create("CName", "zone", cr2w, this);
+				}
+				return _zone;
+			}
+			set
+			{
+				if (_zone == value)
+				{
+					return;
+				}
+				_zone = value;
+				PropertySet(this);
+			}
+		}
 
 		public InterestingFactsListenersFunctions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

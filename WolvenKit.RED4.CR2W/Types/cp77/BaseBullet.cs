@@ -7,11 +7,126 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BaseBullet : BaseProjectile
 	{
-		[Ordinal(51)] [RED("meshComponent")] public CHandle<entIComponent> MeshComponent { get; set; }
-		[Ordinal(52)] [RED("countTime")] public CFloat CountTime { get; set; }
-		[Ordinal(53)] [RED("startVelocity")] public CFloat StartVelocity { get; set; }
-		[Ordinal(54)] [RED("lifetime")] public CFloat Lifetime_456 { get; set; }
-		[Ordinal(55)] [RED("alive")] public CBool Alive { get; set; }
+		private CHandle<entIComponent> _meshComponent;
+		private CFloat _countTime;
+		private CFloat _startVelocity;
+		private CFloat _lifetime;
+		private CBool _alive;
+
+		[Ordinal(51)] 
+		[RED("meshComponent")] 
+		public CHandle<entIComponent> MeshComponent
+		{
+			get
+			{
+				if (_meshComponent == null)
+				{
+					_meshComponent = (CHandle<entIComponent>) CR2WTypeManager.Create("handle:entIComponent", "meshComponent", cr2w, this);
+				}
+				return _meshComponent;
+			}
+			set
+			{
+				if (_meshComponent == value)
+				{
+					return;
+				}
+				_meshComponent = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(52)] 
+		[RED("countTime")] 
+		public CFloat CountTime
+		{
+			get
+			{
+				if (_countTime == null)
+				{
+					_countTime = (CFloat) CR2WTypeManager.Create("Float", "countTime", cr2w, this);
+				}
+				return _countTime;
+			}
+			set
+			{
+				if (_countTime == value)
+				{
+					return;
+				}
+				_countTime = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(53)] 
+		[RED("startVelocity")] 
+		public CFloat StartVelocity
+		{
+			get
+			{
+				if (_startVelocity == null)
+				{
+					_startVelocity = (CFloat) CR2WTypeManager.Create("Float", "startVelocity", cr2w, this);
+				}
+				return _startVelocity;
+			}
+			set
+			{
+				if (_startVelocity == value)
+				{
+					return;
+				}
+				_startVelocity = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(54)] 
+		[RED("lifetime")] 
+		public CFloat Lifetime_456
+		{
+			get
+			{
+				if (_lifetime == null)
+				{
+					_lifetime = (CFloat) CR2WTypeManager.Create("Float", "lifetime", cr2w, this);
+				}
+				return _lifetime;
+			}
+			set
+			{
+				if (_lifetime == value)
+				{
+					return;
+				}
+				_lifetime = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(55)] 
+		[RED("alive")] 
+		public CBool Alive
+		{
+			get
+			{
+				if (_alive == null)
+				{
+					_alive = (CBool) CR2WTypeManager.Create("Bool", "alive", cr2w, this);
+				}
+				return _alive;
+			}
+			set
+			{
+				if (_alive == value)
+				{
+					return;
+				}
+				_alive = value;
+				PropertySet(this);
+			}
+		}
 
 		public BaseBullet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

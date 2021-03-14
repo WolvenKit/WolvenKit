@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectAction_TerminateChildEffect : gameEffectAction
 	{
-		[Ordinal(0)] [RED("effectTag")] public CName EffectTag { get; set; }
+		private CName _effectTag;
+
+		[Ordinal(0)] 
+		[RED("effectTag")] 
+		public CName EffectTag
+		{
+			get
+			{
+				if (_effectTag == null)
+				{
+					_effectTag = (CName) CR2WTypeManager.Create("CName", "effectTag", cr2w, this);
+				}
+				return _effectTag;
+			}
+			set
+			{
+				if (_effectTag == value)
+				{
+					return;
+				}
+				_effectTag = value;
+				PropertySet(this);
+			}
+		}
 
 		public gameEffectAction_TerminateChildEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

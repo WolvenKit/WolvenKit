@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LiftWidgetCustomData : WidgetCustomData
 	{
-		[Ordinal(0)] [RED("movementState")] public CEnum<gamePlatformMovementState> MovementState { get; set; }
+		private CEnum<gamePlatformMovementState> _movementState;
+
+		[Ordinal(0)] 
+		[RED("movementState")] 
+		public CEnum<gamePlatformMovementState> MovementState
+		{
+			get
+			{
+				if (_movementState == null)
+				{
+					_movementState = (CEnum<gamePlatformMovementState>) CR2WTypeManager.Create("gamePlatformMovementState", "movementState", cr2w, this);
+				}
+				return _movementState;
+			}
+			set
+			{
+				if (_movementState == value)
+				{
+					return;
+				}
+				_movementState = value;
+				PropertySet(this);
+			}
+		}
 
 		public LiftWidgetCustomData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,9 +7,78 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questForceVMModule_NodeTypeParams : CVariable
 	{
-		[Ordinal(0)] [RED("reference")] public gameEntityReference Reference { get; set; }
-		[Ordinal(1)] [RED("module")] public CString Module { get; set; }
-		[Ordinal(2)] [RED("components")] public CArray<CName> Components { get; set; }
+		private gameEntityReference _reference;
+		private CString _module;
+		private CArray<CName> _components;
+
+		[Ordinal(0)] 
+		[RED("reference")] 
+		public gameEntityReference Reference
+		{
+			get
+			{
+				if (_reference == null)
+				{
+					_reference = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "reference", cr2w, this);
+				}
+				return _reference;
+			}
+			set
+			{
+				if (_reference == value)
+				{
+					return;
+				}
+				_reference = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(1)] 
+		[RED("module")] 
+		public CString Module
+		{
+			get
+			{
+				if (_module == null)
+				{
+					_module = (CString) CR2WTypeManager.Create("String", "module", cr2w, this);
+				}
+				return _module;
+			}
+			set
+			{
+				if (_module == value)
+				{
+					return;
+				}
+				_module = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(2)] 
+		[RED("components")] 
+		public CArray<CName> Components
+		{
+			get
+			{
+				if (_components == null)
+				{
+					_components = (CArray<CName>) CR2WTypeManager.Create("array:CName", "components", cr2w, this);
+				}
+				return _components;
+			}
+			set
+			{
+				if (_components == value)
+				{
+					return;
+				}
+				_components = value;
+				PropertySet(this);
+			}
+		}
 
 		public questForceVMModule_NodeTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

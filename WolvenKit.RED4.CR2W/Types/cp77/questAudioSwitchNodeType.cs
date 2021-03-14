@@ -7,10 +7,102 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questAudioSwitchNodeType : questIAudioNodeType
 	{
-		[Ordinal(0)] [RED("switch")] public audioAudSwitch Switch { get; set; }
-		[Ordinal(1)] [RED("isMusic")] public CBool IsMusic { get; set; }
-		[Ordinal(2)] [RED("objectRef")] public gameEntityReference ObjectRef { get; set; }
-		[Ordinal(3)] [RED("isPlayer")] public CBool IsPlayer { get; set; }
+		private audioAudSwitch _switch;
+		private CBool _isMusic;
+		private gameEntityReference _objectRef;
+		private CBool _isPlayer;
+
+		[Ordinal(0)] 
+		[RED("switch")] 
+		public audioAudSwitch Switch
+		{
+			get
+			{
+				if (_switch == null)
+				{
+					_switch = (audioAudSwitch) CR2WTypeManager.Create("audioAudSwitch", "switch", cr2w, this);
+				}
+				return _switch;
+			}
+			set
+			{
+				if (_switch == value)
+				{
+					return;
+				}
+				_switch = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(1)] 
+		[RED("isMusic")] 
+		public CBool IsMusic
+		{
+			get
+			{
+				if (_isMusic == null)
+				{
+					_isMusic = (CBool) CR2WTypeManager.Create("Bool", "isMusic", cr2w, this);
+				}
+				return _isMusic;
+			}
+			set
+			{
+				if (_isMusic == value)
+				{
+					return;
+				}
+				_isMusic = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(2)] 
+		[RED("objectRef")] 
+		public gameEntityReference ObjectRef
+		{
+			get
+			{
+				if (_objectRef == null)
+				{
+					_objectRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "objectRef", cr2w, this);
+				}
+				return _objectRef;
+			}
+			set
+			{
+				if (_objectRef == value)
+				{
+					return;
+				}
+				_objectRef = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(3)] 
+		[RED("isPlayer")] 
+		public CBool IsPlayer
+		{
+			get
+			{
+				if (_isPlayer == null)
+				{
+					_isPlayer = (CBool) CR2WTypeManager.Create("Bool", "isPlayer", cr2w, this);
+				}
+				return _isPlayer;
+			}
+			set
+			{
+				if (_isPlayer == value)
+				{
+					return;
+				}
+				_isPlayer = value;
+				PropertySet(this);
+			}
+		}
 
 		public questAudioSwitchNodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

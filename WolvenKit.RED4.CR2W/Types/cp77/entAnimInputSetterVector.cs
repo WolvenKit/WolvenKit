@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entAnimInputSetterVector : entAnimInputSetter
 	{
-		[Ordinal(1)] [RED("value")] public Vector4 Value { get; set; }
+		private Vector4 _value;
+
+		[Ordinal(1)] 
+		[RED("value")] 
+		public Vector4 Value
+		{
+			get
+			{
+				if (_value == null)
+				{
+					_value = (Vector4) CR2WTypeManager.Create("Vector4", "value", cr2w, this);
+				}
+				return _value;
+			}
+			set
+			{
+				if (_value == value)
+				{
+					return;
+				}
+				_value = value;
+				PropertySet(this);
+			}
+		}
 
 		public entAnimInputSetterVector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

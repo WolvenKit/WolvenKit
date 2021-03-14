@@ -7,8 +7,54 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class NPCReactionPresetPrereq : gameIScriptablePrereq
 	{
-		[Ordinal(0)] [RED("reactionPreset")] public CEnum<gamedataReactionPresetType> ReactionPreset { get; set; }
-		[Ordinal(1)] [RED("invert")] public CBool Invert { get; set; }
+		private CEnum<gamedataReactionPresetType> _reactionPreset;
+		private CBool _invert;
+
+		[Ordinal(0)] 
+		[RED("reactionPreset")] 
+		public CEnum<gamedataReactionPresetType> ReactionPreset
+		{
+			get
+			{
+				if (_reactionPreset == null)
+				{
+					_reactionPreset = (CEnum<gamedataReactionPresetType>) CR2WTypeManager.Create("gamedataReactionPresetType", "reactionPreset", cr2w, this);
+				}
+				return _reactionPreset;
+			}
+			set
+			{
+				if (_reactionPreset == value)
+				{
+					return;
+				}
+				_reactionPreset = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(1)] 
+		[RED("invert")] 
+		public CBool Invert
+		{
+			get
+			{
+				if (_invert == null)
+				{
+					_invert = (CBool) CR2WTypeManager.Create("Bool", "invert", cr2w, this);
+				}
+				return _invert;
+			}
+			set
+			{
+				if (_invert == value)
+				{
+					return;
+				}
+				_invert = value;
+				PropertySet(this);
+			}
+		}
 
 		public NPCReactionPresetPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

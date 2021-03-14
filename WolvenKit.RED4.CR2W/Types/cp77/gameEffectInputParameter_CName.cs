@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectInputParameter_CName : CVariable
 	{
-		[Ordinal(0)] [RED("evaluator")] public CHandle<gameIEffectParameter_CNameEvaluator> Evaluator { get; set; }
+		private CHandle<gameIEffectParameter_CNameEvaluator> _evaluator;
+
+		[Ordinal(0)] 
+		[RED("evaluator")] 
+		public CHandle<gameIEffectParameter_CNameEvaluator> Evaluator
+		{
+			get
+			{
+				if (_evaluator == null)
+				{
+					_evaluator = (CHandle<gameIEffectParameter_CNameEvaluator>) CR2WTypeManager.Create("handle:gameIEffectParameter_CNameEvaluator", "evaluator", cr2w, this);
+				}
+				return _evaluator;
+			}
+			set
+			{
+				if (_evaluator == value)
+				{
+					return;
+				}
+				_evaluator = value;
+				PropertySet(this);
+			}
+		}
 
 		public gameEffectInputParameter_CName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

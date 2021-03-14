@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questUICondition : questTypedCondition
 	{
-		[Ordinal(0)] [RED("type")] public CHandle<questIUIConditionType> Type { get; set; }
+		private CHandle<questIUIConditionType> _type;
+
+		[Ordinal(0)] 
+		[RED("type")] 
+		public CHandle<questIUIConditionType> Type
+		{
+			get
+			{
+				if (_type == null)
+				{
+					_type = (CHandle<questIUIConditionType>) CR2WTypeManager.Create("handle:questIUIConditionType", "type", cr2w, this);
+				}
+				return _type;
+			}
+			set
+			{
+				if (_type == value)
+				{
+					return;
+				}
+				_type = value;
+				PropertySet(this);
+			}
+		}
 
 		public questUICondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

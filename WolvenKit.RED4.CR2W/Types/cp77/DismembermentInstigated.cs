@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DismembermentInstigated : redEvent
 	{
-		[Ordinal(0)] [RED("bodyPart")] public CEnum<EHitReactionZone> BodyPart { get; set; }
+		private CEnum<EHitReactionZone> _bodyPart;
+
+		[Ordinal(0)] 
+		[RED("bodyPart")] 
+		public CEnum<EHitReactionZone> BodyPart
+		{
+			get
+			{
+				if (_bodyPart == null)
+				{
+					_bodyPart = (CEnum<EHitReactionZone>) CR2WTypeManager.Create("EHitReactionZone", "bodyPart", cr2w, this);
+				}
+				return _bodyPart;
+			}
+			set
+			{
+				if (_bodyPart == value)
+				{
+					return;
+				}
+				_bodyPart = value;
+				PropertySet(this);
+			}
+		}
 
 		public DismembermentInstigated(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

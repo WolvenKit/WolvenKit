@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldAIDirectorSpawnNode : worldNode
 	{
-		[Ordinal(4)] [RED("tags")] public redTagList Tags { get; set; }
+		private redTagList _tags;
+
+		[Ordinal(4)] 
+		[RED("tags")] 
+		public redTagList Tags
+		{
+			get
+			{
+				if (_tags == null)
+				{
+					_tags = (redTagList) CR2WTypeManager.Create("redTagList", "tags", cr2w, this);
+				}
+				return _tags;
+			}
+			set
+			{
+				if (_tags == value)
+				{
+					return;
+				}
+				_tags = value;
+				PropertySet(this);
+			}
+		}
 
 		public worldAIDirectorSpawnNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

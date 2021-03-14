@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamedataVehicleWheelDrivingPreset_Record : gamedataTweakDBRecord
 	{
+
 		public gamedataVehicleWheelDrivingPreset_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

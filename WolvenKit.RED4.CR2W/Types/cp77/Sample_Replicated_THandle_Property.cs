@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Sample_Replicated_THandle_Property : CVariable
 	{
-		[Ordinal(0)] [RED("property")] public CHandle<Sample_Replicated_Serializable> Property { get; set; }
+		private CHandle<Sample_Replicated_Serializable> _property;
+
+		[Ordinal(0)] 
+		[RED("property")] 
+		public CHandle<Sample_Replicated_Serializable> Property
+		{
+			get
+			{
+				if (_property == null)
+				{
+					_property = (CHandle<Sample_Replicated_Serializable>) CR2WTypeManager.Create("handle:Sample_Replicated_Serializable", "property", cr2w, this);
+				}
+				return _property;
+			}
+			set
+			{
+				if (_property == value)
+				{
+					return;
+				}
+				_property = value;
+				PropertySet(this);
+			}
+		}
 
 		public Sample_Replicated_THandle_Property(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,9 +7,78 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class QsTransform : CVariable
 	{
-		[Ordinal(0)] [RED("Translation")] public Vector4 Translation { get; set; }
-		[Ordinal(1)] [RED("Rotation")] public Quaternion Rotation { get; set; }
-		[Ordinal(2)] [RED("Scale")] public Vector4 Scale { get; set; }
+		private Vector4 _translation;
+		private Quaternion _rotation;
+		private Vector4 _scale;
+
+		[Ordinal(0)] 
+		[RED("Translation")] 
+		public Vector4 Translation
+		{
+			get
+			{
+				if (_translation == null)
+				{
+					_translation = (Vector4) CR2WTypeManager.Create("Vector4", "Translation", cr2w, this);
+				}
+				return _translation;
+			}
+			set
+			{
+				if (_translation == value)
+				{
+					return;
+				}
+				_translation = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(1)] 
+		[RED("Rotation")] 
+		public Quaternion Rotation
+		{
+			get
+			{
+				if (_rotation == null)
+				{
+					_rotation = (Quaternion) CR2WTypeManager.Create("Quaternion", "Rotation", cr2w, this);
+				}
+				return _rotation;
+			}
+			set
+			{
+				if (_rotation == value)
+				{
+					return;
+				}
+				_rotation = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(2)] 
+		[RED("Scale")] 
+		public Vector4 Scale
+		{
+			get
+			{
+				if (_scale == null)
+				{
+					_scale = (Vector4) CR2WTypeManager.Create("Vector4", "Scale", cr2w, this);
+				}
+				return _scale;
+			}
+			set
+			{
+				if (_scale == value)
+				{
+					return;
+				}
+				_scale = value;
+				PropertySet(this);
+			}
+		}
 
 		public QsTransform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

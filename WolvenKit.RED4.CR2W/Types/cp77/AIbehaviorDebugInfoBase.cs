@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorDebugInfoBase : ISerializable
 	{
-		[Ordinal(0)] [RED("caption")] public CString Caption { get; set; }
+		private CString _caption;
+
+		[Ordinal(0)] 
+		[RED("caption")] 
+		public CString Caption
+		{
+			get
+			{
+				if (_caption == null)
+				{
+					_caption = (CString) CR2WTypeManager.Create("String", "caption", cr2w, this);
+				}
+				return _caption;
+			}
+			set
+			{
+				if (_caption == value)
+				{
+					return;
+				}
+				_caption = value;
+				PropertySet(this);
+			}
+		}
 
 		public AIbehaviorDebugInfoBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

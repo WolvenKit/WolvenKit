@@ -7,8 +7,54 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class workStopWorkspotQuestAction : workIWorkspotQuestAction
 	{
-		[Ordinal(0)] [RED("allowCurrAnimToFinish")] public CBool AllowCurrAnimToFinish { get; set; }
-		[Ordinal(1)] [RED("exitAnim")] public CName ExitAnim { get; set; }
+		private CBool _allowCurrAnimToFinish;
+		private CName _exitAnim;
+
+		[Ordinal(0)] 
+		[RED("allowCurrAnimToFinish")] 
+		public CBool AllowCurrAnimToFinish
+		{
+			get
+			{
+				if (_allowCurrAnimToFinish == null)
+				{
+					_allowCurrAnimToFinish = (CBool) CR2WTypeManager.Create("Bool", "allowCurrAnimToFinish", cr2w, this);
+				}
+				return _allowCurrAnimToFinish;
+			}
+			set
+			{
+				if (_allowCurrAnimToFinish == value)
+				{
+					return;
+				}
+				_allowCurrAnimToFinish = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(1)] 
+		[RED("exitAnim")] 
+		public CName ExitAnim
+		{
+			get
+			{
+				if (_exitAnim == null)
+				{
+					_exitAnim = (CName) CR2WTypeManager.Create("CName", "exitAnim", cr2w, this);
+				}
+				return _exitAnim;
+			}
+			set
+			{
+				if (_exitAnim == value)
+				{
+					return;
+				}
+				_exitAnim = value;
+				PropertySet(this);
+			}
+		}
 
 		public workStopWorkspotQuestAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

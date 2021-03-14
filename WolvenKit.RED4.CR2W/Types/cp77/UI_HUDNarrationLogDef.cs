@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UI_HUDNarrationLogDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("LastEvent")] public gamebbScriptID_Variant LastEvent { get; set; }
+		private gamebbScriptID_Variant _lastEvent;
+
+		[Ordinal(0)] 
+		[RED("LastEvent")] 
+		public gamebbScriptID_Variant LastEvent
+		{
+			get
+			{
+				if (_lastEvent == null)
+				{
+					_lastEvent = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "LastEvent", cr2w, this);
+				}
+				return _lastEvent;
+			}
+			set
+			{
+				if (_lastEvent == value)
+				{
+					return;
+				}
+				_lastEvent = value;
+				PropertySet(this);
+			}
+		}
 
 		public UI_HUDNarrationLogDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

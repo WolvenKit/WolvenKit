@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GetOwnPosition : AIbehaviortaskScript
 	{
-		[Ordinal(0)] [RED("outPosition")] public CHandle<AIArgumentMapping> OutPosition { get; set; }
+		private CHandle<AIArgumentMapping> _outPosition;
+
+		[Ordinal(0)] 
+		[RED("outPosition")] 
+		public CHandle<AIArgumentMapping> OutPosition
+		{
+			get
+			{
+				if (_outPosition == null)
+				{
+					_outPosition = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outPosition", cr2w, this);
+				}
+				return _outPosition;
+			}
+			set
+			{
+				if (_outPosition == value)
+				{
+					return;
+				}
+				_outPosition = value;
+				PropertySet(this);
+			}
+		}
 
 		public GetOwnPosition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VendorBoughtItemEvent : redEvent
 	{
-		[Ordinal(0)] [RED("items")] public CArray<gameItemID> Items { get; set; }
+		private CArray<gameItemID> _items;
+
+		[Ordinal(0)] 
+		[RED("items")] 
+		public CArray<gameItemID> Items
+		{
+			get
+			{
+				if (_items == null)
+				{
+					_items = (CArray<gameItemID>) CR2WTypeManager.Create("array:gameItemID", "items", cr2w, this);
+				}
+				return _items;
+			}
+			set
+			{
+				if (_items == value)
+				{
+					return;
+				}
+				_items = value;
+				PropertySet(this);
+			}
+		}
 
 		public VendorBoughtItemEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

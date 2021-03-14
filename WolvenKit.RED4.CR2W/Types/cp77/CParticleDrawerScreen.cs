@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CParticleDrawerScreen : IParticleDrawer
 	{
-		[Ordinal(1)] [RED("isGPUBased")] public CBool IsGPUBased { get; set; }
+		private CBool _isGPUBased;
+
+		[Ordinal(1)] 
+		[RED("isGPUBased")] 
+		public CBool IsGPUBased
+		{
+			get
+			{
+				if (_isGPUBased == null)
+				{
+					_isGPUBased = (CBool) CR2WTypeManager.Create("Bool", "isGPUBased", cr2w, this);
+				}
+				return _isGPUBased;
+			}
+			set
+			{
+				if (_isGPUBased == value)
+				{
+					return;
+				}
+				_isGPUBased = value;
+				PropertySet(this);
+			}
+		}
 
 		public CParticleDrawerScreen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DeadOnInitTask : AIbehaviortaskScript
 	{
-		[Ordinal(0)] [RED("preventSkippingDeathAnimation")] public CBool PreventSkippingDeathAnimation { get; set; }
+		private CBool _preventSkippingDeathAnimation;
+
+		[Ordinal(0)] 
+		[RED("preventSkippingDeathAnimation")] 
+		public CBool PreventSkippingDeathAnimation
+		{
+			get
+			{
+				if (_preventSkippingDeathAnimation == null)
+				{
+					_preventSkippingDeathAnimation = (CBool) CR2WTypeManager.Create("Bool", "preventSkippingDeathAnimation", cr2w, this);
+				}
+				return _preventSkippingDeathAnimation;
+			}
+			set
+			{
+				if (_preventSkippingDeathAnimation == value)
+				{
+					return;
+				}
+				_preventSkippingDeathAnimation = value;
+				PropertySet(this);
+			}
+		}
 
 		public DeadOnInitTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

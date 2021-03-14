@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnOverrideReturnConditions_InterruptionScenarioOperation : scnIInterruptionScenarioOperation
 	{
-		[Ordinal(0)] [RED("returnConditions")] public CArray<CHandle<scnIReturnCondition>> ReturnConditions { get; set; }
+		private CArray<CHandle<scnIReturnCondition>> _returnConditions;
+
+		[Ordinal(0)] 
+		[RED("returnConditions")] 
+		public CArray<CHandle<scnIReturnCondition>> ReturnConditions
+		{
+			get
+			{
+				if (_returnConditions == null)
+				{
+					_returnConditions = (CArray<CHandle<scnIReturnCondition>>) CR2WTypeManager.Create("array:handle:scnIReturnCondition", "returnConditions", cr2w, this);
+				}
+				return _returnConditions;
+			}
+			set
+			{
+				if (_returnConditions == value)
+				{
+					return;
+				}
+				_returnConditions = value;
+				PropertySet(this);
+			}
+		}
 
 		public scnOverrideReturnConditions_InterruptionScenarioOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

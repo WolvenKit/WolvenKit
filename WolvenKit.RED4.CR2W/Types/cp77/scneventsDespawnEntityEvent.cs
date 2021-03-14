@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scneventsDespawnEntityEvent : scnSceneEvent
 	{
-		[Ordinal(6)] [RED("params")] public scneventsDespawnEntityEventParams Params { get; set; }
+		private scneventsDespawnEntityEventParams _params;
+
+		[Ordinal(6)] 
+		[RED("params")] 
+		public scneventsDespawnEntityEventParams Params
+		{
+			get
+			{
+				if (_params == null)
+				{
+					_params = (scneventsDespawnEntityEventParams) CR2WTypeManager.Create("scneventsDespawnEntityEventParams", "params", cr2w, this);
+				}
+				return _params;
+			}
+			set
+			{
+				if (_params == value)
+				{
+					return;
+				}
+				_params = value;
+				PropertySet(this);
+			}
+		}
 
 		public scneventsDespawnEntityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

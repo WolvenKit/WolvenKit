@@ -7,8 +7,54 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class interopTransformInfo : CVariable
 	{
-		[Ordinal(0)] [RED("translation")] public Vector3 Translation { get; set; }
-		[Ordinal(1)] [RED("rotation")] public EulerAngles Rotation { get; set; }
+		private Vector3 _translation;
+		private EulerAngles _rotation;
+
+		[Ordinal(0)] 
+		[RED("translation")] 
+		public Vector3 Translation
+		{
+			get
+			{
+				if (_translation == null)
+				{
+					_translation = (Vector3) CR2WTypeManager.Create("Vector3", "translation", cr2w, this);
+				}
+				return _translation;
+			}
+			set
+			{
+				if (_translation == value)
+				{
+					return;
+				}
+				_translation = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(1)] 
+		[RED("rotation")] 
+		public EulerAngles Rotation
+		{
+			get
+			{
+				if (_rotation == null)
+				{
+					_rotation = (EulerAngles) CR2WTypeManager.Create("EulerAngles", "rotation", cr2w, this);
+				}
+				return _rotation;
+			}
+			set
+			{
+				if (_rotation == value)
+				{
+					return;
+				}
+				_rotation = value;
+				PropertySet(this);
+			}
+		}
 
 		public interopTransformInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

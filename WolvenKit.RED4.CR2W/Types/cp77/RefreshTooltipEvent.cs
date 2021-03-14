@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class RefreshTooltipEvent : redEvent
 	{
-		[Ordinal(0)] [RED("widget")] public wCHandle<inkWidget> Widget { get; set; }
+		private wCHandle<inkWidget> _widget;
+
+		[Ordinal(0)] 
+		[RED("widget")] 
+		public wCHandle<inkWidget> Widget
+		{
+			get
+			{
+				if (_widget == null)
+				{
+					_widget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "widget", cr2w, this);
+				}
+				return _widget;
+			}
+			set
+			{
+				if (_widget == value)
+				{
+					return;
+				}
+				_widget = value;
+				PropertySet(this);
+			}
+		}
 
 		public RefreshTooltipEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

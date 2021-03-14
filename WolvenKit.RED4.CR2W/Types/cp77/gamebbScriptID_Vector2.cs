@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamebbScriptID_Vector2 : gamebbScriptID
 	{
+
 		public gamebbScriptID_Vector2(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

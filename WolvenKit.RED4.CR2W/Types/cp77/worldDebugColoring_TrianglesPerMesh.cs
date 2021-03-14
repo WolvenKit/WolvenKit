@@ -7,10 +7,102 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldDebugColoring_TrianglesPerMesh : worldEditorDebugColoringSettings
 	{
-		[Ordinal(0)] [RED("maxColor")] public CColor MaxColor { get; set; }
-		[Ordinal(1)] [RED("minColor")] public CColor MinColor { get; set; }
-		[Ordinal(2)] [RED("minCount")] public CUInt32 MinCount { get; set; }
-		[Ordinal(3)] [RED("maxCount")] public CUInt32 MaxCount { get; set; }
+		private CColor _maxColor;
+		private CColor _minColor;
+		private CUInt32 _minCount;
+		private CUInt32 _maxCount;
+
+		[Ordinal(0)] 
+		[RED("maxColor")] 
+		public CColor MaxColor
+		{
+			get
+			{
+				if (_maxColor == null)
+				{
+					_maxColor = (CColor) CR2WTypeManager.Create("Color", "maxColor", cr2w, this);
+				}
+				return _maxColor;
+			}
+			set
+			{
+				if (_maxColor == value)
+				{
+					return;
+				}
+				_maxColor = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(1)] 
+		[RED("minColor")] 
+		public CColor MinColor
+		{
+			get
+			{
+				if (_minColor == null)
+				{
+					_minColor = (CColor) CR2WTypeManager.Create("Color", "minColor", cr2w, this);
+				}
+				return _minColor;
+			}
+			set
+			{
+				if (_minColor == value)
+				{
+					return;
+				}
+				_minColor = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(2)] 
+		[RED("minCount")] 
+		public CUInt32 MinCount
+		{
+			get
+			{
+				if (_minCount == null)
+				{
+					_minCount = (CUInt32) CR2WTypeManager.Create("Uint32", "minCount", cr2w, this);
+				}
+				return _minCount;
+			}
+			set
+			{
+				if (_minCount == value)
+				{
+					return;
+				}
+				_minCount = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(3)] 
+		[RED("maxCount")] 
+		public CUInt32 MaxCount
+		{
+			get
+			{
+				if (_maxCount == null)
+				{
+					_maxCount = (CUInt32) CR2WTypeManager.Create("Uint32", "maxCount", cr2w, this);
+				}
+				return _maxCount;
+			}
+			set
+			{
+				if (_maxCount == value)
+				{
+					return;
+				}
+				_maxCount = value;
+				PropertySet(this);
+			}
+		}
 
 		public worldDebugColoring_TrianglesPerMesh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

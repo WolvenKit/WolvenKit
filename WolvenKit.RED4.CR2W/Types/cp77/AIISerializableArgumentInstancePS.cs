@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIISerializableArgumentInstancePS : AIArgumentInstancePS
 	{
-		[Ordinal(1)] [RED("value")] public CHandle<ISerializable> Value { get; set; }
+		private CHandle<ISerializable> _value;
+
+		[Ordinal(1)] 
+		[RED("value")] 
+		public CHandle<ISerializable> Value
+		{
+			get
+			{
+				if (_value == null)
+				{
+					_value = (CHandle<ISerializable>) CR2WTypeManager.Create("handle:ISerializable", "value", cr2w, this);
+				}
+				return _value;
+			}
+			set
+			{
+				if (_value == value)
+				{
+					return;
+				}
+				_value = value;
+				PropertySet(this);
+			}
+		}
 
 		public AIISerializableArgumentInstancePS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

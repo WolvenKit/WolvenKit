@@ -7,9 +7,78 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LibTreeDefCName : CVariable
 	{
-		[Ordinal(0)] [RED("variableId")] public CUInt16 VariableId { get; set; }
-		[Ordinal(1)] [RED("treeVariable")] public CName TreeVariable { get; set; }
-		[Ordinal(2)] [RED("v")] public CName V { get; set; }
+		private CUInt16 _variableId;
+		private CName _treeVariable;
+		private CName _v;
+
+		[Ordinal(0)] 
+		[RED("variableId")] 
+		public CUInt16 VariableId
+		{
+			get
+			{
+				if (_variableId == null)
+				{
+					_variableId = (CUInt16) CR2WTypeManager.Create("Uint16", "variableId", cr2w, this);
+				}
+				return _variableId;
+			}
+			set
+			{
+				if (_variableId == value)
+				{
+					return;
+				}
+				_variableId = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(1)] 
+		[RED("treeVariable")] 
+		public CName TreeVariable
+		{
+			get
+			{
+				if (_treeVariable == null)
+				{
+					_treeVariable = (CName) CR2WTypeManager.Create("CName", "treeVariable", cr2w, this);
+				}
+				return _treeVariable;
+			}
+			set
+			{
+				if (_treeVariable == value)
+				{
+					return;
+				}
+				_treeVariable = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(2)] 
+		[RED("v")] 
+		public CName V
+		{
+			get
+			{
+				if (_v == null)
+				{
+					_v = (CName) CR2WTypeManager.Create("CName", "v", cr2w, this);
+				}
+				return _v;
+			}
+			set
+			{
+				if (_v == value)
+				{
+					return;
+				}
+				_v = value;
+				PropertySet(this);
+			}
+		}
 
 		public LibTreeDefCName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

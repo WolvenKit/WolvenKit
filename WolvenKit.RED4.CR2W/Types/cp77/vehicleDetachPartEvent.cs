@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class vehicleDetachPartEvent : redEvent
 	{
-		[Ordinal(0)] [RED("partName")] public CName PartName { get; set; }
+		private CName _partName;
+
+		[Ordinal(0)] 
+		[RED("partName")] 
+		public CName PartName
+		{
+			get
+			{
+				if (_partName == null)
+				{
+					_partName = (CName) CR2WTypeManager.Create("CName", "partName", cr2w, this);
+				}
+				return _partName;
+			}
+			set
+			{
+				if (_partName == value)
+				{
+					return;
+				}
+				_partName = value;
+				PropertySet(this);
+			}
+		}
 
 		public vehicleDetachPartEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

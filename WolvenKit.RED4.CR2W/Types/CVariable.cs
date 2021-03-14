@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -47,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
             accessor = TypeAccessor.Create(this.GetType());
 
             // instantiate all REDproperties
-            InstantiateAllRedProps();
+            //InstantiateAllRedProps();
         }
 
         private void InstantiateAllRedProps()
@@ -221,6 +222,12 @@ namespace WolvenKit.RED4.CR2W.Types
         #endregion
 
         #region Methods
+
+        internal void PropertySet(CVariable cls, [CallerMemberName] string name = "")
+        {
+
+        }
+
         private string GetFullDependencyStringName()
         {
             var par = this.ParentVar;

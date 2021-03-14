@@ -7,8 +7,54 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entColliderComponentCapsule : entColliderComponentShape
 	{
-		[Ordinal(1)] [RED("radius")] public CFloat Radius { get; set; }
-		[Ordinal(2)] [RED("height")] public CFloat Height { get; set; }
+		private CFloat _radius;
+		private CFloat _height;
+
+		[Ordinal(1)] 
+		[RED("radius")] 
+		public CFloat Radius
+		{
+			get
+			{
+				if (_radius == null)
+				{
+					_radius = (CFloat) CR2WTypeManager.Create("Float", "radius", cr2w, this);
+				}
+				return _radius;
+			}
+			set
+			{
+				if (_radius == value)
+				{
+					return;
+				}
+				_radius = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(2)] 
+		[RED("height")] 
+		public CFloat Height
+		{
+			get
+			{
+				if (_height == null)
+				{
+					_height = (CFloat) CR2WTypeManager.Create("Float", "height", cr2w, this);
+				}
+				return _height;
+			}
+			set
+			{
+				if (_height == value)
+				{
+					return;
+				}
+				_height = value;
+				PropertySet(this);
+			}
+		}
 
 		public entColliderComponentCapsule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

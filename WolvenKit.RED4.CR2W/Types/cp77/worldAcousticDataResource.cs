@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldAcousticDataResource : resStreamedResource
 	{
-		[Ordinal(1)] [RED("cells")] public CArray<worldAcousticDataCell> Cells { get; set; }
+		private CArray<worldAcousticDataCell> _cells;
+
+		[Ordinal(1)] 
+		[RED("cells")] 
+		public CArray<worldAcousticDataCell> Cells
+		{
+			get
+			{
+				if (_cells == null)
+				{
+					_cells = (CArray<worldAcousticDataCell>) CR2WTypeManager.Create("array:worldAcousticDataCell", "cells", cr2w, this);
+				}
+				return _cells;
+			}
+			set
+			{
+				if (_cells == value)
+				{
+					return;
+				}
+				_cells = value;
+				PropertySet(this);
+			}
+		}
 
 		public worldAcousticDataResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

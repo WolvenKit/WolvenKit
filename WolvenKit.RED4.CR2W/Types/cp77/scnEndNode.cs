@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnEndNode : scnSceneGraphNode
 	{
-		[Ordinal(3)] [RED("type")] public CEnum<scnEndNodeNsType> Type { get; set; }
+		private CEnum<scnEndNodeNsType> _type;
+
+		[Ordinal(3)] 
+		[RED("type")] 
+		public CEnum<scnEndNodeNsType> Type
+		{
+			get
+			{
+				if (_type == null)
+				{
+					_type = (CEnum<scnEndNodeNsType>) CR2WTypeManager.Create("scnEndNodeNsType", "type", cr2w, this);
+				}
+				return _type;
+			}
+			set
+			{
+				if (_type == value)
+				{
+					return;
+				}
+				_type = value;
+				PropertySet(this);
+			}
+		}
 
 		public scnEndNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

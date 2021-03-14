@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questSetItemTags_NodeType : questIItemManagerNodeType
 	{
-		[Ordinal(0)] [RED("params")] public CArray<questSetItemTags_NodeTypeParams> Params { get; set; }
+		private CArray<questSetItemTags_NodeTypeParams> _params;
+
+		[Ordinal(0)] 
+		[RED("params")] 
+		public CArray<questSetItemTags_NodeTypeParams> Params
+		{
+			get
+			{
+				if (_params == null)
+				{
+					_params = (CArray<questSetItemTags_NodeTypeParams>) CR2WTypeManager.Create("array:questSetItemTags_NodeTypeParams", "params", cr2w, this);
+				}
+				return _params;
+			}
+			set
+			{
+				if (_params == value)
+				{
+					return;
+				}
+				_params = value;
+				PropertySet(this);
+			}
+		}
 
 		public questSetItemTags_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

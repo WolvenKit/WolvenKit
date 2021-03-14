@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SComputerMenuButtonWidgetPackage : SWidgetPackage
 	{
-		[Ordinal(17)] [RED("counter")] public CInt32 Counter { get; set; }
+		private CInt32 _counter;
+
+		[Ordinal(17)] 
+		[RED("counter")] 
+		public CInt32 Counter
+		{
+			get
+			{
+				if (_counter == null)
+				{
+					_counter = (CInt32) CR2WTypeManager.Create("Int32", "counter", cr2w, this);
+				}
+				return _counter;
+			}
+			set
+			{
+				if (_counter == value)
+				{
+					return;
+				}
+				_counter = value;
+				PropertySet(this);
+			}
+		}
 
 		public SComputerMenuButtonWidgetPackage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

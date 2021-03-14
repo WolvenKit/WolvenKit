@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_SkipPerformanceModeEnd : animAnimNode_Base
 	{
-		[Ordinal(11)] [RED("inputLink")] public animPoseLink InputLink { get; set; }
+		private animPoseLink _inputLink;
+
+		[Ordinal(11)] 
+		[RED("inputLink")] 
+		public animPoseLink InputLink
+		{
+			get
+			{
+				if (_inputLink == null)
+				{
+					_inputLink = (animPoseLink) CR2WTypeManager.Create("animPoseLink", "inputLink", cr2w, this);
+				}
+				return _inputLink;
+			}
+			set
+			{
+				if (_inputLink == value)
+				{
+					return;
+				}
+				_inputLink = value;
+				PropertySet(this);
+			}
+		}
 
 		public animAnimNode_SkipPerformanceModeEnd(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

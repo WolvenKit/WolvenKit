@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questPlayFX_NodeType : questIFXManagerNodeType
 	{
-		[Ordinal(0)] [RED("params")] public CArray<questPlayFX_NodeTypeParams> Params { get; set; }
+		private CArray<questPlayFX_NodeTypeParams> _params;
+
+		[Ordinal(0)] 
+		[RED("params")] 
+		public CArray<questPlayFX_NodeTypeParams> Params
+		{
+			get
+			{
+				if (_params == null)
+				{
+					_params = (CArray<questPlayFX_NodeTypeParams>) CR2WTypeManager.Create("array:questPlayFX_NodeTypeParams", "params", cr2w, this);
+				}
+				return _params;
+			}
+			set
+			{
+				if (_params == value)
+				{
+					return;
+				}
+				_params = value;
+				PropertySet(this);
+			}
+		}
 
 		public questPlayFX_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ChangeLightByNameEvent : ChangeLightEvent
 	{
-		[Ordinal(4)] [RED("componentName")] public CName ComponentName { get; set; }
+		private CName _componentName;
+
+		[Ordinal(4)] 
+		[RED("componentName")] 
+		public CName ComponentName
+		{
+			get
+			{
+				if (_componentName == null)
+				{
+					_componentName = (CName) CR2WTypeManager.Create("CName", "componentName", cr2w, this);
+				}
+				return _componentName;
+			}
+			set
+			{
+				if (_componentName == value)
+				{
+					return;
+				}
+				_componentName = value;
+				PropertySet(this);
+			}
+		}
 
 		public ChangeLightByNameEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

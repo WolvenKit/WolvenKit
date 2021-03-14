@@ -7,8 +7,54 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimFeature_SmartObject : animAnimFeature
 	{
-		[Ordinal(0)] [RED("state")] public CInt32 State { get; set; }
-		[Ordinal(1)] [RED("privateAnimationName")] public CName PrivateAnimationName { get; set; }
+		private CInt32 _state;
+		private CName _privateAnimationName;
+
+		[Ordinal(0)] 
+		[RED("state")] 
+		public CInt32 State
+		{
+			get
+			{
+				if (_state == null)
+				{
+					_state = (CInt32) CR2WTypeManager.Create("Int32", "state", cr2w, this);
+				}
+				return _state;
+			}
+			set
+			{
+				if (_state == value)
+				{
+					return;
+				}
+				_state = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(1)] 
+		[RED("privateAnimationName")] 
+		public CName PrivateAnimationName
+		{
+			get
+			{
+				if (_privateAnimationName == null)
+				{
+					_privateAnimationName = (CName) CR2WTypeManager.Create("CName", "privateAnimationName", cr2w, this);
+				}
+				return _privateAnimationName;
+			}
+			set
+			{
+				if (_privateAnimationName == value)
+				{
+					return;
+				}
+				_privateAnimationName = value;
+				PropertySet(this);
+			}
+		}
 
 		public animAnimFeature_SmartObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

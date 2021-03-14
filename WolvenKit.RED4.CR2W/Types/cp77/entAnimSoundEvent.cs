@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entAnimSoundEvent : entSoundEvent
 	{
-		[Ordinal(4)] [RED("metadataContext")] public CName MetadataContext { get; set; }
+		private CName _metadataContext;
+
+		[Ordinal(4)] 
+		[RED("metadataContext")] 
+		public CName MetadataContext
+		{
+			get
+			{
+				if (_metadataContext == null)
+				{
+					_metadataContext = (CName) CR2WTypeManager.Create("CName", "metadataContext", cr2w, this);
+				}
+				return _metadataContext;
+			}
+			set
+			{
+				if (_metadataContext == value)
+				{
+					return;
+				}
+				_metadataContext = value;
+				PropertySet(this);
+			}
+		}
 
 		public entAnimSoundEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

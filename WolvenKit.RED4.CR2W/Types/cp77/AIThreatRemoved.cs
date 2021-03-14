@@ -7,11 +7,126 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIThreatRemoved : AIAIEvent
 	{
-		[Ordinal(2)] [RED("owner")] public wCHandle<entEntity> Owner { get; set; }
-		[Ordinal(3)] [RED("threat")] public wCHandle<entEntity> Threat { get; set; }
-		[Ordinal(4)] [RED("isHostile")] public CBool IsHostile { get; set; }
-		[Ordinal(5)] [RED("isEnemy")] public CBool IsEnemy { get; set; }
-		[Ordinal(6)] [RED("isDead")] public CBool IsDead { get; set; }
+		private wCHandle<entEntity> _owner;
+		private wCHandle<entEntity> _threat;
+		private CBool _isHostile;
+		private CBool _isEnemy;
+		private CBool _isDead;
+
+		[Ordinal(2)] 
+		[RED("owner")] 
+		public wCHandle<entEntity> Owner
+		{
+			get
+			{
+				if (_owner == null)
+				{
+					_owner = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "owner", cr2w, this);
+				}
+				return _owner;
+			}
+			set
+			{
+				if (_owner == value)
+				{
+					return;
+				}
+				_owner = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(3)] 
+		[RED("threat")] 
+		public wCHandle<entEntity> Threat
+		{
+			get
+			{
+				if (_threat == null)
+				{
+					_threat = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "threat", cr2w, this);
+				}
+				return _threat;
+			}
+			set
+			{
+				if (_threat == value)
+				{
+					return;
+				}
+				_threat = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(4)] 
+		[RED("isHostile")] 
+		public CBool IsHostile
+		{
+			get
+			{
+				if (_isHostile == null)
+				{
+					_isHostile = (CBool) CR2WTypeManager.Create("Bool", "isHostile", cr2w, this);
+				}
+				return _isHostile;
+			}
+			set
+			{
+				if (_isHostile == value)
+				{
+					return;
+				}
+				_isHostile = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(5)] 
+		[RED("isEnemy")] 
+		public CBool IsEnemy
+		{
+			get
+			{
+				if (_isEnemy == null)
+				{
+					_isEnemy = (CBool) CR2WTypeManager.Create("Bool", "isEnemy", cr2w, this);
+				}
+				return _isEnemy;
+			}
+			set
+			{
+				if (_isEnemy == value)
+				{
+					return;
+				}
+				_isEnemy = value;
+				PropertySet(this);
+			}
+		}
+
+		[Ordinal(6)] 
+		[RED("isDead")] 
+		public CBool IsDead
+		{
+			get
+			{
+				if (_isDead == null)
+				{
+					_isDead = (CBool) CR2WTypeManager.Create("Bool", "isDead", cr2w, this);
+				}
+				return _isDead;
+			}
+			set
+			{
+				if (_isDead == value)
+				{
+					return;
+				}
+				_isDead = value;
+				PropertySet(this);
+			}
+		}
 
 		public AIThreatRemoved(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

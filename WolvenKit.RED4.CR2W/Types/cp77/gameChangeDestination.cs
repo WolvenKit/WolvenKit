@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameChangeDestination : gameActionInternalEvent
 	{
-		[Ordinal(0)] [RED("destination")] public Vector4 Destination { get; set; }
+		private Vector4 _destination;
+
+		[Ordinal(0)] 
+		[RED("destination")] 
+		public Vector4 Destination
+		{
+			get
+			{
+				if (_destination == null)
+				{
+					_destination = (Vector4) CR2WTypeManager.Create("Vector4", "destination", cr2w, this);
+				}
+				return _destination;
+			}
+			set
+			{
+				if (_destination == value)
+				{
+					return;
+				}
+				_destination = value;
+				PropertySet(this);
+			}
+		}
 
 		public gameChangeDestination(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

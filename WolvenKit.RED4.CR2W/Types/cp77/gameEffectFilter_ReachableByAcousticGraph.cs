@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectFilter_ReachableByAcousticGraph : gameEffectObjectSingleFilter
 	{
-		[Ordinal(0)] [RED("maxPathLength")] public gameEffectInputParameter_Float MaxPathLength { get; set; }
+		private gameEffectInputParameter_Float _maxPathLength;
+
+		[Ordinal(0)] 
+		[RED("maxPathLength")] 
+		public gameEffectInputParameter_Float MaxPathLength
+		{
+			get
+			{
+				if (_maxPathLength == null)
+				{
+					_maxPathLength = (gameEffectInputParameter_Float) CR2WTypeManager.Create("gameEffectInputParameter_Float", "maxPathLength", cr2w, this);
+				}
+				return _maxPathLength;
+			}
+			set
+			{
+				if (_maxPathLength == value)
+				{
+					return;
+				}
+				_maxPathLength = value;
+				PropertySet(this);
+			}
+		}
 
 		public gameEffectFilter_ReachableByAcousticGraph(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,30 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnRidAnimationContainerSRRef : CVariable
 	{
-		[Ordinal(0)] [RED("animations")] public CArray<scnRidAnimationContainerSRRefAnimContainer> Animations { get; set; }
+		private CArray<scnRidAnimationContainerSRRefAnimContainer> _animations;
+
+		[Ordinal(0)] 
+		[RED("animations")] 
+		public CArray<scnRidAnimationContainerSRRefAnimContainer> Animations
+		{
+			get
+			{
+				if (_animations == null)
+				{
+					_animations = (CArray<scnRidAnimationContainerSRRefAnimContainer>) CR2WTypeManager.Create("array:scnRidAnimationContainerSRRefAnimContainer", "animations", cr2w, this);
+				}
+				return _animations;
+			}
+			set
+			{
+				if (_animations == value)
+				{
+					return;
+				}
+				_animations = value;
+				PropertySet(this);
+			}
+		}
 
 		public scnRidAnimationContainerSRRef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
