@@ -1,8 +1,8 @@
+using System.Threading.Tasks;
 using Catel;
-using Catel.Data;
 using Catel.Fody;
-using Catel.IoC;
 using Catel.MVVM;
+using HandyControl.Controls;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models.Wizards;
 
@@ -10,35 +10,30 @@ namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
 {
     public class FinalizeSetupViewModel : ViewModelBase
     {
+        #region fields
+
+        public static readonly string bpp = "pack://application:,,,/Resources/Media/Images/Application/BlankProfilePicture.png";
+
+        #endregion fields
+
         #region constructors
 
-        public FinalizeSetupViewModel(IServiceLocator serviceLocator)
+        public FinalizeSetupViewModel(ISettingsManager settingsManager, FirstSetupWizardModel firstSetupWizardModel, FirstSetupWizardViewModel firstSetupWizardViewModel)
         {
-            Argument.IsNotNull(() => serviceLocator);
+            Argument.IsNotNull(() => settingsManager);
+            Argument.IsNotNull(() => firstSetupWizardModel);
+            Argument.IsNotNull(() => firstSetupWizardViewModel);
 
-            FirstSetupWizardModel = serviceLocator.ResolveType<FirstSetupWizardModel>();
-            FirstSetupWizardViewModel = serviceLocator.ResolveType<FirstSetupWizardViewModel>();
-            SettingsManager = serviceLocator.ResolveType<ISettingsManager>();
+            SettingsManager = settingsManager;
+            FirstSetupWizardModel = firstSetupWizardModel;
+            FirstSetupWizardViewModel = firstSetupWizardViewModel;
+
+            ControlLoaded = new TaskCommand<ImageSelector>(ControlLoadedExecuteAsync, (imgSelector) => true);
         }
 
         #endregion constructors
 
         #region properties
-
-        /// <summary>
-        /// Register the FirstSetupWizardViewModel property so it is known in the class.
-        /// </summary>
-        public static readonly PropertyData FirstSetupWizardViewModelProperty = RegisterProperty("FirstSetupWizardViewModel", typeof(FirstSetupWizardViewModel));
-
-        /// <summary>
-        /// Register the FirstSetupWizardModel property so it is known in the class.
-        /// </summary>
-        public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty("FirstSetupWizardModel", typeof(FirstSetupWizardModel));
-
-        /// <summary>
-        /// Register the SettingsManager property so it is known in the class.
-        /// </summary>
-        public static readonly PropertyData SettingsManagerProperty = RegisterProperty("SettingsManager", typeof(ISettingsManager));
 
         /// <summary>
         /// Gets or sets the FirstSetupWizardModel.
@@ -50,11 +45,7 @@ namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
         [Expose("AutoUpdatesEnabled")]
         [Expose("CreateModForW3")]
         [Expose("CreateModForCP77")]
-        public FirstSetupWizardModel FirstSetupWizardModel
-        {
-            get => GetValue<FirstSetupWizardModel>(ProjectWizardModelProperty);
-            set => SetValue(ProjectWizardModelProperty, value);
-        }
+        public FirstSetupWizardModel FirstSetupWizardModel { get; set; }
 
         /// <summary>
         /// Gets or sets the FirstSetupWizardViewModel.
@@ -63,23 +54,57 @@ namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
         [Expose("W3ExePath")]
         [Expose("WccLitePath")]
         [Expose("CP77ExePath")]
-        public FirstSetupWizardViewModel FirstSetupWizardViewModel
-        {
-            get => GetValue<FirstSetupWizardViewModel>(FirstSetupWizardViewModelProperty);
-            set => SetValue(FirstSetupWizardViewModelProperty, value);
-        }
+        public FirstSetupWizardViewModel FirstSetupWizardViewModel { get; set; }
 
         /// <summary>
         /// Gets or sets the SettingsManager.
         /// </summary>
         [Model]
         [Expose("DepotPath")]
-        public ISettingsManager SettingsManager
-        {
-            get => GetValue<ISettingsManager>(SettingsManagerProperty);
-            set => SetValue(SettingsManagerProperty, value);
-        }
+        public ISettingsManager SettingsManager { get; set; }
 
         #endregion properties
+
+        #region commands
+
+        public TaskCommand<ImageSelector> ControlLoaded { get; private set; }
+
+        /// <summary>
+        /// Exectues on control loaded event.
+        /// </summary>
+        private Task ControlLoadedExecuteAsync(ImageSelector imgSelector)
+        {
+            if (FirstSetupWizardModel.ProfileImageBrush != null)
+            {
+                imgSelector.SetValue(ImageSelector.UriPropertyKey, new System.Uri(FirstSetupWizardModel.ProfileImageBrushPath, System.UriKind.RelativeOrAbsolute));
+                imgSelector.SetValue(ImageSelector.PreviewBrushPropertyKey, FirstSetupWizardModel.ProfileImageBrush);
+                imgSelector.SetValue(ImageSelector.HasValuePropertyKey, true);
+                imgSelector.SetValue(ImageSelector.IsEnabledProperty, true);
+                imgSelector.SetCurrentValue(ImageSelector.ToolTipProperty, FirstSetupWizardModel.ProfileImageBrushPath);
+            }
+            else
+            {
+                var uri = new System.Uri(bpp);
+                imgSelector.SetValue(ImageSelector.UriPropertyKey, uri);
+                var frame = new System.Windows.Media.Imaging.BitmapImage(uri);
+                var imgBrush = new System.Windows.Media.ImageBrush(frame);
+                imgSelector.SetValue(ImageSelector.PreviewBrushPropertyKey, imgBrush);
+                imgSelector.SetValue(ImageSelector.HasValuePropertyKey, true);
+                imgSelector.SetValue(ImageSelector.IsEnabledProperty, false);
+                imgSelector.SetCurrentValue(ImageSelector.ToolTipProperty, bpp);
+
+                FirstSetupWizardModel.ProfileImageBrush = imgBrush;
+                FirstSetupWizardModel.ProfileImageBrushPath = bpp;
+            }
+
+            if (string.IsNullOrEmpty(FirstSetupWizardModel.Author))
+                FirstSetupWizardModel.Author = "RedModdingUser";
+            if (string.IsNullOrEmpty(FirstSetupWizardModel.Email))
+                FirstSetupWizardModel.Email = "contact@redmodding.org";
+
+            return Task.CompletedTask;
+        }
+
+        #endregion
     }
 }
