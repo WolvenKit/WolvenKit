@@ -518,6 +518,7 @@
                                     <Grid Width="125">
                                         <iconPacks:PackIconCodicons HorizontalAlignment="Right" Kind="Add" />
                                         <TextBlock
+                                         x:Name="QuickAccessStacker"
                                          Margin="5,0,35,0"
                                          HorizontalAlignment="Right"
                                          Text="Create Project"
@@ -636,6 +637,7 @@
                                  />
 
                                 <TextBlock
+                                 x:Name="RecentProjectTour"
                                  Margin="10,0,0,0"
                                  FontSize="18"
                                  Text="Recent Projects"

@@ -7,6 +7,9 @@ namespace WolvenKit.Views.HomePage.Pages
         public WelcomePageView()
         {
             InitializeComponent();
+
+
+
         }
 
         #endregion Constructors

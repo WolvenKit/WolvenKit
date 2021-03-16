@@ -4,6 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:HomeView="clr-namespace:WolvenKit.Views.HomePage"
  xmlns:catel="http://schemas.catelproject.com"
+ xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
  xmlns:fluent="urn:fluent-ribbon"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -40,12 +41,13 @@
                  IsOpen="{Binding BackstageIsOpen}"
                  Shown="{Binding StartScreenShown}"
                  >
-                    <HomeView:HomePageView />
+                    <HomeView:HomePageView x:Name="HMPV" />
                 </fluent:StartScreen>
             </fluent:Ribbon.StartScreen>
 
             <fluent:Ribbon.Menu>
                 <ToggleButton
+                 x:Name="FileDrawer"
                  Grid.Row="0"
                  Grid.Column="1"
                  Width="50"
@@ -745,8 +747,11 @@
             </Border>
         </Border>
 
-
-
+        <feather:GuidedTour
+         Name="guide"
+         AllowDismiss="True"
+         Animate="True"
+         />
 
 
         <hc:Drawer
