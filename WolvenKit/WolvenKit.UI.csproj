@@ -245,6 +245,7 @@
     <Resource Include="Resources\Media\Images\Application\whitelogo.png" />
     <Resource Include="Resources\Media\Images\Application\.cpmodproj.png" />
     <Resource Include="Resources\Media\Images\Application\.w3modproj.png" />
+    <Resource Include="Resources\Media\Images\Application\BlankProfilePicture.png" />
     <Resource Include="Resources\Media\Images\Icons\Files\aiarch3.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

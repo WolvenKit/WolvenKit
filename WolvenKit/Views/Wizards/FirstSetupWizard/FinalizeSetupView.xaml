@@ -5,8 +5,15 @@
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  MaxHeight="600"
- Loaded="UserControl_Loaded">
+ xmlns:local="clr-namespace:WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard"
+ xmlns:xamlbehaviors="http://schemas.microsoft.com/xaml/behaviors">
 
+    <xamlbehaviors:Interaction.Triggers>
+        <xamlbehaviors:EventTrigger EventName="Loaded">
+            <xamlbehaviors:InvokeCommandAction Command="{Binding ViewModel.ControlLoaded, RelativeSource={RelativeSource AncestorType={x:Type local:FinalizeSetupView}}}"
+                                               CommandParameter="{Binding ElementName=imgSelector}"/>
+        </xamlbehaviors:EventTrigger>
+    </xamlbehaviors:Interaction.Triggers>
     <Grid Grid.Row="3" VerticalAlignment="Center">
         <Grid
          Margin="5,5,5,5"

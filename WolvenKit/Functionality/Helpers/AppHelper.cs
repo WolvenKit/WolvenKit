@@ -12,6 +12,7 @@ using Orc.Squirrel;
 using Orchestra.Services;
 using Orchestra.Views;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Models.Wizards;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Others;
 using WolvenKit.ViewModels.Shared;

@@ -26,7 +26,7 @@ namespace WolvenKit.Views.Wizards
 
         public FirstSetupWizardView()
         {
-            ServiceLocator.Default.RegisterTypeAndInstantiate<ProjectWizardModel>();
+            ServiceLocator.Default.RegisterTypeAndInstantiate<FirstSetupWizardModel>();
 
             InitializeComponent();
         }

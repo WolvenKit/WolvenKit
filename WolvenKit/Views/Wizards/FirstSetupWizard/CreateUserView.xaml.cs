@@ -23,6 +23,7 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
             _fswvm = ServiceLocator.Default.ResolveType<FirstSetupWizardViewModel>();
             _fswm = ServiceLocator.Default.ResolveType<FirstSetupWizardModel>();
             validateAllFields();
+            setupProfileImageBrush();
 
             imgSelector.CommandBindings[0].Executed += imgSelector_Executed;
         }
@@ -33,25 +34,6 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
 
         private void Field_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => validateAllFields();
 
-        private void ImageSelector_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
-        {
-        }
-
-        private void imgSelector_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
-        {
-            var imgBrush = imgSelector.PreviewBrush as System.Windows.Media.ImageBrush;
-            if (imgBrush != null)
-            {
-                _fswm.ProfileImageBrush = imgBrush;
-                _fswm.ProfileImageBrushPath = imgSelector.Uri.AbsoluteUri;
-            }
-            else
-            {
-                _fswm.ProfileImageBrush = default(System.Windows.Media.ImageBrush);
-                _fswm.ProfileImageBrushPath = "";
-            }
-        }
-
         private HandyControl.Data.OperationResult<bool> IsValidEmail(string str)
         {
             var regex = new System.Text.RegularExpressions.Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
@@ -61,7 +43,7 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
                 : HandyControl.Data.OperationResult.Failed();
         }
 
-        private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        private void setupProfileImageBrush()
         {
             if (_fswm.ProfileImageBrush != null)
             {
@@ -79,7 +61,26 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
             }
         }
 
-        private void validateAllFields() => _fswvm.AllFieldIsValid = NameTb.VerifyData() && EmailTb.VerifyData() && DonateTb.VerifyData();
+        /// <summary>
+        /// Exectues on image selected event.
+        /// </summary>
+        private void imgSelector_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        {
+            var imgSelector = sender as ImageSelector;
+            var imgBrush = imgSelector.PreviewBrush as System.Windows.Media.ImageBrush;
+            if (imgBrush != null)
+            {
+                _fswm.ProfileImageBrush = imgBrush;
+                _fswm.ProfileImageBrushPath = imgSelector.Uri.AbsoluteUri;
+            }
+            else
+            {
+                _fswm.ProfileImageBrush = default(System.Windows.Media.ImageBrush);
+                _fswm.ProfileImageBrushPath = "";
+            }
+        }
+
+        private void validateAllFields() => _fswvm.AllFieldIsValid = true; /*NameTb.VerifyData() && EmailTb.VerifyData() && DonateTb.VerifyData();*/
 
         #endregion Methods
     }
