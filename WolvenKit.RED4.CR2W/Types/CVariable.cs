@@ -594,7 +594,7 @@ namespace WolvenKit.RED4.CR2W.Types
         /// <param name="value"></param>
         private bool TrySettingFastMemberAccessor(IEditableVariable value)
         {
-            foreach (var member in this.accessor.GetMembers())
+            foreach (var member in REDReflection.GetMembers(this))
             {
                 try
                 {
@@ -815,8 +815,8 @@ namespace WolvenKit.RED4.CR2W.Types
         public override string ToString()
         {
             // check first if there is a property called "Name"
-            var dbg = this.accessor.GetMembers();
-            foreach (var member in this.accessor.GetMembers())
+            var dbg = REDReflection.GetMembers(this);
+            foreach (var member in REDReflection.GetMembers(this))
             {
                 if (member.Name == "Name")
                 {

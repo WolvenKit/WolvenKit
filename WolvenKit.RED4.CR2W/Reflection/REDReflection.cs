@@ -18,7 +18,8 @@ namespace WolvenKit.RED4.CR2W.Reflection
     {
         #region Fields
 
-        private static readonly ConcurrentDictionary<Type, Lazy<IEnumerable<Member>>> MembersCache = new();
+        private static readonly ConcurrentDictionary<Type, Lazy<MemberSet>> MembersCache = new();
+        private static readonly ConcurrentDictionary<Member, Lazy<object[]>> AttributeCache = new();
 
         #endregion Fields
 
@@ -28,20 +29,18 @@ namespace WolvenKit.RED4.CR2W.Reflection
         {
             foreach (var member in GetMembers(cvar))
             {
-                var memberInfo = member.GetMemberInfo();
-                if (memberInfo.MemberType != MemberTypes.Property)
+                if (member.GetMemberInfo().MemberType != MemberTypes.Property)
                 {
                     continue;
                 }
 
-                var attr = memberInfo.GetCustomAttribute<REDAttribute>();
+                var attr = GetREDAttribute(member);
                 if (attr == null || attr.Name != propertyName)
                 {
                     continue;
                 }
 
-                var propertyInfo = (PropertyInfo)member.GetMemberInfo();
-                return (CVariable)propertyInfo.GetMethod.Invoke(cvar, null);
+                return (CVariable)cvar.accessor[cvar, member.Name];
             }
 
             return null;
@@ -49,14 +48,14 @@ namespace WolvenKit.RED4.CR2W.Reflection
 
         public static IEnumerable<Member> GetREDBuffers(this CVariable cvar) =>
             GetMembers(cvar)
-                .Where(p => p.GetMemberAttribute<REDBufferAttribute>() is not null)
-                .OrderBy(p => p.Ordinal);
+                .Where(p => GetREDAttribute(p) is REDBufferAttribute)
+                .OrderBy(GetOrdinal);
 
         public static IEnumerable<Member> GetREDMembers(this CVariable cvar, bool includeBuffers) =>
             GetMembers(cvar)
                 .Where(p =>
                 {
-                    var attr = p.GetMemberAttribute<REDAttribute>();
+                    var attr = GetREDAttribute(p);
                     if (attr is null)
                     {
                         return false;
@@ -69,11 +68,11 @@ namespace WolvenKit.RED4.CR2W.Reflection
 
                     return true;
                 })
-                .OrderBy(p => p.Ordinal);
+                .OrderBy(GetOrdinal);
 
         public static string GetREDNameString(Member item)
         {
-            var attribute = item.GetMemberAttribute<REDAttribute>();
+            var attribute = GetREDAttribute(item);
             if (attribute is null || string.IsNullOrWhiteSpace(attribute.Name))
             {
                 return item.Name;
@@ -107,10 +106,39 @@ namespace WolvenKit.RED4.CR2W.Reflection
                 _ => typename
             };
 
-        private static IEnumerable<Member> GetMembers(CVariable cvar) =>
-            MembersCache.GetOrAdd(cvar.GetType(), new Lazy<IEnumerable<Member>>(() => GetMembersInternal(cvar))).Value;
+        public static MemberSet GetMembers(CVariable cvar) =>
+            MembersCache.GetOrAdd(cvar.GetType(), new Lazy<MemberSet>(() => cvar.accessor.GetMembers())).Value;
 
-        private static IEnumerable<Member> GetMembersInternal(CVariable cvar) => cvar.accessor.GetMembers();
+        private static REDAttribute GetREDAttribute(Member member)
+        {
+            var attrs = GetMemberAttributes(member);
+            for (int i = 0; i < attrs.Length; i++)
+            {
+                if (attrs[i] is REDAttribute red)
+                {
+                    return red;
+                }
+            }
+
+            return null;
+        }
+
+        private static int GetOrdinal(Member member)
+        {
+            var attrs = GetMemberAttributes(member);
+            for (int i = 0; i < attrs.Length; i++)
+            {
+                if (attrs[i] is OrdinalAttribute ord)
+                {
+                    return ord.Ordinal;
+                }
+            }
+
+            return -1;
+        }
+
+        private static object[] GetMemberAttributes(Member member) =>
+            AttributeCache.GetOrAdd(member, new Lazy<object[]>(() => member.GetMemberInfo().GetCustomAttributes(false))).Value;
 
         private static string GetREDTypeFromWkitType(string typename) =>
             typename switch
