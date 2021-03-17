@@ -317,6 +317,7 @@
                     <Grid>
 
                         <Image
+                         x:Name="LogoNavi"
                          Width="152"
                          Height="152"
                          Margin="0"
@@ -533,12 +534,17 @@
 
         </Button>
 
-        
+
         <feather:GuidedTour
          Name="guide"
          AllowDismiss="True"
          Animate="True"
          />
+
+        <Grid x:Name="Fgrid1" />
+        <Grid x:Name="Fgrid2" />
+        <Grid x:Name="Fgrid3" />
+        <Grid x:Name="Fgrid4" />
 
 
     </Grid>

@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Feather.Controls" Version="1.0.1" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
 
     <PackageReference Include="Catel.MVVM" Version="5.12.12" />
