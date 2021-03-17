@@ -27,7 +27,6 @@ namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
         [Expose("CreateModForW3")]
         [Expose("CreateModForCP77")]
         [Expose("AutoInstallMods")]
-        [Expose("AutoUpdatesEnabled")]
         public FirstSetupWizardModel FirstSetupWizardModel { get; set; }
 
         #endregion properties
