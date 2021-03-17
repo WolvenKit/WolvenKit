@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isInside")] 
 		public CBool IsInside
 		{
-			get
-			{
-				if (_isInside == null)
-				{
-					_isInside = (CBool) CR2WTypeManager.Create("Bool", "isInside", cr2w, this);
-				}
-				return _isInside;
-			}
-			set
-			{
-				if (_isInside == value)
-				{
-					return;
-				}
-				_isInside = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInside);
+			set => SetProperty(ref _isInside, value);
 		}
 
 		public audioPlayerInVehicleASTCD(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

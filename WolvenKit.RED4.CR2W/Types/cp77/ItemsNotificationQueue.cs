@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("showDuration")] 
 		public CFloat ShowDuration
 		{
-			get
-			{
-				if (_showDuration == null)
-				{
-					_showDuration = (CFloat) CR2WTypeManager.Create("Float", "showDuration", cr2w, this);
-				}
-				return _showDuration;
-			}
-			set
-			{
-				if (_showDuration == value)
-				{
-					return;
-				}
-				_showDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showDuration);
+			set => SetProperty(ref _showDuration, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("transactionSystem")] 
 		public wCHandle<gameTransactionSystem> TransactionSystem
 		{
-			get
-			{
-				if (_transactionSystem == null)
-				{
-					_transactionSystem = (wCHandle<gameTransactionSystem>) CR2WTypeManager.Create("whandle:gameTransactionSystem", "transactionSystem", cr2w, this);
-				}
-				return _transactionSystem;
-			}
-			set
-			{
-				if (_transactionSystem == value)
-				{
-					return;
-				}
-				_transactionSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transactionSystem);
+			set => SetProperty(ref _transactionSystem, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("currencyNotification")] 
 		public CName CurrencyNotification
 		{
-			get
-			{
-				if (_currencyNotification == null)
-				{
-					_currencyNotification = (CName) CR2WTypeManager.Create("CName", "currencyNotification", cr2w, this);
-				}
-				return _currencyNotification;
-			}
-			set
-			{
-				if (_currencyNotification == value)
-				{
-					return;
-				}
-				_currencyNotification = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currencyNotification);
+			set => SetProperty(ref _currencyNotification, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("itemNotification")] 
 		public CName ItemNotification
 		{
-			get
-			{
-				if (_itemNotification == null)
-				{
-					_itemNotification = (CName) CR2WTypeManager.Create("CName", "itemNotification", cr2w, this);
-				}
-				return _itemNotification;
-			}
-			set
-			{
-				if (_itemNotification == value)
-				{
-					return;
-				}
-				_itemNotification = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemNotification);
+			set => SetProperty(ref _itemNotification, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("xpNotification")] 
 		public CName XpNotification
 		{
-			get
-			{
-				if (_xpNotification == null)
-				{
-					_xpNotification = (CName) CR2WTypeManager.Create("CName", "xpNotification", cr2w, this);
-				}
-				return _xpNotification;
-			}
-			set
-			{
-				if (_xpNotification == value)
-				{
-					return;
-				}
-				_xpNotification = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _xpNotification);
+			set => SetProperty(ref _xpNotification, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("playerPuppet")] 
 		public wCHandle<gameObject> PlayerPuppet
 		{
-			get
-			{
-				if (_playerPuppet == null)
-				{
-					_playerPuppet = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "playerPuppet", cr2w, this);
-				}
-				return _playerPuppet;
-			}
-			set
-			{
-				if (_playerPuppet == value)
-				{
-					return;
-				}
-				_playerPuppet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerPuppet);
+			set => SetProperty(ref _playerPuppet, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("inventoryListener")] 
 		public wCHandle<gameInventoryScriptListener> InventoryListener
 		{
-			get
-			{
-				if (_inventoryListener == null)
-				{
-					_inventoryListener = (wCHandle<gameInventoryScriptListener>) CR2WTypeManager.Create("whandle:gameInventoryScriptListener", "inventoryListener", cr2w, this);
-				}
-				return _inventoryListener;
-			}
-			set
-			{
-				if (_inventoryListener == value)
-				{
-					return;
-				}
-				_inventoryListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryListener);
+			set => SetProperty(ref _inventoryListener, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("currencyInventoryListener")] 
 		public wCHandle<gameInventoryScriptListener> CurrencyInventoryListener
 		{
-			get
-			{
-				if (_currencyInventoryListener == null)
-				{
-					_currencyInventoryListener = (wCHandle<gameInventoryScriptListener>) CR2WTypeManager.Create("whandle:gameInventoryScriptListener", "currencyInventoryListener", cr2w, this);
-				}
-				return _currencyInventoryListener;
-			}
-			set
-			{
-				if (_currencyInventoryListener == value)
-				{
-					return;
-				}
-				_currencyInventoryListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currencyInventoryListener);
+			set => SetProperty(ref _currencyInventoryListener, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("playerStatsBlackboard")] 
 		public CHandle<gameIBlackboard> PlayerStatsBlackboard
 		{
-			get
-			{
-				if (_playerStatsBlackboard == null)
-				{
-					_playerStatsBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "playerStatsBlackboard", cr2w, this);
-				}
-				return _playerStatsBlackboard;
-			}
-			set
-			{
-				if (_playerStatsBlackboard == value)
-				{
-					return;
-				}
-				_playerStatsBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerStatsBlackboard);
+			set => SetProperty(ref _playerStatsBlackboard, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("playerDevelopmentSystem")] 
 		public CHandle<PlayerDevelopmentSystem> PlayerDevelopmentSystem
 		{
-			get
-			{
-				if (_playerDevelopmentSystem == null)
-				{
-					_playerDevelopmentSystem = (CHandle<PlayerDevelopmentSystem>) CR2WTypeManager.Create("handle:PlayerDevelopmentSystem", "playerDevelopmentSystem", cr2w, this);
-				}
-				return _playerDevelopmentSystem;
-			}
-			set
-			{
-				if (_playerDevelopmentSystem == value)
-				{
-					return;
-				}
-				_playerDevelopmentSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerDevelopmentSystem);
+			set => SetProperty(ref _playerDevelopmentSystem, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("combatModeListener")] 
 		public CUInt32 CombatModeListener
 		{
-			get
-			{
-				if (_combatModeListener == null)
-				{
-					_combatModeListener = (CUInt32) CR2WTypeManager.Create("Uint32", "combatModeListener", cr2w, this);
-				}
-				return _combatModeListener;
-			}
-			set
-			{
-				if (_combatModeListener == value)
-				{
-					return;
-				}
-				_combatModeListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _combatModeListener);
+			set => SetProperty(ref _combatModeListener, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
-			get
-			{
-				if (_inventoryManager == null)
-				{
-					_inventoryManager = (CHandle<InventoryDataManagerV2>) CR2WTypeManager.Create("handle:InventoryDataManagerV2", "InventoryManager", cr2w, this);
-				}
-				return _inventoryManager;
-			}
-			set
-			{
-				if (_inventoryManager == value)
-				{
-					return;
-				}
-				_inventoryManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryManager);
+			set => SetProperty(ref _inventoryManager, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("comparisonResolver")] 
 		public CHandle<ItemPreferredComparisonResolver> ComparisonResolver
 		{
-			get
-			{
-				if (_comparisonResolver == null)
-				{
-					_comparisonResolver = (CHandle<ItemPreferredComparisonResolver>) CR2WTypeManager.Create("handle:ItemPreferredComparisonResolver", "comparisonResolver", cr2w, this);
-				}
-				return _comparisonResolver;
-			}
-			set
-			{
-				if (_comparisonResolver == value)
-				{
-					return;
-				}
-				_comparisonResolver = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comparisonResolver);
+			set => SetProperty(ref _comparisonResolver, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("combatModePSM")] 
 		public CEnum<gamePSMCombat> CombatModePSM
 		{
-			get
-			{
-				if (_combatModePSM == null)
-				{
-					_combatModePSM = (CEnum<gamePSMCombat>) CR2WTypeManager.Create("gamePSMCombat", "combatModePSM", cr2w, this);
-				}
-				return _combatModePSM;
-			}
-			set
-			{
-				if (_combatModePSM == value)
-				{
-					return;
-				}
-				_combatModePSM = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _combatModePSM);
+			set => SetProperty(ref _combatModePSM, value);
 		}
 
 		public ItemsNotificationQueue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

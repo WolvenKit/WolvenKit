@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("descriptor")] 
 		public raRef<gameJournalDescriptorResource> Descriptor
 		{
-			get
-			{
-				if (_descriptor == null)
-				{
-					_descriptor = (raRef<gameJournalDescriptorResource>) CR2WTypeManager.Create("raRef:gameJournalDescriptorResource", "descriptor", cr2w, this);
-				}
-				return _descriptor;
-			}
-			set
-			{
-				if (_descriptor == value)
-				{
-					return;
-				}
-				_descriptor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _descriptor);
+			set => SetProperty(ref _descriptor, value);
 		}
 
 		public gameJournalRootFolderEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

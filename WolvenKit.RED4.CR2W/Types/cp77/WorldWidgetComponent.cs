@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cursorResource")] 
 		public rRef<inkWidgetLibraryResource> CursorResource
 		{
-			get
-			{
-				if (_cursorResource == null)
-				{
-					_cursorResource = (rRef<inkWidgetLibraryResource>) CR2WTypeManager.Create("rRef:inkWidgetLibraryResource", "cursorResource", cr2w, this);
-				}
-				return _cursorResource;
-			}
-			set
-			{
-				if (_cursorResource == value)
-				{
-					return;
-				}
-				_cursorResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cursorResource);
+			set => SetProperty(ref _cursorResource, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("widgetResource")] 
 		public raRef<inkWidgetLibraryResource> WidgetResource
 		{
-			get
-			{
-				if (_widgetResource == null)
-				{
-					_widgetResource = (raRef<inkWidgetLibraryResource>) CR2WTypeManager.Create("raRef:inkWidgetLibraryResource", "widgetResource", cr2w, this);
-				}
-				return _widgetResource;
-			}
-			set
-			{
-				if (_widgetResource == value)
-				{
-					return;
-				}
-				_widgetResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetResource);
+			set => SetProperty(ref _widgetResource, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("itemNameToSpawn")] 
 		public CName ItemNameToSpawn
 		{
-			get
-			{
-				if (_itemNameToSpawn == null)
-				{
-					_itemNameToSpawn = (CName) CR2WTypeManager.Create("CName", "itemNameToSpawn", cr2w, this);
-				}
-				return _itemNameToSpawn;
-			}
-			set
-			{
-				if (_itemNameToSpawn == value)
-				{
-					return;
-				}
-				_itemNameToSpawn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemNameToSpawn);
+			set => SetProperty(ref _itemNameToSpawn, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("staticTextureResource")] 
 		public raRef<CBitmapTexture> StaticTextureResource
 		{
-			get
-			{
-				if (_staticTextureResource == null)
-				{
-					_staticTextureResource = (raRef<CBitmapTexture>) CR2WTypeManager.Create("raRef:CBitmapTexture", "staticTextureResource", cr2w, this);
-				}
-				return _staticTextureResource;
-			}
-			set
-			{
-				if (_staticTextureResource == value)
-				{
-					return;
-				}
-				_staticTextureResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _staticTextureResource);
+			set => SetProperty(ref _staticTextureResource, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("sceneWidgetProperties")] 
 		public worlduiSceneWidgetProperties SceneWidgetProperties
 		{
-			get
-			{
-				if (_sceneWidgetProperties == null)
-				{
-					_sceneWidgetProperties = (worlduiSceneWidgetProperties) CR2WTypeManager.Create("worlduiSceneWidgetProperties", "sceneWidgetProperties", cr2w, this);
-				}
-				return _sceneWidgetProperties;
-			}
-			set
-			{
-				if (_sceneWidgetProperties == value)
-				{
-					return;
-				}
-				_sceneWidgetProperties = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneWidgetProperties);
+			set => SetProperty(ref _sceneWidgetProperties, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("screenDefinition")] 
 		public SUIScreenDefinition ScreenDefinition
 		{
-			get
-			{
-				if (_screenDefinition == null)
-				{
-					_screenDefinition = (SUIScreenDefinition) CR2WTypeManager.Create("SUIScreenDefinition", "screenDefinition", cr2w, this);
-				}
-				return _screenDefinition;
-			}
-			set
-			{
-				if (_screenDefinition == value)
-				{
-					return;
-				}
-				_screenDefinition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _screenDefinition);
+			set => SetProperty(ref _screenDefinition, value);
 		}
 
 		public WorldWidgetComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("peekScale")] 
 		public CFloat PeekScale
 		{
-			get
-			{
-				if (_peekScale == null)
-				{
-					_peekScale = (CFloat) CR2WTypeManager.Create("Float", "peekScale", cr2w, this);
-				}
-				return _peekScale;
-			}
-			set
-			{
-				if (_peekScale == value)
-				{
-					return;
-				}
-				_peekScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _peekScale);
+			set => SetProperty(ref _peekScale, value);
 		}
 
 		public AnimFeature_PlayerPeekScale(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

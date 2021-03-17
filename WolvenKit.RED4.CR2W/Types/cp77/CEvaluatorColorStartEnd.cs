@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("start")] 
 		public CColor Start
 		{
-			get
-			{
-				if (_start == null)
-				{
-					_start = (CColor) CR2WTypeManager.Create("Color", "start", cr2w, this);
-				}
-				return _start;
-			}
-			set
-			{
-				if (_start == value)
-				{
-					return;
-				}
-				_start = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _start);
+			set => SetProperty(ref _start, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("end")] 
 		public CColor End
 		{
-			get
-			{
-				if (_end == null)
-				{
-					_end = (CColor) CR2WTypeManager.Create("Color", "end", cr2w, this);
-				}
-				return _end;
-			}
-			set
-			{
-				if (_end == value)
-				{
-					return;
-				}
-				_end = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _end);
+			set => SetProperty(ref _end, value);
 		}
 
 		public CEvaluatorColorStartEnd(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

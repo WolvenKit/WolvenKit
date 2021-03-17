@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("operationsToExecute")] 
 		public CArray<CHandle<OperationExecutionData>> OperationsToExecute
 		{
-			get
-			{
-				if (_operationsToExecute == null)
-				{
-					_operationsToExecute = (CArray<CHandle<OperationExecutionData>>) CR2WTypeManager.Create("array:handle:OperationExecutionData", "operationsToExecute", cr2w, this);
-				}
-				return _operationsToExecute;
-			}
-			set
-			{
-				if (_operationsToExecute == value)
-				{
-					return;
-				}
-				_operationsToExecute = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _operationsToExecute);
+			set => SetProperty(ref _operationsToExecute, value);
 		}
 
 		public DeviceOperationTriggerData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

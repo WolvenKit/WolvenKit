@@ -28,368 +28,128 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("material")] 
 		public rRef<IMaterial> Material
 		{
-			get
-			{
-				if (_material == null)
-				{
-					_material = (rRef<IMaterial>) CR2WTypeManager.Create("rRef:IMaterial", "material", cr2w, this);
-				}
-				return _material;
-			}
-			set
-			{
-				if (_material == value)
-				{
-					return;
-				}
-				_material = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _material);
+			set => SetProperty(ref _material, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("verticalFlip")] 
 		public CBool VerticalFlip
 		{
-			get
-			{
-				if (_verticalFlip == null)
-				{
-					_verticalFlip = (CBool) CR2WTypeManager.Create("Bool", "verticalFlip", cr2w, this);
-				}
-				return _verticalFlip;
-			}
-			set
-			{
-				if (_verticalFlip == value)
-				{
-					return;
-				}
-				_verticalFlip = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _verticalFlip);
+			set => SetProperty(ref _verticalFlip, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("horizontalFlip")] 
 		public CBool HorizontalFlip
 		{
-			get
-			{
-				if (_horizontalFlip == null)
-				{
-					_horizontalFlip = (CBool) CR2WTypeManager.Create("Bool", "horizontalFlip", cr2w, this);
-				}
-				return _horizontalFlip;
-			}
-			set
-			{
-				if (_horizontalFlip == value)
-				{
-					return;
-				}
-				_horizontalFlip = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _horizontalFlip);
+			set => SetProperty(ref _horizontalFlip, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("aspectRatio")] 
 		public CFloat AspectRatio
 		{
-			get
-			{
-				if (_aspectRatio == null)
-				{
-					_aspectRatio = (CFloat) CR2WTypeManager.Create("Float", "aspectRatio", cr2w, this);
-				}
-				return _aspectRatio;
-			}
-			set
-			{
-				if (_aspectRatio == value)
-				{
-					return;
-				}
-				_aspectRatio = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aspectRatio);
+			set => SetProperty(ref _aspectRatio, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("scale")] 
 		public CFloat Scale
 		{
-			get
-			{
-				if (_scale == null)
-				{
-					_scale = (CFloat) CR2WTypeManager.Create("Float", "scale", cr2w, this);
-				}
-				return _scale;
-			}
-			set
-			{
-				if (_scale == value)
-				{
-					return;
-				}
-				_scale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scale);
+			set => SetProperty(ref _scale, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("visualScale")] 
 		public Vector3 VisualScale
 		{
-			get
-			{
-				if (_visualScale == null)
-				{
-					_visualScale = (Vector3) CR2WTypeManager.Create("Vector3", "visualScale", cr2w, this);
-				}
-				return _visualScale;
-			}
-			set
-			{
-				if (_visualScale == value)
-				{
-					return;
-				}
-				_visualScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualScale);
+			set => SetProperty(ref _visualScale, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("alpha")] 
 		public CFloat Alpha
 		{
-			get
-			{
-				if (_alpha == null)
-				{
-					_alpha = (CFloat) CR2WTypeManager.Create("Float", "alpha", cr2w, this);
-				}
-				return _alpha;
-			}
-			set
-			{
-				if (_alpha == value)
-				{
-					return;
-				}
-				_alpha = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alpha);
+			set => SetProperty(ref _alpha, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("normalThreshold")] 
 		public CFloat NormalThreshold
 		{
-			get
-			{
-				if (_normalThreshold == null)
-				{
-					_normalThreshold = (CFloat) CR2WTypeManager.Create("Float", "normalThreshold", cr2w, this);
-				}
-				return _normalThreshold;
-			}
-			set
-			{
-				if (_normalThreshold == value)
-				{
-					return;
-				}
-				_normalThreshold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _normalThreshold);
+			set => SetProperty(ref _normalThreshold, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("roughnessScale")] 
 		public CFloat RoughnessScale
 		{
-			get
-			{
-				if (_roughnessScale == null)
-				{
-					_roughnessScale = (CFloat) CR2WTypeManager.Create("Float", "roughnessScale", cr2w, this);
-				}
-				return _roughnessScale;
-			}
-			set
-			{
-				if (_roughnessScale == value)
-				{
-					return;
-				}
-				_roughnessScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _roughnessScale);
+			set => SetProperty(ref _roughnessScale, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("orderNo")] 
 		public CUInt16 OrderNo
 		{
-			get
-			{
-				if (_orderNo == null)
-				{
-					_orderNo = (CUInt16) CR2WTypeManager.Create("Uint16", "orderNo", cr2w, this);
-				}
-				return _orderNo;
-			}
-			set
-			{
-				if (_orderNo == value)
-				{
-					return;
-				}
-				_orderNo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _orderNo);
+			set => SetProperty(ref _orderNo, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("surfaceType")] 
 		public CEnum<ERenderObjectType> SurfaceType
 		{
-			get
-			{
-				if (_surfaceType == null)
-				{
-					_surfaceType = (CEnum<ERenderObjectType>) CR2WTypeManager.Create("ERenderObjectType", "surfaceType", cr2w, this);
-				}
-				return _surfaceType;
-			}
-			set
-			{
-				if (_surfaceType == value)
-				{
-					return;
-				}
-				_surfaceType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _surfaceType);
+			set => SetProperty(ref _surfaceType, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("decalRenderMode")] 
 		public CEnum<EDecalRenderMode> DecalRenderMode
 		{
-			get
-			{
-				if (_decalRenderMode == null)
-				{
-					_decalRenderMode = (CEnum<EDecalRenderMode>) CR2WTypeManager.Create("EDecalRenderMode", "decalRenderMode", cr2w, this);
-				}
-				return _decalRenderMode;
-			}
-			set
-			{
-				if (_decalRenderMode == value)
-				{
-					return;
-				}
-				_decalRenderMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _decalRenderMode);
+			set => SetProperty(ref _decalRenderMode, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("isStretchingEnabled")] 
 		public CBool IsStretchingEnabled
 		{
-			get
-			{
-				if (_isStretchingEnabled == null)
-				{
-					_isStretchingEnabled = (CBool) CR2WTypeManager.Create("Bool", "isStretchingEnabled", cr2w, this);
-				}
-				return _isStretchingEnabled;
-			}
-			set
-			{
-				if (_isStretchingEnabled == value)
-				{
-					return;
-				}
-				_isStretchingEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isStretchingEnabled);
+			set => SetProperty(ref _isStretchingEnabled, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("normalsBlendingMode")] 
 		public CEnum<RenderDecalNormalsBlendingMode> NormalsBlendingMode
 		{
-			get
-			{
-				if (_normalsBlendingMode == null)
-				{
-					_normalsBlendingMode = (CEnum<RenderDecalNormalsBlendingMode>) CR2WTypeManager.Create("RenderDecalNormalsBlendingMode", "normalsBlendingMode", cr2w, this);
-				}
-				return _normalsBlendingMode;
-			}
-			set
-			{
-				if (_normalsBlendingMode == value)
-				{
-					return;
-				}
-				_normalsBlendingMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _normalsBlendingMode);
+			set => SetProperty(ref _normalsBlendingMode, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("shouldCollectWithRayTracing")] 
 		public CBool ShouldCollectWithRayTracing
 		{
-			get
-			{
-				if (_shouldCollectWithRayTracing == null)
-				{
-					_shouldCollectWithRayTracing = (CBool) CR2WTypeManager.Create("Bool", "shouldCollectWithRayTracing", cr2w, this);
-				}
-				return _shouldCollectWithRayTracing;
-			}
-			set
-			{
-				if (_shouldCollectWithRayTracing == value)
-				{
-					return;
-				}
-				_shouldCollectWithRayTracing = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldCollectWithRayTracing);
+			set => SetProperty(ref _shouldCollectWithRayTracing, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get
-			{
-				if (_isEnabled == null)
-				{
-					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
-				}
-				return _isEnabled;
-			}
-			set
-			{
-				if (_isEnabled == value)
-				{
-					return;
-				}
-				_isEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
 		}
 
 		public entDecalComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

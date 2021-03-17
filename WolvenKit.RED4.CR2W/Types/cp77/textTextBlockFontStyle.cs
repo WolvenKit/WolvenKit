@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fontStyle")] 
 		public CName FontStyle
 		{
-			get
-			{
-				if (_fontStyle == null)
-				{
-					_fontStyle = (CName) CR2WTypeManager.Create("CName", "fontStyle", cr2w, this);
-				}
-				return _fontStyle;
-			}
-			set
-			{
-				if (_fontStyle == value)
-				{
-					return;
-				}
-				_fontStyle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fontStyle);
+			set => SetProperty(ref _fontStyle, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("outlineSize")] 
 		public CInt32 OutlineSize
 		{
-			get
-			{
-				if (_outlineSize == null)
-				{
-					_outlineSize = (CInt32) CR2WTypeManager.Create("Int32", "outlineSize", cr2w, this);
-				}
-				return _outlineSize;
-			}
-			set
-			{
-				if (_outlineSize == value)
-				{
-					return;
-				}
-				_outlineSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outlineSize);
+			set => SetProperty(ref _outlineSize, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("outlineColor")] 
 		public HDRColor OutlineColor
 		{
-			get
-			{
-				if (_outlineColor == null)
-				{
-					_outlineColor = (HDRColor) CR2WTypeManager.Create("HDRColor", "outlineColor", cr2w, this);
-				}
-				return _outlineColor;
-			}
-			set
-			{
-				if (_outlineColor == value)
-				{
-					return;
-				}
-				_outlineColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outlineColor);
+			set => SetProperty(ref _outlineColor, value);
 		}
 
 		public textTextBlockFontStyle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

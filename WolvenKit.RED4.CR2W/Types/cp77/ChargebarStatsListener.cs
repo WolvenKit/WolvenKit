@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("controller")] 
 		public wCHandle<ChargebarController> Controller
 		{
-			get
-			{
-				if (_controller == null)
-				{
-					_controller = (wCHandle<ChargebarController>) CR2WTypeManager.Create("whandle:ChargebarController", "controller", cr2w, this);
-				}
-				return _controller;
-			}
-			set
-			{
-				if (_controller == value)
-				{
-					return;
-				}
-				_controller = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _controller);
+			set => SetProperty(ref _controller, value);
 		}
 
 		public ChargebarStatsListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

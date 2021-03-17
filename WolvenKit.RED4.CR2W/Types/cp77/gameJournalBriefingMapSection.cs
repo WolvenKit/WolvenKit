@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mapLocation")] 
 		public Vector3 MapLocation
 		{
-			get
-			{
-				if (_mapLocation == null)
-				{
-					_mapLocation = (Vector3) CR2WTypeManager.Create("Vector3", "mapLocation", cr2w, this);
-				}
-				return _mapLocation;
-			}
-			set
-			{
-				if (_mapLocation == value)
-				{
-					return;
-				}
-				_mapLocation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mapLocation);
+			set => SetProperty(ref _mapLocation, value);
 		}
 
 		public gameJournalBriefingMapSection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("value")] 
 		public CInt32 Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CInt32) CR2WTypeManager.Create("Int32", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("default")] 
 		public CInt32 Default
 		{
-			get
-			{
-				if (_default == null)
-				{
-					_default = (CInt32) CR2WTypeManager.Create("Int32", "default", cr2w, this);
-				}
-				return _default;
-			}
-			set
-			{
-				if (_default == value)
-				{
-					return;
-				}
-				_default = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _default);
+			set => SetProperty(ref _default, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("min")] 
 		public CInt32 Min
 		{
-			get
-			{
-				if (_min == null)
-				{
-					_min = (CInt32) CR2WTypeManager.Create("Int32", "min", cr2w, this);
-				}
-				return _min;
-			}
-			set
-			{
-				if (_min == value)
-				{
-					return;
-				}
-				_min = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _min);
+			set => SetProperty(ref _min, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("max")] 
 		public CInt32 Max
 		{
-			get
-			{
-				if (_max == null)
-				{
-					_max = (CInt32) CR2WTypeManager.Create("Int32", "max", cr2w, this);
-				}
-				return _max;
-			}
-			set
-			{
-				if (_max == value)
-				{
-					return;
-				}
-				_max = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _max);
+			set => SetProperty(ref _max, value);
 		}
 
 		public animAnimVariableInt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

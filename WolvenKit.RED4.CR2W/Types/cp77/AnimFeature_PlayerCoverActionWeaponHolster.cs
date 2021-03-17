@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isWeaponHolstered")] 
 		public CBool IsWeaponHolstered
 		{
-			get
-			{
-				if (_isWeaponHolstered == null)
-				{
-					_isWeaponHolstered = (CBool) CR2WTypeManager.Create("Bool", "isWeaponHolstered", cr2w, this);
-				}
-				return _isWeaponHolstered;
-			}
-			set
-			{
-				if (_isWeaponHolstered == value)
-				{
-					return;
-				}
-				_isWeaponHolstered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isWeaponHolstered);
+			set => SetProperty(ref _isWeaponHolstered, value);
 		}
 
 		public AnimFeature_PlayerCoverActionWeaponHolster(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

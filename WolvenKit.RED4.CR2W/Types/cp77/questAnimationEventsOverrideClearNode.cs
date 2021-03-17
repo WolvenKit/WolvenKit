@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("resetGlobalOverride")] 
 		public CBool ResetGlobalOverride
 		{
-			get
-			{
-				if (_resetGlobalOverride == null)
-				{
-					_resetGlobalOverride = (CBool) CR2WTypeManager.Create("Bool", "resetGlobalOverride", cr2w, this);
-				}
-				return _resetGlobalOverride;
-			}
-			set
-			{
-				if (_resetGlobalOverride == value)
-				{
-					return;
-				}
-				_resetGlobalOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetGlobalOverride);
+			set => SetProperty(ref _resetGlobalOverride, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("resetActorsOverride")] 
 		public CBool ResetActorsOverride
 		{
-			get
-			{
-				if (_resetActorsOverride == null)
-				{
-					_resetActorsOverride = (CBool) CR2WTypeManager.Create("Bool", "resetActorsOverride", cr2w, this);
-				}
-				return _resetActorsOverride;
-			}
-			set
-			{
-				if (_resetActorsOverride == value)
-				{
-					return;
-				}
-				_resetActorsOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetActorsOverride);
+			set => SetProperty(ref _resetActorsOverride, value);
 		}
 
 		public questAnimationEventsOverrideClearNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

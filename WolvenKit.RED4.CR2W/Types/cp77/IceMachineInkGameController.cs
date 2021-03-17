@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("buttonContainer")] 
 		public inkWidgetReference ButtonContainer
 		{
-			get
-			{
-				if (_buttonContainer == null)
-				{
-					_buttonContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "buttonContainer", cr2w, this);
-				}
-				return _buttonContainer;
-			}
-			set
-			{
-				if (_buttonContainer == value)
-				{
-					return;
-				}
-				_buttonContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonContainer);
+			set => SetProperty(ref _buttonContainer, value);
 		}
 
 		public IceMachineInkGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

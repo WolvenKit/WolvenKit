@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("audioLightIsGreen")] 
 		public CBool AudioLightIsGreen
 		{
-			get
-			{
-				if (_audioLightIsGreen == null)
-				{
-					_audioLightIsGreen = (CBool) CR2WTypeManager.Create("Bool", "audioLightIsGreen", cr2w, this);
-				}
-				return _audioLightIsGreen;
-			}
-			set
-			{
-				if (_audioLightIsGreen == value)
-				{
-					return;
-				}
-				_audioLightIsGreen = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioLightIsGreen);
+			set => SetProperty(ref _audioLightIsGreen, value);
 		}
 
 		public CrossingLight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

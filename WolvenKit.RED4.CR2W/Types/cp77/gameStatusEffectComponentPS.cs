@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statusEffectArray")] 
 		public CArray<gameStatusEffect> StatusEffectArray
 		{
-			get
-			{
-				if (_statusEffectArray == null)
-				{
-					_statusEffectArray = (CArray<gameStatusEffect>) CR2WTypeManager.Create("array:gameStatusEffect", "statusEffectArray", cr2w, this);
-				}
-				return _statusEffectArray;
-			}
-			set
-			{
-				if (_statusEffectArray == value)
-				{
-					return;
-				}
-				_statusEffectArray = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statusEffectArray);
+			set => SetProperty(ref _statusEffectArray, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("delayedFunctions")] 
 		public CHandle<gameDelayedFunctionsScheduler> DelayedFunctions
 		{
-			get
-			{
-				if (_delayedFunctions == null)
-				{
-					_delayedFunctions = (CHandle<gameDelayedFunctionsScheduler>) CR2WTypeManager.Create("handle:gameDelayedFunctionsScheduler", "delayedFunctions", cr2w, this);
-				}
-				return _delayedFunctions;
-			}
-			set
-			{
-				if (_delayedFunctions == value)
-				{
-					return;
-				}
-				_delayedFunctions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delayedFunctions);
+			set => SetProperty(ref _delayedFunctions, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("delayedFunctionsNoTd")] 
 		public CHandle<gameDelayedFunctionsScheduler> DelayedFunctionsNoTd
 		{
-			get
-			{
-				if (_delayedFunctionsNoTd == null)
-				{
-					_delayedFunctionsNoTd = (CHandle<gameDelayedFunctionsScheduler>) CR2WTypeManager.Create("handle:gameDelayedFunctionsScheduler", "delayedFunctionsNoTd", cr2w, this);
-				}
-				return _delayedFunctionsNoTd;
-			}
-			set
-			{
-				if (_delayedFunctionsNoTd == value)
-				{
-					return;
-				}
-				_delayedFunctionsNoTd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delayedFunctionsNoTd);
+			set => SetProperty(ref _delayedFunctionsNoTd, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isPlayerControlled")] 
 		public CBool IsPlayerControlled
 		{
-			get
-			{
-				if (_isPlayerControlled == null)
-				{
-					_isPlayerControlled = (CBool) CR2WTypeManager.Create("Bool", "isPlayerControlled", cr2w, this);
-				}
-				return _isPlayerControlled;
-			}
-			set
-			{
-				if (_isPlayerControlled == value)
-				{
-					return;
-				}
-				_isPlayerControlled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayerControlled);
+			set => SetProperty(ref _isPlayerControlled, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("tickComponent")] 
 		public CBool TickComponent
 		{
-			get
-			{
-				if (_tickComponent == null)
-				{
-					_tickComponent = (CBool) CR2WTypeManager.Create("Bool", "tickComponent", cr2w, this);
-				}
-				return _tickComponent;
-			}
-			set
-			{
-				if (_tickComponent == value)
-				{
-					return;
-				}
-				_tickComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tickComponent);
+			set => SetProperty(ref _tickComponent, value);
 		}
 
 		public gameStatusEffectComponentPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -31,437 +31,152 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("boneName")] 
 		public CName BoneName
 		{
-			get
-			{
-				if (_boneName == null)
-				{
-					_boneName = (CName) CR2WTypeManager.Create("CName", "boneName", cr2w, this);
-				}
-				return _boneName;
-			}
-			set
-			{
-				if (_boneName == value)
-				{
-					return;
-				}
-				_boneName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _boneName);
+			set => SetProperty(ref _boneName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("engineStart")] 
 		public CName EngineStart
 		{
-			get
-			{
-				if (_engineStart == null)
-				{
-					_engineStart = (CName) CR2WTypeManager.Create("CName", "engineStart", cr2w, this);
-				}
-				return _engineStart;
-			}
-			set
-			{
-				if (_engineStart == value)
-				{
-					return;
-				}
-				_engineStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _engineStart);
+			set => SetProperty(ref _engineStart, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("engineStop")] 
 		public CName EngineStop
 		{
-			get
-			{
-				if (_engineStop == null)
-				{
-					_engineStop = (CName) CR2WTypeManager.Create("CName", "engineStop", cr2w, this);
-				}
-				return _engineStop;
-			}
-			set
-			{
-				if (_engineStop == value)
-				{
-					return;
-				}
-				_engineStop = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _engineStop);
+			set => SetProperty(ref _engineStop, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("combatEnter")] 
 		public CName CombatEnter
 		{
-			get
-			{
-				if (_combatEnter == null)
-				{
-					_combatEnter = (CName) CR2WTypeManager.Create("CName", "combatEnter", cr2w, this);
-				}
-				return _combatEnter;
-			}
-			set
-			{
-				if (_combatEnter == value)
-				{
-					return;
-				}
-				_combatEnter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _combatEnter);
+			set => SetProperty(ref _combatEnter, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("combatExit")] 
 		public CName CombatExit
 		{
-			get
-			{
-				if (_combatExit == null)
-				{
-					_combatExit = (CName) CR2WTypeManager.Create("CName", "combatExit", cr2w, this);
-				}
-				return _combatExit;
-			}
-			set
-			{
-				if (_combatExit == value)
-				{
-					return;
-				}
-				_combatExit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _combatExit);
+			set => SetProperty(ref _combatExit, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("targetLost")] 
 		public CName TargetLost
 		{
-			get
-			{
-				if (_targetLost == null)
-				{
-					_targetLost = (CName) CR2WTypeManager.Create("CName", "targetLost", cr2w, this);
-				}
-				return _targetLost;
-			}
-			set
-			{
-				if (_targetLost == value)
-				{
-					return;
-				}
-				_targetLost = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetLost);
+			set => SetProperty(ref _targetLost, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("idle")] 
 		public CName Idle
 		{
-			get
-			{
-				if (_idle == null)
-				{
-					_idle = (CName) CR2WTypeManager.Create("CName", "idle", cr2w, this);
-				}
-				return _idle;
-			}
-			set
-			{
-				if (_idle == value)
-				{
-					return;
-				}
-				_idle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _idle);
+			set => SetProperty(ref _idle, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("initialReaction")] 
 		public CName InitialReaction
 		{
-			get
-			{
-				if (_initialReaction == null)
-				{
-					_initialReaction = (CName) CR2WTypeManager.Create("CName", "initialReaction", cr2w, this);
-				}
-				return _initialReaction;
-			}
-			set
-			{
-				if (_initialReaction == value)
-				{
-					return;
-				}
-				_initialReaction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialReaction);
+			set => SetProperty(ref _initialReaction, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("investigationIgnore")] 
 		public CName InvestigationIgnore
 		{
-			get
-			{
-				if (_investigationIgnore == null)
-				{
-					_investigationIgnore = (CName) CR2WTypeManager.Create("CName", "investigationIgnore", cr2w, this);
-				}
-				return _investigationIgnore;
-			}
-			set
-			{
-				if (_investigationIgnore == value)
-				{
-					return;
-				}
-				_investigationIgnore = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _investigationIgnore);
+			set => SetProperty(ref _investigationIgnore, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("noClearShot")] 
 		public CName NoClearShot
 		{
-			get
-			{
-				if (_noClearShot == null)
-				{
-					_noClearShot = (CName) CR2WTypeManager.Create("CName", "noClearShot", cr2w, this);
-				}
-				return _noClearShot;
-			}
-			set
-			{
-				if (_noClearShot == value)
-				{
-					return;
-				}
-				_noClearShot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _noClearShot);
+			set => SetProperty(ref _noClearShot, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("targetComplies")] 
 		public CName TargetComplies
 		{
-			get
-			{
-				if (_targetComplies == null)
-				{
-					_targetComplies = (CName) CR2WTypeManager.Create("CName", "targetComplies", cr2w, this);
-				}
-				return _targetComplies;
-			}
-			set
-			{
-				if (_targetComplies == value)
-				{
-					return;
-				}
-				_targetComplies = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetComplies);
+			set => SetProperty(ref _targetComplies, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("lookForIntruder")] 
 		public CName LookForIntruder
 		{
-			get
-			{
-				if (_lookForIntruder == null)
-				{
-					_lookForIntruder = (CName) CR2WTypeManager.Create("CName", "lookForIntruder", cr2w, this);
-				}
-				return _lookForIntruder;
-			}
-			set
-			{
-				if (_lookForIntruder == value)
-				{
-					return;
-				}
-				_lookForIntruder = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lookForIntruder);
+			set => SetProperty(ref _lookForIntruder, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("droneDestroyed")] 
 		public CName DroneDestroyed
 		{
-			get
-			{
-				if (_droneDestroyed == null)
-				{
-					_droneDestroyed = (CName) CR2WTypeManager.Create("CName", "droneDestroyed", cr2w, this);
-				}
-				return _droneDestroyed;
-			}
-			set
-			{
-				if (_droneDestroyed == value)
-				{
-					return;
-				}
-				_droneDestroyed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _droneDestroyed);
+			set => SetProperty(ref _droneDestroyed, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("droneDefeated")] 
 		public CName DroneDefeated
 		{
-			get
-			{
-				if (_droneDefeated == null)
-				{
-					_droneDefeated = (CName) CR2WTypeManager.Create("CName", "droneDefeated", cr2w, this);
-				}
-				return _droneDefeated;
-			}
-			set
-			{
-				if (_droneDefeated == value)
-				{
-					return;
-				}
-				_droneDefeated = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _droneDefeated);
+			set => SetProperty(ref _droneDefeated, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("commandHolsterWeapon")] 
 		public CName CommandHolsterWeapon
 		{
-			get
-			{
-				if (_commandHolsterWeapon == null)
-				{
-					_commandHolsterWeapon = (CName) CR2WTypeManager.Create("CName", "commandHolsterWeapon", cr2w, this);
-				}
-				return _commandHolsterWeapon;
-			}
-			set
-			{
-				if (_commandHolsterWeapon == value)
-				{
-					return;
-				}
-				_commandHolsterWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _commandHolsterWeapon);
+			set => SetProperty(ref _commandHolsterWeapon, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("commandLeaveArea")] 
 		public CName CommandLeaveArea
 		{
-			get
-			{
-				if (_commandLeaveArea == null)
-				{
-					_commandLeaveArea = (CName) CR2WTypeManager.Create("CName", "commandLeaveArea", cr2w, this);
-				}
-				return _commandLeaveArea;
-			}
-			set
-			{
-				if (_commandLeaveArea == value)
-				{
-					return;
-				}
-				_commandLeaveArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _commandLeaveArea);
+			set => SetProperty(ref _commandLeaveArea, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("finalWarning")] 
 		public CName FinalWarning
 		{
-			get
-			{
-				if (_finalWarning == null)
-				{
-					_finalWarning = (CName) CR2WTypeManager.Create("CName", "finalWarning", cr2w, this);
-				}
-				return _finalWarning;
-			}
-			set
-			{
-				if (_finalWarning == value)
-				{
-					return;
-				}
-				_finalWarning = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _finalWarning);
+			set => SetProperty(ref _finalWarning, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("playDistance")] 
 		public CFloat PlayDistance
 		{
-			get
-			{
-				if (_playDistance == null)
-				{
-					_playDistance = (CFloat) CR2WTypeManager.Create("Float", "playDistance", cr2w, this);
-				}
-				return _playDistance;
-			}
-			set
-			{
-				if (_playDistance == value)
-				{
-					return;
-				}
-				_playDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playDistance);
+			set => SetProperty(ref _playDistance, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("decorators")] 
 		public CArray<CName> Decorators
 		{
-			get
-			{
-				if (_decorators == null)
-				{
-					_decorators = (CArray<CName>) CR2WTypeManager.Create("array:CName", "decorators", cr2w, this);
-				}
-				return _decorators;
-			}
-			set
-			{
-				if (_decorators == value)
-				{
-					return;
-				}
-				_decorators = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _decorators);
+			set => SetProperty(ref _decorators, value);
 		}
 
 		public audioDroneMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

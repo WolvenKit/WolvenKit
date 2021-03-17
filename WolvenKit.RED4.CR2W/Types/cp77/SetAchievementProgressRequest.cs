@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("achievement")] 
 		public CEnum<gamedataAchievement> Achievement
 		{
-			get
-			{
-				if (_achievement == null)
-				{
-					_achievement = (CEnum<gamedataAchievement>) CR2WTypeManager.Create("gamedataAchievement", "achievement", cr2w, this);
-				}
-				return _achievement;
-			}
-			set
-			{
-				if (_achievement == value)
-				{
-					return;
-				}
-				_achievement = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _achievement);
+			set => SetProperty(ref _achievement, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("currentValue")] 
 		public CInt32 CurrentValue
 		{
-			get
-			{
-				if (_currentValue == null)
-				{
-					_currentValue = (CInt32) CR2WTypeManager.Create("Int32", "currentValue", cr2w, this);
-				}
-				return _currentValue;
-			}
-			set
-			{
-				if (_currentValue == value)
-				{
-					return;
-				}
-				_currentValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentValue);
+			set => SetProperty(ref _currentValue, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("maxValue")] 
 		public CInt32 MaxValue
 		{
-			get
-			{
-				if (_maxValue == null)
-				{
-					_maxValue = (CInt32) CR2WTypeManager.Create("Int32", "maxValue", cr2w, this);
-				}
-				return _maxValue;
-			}
-			set
-			{
-				if (_maxValue == value)
-				{
-					return;
-				}
-				_maxValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxValue);
+			set => SetProperty(ref _maxValue, value);
 		}
 
 		public SetAchievementProgressRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

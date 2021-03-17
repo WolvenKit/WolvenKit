@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("extents")] 
 		public Vector3 Extents
 		{
-			get
-			{
-				if (_extents == null)
-				{
-					_extents = (Vector3) CR2WTypeManager.Create("Vector3", "extents", cr2w, this);
-				}
-				return _extents;
-			}
-			set
-			{
-				if (_extents == value)
-				{
-					return;
-				}
-				_extents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _extents);
+			set => SetProperty(ref _extents, value);
 		}
 
 		public enteventsEntityResize(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

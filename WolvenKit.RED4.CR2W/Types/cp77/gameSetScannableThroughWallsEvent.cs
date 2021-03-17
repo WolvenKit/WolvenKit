@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isScannableThroughWalls")] 
 		public CBool IsScannableThroughWalls
 		{
-			get
-			{
-				if (_isScannableThroughWalls == null)
-				{
-					_isScannableThroughWalls = (CBool) CR2WTypeManager.Create("Bool", "isScannableThroughWalls", cr2w, this);
-				}
-				return _isScannableThroughWalls;
-			}
-			set
-			{
-				if (_isScannableThroughWalls == value)
-				{
-					return;
-				}
-				_isScannableThroughWalls = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isScannableThroughWalls);
+			set => SetProperty(ref _isScannableThroughWalls, value);
 		}
 
 		public gameSetScannableThroughWallsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

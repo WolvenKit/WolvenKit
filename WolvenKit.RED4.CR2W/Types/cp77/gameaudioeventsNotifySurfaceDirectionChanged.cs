@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("surfaceDirection")] 
 		public CEnum<gameaudioeventsSurfaceDirection> SurfaceDirection
 		{
-			get
-			{
-				if (_surfaceDirection == null)
-				{
-					_surfaceDirection = (CEnum<gameaudioeventsSurfaceDirection>) CR2WTypeManager.Create("gameaudioeventsSurfaceDirection", "surfaceDirection", cr2w, this);
-				}
-				return _surfaceDirection;
-			}
-			set
-			{
-				if (_surfaceDirection == value)
-				{
-					return;
-				}
-				_surfaceDirection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _surfaceDirection);
+			set => SetProperty(ref _surfaceDirection, value);
 		}
 
 		public gameaudioeventsNotifySurfaceDirectionChanged(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

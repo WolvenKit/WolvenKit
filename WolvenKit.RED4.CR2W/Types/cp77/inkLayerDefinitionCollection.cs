@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("menuLayer")] 
 		public inkMenuLayerDefinition MenuLayer
 		{
-			get
-			{
-				if (_menuLayer == null)
-				{
-					_menuLayer = (inkMenuLayerDefinition) CR2WTypeManager.Create("inkMenuLayerDefinition", "menuLayer", cr2w, this);
-				}
-				return _menuLayer;
-			}
-			set
-			{
-				if (_menuLayer == value)
-				{
-					return;
-				}
-				_menuLayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuLayer);
+			set => SetProperty(ref _menuLayer, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("menuLayerMP")] 
 		public inkMenuLayerDefinition MenuLayerMP
 		{
-			get
-			{
-				if (_menuLayerMP == null)
-				{
-					_menuLayerMP = (inkMenuLayerDefinition) CR2WTypeManager.Create("inkMenuLayerDefinition", "menuLayerMP", cr2w, this);
-				}
-				return _menuLayerMP;
-			}
-			set
-			{
-				if (_menuLayerMP == value)
-				{
-					return;
-				}
-				_menuLayerMP = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuLayerMP);
+			set => SetProperty(ref _menuLayerMP, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hudLayer")] 
 		public inkHUDLayerDefinition HudLayer
 		{
-			get
-			{
-				if (_hudLayer == null)
-				{
-					_hudLayer = (inkHUDLayerDefinition) CR2WTypeManager.Create("inkHUDLayerDefinition", "hudLayer", cr2w, this);
-				}
-				return _hudLayer;
-			}
-			set
-			{
-				if (_hudLayer == value)
-				{
-					return;
-				}
-				_hudLayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hudLayer);
+			set => SetProperty(ref _hudLayer, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("videoLayer")] 
 		public inkVideoLayerDefinition VideoLayer
 		{
-			get
-			{
-				if (_videoLayer == null)
-				{
-					_videoLayer = (inkVideoLayerDefinition) CR2WTypeManager.Create("inkVideoLayerDefinition", "videoLayer", cr2w, this);
-				}
-				return _videoLayer;
-			}
-			set
-			{
-				if (_videoLayer == value)
-				{
-					return;
-				}
-				_videoLayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _videoLayer);
+			set => SetProperty(ref _videoLayer, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("offscreenLayer")] 
 		public inkOffscreenLayerDefinition OffscreenLayer
 		{
-			get
-			{
-				if (_offscreenLayer == null)
-				{
-					_offscreenLayer = (inkOffscreenLayerDefinition) CR2WTypeManager.Create("inkOffscreenLayerDefinition", "offscreenLayer", cr2w, this);
-				}
-				return _offscreenLayer;
-			}
-			set
-			{
-				if (_offscreenLayer == value)
-				{
-					return;
-				}
-				_offscreenLayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offscreenLayer);
+			set => SetProperty(ref _offscreenLayer, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("gameNotificationsLayer")] 
 		public inkGameNotificationsLayerDefinition GameNotificationsLayer
 		{
-			get
-			{
-				if (_gameNotificationsLayer == null)
-				{
-					_gameNotificationsLayer = (inkGameNotificationsLayerDefinition) CR2WTypeManager.Create("inkGameNotificationsLayerDefinition", "gameNotificationsLayer", cr2w, this);
-				}
-				return _gameNotificationsLayer;
-			}
-			set
-			{
-				if (_gameNotificationsLayer == value)
-				{
-					return;
-				}
-				_gameNotificationsLayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameNotificationsLayer);
+			set => SetProperty(ref _gameNotificationsLayer, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("photoModeLayer")] 
 		public inkPhotoModeLayerDefinition PhotoModeLayer
 		{
-			get
-			{
-				if (_photoModeLayer == null)
-				{
-					_photoModeLayer = (inkPhotoModeLayerDefinition) CR2WTypeManager.Create("inkPhotoModeLayerDefinition", "photoModeLayer", cr2w, this);
-				}
-				return _photoModeLayer;
-			}
-			set
-			{
-				if (_photoModeLayer == value)
-				{
-					return;
-				}
-				_photoModeLayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _photoModeLayer);
+			set => SetProperty(ref _photoModeLayer, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("debugLayer")] 
 		public inkDebugLayerDefinition DebugLayer
 		{
-			get
-			{
-				if (_debugLayer == null)
-				{
-					_debugLayer = (inkDebugLayerDefinition) CR2WTypeManager.Create("inkDebugLayerDefinition", "debugLayer", cr2w, this);
-				}
-				return _debugLayer;
-			}
-			set
-			{
-				if (_debugLayer == value)
-				{
-					return;
-				}
-				_debugLayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _debugLayer);
+			set => SetProperty(ref _debugLayer, value);
 		}
 
 		public inkLayerDefinitionCollection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

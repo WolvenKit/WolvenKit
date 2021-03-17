@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("deviceLinkPS")] 
 		public wCHandle<DeviceLinkComponentPS> DeviceLinkPS
 		{
-			get
-			{
-				if (_deviceLinkPS == null)
-				{
-					_deviceLinkPS = (wCHandle<DeviceLinkComponentPS>) CR2WTypeManager.Create("whandle:DeviceLinkComponentPS", "deviceLinkPS", cr2w, this);
-				}
-				return _deviceLinkPS;
-			}
-			set
-			{
-				if (_deviceLinkPS == value)
-				{
-					return;
-				}
-				_deviceLinkPS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deviceLinkPS);
+			set => SetProperty(ref _deviceLinkPS, value);
 		}
 
 		public DeviceLinkEstablished(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

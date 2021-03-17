@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("deviceComponent")] 
 		public CHandle<gameMasterDeviceComponent> DeviceComponent
 		{
-			get
-			{
-				if (_deviceComponent == null)
-				{
-					_deviceComponent = (CHandle<gameMasterDeviceComponent>) CR2WTypeManager.Create("handle:gameMasterDeviceComponent", "deviceComponent", cr2w, this);
-				}
-				return _deviceComponent;
-			}
-			set
-			{
-				if (_deviceComponent == value)
-				{
-					return;
-				}
-				_deviceComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deviceComponent);
+			set => SetProperty(ref _deviceComponent, value);
 		}
 
 		public Master_Test(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("previousTarget")] 
 		public wCHandle<entEntity> PreviousTarget
 		{
-			get
-			{
-				if (_previousTarget == null)
-				{
-					_previousTarget = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "previousTarget", cr2w, this);
-				}
-				return _previousTarget;
-			}
-			set
-			{
-				if (_previousTarget == value)
-				{
-					return;
-				}
-				_previousTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousTarget);
+			set => SetProperty(ref _previousTarget, value);
 		}
 
 		public RoyceLaserSight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

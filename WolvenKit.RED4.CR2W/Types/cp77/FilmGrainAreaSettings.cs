@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("strength")] 
 		public curveData<Vector4> Strength
 		{
-			get
-			{
-				if (_strength == null)
-				{
-					_strength = (curveData<Vector4>) CR2WTypeManager.Create("curveData:Vector4", "strength", cr2w, this);
-				}
-				return _strength;
-			}
-			set
-			{
-				if (_strength == value)
-				{
-					return;
-				}
-				_strength = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _strength);
+			set => SetProperty(ref _strength, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("luminanceBias")] 
 		public curveData<CFloat> LuminanceBias
 		{
-			get
-			{
-				if (_luminanceBias == null)
-				{
-					_luminanceBias = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "luminanceBias", cr2w, this);
-				}
-				return _luminanceBias;
-			}
-			set
-			{
-				if (_luminanceBias == value)
-				{
-					return;
-				}
-				_luminanceBias = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _luminanceBias);
+			set => SetProperty(ref _luminanceBias, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("grainSize")] 
 		public Vector3 GrainSize
 		{
-			get
-			{
-				if (_grainSize == null)
-				{
-					_grainSize = (Vector3) CR2WTypeManager.Create("Vector3", "grainSize", cr2w, this);
-				}
-				return _grainSize;
-			}
-			set
-			{
-				if (_grainSize == value)
-				{
-					return;
-				}
-				_grainSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grainSize);
+			set => SetProperty(ref _grainSize, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("applyAfterUpsampling")] 
 		public CBool ApplyAfterUpsampling
 		{
-			get
-			{
-				if (_applyAfterUpsampling == null)
-				{
-					_applyAfterUpsampling = (CBool) CR2WTypeManager.Create("Bool", "applyAfterUpsampling", cr2w, this);
-				}
-				return _applyAfterUpsampling;
-			}
-			set
-			{
-				if (_applyAfterUpsampling == value)
-				{
-					return;
-				}
-				_applyAfterUpsampling = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _applyAfterUpsampling);
+			set => SetProperty(ref _applyAfterUpsampling, value);
 		}
 
 		public FilmGrainAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("replicatedPingEntries")] 
 		public CArray<gamePingEntry> ReplicatedPingEntries
 		{
-			get
-			{
-				if (_replicatedPingEntries == null)
-				{
-					_replicatedPingEntries = (CArray<gamePingEntry>) CR2WTypeManager.Create("array:gamePingEntry", "replicatedPingEntries", cr2w, this);
-				}
-				return _replicatedPingEntries;
-			}
-			set
-			{
-				if (_replicatedPingEntries == value)
-				{
-					return;
-				}
-				_replicatedPingEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _replicatedPingEntries);
+			set => SetProperty(ref _replicatedPingEntries, value);
 		}
 
 		public gamePingSystemReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

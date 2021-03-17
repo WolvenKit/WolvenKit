@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("threadHash")] 
 		public CInt32 ThreadHash
 		{
-			get
-			{
-				if (_threadHash == null)
-				{
-					_threadHash = (CInt32) CR2WTypeManager.Create("Int32", "threadHash", cr2w, this);
-				}
-				return _threadHash;
-			}
-			set
-			{
-				if (_threadHash == value)
-				{
-					return;
-				}
-				_threadHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _threadHash);
+			set => SetProperty(ref _threadHash, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("contactHash")] 
 		public CInt32 ContactHash
 		{
-			get
-			{
-				if (_contactHash == null)
-				{
-					_contactHash = (CInt32) CR2WTypeManager.Create("Int32", "contactHash", cr2w, this);
-				}
-				return _contactHash;
-			}
-			set
-			{
-				if (_contactHash == value)
-				{
-					return;
-				}
-				_contactHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contactHash);
+			set => SetProperty(ref _contactHash, value);
 		}
 
 		public gameuiPhoneMessageNotificationViewData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

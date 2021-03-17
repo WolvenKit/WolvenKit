@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("visualTags")] 
 		public redTagList VisualTags
 		{
-			get
-			{
-				if (_visualTags == null)
-				{
-					_visualTags = (redTagList) CR2WTypeManager.Create("redTagList", "visualTags", cr2w, this);
-				}
-				return _visualTags;
-			}
-			set
-			{
-				if (_visualTags == value)
-				{
-					return;
-				}
-				_visualTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualTags);
+			set => SetProperty(ref _visualTags, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("schema")] 
 		public CName Schema
 		{
-			get
-			{
-				if (_schema == null)
-				{
-					_schema = (CName) CR2WTypeManager.Create("CName", "schema", cr2w, this);
-				}
-				return _schema;
-			}
-			set
-			{
-				if (_schema == value)
-				{
-					return;
-				}
-				_schema = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _schema);
+			set => SetProperty(ref _schema, value);
 		}
 
 		public entVisualTagsSchema(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

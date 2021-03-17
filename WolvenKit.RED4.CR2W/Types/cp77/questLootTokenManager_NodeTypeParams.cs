@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tokenNodeRef")] 
 		public NodeRef TokenNodeRef
 		{
-			get
-			{
-				if (_tokenNodeRef == null)
-				{
-					_tokenNodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "tokenNodeRef", cr2w, this);
-				}
-				return _tokenNodeRef;
-			}
-			set
-			{
-				if (_tokenNodeRef == value)
-				{
-					return;
-				}
-				_tokenNodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tokenNodeRef);
+			set => SetProperty(ref _tokenNodeRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lootTokenState")] 
 		public CEnum<questLootTokenState> LootTokenState
 		{
-			get
-			{
-				if (_lootTokenState == null)
-				{
-					_lootTokenState = (CEnum<questLootTokenState>) CR2WTypeManager.Create("questLootTokenState", "lootTokenState", cr2w, this);
-				}
-				return _lootTokenState;
-			}
-			set
-			{
-				if (_lootTokenState == value)
-				{
-					return;
-				}
-				_lootTokenState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lootTokenState);
+			set => SetProperty(ref _lootTokenState, value);
 		}
 
 		public questLootTokenManager_NodeTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statusEffectType")] 
 		public CEnum<gamedataStatusEffectType> StatusEffectType
 		{
-			get
-			{
-				if (_statusEffectType == null)
-				{
-					_statusEffectType = (CEnum<gamedataStatusEffectType>) CR2WTypeManager.Create("gamedataStatusEffectType", "statusEffectType", cr2w, this);
-				}
-				return _statusEffectType;
-			}
-			set
-			{
-				if (_statusEffectType == value)
-				{
-					return;
-				}
-				_statusEffectType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statusEffectType);
+			set => SetProperty(ref _statusEffectType, value);
 		}
 
 		public RemoveAllStatusEffectOfTypeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

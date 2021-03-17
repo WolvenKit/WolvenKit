@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("newValue")] 
 		public CInt32 NewValue
 		{
-			get
-			{
-				if (_newValue == null)
-				{
-					_newValue = (CInt32) CR2WTypeManager.Create("Int32", "newValue", cr2w, this);
-				}
-				return _newValue;
-			}
-			set
-			{
-				if (_newValue == value)
-				{
-					return;
-				}
-				_newValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newValue);
+			set => SetProperty(ref _newValue, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("sliderWidget")] 
 		public inkWidgetReference SliderWidget
 		{
-			get
-			{
-				if (_sliderWidget == null)
-				{
-					_sliderWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "sliderWidget", cr2w, this);
-				}
-				return _sliderWidget;
-			}
-			set
-			{
-				if (_sliderWidget == value)
-				{
-					return;
-				}
-				_sliderWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sliderWidget);
+			set => SetProperty(ref _sliderWidget, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("sliderController")] 
 		public wCHandle<inkSliderController> SliderController
 		{
-			get
-			{
-				if (_sliderController == null)
-				{
-					_sliderController = (wCHandle<inkSliderController>) CR2WTypeManager.Create("whandle:inkSliderController", "sliderController", cr2w, this);
-				}
-				return _sliderController;
-			}
-			set
-			{
-				if (_sliderController == value)
-				{
-					return;
-				}
-				_sliderController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sliderController);
+			set => SetProperty(ref _sliderController, value);
 		}
 
 		public SettingsSelectorControllerInt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

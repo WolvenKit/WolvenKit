@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("queryParams")] 
 		public gameGrenadeThrowQueryParams QueryParams
 		{
-			get
-			{
-				if (_queryParams == null)
-				{
-					_queryParams = (gameGrenadeThrowQueryParams) CR2WTypeManager.Create("gameGrenadeThrowQueryParams", "queryParams", cr2w, this);
-				}
-				return _queryParams;
-			}
-			set
-			{
-				if (_queryParams == value)
-				{
-					return;
-				}
-				_queryParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _queryParams);
+			set => SetProperty(ref _queryParams, value);
 		}
 
 		public StartGrenadeThrowQueryEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

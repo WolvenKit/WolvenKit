@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("events")] 
 		public CArray<CName> Events
 		{
-			get
-			{
-				if (_events == null)
-				{
-					_events = (CArray<CName>) CR2WTypeManager.Create("array:CName", "events", cr2w, this);
-				}
-				return _events;
-			}
-			set
-			{
-				if (_events == value)
-				{
-					return;
-				}
-				_events = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _events);
+			set => SetProperty(ref _events, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("interval")] 
 		public CFloat Interval
 		{
-			get
-			{
-				if (_interval == null)
-				{
-					_interval = (CFloat) CR2WTypeManager.Create("Float", "interval", cr2w, this);
-				}
-				return _interval;
-			}
-			set
-			{
-				if (_interval == value)
-				{
-					return;
-				}
-				_interval = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interval);
+			set => SetProperty(ref _interval, value);
 		}
 
 		public audioDynamicEventsWithInterval(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

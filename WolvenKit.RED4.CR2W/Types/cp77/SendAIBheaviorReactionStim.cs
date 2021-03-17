@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stimToSend")] 
 		public CEnum<gamedataStimType> StimToSend
 		{
-			get
-			{
-				if (_stimToSend == null)
-				{
-					_stimToSend = (CEnum<gamedataStimType>) CR2WTypeManager.Create("gamedataStimType", "stimToSend", cr2w, this);
-				}
-				return _stimToSend;
-			}
-			set
-			{
-				if (_stimToSend == value)
-				{
-					return;
-				}
-				_stimToSend = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stimToSend);
+			set => SetProperty(ref _stimToSend, value);
 		}
 
 		public SendAIBheaviorReactionStim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

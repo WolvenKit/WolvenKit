@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inventory")] 
 		public CHandle<gameInventory> Inventory
 		{
-			get
-			{
-				if (_inventory == null)
-				{
-					_inventory = (CHandle<gameInventory>) CR2WTypeManager.Create("handle:gameInventory", "inventory", cr2w, this);
-				}
-				return _inventory;
-			}
-			set
-			{
-				if (_inventory == value)
-				{
-					return;
-				}
-				_inventory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventory);
+			set => SetProperty(ref _inventory, value);
 		}
 
 		public Stash(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

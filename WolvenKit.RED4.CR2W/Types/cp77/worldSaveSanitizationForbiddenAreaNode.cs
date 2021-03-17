@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("safeSpotOffset")] 
 		public Vector4 SafeSpotOffset
 		{
-			get
-			{
-				if (_safeSpotOffset == null)
-				{
-					_safeSpotOffset = (Vector4) CR2WTypeManager.Create("Vector4", "safeSpotOffset", cr2w, this);
-				}
-				return _safeSpotOffset;
-			}
-			set
-			{
-				if (_safeSpotOffset == value)
-				{
-					return;
-				}
-				_safeSpotOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _safeSpotOffset);
+			set => SetProperty(ref _safeSpotOffset, value);
 		}
 
 		public worldSaveSanitizationForbiddenAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

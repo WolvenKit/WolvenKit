@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sectorBounds")] 
 		public Box SectorBounds
 		{
-			get
-			{
-				if (_sectorBounds == null)
-				{
-					_sectorBounds = (Box) CR2WTypeManager.Create("Box", "sectorBounds", cr2w, this);
-				}
-				return _sectorBounds;
-			}
-			set
-			{
-				if (_sectorBounds == value)
-				{
-					return;
-				}
-				_sectorBounds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sectorBounds);
+			set => SetProperty(ref _sectorBounds, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sectorHash")] 
 		public CUInt64 SectorHash
 		{
-			get
-			{
-				if (_sectorHash == null)
-				{
-					_sectorHash = (CUInt64) CR2WTypeManager.Create("Uint64", "sectorHash", cr2w, this);
-				}
-				return _sectorHash;
-			}
-			set
-			{
-				if (_sectorHash == value)
-				{
-					return;
-				}
-				_sectorHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sectorHash);
+			set => SetProperty(ref _sectorHash, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entryOffset")] 
 		public CUInt32 EntryOffset
 		{
-			get
-			{
-				if (_entryOffset == null)
-				{
-					_entryOffset = (CUInt32) CR2WTypeManager.Create("Uint32", "entryOffset", cr2w, this);
-				}
-				return _entryOffset;
-			}
-			set
-			{
-				if (_entryOffset == value)
-				{
-					return;
-				}
-				_entryOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryOffset);
+			set => SetProperty(ref _entryOffset, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("entrySize")] 
 		public CUInt32 EntrySize
 		{
-			get
-			{
-				if (_entrySize == null)
-				{
-					_entrySize = (CUInt32) CR2WTypeManager.Create("Uint32", "entrySize", cr2w, this);
-				}
-				return _entrySize;
-			}
-			set
-			{
-				if (_entrySize == value)
-				{
-					return;
-				}
-				_entrySize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entrySize);
+			set => SetProperty(ref _entrySize, value);
 		}
 
 		public physicsSectorEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

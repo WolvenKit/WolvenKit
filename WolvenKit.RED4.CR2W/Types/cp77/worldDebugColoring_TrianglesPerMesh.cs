@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("maxColor")] 
 		public CColor MaxColor
 		{
-			get
-			{
-				if (_maxColor == null)
-				{
-					_maxColor = (CColor) CR2WTypeManager.Create("Color", "maxColor", cr2w, this);
-				}
-				return _maxColor;
-			}
-			set
-			{
-				if (_maxColor == value)
-				{
-					return;
-				}
-				_maxColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxColor);
+			set => SetProperty(ref _maxColor, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("minColor")] 
 		public CColor MinColor
 		{
-			get
-			{
-				if (_minColor == null)
-				{
-					_minColor = (CColor) CR2WTypeManager.Create("Color", "minColor", cr2w, this);
-				}
-				return _minColor;
-			}
-			set
-			{
-				if (_minColor == value)
-				{
-					return;
-				}
-				_minColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minColor);
+			set => SetProperty(ref _minColor, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("minCount")] 
 		public CUInt32 MinCount
 		{
-			get
-			{
-				if (_minCount == null)
-				{
-					_minCount = (CUInt32) CR2WTypeManager.Create("Uint32", "minCount", cr2w, this);
-				}
-				return _minCount;
-			}
-			set
-			{
-				if (_minCount == value)
-				{
-					return;
-				}
-				_minCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minCount);
+			set => SetProperty(ref _minCount, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("maxCount")] 
 		public CUInt32 MaxCount
 		{
-			get
-			{
-				if (_maxCount == null)
-				{
-					_maxCount = (CUInt32) CR2WTypeManager.Create("Uint32", "maxCount", cr2w, this);
-				}
-				return _maxCount;
-			}
-			set
-			{
-				if (_maxCount == value)
-				{
-					return;
-				}
-				_maxCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxCount);
+			set => SetProperty(ref _maxCount, value);
 		}
 
 		public worldDebugColoring_TrianglesPerMesh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

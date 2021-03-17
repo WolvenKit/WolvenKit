@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("runAnimation")] 
 		public CName RunAnimation
 		{
-			get
-			{
-				if (_runAnimation == null)
-				{
-					_runAnimation = (CName) CR2WTypeManager.Create("CName", "runAnimation", cr2w, this);
-				}
-				return _runAnimation;
-			}
-			set
-			{
-				if (_runAnimation == value)
-				{
-					return;
-				}
-				_runAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _runAnimation);
+			set => SetProperty(ref _runAnimation, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("jumpAnimation")] 
 		public CName JumpAnimation
 		{
-			get
-			{
-				if (_jumpAnimation == null)
-				{
-					_jumpAnimation = (CName) CR2WTypeManager.Create("CName", "jumpAnimation", cr2w, this);
-				}
-				return _jumpAnimation;
-			}
-			set
-			{
-				if (_jumpAnimation == value)
-				{
-					return;
-				}
-				_jumpAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _jumpAnimation);
+			set => SetProperty(ref _jumpAnimation, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("currentAnimation")] 
 		public CHandle<inkanimProxy> CurrentAnimation
 		{
-			get
-			{
-				if (_currentAnimation == null)
-				{
-					_currentAnimation = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "currentAnimation", cr2w, this);
-				}
-				return _currentAnimation;
-			}
-			set
-			{
-				if (_currentAnimation == value)
-				{
-					return;
-				}
-				_currentAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentAnimation);
+			set => SetProperty(ref _currentAnimation, value);
 		}
 
 		public gameuiRoachRacePlayerController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

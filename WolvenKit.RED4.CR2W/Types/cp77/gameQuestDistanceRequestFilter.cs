@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("distanceSquared")] 
 		public CFloat DistanceSquared
 		{
-			get
-			{
-				if (_distanceSquared == null)
-				{
-					_distanceSquared = (CFloat) CR2WTypeManager.Create("Float", "distanceSquared", cr2w, this);
-				}
-				return _distanceSquared;
-			}
-			set
-			{
-				if (_distanceSquared == value)
-				{
-					return;
-				}
-				_distanceSquared = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distanceSquared);
+			set => SetProperty(ref _distanceSquared, value);
 		}
 
 		public gameQuestDistanceRequestFilter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

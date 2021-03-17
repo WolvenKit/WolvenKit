@@ -25,299 +25,104 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("eyesTags")] 
 		public CArray<CName> EyesTags
 		{
-			get
-			{
-				if (_eyesTags == null)
-				{
-					_eyesTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "eyesTags", cr2w, this);
-				}
-				return _eyesTags;
-			}
-			set
-			{
-				if (_eyesTags == value)
-				{
-					return;
-				}
-				_eyesTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eyesTags);
+			set => SetProperty(ref _eyesTags, value);
 		}
 
 		[Ordinal(48)] 
 		[RED("brainTags")] 
 		public CArray<CName> BrainTags
 		{
-			get
-			{
-				if (_brainTags == null)
-				{
-					_brainTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "brainTags", cr2w, this);
-				}
-				return _brainTags;
-			}
-			set
-			{
-				if (_brainTags == value)
-				{
-					return;
-				}
-				_brainTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _brainTags);
+			set => SetProperty(ref _brainTags, value);
 		}
 
 		[Ordinal(49)] 
 		[RED("musculoskeletalTags")] 
 		public CArray<CName> MusculoskeletalTags
 		{
-			get
-			{
-				if (_musculoskeletalTags == null)
-				{
-					_musculoskeletalTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "musculoskeletalTags", cr2w, this);
-				}
-				return _musculoskeletalTags;
-			}
-			set
-			{
-				if (_musculoskeletalTags == value)
-				{
-					return;
-				}
-				_musculoskeletalTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _musculoskeletalTags);
+			set => SetProperty(ref _musculoskeletalTags, value);
 		}
 
 		[Ordinal(50)] 
 		[RED("nervousTags")] 
 		public CArray<CName> NervousTags
 		{
-			get
-			{
-				if (_nervousTags == null)
-				{
-					_nervousTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "nervousTags", cr2w, this);
-				}
-				return _nervousTags;
-			}
-			set
-			{
-				if (_nervousTags == value)
-				{
-					return;
-				}
-				_nervousTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nervousTags);
+			set => SetProperty(ref _nervousTags, value);
 		}
 
 		[Ordinal(51)] 
 		[RED("cardiovascularTags")] 
 		public CArray<CName> CardiovascularTags
 		{
-			get
-			{
-				if (_cardiovascularTags == null)
-				{
-					_cardiovascularTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "cardiovascularTags", cr2w, this);
-				}
-				return _cardiovascularTags;
-			}
-			set
-			{
-				if (_cardiovascularTags == value)
-				{
-					return;
-				}
-				_cardiovascularTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cardiovascularTags);
+			set => SetProperty(ref _cardiovascularTags, value);
 		}
 
 		[Ordinal(52)] 
 		[RED("immuneTags")] 
 		public CArray<CName> ImmuneTags
 		{
-			get
-			{
-				if (_immuneTags == null)
-				{
-					_immuneTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "immuneTags", cr2w, this);
-				}
-				return _immuneTags;
-			}
-			set
-			{
-				if (_immuneTags == value)
-				{
-					return;
-				}
-				_immuneTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _immuneTags);
+			set => SetProperty(ref _immuneTags, value);
 		}
 
 		[Ordinal(53)] 
 		[RED("integumentaryTags")] 
 		public CArray<CName> IntegumentaryTags
 		{
-			get
-			{
-				if (_integumentaryTags == null)
-				{
-					_integumentaryTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "integumentaryTags", cr2w, this);
-				}
-				return _integumentaryTags;
-			}
-			set
-			{
-				if (_integumentaryTags == value)
-				{
-					return;
-				}
-				_integumentaryTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _integumentaryTags);
+			set => SetProperty(ref _integumentaryTags, value);
 		}
 
 		[Ordinal(54)] 
 		[RED("handsTags")] 
 		public CArray<CName> HandsTags
 		{
-			get
-			{
-				if (_handsTags == null)
-				{
-					_handsTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "handsTags", cr2w, this);
-				}
-				return _handsTags;
-			}
-			set
-			{
-				if (_handsTags == value)
-				{
-					return;
-				}
-				_handsTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _handsTags);
+			set => SetProperty(ref _handsTags, value);
 		}
 
 		[Ordinal(55)] 
 		[RED("armsTags")] 
 		public CArray<CName> ArmsTags
 		{
-			get
-			{
-				if (_armsTags == null)
-				{
-					_armsTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "armsTags", cr2w, this);
-				}
-				return _armsTags;
-			}
-			set
-			{
-				if (_armsTags == value)
-				{
-					return;
-				}
-				_armsTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _armsTags);
+			set => SetProperty(ref _armsTags, value);
 		}
 
 		[Ordinal(56)] 
 		[RED("legsTags")] 
 		public CArray<CName> LegsTags
 		{
-			get
-			{
-				if (_legsTags == null)
-				{
-					_legsTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "legsTags", cr2w, this);
-				}
-				return _legsTags;
-			}
-			set
-			{
-				if (_legsTags == value)
-				{
-					return;
-				}
-				_legsTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _legsTags);
+			set => SetProperty(ref _legsTags, value);
 		}
 
 		[Ordinal(57)] 
 		[RED("quickSlotTags")] 
 		public CArray<CName> QuickSlotTags
 		{
-			get
-			{
-				if (_quickSlotTags == null)
-				{
-					_quickSlotTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "quickSlotTags", cr2w, this);
-				}
-				return _quickSlotTags;
-			}
-			set
-			{
-				if (_quickSlotTags == value)
-				{
-					return;
-				}
-				_quickSlotTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quickSlotTags);
+			set => SetProperty(ref _quickSlotTags, value);
 		}
 
 		[Ordinal(58)] 
 		[RED("weaponsQuickSlotTags")] 
 		public CArray<CName> WeaponsQuickSlotTags
 		{
-			get
-			{
-				if (_weaponsQuickSlotTags == null)
-				{
-					_weaponsQuickSlotTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "weaponsQuickSlotTags", cr2w, this);
-				}
-				return _weaponsQuickSlotTags;
-			}
-			set
-			{
-				if (_weaponsQuickSlotTags == value)
-				{
-					return;
-				}
-				_weaponsQuickSlotTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponsQuickSlotTags);
+			set => SetProperty(ref _weaponsQuickSlotTags, value);
 		}
 
 		[Ordinal(59)] 
 		[RED("fragmentTags")] 
 		public CArray<CName> FragmentTags
 		{
-			get
-			{
-				if (_fragmentTags == null)
-				{
-					_fragmentTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "fragmentTags", cr2w, this);
-				}
-				return _fragmentTags;
-			}
-			set
-			{
-				if (_fragmentTags == value)
-				{
-					return;
-				}
-				_fragmentTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fragmentTags);
+			set => SetProperty(ref _fragmentTags, value);
 		}
 
 		public CyberEquipGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

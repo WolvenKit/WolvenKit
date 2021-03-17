@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("reactionToCompare")] 
 		public CEnum<gamedataOutput> ReactionToCompare
 		{
-			get
-			{
-				if (_reactionToCompare == null)
-				{
-					_reactionToCompare = (CEnum<gamedataOutput>) CR2WTypeManager.Create("gamedataOutput", "reactionToCompare", cr2w, this);
-				}
-				return _reactionToCompare;
-			}
-			set
-			{
-				if (_reactionToCompare == value)
-				{
-					return;
-				}
-				_reactionToCompare = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reactionToCompare);
+			set => SetProperty(ref _reactionToCompare, value);
 		}
 
 		public CheckReaction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

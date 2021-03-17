@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("controllers")] 
 		public CArray<gameMuppetControllerSnapshot> Controllers
 		{
-			get
-			{
-				if (_controllers == null)
-				{
-					_controllers = (CArray<gameMuppetControllerSnapshot>) CR2WTypeManager.Create("array:gameMuppetControllerSnapshot", "controllers", cr2w, this);
-				}
-				return _controllers;
-			}
-			set
-			{
-				if (_controllers == value)
-				{
-					return;
-				}
-				_controllers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _controllers);
+			set => SetProperty(ref _controllers, value);
 		}
 
 		public gameMuppetControllersSnapshot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

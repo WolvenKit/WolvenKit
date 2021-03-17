@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("movementType")] 
 		public CString MovementType
 		{
-			get
-			{
-				if (_movementType == null)
-				{
-					_movementType = (CString) CR2WTypeManager.Create("String", "movementType", cr2w, this);
-				}
-				return _movementType;
-			}
-			set
-			{
-				if (_movementType == value)
-				{
-					return;
-				}
-				_movementType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movementType);
+			set => SetProperty(ref _movementType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("fearStage")] 
 		public CEnum<gameFearStage> FearStage
 		{
-			get
-			{
-				if (_fearStage == null)
-				{
-					_fearStage = (CEnum<gameFearStage>) CR2WTypeManager.Create("gameFearStage", "fearStage", cr2w, this);
-				}
-				return _fearStage;
-			}
-			set
-			{
-				if (_fearStage == value)
-				{
-					return;
-				}
-				_fearStage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fearStage);
+			set => SetProperty(ref _fearStage, value);
 		}
 
 		public SetTrafficLaneMovementParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

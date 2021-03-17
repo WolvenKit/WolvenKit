@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("path")] 
 		public redResourceReferenceScriptToken Path
 		{
-			get
-			{
-				if (_path == null)
-				{
-					_path = (redResourceReferenceScriptToken) CR2WTypeManager.Create("redResourceReferenceScriptToken", "path", cr2w, this);
-				}
-				return _path;
-			}
-			set
-			{
-				if (_path == value)
-				{
-					return;
-				}
-				_path = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _path);
+			set => SetProperty(ref _path, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("startingTime")] 
 		public CFloat StartingTime
 		{
-			get
-			{
-				if (_startingTime == null)
-				{
-					_startingTime = (CFloat) CR2WTypeManager.Create("Float", "startingTime", cr2w, this);
-				}
-				return _startingTime;
-			}
-			set
-			{
-				if (_startingTime == value)
-				{
-					return;
-				}
-				_startingTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startingTime);
+			set => SetProperty(ref _startingTime, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("shouldPlay")] 
 		public CBool ShouldPlay
 		{
-			get
-			{
-				if (_shouldPlay == null)
-				{
-					_shouldPlay = (CBool) CR2WTypeManager.Create("Bool", "shouldPlay", cr2w, this);
-				}
-				return _shouldPlay;
-			}
-			set
-			{
-				if (_shouldPlay == value)
-				{
-					return;
-				}
-				_shouldPlay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldPlay);
+			set => SetProperty(ref _shouldPlay, value);
 		}
 
 		public BinkVideoEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

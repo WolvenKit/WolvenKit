@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("parentName")] 
 		public CName ParentName
 		{
-			get
-			{
-				if (_parentName == null)
-				{
-					_parentName = (CName) CR2WTypeManager.Create("CName", "parentName", cr2w, this);
-				}
-				return _parentName;
-			}
-			set
-			{
-				if (_parentName == value)
-				{
-					return;
-				}
-				_parentName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentName);
+			set => SetProperty(ref _parentName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("referenceTransformLs")] 
 		public QsTransform ReferenceTransformLs
 		{
-			get
-			{
-				if (_referenceTransformLs == null)
-				{
-					_referenceTransformLs = (QsTransform) CR2WTypeManager.Create("QsTransform", "referenceTransformLs", cr2w, this);
-				}
-				return _referenceTransformLs;
-			}
-			set
-			{
-				if (_referenceTransformLs == value)
-				{
-					return;
-				}
-				_referenceTransformLs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _referenceTransformLs);
+			set => SetProperty(ref _referenceTransformLs, value);
 		}
 
 		public animTransformInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

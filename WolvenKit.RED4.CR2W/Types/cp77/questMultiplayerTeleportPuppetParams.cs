@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("teleportAllPlayers")] 
 		public CBool TeleportAllPlayers
 		{
-			get
-			{
-				if (_teleportAllPlayers == null)
-				{
-					_teleportAllPlayers = (CBool) CR2WTypeManager.Create("Bool", "teleportAllPlayers", cr2w, this);
-				}
-				return _teleportAllPlayers;
-			}
-			set
-			{
-				if (_teleportAllPlayers == value)
-				{
-					return;
-				}
-				_teleportAllPlayers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _teleportAllPlayers);
+			set => SetProperty(ref _teleportAllPlayers, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("spawnPointTag")] 
 		public CName SpawnPointTag
 		{
-			get
-			{
-				if (_spawnPointTag == null)
-				{
-					_spawnPointTag = (CName) CR2WTypeManager.Create("CName", "spawnPointTag", cr2w, this);
-				}
-				return _spawnPointTag;
-			}
-			set
-			{
-				if (_spawnPointTag == value)
-				{
-					return;
-				}
-				_spawnPointTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnPointTag);
+			set => SetProperty(ref _spawnPointTag, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("destinationRef")] 
 		public gameEntityReference DestinationRef
 		{
-			get
-			{
-				if (_destinationRef == null)
-				{
-					_destinationRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "destinationRef", cr2w, this);
-				}
-				return _destinationRef;
-			}
-			set
-			{
-				if (_destinationRef == value)
-				{
-					return;
-				}
-				_destinationRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _destinationRef);
+			set => SetProperty(ref _destinationRef, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("destinationOffset")] 
 		public Vector3 DestinationOffset
 		{
-			get
-			{
-				if (_destinationOffset == null)
-				{
-					_destinationOffset = (Vector3) CR2WTypeManager.Create("Vector3", "destinationOffset", cr2w, this);
-				}
-				return _destinationOffset;
-			}
-			set
-			{
-				if (_destinationOffset == value)
-				{
-					return;
-				}
-				_destinationOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _destinationOffset);
+			set => SetProperty(ref _destinationOffset, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("areaNodeTriggerRef")] 
 		public gameEntityReference AreaNodeTriggerRef
 		{
-			get
-			{
-				if (_areaNodeTriggerRef == null)
-				{
-					_areaNodeTriggerRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "areaNodeTriggerRef", cr2w, this);
-				}
-				return _areaNodeTriggerRef;
-			}
-			set
-			{
-				if (_areaNodeTriggerRef == value)
-				{
-					return;
-				}
-				_areaNodeTriggerRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaNodeTriggerRef);
+			set => SetProperty(ref _areaNodeTriggerRef, value);
 		}
 
 		public questMultiplayerTeleportPuppetParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

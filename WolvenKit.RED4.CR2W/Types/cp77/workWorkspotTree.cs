@@ -43,713 +43,248 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("workspotRig")] 
 		public raRef<animRig> WorkspotRig
 		{
-			get
-			{
-				if (_workspotRig == null)
-				{
-					_workspotRig = (raRef<animRig>) CR2WTypeManager.Create("raRef:animRig", "workspotRig", cr2w, this);
-				}
-				return _workspotRig;
-			}
-			set
-			{
-				if (_workspotRig == value)
-				{
-					return;
-				}
-				_workspotRig = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotRig);
+			set => SetProperty(ref _workspotRig, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("availableRigSlots")] 
 		public CArray<CName> AvailableRigSlots
 		{
-			get
-			{
-				if (_availableRigSlots == null)
-				{
-					_availableRigSlots = (CArray<CName>) CR2WTypeManager.Create("array:CName", "availableRigSlots", cr2w, this);
-				}
-				return _availableRigSlots;
-			}
-			set
-			{
-				if (_availableRigSlots == value)
-				{
-					return;
-				}
-				_availableRigSlots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _availableRigSlots);
+			set => SetProperty(ref _availableRigSlots, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("availablePropIds")] 
 		public CArray<CName> AvailablePropIds
 		{
-			get
-			{
-				if (_availablePropIds == null)
-				{
-					_availablePropIds = (CArray<CName>) CR2WTypeManager.Create("array:CName", "availablePropIds", cr2w, this);
-				}
-				return _availablePropIds;
-			}
-			set
-			{
-				if (_availablePropIds == value)
-				{
-					return;
-				}
-				_availablePropIds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _availablePropIds);
+			set => SetProperty(ref _availablePropIds, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("globalProps")] 
 		public CArray<workWorkspotGlobalProp> GlobalProps
 		{
-			get
-			{
-				if (_globalProps == null)
-				{
-					_globalProps = (CArray<workWorkspotGlobalProp>) CR2WTypeManager.Create("array:workWorkspotGlobalProp", "globalProps", cr2w, this);
-				}
-				return _globalProps;
-			}
-			set
-			{
-				if (_globalProps == value)
-				{
-					return;
-				}
-				_globalProps = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _globalProps);
+			set => SetProperty(ref _globalProps, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("rootEntry")] 
 		public CHandle<workIEntry> RootEntry
 		{
-			get
-			{
-				if (_rootEntry == null)
-				{
-					_rootEntry = (CHandle<workIEntry>) CR2WTypeManager.Create("handle:workIEntry", "rootEntry", cr2w, this);
-				}
-				return _rootEntry;
-			}
-			set
-			{
-				if (_rootEntry == value)
-				{
-					return;
-				}
-				_rootEntry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rootEntry);
+			set => SetProperty(ref _rootEntry, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("idCounter")] 
 		public CUInt32 IdCounter
 		{
-			get
-			{
-				if (_idCounter == null)
-				{
-					_idCounter = (CUInt32) CR2WTypeManager.Create("Uint32", "idCounter", cr2w, this);
-				}
-				return _idCounter;
-			}
-			set
-			{
-				if (_idCounter == value)
-				{
-					return;
-				}
-				_idCounter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _idCounter);
+			set => SetProperty(ref _idCounter, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("dontInjectWorkspotGraph")] 
 		public CBool DontInjectWorkspotGraph
 		{
-			get
-			{
-				if (_dontInjectWorkspotGraph == null)
-				{
-					_dontInjectWorkspotGraph = (CBool) CR2WTypeManager.Create("Bool", "dontInjectWorkspotGraph", cr2w, this);
-				}
-				return _dontInjectWorkspotGraph;
-			}
-			set
-			{
-				if (_dontInjectWorkspotGraph == value)
-				{
-					return;
-				}
-				_dontInjectWorkspotGraph = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dontInjectWorkspotGraph);
+			set => SetProperty(ref _dontInjectWorkspotGraph, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("animGraphSlotName")] 
 		public CName AnimGraphSlotName
 		{
-			get
-			{
-				if (_animGraphSlotName == null)
-				{
-					_animGraphSlotName = (CName) CR2WTypeManager.Create("CName", "animGraphSlotName", cr2w, this);
-				}
-				return _animGraphSlotName;
-			}
-			set
-			{
-				if (_animGraphSlotName == value)
-				{
-					return;
-				}
-				_animGraphSlotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animGraphSlotName);
+			set => SetProperty(ref _animGraphSlotName, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("autoTransitionBlendTime")] 
 		public CFloat AutoTransitionBlendTime
 		{
-			get
-			{
-				if (_autoTransitionBlendTime == null)
-				{
-					_autoTransitionBlendTime = (CFloat) CR2WTypeManager.Create("Float", "autoTransitionBlendTime", cr2w, this);
-				}
-				return _autoTransitionBlendTime;
-			}
-			set
-			{
-				if (_autoTransitionBlendTime == value)
-				{
-					return;
-				}
-				_autoTransitionBlendTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _autoTransitionBlendTime);
+			set => SetProperty(ref _autoTransitionBlendTime, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("initialActions")] 
 		public CArray<CHandle<workIWorkspotItemAction>> InitialActions
 		{
-			get
-			{
-				if (_initialActions == null)
-				{
-					_initialActions = (CArray<CHandle<workIWorkspotItemAction>>) CR2WTypeManager.Create("array:handle:workIWorkspotItemAction", "initialActions", cr2w, this);
-				}
-				return _initialActions;
-			}
-			set
-			{
-				if (_initialActions == value)
-				{
-					return;
-				}
-				_initialActions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialActions);
+			set => SetProperty(ref _initialActions, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("blendOutTime")] 
 		public CFloat BlendOutTime
 		{
-			get
-			{
-				if (_blendOutTime == null)
-				{
-					_blendOutTime = (CFloat) CR2WTypeManager.Create("Float", "blendOutTime", cr2w, this);
-				}
-				return _blendOutTime;
-			}
-			set
-			{
-				if (_blendOutTime == value)
-				{
-					return;
-				}
-				_blendOutTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendOutTime);
+			set => SetProperty(ref _blendOutTime, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("hasEntityPathsGenerated")] 
 		public CBool HasEntityPathsGenerated
 		{
-			get
-			{
-				if (_hasEntityPathsGenerated == null)
-				{
-					_hasEntityPathsGenerated = (CBool) CR2WTypeManager.Create("Bool", "hasEntityPathsGenerated", cr2w, this);
-				}
-				return _hasEntityPathsGenerated;
-			}
-			set
-			{
-				if (_hasEntityPathsGenerated == value)
-				{
-					return;
-				}
-				_hasEntityPathsGenerated = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasEntityPathsGenerated);
+			set => SetProperty(ref _hasEntityPathsGenerated, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("entitiesPaths")] 
 		public CArray<CName> EntitiesPaths
 		{
-			get
-			{
-				if (_entitiesPaths == null)
-				{
-					_entitiesPaths = (CArray<CName>) CR2WTypeManager.Create("array:CName", "entitiesPaths", cr2w, this);
-				}
-				return _entitiesPaths;
-			}
-			set
-			{
-				if (_entitiesPaths == value)
-				{
-					return;
-				}
-				_entitiesPaths = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entitiesPaths);
+			set => SetProperty(ref _entitiesPaths, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("animsets")] 
 		public CArray<workWorkspotAnimsetEntry> Animsets
 		{
-			get
-			{
-				if (_animsets == null)
-				{
-					_animsets = (CArray<workWorkspotAnimsetEntry>) CR2WTypeManager.Create("array:workWorkspotAnimsetEntry", "animsets", cr2w, this);
-				}
-				return _animsets;
-			}
-			set
-			{
-				if (_animsets == value)
-				{
-					return;
-				}
-				_animsets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animsets);
+			set => SetProperty(ref _animsets, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("finalAnimsets")] 
 		public CArray<workWorkspotAnimsetEntry> FinalAnimsets
 		{
-			get
-			{
-				if (_finalAnimsets == null)
-				{
-					_finalAnimsets = (CArray<workWorkspotAnimsetEntry>) CR2WTypeManager.Create("array:workWorkspotAnimsetEntry", "finalAnimsets", cr2w, this);
-				}
-				return _finalAnimsets;
-			}
-			set
-			{
-				if (_finalAnimsets == value)
-				{
-					return;
-				}
-				_finalAnimsets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _finalAnimsets);
+			set => SetProperty(ref _finalAnimsets, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("tags")] 
 		public redTagList Tags
 		{
-			get
-			{
-				if (_tags == null)
-				{
-					_tags = (redTagList) CR2WTypeManager.Create("redTagList", "tags", cr2w, this);
-				}
-				return _tags;
-			}
-			set
-			{
-				if (_tags == value)
-				{
-					return;
-				}
-				_tags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tags);
+			set => SetProperty(ref _tags, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("itemsPolicy")] 
 		public CEnum<workWorkspotItemPolicy> ItemsPolicy
 		{
-			get
-			{
-				if (_itemsPolicy == null)
-				{
-					_itemsPolicy = (CEnum<workWorkspotItemPolicy>) CR2WTypeManager.Create("workWorkspotItemPolicy", "itemsPolicy", cr2w, this);
-				}
-				return _itemsPolicy;
-			}
-			set
-			{
-				if (_itemsPolicy == value)
-				{
-					return;
-				}
-				_itemsPolicy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemsPolicy);
+			set => SetProperty(ref _itemsPolicy, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("censorshipFlags")] 
 		public CEnum<CensorshipFlags> CensorshipFlags
 		{
-			get
-			{
-				if (_censorshipFlags == null)
-				{
-					_censorshipFlags = (CEnum<CensorshipFlags>) CR2WTypeManager.Create("CensorshipFlags", "censorshipFlags", cr2w, this);
-				}
-				return _censorshipFlags;
-			}
-			set
-			{
-				if (_censorshipFlags == value)
-				{
-					return;
-				}
-				_censorshipFlags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _censorshipFlags);
+			set => SetProperty(ref _censorshipFlags, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("customTransitionAnims")] 
 		public CArray<workTransitionAnim> CustomTransitionAnims
 		{
-			get
-			{
-				if (_customTransitionAnims == null)
-				{
-					_customTransitionAnims = (CArray<workTransitionAnim>) CR2WTypeManager.Create("array:workTransitionAnim", "customTransitionAnims", cr2w, this);
-				}
-				return _customTransitionAnims;
-			}
-			set
-			{
-				if (_customTransitionAnims == value)
-				{
-					return;
-				}
-				_customTransitionAnims = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customTransitionAnims);
+			set => SetProperty(ref _customTransitionAnims, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("inertializationDurationEnter")] 
 		public CFloat InertializationDurationEnter
 		{
-			get
-			{
-				if (_inertializationDurationEnter == null)
-				{
-					_inertializationDurationEnter = (CFloat) CR2WTypeManager.Create("Float", "inertializationDurationEnter", cr2w, this);
-				}
-				return _inertializationDurationEnter;
-			}
-			set
-			{
-				if (_inertializationDurationEnter == value)
-				{
-					return;
-				}
-				_inertializationDurationEnter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inertializationDurationEnter);
+			set => SetProperty(ref _inertializationDurationEnter, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("inertializationDurationExitNatural")] 
 		public CFloat InertializationDurationExitNatural
 		{
-			get
-			{
-				if (_inertializationDurationExitNatural == null)
-				{
-					_inertializationDurationExitNatural = (CFloat) CR2WTypeManager.Create("Float", "inertializationDurationExitNatural", cr2w, this);
-				}
-				return _inertializationDurationExitNatural;
-			}
-			set
-			{
-				if (_inertializationDurationExitNatural == value)
-				{
-					return;
-				}
-				_inertializationDurationExitNatural = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inertializationDurationExitNatural);
+			set => SetProperty(ref _inertializationDurationExitNatural, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("inertializationDurationExitForced")] 
 		public CFloat InertializationDurationExitForced
 		{
-			get
-			{
-				if (_inertializationDurationExitForced == null)
-				{
-					_inertializationDurationExitForced = (CFloat) CR2WTypeManager.Create("Float", "inertializationDurationExitForced", cr2w, this);
-				}
-				return _inertializationDurationExitForced;
-			}
-			set
-			{
-				if (_inertializationDurationExitForced == value)
-				{
-					return;
-				}
-				_inertializationDurationExitForced = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inertializationDurationExitForced);
+			set => SetProperty(ref _inertializationDurationExitForced, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("useTimeLimitForSequences")] 
 		public CBool UseTimeLimitForSequences
 		{
-			get
-			{
-				if (_useTimeLimitForSequences == null)
-				{
-					_useTimeLimitForSequences = (CBool) CR2WTypeManager.Create("Bool", "useTimeLimitForSequences", cr2w, this);
-				}
-				return _useTimeLimitForSequences;
-			}
-			set
-			{
-				if (_useTimeLimitForSequences == value)
-				{
-					return;
-				}
-				_useTimeLimitForSequences = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useTimeLimitForSequences);
+			set => SetProperty(ref _useTimeLimitForSequences, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("disableAutoAnimsetGeneraion")] 
 		public CBool DisableAutoAnimsetGeneraion
 		{
-			get
-			{
-				if (_disableAutoAnimsetGeneraion == null)
-				{
-					_disableAutoAnimsetGeneraion = (CBool) CR2WTypeManager.Create("Bool", "disableAutoAnimsetGeneraion", cr2w, this);
-				}
-				return _disableAutoAnimsetGeneraion;
-			}
-			set
-			{
-				if (_disableAutoAnimsetGeneraion == value)
-				{
-					return;
-				}
-				_disableAutoAnimsetGeneraion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _disableAutoAnimsetGeneraion);
+			set => SetProperty(ref _disableAutoAnimsetGeneraion, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("frezeAtTheLastFrame_UseWithCaution")] 
 		public CBool FrezeAtTheLastFrame_UseWithCaution
 		{
-			get
-			{
-				if (_frezeAtTheLastFrame_UseWithCaution == null)
-				{
-					_frezeAtTheLastFrame_UseWithCaution = (CBool) CR2WTypeManager.Create("Bool", "frezeAtTheLastFrame_UseWithCaution", cr2w, this);
-				}
-				return _frezeAtTheLastFrame_UseWithCaution;
-			}
-			set
-			{
-				if (_frezeAtTheLastFrame_UseWithCaution == value)
-				{
-					return;
-				}
-				_frezeAtTheLastFrame_UseWithCaution = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frezeAtTheLastFrame_UseWithCaution);
+			set => SetProperty(ref _frezeAtTheLastFrame_UseWithCaution, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("sequencesTimeLimit")] 
 		public CFloat SequencesTimeLimit
 		{
-			get
-			{
-				if (_sequencesTimeLimit == null)
-				{
-					_sequencesTimeLimit = (CFloat) CR2WTypeManager.Create("Float", "sequencesTimeLimit", cr2w, this);
-				}
-				return _sequencesTimeLimit;
-			}
-			set
-			{
-				if (_sequencesTimeLimit == value)
-				{
-					return;
-				}
-				_sequencesTimeLimit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sequencesTimeLimit);
+			set => SetProperty(ref _sequencesTimeLimit, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("snapToTerrain")] 
 		public CBool SnapToTerrain
 		{
-			get
-			{
-				if (_snapToTerrain == null)
-				{
-					_snapToTerrain = (CBool) CR2WTypeManager.Create("Bool", "snapToTerrain", cr2w, this);
-				}
-				return _snapToTerrain;
-			}
-			set
-			{
-				if (_snapToTerrain == value)
-				{
-					return;
-				}
-				_snapToTerrain = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _snapToTerrain);
+			set => SetProperty(ref _snapToTerrain, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("unmountBodyCarry")] 
 		public CBool UnmountBodyCarry
 		{
-			get
-			{
-				if (_unmountBodyCarry == null)
-				{
-					_unmountBodyCarry = (CBool) CR2WTypeManager.Create("Bool", "unmountBodyCarry", cr2w, this);
-				}
-				return _unmountBodyCarry;
-			}
-			set
-			{
-				if (_unmountBodyCarry == value)
-				{
-					return;
-				}
-				_unmountBodyCarry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unmountBodyCarry);
+			set => SetProperty(ref _unmountBodyCarry, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("statusEffectID")] 
 		public TweakDBID StatusEffectID
 		{
-			get
-			{
-				if (_statusEffectID == null)
-				{
-					_statusEffectID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "statusEffectID", cr2w, this);
-				}
-				return _statusEffectID;
-			}
-			set
-			{
-				if (_statusEffectID == value)
-				{
-					return;
-				}
-				_statusEffectID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statusEffectID);
+			set => SetProperty(ref _statusEffectID, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("whitelistVisualTags")] 
 		public redTagList WhitelistVisualTags
 		{
-			get
-			{
-				if (_whitelistVisualTags == null)
-				{
-					_whitelistVisualTags = (redTagList) CR2WTypeManager.Create("redTagList", "whitelistVisualTags", cr2w, this);
-				}
-				return _whitelistVisualTags;
-			}
-			set
-			{
-				if (_whitelistVisualTags == value)
-				{
-					return;
-				}
-				_whitelistVisualTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _whitelistVisualTags);
+			set => SetProperty(ref _whitelistVisualTags, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("blacklistVisualTags")] 
 		public redTagList BlacklistVisualTags
 		{
-			get
-			{
-				if (_blacklistVisualTags == null)
-				{
-					_blacklistVisualTags = (redTagList) CR2WTypeManager.Create("redTagList", "blacklistVisualTags", cr2w, this);
-				}
-				return _blacklistVisualTags;
-			}
-			set
-			{
-				if (_blacklistVisualTags == value)
-				{
-					return;
-				}
-				_blacklistVisualTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blacklistVisualTags);
+			set => SetProperty(ref _blacklistVisualTags, value);
 		}
 
 		public workWorkspotTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statusEffectRemovedId")] 
 		public CUInt32 StatusEffectRemovedId
 		{
-			get
-			{
-				if (_statusEffectRemovedId == null)
-				{
-					_statusEffectRemovedId = (CUInt32) CR2WTypeManager.Create("Uint32", "statusEffectRemovedId", cr2w, this);
-				}
-				return _statusEffectRemovedId;
-			}
-			set
-			{
-				if (_statusEffectRemovedId == value)
-				{
-					return;
-				}
-				_statusEffectRemovedId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statusEffectRemovedId);
+			set => SetProperty(ref _statusEffectRemovedId, value);
 		}
 
 		public PassiveCannotMoveConditions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

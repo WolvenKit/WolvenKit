@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("groupName")] 
 		public LocalizationString GroupName
 		{
-			get
-			{
-				if (_groupName == null)
-				{
-					_groupName = (LocalizationString) CR2WTypeManager.Create("LocalizationString", "groupName", cr2w, this);
-				}
-				return _groupName;
-			}
-			set
-			{
-				if (_groupName == value)
-				{
-					return;
-				}
-				_groupName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _groupName);
+			set => SetProperty(ref _groupName, value);
 		}
 
 		public gameJournalCodexGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

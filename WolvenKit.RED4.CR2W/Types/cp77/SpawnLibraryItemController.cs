@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("libraryID")] 
 		public CName LibraryID
 		{
-			get
-			{
-				if (_libraryID == null)
-				{
-					_libraryID = (CName) CR2WTypeManager.Create("CName", "libraryID", cr2w, this);
-				}
-				return _libraryID;
-			}
-			set
-			{
-				if (_libraryID == value)
-				{
-					return;
-				}
-				_libraryID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _libraryID);
+			set => SetProperty(ref _libraryID, value);
 		}
 
 		public SpawnLibraryItemController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("options")] 
 		public CArray<CName> Options
 		{
-			get
-			{
-				if (_options == null)
-				{
-					_options = (CArray<CName>) CR2WTypeManager.Create("array:CName", "options", cr2w, this);
-				}
-				return _options;
-			}
-			set
-			{
-				if (_options == value)
-				{
-					return;
-				}
-				_options = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _options);
+			set => SetProperty(ref _options, value);
 		}
 
 		public gameuiOptionsGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

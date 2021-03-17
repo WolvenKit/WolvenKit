@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("scaleMultiplier")] 
 		public Vector4 ScaleMultiplier
 		{
-			get
-			{
-				if (_scaleMultiplier == null)
-				{
-					_scaleMultiplier = (Vector4) CR2WTypeManager.Create("Vector4", "scaleMultiplier", cr2w, this);
-				}
-				return _scaleMultiplier;
-			}
-			set
-			{
-				if (_scaleMultiplier == value)
-				{
-					return;
-				}
-				_scaleMultiplier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scaleMultiplier);
+			set => SetProperty(ref _scaleMultiplier, value);
 		}
 
 		public gamehitRepresentationEventsSetSingleScaleMultiplier_AllShapes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

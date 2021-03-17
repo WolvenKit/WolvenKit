@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("reward")] 
 		public TweakDBID Reward
 		{
-			get
-			{
-				if (_reward == null)
-				{
-					_reward = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "reward", cr2w, this);
-				}
-				return _reward;
-			}
-			set
-			{
-				if (_reward == value)
-				{
-					return;
-				}
-				_reward = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reward);
+			set => SetProperty(ref _reward, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("target")] 
 		public entEntityID Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (entEntityID) CR2WTypeManager.Create("entEntityID", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		public GiveRewardEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

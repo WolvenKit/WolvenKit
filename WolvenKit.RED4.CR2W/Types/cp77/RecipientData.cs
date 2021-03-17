@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fuseID")] 
 		public CInt32 FuseID
 		{
-			get
-			{
-				if (_fuseID == null)
-				{
-					_fuseID = (CInt32) CR2WTypeManager.Create("Int32", "fuseID", cr2w, this);
-				}
-				return _fuseID;
-			}
-			set
-			{
-				if (_fuseID == value)
-				{
-					return;
-				}
-				_fuseID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fuseID);
+			set => SetProperty(ref _fuseID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entryID")] 
 		public CInt32 EntryID
 		{
-			get
-			{
-				if (_entryID == null)
-				{
-					_entryID = (CInt32) CR2WTypeManager.Create("Int32", "entryID", cr2w, this);
-				}
-				return _entryID;
-			}
-			set
-			{
-				if (_entryID == value)
-				{
-					return;
-				}
-				_entryID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryID);
+			set => SetProperty(ref _entryID, value);
 		}
 
 		public RecipientData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

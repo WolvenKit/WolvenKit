@@ -23,253 +23,88 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("influencedBy")] 
 		public CArray<CName> InfluencedBy
 		{
-			get
-			{
-				if (_influencedBy == null)
-				{
-					_influencedBy = (CArray<CName>) CR2WTypeManager.Create("array:CName", "influencedBy", cr2w, this);
-				}
-				return _influencedBy;
-			}
-			set
-			{
-				if (_influencedBy == value)
-				{
-					return;
-				}
-				_influencedBy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _influencedBy);
+			set => SetProperty(ref _influencedBy, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("influenceMainWeightIndices")] 
 		public CArray<CUInt16> InfluenceMainWeightIndices
 		{
-			get
-			{
-				if (_influenceMainWeightIndices == null)
-				{
-					_influenceMainWeightIndices = (CArray<CUInt16>) CR2WTypeManager.Create("array:Uint16", "influenceMainWeightIndices", cr2w, this);
-				}
-				return _influenceMainWeightIndices;
-			}
-			set
-			{
-				if (_influenceMainWeightIndices == value)
-				{
-					return;
-				}
-				_influenceMainWeightIndices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _influenceMainWeightIndices);
+			set => SetProperty(ref _influenceMainWeightIndices, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("poses")] 
 		public CArray<animImportFacialPoseDesc> Poses
 		{
-			get
-			{
-				if (_poses == null)
-				{
-					_poses = (CArray<animImportFacialPoseDesc>) CR2WTypeManager.Create("array:animImportFacialPoseDesc", "poses", cr2w, this);
-				}
-				return _poses;
-			}
-			set
-			{
-				if (_poses == value)
-				{
-					return;
-				}
-				_poses = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _poses);
+			set => SetProperty(ref _poses, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("poseIndices")] 
 		public CArray<CUInt16> PoseIndices
 		{
-			get
-			{
-				if (_poseIndices == null)
-				{
-					_poseIndices = (CArray<CUInt16>) CR2WTypeManager.Create("array:Uint16", "poseIndices", cr2w, this);
-				}
-				return _poseIndices;
-			}
-			set
-			{
-				if (_poseIndices == value)
-				{
-					return;
-				}
-				_poseIndices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _poseIndices);
+			set => SetProperty(ref _poseIndices, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("weights")] 
 		public CArray<CFloat> Weights
 		{
-			get
-			{
-				if (_weights == null)
-				{
-					_weights = (CArray<CFloat>) CR2WTypeManager.Create("array:Float", "weights", cr2w, this);
-				}
-				return _weights;
-			}
-			set
-			{
-				if (_weights == value)
-				{
-					return;
-				}
-				_weights = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weights);
+			set => SetProperty(ref _weights, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("inBetweenScopeMultipliers")] 
 		public CArray<CFloat> InBetweenScopeMultipliers
 		{
-			get
-			{
-				if (_inBetweenScopeMultipliers == null)
-				{
-					_inBetweenScopeMultipliers = (CArray<CFloat>) CR2WTypeManager.Create("array:Float", "inBetweenScopeMultipliers", cr2w, this);
-				}
-				return _inBetweenScopeMultipliers;
-			}
-			set
-			{
-				if (_inBetweenScopeMultipliers == value)
-				{
-					return;
-				}
-				_inBetweenScopeMultipliers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inBetweenScopeMultipliers);
+			set => SetProperty(ref _inBetweenScopeMultipliers, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("index")] 
 		public CUInt16 Index
 		{
-			get
-			{
-				if (_index == null)
-				{
-					_index = (CUInt16) CR2WTypeManager.Create("Uint16", "index", cr2w, this);
-				}
-				return _index;
-			}
-			set
-			{
-				if (_index == value)
-				{
-					return;
-				}
-				_index = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _index);
+			set => SetProperty(ref _index, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("influenceType")] 
 		public CUInt8 InfluenceType
 		{
-			get
-			{
-				if (_influenceType == null)
-				{
-					_influenceType = (CUInt8) CR2WTypeManager.Create("Uint8", "influenceType", cr2w, this);
-				}
-				return _influenceType;
-			}
-			set
-			{
-				if (_influenceType == value)
-				{
-					return;
-				}
-				_influenceType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _influenceType);
+			set => SetProperty(ref _influenceType, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("side")] 
 		public CUInt8 Side
 		{
-			get
-			{
-				if (_side == null)
-				{
-					_side = (CUInt8) CR2WTypeManager.Create("Uint8", "side", cr2w, this);
-				}
-				return _side;
-			}
-			set
-			{
-				if (_side == value)
-				{
-					return;
-				}
-				_side = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _side);
+			set => SetProperty(ref _side, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("facePart")] 
 		public CUInt8 FacePart
 		{
-			get
-			{
-				if (_facePart == null)
-				{
-					_facePart = (CUInt8) CR2WTypeManager.Create("Uint8", "facePart", cr2w, this);
-				}
-				return _facePart;
-			}
-			set
-			{
-				if (_facePart == value)
-				{
-					return;
-				}
-				_facePart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _facePart);
+			set => SetProperty(ref _facePart, value);
 		}
 
 		public animImportFacialMainPoseDesc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

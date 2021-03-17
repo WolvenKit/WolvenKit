@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("districtName")] 
 		public inkTextWidgetReference DistrictName
 		{
-			get
-			{
-				if (_districtName == null)
-				{
-					_districtName = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "districtName", cr2w, this);
-				}
-				return _districtName;
-			}
-			set
-			{
-				if (_districtName == value)
-				{
-					return;
-				}
-				_districtName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _districtName);
+			set => SetProperty(ref _districtName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("subDistrictName")] 
 		public inkTextWidgetReference SubDistrictName
 		{
-			get
-			{
-				if (_subDistrictName == null)
-				{
-					_subDistrictName = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "subDistrictName", cr2w, this);
-				}
-				return _subDistrictName;
-			}
-			set
-			{
-				if (_subDistrictName == value)
-				{
-					return;
-				}
-				_subDistrictName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subDistrictName);
+			set => SetProperty(ref _subDistrictName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("metroStationIconLeft")] 
 		public inkImageWidgetReference MetroStationIconLeft
 		{
-			get
-			{
-				if (_metroStationIconLeft == null)
-				{
-					_metroStationIconLeft = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "metroStationIconLeft", cr2w, this);
-				}
-				return _metroStationIconLeft;
-			}
-			set
-			{
-				if (_metroStationIconLeft == value)
-				{
-					return;
-				}
-				_metroStationIconLeft = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metroStationIconLeft);
+			set => SetProperty(ref _metroStationIconLeft, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("metroStationIconRight")] 
 		public inkImageWidgetReference MetroStationIconRight
 		{
-			get
-			{
-				if (_metroStationIconRight == null)
-				{
-					_metroStationIconRight = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "metroStationIconRight", cr2w, this);
-				}
-				return _metroStationIconRight;
-			}
-			set
-			{
-				if (_metroStationIconRight == value)
-				{
-					return;
-				}
-				_metroStationIconRight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metroStationIconRight);
+			set => SetProperty(ref _metroStationIconRight, value);
 		}
 
 		public inkHighwaySignLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

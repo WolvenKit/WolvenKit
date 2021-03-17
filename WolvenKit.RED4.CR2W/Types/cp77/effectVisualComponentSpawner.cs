@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("componentName")] 
 		public CArray<CName> ComponentName
 		{
-			get
-			{
-				if (_componentName == null)
-				{
-					_componentName = (CArray<CName>) CR2WTypeManager.Create("array:CName", "componentName", cr2w, this);
-				}
-				return _componentName;
-			}
-			set
-			{
-				if (_componentName == value)
-				{
-					return;
-				}
-				_componentName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _componentName);
+			set => SetProperty(ref _componentName, value);
 		}
 
 		public effectVisualComponentSpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

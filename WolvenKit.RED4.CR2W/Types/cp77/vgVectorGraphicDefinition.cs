@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rootShapeGroup")] 
 		public CHandle<vgVectorGraphicShape_Group> RootShapeGroup
 		{
-			get
-			{
-				if (_rootShapeGroup == null)
-				{
-					_rootShapeGroup = (CHandle<vgVectorGraphicShape_Group>) CR2WTypeManager.Create("handle:vgVectorGraphicShape_Group", "rootShapeGroup", cr2w, this);
-				}
-				return _rootShapeGroup;
-			}
-			set
-			{
-				if (_rootShapeGroup == value)
-				{
-					return;
-				}
-				_rootShapeGroup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rootShapeGroup);
+			set => SetProperty(ref _rootShapeGroup, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("dimensions")] 
 		public Vector2 Dimensions
 		{
-			get
-			{
-				if (_dimensions == null)
-				{
-					_dimensions = (Vector2) CR2WTypeManager.Create("Vector2", "dimensions", cr2w, this);
-				}
-				return _dimensions;
-			}
-			set
-			{
-				if (_dimensions == value)
-				{
-					return;
-				}
-				_dimensions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dimensions);
+			set => SetProperty(ref _dimensions, value);
 		}
 
 		public vgVectorGraphicDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

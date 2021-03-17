@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("effectTag")] 
 		public CName EffectTag
 		{
-			get
-			{
-				if (_effectTag == null)
-				{
-					_effectTag = (CName) CR2WTypeManager.Create("CName", "effectTag", cr2w, this);
-				}
-				return _effectTag;
-			}
-			set
-			{
-				if (_effectTag == value)
-				{
-					return;
-				}
-				_effectTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectTag);
+			set => SetProperty(ref _effectTag, value);
 		}
 
 		public gameTransformAnimation_KillEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

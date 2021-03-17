@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("shouldReveal")] 
 		public CBool ShouldReveal
 		{
-			get
-			{
-				if (_shouldReveal == null)
-				{
-					_shouldReveal = (CBool) CR2WTypeManager.Create("Bool", "shouldReveal", cr2w, this);
-				}
-				return _shouldReveal;
-			}
-			set
-			{
-				if (_shouldReveal == value)
-				{
-					return;
-				}
-				_shouldReveal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldReveal);
+			set => SetProperty(ref _shouldReveal, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("requester")] 
 		public entEntityID Requester
 		{
-			get
-			{
-				if (_requester == null)
-				{
-					_requester = (entEntityID) CR2WTypeManager.Create("entEntityID", "requester", cr2w, this);
-				}
-				return _requester;
-			}
-			set
-			{
-				if (_requester == value)
-				{
-					return;
-				}
-				_requester = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requester);
+			set => SetProperty(ref _requester, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("oneFrame")] 
 		public CBool OneFrame
 		{
-			get
-			{
-				if (_oneFrame == null)
-				{
-					_oneFrame = (CBool) CR2WTypeManager.Create("Bool", "oneFrame", cr2w, this);
-				}
-				return _oneFrame;
-			}
-			set
-			{
-				if (_oneFrame == value)
-				{
-					return;
-				}
-				_oneFrame = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _oneFrame);
+			set => SetProperty(ref _oneFrame, value);
 		}
 
 		public RevealRequestEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("evaluator")] 
 		public CHandle<IEvaluatorFloat> Evaluator
 		{
-			get
-			{
-				if (_evaluator == null)
-				{
-					_evaluator = (CHandle<IEvaluatorFloat>) CR2WTypeManager.Create("handle:IEvaluatorFloat", "evaluator", cr2w, this);
-				}
-				return _evaluator;
-			}
-			set
-			{
-				if (_evaluator == value)
-				{
-					return;
-				}
-				_evaluator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _evaluator);
+			set => SetProperty(ref _evaluator, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("inputParameterOverride")] 
 		public CName InputParameterOverride
 		{
-			get
-			{
-				if (_inputParameterOverride == null)
-				{
-					_inputParameterOverride = (CName) CR2WTypeManager.Create("CName", "inputParameterOverride", cr2w, this);
-				}
-				return _inputParameterOverride;
-			}
-			set
-			{
-				if (_inputParameterOverride == value)
-				{
-					return;
-				}
-				_inputParameterOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputParameterOverride);
+			set => SetProperty(ref _inputParameterOverride, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("inputParameterIsPostMultiplier")] 
 		public CBool InputParameterIsPostMultiplier
 		{
-			get
-			{
-				if (_inputParameterIsPostMultiplier == null)
-				{
-					_inputParameterIsPostMultiplier = (CBool) CR2WTypeManager.Create("Bool", "inputParameterIsPostMultiplier", cr2w, this);
-				}
-				return _inputParameterIsPostMultiplier;
-			}
-			set
-			{
-				if (_inputParameterIsPostMultiplier == value)
-				{
-					return;
-				}
-				_inputParameterIsPostMultiplier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputParameterIsPostMultiplier);
+			set => SetProperty(ref _inputParameterIsPostMultiplier, value);
 		}
 
 		public effectEffectParameterEvaluatorFloat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

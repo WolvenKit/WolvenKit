@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get
-			{
-				if (_vehicleRef == null)
-				{
-					_vehicleRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "vehicleRef", cr2w, this);
-				}
-				return _vehicleRef;
-			}
-			set
-			{
-				if (_vehicleRef == value)
-				{
-					return;
-				}
-				_vehicleRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleRef);
+			set => SetProperty(ref _vehicleRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("followObjectRef")] 
 		public gameEntityReference FollowObjectRef
 		{
-			get
-			{
-				if (_followObjectRef == null)
-				{
-					_followObjectRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "followObjectRef", cr2w, this);
-				}
-				return _followObjectRef;
-			}
-			set
-			{
-				if (_followObjectRef == value)
-				{
-					return;
-				}
-				_followObjectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _followObjectRef);
+			set => SetProperty(ref _followObjectRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("offset")] 
 		public Vector3 Offset
 		{
-			get
-			{
-				if (_offset == null)
-				{
-					_offset = (Vector3) CR2WTypeManager.Create("Vector3", "offset", cr2w, this);
-				}
-				return _offset;
-			}
-			set
-			{
-				if (_offset == value)
-				{
-					return;
-				}
-				_offset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offset);
+			set => SetProperty(ref _offset, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("positionLerpSpeed")] 
 		public CFloat PositionLerpSpeed
 		{
-			get
-			{
-				if (_positionLerpSpeed == null)
-				{
-					_positionLerpSpeed = (CFloat) CR2WTypeManager.Create("Float", "positionLerpSpeed", cr2w, this);
-				}
-				return _positionLerpSpeed;
-			}
-			set
-			{
-				if (_positionLerpSpeed == value)
-				{
-					return;
-				}
-				_positionLerpSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _positionLerpSpeed);
+			set => SetProperty(ref _positionLerpSpeed, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("rotationLerpSpeed")] 
 		public CFloat RotationLerpSpeed
 		{
-			get
-			{
-				if (_rotationLerpSpeed == null)
-				{
-					_rotationLerpSpeed = (CFloat) CR2WTypeManager.Create("Float", "rotationLerpSpeed", cr2w, this);
-				}
-				return _rotationLerpSpeed;
-			}
-			set
-			{
-				if (_rotationLerpSpeed == value)
-				{
-					return;
-				}
-				_rotationLerpSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotationLerpSpeed);
+			set => SetProperty(ref _rotationLerpSpeed, value);
 		}
 
 		public questFollowObject_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

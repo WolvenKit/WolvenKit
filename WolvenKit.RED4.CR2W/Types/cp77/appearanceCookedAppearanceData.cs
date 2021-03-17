@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dependencies")] 
 		public CArray<rRef<CResource>> Dependencies
 		{
-			get
-			{
-				if (_dependencies == null)
-				{
-					_dependencies = (CArray<rRef<CResource>>) CR2WTypeManager.Create("array:rRef:CResource", "dependencies", cr2w, this);
-				}
-				return _dependencies;
-			}
-			set
-			{
-				if (_dependencies == value)
-				{
-					return;
-				}
-				_dependencies = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dependencies);
+			set => SetProperty(ref _dependencies, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("totalSizeOnDisk")] 
 		public CUInt32 TotalSizeOnDisk
 		{
-			get
-			{
-				if (_totalSizeOnDisk == null)
-				{
-					_totalSizeOnDisk = (CUInt32) CR2WTypeManager.Create("Uint32", "totalSizeOnDisk", cr2w, this);
-				}
-				return _totalSizeOnDisk;
-			}
-			set
-			{
-				if (_totalSizeOnDisk == value)
-				{
-					return;
-				}
-				_totalSizeOnDisk = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _totalSizeOnDisk);
+			set => SetProperty(ref _totalSizeOnDisk, value);
 		}
 
 		public appearanceCookedAppearanceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actorVoiceTags")] 
 		public CArray<CRUID> ActorVoiceTags
 		{
-			get
-			{
-				if (_actorVoiceTags == null)
-				{
-					_actorVoiceTags = (CArray<CRUID>) CR2WTypeManager.Create("array:CRUID", "actorVoiceTags", cr2w, this);
-				}
-				return _actorVoiceTags;
-			}
-			set
-			{
-				if (_actorVoiceTags == value)
-				{
-					return;
-				}
-				_actorVoiceTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actorVoiceTags);
+			set => SetProperty(ref _actorVoiceTags, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("animSets")] 
 		public CArray<raRef<animAnimSet>> AnimSets
 		{
-			get
-			{
-				if (_animSets == null)
-				{
-					_animSets = (CArray<raRef<animAnimSet>>) CR2WTypeManager.Create("array:raRef:animAnimSet", "animSets", cr2w, this);
-				}
-				return _animSets;
-			}
-			set
-			{
-				if (_animSets == value)
-				{
-					return;
-				}
-				_animSets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animSets);
+			set => SetProperty(ref _animSets, value);
 		}
 
 		public animLipsyncMappingSceneEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

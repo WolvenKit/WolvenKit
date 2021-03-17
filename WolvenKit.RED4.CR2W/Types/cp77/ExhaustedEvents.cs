@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("staminaVfxBlackboard")] 
 		public CHandle<worldEffectBlackboard> StaminaVfxBlackboard
 		{
-			get
-			{
-				if (_staminaVfxBlackboard == null)
-				{
-					_staminaVfxBlackboard = (CHandle<worldEffectBlackboard>) CR2WTypeManager.Create("handle:worldEffectBlackboard", "staminaVfxBlackboard", cr2w, this);
-				}
-				return _staminaVfxBlackboard;
-			}
-			set
-			{
-				if (_staminaVfxBlackboard == value)
-				{
-					return;
-				}
-				_staminaVfxBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _staminaVfxBlackboard);
+			set => SetProperty(ref _staminaVfxBlackboard, value);
 		}
 
 		public ExhaustedEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("strength")] 
 		public curveData<CFloat> Strength
 		{
-			get
-			{
-				if (_strength == null)
-				{
-					_strength = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "strength", cr2w, this);
-				}
-				return _strength;
-			}
-			set
-			{
-				if (_strength == value)
-				{
-					return;
-				}
-				_strength = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _strength);
+			set => SetProperty(ref _strength, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("direction")] 
 		public curveData<Vector4> Direction
 		{
-			get
-			{
-				if (_direction == null)
-				{
-					_direction = (curveData<Vector4>) CR2WTypeManager.Create("curveData:Vector4", "direction", cr2w, this);
-				}
-				return _direction;
-			}
-			set
-			{
-				if (_direction == value)
-				{
-					return;
-				}
-				_direction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _direction);
+			set => SetProperty(ref _direction, value);
 		}
 
 		public WindAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

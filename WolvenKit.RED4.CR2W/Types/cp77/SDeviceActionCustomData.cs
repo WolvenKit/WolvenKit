@@ -24,276 +24,96 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actionID")] 
 		public CName ActionID
 		{
-			get
-			{
-				if (_actionID == null)
-				{
-					_actionID = (CName) CR2WTypeManager.Create("CName", "actionID", cr2w, this);
-				}
-				return _actionID;
-			}
-			set
-			{
-				if (_actionID == value)
-				{
-					return;
-				}
-				_actionID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionID);
+			set => SetProperty(ref _actionID, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("On")] 
 		public CBool On
 		{
-			get
-			{
-				if (_on == null)
-				{
-					_on = (CBool) CR2WTypeManager.Create("Bool", "On", cr2w, this);
-				}
-				return _on;
-			}
-			set
-			{
-				if (_on == value)
-				{
-					return;
-				}
-				_on = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _on);
+			set => SetProperty(ref _on, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("Off")] 
 		public CBool Off
 		{
-			get
-			{
-				if (_off == null)
-				{
-					_off = (CBool) CR2WTypeManager.Create("Bool", "Off", cr2w, this);
-				}
-				return _off;
-			}
-			set
-			{
-				if (_off == value)
-				{
-					return;
-				}
-				_off = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _off);
+			set => SetProperty(ref _off, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("Unpowered")] 
 		public CBool Unpowered
 		{
-			get
-			{
-				if (_unpowered == null)
-				{
-					_unpowered = (CBool) CR2WTypeManager.Create("Bool", "Unpowered", cr2w, this);
-				}
-				return _unpowered;
-			}
-			set
-			{
-				if (_unpowered == value)
-				{
-					return;
-				}
-				_unpowered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unpowered);
+			set => SetProperty(ref _unpowered, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("displayNameRecord")] 
 		public TweakDBID DisplayNameRecord
 		{
-			get
-			{
-				if (_displayNameRecord == null)
-				{
-					_displayNameRecord = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "displayNameRecord", cr2w, this);
-				}
-				return _displayNameRecord;
-			}
-			set
-			{
-				if (_displayNameRecord == value)
-				{
-					return;
-				}
-				_displayNameRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _displayNameRecord);
+			set => SetProperty(ref _displayNameRecord, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("displayName")] 
 		public CString DisplayName
 		{
-			get
-			{
-				if (_displayName == null)
-				{
-					_displayName = (CString) CR2WTypeManager.Create("String", "displayName", cr2w, this);
-				}
-				return _displayName;
-			}
-			set
-			{
-				if (_displayName == value)
-				{
-					return;
-				}
-				_displayName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _displayName);
+			set => SetProperty(ref _displayName, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("customClearance")] 
 		public CInt32 CustomClearance
 		{
-			get
-			{
-				if (_customClearance == null)
-				{
-					_customClearance = (CInt32) CR2WTypeManager.Create("Int32", "customClearance", cr2w, this);
-				}
-				return _customClearance;
-			}
-			set
-			{
-				if (_customClearance == value)
-				{
-					return;
-				}
-				_customClearance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customClearance);
+			set => SetProperty(ref _customClearance, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get
-			{
-				if (_isEnabled == null)
-				{
-					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
-				}
-				return _isEnabled;
-			}
-			set
-			{
-				if (_isEnabled == value)
-				{
-					return;
-				}
-				_isEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("disableOnUse")] 
 		public CBool DisableOnUse
 		{
-			get
-			{
-				if (_disableOnUse == null)
-				{
-					_disableOnUse = (CBool) CR2WTypeManager.Create("Bool", "disableOnUse", cr2w, this);
-				}
-				return _disableOnUse;
-			}
-			set
-			{
-				if (_disableOnUse == value)
-				{
-					return;
-				}
-				_disableOnUse = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _disableOnUse);
+			set => SetProperty(ref _disableOnUse, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("factToEnableName")] 
 		public CName FactToEnableName
 		{
-			get
-			{
-				if (_factToEnableName == null)
-				{
-					_factToEnableName = (CName) CR2WTypeManager.Create("CName", "factToEnableName", cr2w, this);
-				}
-				return _factToEnableName;
-			}
-			set
-			{
-				if (_factToEnableName == value)
-				{
-					return;
-				}
-				_factToEnableName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factToEnableName);
+			set => SetProperty(ref _factToEnableName, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("quickHackCost")] 
 		public CInt32 QuickHackCost
 		{
-			get
-			{
-				if (_quickHackCost == null)
-				{
-					_quickHackCost = (CInt32) CR2WTypeManager.Create("Int32", "quickHackCost", cr2w, this);
-				}
-				return _quickHackCost;
-			}
-			set
-			{
-				if (_quickHackCost == value)
-				{
-					return;
-				}
-				_quickHackCost = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quickHackCost);
+			set => SetProperty(ref _quickHackCost, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("callbackID")] 
 		public CUInt32 CallbackID
 		{
-			get
-			{
-				if (_callbackID == null)
-				{
-					_callbackID = (CUInt32) CR2WTypeManager.Create("Uint32", "callbackID", cr2w, this);
-				}
-				return _callbackID;
-			}
-			set
-			{
-				if (_callbackID == value)
-				{
-					return;
-				}
-				_callbackID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callbackID);
+			set => SetProperty(ref _callbackID, value);
 		}
 
 		public SDeviceActionCustomData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

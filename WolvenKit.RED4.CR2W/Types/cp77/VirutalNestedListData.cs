@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("collapsable")] 
 		public CBool Collapsable
 		{
-			get
-			{
-				if (_collapsable == null)
-				{
-					_collapsable = (CBool) CR2WTypeManager.Create("Bool", "collapsable", cr2w, this);
-				}
-				return _collapsable;
-			}
-			set
-			{
-				if (_collapsable == value)
-				{
-					return;
-				}
-				_collapsable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collapsable);
+			set => SetProperty(ref _collapsable, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isHeader")] 
 		public CBool IsHeader
 		{
-			get
-			{
-				if (_isHeader == null)
-				{
-					_isHeader = (CBool) CR2WTypeManager.Create("Bool", "isHeader", cr2w, this);
-				}
-				return _isHeader;
-			}
-			set
-			{
-				if (_isHeader == value)
-				{
-					return;
-				}
-				_isHeader = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isHeader);
+			set => SetProperty(ref _isHeader, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("level")] 
 		public CInt32 Level
 		{
-			get
-			{
-				if (_level == null)
-				{
-					_level = (CInt32) CR2WTypeManager.Create("Int32", "level", cr2w, this);
-				}
-				return _level;
-			}
-			set
-			{
-				if (_level == value)
-				{
-					return;
-				}
-				_level = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _level);
+			set => SetProperty(ref _level, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("widgetType")] 
 		public CUInt32 WidgetType
 		{
-			get
-			{
-				if (_widgetType == null)
-				{
-					_widgetType = (CUInt32) CR2WTypeManager.Create("Uint32", "widgetType", cr2w, this);
-				}
-				return _widgetType;
-			}
-			set
-			{
-				if (_widgetType == value)
-				{
-					return;
-				}
-				_widgetType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetType);
+			set => SetProperty(ref _widgetType, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("data")] 
 		public CHandle<IScriptable> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CHandle<IScriptable>) CR2WTypeManager.Create("handle:IScriptable", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		public VirutalNestedListData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

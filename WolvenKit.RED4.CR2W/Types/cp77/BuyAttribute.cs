@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attributeType")] 
 		public CEnum<gamedataStatType> AttributeType
 		{
-			get
-			{
-				if (_attributeType == null)
-				{
-					_attributeType = (CEnum<gamedataStatType>) CR2WTypeManager.Create("gamedataStatType", "attributeType", cr2w, this);
-				}
-				return _attributeType;
-			}
-			set
-			{
-				if (_attributeType == value)
-				{
-					return;
-				}
-				_attributeType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeType);
+			set => SetProperty(ref _attributeType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("grantAttributePoint")] 
 		public CBool GrantAttributePoint
 		{
-			get
-			{
-				if (_grantAttributePoint == null)
-				{
-					_grantAttributePoint = (CBool) CR2WTypeManager.Create("Bool", "grantAttributePoint", cr2w, this);
-				}
-				return _grantAttributePoint;
-			}
-			set
-			{
-				if (_grantAttributePoint == value)
-				{
-					return;
-				}
-				_grantAttributePoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grantAttributePoint);
+			set => SetProperty(ref _grantAttributePoint, value);
 		}
 
 		public BuyAttribute(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

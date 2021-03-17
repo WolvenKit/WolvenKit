@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("triggerMode")] 
 		public CEnum<gamedataTriggerMode> TriggerMode
 		{
-			get
-			{
-				if (_triggerMode == null)
-				{
-					_triggerMode = (CEnum<gamedataTriggerMode>) CR2WTypeManager.Create("gamedataTriggerMode", "triggerMode", cr2w, this);
-				}
-				return _triggerMode;
-			}
-			set
-			{
-				if (_triggerMode == value)
-				{
-					return;
-				}
-				_triggerMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerMode);
+			set => SetProperty(ref _triggerMode, value);
 		}
 
 		public gameweaponeventsChangeTriggerModeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

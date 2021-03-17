@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("planes")] 
 		public CArray<Vector4> Planes
 		{
-			get
-			{
-				if (_planes == null)
-				{
-					_planes = (CArray<Vector4>) CR2WTypeManager.Create("array:Vector4", "planes", cr2w, this);
-				}
-				return _planes;
-			}
-			set
-			{
-				if (_planes == value)
-				{
-					return;
-				}
-				_planes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _planes);
+			set => SetProperty(ref _planes, value);
 		}
 
 		public ConvexHull(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

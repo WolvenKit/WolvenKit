@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statToCheck")] 
 		public TweakDBID StatToCheck
 		{
-			get
-			{
-				if (_statToCheck == null)
-				{
-					_statToCheck = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "statToCheck", cr2w, this);
-				}
-				return _statToCheck;
-			}
-			set
-			{
-				if (_statToCheck == value)
-				{
-					return;
-				}
-				_statToCheck = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statToCheck);
+			set => SetProperty(ref _statToCheck, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("stat")] 
 		public CEnum<EDeviceChallengeAttribute> Stat
 		{
-			get
-			{
-				if (_stat == null)
-				{
-					_stat = (CEnum<EDeviceChallengeAttribute>) CR2WTypeManager.Create("EDeviceChallengeAttribute", "stat", cr2w, this);
-				}
-				return _stat;
-			}
-			set
-			{
-				if (_stat == value)
-				{
-					return;
-				}
-				_stat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stat);
+			set => SetProperty(ref _stat, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("difficulty")] 
 		public CEnum<EGameplayChallengeLevel> Difficulty
 		{
-			get
-			{
-				if (_difficulty == null)
-				{
-					_difficulty = (CEnum<EGameplayChallengeLevel>) CR2WTypeManager.Create("EGameplayChallengeLevel", "difficulty", cr2w, this);
-				}
-				return _difficulty;
-			}
-			set
-			{
-				if (_difficulty == value)
-				{
-					return;
-				}
-				_difficulty = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _difficulty);
+			set => SetProperty(ref _difficulty, value);
 		}
 
 		public GameplayStatCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

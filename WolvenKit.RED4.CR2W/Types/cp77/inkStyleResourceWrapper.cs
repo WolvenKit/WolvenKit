@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("styleResource")] 
 		public raRef<inkStyleResource> StyleResource
 		{
-			get
-			{
-				if (_styleResource == null)
-				{
-					_styleResource = (raRef<inkStyleResource>) CR2WTypeManager.Create("raRef:inkStyleResource", "styleResource", cr2w, this);
-				}
-				return _styleResource;
-			}
-			set
-			{
-				if (_styleResource == value)
-				{
-					return;
-				}
-				_styleResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _styleResource);
+			set => SetProperty(ref _styleResource, value);
 		}
 
 		public inkStyleResourceWrapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

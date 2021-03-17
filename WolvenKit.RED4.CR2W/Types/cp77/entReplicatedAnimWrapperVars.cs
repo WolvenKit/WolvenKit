@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("serverReplicatedTime")] 
 		public netTime ServerReplicatedTime
 		{
-			get
-			{
-				if (_serverReplicatedTime == null)
-				{
-					_serverReplicatedTime = (netTime) CR2WTypeManager.Create("netTime", "serverReplicatedTime", cr2w, this);
-				}
-				return _serverReplicatedTime;
-			}
-			set
-			{
-				if (_serverReplicatedTime == value)
-				{
-					return;
-				}
-				_serverReplicatedTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _serverReplicatedTime);
+			set => SetProperty(ref _serverReplicatedTime, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("data")] 
 		public CArray<entReplicatedVariableValue> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CArray<entReplicatedVariableValue>) CR2WTypeManager.Create("array:entReplicatedVariableValue", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		public entReplicatedAnimWrapperVars(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gameEffectRef")] 
 		public gameEffectRef GameEffectRef
 		{
-			get
-			{
-				if (_gameEffectRef == null)
-				{
-					_gameEffectRef = (gameEffectRef) CR2WTypeManager.Create("gameEffectRef", "gameEffectRef", cr2w, this);
-				}
-				return _gameEffectRef;
-			}
-			set
-			{
-				if (_gameEffectRef == value)
-				{
-					return;
-				}
-				_gameEffectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameEffectRef);
+			set => SetProperty(ref _gameEffectRef, value);
 		}
 
 		[Ordinal(58)] 
 		[RED("gameEffectInstance")] 
 		public CHandle<gameEffectInstance> GameEffectInstance
 		{
-			get
-			{
-				if (_gameEffectInstance == null)
-				{
-					_gameEffectInstance = (CHandle<gameEffectInstance>) CR2WTypeManager.Create("handle:gameEffectInstance", "gameEffectInstance", cr2w, this);
-				}
-				return _gameEffectInstance;
-			}
-			set
-			{
-				if (_gameEffectInstance == value)
-				{
-					return;
-				}
-				_gameEffectInstance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameEffectInstance);
+			set => SetProperty(ref _gameEffectInstance, value);
 		}
 
 		public MuteArm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

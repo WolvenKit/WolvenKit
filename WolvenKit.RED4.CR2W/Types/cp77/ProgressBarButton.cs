@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("craftingFill")] 
 		public inkWidgetReference CraftingFill
 		{
-			get
-			{
-				if (_craftingFill == null)
-				{
-					_craftingFill = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "craftingFill", cr2w, this);
-				}
-				return _craftingFill;
-			}
-			set
-			{
-				if (_craftingFill == value)
-				{
-					return;
-				}
-				_craftingFill = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _craftingFill);
+			set => SetProperty(ref _craftingFill, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("craftingLabel")] 
 		public inkTextWidgetReference CraftingLabel
 		{
-			get
-			{
-				if (_craftingLabel == null)
-				{
-					_craftingLabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "craftingLabel", cr2w, this);
-				}
-				return _craftingLabel;
-			}
-			set
-			{
-				if (_craftingLabel == value)
-				{
-					return;
-				}
-				_craftingLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _craftingLabel);
+			set => SetProperty(ref _craftingLabel, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ButtonController")] 
 		public wCHandle<inkButtonController> ButtonController
 		{
-			get
-			{
-				if (_buttonController == null)
-				{
-					_buttonController = (wCHandle<inkButtonController>) CR2WTypeManager.Create("whandle:inkButtonController", "ButtonController", cr2w, this);
-				}
-				return _buttonController;
-			}
-			set
-			{
-				if (_buttonController == value)
-				{
-					return;
-				}
-				_buttonController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonController);
+			set => SetProperty(ref _buttonController, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("progressController")] 
 		public wCHandle<ProgressBarsController> ProgressController
 		{
-			get
-			{
-				if (_progressController == null)
-				{
-					_progressController = (wCHandle<ProgressBarsController>) CR2WTypeManager.Create("whandle:ProgressBarsController", "progressController", cr2w, this);
-				}
-				return _progressController;
-			}
-			set
-			{
-				if (_progressController == value)
-				{
-					return;
-				}
-				_progressController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _progressController);
+			set => SetProperty(ref _progressController, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("available")] 
 		public CBool Available
 		{
-			get
-			{
-				if (_available == null)
-				{
-					_available = (CBool) CR2WTypeManager.Create("Bool", "available", cr2w, this);
-				}
-				return _available;
-			}
-			set
-			{
-				if (_available == value)
-				{
-					return;
-				}
-				_available = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _available);
+			set => SetProperty(ref _available, value);
 		}
 
 		public ProgressBarButton(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

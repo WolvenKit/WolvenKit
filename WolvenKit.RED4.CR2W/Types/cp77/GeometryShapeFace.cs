@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("indices")] 
 		public CArray<CUInt32> Indices
 		{
-			get
-			{
-				if (_indices == null)
-				{
-					_indices = (CArray<CUInt32>) CR2WTypeManager.Create("array:Uint32", "indices", cr2w, this);
-				}
-				return _indices;
-			}
-			set
-			{
-				if (_indices == value)
-				{
-					return;
-				}
-				_indices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _indices);
+			set => SetProperty(ref _indices, value);
 		}
 
 		public GeometryShapeFace(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

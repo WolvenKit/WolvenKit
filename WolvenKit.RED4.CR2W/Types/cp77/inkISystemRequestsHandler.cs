@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("SavesReady")] 
 		public inkSystemRequesResult SavesReady
 		{
-			get
-			{
-				if (_savesReady == null)
-				{
-					_savesReady = (inkSystemRequesResult) CR2WTypeManager.Create("inkSystemRequesResult", "SavesReady", cr2w, this);
-				}
-				return _savesReady;
-			}
-			set
-			{
-				if (_savesReady == value)
-				{
-					return;
-				}
-				_savesReady = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _savesReady);
+			set => SetProperty(ref _savesReady, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("SaveMetadataReady")] 
 		public inkSaveMetadataRequestResult SaveMetadataReady
 		{
-			get
-			{
-				if (_saveMetadataReady == null)
-				{
-					_saveMetadataReady = (inkSaveMetadataRequestResult) CR2WTypeManager.Create("inkSaveMetadataRequestResult", "SaveMetadataReady", cr2w, this);
-				}
-				return _saveMetadataReady;
-			}
-			set
-			{
-				if (_saveMetadataReady == value)
-				{
-					return;
-				}
-				_saveMetadataReady = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _saveMetadataReady);
+			set => SetProperty(ref _saveMetadataReady, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("SaveDeleted")] 
 		public inkDeleteRequestResult SaveDeleted
 		{
-			get
-			{
-				if (_saveDeleted == null)
-				{
-					_saveDeleted = (inkDeleteRequestResult) CR2WTypeManager.Create("inkDeleteRequestResult", "SaveDeleted", cr2w, this);
-				}
-				return _saveDeleted;
-			}
-			set
-			{
-				if (_saveDeleted == value)
-				{
-					return;
-				}
-				_saveDeleted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _saveDeleted);
+			set => SetProperty(ref _saveDeleted, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ServersSearchResult")] 
 		public inkSystemServerRequesResult ServersSearchResult
 		{
-			get
-			{
-				if (_serversSearchResult == null)
-				{
-					_serversSearchResult = (inkSystemServerRequesResult) CR2WTypeManager.Create("inkSystemServerRequesResult", "ServersSearchResult", cr2w, this);
-				}
-				return _serversSearchResult;
-			}
-			set
-			{
-				if (_serversSearchResult == value)
-				{
-					return;
-				}
-				_serversSearchResult = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _serversSearchResult);
+			set => SetProperty(ref _serversSearchResult, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("UserChanged")] 
 		public inkUserIdResult UserChanged
 		{
-			get
-			{
-				if (_userChanged == null)
-				{
-					_userChanged = (inkUserIdResult) CR2WTypeManager.Create("inkUserIdResult", "UserChanged", cr2w, this);
-				}
-				return _userChanged;
-			}
-			set
-			{
-				if (_userChanged == value)
-				{
-					return;
-				}
-				_userChanged = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _userChanged);
+			set => SetProperty(ref _userChanged, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("UserIdResult")] 
 		public inkUserIdResult UserIdResult
 		{
-			get
-			{
-				if (_userIdResult == null)
-				{
-					_userIdResult = (inkUserIdResult) CR2WTypeManager.Create("inkUserIdResult", "UserIdResult", cr2w, this);
-				}
-				return _userIdResult;
-			}
-			set
-			{
-				if (_userIdResult == value)
-				{
-					return;
-				}
-				_userIdResult = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _userIdResult);
+			set => SetProperty(ref _userIdResult, value);
 		}
 
 		public inkISystemRequestsHandler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkListItemControllerCallback _toggledOff;
 		private inkListItemControllerCallback _toggledOn;
-		private inkListItemControllerCallback _selected;
+		private inkListItemControllerCallback _selected_656;
 		private inkListItemControllerCallback _deselected;
 		private inkListItemControllerCallback _addedToList;
 		private inkTextWidgetReference _labelPathRef;
@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ToggledOff")] 
 		public inkListItemControllerCallback ToggledOff
 		{
-			get
-			{
-				if (_toggledOff == null)
-				{
-					_toggledOff = (inkListItemControllerCallback) CR2WTypeManager.Create("inkListItemControllerCallback", "ToggledOff", cr2w, this);
-				}
-				return _toggledOff;
-			}
-			set
-			{
-				if (_toggledOff == value)
-				{
-					return;
-				}
-				_toggledOff = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toggledOff);
+			set => SetProperty(ref _toggledOff, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("ToggledOn")] 
 		public inkListItemControllerCallback ToggledOn
 		{
-			get
-			{
-				if (_toggledOn == null)
-				{
-					_toggledOn = (inkListItemControllerCallback) CR2WTypeManager.Create("inkListItemControllerCallback", "ToggledOn", cr2w, this);
-				}
-				return _toggledOn;
-			}
-			set
-			{
-				if (_toggledOn == value)
-				{
-					return;
-				}
-				_toggledOn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toggledOn);
+			set => SetProperty(ref _toggledOn, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("Selected")] 
 		public inkListItemControllerCallback Selected_656
 		{
-			get
-			{
-				if (_selected == null)
-				{
-					_selected = (inkListItemControllerCallback) CR2WTypeManager.Create("inkListItemControllerCallback", "Selected", cr2w, this);
-				}
-				return _selected;
-			}
-			set
-			{
-				if (_selected == value)
-				{
-					return;
-				}
-				_selected = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selected_656);
+			set => SetProperty(ref _selected_656, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("Deselected")] 
 		public inkListItemControllerCallback Deselected
 		{
-			get
-			{
-				if (_deselected == null)
-				{
-					_deselected = (inkListItemControllerCallback) CR2WTypeManager.Create("inkListItemControllerCallback", "Deselected", cr2w, this);
-				}
-				return _deselected;
-			}
-			set
-			{
-				if (_deselected == value)
-				{
-					return;
-				}
-				_deselected = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deselected);
+			set => SetProperty(ref _deselected, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("AddedToList")] 
 		public inkListItemControllerCallback AddedToList
 		{
-			get
-			{
-				if (_addedToList == null)
-				{
-					_addedToList = (inkListItemControllerCallback) CR2WTypeManager.Create("inkListItemControllerCallback", "AddedToList", cr2w, this);
-				}
-				return _addedToList;
-			}
-			set
-			{
-				if (_addedToList == value)
-				{
-					return;
-				}
-				_addedToList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addedToList);
+			set => SetProperty(ref _addedToList, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("labelPathRef")] 
 		public inkTextWidgetReference LabelPathRef
 		{
-			get
-			{
-				if (_labelPathRef == null)
-				{
-					_labelPathRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "labelPathRef", cr2w, this);
-				}
-				return _labelPathRef;
-			}
-			set
-			{
-				if (_labelPathRef == value)
-				{
-					return;
-				}
-				_labelPathRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _labelPathRef);
+			set => SetProperty(ref _labelPathRef, value);
 		}
 
 		public inkListItemController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

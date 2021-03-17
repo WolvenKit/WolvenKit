@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inCommand")] 
 		public CHandle<AIArgumentMapping> InCommand
 		{
-			get
-			{
-				if (_inCommand == null)
-				{
-					_inCommand = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "inCommand", cr2w, this);
-				}
-				return _inCommand;
-			}
-			set
-			{
-				if (_inCommand == value)
-				{
-					return;
-				}
-				_inCommand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inCommand);
+			set => SetProperty(ref _inCommand, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("currentCommand")] 
 		public wCHandle<AIForceShootCommand> CurrentCommand
 		{
-			get
-			{
-				if (_currentCommand == null)
-				{
-					_currentCommand = (wCHandle<AIForceShootCommand>) CR2WTypeManager.Create("whandle:AIForceShootCommand", "currentCommand", cr2w, this);
-				}
-				return _currentCommand;
-			}
-			set
-			{
-				if (_currentCommand == value)
-				{
-					return;
-				}
-				_currentCommand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentCommand);
+			set => SetProperty(ref _currentCommand, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("activationTimeStamp")] 
 		public CFloat ActivationTimeStamp
 		{
-			get
-			{
-				if (_activationTimeStamp == null)
-				{
-					_activationTimeStamp = (CFloat) CR2WTypeManager.Create("Float", "activationTimeStamp", cr2w, this);
-				}
-				return _activationTimeStamp;
-			}
-			set
-			{
-				if (_activationTimeStamp == value)
-				{
-					return;
-				}
-				_activationTimeStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activationTimeStamp);
+			set => SetProperty(ref _activationTimeStamp, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("commandDuration")] 
 		public CFloat CommandDuration
 		{
-			get
-			{
-				if (_commandDuration == null)
-				{
-					_commandDuration = (CFloat) CR2WTypeManager.Create("Float", "commandDuration", cr2w, this);
-				}
-				return _commandDuration;
-			}
-			set
-			{
-				if (_commandDuration == value)
-				{
-					return;
-				}
-				_commandDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _commandDuration);
+			set => SetProperty(ref _commandDuration, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("target")] 
 		public wCHandle<gameObject> Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("targetID")] 
 		public entEntityID TargetID
 		{
-			get
-			{
-				if (_targetID == null)
-				{
-					_targetID = (entEntityID) CR2WTypeManager.Create("entEntityID", "targetID", cr2w, this);
-				}
-				return _targetID;
-			}
-			set
-			{
-				if (_targetID == value)
-				{
-					return;
-				}
-				_targetID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetID);
+			set => SetProperty(ref _targetID, value);
 		}
 
 		public ForceShootCommandTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

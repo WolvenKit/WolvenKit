@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("MainViewRoot")] 
 		public inkWidgetReference MainViewRoot
 		{
-			get
-			{
-				if (_mainViewRoot == null)
-				{
-					_mainViewRoot = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "MainViewRoot", cr2w, this);
-				}
-				return _mainViewRoot;
-			}
-			set
-			{
-				if (_mainViewRoot == value)
-				{
-					return;
-				}
-				_mainViewRoot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mainViewRoot);
+			set => SetProperty(ref _mainViewRoot, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("CyberwareColumnLeft")] 
 		public inkCompoundWidgetReference CyberwareColumnLeft
 		{
-			get
-			{
-				if (_cyberwareColumnLeft == null)
-				{
-					_cyberwareColumnLeft = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "CyberwareColumnLeft", cr2w, this);
-				}
-				return _cyberwareColumnLeft;
-			}
-			set
-			{
-				if (_cyberwareColumnLeft == value)
-				{
-					return;
-				}
-				_cyberwareColumnLeft = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cyberwareColumnLeft);
+			set => SetProperty(ref _cyberwareColumnLeft, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("CyberwareColumnRight")] 
 		public inkCompoundWidgetReference CyberwareColumnRight
 		{
-			get
-			{
-				if (_cyberwareColumnRight == null)
-				{
-					_cyberwareColumnRight = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "CyberwareColumnRight", cr2w, this);
-				}
-				return _cyberwareColumnRight;
-			}
-			set
-			{
-				if (_cyberwareColumnRight == value)
-				{
-					return;
-				}
-				_cyberwareColumnRight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cyberwareColumnRight);
+			set => SetProperty(ref _cyberwareColumnRight, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("personalStatsList")] 
 		public inkCompoundWidgetReference PersonalStatsList
 		{
-			get
-			{
-				if (_personalStatsList == null)
-				{
-					_personalStatsList = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "personalStatsList", cr2w, this);
-				}
-				return _personalStatsList;
-			}
-			set
-			{
-				if (_personalStatsList == value)
-				{
-					return;
-				}
-				_personalStatsList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _personalStatsList);
+			set => SetProperty(ref _personalStatsList, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("attributesList")] 
 		public inkCompoundWidgetReference AttributesList
 		{
-			get
-			{
-				if (_attributesList == null)
-				{
-					_attributesList = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "attributesList", cr2w, this);
-				}
-				return _attributesList;
-			}
-			set
-			{
-				if (_attributesList == value)
-				{
-					return;
-				}
-				_attributesList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributesList);
+			set => SetProperty(ref _attributesList, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("resistancesList")] 
 		public inkCompoundWidgetReference ResistancesList
 		{
-			get
-			{
-				if (_resistancesList == null)
-				{
-					_resistancesList = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "resistancesList", cr2w, this);
-				}
-				return _resistancesList;
-			}
-			set
-			{
-				if (_resistancesList == value)
-				{
-					return;
-				}
-				_resistancesList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resistancesList);
+			set => SetProperty(ref _resistancesList, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("TooltipsManagerRef")] 
 		public inkWidgetReference TooltipsManagerRef
 		{
-			get
-			{
-				if (_tooltipsManagerRef == null)
-				{
-					_tooltipsManagerRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "TooltipsManagerRef", cr2w, this);
-				}
-				return _tooltipsManagerRef;
-			}
-			set
-			{
-				if (_tooltipsManagerRef == value)
-				{
-					return;
-				}
-				_tooltipsManagerRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsManagerRef);
+			set => SetProperty(ref _tooltipsManagerRef, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("TooltipsManager")] 
 		public wCHandle<gameuiTooltipsManager> TooltipsManager
 		{
-			get
-			{
-				if (_tooltipsManager == null)
-				{
-					_tooltipsManager = (wCHandle<gameuiTooltipsManager>) CR2WTypeManager.Create("whandle:gameuiTooltipsManager", "TooltipsManager", cr2w, this);
-				}
-				return _tooltipsManager;
-			}
-			set
-			{
-				if (_tooltipsManager == value)
-				{
-					return;
-				}
-				_tooltipsManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsManager);
+			set => SetProperty(ref _tooltipsManager, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
-			get
-			{
-				if (_inventoryManager == null)
-				{
-					_inventoryManager = (CHandle<InventoryDataManagerV2>) CR2WTypeManager.Create("handle:InventoryDataManagerV2", "InventoryManager", cr2w, this);
-				}
-				return _inventoryManager;
-			}
-			set
-			{
-				if (_inventoryManager == value)
-				{
-					return;
-				}
-				_inventoryManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryManager);
+			set => SetProperty(ref _inventoryManager, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("player")] 
 		public wCHandle<PlayerPuppet> Player
 		{
-			get
-			{
-				if (_player == null)
-				{
-					_player = (wCHandle<PlayerPuppet>) CR2WTypeManager.Create("whandle:PlayerPuppet", "player", cr2w, this);
-				}
-				return _player;
-			}
-			set
-			{
-				if (_player == value)
-				{
-					return;
-				}
-				_player = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _player);
+			set => SetProperty(ref _player, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("resistanceView")] 
 		public CName ResistanceView
 		{
-			get
-			{
-				if (_resistanceView == null)
-				{
-					_resistanceView = (CName) CR2WTypeManager.Create("CName", "resistanceView", cr2w, this);
-				}
-				return _resistanceView;
-			}
-			set
-			{
-				if (_resistanceView == value)
-				{
-					return;
-				}
-				_resistanceView = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resistanceView);
+			set => SetProperty(ref _resistanceView, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("statView")] 
 		public CName StatView
 		{
-			get
-			{
-				if (_statView == null)
-				{
-					_statView = (CName) CR2WTypeManager.Create("CName", "statView", cr2w, this);
-				}
-				return _statView;
-			}
-			set
-			{
-				if (_statView == value)
-				{
-					return;
-				}
-				_statView = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statView);
+			set => SetProperty(ref _statView, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("toolTipOffset")] 
 		public inkMargin ToolTipOffset
 		{
-			get
-			{
-				if (_toolTipOffset == null)
-				{
-					_toolTipOffset = (inkMargin) CR2WTypeManager.Create("inkMargin", "toolTipOffset", cr2w, this);
-				}
-				return _toolTipOffset;
-			}
-			set
-			{
-				if (_toolTipOffset == value)
-				{
-					return;
-				}
-				_toolTipOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toolTipOffset);
+			set => SetProperty(ref _toolTipOffset, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("rawStatsData")] 
 		public CArray<gameStatViewData> RawStatsData
 		{
-			get
-			{
-				if (_rawStatsData == null)
-				{
-					_rawStatsData = (CArray<gameStatViewData>) CR2WTypeManager.Create("array:gameStatViewData", "rawStatsData", cr2w, this);
-				}
-				return _rawStatsData;
-			}
-			set
-			{
-				if (_rawStatsData == value)
-				{
-					return;
-				}
-				_rawStatsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rawStatsData);
+			set => SetProperty(ref _rawStatsData, value);
 		}
 
 		public CyberwareMainGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

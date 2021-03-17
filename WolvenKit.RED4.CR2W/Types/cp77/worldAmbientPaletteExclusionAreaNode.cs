@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("exclusionPaletteEntries")] 
 		public CArray<audioAmbientPaletteEntry> ExclusionPaletteEntries
 		{
-			get
-			{
-				if (_exclusionPaletteEntries == null)
-				{
-					_exclusionPaletteEntries = (CArray<audioAmbientPaletteEntry>) CR2WTypeManager.Create("array:audioAmbientPaletteEntry", "exclusionPaletteEntries", cr2w, this);
-				}
-				return _exclusionPaletteEntries;
-			}
-			set
-			{
-				if (_exclusionPaletteEntries == value)
-				{
-					return;
-				}
-				_exclusionPaletteEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exclusionPaletteEntries);
+			set => SetProperty(ref _exclusionPaletteEntries, value);
 		}
 
 		public worldAmbientPaletteExclusionAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

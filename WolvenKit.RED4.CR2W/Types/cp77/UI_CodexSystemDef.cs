@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("CodexUpdated")] 
 		public gamebbScriptID_Variant CodexUpdated
 		{
-			get
-			{
-				if (_codexUpdated == null)
-				{
-					_codexUpdated = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "CodexUpdated", cr2w, this);
-				}
-				return _codexUpdated;
-			}
-			set
-			{
-				if (_codexUpdated == value)
-				{
-					return;
-				}
-				_codexUpdated = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _codexUpdated);
+			set => SetProperty(ref _codexUpdated, value);
 		}
 
 		public UI_CodexSystemDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("resource")] 
 		public raRef<appearanceAppearanceResource> Resource
 		{
-			get
-			{
-				if (_resource == null)
-				{
-					_resource = (raRef<appearanceAppearanceResource>) CR2WTypeManager.Create("raRef:appearanceAppearanceResource", "resource", cr2w, this);
-				}
-				return _resource;
-			}
-			set
-			{
-				if (_resource == value)
-				{
-					return;
-				}
-				_resource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resource);
+			set => SetProperty(ref _resource, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("definition")] 
 		public CName Definition
 		{
-			get
-			{
-				if (_definition == null)
-				{
-					_definition = (CName) CR2WTypeManager.Create("CName", "definition", cr2w, this);
-				}
-				return _definition;
-			}
-			set
-			{
-				if (_definition == value)
-				{
-					return;
-				}
-				_definition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _definition);
+			set => SetProperty(ref _definition, value);
 		}
 
 		public gameuiCharacterCustomizationBrokenNoseControllerBrokenNoseAppearance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

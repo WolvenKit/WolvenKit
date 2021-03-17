@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Bits")] 
 		public CInt32 Bits
 		{
-			get
-			{
-				if (_bits == null)
-				{
-					_bits = (CInt32) CR2WTypeManager.Create("Int32", "Bits", cr2w, this);
-				}
-				return _bits;
-			}
-			set
-			{
-				if (_bits == value)
-				{
-					return;
-				}
-				_bits = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bits);
+			set => SetProperty(ref _bits, value);
 		}
 
 		public FixedPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

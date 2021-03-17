@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("defaultFluffDescription")] 
 		public CString DefaultFluffDescription
 		{
-			get
-			{
-				if (_defaultFluffDescription == null)
-				{
-					_defaultFluffDescription = (CString) CR2WTypeManager.Create("String", "defaultFluffDescription", cr2w, this);
-				}
-				return _defaultFluffDescription;
-			}
-			set
-			{
-				if (_defaultFluffDescription == value)
-				{
-					return;
-				}
-				_defaultFluffDescription = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultFluffDescription);
+			set => SetProperty(ref _defaultFluffDescription, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("customDescriptions")] 
 		public CArray<CString> CustomDescriptions
 		{
-			get
-			{
-				if (_customDescriptions == null)
-				{
-					_customDescriptions = (CArray<CString>) CR2WTypeManager.Create("array:String", "customDescriptions", cr2w, this);
-				}
-				return _customDescriptions;
-			}
-			set
-			{
-				if (_customDescriptions == value)
-				{
-					return;
-				}
-				_customDescriptions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customDescriptions);
+			set => SetProperty(ref _customDescriptions, value);
 		}
 
 		public ScannerDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

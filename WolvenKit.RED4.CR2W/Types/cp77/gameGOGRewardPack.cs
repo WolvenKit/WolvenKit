@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("id")] 
 		public CString Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CString) CR2WTypeManager.Create("String", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("title")] 
 		public CString Title
 		{
-			get
-			{
-				if (_title == null)
-				{
-					_title = (CString) CR2WTypeManager.Create("String", "title", cr2w, this);
-				}
-				return _title;
-			}
-			set
-			{
-				if (_title == value)
-				{
-					return;
-				}
-				_title = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _title);
+			set => SetProperty(ref _title, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("reason")] 
 		public CString Reason
 		{
-			get
-			{
-				if (_reason == null)
-				{
-					_reason = (CString) CR2WTypeManager.Create("String", "reason", cr2w, this);
-				}
-				return _reason;
-			}
-			set
-			{
-				if (_reason == value)
-				{
-					return;
-				}
-				_reason = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reason);
+			set => SetProperty(ref _reason, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("iconSlot")] 
 		public CName IconSlot
 		{
-			get
-			{
-				if (_iconSlot == null)
-				{
-					_iconSlot = (CName) CR2WTypeManager.Create("CName", "iconSlot", cr2w, this);
-				}
-				return _iconSlot;
-			}
-			set
-			{
-				if (_iconSlot == value)
-				{
-					return;
-				}
-				_iconSlot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _iconSlot);
+			set => SetProperty(ref _iconSlot, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("rewards")] 
 		public CArray<CUInt64> Rewards
 		{
-			get
-			{
-				if (_rewards == null)
-				{
-					_rewards = (CArray<CUInt64>) CR2WTypeManager.Create("array:Uint64", "rewards", cr2w, this);
-				}
-				return _rewards;
-			}
-			set
-			{
-				if (_rewards == value)
-				{
-					return;
-				}
-				_rewards = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rewards);
+			set => SetProperty(ref _rewards, value);
 		}
 
 		public gameGOGRewardPack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

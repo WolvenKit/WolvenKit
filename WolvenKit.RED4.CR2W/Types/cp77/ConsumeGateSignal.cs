@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("consumeCallName")] 
 		public CName ConsumeCallName
 		{
-			get
-			{
-				if (_consumeCallName == null)
-				{
-					_consumeCallName = (CName) CR2WTypeManager.Create("CName", "consumeCallName", cr2w, this);
-				}
-				return _consumeCallName;
-			}
-			set
-			{
-				if (_consumeCallName == value)
-				{
-					return;
-				}
-				_consumeCallName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _consumeCallName);
+			set => SetProperty(ref _consumeCallName, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("signalToConsume")] 
 		public CHandle<GateSignal> SignalToConsume
 		{
-			get
-			{
-				if (_signalToConsume == null)
-				{
-					_signalToConsume = (CHandle<GateSignal>) CR2WTypeManager.Create("handle:GateSignal", "signalToConsume", cr2w, this);
-				}
-				return _signalToConsume;
-			}
-			set
-			{
-				if (_signalToConsume == value)
-				{
-					return;
-				}
-				_signalToConsume = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _signalToConsume);
+			set => SetProperty(ref _signalToConsume, value);
 		}
 
 		public ConsumeGateSignal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

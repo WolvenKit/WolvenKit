@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("PointRadius")] 
 		public Vector4 PointRadius
 		{
-			get
-			{
-				if (_pointRadius == null)
-				{
-					_pointRadius = (Vector4) CR2WTypeManager.Create("Vector4", "PointRadius", cr2w, this);
-				}
-				return _pointRadius;
-			}
-			set
-			{
-				if (_pointRadius == value)
-				{
-					return;
-				}
-				_pointRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pointRadius);
+			set => SetProperty(ref _pointRadius, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("Height")] 
 		public CFloat Height
 		{
-			get
-			{
-				if (_height == null)
-				{
-					_height = (CFloat) CR2WTypeManager.Create("Float", "Height", cr2w, this);
-				}
-				return _height;
-			}
-			set
-			{
-				if (_height == value)
-				{
-					return;
-				}
-				_height = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _height);
+			set => SetProperty(ref _height, value);
 		}
 
 		public FixedCapsule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

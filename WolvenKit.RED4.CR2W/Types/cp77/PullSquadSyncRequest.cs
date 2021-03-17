@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("squadType")] 
 		public CEnum<AISquadType> SquadType
 		{
-			get
-			{
-				if (_squadType == null)
-				{
-					_squadType = (CEnum<AISquadType>) CR2WTypeManager.Create("AISquadType", "squadType", cr2w, this);
-				}
-				return _squadType;
-			}
-			set
-			{
-				if (_squadType == value)
-				{
-					return;
-				}
-				_squadType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _squadType);
+			set => SetProperty(ref _squadType, value);
 		}
 
 		public PullSquadSyncRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

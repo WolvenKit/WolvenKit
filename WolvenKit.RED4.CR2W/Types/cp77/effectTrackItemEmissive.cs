@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("override")] 
 		public CBool Override
 		{
-			get
-			{
-				if (_override == null)
-				{
-					_override = (CBool) CR2WTypeManager.Create("Bool", "override", cr2w, this);
-				}
-				return _override;
-			}
-			set
-			{
-				if (_override == value)
-				{
-					return;
-				}
-				_override = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _override);
+			set => SetProperty(ref _override, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("brigtness")] 
 		public effectEffectParameterEvaluatorFloat Brigtness
 		{
-			get
-			{
-				if (_brigtness == null)
-				{
-					_brigtness = (effectEffectParameterEvaluatorFloat) CR2WTypeManager.Create("effectEffectParameterEvaluatorFloat", "brigtness", cr2w, this);
-				}
-				return _brigtness;
-			}
-			set
-			{
-				if (_brigtness == value)
-				{
-					return;
-				}
-				_brigtness = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _brigtness);
+			set => SetProperty(ref _brigtness, value);
 		}
 
 		public effectTrackItemEmissive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

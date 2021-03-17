@@ -42,690 +42,240 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("backgroundPrefabRef")] 
 		public NodeRef BackgroundPrefabRef
 		{
-			get
-			{
-				if (_backgroundPrefabRef == null)
-				{
-					_backgroundPrefabRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "backgroundPrefabRef", cr2w, this);
-				}
-				return _backgroundPrefabRef;
-			}
-			set
-			{
-				if (_backgroundPrefabRef == value)
-				{
-					return;
-				}
-				_backgroundPrefabRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backgroundPrefabRef);
+			set => SetProperty(ref _backgroundPrefabRef, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ResetStickers")] 
 		public inkEmptyCallback ResetStickers
 		{
-			get
-			{
-				if (_resetStickers == null)
-				{
-					_resetStickers = (inkEmptyCallback) CR2WTypeManager.Create("inkEmptyCallback", "ResetStickers", cr2w, this);
-				}
-				return _resetStickers;
-			}
-			set
-			{
-				if (_resetStickers == value)
-				{
-					return;
-				}
-				_resetStickers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetStickers);
+			set => SetProperty(ref _resetStickers, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("SetStickerImage")] 
 		public gameuiStickerImageCallback SetStickerImage
 		{
-			get
-			{
-				if (_setStickerImage == null)
-				{
-					_setStickerImage = (gameuiStickerImageCallback) CR2WTypeManager.Create("gameuiStickerImageCallback", "SetStickerImage", cr2w, this);
-				}
-				return _setStickerImage;
-			}
-			set
-			{
-				if (_setStickerImage == value)
-				{
-					return;
-				}
-				_setStickerImage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setStickerImage);
+			set => SetProperty(ref _setStickerImage, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("SetFrameImage")] 
 		public gameuiStickerFrameCallback SetFrameImage
 		{
-			get
-			{
-				if (_setFrameImage == null)
-				{
-					_setFrameImage = (gameuiStickerFrameCallback) CR2WTypeManager.Create("gameuiStickerFrameCallback", "SetFrameImage", cr2w, this);
-				}
-				return _setFrameImage;
-			}
-			set
-			{
-				if (_setFrameImage == value)
-				{
-					return;
-				}
-				_setFrameImage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setFrameImage);
+			set => SetProperty(ref _setFrameImage, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("SetBackground")] 
 		public gameuiStickerBackgroundCallback SetBackground
 		{
-			get
-			{
-				if (_setBackground == null)
-				{
-					_setBackground = (gameuiStickerBackgroundCallback) CR2WTypeManager.Create("gameuiStickerBackgroundCallback", "SetBackground", cr2w, this);
-				}
-				return _setBackground;
-			}
-			set
-			{
-				if (_setBackground == value)
-				{
-					return;
-				}
-				_setBackground = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setBackground);
+			set => SetProperty(ref _setBackground, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("SetSetSelectedSticker")] 
 		public gameuiStickerCallback SetSetSelectedSticker
 		{
-			get
-			{
-				if (_setSetSelectedSticker == null)
-				{
-					_setSetSelectedSticker = (gameuiStickerCallback) CR2WTypeManager.Create("gameuiStickerCallback", "SetSetSelectedSticker", cr2w, this);
-				}
-				return _setSetSelectedSticker;
-			}
-			set
-			{
-				if (_setSetSelectedSticker == value)
-				{
-					return;
-				}
-				_setSetSelectedSticker = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setSetSelectedSticker);
+			set => SetProperty(ref _setSetSelectedSticker, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("stickerLibraryId")] 
 		public CName StickerLibraryId
 		{
-			get
-			{
-				if (_stickerLibraryId == null)
-				{
-					_stickerLibraryId = (CName) CR2WTypeManager.Create("CName", "stickerLibraryId", cr2w, this);
-				}
-				return _stickerLibraryId;
-			}
-			set
-			{
-				if (_stickerLibraryId == value)
-				{
-					return;
-				}
-				_stickerLibraryId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stickerLibraryId);
+			set => SetProperty(ref _stickerLibraryId, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("stickersRoot")] 
 		public inkWidgetReference StickersRoot
 		{
-			get
-			{
-				if (_stickersRoot == null)
-				{
-					_stickersRoot = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "stickersRoot", cr2w, this);
-				}
-				return _stickersRoot;
-			}
-			set
-			{
-				if (_stickersRoot == value)
-				{
-					return;
-				}
-				_stickersRoot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stickersRoot);
+			set => SetProperty(ref _stickersRoot, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("frameRoot")] 
 		public inkWidgetReference FrameRoot
 		{
-			get
-			{
-				if (_frameRoot == null)
-				{
-					_frameRoot = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "frameRoot", cr2w, this);
-				}
-				return _frameRoot;
-			}
-			set
-			{
-				if (_frameRoot == value)
-				{
-					return;
-				}
-				_frameRoot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frameRoot);
+			set => SetProperty(ref _frameRoot, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("backgroundViewRoot")] 
 		public inkWidgetReference BackgroundViewRoot
 		{
-			get
-			{
-				if (_backgroundViewRoot == null)
-				{
-					_backgroundViewRoot = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "backgroundViewRoot", cr2w, this);
-				}
-				return _backgroundViewRoot;
-			}
-			set
-			{
-				if (_backgroundViewRoot == value)
-				{
-					return;
-				}
-				_backgroundViewRoot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backgroundViewRoot);
+			set => SetProperty(ref _backgroundViewRoot, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("stickers")] 
 		public CArray<wCHandle<inkWidget>> Stickers
 		{
-			get
-			{
-				if (_stickers == null)
-				{
-					_stickers = (CArray<wCHandle<inkWidget>>) CR2WTypeManager.Create("array:whandle:inkWidget", "stickers", cr2w, this);
-				}
-				return _stickers;
-			}
-			set
-			{
-				if (_stickers == value)
-				{
-					return;
-				}
-				_stickers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stickers);
+			set => SetProperty(ref _stickers, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("frame")] 
 		public wCHandle<inkWidget> Frame
 		{
-			get
-			{
-				if (_frame == null)
-				{
-					_frame = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "frame", cr2w, this);
-				}
-				return _frame;
-			}
-			set
-			{
-				if (_frame == value)
-				{
-					return;
-				}
-				_frame = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frame);
+			set => SetProperty(ref _frame, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("frameLogic")] 
 		public CHandle<PhotoModeFrame> FrameLogic
 		{
-			get
-			{
-				if (_frameLogic == null)
-				{
-					_frameLogic = (CHandle<PhotoModeFrame>) CR2WTypeManager.Create("handle:PhotoModeFrame", "frameLogic", cr2w, this);
-				}
-				return _frameLogic;
-			}
-			set
-			{
-				if (_frameLogic == value)
-				{
-					return;
-				}
-				_frameLogic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frameLogic);
+			set => SetProperty(ref _frameLogic, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("currentHovered")] 
 		public CInt32 CurrentHovered
 		{
-			get
-			{
-				if (_currentHovered == null)
-				{
-					_currentHovered = (CInt32) CR2WTypeManager.Create("Int32", "currentHovered", cr2w, this);
-				}
-				return _currentHovered;
-			}
-			set
-			{
-				if (_currentHovered == value)
-				{
-					return;
-				}
-				_currentHovered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentHovered);
+			set => SetProperty(ref _currentHovered, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("currentMouseDrag")] 
 		public CInt32 CurrentMouseDrag
 		{
-			get
-			{
-				if (_currentMouseDrag == null)
-				{
-					_currentMouseDrag = (CInt32) CR2WTypeManager.Create("Int32", "currentMouseDrag", cr2w, this);
-				}
-				return _currentMouseDrag;
-			}
-			set
-			{
-				if (_currentMouseDrag == value)
-				{
-					return;
-				}
-				_currentMouseDrag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentMouseDrag);
+			set => SetProperty(ref _currentMouseDrag, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("currentMouseRotate")] 
 		public CInt32 CurrentMouseRotate
 		{
-			get
-			{
-				if (_currentMouseRotate == null)
-				{
-					_currentMouseRotate = (CInt32) CR2WTypeManager.Create("Int32", "currentMouseRotate", cr2w, this);
-				}
-				return _currentMouseRotate;
-			}
-			set
-			{
-				if (_currentMouseRotate == value)
-				{
-					return;
-				}
-				_currentMouseRotate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentMouseRotate);
+			set => SetProperty(ref _currentMouseRotate, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("stickerDragStartRotation")] 
 		public CFloat StickerDragStartRotation
 		{
-			get
-			{
-				if (_stickerDragStartRotation == null)
-				{
-					_stickerDragStartRotation = (CFloat) CR2WTypeManager.Create("Float", "stickerDragStartRotation", cr2w, this);
-				}
-				return _stickerDragStartRotation;
-			}
-			set
-			{
-				if (_stickerDragStartRotation == value)
-				{
-					return;
-				}
-				_stickerDragStartRotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stickerDragStartRotation);
+			set => SetProperty(ref _stickerDragStartRotation, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("stickerDragStartScale")] 
 		public Vector2 StickerDragStartScale
 		{
-			get
-			{
-				if (_stickerDragStartScale == null)
-				{
-					_stickerDragStartScale = (Vector2) CR2WTypeManager.Create("Vector2", "stickerDragStartScale", cr2w, this);
-				}
-				return _stickerDragStartScale;
-			}
-			set
-			{
-				if (_stickerDragStartScale == value)
-				{
-					return;
-				}
-				_stickerDragStartScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stickerDragStartScale);
+			set => SetProperty(ref _stickerDragStartScale, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("stickerDragStartPos")] 
 		public Vector2 StickerDragStartPos
 		{
-			get
-			{
-				if (_stickerDragStartPos == null)
-				{
-					_stickerDragStartPos = (Vector2) CR2WTypeManager.Create("Vector2", "stickerDragStartPos", cr2w, this);
-				}
-				return _stickerDragStartPos;
-			}
-			set
-			{
-				if (_stickerDragStartPos == value)
-				{
-					return;
-				}
-				_stickerDragStartPos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stickerDragStartPos);
+			set => SetProperty(ref _stickerDragStartPos, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("mouseDragStartPos")] 
 		public Vector2 MouseDragStartPos
 		{
-			get
-			{
-				if (_mouseDragStartPos == null)
-				{
-					_mouseDragStartPos = (Vector2) CR2WTypeManager.Create("Vector2", "mouseDragStartPos", cr2w, this);
-				}
-				return _mouseDragStartPos;
-			}
-			set
-			{
-				if (_mouseDragStartPos == value)
-				{
-					return;
-				}
-				_mouseDragStartPos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mouseDragStartPos);
+			set => SetProperty(ref _mouseDragStartPos, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("mouseDragCurrentPos")] 
 		public Vector2 MouseDragCurrentPos
 		{
-			get
-			{
-				if (_mouseDragCurrentPos == null)
-				{
-					_mouseDragCurrentPos = (Vector2) CR2WTypeManager.Create("Vector2", "mouseDragCurrentPos", cr2w, this);
-				}
-				return _mouseDragCurrentPos;
-			}
-			set
-			{
-				if (_mouseDragCurrentPos == value)
-				{
-					return;
-				}
-				_mouseDragCurrentPos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mouseDragCurrentPos);
+			set => SetProperty(ref _mouseDragCurrentPos, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("currentSticker")] 
 		public CInt32 CurrentSticker
 		{
-			get
-			{
-				if (_currentSticker == null)
-				{
-					_currentSticker = (CInt32) CR2WTypeManager.Create("Int32", "currentSticker", cr2w, this);
-				}
-				return _currentSticker;
-			}
-			set
-			{
-				if (_currentSticker == value)
-				{
-					return;
-				}
-				_currentSticker = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentSticker);
+			set => SetProperty(ref _currentSticker, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("stickerMove")] 
 		public Vector2 StickerMove
 		{
-			get
-			{
-				if (_stickerMove == null)
-				{
-					_stickerMove = (Vector2) CR2WTypeManager.Create("Vector2", "stickerMove", cr2w, this);
-				}
-				return _stickerMove;
-			}
-			set
-			{
-				if (_stickerMove == value)
-				{
-					return;
-				}
-				_stickerMove = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stickerMove);
+			set => SetProperty(ref _stickerMove, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("stickerRotation")] 
 		public CFloat StickerRotation
 		{
-			get
-			{
-				if (_stickerRotation == null)
-				{
-					_stickerRotation = (CFloat) CR2WTypeManager.Create("Float", "stickerRotation", cr2w, this);
-				}
-				return _stickerRotation;
-			}
-			set
-			{
-				if (_stickerRotation == value)
-				{
-					return;
-				}
-				_stickerRotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stickerRotation);
+			set => SetProperty(ref _stickerRotation, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("stickerScale")] 
 		public CFloat StickerScale
 		{
-			get
-			{
-				if (_stickerScale == null)
-				{
-					_stickerScale = (CFloat) CR2WTypeManager.Create("Float", "stickerScale", cr2w, this);
-				}
-				return _stickerScale;
-			}
-			set
-			{
-				if (_stickerScale == value)
-				{
-					return;
-				}
-				_stickerScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stickerScale);
+			set => SetProperty(ref _stickerScale, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("stickersAreaSize")] 
 		public Vector2 StickersAreaSize
 		{
-			get
-			{
-				if (_stickersAreaSize == null)
-				{
-					_stickersAreaSize = (Vector2) CR2WTypeManager.Create("Vector2", "stickersAreaSize", cr2w, this);
-				}
-				return _stickersAreaSize;
-			}
-			set
-			{
-				if (_stickersAreaSize == value)
-				{
-					return;
-				}
-				_stickersAreaSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stickersAreaSize);
+			set => SetProperty(ref _stickersAreaSize, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("cursorInputEnabled")] 
 		public CBool CursorInputEnabled
 		{
-			get
-			{
-				if (_cursorInputEnabled == null)
-				{
-					_cursorInputEnabled = (CBool) CR2WTypeManager.Create("Bool", "cursorInputEnabled", cr2w, this);
-				}
-				return _cursorInputEnabled;
-			}
-			set
-			{
-				if (_cursorInputEnabled == value)
-				{
-					return;
-				}
-				_cursorInputEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cursorInputEnabled);
+			set => SetProperty(ref _cursorInputEnabled, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("editorEnabled")] 
 		public CBool EditorEnabled
 		{
-			get
-			{
-				if (_editorEnabled == null)
-				{
-					_editorEnabled = (CBool) CR2WTypeManager.Create("Bool", "editorEnabled", cr2w, this);
-				}
-				return _editorEnabled;
-			}
-			set
-			{
-				if (_editorEnabled == value)
-				{
-					return;
-				}
-				_editorEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _editorEnabled);
+			set => SetProperty(ref _editorEnabled, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("root")] 
 		public wCHandle<inkCanvasWidget> Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (wCHandle<inkCanvasWidget>) CR2WTypeManager.Create("whandle:inkCanvasWidget", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("isInPhotoMode")] 
 		public CBool IsInPhotoMode
 		{
-			get
-			{
-				if (_isInPhotoMode == null)
-				{
-					_isInPhotoMode = (CBool) CR2WTypeManager.Create("Bool", "isInPhotoMode", cr2w, this);
-				}
-				return _isInPhotoMode;
-			}
-			set
-			{
-				if (_isInPhotoMode == value)
-				{
-					return;
-				}
-				_isInPhotoMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInPhotoMode);
+			set => SetProperty(ref _isInPhotoMode, value);
 		}
 
 		public gameuiPhotoModeStickersController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

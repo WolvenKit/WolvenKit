@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("visionTag")] 
 		public CName VisionTag
 		{
-			get
-			{
-				if (_visionTag == null)
-				{
-					_visionTag = (CName) CR2WTypeManager.Create("CName", "visionTag", cr2w, this);
-				}
-				return _visionTag;
-			}
-			set
-			{
-				if (_visionTag == value)
-				{
-					return;
-				}
-				_visionTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visionTag);
+			set => SetProperty(ref _visionTag, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("meshComponents")] 
 		public CArray<gameMeshDef> MeshComponents
 		{
-			get
-			{
-				if (_meshComponents == null)
-				{
-					_meshComponents = (CArray<gameMeshDef>) CR2WTypeManager.Create("array:gameMeshDef", "meshComponents", cr2w, this);
-				}
-				return _meshComponents;
-			}
-			set
-			{
-				if (_meshComponents == value)
-				{
-					return;
-				}
-				_meshComponents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshComponents);
+			set => SetProperty(ref _meshComponents, value);
 		}
 
 		public gameVisionModuleParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

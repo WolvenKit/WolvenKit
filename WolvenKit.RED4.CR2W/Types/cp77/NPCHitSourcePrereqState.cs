@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("listener")] 
 		public CHandle<PuppetListener> Listener
 		{
-			get
-			{
-				if (_listener == null)
-				{
-					_listener = (CHandle<PuppetListener>) CR2WTypeManager.Create("handle:PuppetListener", "listener", cr2w, this);
-				}
-				return _listener;
-			}
-			set
-			{
-				if (_listener == value)
-				{
-					return;
-				}
-				_listener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _listener);
+			set => SetProperty(ref _listener, value);
 		}
 
 		public NPCHitSourcePrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

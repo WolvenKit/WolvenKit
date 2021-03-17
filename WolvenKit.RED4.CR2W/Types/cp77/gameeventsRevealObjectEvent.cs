@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("reveal")] 
 		public CBool Reveal
 		{
-			get
-			{
-				if (_reveal == null)
-				{
-					_reveal = (CBool) CR2WTypeManager.Create("Bool", "reveal", cr2w, this);
-				}
-				return _reveal;
-			}
-			set
-			{
-				if (_reveal == value)
-				{
-					return;
-				}
-				_reveal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reveal);
+			set => SetProperty(ref _reveal, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("reason")] 
 		public gameVisionModeSystemRevealIdentifier Reason
 		{
-			get
-			{
-				if (_reason == null)
-				{
-					_reason = (gameVisionModeSystemRevealIdentifier) CR2WTypeManager.Create("gameVisionModeSystemRevealIdentifier", "reason", cr2w, this);
-				}
-				return _reason;
-			}
-			set
-			{
-				if (_reason == value)
-				{
-					return;
-				}
-				_reason = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reason);
+			set => SetProperty(ref _reason, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lifetime")] 
 		public CFloat Lifetime
 		{
-			get
-			{
-				if (_lifetime == null)
-				{
-					_lifetime = (CFloat) CR2WTypeManager.Create("Float", "lifetime", cr2w, this);
-				}
-				return _lifetime;
-			}
-			set
-			{
-				if (_lifetime == value)
-				{
-					return;
-				}
-				_lifetime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lifetime);
+			set => SetProperty(ref _lifetime, value);
 		}
 
 		public gameeventsRevealObjectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

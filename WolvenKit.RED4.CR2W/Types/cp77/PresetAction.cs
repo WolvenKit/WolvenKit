@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("preset")] 
 		public CHandle<SmartHousePreset> Preset
 		{
-			get
-			{
-				if (_preset == null)
-				{
-					_preset = (CHandle<SmartHousePreset>) CR2WTypeManager.Create("handle:SmartHousePreset", "preset", cr2w, this);
-				}
-				return _preset;
-			}
-			set
-			{
-				if (_preset == value)
-				{
-					return;
-				}
-				_preset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _preset);
+			set => SetProperty(ref _preset, value);
 		}
 
 		public PresetAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

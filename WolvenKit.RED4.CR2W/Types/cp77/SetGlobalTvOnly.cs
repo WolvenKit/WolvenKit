@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isGlobalTvOnly")] 
 		public CBool IsGlobalTvOnly
 		{
-			get
-			{
-				if (_isGlobalTvOnly == null)
-				{
-					_isGlobalTvOnly = (CBool) CR2WTypeManager.Create("Bool", "isGlobalTvOnly", cr2w, this);
-				}
-				return _isGlobalTvOnly;
-			}
-			set
-			{
-				if (_isGlobalTvOnly == value)
-				{
-					return;
-				}
-				_isGlobalTvOnly = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isGlobalTvOnly);
+			set => SetProperty(ref _isGlobalTvOnly, value);
 		}
 
 		public SetGlobalTvOnly(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

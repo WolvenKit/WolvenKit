@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("revealPlayer")] 
 		public CEnum<ERevealPlayerType> RevealPlayer
 		{
-			get
-			{
-				if (_revealPlayer == null)
-				{
-					_revealPlayer = (CEnum<ERevealPlayerType>) CR2WTypeManager.Create("ERevealPlayerType", "revealPlayer", cr2w, this);
-				}
-				return _revealPlayer;
-			}
-			set
-			{
-				if (_revealPlayer == value)
-				{
-					return;
-				}
-				_revealPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revealPlayer);
+			set => SetProperty(ref _revealPlayer, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("revealPlayerOutsideSecurityPerimeter")] 
 		public CBool RevealPlayerOutsideSecurityPerimeter
 		{
-			get
-			{
-				if (_revealPlayerOutsideSecurityPerimeter == null)
-				{
-					_revealPlayerOutsideSecurityPerimeter = (CBool) CR2WTypeManager.Create("Bool", "revealPlayerOutsideSecurityPerimeter", cr2w, this);
-				}
-				return _revealPlayerOutsideSecurityPerimeter;
-			}
-			set
-			{
-				if (_revealPlayerOutsideSecurityPerimeter == value)
-				{
-					return;
-				}
-				_revealPlayerOutsideSecurityPerimeter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revealPlayerOutsideSecurityPerimeter);
+			set => SetProperty(ref _revealPlayerOutsideSecurityPerimeter, value);
 		}
 
 		public RevealPlayerSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

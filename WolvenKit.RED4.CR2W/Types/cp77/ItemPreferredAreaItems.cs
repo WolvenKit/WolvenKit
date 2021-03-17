@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("equipmentArea")] 
 		public CEnum<gamedataEquipmentArea> EquipmentArea
 		{
-			get
-			{
-				if (_equipmentArea == null)
-				{
-					_equipmentArea = (CEnum<gamedataEquipmentArea>) CR2WTypeManager.Create("gamedataEquipmentArea", "equipmentArea", cr2w, this);
-				}
-				return _equipmentArea;
-			}
-			set
-			{
-				if (_equipmentArea == value)
-				{
-					return;
-				}
-				_equipmentArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipmentArea);
+			set => SetProperty(ref _equipmentArea, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("items")] 
 		public CArray<InventoryItemData> Items
 		{
-			get
-			{
-				if (_items == null)
-				{
-					_items = (CArray<InventoryItemData>) CR2WTypeManager.Create("array:InventoryItemData", "items", cr2w, this);
-				}
-				return _items;
-			}
-			set
-			{
-				if (_items == value)
-				{
-					return;
-				}
-				_items = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _items);
+			set => SetProperty(ref _items, value);
 		}
 
 		public ItemPreferredAreaItems(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

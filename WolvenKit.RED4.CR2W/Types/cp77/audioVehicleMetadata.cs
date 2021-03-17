@@ -35,529 +35,184 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("generalData")] 
 		public audioVehicleGeneralData GeneralData
 		{
-			get
-			{
-				if (_generalData == null)
-				{
-					_generalData = (audioVehicleGeneralData) CR2WTypeManager.Create("audioVehicleGeneralData", "generalData", cr2w, this);
-				}
-				return _generalData;
-			}
-			set
-			{
-				if (_generalData == value)
-				{
-					return;
-				}
-				_generalData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _generalData);
+			set => SetProperty(ref _generalData, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("mechanicalData")] 
 		public audioVehicleMechanicalData MechanicalData
 		{
-			get
-			{
-				if (_mechanicalData == null)
-				{
-					_mechanicalData = (audioVehicleMechanicalData) CR2WTypeManager.Create("audioVehicleMechanicalData", "mechanicalData", cr2w, this);
-				}
-				return _mechanicalData;
-			}
-			set
-			{
-				if (_mechanicalData == value)
-				{
-					return;
-				}
-				_mechanicalData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mechanicalData);
+			set => SetProperty(ref _mechanicalData, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("wheelData")] 
 		public audioVehicleWheelData WheelData
 		{
-			get
-			{
-				if (_wheelData == null)
-				{
-					_wheelData = (audioVehicleWheelData) CR2WTypeManager.Create("audioVehicleWheelData", "wheelData", cr2w, this);
-				}
-				return _wheelData;
-			}
-			set
-			{
-				if (_wheelData == value)
-				{
-					return;
-				}
-				_wheelData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wheelData);
+			set => SetProperty(ref _wheelData, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("emitterPositionData")] 
 		public audioVehicleEmitterPositionData EmitterPositionData
 		{
-			get
-			{
-				if (_emitterPositionData == null)
-				{
-					_emitterPositionData = (audioVehicleEmitterPositionData) CR2WTypeManager.Create("audioVehicleEmitterPositionData", "emitterPositionData", cr2w, this);
-				}
-				return _emitterPositionData;
-			}
-			set
-			{
-				if (_emitterPositionData == value)
-				{
-					return;
-				}
-				_emitterPositionData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _emitterPositionData);
+			set => SetProperty(ref _emitterPositionData, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("minRpm")] 
 		public CFloat MinRpm
 		{
-			get
-			{
-				if (_minRpm == null)
-				{
-					_minRpm = (CFloat) CR2WTypeManager.Create("Float", "minRpm", cr2w, this);
-				}
-				return _minRpm;
-			}
-			set
-			{
-				if (_minRpm == value)
-				{
-					return;
-				}
-				_minRpm = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minRpm);
+			set => SetProperty(ref _minRpm, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("maxRpm")] 
 		public CFloat MaxRpm
 		{
-			get
-			{
-				if (_maxRpm == null)
-				{
-					_maxRpm = (CFloat) CR2WTypeManager.Create("Float", "maxRpm", cr2w, this);
-				}
-				return _maxRpm;
-			}
-			set
-			{
-				if (_maxRpm == value)
-				{
-					return;
-				}
-				_maxRpm = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxRpm);
+			set => SetProperty(ref _maxRpm, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("vehicleCollisionSettings")] 
 		public CName VehicleCollisionSettings
 		{
-			get
-			{
-				if (_vehicleCollisionSettings == null)
-				{
-					_vehicleCollisionSettings = (CName) CR2WTypeManager.Create("CName", "vehicleCollisionSettings", cr2w, this);
-				}
-				return _vehicleCollisionSettings;
-			}
-			set
-			{
-				if (_vehicleCollisionSettings == value)
-				{
-					return;
-				}
-				_vehicleCollisionSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleCollisionSettings);
+			set => SetProperty(ref _vehicleCollisionSettings, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("vehicleGridDestructionSettings")] 
 		public CName VehicleGridDestructionSettings
 		{
-			get
-			{
-				if (_vehicleGridDestructionSettings == null)
-				{
-					_vehicleGridDestructionSettings = (CName) CR2WTypeManager.Create("CName", "vehicleGridDestructionSettings", cr2w, this);
-				}
-				return _vehicleGridDestructionSettings;
-			}
-			set
-			{
-				if (_vehicleGridDestructionSettings == value)
-				{
-					return;
-				}
-				_vehicleGridDestructionSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleGridDestructionSettings);
+			set => SetProperty(ref _vehicleGridDestructionSettings, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("vehiclePartSettings")] 
 		public CName VehiclePartSettings
 		{
-			get
-			{
-				if (_vehiclePartSettings == null)
-				{
-					_vehiclePartSettings = (CName) CR2WTypeManager.Create("CName", "vehiclePartSettings", cr2w, this);
-				}
-				return _vehiclePartSettings;
-			}
-			set
-			{
-				if (_vehiclePartSettings == value)
-				{
-					return;
-				}
-				_vehiclePartSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehiclePartSettings);
+			set => SetProperty(ref _vehiclePartSettings, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("collisionCooldown")] 
 		public CFloat CollisionCooldown
 		{
-			get
-			{
-				if (_collisionCooldown == null)
-				{
-					_collisionCooldown = (CFloat) CR2WTypeManager.Create("Float", "collisionCooldown", cr2w, this);
-				}
-				return _collisionCooldown;
-			}
-			set
-			{
-				if (_collisionCooldown == value)
-				{
-					return;
-				}
-				_collisionCooldown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collisionCooldown);
+			set => SetProperty(ref _collisionCooldown, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("maxPlayingDistance")] 
 		public CFloat MaxPlayingDistance
 		{
-			get
-			{
-				if (_maxPlayingDistance == null)
-				{
-					_maxPlayingDistance = (CFloat) CR2WTypeManager.Create("Float", "maxPlayingDistance", cr2w, this);
-				}
-				return _maxPlayingDistance;
-			}
-			set
-			{
-				if (_maxPlayingDistance == value)
-				{
-					return;
-				}
-				_maxPlayingDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxPlayingDistance);
+			set => SetProperty(ref _maxPlayingDistance, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("dopplerFactor")] 
 		public CFloat DopplerFactor
 		{
-			get
-			{
-				if (_dopplerFactor == null)
-				{
-					_dopplerFactor = (CFloat) CR2WTypeManager.Create("Float", "dopplerFactor", cr2w, this);
-				}
-				return _dopplerFactor;
-			}
-			set
-			{
-				if (_dopplerFactor == value)
-				{
-					return;
-				}
-				_dopplerFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dopplerFactor);
+			set => SetProperty(ref _dopplerFactor, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("suspensionSqueekTimeout")] 
 		public CFloat SuspensionSqueekTimeout
 		{
-			get
-			{
-				if (_suspensionSqueekTimeout == null)
-				{
-					_suspensionSqueekTimeout = (CFloat) CR2WTypeManager.Create("Float", "suspensionSqueekTimeout", cr2w, this);
-				}
-				return _suspensionSqueekTimeout;
-			}
-			set
-			{
-				if (_suspensionSqueekTimeout == value)
-				{
-					return;
-				}
-				_suspensionSqueekTimeout = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _suspensionSqueekTimeout);
+			set => SetProperty(ref _suspensionSqueekTimeout, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("exitDelay")] 
 		public CFloat ExitDelay
 		{
-			get
-			{
-				if (_exitDelay == null)
-				{
-					_exitDelay = (CFloat) CR2WTypeManager.Create("Float", "exitDelay", cr2w, this);
-				}
-				return _exitDelay;
-			}
-			set
-			{
-				if (_exitDelay == value)
-				{
-					return;
-				}
-				_exitDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitDelay);
+			set => SetProperty(ref _exitDelay, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("gearSweeteners")] 
 		public CArray<CName> GearSweeteners
 		{
-			get
-			{
-				if (_gearSweeteners == null)
-				{
-					_gearSweeteners = (CArray<CName>) CR2WTypeManager.Create("array:CName", "gearSweeteners", cr2w, this);
-				}
-				return _gearSweeteners;
-			}
-			set
-			{
-				if (_gearSweeteners == value)
-				{
-					return;
-				}
-				_gearSweeteners = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gearSweeteners);
+			set => SetProperty(ref _gearSweeteners, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("testWheelMaterial")] 
 		public CBool TestWheelMaterial
 		{
-			get
-			{
-				if (_testWheelMaterial == null)
-				{
-					_testWheelMaterial = (CBool) CR2WTypeManager.Create("Bool", "testWheelMaterial", cr2w, this);
-				}
-				return _testWheelMaterial;
-			}
-			set
-			{
-				if (_testWheelMaterial == value)
-				{
-					return;
-				}
-				_testWheelMaterial = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _testWheelMaterial);
+			set => SetProperty(ref _testWheelMaterial, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("hasRadioReceiver")] 
 		public CBool HasRadioReceiver
 		{
-			get
-			{
-				if (_hasRadioReceiver == null)
-				{
-					_hasRadioReceiver = (CBool) CR2WTypeManager.Create("Bool", "hasRadioReceiver", cr2w, this);
-				}
-				return _hasRadioReceiver;
-			}
-			set
-			{
-				if (_hasRadioReceiver == value)
-				{
-					return;
-				}
-				_hasRadioReceiver = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasRadioReceiver);
+			set => SetProperty(ref _hasRadioReceiver, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("usesPoliceRadioStation")] 
 		public CBool UsesPoliceRadioStation
 		{
-			get
-			{
-				if (_usesPoliceRadioStation == null)
-				{
-					_usesPoliceRadioStation = (CBool) CR2WTypeManager.Create("Bool", "usesPoliceRadioStation", cr2w, this);
-				}
-				return _usesPoliceRadioStation;
-			}
-			set
-			{
-				if (_usesPoliceRadioStation == value)
-				{
-					return;
-				}
-				_usesPoliceRadioStation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _usesPoliceRadioStation);
+			set => SetProperty(ref _usesPoliceRadioStation, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("acousticIsolationFactor")] 
 		public CFloat AcousticIsolationFactor
 		{
-			get
-			{
-				if (_acousticIsolationFactor == null)
-				{
-					_acousticIsolationFactor = (CFloat) CR2WTypeManager.Create("Float", "acousticIsolationFactor", cr2w, this);
-				}
-				return _acousticIsolationFactor;
-			}
-			set
-			{
-				if (_acousticIsolationFactor == value)
-				{
-					return;
-				}
-				_acousticIsolationFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _acousticIsolationFactor);
+			set => SetProperty(ref _acousticIsolationFactor, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("trafficEmitterMetadata")] 
 		public CName TrafficEmitterMetadata
 		{
-			get
-			{
-				if (_trafficEmitterMetadata == null)
-				{
-					_trafficEmitterMetadata = (CName) CR2WTypeManager.Create("CName", "trafficEmitterMetadata", cr2w, this);
-				}
-				return _trafficEmitterMetadata;
-			}
-			set
-			{
-				if (_trafficEmitterMetadata == value)
-				{
-					return;
-				}
-				_trafficEmitterMetadata = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trafficEmitterMetadata);
+			set => SetProperty(ref _trafficEmitterMetadata, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("radioReceiverType")] 
 		public CName RadioReceiverType
 		{
-			get
-			{
-				if (_radioReceiverType == null)
-				{
-					_radioReceiverType = (CName) CR2WTypeManager.Create("CName", "radioReceiverType", cr2w, this);
-				}
-				return _radioReceiverType;
-			}
-			set
-			{
-				if (_radioReceiverType == value)
-				{
-					return;
-				}
-				_radioReceiverType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radioReceiverType);
+			set => SetProperty(ref _radioReceiverType, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("matchingStartupRadioStations")] 
 		public CArray<CName> MatchingStartupRadioStations
 		{
-			get
-			{
-				if (_matchingStartupRadioStations == null)
-				{
-					_matchingStartupRadioStations = (CArray<CName>) CR2WTypeManager.Create("array:CName", "matchingStartupRadioStations", cr2w, this);
-				}
-				return _matchingStartupRadioStations;
-			}
-			set
-			{
-				if (_matchingStartupRadioStations == value)
-				{
-					return;
-				}
-				_matchingStartupRadioStations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _matchingStartupRadioStations);
+			set => SetProperty(ref _matchingStartupRadioStations, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("radioPlaysWhenEngineStartsProbability")] 
 		public CFloat RadioPlaysWhenEngineStartsProbability
 		{
-			get
-			{
-				if (_radioPlaysWhenEngineStartsProbability == null)
-				{
-					_radioPlaysWhenEngineStartsProbability = (CFloat) CR2WTypeManager.Create("Float", "radioPlaysWhenEngineStartsProbability", cr2w, this);
-				}
-				return _radioPlaysWhenEngineStartsProbability;
-			}
-			set
-			{
-				if (_radioPlaysWhenEngineStartsProbability == value)
-				{
-					return;
-				}
-				_radioPlaysWhenEngineStartsProbability = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radioPlaysWhenEngineStartsProbability);
+			set => SetProperty(ref _radioPlaysWhenEngineStartsProbability, value);
 		}
 
 		public audioVehicleMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

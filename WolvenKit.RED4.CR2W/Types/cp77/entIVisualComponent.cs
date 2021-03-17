@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("autoHideDistance")] 
 		public CFloat AutoHideDistance
 		{
-			get
-			{
-				if (_autoHideDistance == null)
-				{
-					_autoHideDistance = (CFloat) CR2WTypeManager.Create("Float", "autoHideDistance", cr2w, this);
-				}
-				return _autoHideDistance;
-			}
-			set
-			{
-				if (_autoHideDistance == value)
-				{
-					return;
-				}
-				_autoHideDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _autoHideDistance);
+			set => SetProperty(ref _autoHideDistance, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("renderSceneLayerMask")] 
 		public CEnum<RenderSceneLayerMask> RenderSceneLayerMask
 		{
-			get
-			{
-				if (_renderSceneLayerMask == null)
-				{
-					_renderSceneLayerMask = (CEnum<RenderSceneLayerMask>) CR2WTypeManager.Create("RenderSceneLayerMask", "renderSceneLayerMask", cr2w, this);
-				}
-				return _renderSceneLayerMask;
-			}
-			set
-			{
-				if (_renderSceneLayerMask == value)
-				{
-					return;
-				}
-				_renderSceneLayerMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _renderSceneLayerMask);
+			set => SetProperty(ref _renderSceneLayerMask, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("forceLODLevel")] 
 		public CInt8 ForceLODLevel
 		{
-			get
-			{
-				if (_forceLODLevel == null)
-				{
-					_forceLODLevel = (CInt8) CR2WTypeManager.Create("Int8", "forceLODLevel", cr2w, this);
-				}
-				return _forceLODLevel;
-			}
-			set
-			{
-				if (_forceLODLevel == value)
-				{
-					return;
-				}
-				_forceLODLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceLODLevel);
+			set => SetProperty(ref _forceLODLevel, value);
 		}
 
 		public entIVisualComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

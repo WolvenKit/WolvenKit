@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tppEnabled")] 
 		public CBool TppEnabled
 		{
-			get
-			{
-				if (_tppEnabled == null)
-				{
-					_tppEnabled = (CBool) CR2WTypeManager.Create("Bool", "tppEnabled", cr2w, this);
-				}
-				return _tppEnabled;
-			}
-			set
-			{
-				if (_tppEnabled == value)
-				{
-					return;
-				}
-				_tppEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tppEnabled);
+			set => SetProperty(ref _tppEnabled, value);
 		}
 
 		public AnimFeature_VehicleState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gunshotRange")] 
 		public CFloat GunshotRange
 		{
-			get
-			{
-				if (_gunshotRange == null)
-				{
-					_gunshotRange = (CFloat) CR2WTypeManager.Create("Float", "gunshotRange", cr2w, this);
-				}
-				return _gunshotRange;
-			}
-			set
-			{
-				if (_gunshotRange == value)
-				{
-					return;
-				}
-				_gunshotRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gunshotRange);
+			set => SetProperty(ref _gunshotRange, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("explosionRange")] 
 		public CFloat ExplosionRange
 		{
-			get
-			{
-				if (_explosionRange == null)
-				{
-					_explosionRange = (CFloat) CR2WTypeManager.Create("Float", "explosionRange", cr2w, this);
-				}
-				return _explosionRange;
-			}
-			set
-			{
-				if (_explosionRange == value)
-				{
-					return;
-				}
-				_explosionRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _explosionRange);
+			set => SetProperty(ref _explosionRange, value);
 		}
 
 		public PlayerEnteredNewDistrictEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

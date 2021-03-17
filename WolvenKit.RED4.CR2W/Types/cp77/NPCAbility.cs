@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("abilityName")] 
 		public CString AbilityName
 		{
-			get
-			{
-				if (_abilityName == null)
-				{
-					_abilityName = (CString) CR2WTypeManager.Create("String", "abilityName", cr2w, this);
-				}
-				return _abilityName;
-			}
-			set
-			{
-				if (_abilityName == value)
-				{
-					return;
-				}
-				_abilityName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _abilityName);
+			set => SetProperty(ref _abilityName, value);
 		}
 
 		public NPCAbility(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

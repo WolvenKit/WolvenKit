@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		public ControlledDeviceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sceneListener")] 
 		public CHandle<gameScriptedPrereqSceneInspectionListenerWrapper> SceneListener
 		{
-			get
-			{
-				if (_sceneListener == null)
-				{
-					_sceneListener = (CHandle<gameScriptedPrereqSceneInspectionListenerWrapper>) CR2WTypeManager.Create("handle:gameScriptedPrereqSceneInspectionListenerWrapper", "sceneListener", cr2w, this);
-				}
-				return _sceneListener;
-			}
-			set
-			{
-				if (_sceneListener == value)
-				{
-					return;
-				}
-				_sceneListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneListener);
+			set => SetProperty(ref _sceneListener, value);
 		}
 
 		public NPCInScenePrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

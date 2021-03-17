@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("text")] 
 		public LocalizationString Text
 		{
-			get
-			{
-				if (_text == null)
-				{
-					_text = (LocalizationString) CR2WTypeManager.Create("LocalizationString", "text", cr2w, this);
-				}
-				return _text;
-			}
-			set
-			{
-				if (_text == value)
-				{
-					return;
-				}
-				_text = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _text);
+			set => SetProperty(ref _text, value);
 		}
 
 		public gameJournalInternetText(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

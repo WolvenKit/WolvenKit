@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ikLeftHandLocalPosition")] 
 		public Vector4 IkLeftHandLocalPosition
 		{
-			get
-			{
-				if (_ikLeftHandLocalPosition == null)
-				{
-					_ikLeftHandLocalPosition = (Vector4) CR2WTypeManager.Create("Vector4", "ikLeftHandLocalPosition", cr2w, this);
-				}
-				return _ikLeftHandLocalPosition;
-			}
-			set
-			{
-				if (_ikLeftHandLocalPosition == value)
-				{
-					return;
-				}
-				_ikLeftHandLocalPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ikLeftHandLocalPosition);
+			set => SetProperty(ref _ikLeftHandLocalPosition, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ikRightHandLocalPosition")] 
 		public Vector4 IkRightHandLocalPosition
 		{
-			get
-			{
-				if (_ikRightHandLocalPosition == null)
-				{
-					_ikRightHandLocalPosition = (Vector4) CR2WTypeManager.Create("Vector4", "ikRightHandLocalPosition", cr2w, this);
-				}
-				return _ikRightHandLocalPosition;
-			}
-			set
-			{
-				if (_ikRightHandLocalPosition == value)
-				{
-					return;
-				}
-				_ikRightHandLocalPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ikRightHandLocalPosition);
+			set => SetProperty(ref _ikRightHandLocalPosition, value);
 		}
 
 		public animAnimFeature_WeaponUser(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

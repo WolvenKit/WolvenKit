@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("areaEffect")] 
 		public CEnum<ETrapEffects> AreaEffect
 		{
-			get
-			{
-				if (_areaEffect == null)
-				{
-					_areaEffect = (CEnum<ETrapEffects>) CR2WTypeManager.Create("ETrapEffects", "areaEffect", cr2w, this);
-				}
-				return _areaEffect;
-			}
-			set
-			{
-				if (_areaEffect == value)
-				{
-					return;
-				}
-				_areaEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaEffect);
+			set => SetProperty(ref _areaEffect, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("actionName")] 
 		public CName ActionName
 		{
-			get
-			{
-				if (_actionName == null)
-				{
-					_actionName = (CName) CR2WTypeManager.Create("CName", "actionName", cr2w, this);
-				}
-				return _actionName;
-			}
-			set
-			{
-				if (_actionName == value)
-				{
-					return;
-				}
-				_actionName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionName);
+			set => SetProperty(ref _actionName, value);
 		}
 
 		public VentilationAreaSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

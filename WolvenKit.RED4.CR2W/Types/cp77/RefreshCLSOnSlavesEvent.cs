@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slaves")] 
 		public CArray<CHandle<gameDeviceComponentPS>> Slaves
 		{
-			get
-			{
-				if (_slaves == null)
-				{
-					_slaves = (CArray<CHandle<gameDeviceComponentPS>>) CR2WTypeManager.Create("array:handle:gameDeviceComponentPS", "slaves", cr2w, this);
-				}
-				return _slaves;
-			}
-			set
-			{
-				if (_slaves == value)
-				{
-					return;
-				}
-				_slaves = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slaves);
+			set => SetProperty(ref _slaves, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("state")] 
 		public CEnum<EDeviceStatus> State
 		{
-			get
-			{
-				if (_state == null)
-				{
-					_state = (CEnum<EDeviceStatus>) CR2WTypeManager.Create("EDeviceStatus", "state", cr2w, this);
-				}
-				return _state;
-			}
-			set
-			{
-				if (_state == value)
-				{
-					return;
-				}
-				_state = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("restorePower")] 
 		public CBool RestorePower
 		{
-			get
-			{
-				if (_restorePower == null)
-				{
-					_restorePower = (CBool) CR2WTypeManager.Create("Bool", "restorePower", cr2w, this);
-				}
-				return _restorePower;
-			}
-			set
-			{
-				if (_restorePower == value)
-				{
-					return;
-				}
-				_restorePower = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _restorePower);
+			set => SetProperty(ref _restorePower, value);
 		}
 
 		public RefreshCLSOnSlavesEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

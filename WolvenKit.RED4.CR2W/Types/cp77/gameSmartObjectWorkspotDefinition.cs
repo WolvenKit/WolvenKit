@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("workspotTemplate")] 
 		public rRef<workWorkspotResource> WorkspotTemplate
 		{
-			get
-			{
-				if (_workspotTemplate == null)
-				{
-					_workspotTemplate = (rRef<workWorkspotResource>) CR2WTypeManager.Create("rRef:workWorkspotResource", "workspotTemplate", cr2w, this);
-				}
-				return _workspotTemplate;
-			}
-			set
-			{
-				if (_workspotTemplate == value)
-				{
-					return;
-				}
-				_workspotTemplate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotTemplate);
+			set => SetProperty(ref _workspotTemplate, value);
 		}
 
 		public gameSmartObjectWorkspotDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

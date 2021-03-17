@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("base")] 
 		public animPoseLink Base
 		{
-			get
-			{
-				if (_base == null)
-				{
-					_base = (animPoseLink) CR2WTypeManager.Create("animPoseLink", "base", cr2w, this);
-				}
-				return _base;
-			}
-			set
-			{
-				if (_base == value)
-				{
-					return;
-				}
-				_base = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _base);
+			set => SetProperty(ref _base, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("overlay")] 
 		public animPoseLink Overlay
 		{
-			get
-			{
-				if (_overlay == null)
-				{
-					_overlay = (animPoseLink) CR2WTypeManager.Create("animPoseLink", "overlay", cr2w, this);
-				}
-				return _overlay;
-			}
-			set
-			{
-				if (_overlay == value)
-				{
-					return;
-				}
-				_overlay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overlay);
+			set => SetProperty(ref _overlay, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("blendIn")] 
 		public CFloat BlendIn
 		{
-			get
-			{
-				if (_blendIn == null)
-				{
-					_blendIn = (CFloat) CR2WTypeManager.Create("Float", "blendIn", cr2w, this);
-				}
-				return _blendIn;
-			}
-			set
-			{
-				if (_blendIn == value)
-				{
-					return;
-				}
-				_blendIn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendIn);
+			set => SetProperty(ref _blendIn, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("blendOut")] 
 		public CFloat BlendOut
 		{
-			get
-			{
-				if (_blendOut == null)
-				{
-					_blendOut = (CFloat) CR2WTypeManager.Create("Float", "blendOut", cr2w, this);
-				}
-				return _blendOut;
-			}
-			set
-			{
-				if (_blendOut == value)
-				{
-					return;
-				}
-				_blendOut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendOut);
+			set => SetProperty(ref _blendOut, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("startEvent")] 
 		public CName StartEvent
 		{
-			get
-			{
-				if (_startEvent == null)
-				{
-					_startEvent = (CName) CR2WTypeManager.Create("CName", "startEvent", cr2w, this);
-				}
-				return _startEvent;
-			}
-			set
-			{
-				if (_startEvent == value)
-				{
-					return;
-				}
-				_startEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startEvent);
+			set => SetProperty(ref _startEvent, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("endEvent")] 
 		public CName EndEvent
 		{
-			get
-			{
-				if (_endEvent == null)
-				{
-					_endEvent = (CName) CR2WTypeManager.Create("CName", "endEvent", cr2w, this);
-				}
-				return _endEvent;
-			}
-			set
-			{
-				if (_endEvent == value)
-				{
-					return;
-				}
-				_endEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endEvent);
+			set => SetProperty(ref _endEvent, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("cooldown")] 
 		public CFloat Cooldown
 		{
-			get
-			{
-				if (_cooldown == null)
-				{
-					_cooldown = (CFloat) CR2WTypeManager.Create("Float", "cooldown", cr2w, this);
-				}
-				return _cooldown;
-			}
-			set
-			{
-				if (_cooldown == value)
-				{
-					return;
-				}
-				_cooldown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cooldown);
+			set => SetProperty(ref _cooldown, value);
 		}
 
 		public animAnimNode_TriggerBranch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

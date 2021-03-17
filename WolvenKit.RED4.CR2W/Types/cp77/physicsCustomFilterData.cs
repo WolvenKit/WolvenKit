@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("collisionType")] 
 		public CArray<CName> CollisionType
 		{
-			get
-			{
-				if (_collisionType == null)
-				{
-					_collisionType = (CArray<CName>) CR2WTypeManager.Create("array:CName", "collisionType", cr2w, this);
-				}
-				return _collisionType;
-			}
-			set
-			{
-				if (_collisionType == value)
-				{
-					return;
-				}
-				_collisionType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collisionType);
+			set => SetProperty(ref _collisionType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("collideWith")] 
 		public CArray<CName> CollideWith
 		{
-			get
-			{
-				if (_collideWith == null)
-				{
-					_collideWith = (CArray<CName>) CR2WTypeManager.Create("array:CName", "collideWith", cr2w, this);
-				}
-				return _collideWith;
-			}
-			set
-			{
-				if (_collideWith == value)
-				{
-					return;
-				}
-				_collideWith = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collideWith);
+			set => SetProperty(ref _collideWith, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("queryDetect")] 
 		public CArray<CName> QueryDetect
 		{
-			get
-			{
-				if (_queryDetect == null)
-				{
-					_queryDetect = (CArray<CName>) CR2WTypeManager.Create("array:CName", "queryDetect", cr2w, this);
-				}
-				return _queryDetect;
-			}
-			set
-			{
-				if (_queryDetect == value)
-				{
-					return;
-				}
-				_queryDetect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _queryDetect);
+			set => SetProperty(ref _queryDetect, value);
 		}
 
 		public physicsCustomFilterData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

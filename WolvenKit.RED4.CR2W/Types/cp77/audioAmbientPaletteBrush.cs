@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("distributionBucketSize")] 
 		public CFloat DistributionBucketSize
 		{
-			get
-			{
-				if (_distributionBucketSize == null)
-				{
-					_distributionBucketSize = (CFloat) CR2WTypeManager.Create("Float", "distributionBucketSize", cr2w, this);
-				}
-				return _distributionBucketSize;
-			}
-			set
-			{
-				if (_distributionBucketSize == value)
-				{
-					return;
-				}
-				_distributionBucketSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distributionBucketSize);
+			set => SetProperty(ref _distributionBucketSize, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("virtualHearingRadius")] 
 		public CFloat VirtualHearingRadius
 		{
-			get
-			{
-				if (_virtualHearingRadius == null)
-				{
-					_virtualHearingRadius = (CFloat) CR2WTypeManager.Create("Float", "virtualHearingRadius", cr2w, this);
-				}
-				return _virtualHearingRadius;
-			}
-			set
-			{
-				if (_virtualHearingRadius == value)
-				{
-					return;
-				}
-				_virtualHearingRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _virtualHearingRadius);
+			set => SetProperty(ref _virtualHearingRadius, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hearingDistanceCooldown")] 
 		public CFloat HearingDistanceCooldown
 		{
-			get
-			{
-				if (_hearingDistanceCooldown == null)
-				{
-					_hearingDistanceCooldown = (CFloat) CR2WTypeManager.Create("Float", "hearingDistanceCooldown", cr2w, this);
-				}
-				return _hearingDistanceCooldown;
-			}
-			set
-			{
-				if (_hearingDistanceCooldown == value)
-				{
-					return;
-				}
-				_hearingDistanceCooldown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hearingDistanceCooldown);
+			set => SetProperty(ref _hearingDistanceCooldown, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("eventsPool")] 
 		public CArray<CName> EventsPool
 		{
-			get
-			{
-				if (_eventsPool == null)
-				{
-					_eventsPool = (CArray<CName>) CR2WTypeManager.Create("array:CName", "eventsPool", cr2w, this);
-				}
-				return _eventsPool;
-			}
-			set
-			{
-				if (_eventsPool == value)
-				{
-					return;
-				}
-				_eventsPool = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventsPool);
+			set => SetProperty(ref _eventsPool, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("radioStationMetadata")] 
 		public CName RadioStationMetadata
 		{
-			get
-			{
-				if (_radioStationMetadata == null)
-				{
-					_radioStationMetadata = (CName) CR2WTypeManager.Create("CName", "radioStationMetadata", cr2w, this);
-				}
-				return _radioStationMetadata;
-			}
-			set
-			{
-				if (_radioStationMetadata == value)
-				{
-					return;
-				}
-				_radioStationMetadata = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radioStationMetadata);
+			set => SetProperty(ref _radioStationMetadata, value);
 		}
 
 		public audioAmbientPaletteBrush(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("start")] 
 		public CFloat Start
 		{
-			get
-			{
-				if (_start == null)
-				{
-					_start = (CFloat) CR2WTypeManager.Create("Float", "start", cr2w, this);
-				}
-				return _start;
-			}
-			set
-			{
-				if (_start == value)
-				{
-					return;
-				}
-				_start = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _start);
+			set => SetProperty(ref _start, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("end")] 
 		public CFloat End
 		{
-			get
-			{
-				if (_end == null)
-				{
-					_end = (CFloat) CR2WTypeManager.Create("Float", "end", cr2w, this);
-				}
-				return _end;
-			}
-			set
-			{
-				if (_end == value)
-				{
-					return;
-				}
-				_end = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _end);
+			set => SetProperty(ref _end, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("targetSpeed_M_P_S")] 
 		public CFloat TargetSpeed_M_P_S
 		{
-			get
-			{
-				if (_targetSpeed_M_P_S == null)
-				{
-					_targetSpeed_M_P_S = (CFloat) CR2WTypeManager.Create("Float", "targetSpeed_M_P_S", cr2w, this);
-				}
-				return _targetSpeed_M_P_S;
-			}
-			set
-			{
-				if (_targetSpeed_M_P_S == value)
-				{
-					return;
-				}
-				_targetSpeed_M_P_S = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetSpeed_M_P_S);
+			set => SetProperty(ref _targetSpeed_M_P_S, value);
 		}
 
 		public worldSpeedSplineNodeSpeedChangeSection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

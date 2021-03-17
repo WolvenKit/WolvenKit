@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("angle")] 
 		public CHandle<AIArgumentMapping> Angle
 		{
-			get
-			{
-				if (_angle == null)
-				{
-					_angle = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "angle", cr2w, this);
-				}
-				return _angle;
-			}
-			set
-			{
-				if (_angle == value)
-				{
-					return;
-				}
-				_angle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _angle);
+			set => SetProperty(ref _angle, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("angleTolerance")] 
 		public CHandle<AIArgumentMapping> AngleTolerance
 		{
-			get
-			{
-				if (_angleTolerance == null)
-				{
-					_angleTolerance = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "angleTolerance", cr2w, this);
-				}
-				return _angleTolerance;
-			}
-			set
-			{
-				if (_angleTolerance == value)
-				{
-					return;
-				}
-				_angleTolerance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _angleTolerance);
+			set => SetProperty(ref _angleTolerance, value);
 		}
 
 		public AIbehaviorActionRotateByAngleTreeNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

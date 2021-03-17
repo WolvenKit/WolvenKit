@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("source")] 
 		public wCHandle<gameObject> Source
 		{
-			get
-			{
-				if (_source == null)
-				{
-					_source = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "source", cr2w, this);
-				}
-				return _source;
-			}
-			set
-			{
-				if (_source == value)
-				{
-					return;
-				}
-				_source = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("targets")] 
 		public CArray<wCHandle<gameObject>> Targets
 		{
-			get
-			{
-				if (_targets == null)
-				{
-					_targets = (CArray<wCHandle<gameObject>>) CR2WTypeManager.Create("array:whandle:gameObject", "targets", cr2w, this);
-				}
-				return _targets;
-			}
-			set
-			{
-				if (_targets == value)
-				{
-					return;
-				}
-				_targets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targets);
+			set => SetProperty(ref _targets, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("timestamps")] 
 		public CArray<CFloat> Timestamps
 		{
-			get
-			{
-				if (_timestamps == null)
-				{
-					_timestamps = (CArray<CFloat>) CR2WTypeManager.Create("array:Float", "timestamps", cr2w, this);
-				}
-				return _timestamps;
-			}
-			set
-			{
-				if (_timestamps == value)
-				{
-					return;
-				}
-				_timestamps = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timestamps);
+			set => SetProperty(ref _timestamps, value);
 		}
 
 		public GrenadeQuickhackKillEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

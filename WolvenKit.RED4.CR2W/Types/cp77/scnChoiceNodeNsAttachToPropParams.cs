@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("propId")] 
 		public scnPropId PropId
 		{
-			get
-			{
-				if (_propId == null)
-				{
-					_propId = (scnPropId) CR2WTypeManager.Create("scnPropId", "propId", cr2w, this);
-				}
-				return _propId;
-			}
-			set
-			{
-				if (_propId == value)
-				{
-					return;
-				}
-				_propId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _propId);
+			set => SetProperty(ref _propId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("visualizerStyle")] 
 		public CEnum<scnChoiceNodeNsVisualizerStyle> VisualizerStyle
 		{
-			get
-			{
-				if (_visualizerStyle == null)
-				{
-					_visualizerStyle = (CEnum<scnChoiceNodeNsVisualizerStyle>) CR2WTypeManager.Create("scnChoiceNodeNsVisualizerStyle", "visualizerStyle", cr2w, this);
-				}
-				return _visualizerStyle;
-			}
-			set
-			{
-				if (_visualizerStyle == value)
-				{
-					return;
-				}
-				_visualizerStyle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualizerStyle);
+			set => SetProperty(ref _visualizerStyle, value);
 		}
 
 		public scnChoiceNodeNsAttachToPropParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

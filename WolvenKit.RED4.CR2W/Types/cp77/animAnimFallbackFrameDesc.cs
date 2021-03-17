@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rsion")] 
 		public CUInt16 Rsion
 		{
-			get
-			{
-				if (_rsion == null)
-				{
-					_rsion = (CUInt16) CR2WTypeManager.Create("Uint16", "rsion", cr2w, this);
-				}
-				return _rsion;
-			}
-			set
-			{
-				if (_rsion == value)
-				{
-					return;
-				}
-				_rsion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rsion);
+			set => SetProperty(ref _rsion, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("pe")] 
 		public CUInt16 Pe
 		{
-			get
-			{
-				if (_pe == null)
-				{
-					_pe = (CUInt16) CR2WTypeManager.Create("Uint16", "pe", cr2w, this);
-				}
-				return _pe;
-			}
-			set
-			{
-				if (_pe == value)
-				{
-					return;
-				}
-				_pe = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pe);
+			set => SetProperty(ref _pe, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("mPositions")] 
 		public CUInt16 MPositions
 		{
-			get
-			{
-				if (_mPositions == null)
-				{
-					_mPositions = (CUInt16) CR2WTypeManager.Create("Uint16", "mPositions", cr2w, this);
-				}
-				return _mPositions;
-			}
-			set
-			{
-				if (_mPositions == value)
-				{
-					return;
-				}
-				_mPositions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mPositions);
+			set => SetProperty(ref _mPositions, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("mRotations")] 
 		public CUInt16 MRotations
 		{
-			get
-			{
-				if (_mRotations == null)
-				{
-					_mRotations = (CUInt16) CR2WTypeManager.Create("Uint16", "mRotations", cr2w, this);
-				}
-				return _mRotations;
-			}
-			set
-			{
-				if (_mRotations == value)
-				{
-					return;
-				}
-				_mRotations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mRotations);
+			set => SetProperty(ref _mRotations, value);
 		}
 
 		public animAnimFallbackFrameDesc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("callStack")] 
 		public AIbehaviorBehaviorInstanceCallStack CallStack
 		{
-			get
-			{
-				if (_callStack == null)
-				{
-					_callStack = (AIbehaviorBehaviorInstanceCallStack) CR2WTypeManager.Create("AIbehaviorBehaviorInstanceCallStack", "callStack", cr2w, this);
-				}
-				return _callStack;
-			}
-			set
-			{
-				if (_callStack == value)
-				{
-					return;
-				}
-				_callStack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callStack);
+			set => SetProperty(ref _callStack, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("behaviorResourcePath")] 
 		public CString BehaviorResourcePath
 		{
-			get
-			{
-				if (_behaviorResourcePath == null)
-				{
-					_behaviorResourcePath = (CString) CR2WTypeManager.Create("String", "behaviorResourcePath", cr2w, this);
-				}
-				return _behaviorResourcePath;
-			}
-			set
-			{
-				if (_behaviorResourcePath == value)
-				{
-					return;
-				}
-				_behaviorResourcePath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _behaviorResourcePath);
+			set => SetProperty(ref _behaviorResourcePath, value);
 		}
 
 		public AIbehaviorAgentInfoDebuggerCommandEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

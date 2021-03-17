@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("item")] 
 		public InventoryItemData Item
 		{
-			get
-			{
-				if (_item == null)
-				{
-					_item = (InventoryItemData) CR2WTypeManager.Create("InventoryItemData", "item", cr2w, this);
-				}
-				return _item;
-			}
-			set
-			{
-				if (_item == value)
-				{
-					return;
-				}
-				_item = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _item);
+			set => SetProperty(ref _item, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("inventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
-			get
-			{
-				if (_inventoryManager == null)
-				{
-					_inventoryManager = (CHandle<InventoryDataManagerV2>) CR2WTypeManager.Create("handle:InventoryDataManagerV2", "inventoryManager", cr2w, this);
-				}
-				return _inventoryManager;
-			}
-			set
-			{
-				if (_inventoryManager == value)
-				{
-					return;
-				}
-				_inventoryManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryManager);
+			set => SetProperty(ref _inventoryManager, value);
 		}
 
 		public BackpackEquipSlotChooserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

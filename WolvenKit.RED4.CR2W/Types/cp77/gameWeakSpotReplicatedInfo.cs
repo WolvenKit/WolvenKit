@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weakSpotRecordID")] 
 		public CUInt64 WeakSpotRecordID
 		{
-			get
-			{
-				if (_weakSpotRecordID == null)
-				{
-					_weakSpotRecordID = (CUInt64) CR2WTypeManager.Create("Uint64", "weakSpotRecordID", cr2w, this);
-				}
-				return _weakSpotRecordID;
-			}
-			set
-			{
-				if (_weakSpotRecordID == value)
-				{
-					return;
-				}
-				_weakSpotRecordID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weakSpotRecordID);
+			set => SetProperty(ref _weakSpotRecordID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("wsHealthValue")] 
 		public CFloat WsHealthValue
 		{
-			get
-			{
-				if (_wsHealthValue == null)
-				{
-					_wsHealthValue = (CFloat) CR2WTypeManager.Create("Float", "wsHealthValue", cr2w, this);
-				}
-				return _wsHealthValue;
-			}
-			set
-			{
-				if (_wsHealthValue == value)
-				{
-					return;
-				}
-				_wsHealthValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wsHealthValue);
+			set => SetProperty(ref _wsHealthValue, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("LastDamageInstigator")] 
 		public wCHandle<gamePuppet> LastDamageInstigator
 		{
-			get
-			{
-				if (_lastDamageInstigator == null)
-				{
-					_lastDamageInstigator = (wCHandle<gamePuppet>) CR2WTypeManager.Create("whandle:gamePuppet", "LastDamageInstigator", cr2w, this);
-				}
-				return _lastDamageInstigator;
-			}
-			set
-			{
-				if (_lastDamageInstigator == value)
-				{
-					return;
-				}
-				_lastDamageInstigator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastDamageInstigator);
+			set => SetProperty(ref _lastDamageInstigator, value);
 		}
 
 		public gameWeakSpotReplicatedInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

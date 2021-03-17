@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("useAreaLoot")] 
 		public CBool UseAreaLoot
 		{
-			get
-			{
-				if (_useAreaLoot == null)
-				{
-					_useAreaLoot = (CBool) CR2WTypeManager.Create("Bool", "useAreaLoot", cr2w, this);
-				}
-				return _useAreaLoot;
-			}
-			set
-			{
-				if (_useAreaLoot == value)
-				{
-					return;
-				}
-				_useAreaLoot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useAreaLoot);
+			set => SetProperty(ref _useAreaLoot, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("lootTables")] 
 		public CArray<TweakDBID> LootTables
 		{
-			get
-			{
-				if (_lootTables == null)
-				{
-					_lootTables = (CArray<TweakDBID>) CR2WTypeManager.Create("array:TweakDBID", "lootTables", cr2w, this);
-				}
-				return _lootTables;
-			}
-			set
-			{
-				if (_lootTables == value)
-				{
-					return;
-				}
-				_lootTables = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lootTables);
+			set => SetProperty(ref _lootTables, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("contentAssignment")] 
 		public TweakDBID ContentAssignment
 		{
-			get
-			{
-				if (_contentAssignment == null)
-				{
-					_contentAssignment = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "contentAssignment", cr2w, this);
-				}
-				return _contentAssignment;
-			}
-			set
-			{
-				if (_contentAssignment == value)
-				{
-					return;
-				}
-				_contentAssignment = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contentAssignment);
+			set => SetProperty(ref _contentAssignment, value);
 		}
 
 		[Ordinal(43)] 
 		[RED("isIllegal")] 
 		public CBool IsIllegal
 		{
-			get
-			{
-				if (_isIllegal == null)
-				{
-					_isIllegal = (CBool) CR2WTypeManager.Create("Bool", "isIllegal", cr2w, this);
-				}
-				return _isIllegal;
-			}
-			set
-			{
-				if (_isIllegal == value)
-				{
-					return;
-				}
-				_isIllegal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isIllegal);
+			set => SetProperty(ref _isIllegal, value);
 		}
 
 		[Ordinal(44)] 
 		[RED("lootQuality")] 
 		public CEnum<gamedataQuality> LootQuality
 		{
-			get
-			{
-				if (_lootQuality == null)
-				{
-					_lootQuality = (CEnum<gamedataQuality>) CR2WTypeManager.Create("gamedataQuality", "lootQuality", cr2w, this);
-				}
-				return _lootQuality;
-			}
-			set
-			{
-				if (_lootQuality == value)
-				{
-					return;
-				}
-				_lootQuality = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lootQuality);
+			set => SetProperty(ref _lootQuality, value);
 		}
 
 		[Ordinal(45)] 
 		[RED("hasQuestItems")] 
 		public CBool HasQuestItems
 		{
-			get
-			{
-				if (_hasQuestItems == null)
-				{
-					_hasQuestItems = (CBool) CR2WTypeManager.Create("Bool", "hasQuestItems", cr2w, this);
-				}
-				return _hasQuestItems;
-			}
-			set
-			{
-				if (_hasQuestItems == value)
-				{
-					return;
-				}
-				_hasQuestItems = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasQuestItems);
+			set => SetProperty(ref _hasQuestItems, value);
 		}
 
 		[Ordinal(46)] 
 		[RED("wasLootInitalized")] 
 		public CBool WasLootInitalized
 		{
-			get
-			{
-				if (_wasLootInitalized == null)
-				{
-					_wasLootInitalized = (CBool) CR2WTypeManager.Create("Bool", "wasLootInitalized", cr2w, this);
-				}
-				return _wasLootInitalized;
-			}
-			set
-			{
-				if (_wasLootInitalized == value)
-				{
-					return;
-				}
-				_wasLootInitalized = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasLootInitalized);
+			set => SetProperty(ref _wasLootInitalized, value);
 		}
 
 		[Ordinal(47)] 
 		[RED("isInIconForcedVisibilityRange")] 
 		public CBool IsInIconForcedVisibilityRange
 		{
-			get
-			{
-				if (_isInIconForcedVisibilityRange == null)
-				{
-					_isInIconForcedVisibilityRange = (CBool) CR2WTypeManager.Create("Bool", "isInIconForcedVisibilityRange", cr2w, this);
-				}
-				return _isInIconForcedVisibilityRange;
-			}
-			set
-			{
-				if (_isInIconForcedVisibilityRange == value)
-				{
-					return;
-				}
-				_isInIconForcedVisibilityRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInIconForcedVisibilityRange);
+			set => SetProperty(ref _isInIconForcedVisibilityRange, value);
 		}
 
 		[Ordinal(48)] 
 		[RED("isIconic")] 
 		public CBool IsIconic
 		{
-			get
-			{
-				if (_isIconic == null)
-				{
-					_isIconic = (CBool) CR2WTypeManager.Create("Bool", "isIconic", cr2w, this);
-				}
-				return _isIconic;
-			}
-			set
-			{
-				if (_isIconic == value)
-				{
-					return;
-				}
-				_isIconic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isIconic);
+			set => SetProperty(ref _isIconic, value);
 		}
 
 		[Ordinal(49)] 
 		[RED("activeQualityRangeInteraction")] 
 		public CName ActiveQualityRangeInteraction
 		{
-			get
-			{
-				if (_activeQualityRangeInteraction == null)
-				{
-					_activeQualityRangeInteraction = (CName) CR2WTypeManager.Create("CName", "activeQualityRangeInteraction", cr2w, this);
-				}
-				return _activeQualityRangeInteraction;
-			}
-			set
-			{
-				if (_activeQualityRangeInteraction == value)
-				{
-					return;
-				}
-				_activeQualityRangeInteraction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeQualityRangeInteraction);
+			set => SetProperty(ref _activeQualityRangeInteraction, value);
 		}
 
 		public gameLootContainerBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

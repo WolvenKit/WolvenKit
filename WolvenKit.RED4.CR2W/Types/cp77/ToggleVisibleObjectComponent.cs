@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("componentTargetState")] 
 		public CBool ComponentTargetState
 		{
-			get
-			{
-				if (_componentTargetState == null)
-				{
-					_componentTargetState = (CBool) CR2WTypeManager.Create("Bool", "componentTargetState", cr2w, this);
-				}
-				return _componentTargetState;
-			}
-			set
-			{
-				if (_componentTargetState == value)
-				{
-					return;
-				}
-				_componentTargetState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _componentTargetState);
+			set => SetProperty(ref _componentTargetState, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("visibleObjectDescription")] 
 		public CName VisibleObjectDescription
 		{
-			get
-			{
-				if (_visibleObjectDescription == null)
-				{
-					_visibleObjectDescription = (CName) CR2WTypeManager.Create("CName", "visibleObjectDescription", cr2w, this);
-				}
-				return _visibleObjectDescription;
-			}
-			set
-			{
-				if (_visibleObjectDescription == value)
-				{
-					return;
-				}
-				_visibleObjectDescription = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visibleObjectDescription);
+			set => SetProperty(ref _visibleObjectDescription, value);
 		}
 
 		public ToggleVisibleObjectComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

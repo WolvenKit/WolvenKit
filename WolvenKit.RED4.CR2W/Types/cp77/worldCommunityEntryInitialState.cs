@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entryName")] 
 		public CName EntryName
 		{
-			get
-			{
-				if (_entryName == null)
-				{
-					_entryName = (CName) CR2WTypeManager.Create("CName", "entryName", cr2w, this);
-				}
-				return _entryName;
-			}
-			set
-			{
-				if (_entryName == value)
-				{
-					return;
-				}
-				_entryName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryName);
+			set => SetProperty(ref _entryName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("initialPhaseName")] 
 		public CName InitialPhaseName
 		{
-			get
-			{
-				if (_initialPhaseName == null)
-				{
-					_initialPhaseName = (CName) CR2WTypeManager.Create("CName", "initialPhaseName", cr2w, this);
-				}
-				return _initialPhaseName;
-			}
-			set
-			{
-				if (_initialPhaseName == value)
-				{
-					return;
-				}
-				_initialPhaseName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialPhaseName);
+			set => SetProperty(ref _initialPhaseName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entryActiveOnStart")] 
 		public CBool EntryActiveOnStart
 		{
-			get
-			{
-				if (_entryActiveOnStart == null)
-				{
-					_entryActiveOnStart = (CBool) CR2WTypeManager.Create("Bool", "entryActiveOnStart", cr2w, this);
-				}
-				return _entryActiveOnStart;
-			}
-			set
-			{
-				if (_entryActiveOnStart == value)
-				{
-					return;
-				}
-				_entryActiveOnStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryActiveOnStart);
+			set => SetProperty(ref _entryActiveOnStart, value);
 		}
 
 		public worldCommunityEntryInitialState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

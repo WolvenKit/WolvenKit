@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
-			get
-			{
-				if (_gameInstance == null)
-				{
-					_gameInstance = (ScriptGameInstance) CR2WTypeManager.Create("ScriptGameInstance", "gameInstance", cr2w, this);
-				}
-				return _gameInstance;
-			}
-			set
-			{
-				if (_gameInstance == value)
-				{
-					return;
-				}
-				_gameInstance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameInstance);
+			set => SetProperty(ref _gameInstance, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("requesterPuppet")] 
 		public wCHandle<ScriptedPuppet> RequesterPuppet
 		{
-			get
-			{
-				if (_requesterPuppet == null)
-				{
-					_requesterPuppet = (wCHandle<ScriptedPuppet>) CR2WTypeManager.Create("whandle:ScriptedPuppet", "requesterPuppet", cr2w, this);
-				}
-				return _requesterPuppet;
-			}
-			set
-			{
-				if (_requesterPuppet == value)
-				{
-					return;
-				}
-				_requesterPuppet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requesterPuppet);
+			set => SetProperty(ref _requesterPuppet, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("requesterID")] 
 		public entEntityID RequesterID
 		{
-			get
-			{
-				if (_requesterID == null)
-				{
-					_requesterID = (entEntityID) CR2WTypeManager.Create("entEntityID", "requesterID", cr2w, this);
-				}
-				return _requesterID;
-			}
-			set
-			{
-				if (_requesterID == value)
-				{
-					return;
-				}
-				_requesterID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requesterID);
+			set => SetProperty(ref _requesterID, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("statPoolType")] 
 		public CEnum<gamedataStatPoolType> StatPoolType
 		{
-			get
-			{
-				if (_statPoolType == null)
-				{
-					_statPoolType = (CEnum<gamedataStatPoolType>) CR2WTypeManager.Create("gamedataStatPoolType", "statPoolType", cr2w, this);
-				}
-				return _statPoolType;
-			}
-			set
-			{
-				if (_statPoolType == value)
-				{
-					return;
-				}
-				_statPoolType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statPoolType);
+			set => SetProperty(ref _statPoolType, value);
 		}
 
 		public PhoneCallUploadDurationListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

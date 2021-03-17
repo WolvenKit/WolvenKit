@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("maxCollisions")] 
 		public CUInt32 MaxCollisions
 		{
-			get
-			{
-				if (_maxCollisions == null)
-				{
-					_maxCollisions = (CUInt32) CR2WTypeManager.Create("Uint32", "maxCollisions", cr2w, this);
-				}
-				return _maxCollisions;
-			}
-			set
-			{
-				if (_maxCollisions == value)
-				{
-					return;
-				}
-				_maxCollisions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxCollisions);
+			set => SetProperty(ref _maxCollisions, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("restitution")] 
 		public CFloat Restitution
 		{
-			get
-			{
-				if (_restitution == null)
-				{
-					_restitution = (CFloat) CR2WTypeManager.Create("Float", "restitution", cr2w, this);
-				}
-				return _restitution;
-			}
-			set
-			{
-				if (_restitution == value)
-				{
-					return;
-				}
-				_restitution = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _restitution);
+			set => SetProperty(ref _restitution, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("friction")] 
 		public CFloat Friction
 		{
-			get
-			{
-				if (_friction == null)
-				{
-					_friction = (CFloat) CR2WTypeManager.Create("Float", "friction", cr2w, this);
-				}
-				return _friction;
-			}
-			set
-			{
-				if (_friction == value)
-				{
-					return;
-				}
-				_friction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _friction);
+			set => SetProperty(ref _friction, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get
-			{
-				if (_radius == null)
-				{
-					_radius = (CFloat) CR2WTypeManager.Create("Float", "radius", cr2w, this);
-				}
-				return _radius;
-			}
-			set
-			{
-				if (_radius == value)
-				{
-					return;
-				}
-				_radius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radius);
+			set => SetProperty(ref _radius, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("collisionEffect")] 
 		public CEnum<EDepthCollisionEffect> CollisionEffect
 		{
-			get
-			{
-				if (_collisionEffect == null)
-				{
-					_collisionEffect = (CEnum<EDepthCollisionEffect>) CR2WTypeManager.Create("EDepthCollisionEffect", "collisionEffect", cr2w, this);
-				}
-				return _collisionEffect;
-			}
-			set
-			{
-				if (_collisionEffect == value)
-				{
-					return;
-				}
-				_collisionEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collisionEffect);
+			set => SetProperty(ref _collisionEffect, value);
 		}
 
 		public CParticleModificatorDepthCollision(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

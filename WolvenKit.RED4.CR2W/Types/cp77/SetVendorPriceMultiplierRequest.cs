@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vendorID")] 
 		public TweakDBID VendorID
 		{
-			get
-			{
-				if (_vendorID == null)
-				{
-					_vendorID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "vendorID", cr2w, this);
-				}
-				return _vendorID;
-			}
-			set
-			{
-				if (_vendorID == value)
-				{
-					return;
-				}
-				_vendorID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vendorID);
+			set => SetProperty(ref _vendorID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("multiplier")] 
 		public CFloat Multiplier
 		{
-			get
-			{
-				if (_multiplier == null)
-				{
-					_multiplier = (CFloat) CR2WTypeManager.Create("Float", "multiplier", cr2w, this);
-				}
-				return _multiplier;
-			}
-			set
-			{
-				if (_multiplier == value)
-				{
-					return;
-				}
-				_multiplier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _multiplier);
+			set => SetProperty(ref _multiplier, value);
 		}
 
 		public SetVendorPriceMultiplierRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

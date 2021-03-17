@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("severity")] 
 		public CEnum<toolsMessageSeverity> Severity
 		{
-			get
-			{
-				if (_severity == null)
-				{
-					_severity = (CEnum<toolsMessageSeverity>) CR2WTypeManager.Create("toolsMessageSeverity", "severity", cr2w, this);
-				}
-				return _severity;
-			}
-			set
-			{
-				if (_severity == value)
-				{
-					return;
-				}
-				_severity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _severity);
+			set => SetProperty(ref _severity, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("created")] 
 		public CInt64 Created
 		{
-			get
-			{
-				if (_created == null)
-				{
-					_created = (CInt64) CR2WTypeManager.Create("Int64", "created", cr2w, this);
-				}
-				return _created;
-			}
-			set
-			{
-				if (_created == value)
-				{
-					return;
-				}
-				_created = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _created);
+			set => SetProperty(ref _created, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("location")] 
 		public CHandle<toolsIMessageLocation> Location
 		{
-			get
-			{
-				if (_location == null)
-				{
-					_location = (CHandle<toolsIMessageLocation>) CR2WTypeManager.Create("handle:toolsIMessageLocation", "location", cr2w, this);
-				}
-				return _location;
-			}
-			set
-			{
-				if (_location == value)
-				{
-					return;
-				}
-				_location = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _location);
+			set => SetProperty(ref _location, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("tokens")] 
 		public CArray<CHandle<toolsIMessageToken>> Tokens
 		{
-			get
-			{
-				if (_tokens == null)
-				{
-					_tokens = (CArray<CHandle<toolsIMessageToken>>) CR2WTypeManager.Create("array:handle:toolsIMessageToken", "tokens", cr2w, this);
-				}
-				return _tokens;
-			}
-			set
-			{
-				if (_tokens == value)
-				{
-					return;
-				}
-				_tokens = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tokens);
+			set => SetProperty(ref _tokens, value);
 		}
 
 		public toolsMessage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

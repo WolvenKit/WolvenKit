@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("capsules")] 
 		public CArray<physicsclothExportedCapsule> Capsules
 		{
-			get
-			{
-				if (_capsules == null)
-				{
-					_capsules = (CArray<physicsclothExportedCapsule>) CR2WTypeManager.Create("array:physicsclothExportedCapsule", "capsules", cr2w, this);
-				}
-				return _capsules;
-			}
-			set
-			{
-				if (_capsules == value)
-				{
-					return;
-				}
-				_capsules = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _capsules);
+			set => SetProperty(ref _capsules, value);
 		}
 
 		public physicsclothClothCapsuleExportData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

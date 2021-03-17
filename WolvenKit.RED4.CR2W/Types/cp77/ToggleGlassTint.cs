@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("TrueRecord")] 
 		public CString TrueRecord
 		{
-			get
-			{
-				if (_trueRecord == null)
-				{
-					_trueRecord = (CString) CR2WTypeManager.Create("String", "TrueRecord", cr2w, this);
-				}
-				return _trueRecord;
-			}
-			set
-			{
-				if (_trueRecord == value)
-				{
-					return;
-				}
-				_trueRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trueRecord);
+			set => SetProperty(ref _trueRecord, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("FalseRecord")] 
 		public CString FalseRecord
 		{
-			get
-			{
-				if (_falseRecord == null)
-				{
-					_falseRecord = (CString) CR2WTypeManager.Create("String", "FalseRecord", cr2w, this);
-				}
-				return _falseRecord;
-			}
-			set
-			{
-				if (_falseRecord == value)
-				{
-					return;
-				}
-				_falseRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _falseRecord);
+			set => SetProperty(ref _falseRecord, value);
 		}
 
 		public ToggleGlassTint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

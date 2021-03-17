@@ -40,644 +40,224 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lastInstruction")] 
 		public CEnum<EReprimandInstructions> LastInstruction
 		{
-			get
-			{
-				if (_lastInstruction == null)
-				{
-					_lastInstruction = (CEnum<EReprimandInstructions>) CR2WTypeManager.Create("EReprimandInstructions", "lastInstruction", cr2w, this);
-				}
-				return _lastInstruction;
-			}
-			set
-			{
-				if (_lastInstruction == value)
-				{
-					return;
-				}
-				_lastInstruction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastInstruction);
+			set => SetProperty(ref _lastInstruction, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("instructionSet")] 
 		public CBool InstructionSet
 		{
-			get
-			{
-				if (_instructionSet == null)
-				{
-					_instructionSet = (CBool) CR2WTypeManager.Create("Bool", "instructionSet", cr2w, this);
-				}
-				return _instructionSet;
-			}
-			set
-			{
-				if (_instructionSet == value)
-				{
-					return;
-				}
-				_instructionSet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instructionSet);
+			set => SetProperty(ref _instructionSet, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lastInstructionTime")] 
 		public CFloat LastInstructionTime
 		{
-			get
-			{
-				if (_lastInstructionTime == null)
-				{
-					_lastInstructionTime = (CFloat) CR2WTypeManager.Create("Float", "lastInstructionTime", cr2w, this);
-				}
-				return _lastInstructionTime;
-			}
-			set
-			{
-				if (_lastInstructionTime == value)
-				{
-					return;
-				}
-				_lastInstructionTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastInstructionTime);
+			set => SetProperty(ref _lastInstructionTime, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("lastInput")] 
 		public CEnum<ESecurityNotificationType> LastInput
 		{
-			get
-			{
-				if (_lastInput == null)
-				{
-					_lastInput = (CEnum<ESecurityNotificationType>) CR2WTypeManager.Create("ESecurityNotificationType", "lastInput", cr2w, this);
-				}
-				return _lastInput;
-			}
-			set
-			{
-				if (_lastInput == value)
-				{
-					return;
-				}
-				_lastInput = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastInput);
+			set => SetProperty(ref _lastInput, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("inputSet")] 
 		public CBool InputSet
 		{
-			get
-			{
-				if (_inputSet == null)
-				{
-					_inputSet = (CBool) CR2WTypeManager.Create("Bool", "inputSet", cr2w, this);
-				}
-				return _inputSet;
-			}
-			set
-			{
-				if (_inputSet == value)
-				{
-					return;
-				}
-				_inputSet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputSet);
+			set => SetProperty(ref _inputSet, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("lastInputTime")] 
 		public CFloat LastInputTime
 		{
-			get
-			{
-				if (_lastInputTime == null)
-				{
-					_lastInputTime = (CFloat) CR2WTypeManager.Create("Float", "lastInputTime", cr2w, this);
-				}
-				return _lastInputTime;
-			}
-			set
-			{
-				if (_lastInputTime == value)
-				{
-					return;
-				}
-				_lastInputTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastInputTime);
+			set => SetProperty(ref _lastInputTime, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("lastUpdateTime")] 
 		public CFloat LastUpdateTime
 		{
-			get
-			{
-				if (_lastUpdateTime == null)
-				{
-					_lastUpdateTime = (CFloat) CR2WTypeManager.Create("Float", "lastUpdateTime", cr2w, this);
-				}
-				return _lastUpdateTime;
-			}
-			set
-			{
-				if (_lastUpdateTime == value)
-				{
-					return;
-				}
-				_lastUpdateTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastUpdateTime);
+			set => SetProperty(ref _lastUpdateTime, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("realTimeCallbackID")] 
 		public gameDelayID RealTimeCallbackID
 		{
-			get
-			{
-				if (_realTimeCallbackID == null)
-				{
-					_realTimeCallbackID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "realTimeCallbackID", cr2w, this);
-				}
-				return _realTimeCallbackID;
-			}
-			set
-			{
-				if (_realTimeCallbackID == value)
-				{
-					return;
-				}
-				_realTimeCallbackID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _realTimeCallbackID);
+			set => SetProperty(ref _realTimeCallbackID, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("realTimeCallback")] 
 		public CBool RealTimeCallback
 		{
-			get
-			{
-				if (_realTimeCallback == null)
-				{
-					_realTimeCallback = (CBool) CR2WTypeManager.Create("Bool", "realTimeCallback", cr2w, this);
-				}
-				return _realTimeCallback;
-			}
-			set
-			{
-				if (_realTimeCallback == value)
-				{
-					return;
-				}
-				_realTimeCallback = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _realTimeCallback);
+			set => SetProperty(ref _realTimeCallback, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("realTime")] 
 		public CFloat RealTime
 		{
-			get
-			{
-				if (_realTime == null)
-				{
-					_realTime = (CFloat) CR2WTypeManager.Create("Float", "realTime", cr2w, this);
-				}
-				return _realTime;
-			}
-			set
-			{
-				if (_realTime == value)
-				{
-					return;
-				}
-				_realTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _realTime);
+			set => SetProperty(ref _realTime, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("callstack")] 
 		public CArray<CName> Callstack
 		{
-			get
-			{
-				if (_callstack == null)
-				{
-					_callstack = (CArray<CName>) CR2WTypeManager.Create("array:CName", "callstack", cr2w, this);
-				}
-				return _callstack;
-			}
-			set
-			{
-				if (_callstack == value)
-				{
-					return;
-				}
-				_callstack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callstack);
+			set => SetProperty(ref _callstack, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("ids")] 
 		public CArray<CUInt32> Ids
 		{
-			get
-			{
-				if (_ids == null)
-				{
-					_ids = (CArray<CUInt32>) CR2WTypeManager.Create("array:Uint32", "ids", cr2w, this);
-				}
-				return _ids;
-			}
-			set
-			{
-				if (_ids == value)
-				{
-					return;
-				}
-				_ids = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ids);
+			set => SetProperty(ref _ids, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("background")] 
 		public CUInt32 Background
 		{
-			get
-			{
-				if (_background == null)
-				{
-					_background = (CUInt32) CR2WTypeManager.Create("Uint32", "background", cr2w, this);
-				}
-				return _background;
-			}
-			set
-			{
-				if (_background == value)
-				{
-					return;
-				}
-				_background = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _background);
+			set => SetProperty(ref _background, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("sysName")] 
 		public CUInt32 SysName
 		{
-			get
-			{
-				if (_sysName == null)
-				{
-					_sysName = (CUInt32) CR2WTypeManager.Create("Uint32", "sysName", cr2w, this);
-				}
-				return _sysName;
-			}
-			set
-			{
-				if (_sysName == value)
-				{
-					return;
-				}
-				_sysName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sysName);
+			set => SetProperty(ref _sysName, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("sysState")] 
 		public CUInt32 SysState
 		{
-			get
-			{
-				if (_sysState == null)
-				{
-					_sysState = (CUInt32) CR2WTypeManager.Create("Uint32", "sysState", cr2w, this);
-				}
-				return _sysState;
-			}
-			set
-			{
-				if (_sysState == value)
-				{
-					return;
-				}
-				_sysState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sysState);
+			set => SetProperty(ref _sysState, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("mostDangerousArea")] 
 		public CUInt32 MostDangerousArea
 		{
-			get
-			{
-				if (_mostDangerousArea == null)
-				{
-					_mostDangerousArea = (CUInt32) CR2WTypeManager.Create("Uint32", "mostDangerousArea", cr2w, this);
-				}
-				return _mostDangerousArea;
-			}
-			set
-			{
-				if (_mostDangerousArea == value)
-				{
-					return;
-				}
-				_mostDangerousArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mostDangerousArea);
+			set => SetProperty(ref _mostDangerousArea, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("blacklistReason")] 
 		public CUInt32 BlacklistReason
 		{
-			get
-			{
-				if (_blacklistReason == null)
-				{
-					_blacklistReason = (CUInt32) CR2WTypeManager.Create("Uint32", "blacklistReason", cr2w, this);
-				}
-				return _blacklistReason;
-			}
-			set
-			{
-				if (_blacklistReason == value)
-				{
-					return;
-				}
-				_blacklistReason = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blacklistReason);
+			set => SetProperty(ref _blacklistReason, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("blacklistCount")] 
 		public CUInt32 BlacklistCount
 		{
-			get
-			{
-				if (_blacklistCount == null)
-				{
-					_blacklistCount = (CUInt32) CR2WTypeManager.Create("Uint32", "blacklistCount", cr2w, this);
-				}
-				return _blacklistCount;
-			}
-			set
-			{
-				if (_blacklistCount == value)
-				{
-					return;
-				}
-				_blacklistCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blacklistCount);
+			set => SetProperty(ref _blacklistCount, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("reprimand")] 
 		public CUInt32 Reprimand
 		{
-			get
-			{
-				if (_reprimand == null)
-				{
-					_reprimand = (CUInt32) CR2WTypeManager.Create("Uint32", "reprimand", cr2w, this);
-				}
-				return _reprimand;
-			}
-			set
-			{
-				if (_reprimand == value)
-				{
-					return;
-				}
-				_reprimand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reprimand);
+			set => SetProperty(ref _reprimand, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("repInstruction")] 
 		public CUInt32 RepInstruction
 		{
-			get
-			{
-				if (_repInstruction == null)
-				{
-					_repInstruction = (CUInt32) CR2WTypeManager.Create("Uint32", "repInstruction", cr2w, this);
-				}
-				return _repInstruction;
-			}
-			set
-			{
-				if (_repInstruction == value)
-				{
-					return;
-				}
-				_repInstruction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _repInstruction);
+			set => SetProperty(ref _repInstruction, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("reprimandID")] 
 		public CUInt32 ReprimandID
 		{
-			get
-			{
-				if (_reprimandID == null)
-				{
-					_reprimandID = (CUInt32) CR2WTypeManager.Create("Uint32", "reprimandID", cr2w, this);
-				}
-				return _reprimandID;
-			}
-			set
-			{
-				if (_reprimandID == value)
-				{
-					return;
-				}
-				_reprimandID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reprimandID);
+			set => SetProperty(ref _reprimandID, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("input")] 
 		public CUInt32 Input
 		{
-			get
-			{
-				if (_input == null)
-				{
-					_input = (CUInt32) CR2WTypeManager.Create("Uint32", "input", cr2w, this);
-				}
-				return _input;
-			}
-			set
-			{
-				if (_input == value)
-				{
-					return;
-				}
-				_input = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _input);
+			set => SetProperty(ref _input, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("regTime")] 
 		public CUInt32 RegTime
 		{
-			get
-			{
-				if (_regTime == null)
-				{
-					_regTime = (CUInt32) CR2WTypeManager.Create("Uint32", "regTime", cr2w, this);
-				}
-				return _regTime;
-			}
-			set
-			{
-				if (_regTime == value)
-				{
-					return;
-				}
-				_regTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _regTime);
+			set => SetProperty(ref _regTime, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("inputTime")] 
 		public CUInt32 InputTime
 		{
-			get
-			{
-				if (_inputTime == null)
-				{
-					_inputTime = (CUInt32) CR2WTypeManager.Create("Uint32", "inputTime", cr2w, this);
-				}
-				return _inputTime;
-			}
-			set
-			{
-				if (_inputTime == value)
-				{
-					return;
-				}
-				_inputTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputTime);
+			set => SetProperty(ref _inputTime, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("instructionTime")] 
 		public CUInt32 InstructionTime
 		{
-			get
-			{
-				if (_instructionTime == null)
-				{
-					_instructionTime = (CUInt32) CR2WTypeManager.Create("Uint32", "instructionTime", cr2w, this);
-				}
-				return _instructionTime;
-			}
-			set
-			{
-				if (_instructionTime == value)
-				{
-					return;
-				}
-				_instructionTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instructionTime);
+			set => SetProperty(ref _instructionTime, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("actualTime")] 
 		public CUInt32 ActualTime
 		{
-			get
-			{
-				if (_actualTime == null)
-				{
-					_actualTime = (CUInt32) CR2WTypeManager.Create("Uint32", "actualTime", cr2w, this);
-				}
-				return _actualTime;
-			}
-			set
-			{
-				if (_actualTime == value)
-				{
-					return;
-				}
-				_actualTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actualTime);
+			set => SetProperty(ref _actualTime, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("system")] 
 		public CHandle<SecuritySystemControllerPS> System
 		{
-			get
-			{
-				if (_system == null)
-				{
-					_system = (CHandle<SecuritySystemControllerPS>) CR2WTypeManager.Create("handle:SecuritySystemControllerPS", "system", cr2w, this);
-				}
-				return _system;
-			}
-			set
-			{
-				if (_system == value)
-				{
-					return;
-				}
-				_system = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _system);
+			set => SetProperty(ref _system, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("refreshTime")] 
 		public CFloat RefreshTime
 		{
-			get
-			{
-				if (_refreshTime == null)
-				{
-					_refreshTime = (CFloat) CR2WTypeManager.Create("Float", "refreshTime", cr2w, this);
-				}
-				return _refreshTime;
-			}
-			set
-			{
-				if (_refreshTime == value)
-				{
-					return;
-				}
-				_refreshTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _refreshTime);
+			set => SetProperty(ref _refreshTime, value);
 		}
 
 		public SecSystemDebugger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

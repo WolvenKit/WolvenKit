@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enable")] 
 		public CBool Enable
 		{
-			get
-			{
-				if (_enable == null)
-				{
-					_enable = (CBool) CR2WTypeManager.Create("Bool", "enable", cr2w, this);
-				}
-				return _enable;
-			}
-			set
-			{
-				if (_enable == value)
-				{
-					return;
-				}
-				_enable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enable);
+			set => SetProperty(ref _enable, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("affectsPlayer")] 
 		public CBool AffectsPlayer
 		{
-			get
-			{
-				if (_affectsPlayer == null)
-				{
-					_affectsPlayer = (CBool) CR2WTypeManager.Create("Bool", "affectsPlayer", cr2w, this);
-				}
-				return _affectsPlayer;
-			}
-			set
-			{
-				if (_affectsPlayer == value)
-				{
-					return;
-				}
-				_affectsPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _affectsPlayer);
+			set => SetProperty(ref _affectsPlayer, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("affectsNPCs")] 
 		public CBool AffectsNPCs
 		{
-			get
-			{
-				if (_affectsNPCs == null)
-				{
-					_affectsNPCs = (CBool) CR2WTypeManager.Create("Bool", "affectsNPCs", cr2w, this);
-				}
-				return _affectsNPCs;
-			}
-			set
-			{
-				if (_affectsNPCs == value)
-				{
-					return;
-				}
-				_affectsNPCs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _affectsNPCs);
+			set => SetProperty(ref _affectsNPCs, value);
 		}
 
 		public ToggleOffMeshConnectionsDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

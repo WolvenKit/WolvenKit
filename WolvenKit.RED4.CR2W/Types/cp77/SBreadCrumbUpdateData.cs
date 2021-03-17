@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("elementName")] 
 		public CString ElementName
 		{
-			get
-			{
-				if (_elementName == null)
-				{
-					_elementName = (CString) CR2WTypeManager.Create("String", "elementName", cr2w, this);
-				}
-				return _elementName;
-			}
-			set
-			{
-				if (_elementName == value)
-				{
-					return;
-				}
-				_elementName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _elementName);
+			set => SetProperty(ref _elementName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("elementID")] 
 		public CInt32 ElementID
 		{
-			get
-			{
-				if (_elementID == null)
-				{
-					_elementID = (CInt32) CR2WTypeManager.Create("Int32", "elementID", cr2w, this);
-				}
-				return _elementID;
-			}
-			set
-			{
-				if (_elementID == value)
-				{
-					return;
-				}
-				_elementID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _elementID);
+			set => SetProperty(ref _elementID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("context")] 
 		public CName Context
 		{
-			get
-			{
-				if (_context == null)
-				{
-					_context = (CName) CR2WTypeManager.Create("CName", "context", cr2w, this);
-				}
-				return _context;
-			}
-			set
-			{
-				if (_context == value)
-				{
-					return;
-				}
-				_context = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _context);
+			set => SetProperty(ref _context, value);
 		}
 
 		public SBreadCrumbUpdateData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

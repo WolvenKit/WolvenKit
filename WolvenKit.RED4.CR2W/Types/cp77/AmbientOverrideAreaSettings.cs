@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("color", 6)] 
 		public CArrayFixedSize<curveData<HDRColor>> Color
 		{
-			get
-			{
-				if (_color == null)
-				{
-					_color = (CArrayFixedSize<curveData<HDRColor>>) CR2WTypeManager.Create("[6]curveData:HDRColor", "color", cr2w, this);
-				}
-				return _color;
-			}
-			set
-			{
-				if (_color == value)
-				{
-					return;
-				}
-				_color = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _color);
+			set => SetProperty(ref _color, value);
 		}
 
 		public AmbientOverrideAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

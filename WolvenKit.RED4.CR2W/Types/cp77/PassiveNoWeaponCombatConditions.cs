@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("delayEvaluationCbId")] 
 		public CUInt32 DelayEvaluationCbId
 		{
-			get
-			{
-				if (_delayEvaluationCbId == null)
-				{
-					_delayEvaluationCbId = (CUInt32) CR2WTypeManager.Create("Uint32", "delayEvaluationCbId", cr2w, this);
-				}
-				return _delayEvaluationCbId;
-			}
-			set
-			{
-				if (_delayEvaluationCbId == value)
-				{
-					return;
-				}
-				_delayEvaluationCbId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delayEvaluationCbId);
+			set => SetProperty(ref _delayEvaluationCbId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("onItemAddedToSlotCbId")] 
 		public CUInt32 OnItemAddedToSlotCbId
 		{
-			get
-			{
-				if (_onItemAddedToSlotCbId == null)
-				{
-					_onItemAddedToSlotCbId = (CUInt32) CR2WTypeManager.Create("Uint32", "onItemAddedToSlotCbId", cr2w, this);
-				}
-				return _onItemAddedToSlotCbId;
-			}
-			set
-			{
-				if (_onItemAddedToSlotCbId == value)
-				{
-					return;
-				}
-				_onItemAddedToSlotCbId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onItemAddedToSlotCbId);
+			set => SetProperty(ref _onItemAddedToSlotCbId, value);
 		}
 
 		public PassiveNoWeaponCombatConditions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

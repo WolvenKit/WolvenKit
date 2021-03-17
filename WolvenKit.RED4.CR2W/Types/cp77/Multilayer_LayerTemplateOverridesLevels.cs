@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("n")] 
 		public CName N
 		{
-			get
-			{
-				if (_n == null)
-				{
-					_n = (CName) CR2WTypeManager.Create("CName", "n", cr2w, this);
-				}
-				return _n;
-			}
-			set
-			{
-				if (_n == value)
-				{
-					return;
-				}
-				_n = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _n);
+			set => SetProperty(ref _n, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("v", 2)] 
 		public CArrayFixedSize<CFloat> V
 		{
-			get
-			{
-				if (_v == null)
-				{
-					_v = (CArrayFixedSize<CFloat>) CR2WTypeManager.Create("[2]Float", "v", cr2w, this);
-				}
-				return _v;
-			}
-			set
-			{
-				if (_v == value)
-				{
-					return;
-				}
-				_v = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _v);
+			set => SetProperty(ref _v, value);
 		}
 
 		public Multilayer_LayerTemplateOverridesLevels(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lockedByKey")] 
 		public TweakDBID LockedByKey
 		{
-			get
-			{
-				if (_lockedByKey == null)
-				{
-					_lockedByKey = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "lockedByKey", cr2w, this);
-				}
-				return _lockedByKey;
-			}
-			set
-			{
-				if (_lockedByKey == value)
-				{
-					return;
-				}
-				_lockedByKey = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lockedByKey);
+			set => SetProperty(ref _lockedByKey, value);
 		}
 
 		public gameContainerObjectBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

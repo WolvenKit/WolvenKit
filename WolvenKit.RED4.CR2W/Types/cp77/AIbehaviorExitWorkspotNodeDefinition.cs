@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("skipExitAnimation")] 
 		public CHandle<AIArgumentMapping> SkipExitAnimation
 		{
-			get
-			{
-				if (_skipExitAnimation == null)
-				{
-					_skipExitAnimation = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "skipExitAnimation", cr2w, this);
-				}
-				return _skipExitAnimation;
-			}
-			set
-			{
-				if (_skipExitAnimation == value)
-				{
-					return;
-				}
-				_skipExitAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skipExitAnimation);
+			set => SetProperty(ref _skipExitAnimation, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("useSlowExitAnimation")] 
 		public CHandle<AIArgumentMapping> UseSlowExitAnimation
 		{
-			get
-			{
-				if (_useSlowExitAnimation == null)
-				{
-					_useSlowExitAnimation = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "useSlowExitAnimation", cr2w, this);
-				}
-				return _useSlowExitAnimation;
-			}
-			set
-			{
-				if (_useSlowExitAnimation == value)
-				{
-					return;
-				}
-				_useSlowExitAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useSlowExitAnimation);
+			set => SetProperty(ref _useSlowExitAnimation, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("doSlowIfFastExitFails")] 
 		public CHandle<AIArgumentMapping> DoSlowIfFastExitFails
 		{
-			get
-			{
-				if (_doSlowIfFastExitFails == null)
-				{
-					_doSlowIfFastExitFails = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "doSlowIfFastExitFails", cr2w, this);
-				}
-				return _doSlowIfFastExitFails;
-			}
-			set
-			{
-				if (_doSlowIfFastExitFails == value)
-				{
-					return;
-				}
-				_doSlowIfFastExitFails = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _doSlowIfFastExitFails);
+			set => SetProperty(ref _doSlowIfFastExitFails, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("stayInWorkspotIfExitFails")] 
 		public CHandle<AIArgumentMapping> StayInWorkspotIfExitFails
 		{
-			get
-			{
-				if (_stayInWorkspotIfExitFails == null)
-				{
-					_stayInWorkspotIfExitFails = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "stayInWorkspotIfExitFails", cr2w, this);
-				}
-				return _stayInWorkspotIfExitFails;
-			}
-			set
-			{
-				if (_stayInWorkspotIfExitFails == value)
-				{
-					return;
-				}
-				_stayInWorkspotIfExitFails = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stayInWorkspotIfExitFails);
+			set => SetProperty(ref _stayInWorkspotIfExitFails, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("tryBlendFastExitToWalk")] 
 		public CHandle<AIArgumentMapping> TryBlendFastExitToWalk
 		{
-			get
-			{
-				if (_tryBlendFastExitToWalk == null)
-				{
-					_tryBlendFastExitToWalk = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "tryBlendFastExitToWalk", cr2w, this);
-				}
-				return _tryBlendFastExitToWalk;
-			}
-			set
-			{
-				if (_tryBlendFastExitToWalk == value)
-				{
-					return;
-				}
-				_tryBlendFastExitToWalk = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tryBlendFastExitToWalk);
+			set => SetProperty(ref _tryBlendFastExitToWalk, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("dontRequestExit")] 
 		public CHandle<AIArgumentMapping> DontRequestExit
 		{
-			get
-			{
-				if (_dontRequestExit == null)
-				{
-					_dontRequestExit = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "dontRequestExit", cr2w, this);
-				}
-				return _dontRequestExit;
-			}
-			set
-			{
-				if (_dontRequestExit == value)
-				{
-					return;
-				}
-				_dontRequestExit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dontRequestExit);
+			set => SetProperty(ref _dontRequestExit, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("target")] 
 		public CHandle<AIArgumentMapping> Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		public AIbehaviorExitWorkspotNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

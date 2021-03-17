@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("statusEffect")] 
 		public TweakDBID StatusEffect
 		{
-			get
-			{
-				if (_statusEffect == null)
-				{
-					_statusEffect = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "statusEffect", cr2w, this);
-				}
-				return _statusEffect;
-			}
-			set
-			{
-				if (_statusEffect == value)
-				{
-					return;
-				}
-				_statusEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statusEffect);
+			set => SetProperty(ref _statusEffect, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("statPoolType")] 
 		public CEnum<gamedataStatPoolType> StatPoolType
 		{
-			get
-			{
-				if (_statPoolType == null)
-				{
-					_statPoolType = (CEnum<gamedataStatPoolType>) CR2WTypeManager.Create("gamedataStatPoolType", "statPoolType", cr2w, this);
-				}
-				return _statPoolType;
-			}
-			set
-			{
-				if (_statPoolType == value)
-				{
-					return;
-				}
-				_statPoolType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statPoolType);
+			set => SetProperty(ref _statPoolType, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("instigator")] 
 		public wCHandle<gameObject> Instigator
 		{
-			get
-			{
-				if (_instigator == null)
-				{
-					_instigator = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "instigator", cr2w, this);
-				}
-				return _instigator;
-			}
-			set
-			{
-				if (_instigator == value)
-				{
-					return;
-				}
-				_instigator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instigator);
+			set => SetProperty(ref _instigator, value);
 		}
 
 		public StatusEffectTriggerListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

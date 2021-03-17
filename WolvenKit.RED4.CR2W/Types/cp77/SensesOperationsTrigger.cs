@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("triggerData")] 
 		public CHandle<SensesOperationTriggerData> TriggerData
 		{
-			get
-			{
-				if (_triggerData == null)
-				{
-					_triggerData = (CHandle<SensesOperationTriggerData>) CR2WTypeManager.Create("handle:SensesOperationTriggerData", "triggerData", cr2w, this);
-				}
-				return _triggerData;
-			}
-			set
-			{
-				if (_triggerData == value)
-				{
-					return;
-				}
-				_triggerData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerData);
+			set => SetProperty(ref _triggerData, value);
 		}
 
 		public SensesOperationsTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

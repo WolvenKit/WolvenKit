@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ShowHudHintMessege")] 
 		public gamebbScriptID_Bool ShowHudHintMessege
 		{
-			get
-			{
-				if (_showHudHintMessege == null)
-				{
-					_showHudHintMessege = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "ShowHudHintMessege", cr2w, this);
-				}
-				return _showHudHintMessege;
-			}
-			set
-			{
-				if (_showHudHintMessege == value)
-				{
-					return;
-				}
-				_showHudHintMessege = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showHudHintMessege);
+			set => SetProperty(ref _showHudHintMessege, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("HudHintMessegeContent")] 
 		public gamebbScriptID_String HudHintMessegeContent
 		{
-			get
-			{
-				if (_hudHintMessegeContent == null)
-				{
-					_hudHintMessegeContent = (gamebbScriptID_String) CR2WTypeManager.Create("gamebbScriptID_String", "HudHintMessegeContent", cr2w, this);
-				}
-				return _hudHintMessegeContent;
-			}
-			set
-			{
-				if (_hudHintMessegeContent == value)
-				{
-					return;
-				}
-				_hudHintMessegeContent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hudHintMessegeContent);
+			set => SetProperty(ref _hudHintMessegeContent, value);
 		}
 
 		public HUDManagerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

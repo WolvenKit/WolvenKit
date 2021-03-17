@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("calculateClose")] 
 		public CBool CalculateClose
 		{
-			get
-			{
-				if (_calculateClose == null)
-				{
-					_calculateClose = (CBool) CR2WTypeManager.Create("Bool", "calculateClose", cr2w, this);
-				}
-				return _calculateClose;
-			}
-			set
-			{
-				if (_calculateClose == value)
-				{
-					return;
-				}
-				_calculateClose = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _calculateClose);
+			set => SetProperty(ref _calculateClose, value);
 		}
 
 		public QuickhackModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

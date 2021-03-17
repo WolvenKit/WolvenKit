@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gameRestrictionIDs")] 
 		public CArray<TweakDBID> GameRestrictionIDs
 		{
-			get
-			{
-				if (_gameRestrictionIDs == null)
-				{
-					_gameRestrictionIDs = (CArray<TweakDBID>) CR2WTypeManager.Create("array:TweakDBID", "gameRestrictionIDs", cr2w, this);
-				}
-				return _gameRestrictionIDs;
-			}
-			set
-			{
-				if (_gameRestrictionIDs == value)
-				{
-					return;
-				}
-				_gameRestrictionIDs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameRestrictionIDs);
+			set => SetProperty(ref _gameRestrictionIDs, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("treatAsInterior")] 
 		public CBool TreatAsInterior
 		{
-			get
-			{
-				if (_treatAsInterior == null)
-				{
-					_treatAsInterior = (CBool) CR2WTypeManager.Create("Bool", "treatAsInterior", cr2w, this);
-				}
-				return _treatAsInterior;
-			}
-			set
-			{
-				if (_treatAsInterior == value)
-				{
-					return;
-				}
-				_treatAsInterior = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _treatAsInterior);
+			set => SetProperty(ref _treatAsInterior, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("setTier2")] 
 		public CBool SetTier2
 		{
-			get
-			{
-				if (_setTier2 == null)
-				{
-					_setTier2 = (CBool) CR2WTypeManager.Create("Bool", "setTier2", cr2w, this);
-				}
-				return _setTier2;
-			}
-			set
-			{
-				if (_setTier2 == value)
-				{
-					return;
-				}
-				_setTier2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setTier2);
+			set => SetProperty(ref _setTier2, value);
 		}
 
 		public worldInteriorAreaNotifier(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

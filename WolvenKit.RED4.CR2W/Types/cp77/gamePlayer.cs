@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("peerID")] 
 		public netPeerID PeerID
 		{
-			get
-			{
-				if (_peerID == null)
-				{
-					_peerID = (netPeerID) CR2WTypeManager.Create("netPeerID", "peerID", cr2w, this);
-				}
-				return _peerID;
-			}
-			set
-			{
-				if (_peerID == value)
-				{
-					return;
-				}
-				_peerID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _peerID);
+			set => SetProperty(ref _peerID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("nickname")] 
 		public CString Nickname
 		{
-			get
-			{
-				if (_nickname == null)
-				{
-					_nickname = (CString) CR2WTypeManager.Create("String", "nickname", cr2w, this);
-				}
-				return _nickname;
-			}
-			set
-			{
-				if (_nickname == value)
-				{
-					return;
-				}
-				_nickname = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nickname);
+			set => SetProperty(ref _nickname, value);
 		}
 
 		public gamePlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

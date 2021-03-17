@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("deviceIcon")] 
 		public wCHandle<inkImageWidget> DeviceIcon
 		{
-			get
-			{
-				if (_deviceIcon == null)
-				{
-					_deviceIcon = (wCHandle<inkImageWidget>) CR2WTypeManager.Create("whandle:inkImageWidget", "deviceIcon", cr2w, this);
-				}
-				return _deviceIcon;
-			}
-			set
-			{
-				if (_deviceIcon == value)
-				{
-					return;
-				}
-				_deviceIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deviceIcon);
+			set => SetProperty(ref _deviceIcon, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("activeBg")] 
 		public wCHandle<inkRectangleWidget> ActiveBg
 		{
-			get
-			{
-				if (_activeBg == null)
-				{
-					_activeBg = (wCHandle<inkRectangleWidget>) CR2WTypeManager.Create("whandle:inkRectangleWidget", "activeBg", cr2w, this);
-				}
-				return _activeBg;
-			}
-			set
-			{
-				if (_activeBg == value)
-				{
-					return;
-				}
-				_activeBg = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeBg);
+			set => SetProperty(ref _activeBg, value);
 		}
 
 		public ControlledDeviceLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -24,276 +24,96 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("root")] 
 		public wCHandle<inkWidget> Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("blackboard")] 
 		public CHandle<gameIBlackboard> Blackboard
 		{
-			get
-			{
-				if (_blackboard == null)
-				{
-					_blackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "blackboard", cr2w, this);
-				}
-				return _blackboard;
-			}
-			set
-			{
-				if (_blackboard == value)
-				{
-					return;
-				}
-				_blackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboard);
+			set => SetProperty(ref _blackboard, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("blackboardDef")] 
 		public CHandle<UI_NotificationsDef> BlackboardDef
 		{
-			get
-			{
-				if (_blackboardDef == null)
-				{
-					_blackboardDef = (CHandle<UI_NotificationsDef>) CR2WTypeManager.Create("handle:UI_NotificationsDef", "blackboardDef", cr2w, this);
-				}
-				return _blackboardDef;
-			}
-			set
-			{
-				if (_blackboardDef == value)
-				{
-					return;
-				}
-				_blackboardDef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboardDef);
+			set => SetProperty(ref _blackboardDef, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("screenMessageUpdateCallbackId")] 
 		public CUInt32 ScreenMessageUpdateCallbackId
 		{
-			get
-			{
-				if (_screenMessageUpdateCallbackId == null)
-				{
-					_screenMessageUpdateCallbackId = (CUInt32) CR2WTypeManager.Create("Uint32", "screenMessageUpdateCallbackId", cr2w, this);
-				}
-				return _screenMessageUpdateCallbackId;
-			}
-			set
-			{
-				if (_screenMessageUpdateCallbackId == value)
-				{
-					return;
-				}
-				_screenMessageUpdateCallbackId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _screenMessageUpdateCallbackId);
+			set => SetProperty(ref _screenMessageUpdateCallbackId, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("screenMessage")] 
 		public gameSimpleScreenMessage ScreenMessage
 		{
-			get
-			{
-				if (_screenMessage == null)
-				{
-					_screenMessage = (gameSimpleScreenMessage) CR2WTypeManager.Create("gameSimpleScreenMessage", "screenMessage", cr2w, this);
-				}
-				return _screenMessage;
-			}
-			set
-			{
-				if (_screenMessage == value)
-				{
-					return;
-				}
-				_screenMessage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _screenMessage);
+			set => SetProperty(ref _screenMessage, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("mainTextWidget")] 
 		public inkTextWidgetReference MainTextWidget
 		{
-			get
-			{
-				if (_mainTextWidget == null)
-				{
-					_mainTextWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "mainTextWidget", cr2w, this);
-				}
-				return _mainTextWidget;
-			}
-			set
-			{
-				if (_mainTextWidget == value)
-				{
-					return;
-				}
-				_mainTextWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mainTextWidget);
+			set => SetProperty(ref _mainTextWidget, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("blinkingAnim")] 
 		public CHandle<inkanimDefinition> BlinkingAnim
 		{
-			get
-			{
-				if (_blinkingAnim == null)
-				{
-					_blinkingAnim = (CHandle<inkanimDefinition>) CR2WTypeManager.Create("handle:inkanimDefinition", "blinkingAnim", cr2w, this);
-				}
-				return _blinkingAnim;
-			}
-			set
-			{
-				if (_blinkingAnim == value)
-				{
-					return;
-				}
-				_blinkingAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blinkingAnim);
+			set => SetProperty(ref _blinkingAnim, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("showAnim")] 
 		public CHandle<inkanimDefinition> ShowAnim
 		{
-			get
-			{
-				if (_showAnim == null)
-				{
-					_showAnim = (CHandle<inkanimDefinition>) CR2WTypeManager.Create("handle:inkanimDefinition", "showAnim", cr2w, this);
-				}
-				return _showAnim;
-			}
-			set
-			{
-				if (_showAnim == value)
-				{
-					return;
-				}
-				_showAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showAnim);
+			set => SetProperty(ref _showAnim, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("hideAnim")] 
 		public CHandle<inkanimDefinition> HideAnim
 		{
-			get
-			{
-				if (_hideAnim == null)
-				{
-					_hideAnim = (CHandle<inkanimDefinition>) CR2WTypeManager.Create("handle:inkanimDefinition", "hideAnim", cr2w, this);
-				}
-				return _hideAnim;
-			}
-			set
-			{
-				if (_hideAnim == value)
-				{
-					return;
-				}
-				_hideAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hideAnim);
+			set => SetProperty(ref _hideAnim, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("animProxyShow")] 
 		public CHandle<inkanimProxy> AnimProxyShow
 		{
-			get
-			{
-				if (_animProxyShow == null)
-				{
-					_animProxyShow = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animProxyShow", cr2w, this);
-				}
-				return _animProxyShow;
-			}
-			set
-			{
-				if (_animProxyShow == value)
-				{
-					return;
-				}
-				_animProxyShow = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animProxyShow);
+			set => SetProperty(ref _animProxyShow, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("animProxyHide")] 
 		public CHandle<inkanimProxy> AnimProxyHide
 		{
-			get
-			{
-				if (_animProxyHide == null)
-				{
-					_animProxyHide = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animProxyHide", cr2w, this);
-				}
-				return _animProxyHide;
-			}
-			set
-			{
-				if (_animProxyHide == value)
-				{
-					return;
-				}
-				_animProxyHide = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animProxyHide);
+			set => SetProperty(ref _animProxyHide, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("animProxyTimeout")] 
 		public CHandle<inkanimProxy> AnimProxyTimeout
 		{
-			get
-			{
-				if (_animProxyTimeout == null)
-				{
-					_animProxyTimeout = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animProxyTimeout", cr2w, this);
-				}
-				return _animProxyTimeout;
-			}
-			set
-			{
-				if (_animProxyTimeout == value)
-				{
-					return;
-				}
-				_animProxyTimeout = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animProxyTimeout);
+			set => SetProperty(ref _animProxyTimeout, value);
 		}
 
 		public OnscreenMessageGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

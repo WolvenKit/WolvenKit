@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("maxPathLength")] 
 		public gameEffectInputParameter_Float MaxPathLength
 		{
-			get
-			{
-				if (_maxPathLength == null)
-				{
-					_maxPathLength = (gameEffectInputParameter_Float) CR2WTypeManager.Create("gameEffectInputParameter_Float", "maxPathLength", cr2w, this);
-				}
-				return _maxPathLength;
-			}
-			set
-			{
-				if (_maxPathLength == value)
-				{
-					return;
-				}
-				_maxPathLength = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxPathLength);
+			set => SetProperty(ref _maxPathLength, value);
 		}
 
 		public gameEffectFilter_ReachableByNavigation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

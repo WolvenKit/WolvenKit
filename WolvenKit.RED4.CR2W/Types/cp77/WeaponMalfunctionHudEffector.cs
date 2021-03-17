@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bb")] 
 		public CHandle<gameIBlackboard> Bb
 		{
-			get
-			{
-				if (_bb == null)
-				{
-					_bb = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "bb", cr2w, this);
-				}
-				return _bb;
-			}
-			set
-			{
-				if (_bb == value)
-				{
-					return;
-				}
-				_bb = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bb);
+			set => SetProperty(ref _bb, value);
 		}
 
 		public WeaponMalfunctionHudEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

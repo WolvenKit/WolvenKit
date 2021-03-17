@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("setup")] 
 		public STextureGroupSetup Setup
 		{
-			get
-			{
-				if (_setup == null)
-				{
-					_setup = (STextureGroupSetup) CR2WTypeManager.Create("STextureGroupSetup", "setup", cr2w, this);
-				}
-				return _setup;
-			}
-			set
-			{
-				if (_setup == value)
-				{
-					return;
-				}
-				_setup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setup);
+			set => SetProperty(ref _setup, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("size")] 
 		public CUInt32 Size
 		{
-			get
-			{
-				if (_size == null)
-				{
-					_size = (CUInt32) CR2WTypeManager.Create("Uint32", "size", cr2w, this);
-				}
-				return _size;
-			}
-			set
-			{
-				if (_size == value)
-				{
-					return;
-				}
-				_size = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _size);
+			set => SetProperty(ref _size, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("renderResourceBlob")] 
 		public CHandle<IRenderResourceBlob> RenderResourceBlob
 		{
-			get
-			{
-				if (_renderResourceBlob == null)
-				{
-					_renderResourceBlob = (CHandle<IRenderResourceBlob>) CR2WTypeManager.Create("handle:IRenderResourceBlob", "renderResourceBlob", cr2w, this);
-				}
-				return _renderResourceBlob;
-			}
-			set
-			{
-				if (_renderResourceBlob == value)
-				{
-					return;
-				}
-				_renderResourceBlob = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _renderResourceBlob);
+			set => SetProperty(ref _renderResourceBlob, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("renderTextureResource")] 
 		public rendRenderTextureResource RenderTextureResource
 		{
-			get
-			{
-				if (_renderTextureResource == null)
-				{
-					_renderTextureResource = (rendRenderTextureResource) CR2WTypeManager.Create("rendRenderTextureResource", "renderTextureResource", cr2w, this);
-				}
-				return _renderTextureResource;
-			}
-			set
-			{
-				if (_renderTextureResource == value)
-				{
-					return;
-				}
-				_renderTextureResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _renderTextureResource);
+			set => SetProperty(ref _renderTextureResource, value);
 		}
 
 		public CCubeTexture(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

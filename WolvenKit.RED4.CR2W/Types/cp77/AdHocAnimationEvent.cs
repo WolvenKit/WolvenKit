@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animationIndex")] 
 		public CInt32 AnimationIndex
 		{
-			get
-			{
-				if (_animationIndex == null)
-				{
-					_animationIndex = (CInt32) CR2WTypeManager.Create("Int32", "animationIndex", cr2w, this);
-				}
-				return _animationIndex;
-			}
-			set
-			{
-				if (_animationIndex == value)
-				{
-					return;
-				}
-				_animationIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationIndex);
+			set => SetProperty(ref _animationIndex, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useBothHands")] 
 		public CBool UseBothHands
 		{
-			get
-			{
-				if (_useBothHands == null)
-				{
-					_useBothHands = (CBool) CR2WTypeManager.Create("Bool", "useBothHands", cr2w, this);
-				}
-				return _useBothHands;
-			}
-			set
-			{
-				if (_useBothHands == value)
-				{
-					return;
-				}
-				_useBothHands = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useBothHands);
+			set => SetProperty(ref _useBothHands, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("unequipWeapon")] 
 		public CBool UnequipWeapon
 		{
-			get
-			{
-				if (_unequipWeapon == null)
-				{
-					_unequipWeapon = (CBool) CR2WTypeManager.Create("Bool", "unequipWeapon", cr2w, this);
-				}
-				return _unequipWeapon;
-			}
-			set
-			{
-				if (_unequipWeapon == value)
-				{
-					return;
-				}
-				_unequipWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unequipWeapon);
+			set => SetProperty(ref _unequipWeapon, value);
 		}
 
 		public AdHocAnimationEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

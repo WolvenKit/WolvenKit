@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("value")] 
 		public CVariant Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CVariant) CR2WTypeManager.Create("Variant", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("min")] 
 		public CFloat Min
 		{
-			get
-			{
-				if (_min == null)
-				{
-					_min = (CFloat) CR2WTypeManager.Create("Float", "min", cr2w, this);
-				}
-				return _min;
-			}
-			set
-			{
-				if (_min == value)
-				{
-					return;
-				}
-				_min = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _min);
+			set => SetProperty(ref _min, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("max")] 
 		public CFloat Max
 		{
-			get
-			{
-				if (_max == null)
-				{
-					_max = (CFloat) CR2WTypeManager.Create("Float", "max", cr2w, this);
-				}
-				return _max;
-			}
-			set
-			{
-				if (_max == value)
-				{
-					return;
-				}
-				_max = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _max);
+			set => SetProperty(ref _max, value);
 		}
 
 		public questDeviceManager_ActionProperty(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

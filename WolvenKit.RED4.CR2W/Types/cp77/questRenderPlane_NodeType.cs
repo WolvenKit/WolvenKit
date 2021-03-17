@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get
-			{
-				if (_puppetRef == null)
-				{
-					_puppetRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "puppetRef", cr2w, this);
-				}
-				return _puppetRef;
-			}
-			set
-			{
-				if (_puppetRef == value)
-				{
-					return;
-				}
-				_puppetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppetRef);
+			set => SetProperty(ref _puppetRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("renderPlane")] 
 		public CEnum<ERenderingPlane> RenderPlane
 		{
-			get
-			{
-				if (_renderPlane == null)
-				{
-					_renderPlane = (CEnum<ERenderingPlane>) CR2WTypeManager.Create("ERenderingPlane", "renderPlane", cr2w, this);
-				}
-				return _renderPlane;
-			}
-			set
-			{
-				if (_renderPlane == value)
-				{
-					return;
-				}
-				_renderPlane = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _renderPlane);
+			set => SetProperty(ref _renderPlane, value);
 		}
 
 		public questRenderPlane_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

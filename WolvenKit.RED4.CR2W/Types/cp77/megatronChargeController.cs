@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("chargeBar")] 
 		public wCHandle<inkImageWidget> ChargeBar
 		{
-			get
-			{
-				if (_chargeBar == null)
-				{
-					_chargeBar = (wCHandle<inkImageWidget>) CR2WTypeManager.Create("whandle:inkImageWidget", "chargeBar", cr2w, this);
-				}
-				return _chargeBar;
-			}
-			set
-			{
-				if (_chargeBar == value)
-				{
-					return;
-				}
-				_chargeBar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeBar);
+			set => SetProperty(ref _chargeBar, value);
 		}
 
 		public megatronChargeController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

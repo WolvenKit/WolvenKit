@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("maxColor")] 
 		public CColor MaxColor
 		{
-			get
-			{
-				if (_maxColor == null)
-				{
-					_maxColor = (CColor) CR2WTypeManager.Create("Color", "maxColor", cr2w, this);
-				}
-				return _maxColor;
-			}
-			set
-			{
-				if (_maxColor == value)
-				{
-					return;
-				}
-				_maxColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxColor);
+			set => SetProperty(ref _maxColor, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("minColor")] 
 		public CColor MinColor
 		{
-			get
-			{
-				if (_minColor == null)
-				{
-					_minColor = (CColor) CR2WTypeManager.Create("Color", "minColor", cr2w, this);
-				}
-				return _minColor;
-			}
-			set
-			{
-				if (_minColor == value)
-				{
-					return;
-				}
-				_minColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minColor);
+			set => SetProperty(ref _minColor, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("minSize")] 
 		public CUInt32 MinSize
 		{
-			get
-			{
-				if (_minSize == null)
-				{
-					_minSize = (CUInt32) CR2WTypeManager.Create("Uint32", "minSize", cr2w, this);
-				}
-				return _minSize;
-			}
-			set
-			{
-				if (_minSize == value)
-				{
-					return;
-				}
-				_minSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minSize);
+			set => SetProperty(ref _minSize, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("maxSize")] 
 		public CUInt32 MaxSize
 		{
-			get
-			{
-				if (_maxSize == null)
-				{
-					_maxSize = (CUInt32) CR2WTypeManager.Create("Uint32", "maxSize", cr2w, this);
-				}
-				return _maxSize;
-			}
-			set
-			{
-				if (_maxSize == value)
-				{
-					return;
-				}
-				_maxSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxSize);
+			set => SetProperty(ref _maxSize, value);
 		}
 
 		public worldDebugColoring_MetricsUsageAbstractBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

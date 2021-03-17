@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hasBuffs")] 
 		public CBool HasBuffs
 		{
-			get
-			{
-				if (_hasBuffs == null)
-				{
-					_hasBuffs = (CBool) CR2WTypeManager.Create("Bool", "hasBuffs", cr2w, this);
-				}
-				return _hasBuffs;
-			}
-			set
-			{
-				if (_hasBuffs == value)
-				{
-					return;
-				}
-				_hasBuffs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasBuffs);
+			set => SetProperty(ref _hasBuffs, value);
 		}
 
 		public BuffListVisibilityChangedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

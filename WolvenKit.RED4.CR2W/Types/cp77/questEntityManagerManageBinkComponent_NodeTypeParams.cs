@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get
-			{
-				if (_objectRef == null)
-				{
-					_objectRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "objectRef", cr2w, this);
-				}
-				return _objectRef;
-			}
-			set
-			{
-				if (_objectRef == value)
-				{
-					return;
-				}
-				_objectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("videoPath")] 
 		public CString VideoPath
 		{
-			get
-			{
-				if (_videoPath == null)
-				{
-					_videoPath = (CString) CR2WTypeManager.Create("String", "videoPath", cr2w, this);
-				}
-				return _videoPath;
-			}
-			set
-			{
-				if (_videoPath == value)
-				{
-					return;
-				}
-				_videoPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _videoPath);
+			set => SetProperty(ref _videoPath, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("action")] 
 		public CEnum<gameBinkVideoAction> Action
 		{
-			get
-			{
-				if (_action == null)
-				{
-					_action = (CEnum<gameBinkVideoAction>) CR2WTypeManager.Create("gameBinkVideoAction", "action", cr2w, this);
-				}
-				return _action;
-			}
-			set
-			{
-				if (_action == value)
-				{
-					return;
-				}
-				_action = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
 		}
 
 		public questEntityManagerManageBinkComponent_NodeTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

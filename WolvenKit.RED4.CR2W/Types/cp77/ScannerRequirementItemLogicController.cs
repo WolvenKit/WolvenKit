@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("requirementNameText")] 
 		public inkTextWidgetReference RequirementNameText
 		{
-			get
-			{
-				if (_requirementNameText == null)
-				{
-					_requirementNameText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "requirementNameText", cr2w, this);
-				}
-				return _requirementNameText;
-			}
-			set
-			{
-				if (_requirementNameText == value)
-				{
-					return;
-				}
-				_requirementNameText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requirementNameText);
+			set => SetProperty(ref _requirementNameText, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("requirementLevelText")] 
 		public inkTextWidgetReference RequirementLevelText
 		{
-			get
-			{
-				if (_requirementLevelText == null)
-				{
-					_requirementLevelText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "requirementLevelText", cr2w, this);
-				}
-				return _requirementLevelText;
-			}
-			set
-			{
-				if (_requirementLevelText == value)
-				{
-					return;
-				}
-				_requirementLevelText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requirementLevelText);
+			set => SetProperty(ref _requirementLevelText, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("requirementIcon")] 
 		public inkImageWidgetReference RequirementIcon
 		{
-			get
-			{
-				if (_requirementIcon == null)
-				{
-					_requirementIcon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "requirementIcon", cr2w, this);
-				}
-				return _requirementIcon;
-			}
-			set
-			{
-				if (_requirementIcon == value)
-				{
-					return;
-				}
-				_requirementIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requirementIcon);
+			set => SetProperty(ref _requirementIcon, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("requirementStruct")] 
 		public UIInteractionSkillCheck RequirementStruct
 		{
-			get
-			{
-				if (_requirementStruct == null)
-				{
-					_requirementStruct = (UIInteractionSkillCheck) CR2WTypeManager.Create("UIInteractionSkillCheck", "requirementStruct", cr2w, this);
-				}
-				return _requirementStruct;
-			}
-			set
-			{
-				if (_requirementStruct == value)
-				{
-					return;
-				}
-				_requirementStruct = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requirementStruct);
+			set => SetProperty(ref _requirementStruct, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("skillCheck")] 
 		public CEnum<EDeviceChallengeSkill> SkillCheck
 		{
-			get
-			{
-				if (_skillCheck == null)
-				{
-					_skillCheck = (CEnum<EDeviceChallengeSkill>) CR2WTypeManager.Create("EDeviceChallengeSkill", "skillCheck", cr2w, this);
-				}
-				return _skillCheck;
-			}
-			set
-			{
-				if (_skillCheck == value)
-				{
-					return;
-				}
-				_skillCheck = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skillCheck);
+			set => SetProperty(ref _skillCheck, value);
 		}
 
 		public ScannerRequirementItemLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

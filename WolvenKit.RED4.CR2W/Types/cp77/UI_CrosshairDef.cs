@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("EnemyNeutralized")] 
 		public gamebbScriptID_Variant EnemyNeutralized
 		{
-			get
-			{
-				if (_enemyNeutralized == null)
-				{
-					_enemyNeutralized = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "EnemyNeutralized", cr2w, this);
-				}
-				return _enemyNeutralized;
-			}
-			set
-			{
-				if (_enemyNeutralized == value)
-				{
-					return;
-				}
-				_enemyNeutralized = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enemyNeutralized);
+			set => SetProperty(ref _enemyNeutralized, value);
 		}
 
 		public UI_CrosshairDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

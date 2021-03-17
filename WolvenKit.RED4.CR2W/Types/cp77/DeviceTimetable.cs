@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timeTableSetup")] 
 		public CHandle<DeviceTimeTableManager> TimeTableSetup
 		{
-			get
-			{
-				if (_timeTableSetup == null)
-				{
-					_timeTableSetup = (CHandle<DeviceTimeTableManager>) CR2WTypeManager.Create("handle:DeviceTimeTableManager", "timeTableSetup", cr2w, this);
-				}
-				return _timeTableSetup;
-			}
-			set
-			{
-				if (_timeTableSetup == value)
-				{
-					return;
-				}
-				_timeTableSetup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeTableSetup);
+			set => SetProperty(ref _timeTableSetup, value);
 		}
 
 		public DeviceTimetable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

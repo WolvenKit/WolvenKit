@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rotation")] 
 		public Vector2 Rotation
 		{
-			get
-			{
-				if (_rotation == null)
-				{
-					_rotation = (Vector2) CR2WTypeManager.Create("Vector2", "rotation", cr2w, this);
-				}
-				return _rotation;
-			}
-			set
-			{
-				if (_rotation == value)
-				{
-					return;
-				}
-				_rotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotation);
+			set => SetProperty(ref _rotation, value);
 		}
 
 		public gameMuppetInputActionLook(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

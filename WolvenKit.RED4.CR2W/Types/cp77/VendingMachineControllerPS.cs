@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vendingMachineSetup")] 
 		public VendingMachineSetup VendingMachineSetup
 		{
-			get
-			{
-				if (_vendingMachineSetup == null)
-				{
-					_vendingMachineSetup = (VendingMachineSetup) CR2WTypeManager.Create("VendingMachineSetup", "vendingMachineSetup", cr2w, this);
-				}
-				return _vendingMachineSetup;
-			}
-			set
-			{
-				if (_vendingMachineSetup == value)
-				{
-					return;
-				}
-				_vendingMachineSetup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vendingMachineSetup);
+			set => SetProperty(ref _vendingMachineSetup, value);
 		}
 
 		[Ordinal(104)] 
 		[RED("vendingMachineSFX")] 
 		public VendingMachineSFX VendingMachineSFX
 		{
-			get
-			{
-				if (_vendingMachineSFX == null)
-				{
-					_vendingMachineSFX = (VendingMachineSFX) CR2WTypeManager.Create("VendingMachineSFX", "vendingMachineSFX", cr2w, this);
-				}
-				return _vendingMachineSFX;
-			}
-			set
-			{
-				if (_vendingMachineSFX == value)
-				{
-					return;
-				}
-				_vendingMachineSFX = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vendingMachineSFX);
+			set => SetProperty(ref _vendingMachineSFX, value);
 		}
 
 		[Ordinal(105)] 
 		[RED("soldOutProbability")] 
 		public CFloat SoldOutProbability
 		{
-			get
-			{
-				if (_soldOutProbability == null)
-				{
-					_soldOutProbability = (CFloat) CR2WTypeManager.Create("Float", "soldOutProbability", cr2w, this);
-				}
-				return _soldOutProbability;
-			}
-			set
-			{
-				if (_soldOutProbability == value)
-				{
-					return;
-				}
-				_soldOutProbability = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soldOutProbability);
+			set => SetProperty(ref _soldOutProbability, value);
 		}
 
 		[Ordinal(106)] 
 		[RED("isReady")] 
 		public CBool IsReady
 		{
-			get
-			{
-				if (_isReady == null)
-				{
-					_isReady = (CBool) CR2WTypeManager.Create("Bool", "isReady", cr2w, this);
-				}
-				return _isReady;
-			}
-			set
-			{
-				if (_isReady == value)
-				{
-					return;
-				}
-				_isReady = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isReady);
+			set => SetProperty(ref _isReady, value);
 		}
 
 		[Ordinal(107)] 
 		[RED("isSoldOut")] 
 		public CBool IsSoldOut
 		{
-			get
-			{
-				if (_isSoldOut == null)
-				{
-					_isSoldOut = (CBool) CR2WTypeManager.Create("Bool", "isSoldOut", cr2w, this);
-				}
-				return _isSoldOut;
-			}
-			set
-			{
-				if (_isSoldOut == value)
-				{
-					return;
-				}
-				_isSoldOut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isSoldOut);
+			set => SetProperty(ref _isSoldOut, value);
 		}
 
 		[Ordinal(108)] 
 		[RED("hackCount")] 
 		public CInt32 HackCount
 		{
-			get
-			{
-				if (_hackCount == null)
-				{
-					_hackCount = (CInt32) CR2WTypeManager.Create("Int32", "hackCount", cr2w, this);
-				}
-				return _hackCount;
-			}
-			set
-			{
-				if (_hackCount == value)
-				{
-					return;
-				}
-				_hackCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hackCount);
+			set => SetProperty(ref _hackCount, value);
 		}
 
 		[Ordinal(109)] 
 		[RED("shopStock")] 
 		public CArray<gameSItemStack> ShopStock
 		{
-			get
-			{
-				if (_shopStock == null)
-				{
-					_shopStock = (CArray<gameSItemStack>) CR2WTypeManager.Create("array:gameSItemStack", "shopStock", cr2w, this);
-				}
-				return _shopStock;
-			}
-			set
-			{
-				if (_shopStock == value)
-				{
-					return;
-				}
-				_shopStock = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shopStock);
+			set => SetProperty(ref _shopStock, value);
 		}
 
 		[Ordinal(110)] 
 		[RED("shopStockInit")] 
 		public CBool ShopStockInit
 		{
-			get
-			{
-				if (_shopStockInit == null)
-				{
-					_shopStockInit = (CBool) CR2WTypeManager.Create("Bool", "shopStockInit", cr2w, this);
-				}
-				return _shopStockInit;
-			}
-			set
-			{
-				if (_shopStockInit == value)
-				{
-					return;
-				}
-				_shopStockInit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shopStockInit);
+			set => SetProperty(ref _shopStockInit, value);
 		}
 
 		public VendingMachineControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isCombatGadgetActive")] 
 		public CBool IsCombatGadgetActive
 		{
-			get
-			{
-				if (_isCombatGadgetActive == null)
-				{
-					_isCombatGadgetActive = (CBool) CR2WTypeManager.Create("Bool", "isCombatGadgetActive", cr2w, this);
-				}
-				return _isCombatGadgetActive;
-			}
-			set
-			{
-				if (_isCombatGadgetActive == value)
-				{
-					return;
-				}
-				_isCombatGadgetActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isCombatGadgetActive);
+			set => SetProperty(ref _isCombatGadgetActive, value);
 		}
 
 		public grenadeSpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

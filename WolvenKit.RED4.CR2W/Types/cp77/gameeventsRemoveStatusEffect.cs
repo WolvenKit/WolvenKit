@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isFinalRemoval")] 
 		public CBool IsFinalRemoval
 		{
-			get
-			{
-				if (_isFinalRemoval == null)
-				{
-					_isFinalRemoval = (CBool) CR2WTypeManager.Create("Bool", "isFinalRemoval", cr2w, this);
-				}
-				return _isFinalRemoval;
-			}
-			set
-			{
-				if (_isFinalRemoval == value)
-				{
-					return;
-				}
-				_isFinalRemoval = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isFinalRemoval);
+			set => SetProperty(ref _isFinalRemoval, value);
 		}
 
 		public gameeventsRemoveStatusEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

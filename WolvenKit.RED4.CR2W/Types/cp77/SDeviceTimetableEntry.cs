@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("time")] 
 		public SSimpleGameTime Time
 		{
-			get
-			{
-				if (_time == null)
-				{
-					_time = (SSimpleGameTime) CR2WTypeManager.Create("SSimpleGameTime", "time", cr2w, this);
-				}
-				return _time;
-			}
-			set
-			{
-				if (_time == value)
-				{
-					return;
-				}
-				_time = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _time);
+			set => SetProperty(ref _time, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("state")] 
 		public CEnum<EDeviceStatus> State
 		{
-			get
-			{
-				if (_state == null)
-				{
-					_state = (CEnum<EDeviceStatus>) CR2WTypeManager.Create("EDeviceStatus", "state", cr2w, this);
-				}
-				return _state;
-			}
-			set
-			{
-				if (_state == value)
-				{
-					return;
-				}
-				_state = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entryID")] 
 		public CUInt32 EntryID
 		{
-			get
-			{
-				if (_entryID == null)
-				{
-					_entryID = (CUInt32) CR2WTypeManager.Create("Uint32", "entryID", cr2w, this);
-				}
-				return _entryID;
-			}
-			set
-			{
-				if (_entryID == value)
-				{
-					return;
-				}
-				_entryID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryID);
+			set => SetProperty(ref _entryID, value);
 		}
 
 		public SDeviceTimetableEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

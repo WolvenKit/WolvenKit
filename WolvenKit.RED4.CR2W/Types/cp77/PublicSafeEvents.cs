@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weaponUnequipRequestSent")] 
 		public CBool WeaponUnequipRequestSent
 		{
-			get
-			{
-				if (_weaponUnequipRequestSent == null)
-				{
-					_weaponUnequipRequestSent = (CBool) CR2WTypeManager.Create("Bool", "weaponUnequipRequestSent", cr2w, this);
-				}
-				return _weaponUnequipRequestSent;
-			}
-			set
-			{
-				if (_weaponUnequipRequestSent == value)
-				{
-					return;
-				}
-				_weaponUnequipRequestSent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponUnequipRequestSent);
+			set => SetProperty(ref _weaponUnequipRequestSent, value);
 		}
 
 		public PublicSafeEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

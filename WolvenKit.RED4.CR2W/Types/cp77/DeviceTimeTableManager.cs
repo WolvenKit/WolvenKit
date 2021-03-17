@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timeTable")] 
 		public CArray<SDeviceTimetableEntry> TimeTable
 		{
-			get
-			{
-				if (_timeTable == null)
-				{
-					_timeTable = (CArray<SDeviceTimetableEntry>) CR2WTypeManager.Create("array:SDeviceTimetableEntry", "timeTable", cr2w, this);
-				}
-				return _timeTable;
-			}
-			set
-			{
-				if (_timeTable == value)
-				{
-					return;
-				}
-				_timeTable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeTable);
+			set => SetProperty(ref _timeTable, value);
 		}
 
 		public DeviceTimeTableManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

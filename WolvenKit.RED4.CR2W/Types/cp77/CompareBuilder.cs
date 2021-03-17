@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("FLOAT_EQUAL_EPSILON")] 
 		public CFloat FLOAT_EQUAL_EPSILON
 		{
-			get
-			{
-				if (_fLOAT_EQUAL_EPSILON == null)
-				{
-					_fLOAT_EQUAL_EPSILON = (CFloat) CR2WTypeManager.Create("Float", "FLOAT_EQUAL_EPSILON", cr2w, this);
-				}
-				return _fLOAT_EQUAL_EPSILON;
-			}
-			set
-			{
-				if (_fLOAT_EQUAL_EPSILON == value)
-				{
-					return;
-				}
-				_fLOAT_EQUAL_EPSILON = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fLOAT_EQUAL_EPSILON);
+			set => SetProperty(ref _fLOAT_EQUAL_EPSILON, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("value")] 
 		public CInt32 Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CInt32) CR2WTypeManager.Create("Int32", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		public CompareBuilder(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

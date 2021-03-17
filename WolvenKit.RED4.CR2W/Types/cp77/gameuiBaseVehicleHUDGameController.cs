@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mounted")] 
 		public CBool Mounted
 		{
-			get
-			{
-				if (_mounted == null)
-				{
-					_mounted = (CBool) CR2WTypeManager.Create("Bool", "mounted", cr2w, this);
-				}
-				return _mounted;
-			}
-			set
-			{
-				if (_mounted == value)
-				{
-					return;
-				}
-				_mounted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mounted);
+			set => SetProperty(ref _mounted, value);
 		}
 
 		public gameuiBaseVehicleHUDGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

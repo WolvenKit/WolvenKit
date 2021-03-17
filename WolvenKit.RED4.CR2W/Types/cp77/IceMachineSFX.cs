@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("iceFalls")] 
 		public CName IceFalls
 		{
-			get
-			{
-				if (_iceFalls == null)
-				{
-					_iceFalls = (CName) CR2WTypeManager.Create("CName", "iceFalls", cr2w, this);
-				}
-				return _iceFalls;
-			}
-			set
-			{
-				if (_iceFalls == value)
-				{
-					return;
-				}
-				_iceFalls = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _iceFalls);
+			set => SetProperty(ref _iceFalls, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("processing")] 
 		public CName Processing
 		{
-			get
-			{
-				if (_processing == null)
-				{
-					_processing = (CName) CR2WTypeManager.Create("CName", "processing", cr2w, this);
-				}
-				return _processing;
-			}
-			set
-			{
-				if (_processing == value)
-				{
-					return;
-				}
-				_processing = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _processing);
+			set => SetProperty(ref _processing, value);
 		}
 
 		public IceMachineSFX(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

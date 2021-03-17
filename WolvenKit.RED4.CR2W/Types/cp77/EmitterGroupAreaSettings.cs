@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("emitterGroupParams")] 
 		public CArray<EmitterGroupParams> EmitterGroupParams_72
 		{
-			get
-			{
-				if (_emitterGroupParams_72 == null)
-				{
-                    _emitterGroupParams_72 = (CArray<EmitterGroupParams>) CR2WTypeManager.Create("array:EmitterGroupParams", "emitterGroupParams", cr2w, this);
-				}
-				return _emitterGroupParams_72;
-			}
-			set
-			{
-				if (_emitterGroupParams_72 == value)
-				{
-					return;
-				}
-                _emitterGroupParams_72 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _emitterGroupParams_72);
+			set => SetProperty(ref _emitterGroupParams_72, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("EmitterGroupParams")] 
 		public CArray<EmitterGroupAreaParams> EmitterGroupParams_88
 		{
-			get
-			{
-				if (_emitterGroupParams_88 == null)
-				{
-                    _emitterGroupParams_88 = (CArray<EmitterGroupAreaParams>) CR2WTypeManager.Create("array:EmitterGroupAreaParams", "EmitterGroupParams", cr2w, this);
-				}
-				return _emitterGroupParams_88;
-			}
-			set
-			{
-				if (_emitterGroupParams_88 == value)
-				{
-					return;
-				}
-                _emitterGroupParams_88 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _emitterGroupParams_88);
+			set => SetProperty(ref _emitterGroupParams_88, value);
 		}
 
 		public EmitterGroupAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

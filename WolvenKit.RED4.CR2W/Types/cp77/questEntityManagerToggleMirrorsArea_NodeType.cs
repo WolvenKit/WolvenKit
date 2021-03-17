@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get
-			{
-				if (_objectRef == null)
-				{
-					_objectRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "objectRef", cr2w, this);
-				}
-				return _objectRef;
-			}
-			set
-			{
-				if (_objectRef == value)
-				{
-					return;
-				}
-				_objectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isInMirrorsArea")] 
 		public CBool IsInMirrorsArea
 		{
-			get
-			{
-				if (_isInMirrorsArea == null)
-				{
-					_isInMirrorsArea = (CBool) CR2WTypeManager.Create("Bool", "isInMirrorsArea", cr2w, this);
-				}
-				return _isInMirrorsArea;
-			}
-			set
-			{
-				if (_isInMirrorsArea == value)
-				{
-					return;
-				}
-				_isInMirrorsArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInMirrorsArea);
+			set => SetProperty(ref _isInMirrorsArea, value);
 		}
 
 		public questEntityManagerToggleMirrorsArea_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

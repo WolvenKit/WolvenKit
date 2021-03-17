@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("open")] 
 		public CBool Open
 		{
-			get
-			{
-				if (_open == null)
-				{
-					_open = (CBool) CR2WTypeManager.Create("Bool", "open", cr2w, this);
-				}
-				return _open;
-			}
-			set
-			{
-				if (_open == value)
-				{
-					return;
-				}
-				_open = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _open);
+			set => SetProperty(ref _open, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("process")] 
 		public CBool Process
 		{
-			get
-			{
-				if (_process == null)
-				{
-					_process = (CBool) CR2WTypeManager.Create("Bool", "process", cr2w, this);
-				}
-				return _process;
-			}
-			set
-			{
-				if (_process == value)
-				{
-					return;
-				}
-				_process = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _process);
+			set => SetProperty(ref _process, value);
 		}
 
 		public QuickhackInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

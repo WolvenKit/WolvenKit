@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hit")] 
 		public CBool Hit
 		{
-			get
-			{
-				if (_hit == null)
-				{
-					_hit = (CBool) CR2WTypeManager.Create("Bool", "hit", cr2w, this);
-				}
-				return _hit;
-			}
-			set
-			{
-				if (_hit == value)
-				{
-					return;
-				}
-				_hit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hit);
+			set => SetProperty(ref _hit, value);
 		}
 
 		public AnimFeature_MeleeAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

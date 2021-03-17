@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("previousStimTimeStamp")] 
 		public CFloat PreviousStimTimeStamp
 		{
-			get
-			{
-				if (_previousStimTimeStamp == null)
-				{
-					_previousStimTimeStamp = (CFloat) CR2WTypeManager.Create("Float", "previousStimTimeStamp", cr2w, this);
-				}
-				return _previousStimTimeStamp;
-			}
-			set
-			{
-				if (_previousStimTimeStamp == value)
-				{
-					return;
-				}
-				_previousStimTimeStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousStimTimeStamp);
+			set => SetProperty(ref _previousStimTimeStamp, value);
 		}
 
 		public StandEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

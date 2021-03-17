@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("osockStamp")] 
 		public scnOutputSocketStamp OsockStamp
 		{
-			get
-			{
-				if (_osockStamp == null)
-				{
-					_osockStamp = (scnOutputSocketStamp) CR2WTypeManager.Create("scnOutputSocketStamp", "osockStamp", cr2w, this);
-				}
-				return _osockStamp;
-			}
-			set
-			{
-				if (_osockStamp == value)
-				{
-					return;
-				}
-				_osockStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _osockStamp);
+			set => SetProperty(ref _osockStamp, value);
 		}
 
 		public scneventsSocket(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

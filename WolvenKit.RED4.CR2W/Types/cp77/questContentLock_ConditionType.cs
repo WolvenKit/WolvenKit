@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isContentBlocked")] 
 		public CBool IsContentBlocked
 		{
-			get
-			{
-				if (_isContentBlocked == null)
-				{
-					_isContentBlocked = (CBool) CR2WTypeManager.Create("Bool", "isContentBlocked", cr2w, this);
-				}
-				return _isContentBlocked;
-			}
-			set
-			{
-				if (_isContentBlocked == value)
-				{
-					return;
-				}
-				_isContentBlocked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isContentBlocked);
+			set => SetProperty(ref _isContentBlocked, value);
 		}
 
 		public questContentLock_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

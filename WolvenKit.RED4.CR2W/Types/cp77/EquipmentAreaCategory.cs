@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("parentCategory")] 
 		public CHandle<InventoryItemDisplayCategoryArea> ParentCategory
 		{
-			get
-			{
-				if (_parentCategory == null)
-				{
-					_parentCategory = (CHandle<InventoryItemDisplayCategoryArea>) CR2WTypeManager.Create("handle:InventoryItemDisplayCategoryArea", "parentCategory", cr2w, this);
-				}
-				return _parentCategory;
-			}
-			set
-			{
-				if (_parentCategory == value)
-				{
-					return;
-				}
-				_parentCategory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentCategory);
+			set => SetProperty(ref _parentCategory, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("areaDisplays")] 
 		public CArray<CHandle<EquipmentAreaDisplays>> AreaDisplays
 		{
-			get
-			{
-				if (_areaDisplays == null)
-				{
-					_areaDisplays = (CArray<CHandle<EquipmentAreaDisplays>>) CR2WTypeManager.Create("array:handle:EquipmentAreaDisplays", "areaDisplays", cr2w, this);
-				}
-				return _areaDisplays;
-			}
-			set
-			{
-				if (_areaDisplays == value)
-				{
-					return;
-				}
-				_areaDisplays = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaDisplays);
+			set => SetProperty(ref _areaDisplays, value);
 		}
 
 		public EquipmentAreaCategory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

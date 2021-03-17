@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("reprimandData")] 
 		public ReprimandData ReprimandData
 		{
-			get
-			{
-				if (_reprimandData == null)
-				{
-					_reprimandData = (ReprimandData) CR2WTypeManager.Create("ReprimandData", "reprimandData", cr2w, this);
-				}
-				return _reprimandData;
-			}
-			set
-			{
-				if (_reprimandData == value)
-				{
-					return;
-				}
-				_reprimandData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reprimandData);
+			set => SetProperty(ref _reprimandData, value);
 		}
 
 		public Reprimand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

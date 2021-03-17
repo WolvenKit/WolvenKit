@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("transition")] 
 		public CArray<inkWidgetStateAnimatedTransition> Transition
 		{
-			get
-			{
-				if (_transition == null)
-				{
-					_transition = (CArray<inkWidgetStateAnimatedTransition>) CR2WTypeManager.Create("array:inkWidgetStateAnimatedTransition", "transition", cr2w, this);
-				}
-				return _transition;
-			}
-			set
-			{
-				if (_transition == value)
-				{
-					return;
-				}
-				_transition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transition);
+			set => SetProperty(ref _transition, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("stopActiveAnimation")] 
 		public CBool StopActiveAnimation
 		{
-			get
-			{
-				if (_stopActiveAnimation == null)
-				{
-					_stopActiveAnimation = (CBool) CR2WTypeManager.Create("Bool", "stopActiveAnimation", cr2w, this);
-				}
-				return _stopActiveAnimation;
-			}
-			set
-			{
-				if (_stopActiveAnimation == value)
-				{
-					return;
-				}
-				_stopActiveAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stopActiveAnimation);
+			set => SetProperty(ref _stopActiveAnimation, value);
 		}
 
 		public inkStateTransitionAnimationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

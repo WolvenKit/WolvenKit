@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("option")] 
 		public wCHandle<gameuiCharacterCustomizationOption> Option
 		{
-			get
-			{
-				if (_option == null)
-				{
-					_option = (wCHandle<gameuiCharacterCustomizationOption>) CR2WTypeManager.Create("whandle:gameuiCharacterCustomizationOption", "option", cr2w, this);
-				}
-				return _option;
-			}
-			set
-			{
-				if (_option == value)
-				{
-					return;
-				}
-				_option = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _option);
+			set => SetProperty(ref _option, value);
 		}
 
 		public gameuiCharacterCustomizationSystem_OnOptionUpdatedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

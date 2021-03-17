@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("startingStation")] 
 		public CEnum<ERadioStationList> StartingStation
 		{
-			get
-			{
-				if (_startingStation == null)
-				{
-					_startingStation = (CEnum<ERadioStationList>) CR2WTypeManager.Create("ERadioStationList", "startingStation", cr2w, this);
-				}
-				return _startingStation;
-			}
-			set
-			{
-				if (_startingStation == value)
-				{
-					return;
-				}
-				_startingStation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startingStation);
+			set => SetProperty(ref _startingStation, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("glitchSFX")] 
 		public CName GlitchSFX
 		{
-			get
-			{
-				if (_glitchSFX == null)
-				{
-					_glitchSFX = (CName) CR2WTypeManager.Create("CName", "glitchSFX", cr2w, this);
-				}
-				return _glitchSFX;
-			}
-			set
-			{
-				if (_glitchSFX == value)
-				{
-					return;
-				}
-				_glitchSFX = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _glitchSFX);
+			set => SetProperty(ref _glitchSFX, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("paymentRecordID")] 
 		public TweakDBID PaymentRecordID
 		{
-			get
-			{
-				if (_paymentRecordID == null)
-				{
-					_paymentRecordID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "paymentRecordID", cr2w, this);
-				}
-				return _paymentRecordID;
-			}
-			set
-			{
-				if (_paymentRecordID == value)
-				{
-					return;
-				}
-				_paymentRecordID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _paymentRecordID);
+			set => SetProperty(ref _paymentRecordID, value);
 		}
 
 		public JukeboxSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

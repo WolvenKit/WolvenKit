@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nameWidget")] 
 		public inkTextWidgetReference NameWidget
 		{
-			get
-			{
-				if (_nameWidget == null)
-				{
-					_nameWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "nameWidget", cr2w, this);
-				}
-				return _nameWidget;
-			}
-			set
-			{
-				if (_nameWidget == value)
-				{
-					return;
-				}
-				_nameWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nameWidget);
+			set => SetProperty(ref _nameWidget, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("scoreWidget")] 
 		public inkTextWidgetReference ScoreWidget
 		{
-			get
-			{
-				if (_scoreWidget == null)
-				{
-					_scoreWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "scoreWidget", cr2w, this);
-				}
-				return _scoreWidget;
-			}
-			set
-			{
-				if (_scoreWidget == value)
-				{
-					return;
-				}
-				_scoreWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scoreWidget);
+			set => SetProperty(ref _scoreWidget, value);
 		}
 
 		public gameuiPanzerScoreRecord(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

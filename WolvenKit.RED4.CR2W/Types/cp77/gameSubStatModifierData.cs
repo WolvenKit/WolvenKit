@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("refStatType")] 
 		public CEnum<gamedataStatType> RefStatType
 		{
-			get
-			{
-				if (_refStatType == null)
-				{
-					_refStatType = (CEnum<gamedataStatType>) CR2WTypeManager.Create("gamedataStatType", "refStatType", cr2w, this);
-				}
-				return _refStatType;
-			}
-			set
-			{
-				if (_refStatType == value)
-				{
-					return;
-				}
-				_refStatType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _refStatType);
+			set => SetProperty(ref _refStatType, value);
 		}
 
 		public gameSubStatModifierData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

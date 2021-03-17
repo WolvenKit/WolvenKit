@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gameSessionDataModules")] 
 		public CArray<CHandle<GameSessionDataModule>> GameSessionDataModules
 		{
-			get
-			{
-				if (_gameSessionDataModules == null)
-				{
-					_gameSessionDataModules = (CArray<CHandle<GameSessionDataModule>>) CR2WTypeManager.Create("array:handle:GameSessionDataModule", "gameSessionDataModules", cr2w, this);
-				}
-				return _gameSessionDataModules;
-			}
-			set
-			{
-				if (_gameSessionDataModules == value)
-				{
-					return;
-				}
-				_gameSessionDataModules = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameSessionDataModules);
+			set => SetProperty(ref _gameSessionDataModules, value);
 		}
 
 		public GameSessionDataSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

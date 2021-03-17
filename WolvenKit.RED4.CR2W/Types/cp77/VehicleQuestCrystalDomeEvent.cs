@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("toggle")] 
 		public CBool Toggle
 		{
-			get
-			{
-				if (_toggle == null)
-				{
-					_toggle = (CBool) CR2WTypeManager.Create("Bool", "toggle", cr2w, this);
-				}
-				return _toggle;
-			}
-			set
-			{
-				if (_toggle == value)
-				{
-					return;
-				}
-				_toggle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toggle);
+			set => SetProperty(ref _toggle, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("removeQuestControl")] 
 		public CBool RemoveQuestControl
 		{
-			get
-			{
-				if (_removeQuestControl == null)
-				{
-					_removeQuestControl = (CBool) CR2WTypeManager.Create("Bool", "removeQuestControl", cr2w, this);
-				}
-				return _removeQuestControl;
-			}
-			set
-			{
-				if (_removeQuestControl == value)
-				{
-					return;
-				}
-				_removeQuestControl = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _removeQuestControl);
+			set => SetProperty(ref _removeQuestControl, value);
 		}
 
 		public VehicleQuestCrystalDomeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

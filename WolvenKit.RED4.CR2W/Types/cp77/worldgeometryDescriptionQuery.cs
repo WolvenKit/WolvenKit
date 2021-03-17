@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("refPosition")] 
 		public Vector4 RefPosition
 		{
-			get
-			{
-				if (_refPosition == null)
-				{
-					_refPosition = (Vector4) CR2WTypeManager.Create("Vector4", "refPosition", cr2w, this);
-				}
-				return _refPosition;
-			}
-			set
-			{
-				if (_refPosition == value)
-				{
-					return;
-				}
-				_refPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _refPosition);
+			set => SetProperty(ref _refPosition, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("refDirection")] 
 		public Vector4 RefDirection
 		{
-			get
-			{
-				if (_refDirection == null)
-				{
-					_refDirection = (Vector4) CR2WTypeManager.Create("Vector4", "refDirection", cr2w, this);
-				}
-				return _refDirection;
-			}
-			set
-			{
-				if (_refDirection == value)
-				{
-					return;
-				}
-				_refDirection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _refDirection);
+			set => SetProperty(ref _refDirection, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("refUp")] 
 		public Vector4 RefUp
 		{
-			get
-			{
-				if (_refUp == null)
-				{
-					_refUp = (Vector4) CR2WTypeManager.Create("Vector4", "refUp", cr2w, this);
-				}
-				return _refUp;
-			}
-			set
-			{
-				if (_refUp == value)
-				{
-					return;
-				}
-				_refUp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _refUp);
+			set => SetProperty(ref _refUp, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("primitiveDimension")] 
 		public Vector4 PrimitiveDimension
 		{
-			get
-			{
-				if (_primitiveDimension == null)
-				{
-					_primitiveDimension = (Vector4) CR2WTypeManager.Create("Vector4", "primitiveDimension", cr2w, this);
-				}
-				return _primitiveDimension;
-			}
-			set
-			{
-				if (_primitiveDimension == value)
-				{
-					return;
-				}
-				_primitiveDimension = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _primitiveDimension);
+			set => SetProperty(ref _primitiveDimension, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("primitiveRotation")] 
 		public Quaternion PrimitiveRotation
 		{
-			get
-			{
-				if (_primitiveRotation == null)
-				{
-					_primitiveRotation = (Quaternion) CR2WTypeManager.Create("Quaternion", "primitiveRotation", cr2w, this);
-				}
-				return _primitiveRotation;
-			}
-			set
-			{
-				if (_primitiveRotation == value)
-				{
-					return;
-				}
-				_primitiveRotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _primitiveRotation);
+			set => SetProperty(ref _primitiveRotation, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("maxDistance")] 
 		public CFloat MaxDistance
 		{
-			get
-			{
-				if (_maxDistance == null)
-				{
-					_maxDistance = (CFloat) CR2WTypeManager.Create("Float", "maxDistance", cr2w, this);
-				}
-				return _maxDistance;
-			}
-			set
-			{
-				if (_maxDistance == value)
-				{
-					return;
-				}
-				_maxDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxDistance);
+			set => SetProperty(ref _maxDistance, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("maxExtent")] 
 		public CFloat MaxExtent
 		{
-			get
-			{
-				if (_maxExtent == null)
-				{
-					_maxExtent = (CFloat) CR2WTypeManager.Create("Float", "maxExtent", cr2w, this);
-				}
-				return _maxExtent;
-			}
-			set
-			{
-				if (_maxExtent == value)
-				{
-					return;
-				}
-				_maxExtent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxExtent);
+			set => SetProperty(ref _maxExtent, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("raycastStartDistance")] 
 		public CFloat RaycastStartDistance
 		{
-			get
-			{
-				if (_raycastStartDistance == null)
-				{
-					_raycastStartDistance = (CFloat) CR2WTypeManager.Create("Float", "raycastStartDistance", cr2w, this);
-				}
-				return _raycastStartDistance;
-			}
-			set
-			{
-				if (_raycastStartDistance == value)
-				{
-					return;
-				}
-				_raycastStartDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _raycastStartDistance);
+			set => SetProperty(ref _raycastStartDistance, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("probingPrecision")] 
 		public CFloat ProbingPrecision
 		{
-			get
-			{
-				if (_probingPrecision == null)
-				{
-					_probingPrecision = (CFloat) CR2WTypeManager.Create("Float", "probingPrecision", cr2w, this);
-				}
-				return _probingPrecision;
-			}
-			set
-			{
-				if (_probingPrecision == value)
-				{
-					return;
-				}
-				_probingPrecision = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _probingPrecision);
+			set => SetProperty(ref _probingPrecision, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("probingMaxDistanceDiff")] 
 		public CFloat ProbingMaxDistanceDiff
 		{
-			get
-			{
-				if (_probingMaxDistanceDiff == null)
-				{
-					_probingMaxDistanceDiff = (CFloat) CR2WTypeManager.Create("Float", "probingMaxDistanceDiff", cr2w, this);
-				}
-				return _probingMaxDistanceDiff;
-			}
-			set
-			{
-				if (_probingMaxDistanceDiff == value)
-				{
-					return;
-				}
-				_probingMaxDistanceDiff = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _probingMaxDistanceDiff);
+			set => SetProperty(ref _probingMaxDistanceDiff, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("maxProbes")] 
 		public CUInt32 MaxProbes
 		{
-			get
-			{
-				if (_maxProbes == null)
-				{
-					_maxProbes = (CUInt32) CR2WTypeManager.Create("Uint32", "maxProbes", cr2w, this);
-				}
-				return _maxProbes;
-			}
-			set
-			{
-				if (_maxProbes == value)
-				{
-					return;
-				}
-				_maxProbes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxProbes);
+			set => SetProperty(ref _maxProbes, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("probeDimensions")] 
 		public Vector4 ProbeDimensions
 		{
-			get
-			{
-				if (_probeDimensions == null)
-				{
-					_probeDimensions = (Vector4) CR2WTypeManager.Create("Vector4", "probeDimensions", cr2w, this);
-				}
-				return _probeDimensions;
-			}
-			set
-			{
-				if (_probeDimensions == value)
-				{
-					return;
-				}
-				_probeDimensions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _probeDimensions);
+			set => SetProperty(ref _probeDimensions, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("filter")] 
 		public physicsQueryFilter Filter
 		{
-			get
-			{
-				if (_filter == null)
-				{
-					_filter = (physicsQueryFilter) CR2WTypeManager.Create("physicsQueryFilter", "filter", cr2w, this);
-				}
-				return _filter;
-			}
-			set
-			{
-				if (_filter == value)
-				{
-					return;
-				}
-				_filter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filter);
+			set => SetProperty(ref _filter, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("flags")] 
 		public CUInt32 Flags
 		{
-			get
-			{
-				if (_flags == null)
-				{
-					_flags = (CUInt32) CR2WTypeManager.Create("Uint32", "flags", cr2w, this);
-				}
-				return _flags;
-			}
-			set
-			{
-				if (_flags == value)
-				{
-					return;
-				}
-				_flags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flags);
+			set => SetProperty(ref _flags, value);
 		}
 
 		public worldgeometryDescriptionQuery(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

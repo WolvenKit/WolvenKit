@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetRef")] 
 		public NodeRef TargetRef
 		{
-			get
-			{
-				if (_targetRef == null)
-				{
-					_targetRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "targetRef", cr2w, this);
-				}
-				return _targetRef;
-			}
-			set
-			{
-				if (_targetRef == value)
-				{
-					return;
-				}
-				_targetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetRef);
+			set => SetProperty(ref _targetRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useTraffic")] 
 		public CBool UseTraffic
 		{
-			get
-			{
-				if (_useTraffic == null)
-				{
-					_useTraffic = (CBool) CR2WTypeManager.Create("Bool", "useTraffic", cr2w, this);
-				}
-				return _useTraffic;
-			}
-			set
-			{
-				if (_useTraffic == value)
-				{
-					return;
-				}
-				_useTraffic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useTraffic);
+			set => SetProperty(ref _useTraffic, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("speedInTraffic")] 
 		public CFloat SpeedInTraffic
 		{
-			get
-			{
-				if (_speedInTraffic == null)
-				{
-					_speedInTraffic = (CFloat) CR2WTypeManager.Create("Float", "speedInTraffic", cr2w, this);
-				}
-				return _speedInTraffic;
-			}
-			set
-			{
-				if (_speedInTraffic == value)
-				{
-					return;
-				}
-				_speedInTraffic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speedInTraffic);
+			set => SetProperty(ref _speedInTraffic, value);
 		}
 
 		public vehicleDriveToNodeRefEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

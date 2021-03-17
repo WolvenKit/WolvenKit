@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timeoutParamName")] 
 		public CString TimeoutParamName
 		{
-			get
-			{
-				if (_timeoutParamName == null)
-				{
-					_timeoutParamName = (CString) CR2WTypeManager.Create("String", "timeoutParamName", cr2w, this);
-				}
-				return _timeoutParamName;
-			}
-			set
-			{
-				if (_timeoutParamName == value)
-				{
-					return;
-				}
-				_timeoutParamName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeoutParamName);
+			set => SetProperty(ref _timeoutParamName, value);
 		}
 
 		public CharParamTimeout(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -28,368 +28,128 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tooltipsContainer")] 
 		public inkWidgetReference TooltipsContainer
 		{
-			get
-			{
-				if (_tooltipsContainer == null)
-				{
-					_tooltipsContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "tooltipsContainer", cr2w, this);
-				}
-				return _tooltipsContainer;
-			}
-			set
-			{
-				if (_tooltipsContainer == value)
-				{
-					return;
-				}
-				_tooltipsContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsContainer);
+			set => SetProperty(ref _tooltipsContainer, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("flipX")] 
 		public CBool FlipX
 		{
-			get
-			{
-				if (_flipX == null)
-				{
-					_flipX = (CBool) CR2WTypeManager.Create("Bool", "flipX", cr2w, this);
-				}
-				return _flipX;
-			}
-			set
-			{
-				if (_flipX == value)
-				{
-					return;
-				}
-				_flipX = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flipX);
+			set => SetProperty(ref _flipX, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("flipY")] 
 		public CBool FlipY
 		{
-			get
-			{
-				if (_flipY == null)
-				{
-					_flipY = (CBool) CR2WTypeManager.Create("Bool", "flipY", cr2w, this);
-				}
-				return _flipY;
-			}
-			set
-			{
-				if (_flipY == value)
-				{
-					return;
-				}
-				_flipY = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flipY);
+			set => SetProperty(ref _flipY, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("rootMargin")] 
 		public inkMargin RootMargin
 		{
-			get
-			{
-				if (_rootMargin == null)
-				{
-					_rootMargin = (inkMargin) CR2WTypeManager.Create("inkMargin", "rootMargin", cr2w, this);
-				}
-				return _rootMargin;
-			}
-			set
-			{
-				if (_rootMargin == value)
-				{
-					return;
-				}
-				_rootMargin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rootMargin);
+			set => SetProperty(ref _rootMargin, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("screenMargin")] 
 		public inkMargin ScreenMargin
 		{
-			get
-			{
-				if (_screenMargin == null)
-				{
-					_screenMargin = (inkMargin) CR2WTypeManager.Create("inkMargin", "screenMargin", cr2w, this);
-				}
-				return _screenMargin;
-			}
-			set
-			{
-				if (_screenMargin == value)
-				{
-					return;
-				}
-				_screenMargin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _screenMargin);
+			set => SetProperty(ref _screenMargin, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("TooltipRequesters")] 
 		public CArray<inkWidgetReference> TooltipRequesters
 		{
-			get
-			{
-				if (_tooltipRequesters == null)
-				{
-					_tooltipRequesters = (CArray<inkWidgetReference>) CR2WTypeManager.Create("array:inkWidgetReference", "TooltipRequesters", cr2w, this);
-				}
-				return _tooltipRequesters;
-			}
-			set
-			{
-				if (_tooltipRequesters == value)
-				{
-					return;
-				}
-				_tooltipRequesters = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipRequesters);
+			set => SetProperty(ref _tooltipRequesters, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("TooltipsLibrary")] 
 		public redResourceReferenceScriptToken TooltipsLibrary
 		{
-			get
-			{
-				if (_tooltipsLibrary == null)
-				{
-					_tooltipsLibrary = (redResourceReferenceScriptToken) CR2WTypeManager.Create("redResourceReferenceScriptToken", "TooltipsLibrary", cr2w, this);
-				}
-				return _tooltipsLibrary;
-			}
-			set
-			{
-				if (_tooltipsLibrary == value)
-				{
-					return;
-				}
-				_tooltipsLibrary = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsLibrary);
+			set => SetProperty(ref _tooltipsLibrary, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("GenericTooltipsNames")] 
 		public CArray<CName> GenericTooltipsNames
 		{
-			get
-			{
-				if (_genericTooltipsNames == null)
-				{
-					_genericTooltipsNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "GenericTooltipsNames", cr2w, this);
-				}
-				return _genericTooltipsNames;
-			}
-			set
-			{
-				if (_genericTooltipsNames == value)
-				{
-					return;
-				}
-				_genericTooltipsNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _genericTooltipsNames);
+			set => SetProperty(ref _genericTooltipsNames, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("TooltipLibrariesReferences")] 
 		public CArray<TooltipWidgetReference> TooltipLibrariesReferences
 		{
-			get
-			{
-				if (_tooltipLibrariesReferences == null)
-				{
-					_tooltipLibrariesReferences = (CArray<TooltipWidgetReference>) CR2WTypeManager.Create("array:TooltipWidgetReference", "TooltipLibrariesReferences", cr2w, this);
-				}
-				return _tooltipLibrariesReferences;
-			}
-			set
-			{
-				if (_tooltipLibrariesReferences == value)
-				{
-					return;
-				}
-				_tooltipLibrariesReferences = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipLibrariesReferences);
+			set => SetProperty(ref _tooltipLibrariesReferences, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("TooltipLibrariesStyledReferences")] 
 		public CArray<TooltipWidgetStyledReference> TooltipLibrariesStyledReferences
 		{
-			get
-			{
-				if (_tooltipLibrariesStyledReferences == null)
-				{
-					_tooltipLibrariesStyledReferences = (CArray<TooltipWidgetStyledReference>) CR2WTypeManager.Create("array:TooltipWidgetStyledReference", "TooltipLibrariesStyledReferences", cr2w, this);
-				}
-				return _tooltipLibrariesStyledReferences;
-			}
-			set
-			{
-				if (_tooltipLibrariesStyledReferences == value)
-				{
-					return;
-				}
-				_tooltipLibrariesStyledReferences = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipLibrariesStyledReferences);
+			set => SetProperty(ref _tooltipLibrariesStyledReferences, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("MenuTooltipStylePath")] 
 		public redResourceReferenceScriptToken MenuTooltipStylePath
 		{
-			get
-			{
-				if (_menuTooltipStylePath == null)
-				{
-					_menuTooltipStylePath = (redResourceReferenceScriptToken) CR2WTypeManager.Create("redResourceReferenceScriptToken", "MenuTooltipStylePath", cr2w, this);
-				}
-				return _menuTooltipStylePath;
-			}
-			set
-			{
-				if (_menuTooltipStylePath == value)
-				{
-					return;
-				}
-				_menuTooltipStylePath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuTooltipStylePath);
+			set => SetProperty(ref _menuTooltipStylePath, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("HudTooltipStylePath")] 
 		public redResourceReferenceScriptToken HudTooltipStylePath
 		{
-			get
-			{
-				if (_hudTooltipStylePath == null)
-				{
-					_hudTooltipStylePath = (redResourceReferenceScriptToken) CR2WTypeManager.Create("redResourceReferenceScriptToken", "HudTooltipStylePath", cr2w, this);
-				}
-				return _hudTooltipStylePath;
-			}
-			set
-			{
-				if (_hudTooltipStylePath == value)
-				{
-					return;
-				}
-				_hudTooltipStylePath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hudTooltipStylePath);
+			set => SetProperty(ref _hudTooltipStylePath, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("IndexedTooltips")] 
 		public CArray<wCHandle<AGenericTooltipController>> IndexedTooltips
 		{
-			get
-			{
-				if (_indexedTooltips == null)
-				{
-					_indexedTooltips = (CArray<wCHandle<AGenericTooltipController>>) CR2WTypeManager.Create("array:whandle:AGenericTooltipController", "IndexedTooltips", cr2w, this);
-				}
-				return _indexedTooltips;
-			}
-			set
-			{
-				if (_indexedTooltips == value)
-				{
-					return;
-				}
-				_indexedTooltips = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _indexedTooltips);
+			set => SetProperty(ref _indexedTooltips, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("NamedTooltips")] 
 		public CArray<CHandle<NamedTooltipController>> NamedTooltips
 		{
-			get
-			{
-				if (_namedTooltips == null)
-				{
-					_namedTooltips = (CArray<CHandle<NamedTooltipController>>) CR2WTypeManager.Create("array:handle:NamedTooltipController", "NamedTooltips", cr2w, this);
-				}
-				return _namedTooltips;
-			}
-			set
-			{
-				if (_namedTooltips == value)
-				{
-					return;
-				}
-				_namedTooltips = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _namedTooltips);
+			set => SetProperty(ref _namedTooltips, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("TooltipStylePath")] 
 		public redResourceReferenceScriptToken TooltipStylePath
 		{
-			get
-			{
-				if (_tooltipStylePath == null)
-				{
-					_tooltipStylePath = (redResourceReferenceScriptToken) CR2WTypeManager.Create("redResourceReferenceScriptToken", "TooltipStylePath", cr2w, this);
-				}
-				return _tooltipStylePath;
-			}
-			set
-			{
-				if (_tooltipStylePath == value)
-				{
-					return;
-				}
-				_tooltipStylePath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipStylePath);
+			set => SetProperty(ref _tooltipStylePath, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("introAnim")] 
 		public CHandle<inkanimProxy> IntroAnim
 		{
-			get
-			{
-				if (_introAnim == null)
-				{
-					_introAnim = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "introAnim", cr2w, this);
-				}
-				return _introAnim;
-			}
-			set
-			{
-				if (_introAnim == value)
-				{
-					return;
-				}
-				_introAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _introAnim);
+			set => SetProperty(ref _introAnim, value);
 		}
 
 		public gameuiTooltipsManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

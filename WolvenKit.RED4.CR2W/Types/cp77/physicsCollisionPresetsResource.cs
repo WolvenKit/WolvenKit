@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("presets")] 
 		public CArray<physicsCollisionPreset> Presets
 		{
-			get
-			{
-				if (_presets == null)
-				{
-					_presets = (CArray<physicsCollisionPreset>) CR2WTypeManager.Create("array:physicsCollisionPreset", "presets", cr2w, this);
-				}
-				return _presets;
-			}
-			set
-			{
-				if (_presets == value)
-				{
-					return;
-				}
-				_presets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _presets);
+			set => SetProperty(ref _presets, value);
 		}
 
 		public physicsCollisionPresetsResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

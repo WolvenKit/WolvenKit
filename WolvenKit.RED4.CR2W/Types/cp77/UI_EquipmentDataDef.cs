@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("EquipmentData")] 
 		public gamebbScriptID_Variant EquipmentData
 		{
-			get
-			{
-				if (_equipmentData == null)
-				{
-					_equipmentData = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "EquipmentData", cr2w, this);
-				}
-				return _equipmentData;
-			}
-			set
-			{
-				if (_equipmentData == value)
-				{
-					return;
-				}
-				_equipmentData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipmentData);
+			set => SetProperty(ref _equipmentData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("UIjailbreakData")] 
 		public gamebbScriptID_Variant UIjailbreakData
 		{
-			get
-			{
-				if (_uIjailbreakData == null)
-				{
-					_uIjailbreakData = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "UIjailbreakData", cr2w, this);
-				}
-				return _uIjailbreakData;
-			}
-			set
-			{
-				if (_uIjailbreakData == value)
-				{
-					return;
-				}
-				_uIjailbreakData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uIjailbreakData);
+			set => SetProperty(ref _uIjailbreakData, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ammoLooted")] 
 		public gamebbScriptID_Bool AmmoLooted
 		{
-			get
-			{
-				if (_ammoLooted == null)
-				{
-					_ammoLooted = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "ammoLooted", cr2w, this);
-				}
-				return _ammoLooted;
-			}
-			set
-			{
-				if (_ammoLooted == value)
-				{
-					return;
-				}
-				_ammoLooted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ammoLooted);
+			set => SetProperty(ref _ammoLooted, value);
 		}
 
 		public UI_EquipmentDataDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

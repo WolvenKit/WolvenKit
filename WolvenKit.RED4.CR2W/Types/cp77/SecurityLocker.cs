@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inventory")] 
 		public CHandle<gameInventory> Inventory
 		{
-			get
-			{
-				if (_inventory == null)
-				{
-					_inventory = (CHandle<gameInventory>) CR2WTypeManager.Create("handle:gameInventory", "inventory", cr2w, this);
-				}
-				return _inventory;
-			}
-			set
-			{
-				if (_inventory == value)
-				{
-					return;
-				}
-				_inventory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventory);
+			set => SetProperty(ref _inventory, value);
 		}
 
 		[Ordinal(94)] 
 		[RED("cachedEvent")] 
 		public CHandle<UseSecurityLocker> CachedEvent
 		{
-			get
-			{
-				if (_cachedEvent == null)
-				{
-					_cachedEvent = (CHandle<UseSecurityLocker>) CR2WTypeManager.Create("handle:UseSecurityLocker", "cachedEvent", cr2w, this);
-				}
-				return _cachedEvent;
-			}
-			set
-			{
-				if (_cachedEvent == value)
-				{
-					return;
-				}
-				_cachedEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cachedEvent);
+			set => SetProperty(ref _cachedEvent, value);
 		}
 
 		public SecurityLocker(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

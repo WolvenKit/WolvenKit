@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("reactionData")] 
 		public CHandle<AIReactionData> ReactionData
 		{
-			get
-			{
-				if (_reactionData == null)
-				{
-					_reactionData = (CHandle<AIReactionData>) CR2WTypeManager.Create("handle:AIReactionData", "reactionData", cr2w, this);
-				}
-				return _reactionData;
-			}
-			set
-			{
-				if (_reactionData == value)
-				{
-					return;
-				}
-				_reactionData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reactionData);
+			set => SetProperty(ref _reactionData, value);
 		}
 
 		public ReactionManagerTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

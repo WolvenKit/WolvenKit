@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("colorPreservation")] 
 		public curveData<CFloat> ColorPreservation
 		{
-			get
-			{
-				if (_colorPreservation == null)
-				{
-					_colorPreservation = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "colorPreservation", cr2w, this);
-				}
-				return _colorPreservation;
-			}
-			set
-			{
-				if (_colorPreservation == value)
-				{
-					return;
-				}
-				_colorPreservation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _colorPreservation);
+			set => SetProperty(ref _colorPreservation, value);
 		}
 
 		public ITonemappingMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

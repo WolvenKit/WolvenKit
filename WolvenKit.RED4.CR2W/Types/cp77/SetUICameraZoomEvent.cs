@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hasUICameraZoom")] 
 		public CBool HasUICameraZoom
 		{
-			get
-			{
-				if (_hasUICameraZoom == null)
-				{
-					_hasUICameraZoom = (CBool) CR2WTypeManager.Create("Bool", "hasUICameraZoom", cr2w, this);
-				}
-				return _hasUICameraZoom;
-			}
-			set
-			{
-				if (_hasUICameraZoom == value)
-				{
-					return;
-				}
-				_hasUICameraZoom = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasUICameraZoom);
+			set => SetProperty(ref _hasUICameraZoom, value);
 		}
 
 		public SetUICameraZoomEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("UPDATE_DELAY")] 
 		public CFloat UPDATE_DELAY
 		{
-			get
-			{
-				if (_uPDATE_DELAY == null)
-				{
-					_uPDATE_DELAY = (CFloat) CR2WTypeManager.Create("Float", "UPDATE_DELAY", cr2w, this);
-				}
-				return _uPDATE_DELAY;
-			}
-			set
-			{
-				if (_uPDATE_DELAY == value)
-				{
-					return;
-				}
-				_uPDATE_DELAY = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uPDATE_DELAY);
+			set => SetProperty(ref _uPDATE_DELAY, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("DISPLAY_DURATION")] 
 		public CFloat DISPLAY_DURATION
 		{
-			get
-			{
-				if (_dISPLAY_DURATION == null)
-				{
-					_dISPLAY_DURATION = (CFloat) CR2WTypeManager.Create("Float", "DISPLAY_DURATION", cr2w, this);
-				}
-				return _dISPLAY_DURATION;
-			}
-			set
-			{
-				if (_dISPLAY_DURATION == value)
-				{
-					return;
-				}
-				_dISPLAY_DURATION = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dISPLAY_DURATION);
+			set => SetProperty(ref _dISPLAY_DURATION, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("timeToNextUpdate")] 
 		public CFloat TimeToNextUpdate
 		{
-			get
-			{
-				if (_timeToNextUpdate == null)
-				{
-					_timeToNextUpdate = (CFloat) CR2WTypeManager.Create("Float", "timeToNextUpdate", cr2w, this);
-				}
-				return _timeToNextUpdate;
-			}
-			set
-			{
-				if (_timeToNextUpdate == value)
-				{
-					return;
-				}
-				_timeToNextUpdate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeToNextUpdate);
+			set => SetProperty(ref _timeToNextUpdate, value);
 		}
 
 		public StrikeDuration_Debug_VDB(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

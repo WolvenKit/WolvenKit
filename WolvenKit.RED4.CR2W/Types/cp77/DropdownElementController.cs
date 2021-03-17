@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("text")] 
 		public inkTextWidgetReference Text
 		{
-			get
-			{
-				if (_text == null)
-				{
-					_text = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "text", cr2w, this);
-				}
-				return _text;
-			}
-			set
-			{
-				if (_text == value)
-				{
-					return;
-				}
-				_text = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _text);
+			set => SetProperty(ref _text, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("arrow")] 
 		public inkImageWidgetReference Arrow
 		{
-			get
-			{
-				if (_arrow == null)
-				{
-					_arrow = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "arrow", cr2w, this);
-				}
-				return _arrow;
-			}
-			set
-			{
-				if (_arrow == value)
-				{
-					return;
-				}
-				_arrow = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _arrow);
+			set => SetProperty(ref _arrow, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("frame")] 
 		public inkWidgetReference Frame
 		{
-			get
-			{
-				if (_frame == null)
-				{
-					_frame = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "frame", cr2w, this);
-				}
-				return _frame;
-			}
-			set
-			{
-				if (_frame == value)
-				{
-					return;
-				}
-				_frame = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frame);
+			set => SetProperty(ref _frame, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("contentContainer")] 
 		public inkWidgetReference ContentContainer
 		{
-			get
-			{
-				if (_contentContainer == null)
-				{
-					_contentContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "contentContainer", cr2w, this);
-				}
-				return _contentContainer;
-			}
-			set
-			{
-				if (_contentContainer == value)
-				{
-					return;
-				}
-				_contentContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contentContainer);
+			set => SetProperty(ref _contentContainer, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("data")] 
 		public CHandle<DropdownItemData> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CHandle<DropdownItemData>) CR2WTypeManager.Create("handle:DropdownItemData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("active")] 
 		public CBool Active
 		{
-			get
-			{
-				if (_active == null)
-				{
-					_active = (CBool) CR2WTypeManager.Create("Bool", "active", cr2w, this);
-				}
-				return _active;
-			}
-			set
-			{
-				if (_active == value)
-				{
-					return;
-				}
-				_active = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _active);
+			set => SetProperty(ref _active, value);
 		}
 
 		public DropdownElementController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

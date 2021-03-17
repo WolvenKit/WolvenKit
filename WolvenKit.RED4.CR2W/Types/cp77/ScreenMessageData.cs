@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("messageRecord")] 
 		public CHandle<gamedataScreenMessageData_Record> MessageRecord
 		{
-			get
-			{
-				if (_messageRecord == null)
-				{
-					_messageRecord = (CHandle<gamedataScreenMessageData_Record>) CR2WTypeManager.Create("handle:gamedataScreenMessageData_Record", "messageRecord", cr2w, this);
-				}
-				return _messageRecord;
-			}
-			set
-			{
-				if (_messageRecord == value)
-				{
-					return;
-				}
-				_messageRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _messageRecord);
+			set => SetProperty(ref _messageRecord, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("replaceTextWithCustomNumber")] 
 		public CBool ReplaceTextWithCustomNumber
 		{
-			get
-			{
-				if (_replaceTextWithCustomNumber == null)
-				{
-					_replaceTextWithCustomNumber = (CBool) CR2WTypeManager.Create("Bool", "replaceTextWithCustomNumber", cr2w, this);
-				}
-				return _replaceTextWithCustomNumber;
-			}
-			set
-			{
-				if (_replaceTextWithCustomNumber == value)
-				{
-					return;
-				}
-				_replaceTextWithCustomNumber = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _replaceTextWithCustomNumber);
+			set => SetProperty(ref _replaceTextWithCustomNumber, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("customNumber")] 
 		public CInt32 CustomNumber
 		{
-			get
-			{
-				if (_customNumber == null)
-				{
-					_customNumber = (CInt32) CR2WTypeManager.Create("Int32", "customNumber", cr2w, this);
-				}
-				return _customNumber;
-			}
-			set
-			{
-				if (_customNumber == value)
-				{
-					return;
-				}
-				_customNumber = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customNumber);
+			set => SetProperty(ref _customNumber, value);
 		}
 
 		public ScreenMessageData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

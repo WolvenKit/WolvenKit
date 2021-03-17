@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("propertyId")] 
 		public CUInt16 PropertyId
 		{
-			get
-			{
-				if (_propertyId == null)
-				{
-					_propertyId = (CUInt16) CR2WTypeManager.Create("Uint16", "propertyId", cr2w, this);
-				}
-				return _propertyId;
-			}
-			set
-			{
-				if (_propertyId == value)
-				{
-					return;
-				}
-				_propertyId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _propertyId);
+			set => SetProperty(ref _propertyId, value);
 		}
 
 		public gameCompressedSmartObjectPointProperties(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

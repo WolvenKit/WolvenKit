@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("IsScanning")] 
 		public CBool IsScanning
 		{
-			get
-			{
-				if (_isScanning == null)
-				{
-					_isScanning = (CBool) CR2WTypeManager.Create("Bool", "IsScanning", cr2w, this);
-				}
-				return _isScanning;
-			}
-			set
-			{
-				if (_isScanning == value)
-				{
-					return;
-				}
-				_isScanning = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isScanning);
+			set => SetProperty(ref _isScanning, value);
 		}
 
 		public DrillScanEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

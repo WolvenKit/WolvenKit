@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fullBar")] 
 		public inkWidgetReference FullBar
 		{
-			get
-			{
-				if (_fullBar == null)
-				{
-					_fullBar = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "fullBar", cr2w, this);
-				}
-				return _fullBar;
-			}
-			set
-			{
-				if (_fullBar == value)
-				{
-					return;
-				}
-				_fullBar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fullBar);
+			set => SetProperty(ref _fullBar, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("stippedBar")] 
 		public inkWidgetReference StippedBar
 		{
-			get
-			{
-				if (_stippedBar == null)
-				{
-					_stippedBar = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "stippedBar", cr2w, this);
-				}
-				return _stippedBar;
-			}
-			set
-			{
-				if (_stippedBar == value)
-				{
-					return;
-				}
-				_stippedBar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stippedBar);
+			set => SetProperty(ref _stippedBar, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("rootCanvas")] 
 		public inkWidgetReference RootCanvas
 		{
-			get
-			{
-				if (_rootCanvas == null)
-				{
-					_rootCanvas = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "rootCanvas", cr2w, this);
-				}
-				return _rootCanvas;
-			}
-			set
-			{
-				if (_rootCanvas == value)
-				{
-					return;
-				}
-				_rootCanvas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rootCanvas);
+			set => SetProperty(ref _rootCanvas, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("width")] 
 		public CFloat Width
 		{
-			get
-			{
-				if (_width == null)
-				{
-					_width = (CFloat) CR2WTypeManager.Create("Float", "width", cr2w, this);
-				}
-				return _width;
-			}
-			set
-			{
-				if (_width == value)
-				{
-					return;
-				}
-				_width = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _width);
+			set => SetProperty(ref _width, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("height")] 
 		public CFloat Height
 		{
-			get
-			{
-				if (_height == null)
-				{
-					_height = (CFloat) CR2WTypeManager.Create("Float", "height", cr2w, this);
-				}
-				return _height;
-			}
-			set
-			{
-				if (_height == value)
-				{
-					return;
-				}
-				_height = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _height);
+			set => SetProperty(ref _height, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("heightStripped")] 
 		public CFloat HeightStripped
 		{
-			get
-			{
-				if (_heightStripped == null)
-				{
-					_heightStripped = (CFloat) CR2WTypeManager.Create("Float", "heightStripped", cr2w, this);
-				}
-				return _heightStripped;
-			}
-			set
-			{
-				if (_heightStripped == value)
-				{
-					return;
-				}
-				_heightStripped = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _heightStripped);
+			set => SetProperty(ref _heightStripped, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("heightRoot")] 
 		public CFloat HeightRoot
 		{
-			get
-			{
-				if (_heightRoot == null)
-				{
-					_heightRoot = (CFloat) CR2WTypeManager.Create("Float", "heightRoot", cr2w, this);
-				}
-				return _heightRoot;
-			}
-			set
-			{
-				if (_heightRoot == value)
-				{
-					return;
-				}
-				_heightRoot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _heightRoot);
+			set => SetProperty(ref _heightRoot, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get
-			{
-				if (_animProxy == null)
-				{
-					_animProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animProxy", cr2w, this);
-				}
-				return _animProxy;
-			}
-			set
-			{
-				if (_animProxy == value)
-				{
-					return;
-				}
-				_animProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animProxy);
+			set => SetProperty(ref _animProxy, value);
 		}
 
 		public DamagePreviewController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

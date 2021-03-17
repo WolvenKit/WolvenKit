@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("effectName")] 
 		public CName EffectName
 		{
-			get
-			{
-				if (_effectName == null)
-				{
-					_effectName = (CName) CR2WTypeManager.Create("CName", "effectName", cr2w, this);
-				}
-				return _effectName;
-			}
-			set
-			{
-				if (_effectName == value)
-				{
-					return;
-				}
-				_effectName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectName);
+			set => SetProperty(ref _effectName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("sequenceShift")] 
 		public CUInt32 SequenceShift
 		{
-			get
-			{
-				if (_sequenceShift == null)
-				{
-					_sequenceShift = (CUInt32) CR2WTypeManager.Create("Uint32", "sequenceShift", cr2w, this);
-				}
-				return _sequenceShift;
-			}
-			set
-			{
-				if (_sequenceShift == value)
-				{
-					return;
-				}
-				_sequenceShift = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sequenceShift);
+			set => SetProperty(ref _sequenceShift, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("breakAllLoopsOnStop")] 
 		public CBool BreakAllLoopsOnStop
 		{
-			get
-			{
-				if (_breakAllLoopsOnStop == null)
-				{
-					_breakAllLoopsOnStop = (CBool) CR2WTypeManager.Create("Bool", "breakAllLoopsOnStop", cr2w, this);
-				}
-				return _breakAllLoopsOnStop;
-			}
-			set
-			{
-				if (_breakAllLoopsOnStop == value)
-				{
-					return;
-				}
-				_breakAllLoopsOnStop = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _breakAllLoopsOnStop);
+			set => SetProperty(ref _breakAllLoopsOnStop, value);
 		}
 
 		public animAnimEvent_ItemEffectDuration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

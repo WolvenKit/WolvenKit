@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("themeID")] 
 		public CName ThemeID
 		{
-			get
-			{
-				if (_themeID == null)
-				{
-					_themeID = (CName) CR2WTypeManager.Create("CName", "themeID", cr2w, this);
-				}
-				return _themeID;
-			}
-			set
-			{
-				if (_themeID == value)
-				{
-					return;
-				}
-				_themeID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _themeID);
+			set => SetProperty(ref _themeID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("styleResource")] 
 		public rRef<inkStyleResource> StyleResource
 		{
-			get
-			{
-				if (_styleResource == null)
-				{
-					_styleResource = (rRef<inkStyleResource>) CR2WTypeManager.Create("rRef:inkStyleResource", "styleResource", cr2w, this);
-				}
-				return _styleResource;
-			}
-			set
-			{
-				if (_styleResource == value)
-				{
-					return;
-				}
-				_styleResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _styleResource);
+			set => SetProperty(ref _styleResource, value);
 		}
 
 		public inkStyleTheme(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

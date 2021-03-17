@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("track")] 
 		public animNamedTrackIndex Track
 		{
-			get
-			{
-				if (_track == null)
-				{
-					_track = (animNamedTrackIndex) CR2WTypeManager.Create("animNamedTrackIndex", "track", cr2w, this);
-				}
-				return _track;
-			}
-			set
-			{
-				if (_track == value)
-				{
-					return;
-				}
-				_track = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _track);
+			set => SetProperty(ref _track, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("value")] 
 		public animFloatLink Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		public animAnimNode_TrackSetter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

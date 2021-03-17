@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("startValue")] 
 		public Vector2 StartValue
 		{
-			get
-			{
-				if (_startValue == null)
-				{
-					_startValue = (Vector2) CR2WTypeManager.Create("Vector2", "startValue", cr2w, this);
-				}
-				return _startValue;
-			}
-			set
-			{
-				if (_startValue == value)
-				{
-					return;
-				}
-				_startValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startValue);
+			set => SetProperty(ref _startValue, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("endValue")] 
 		public Vector2 EndValue
 		{
-			get
-			{
-				if (_endValue == null)
-				{
-					_endValue = (Vector2) CR2WTypeManager.Create("Vector2", "endValue", cr2w, this);
-				}
-				return _endValue;
-			}
-			set
-			{
-				if (_endValue == value)
-				{
-					return;
-				}
-				_endValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endValue);
+			set => SetProperty(ref _endValue, value);
 		}
 
 		public inkanimPivotInterpolator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

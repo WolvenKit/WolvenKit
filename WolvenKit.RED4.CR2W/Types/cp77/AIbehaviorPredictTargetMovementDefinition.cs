@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("target")] 
 		public CHandle<AIArgumentMapping> Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("timeInterval")] 
 		public CHandle<AIArgumentMapping> TimeInterval
 		{
-			get
-			{
-				if (_timeInterval == null)
-				{
-					_timeInterval = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "timeInterval", cr2w, this);
-				}
-				return _timeInterval;
-			}
-			set
-			{
-				if (_timeInterval == value)
-				{
-					return;
-				}
-				_timeInterval = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeInterval);
+			set => SetProperty(ref _timeInterval, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("result")] 
 		public CHandle<AIArgumentMapping> Result
 		{
-			get
-			{
-				if (_result == null)
-				{
-					_result = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "result", cr2w, this);
-				}
-				return _result;
-			}
-			set
-			{
-				if (_result == value)
-				{
-					return;
-				}
-				_result = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _result);
+			set => SetProperty(ref _result, value);
 		}
 
 		public AIbehaviorPredictTargetMovementDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("value")] 
 		public CString Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CString) CR2WTypeManager.Create("String", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("errorInfo")] 
 		public CString ErrorInfo
 		{
-			get
-			{
-				if (_errorInfo == null)
-				{
-					_errorInfo = (CString) CR2WTypeManager.Create("String", "errorInfo", cr2w, this);
-				}
-				return _errorInfo;
-			}
-			set
-			{
-				if (_errorInfo == value)
-				{
-					return;
-				}
-				_errorInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _errorInfo);
+			set => SetProperty(ref _errorInfo, value);
 		}
 
 		public GameplayFunctionalTestReturnValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

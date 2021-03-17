@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("blend")] 
 		public CBool Blend
 		{
-			get
-			{
-				if (_blend == null)
-				{
-					_blend = (CBool) CR2WTypeManager.Create("Bool", "blend", cr2w, this);
-				}
-				return _blend;
-			}
-			set
-			{
-				if (_blend == value)
-				{
-					return;
-				}
-				_blend = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blend);
+			set => SetProperty(ref _blend, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("diffSize")] 
 		public CEnum<MorphTargetsDiffTextureSize> DiffSize
 		{
-			get
-			{
-				if (_diffSize == null)
-				{
-					_diffSize = (CEnum<MorphTargetsDiffTextureSize>) CR2WTypeManager.Create("MorphTargetsDiffTextureSize", "diffSize", cr2w, this);
-				}
-				return _diffSize;
-			}
-			set
-			{
-				if (_diffSize == value)
-				{
-					return;
-				}
-				_diffSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _diffSize);
+			set => SetProperty(ref _diffSize, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		public MorphTargetsTextureBlendInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

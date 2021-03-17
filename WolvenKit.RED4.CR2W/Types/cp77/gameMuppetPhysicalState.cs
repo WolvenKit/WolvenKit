@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (Vector4) CR2WTypeManager.Create("Vector4", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("worldYaw")] 
 		public CFloat WorldYaw
 		{
-			get
-			{
-				if (_worldYaw == null)
-				{
-					_worldYaw = (CFloat) CR2WTypeManager.Create("Float", "worldYaw", cr2w, this);
-				}
-				return _worldYaw;
-			}
-			set
-			{
-				if (_worldYaw == value)
-				{
-					return;
-				}
-				_worldYaw = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _worldYaw);
+			set => SetProperty(ref _worldYaw, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("velocity")] 
 		public Vector4 Velocity
 		{
-			get
-			{
-				if (_velocity == null)
-				{
-					_velocity = (Vector4) CR2WTypeManager.Create("Vector4", "velocity", cr2w, this);
-				}
-				return _velocity;
-			}
-			set
-			{
-				if (_velocity == value)
-				{
-					return;
-				}
-				_velocity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _velocity);
+			set => SetProperty(ref _velocity, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isOnGround")] 
 		public CBool IsOnGround
 		{
-			get
-			{
-				if (_isOnGround == null)
-				{
-					_isOnGround = (CBool) CR2WTypeManager.Create("Bool", "isOnGround", cr2w, this);
-				}
-				return _isOnGround;
-			}
-			set
-			{
-				if (_isOnGround == value)
-				{
-					return;
-				}
-				_isOnGround = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isOnGround);
+			set => SetProperty(ref _isOnGround, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("groundNormal")] 
 		public Vector4 GroundNormal
 		{
-			get
-			{
-				if (_groundNormal == null)
-				{
-					_groundNormal = (Vector4) CR2WTypeManager.Create("Vector4", "groundNormal", cr2w, this);
-				}
-				return _groundNormal;
-			}
-			set
-			{
-				if (_groundNormal == value)
-				{
-					return;
-				}
-				_groundNormal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _groundNormal);
+			set => SetProperty(ref _groundNormal, value);
 		}
 
 		public gameMuppetPhysicalState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

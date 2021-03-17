@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("healthRegeneration")] 
 		public CBool HealthRegeneration
 		{
-			get
-			{
-				if (_healthRegeneration == null)
-				{
-					_healthRegeneration = (CBool) CR2WTypeManager.Create("Bool", "healthRegeneration", cr2w, this);
-				}
-				return _healthRegeneration;
-			}
-			set
-			{
-				if (_healthRegeneration == value)
-				{
-					return;
-				}
-				_healthRegeneration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _healthRegeneration);
+			set => SetProperty(ref _healthRegeneration, value);
 		}
 
 		public AISetHealthRegenerationState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

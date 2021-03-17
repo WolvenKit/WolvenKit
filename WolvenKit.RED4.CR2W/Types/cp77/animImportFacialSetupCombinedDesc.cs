@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("face")] 
 		public animImportFacialSetupDesc Face
 		{
-			get
-			{
-				if (_face == null)
-				{
-					_face = (animImportFacialSetupDesc) CR2WTypeManager.Create("animImportFacialSetupDesc", "face", cr2w, this);
-				}
-				return _face;
-			}
-			set
-			{
-				if (_face == value)
-				{
-					return;
-				}
-				_face = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _face);
+			set => SetProperty(ref _face, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("eyes")] 
 		public animImportFacialSetupDesc Eyes
 		{
-			get
-			{
-				if (_eyes == null)
-				{
-					_eyes = (animImportFacialSetupDesc) CR2WTypeManager.Create("animImportFacialSetupDesc", "eyes", cr2w, this);
-				}
-				return _eyes;
-			}
-			set
-			{
-				if (_eyes == value)
-				{
-					return;
-				}
-				_eyes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eyes);
+			set => SetProperty(ref _eyes, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tongue")] 
 		public animImportFacialSetupDesc Tongue
 		{
-			get
-			{
-				if (_tongue == null)
-				{
-					_tongue = (animImportFacialSetupDesc) CR2WTypeManager.Create("animImportFacialSetupDesc", "tongue", cr2w, this);
-				}
-				return _tongue;
-			}
-			set
-			{
-				if (_tongue == value)
-				{
-					return;
-				}
-				_tongue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tongue);
+			set => SetProperty(ref _tongue, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("usedTransformIndices")] 
 		public CArray<CUInt16> UsedTransformIndices
 		{
-			get
-			{
-				if (_usedTransformIndices == null)
-				{
-					_usedTransformIndices = (CArray<CUInt16>) CR2WTypeManager.Create("array:Uint16", "usedTransformIndices", cr2w, this);
-				}
-				return _usedTransformIndices;
-			}
-			set
-			{
-				if (_usedTransformIndices == value)
-				{
-					return;
-				}
-				_usedTransformIndices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _usedTransformIndices);
+			set => SetProperty(ref _usedTransformIndices, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("lipsyncOverrideToMainPosesTracksMapping")] 
 		public CArray<CInt16> LipsyncOverrideToMainPosesTracksMapping
 		{
-			get
-			{
-				if (_lipsyncOverrideToMainPosesTracksMapping == null)
-				{
-					_lipsyncOverrideToMainPosesTracksMapping = (CArray<CInt16>) CR2WTypeManager.Create("array:Int16", "lipsyncOverrideToMainPosesTracksMapping", cr2w, this);
-				}
-				return _lipsyncOverrideToMainPosesTracksMapping;
-			}
-			set
-			{
-				if (_lipsyncOverrideToMainPosesTracksMapping == value)
-				{
-					return;
-				}
-				_lipsyncOverrideToMainPosesTracksMapping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lipsyncOverrideToMainPosesTracksMapping);
+			set => SetProperty(ref _lipsyncOverrideToMainPosesTracksMapping, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("firstLipsyncOverrideTrackIndex")] 
 		public CInt16 FirstLipsyncOverrideTrackIndex
 		{
-			get
-			{
-				if (_firstLipsyncOverrideTrackIndex == null)
-				{
-					_firstLipsyncOverrideTrackIndex = (CInt16) CR2WTypeManager.Create("Int16", "firstLipsyncOverrideTrackIndex", cr2w, this);
-				}
-				return _firstLipsyncOverrideTrackIndex;
-			}
-			set
-			{
-				if (_firstLipsyncOverrideTrackIndex == value)
-				{
-					return;
-				}
-				_firstLipsyncOverrideTrackIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _firstLipsyncOverrideTrackIndex);
+			set => SetProperty(ref _firstLipsyncOverrideTrackIndex, value);
 		}
 
 		public animImportFacialSetupCombinedDesc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("type")] 
 		public CEnum<GpuWrapApiVertexPackingePackingType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<GpuWrapApiVertexPackingePackingType>) CR2WTypeManager.Create("GpuWrapApiVertexPackingePackingType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("usage")] 
 		public CEnum<GpuWrapApiVertexPackingePackingUsage> Usage
 		{
-			get
-			{
-				if (_usage == null)
-				{
-					_usage = (CEnum<GpuWrapApiVertexPackingePackingUsage>) CR2WTypeManager.Create("GpuWrapApiVertexPackingePackingUsage", "usage", cr2w, this);
-				}
-				return _usage;
-			}
-			set
-			{
-				if (_usage == value)
-				{
-					return;
-				}
-				_usage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _usage);
+			set => SetProperty(ref _usage, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("usageIndex")] 
 		public CUInt8 UsageIndex
 		{
-			get
-			{
-				if (_usageIndex == null)
-				{
-					_usageIndex = (CUInt8) CR2WTypeManager.Create("Uint8", "usageIndex", cr2w, this);
-				}
-				return _usageIndex;
-			}
-			set
-			{
-				if (_usageIndex == value)
-				{
-					return;
-				}
-				_usageIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _usageIndex);
+			set => SetProperty(ref _usageIndex, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("streamIndex")] 
 		public CUInt8 StreamIndex
 		{
-			get
-			{
-				if (_streamIndex == null)
-				{
-					_streamIndex = (CUInt8) CR2WTypeManager.Create("Uint8", "streamIndex", cr2w, this);
-				}
-				return _streamIndex;
-			}
-			set
-			{
-				if (_streamIndex == value)
-				{
-					return;
-				}
-				_streamIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _streamIndex);
+			set => SetProperty(ref _streamIndex, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("streamType")] 
 		public CEnum<GpuWrapApiVertexPackingEStreamType> StreamType
 		{
-			get
-			{
-				if (_streamType == null)
-				{
-					_streamType = (CEnum<GpuWrapApiVertexPackingEStreamType>) CR2WTypeManager.Create("GpuWrapApiVertexPackingEStreamType", "streamType", cr2w, this);
-				}
-				return _streamType;
-			}
-			set
-			{
-				if (_streamType == value)
-				{
-					return;
-				}
-				_streamType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _streamType);
+			set => SetProperty(ref _streamType, value);
 		}
 
 		public GpuWrapApiVertexPackingPackingElement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

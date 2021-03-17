@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("startPositionEvaluator")] 
 		public CHandle<gameTransformAnimation_Position> StartPositionEvaluator
 		{
-			get
-			{
-				if (_startPositionEvaluator == null)
-				{
-					_startPositionEvaluator = (CHandle<gameTransformAnimation_Position>) CR2WTypeManager.Create("handle:gameTransformAnimation_Position", "startPositionEvaluator", cr2w, this);
-				}
-				return _startPositionEvaluator;
-			}
-			set
-			{
-				if (_startPositionEvaluator == value)
-				{
-					return;
-				}
-				_startPositionEvaluator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startPositionEvaluator);
+			set => SetProperty(ref _startPositionEvaluator, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("targetPositionEvaluator")] 
 		public CHandle<gameTransformAnimation_Position> TargetPositionEvaluator
 		{
-			get
-			{
-				if (_targetPositionEvaluator == null)
-				{
-					_targetPositionEvaluator = (CHandle<gameTransformAnimation_Position>) CR2WTypeManager.Create("handle:gameTransformAnimation_Position", "targetPositionEvaluator", cr2w, this);
-				}
-				return _targetPositionEvaluator;
-			}
-			set
-			{
-				if (_targetPositionEvaluator == value)
-				{
-					return;
-				}
-				_targetPositionEvaluator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetPositionEvaluator);
+			set => SetProperty(ref _targetPositionEvaluator, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("movement")] 
 		public CHandle<gameTransformAnimation_Movement> Movement
 		{
-			get
-			{
-				if (_movement == null)
-				{
-					_movement = (CHandle<gameTransformAnimation_Movement>) CR2WTypeManager.Create("handle:gameTransformAnimation_Movement", "movement", cr2w, this);
-				}
-				return _movement;
-			}
-			set
-			{
-				if (_movement == value)
-				{
-					return;
-				}
-				_movement = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movement);
+			set => SetProperty(ref _movement, value);
 		}
 
 		public gameTransformAnimation_Move(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

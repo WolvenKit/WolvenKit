@@ -24,276 +24,96 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CString Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CString) CR2WTypeManager.Create("String", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("base")] 
 		public CString Base
 		{
-			get
-			{
-				if (_base == null)
-				{
-					_base = (CString) CR2WTypeManager.Create("String", "base", cr2w, this);
-				}
-				return _base;
-			}
-			set
-			{
-				if (_base == value)
-				{
-					return;
-				}
-				_base = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _base);
+			set => SetProperty(ref _base, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("schema")] 
 		public CString Schema
 		{
-			get
-			{
-				if (_schema == null)
-				{
-					_schema = (CString) CR2WTypeManager.Create("String", "schema", cr2w, this);
-				}
-				return _schema;
-			}
-			set
-			{
-				if (_schema == value)
-				{
-					return;
-				}
-				_schema = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _schema);
+			set => SetProperty(ref _schema, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isInline")] 
 		public CBool IsInline
 		{
-			get
-			{
-				if (_isInline == null)
-				{
-					_isInline = (CBool) CR2WTypeManager.Create("Bool", "isInline", cr2w, this);
-				}
-				return _isInline;
-			}
-			set
-			{
-				if (_isInline == value)
-				{
-					return;
-				}
-				_isInline = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInline);
+			set => SetProperty(ref _isInline, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("baseGroup")] 
 		public wCHandle<gamedataGroupNode> BaseGroup
 		{
-			get
-			{
-				if (_baseGroup == null)
-				{
-					_baseGroup = (wCHandle<gamedataGroupNode>) CR2WTypeManager.Create("whandle:gamedataGroupNode", "baseGroup", cr2w, this);
-				}
-				return _baseGroup;
-			}
-			set
-			{
-				if (_baseGroup == value)
-				{
-					return;
-				}
-				_baseGroup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _baseGroup);
+			set => SetProperty(ref _baseGroup, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("schemaGroup")] 
 		public wCHandle<gamedataGroupNode> SchemaGroup
 		{
-			get
-			{
-				if (_schemaGroup == null)
-				{
-					_schemaGroup = (wCHandle<gamedataGroupNode>) CR2WTypeManager.Create("whandle:gamedataGroupNode", "schemaGroup", cr2w, this);
-				}
-				return _schemaGroup;
-			}
-			set
-			{
-				if (_schemaGroup == value)
-				{
-					return;
-				}
-				_schemaGroup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _schemaGroup);
+			set => SetProperty(ref _schemaGroup, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("package")] 
 		public wCHandle<gamedataPackageNode> Package
 		{
-			get
-			{
-				if (_package == null)
-				{
-					_package = (wCHandle<gamedataPackageNode>) CR2WTypeManager.Create("whandle:gamedataPackageNode", "package", cr2w, this);
-				}
-				return _package;
-			}
-			set
-			{
-				if (_package == value)
-				{
-					return;
-				}
-				_package = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _package);
+			set => SetProperty(ref _package, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("fileNode")] 
 		public CHandle<gamedataFileNode> FileNode
 		{
-			get
-			{
-				if (_fileNode == null)
-				{
-					_fileNode = (CHandle<gamedataFileNode>) CR2WTypeManager.Create("handle:gamedataFileNode", "fileNode", cr2w, this);
-				}
-				return _fileNode;
-			}
-			set
-			{
-				if (_fileNode == value)
-				{
-					return;
-				}
-				_fileNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fileNode);
+			set => SetProperty(ref _fileNode, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("inlineGroupId")] 
 		public CUInt32 InlineGroupId
 		{
-			get
-			{
-				if (_inlineGroupId == null)
-				{
-					_inlineGroupId = (CUInt32) CR2WTypeManager.Create("Uint32", "inlineGroupId", cr2w, this);
-				}
-				return _inlineGroupId;
-			}
-			set
-			{
-				if (_inlineGroupId == value)
-				{
-					return;
-				}
-				_inlineGroupId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inlineGroupId);
+			set => SetProperty(ref _inlineGroupId, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("inheritanceState")] 
 		public CEnum<gamedataGroupNodeInheritanceState> InheritanceState
 		{
-			get
-			{
-				if (_inheritanceState == null)
-				{
-					_inheritanceState = (CEnum<gamedataGroupNodeInheritanceState>) CR2WTypeManager.Create("gamedataGroupNodeInheritanceState", "inheritanceState", cr2w, this);
-				}
-				return _inheritanceState;
-			}
-			set
-			{
-				if (_inheritanceState == value)
-				{
-					return;
-				}
-				_inheritanceState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inheritanceState);
+			set => SetProperty(ref _inheritanceState, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("serializedVariables")] 
 		public CArray<gamedataGroupNodeGroupVariable> SerializedVariables
 		{
-			get
-			{
-				if (_serializedVariables == null)
-				{
-					_serializedVariables = (CArray<gamedataGroupNodeGroupVariable>) CR2WTypeManager.Create("array:gamedataGroupNodeGroupVariable", "serializedVariables", cr2w, this);
-				}
-				return _serializedVariables;
-			}
-			set
-			{
-				if (_serializedVariables == value)
-				{
-					return;
-				}
-				_serializedVariables = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _serializedVariables);
+			set => SetProperty(ref _serializedVariables, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("tags")] 
 		public CArray<CName> Tags
 		{
-			get
-			{
-				if (_tags == null)
-				{
-					_tags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "tags", cr2w, this);
-				}
-				return _tags;
-			}
-			set
-			{
-				if (_tags == value)
-				{
-					return;
-				}
-				_tags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tags);
+			set => SetProperty(ref _tags, value);
 		}
 
 		public gamedataGroupNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

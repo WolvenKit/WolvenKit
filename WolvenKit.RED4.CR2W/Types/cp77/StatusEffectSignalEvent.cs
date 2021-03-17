@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statusEffectID")] 
 		public TweakDBID StatusEffectID
 		{
-			get
-			{
-				if (_statusEffectID == null)
-				{
-					_statusEffectID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "statusEffectID", cr2w, this);
-				}
-				return _statusEffectID;
-			}
-			set
-			{
-				if (_statusEffectID == value)
-				{
-					return;
-				}
-				_statusEffectID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statusEffectID);
+			set => SetProperty(ref _statusEffectID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("priority")] 
 		public CFloat Priority
 		{
-			get
-			{
-				if (_priority == null)
-				{
-					_priority = (CFloat) CR2WTypeManager.Create("Float", "priority", cr2w, this);
-				}
-				return _priority;
-			}
-			set
-			{
-				if (_priority == value)
-				{
-					return;
-				}
-				_priority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _priority);
+			set => SetProperty(ref _priority, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tags")] 
 		public CArray<CName> Tags
 		{
-			get
-			{
-				if (_tags == null)
-				{
-					_tags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "tags", cr2w, this);
-				}
-				return _tags;
-			}
-			set
-			{
-				if (_tags == value)
-				{
-					return;
-				}
-				_tags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tags);
+			set => SetProperty(ref _tags, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("flags")] 
 		public CArray<CEnum<EAIGateSignalFlags>> Flags
 		{
-			get
-			{
-				if (_flags == null)
-				{
-					_flags = (CArray<CEnum<EAIGateSignalFlags>>) CR2WTypeManager.Create("array:EAIGateSignalFlags", "flags", cr2w, this);
-				}
-				return _flags;
-			}
-			set
-			{
-				if (_flags == value)
-				{
-					return;
-				}
-				_flags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flags);
+			set => SetProperty(ref _flags, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("repeatSignalDelay")] 
 		public CFloat RepeatSignalDelay
 		{
-			get
-			{
-				if (_repeatSignalDelay == null)
-				{
-					_repeatSignalDelay = (CFloat) CR2WTypeManager.Create("Float", "repeatSignalDelay", cr2w, this);
-				}
-				return _repeatSignalDelay;
-			}
-			set
-			{
-				if (_repeatSignalDelay == value)
-				{
-					return;
-				}
-				_repeatSignalDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _repeatSignalDelay);
+			set => SetProperty(ref _repeatSignalDelay, value);
 		}
 
 		public StatusEffectSignalEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

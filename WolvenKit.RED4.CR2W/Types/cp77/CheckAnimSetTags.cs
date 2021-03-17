@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animsetTagToCompare")] 
 		public CArray<CName> AnimsetTagToCompare
 		{
-			get
-			{
-				if (_animsetTagToCompare == null)
-				{
-					_animsetTagToCompare = (CArray<CName>) CR2WTypeManager.Create("array:CName", "animsetTagToCompare", cr2w, this);
-				}
-				return _animsetTagToCompare;
-			}
-			set
-			{
-				if (_animsetTagToCompare == value)
-				{
-					return;
-				}
-				_animsetTagToCompare = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animsetTagToCompare);
+			set => SetProperty(ref _animsetTagToCompare, value);
 		}
 
 		public CheckAnimSetTags(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

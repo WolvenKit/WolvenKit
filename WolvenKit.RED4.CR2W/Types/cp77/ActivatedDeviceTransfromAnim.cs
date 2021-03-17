@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animationState")] 
 		public CInt32 AnimationState
 		{
-			get
-			{
-				if (_animationState == null)
-				{
-					_animationState = (CInt32) CR2WTypeManager.Create("Int32", "animationState", cr2w, this);
-				}
-				return _animationState;
-			}
-			set
-			{
-				if (_animationState == value)
-				{
-					return;
-				}
-				_animationState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationState);
+			set => SetProperty(ref _animationState, value);
 		}
 
 		public ActivatedDeviceTransfromAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("aimForced")] 
 		public CBool AimForced
 		{
-			get
-			{
-				if (_aimForced == null)
-				{
-					_aimForced = (CBool) CR2WTypeManager.Create("Bool", "aimForced", cr2w, this);
-				}
-				return _aimForced;
-			}
-			set
-			{
-				if (_aimForced == value)
-				{
-					return;
-				}
-				_aimForced = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aimForced);
+			set => SetProperty(ref _aimForced, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("safeForced")] 
 		public CBool SafeForced
 		{
-			get
-			{
-				if (_safeForced == null)
-				{
-					_safeForced = (CBool) CR2WTypeManager.Create("Bool", "safeForced", cr2w, this);
-				}
-				return _safeForced;
-			}
-			set
-			{
-				if (_safeForced == value)
-				{
-					return;
-				}
-				_safeForced = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _safeForced);
+			set => SetProperty(ref _safeForced, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isAimOutTimeOverridden")] 
 		public CBool IsAimOutTimeOverridden
 		{
-			get
-			{
-				if (_isAimOutTimeOverridden == null)
-				{
-					_isAimOutTimeOverridden = (CBool) CR2WTypeManager.Create("Bool", "isAimOutTimeOverridden", cr2w, this);
-				}
-				return _isAimOutTimeOverridden;
-			}
-			set
-			{
-				if (_isAimOutTimeOverridden == value)
-				{
-					return;
-				}
-				_isAimOutTimeOverridden = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isAimOutTimeOverridden);
+			set => SetProperty(ref _isAimOutTimeOverridden, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("aimOutTimeOverride")] 
 		public CFloat AimOutTimeOverride
 		{
-			get
-			{
-				if (_aimOutTimeOverride == null)
-				{
-					_aimOutTimeOverride = (CFloat) CR2WTypeManager.Create("Float", "aimOutTimeOverride", cr2w, this);
-				}
-				return _aimOutTimeOverride;
-			}
-			set
-			{
-				if (_aimOutTimeOverride == value)
-				{
-					return;
-				}
-				_aimOutTimeOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aimOutTimeOverride);
+			set => SetProperty(ref _aimOutTimeOverride, value);
 		}
 
 		public AnimFeature_SceneGameplayOverrides(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

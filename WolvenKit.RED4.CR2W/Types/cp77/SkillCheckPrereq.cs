@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("skillToCheck")] 
 		public CEnum<gamedataProficiencyType> SkillToCheck
 		{
-			get
-			{
-				if (_skillToCheck == null)
-				{
-					_skillToCheck = (CEnum<gamedataProficiencyType>) CR2WTypeManager.Create("gamedataProficiencyType", "skillToCheck", cr2w, this);
-				}
-				return _skillToCheck;
-			}
-			set
-			{
-				if (_skillToCheck == value)
-				{
-					return;
-				}
-				_skillToCheck = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skillToCheck);
+			set => SetProperty(ref _skillToCheck, value);
 		}
 
 		public SkillCheckPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

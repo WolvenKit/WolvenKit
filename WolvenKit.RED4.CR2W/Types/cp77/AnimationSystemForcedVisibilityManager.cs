@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entities")] 
 		public CArray<CHandle<AnimationSystemForcedVisibilityEntityData>> Entities
 		{
-			get
-			{
-				if (_entities == null)
-				{
-					_entities = (CArray<CHandle<AnimationSystemForcedVisibilityEntityData>>) CR2WTypeManager.Create("array:handle:AnimationSystemForcedVisibilityEntityData", "entities", cr2w, this);
-				}
-				return _entities;
-			}
-			set
-			{
-				if (_entities == value)
-				{
-					return;
-				}
-				_entities = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entities);
+			set => SetProperty(ref _entities, value);
 		}
 
 		public AnimationSystemForcedVisibilityManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

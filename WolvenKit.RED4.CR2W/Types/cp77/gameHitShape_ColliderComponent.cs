@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("componentNames")] 
 		public CArray<CName> ComponentNames
 		{
-			get
-			{
-				if (_componentNames == null)
-				{
-					_componentNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "componentNames", cr2w, this);
-				}
-				return _componentNames;
-			}
-			set
-			{
-				if (_componentNames == value)
-				{
-					return;
-				}
-				_componentNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _componentNames);
+			set => SetProperty(ref _componentNames, value);
 		}
 
 		public gameHitShape_ColliderComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

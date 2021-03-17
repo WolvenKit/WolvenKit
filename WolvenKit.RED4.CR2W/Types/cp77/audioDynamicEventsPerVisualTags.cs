@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("visualTags")] 
 		public CArray<CName> VisualTags
 		{
-			get
-			{
-				if (_visualTags == null)
-				{
-					_visualTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "visualTags", cr2w, this);
-				}
-				return _visualTags;
-			}
-			set
-			{
-				if (_visualTags == value)
-				{
-					return;
-				}
-				_visualTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualTags);
+			set => SetProperty(ref _visualTags, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("grunts")] 
 		public CArray<audioDynamicEventsWithInterval> Grunts
 		{
-			get
-			{
-				if (_grunts == null)
-				{
-					_grunts = (CArray<audioDynamicEventsWithInterval>) CR2WTypeManager.Create("array:audioDynamicEventsWithInterval", "grunts", cr2w, this);
-				}
-				return _grunts;
-			}
-			set
-			{
-				if (_grunts == value)
-				{
-					return;
-				}
-				_grunts = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grunts);
+			set => SetProperty(ref _grunts, value);
 		}
 
 		public audioDynamicEventsPerVisualTags(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

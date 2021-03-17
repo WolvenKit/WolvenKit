@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("offset")] 
 		public CHandle<IEvaluatorVector> Offset
 		{
-			get
-			{
-				if (_offset == null)
-				{
-					_offset = (CHandle<IEvaluatorVector>) CR2WTypeManager.Create("handle:IEvaluatorVector", "offset", cr2w, this);
-				}
-				return _offset;
-			}
-			set
-			{
-				if (_offset == value)
-				{
-					return;
-				}
-				_offset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offset);
+			set => SetProperty(ref _offset, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("frequency")] 
 		public CHandle<IEvaluatorVector> Frequency
 		{
-			get
-			{
-				if (_frequency == null)
-				{
-					_frequency = (CHandle<IEvaluatorVector>) CR2WTypeManager.Create("handle:IEvaluatorVector", "frequency", cr2w, this);
-				}
-				return _frequency;
-			}
-			set
-			{
-				if (_frequency == value)
-				{
-					return;
-				}
-				_frequency = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frequency);
+			set => SetProperty(ref _frequency, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("phase")] 
 		public CHandle<IEvaluatorVector> Phase
 		{
-			get
-			{
-				if (_phase == null)
-				{
-					_phase = (CHandle<IEvaluatorVector>) CR2WTypeManager.Create("handle:IEvaluatorVector", "phase", cr2w, this);
-				}
-				return _phase;
-			}
-			set
-			{
-				if (_phase == value)
-				{
-					return;
-				}
-				_phase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _phase);
+			set => SetProperty(ref _phase, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("overridePosition")] 
 		public CBool OverridePosition
 		{
-			get
-			{
-				if (_overridePosition == null)
-				{
-					_overridePosition = (CBool) CR2WTypeManager.Create("Bool", "overridePosition", cr2w, this);
-				}
-				return _overridePosition;
-			}
-			set
-			{
-				if (_overridePosition == value)
-				{
-					return;
-				}
-				_overridePosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overridePosition);
+			set => SetProperty(ref _overridePosition, value);
 		}
 
 		public CParticleModificatorOrbit(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

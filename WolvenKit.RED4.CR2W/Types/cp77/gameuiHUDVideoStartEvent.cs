@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("videoPathHash")] 
 		public CUInt64 VideoPathHash
 		{
-			get
-			{
-				if (_videoPathHash == null)
-				{
-					_videoPathHash = (CUInt64) CR2WTypeManager.Create("Uint64", "videoPathHash", cr2w, this);
-				}
-				return _videoPathHash;
-			}
-			set
-			{
-				if (_videoPathHash == value)
-				{
-					return;
-				}
-				_videoPathHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _videoPathHash);
+			set => SetProperty(ref _videoPathHash, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("playOnHud")] 
 		public CBool PlayOnHud
 		{
-			get
-			{
-				if (_playOnHud == null)
-				{
-					_playOnHud = (CBool) CR2WTypeManager.Create("Bool", "playOnHud", cr2w, this);
-				}
-				return _playOnHud;
-			}
-			set
-			{
-				if (_playOnHud == value)
-				{
-					return;
-				}
-				_playOnHud = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playOnHud);
+			set => SetProperty(ref _playOnHud, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("fullScreen")] 
 		public CBool FullScreen
 		{
-			get
-			{
-				if (_fullScreen == null)
-				{
-					_fullScreen = (CBool) CR2WTypeManager.Create("Bool", "fullScreen", cr2w, this);
-				}
-				return _fullScreen;
-			}
-			set
-			{
-				if (_fullScreen == value)
-				{
-					return;
-				}
-				_fullScreen = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fullScreen);
+			set => SetProperty(ref _fullScreen, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("position")] 
 		public Vector2 Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (Vector2) CR2WTypeManager.Create("Vector2", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("size")] 
 		public Vector2 Size
 		{
-			get
-			{
-				if (_size == null)
-				{
-					_size = (Vector2) CR2WTypeManager.Create("Vector2", "size", cr2w, this);
-				}
-				return _size;
-			}
-			set
-			{
-				if (_size == value)
-				{
-					return;
-				}
-				_size = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _size);
+			set => SetProperty(ref _size, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("skippable")] 
 		public CBool Skippable
 		{
-			get
-			{
-				if (_skippable == null)
-				{
-					_skippable = (CBool) CR2WTypeManager.Create("Bool", "skippable", cr2w, this);
-				}
-				return _skippable;
-			}
-			set
-			{
-				if (_skippable == value)
-				{
-					return;
-				}
-				_skippable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skippable);
+			set => SetProperty(ref _skippable, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isLooped")] 
 		public CBool IsLooped
 		{
-			get
-			{
-				if (_isLooped == null)
-				{
-					_isLooped = (CBool) CR2WTypeManager.Create("Bool", "isLooped", cr2w, this);
-				}
-				return _isLooped;
-			}
-			set
-			{
-				if (_isLooped == value)
-				{
-					return;
-				}
-				_isLooped = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isLooped);
+			set => SetProperty(ref _isLooped, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("forceVideoFrameRate")] 
 		public CBool ForceVideoFrameRate
 		{
-			get
-			{
-				if (_forceVideoFrameRate == null)
-				{
-					_forceVideoFrameRate = (CBool) CR2WTypeManager.Create("Bool", "forceVideoFrameRate", cr2w, this);
-				}
-				return _forceVideoFrameRate;
-			}
-			set
-			{
-				if (_forceVideoFrameRate == value)
-				{
-					return;
-				}
-				_forceVideoFrameRate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceVideoFrameRate);
+			set => SetProperty(ref _forceVideoFrameRate, value);
 		}
 
 		public gameuiHUDVideoStartEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

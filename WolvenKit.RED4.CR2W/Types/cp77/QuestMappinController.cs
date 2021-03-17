@@ -31,437 +31,152 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("arrowCanvas")] 
 		public inkWidgetReference ArrowCanvas
 		{
-			get
-			{
-				if (_arrowCanvas == null)
-				{
-					_arrowCanvas = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "arrowCanvas", cr2w, this);
-				}
-				return _arrowCanvas;
-			}
-			set
-			{
-				if (_arrowCanvas == value)
-				{
-					return;
-				}
-				_arrowCanvas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _arrowCanvas);
+			set => SetProperty(ref _arrowCanvas, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("arrowPart")] 
 		public inkWidgetReference ArrowPart
 		{
-			get
-			{
-				if (_arrowPart == null)
-				{
-					_arrowPart = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "arrowPart", cr2w, this);
-				}
-				return _arrowPart;
-			}
-			set
-			{
-				if (_arrowPart == value)
-				{
-					return;
-				}
-				_arrowPart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _arrowPart);
+			set => SetProperty(ref _arrowPart, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("selector")] 
 		public inkWidgetReference Selector
 		{
-			get
-			{
-				if (_selector == null)
-				{
-					_selector = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "selector", cr2w, this);
-				}
-				return _selector;
-			}
-			set
-			{
-				if (_selector == value)
-				{
-					return;
-				}
-				_selector = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selector);
+			set => SetProperty(ref _selector, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("scanningDiamond")] 
 		public inkWidgetReference ScanningDiamond
 		{
-			get
-			{
-				if (_scanningDiamond == null)
-				{
-					_scanningDiamond = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "scanningDiamond", cr2w, this);
-				}
-				return _scanningDiamond;
-			}
-			set
-			{
-				if (_scanningDiamond == value)
-				{
-					return;
-				}
-				_scanningDiamond = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scanningDiamond);
+			set => SetProperty(ref _scanningDiamond, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("portalIcon")] 
 		public inkWidgetReference PortalIcon
 		{
-			get
-			{
-				if (_portalIcon == null)
-				{
-					_portalIcon = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "portalIcon", cr2w, this);
-				}
-				return _portalIcon;
-			}
-			set
-			{
-				if (_portalIcon == value)
-				{
-					return;
-				}
-				_portalIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _portalIcon);
+			set => SetProperty(ref _portalIcon, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("aboveWidget")] 
 		public wCHandle<inkWidget> AboveWidget
 		{
-			get
-			{
-				if (_aboveWidget == null)
-				{
-					_aboveWidget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "aboveWidget", cr2w, this);
-				}
-				return _aboveWidget;
-			}
-			set
-			{
-				if (_aboveWidget == value)
-				{
-					return;
-				}
-				_aboveWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aboveWidget);
+			set => SetProperty(ref _aboveWidget, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("belowWidget")] 
 		public wCHandle<inkWidget> BelowWidget
 		{
-			get
-			{
-				if (_belowWidget == null)
-				{
-					_belowWidget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "belowWidget", cr2w, this);
-				}
-				return _belowWidget;
-			}
-			set
-			{
-				if (_belowWidget == value)
-				{
-					return;
-				}
-				_belowWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _belowWidget);
+			set => SetProperty(ref _belowWidget, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("mappin")] 
 		public wCHandle<gamemappinsIMappin> Mappin
 		{
-			get
-			{
-				if (_mappin == null)
-				{
-					_mappin = (wCHandle<gamemappinsIMappin>) CR2WTypeManager.Create("whandle:gamemappinsIMappin", "mappin", cr2w, this);
-				}
-				return _mappin;
-			}
-			set
-			{
-				if (_mappin == value)
-				{
-					return;
-				}
-				_mappin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mappin);
+			set => SetProperty(ref _mappin, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("questMappin")] 
 		public wCHandle<gamemappinsQuestMappin> QuestMappin
 		{
-			get
-			{
-				if (_questMappin == null)
-				{
-					_questMappin = (wCHandle<gamemappinsQuestMappin>) CR2WTypeManager.Create("whandle:gamemappinsQuestMappin", "questMappin", cr2w, this);
-				}
-				return _questMappin;
-			}
-			set
-			{
-				if (_questMappin == value)
-				{
-					return;
-				}
-				_questMappin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questMappin);
+			set => SetProperty(ref _questMappin, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("runtimeMappin")] 
 		public wCHandle<gamemappinsRuntimeMappin> RuntimeMappin
 		{
-			get
-			{
-				if (_runtimeMappin == null)
-				{
-					_runtimeMappin = (wCHandle<gamemappinsRuntimeMappin>) CR2WTypeManager.Create("whandle:gamemappinsRuntimeMappin", "runtimeMappin", cr2w, this);
-				}
-				return _runtimeMappin;
-			}
-			set
-			{
-				if (_runtimeMappin == value)
-				{
-					return;
-				}
-				_runtimeMappin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _runtimeMappin);
+			set => SetProperty(ref _runtimeMappin, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("root")] 
 		public wCHandle<inkCompoundWidget> Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (wCHandle<inkCompoundWidget>) CR2WTypeManager.Create("whandle:inkCompoundWidget", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("isMainQuest")] 
 		public CBool IsMainQuest
 		{
-			get
-			{
-				if (_isMainQuest == null)
-				{
-					_isMainQuest = (CBool) CR2WTypeManager.Create("Bool", "isMainQuest", cr2w, this);
-				}
-				return _isMainQuest;
-			}
-			set
-			{
-				if (_isMainQuest == value)
-				{
-					return;
-				}
-				_isMainQuest = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isMainQuest);
+			set => SetProperty(ref _isMainQuest, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("shouldHideWhenClamped")] 
 		public CBool ShouldHideWhenClamped
 		{
-			get
-			{
-				if (_shouldHideWhenClamped == null)
-				{
-					_shouldHideWhenClamped = (CBool) CR2WTypeManager.Create("Bool", "shouldHideWhenClamped", cr2w, this);
-				}
-				return _shouldHideWhenClamped;
-			}
-			set
-			{
-				if (_shouldHideWhenClamped == value)
-				{
-					return;
-				}
-				_shouldHideWhenClamped = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldHideWhenClamped);
+			set => SetProperty(ref _shouldHideWhenClamped, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("isCompletedPhase")] 
 		public CBool IsCompletedPhase
 		{
-			get
-			{
-				if (_isCompletedPhase == null)
-				{
-					_isCompletedPhase = (CBool) CR2WTypeManager.Create("Bool", "isCompletedPhase", cr2w, this);
-				}
-				return _isCompletedPhase;
-			}
-			set
-			{
-				if (_isCompletedPhase == value)
-				{
-					return;
-				}
-				_isCompletedPhase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isCompletedPhase);
+			set => SetProperty(ref _isCompletedPhase, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get
-			{
-				if (_animProxy == null)
-				{
-					_animProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animProxy", cr2w, this);
-				}
-				return _animProxy;
-			}
-			set
-			{
-				if (_animProxy == value)
-				{
-					return;
-				}
-				_animProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animProxy);
+			set => SetProperty(ref _animProxy, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("animOptions")] 
 		public inkanimPlaybackOptions AnimOptions
 		{
-			get
-			{
-				if (_animOptions == null)
-				{
-					_animOptions = (inkanimPlaybackOptions) CR2WTypeManager.Create("inkanimPlaybackOptions", "animOptions", cr2w, this);
-				}
-				return _animOptions;
-			}
-			set
-			{
-				if (_animOptions == value)
-				{
-					return;
-				}
-				_animOptions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animOptions);
+			set => SetProperty(ref _animOptions, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("vehicleAlreadySummonedTime")] 
 		public EngineTime VehicleAlreadySummonedTime
 		{
-			get
-			{
-				if (_vehicleAlreadySummonedTime == null)
-				{
-					_vehicleAlreadySummonedTime = (EngineTime) CR2WTypeManager.Create("EngineTime", "vehicleAlreadySummonedTime", cr2w, this);
-				}
-				return _vehicleAlreadySummonedTime;
-			}
-			set
-			{
-				if (_vehicleAlreadySummonedTime == value)
-				{
-					return;
-				}
-				_vehicleAlreadySummonedTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleAlreadySummonedTime);
+			set => SetProperty(ref _vehicleAlreadySummonedTime, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("vehiclePulseTimeSecs")] 
 		public CFloat VehiclePulseTimeSecs
 		{
-			get
-			{
-				if (_vehiclePulseTimeSecs == null)
-				{
-					_vehiclePulseTimeSecs = (CFloat) CR2WTypeManager.Create("Float", "vehiclePulseTimeSecs", cr2w, this);
-				}
-				return _vehiclePulseTimeSecs;
-			}
-			set
-			{
-				if (_vehiclePulseTimeSecs == value)
-				{
-					return;
-				}
-				_vehiclePulseTimeSecs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehiclePulseTimeSecs);
+			set => SetProperty(ref _vehiclePulseTimeSecs, value);
 		}
 
 		[Ordinal(32)] 
 		[RED("vehicleMappinComponent")] 
 		public CHandle<VehicleMappinComponent> VehicleMappinComponent
 		{
-			get
-			{
-				if (_vehicleMappinComponent == null)
-				{
-					_vehicleMappinComponent = (CHandle<VehicleMappinComponent>) CR2WTypeManager.Create("handle:VehicleMappinComponent", "vehicleMappinComponent", cr2w, this);
-				}
-				return _vehicleMappinComponent;
-			}
-			set
-			{
-				if (_vehicleMappinComponent == value)
-				{
-					return;
-				}
-				_vehicleMappinComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleMappinComponent);
+			set => SetProperty(ref _vehicleMappinComponent, value);
 		}
 
 		public QuestMappinController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

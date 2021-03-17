@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actorId")] 
 		public scnActorId ActorId
 		{
-			get
-			{
-				if (_actorId == null)
-				{
-					_actorId = (scnActorId) CR2WTypeManager.Create("scnActorId", "actorId", cr2w, this);
-				}
-				return _actorId;
-			}
-			set
-			{
-				if (_actorId == value)
-				{
-					return;
-				}
-				_actorId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actorId);
+			set => SetProperty(ref _actorId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("performerId")] 
 		public scnPerformerId PerformerId
 		{
-			get
-			{
-				if (_performerId == null)
-				{
-					_performerId = (scnPerformerId) CR2WTypeManager.Create("scnPerformerId", "performerId", cr2w, this);
-				}
-				return _performerId;
-			}
-			set
-			{
-				if (_performerId == value)
-				{
-					return;
-				}
-				_performerId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _performerId);
+			set => SetProperty(ref _performerId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("itemID")] 
 		public TweakDBID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("slotID")] 
 		public TweakDBID SlotID
 		{
-			get
-			{
-				if (_slotID == null)
-				{
-					_slotID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "slotID", cr2w, this);
-				}
-				return _slotID;
-			}
-			set
-			{
-				if (_slotID == value)
-				{
-					return;
-				}
-				_slotID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("forceMaxVisibility")] 
 		public CBool ForceMaxVisibility
 		{
-			get
-			{
-				if (_forceMaxVisibility == null)
-				{
-					_forceMaxVisibility = (CBool) CR2WTypeManager.Create("Bool", "forceMaxVisibility", cr2w, this);
-				}
-				return _forceMaxVisibility;
-			}
-			set
-			{
-				if (_forceMaxVisibility == value)
-				{
-					return;
-				}
-				_forceMaxVisibility = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceMaxVisibility);
+			set => SetProperty(ref _forceMaxVisibility, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ownershipTransferOptions")] 
 		public scnPropOwnershipTransferOptions OwnershipTransferOptions
 		{
-			get
-			{
-				if (_ownershipTransferOptions == null)
-				{
-					_ownershipTransferOptions = (scnPropOwnershipTransferOptions) CR2WTypeManager.Create("scnPropOwnershipTransferOptions", "ownershipTransferOptions", cr2w, this);
-				}
-				return _ownershipTransferOptions;
-			}
-			set
-			{
-				if (_ownershipTransferOptions == value)
-				{
-					return;
-				}
-				_ownershipTransferOptions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownershipTransferOptions);
+			set => SetProperty(ref _ownershipTransferOptions, value);
 		}
 
 		public scnFindEntityInEntityParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

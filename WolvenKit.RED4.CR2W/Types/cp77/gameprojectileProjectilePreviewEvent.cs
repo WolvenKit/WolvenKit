@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("visualOffset")] 
 		public Transform VisualOffset
 		{
-			get
-			{
-				if (_visualOffset == null)
-				{
-					_visualOffset = (Transform) CR2WTypeManager.Create("Transform", "visualOffset", cr2w, this);
-				}
-				return _visualOffset;
-			}
-			set
-			{
-				if (_visualOffset == value)
-				{
-					return;
-				}
-				_visualOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualOffset);
+			set => SetProperty(ref _visualOffset, value);
 		}
 
 		public gameprojectileProjectilePreviewEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

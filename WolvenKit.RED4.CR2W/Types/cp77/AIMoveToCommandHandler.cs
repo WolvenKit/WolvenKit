@@ -23,253 +23,88 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("outIsDynamicMove")] 
 		public CHandle<AIArgumentMapping> OutIsDynamicMove
 		{
-			get
-			{
-				if (_outIsDynamicMove == null)
-				{
-					_outIsDynamicMove = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outIsDynamicMove", cr2w, this);
-				}
-				return _outIsDynamicMove;
-			}
-			set
-			{
-				if (_outIsDynamicMove == value)
-				{
-					return;
-				}
-				_outIsDynamicMove = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outIsDynamicMove);
+			set => SetProperty(ref _outIsDynamicMove, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("outMovementTarget")] 
 		public CHandle<AIArgumentMapping> OutMovementTarget
 		{
-			get
-			{
-				if (_outMovementTarget == null)
-				{
-					_outMovementTarget = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outMovementTarget", cr2w, this);
-				}
-				return _outMovementTarget;
-			}
-			set
-			{
-				if (_outMovementTarget == value)
-				{
-					return;
-				}
-				_outMovementTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outMovementTarget);
+			set => SetProperty(ref _outMovementTarget, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("outMovementTargetPos")] 
 		public CHandle<AIArgumentMapping> OutMovementTargetPos
 		{
-			get
-			{
-				if (_outMovementTargetPos == null)
-				{
-					_outMovementTargetPos = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outMovementTargetPos", cr2w, this);
-				}
-				return _outMovementTargetPos;
-			}
-			set
-			{
-				if (_outMovementTargetPos == value)
-				{
-					return;
-				}
-				_outMovementTargetPos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outMovementTargetPos);
+			set => SetProperty(ref _outMovementTargetPos, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("outRotateEntityTowardsFacingTarget")] 
 		public CHandle<AIArgumentMapping> OutRotateEntityTowardsFacingTarget
 		{
-			get
-			{
-				if (_outRotateEntityTowardsFacingTarget == null)
-				{
-					_outRotateEntityTowardsFacingTarget = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outRotateEntityTowardsFacingTarget", cr2w, this);
-				}
-				return _outRotateEntityTowardsFacingTarget;
-			}
-			set
-			{
-				if (_outRotateEntityTowardsFacingTarget == value)
-				{
-					return;
-				}
-				_outRotateEntityTowardsFacingTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outRotateEntityTowardsFacingTarget);
+			set => SetProperty(ref _outRotateEntityTowardsFacingTarget, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("outFacingTarget")] 
 		public CHandle<AIArgumentMapping> OutFacingTarget
 		{
-			get
-			{
-				if (_outFacingTarget == null)
-				{
-					_outFacingTarget = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outFacingTarget", cr2w, this);
-				}
-				return _outFacingTarget;
-			}
-			set
-			{
-				if (_outFacingTarget == value)
-				{
-					return;
-				}
-				_outFacingTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outFacingTarget);
+			set => SetProperty(ref _outFacingTarget, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("outMovementType")] 
 		public CHandle<AIArgumentMapping> OutMovementType
 		{
-			get
-			{
-				if (_outMovementType == null)
-				{
-					_outMovementType = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outMovementType", cr2w, this);
-				}
-				return _outMovementType;
-			}
-			set
-			{
-				if (_outMovementType == value)
-				{
-					return;
-				}
-				_outMovementType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outMovementType);
+			set => SetProperty(ref _outMovementType, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("outIgnoreNavigation")] 
 		public CHandle<AIArgumentMapping> OutIgnoreNavigation
 		{
-			get
-			{
-				if (_outIgnoreNavigation == null)
-				{
-					_outIgnoreNavigation = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outIgnoreNavigation", cr2w, this);
-				}
-				return _outIgnoreNavigation;
-			}
-			set
-			{
-				if (_outIgnoreNavigation == value)
-				{
-					return;
-				}
-				_outIgnoreNavigation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outIgnoreNavigation);
+			set => SetProperty(ref _outIgnoreNavigation, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("outUseStart")] 
 		public CHandle<AIArgumentMapping> OutUseStart
 		{
-			get
-			{
-				if (_outUseStart == null)
-				{
-					_outUseStart = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outUseStart", cr2w, this);
-				}
-				return _outUseStart;
-			}
-			set
-			{
-				if (_outUseStart == value)
-				{
-					return;
-				}
-				_outUseStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outUseStart);
+			set => SetProperty(ref _outUseStart, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("outUseStop")] 
 		public CHandle<AIArgumentMapping> OutUseStop
 		{
-			get
-			{
-				if (_outUseStop == null)
-				{
-					_outUseStop = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outUseStop", cr2w, this);
-				}
-				return _outUseStop;
-			}
-			set
-			{
-				if (_outUseStop == value)
-				{
-					return;
-				}
-				_outUseStop = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outUseStop);
+			set => SetProperty(ref _outUseStop, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("outDesiredDistanceFromTarget")] 
 		public CHandle<AIArgumentMapping> OutDesiredDistanceFromTarget
 		{
-			get
-			{
-				if (_outDesiredDistanceFromTarget == null)
-				{
-					_outDesiredDistanceFromTarget = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outDesiredDistanceFromTarget", cr2w, this);
-				}
-				return _outDesiredDistanceFromTarget;
-			}
-			set
-			{
-				if (_outDesiredDistanceFromTarget == value)
-				{
-					return;
-				}
-				_outDesiredDistanceFromTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outDesiredDistanceFromTarget);
+			set => SetProperty(ref _outDesiredDistanceFromTarget, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("outFinishWhenDestinationReached")] 
 		public CHandle<AIArgumentMapping> OutFinishWhenDestinationReached
 		{
-			get
-			{
-				if (_outFinishWhenDestinationReached == null)
-				{
-					_outFinishWhenDestinationReached = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outFinishWhenDestinationReached", cr2w, this);
-				}
-				return _outFinishWhenDestinationReached;
-			}
-			set
-			{
-				if (_outFinishWhenDestinationReached == value)
-				{
-					return;
-				}
-				_outFinishWhenDestinationReached = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outFinishWhenDestinationReached);
+			set => SetProperty(ref _outFinishWhenDestinationReached, value);
 		}
 
 		public AIMoveToCommandHandler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

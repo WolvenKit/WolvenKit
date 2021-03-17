@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("currentSecurityState")] 
 		public CEnum<ESecuritySystemState> CurrentSecurityState
 		{
-			get
-			{
-				if (_currentSecurityState == null)
-				{
-					_currentSecurityState = (CEnum<ESecuritySystemState>) CR2WTypeManager.Create("ESecuritySystemState", "currentSecurityState", cr2w, this);
-				}
-				return _currentSecurityState;
-			}
-			set
-			{
-				if (_currentSecurityState == value)
-				{
-					return;
-				}
-				_currentSecurityState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentSecurityState);
+			set => SetProperty(ref _currentSecurityState, value);
 		}
 
 		public SecurityAlarmBreachResponse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

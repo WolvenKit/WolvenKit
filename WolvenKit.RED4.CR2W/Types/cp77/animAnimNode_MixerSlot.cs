@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("maxNormalAnimEntriesCount")] 
 		public CUInt16 MaxNormalAnimEntriesCount
 		{
-			get
-			{
-				if (_maxNormalAnimEntriesCount == null)
-				{
-					_maxNormalAnimEntriesCount = (CUInt16) CR2WTypeManager.Create("Uint16", "maxNormalAnimEntriesCount", cr2w, this);
-				}
-				return _maxNormalAnimEntriesCount;
-			}
-			set
-			{
-				if (_maxNormalAnimEntriesCount == value)
-				{
-					return;
-				}
-				_maxNormalAnimEntriesCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxNormalAnimEntriesCount);
+			set => SetProperty(ref _maxNormalAnimEntriesCount, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("maxAdditiveAnimEntriesCount")] 
 		public CUInt16 MaxAdditiveAnimEntriesCount
 		{
-			get
-			{
-				if (_maxAdditiveAnimEntriesCount == null)
-				{
-					_maxAdditiveAnimEntriesCount = (CUInt16) CR2WTypeManager.Create("Uint16", "maxAdditiveAnimEntriesCount", cr2w, this);
-				}
-				return _maxAdditiveAnimEntriesCount;
-			}
-			set
-			{
-				if (_maxAdditiveAnimEntriesCount == value)
-				{
-					return;
-				}
-				_maxAdditiveAnimEntriesCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxAdditiveAnimEntriesCount);
+			set => SetProperty(ref _maxAdditiveAnimEntriesCount, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("maxOverrideAnimEntriesCount")] 
 		public CUInt16 MaxOverrideAnimEntriesCount
 		{
-			get
-			{
-				if (_maxOverrideAnimEntriesCount == null)
-				{
-					_maxOverrideAnimEntriesCount = (CUInt16) CR2WTypeManager.Create("Uint16", "maxOverrideAnimEntriesCount", cr2w, this);
-				}
-				return _maxOverrideAnimEntriesCount;
-			}
-			set
-			{
-				if (_maxOverrideAnimEntriesCount == value)
-				{
-					return;
-				}
-				_maxOverrideAnimEntriesCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxOverrideAnimEntriesCount);
+			set => SetProperty(ref _maxOverrideAnimEntriesCount, value);
 		}
 
 		public animAnimNode_MixerSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

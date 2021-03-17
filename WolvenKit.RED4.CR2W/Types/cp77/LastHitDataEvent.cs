@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hitReactionBehaviorData")] 
 		public CHandle<HitReactionBehaviorData> HitReactionBehaviorData
 		{
-			get
-			{
-				if (_hitReactionBehaviorData == null)
-				{
-					_hitReactionBehaviorData = (CHandle<HitReactionBehaviorData>) CR2WTypeManager.Create("handle:HitReactionBehaviorData", "hitReactionBehaviorData", cr2w, this);
-				}
-				return _hitReactionBehaviorData;
-			}
-			set
-			{
-				if (_hitReactionBehaviorData == value)
-				{
-					return;
-				}
-				_hitReactionBehaviorData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitReactionBehaviorData);
+			set => SetProperty(ref _hitReactionBehaviorData, value);
 		}
 
 		public LastHitDataEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

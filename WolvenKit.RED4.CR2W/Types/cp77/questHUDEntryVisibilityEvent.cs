@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dataEntries")] 
 		public CArray<questHUDEntryVisibilityData> DataEntries
 		{
-			get
-			{
-				if (_dataEntries == null)
-				{
-					_dataEntries = (CArray<questHUDEntryVisibilityData>) CR2WTypeManager.Create("array:questHUDEntryVisibilityData", "dataEntries", cr2w, this);
-				}
-				return _dataEntries;
-			}
-			set
-			{
-				if (_dataEntries == value)
-				{
-					return;
-				}
-				_dataEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dataEntries);
+			set => SetProperty(ref _dataEntries, value);
 		}
 
 		public questHUDEntryVisibilityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

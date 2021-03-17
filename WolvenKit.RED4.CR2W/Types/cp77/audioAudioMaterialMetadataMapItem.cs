@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("footstepsMetadata")] 
 		public CName FootstepsMetadata
 		{
-			get
-			{
-				if (_footstepsMetadata == null)
-				{
-					_footstepsMetadata = (CName) CR2WTypeManager.Create("CName", "footstepsMetadata", cr2w, this);
-				}
-				return _footstepsMetadata;
-			}
-			set
-			{
-				if (_footstepsMetadata == value)
-				{
-					return;
-				}
-				_footstepsMetadata = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _footstepsMetadata);
+			set => SetProperty(ref _footstepsMetadata, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ragdollMetadata")] 
 		public CName RagdollMetadata
 		{
-			get
-			{
-				if (_ragdollMetadata == null)
-				{
-					_ragdollMetadata = (CName) CR2WTypeManager.Create("CName", "ragdollMetadata", cr2w, this);
-				}
-				return _ragdollMetadata;
-			}
-			set
-			{
-				if (_ragdollMetadata == value)
-				{
-					return;
-				}
-				_ragdollMetadata = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ragdollMetadata);
+			set => SetProperty(ref _ragdollMetadata, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("physicalMaterial")] 
 		public CName PhysicalMaterial
 		{
-			get
-			{
-				if (_physicalMaterial == null)
-				{
-					_physicalMaterial = (CName) CR2WTypeManager.Create("CName", "physicalMaterial", cr2w, this);
-				}
-				return _physicalMaterial;
-			}
-			set
-			{
-				if (_physicalMaterial == value)
-				{
-					return;
-				}
-				_physicalMaterial = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _physicalMaterial);
+			set => SetProperty(ref _physicalMaterial, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("obstructionData")] 
 		public CName ObstructionData
 		{
-			get
-			{
-				if (_obstructionData == null)
-				{
-					_obstructionData = (CName) CR2WTypeManager.Create("CName", "obstructionData", cr2w, this);
-				}
-				return _obstructionData;
-			}
-			set
-			{
-				if (_obstructionData == value)
-				{
-					return;
-				}
-				_obstructionData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _obstructionData);
+			set => SetProperty(ref _obstructionData, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("reflectionParams")] 
 		public CName ReflectionParams
 		{
-			get
-			{
-				if (_reflectionParams == null)
-				{
-					_reflectionParams = (CName) CR2WTypeManager.Create("CName", "reflectionParams", cr2w, this);
-				}
-				return _reflectionParams;
-			}
-			set
-			{
-				if (_reflectionParams == value)
-				{
-					return;
-				}
-				_reflectionParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reflectionParams);
+			set => SetProperty(ref _reflectionParams, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("meleeMaterialName")] 
 		public CName MeleeMaterialName
 		{
-			get
-			{
-				if (_meleeMaterialName == null)
-				{
-					_meleeMaterialName = (CName) CR2WTypeManager.Create("CName", "meleeMaterialName", cr2w, this);
-				}
-				return _meleeMaterialName;
-			}
-			set
-			{
-				if (_meleeMaterialName == value)
-				{
-					return;
-				}
-				_meleeMaterialName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meleeMaterialName);
+			set => SetProperty(ref _meleeMaterialName, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("vehicleMaterialName")] 
 		public CName VehicleMaterialName
 		{
-			get
-			{
-				if (_vehicleMaterialName == null)
-				{
-					_vehicleMaterialName = (CName) CR2WTypeManager.Create("CName", "vehicleMaterialName", cr2w, this);
-				}
-				return _vehicleMaterialName;
-			}
-			set
-			{
-				if (_vehicleMaterialName == value)
-				{
-					return;
-				}
-				_vehicleMaterialName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleMaterialName);
+			set => SetProperty(ref _vehicleMaterialName, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("foliageMaterialName")] 
 		public CName FoliageMaterialName
 		{
-			get
-			{
-				if (_foliageMaterialName == null)
-				{
-					_foliageMaterialName = (CName) CR2WTypeManager.Create("CName", "foliageMaterialName", cr2w, this);
-				}
-				return _foliageMaterialName;
-			}
-			set
-			{
-				if (_foliageMaterialName == value)
-				{
-					return;
-				}
-				_foliageMaterialName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _foliageMaterialName);
+			set => SetProperty(ref _foliageMaterialName, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("foliagePaletteTag")] 
 		public CName FoliagePaletteTag
 		{
-			get
-			{
-				if (_foliagePaletteTag == null)
-				{
-					_foliagePaletteTag = (CName) CR2WTypeManager.Create("CName", "foliagePaletteTag", cr2w, this);
-				}
-				return _foliagePaletteTag;
-			}
-			set
-			{
-				if (_foliagePaletteTag == value)
-				{
-					return;
-				}
-				_foliagePaletteTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _foliagePaletteTag);
+			set => SetProperty(ref _foliagePaletteTag, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("meleeMaterialType")] 
 		public CEnum<audioMeleeMaterialType> MeleeMaterialType
 		{
-			get
-			{
-				if (_meleeMaterialType == null)
-				{
-					_meleeMaterialType = (CEnum<audioMeleeMaterialType>) CR2WTypeManager.Create("audioMeleeMaterialType", "meleeMaterialType", cr2w, this);
-				}
-				return _meleeMaterialType;
-			}
-			set
-			{
-				if (_meleeMaterialType == value)
-				{
-					return;
-				}
-				_meleeMaterialType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meleeMaterialType);
+			set => SetProperty(ref _meleeMaterialType, value);
 		}
 
 		public audioAudioMaterialMetadataMapItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

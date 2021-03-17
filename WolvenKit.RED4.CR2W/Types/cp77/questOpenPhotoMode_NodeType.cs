@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("factName")] 
 		public CString FactName
 		{
-			get
-			{
-				if (_factName == null)
-				{
-					_factName = (CString) CR2WTypeManager.Create("String", "factName", cr2w, this);
-				}
-				return _factName;
-			}
-			set
-			{
-				if (_factName == value)
-				{
-					return;
-				}
-				_factName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factName);
+			set => SetProperty(ref _factName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("forceFppMode")] 
 		public CBool ForceFppMode
 		{
-			get
-			{
-				if (_forceFppMode == null)
-				{
-					_forceFppMode = (CBool) CR2WTypeManager.Create("Bool", "forceFppMode", cr2w, this);
-				}
-				return _forceFppMode;
-			}
-			set
-			{
-				if (_forceFppMode == value)
-				{
-					return;
-				}
-				_forceFppMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceFppMode);
+			set => SetProperty(ref _forceFppMode, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("alwaysAllowTPP")] 
 		public CBool AlwaysAllowTPP
 		{
-			get
-			{
-				if (_alwaysAllowTPP == null)
-				{
-					_alwaysAllowTPP = (CBool) CR2WTypeManager.Create("Bool", "alwaysAllowTPP", cr2w, this);
-				}
-				return _alwaysAllowTPP;
-			}
-			set
-			{
-				if (_alwaysAllowTPP == value)
-				{
-					return;
-				}
-				_alwaysAllowTPP = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alwaysAllowTPP);
+			set => SetProperty(ref _alwaysAllowTPP, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("lockExitUntilScreenshot")] 
 		public CBool LockExitUntilScreenshot
 		{
-			get
-			{
-				if (_lockExitUntilScreenshot == null)
-				{
-					_lockExitUntilScreenshot = (CBool) CR2WTypeManager.Create("Bool", "lockExitUntilScreenshot", cr2w, this);
-				}
-				return _lockExitUntilScreenshot;
-			}
-			set
-			{
-				if (_lockExitUntilScreenshot == value)
-				{
-					return;
-				}
-				_lockExitUntilScreenshot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lockExitUntilScreenshot);
+			set => SetProperty(ref _lockExitUntilScreenshot, value);
 		}
 
 		public questOpenPhotoMode_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

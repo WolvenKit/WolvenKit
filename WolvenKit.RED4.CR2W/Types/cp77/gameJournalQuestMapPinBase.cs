@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enableGPS")] 
 		public CBool EnableGPS
 		{
-			get
-			{
-				if (_enableGPS == null)
-				{
-					_enableGPS = (CBool) CR2WTypeManager.Create("Bool", "enableGPS", cr2w, this);
-				}
-				return _enableGPS;
-			}
-			set
-			{
-				if (_enableGPS == value)
-				{
-					return;
-				}
-				_enableGPS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableGPS);
+			set => SetProperty(ref _enableGPS, value);
 		}
 
 		public gameJournalQuestMapPinBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

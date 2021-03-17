@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("advertSoundNames")] 
 		public CArray<CName> AdvertSoundNames
 		{
-			get
-			{
-				if (_advertSoundNames == null)
-				{
-					_advertSoundNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "advertSoundNames", cr2w, this);
-				}
-				return _advertSoundNames;
-			}
-			set
-			{
-				if (_advertSoundNames == value)
-				{
-					return;
-				}
-				_advertSoundNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _advertSoundNames);
+			set => SetProperty(ref _advertSoundNames, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("minSilenceTime")] 
 		public CFloat MinSilenceTime
 		{
-			get
-			{
-				if (_minSilenceTime == null)
-				{
-					_minSilenceTime = (CFloat) CR2WTypeManager.Create("Float", "minSilenceTime", cr2w, this);
-				}
-				return _minSilenceTime;
-			}
-			set
-			{
-				if (_minSilenceTime == value)
-				{
-					return;
-				}
-				_minSilenceTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minSilenceTime);
+			set => SetProperty(ref _minSilenceTime, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("maxSilenceTime")] 
 		public CFloat MaxSilenceTime
 		{
-			get
-			{
-				if (_maxSilenceTime == null)
-				{
-					_maxSilenceTime = (CFloat) CR2WTypeManager.Create("Float", "maxSilenceTime", cr2w, this);
-				}
-				return _maxSilenceTime;
-			}
-			set
-			{
-				if (_maxSilenceTime == value)
-				{
-					return;
-				}
-				_maxSilenceTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxSilenceTime);
+			set => SetProperty(ref _maxSilenceTime, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("minDistance")] 
 		public CFloat MinDistance
 		{
-			get
-			{
-				if (_minDistance == null)
-				{
-					_minDistance = (CFloat) CR2WTypeManager.Create("Float", "minDistance", cr2w, this);
-				}
-				return _minDistance;
-			}
-			set
-			{
-				if (_minDistance == value)
-				{
-					return;
-				}
-				_minDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minDistance);
+			set => SetProperty(ref _minDistance, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("filter")] 
 		public CEnum<audioAdvertIndoorFilter> Filter
 		{
-			get
-			{
-				if (_filter == null)
-				{
-					_filter = (CEnum<audioAdvertIndoorFilter>) CR2WTypeManager.Create("audioAdvertIndoorFilter", "filter", cr2w, this);
-				}
-				return _filter;
-			}
-			set
-			{
-				if (_filter == value)
-				{
-					return;
-				}
-				_filter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filter);
+			set => SetProperty(ref _filter, value);
 		}
 
 		public audioAdvertMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

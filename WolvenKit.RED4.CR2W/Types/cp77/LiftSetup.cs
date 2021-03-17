@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("startingFloorTerminal")] 
 		public CInt32 StartingFloorTerminal
 		{
-			get
-			{
-				if (_startingFloorTerminal == null)
-				{
-					_startingFloorTerminal = (CInt32) CR2WTypeManager.Create("Int32", "startingFloorTerminal", cr2w, this);
-				}
-				return _startingFloorTerminal;
-			}
-			set
-			{
-				if (_startingFloorTerminal == value)
-				{
-					return;
-				}
-				_startingFloorTerminal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startingFloorTerminal);
+			set => SetProperty(ref _startingFloorTerminal, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("liftSpeed")] 
 		public CFloat LiftSpeed
 		{
-			get
-			{
-				if (_liftSpeed == null)
-				{
-					_liftSpeed = (CFloat) CR2WTypeManager.Create("Float", "liftSpeed", cr2w, this);
-				}
-				return _liftSpeed;
-			}
-			set
-			{
-				if (_liftSpeed == value)
-				{
-					return;
-				}
-				_liftSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _liftSpeed);
+			set => SetProperty(ref _liftSpeed, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("liftStartingDelay")] 
 		public CFloat LiftStartingDelay
 		{
-			get
-			{
-				if (_liftStartingDelay == null)
-				{
-					_liftStartingDelay = (CFloat) CR2WTypeManager.Create("Float", "liftStartingDelay", cr2w, this);
-				}
-				return _liftStartingDelay;
-			}
-			set
-			{
-				if (_liftStartingDelay == value)
-				{
-					return;
-				}
-				_liftStartingDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _liftStartingDelay);
+			set => SetProperty(ref _liftStartingDelay, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("liftTravelTimeOverride")] 
 		public CFloat LiftTravelTimeOverride
 		{
-			get
-			{
-				if (_liftTravelTimeOverride == null)
-				{
-					_liftTravelTimeOverride = (CFloat) CR2WTypeManager.Create("Float", "liftTravelTimeOverride", cr2w, this);
-				}
-				return _liftTravelTimeOverride;
-			}
-			set
-			{
-				if (_liftTravelTimeOverride == value)
-				{
-					return;
-				}
-				_liftTravelTimeOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _liftTravelTimeOverride);
+			set => SetProperty(ref _liftTravelTimeOverride, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isLiftTravelTimeOverride")] 
 		public CBool IsLiftTravelTimeOverride
 		{
-			get
-			{
-				if (_isLiftTravelTimeOverride == null)
-				{
-					_isLiftTravelTimeOverride = (CBool) CR2WTypeManager.Create("Bool", "isLiftTravelTimeOverride", cr2w, this);
-				}
-				return _isLiftTravelTimeOverride;
-			}
-			set
-			{
-				if (_isLiftTravelTimeOverride == value)
-				{
-					return;
-				}
-				_isLiftTravelTimeOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isLiftTravelTimeOverride);
+			set => SetProperty(ref _isLiftTravelTimeOverride, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("emptyLiftSpeedMultiplier")] 
 		public CFloat EmptyLiftSpeedMultiplier
 		{
-			get
-			{
-				if (_emptyLiftSpeedMultiplier == null)
-				{
-					_emptyLiftSpeedMultiplier = (CFloat) CR2WTypeManager.Create("Float", "emptyLiftSpeedMultiplier", cr2w, this);
-				}
-				return _emptyLiftSpeedMultiplier;
-			}
-			set
-			{
-				if (_emptyLiftSpeedMultiplier == value)
-				{
-					return;
-				}
-				_emptyLiftSpeedMultiplier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _emptyLiftSpeedMultiplier);
+			set => SetProperty(ref _emptyLiftSpeedMultiplier, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("radioStationNumer")] 
 		public CInt32 RadioStationNumer
 		{
-			get
-			{
-				if (_radioStationNumer == null)
-				{
-					_radioStationNumer = (CInt32) CR2WTypeManager.Create("Int32", "radioStationNumer", cr2w, this);
-				}
-				return _radioStationNumer;
-			}
-			set
-			{
-				if (_radioStationNumer == value)
-				{
-					return;
-				}
-				_radioStationNumer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radioStationNumer);
+			set => SetProperty(ref _radioStationNumer, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("speakerDestroyedQuestFact")] 
 		public CName SpeakerDestroyedQuestFact
 		{
-			get
-			{
-				if (_speakerDestroyedQuestFact == null)
-				{
-					_speakerDestroyedQuestFact = (CName) CR2WTypeManager.Create("CName", "speakerDestroyedQuestFact", cr2w, this);
-				}
-				return _speakerDestroyedQuestFact;
-			}
-			set
-			{
-				if (_speakerDestroyedQuestFact == value)
-				{
-					return;
-				}
-				_speakerDestroyedQuestFact = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speakerDestroyedQuestFact);
+			set => SetProperty(ref _speakerDestroyedQuestFact, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("speakerDestroyedVFX")] 
 		public CName SpeakerDestroyedVFX
 		{
-			get
-			{
-				if (_speakerDestroyedVFX == null)
-				{
-					_speakerDestroyedVFX = (CName) CR2WTypeManager.Create("CName", "speakerDestroyedVFX", cr2w, this);
-				}
-				return _speakerDestroyedVFX;
-			}
-			set
-			{
-				if (_speakerDestroyedVFX == value)
-				{
-					return;
-				}
-				_speakerDestroyedVFX = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speakerDestroyedVFX);
+			set => SetProperty(ref _speakerDestroyedVFX, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("authorizationTextOverride")] 
 		public CString AuthorizationTextOverride
 		{
-			get
-			{
-				if (_authorizationTextOverride == null)
-				{
-					_authorizationTextOverride = (CString) CR2WTypeManager.Create("String", "authorizationTextOverride", cr2w, this);
-				}
-				return _authorizationTextOverride;
-			}
-			set
-			{
-				if (_authorizationTextOverride == value)
-				{
-					return;
-				}
-				_authorizationTextOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _authorizationTextOverride);
+			set => SetProperty(ref _authorizationTextOverride, value);
 		}
 
 		public LiftSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

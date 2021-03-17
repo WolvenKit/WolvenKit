@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("meshTable")] 
 		public CArray<CHandle<entMeshComponent>> MeshTable
 		{
-			get
-			{
-				if (_meshTable == null)
-				{
-					_meshTable = (CArray<CHandle<entMeshComponent>>) CR2WTypeManager.Create("array:handle:entMeshComponent", "meshTable", cr2w, this);
-				}
-				return _meshTable;
-			}
-			set
-			{
-				if (_meshTable == value)
-				{
-					return;
-				}
-				_meshTable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshTable);
+			set => SetProperty(ref _meshTable, value);
 		}
 
 		[Ordinal(94)] 
 		[RED("componentCounter")] 
 		public CInt32 ComponentCounter
 		{
-			get
-			{
-				if (_componentCounter == null)
-				{
-					_componentCounter = (CInt32) CR2WTypeManager.Create("Int32", "componentCounter", cr2w, this);
-				}
-				return _componentCounter;
-			}
-			set
-			{
-				if (_componentCounter == value)
-				{
-					return;
-				}
-				_componentCounter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _componentCounter);
+			set => SetProperty(ref _componentCounter, value);
 		}
 
 		[Ordinal(95)] 
 		[RED("currentMesh")] 
 		public CInt32 CurrentMesh
 		{
-			get
-			{
-				if (_currentMesh == null)
-				{
-					_currentMesh = (CInt32) CR2WTypeManager.Create("Int32", "currentMesh", cr2w, this);
-				}
-				return _currentMesh;
-			}
-			set
-			{
-				if (_currentMesh == value)
-				{
-					return;
-				}
-				_currentMesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentMesh);
+			set => SetProperty(ref _currentMesh, value);
 		}
 
 		[Ordinal(96)] 
 		[RED("glitchMesh")] 
 		public CHandle<entMeshComponent> GlitchMesh
 		{
-			get
-			{
-				if (_glitchMesh == null)
-				{
-					_glitchMesh = (CHandle<entMeshComponent>) CR2WTypeManager.Create("handle:entMeshComponent", "glitchMesh", cr2w, this);
-				}
-				return _glitchMesh;
-			}
-			set
-			{
-				if (_glitchMesh == value)
-				{
-					return;
-				}
-				_glitchMesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _glitchMesh);
+			set => SetProperty(ref _glitchMesh, value);
 		}
 
 		public HoloTable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

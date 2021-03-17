@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("includeMask")] 
 		public CUInt32 IncludeMask
 		{
-			get
-			{
-				if (_includeMask == null)
-				{
-					_includeMask = (CUInt32) CR2WTypeManager.Create("Uint32", "includeMask", cr2w, this);
-				}
-				return _includeMask;
-			}
-			set
-			{
-				if (_includeMask == value)
-				{
-					return;
-				}
-				_includeMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _includeMask);
+			set => SetProperty(ref _includeMask, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("excludeMask")] 
 		public CUInt32 ExcludeMask
 		{
-			get
-			{
-				if (_excludeMask == null)
-				{
-					_excludeMask = (CUInt32) CR2WTypeManager.Create("Uint32", "excludeMask", cr2w, this);
-				}
-				return _excludeMask;
-			}
-			set
-			{
-				if (_excludeMask == value)
-				{
-					return;
-				}
-				_excludeMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _excludeMask);
+			set => SetProperty(ref _excludeMask, value);
 		}
 
 		public gameStaticTriggerAreaComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

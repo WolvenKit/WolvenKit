@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("amplitude")] 
 		public CHandle<IEvaluatorVector> Amplitude
 		{
-			get
-			{
-				if (_amplitude == null)
-				{
-					_amplitude = (CHandle<IEvaluatorVector>) CR2WTypeManager.Create("handle:IEvaluatorVector", "amplitude", cr2w, this);
-				}
-				return _amplitude;
-			}
-			set
-			{
-				if (_amplitude == value)
-				{
-					return;
-				}
-				_amplitude = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _amplitude);
+			set => SetProperty(ref _amplitude, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("offset")] 
 		public CHandle<IEvaluatorVector> Offset
 		{
-			get
-			{
-				if (_offset == null)
-				{
-					_offset = (CHandle<IEvaluatorVector>) CR2WTypeManager.Create("handle:IEvaluatorVector", "offset", cr2w, this);
-				}
-				return _offset;
-			}
-			set
-			{
-				if (_offset == value)
-				{
-					return;
-				}
-				_offset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offset);
+			set => SetProperty(ref _offset, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("frequency")] 
 		public CHandle<IEvaluatorVector> Frequency
 		{
-			get
-			{
-				if (_frequency == null)
-				{
-					_frequency = (CHandle<IEvaluatorVector>) CR2WTypeManager.Create("handle:IEvaluatorVector", "frequency", cr2w, this);
-				}
-				return _frequency;
-			}
-			set
-			{
-				if (_frequency == value)
-				{
-					return;
-				}
-				_frequency = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frequency);
+			set => SetProperty(ref _frequency, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("changeRate")] 
 		public Vector3 ChangeRate
 		{
-			get
-			{
-				if (_changeRate == null)
-				{
-					_changeRate = (Vector3) CR2WTypeManager.Create("Vector3", "changeRate", cr2w, this);
-				}
-				return _changeRate;
-			}
-			set
-			{
-				if (_changeRate == value)
-				{
-					return;
-				}
-				_changeRate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _changeRate);
+			set => SetProperty(ref _changeRate, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("applyToPosition")] 
 		public CBool ApplyToPosition
 		{
-			get
-			{
-				if (_applyToPosition == null)
-				{
-					_applyToPosition = (CBool) CR2WTypeManager.Create("Bool", "applyToPosition", cr2w, this);
-				}
-				return _applyToPosition;
-			}
-			set
-			{
-				if (_applyToPosition == value)
-				{
-					return;
-				}
-				_applyToPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _applyToPosition);
+			set => SetProperty(ref _applyToPosition, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("worldSpaceOffset")] 
 		public CBool WorldSpaceOffset
 		{
-			get
-			{
-				if (_worldSpaceOffset == null)
-				{
-					_worldSpaceOffset = (CBool) CR2WTypeManager.Create("Bool", "worldSpaceOffset", cr2w, this);
-				}
-				return _worldSpaceOffset;
-			}
-			set
-			{
-				if (_worldSpaceOffset == value)
-				{
-					return;
-				}
-				_worldSpaceOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _worldSpaceOffset);
+			set => SetProperty(ref _worldSpaceOffset, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("noiseType")] 
 		public CEnum<ENoiseType> NoiseType
 		{
-			get
-			{
-				if (_noiseType == null)
-				{
-					_noiseType = (CEnum<ENoiseType>) CR2WTypeManager.Create("ENoiseType", "noiseType", cr2w, this);
-				}
-				return _noiseType;
-			}
-			set
-			{
-				if (_noiseType == value)
-				{
-					return;
-				}
-				_noiseType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _noiseType);
+			set => SetProperty(ref _noiseType, value);
 		}
 
 		public CParticleModificatorNoise(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("target")] 
 		public wCHandle<gameObject> Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("description")] 
 		public CName Description
 		{
-			get
-			{
-				if (_description == null)
-				{
-					_description = (CName) CR2WTypeManager.Create("CName", "description", cr2w, this);
-				}
-				return _description;
-			}
-			set
-			{
-				if (_description == value)
-				{
-					return;
-				}
-				_description = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _description);
+			set => SetProperty(ref _description, value);
 		}
 
 		public AIbehaviorSuspiciousObjectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

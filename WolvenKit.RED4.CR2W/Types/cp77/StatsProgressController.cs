@@ -23,253 +23,88 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("labelRef")] 
 		public inkTextWidgetReference LabelRef
 		{
-			get
-			{
-				if (_labelRef == null)
-				{
-					_labelRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "labelRef", cr2w, this);
-				}
-				return _labelRef;
-			}
-			set
-			{
-				if (_labelRef == value)
-				{
-					return;
-				}
-				_labelRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _labelRef);
+			set => SetProperty(ref _labelRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("currentXpRef")] 
 		public inkTextWidgetReference CurrentXpRef
 		{
-			get
-			{
-				if (_currentXpRef == null)
-				{
-					_currentXpRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "currentXpRef", cr2w, this);
-				}
-				return _currentXpRef;
-			}
-			set
-			{
-				if (_currentXpRef == value)
-				{
-					return;
-				}
-				_currentXpRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentXpRef);
+			set => SetProperty(ref _currentXpRef, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("maxXpRef")] 
 		public inkTextWidgetReference MaxXpRef
 		{
-			get
-			{
-				if (_maxXpRef == null)
-				{
-					_maxXpRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "maxXpRef", cr2w, this);
-				}
-				return _maxXpRef;
-			}
-			set
-			{
-				if (_maxXpRef == value)
-				{
-					return;
-				}
-				_maxXpRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxXpRef);
+			set => SetProperty(ref _maxXpRef, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("currentLevelRef")] 
 		public inkTextWidgetReference CurrentLevelRef
 		{
-			get
-			{
-				if (_currentLevelRef == null)
-				{
-					_currentLevelRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "currentLevelRef", cr2w, this);
-				}
-				return _currentLevelRef;
-			}
-			set
-			{
-				if (_currentLevelRef == value)
-				{
-					return;
-				}
-				_currentLevelRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentLevelRef);
+			set => SetProperty(ref _currentLevelRef, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("currentPersentageRef")] 
 		public inkTextWidgetReference CurrentPersentageRef
 		{
-			get
-			{
-				if (_currentPersentageRef == null)
-				{
-					_currentPersentageRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "currentPersentageRef", cr2w, this);
-				}
-				return _currentPersentageRef;
-			}
-			set
-			{
-				if (_currentPersentageRef == value)
-				{
-					return;
-				}
-				_currentPersentageRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentPersentageRef);
+			set => SetProperty(ref _currentPersentageRef, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("XpWrapper")] 
 		public inkWidgetReference XpWrapper
 		{
-			get
-			{
-				if (_xpWrapper == null)
-				{
-					_xpWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "XpWrapper", cr2w, this);
-				}
-				return _xpWrapper;
-			}
-			set
-			{
-				if (_xpWrapper == value)
-				{
-					return;
-				}
-				_xpWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _xpWrapper);
+			set => SetProperty(ref _xpWrapper, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("maxXpWrapper")] 
 		public inkWidgetReference MaxXpWrapper
 		{
-			get
-			{
-				if (_maxXpWrapper == null)
-				{
-					_maxXpWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "maxXpWrapper", cr2w, this);
-				}
-				return _maxXpWrapper;
-			}
-			set
-			{
-				if (_maxXpWrapper == value)
-				{
-					return;
-				}
-				_maxXpWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxXpWrapper);
+			set => SetProperty(ref _maxXpWrapper, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("progressBarFill")] 
 		public inkWidgetReference ProgressBarFill
 		{
-			get
-			{
-				if (_progressBarFill == null)
-				{
-					_progressBarFill = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "progressBarFill", cr2w, this);
-				}
-				return _progressBarFill;
-			}
-			set
-			{
-				if (_progressBarFill == value)
-				{
-					return;
-				}
-				_progressBarFill = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _progressBarFill);
+			set => SetProperty(ref _progressBarFill, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("progressBar")] 
 		public inkWidgetReference ProgressBar
 		{
-			get
-			{
-				if (_progressBar == null)
-				{
-					_progressBar = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "progressBar", cr2w, this);
-				}
-				return _progressBar;
-			}
-			set
-			{
-				if (_progressBar == value)
-				{
-					return;
-				}
-				_progressBar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _progressBar);
+			set => SetProperty(ref _progressBar, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("progressMarkerBar")] 
 		public inkWidgetReference ProgressMarkerBar
 		{
-			get
-			{
-				if (_progressMarkerBar == null)
-				{
-					_progressMarkerBar = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "progressMarkerBar", cr2w, this);
-				}
-				return _progressMarkerBar;
-			}
-			set
-			{
-				if (_progressMarkerBar == value)
-				{
-					return;
-				}
-				_progressMarkerBar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _progressMarkerBar);
+			set => SetProperty(ref _progressMarkerBar, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("barLenght")] 
 		public CFloat BarLenght
 		{
-			get
-			{
-				if (_barLenght == null)
-				{
-					_barLenght = (CFloat) CR2WTypeManager.Create("Float", "barLenght", cr2w, this);
-				}
-				return _barLenght;
-			}
-			set
-			{
-				if (_barLenght == value)
-				{
-					return;
-				}
-				_barLenght = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _barLenght);
+			set => SetProperty(ref _barLenght, value);
 		}
 
 		public StatsProgressController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

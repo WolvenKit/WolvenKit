@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("recordID")] 
 		public TweakDBID RecordID
 		{
-			get
-			{
-				if (_recordID == null)
-				{
-					_recordID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "recordID", cr2w, this);
-				}
-				return _recordID;
-			}
-			set
-			{
-				if (_recordID == value)
-				{
-					return;
-				}
-				_recordID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recordID);
+			set => SetProperty(ref _recordID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("persistentID")] 
 		public CUInt64 PersistentID
 		{
-			get
-			{
-				if (_persistentID == null)
-				{
-					_persistentID = (CUInt64) CR2WTypeManager.Create("Uint64", "persistentID", cr2w, this);
-				}
-				return _persistentID;
-			}
-			set
-			{
-				if (_persistentID == value)
-				{
-					return;
-				}
-				_persistentID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _persistentID);
+			set => SetProperty(ref _persistentID, value);
 		}
 
 		public netIEntityState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

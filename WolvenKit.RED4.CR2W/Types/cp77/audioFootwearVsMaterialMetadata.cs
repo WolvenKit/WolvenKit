@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("footwearType")] 
 		public CName FootwearType
 		{
-			get
-			{
-				if (_footwearType == null)
-				{
-					_footwearType = (CName) CR2WTypeManager.Create("CName", "footwearType", cr2w, this);
-				}
-				return _footwearType;
-			}
-			set
-			{
-				if (_footwearType == value)
-				{
-					return;
-				}
-				_footwearType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _footwearType);
+			set => SetProperty(ref _footwearType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("skidEvent")] 
 		public CName SkidEvent
 		{
-			get
-			{
-				if (_skidEvent == null)
-				{
-					_skidEvent = (CName) CR2WTypeManager.Create("CName", "skidEvent", cr2w, this);
-				}
-				return _skidEvent;
-			}
-			set
-			{
-				if (_skidEvent == value)
-				{
-					return;
-				}
-				_skidEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skidEvent);
+			set => SetProperty(ref _skidEvent, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("defaultFootstep")] 
 		public CName DefaultFootstep
 		{
-			get
-			{
-				if (_defaultFootstep == null)
-				{
-					_defaultFootstep = (CName) CR2WTypeManager.Create("CName", "defaultFootstep", cr2w, this);
-				}
-				return _defaultFootstep;
-			}
-			set
-			{
-				if (_defaultFootstep == value)
-				{
-					return;
-				}
-				_defaultFootstep = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultFootstep);
+			set => SetProperty(ref _defaultFootstep, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("locomotionStates")] 
 		public CHandle<audioLocomotionStateEventDictionary> LocomotionStates
 		{
-			get
-			{
-				if (_locomotionStates == null)
-				{
-					_locomotionStates = (CHandle<audioLocomotionStateEventDictionary>) CR2WTypeManager.Create("handle:audioLocomotionStateEventDictionary", "locomotionStates", cr2w, this);
-				}
-				return _locomotionStates;
-			}
-			set
-			{
-				if (_locomotionStates == value)
-				{
-					return;
-				}
-				_locomotionStates = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _locomotionStates);
+			set => SetProperty(ref _locomotionStates, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("customActionEvents")] 
 		public CHandle<audioLocomotionCustomActionEventDictionary> CustomActionEvents
 		{
-			get
-			{
-				if (_customActionEvents == null)
-				{
-					_customActionEvents = (CHandle<audioLocomotionCustomActionEventDictionary>) CR2WTypeManager.Create("handle:audioLocomotionCustomActionEventDictionary", "customActionEvents", cr2w, this);
-				}
-				return _customActionEvents;
-			}
-			set
-			{
-				if (_customActionEvents == value)
-				{
-					return;
-				}
-				_customActionEvents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customActionEvents);
+			set => SetProperty(ref _customActionEvents, value);
 		}
 
 		public audioFootwearVsMaterialMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

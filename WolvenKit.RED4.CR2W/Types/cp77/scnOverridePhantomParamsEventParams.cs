@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("performer")] 
 		public scnPerformerId Performer
 		{
-			get
-			{
-				if (_performer == null)
-				{
-					_performer = (scnPerformerId) CR2WTypeManager.Create("scnPerformerId", "performer", cr2w, this);
-				}
-				return _performer;
-			}
-			set
-			{
-				if (_performer == value)
-				{
-					return;
-				}
-				_performer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _performer);
+			set => SetProperty(ref _performer, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("overrideSpawnEffect")] 
 		public CName OverrideSpawnEffect
 		{
-			get
-			{
-				if (_overrideSpawnEffect == null)
-				{
-					_overrideSpawnEffect = (CName) CR2WTypeManager.Create("CName", "overrideSpawnEffect", cr2w, this);
-				}
-				return _overrideSpawnEffect;
-			}
-			set
-			{
-				if (_overrideSpawnEffect == value)
-				{
-					return;
-				}
-				_overrideSpawnEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideSpawnEffect);
+			set => SetProperty(ref _overrideSpawnEffect, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("overrideIdleEffect")] 
 		public CName OverrideIdleEffect
 		{
-			get
-			{
-				if (_overrideIdleEffect == null)
-				{
-					_overrideIdleEffect = (CName) CR2WTypeManager.Create("CName", "overrideIdleEffect", cr2w, this);
-				}
-				return _overrideIdleEffect;
-			}
-			set
-			{
-				if (_overrideIdleEffect == value)
-				{
-					return;
-				}
-				_overrideIdleEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideIdleEffect);
+			set => SetProperty(ref _overrideIdleEffect, value);
 		}
 
 		public scnOverridePhantomParamsEventParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

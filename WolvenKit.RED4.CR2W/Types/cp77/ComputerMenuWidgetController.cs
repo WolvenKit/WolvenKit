@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("thumbnailsListWidget")] 
 		public inkWidgetReference ThumbnailsListWidget
 		{
-			get
-			{
-				if (_thumbnailsListWidget == null)
-				{
-					_thumbnailsListWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "thumbnailsListWidget", cr2w, this);
-				}
-				return _thumbnailsListWidget;
-			}
-			set
-			{
-				if (_thumbnailsListWidget == value)
-				{
-					return;
-				}
-				_thumbnailsListWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _thumbnailsListWidget);
+			set => SetProperty(ref _thumbnailsListWidget, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("contentWidget")] 
 		public inkWidgetReference ContentWidget
 		{
-			get
-			{
-				if (_contentWidget == null)
-				{
-					_contentWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "contentWidget", cr2w, this);
-				}
-				return _contentWidget;
-			}
-			set
-			{
-				if (_contentWidget == value)
-				{
-					return;
-				}
-				_contentWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contentWidget);
+			set => SetProperty(ref _contentWidget, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isInitialized")] 
 		public CBool IsInitialized
 		{
-			get
-			{
-				if (_isInitialized == null)
-				{
-					_isInitialized = (CBool) CR2WTypeManager.Create("Bool", "isInitialized", cr2w, this);
-				}
-				return _isInitialized;
-			}
-			set
-			{
-				if (_isInitialized == value)
-				{
-					return;
-				}
-				_isInitialized = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInitialized);
+			set => SetProperty(ref _isInitialized, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("fileWidgetsData")] 
 		public CArray<SDocumentWidgetPackage> FileWidgetsData
 		{
-			get
-			{
-				if (_fileWidgetsData == null)
-				{
-					_fileWidgetsData = (CArray<SDocumentWidgetPackage>) CR2WTypeManager.Create("array:SDocumentWidgetPackage", "fileWidgetsData", cr2w, this);
-				}
-				return _fileWidgetsData;
-			}
-			set
-			{
-				if (_fileWidgetsData == value)
-				{
-					return;
-				}
-				_fileWidgetsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fileWidgetsData);
+			set => SetProperty(ref _fileWidgetsData, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("fileThumbnailWidgetsData")] 
 		public CArray<SDocumentThumbnailWidgetPackage> FileThumbnailWidgetsData
 		{
-			get
-			{
-				if (_fileThumbnailWidgetsData == null)
-				{
-					_fileThumbnailWidgetsData = (CArray<SDocumentThumbnailWidgetPackage>) CR2WTypeManager.Create("array:SDocumentThumbnailWidgetPackage", "fileThumbnailWidgetsData", cr2w, this);
-				}
-				return _fileThumbnailWidgetsData;
-			}
-			set
-			{
-				if (_fileThumbnailWidgetsData == value)
-				{
-					return;
-				}
-				_fileThumbnailWidgetsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fileThumbnailWidgetsData);
+			set => SetProperty(ref _fileThumbnailWidgetsData, value);
 		}
 
 		public ComputerMenuWidgetController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

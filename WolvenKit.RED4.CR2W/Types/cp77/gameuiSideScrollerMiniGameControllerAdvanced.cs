@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gameplayCanvas")] 
 		public inkWidgetReference GameplayCanvas
 		{
-			get
-			{
-				if (_gameplayCanvas == null)
-				{
-					_gameplayCanvas = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "gameplayCanvas", cr2w, this);
-				}
-				return _gameplayCanvas;
-			}
-			set
-			{
-				if (_gameplayCanvas == value)
-				{
-					return;
-				}
-				_gameplayCanvas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameplayCanvas);
+			set => SetProperty(ref _gameplayCanvas, value);
 		}
 
 		public gameuiSideScrollerMiniGameControllerAdvanced(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

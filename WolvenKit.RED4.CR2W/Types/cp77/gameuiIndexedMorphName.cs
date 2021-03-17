@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("index")] 
 		public CInt32 Index
 		{
-			get
-			{
-				if (_index == null)
-				{
-					_index = (CInt32) CR2WTypeManager.Create("Int32", "index", cr2w, this);
-				}
-				return _index;
-			}
-			set
-			{
-				if (_index == value)
-				{
-					return;
-				}
-				_index = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _index);
+			set => SetProperty(ref _index, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("morphName")] 
 		public CName MorphName
 		{
-			get
-			{
-				if (_morphName == null)
-				{
-					_morphName = (CName) CR2WTypeManager.Create("CName", "morphName", cr2w, this);
-				}
-				return _morphName;
-			}
-			set
-			{
-				if (_morphName == value)
-				{
-					return;
-				}
-				_morphName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _morphName);
+			set => SetProperty(ref _morphName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("localizedName")] 
 		public CString LocalizedName
 		{
-			get
-			{
-				if (_localizedName == null)
-				{
-					_localizedName = (CString) CR2WTypeManager.Create("String", "localizedName", cr2w, this);
-				}
-				return _localizedName;
-			}
-			set
-			{
-				if (_localizedName == value)
-				{
-					return;
-				}
-				_localizedName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localizedName);
+			set => SetProperty(ref _localizedName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("tags")] 
 		public redTagList Tags
 		{
-			get
-			{
-				if (_tags == null)
-				{
-					_tags = (redTagList) CR2WTypeManager.Create("redTagList", "tags", cr2w, this);
-				}
-				return _tags;
-			}
-			set
-			{
-				if (_tags == value)
-				{
-					return;
-				}
-				_tags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tags);
+			set => SetProperty(ref _tags, value);
 		}
 
 		public gameuiIndexedMorphName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

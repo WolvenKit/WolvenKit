@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hasBlockedAiming")] 
 		public CBool HasBlockedAiming
 		{
-			get
-			{
-				if (_hasBlockedAiming == null)
-				{
-					_hasBlockedAiming = (CBool) CR2WTypeManager.Create("Bool", "hasBlockedAiming", cr2w, this);
-				}
-				return _hasBlockedAiming;
-			}
-			set
-			{
-				if (_hasBlockedAiming == value)
-				{
-					return;
-				}
-				_hasBlockedAiming = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasBlockedAiming);
+			set => SetProperty(ref _hasBlockedAiming, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("blockAimStart")] 
 		public CFloat BlockAimStart
 		{
-			get
-			{
-				if (_blockAimStart == null)
-				{
-					_blockAimStart = (CFloat) CR2WTypeManager.Create("Float", "blockAimStart", cr2w, this);
-				}
-				return _blockAimStart;
-			}
-			set
-			{
-				if (_blockAimStart == value)
-				{
-					return;
-				}
-				_blockAimStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blockAimStart);
+			set => SetProperty(ref _blockAimStart, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("blockAimDuration")] 
 		public CFloat BlockAimDuration
 		{
-			get
-			{
-				if (_blockAimDuration == null)
-				{
-					_blockAimDuration = (CFloat) CR2WTypeManager.Create("Float", "blockAimDuration", cr2w, this);
-				}
-				return _blockAimDuration;
-			}
-			set
-			{
-				if (_blockAimDuration == value)
-				{
-					return;
-				}
-				_blockAimDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blockAimDuration);
+			set => SetProperty(ref _blockAimDuration, value);
 		}
 
 		public CycleRoundEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

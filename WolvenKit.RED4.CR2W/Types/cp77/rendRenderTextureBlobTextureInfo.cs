@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("type")] 
 		public CEnum<GpuWrapApieTextureType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<GpuWrapApieTextureType>) CR2WTypeManager.Create("GpuWrapApieTextureType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("textureDataSize")] 
 		public CUInt32 TextureDataSize
 		{
-			get
-			{
-				if (_textureDataSize == null)
-				{
-					_textureDataSize = (CUInt32) CR2WTypeManager.Create("Uint32", "textureDataSize", cr2w, this);
-				}
-				return _textureDataSize;
-			}
-			set
-			{
-				if (_textureDataSize == value)
-				{
-					return;
-				}
-				_textureDataSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textureDataSize);
+			set => SetProperty(ref _textureDataSize, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("sliceSize")] 
 		public CUInt32 SliceSize
 		{
-			get
-			{
-				if (_sliceSize == null)
-				{
-					_sliceSize = (CUInt32) CR2WTypeManager.Create("Uint32", "sliceSize", cr2w, this);
-				}
-				return _sliceSize;
-			}
-			set
-			{
-				if (_sliceSize == value)
-				{
-					return;
-				}
-				_sliceSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sliceSize);
+			set => SetProperty(ref _sliceSize, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("dataAlignment")] 
 		public CUInt32 DataAlignment
 		{
-			get
-			{
-				if (_dataAlignment == null)
-				{
-					_dataAlignment = (CUInt32) CR2WTypeManager.Create("Uint32", "dataAlignment", cr2w, this);
-				}
-				return _dataAlignment;
-			}
-			set
-			{
-				if (_dataAlignment == value)
-				{
-					return;
-				}
-				_dataAlignment = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dataAlignment);
+			set => SetProperty(ref _dataAlignment, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("sliceCount")] 
 		public CUInt16 SliceCount
 		{
-			get
-			{
-				if (_sliceCount == null)
-				{
-					_sliceCount = (CUInt16) CR2WTypeManager.Create("Uint16", "sliceCount", cr2w, this);
-				}
-				return _sliceCount;
-			}
-			set
-			{
-				if (_sliceCount == value)
-				{
-					return;
-				}
-				_sliceCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sliceCount);
+			set => SetProperty(ref _sliceCount, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("mipCount")] 
 		public CUInt8 MipCount
 		{
-			get
-			{
-				if (_mipCount == null)
-				{
-					_mipCount = (CUInt8) CR2WTypeManager.Create("Uint8", "mipCount", cr2w, this);
-				}
-				return _mipCount;
-			}
-			set
-			{
-				if (_mipCount == value)
-				{
-					return;
-				}
-				_mipCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mipCount);
+			set => SetProperty(ref _mipCount, value);
 		}
 
 		public rendRenderTextureBlobTextureInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

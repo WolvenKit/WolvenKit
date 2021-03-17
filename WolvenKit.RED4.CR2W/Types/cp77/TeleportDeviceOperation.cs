@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("teleport")] 
 		public STeleportOperationData Teleport
 		{
-			get
-			{
-				if (_teleport == null)
-				{
-					_teleport = (STeleportOperationData) CR2WTypeManager.Create("STeleportOperationData", "teleport", cr2w, this);
-				}
-				return _teleport;
-			}
-			set
-			{
-				if (_teleport == value)
-				{
-					return;
-				}
-				_teleport = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _teleport);
+			set => SetProperty(ref _teleport, value);
 		}
 
 		public TeleportDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

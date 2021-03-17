@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("value")] 
 		public inkTextWidgetReference Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("arrow")] 
 		public inkImageWidgetReference Arrow
 		{
-			get
-			{
-				if (_arrow == null)
-				{
-					_arrow = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "arrow", cr2w, this);
-				}
-				return _arrow;
-			}
-			set
-			{
-				if (_arrow == value)
-				{
-					return;
-				}
-				_arrow = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _arrow);
+			set => SetProperty(ref _arrow, value);
 		}
 
 		public ItemTooltipClothingInfoModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

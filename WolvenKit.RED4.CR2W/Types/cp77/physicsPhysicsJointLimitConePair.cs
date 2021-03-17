@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("swingY")] 
 		public CEnum<physicsPhysicsJointMotion> SwingY
 		{
-			get
-			{
-				if (_swingY == null)
-				{
-					_swingY = (CEnum<physicsPhysicsJointMotion>) CR2WTypeManager.Create("physicsPhysicsJointMotion", "swingY", cr2w, this);
-				}
-				return _swingY;
-			}
-			set
-			{
-				if (_swingY == value)
-				{
-					return;
-				}
-				_swingY = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _swingY);
+			set => SetProperty(ref _swingY, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("swingZ")] 
 		public CEnum<physicsPhysicsJointMotion> SwingZ
 		{
-			get
-			{
-				if (_swingZ == null)
-				{
-					_swingZ = (CEnum<physicsPhysicsJointMotion>) CR2WTypeManager.Create("physicsPhysicsJointMotion", "swingZ", cr2w, this);
-				}
-				return _swingZ;
-			}
-			set
-			{
-				if (_swingZ == value)
-				{
-					return;
-				}
-				_swingZ = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _swingZ);
+			set => SetProperty(ref _swingZ, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("yAngle")] 
 		public CFloat YAngle
 		{
-			get
-			{
-				if (_yAngle == null)
-				{
-					_yAngle = (CFloat) CR2WTypeManager.Create("Float", "yAngle", cr2w, this);
-				}
-				return _yAngle;
-			}
-			set
-			{
-				if (_yAngle == value)
-				{
-					return;
-				}
-				_yAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _yAngle);
+			set => SetProperty(ref _yAngle, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("zAngle")] 
 		public CFloat ZAngle
 		{
-			get
-			{
-				if (_zAngle == null)
-				{
-					_zAngle = (CFloat) CR2WTypeManager.Create("Float", "zAngle", cr2w, this);
-				}
-				return _zAngle;
-			}
-			set
-			{
-				if (_zAngle == value)
-				{
-					return;
-				}
-				_zAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _zAngle);
+			set => SetProperty(ref _zAngle, value);
 		}
 
 		public physicsPhysicsJointLimitConePair(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

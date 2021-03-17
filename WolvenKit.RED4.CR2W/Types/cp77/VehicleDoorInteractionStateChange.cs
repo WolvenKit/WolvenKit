@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("door")] 
 		public CEnum<vehicleEVehicleDoor> Door
 		{
-			get
-			{
-				if (_door == null)
-				{
-					_door = (CEnum<vehicleEVehicleDoor>) CR2WTypeManager.Create("vehicleEVehicleDoor", "door", cr2w, this);
-				}
-				return _door;
-			}
-			set
-			{
-				if (_door == value)
-				{
-					return;
-				}
-				_door = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _door);
+			set => SetProperty(ref _door, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("newState")] 
 		public CEnum<vehicleVehicleDoorInteractionState> NewState
 		{
-			get
-			{
-				if (_newState == null)
-				{
-					_newState = (CEnum<vehicleVehicleDoorInteractionState>) CR2WTypeManager.Create("vehicleVehicleDoorInteractionState", "newState", cr2w, this);
-				}
-				return _newState;
-			}
-			set
-			{
-				if (_newState == value)
-				{
-					return;
-				}
-				_newState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newState);
+			set => SetProperty(ref _newState, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("source")] 
 		public CString Source
 		{
-			get
-			{
-				if (_source == null)
-				{
-					_source = (CString) CR2WTypeManager.Create("String", "source", cr2w, this);
-				}
-				return _source;
-			}
-			set
-			{
-				if (_source == value)
-				{
-					return;
-				}
-				_source = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
 		}
 
 		public VehicleDoorInteractionStateChange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

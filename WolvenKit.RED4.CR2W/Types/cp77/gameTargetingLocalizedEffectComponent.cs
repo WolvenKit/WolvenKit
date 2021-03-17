@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("streamingDistance")] 
 		public CFloat StreamingDistance
 		{
-			get
-			{
-				if (_streamingDistance == null)
-				{
-					_streamingDistance = (CFloat) CR2WTypeManager.Create("Float", "streamingDistance", cr2w, this);
-				}
-				return _streamingDistance;
-			}
-			set
-			{
-				if (_streamingDistance == value)
-				{
-					return;
-				}
-				_streamingDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _streamingDistance);
+			set => SetProperty(ref _streamingDistance, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("visibleTargetRange")] 
 		public CFloat VisibleTargetRange
 		{
-			get
-			{
-				if (_visibleTargetRange == null)
-				{
-					_visibleTargetRange = (CFloat) CR2WTypeManager.Create("Float", "visibleTargetRange", cr2w, this);
-				}
-				return _visibleTargetRange;
-			}
-			set
-			{
-				if (_visibleTargetRange == value)
-				{
-					return;
-				}
-				_visibleTargetRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visibleTargetRange);
+			set => SetProperty(ref _visibleTargetRange, value);
 		}
 
 		public gameTargetingLocalizedEffectComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("psmVision")] 
 		public CEnum<gamePSMVision> PsmVision
 		{
-			get
-			{
-				if (_psmVision == null)
-				{
-					_psmVision = (CEnum<gamePSMVision>) CR2WTypeManager.Create("gamePSMVision", "psmVision", cr2w, this);
-				}
-				return _psmVision;
-			}
-			set
-			{
-				if (_psmVision == value)
-				{
-					return;
-				}
-				_psmVision = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _psmVision);
+			set => SetProperty(ref _psmVision, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("psmCombat")] 
 		public CEnum<gamePSMCombat> PsmCombat
 		{
-			get
-			{
-				if (_psmCombat == null)
-				{
-					_psmCombat = (CEnum<gamePSMCombat>) CR2WTypeManager.Create("gamePSMCombat", "psmCombat", cr2w, this);
-				}
-				return _psmCombat;
-			}
-			set
-			{
-				if (_psmCombat == value)
-				{
-					return;
-				}
-				_psmCombat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _psmCombat);
+			set => SetProperty(ref _psmCombat, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("psmZone")] 
 		public CEnum<gamePSMZones> PsmZone
 		{
-			get
-			{
-				if (_psmZone == null)
-				{
-					_psmZone = (CEnum<gamePSMZones>) CR2WTypeManager.Create("gamePSMZones", "psmZone", cr2w, this);
-				}
-				return _psmZone;
-			}
-			set
-			{
-				if (_psmZone == value)
-				{
-					return;
-				}
-				_psmZone = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _psmZone);
+			set => SetProperty(ref _psmZone, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("tier")] 
 		public CEnum<GameplayTier> Tier
 		{
-			get
-			{
-				if (_tier == null)
-				{
-					_tier = (CEnum<GameplayTier>) CR2WTypeManager.Create("GameplayTier", "tier", cr2w, this);
-				}
-				return _tier;
-			}
-			set
-			{
-				if (_tier == value)
-				{
-					return;
-				}
-				_tier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tier);
+			set => SetProperty(ref _tier, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("spawnContainerPath")] 
 		public inkWidgetPath SpawnContainerPath
 		{
-			get
-			{
-				if (_spawnContainerPath == null)
-				{
-					_spawnContainerPath = (inkWidgetPath) CR2WTypeManager.Create("inkWidgetPath", "spawnContainerPath", cr2w, this);
-				}
-				return _spawnContainerPath;
-			}
-			set
-			{
-				if (_spawnContainerPath == value)
-				{
-					return;
-				}
-				_spawnContainerPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnContainerPath);
+			set => SetProperty(ref _spawnContainerPath, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("gpsQuestPathWidget")] 
 		public inkLinePatternWidgetReference GpsQuestPathWidget
 		{
-			get
-			{
-				if (_gpsQuestPathWidget == null)
-				{
-					_gpsQuestPathWidget = (inkLinePatternWidgetReference) CR2WTypeManager.Create("inkLinePatternWidgetReference", "gpsQuestPathWidget", cr2w, this);
-				}
-				return _gpsQuestPathWidget;
-			}
-			set
-			{
-				if (_gpsQuestPathWidget == value)
-				{
-					return;
-				}
-				_gpsQuestPathWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gpsQuestPathWidget);
+			set => SetProperty(ref _gpsQuestPathWidget, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("gpsPlayerTrackedPathWidget")] 
 		public inkLinePatternWidgetReference GpsPlayerTrackedPathWidget
 		{
-			get
-			{
-				if (_gpsPlayerTrackedPathWidget == null)
-				{
-					_gpsPlayerTrackedPathWidget = (inkLinePatternWidgetReference) CR2WTypeManager.Create("inkLinePatternWidgetReference", "gpsPlayerTrackedPathWidget", cr2w, this);
-				}
-				return _gpsPlayerTrackedPathWidget;
-			}
-			set
-			{
-				if (_gpsPlayerTrackedPathWidget == value)
-				{
-					return;
-				}
-				_gpsPlayerTrackedPathWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gpsPlayerTrackedPathWidget);
+			set => SetProperty(ref _gpsPlayerTrackedPathWidget, value);
 		}
 
 		public gameuiMappinsContainerController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

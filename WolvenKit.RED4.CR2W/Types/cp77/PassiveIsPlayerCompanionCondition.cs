@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("roleCbId")] 
 		public CUInt32 RoleCbId
 		{
-			get
-			{
-				if (_roleCbId == null)
-				{
-					_roleCbId = (CUInt32) CR2WTypeManager.Create("Uint32", "roleCbId", cr2w, this);
-				}
-				return _roleCbId;
-			}
-			set
-			{
-				if (_roleCbId == value)
-				{
-					return;
-				}
-				_roleCbId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _roleCbId);
+			set => SetProperty(ref _roleCbId, value);
 		}
 
 		public PassiveIsPlayerCompanionCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

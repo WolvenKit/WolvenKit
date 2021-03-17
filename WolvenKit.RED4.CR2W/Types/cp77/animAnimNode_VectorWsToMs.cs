@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("type")] 
 		public CEnum<animEVectorWsToMsType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<animEVectorWsToMsType>) CR2WTypeManager.Create("animEVectorWsToMsType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("vectorWs")] 
 		public animVectorLink VectorWs
 		{
-			get
-			{
-				if (_vectorWs == null)
-				{
-					_vectorWs = (animVectorLink) CR2WTypeManager.Create("animVectorLink", "vectorWs", cr2w, this);
-				}
-				return _vectorWs;
-			}
-			set
-			{
-				if (_vectorWs == value)
-				{
-					return;
-				}
-				_vectorWs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vectorWs);
+			set => SetProperty(ref _vectorWs, value);
 		}
 
 		public animAnimNode_VectorWsToMs(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

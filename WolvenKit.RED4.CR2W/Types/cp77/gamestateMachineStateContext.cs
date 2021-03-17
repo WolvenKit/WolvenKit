@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("snapshot")] 
 		public gamestateMachineStateSnapshotsContainer Snapshot
 		{
-			get
-			{
-				if (_snapshot == null)
-				{
-					_snapshot = (gamestateMachineStateSnapshotsContainer) CR2WTypeManager.Create("gamestateMachineStateSnapshotsContainer", "snapshot", cr2w, this);
-				}
-				return _snapshot;
-			}
-			set
-			{
-				if (_snapshot == value)
-				{
-					return;
-				}
-				_snapshot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _snapshot);
+			set => SetProperty(ref _snapshot, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("permanentParameters")] 
 		public gamestateMachineStateContextParameters PermanentParameters
 		{
-			get
-			{
-				if (_permanentParameters == null)
-				{
-					_permanentParameters = (gamestateMachineStateContextParameters) CR2WTypeManager.Create("gamestateMachineStateContextParameters", "permanentParameters", cr2w, this);
-				}
-				return _permanentParameters;
-			}
-			set
-			{
-				if (_permanentParameters == value)
-				{
-					return;
-				}
-				_permanentParameters = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _permanentParameters);
+			set => SetProperty(ref _permanentParameters, value);
 		}
 
 		public gamestateMachineStateContext(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

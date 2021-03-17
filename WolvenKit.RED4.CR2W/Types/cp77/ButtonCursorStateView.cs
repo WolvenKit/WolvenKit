@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("HoverStateName")] 
 		public CName HoverStateName
 		{
-			get
-			{
-				if (_hoverStateName == null)
-				{
-					_hoverStateName = (CName) CR2WTypeManager.Create("CName", "HoverStateName", cr2w, this);
-				}
-				return _hoverStateName;
-			}
-			set
-			{
-				if (_hoverStateName == value)
-				{
-					return;
-				}
-				_hoverStateName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hoverStateName);
+			set => SetProperty(ref _hoverStateName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("PressStateName")] 
 		public CName PressStateName
 		{
-			get
-			{
-				if (_pressStateName == null)
-				{
-					_pressStateName = (CName) CR2WTypeManager.Create("CName", "PressStateName", cr2w, this);
-				}
-				return _pressStateName;
-			}
-			set
-			{
-				if (_pressStateName == value)
-				{
-					return;
-				}
-				_pressStateName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pressStateName);
+			set => SetProperty(ref _pressStateName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("DefaultStateName")] 
 		public CName DefaultStateName
 		{
-			get
-			{
-				if (_defaultStateName == null)
-				{
-					_defaultStateName = (CName) CR2WTypeManager.Create("CName", "DefaultStateName", cr2w, this);
-				}
-				return _defaultStateName;
-			}
-			set
-			{
-				if (_defaultStateName == value)
-				{
-					return;
-				}
-				_defaultStateName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultStateName);
+			set => SetProperty(ref _defaultStateName, value);
 		}
 
 		public ButtonCursorStateView(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

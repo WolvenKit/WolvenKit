@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemStack")] 
 		public gameSItemStack ItemStack
 		{
-			get
-			{
-				if (_itemStack == null)
-				{
-					_itemStack = (gameSItemStack) CR2WTypeManager.Create("gameSItemStack", "itemStack", cr2w, this);
-				}
-				return _itemStack;
-			}
-			set
-			{
-				if (_itemStack == value)
-				{
-					return;
-				}
-				_itemStack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemStack);
+			set => SetProperty(ref _itemStack, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("pricePerItem")] 
 		public CInt32 PricePerItem
 		{
-			get
-			{
-				if (_pricePerItem == null)
-				{
-					_pricePerItem = (CInt32) CR2WTypeManager.Create("Int32", "pricePerItem", cr2w, this);
-				}
-				return _pricePerItem;
-			}
-			set
-			{
-				if (_pricePerItem == value)
-				{
-					return;
-				}
-				_pricePerItem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pricePerItem);
+			set => SetProperty(ref _pricePerItem, value);
 		}
 
 		public SItemTransaction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

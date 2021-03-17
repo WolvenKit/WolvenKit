@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slot")] 
 		public CHandle<AIArgumentMapping> Slot
 		{
-			get
-			{
-				if (_slot == null)
-				{
-					_slot = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "slot", cr2w, this);
-				}
-				return _slot;
-			}
-			set
-			{
-				if (_slot == value)
-				{
-					return;
-				}
-				_slot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slot);
+			set => SetProperty(ref _slot, value);
 		}
 
 		public AIbehaviorSlotOccupiedConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

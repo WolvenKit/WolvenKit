@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("maxSuperheroFallHeight")] 
 		public CBool MaxSuperheroFallHeight
 		{
-			get
-			{
-				if (_maxSuperheroFallHeight == null)
-				{
-					_maxSuperheroFallHeight = (CBool) CR2WTypeManager.Create("Bool", "maxSuperheroFallHeight", cr2w, this);
-				}
-				return _maxSuperheroFallHeight;
-			}
-			set
-			{
-				if (_maxSuperheroFallHeight == value)
-				{
-					return;
-				}
-				_maxSuperheroFallHeight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxSuperheroFallHeight);
+			set => SetProperty(ref _maxSuperheroFallHeight, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("updateInputToggles")] 
 		public CBool UpdateInputToggles
 		{
-			get
-			{
-				if (_updateInputToggles == null)
-				{
-					_updateInputToggles = (CBool) CR2WTypeManager.Create("Bool", "updateInputToggles", cr2w, this);
-				}
-				return _updateInputToggles;
-			}
-			set
-			{
-				if (_updateInputToggles == value)
-				{
-					return;
-				}
-				_updateInputToggles = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _updateInputToggles);
+			set => SetProperty(ref _updateInputToggles, value);
 		}
 
 		public LocomotionAirEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

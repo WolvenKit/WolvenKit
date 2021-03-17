@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("memorycost")] 
 		public CInt32 Memorycost
 		{
-			get
-			{
-				if (_memorycost == null)
-				{
-					_memorycost = (CInt32) CR2WTypeManager.Create("Int32", "memorycost", cr2w, this);
-				}
-				return _memorycost;
-			}
-			set
-			{
-				if (_memorycost == value)
-				{
-					return;
-				}
-				_memorycost = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _memorycost);
+			set => SetProperty(ref _memorycost, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("baseCost")] 
 		public CInt32 BaseCost
 		{
-			get
-			{
-				if (_baseCost == null)
-				{
-					_baseCost = (CInt32) CR2WTypeManager.Create("Int32", "baseCost", cr2w, this);
-				}
-				return _baseCost;
-			}
-			set
-			{
-				if (_baseCost == value)
-				{
-					return;
-				}
-				_baseCost = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _baseCost);
+			set => SetProperty(ref _baseCost, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("uploadTime")] 
 		public CFloat UploadTime
 		{
-			get
-			{
-				if (_uploadTime == null)
-				{
-					_uploadTime = (CFloat) CR2WTypeManager.Create("Float", "uploadTime", cr2w, this);
-				}
-				return _uploadTime;
-			}
-			set
-			{
-				if (_uploadTime == value)
-				{
-					return;
-				}
-				_uploadTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uploadTime);
+			set => SetProperty(ref _uploadTime, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("cooldown")] 
 		public CFloat Cooldown
 		{
-			get
-			{
-				if (_cooldown == null)
-				{
-					_cooldown = (CFloat) CR2WTypeManager.Create("Float", "cooldown", cr2w, this);
-				}
-				return _cooldown;
-			}
-			set
-			{
-				if (_cooldown == value)
-				{
-					return;
-				}
-				_cooldown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cooldown);
+			set => SetProperty(ref _cooldown, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("attackEffects")] 
 		public CArray<CHandle<DamageEffectUIEntry>> AttackEffects
 		{
-			get
-			{
-				if (_attackEffects == null)
-				{
-					_attackEffects = (CArray<CHandle<DamageEffectUIEntry>>) CR2WTypeManager.Create("array:handle:DamageEffectUIEntry", "attackEffects", cr2w, this);
-				}
-				return _attackEffects;
-			}
-			set
-			{
-				if (_attackEffects == value)
-				{
-					return;
-				}
-				_attackEffects = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackEffects);
+			set => SetProperty(ref _attackEffects, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("uploadTimeDiff")] 
 		public CFloat UploadTimeDiff
 		{
-			get
-			{
-				if (_uploadTimeDiff == null)
-				{
-					_uploadTimeDiff = (CFloat) CR2WTypeManager.Create("Float", "uploadTimeDiff", cr2w, this);
-				}
-				return _uploadTimeDiff;
-			}
-			set
-			{
-				if (_uploadTimeDiff == value)
-				{
-					return;
-				}
-				_uploadTimeDiff = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uploadTimeDiff);
+			set => SetProperty(ref _uploadTimeDiff, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("durationDiff")] 
 		public CFloat DurationDiff
 		{
-			get
-			{
-				if (_durationDiff == null)
-				{
-					_durationDiff = (CFloat) CR2WTypeManager.Create("Float", "durationDiff", cr2w, this);
-				}
-				return _durationDiff;
-			}
-			set
-			{
-				if (_durationDiff == value)
-				{
-					return;
-				}
-				_durationDiff = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _durationDiff);
+			set => SetProperty(ref _durationDiff, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("cooldownDiff")] 
 		public CFloat CooldownDiff
 		{
-			get
-			{
-				if (_cooldownDiff == null)
-				{
-					_cooldownDiff = (CFloat) CR2WTypeManager.Create("Float", "cooldownDiff", cr2w, this);
-				}
-				return _cooldownDiff;
-			}
-			set
-			{
-				if (_cooldownDiff == value)
-				{
-					return;
-				}
-				_cooldownDiff = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cooldownDiff);
+			set => SetProperty(ref _cooldownDiff, value);
 		}
 
 		public InventoryTooltipData_QuickhackData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

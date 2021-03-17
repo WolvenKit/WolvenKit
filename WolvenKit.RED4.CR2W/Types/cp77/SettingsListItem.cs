@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Selector")] 
 		public inkWidgetReference Selector
 		{
-			get
-			{
-				if (_selector == null)
-				{
-					_selector = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "Selector", cr2w, this);
-				}
-				return _selector;
-			}
-			set
-			{
-				if (_selector == value)
-				{
-					return;
-				}
-				_selector = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selector);
+			set => SetProperty(ref _selector, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("settingsSelector")] 
 		public wCHandle<inkSettingsSelectorController> SettingsSelector
 		{
-			get
-			{
-				if (_settingsSelector == null)
-				{
-					_settingsSelector = (wCHandle<inkSettingsSelectorController>) CR2WTypeManager.Create("whandle:inkSettingsSelectorController", "settingsSelector", cr2w, this);
-				}
-				return _settingsSelector;
-			}
-			set
-			{
-				if (_settingsSelector == value)
-				{
-					return;
-				}
-				_settingsSelector = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _settingsSelector);
+			set => SetProperty(ref _settingsSelector, value);
 		}
 
 		public SettingsListItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("leftPart")] 
 		public inkWidgetReference LeftPart
 		{
-			get
-			{
-				if (_leftPart == null)
-				{
-					_leftPart = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "leftPart", cr2w, this);
-				}
-				return _leftPart;
-			}
-			set
-			{
-				if (_leftPart == value)
-				{
-					return;
-				}
-				_leftPart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _leftPart);
+			set => SetProperty(ref _leftPart, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("rightPart")] 
 		public inkWidgetReference RightPart
 		{
-			get
-			{
-				if (_rightPart == null)
-				{
-					_rightPart = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "rightPart", cr2w, this);
-				}
-				return _rightPart;
-			}
-			set
-			{
-				if (_rightPart == value)
-				{
-					return;
-				}
-				_rightPart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rightPart);
+			set => SetProperty(ref _rightPart, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("topPart")] 
 		public inkWidgetReference TopPart
 		{
-			get
-			{
-				if (_topPart == null)
-				{
-					_topPart = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "topPart", cr2w, this);
-				}
-				return _topPart;
-			}
-			set
-			{
-				if (_topPart == value)
-				{
-					return;
-				}
-				_topPart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _topPart);
+			set => SetProperty(ref _topPart, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("botPart")] 
 		public inkWidgetReference BotPart
 		{
-			get
-			{
-				if (_botPart == null)
-				{
-					_botPart = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "botPart", cr2w, this);
-				}
-				return _botPart;
-			}
-			set
-			{
-				if (_botPart == value)
-				{
-					return;
-				}
-				_botPart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _botPart);
+			set => SetProperty(ref _botPart, value);
 		}
 
 		public Crosshair_Power_Saratoga(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

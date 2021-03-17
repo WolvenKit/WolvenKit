@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nodeId")] 
 		public scnNodeId NodeId
 		{
-			get
-			{
-				if (_nodeId == null)
-				{
-					_nodeId = (scnNodeId) CR2WTypeManager.Create("scnNodeId", "nodeId", cr2w, this);
-				}
-				return _nodeId;
-			}
-			set
-			{
-				if (_nodeId == value)
-				{
-					return;
-				}
-				_nodeId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeId);
+			set => SetProperty(ref _nodeId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("type")] 
 		public CEnum<scndevEventType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<scndevEventType>) CR2WTypeManager.Create("scndevEventType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("message")] 
 		public CString Message
 		{
-			get
-			{
-				if (_message == null)
-				{
-					_message = (CString) CR2WTypeManager.Create("String", "message", cr2w, this);
-				}
-				return _message;
-			}
-			set
-			{
-				if (_message == value)
-				{
-					return;
-				}
-				_message = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _message);
+			set => SetProperty(ref _message, value);
 		}
 
 		public scndevEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

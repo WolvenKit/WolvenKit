@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lanes")] 
 		public CArray<worldTrafficLanePersistent> Lanes
 		{
-			get
-			{
-				if (_lanes == null)
-				{
-					_lanes = (CArray<worldTrafficLanePersistent>) CR2WTypeManager.Create("array:worldTrafficLanePersistent", "lanes", cr2w, this);
-				}
-				return _lanes;
-			}
-			set
-			{
-				if (_lanes == value)
-				{
-					return;
-				}
-				_lanes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lanes);
+			set => SetProperty(ref _lanes, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("neighborGroups")] 
 		public CArray<CArray<CUInt16>> NeighborGroups
 		{
-			get
-			{
-				if (_neighborGroups == null)
-				{
-					_neighborGroups = (CArray<CArray<CUInt16>>) CR2WTypeManager.Create("array:array:Uint16", "neighborGroups", cr2w, this);
-				}
-				return _neighborGroups;
-			}
-			set
-			{
-				if (_neighborGroups == value)
-				{
-					return;
-				}
-				_neighborGroups = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _neighborGroups);
+			set => SetProperty(ref _neighborGroups, value);
 		}
 
 		public worldTrafficPersistentData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

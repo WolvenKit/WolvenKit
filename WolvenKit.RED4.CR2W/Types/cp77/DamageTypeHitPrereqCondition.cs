@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("damageType")] 
 		public CEnum<gamedataDamageType> DamageType
 		{
-			get
-			{
-				if (_damageType == null)
-				{
-					_damageType = (CEnum<gamedataDamageType>) CR2WTypeManager.Create("gamedataDamageType", "damageType", cr2w, this);
-				}
-				return _damageType;
-			}
-			set
-			{
-				if (_damageType == value)
-				{
-					return;
-				}
-				_damageType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damageType);
+			set => SetProperty(ref _damageType, value);
 		}
 
 		public DamageTypeHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("scannerTarget")] 
 		public entEntityID ScannerTarget
 		{
-			get
-			{
-				if (_scannerTarget == null)
-				{
-					_scannerTarget = (entEntityID) CR2WTypeManager.Create("entEntityID", "scannerTarget", cr2w, this);
-				}
-				return _scannerTarget;
-			}
-			set
-			{
-				if (_scannerTarget == value)
-				{
-					return;
-				}
-				_scannerTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerTarget);
+			set => SetProperty(ref _scannerTarget, value);
 		}
 
 		public ScannerTargetChangedRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

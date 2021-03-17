@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("variableName")] 
 		public CName VariableName
 		{
-			get
-			{
-				if (_variableName == null)
-				{
-					_variableName = (CName) CR2WTypeManager.Create("CName", "variableName", cr2w, this);
-				}
-				return _variableName;
-			}
-			set
-			{
-				if (_variableName == value)
-				{
-					return;
-				}
-				_variableName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _variableName);
+			set => SetProperty(ref _variableName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("defaultValue")] 
 		public CFloat DefaultValue
 		{
-			get
-			{
-				if (_defaultValue == null)
-				{
-					_defaultValue = (CFloat) CR2WTypeManager.Create("Float", "defaultValue", cr2w, this);
-				}
-				return _defaultValue;
-			}
-			set
-			{
-				if (_defaultValue == value)
-				{
-					return;
-				}
-				_defaultValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultValue);
+			set => SetProperty(ref _defaultValue, value);
 		}
 
 		public animAnimWrapperVariableDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

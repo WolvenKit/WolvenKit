@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("pathParams")] 
 		public CHandle<AIPatrolPathParameters> PathParams
 		{
-			get
-			{
-				if (_pathParams == null)
-				{
-					_pathParams = (CHandle<AIPatrolPathParameters>) CR2WTypeManager.Create("handle:AIPatrolPathParameters", "pathParams", cr2w, this);
-				}
-				return _pathParams;
-			}
-			set
-			{
-				if (_pathParams == value)
-				{
-					return;
-				}
-				_pathParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pathParams);
+			set => SetProperty(ref _pathParams, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("alertedPathParams")] 
 		public CHandle<AIPatrolPathParameters> AlertedPathParams
 		{
-			get
-			{
-				if (_alertedPathParams == null)
-				{
-					_alertedPathParams = (CHandle<AIPatrolPathParameters>) CR2WTypeManager.Create("handle:AIPatrolPathParameters", "alertedPathParams", cr2w, this);
-				}
-				return _alertedPathParams;
-			}
-			set
-			{
-				if (_alertedPathParams == value)
-				{
-					return;
-				}
-				_alertedPathParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alertedPathParams);
+			set => SetProperty(ref _alertedPathParams, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("alertedRadius")] 
 		public CFloat AlertedRadius
 		{
-			get
-			{
-				if (_alertedRadius == null)
-				{
-					_alertedRadius = (CFloat) CR2WTypeManager.Create("Float", "alertedRadius", cr2w, this);
-				}
-				return _alertedRadius;
-			}
-			set
-			{
-				if (_alertedRadius == value)
-				{
-					return;
-				}
-				_alertedRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alertedRadius);
+			set => SetProperty(ref _alertedRadius, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("alertedSpots")] 
 		public CHandle<AIbehaviorWorkspotList> AlertedSpots
 		{
-			get
-			{
-				if (_alertedSpots == null)
-				{
-					_alertedSpots = (CHandle<AIbehaviorWorkspotList>) CR2WTypeManager.Create("handle:AIbehaviorWorkspotList", "alertedSpots", cr2w, this);
-				}
-				return _alertedSpots;
-			}
-			set
-			{
-				if (_alertedSpots == value)
-				{
-					return;
-				}
-				_alertedSpots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alertedSpots);
+			set => SetProperty(ref _alertedSpots, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("forceAlerted")] 
 		public CBool ForceAlerted
 		{
-			get
-			{
-				if (_forceAlerted == null)
-				{
-					_forceAlerted = (CBool) CR2WTypeManager.Create("Bool", "forceAlerted", cr2w, this);
-				}
-				return _forceAlerted;
-			}
-			set
-			{
-				if (_forceAlerted == value)
-				{
-					return;
-				}
-				_forceAlerted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceAlerted);
+			set => SetProperty(ref _forceAlerted, value);
 		}
 
 		public AIPatrolRole(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animationName")] 
 		public CName AnimationName
 		{
-			get
-			{
-				if (_animationName == null)
-				{
-					_animationName = (CName) CR2WTypeManager.Create("CName", "animationName", cr2w, this);
-				}
-				return _animationName;
-			}
-			set
-			{
-				if (_animationName == value)
-				{
-					return;
-				}
-				_animationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationName);
+			set => SetProperty(ref _animationName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("operationType")] 
 		public CEnum<ETransformAnimationOperationType> OperationType
 		{
-			get
-			{
-				if (_operationType == null)
-				{
-					_operationType = (CEnum<ETransformAnimationOperationType>) CR2WTypeManager.Create("ETransformAnimationOperationType", "operationType", cr2w, this);
-				}
-				return _operationType;
-			}
-			set
-			{
-				if (_operationType == value)
-				{
-					return;
-				}
-				_operationType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _operationType);
+			set => SetProperty(ref _operationType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("playData")] 
 		public STransformAnimationPlayEventData PlayData
 		{
-			get
-			{
-				if (_playData == null)
-				{
-					_playData = (STransformAnimationPlayEventData) CR2WTypeManager.Create("STransformAnimationPlayEventData", "playData", cr2w, this);
-				}
-				return _playData;
-			}
-			set
-			{
-				if (_playData == value)
-				{
-					return;
-				}
-				_playData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playData);
+			set => SetProperty(ref _playData, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("skipData")] 
 		public STransformAnimationSkipEventData SkipData
 		{
-			get
-			{
-				if (_skipData == null)
-				{
-					_skipData = (STransformAnimationSkipEventData) CR2WTypeManager.Create("STransformAnimationSkipEventData", "skipData", cr2w, this);
-				}
-				return _skipData;
-			}
-			set
-			{
-				if (_skipData == value)
-				{
-					return;
-				}
-				_skipData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skipData);
+			set => SetProperty(ref _skipData, value);
 		}
 
 		public STransformAnimationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

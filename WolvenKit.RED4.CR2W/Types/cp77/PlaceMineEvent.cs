@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (Vector4) CR2WTypeManager.Create("Vector4", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("normal")] 
 		public Vector4 Normal
 		{
-			get
-			{
-				if (_normal == null)
-				{
-					_normal = (Vector4) CR2WTypeManager.Create("Vector4", "normal", cr2w, this);
-				}
-				return _normal;
-			}
-			set
-			{
-				if (_normal == value)
-				{
-					return;
-				}
-				_normal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _normal);
+			set => SetProperty(ref _normal, value);
 		}
 
 		public PlaceMineEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

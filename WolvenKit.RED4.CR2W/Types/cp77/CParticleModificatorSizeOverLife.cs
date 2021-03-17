@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("size")] 
 		public CHandle<IEvaluatorVector> Size
 		{
-			get
-			{
-				if (_size == null)
-				{
-					_size = (CHandle<IEvaluatorVector>) CR2WTypeManager.Create("handle:IEvaluatorVector", "size", cr2w, this);
-				}
-				return _size;
-			}
-			set
-			{
-				if (_size == value)
-				{
-					return;
-				}
-				_size = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _size);
+			set => SetProperty(ref _size, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("scale")] 
 		public CFloat Scale
 		{
-			get
-			{
-				if (_scale == null)
-				{
-					_scale = (CFloat) CR2WTypeManager.Create("Float", "scale", cr2w, this);
-				}
-				return _scale;
-			}
-			set
-			{
-				if (_scale == value)
-				{
-					return;
-				}
-				_scale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scale);
+			set => SetProperty(ref _scale, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("modulate")] 
 		public CBool Modulate
 		{
-			get
-			{
-				if (_modulate == null)
-				{
-					_modulate = (CBool) CR2WTypeManager.Create("Bool", "modulate", cr2w, this);
-				}
-				return _modulate;
-			}
-			set
-			{
-				if (_modulate == value)
-				{
-					return;
-				}
-				_modulate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _modulate);
+			set => SetProperty(ref _modulate, value);
 		}
 
 		public CParticleModificatorSizeOverLife(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

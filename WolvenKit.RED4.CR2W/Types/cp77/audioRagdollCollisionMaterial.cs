@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lightCollisionEventName")] 
 		public CName LightCollisionEventName
 		{
-			get
-			{
-				if (_lightCollisionEventName == null)
-				{
-					_lightCollisionEventName = (CName) CR2WTypeManager.Create("CName", "lightCollisionEventName", cr2w, this);
-				}
-				return _lightCollisionEventName;
-			}
-			set
-			{
-				if (_lightCollisionEventName == value)
-				{
-					return;
-				}
-				_lightCollisionEventName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lightCollisionEventName);
+			set => SetProperty(ref _lightCollisionEventName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("heavyCollisionEventName")] 
 		public CName HeavyCollisionEventName
 		{
-			get
-			{
-				if (_heavyCollisionEventName == null)
-				{
-					_heavyCollisionEventName = (CName) CR2WTypeManager.Create("CName", "heavyCollisionEventName", cr2w, this);
-				}
-				return _heavyCollisionEventName;
-			}
-			set
-			{
-				if (_heavyCollisionEventName == value)
-				{
-					return;
-				}
-				_heavyCollisionEventName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _heavyCollisionEventName);
+			set => SetProperty(ref _heavyCollisionEventName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("dismemberedLimbCollisionEventName")] 
 		public CName DismemberedLimbCollisionEventName
 		{
-			get
-			{
-				if (_dismemberedLimbCollisionEventName == null)
-				{
-					_dismemberedLimbCollisionEventName = (CName) CR2WTypeManager.Create("CName", "dismemberedLimbCollisionEventName", cr2w, this);
-				}
-				return _dismemberedLimbCollisionEventName;
-			}
-			set
-			{
-				if (_dismemberedLimbCollisionEventName == value)
-				{
-					return;
-				}
-				_dismemberedLimbCollisionEventName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dismemberedLimbCollisionEventName);
+			set => SetProperty(ref _dismemberedLimbCollisionEventName, value);
 		}
 
 		public audioRagdollCollisionMaterial(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

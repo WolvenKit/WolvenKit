@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("id")] 
 		public CString Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CString) CR2WTypeManager.Create("String", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("templateName")] 
 		public CName TemplateName
 		{
-			get
-			{
-				if (_templateName == null)
-				{
-					_templateName = (CName) CR2WTypeManager.Create("CName", "templateName", cr2w, this);
-				}
-				return _templateName;
-			}
-			set
-			{
-				if (_templateName == value)
-				{
-					return;
-				}
-				_templateName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _templateName);
+			set => SetProperty(ref _templateName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("spawnPos")] 
 		public NodeRef SpawnPos
 		{
-			get
-			{
-				if (_spawnPos == null)
-				{
-					_spawnPos = (NodeRef) CR2WTypeManager.Create("NodeRef", "spawnPos", cr2w, this);
-				}
-				return _spawnPos;
-			}
-			set
-			{
-				if (_spawnPos == value)
-				{
-					return;
-				}
-				_spawnPos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnPos);
+			set => SetProperty(ref _spawnPos, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("probability")] 
 		public CFloat Probability
 		{
-			get
-			{
-				if (_probability == null)
-				{
-					_probability = (CFloat) CR2WTypeManager.Create("Float", "probability", cr2w, this);
-				}
-				return _probability;
-			}
-			set
-			{
-				if (_probability == value)
-				{
-					return;
-				}
-				_probability = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _probability);
+			set => SetProperty(ref _probability, value);
 		}
 
 		public genLevelRandomizerEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

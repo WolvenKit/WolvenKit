@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("secondsCounter")] 
 		public CInt32 SecondsCounter
 		{
-			get
-			{
-				if (_secondsCounter == null)
-				{
-					_secondsCounter = (CInt32) CR2WTypeManager.Create("Int32", "secondsCounter", cr2w, this);
-				}
-				return _secondsCounter;
-			}
-			set
-			{
-				if (_secondsCounter == value)
-				{
-					return;
-				}
-				_secondsCounter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _secondsCounter);
+			set => SetProperty(ref _secondsCounter, value);
 		}
 
 		public cpPlayerDetectorPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

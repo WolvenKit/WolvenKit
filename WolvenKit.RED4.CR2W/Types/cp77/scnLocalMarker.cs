@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("transformLS")] 
 		public Transform TransformLS
 		{
-			get
-			{
-				if (_transformLS == null)
-				{
-					_transformLS = (Transform) CR2WTypeManager.Create("Transform", "transformLS", cr2w, this);
-				}
-				return _transformLS;
-			}
-			set
-			{
-				if (_transformLS == value)
-				{
-					return;
-				}
-				_transformLS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transformLS);
+			set => SetProperty(ref _transformLS, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		public scnLocalMarker(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

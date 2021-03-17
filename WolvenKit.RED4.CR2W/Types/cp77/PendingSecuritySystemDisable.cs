@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isPending")] 
 		public CBool IsPending
 		{
-			get
-			{
-				if (_isPending == null)
-				{
-					_isPending = (CBool) CR2WTypeManager.Create("Bool", "isPending", cr2w, this);
-				}
-				return _isPending;
-			}
-			set
-			{
-				if (_isPending == value)
-				{
-					return;
-				}
-				_isPending = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPending);
+			set => SetProperty(ref _isPending, value);
 		}
 
 		public PendingSecuritySystemDisable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

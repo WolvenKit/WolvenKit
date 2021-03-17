@@ -32,460 +32,160 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bracketsContainer")] 
 		public inkCompoundWidgetReference BracketsContainer
 		{
-			get
-			{
-				if (_bracketsContainer == null)
-				{
-					_bracketsContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "bracketsContainer", cr2w, this);
-				}
-				return _bracketsContainer;
-			}
-			set
-			{
-				if (_bracketsContainer == value)
-				{
-					return;
-				}
-				_bracketsContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bracketsContainer);
+			set => SetProperty(ref _bracketsContainer, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("tutorialOverlayContainer")] 
 		public inkCompoundWidgetReference TutorialOverlayContainer
 		{
-			get
-			{
-				if (_tutorialOverlayContainer == null)
-				{
-					_tutorialOverlayContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "tutorialOverlayContainer", cr2w, this);
-				}
-				return _tutorialOverlayContainer;
-			}
-			set
-			{
-				if (_tutorialOverlayContainer == value)
-				{
-					return;
-				}
-				_tutorialOverlayContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tutorialOverlayContainer);
+			set => SetProperty(ref _tutorialOverlayContainer, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("bracketLibraryID")] 
 		public CName BracketLibraryID
 		{
-			get
-			{
-				if (_bracketLibraryID == null)
-				{
-					_bracketLibraryID = (CName) CR2WTypeManager.Create("CName", "bracketLibraryID", cr2w, this);
-				}
-				return _bracketLibraryID;
-			}
-			set
-			{
-				if (_bracketLibraryID == value)
-				{
-					return;
-				}
-				_bracketLibraryID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bracketLibraryID);
+			set => SetProperty(ref _bracketLibraryID, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("blackboard")] 
 		public CHandle<gameIBlackboard> Blackboard
 		{
-			get
-			{
-				if (_blackboard == null)
-				{
-					_blackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "blackboard", cr2w, this);
-				}
-				return _blackboard;
-			}
-			set
-			{
-				if (_blackboard == value)
-				{
-					return;
-				}
-				_blackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboard);
+			set => SetProperty(ref _blackboard, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("bbDefinition")] 
 		public CHandle<UIGameDataDef> BbDefinition
 		{
-			get
-			{
-				if (_bbDefinition == null)
-				{
-					_bbDefinition = (CHandle<UIGameDataDef>) CR2WTypeManager.Create("handle:UIGameDataDef", "bbDefinition", cr2w, this);
-				}
-				return _bbDefinition;
-			}
-			set
-			{
-				if (_bbDefinition == value)
-				{
-					return;
-				}
-				_bbDefinition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbDefinition);
+			set => SetProperty(ref _bbDefinition, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("journalManager")] 
 		public wCHandle<gameJournalManager> JournalManager
 		{
-			get
-			{
-				if (_journalManager == null)
-				{
-					_journalManager = (wCHandle<gameJournalManager>) CR2WTypeManager.Create("whandle:gameJournalManager", "journalManager", cr2w, this);
-				}
-				return _journalManager;
-			}
-			set
-			{
-				if (_journalManager == value)
-				{
-					return;
-				}
-				_journalManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _journalManager);
+			set => SetProperty(ref _journalManager, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("uiSystemBB")] 
 		public CHandle<gameIBlackboard> UiSystemBB
 		{
-			get
-			{
-				if (_uiSystemBB == null)
-				{
-					_uiSystemBB = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "uiSystemBB", cr2w, this);
-				}
-				return _uiSystemBB;
-			}
-			set
-			{
-				if (_uiSystemBB == value)
-				{
-					return;
-				}
-				_uiSystemBB = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uiSystemBB);
+			set => SetProperty(ref _uiSystemBB, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("uiSystemBBDef")] 
 		public CHandle<UI_SystemDef> UiSystemBBDef
 		{
-			get
-			{
-				if (_uiSystemBBDef == null)
-				{
-					_uiSystemBBDef = (CHandle<UI_SystemDef>) CR2WTypeManager.Create("handle:UI_SystemDef", "uiSystemBBDef", cr2w, this);
-				}
-				return _uiSystemBBDef;
-			}
-			set
-			{
-				if (_uiSystemBBDef == value)
-				{
-					return;
-				}
-				_uiSystemBBDef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uiSystemBBDef);
+			set => SetProperty(ref _uiSystemBBDef, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("uiSystemId")] 
 		public CUInt32 UiSystemId
 		{
-			get
-			{
-				if (_uiSystemId == null)
-				{
-					_uiSystemId = (CUInt32) CR2WTypeManager.Create("Uint32", "uiSystemId", cr2w, this);
-				}
-				return _uiSystemId;
-			}
-			set
-			{
-				if (_uiSystemId == value)
-				{
-					return;
-				}
-				_uiSystemId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uiSystemId);
+			set => SetProperty(ref _uiSystemId, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("isShownBbId")] 
 		public CUInt32 IsShownBbId
 		{
-			get
-			{
-				if (_isShownBbId == null)
-				{
-					_isShownBbId = (CUInt32) CR2WTypeManager.Create("Uint32", "isShownBbId", cr2w, this);
-				}
-				return _isShownBbId;
-			}
-			set
-			{
-				if (_isShownBbId == value)
-				{
-					return;
-				}
-				_isShownBbId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isShownBbId);
+			set => SetProperty(ref _isShownBbId, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("dataBbId")] 
 		public CUInt32 DataBbId
 		{
-			get
-			{
-				if (_dataBbId == null)
-				{
-					_dataBbId = (CUInt32) CR2WTypeManager.Create("Uint32", "dataBbId", cr2w, this);
-				}
-				return _dataBbId;
-			}
-			set
-			{
-				if (_dataBbId == value)
-				{
-					return;
-				}
-				_dataBbId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dataBbId);
+			set => SetProperty(ref _dataBbId, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("tutorialOnHold")] 
 		public CBool TutorialOnHold
 		{
-			get
-			{
-				if (_tutorialOnHold == null)
-				{
-					_tutorialOnHold = (CBool) CR2WTypeManager.Create("Bool", "tutorialOnHold", cr2w, this);
-				}
-				return _tutorialOnHold;
-			}
-			set
-			{
-				if (_tutorialOnHold == value)
-				{
-					return;
-				}
-				_tutorialOnHold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tutorialOnHold);
+			set => SetProperty(ref _tutorialOnHold, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("tutorialData")] 
 		public gamePopupData TutorialData
 		{
-			get
-			{
-				if (_tutorialData == null)
-				{
-					_tutorialData = (gamePopupData) CR2WTypeManager.Create("gamePopupData", "tutorialData", cr2w, this);
-				}
-				return _tutorialData;
-			}
-			set
-			{
-				if (_tutorialData == value)
-				{
-					return;
-				}
-				_tutorialData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tutorialData);
+			set => SetProperty(ref _tutorialData, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("tutorialSettings")] 
 		public gamePopupSettings TutorialSettings
 		{
-			get
-			{
-				if (_tutorialSettings == null)
-				{
-					_tutorialSettings = (gamePopupSettings) CR2WTypeManager.Create("gamePopupSettings", "tutorialSettings", cr2w, this);
-				}
-				return _tutorialSettings;
-			}
-			set
-			{
-				if (_tutorialSettings == value)
-				{
-					return;
-				}
-				_tutorialSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tutorialSettings);
+			set => SetProperty(ref _tutorialSettings, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("tutorialToken")] 
 		public CHandle<inkGameNotificationToken> TutorialToken
 		{
-			get
-			{
-				if (_tutorialToken == null)
-				{
-					_tutorialToken = (CHandle<inkGameNotificationToken>) CR2WTypeManager.Create("handle:inkGameNotificationToken", "tutorialToken", cr2w, this);
-				}
-				return _tutorialToken;
-			}
-			set
-			{
-				if (_tutorialToken == value)
-				{
-					return;
-				}
-				_tutorialToken = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tutorialToken);
+			set => SetProperty(ref _tutorialToken, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("phoneMessageToken")] 
 		public CHandle<inkGameNotificationToken> PhoneMessageToken
 		{
-			get
-			{
-				if (_phoneMessageToken == null)
-				{
-					_phoneMessageToken = (CHandle<inkGameNotificationToken>) CR2WTypeManager.Create("handle:inkGameNotificationToken", "phoneMessageToken", cr2w, this);
-				}
-				return _phoneMessageToken;
-			}
-			set
-			{
-				if (_phoneMessageToken == value)
-				{
-					return;
-				}
-				_phoneMessageToken = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _phoneMessageToken);
+			set => SetProperty(ref _phoneMessageToken, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("shardToken")] 
 		public CHandle<inkGameNotificationToken> ShardToken
 		{
-			get
-			{
-				if (_shardToken == null)
-				{
-					_shardToken = (CHandle<inkGameNotificationToken>) CR2WTypeManager.Create("handle:inkGameNotificationToken", "shardToken", cr2w, this);
-				}
-				return _shardToken;
-			}
-			set
-			{
-				if (_shardToken == value)
-				{
-					return;
-				}
-				_shardToken = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shardToken);
+			set => SetProperty(ref _shardToken, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("vehiclesManagerToken")] 
 		public CHandle<inkGameNotificationToken> VehiclesManagerToken
 		{
-			get
-			{
-				if (_vehiclesManagerToken == null)
-				{
-					_vehiclesManagerToken = (CHandle<inkGameNotificationToken>) CR2WTypeManager.Create("handle:inkGameNotificationToken", "vehiclesManagerToken", cr2w, this);
-				}
-				return _vehiclesManagerToken;
-			}
-			set
-			{
-				if (_vehiclesManagerToken == value)
-				{
-					return;
-				}
-				_vehiclesManagerToken = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehiclesManagerToken);
+			set => SetProperty(ref _vehiclesManagerToken, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("vehicleRadioToken")] 
 		public CHandle<inkGameNotificationToken> VehicleRadioToken
 		{
-			get
-			{
-				if (_vehicleRadioToken == null)
-				{
-					_vehicleRadioToken = (CHandle<inkGameNotificationToken>) CR2WTypeManager.Create("handle:inkGameNotificationToken", "vehicleRadioToken", cr2w, this);
-				}
-				return _vehicleRadioToken;
-			}
-			set
-			{
-				if (_vehicleRadioToken == value)
-				{
-					return;
-				}
-				_vehicleRadioToken = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleRadioToken);
+			set => SetProperty(ref _vehicleRadioToken, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("codexToken")] 
 		public CHandle<inkGameNotificationToken> CodexToken
 		{
-			get
-			{
-				if (_codexToken == null)
-				{
-					_codexToken = (CHandle<inkGameNotificationToken>) CR2WTypeManager.Create("handle:inkGameNotificationToken", "codexToken", cr2w, this);
-				}
-				return _codexToken;
-			}
-			set
-			{
-				if (_codexToken == value)
-				{
-					return;
-				}
-				_codexToken = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _codexToken);
+			set => SetProperty(ref _codexToken, value);
 		}
 
 		public gameuiPopupsManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

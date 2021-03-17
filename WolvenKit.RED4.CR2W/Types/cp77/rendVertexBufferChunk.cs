@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vertexLayout")] 
 		public GpuWrapApiVertexLayoutDesc VertexLayout
 		{
-			get
-			{
-				if (_vertexLayout == null)
-				{
-					_vertexLayout = (GpuWrapApiVertexLayoutDesc) CR2WTypeManager.Create("GpuWrapApiVertexLayoutDesc", "vertexLayout", cr2w, this);
-				}
-				return _vertexLayout;
-			}
-			set
-			{
-				if (_vertexLayout == value)
-				{
-					return;
-				}
-				_vertexLayout = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vertexLayout);
+			set => SetProperty(ref _vertexLayout, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("byteOffsets", 5)] 
 		public CStatic<CUInt32> ByteOffsets
 		{
-			get
-			{
-				if (_byteOffsets == null)
-				{
-					_byteOffsets = (CStatic<CUInt32>) CR2WTypeManager.Create("static:5,Uint32", "byteOffsets", cr2w, this);
-				}
-				return _byteOffsets;
-			}
-			set
-			{
-				if (_byteOffsets == value)
-				{
-					return;
-				}
-				_byteOffsets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _byteOffsets);
+			set => SetProperty(ref _byteOffsets, value);
 		}
 
 		public rendVertexBufferChunk(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

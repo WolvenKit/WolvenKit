@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemId")] 
 		public scnscreenplayItemId ItemId
 		{
-			get
-			{
-				if (_itemId == null)
-				{
-					_itemId = (scnscreenplayItemId) CR2WTypeManager.Create("scnscreenplayItemId", "itemId", cr2w, this);
-				}
-				return _itemId;
-			}
-			set
-			{
-				if (_itemId == value)
-				{
-					return;
-				}
-				_itemId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemId);
+			set => SetProperty(ref _itemId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("comment")] 
 		public CString Comment
 		{
-			get
-			{
-				if (_comment == null)
-				{
-					_comment = (CString) CR2WTypeManager.Create("String", "comment", cr2w, this);
-				}
-				return _comment;
-			}
-			set
-			{
-				if (_comment == value)
-				{
-					return;
-				}
-				_comment = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comment);
+			set => SetProperty(ref _comment, value);
 		}
 
 		public scnscreenplayStandaloneComment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

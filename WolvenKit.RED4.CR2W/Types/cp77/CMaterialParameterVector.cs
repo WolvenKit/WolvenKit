@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vector")] 
 		public Vector4 Vector
 		{
-			get
-			{
-				if (_vector == null)
-				{
-					_vector = (Vector4) CR2WTypeManager.Create("Vector4", "vector", cr2w, this);
-				}
-				return _vector;
-			}
-			set
-			{
-				if (_vector == value)
-				{
-					return;
-				}
-				_vector = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vector);
+			set => SetProperty(ref _vector, value);
 		}
 
 		public CMaterialParameterVector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

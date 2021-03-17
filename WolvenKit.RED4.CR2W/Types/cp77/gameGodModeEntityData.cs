@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("overrides")] 
 		public CArray<gameGodModeData> Overrides
 		{
-			get
-			{
-				if (_overrides == null)
-				{
-					_overrides = (CArray<gameGodModeData>) CR2WTypeManager.Create("array:gameGodModeData", "overrides", cr2w, this);
-				}
-				return _overrides;
-			}
-			set
-			{
-				if (_overrides == value)
-				{
-					return;
-				}
-				_overrides = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrides);
+			set => SetProperty(ref _overrides, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("base")] 
 		public CArray<gameGodModeData> Base
 		{
-			get
-			{
-				if (_base == null)
-				{
-					_base = (CArray<gameGodModeData>) CR2WTypeManager.Create("array:gameGodModeData", "base", cr2w, this);
-				}
-				return _base;
-			}
-			set
-			{
-				if (_base == value)
-				{
-					return;
-				}
-				_base = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _base);
+			set => SetProperty(ref _base, value);
 		}
 
 		public gameGodModeEntityData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

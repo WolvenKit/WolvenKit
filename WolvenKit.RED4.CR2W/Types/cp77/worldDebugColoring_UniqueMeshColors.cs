@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("alpha")] 
 		public CUInt8 Alpha
 		{
-			get
-			{
-				if (_alpha == null)
-				{
-					_alpha = (CUInt8) CR2WTypeManager.Create("Uint8", "alpha", cr2w, this);
-				}
-				return _alpha;
-			}
-			set
-			{
-				if (_alpha == value)
-				{
-					return;
-				}
-				_alpha = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alpha);
+			set => SetProperty(ref _alpha, value);
 		}
 
 		public worldDebugColoring_UniqueMeshColors(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

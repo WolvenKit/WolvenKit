@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("effectsContainerRef")] 
 		public inkCompoundWidgetReference EffectsContainerRef
 		{
-			get
-			{
-				if (_effectsContainerRef == null)
-				{
-					_effectsContainerRef = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "effectsContainerRef", cr2w, this);
-				}
-				return _effectsContainerRef;
-			}
-			set
-			{
-				if (_effectsContainerRef == value)
-				{
-					return;
-				}
-				_effectsContainerRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectsContainerRef);
+			set => SetProperty(ref _effectsContainerRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("poolHolderRef")] 
 		public inkCompoundWidgetReference PoolHolderRef
 		{
-			get
-			{
-				if (_poolHolderRef == null)
-				{
-					_poolHolderRef = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "poolHolderRef", cr2w, this);
-				}
-				return _poolHolderRef;
-			}
-			set
-			{
-				if (_poolHolderRef == value)
-				{
-					return;
-				}
-				_poolHolderRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _poolHolderRef);
+			set => SetProperty(ref _poolHolderRef, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("effectTemplateRef")] 
 		public inkWidgetLibraryReference EffectTemplateRef
 		{
-			get
-			{
-				if (_effectTemplateRef == null)
-				{
-					_effectTemplateRef = (inkWidgetLibraryReference) CR2WTypeManager.Create("inkWidgetLibraryReference", "effectTemplateRef", cr2w, this);
-				}
-				return _effectTemplateRef;
-			}
-			set
-			{
-				if (_effectTemplateRef == value)
-				{
-					return;
-				}
-				_effectTemplateRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectTemplateRef);
+			set => SetProperty(ref _effectTemplateRef, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("maxSize")] 
 		public CInt32 MaxSize
 		{
-			get
-			{
-				if (_maxSize == null)
-				{
-					_maxSize = (CInt32) CR2WTypeManager.Create("Int32", "maxSize", cr2w, this);
-				}
-				return _maxSize;
-			}
-			set
-			{
-				if (_maxSize == value)
-				{
-					return;
-				}
-				_maxSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxSize);
+			set => SetProperty(ref _maxSize, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("effects")] 
 		public CArray<wCHandle<SingleCooldownManager>> Effects
 		{
-			get
-			{
-				if (_effects == null)
-				{
-					_effects = (CArray<wCHandle<SingleCooldownManager>>) CR2WTypeManager.Create("array:whandle:SingleCooldownManager", "effects", cr2w, this);
-				}
-				return _effects;
-			}
-			set
-			{
-				if (_effects == value)
-				{
-					return;
-				}
-				_effects = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effects);
+			set => SetProperty(ref _effects, value);
 		}
 
 		public RadialStatusEffectController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

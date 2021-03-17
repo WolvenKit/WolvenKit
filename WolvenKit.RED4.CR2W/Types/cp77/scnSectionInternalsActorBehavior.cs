@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actorId")] 
 		public scnActorId ActorId
 		{
-			get
-			{
-				if (_actorId == null)
-				{
-					_actorId = (scnActorId) CR2WTypeManager.Create("scnActorId", "actorId", cr2w, this);
-				}
-				return _actorId;
-			}
-			set
-			{
-				if (_actorId == value)
-				{
-					return;
-				}
-				_actorId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actorId);
+			set => SetProperty(ref _actorId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("behaviorMode")] 
 		public CEnum<scnSectionInternalsActorBehaviorMode> BehaviorMode
 		{
-			get
-			{
-				if (_behaviorMode == null)
-				{
-					_behaviorMode = (CEnum<scnSectionInternalsActorBehaviorMode>) CR2WTypeManager.Create("scnSectionInternalsActorBehaviorMode", "behaviorMode", cr2w, this);
-				}
-				return _behaviorMode;
-			}
-			set
-			{
-				if (_behaviorMode == value)
-				{
-					return;
-				}
-				_behaviorMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _behaviorMode);
+			set => SetProperty(ref _behaviorMode, value);
 		}
 
 		public scnSectionInternalsActorBehavior(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

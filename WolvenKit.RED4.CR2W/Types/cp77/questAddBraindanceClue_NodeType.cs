@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("clueName")] 
 		public CName ClueName
 		{
-			get
-			{
-				if (_clueName == null)
-				{
-					_clueName = (CName) CR2WTypeManager.Create("CName", "clueName", cr2w, this);
-				}
-				return _clueName;
-			}
-			set
-			{
-				if (_clueName == value)
-				{
-					return;
-				}
-				_clueName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clueName);
+			set => SetProperty(ref _clueName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("startTime")] 
 		public CFloat StartTime
 		{
-			get
-			{
-				if (_startTime == null)
-				{
-					_startTime = (CFloat) CR2WTypeManager.Create("Float", "startTime", cr2w, this);
-				}
-				return _startTime;
-			}
-			set
-			{
-				if (_startTime == value)
-				{
-					return;
-				}
-				_startTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startTime);
+			set => SetProperty(ref _startTime, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("endTime")] 
 		public CFloat EndTime
 		{
-			get
-			{
-				if (_endTime == null)
-				{
-					_endTime = (CFloat) CR2WTypeManager.Create("Float", "endTime", cr2w, this);
-				}
-				return _endTime;
-			}
-			set
-			{
-				if (_endTime == value)
-				{
-					return;
-				}
-				_endTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endTime);
+			set => SetProperty(ref _endTime, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("layer")] 
 		public CEnum<gameuiEBraindanceLayer> Layer
 		{
-			get
-			{
-				if (_layer == null)
-				{
-					_layer = (CEnum<gameuiEBraindanceLayer>) CR2WTypeManager.Create("gameuiEBraindanceLayer", "layer", cr2w, this);
-				}
-				return _layer;
-			}
-			set
-			{
-				if (_layer == value)
-				{
-					return;
-				}
-				_layer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _layer);
+			set => SetProperty(ref _layer, value);
 		}
 
 		public questAddBraindanceClue_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

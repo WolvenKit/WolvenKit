@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("min")] 
 		public CColor Min
 		{
-			get
-			{
-				if (_min == null)
-				{
-					_min = (CColor) CR2WTypeManager.Create("Color", "min", cr2w, this);
-				}
-				return _min;
-			}
-			set
-			{
-				if (_min == value)
-				{
-					return;
-				}
-				_min = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _min);
+			set => SetProperty(ref _min, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("max")] 
 		public CColor Max
 		{
-			get
-			{
-				if (_max == null)
-				{
-					_max = (CColor) CR2WTypeManager.Create("Color", "max", cr2w, this);
-				}
-				return _max;
-			}
-			set
-			{
-				if (_max == value)
-				{
-					return;
-				}
-				_max = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _max);
+			set => SetProperty(ref _max, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("randomPerChannel")] 
 		public CBool RandomPerChannel
 		{
-			get
-			{
-				if (_randomPerChannel == null)
-				{
-					_randomPerChannel = (CBool) CR2WTypeManager.Create("Bool", "randomPerChannel", cr2w, this);
-				}
-				return _randomPerChannel;
-			}
-			set
-			{
-				if (_randomPerChannel == value)
-				{
-					return;
-				}
-				_randomPerChannel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _randomPerChannel);
+			set => SetProperty(ref _randomPerChannel, value);
 		}
 
 		public CEvaluatorColorRandom(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

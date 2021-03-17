@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("number")] 
 		public CInt32 Number
 		{
-			get
-			{
-				if (_number == null)
-				{
-					_number = (CInt32) CR2WTypeManager.Create("Int32", "number", cr2w, this);
-				}
-				return _number;
-			}
-			set
-			{
-				if (_number == value)
-				{
-					return;
-				}
-				_number = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _number);
+			set => SetProperty(ref _number, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("kind")] 
 		public CString Kind
 		{
-			get
-			{
-				if (_kind == null)
-				{
-					_kind = (CString) CR2WTypeManager.Create("String", "kind", cr2w, this);
-				}
-				return _kind;
-			}
-			set
-			{
-				if (_kind == value)
-				{
-					return;
-				}
-				_kind = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _kind);
+			set => SetProperty(ref _kind, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hostname")] 
 		public CString Hostname
 		{
-			get
-			{
-				if (_hostname == null)
-				{
-					_hostname = (CString) CR2WTypeManager.Create("String", "hostname", cr2w, this);
-				}
-				return _hostname;
-			}
-			set
-			{
-				if (_hostname == value)
-				{
-					return;
-				}
-				_hostname = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hostname);
+			set => SetProperty(ref _hostname, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("address")] 
 		public CString Address
 		{
-			get
-			{
-				if (_address == null)
-				{
-					_address = (CString) CR2WTypeManager.Create("String", "address", cr2w, this);
-				}
-				return _address;
-			}
-			set
-			{
-				if (_address == value)
-				{
-					return;
-				}
-				_address = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _address);
+			set => SetProperty(ref _address, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("worldDescription")] 
 		public CString WorldDescription
 		{
-			get
-			{
-				if (_worldDescription == null)
-				{
-					_worldDescription = (CString) CR2WTypeManager.Create("String", "worldDescription", cr2w, this);
-				}
-				return _worldDescription;
-			}
-			set
-			{
-				if (_worldDescription == value)
-				{
-					return;
-				}
-				_worldDescription = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _worldDescription);
+			set => SetProperty(ref _worldDescription, value);
 		}
 
 		public inkServerInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animName")] 
 		public CName AnimName
 		{
-			get
-			{
-				if (_animName == null)
-				{
-					_animName = (CName) CR2WTypeManager.Create("CName", "animName", cr2w, this);
-				}
-				return _animName;
-			}
-			set
-			{
-				if (_animName == value)
-				{
-					return;
-				}
-				_animName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animName);
+			set => SetProperty(ref _animName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("animationPriority")] 
 		public CInt32 AnimationPriority
 		{
-			get
-			{
-				if (_animationPriority == null)
-				{
-					_animationPriority = (CInt32) CR2WTypeManager.Create("Int32", "animationPriority", cr2w, this);
-				}
-				return _animationPriority;
-			}
-			set
-			{
-				if (_animationPriority == value)
-				{
-					return;
-				}
-				_animationPriority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationPriority);
+			set => SetProperty(ref _animationPriority, value);
 		}
 
 		public TargetHitIndicatorLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

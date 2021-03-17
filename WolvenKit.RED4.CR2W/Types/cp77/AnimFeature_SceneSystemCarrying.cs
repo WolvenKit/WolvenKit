@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("carrying")] 
 		public CBool Carrying
 		{
-			get
-			{
-				if (_carrying == null)
-				{
-					_carrying = (CBool) CR2WTypeManager.Create("Bool", "carrying", cr2w, this);
-				}
-				return _carrying;
-			}
-			set
-			{
-				if (_carrying == value)
-				{
-					return;
-				}
-				_carrying = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _carrying);
+			set => SetProperty(ref _carrying, value);
 		}
 
 		public AnimFeature_SceneSystemCarrying(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

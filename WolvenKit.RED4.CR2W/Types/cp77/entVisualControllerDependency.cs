@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mesh")] 
 		public raRef<CMesh> Mesh
 		{
-			get
-			{
-				if (_mesh == null)
-				{
-					_mesh = (raRef<CMesh>) CR2WTypeManager.Create("raRef:CMesh", "mesh", cr2w, this);
-				}
-				return _mesh;
-			}
-			set
-			{
-				if (_mesh == value)
-				{
-					return;
-				}
-				_mesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mesh);
+			set => SetProperty(ref _mesh, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("appearanceName")] 
 		public CName AppearanceName
 		{
-			get
-			{
-				if (_appearanceName == null)
-				{
-					_appearanceName = (CName) CR2WTypeManager.Create("CName", "appearanceName", cr2w, this);
-				}
-				return _appearanceName;
-			}
-			set
-			{
-				if (_appearanceName == value)
-				{
-					return;
-				}
-				_appearanceName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _appearanceName);
+			set => SetProperty(ref _appearanceName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("componentName")] 
 		public CName ComponentName
 		{
-			get
-			{
-				if (_componentName == null)
-				{
-					_componentName = (CName) CR2WTypeManager.Create("CName", "componentName", cr2w, this);
-				}
-				return _componentName;
-			}
-			set
-			{
-				if (_componentName == value)
-				{
-					return;
-				}
-				_componentName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _componentName);
+			set => SetProperty(ref _componentName, value);
 		}
 
 		public entVisualControllerDependency(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (Vector4) CR2WTypeManager.Create("Vector4", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rotation")] 
 		public Quaternion Rotation
 		{
-			get
-			{
-				if (_rotation == null)
-				{
-					_rotation = (Quaternion) CR2WTypeManager.Create("Quaternion", "rotation", cr2w, this);
-				}
-				return _rotation;
-			}
-			set
-			{
-				if (_rotation == value)
-				{
-					return;
-				}
-				_rotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotation);
+			set => SetProperty(ref _rotation, value);
 		}
 
 		public gamestateMachineparameterTypeAdjustTransform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

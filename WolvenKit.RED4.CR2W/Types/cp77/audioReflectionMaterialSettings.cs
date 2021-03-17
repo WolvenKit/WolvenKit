@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lowPass")] 
 		public CFloat LowPass
 		{
-			get
-			{
-				if (_lowPass == null)
-				{
-					_lowPass = (CFloat) CR2WTypeManager.Create("Float", "lowPass", cr2w, this);
-				}
-				return _lowPass;
-			}
-			set
-			{
-				if (_lowPass == value)
-				{
-					return;
-				}
-				_lowPass = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lowPass);
+			set => SetProperty(ref _lowPass, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("highPass")] 
 		public CFloat HighPass
 		{
-			get
-			{
-				if (_highPass == null)
-				{
-					_highPass = (CFloat) CR2WTypeManager.Create("Float", "highPass", cr2w, this);
-				}
-				return _highPass;
-			}
-			set
-			{
-				if (_highPass == value)
-				{
-					return;
-				}
-				_highPass = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highPass);
+			set => SetProperty(ref _highPass, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("gain")] 
 		public CFloat Gain
 		{
-			get
-			{
-				if (_gain == null)
-				{
-					_gain = (CFloat) CR2WTypeManager.Create("Float", "gain", cr2w, this);
-				}
-				return _gain;
-			}
-			set
-			{
-				if (_gain == value)
-				{
-					return;
-				}
-				_gain = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gain);
+			set => SetProperty(ref _gain, value);
 		}
 
 		public audioReflectionMaterialSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

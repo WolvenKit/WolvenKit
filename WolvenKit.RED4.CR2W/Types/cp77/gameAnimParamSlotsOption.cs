@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotID")] 
 		public TweakDBID SlotID
 		{
-			get
-			{
-				if (_slotID == null)
-				{
-					_slotID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "slotID", cr2w, this);
-				}
-				return _slotID;
-			}
-			set
-			{
-				if (_slotID == value)
-				{
-					return;
-				}
-				_slotID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("paramName")] 
 		public CName ParamName
 		{
-			get
-			{
-				if (_paramName == null)
-				{
-					_paramName = (CName) CR2WTypeManager.Create("CName", "paramName", cr2w, this);
-				}
-				return _paramName;
-			}
-			set
-			{
-				if (_paramName == value)
-				{
-					return;
-				}
-				_paramName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _paramName);
+			set => SetProperty(ref _paramName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("function")] 
 		public CEnum<entAnimParamSlotFunction> Function
 		{
-			get
-			{
-				if (_function == null)
-				{
-					_function = (CEnum<entAnimParamSlotFunction>) CR2WTypeManager.Create("entAnimParamSlotFunction", "function", cr2w, this);
-				}
-				return _function;
-			}
-			set
-			{
-				if (_function == value)
-				{
-					return;
-				}
-				_function = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _function);
+			set => SetProperty(ref _function, value);
 		}
 
 		public gameAnimParamSlotsOption(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

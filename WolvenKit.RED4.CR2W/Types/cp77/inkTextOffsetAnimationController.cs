@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timeToSkip")] 
 		public CFloat TimeToSkip
 		{
-			get
-			{
-				if (_timeToSkip == null)
-				{
-					_timeToSkip = (CFloat) CR2WTypeManager.Create("Float", "timeToSkip", cr2w, this);
-				}
-				return _timeToSkip;
-			}
-			set
-			{
-				if (_timeToSkip == value)
-				{
-					return;
-				}
-				_timeToSkip = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeToSkip);
+			set => SetProperty(ref _timeToSkip, value);
 		}
 
 		public inkTextOffsetAnimationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

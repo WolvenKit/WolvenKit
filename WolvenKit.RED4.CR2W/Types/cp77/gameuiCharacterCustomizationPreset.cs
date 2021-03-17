@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isMale")] 
 		public CBool IsMale
 		{
-			get
-			{
-				if (_isMale == null)
-				{
-					_isMale = (CBool) CR2WTypeManager.Create("Bool", "isMale", cr2w, this);
-				}
-				return _isMale;
-			}
-			set
-			{
-				if (_isMale == value)
-				{
-					return;
-				}
-				_isMale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isMale);
+			set => SetProperty(ref _isMale, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("bodyGroups")] 
 		public CArray<gameuiCustomizationGroup> BodyGroups
 		{
-			get
-			{
-				if (_bodyGroups == null)
-				{
-					_bodyGroups = (CArray<gameuiCustomizationGroup>) CR2WTypeManager.Create("array:gameuiCustomizationGroup", "bodyGroups", cr2w, this);
-				}
-				return _bodyGroups;
-			}
-			set
-			{
-				if (_bodyGroups == value)
-				{
-					return;
-				}
-				_bodyGroups = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyGroups);
+			set => SetProperty(ref _bodyGroups, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("headGroups")] 
 		public CArray<gameuiCustomizationGroup> HeadGroups
 		{
-			get
-			{
-				if (_headGroups == null)
-				{
-					_headGroups = (CArray<gameuiCustomizationGroup>) CR2WTypeManager.Create("array:gameuiCustomizationGroup", "headGroups", cr2w, this);
-				}
-				return _headGroups;
-			}
-			set
-			{
-				if (_headGroups == value)
-				{
-					return;
-				}
-				_headGroups = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _headGroups);
+			set => SetProperty(ref _headGroups, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("armsGroups")] 
 		public CArray<gameuiCustomizationGroup> ArmsGroups
 		{
-			get
-			{
-				if (_armsGroups == null)
-				{
-					_armsGroups = (CArray<gameuiCustomizationGroup>) CR2WTypeManager.Create("array:gameuiCustomizationGroup", "armsGroups", cr2w, this);
-				}
-				return _armsGroups;
-			}
-			set
-			{
-				if (_armsGroups == value)
-				{
-					return;
-				}
-				_armsGroups = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _armsGroups);
+			set => SetProperty(ref _armsGroups, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("perspectiveInfo")] 
 		public CArray<gameuiPerspectiveInfo> PerspectiveInfo
 		{
-			get
-			{
-				if (_perspectiveInfo == null)
-				{
-					_perspectiveInfo = (CArray<gameuiPerspectiveInfo>) CR2WTypeManager.Create("array:gameuiPerspectiveInfo", "perspectiveInfo", cr2w, this);
-				}
-				return _perspectiveInfo;
-			}
-			set
-			{
-				if (_perspectiveInfo == value)
-				{
-					return;
-				}
-				_perspectiveInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perspectiveInfo);
+			set => SetProperty(ref _perspectiveInfo, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("tags")] 
 		public redTagList Tags
 		{
-			get
-			{
-				if (_tags == null)
-				{
-					_tags = (redTagList) CR2WTypeManager.Create("redTagList", "tags", cr2w, this);
-				}
-				return _tags;
-			}
-			set
-			{
-				if (_tags == value)
-				{
-					return;
-				}
-				_tags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tags);
+			set => SetProperty(ref _tags, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("version")] 
 		public CUInt32 Version
 		{
-			get
-			{
-				if (_version == null)
-				{
-					_version = (CUInt32) CR2WTypeManager.Create("Uint32", "version", cr2w, this);
-				}
-				return _version;
-			}
-			set
-			{
-				if (_version == value)
-				{
-					return;
-				}
-				_version = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _version);
+			set => SetProperty(ref _version, value);
 		}
 
 		public gameuiCharacterCustomizationPreset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

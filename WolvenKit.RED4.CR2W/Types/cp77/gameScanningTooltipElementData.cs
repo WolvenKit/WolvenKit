@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("recordID")] 
 		public TweakDBID RecordID
 		{
-			get
-			{
-				if (_recordID == null)
-				{
-					_recordID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "recordID", cr2w, this);
-				}
-				return _recordID;
-			}
-			set
-			{
-				if (_recordID == value)
-				{
-					return;
-				}
-				_recordID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recordID);
+			set => SetProperty(ref _recordID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("localizedName")] 
 		public CName LocalizedName
 		{
-			get
-			{
-				if (_localizedName == null)
-				{
-					_localizedName = (CName) CR2WTypeManager.Create("CName", "localizedName", cr2w, this);
-				}
-				return _localizedName;
-			}
-			set
-			{
-				if (_localizedName == value)
-				{
-					return;
-				}
-				_localizedName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localizedName);
+			set => SetProperty(ref _localizedName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("localizedDescription")] 
 		public CName LocalizedDescription
 		{
-			get
-			{
-				if (_localizedDescription == null)
-				{
-					_localizedDescription = (CName) CR2WTypeManager.Create("CName", "localizedDescription", cr2w, this);
-				}
-				return _localizedDescription;
-			}
-			set
-			{
-				if (_localizedDescription == value)
-				{
-					return;
-				}
-				_localizedDescription = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localizedDescription);
+			set => SetProperty(ref _localizedDescription, value);
 		}
 
 		public gameScanningTooltipElementData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

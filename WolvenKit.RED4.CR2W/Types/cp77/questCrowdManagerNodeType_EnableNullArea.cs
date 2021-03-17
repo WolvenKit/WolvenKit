@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("areaReference")] 
 		public NodeRef AreaReference
 		{
-			get
-			{
-				if (_areaReference == null)
-				{
-					_areaReference = (NodeRef) CR2WTypeManager.Create("NodeRef", "areaReference", cr2w, this);
-				}
-				return _areaReference;
-			}
-			set
-			{
-				if (_areaReference == value)
-				{
-					return;
-				}
-				_areaReference = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaReference);
+			set => SetProperty(ref _areaReference, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("enable")] 
 		public CBool Enable
 		{
-			get
-			{
-				if (_enable == null)
-				{
-					_enable = (CBool) CR2WTypeManager.Create("Bool", "enable", cr2w, this);
-				}
-				return _enable;
-			}
-			set
-			{
-				if (_enable == value)
-				{
-					return;
-				}
-				_enable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enable);
+			set => SetProperty(ref _enable, value);
 		}
 
 		public questCrowdManagerNodeType_EnableNullArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

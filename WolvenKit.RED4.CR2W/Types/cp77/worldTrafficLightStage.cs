@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("color")] 
 		public CEnum<worldTrafficLightColor> Color
 		{
-			get
-			{
-				if (_color == null)
-				{
-					_color = (CEnum<worldTrafficLightColor>) CR2WTypeManager.Create("worldTrafficLightColor", "color", cr2w, this);
-				}
-				return _color;
-			}
-			set
-			{
-				if (_color == value)
-				{
-					return;
-				}
-				_color = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _color);
+			set => SetProperty(ref _color, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		public worldTrafficLightStage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

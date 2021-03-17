@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get
-			{
-				if (_vehicleRef == null)
-				{
-					_vehicleRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "vehicleRef", cr2w, this);
-				}
-				return _vehicleRef;
-			}
-			set
-			{
-				if (_vehicleRef == value)
-				{
-					return;
-				}
-				_vehicleRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleRef);
+			set => SetProperty(ref _vehicleRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("val")] 
 		public CBool Val
 		{
-			get
-			{
-				if (_val == null)
-				{
-					_val = (CBool) CR2WTypeManager.Create("Bool", "val", cr2w, this);
-				}
-				return _val;
-			}
-			set
-			{
-				if (_val == value)
-				{
-					return;
-				}
-				_val = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _val);
+			set => SetProperty(ref _val, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tire")] 
 		public CUInt32 Tire
 		{
-			get
-			{
-				if (_tire == null)
-				{
-					_tire = (CUInt32) CR2WTypeManager.Create("Uint32", "tire", cr2w, this);
-				}
-				return _tire;
-			}
-			set
-			{
-				if (_tire == value)
-				{
-					return;
-				}
-				_tire = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tire);
+			set => SetProperty(ref _tire, value);
 		}
 
 		public questToggleBrokenTire_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

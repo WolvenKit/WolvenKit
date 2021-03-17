@@ -30,414 +30,144 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dopplerFactor")] 
 		public CFloat DopplerFactor
 		{
-			get
-			{
-				if (_dopplerFactor == null)
-				{
-					_dopplerFactor = (CFloat) CR2WTypeManager.Create("Float", "dopplerFactor", cr2w, this);
-				}
-				return _dopplerFactor;
-			}
-			set
-			{
-				if (_dopplerFactor == value)
-				{
-					return;
-				}
-				_dopplerFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dopplerFactor);
+			set => SetProperty(ref _dopplerFactor, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("speedOfSound")] 
 		public CFloat SpeedOfSound
 		{
-			get
-			{
-				if (_speedOfSound == null)
-				{
-					_speedOfSound = (CFloat) CR2WTypeManager.Create("Float", "speedOfSound", cr2w, this);
-				}
-				return _speedOfSound;
-			}
-			set
-			{
-				if (_speedOfSound == value)
-				{
-					return;
-				}
-				_speedOfSound = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speedOfSound);
+			set => SetProperty(ref _speedOfSound, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("wideInteriorLimit")] 
 		public CFloat WideInteriorLimit
 		{
-			get
-			{
-				if (_wideInteriorLimit == null)
-				{
-					_wideInteriorLimit = (CFloat) CR2WTypeManager.Create("Float", "wideInteriorLimit", cr2w, this);
-				}
-				return _wideInteriorLimit;
-			}
-			set
-			{
-				if (_wideInteriorLimit == value)
-				{
-					return;
-				}
-				_wideInteriorLimit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wideInteriorLimit);
+			set => SetProperty(ref _wideInteriorLimit, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("enclosedCeilingDistance")] 
 		public CFloat EnclosedCeilingDistance
 		{
-			get
-			{
-				if (_enclosedCeilingDistance == null)
-				{
-					_enclosedCeilingDistance = (CFloat) CR2WTypeManager.Create("Float", "enclosedCeilingDistance", cr2w, this);
-				}
-				return _enclosedCeilingDistance;
-			}
-			set
-			{
-				if (_enclosedCeilingDistance == value)
-				{
-					return;
-				}
-				_enclosedCeilingDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enclosedCeilingDistance);
+			set => SetProperty(ref _enclosedCeilingDistance, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("urbanNarrowDistance")] 
 		public CFloat UrbanNarrowDistance
 		{
-			get
-			{
-				if (_urbanNarrowDistance == null)
-				{
-					_urbanNarrowDistance = (CFloat) CR2WTypeManager.Create("Float", "urbanNarrowDistance", cr2w, this);
-				}
-				return _urbanNarrowDistance;
-			}
-			set
-			{
-				if (_urbanNarrowDistance == value)
-				{
-					return;
-				}
-				_urbanNarrowDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _urbanNarrowDistance);
+			set => SetProperty(ref _urbanNarrowDistance, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("urbanStreetDistance")] 
 		public CFloat UrbanStreetDistance
 		{
-			get
-			{
-				if (_urbanStreetDistance == null)
-				{
-					_urbanStreetDistance = (CFloat) CR2WTypeManager.Create("Float", "urbanStreetDistance", cr2w, this);
-				}
-				return _urbanStreetDistance;
-			}
-			set
-			{
-				if (_urbanStreetDistance == value)
-				{
-					return;
-				}
-				_urbanStreetDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _urbanStreetDistance);
+			set => SetProperty(ref _urbanStreetDistance, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("exteriorWideAltitude")] 
 		public CFloat ExteriorWideAltitude
 		{
-			get
-			{
-				if (_exteriorWideAltitude == null)
-				{
-					_exteriorWideAltitude = (CFloat) CR2WTypeManager.Create("Float", "exteriorWideAltitude", cr2w, this);
-				}
-				return _exteriorWideAltitude;
-			}
-			set
-			{
-				if (_exteriorWideAltitude == value)
-				{
-					return;
-				}
-				_exteriorWideAltitude = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exteriorWideAltitude);
+			set => SetProperty(ref _exteriorWideAltitude, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("elevatedOpenDistance")] 
 		public CFloat ElevatedOpenDistance
 		{
-			get
-			{
-				if (_elevatedOpenDistance == null)
-				{
-					_elevatedOpenDistance = (CFloat) CR2WTypeManager.Create("Float", "elevatedOpenDistance", cr2w, this);
-				}
-				return _elevatedOpenDistance;
-			}
-			set
-			{
-				if (_elevatedOpenDistance == value)
-				{
-					return;
-				}
-				_elevatedOpenDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _elevatedOpenDistance);
+			set => SetProperty(ref _elevatedOpenDistance, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("ambExteriorCeilingMinDistance")] 
 		public CFloat AmbExteriorCeilingMinDistance
 		{
-			get
-			{
-				if (_ambExteriorCeilingMinDistance == null)
-				{
-					_ambExteriorCeilingMinDistance = (CFloat) CR2WTypeManager.Create("Float", "ambExteriorCeilingMinDistance", cr2w, this);
-				}
-				return _ambExteriorCeilingMinDistance;
-			}
-			set
-			{
-				if (_ambExteriorCeilingMinDistance == value)
-				{
-					return;
-				}
-				_ambExteriorCeilingMinDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ambExteriorCeilingMinDistance);
+			set => SetProperty(ref _ambExteriorCeilingMinDistance, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("ambExteriorCeilingMaxDistance")] 
 		public CFloat AmbExteriorCeilingMaxDistance
 		{
-			get
-			{
-				if (_ambExteriorCeilingMaxDistance == null)
-				{
-					_ambExteriorCeilingMaxDistance = (CFloat) CR2WTypeManager.Create("Float", "ambExteriorCeilingMaxDistance", cr2w, this);
-				}
-				return _ambExteriorCeilingMaxDistance;
-			}
-			set
-			{
-				if (_ambExteriorCeilingMaxDistance == value)
-				{
-					return;
-				}
-				_ambExteriorCeilingMaxDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ambExteriorCeilingMaxDistance);
+			set => SetProperty(ref _ambExteriorCeilingMaxDistance, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("badlandsWideRelativeAltitude")] 
 		public CFloat BadlandsWideRelativeAltitude
 		{
-			get
-			{
-				if (_badlandsWideRelativeAltitude == null)
-				{
-					_badlandsWideRelativeAltitude = (CFloat) CR2WTypeManager.Create("Float", "badlandsWideRelativeAltitude", cr2w, this);
-				}
-				return _badlandsWideRelativeAltitude;
-			}
-			set
-			{
-				if (_badlandsWideRelativeAltitude == value)
-				{
-					return;
-				}
-				_badlandsWideRelativeAltitude = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _badlandsWideRelativeAltitude);
+			set => SetProperty(ref _badlandsWideRelativeAltitude, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("repositioningStandardZoomFactor")] 
 		public CFloat RepositioningStandardZoomFactor
 		{
-			get
-			{
-				if (_repositioningStandardZoomFactor == null)
-				{
-					_repositioningStandardZoomFactor = (CFloat) CR2WTypeManager.Create("Float", "repositioningStandardZoomFactor", cr2w, this);
-				}
-				return _repositioningStandardZoomFactor;
-			}
-			set
-			{
-				if (_repositioningStandardZoomFactor == value)
-				{
-					return;
-				}
-				_repositioningStandardZoomFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _repositioningStandardZoomFactor);
+			set => SetProperty(ref _repositioningStandardZoomFactor, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("repositioningScanningZoomFactor")] 
 		public CFloat RepositioningScanningZoomFactor
 		{
-			get
-			{
-				if (_repositioningScanningZoomFactor == null)
-				{
-					_repositioningScanningZoomFactor = (CFloat) CR2WTypeManager.Create("Float", "repositioningScanningZoomFactor", cr2w, this);
-				}
-				return _repositioningScanningZoomFactor;
-			}
-			set
-			{
-				if (_repositioningScanningZoomFactor == value)
-				{
-					return;
-				}
-				_repositioningScanningZoomFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _repositioningScanningZoomFactor);
+			set => SetProperty(ref _repositioningScanningZoomFactor, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("repositioningVoStandardZoomFactor")] 
 		public CFloat RepositioningVoStandardZoomFactor
 		{
-			get
-			{
-				if (_repositioningVoStandardZoomFactor == null)
-				{
-					_repositioningVoStandardZoomFactor = (CFloat) CR2WTypeManager.Create("Float", "repositioningVoStandardZoomFactor", cr2w, this);
-				}
-				return _repositioningVoStandardZoomFactor;
-			}
-			set
-			{
-				if (_repositioningVoStandardZoomFactor == value)
-				{
-					return;
-				}
-				_repositioningVoStandardZoomFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _repositioningVoStandardZoomFactor);
+			set => SetProperty(ref _repositioningVoStandardZoomFactor, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("repositioningVoScanningZoomFactor")] 
 		public CFloat RepositioningVoScanningZoomFactor
 		{
-			get
-			{
-				if (_repositioningVoScanningZoomFactor == null)
-				{
-					_repositioningVoScanningZoomFactor = (CFloat) CR2WTypeManager.Create("Float", "repositioningVoScanningZoomFactor", cr2w, this);
-				}
-				return _repositioningVoScanningZoomFactor;
-			}
-			set
-			{
-				if (_repositioningVoScanningZoomFactor == value)
-				{
-					return;
-				}
-				_repositioningVoScanningZoomFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _repositioningVoScanningZoomFactor);
+			set => SetProperty(ref _repositioningVoScanningZoomFactor, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("groupingExcludedVisualTags")] 
 		public CArray<CName> GroupingExcludedVisualTags
 		{
-			get
-			{
-				if (_groupingExcludedVisualTags == null)
-				{
-					_groupingExcludedVisualTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "groupingExcludedVisualTags", cr2w, this);
-				}
-				return _groupingExcludedVisualTags;
-			}
-			set
-			{
-				if (_groupingExcludedVisualTags == value)
-				{
-					return;
-				}
-				_groupingExcludedVisualTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _groupingExcludedVisualTags);
+			set => SetProperty(ref _groupingExcludedVisualTags, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("windowEventName")] 
 		public CName WindowEventName
 		{
-			get
-			{
-				if (_windowEventName == null)
-				{
-					_windowEventName = (CName) CR2WTypeManager.Create("CName", "windowEventName", cr2w, this);
-				}
-				return _windowEventName;
-			}
-			set
-			{
-				if (_windowEventName == value)
-				{
-					return;
-				}
-				_windowEventName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _windowEventName);
+			set => SetProperty(ref _windowEventName, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("maxWindowOffset")] 
 		public CFloat MaxWindowOffset
 		{
-			get
-			{
-				if (_maxWindowOffset == null)
-				{
-					_maxWindowOffset = (CFloat) CR2WTypeManager.Create("Float", "maxWindowOffset", cr2w, this);
-				}
-				return _maxWindowOffset;
-			}
-			set
-			{
-				if (_maxWindowOffset == value)
-				{
-					return;
-				}
-				_maxWindowOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxWindowOffset);
+			set => SetProperty(ref _maxWindowOffset, value);
 		}
 
 		public audioAcousticConstantsPreset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

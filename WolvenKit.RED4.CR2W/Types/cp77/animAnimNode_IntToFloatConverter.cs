@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inputNode")] 
 		public animIntLink InputNode
 		{
-			get
-			{
-				if (_inputNode == null)
-				{
-					_inputNode = (animIntLink) CR2WTypeManager.Create("animIntLink", "inputNode", cr2w, this);
-				}
-				return _inputNode;
-			}
-			set
-			{
-				if (_inputNode == value)
-				{
-					return;
-				}
-				_inputNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputNode);
+			set => SetProperty(ref _inputNode, value);
 		}
 
 		public animAnimNode_IntToFloatConverter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

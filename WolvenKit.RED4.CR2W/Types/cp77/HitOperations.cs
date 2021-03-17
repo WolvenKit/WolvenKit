@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hitOperations")] 
 		public CArray<SHitOperationData> HitOperations_
 		{
-			get
-			{
-				if (_hitOperations == null)
-				{
-					_hitOperations = (CArray<SHitOperationData>) CR2WTypeManager.Create("array:SHitOperationData", "hitOperations", cr2w, this);
-				}
-				return _hitOperations;
-			}
-			set
-			{
-				if (_hitOperations == value)
-				{
-					return;
-				}
-				_hitOperations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitOperations);
+			set => SetProperty(ref _hitOperations, value);
 		}
 
 		public HitOperations(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

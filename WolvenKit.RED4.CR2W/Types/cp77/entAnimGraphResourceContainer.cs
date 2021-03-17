@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animGraphLookupTable")] 
 		public CArray<entAnimGraphResourceContainerEntry> AnimGraphLookupTable
 		{
-			get
-			{
-				if (_animGraphLookupTable == null)
-				{
-					_animGraphLookupTable = (CArray<entAnimGraphResourceContainerEntry>) CR2WTypeManager.Create("array:entAnimGraphResourceContainerEntry", "animGraphLookupTable", cr2w, this);
-				}
-				return _animGraphLookupTable;
-			}
-			set
-			{
-				if (_animGraphLookupTable == value)
-				{
-					return;
-				}
-				_animGraphLookupTable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animGraphLookupTable);
+			set => SetProperty(ref _animGraphLookupTable, value);
 		}
 
 		public entAnimGraphResourceContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

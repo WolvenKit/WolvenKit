@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ownerEnum")] 
 		public CInt32 OwnerEnum
 		{
-			get
-			{
-				if (_ownerEnum == null)
-				{
-					_ownerEnum = (CInt32) CR2WTypeManager.Create("Int32", "ownerEnum", cr2w, this);
-				}
-				return _ownerEnum;
-			}
-			set
-			{
-				if (_ownerEnum == value)
-				{
-					return;
-				}
-				_ownerEnum = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerEnum);
+			set => SetProperty(ref _ownerEnum, value);
 		}
 
 		public AnimFeature_OwnerType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

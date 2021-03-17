@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fearPhase")] 
 		public CInt32 FearPhase
 		{
-			get
-			{
-				if (_fearPhase == null)
-				{
-					_fearPhase = (CInt32) CR2WTypeManager.Create("Int32", "fearPhase", cr2w, this);
-				}
-				return _fearPhase;
-			}
-			set
-			{
-				if (_fearPhase == value)
-				{
-					return;
-				}
-				_fearPhase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fearPhase);
+			set => SetProperty(ref _fearPhase, value);
 		}
 
 		public PreviousFearPhaseCheck(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

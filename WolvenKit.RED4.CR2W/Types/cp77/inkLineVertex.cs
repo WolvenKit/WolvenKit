@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("int")] 
 		public Vector2 Int
 		{
-			get
-			{
-				if (_int == null)
-				{
-					_int = (Vector2) CR2WTypeManager.Create("Vector2", "int", cr2w, this);
-				}
-				return _int;
-			}
-			set
-			{
-				if (_int == value)
-				{
-					return;
-				}
-				_int = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _int);
+			set => SetProperty(ref _int, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("neType")] 
 		public CEnum<inkLineType> NeType
 		{
-			get
-			{
-				if (_neType == null)
-				{
-					_neType = (CEnum<inkLineType>) CR2WTypeManager.Create("inkLineType", "neType", cr2w, this);
-				}
-				return _neType;
-			}
-			set
-			{
-				if (_neType == value)
-				{
-					return;
-				}
-				_neType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _neType);
+			set => SetProperty(ref _neType, value);
 		}
 
 		public inkLineVertex(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

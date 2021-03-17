@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ownerEntityPosition")] 
 		public Vector4 OwnerEntityPosition
 		{
-			get
-			{
-				if (_ownerEntityPosition == null)
-				{
-					_ownerEntityPosition = (Vector4) CR2WTypeManager.Create("Vector4", "ownerEntityPosition", cr2w, this);
-				}
-				return _ownerEntityPosition;
-			}
-			set
-			{
-				if (_ownerEntityPosition == value)
-				{
-					return;
-				}
-				_ownerEntityPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerEntityPosition);
+			set => SetProperty(ref _ownerEntityPosition, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("fxResource")] 
 		public gameFxResource FxResource
 		{
-			get
-			{
-				if (_fxResource == null)
-				{
-					_fxResource = (gameFxResource) CR2WTypeManager.Create("gameFxResource", "fxResource", cr2w, this);
-				}
-				return _fxResource;
-			}
-			set
-			{
-				if (_fxResource == value)
-				{
-					return;
-				}
-				_fxResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fxResource);
+			set => SetProperty(ref _fxResource, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lifetime")] 
 		public CFloat Lifetime
 		{
-			get
-			{
-				if (_lifetime == null)
-				{
-					_lifetime = (CFloat) CR2WTypeManager.Create("Float", "lifetime", cr2w, this);
-				}
-				return _lifetime;
-			}
-			set
-			{
-				if (_lifetime == value)
-				{
-					return;
-				}
-				_lifetime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lifetime);
+			set => SetProperty(ref _lifetime, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("pingType")] 
 		public CEnum<EPingType> PingType
 		{
-			get
-			{
-				if (_pingType == null)
-				{
-					_pingType = (CEnum<EPingType>) CR2WTypeManager.Create("EPingType", "pingType", cr2w, this);
-				}
-				return _pingType;
-			}
-			set
-			{
-				if (_pingType == value)
-				{
-					return;
-				}
-				_pingType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pingType);
+			set => SetProperty(ref _pingType, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("revealSlave")] 
 		public CBool RevealSlave
 		{
-			get
-			{
-				if (_revealSlave == null)
-				{
-					_revealSlave = (CBool) CR2WTypeManager.Create("Bool", "revealSlave", cr2w, this);
-				}
-				return _revealSlave;
-			}
-			set
-			{
-				if (_revealSlave == value)
-				{
-					return;
-				}
-				_revealSlave = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revealSlave);
+			set => SetProperty(ref _revealSlave, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("revealMaster")] 
 		public CBool RevealMaster
 		{
-			get
-			{
-				if (_revealMaster == null)
-				{
-					_revealMaster = (CBool) CR2WTypeManager.Create("Bool", "revealMaster", cr2w, this);
-				}
-				return _revealMaster;
-			}
-			set
-			{
-				if (_revealMaster == value)
-				{
-					return;
-				}
-				_revealMaster = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revealMaster);
+			set => SetProperty(ref _revealMaster, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("ignoreRevealed")] 
 		public CBool IgnoreRevealed
 		{
-			get
-			{
-				if (_ignoreRevealed == null)
-				{
-					_ignoreRevealed = (CBool) CR2WTypeManager.Create("Bool", "ignoreRevealed", cr2w, this);
-				}
-				return _ignoreRevealed;
-			}
-			set
-			{
-				if (_ignoreRevealed == value)
-				{
-					return;
-				}
-				_ignoreRevealed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ignoreRevealed);
+			set => SetProperty(ref _ignoreRevealed, value);
 		}
 
 		public PingNetworkGridEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mediaDeviceData")] 
 		public MediaDeviceData MediaDeviceData
 		{
-			get
-			{
-				if (_mediaDeviceData == null)
-				{
-					_mediaDeviceData = (MediaDeviceData) CR2WTypeManager.Create("MediaDeviceData", "mediaDeviceData", cr2w, this);
-				}
-				return _mediaDeviceData;
-			}
-			set
-			{
-				if (_mediaDeviceData == value)
-				{
-					return;
-				}
-				_mediaDeviceData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mediaDeviceData);
+			set => SetProperty(ref _mediaDeviceData, value);
 		}
 
 		public MediaResaveData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

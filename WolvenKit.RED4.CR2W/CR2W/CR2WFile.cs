@@ -19,6 +19,8 @@ using WolvenKit.Common.Services;
 using WolvenKit.Common.FNV1A;
 using Newtonsoft.Json;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED4.CR2W.Exceptions;
+using WolvenKit.RED4.CR2W.Reflection;
 
 namespace WolvenKit.RED4.CR2W
 {
@@ -377,7 +379,12 @@ namespace WolvenKit.RED4.CR2W
             var size = file.ReadUInt32();
 
             // Read Value
-            var parsedvar = CR2WTypeManager.Create(typename, varname, this, parent);
+            var parsedvar = parent.GetPropertyByREDName(varname);
+            if (parsedvar.REDType != typename)
+            {
+                throw new TypeMismatchException(typename, parsedvar.REDType);
+            }
+
             // The "size" variable read is something a bit strange : it takes itself into account.
             parsedvar.Read(file, size - 4);
 

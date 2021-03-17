@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("state")] 
 		public wCHandle<StatPoolSpentPrereqState> State
 		{
-			get
-			{
-				if (_state == null)
-				{
-					_state = (wCHandle<StatPoolSpentPrereqState>) CR2WTypeManager.Create("whandle:StatPoolSpentPrereqState", "state", cr2w, this);
-				}
-				return _state;
-			}
-			set
-			{
-				if (_state == value)
-				{
-					return;
-				}
-				_state = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("overallSpentValue")] 
 		public CFloat OverallSpentValue
 		{
-			get
-			{
-				if (_overallSpentValue == null)
-				{
-					_overallSpentValue = (CFloat) CR2WTypeManager.Create("Float", "overallSpentValue", cr2w, this);
-				}
-				return _overallSpentValue;
-			}
-			set
-			{
-				if (_overallSpentValue == value)
-				{
-					return;
-				}
-				_overallSpentValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overallSpentValue);
+			set => SetProperty(ref _overallSpentValue, value);
 		}
 
 		public StatPoolSpentPrereqListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

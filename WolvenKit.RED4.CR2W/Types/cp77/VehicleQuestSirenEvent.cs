@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lights")] 
 		public CBool Lights
 		{
-			get
-			{
-				if (_lights == null)
-				{
-					_lights = (CBool) CR2WTypeManager.Create("Bool", "lights", cr2w, this);
-				}
-				return _lights;
-			}
-			set
-			{
-				if (_lights == value)
-				{
-					return;
-				}
-				_lights = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lights);
+			set => SetProperty(ref _lights, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sounds")] 
 		public CBool Sounds
 		{
-			get
-			{
-				if (_sounds == null)
-				{
-					_sounds = (CBool) CR2WTypeManager.Create("Bool", "sounds", cr2w, this);
-				}
-				return _sounds;
-			}
-			set
-			{
-				if (_sounds == value)
-				{
-					return;
-				}
-				_sounds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sounds);
+			set => SetProperty(ref _sounds, value);
 		}
 
 		public VehicleQuestSirenEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

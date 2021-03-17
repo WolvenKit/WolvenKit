@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("compiledData")] 
 		public CHandle<gameCompiledSmartObjectData> CompiledData
 		{
-			get
-			{
-				if (_compiledData == null)
-				{
-					_compiledData = (CHandle<gameCompiledSmartObjectData>) CR2WTypeManager.Create("handle:gameCompiledSmartObjectData", "compiledData", cr2w, this);
-				}
-				return _compiledData;
-			}
-			set
-			{
-				if (_compiledData == value)
-				{
-					return;
-				}
-				_compiledData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _compiledData);
+			set => SetProperty(ref _compiledData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("worldTransform")] 
 		public WorldTransform WorldTransform
 		{
-			get
-			{
-				if (_worldTransform == null)
-				{
-					_worldTransform = (WorldTransform) CR2WTypeManager.Create("WorldTransform", "worldTransform", cr2w, this);
-				}
-				return _worldTransform;
-			}
-			set
-			{
-				if (_worldTransform == value)
-				{
-					return;
-				}
-				_worldTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _worldTransform);
+			set => SetProperty(ref _worldTransform, value);
 		}
 
 		public gameCompiledSmartObjectNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

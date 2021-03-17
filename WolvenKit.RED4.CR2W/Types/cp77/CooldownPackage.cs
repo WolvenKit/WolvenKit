@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actionID")] 
 		public TweakDBID ActionID
 		{
-			get
-			{
-				if (_actionID == null)
-				{
-					_actionID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "actionID", cr2w, this);
-				}
-				return _actionID;
-			}
-			set
-			{
-				if (_actionID == value)
-				{
-					return;
-				}
-				_actionID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionID);
+			set => SetProperty(ref _actionID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("addressees")] 
 		public CArray<PSOwnerData> Addressees
 		{
-			get
-			{
-				if (_addressees == null)
-				{
-					_addressees = (CArray<PSOwnerData>) CR2WTypeManager.Create("array:PSOwnerData", "addressees", cr2w, this);
-				}
-				return _addressees;
-			}
-			set
-			{
-				if (_addressees == value)
-				{
-					return;
-				}
-				_addressees = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addressees);
+			set => SetProperty(ref _addressees, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("initialCooldown")] 
 		public CFloat InitialCooldown
 		{
-			get
-			{
-				if (_initialCooldown == null)
-				{
-					_initialCooldown = (CFloat) CR2WTypeManager.Create("Float", "initialCooldown", cr2w, this);
-				}
-				return _initialCooldown;
-			}
-			set
-			{
-				if (_initialCooldown == value)
-				{
-					return;
-				}
-				_initialCooldown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialCooldown);
+			set => SetProperty(ref _initialCooldown, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("label")] 
 		public CooldownStorageID Label
 		{
-			get
-			{
-				if (_label == null)
-				{
-					_label = (CooldownStorageID) CR2WTypeManager.Create("CooldownStorageID", "label", cr2w, this);
-				}
-				return _label;
-			}
-			set
-			{
-				if (_label == value)
-				{
-					return;
-				}
-				_label = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _label);
+			set => SetProperty(ref _label, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("packageStatus")] 
 		public CEnum<PackageStatus> PackageStatus
 		{
-			get
-			{
-				if (_packageStatus == null)
-				{
-					_packageStatus = (CEnum<PackageStatus>) CR2WTypeManager.Create("PackageStatus", "packageStatus", cr2w, this);
-				}
-				return _packageStatus;
-			}
-			set
-			{
-				if (_packageStatus == value)
-				{
-					return;
-				}
-				_packageStatus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _packageStatus);
+			set => SetProperty(ref _packageStatus, value);
 		}
 
 		public CooldownPackage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

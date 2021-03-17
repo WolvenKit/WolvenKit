@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("limits")] 
 		public audioVoiceTriggerLimits Limits
 		{
-			get
-			{
-				if (_limits == null)
-				{
-					_limits = (audioVoiceTriggerLimits) CR2WTypeManager.Create("audioVoiceTriggerLimits", "limits", cr2w, this);
-				}
-				return _limits;
-			}
-			set
-			{
-				if (_limits == value)
-				{
-					return;
-				}
-				_limits = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _limits);
+			set => SetProperty(ref _limits, value);
 		}
 
 		public audioVoiceTriggerLimitsMapItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

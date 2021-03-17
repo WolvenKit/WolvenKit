@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("errorMessageWidget")] 
 		public inkWidgetReference ErrorMessageWidget
 		{
-			get
-			{
-				if (_errorMessageWidget == null)
-				{
-					_errorMessageWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "errorMessageWidget", cr2w, this);
-				}
-				return _errorMessageWidget;
-			}
-			set
-			{
-				if (_errorMessageWidget == value)
-				{
-					return;
-				}
-				_errorMessageWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _errorMessageWidget);
+			set => SetProperty(ref _errorMessageWidget, value);
 		}
 
 		public GogErrorNotificationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

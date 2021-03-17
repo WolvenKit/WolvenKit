@@ -23,253 +23,88 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enabled")] 
 		public CBool Enabled
 		{
-			get
-			{
-				if (_enabled == null)
-				{
-					_enabled = (CBool) CR2WTypeManager.Create("Bool", "enabled", cr2w, this);
-				}
-				return _enabled;
-			}
-			set
-			{
-				if (_enabled == value)
-				{
-					return;
-				}
-				_enabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enabled);
+			set => SetProperty(ref _enabled, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get
-			{
-				if (_radius == null)
-				{
-					_radius = (CFloat) CR2WTypeManager.Create("Float", "radius", cr2w, this);
-				}
-				return _radius;
-			}
-			set
-			{
-				if (_radius == value)
-				{
-					return;
-				}
-				_radius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radius);
+			set => SetProperty(ref _radius, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("cycleTimeMin")] 
 		public CFloat CycleTimeMin
 		{
-			get
-			{
-				if (_cycleTimeMin == null)
-				{
-					_cycleTimeMin = (CFloat) CR2WTypeManager.Create("Float", "cycleTimeMin", cr2w, this);
-				}
-				return _cycleTimeMin;
-			}
-			set
-			{
-				if (_cycleTimeMin == value)
-				{
-					return;
-				}
-				_cycleTimeMin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cycleTimeMin);
+			set => SetProperty(ref _cycleTimeMin, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("cycleTimeMax")] 
 		public CFloat CycleTimeMax
 		{
-			get
-			{
-				if (_cycleTimeMax == null)
-				{
-					_cycleTimeMax = (CFloat) CR2WTypeManager.Create("Float", "cycleTimeMax", cr2w, this);
-				}
-				return _cycleTimeMax;
-			}
-			set
-			{
-				if (_cycleTimeMax == value)
-				{
-					return;
-				}
-				_cycleTimeMax = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cycleTimeMax);
+			set => SetProperty(ref _cycleTimeMax, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("rampUpDistanceStart")] 
 		public CFloat RampUpDistanceStart
 		{
-			get
-			{
-				if (_rampUpDistanceStart == null)
-				{
-					_rampUpDistanceStart = (CFloat) CR2WTypeManager.Create("Float", "rampUpDistanceStart", cr2w, this);
-				}
-				return _rampUpDistanceStart;
-			}
-			set
-			{
-				if (_rampUpDistanceStart == value)
-				{
-					return;
-				}
-				_rampUpDistanceStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rampUpDistanceStart);
+			set => SetProperty(ref _rampUpDistanceStart, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("rampUpDistanceEnd")] 
 		public CFloat RampUpDistanceEnd
 		{
-			get
-			{
-				if (_rampUpDistanceEnd == null)
-				{
-					_rampUpDistanceEnd = (CFloat) CR2WTypeManager.Create("Float", "rampUpDistanceEnd", cr2w, this);
-				}
-				return _rampUpDistanceEnd;
-			}
-			set
-			{
-				if (_rampUpDistanceEnd == value)
-				{
-					return;
-				}
-				_rampUpDistanceEnd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rampUpDistanceEnd);
+			set => SetProperty(ref _rampUpDistanceEnd, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("rampDownDistanceStart")] 
 		public CFloat RampDownDistanceStart
 		{
-			get
-			{
-				if (_rampDownDistanceStart == null)
-				{
-					_rampDownDistanceStart = (CFloat) CR2WTypeManager.Create("Float", "rampDownDistanceStart", cr2w, this);
-				}
-				return _rampDownDistanceStart;
-			}
-			set
-			{
-				if (_rampDownDistanceStart == value)
-				{
-					return;
-				}
-				_rampDownDistanceStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rampDownDistanceStart);
+			set => SetProperty(ref _rampDownDistanceStart, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("rampDownDistanceEnd")] 
 		public CFloat RampDownDistanceEnd
 		{
-			get
-			{
-				if (_rampDownDistanceEnd == null)
-				{
-					_rampDownDistanceEnd = (CFloat) CR2WTypeManager.Create("Float", "rampDownDistanceEnd", cr2w, this);
-				}
-				return _rampDownDistanceEnd;
-			}
-			set
-			{
-				if (_rampDownDistanceEnd == value)
-				{
-					return;
-				}
-				_rampDownDistanceEnd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rampDownDistanceEnd);
+			set => SetProperty(ref _rampDownDistanceEnd, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("rampDownFactor")] 
 		public CFloat RampDownFactor
 		{
-			get
-			{
-				if (_rampDownFactor == null)
-				{
-					_rampDownFactor = (CFloat) CR2WTypeManager.Create("Float", "rampDownFactor", cr2w, this);
-				}
-				return _rampDownFactor;
-			}
-			set
-			{
-				if (_rampDownFactor == value)
-				{
-					return;
-				}
-				_rampDownFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rampDownFactor);
+			set => SetProperty(ref _rampDownFactor, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("randomizePhase")] 
 		public CBool RandomizePhase
 		{
-			get
-			{
-				if (_randomizePhase == null)
-				{
-					_randomizePhase = (CBool) CR2WTypeManager.Create("Bool", "randomizePhase", cr2w, this);
-				}
-				return _randomizePhase;
-			}
-			set
-			{
-				if (_randomizePhase == value)
-				{
-					return;
-				}
-				_randomizePhase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _randomizePhase);
+			set => SetProperty(ref _randomizePhase, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("randomizeDirection")] 
 		public CBool RandomizeDirection
 		{
-			get
-			{
-				if (_randomizeDirection == null)
-				{
-					_randomizeDirection = (CBool) CR2WTypeManager.Create("Bool", "randomizeDirection", cr2w, this);
-				}
-				return _randomizeDirection;
-			}
-			set
-			{
-				if (_randomizeDirection == value)
-				{
-					return;
-				}
-				_randomizeDirection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _randomizeDirection);
+			set => SetProperty(ref _randomizeDirection, value);
 		}
 
 		public gameprojectileSpiralParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

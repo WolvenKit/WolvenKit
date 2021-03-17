@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("soundEvent")] 
 		public CName SoundEvent
 		{
-			get
-			{
-				if (_soundEvent == null)
-				{
-					_soundEvent = (CName) CR2WTypeManager.Create("CName", "soundEvent", cr2w, this);
-				}
-				return _soundEvent;
-			}
-			set
-			{
-				if (_soundEvent == value)
-				{
-					return;
-				}
-				_soundEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soundEvent);
+			set => SetProperty(ref _soundEvent, value);
 		}
 
 		public PlaySoundEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

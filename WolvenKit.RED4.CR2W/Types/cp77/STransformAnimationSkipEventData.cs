@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("time")] 
 		public CFloat Time
 		{
-			get
-			{
-				if (_time == null)
-				{
-					_time = (CFloat) CR2WTypeManager.Create("Float", "time", cr2w, this);
-				}
-				return _time;
-			}
-			set
-			{
-				if (_time == value)
-				{
-					return;
-				}
-				_time = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _time);
+			set => SetProperty(ref _time, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("skipToEnd")] 
 		public CBool SkipToEnd
 		{
-			get
-			{
-				if (_skipToEnd == null)
-				{
-					_skipToEnd = (CBool) CR2WTypeManager.Create("Bool", "skipToEnd", cr2w, this);
-				}
-				return _skipToEnd;
-			}
-			set
-			{
-				if (_skipToEnd == value)
-				{
-					return;
-				}
-				_skipToEnd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skipToEnd);
+			set => SetProperty(ref _skipToEnd, value);
 		}
 
 		public STransformAnimationSkipEventData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

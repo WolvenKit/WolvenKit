@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("abilities")] 
 		public CArray<wCHandle<gamedataGameplayAbility_Record>> Abilities
 		{
-			get
-			{
-				if (_abilities == null)
-				{
-					_abilities = (CArray<wCHandle<gamedataGameplayAbility_Record>>) CR2WTypeManager.Create("array:whandle:gamedataGameplayAbility_Record", "abilities", cr2w, this);
-				}
-				return _abilities;
-			}
-			set
-			{
-				if (_abilities == value)
-				{
-					return;
-				}
-				_abilities = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _abilities);
+			set => SetProperty(ref _abilities, value);
 		}
 
 		public ScannerAbilities(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

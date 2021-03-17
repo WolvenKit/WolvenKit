@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("companionTargetRef")] 
 		public CHandle<questUniversalRef> CompanionTargetRef
 		{
-			get
-			{
-				if (_companionTargetRef == null)
-				{
-					_companionTargetRef = (CHandle<questUniversalRef>) CR2WTypeManager.Create("handle:questUniversalRef", "companionTargetRef", cr2w, this);
-				}
-				return _companionTargetRef;
-			}
-			set
-			{
-				if (_companionTargetRef == value)
-				{
-					return;
-				}
-				_companionTargetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _companionTargetRef);
+			set => SetProperty(ref _companionTargetRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("distance")] 
 		public CFloat Distance
 		{
-			get
-			{
-				if (_distance == null)
-				{
-					_distance = (CFloat) CR2WTypeManager.Create("Float", "distance", cr2w, this);
-				}
-				return _distance;
-			}
-			set
-			{
-				if (_distance == value)
-				{
-					return;
-				}
-				_distance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distance);
+			set => SetProperty(ref _distance, value);
 		}
 
 		public questParamKeepDistance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

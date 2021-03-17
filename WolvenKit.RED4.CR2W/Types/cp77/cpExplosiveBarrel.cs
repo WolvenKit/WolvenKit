@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("colliderComponentName")] 
 		public CName ColliderComponentName
 		{
-			get
-			{
-				if (_colliderComponentName == null)
-				{
-					_colliderComponentName = (CName) CR2WTypeManager.Create("CName", "colliderComponentName", cr2w, this);
-				}
-				return _colliderComponentName;
-			}
-			set
-			{
-				if (_colliderComponentName == value)
-				{
-					return;
-				}
-				_colliderComponentName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _colliderComponentName);
+			set => SetProperty(ref _colliderComponentName, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("destructionComponentName")] 
 		public CName DestructionComponentName
 		{
-			get
-			{
-				if (_destructionComponentName == null)
-				{
-					_destructionComponentName = (CName) CR2WTypeManager.Create("CName", "destructionComponentName", cr2w, this);
-				}
-				return _destructionComponentName;
-			}
-			set
-			{
-				if (_destructionComponentName == value)
-				{
-					return;
-				}
-				_destructionComponentName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _destructionComponentName);
+			set => SetProperty(ref _destructionComponentName, value);
 		}
 
 		public cpExplosiveBarrel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

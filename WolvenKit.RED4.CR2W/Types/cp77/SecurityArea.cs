@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("area")] 
 		public CHandle<gameStaticTriggerAreaComponent> Area
 		{
-			get
-			{
-				if (_area == null)
-				{
-					_area = (CHandle<gameStaticTriggerAreaComponent>) CR2WTypeManager.Create("handle:gameStaticTriggerAreaComponent", "area", cr2w, this);
-				}
-				return _area;
-			}
-			set
-			{
-				if (_area == value)
-				{
-					return;
-				}
-				_area = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _area);
+			set => SetProperty(ref _area, value);
 		}
 
 		public SecurityArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("linkedLayersName")] 
 		public CName LinkedLayersName
 		{
-			get
-			{
-				if (_linkedLayersName == null)
-				{
-					_linkedLayersName = (CName) CR2WTypeManager.Create("CName", "linkedLayersName", cr2w, this);
-				}
-				return _linkedLayersName;
-			}
-			set
-			{
-				if (_linkedLayersName == value)
-				{
-					return;
-				}
-				_linkedLayersName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linkedLayersName);
+			set => SetProperty(ref _linkedLayersName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("layerName")] 
 		public CName LayerName
 		{
-			get
-			{
-				if (_layerName == null)
-				{
-					_layerName = (CName) CR2WTypeManager.Create("CName", "layerName", cr2w, this);
-				}
-				return _layerName;
-			}
-			set
-			{
-				if (_layerName == value)
-				{
-					return;
-				}
-				_layerName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _layerName);
+			set => SetProperty(ref _layerName, value);
 		}
 
 		public gameinteractionsLayerActivatedPredicate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

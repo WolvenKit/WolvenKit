@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("eventTarget")] 
 		public CHandle<RipperDocGameController> EventTarget
 		{
-			get
-			{
-				if (_eventTarget == null)
-				{
-					_eventTarget = (CHandle<RipperDocGameController>) CR2WTypeManager.Create("handle:RipperDocGameController", "eventTarget", cr2w, this);
-				}
-				return _eventTarget;
-			}
-			set
-			{
-				if (_eventTarget == value)
-				{
-					return;
-				}
-				_eventTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventTarget);
+			set => SetProperty(ref _eventTarget, value);
 		}
 
 		public RipperDocItemBoughtCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

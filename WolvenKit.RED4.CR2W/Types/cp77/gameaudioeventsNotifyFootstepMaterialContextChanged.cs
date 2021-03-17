@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("footwareType")] 
 		public CName FootwareType
 		{
-			get
-			{
-				if (_footwareType == null)
-				{
-					_footwareType = (CName) CR2WTypeManager.Create("CName", "footwareType", cr2w, this);
-				}
-				return _footwareType;
-			}
-			set
-			{
-				if (_footwareType == value)
-				{
-					return;
-				}
-				_footwareType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _footwareType);
+			set => SetProperty(ref _footwareType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("surfaceFlavourName")] 
 		public CName SurfaceFlavourName
 		{
-			get
-			{
-				if (_surfaceFlavourName == null)
-				{
-					_surfaceFlavourName = (CName) CR2WTypeManager.Create("CName", "surfaceFlavourName", cr2w, this);
-				}
-				return _surfaceFlavourName;
-			}
-			set
-			{
-				if (_surfaceFlavourName == value)
-				{
-					return;
-				}
-				_surfaceFlavourName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _surfaceFlavourName);
+			set => SetProperty(ref _surfaceFlavourName, value);
 		}
 
 		public gameaudioeventsNotifyFootstepMaterialContextChanged(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

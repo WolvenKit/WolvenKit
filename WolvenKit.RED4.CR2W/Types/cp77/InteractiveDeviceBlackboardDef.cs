@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("showAd")] 
 		public gamebbScriptID_Bool ShowAd
 		{
-			get
-			{
-				if (_showAd == null)
-				{
-					_showAd = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "showAd", cr2w, this);
-				}
-				return _showAd;
-			}
-			set
-			{
-				if (_showAd == value)
-				{
-					return;
-				}
-				_showAd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showAd);
+			set => SetProperty(ref _showAd, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("showVendor")] 
 		public gamebbScriptID_Bool ShowVendor
 		{
-			get
-			{
-				if (_showVendor == null)
-				{
-					_showVendor = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "showVendor", cr2w, this);
-				}
-				return _showVendor;
-			}
-			set
-			{
-				if (_showVendor == value)
-				{
-					return;
-				}
-				_showVendor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showVendor);
+			set => SetProperty(ref _showVendor, value);
 		}
 
 		public InteractiveDeviceBlackboardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

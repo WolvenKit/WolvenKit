@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("min")] 
 		public CFloat Min
 		{
-			get
-			{
-				if (_min == null)
-				{
-					_min = (CFloat) CR2WTypeManager.Create("Float", "min", cr2w, this);
-				}
-				return _min;
-			}
-			set
-			{
-				if (_min == value)
-				{
-					return;
-				}
-				_min = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _min);
+			set => SetProperty(ref _min, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("max")] 
 		public CFloat Max
 		{
-			get
-			{
-				if (_max == null)
-				{
-					_max = (CFloat) CR2WTypeManager.Create("Float", "max", cr2w, this);
-				}
-				return _max;
-			}
-			set
-			{
-				if (_max == value)
-				{
-					return;
-				}
-				_max = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _max);
+			set => SetProperty(ref _max, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("frequencyFactor")] 
 		public CFloat FrequencyFactor
 		{
-			get
-			{
-				if (_frequencyFactor == null)
-				{
-					_frequencyFactor = (CFloat) CR2WTypeManager.Create("Float", "frequencyFactor", cr2w, this);
-				}
-				return _frequencyFactor;
-			}
-			set
-			{
-				if (_frequencyFactor == value)
-				{
-					return;
-				}
-				_frequencyFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frequencyFactor);
+			set => SetProperty(ref _frequencyFactor, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("phaseFactor")] 
 		public CFloat PhaseFactor
 		{
-			get
-			{
-				if (_phaseFactor == null)
-				{
-					_phaseFactor = (CFloat) CR2WTypeManager.Create("Float", "phaseFactor", cr2w, this);
-				}
-				return _phaseFactor;
-			}
-			set
-			{
-				if (_phaseFactor == value)
-				{
-					return;
-				}
-				_phaseFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _phaseFactor);
+			set => SetProperty(ref _phaseFactor, value);
 		}
 
 		public animAnimNode_FloatTimeDependentSinus(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

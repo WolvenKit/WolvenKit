@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("voices")] 
 		public CArray<CName> Voices
 		{
-			get
-			{
-				if (_voices == null)
-				{
-					_voices = (CArray<CName>) CR2WTypeManager.Create("array:CName", "voices", cr2w, this);
-				}
-				return _voices;
-			}
-			set
-			{
-				if (_voices == value)
-				{
-					return;
-				}
-				_voices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _voices);
+			set => SetProperty(ref _voices, value);
 		}
 
 		public audioNpcGunChoirSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

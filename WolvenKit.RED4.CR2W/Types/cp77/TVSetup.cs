@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("channels")] 
 		public CArray<STvChannel> Channels
 		{
-			get
-			{
-				if (_channels == null)
-				{
-					_channels = (CArray<STvChannel>) CR2WTypeManager.Create("array:STvChannel", "channels", cr2w, this);
-				}
-				return _channels;
-			}
-			set
-			{
-				if (_channels == value)
-				{
-					return;
-				}
-				_channels = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _channels);
+			set => SetProperty(ref _channels, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("initialChannel")] 
 		public CInt32 InitialChannel
 		{
-			get
-			{
-				if (_initialChannel == null)
-				{
-					_initialChannel = (CInt32) CR2WTypeManager.Create("Int32", "initialChannel", cr2w, this);
-				}
-				return _initialChannel;
-			}
-			set
-			{
-				if (_initialChannel == value)
-				{
-					return;
-				}
-				_initialChannel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialChannel);
+			set => SetProperty(ref _initialChannel, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("initialGlobalTvChannel")] 
 		public TweakDBID InitialGlobalTvChannel
 		{
-			get
-			{
-				if (_initialGlobalTvChannel == null)
-				{
-					_initialGlobalTvChannel = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "initialGlobalTvChannel", cr2w, this);
-				}
-				return _initialGlobalTvChannel;
-			}
-			set
-			{
-				if (_initialGlobalTvChannel == value)
-				{
-					return;
-				}
-				_initialGlobalTvChannel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialGlobalTvChannel);
+			set => SetProperty(ref _initialGlobalTvChannel, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("muteInterface")] 
 		public CBool MuteInterface
 		{
-			get
-			{
-				if (_muteInterface == null)
-				{
-					_muteInterface = (CBool) CR2WTypeManager.Create("Bool", "muteInterface", cr2w, this);
-				}
-				return _muteInterface;
-			}
-			set
-			{
-				if (_muteInterface == value)
-				{
-					return;
-				}
-				_muteInterface = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _muteInterface);
+			set => SetProperty(ref _muteInterface, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isInteractive")] 
 		public CBool IsInteractive
 		{
-			get
-			{
-				if (_isInteractive == null)
-				{
-					_isInteractive = (CBool) CR2WTypeManager.Create("Bool", "isInteractive", cr2w, this);
-				}
-				return _isInteractive;
-			}
-			set
-			{
-				if (_isInteractive == value)
-				{
-					return;
-				}
-				_isInteractive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInteractive);
+			set => SetProperty(ref _isInteractive, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isGlobalTvOnly")] 
 		public CBool IsGlobalTvOnly
 		{
-			get
-			{
-				if (_isGlobalTvOnly == null)
-				{
-					_isGlobalTvOnly = (CBool) CR2WTypeManager.Create("Bool", "isGlobalTvOnly", cr2w, this);
-				}
-				return _isGlobalTvOnly;
-			}
-			set
-			{
-				if (_isGlobalTvOnly == value)
-				{
-					return;
-				}
-				_isGlobalTvOnly = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isGlobalTvOnly);
+			set => SetProperty(ref _isGlobalTvOnly, value);
 		}
 
 		public TVSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

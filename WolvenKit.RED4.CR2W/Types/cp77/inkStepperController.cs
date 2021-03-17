@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cycledNavigation")] 
 		public CBool CycledNavigation
 		{
-			get
-			{
-				if (_cycledNavigation == null)
-				{
-					_cycledNavigation = (CBool) CR2WTypeManager.Create("Bool", "cycledNavigation", cr2w, this);
-				}
-				return _cycledNavigation;
-			}
-			set
-			{
-				if (_cycledNavigation == value)
-				{
-					return;
-				}
-				_cycledNavigation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cycledNavigation);
+			set => SetProperty(ref _cycledNavigation, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("indicatorUnitLibraryID")] 
 		public CName IndicatorUnitLibraryID
 		{
-			get
-			{
-				if (_indicatorUnitLibraryID == null)
-				{
-					_indicatorUnitLibraryID = (CName) CR2WTypeManager.Create("CName", "indicatorUnitLibraryID", cr2w, this);
-				}
-				return _indicatorUnitLibraryID;
-			}
-			set
-			{
-				if (_indicatorUnitLibraryID == value)
-				{
-					return;
-				}
-				_indicatorUnitLibraryID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _indicatorUnitLibraryID);
+			set => SetProperty(ref _indicatorUnitLibraryID, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("currentValueDisplay")] 
 		public inkTextWidgetReference CurrentValueDisplay
 		{
-			get
-			{
-				if (_currentValueDisplay == null)
-				{
-					_currentValueDisplay = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "currentValueDisplay", cr2w, this);
-				}
-				return _currentValueDisplay;
-			}
-			set
-			{
-				if (_currentValueDisplay == value)
-				{
-					return;
-				}
-				_currentValueDisplay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentValueDisplay);
+			set => SetProperty(ref _currentValueDisplay, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("indicatorContainer")] 
 		public inkCompoundWidgetReference IndicatorContainer
 		{
-			get
-			{
-				if (_indicatorContainer == null)
-				{
-					_indicatorContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "indicatorContainer", cr2w, this);
-				}
-				return _indicatorContainer;
-			}
-			set
-			{
-				if (_indicatorContainer == value)
-				{
-					return;
-				}
-				_indicatorContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _indicatorContainer);
+			set => SetProperty(ref _indicatorContainer, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("leftButton")] 
 		public inkWidgetReference LeftButton
 		{
-			get
-			{
-				if (_leftButton == null)
-				{
-					_leftButton = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "leftButton", cr2w, this);
-				}
-				return _leftButton;
-			}
-			set
-			{
-				if (_leftButton == value)
-				{
-					return;
-				}
-				_leftButton = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _leftButton);
+			set => SetProperty(ref _leftButton, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("rightButton")] 
 		public inkWidgetReference RightButton
 		{
-			get
-			{
-				if (_rightButton == null)
-				{
-					_rightButton = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "rightButton", cr2w, this);
-				}
-				return _rightButton;
-			}
-			set
-			{
-				if (_rightButton == value)
-				{
-					return;
-				}
-				_rightButton = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rightButton);
+			set => SetProperty(ref _rightButton, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("Change")] 
 		public inkStepperChangedCallback Change
 		{
-			get
-			{
-				if (_change == null)
-				{
-					_change = (inkStepperChangedCallback) CR2WTypeManager.Create("inkStepperChangedCallback", "Change", cr2w, this);
-				}
-				return _change;
-			}
-			set
-			{
-				if (_change == value)
-				{
-					return;
-				}
-				_change = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _change);
+			set => SetProperty(ref _change, value);
 		}
 
 		public inkStepperController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

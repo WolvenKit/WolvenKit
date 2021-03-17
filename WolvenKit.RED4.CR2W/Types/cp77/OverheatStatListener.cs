@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weapon")] 
 		public wCHandle<gameweaponObject> Weapon
 		{
-			get
-			{
-				if (_weapon == null)
-				{
-					_weapon = (wCHandle<gameweaponObject>) CR2WTypeManager.Create("whandle:gameweaponObject", "weapon", cr2w, this);
-				}
-				return _weapon;
-			}
-			set
-			{
-				if (_weapon == value)
-				{
-					return;
-				}
-				_weapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weapon);
+			set => SetProperty(ref _weapon, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("updateEvt")] 
 		public CHandle<UpdateOverheatEvent> UpdateEvt
 		{
-			get
-			{
-				if (_updateEvt == null)
-				{
-					_updateEvt = (CHandle<UpdateOverheatEvent>) CR2WTypeManager.Create("handle:UpdateOverheatEvent", "updateEvt", cr2w, this);
-				}
-				return _updateEvt;
-			}
-			set
-			{
-				if (_updateEvt == value)
-				{
-					return;
-				}
-				_updateEvt = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _updateEvt);
+			set => SetProperty(ref _updateEvt, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("startEvt")] 
 		public CHandle<StartOverheatEffectEvent> StartEvt
 		{
-			get
-			{
-				if (_startEvt == null)
-				{
-					_startEvt = (CHandle<StartOverheatEffectEvent>) CR2WTypeManager.Create("handle:StartOverheatEffectEvent", "startEvt", cr2w, this);
-				}
-				return _startEvt;
-			}
-			set
-			{
-				if (_startEvt == value)
-				{
-					return;
-				}
-				_startEvt = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startEvt);
+			set => SetProperty(ref _startEvt, value);
 		}
 
 		public OverheatStatListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

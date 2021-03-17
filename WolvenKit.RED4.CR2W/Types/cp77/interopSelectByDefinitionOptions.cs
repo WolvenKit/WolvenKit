@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("searchInSelection")] 
 		public CBool SearchInSelection
 		{
-			get
-			{
-				if (_searchInSelection == null)
-				{
-					_searchInSelection = (CBool) CR2WTypeManager.Create("Bool", "searchInSelection", cr2w, this);
-				}
-				return _searchInSelection;
-			}
-			set
-			{
-				if (_searchInSelection == value)
-				{
-					return;
-				}
-				_searchInSelection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _searchInSelection);
+			set => SetProperty(ref _searchInSelection, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("minBBoxDiagonalLength")] 
 		public CFloat MinBBoxDiagonalLength
 		{
-			get
-			{
-				if (_minBBoxDiagonalLength == null)
-				{
-					_minBBoxDiagonalLength = (CFloat) CR2WTypeManager.Create("Float", "minBBoxDiagonalLength", cr2w, this);
-				}
-				return _minBBoxDiagonalLength;
-			}
-			set
-			{
-				if (_minBBoxDiagonalLength == value)
-				{
-					return;
-				}
-				_minBBoxDiagonalLength = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minBBoxDiagonalLength);
+			set => SetProperty(ref _minBBoxDiagonalLength, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("maxBBoxDiagonalLength")] 
 		public CFloat MaxBBoxDiagonalLength
 		{
-			get
-			{
-				if (_maxBBoxDiagonalLength == null)
-				{
-					_maxBBoxDiagonalLength = (CFloat) CR2WTypeManager.Create("Float", "maxBBoxDiagonalLength", cr2w, this);
-				}
-				return _maxBBoxDiagonalLength;
-			}
-			set
-			{
-				if (_maxBBoxDiagonalLength == value)
-				{
-					return;
-				}
-				_maxBBoxDiagonalLength = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxBBoxDiagonalLength);
+			set => SetProperty(ref _maxBBoxDiagonalLength, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("maxBBoxParentPercantageDiagonalLength")] 
 		public CFloat MaxBBoxParentPercantageDiagonalLength
 		{
-			get
-			{
-				if (_maxBBoxParentPercantageDiagonalLength == null)
-				{
-					_maxBBoxParentPercantageDiagonalLength = (CFloat) CR2WTypeManager.Create("Float", "maxBBoxParentPercantageDiagonalLength", cr2w, this);
-				}
-				return _maxBBoxParentPercantageDiagonalLength;
-			}
-			set
-			{
-				if (_maxBBoxParentPercantageDiagonalLength == value)
-				{
-					return;
-				}
-				_maxBBoxParentPercantageDiagonalLength = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxBBoxParentPercantageDiagonalLength);
+			set => SetProperty(ref _maxBBoxParentPercantageDiagonalLength, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("includePrefabNodes")] 
 		public CBool IncludePrefabNodes
 		{
-			get
-			{
-				if (_includePrefabNodes == null)
-				{
-					_includePrefabNodes = (CBool) CR2WTypeManager.Create("Bool", "includePrefabNodes", cr2w, this);
-				}
-				return _includePrefabNodes;
-			}
-			set
-			{
-				if (_includePrefabNodes == value)
-				{
-					return;
-				}
-				_includePrefabNodes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _includePrefabNodes);
+			set => SetProperty(ref _includePrefabNodes, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("includeDecalNodes")] 
 		public CBool IncludeDecalNodes
 		{
-			get
-			{
-				if (_includeDecalNodes == null)
-				{
-					_includeDecalNodes = (CBool) CR2WTypeManager.Create("Bool", "includeDecalNodes", cr2w, this);
-				}
-				return _includeDecalNodes;
-			}
-			set
-			{
-				if (_includeDecalNodes == value)
-				{
-					return;
-				}
-				_includeDecalNodes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _includeDecalNodes);
+			set => SetProperty(ref _includeDecalNodes, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("includeMeshNodes")] 
 		public CBool IncludeMeshNodes
 		{
-			get
-			{
-				if (_includeMeshNodes == null)
-				{
-					_includeMeshNodes = (CBool) CR2WTypeManager.Create("Bool", "includeMeshNodes", cr2w, this);
-				}
-				return _includeMeshNodes;
-			}
-			set
-			{
-				if (_includeMeshNodes == value)
-				{
-					return;
-				}
-				_includeMeshNodes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _includeMeshNodes);
+			set => SetProperty(ref _includeMeshNodes, value);
 		}
 
 		public interopSelectByDefinitionOptions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

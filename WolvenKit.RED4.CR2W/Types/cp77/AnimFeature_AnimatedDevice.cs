@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isOn")] 
 		public CBool IsOn
 		{
-			get
-			{
-				if (_isOn == null)
-				{
-					_isOn = (CBool) CR2WTypeManager.Create("Bool", "isOn", cr2w, this);
-				}
-				return _isOn;
-			}
-			set
-			{
-				if (_isOn == value)
-				{
-					return;
-				}
-				_isOn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isOn);
+			set => SetProperty(ref _isOn, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isOff")] 
 		public CBool IsOff
 		{
-			get
-			{
-				if (_isOff == null)
-				{
-					_isOff = (CBool) CR2WTypeManager.Create("Bool", "isOff", cr2w, this);
-				}
-				return _isOff;
-			}
-			set
-			{
-				if (_isOff == value)
-				{
-					return;
-				}
-				_isOff = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isOff);
+			set => SetProperty(ref _isOff, value);
 		}
 
 		public AnimFeature_AnimatedDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

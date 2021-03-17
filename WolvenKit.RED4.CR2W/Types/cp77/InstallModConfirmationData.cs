@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemId")] 
 		public gameItemID ItemId
 		{
-			get
-			{
-				if (_itemId == null)
-				{
-					_itemId = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemId", cr2w, this);
-				}
-				return _itemId;
-			}
-			set
-			{
-				if (_itemId == value)
-				{
-					return;
-				}
-				_itemId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemId);
+			set => SetProperty(ref _itemId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("partId")] 
 		public gameItemID PartId
 		{
-			get
-			{
-				if (_partId == null)
-				{
-					_partId = (gameItemID) CR2WTypeManager.Create("gameItemID", "partId", cr2w, this);
-				}
-				return _partId;
-			}
-			set
-			{
-				if (_partId == value)
-				{
-					return;
-				}
-				_partId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _partId);
+			set => SetProperty(ref _partId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("slotID")] 
 		public TweakDBID SlotID
 		{
-			get
-			{
-				if (_slotID == null)
-				{
-					_slotID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "slotID", cr2w, this);
-				}
-				return _slotID;
-			}
-			set
-			{
-				if (_slotID == value)
-				{
-					return;
-				}
-				_slotID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("telemetryItemData")] 
 		public gameTelemetryInventoryItem TelemetryItemData
 		{
-			get
-			{
-				if (_telemetryItemData == null)
-				{
-					_telemetryItemData = (gameTelemetryInventoryItem) CR2WTypeManager.Create("gameTelemetryInventoryItem", "telemetryItemData", cr2w, this);
-				}
-				return _telemetryItemData;
-			}
-			set
-			{
-				if (_telemetryItemData == value)
-				{
-					return;
-				}
-				_telemetryItemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _telemetryItemData);
+			set => SetProperty(ref _telemetryItemData, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("telemetryPartData")] 
 		public gameTelemetryInventoryItem TelemetryPartData
 		{
-			get
-			{
-				if (_telemetryPartData == null)
-				{
-					_telemetryPartData = (gameTelemetryInventoryItem) CR2WTypeManager.Create("gameTelemetryInventoryItem", "telemetryPartData", cr2w, this);
-				}
-				return _telemetryPartData;
-			}
-			set
-			{
-				if (_telemetryPartData == value)
-				{
-					return;
-				}
-				_telemetryPartData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _telemetryPartData);
+			set => SetProperty(ref _telemetryPartData, value);
 		}
 
 		public InstallModConfirmationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

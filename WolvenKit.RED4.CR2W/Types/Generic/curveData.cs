@@ -34,12 +34,12 @@ namespace WolvenKit.RED4.CR2W.Types
         {
         }
 
-        public string Elementtype { get; set; }
+        public string Elementtype => REDReflection.GetREDTypeString(typeof(T));
 
         private List<CurvePoint<T>> Elements { get; set; } = new();
         public ushort Tail { get; set; }
 
-        public override string REDType => $"curveData:{Elementtype}";
+        public override string REDType => REDReflection.GetREDTypeString(GetType());
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 var cpoint = new CurvePoint<T>(cr2w, this, i.ToString()) {IsSerialized = true};
 
                 var point = new CFloat(cr2w, cpoint, "point") { IsSerialized = true };
-                var element = CR2WTypeManager.Create(Elementtype, i.ToString(), cr2w, cpoint);
+                var element = Create<T>(i.ToString(), new int[0]);
 
                 // no actual way to find out the elementsize of an array element
                 // bacause cdpr serialized classes have no fixed size

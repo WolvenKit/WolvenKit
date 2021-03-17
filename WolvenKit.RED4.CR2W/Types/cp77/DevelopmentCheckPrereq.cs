@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("requiredLevel")] 
 		public CFloat RequiredLevel
 		{
-			get
-			{
-				if (_requiredLevel == null)
-				{
-					_requiredLevel = (CFloat) CR2WTypeManager.Create("Float", "requiredLevel", cr2w, this);
-				}
-				return _requiredLevel;
-			}
-			set
-			{
-				if (_requiredLevel == value)
-				{
-					return;
-				}
-				_requiredLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requiredLevel);
+			set => SetProperty(ref _requiredLevel, value);
 		}
 
 		public DevelopmentCheckPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

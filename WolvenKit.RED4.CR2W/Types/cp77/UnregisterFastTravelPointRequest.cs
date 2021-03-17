@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("pointData")] 
 		public CHandle<gameFastTravelPointData> PointData
 		{
-			get
-			{
-				if (_pointData == null)
-				{
-					_pointData = (CHandle<gameFastTravelPointData>) CR2WTypeManager.Create("handle:gameFastTravelPointData", "pointData", cr2w, this);
-				}
-				return _pointData;
-			}
-			set
-			{
-				if (_pointData == value)
-				{
-					return;
-				}
-				_pointData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pointData);
+			set => SetProperty(ref _pointData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("requesterID")] 
 		public entEntityID RequesterID
 		{
-			get
-			{
-				if (_requesterID == null)
-				{
-					_requesterID = (entEntityID) CR2WTypeManager.Create("entEntityID", "requesterID", cr2w, this);
-				}
-				return _requesterID;
-			}
-			set
-			{
-				if (_requesterID == value)
-				{
-					return;
-				}
-				_requesterID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requesterID);
+			set => SetProperty(ref _requesterID, value);
 		}
 
 		public UnregisterFastTravelPointRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

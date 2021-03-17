@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sections")] 
 		public CArray<animAnimProfilerData_SectionTimings> Sections
 		{
-			get
-			{
-				if (_sections == null)
-				{
-					_sections = (CArray<animAnimProfilerData_SectionTimings>) CR2WTypeManager.Create("array:animAnimProfilerData_SectionTimings", "sections", cr2w, this);
-				}
-				return _sections;
-			}
-			set
-			{
-				if (_sections == value)
-				{
-					return;
-				}
-				_sections = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sections);
+			set => SetProperty(ref _sections, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timings")] 
 		public CArray<animAnimProfilerData_TimingsDetailed> Timings
 		{
-			get
-			{
-				if (_timings == null)
-				{
-					_timings = (CArray<animAnimProfilerData_TimingsDetailed>) CR2WTypeManager.Create("array:animAnimProfilerData_TimingsDetailed", "timings", cr2w, this);
-				}
-				return _timings;
-			}
-			set
-			{
-				if (_timings == value)
-				{
-					return;
-				}
-				_timings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timings);
+			set => SetProperty(ref _timings, value);
 		}
 
 		public animAnimProfilerData_TimingsDetailedRoot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animationType")] 
 		public CEnum<EAnimationType> AnimationType
 		{
-			get
-			{
-				if (_animationType == null)
-				{
-					_animationType = (CEnum<EAnimationType>) CR2WTypeManager.Create("EAnimationType", "animationType", cr2w, this);
-				}
-				return _animationType;
-			}
-			set
-			{
-				if (_animationType == value)
-				{
-					return;
-				}
-				_animationType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationType);
+			set => SetProperty(ref _animationType, value);
 		}
 
 		[Ordinal(94)] 
 		[RED("animationSpeed")] 
 		public CFloat AnimationSpeed
 		{
-			get
-			{
-				if (_animationSpeed == null)
-				{
-					_animationSpeed = (CFloat) CR2WTypeManager.Create("Float", "animationSpeed", cr2w, this);
-				}
-				return _animationSpeed;
-			}
-			set
-			{
-				if (_animationSpeed == value)
-				{
-					return;
-				}
-				_animationSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationSpeed);
+			set => SetProperty(ref _animationSpeed, value);
 		}
 
 		public SimpleSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

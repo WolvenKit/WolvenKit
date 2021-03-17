@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rootWidget")] 
 		public wCHandle<inkWidget> RootWidget
 		{
-			get
-			{
-				if (_rootWidget == null)
-				{
-					_rootWidget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "rootWidget", cr2w, this);
-				}
-				return _rootWidget;
-			}
-			set
-			{
-				if (_rootWidget == value)
-				{
-					return;
-				}
-				_rootWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rootWidget);
+			set => SetProperty(ref _rootWidget, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("linesWidget")] 
 		public wCHandle<inkCanvasWidget> LinesWidget
 		{
-			get
-			{
-				if (_linesWidget == null)
-				{
-					_linesWidget = (wCHandle<inkCanvasWidget>) CR2WTypeManager.Create("whandle:inkCanvasWidget", "linesWidget", cr2w, this);
-				}
-				return _linesWidget;
-			}
-			set
-			{
-				if (_linesWidget == value)
-				{
-					return;
-				}
-				_linesWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linesWidget);
+			set => SetProperty(ref _linesWidget, value);
 		}
 
 		public artist_test_area_r(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

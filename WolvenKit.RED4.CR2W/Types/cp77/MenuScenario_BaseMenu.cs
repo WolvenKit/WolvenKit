@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("currMenuName")] 
 		public CName CurrMenuName
 		{
-			get
-			{
-				if (_currMenuName == null)
-				{
-					_currMenuName = (CName) CR2WTypeManager.Create("CName", "currMenuName", cr2w, this);
-				}
-				return _currMenuName;
-			}
-			set
-			{
-				if (_currMenuName == value)
-				{
-					return;
-				}
-				_currMenuName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currMenuName);
+			set => SetProperty(ref _currMenuName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("currUserData")] 
 		public CHandle<IScriptable> CurrUserData
 		{
-			get
-			{
-				if (_currUserData == null)
-				{
-					_currUserData = (CHandle<IScriptable>) CR2WTypeManager.Create("handle:IScriptable", "currUserData", cr2w, this);
-				}
-				return _currUserData;
-			}
-			set
-			{
-				if (_currUserData == value)
-				{
-					return;
-				}
-				_currUserData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currUserData);
+			set => SetProperty(ref _currUserData, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("currSubMenuName")] 
 		public CName CurrSubMenuName
 		{
-			get
-			{
-				if (_currSubMenuName == null)
-				{
-					_currSubMenuName = (CName) CR2WTypeManager.Create("CName", "currSubMenuName", cr2w, this);
-				}
-				return _currSubMenuName;
-			}
-			set
-			{
-				if (_currSubMenuName == value)
-				{
-					return;
-				}
-				_currSubMenuName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currSubMenuName);
+			set => SetProperty(ref _currSubMenuName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("prevMenuName")] 
 		public CName PrevMenuName
 		{
-			get
-			{
-				if (_prevMenuName == null)
-				{
-					_prevMenuName = (CName) CR2WTypeManager.Create("CName", "prevMenuName", cr2w, this);
-				}
-				return _prevMenuName;
-			}
-			set
-			{
-				if (_prevMenuName == value)
-				{
-					return;
-				}
-				_prevMenuName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prevMenuName);
+			set => SetProperty(ref _prevMenuName, value);
 		}
 
 		public MenuScenario_BaseMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

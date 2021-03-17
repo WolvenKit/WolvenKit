@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("reason")] 
 		public CEnum<gameSaveLockReason> Reason
 		{
-			get
-			{
-				if (_reason == null)
-				{
-					_reason = (CEnum<gameSaveLockReason>) CR2WTypeManager.Create("gameSaveLockReason", "reason", cr2w, this);
-				}
-				return _reason;
-			}
-			set
-			{
-				if (_reason == value)
-				{
-					return;
-				}
-				_reason = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reason);
+			set => SetProperty(ref _reason, value);
 		}
 
 		public gameSaveLock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

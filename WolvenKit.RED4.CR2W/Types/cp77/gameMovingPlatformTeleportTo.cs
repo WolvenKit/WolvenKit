@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("destinationNode")] 
 		public NodeRef DestinationNode
 		{
-			get
-			{
-				if (_destinationNode == null)
-				{
-					_destinationNode = (NodeRef) CR2WTypeManager.Create("NodeRef", "destinationNode", cr2w, this);
-				}
-				return _destinationNode;
-			}
-			set
-			{
-				if (_destinationNode == value)
-				{
-					return;
-				}
-				_destinationNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _destinationNode);
+			set => SetProperty(ref _destinationNode, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rootEntityPosition")] 
 		public Vector4 RootEntityPosition
 		{
-			get
-			{
-				if (_rootEntityPosition == null)
-				{
-					_rootEntityPosition = (Vector4) CR2WTypeManager.Create("Vector4", "rootEntityPosition", cr2w, this);
-				}
-				return _rootEntityPosition;
-			}
-			set
-			{
-				if (_rootEntityPosition == value)
-				{
-					return;
-				}
-				_rootEntityPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rootEntityPosition);
+			set => SetProperty(ref _rootEntityPosition, value);
 		}
 
 		public gameMovingPlatformTeleportTo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

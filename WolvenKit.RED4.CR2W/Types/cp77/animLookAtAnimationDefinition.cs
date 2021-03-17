@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("minTransitionDuration")] 
 		public CFloat MinTransitionDuration
 		{
-			get
-			{
-				if (_minTransitionDuration == null)
-				{
-					_minTransitionDuration = (CFloat) CR2WTypeManager.Create("Float", "minTransitionDuration", cr2w, this);
-				}
-				return _minTransitionDuration;
-			}
-			set
-			{
-				if (_minTransitionDuration == value)
-				{
-					return;
-				}
-				_minTransitionDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minTransitionDuration);
+			set => SetProperty(ref _minTransitionDuration, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("playAnimProbability")] 
 		public CFloat PlayAnimProbability
 		{
-			get
-			{
-				if (_playAnimProbability == null)
-				{
-					_playAnimProbability = (CFloat) CR2WTypeManager.Create("Float", "playAnimProbability", cr2w, this);
-				}
-				return _playAnimProbability;
-			}
-			set
-			{
-				if (_playAnimProbability == value)
-				{
-					return;
-				}
-				_playAnimProbability = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playAnimProbability);
+			set => SetProperty(ref _playAnimProbability, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("animDelay")] 
 		public CFloat AnimDelay
 		{
-			get
-			{
-				if (_animDelay == null)
-				{
-					_animDelay = (CFloat) CR2WTypeManager.Create("Float", "animDelay", cr2w, this);
-				}
-				return _animDelay;
-			}
-			set
-			{
-				if (_animDelay == value)
-				{
-					return;
-				}
-				_animDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animDelay);
+			set => SetProperty(ref _animDelay, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("animations")] 
 		public CArray<CName> Animations
 		{
-			get
-			{
-				if (_animations == null)
-				{
-					_animations = (CArray<CName>) CR2WTypeManager.Create("array:CName", "animations", cr2w, this);
-				}
-				return _animations;
-			}
-			set
-			{
-				if (_animations == value)
-				{
-					return;
-				}
-				_animations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animations);
+			set => SetProperty(ref _animations, value);
 		}
 
 		public animLookAtAnimationDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

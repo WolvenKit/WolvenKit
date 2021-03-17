@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dragCoefficient")] 
 		public CHandle<IEvaluatorFloat> DragCoefficient
 		{
-			get
-			{
-				if (_dragCoefficient == null)
-				{
-					_dragCoefficient = (CHandle<IEvaluatorFloat>) CR2WTypeManager.Create("handle:IEvaluatorFloat", "dragCoefficient", cr2w, this);
-				}
-				return _dragCoefficient;
-			}
-			set
-			{
-				if (_dragCoefficient == value)
-				{
-					return;
-				}
-				_dragCoefficient = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dragCoefficient);
+			set => SetProperty(ref _dragCoefficient, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("scale")] 
 		public CFloat Scale
 		{
-			get
-			{
-				if (_scale == null)
-				{
-					_scale = (CFloat) CR2WTypeManager.Create("Float", "scale", cr2w, this);
-				}
-				return _scale;
-			}
-			set
-			{
-				if (_scale == value)
-				{
-					return;
-				}
-				_scale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scale);
+			set => SetProperty(ref _scale, value);
 		}
 
 		public CParticleModificatorDrag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

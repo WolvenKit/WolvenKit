@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("contextName")] 
 		public CName ContextName
 		{
-			get
-			{
-				if (_contextName == null)
-				{
-					_contextName = (CName) CR2WTypeManager.Create("CName", "contextName", cr2w, this);
-				}
-				return _contextName;
-			}
-			set
-			{
-				if (_contextName == value)
-				{
-					return;
-				}
-				_contextName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contextName);
+			set => SetProperty(ref _contextName, value);
 		}
 
 		public entContextualLookAtAddEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

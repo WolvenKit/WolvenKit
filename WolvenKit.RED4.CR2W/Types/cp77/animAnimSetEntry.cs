@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animation")] 
 		public CHandle<animAnimation> Animation
 		{
-			get
-			{
-				if (_animation == null)
-				{
-					_animation = (CHandle<animAnimation>) CR2WTypeManager.Create("handle:animAnimation", "animation", cr2w, this);
-				}
-				return _animation;
-			}
-			set
-			{
-				if (_animation == value)
-				{
-					return;
-				}
-				_animation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animation);
+			set => SetProperty(ref _animation, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("events")] 
 		public CHandle<animEventsContainer> Events
 		{
-			get
-			{
-				if (_events == null)
-				{
-					_events = (CHandle<animEventsContainer>) CR2WTypeManager.Create("handle:animEventsContainer", "events", cr2w, this);
-				}
-				return _events;
-			}
-			set
-			{
-				if (_events == value)
-				{
-					return;
-				}
-				_events = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _events);
+			set => SetProperty(ref _events, value);
 		}
 
 		public animAnimSetEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

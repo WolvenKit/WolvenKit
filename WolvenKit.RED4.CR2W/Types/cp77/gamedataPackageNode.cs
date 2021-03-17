@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CString Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CString) CR2WTypeManager.Create("String", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("serializedVariables")] 
 		public CArray<CHandle<gamedataVariableNode>> SerializedVariables
 		{
-			get
-			{
-				if (_serializedVariables == null)
-				{
-					_serializedVariables = (CArray<CHandle<gamedataVariableNode>>) CR2WTypeManager.Create("array:handle:gamedataVariableNode", "serializedVariables", cr2w, this);
-				}
-				return _serializedVariables;
-			}
-			set
-			{
-				if (_serializedVariables == value)
-				{
-					return;
-				}
-				_serializedVariables = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _serializedVariables);
+			set => SetProperty(ref _serializedVariables, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("serializedGroups")] 
 		public CArray<CHandle<gamedataGroupNode>> SerializedGroups
 		{
-			get
-			{
-				if (_serializedGroups == null)
-				{
-					_serializedGroups = (CArray<CHandle<gamedataGroupNode>>) CR2WTypeManager.Create("array:handle:gamedataGroupNode", "serializedGroups", cr2w, this);
-				}
-				return _serializedGroups;
-			}
-			set
-			{
-				if (_serializedGroups == value)
-				{
-					return;
-				}
-				_serializedGroups = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _serializedGroups);
+			set => SetProperty(ref _serializedGroups, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("files")] 
 		public CArray<CHandle<gamedataFileNode>> Files
 		{
-			get
-			{
-				if (_files == null)
-				{
-					_files = (CArray<CHandle<gamedataFileNode>>) CR2WTypeManager.Create("array:handle:gamedataFileNode", "files", cr2w, this);
-				}
-				return _files;
-			}
-			set
-			{
-				if (_files == value)
-				{
-					return;
-				}
-				_files = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _files);
+			set => SetProperty(ref _files, value);
 		}
 
 		public gamedataPackageNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("queryTDBID")] 
 		public TweakDBID QueryTDBID
 		{
-			get
-			{
-				if (_queryTDBID == null)
-				{
-					_queryTDBID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "queryTDBID", cr2w, this);
-				}
-				return _queryTDBID;
-			}
-			set
-			{
-				if (_queryTDBID == value)
-				{
-					return;
-				}
-				_queryTDBID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _queryTDBID);
+			set => SetProperty(ref _queryTDBID, value);
 		}
 
 		public gameLootSlotSingleQuery(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

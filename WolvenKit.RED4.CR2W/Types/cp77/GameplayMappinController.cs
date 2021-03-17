@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("anim")] 
 		public CHandle<inkanimProxy> Anim
 		{
-			get
-			{
-				if (_anim == null)
-				{
-					_anim = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "anim", cr2w, this);
-				}
-				return _anim;
-			}
-			set
-			{
-				if (_anim == value)
-				{
-					return;
-				}
-				_anim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _anim);
+			set => SetProperty(ref _anim, value);
 		}
 
 		[Ordinal(34)] 
 		[RED("isVisibleThroughWalls")] 
 		public CBool IsVisibleThroughWalls
 		{
-			get
-			{
-				if (_isVisibleThroughWalls == null)
-				{
-					_isVisibleThroughWalls = (CBool) CR2WTypeManager.Create("Bool", "isVisibleThroughWalls", cr2w, this);
-				}
-				return _isVisibleThroughWalls;
-			}
-			set
-			{
-				if (_isVisibleThroughWalls == value)
-				{
-					return;
-				}
-				_isVisibleThroughWalls = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isVisibleThroughWalls);
+			set => SetProperty(ref _isVisibleThroughWalls, value);
 		}
 
 		public GameplayMappinController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

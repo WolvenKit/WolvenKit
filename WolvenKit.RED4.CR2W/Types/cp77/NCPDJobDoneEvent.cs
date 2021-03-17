@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("levelXPAwarded")] 
 		public CInt32 LevelXPAwarded
 		{
-			get
-			{
-				if (_levelXPAwarded == null)
-				{
-					_levelXPAwarded = (CInt32) CR2WTypeManager.Create("Int32", "levelXPAwarded", cr2w, this);
-				}
-				return _levelXPAwarded;
-			}
-			set
-			{
-				if (_levelXPAwarded == value)
-				{
-					return;
-				}
-				_levelXPAwarded = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelXPAwarded);
+			set => SetProperty(ref _levelXPAwarded, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("streetCredXPAwarded")] 
 		public CInt32 StreetCredXPAwarded
 		{
-			get
-			{
-				if (_streetCredXPAwarded == null)
-				{
-					_streetCredXPAwarded = (CInt32) CR2WTypeManager.Create("Int32", "streetCredXPAwarded", cr2w, this);
-				}
-				return _streetCredXPAwarded;
-			}
-			set
-			{
-				if (_streetCredXPAwarded == value)
-				{
-					return;
-				}
-				_streetCredXPAwarded = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _streetCredXPAwarded);
+			set => SetProperty(ref _streetCredXPAwarded, value);
 		}
 
 		public NCPDJobDoneEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

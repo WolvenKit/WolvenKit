@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("coverNodeRef")] 
 		public NodeRef CoverNodeRef
 		{
-			get
-			{
-				if (_coverNodeRef == null)
-				{
-					_coverNodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "coverNodeRef", cr2w, this);
-				}
-				return _coverNodeRef;
-			}
-			set
-			{
-				if (_coverNodeRef == value)
-				{
-					return;
-				}
-				_coverNodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _coverNodeRef);
+			set => SetProperty(ref _coverNodeRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("alwaysUseStealth")] 
 		public CBool AlwaysUseStealth
 		{
-			get
-			{
-				if (_alwaysUseStealth == null)
-				{
-					_alwaysUseStealth = (CBool) CR2WTypeManager.Create("Bool", "alwaysUseStealth", cr2w, this);
-				}
-				return _alwaysUseStealth;
-			}
-			set
-			{
-				if (_alwaysUseStealth == value)
-				{
-					return;
-				}
-				_alwaysUseStealth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alwaysUseStealth);
+			set => SetProperty(ref _alwaysUseStealth, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("specialAction")] 
 		public CEnum<ECoverSpecialAction> SpecialAction
 		{
-			get
-			{
-				if (_specialAction == null)
-				{
-					_specialAction = (CEnum<ECoverSpecialAction>) CR2WTypeManager.Create("ECoverSpecialAction", "specialAction", cr2w, this);
-				}
-				return _specialAction;
-			}
-			set
-			{
-				if (_specialAction == value)
-				{
-					return;
-				}
-				_specialAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _specialAction);
+			set => SetProperty(ref _specialAction, value);
 		}
 
 		public AIMoveToCoverCommandParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

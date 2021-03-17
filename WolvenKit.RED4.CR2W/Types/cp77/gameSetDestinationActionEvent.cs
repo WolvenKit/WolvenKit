@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("position")] 
 		public Vector3 Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (Vector3) CR2WTypeManager.Create("Vector3", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		public gameSetDestinationActionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

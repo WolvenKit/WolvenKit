@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemData")] 
 		public InventoryItemData ItemData
 		{
-			get
-			{
-				if (_itemData == null)
-				{
-					_itemData = (InventoryItemData) CR2WTypeManager.Create("InventoryItemData", "itemData", cr2w, this);
-				}
-				return _itemData;
-			}
-			set
-			{
-				if (_itemData == value)
-				{
-					return;
-				}
-				_itemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemData);
+			set => SetProperty(ref _itemData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("slotID")] 
 		public TweakDBID SlotID
 		{
-			get
-			{
-				if (_slotID == null)
-				{
-					_slotID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "slotID", cr2w, this);
-				}
-				return _slotID;
-			}
-			set
-			{
-				if (_slotID == value)
-				{
-					return;
-				}
-				_slotID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
 		}
 
 		public ItemChooserUnequipMod(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

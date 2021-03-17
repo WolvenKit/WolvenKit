@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isMoving")] 
 		public CBool IsMoving
 		{
-			get
-			{
-				if (_isMoving == null)
-				{
-					_isMoving = (CBool) CR2WTypeManager.Create("Bool", "isMoving", cr2w, this);
-				}
-				return _isMoving;
-			}
-			set
-			{
-				if (_isMoving == value)
-				{
-					return;
-				}
-				_isMoving = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isMoving);
+			set => SetProperty(ref _isMoving, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("object")] 
 		public CName Object
 		{
-			get
-			{
-				if (_object == null)
-				{
-					_object = (CName) CR2WTypeManager.Create("CName", "object", cr2w, this);
-				}
-				return _object;
-			}
-			set
-			{
-				if (_object == value)
-				{
-					return;
-				}
-				_object = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _object);
+			set => SetProperty(ref _object, value);
 		}
 
 		public AgentMovingHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

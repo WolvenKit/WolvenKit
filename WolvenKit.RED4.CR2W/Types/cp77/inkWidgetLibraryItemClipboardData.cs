@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("libraryItem")] 
 		public CHandle<inkWidgetLibraryItemUnpackedView> LibraryItem
 		{
-			get
-			{
-				if (_libraryItem == null)
-				{
-					_libraryItem = (CHandle<inkWidgetLibraryItemUnpackedView>) CR2WTypeManager.Create("handle:inkWidgetLibraryItemUnpackedView", "libraryItem", cr2w, this);
-				}
-				return _libraryItem;
-			}
-			set
-			{
-				if (_libraryItem == value)
-				{
-					return;
-				}
-				_libraryItem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _libraryItem);
+			set => SetProperty(ref _libraryItem, value);
 		}
 
 		public inkWidgetLibraryItemClipboardData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

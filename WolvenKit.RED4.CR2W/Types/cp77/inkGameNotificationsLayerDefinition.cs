@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cursorResource")] 
 		public rRef<inkWidgetLibraryResource> CursorResource
 		{
-			get
-			{
-				if (_cursorResource == null)
-				{
-					_cursorResource = (rRef<inkWidgetLibraryResource>) CR2WTypeManager.Create("rRef:inkWidgetLibraryResource", "cursorResource", cr2w, this);
-				}
-				return _cursorResource;
-			}
-			set
-			{
-				if (_cursorResource == value)
-				{
-					return;
-				}
-				_cursorResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cursorResource);
+			set => SetProperty(ref _cursorResource, value);
 		}
 
 		public inkGameNotificationsLayerDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

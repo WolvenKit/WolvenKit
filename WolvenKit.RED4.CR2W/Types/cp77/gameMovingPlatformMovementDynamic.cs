@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("curveName")] 
 		public CName CurveName
 		{
-			get
-			{
-				if (_curveName == null)
-				{
-					_curveName = (CName) CR2WTypeManager.Create("CName", "curveName", cr2w, this);
-				}
-				return _curveName;
-			}
-			set
-			{
-				if (_curveName == value)
-				{
-					return;
-				}
-				_curveName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _curveName);
+			set => SetProperty(ref _curveName, value);
 		}
 
 		public gameMovingPlatformMovementDynamic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

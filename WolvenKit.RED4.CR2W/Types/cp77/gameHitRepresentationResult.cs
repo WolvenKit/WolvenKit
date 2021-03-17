@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sult")] 
 		public gameQueryResult Sult
 		{
-			get
-			{
-				if (_sult == null)
-				{
-					_sult = (gameQueryResult) CR2WTypeManager.Create("gameQueryResult", "sult", cr2w, this);
-				}
-				return _sult;
-			}
-			set
-			{
-				if (_sult == value)
-				{
-					return;
-				}
-				_sult = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sult);
+			set => SetProperty(ref _sult, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("tityID")] 
 		public entEntityID TityID
 		{
-			get
-			{
-				if (_tityID == null)
-				{
-					_tityID = (entEntityID) CR2WTypeManager.Create("entEntityID", "tityID", cr2w, this);
-				}
-				return _tityID;
-			}
-			set
-			{
-				if (_tityID == value)
-				{
-					return;
-				}
-				_tityID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tityID);
+			set => SetProperty(ref _tityID, value);
 		}
 
 		public gameHitRepresentationResult(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

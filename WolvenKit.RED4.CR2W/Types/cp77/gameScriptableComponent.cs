@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("priority")] 
 		public CUInt32 Priority
 		{
-			get
-			{
-				if (_priority == null)
-				{
-					_priority = (CUInt32) CR2WTypeManager.Create("Uint32", "priority", cr2w, this);
-				}
-				return _priority;
-			}
-			set
-			{
-				if (_priority == value)
-				{
-					return;
-				}
-				_priority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _priority);
+			set => SetProperty(ref _priority, value);
 		}
 
 		public gameScriptableComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

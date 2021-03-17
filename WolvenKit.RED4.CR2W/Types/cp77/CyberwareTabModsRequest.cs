@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("open")] 
 		public CBool Open
 		{
-			get
-			{
-				if (_open == null)
-				{
-					_open = (CBool) CR2WTypeManager.Create("Bool", "open", cr2w, this);
-				}
-				return _open;
-			}
-			set
-			{
-				if (_open == value)
-				{
-					return;
-				}
-				_open = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _open);
+			set => SetProperty(ref _open, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("wrapper")] 
 		public CHandle<CyberwareDisplayWrapper> Wrapper
 		{
-			get
-			{
-				if (_wrapper == null)
-				{
-					_wrapper = (CHandle<CyberwareDisplayWrapper>) CR2WTypeManager.Create("handle:CyberwareDisplayWrapper", "wrapper", cr2w, this);
-				}
-				return _wrapper;
-			}
-			set
-			{
-				if (_wrapper == value)
-				{
-					return;
-				}
-				_wrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wrapper);
+			set => SetProperty(ref _wrapper, value);
 		}
 
 		public CyberwareTabModsRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

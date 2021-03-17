@@ -24,276 +24,96 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("starsWidget")] 
 		public CArray<inkWidgetReference> StarsWidget
 		{
-			get
-			{
-				if (_starsWidget == null)
-				{
-					_starsWidget = (CArray<inkWidgetReference>) CR2WTypeManager.Create("array:inkWidgetReference", "starsWidget", cr2w, this);
-				}
-				return _starsWidget;
-			}
-			set
-			{
-				if (_starsWidget == value)
-				{
-					return;
-				}
-				_starsWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _starsWidget);
+			set => SetProperty(ref _starsWidget, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("wantedBlackboard")] 
 		public CHandle<gameIBlackboard> WantedBlackboard
 		{
-			get
-			{
-				if (_wantedBlackboard == null)
-				{
-					_wantedBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "wantedBlackboard", cr2w, this);
-				}
-				return _wantedBlackboard;
-			}
-			set
-			{
-				if (_wantedBlackboard == value)
-				{
-					return;
-				}
-				_wantedBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wantedBlackboard);
+			set => SetProperty(ref _wantedBlackboard, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("wantedBlackboardDef")] 
 		public CHandle<UI_WantedBarDef> WantedBlackboardDef
 		{
-			get
-			{
-				if (_wantedBlackboardDef == null)
-				{
-					_wantedBlackboardDef = (CHandle<UI_WantedBarDef>) CR2WTypeManager.Create("handle:UI_WantedBarDef", "wantedBlackboardDef", cr2w, this);
-				}
-				return _wantedBlackboardDef;
-			}
-			set
-			{
-				if (_wantedBlackboardDef == value)
-				{
-					return;
-				}
-				_wantedBlackboardDef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wantedBlackboardDef);
+			set => SetProperty(ref _wantedBlackboardDef, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("wantedCallbackID")] 
 		public CUInt32 WantedCallbackID
 		{
-			get
-			{
-				if (_wantedCallbackID == null)
-				{
-					_wantedCallbackID = (CUInt32) CR2WTypeManager.Create("Uint32", "wantedCallbackID", cr2w, this);
-				}
-				return _wantedCallbackID;
-			}
-			set
-			{
-				if (_wantedCallbackID == value)
-				{
-					return;
-				}
-				_wantedCallbackID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wantedCallbackID);
+			set => SetProperty(ref _wantedCallbackID, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get
-			{
-				if (_animProxy == null)
-				{
-					_animProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animProxy", cr2w, this);
-				}
-				return _animProxy;
-			}
-			set
-			{
-				if (_animProxy == value)
-				{
-					return;
-				}
-				_animProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animProxy);
+			set => SetProperty(ref _animProxy, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("attentionAnimProxy")] 
 		public CHandle<inkanimProxy> AttentionAnimProxy
 		{
-			get
-			{
-				if (_attentionAnimProxy == null)
-				{
-					_attentionAnimProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "attentionAnimProxy", cr2w, this);
-				}
-				return _attentionAnimProxy;
-			}
-			set
-			{
-				if (_attentionAnimProxy == value)
-				{
-					return;
-				}
-				_attentionAnimProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attentionAnimProxy);
+			set => SetProperty(ref _attentionAnimProxy, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("bountyAnimProxy")] 
 		public CHandle<inkanimProxy> BountyAnimProxy
 		{
-			get
-			{
-				if (_bountyAnimProxy == null)
-				{
-					_bountyAnimProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "bountyAnimProxy", cr2w, this);
-				}
-				return _bountyAnimProxy;
-			}
-			set
-			{
-				if (_bountyAnimProxy == value)
-				{
-					return;
-				}
-				_bountyAnimProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bountyAnimProxy);
+			set => SetProperty(ref _bountyAnimProxy, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("animOptionsLoop")] 
 		public inkanimPlaybackOptions AnimOptionsLoop
 		{
-			get
-			{
-				if (_animOptionsLoop == null)
-				{
-					_animOptionsLoop = (inkanimPlaybackOptions) CR2WTypeManager.Create("inkanimPlaybackOptions", "animOptionsLoop", cr2w, this);
-				}
-				return _animOptionsLoop;
-			}
-			set
-			{
-				if (_animOptionsLoop == value)
-				{
-					return;
-				}
-				_animOptionsLoop = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animOptionsLoop);
+			set => SetProperty(ref _animOptionsLoop, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("wantedLevel")] 
 		public CInt32 WantedLevel
 		{
-			get
-			{
-				if (_wantedLevel == null)
-				{
-					_wantedLevel = (CInt32) CR2WTypeManager.Create("Int32", "wantedLevel", cr2w, this);
-				}
-				return _wantedLevel;
-			}
-			set
-			{
-				if (_wantedLevel == value)
-				{
-					return;
-				}
-				_wantedLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wantedLevel);
+			set => SetProperty(ref _wantedLevel, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("rootWidget")] 
 		public CHandle<inkWidget> RootWidget
 		{
-			get
-			{
-				if (_rootWidget == null)
-				{
-					_rootWidget = (CHandle<inkWidget>) CR2WTypeManager.Create("handle:inkWidget", "rootWidget", cr2w, this);
-				}
-				return _rootWidget;
-			}
-			set
-			{
-				if (_rootWidget == value)
-				{
-					return;
-				}
-				_rootWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rootWidget);
+			set => SetProperty(ref _rootWidget, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("WANTED_TIER_1")] 
 		public CFloat WANTED_TIER_1
 		{
-			get
-			{
-				if (_wANTED_TIER_1 == null)
-				{
-					_wANTED_TIER_1 = (CFloat) CR2WTypeManager.Create("Float", "WANTED_TIER_1", cr2w, this);
-				}
-				return _wANTED_TIER_1;
-			}
-			set
-			{
-				if (_wANTED_TIER_1 == value)
-				{
-					return;
-				}
-				_wANTED_TIER_1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wANTED_TIER_1);
+			set => SetProperty(ref _wANTED_TIER_1, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("WANTED_MIN")] 
 		public CFloat WANTED_MIN
 		{
-			get
-			{
-				if (_wANTED_MIN == null)
-				{
-					_wANTED_MIN = (CFloat) CR2WTypeManager.Create("Float", "WANTED_MIN", cr2w, this);
-				}
-				return _wANTED_MIN;
-			}
-			set
-			{
-				if (_wANTED_MIN == value)
-				{
-					return;
-				}
-				_wANTED_MIN = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wANTED_MIN);
+			set => SetProperty(ref _wANTED_MIN, value);
 		}
 
 		public WantedBarGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -39,621 +39,216 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("displayNameOverride")] 
 		public CString DisplayNameOverride
 		{
-			get
-			{
-				if (_displayNameOverride == null)
-				{
-					_displayNameOverride = (CString) CR2WTypeManager.Create("String", "displayNameOverride", cr2w, this);
-				}
-				return _displayNameOverride;
-			}
-			set
-			{
-				if (_displayNameOverride == value)
-				{
-					return;
-				}
-				_displayNameOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _displayNameOverride);
+			set => SetProperty(ref _displayNameOverride, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("localizedDisplayNameOverride")] 
 		public LocalizationString LocalizedDisplayNameOverride
 		{
-			get
-			{
-				if (_localizedDisplayNameOverride == null)
-				{
-					_localizedDisplayNameOverride = (LocalizationString) CR2WTypeManager.Create("LocalizationString", "localizedDisplayNameOverride", cr2w, this);
-				}
-				return _localizedDisplayNameOverride;
-			}
-			set
-			{
-				if (_localizedDisplayNameOverride == value)
-				{
-					return;
-				}
-				_localizedDisplayNameOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localizedDisplayNameOverride);
+			set => SetProperty(ref _localizedDisplayNameOverride, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("options")] 
 		public CArray<scnChoiceNodeOption> Options
 		{
-			get
-			{
-				if (_options == null)
-				{
-					_options = (CArray<scnChoiceNodeOption>) CR2WTypeManager.Create("array:scnChoiceNodeOption", "options", cr2w, this);
-				}
-				return _options;
-			}
-			set
-			{
-				if (_options == value)
-				{
-					return;
-				}
-				_options = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _options);
+			set => SetProperty(ref _options, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("mode")] 
 		public CEnum<scnChoiceNodeNsOperationMode> Mode
 		{
-			get
-			{
-				if (_mode == null)
-				{
-					_mode = (CEnum<scnChoiceNodeNsOperationMode>) CR2WTypeManager.Create("scnChoiceNodeNsOperationMode", "mode", cr2w, this);
-				}
-				return _mode;
-			}
-			set
-			{
-				if (_mode == value)
-				{
-					return;
-				}
-				_mode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mode);
+			set => SetProperty(ref _mode, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("persistentLineEvents")] 
 		public CArray<scnSceneEventId> PersistentLineEvents
 		{
-			get
-			{
-				if (_persistentLineEvents == null)
-				{
-					_persistentLineEvents = (CArray<scnSceneEventId>) CR2WTypeManager.Create("array:scnSceneEventId", "persistentLineEvents", cr2w, this);
-				}
-				return _persistentLineEvents;
-			}
-			set
-			{
-				if (_persistentLineEvents == value)
-				{
-					return;
-				}
-				_persistentLineEvents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _persistentLineEvents);
+			set => SetProperty(ref _persistentLineEvents, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("customPersistentLine")] 
 		public scnscreenplayItemId CustomPersistentLine
 		{
-			get
-			{
-				if (_customPersistentLine == null)
-				{
-					_customPersistentLine = (scnscreenplayItemId) CR2WTypeManager.Create("scnscreenplayItemId", "customPersistentLine", cr2w, this);
-				}
-				return _customPersistentLine;
-			}
-			set
-			{
-				if (_customPersistentLine == value)
-				{
-					return;
-				}
-				_customPersistentLine = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customPersistentLine);
+			set => SetProperty(ref _customPersistentLine, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("timedParams")] 
 		public CHandle<scnChoiceNodeNsTimedParams> TimedParams
 		{
-			get
-			{
-				if (_timedParams == null)
-				{
-					_timedParams = (CHandle<scnChoiceNodeNsTimedParams>) CR2WTypeManager.Create("handle:scnChoiceNodeNsTimedParams", "timedParams", cr2w, this);
-				}
-				return _timedParams;
-			}
-			set
-			{
-				if (_timedParams == value)
-				{
-					return;
-				}
-				_timedParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timedParams);
+			set => SetProperty(ref _timedParams, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("reminderParams")] 
 		public CHandle<scnChoiceNodeNsActorReminderParams> ReminderParams
 		{
-			get
-			{
-				if (_reminderParams == null)
-				{
-					_reminderParams = (CHandle<scnChoiceNodeNsActorReminderParams>) CR2WTypeManager.Create("handle:scnChoiceNodeNsActorReminderParams", "reminderParams", cr2w, this);
-				}
-				return _reminderParams;
-			}
-			set
-			{
-				if (_reminderParams == value)
-				{
-					return;
-				}
-				_reminderParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reminderParams);
+			set => SetProperty(ref _reminderParams, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("shapeParams")] 
 		public CHandle<scnInteractionShapeParams> ShapeParams
 		{
-			get
-			{
-				if (_shapeParams == null)
-				{
-					_shapeParams = (CHandle<scnInteractionShapeParams>) CR2WTypeManager.Create("handle:scnInteractionShapeParams", "shapeParams", cr2w, this);
-				}
-				return _shapeParams;
-			}
-			set
-			{
-				if (_shapeParams == value)
-				{
-					return;
-				}
-				_shapeParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shapeParams);
+			set => SetProperty(ref _shapeParams, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("lookAtParams")] 
 		public CHandle<scnChoiceNodeNsLookAtParams> LookAtParams
 		{
-			get
-			{
-				if (_lookAtParams == null)
-				{
-					_lookAtParams = (CHandle<scnChoiceNodeNsLookAtParams>) CR2WTypeManager.Create("handle:scnChoiceNodeNsLookAtParams", "lookAtParams", cr2w, this);
-				}
-				return _lookAtParams;
-			}
-			set
-			{
-				if (_lookAtParams == value)
-				{
-					return;
-				}
-				_lookAtParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lookAtParams);
+			set => SetProperty(ref _lookAtParams, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("forceAttachToScreenCondition")] 
 		public CHandle<questIBaseCondition> ForceAttachToScreenCondition
 		{
-			get
-			{
-				if (_forceAttachToScreenCondition == null)
-				{
-					_forceAttachToScreenCondition = (CHandle<questIBaseCondition>) CR2WTypeManager.Create("handle:questIBaseCondition", "forceAttachToScreenCondition", cr2w, this);
-				}
-				return _forceAttachToScreenCondition;
-			}
-			set
-			{
-				if (_forceAttachToScreenCondition == value)
-				{
-					return;
-				}
-				_forceAttachToScreenCondition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceAttachToScreenCondition);
+			set => SetProperty(ref _forceAttachToScreenCondition, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("choiceGroup")] 
 		public CName ChoiceGroup
 		{
-			get
-			{
-				if (_choiceGroup == null)
-				{
-					_choiceGroup = (CName) CR2WTypeManager.Create("CName", "choiceGroup", cr2w, this);
-				}
-				return _choiceGroup;
-			}
-			set
-			{
-				if (_choiceGroup == value)
-				{
-					return;
-				}
-				_choiceGroup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _choiceGroup);
+			set => SetProperty(ref _choiceGroup, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("cpoHoldInputActionSection")] 
 		public CBool CpoHoldInputActionSection
 		{
-			get
-			{
-				if (_cpoHoldInputActionSection == null)
-				{
-					_cpoHoldInputActionSection = (CBool) CR2WTypeManager.Create("Bool", "cpoHoldInputActionSection", cr2w, this);
-				}
-				return _cpoHoldInputActionSection;
-			}
-			set
-			{
-				if (_cpoHoldInputActionSection == value)
-				{
-					return;
-				}
-				_cpoHoldInputActionSection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cpoHoldInputActionSection);
+			set => SetProperty(ref _cpoHoldInputActionSection, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("ataParams")] 
 		public scnChoiceNodeNsAttachToActorParams AtaParams
 		{
-			get
-			{
-				if (_ataParams == null)
-				{
-					_ataParams = (scnChoiceNodeNsAttachToActorParams) CR2WTypeManager.Create("scnChoiceNodeNsAttachToActorParams", "ataParams", cr2w, this);
-				}
-				return _ataParams;
-			}
-			set
-			{
-				if (_ataParams == value)
-				{
-					return;
-				}
-				_ataParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ataParams);
+			set => SetProperty(ref _ataParams, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("atpParams")] 
 		public scnChoiceNodeNsAttachToPropParams AtpParams
 		{
-			get
-			{
-				if (_atpParams == null)
-				{
-					_atpParams = (scnChoiceNodeNsAttachToPropParams) CR2WTypeManager.Create("scnChoiceNodeNsAttachToPropParams", "atpParams", cr2w, this);
-				}
-				return _atpParams;
-			}
-			set
-			{
-				if (_atpParams == value)
-				{
-					return;
-				}
-				_atpParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _atpParams);
+			set => SetProperty(ref _atpParams, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("atgoParams")] 
 		public scnChoiceNodeNsAttachToGameObjectParams AtgoParams
 		{
-			get
-			{
-				if (_atgoParams == null)
-				{
-					_atgoParams = (scnChoiceNodeNsAttachToGameObjectParams) CR2WTypeManager.Create("scnChoiceNodeNsAttachToGameObjectParams", "atgoParams", cr2w, this);
-				}
-				return _atgoParams;
-			}
-			set
-			{
-				if (_atgoParams == value)
-				{
-					return;
-				}
-				_atgoParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _atgoParams);
+			set => SetProperty(ref _atgoParams, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("atsParams")] 
 		public scnChoiceNodeNsAttachToScreenParams AtsParams
 		{
-			get
-			{
-				if (_atsParams == null)
-				{
-					_atsParams = (scnChoiceNodeNsAttachToScreenParams) CR2WTypeManager.Create("scnChoiceNodeNsAttachToScreenParams", "atsParams", cr2w, this);
-				}
-				return _atsParams;
-			}
-			set
-			{
-				if (_atsParams == value)
-				{
-					return;
-				}
-				_atsParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _atsParams);
+			set => SetProperty(ref _atsParams, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("atwParams")] 
 		public scnChoiceNodeNsAttachToWorldParams AtwParams
 		{
-			get
-			{
-				if (_atwParams == null)
-				{
-					_atwParams = (scnChoiceNodeNsAttachToWorldParams) CR2WTypeManager.Create("scnChoiceNodeNsAttachToWorldParams", "atwParams", cr2w, this);
-				}
-				return _atwParams;
-			}
-			set
-			{
-				if (_atwParams == value)
-				{
-					return;
-				}
-				_atwParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _atwParams);
+			set => SetProperty(ref _atwParams, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("choicePriority")] 
 		public CUInt8 ChoicePriority
 		{
-			get
-			{
-				if (_choicePriority == null)
-				{
-					_choicePriority = (CUInt8) CR2WTypeManager.Create("Uint8", "choicePriority", cr2w, this);
-				}
-				return _choicePriority;
-			}
-			set
-			{
-				if (_choicePriority == value)
-				{
-					return;
-				}
-				_choicePriority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _choicePriority);
+			set => SetProperty(ref _choicePriority, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("hubPriority")] 
 		public CUInt8 HubPriority
 		{
-			get
-			{
-				if (_hubPriority == null)
-				{
-					_hubPriority = (CUInt8) CR2WTypeManager.Create("Uint8", "hubPriority", cr2w, this);
-				}
-				return _hubPriority;
-			}
-			set
-			{
-				if (_hubPriority == value)
-				{
-					return;
-				}
-				_hubPriority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hubPriority);
+			set => SetProperty(ref _hubPriority, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("mappinParams")] 
 		public CHandle<scnChoiceNodeNsMappinParams> MappinParams
 		{
-			get
-			{
-				if (_mappinParams == null)
-				{
-					_mappinParams = (CHandle<scnChoiceNodeNsMappinParams>) CR2WTypeManager.Create("handle:scnChoiceNodeNsMappinParams", "mappinParams", cr2w, this);
-				}
-				return _mappinParams;
-			}
-			set
-			{
-				if (_mappinParams == value)
-				{
-					return;
-				}
-				_mappinParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mappinParams);
+			set => SetProperty(ref _mappinParams, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("interruptCapability")] 
 		public CEnum<scnInterruptCapability> InterruptCapability
 		{
-			get
-			{
-				if (_interruptCapability == null)
-				{
-					_interruptCapability = (CEnum<scnInterruptCapability>) CR2WTypeManager.Create("scnInterruptCapability", "interruptCapability", cr2w, this);
-				}
-				return _interruptCapability;
-			}
-			set
-			{
-				if (_interruptCapability == value)
-				{
-					return;
-				}
-				_interruptCapability = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interruptCapability);
+			set => SetProperty(ref _interruptCapability, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("interruptionSpeakerOverride")] 
 		public scnActorId InterruptionSpeakerOverride
 		{
-			get
-			{
-				if (_interruptionSpeakerOverride == null)
-				{
-					_interruptionSpeakerOverride = (scnActorId) CR2WTypeManager.Create("scnActorId", "interruptionSpeakerOverride", cr2w, this);
-				}
-				return _interruptionSpeakerOverride;
-			}
-			set
-			{
-				if (_interruptionSpeakerOverride == value)
-				{
-					return;
-				}
-				_interruptionSpeakerOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interruptionSpeakerOverride);
+			set => SetProperty(ref _interruptionSpeakerOverride, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("choiceFlags")] 
 		public CEnum<scnChoiceNodeNsChoiceNodeBitFlags> ChoiceFlags
 		{
-			get
-			{
-				if (_choiceFlags == null)
-				{
-					_choiceFlags = (CEnum<scnChoiceNodeNsChoiceNodeBitFlags>) CR2WTypeManager.Create("scnChoiceNodeNsChoiceNodeBitFlags", "choiceFlags", cr2w, this);
-				}
-				return _choiceFlags;
-			}
-			set
-			{
-				if (_choiceFlags == value)
-				{
-					return;
-				}
-				_choiceFlags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _choiceFlags);
+			set => SetProperty(ref _choiceFlags, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("alwaysUseBrainGender")] 
 		public CBool AlwaysUseBrainGender
 		{
-			get
-			{
-				if (_alwaysUseBrainGender == null)
-				{
-					_alwaysUseBrainGender = (CBool) CR2WTypeManager.Create("Bool", "alwaysUseBrainGender", cr2w, this);
-				}
-				return _alwaysUseBrainGender;
-			}
-			set
-			{
-				if (_alwaysUseBrainGender == value)
-				{
-					return;
-				}
-				_alwaysUseBrainGender = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alwaysUseBrainGender);
+			set => SetProperty(ref _alwaysUseBrainGender, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("timedSectionCondition")] 
 		public CHandle<scnTimedCondition> TimedSectionCondition
 		{
-			get
-			{
-				if (_timedSectionCondition == null)
-				{
-					_timedSectionCondition = (CHandle<scnTimedCondition>) CR2WTypeManager.Create("handle:scnTimedCondition", "timedSectionCondition", cr2w, this);
-				}
-				return _timedSectionCondition;
-			}
-			set
-			{
-				if (_timedSectionCondition == value)
-				{
-					return;
-				}
-				_timedSectionCondition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timedSectionCondition);
+			set => SetProperty(ref _timedSectionCondition, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("reminderCondition")] 
 		public CHandle<scnReminderCondition> ReminderCondition
 		{
-			get
-			{
-				if (_reminderCondition == null)
-				{
-					_reminderCondition = (CHandle<scnReminderCondition>) CR2WTypeManager.Create("handle:scnReminderCondition", "reminderCondition", cr2w, this);
-				}
-				return _reminderCondition;
-			}
-			set
-			{
-				if (_reminderCondition == value)
-				{
-					return;
-				}
-				_reminderCondition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reminderCondition);
+			set => SetProperty(ref _reminderCondition, value);
 		}
 
 		public scnChoiceNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

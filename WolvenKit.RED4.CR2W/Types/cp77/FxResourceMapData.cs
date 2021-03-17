@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("key")] 
 		public CName Key
 		{
-			get
-			{
-				if (_key == null)
-				{
-					_key = (CName) CR2WTypeManager.Create("CName", "key", cr2w, this);
-				}
-				return _key;
-			}
-			set
-			{
-				if (_key == value)
-				{
-					return;
-				}
-				_key = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _key);
+			set => SetProperty(ref _key, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("resource")] 
 		public gameFxResource Resource
 		{
-			get
-			{
-				if (_resource == null)
-				{
-					_resource = (gameFxResource) CR2WTypeManager.Create("gameFxResource", "resource", cr2w, this);
-				}
-				return _resource;
-			}
-			set
-			{
-				if (_resource == value)
-				{
-					return;
-				}
-				_resource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resource);
+			set => SetProperty(ref _resource, value);
 		}
 
 		public FxResourceMapData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

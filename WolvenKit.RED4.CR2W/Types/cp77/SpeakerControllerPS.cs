@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("speakerSetup")] 
 		public SpeakerSetup SpeakerSetup
 		{
-			get
-			{
-				if (_speakerSetup == null)
-				{
-					_speakerSetup = (SpeakerSetup) CR2WTypeManager.Create("SpeakerSetup", "speakerSetup", cr2w, this);
-				}
-				return _speakerSetup;
-			}
-			set
-			{
-				if (_speakerSetup == value)
-				{
-					return;
-				}
-				_speakerSetup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speakerSetup);
+			set => SetProperty(ref _speakerSetup, value);
 		}
 
 		[Ordinal(104)] 
 		[RED("currentValue")] 
 		public CName CurrentValue
 		{
-			get
-			{
-				if (_currentValue == null)
-				{
-					_currentValue = (CName) CR2WTypeManager.Create("CName", "currentValue", cr2w, this);
-				}
-				return _currentValue;
-			}
-			set
-			{
-				if (_currentValue == value)
-				{
-					return;
-				}
-				_currentValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentValue);
+			set => SetProperty(ref _currentValue, value);
 		}
 
 		[Ordinal(105)] 
 		[RED("previousValue")] 
 		public CName PreviousValue
 		{
-			get
-			{
-				if (_previousValue == null)
-				{
-					_previousValue = (CName) CR2WTypeManager.Create("CName", "previousValue", cr2w, this);
-				}
-				return _previousValue;
-			}
-			set
-			{
-				if (_previousValue == value)
-				{
-					return;
-				}
-				_previousValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousValue);
+			set => SetProperty(ref _previousValue, value);
 		}
 
 		public SpeakerControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

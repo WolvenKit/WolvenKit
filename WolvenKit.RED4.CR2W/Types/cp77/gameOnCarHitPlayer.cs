@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hitDirection")] 
 		public Vector4 HitDirection
 		{
-			get
-			{
-				if (_hitDirection == null)
-				{
-					_hitDirection = (Vector4) CR2WTypeManager.Create("Vector4", "hitDirection", cr2w, this);
-				}
-				return _hitDirection;
-			}
-			set
-			{
-				if (_hitDirection == value)
-				{
-					return;
-				}
-				_hitDirection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitDirection);
+			set => SetProperty(ref _hitDirection, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("carId")] 
 		public entEntityID CarId
 		{
-			get
-			{
-				if (_carId == null)
-				{
-					_carId = (entEntityID) CR2WTypeManager.Create("entEntityID", "carId", cr2w, this);
-				}
-				return _carId;
-			}
-			set
-			{
-				if (_carId == value)
-				{
-					return;
-				}
-				_carId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _carId);
+			set => SetProperty(ref _carId, value);
 		}
 
 		public gameOnCarHitPlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

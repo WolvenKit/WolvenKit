@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("behaviorArgumentList")] 
 		public CArray<CHandle<AIArgumentInstancePS>> BehaviorArgumentList
 		{
-			get
-			{
-				if (_behaviorArgumentList == null)
-				{
-					_behaviorArgumentList = (CArray<CHandle<AIArgumentInstancePS>>) CR2WTypeManager.Create("array:handle:AIArgumentInstancePS", "behaviorArgumentList", cr2w, this);
-				}
-				return _behaviorArgumentList;
-			}
-			set
-			{
-				if (_behaviorArgumentList == value)
-				{
-					return;
-				}
-				_behaviorArgumentList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _behaviorArgumentList);
+			set => SetProperty(ref _behaviorArgumentList, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("aiRole")] 
 		public CHandle<AIRole> AiRole
 		{
-			get
-			{
-				if (_aiRole == null)
-				{
-					_aiRole = (CHandle<AIRole>) CR2WTypeManager.Create("handle:AIRole", "aiRole", cr2w, this);
-				}
-				return _aiRole;
-			}
-			set
-			{
-				if (_aiRole == value)
-				{
-					return;
-				}
-				_aiRole = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aiRole);
+			set => SetProperty(ref _aiRole, value);
 		}
 
 		public AICommandQueuePS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

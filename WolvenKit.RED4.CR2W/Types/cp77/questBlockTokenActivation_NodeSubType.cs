@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("action")] 
 		public CEnum<questBlockAction> Action
 		{
-			get
-			{
-				if (_action == null)
-				{
-					_action = (CEnum<questBlockAction>) CR2WTypeManager.Create("questBlockAction", "action", cr2w, this);
-				}
-				return _action;
-			}
-			set
-			{
-				if (_action == value)
-				{
-					return;
-				}
-				_action = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("source")] 
 		public CName Source
 		{
-			get
-			{
-				if (_source == null)
-				{
-					_source = (CName) CR2WTypeManager.Create("CName", "source", cr2w, this);
-				}
-				return _source;
-			}
-			set
-			{
-				if (_source == value)
-				{
-					return;
-				}
-				_source = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
 		}
 
 		public questBlockTokenActivation_NodeSubType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

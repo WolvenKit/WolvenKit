@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("questObjective")] 
 		public wCHandle<gameJournalQuestObjectiveBase> QuestObjective
 		{
-			get
-			{
-				if (_questObjective == null)
-				{
-					_questObjective = (wCHandle<gameJournalQuestObjectiveBase>) CR2WTypeManager.Create("whandle:gameJournalQuestObjectiveBase", "questObjective", cr2w, this);
-				}
-				return _questObjective;
-			}
-			set
-			{
-				if (_questObjective == value)
-				{
-					return;
-				}
-				_questObjective = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questObjective);
+			set => SetProperty(ref _questObjective, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("objectiveStatus")] 
 		public CEnum<gameJournalEntryState> ObjectiveStatus
 		{
-			get
-			{
-				if (_objectiveStatus == null)
-				{
-					_objectiveStatus = (CEnum<gameJournalEntryState>) CR2WTypeManager.Create("gameJournalEntryState", "objectiveStatus", cr2w, this);
-				}
-				return _objectiveStatus;
-			}
-			set
-			{
-				if (_objectiveStatus == value)
-				{
-					return;
-				}
-				_objectiveStatus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectiveStatus);
+			set => SetProperty(ref _objectiveStatus, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isTracked")] 
 		public CBool IsTracked
 		{
-			get
-			{
-				if (_isTracked == null)
-				{
-					_isTracked = (CBool) CR2WTypeManager.Create("Bool", "isTracked", cr2w, this);
-				}
-				return _isTracked;
-			}
-			set
-			{
-				if (_isTracked == value)
-				{
-					return;
-				}
-				_isTracked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isTracked);
+			set => SetProperty(ref _isTracked, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("currentCounter")] 
 		public CInt32 CurrentCounter
 		{
-			get
-			{
-				if (_currentCounter == null)
-				{
-					_currentCounter = (CInt32) CR2WTypeManager.Create("Int32", "currentCounter", cr2w, this);
-				}
-				return _currentCounter;
-			}
-			set
-			{
-				if (_currentCounter == value)
-				{
-					return;
-				}
-				_currentCounter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentCounter);
+			set => SetProperty(ref _currentCounter, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("totalCounter")] 
 		public CInt32 TotalCounter
 		{
-			get
-			{
-				if (_totalCounter == null)
-				{
-					_totalCounter = (CInt32) CR2WTypeManager.Create("Int32", "totalCounter", cr2w, this);
-				}
-				return _totalCounter;
-			}
-			set
-			{
-				if (_totalCounter == value)
-				{
-					return;
-				}
-				_totalCounter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _totalCounter);
+			set => SetProperty(ref _totalCounter, value);
 		}
 
 		public ABaseQuestObjectiveWrapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

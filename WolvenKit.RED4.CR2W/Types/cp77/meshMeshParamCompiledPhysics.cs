@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("collection")] 
 		public CHandle<physicsDeferredCollection> Collection
 		{
-			get
-			{
-				if (_collection == null)
-				{
-					_collection = (CHandle<physicsDeferredCollection>) CR2WTypeManager.Create("handle:physicsDeferredCollection", "collection", cr2w, this);
-				}
-				return _collection;
-			}
-			set
-			{
-				if (_collection == value)
-				{
-					return;
-				}
-				_collection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collection);
+			set => SetProperty(ref _collection, value);
 		}
 
 		public meshMeshParamCompiledPhysics(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

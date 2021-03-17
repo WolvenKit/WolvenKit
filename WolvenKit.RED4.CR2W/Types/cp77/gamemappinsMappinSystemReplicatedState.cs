@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mappinState")] 
 		public CArray<gameNewMappinID> MappinState
 		{
-			get
-			{
-				if (_mappinState == null)
-				{
-					_mappinState = (CArray<gameNewMappinID>) CR2WTypeManager.Create("array:gameNewMappinID", "mappinState", cr2w, this);
-				}
-				return _mappinState;
-			}
-			set
-			{
-				if (_mappinState == value)
-				{
-					return;
-				}
-				_mappinState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mappinState);
+			set => SetProperty(ref _mappinState, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("mappinWithJournalState")] 
 		public CArray<CUInt32> MappinWithJournalState
 		{
-			get
-			{
-				if (_mappinWithJournalState == null)
-				{
-					_mappinWithJournalState = (CArray<CUInt32>) CR2WTypeManager.Create("array:Uint32", "mappinWithJournalState", cr2w, this);
-				}
-				return _mappinWithJournalState;
-			}
-			set
-			{
-				if (_mappinWithJournalState == value)
-				{
-					return;
-				}
-				_mappinWithJournalState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mappinWithJournalState);
+			set => SetProperty(ref _mappinWithJournalState, value);
 		}
 
 		public gamemappinsMappinSystemReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

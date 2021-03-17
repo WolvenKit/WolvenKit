@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("playOnInitialize")] 
 		public CBool PlayOnInitialize
 		{
-			get
-			{
-				if (_playOnInitialize == null)
-				{
-					_playOnInitialize = (CBool) CR2WTypeManager.Create("Bool", "playOnInitialize", cr2w, this);
-				}
-				return _playOnInitialize;
-			}
-			set
-			{
-				if (_playOnInitialize == value)
-				{
-					return;
-				}
-				_playOnInitialize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playOnInitialize);
+			set => SetProperty(ref _playOnInitialize, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("animationName")] 
 		public CName AnimationName
 		{
-			get
-			{
-				if (_animationName == null)
-				{
-					_animationName = (CName) CR2WTypeManager.Create("CName", "animationName", cr2w, this);
-				}
-				return _animationName;
-			}
-			set
-			{
-				if (_animationName == value)
-				{
-					return;
-				}
-				_animationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationName);
+			set => SetProperty(ref _animationName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("useDefaultAnimation")] 
 		public CBool UseDefaultAnimation
 		{
-			get
-			{
-				if (_useDefaultAnimation == null)
-				{
-					_useDefaultAnimation = (CBool) CR2WTypeManager.Create("Bool", "useDefaultAnimation", cr2w, this);
-				}
-				return _useDefaultAnimation;
-			}
-			set
-			{
-				if (_useDefaultAnimation == value)
-				{
-					return;
-				}
-				_useDefaultAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useDefaultAnimation);
+			set => SetProperty(ref _useDefaultAnimation, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("startDelay")] 
 		public CFloat StartDelay
 		{
-			get
-			{
-				if (_startDelay == null)
-				{
-					_startDelay = (CFloat) CR2WTypeManager.Create("Float", "startDelay", cr2w, this);
-				}
-				return _startDelay;
-			}
-			set
-			{
-				if (_startDelay == value)
-				{
-					return;
-				}
-				_startDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startDelay);
+			set => SetProperty(ref _startDelay, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("startValue")] 
 		public CFloat StartValue
 		{
-			get
-			{
-				if (_startValue == null)
-				{
-					_startValue = (CFloat) CR2WTypeManager.Create("Float", "startValue", cr2w, this);
-				}
-				return _startValue;
-			}
-			set
-			{
-				if (_startValue == value)
-				{
-					return;
-				}
-				_startValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startValue);
+			set => SetProperty(ref _startValue, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("endValue")] 
 		public CFloat EndValue
 		{
-			get
-			{
-				if (_endValue == null)
-				{
-					_endValue = (CFloat) CR2WTypeManager.Create("Float", "endValue", cr2w, this);
-				}
-				return _endValue;
-			}
-			set
-			{
-				if (_endValue == value)
-				{
-					return;
-				}
-				_endValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endValue);
+			set => SetProperty(ref _endValue, value);
 		}
 
 		public inkTextAnimationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

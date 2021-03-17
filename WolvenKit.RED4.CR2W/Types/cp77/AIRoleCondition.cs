@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("role")] 
 		public CEnum<EAIRole> Role
 		{
-			get
-			{
-				if (_role == null)
-				{
-					_role = (CEnum<EAIRole>) CR2WTypeManager.Create("EAIRole", "role", cr2w, this);
-				}
-				return _role;
-			}
-			set
-			{
-				if (_role == value)
-				{
-					return;
-				}
-				_role = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _role);
+			set => SetProperty(ref _role, value);
 		}
 
 		public AIRoleCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

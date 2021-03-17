@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("time")] 
 		public CFloat Time
 		{
-			get
-			{
-				if (_time == null)
-				{
-					_time = (CFloat) CR2WTypeManager.Create("Float", "time", cr2w, this);
-				}
-				return _time;
-			}
-			set
-			{
-				if (_time == value)
-				{
-					return;
-				}
-				_time = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _time);
+			set => SetProperty(ref _time, value);
 		}
 
 		public gameSetScanningTimeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

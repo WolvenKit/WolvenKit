@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("codex")] 
 		public CArray<SCodexRecord> Codex
 		{
-			get
-			{
-				if (_codex == null)
-				{
-					_codex = (CArray<SCodexRecord>) CR2WTypeManager.Create("array:SCodexRecord", "codex", cr2w, this);
-				}
-				return _codex;
-			}
-			set
-			{
-				if (_codex == value)
-				{
-					return;
-				}
-				_codex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _codex);
+			set => SetProperty(ref _codex, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("blackboard")] 
 		public wCHandle<gameIBlackboard> Blackboard
 		{
-			get
-			{
-				if (_blackboard == null)
-				{
-					_blackboard = (wCHandle<gameIBlackboard>) CR2WTypeManager.Create("whandle:gameIBlackboard", "blackboard", cr2w, this);
-				}
-				return _blackboard;
-			}
-			set
-			{
-				if (_blackboard == value)
-				{
-					return;
-				}
-				_blackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboard);
+			set => SetProperty(ref _blackboard, value);
 		}
 
 		public CodexSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

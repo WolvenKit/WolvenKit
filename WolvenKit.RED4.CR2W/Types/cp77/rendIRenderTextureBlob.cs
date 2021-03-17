@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("header")] 
 		public rendRenderTextureBlobHeader Header
 		{
-			get
-			{
-				if (_header == null)
-				{
-					_header = (rendRenderTextureBlobHeader) CR2WTypeManager.Create("rendRenderTextureBlobHeader", "header", cr2w, this);
-				}
-				return _header;
-			}
-			set
-			{
-				if (_header == value)
-				{
-					return;
-				}
-				_header = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _header);
+			set => SetProperty(ref _header, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("textureData")] 
 		public serializationDeferredDataBuffer TextureData
 		{
-			get
-			{
-				if (_textureData == null)
-				{
-					_textureData = (serializationDeferredDataBuffer) CR2WTypeManager.Create("serializationDeferredDataBuffer", "textureData", cr2w, this);
-				}
-				return _textureData;
-			}
-			set
-			{
-				if (_textureData == value)
-				{
-					return;
-				}
-				_textureData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textureData);
+			set => SetProperty(ref _textureData, value);
 		}
 
 		public rendIRenderTextureBlob(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

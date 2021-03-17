@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("command")] 
 		public CHandle<AICommand> Command
 		{
-			get
-			{
-				if (_command == null)
-				{
-					_command = (CHandle<AICommand>) CR2WTypeManager.Create("handle:AICommand", "command", cr2w, this);
-				}
-				return _command;
-			}
-			set
-			{
-				if (_command == value)
-				{
-					return;
-				}
-				_command = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _command);
+			set => SetProperty(ref _command, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("newState")] 
 		public CEnum<AICommandState> NewState
 		{
-			get
-			{
-				if (_newState == null)
-				{
-					_newState = (CEnum<AICommandState>) CR2WTypeManager.Create("AICommandState", "newState", cr2w, this);
-				}
-				return _newState;
-			}
-			set
-			{
-				if (_newState == value)
-				{
-					return;
-				}
-				_newState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newState);
+			set => SetProperty(ref _newState, value);
 		}
 
 		public AINPCCommandStateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

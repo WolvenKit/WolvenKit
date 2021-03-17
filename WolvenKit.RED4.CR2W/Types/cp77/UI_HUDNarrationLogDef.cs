@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("LastEvent")] 
 		public gamebbScriptID_Variant LastEvent
 		{
-			get
-			{
-				if (_lastEvent == null)
-				{
-					_lastEvent = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "LastEvent", cr2w, this);
-				}
-				return _lastEvent;
-			}
-			set
-			{
-				if (_lastEvent == value)
-				{
-					return;
-				}
-				_lastEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastEvent);
+			set => SetProperty(ref _lastEvent, value);
 		}
 
 		public UI_HUDNarrationLogDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

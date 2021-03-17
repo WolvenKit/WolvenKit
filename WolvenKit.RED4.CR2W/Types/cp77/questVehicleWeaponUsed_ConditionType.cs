@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get
-			{
-				if (_vehicleRef == null)
-				{
-					_vehicleRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "vehicleRef", cr2w, this);
-				}
-				return _vehicleRef;
-			}
-			set
-			{
-				if (_vehicleRef == value)
-				{
-					return;
-				}
-				_vehicleRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleRef);
+			set => SetProperty(ref _vehicleRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("weapon")] 
 		public CEnum<questVehicleWeaponQuestID> Weapon
 		{
-			get
-			{
-				if (_weapon == null)
-				{
-					_weapon = (CEnum<questVehicleWeaponQuestID>) CR2WTypeManager.Create("questVehicleWeaponQuestID", "weapon", cr2w, this);
-				}
-				return _weapon;
-			}
-			set
-			{
-				if (_weapon == value)
-				{
-					return;
-				}
-				_weapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weapon);
+			set => SetProperty(ref _weapon, value);
 		}
 
 		public questVehicleWeaponUsed_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("interiorColor")] 
 		public CColor InteriorColor
 		{
-			get
-			{
-				if (_interiorColor == null)
-				{
-					_interiorColor = (CColor) CR2WTypeManager.Create("Color", "interiorColor", cr2w, this);
-				}
-				return _interiorColor;
-			}
-			set
-			{
-				if (_interiorColor == value)
-				{
-					return;
-				}
-				_interiorColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interiorColor);
+			set => SetProperty(ref _interiorColor, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("openInteriorColor")] 
 		public CColor OpenInteriorColor
 		{
-			get
-			{
-				if (_openInteriorColor == null)
-				{
-					_openInteriorColor = (CColor) CR2WTypeManager.Create("Color", "openInteriorColor", cr2w, this);
-				}
-				return _openInteriorColor;
-			}
-			set
-			{
-				if (_openInteriorColor == value)
-				{
-					return;
-				}
-				_openInteriorColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _openInteriorColor);
+			set => SetProperty(ref _openInteriorColor, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("exteriorColor")] 
 		public CColor ExteriorColor
 		{
-			get
-			{
-				if (_exteriorColor == null)
-				{
-					_exteriorColor = (CColor) CR2WTypeManager.Create("Color", "exteriorColor", cr2w, this);
-				}
-				return _exteriorColor;
-			}
-			set
-			{
-				if (_exteriorColor == value)
-				{
-					return;
-				}
-				_exteriorColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exteriorColor);
+			set => SetProperty(ref _exteriorColor, value);
 		}
 
 		public worldDebugColoring_InteriorExterior(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

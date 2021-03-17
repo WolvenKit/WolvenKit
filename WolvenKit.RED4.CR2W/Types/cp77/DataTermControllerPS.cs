@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("linkedFastTravelPoint")] 
 		public CHandle<gameFastTravelPointData> LinkedFastTravelPoint
 		{
-			get
-			{
-				if (_linkedFastTravelPoint == null)
-				{
-					_linkedFastTravelPoint = (CHandle<gameFastTravelPointData>) CR2WTypeManager.Create("handle:gameFastTravelPointData", "linkedFastTravelPoint", cr2w, this);
-				}
-				return _linkedFastTravelPoint;
-			}
-			set
-			{
-				if (_linkedFastTravelPoint == value)
-				{
-					return;
-				}
-				_linkedFastTravelPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linkedFastTravelPoint);
+			set => SetProperty(ref _linkedFastTravelPoint, value);
 		}
 
 		[Ordinal(104)] 
 		[RED("triggerType")] 
 		public CEnum<EFastTravelTriggerType> TriggerType
 		{
-			get
-			{
-				if (_triggerType == null)
-				{
-					_triggerType = (CEnum<EFastTravelTriggerType>) CR2WTypeManager.Create("EFastTravelTriggerType", "triggerType", cr2w, this);
-				}
-				return _triggerType;
-			}
-			set
-			{
-				if (_triggerType == value)
-				{
-					return;
-				}
-				_triggerType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerType);
+			set => SetProperty(ref _triggerType, value);
 		}
 
 		public DataTermControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

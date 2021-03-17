@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("eventName")] 
 		public CName EventName
 		{
-			get
-			{
-				if (_eventName == null)
-				{
-					_eventName = (CName) CR2WTypeManager.Create("CName", "eventName", cr2w, this);
-				}
-				return _eventName;
-			}
-			set
-			{
-				if (_eventName == value)
-				{
-					return;
-				}
-				_eventName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventName);
+			set => SetProperty(ref _eventName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("gruntType")] 
 		public CEnum<audioVoGruntType> GruntType
 		{
-			get
-			{
-				if (_gruntType == null)
-				{
-					_gruntType = (CEnum<audioVoGruntType>) CR2WTypeManager.Create("audioVoGruntType", "gruntType", cr2w, this);
-				}
-				return _gruntType;
-			}
-			set
-			{
-				if (_gruntType == value)
-				{
-					return;
-				}
-				_gruntType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gruntType);
+			set => SetProperty(ref _gruntType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isV")] 
 		public CBool IsV
 		{
-			get
-			{
-				if (_isV == null)
-				{
-					_isV = (CBool) CR2WTypeManager.Create("Bool", "isV", cr2w, this);
-				}
-				return _isV;
-			}
-			set
-			{
-				if (_isV == value)
-				{
-					return;
-				}
-				_isV = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isV);
+			set => SetProperty(ref _isV, value);
 		}
 
 		public gameaudioeventsVoicePlayedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

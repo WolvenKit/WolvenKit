@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nodeId")] 
 		public CUInt32 NodeId
 		{
-			get
-			{
-				if (_nodeId == null)
-				{
-					_nodeId = (CUInt32) CR2WTypeManager.Create("Uint32", "nodeId", cr2w, this);
-				}
-				return _nodeId;
-			}
-			set
-			{
-				if (_nodeId == value)
-				{
-					return;
-				}
-				_nodeId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeId);
+			set => SetProperty(ref _nodeId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("active")] 
 		public CBool Active
 		{
-			get
-			{
-				if (_active == null)
-				{
-					_active = (CBool) CR2WTypeManager.Create("Bool", "active", cr2w, this);
-				}
-				return _active;
-			}
-			set
-			{
-				if (_active == value)
-				{
-					return;
-				}
-				_active = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _active);
+			set => SetProperty(ref _active, value);
 		}
 
 		public animAnimNodeDebugState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

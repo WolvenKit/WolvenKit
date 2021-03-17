@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("shouldOpen")] 
 		public CBool ShouldOpen
 		{
-			get
-			{
-				if (_shouldOpen == null)
-				{
-					_shouldOpen = (CBool) CR2WTypeManager.Create("Bool", "shouldOpen", cr2w, this);
-				}
-				return _shouldOpen;
-			}
-			set
-			{
-				if (_shouldOpen == value)
-				{
-					return;
-				}
-				_shouldOpen = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldOpen);
+			set => SetProperty(ref _shouldOpen, value);
 		}
 
 		public ToggleLock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

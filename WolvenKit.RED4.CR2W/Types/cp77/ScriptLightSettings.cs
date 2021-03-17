@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("strength")] 
 		public CFloat Strength
 		{
-			get
-			{
-				if (_strength == null)
-				{
-					_strength = (CFloat) CR2WTypeManager.Create("Float", "strength", cr2w, this);
-				}
-				return _strength;
-			}
-			set
-			{
-				if (_strength == value)
-				{
-					return;
-				}
-				_strength = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _strength);
+			set => SetProperty(ref _strength, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("color")] 
 		public CColor Color
 		{
-			get
-			{
-				if (_color == null)
-				{
-					_color = (CColor) CR2WTypeManager.Create("Color", "color", cr2w, this);
-				}
-				return _color;
-			}
-			set
-			{
-				if (_color == value)
-				{
-					return;
-				}
-				_color = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _color);
+			set => SetProperty(ref _color, value);
 		}
 
 		public ScriptLightSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

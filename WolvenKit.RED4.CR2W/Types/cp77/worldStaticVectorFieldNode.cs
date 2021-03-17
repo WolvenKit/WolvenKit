@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("direction")] 
 		public Vector3 Direction
 		{
-			get
-			{
-				if (_direction == null)
-				{
-					_direction = (Vector3) CR2WTypeManager.Create("Vector3", "direction", cr2w, this);
-				}
-				return _direction;
-			}
-			set
-			{
-				if (_direction == value)
-				{
-					return;
-				}
-				_direction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _direction);
+			set => SetProperty(ref _direction, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("autoHideDistance")] 
 		public CFloat AutoHideDistance
 		{
-			get
-			{
-				if (_autoHideDistance == null)
-				{
-					_autoHideDistance = (CFloat) CR2WTypeManager.Create("Float", "autoHideDistance", cr2w, this);
-				}
-				return _autoHideDistance;
-			}
-			set
-			{
-				if (_autoHideDistance == value)
-				{
-					return;
-				}
-				_autoHideDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _autoHideDistance);
+			set => SetProperty(ref _autoHideDistance, value);
 		}
 
 		public worldStaticVectorFieldNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

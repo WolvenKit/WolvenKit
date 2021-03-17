@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("newRole")] 
 		public CEnum<EGameplayRole> NewRole
 		{
-			get
-			{
-				if (_newRole == null)
-				{
-					_newRole = (CEnum<EGameplayRole>) CR2WTypeManager.Create("EGameplayRole", "newRole", cr2w, this);
-				}
-				return _newRole;
-			}
-			set
-			{
-				if (_newRole == value)
-				{
-					return;
-				}
-				_newRole = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newRole);
+			set => SetProperty(ref _newRole, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("oldRole")] 
 		public CEnum<EGameplayRole> OldRole
 		{
-			get
-			{
-				if (_oldRole == null)
-				{
-					_oldRole = (CEnum<EGameplayRole>) CR2WTypeManager.Create("EGameplayRole", "oldRole", cr2w, this);
-				}
-				return _oldRole;
-			}
-			set
-			{
-				if (_oldRole == value)
-				{
-					return;
-				}
-				_oldRole = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _oldRole);
+			set => SetProperty(ref _oldRole, value);
 		}
 
 		public GameplayRoleChangeNotification(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

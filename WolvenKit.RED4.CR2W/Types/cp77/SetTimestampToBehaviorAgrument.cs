@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timestampArgument")] 
 		public CName TimestampArgument
 		{
-			get
-			{
-				if (_timestampArgument == null)
-				{
-					_timestampArgument = (CName) CR2WTypeManager.Create("CName", "timestampArgument", cr2w, this);
-				}
-				return _timestampArgument;
-			}
-			set
-			{
-				if (_timestampArgument == value)
-				{
-					return;
-				}
-				_timestampArgument = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timestampArgument);
+			set => SetProperty(ref _timestampArgument, value);
 		}
 
 		public SetTimestampToBehaviorAgrument(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

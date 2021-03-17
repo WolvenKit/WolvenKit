@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("activeAssists")] 
 		public CArray<CHandle<AimAssist>> ActiveAssists
 		{
-			get
-			{
-				if (_activeAssists == null)
-				{
-					_activeAssists = (CArray<CHandle<AimAssist>>) CR2WTypeManager.Create("array:handle:AimAssist", "activeAssists", cr2w, this);
-				}
-				return _activeAssists;
-			}
-			set
-			{
-				if (_activeAssists == value)
-				{
-					return;
-				}
-				_activeAssists = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeAssists);
+			set => SetProperty(ref _activeAssists, value);
 		}
 
 		public AimAssistModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

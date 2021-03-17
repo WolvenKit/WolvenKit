@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("register")] 
 		public CBool Register
 		{
-			get
-			{
-				if (_register == null)
-				{
-					_register = (CBool) CR2WTypeManager.Create("Bool", "register", cr2w, this);
-				}
-				return _register;
-			}
-			set
-			{
-				if (_register == value)
-				{
-					return;
-				}
-				_register = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _register);
+			set => SetProperty(ref _register, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("skillCheckState")] 
 		public CHandle<SkillCheckPrereqState> SkillCheckState
 		{
-			get
-			{
-				if (_skillCheckState == null)
-				{
-					_skillCheckState = (CHandle<SkillCheckPrereqState>) CR2WTypeManager.Create("handle:SkillCheckPrereqState", "skillCheckState", cr2w, this);
-				}
-				return _skillCheckState;
-			}
-			set
-			{
-				if (_skillCheckState == value)
-				{
-					return;
-				}
-				_skillCheckState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skillCheckState);
+			set => SetProperty(ref _skillCheckState, value);
 		}
 
 		public ModifySkillCheckPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

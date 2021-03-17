@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("flatten")] 
 		public CBool Flatten
 		{
-			get
-			{
-				if (_flatten == null)
-				{
-					_flatten = (CBool) CR2WTypeManager.Create("Bool", "flatten", cr2w, this);
-				}
-				return _flatten;
-			}
-			set
-			{
-				if (_flatten == value)
-				{
-					return;
-				}
-				_flatten = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flatten);
+			set => SetProperty(ref _flatten, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("groupingStepAngle")] 
 		public CEnum<worldProxyNormalAngleStepSize> GroupingStepAngle
 		{
-			get
-			{
-				if (_groupingStepAngle == null)
-				{
-					_groupingStepAngle = (CEnum<worldProxyNormalAngleStepSize>) CR2WTypeManager.Create("worldProxyNormalAngleStepSize", "groupingStepAngle", cr2w, this);
-				}
-				return _groupingStepAngle;
-			}
-			set
-			{
-				if (_groupingStepAngle == value)
-				{
-					return;
-				}
-				_groupingStepAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _groupingStepAngle);
+			set => SetProperty(ref _groupingStepAngle, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("syncNormalSource")] 
 		public CEnum<worldProxySyncNormalSource> SyncNormalSource
 		{
-			get
-			{
-				if (_syncNormalSource == null)
-				{
-					_syncNormalSource = (CEnum<worldProxySyncNormalSource>) CR2WTypeManager.Create("worldProxySyncNormalSource", "syncNormalSource", cr2w, this);
-				}
-				return _syncNormalSource;
-			}
-			set
-			{
-				if (_syncNormalSource == value)
-				{
-					return;
-				}
-				_syncNormalSource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _syncNormalSource);
+			set => SetProperty(ref _syncNormalSource, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("coreAxisRotationOffset")] 
 		public CFloat CoreAxisRotationOffset
 		{
-			get
-			{
-				if (_coreAxisRotationOffset == null)
-				{
-					_coreAxisRotationOffset = (CFloat) CR2WTypeManager.Create("Float", "coreAxisRotationOffset", cr2w, this);
-				}
-				return _coreAxisRotationOffset;
-			}
-			set
-			{
-				if (_coreAxisRotationOffset == value)
-				{
-					return;
-				}
-				_coreAxisRotationOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _coreAxisRotationOffset);
+			set => SetProperty(ref _coreAxisRotationOffset, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("postFlattenReduce")] 
 		public CBool PostFlattenReduce
 		{
-			get
-			{
-				if (_postFlattenReduce == null)
-				{
-					_postFlattenReduce = (CBool) CR2WTypeManager.Create("Bool", "postFlattenReduce", cr2w, this);
-				}
-				return _postFlattenReduce;
-			}
-			set
-			{
-				if (_postFlattenReduce == value)
-				{
-					return;
-				}
-				_postFlattenReduce = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _postFlattenReduce);
+			set => SetProperty(ref _postFlattenReduce, value);
 		}
 
 		public worldProxySurfaceFlattenParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

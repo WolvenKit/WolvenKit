@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("id")] 
 		public CInt32 Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CInt32) CR2WTypeManager.Create("Int32", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("slotTransform")] 
 		public Transform SlotTransform
 		{
-			get
-			{
-				if (_slotTransform == null)
-				{
-					_slotTransform = (Transform) CR2WTypeManager.Create("Transform", "slotTransform", cr2w, this);
-				}
-				return _slotTransform;
-			}
-			set
-			{
-				if (_slotTransform == value)
-				{
-					return;
-				}
-				_slotTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotTransform);
+			set => SetProperty(ref _slotTransform, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get
-			{
-				if (_isEnabled == null)
-				{
-					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
-				}
-				return _isEnabled;
-			}
-			set
-			{
-				if (_isEnabled == value)
-				{
-					return;
-				}
-				_isEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isAvailable")] 
 		public CBool IsAvailable
 		{
-			get
-			{
-				if (_isAvailable == null)
-				{
-					_isAvailable = (CBool) CR2WTypeManager.Create("Bool", "isAvailable", cr2w, this);
-				}
-				return _isAvailable;
-			}
-			set
-			{
-				if (_isAvailable == value)
-				{
-					return;
-				}
-				_isAvailable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isAvailable);
+			set => SetProperty(ref _isAvailable, value);
 		}
 
 		public FollowSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

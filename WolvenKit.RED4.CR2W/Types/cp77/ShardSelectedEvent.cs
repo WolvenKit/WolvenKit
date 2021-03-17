@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("group")] 
 		public CBool Group
 		{
-			get
-			{
-				if (_group == null)
-				{
-					_group = (CBool) CR2WTypeManager.Create("Bool", "group", cr2w, this);
-				}
-				return _group;
-			}
-			set
-			{
-				if (_group == value)
-				{
-					return;
-				}
-				_group = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _group);
+			set => SetProperty(ref _group, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entryHash")] 
 		public CInt32 EntryHash
 		{
-			get
-			{
-				if (_entryHash == null)
-				{
-					_entryHash = (CInt32) CR2WTypeManager.Create("Int32", "entryHash", cr2w, this);
-				}
-				return _entryHash;
-			}
-			set
-			{
-				if (_entryHash == value)
-				{
-					return;
-				}
-				_entryHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryHash);
+			set => SetProperty(ref _entryHash, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("level")] 
 		public CInt32 Level
 		{
-			get
-			{
-				if (_level == null)
-				{
-					_level = (CInt32) CR2WTypeManager.Create("Int32", "level", cr2w, this);
-				}
-				return _level;
-			}
-			set
-			{
-				if (_level == value)
-				{
-					return;
-				}
-				_level = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _level);
+			set => SetProperty(ref _level, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("data")] 
 		public wCHandle<ShardEntryData> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (wCHandle<ShardEntryData>) CR2WTypeManager.Create("whandle:ShardEntryData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		public ShardSelectedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

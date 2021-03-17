@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("suppressor")] 
 		public CBool Suppressor
 		{
-			get
-			{
-				if (_suppressor == null)
-				{
-					_suppressor = (CBool) CR2WTypeManager.Create("Bool", "suppressor", cr2w, this);
-				}
-				return _suppressor;
-			}
-			set
-			{
-				if (_suppressor == value)
-				{
-					return;
-				}
-				_suppressor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _suppressor);
+			set => SetProperty(ref _suppressor, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("layersDefinition")] 
 		public CArray<CHandle<gameinteractionsCLinkedLayersDefinition>> LayersDefinition
 		{
-			get
-			{
-				if (_layersDefinition == null)
-				{
-					_layersDefinition = (CArray<CHandle<gameinteractionsCLinkedLayersDefinition>>) CR2WTypeManager.Create("array:handle:gameinteractionsCLinkedLayersDefinition", "layersDefinition", cr2w, this);
-				}
-				return _layersDefinition;
-			}
-			set
-			{
-				if (_layersDefinition == value)
-				{
-					return;
-				}
-				_layersDefinition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _layersDefinition);
+			set => SetProperty(ref _layersDefinition, value);
 		}
 
 		public gameinteractionsCHotSpotDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

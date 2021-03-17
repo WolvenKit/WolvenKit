@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemInLeftHand")] 
 		public CBool ItemInLeftHand
 		{
-			get
-			{
-				if (_itemInLeftHand == null)
-				{
-					_itemInLeftHand = (CBool) CR2WTypeManager.Create("Bool", "itemInLeftHand", cr2w, this);
-				}
-				return _itemInLeftHand;
-			}
-			set
-			{
-				if (_itemInLeftHand == value)
-				{
-					return;
-				}
-				_itemInLeftHand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemInLeftHand);
+			set => SetProperty(ref _itemInLeftHand, value);
 		}
 
 		public animAnimFeature_LeftHandItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

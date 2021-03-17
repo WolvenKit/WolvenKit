@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemEquipped")] 
 		public gamebbScriptID_Variant ItemEquipped
 		{
-			get
-			{
-				if (_itemEquipped == null)
-				{
-					_itemEquipped = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "itemEquipped", cr2w, this);
-				}
-				return _itemEquipped;
-			}
-			set
-			{
-				if (_itemEquipped == value)
-				{
-					return;
-				}
-				_itemEquipped = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemEquipped);
+			set => SetProperty(ref _itemEquipped, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lastModifiedArea")] 
 		public gamebbScriptID_Variant LastModifiedArea
 		{
-			get
-			{
-				if (_lastModifiedArea == null)
-				{
-					_lastModifiedArea = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "lastModifiedArea", cr2w, this);
-				}
-				return _lastModifiedArea;
-			}
-			set
-			{
-				if (_lastModifiedArea == value)
-				{
-					return;
-				}
-				_lastModifiedArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastModifiedArea);
+			set => SetProperty(ref _lastModifiedArea, value);
 		}
 
 		public UI_EquipmentDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

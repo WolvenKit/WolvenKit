@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("worldPos")] 
 		public Vector3 WorldPos
 		{
-			get
-			{
-				if (_worldPos == null)
-				{
-					_worldPos = (Vector3) CR2WTypeManager.Create("Vector3", "worldPos", cr2w, this);
-				}
-				return _worldPos;
-			}
-			set
-			{
-				if (_worldPos == value)
-				{
-					return;
-				}
-				_worldPos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _worldPos);
+			set => SetProperty(ref _worldPos, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("direction")] 
 		public Vector3 Direction
 		{
-			get
-			{
-				if (_direction == null)
-				{
-					_direction = (Vector3) CR2WTypeManager.Create("Vector3", "direction", cr2w, this);
-				}
-				return _direction;
-			}
-			set
-			{
-				if (_direction == value)
-				{
-					return;
-				}
-				_direction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _direction);
+			set => SetProperty(ref _direction, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get
-			{
-				if (_radius == null)
-				{
-					_radius = (CFloat) CR2WTypeManager.Create("Float", "radius", cr2w, this);
-				}
-				return _radius;
-			}
-			set
-			{
-				if (_radius == value)
-				{
-					return;
-				}
-				_radius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radius);
+			set => SetProperty(ref _radius, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("userData")] 
 		public CUInt64 UserData
 		{
-			get
-			{
-				if (_userData == null)
-				{
-					_userData = (CUInt64) CR2WTypeManager.Create("Uint64", "userData", cr2w, this);
-				}
-				return _userData;
-			}
-			set
-			{
-				if (_userData == value)
-				{
-					return;
-				}
-				_userData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _userData);
+			set => SetProperty(ref _userData, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("flags")] 
 		public CUInt8 Flags
 		{
-			get
-			{
-				if (_flags == null)
-				{
-					_flags = (CUInt8) CR2WTypeManager.Create("Uint8", "flags", cr2w, this);
-				}
-				return _flags;
-			}
-			set
-			{
-				if (_flags == value)
-				{
-					return;
-				}
-				_flags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flags);
+			set => SetProperty(ref _flags, value);
 		}
 
 		public worldTrafficCollisionSphere(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

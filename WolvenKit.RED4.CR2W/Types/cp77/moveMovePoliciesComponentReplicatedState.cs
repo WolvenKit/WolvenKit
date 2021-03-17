@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("movePolicies")] 
 		public moveReplicatedMovePoliciesState MovePolicies
 		{
-			get
-			{
-				if (_movePolicies == null)
-				{
-					_movePolicies = (moveReplicatedMovePoliciesState) CR2WTypeManager.Create("moveReplicatedMovePoliciesState", "movePolicies", cr2w, this);
-				}
-				return _movePolicies;
-			}
-			set
-			{
-				if (_movePolicies == value)
-				{
-					return;
-				}
-				_movePolicies = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movePolicies);
+			set => SetProperty(ref _movePolicies, value);
 		}
 
 		public moveMovePoliciesComponentReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

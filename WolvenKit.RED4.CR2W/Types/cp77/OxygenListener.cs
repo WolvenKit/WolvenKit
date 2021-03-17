@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("oxygenBar")] 
 		public wCHandle<OxygenbarWidgetGameController> OxygenBar
 		{
-			get
-			{
-				if (_oxygenBar == null)
-				{
-					_oxygenBar = (wCHandle<OxygenbarWidgetGameController>) CR2WTypeManager.Create("whandle:OxygenbarWidgetGameController", "oxygenBar", cr2w, this);
-				}
-				return _oxygenBar;
-			}
-			set
-			{
-				if (_oxygenBar == value)
-				{
-					return;
-				}
-				_oxygenBar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _oxygenBar);
+			set => SetProperty(ref _oxygenBar, value);
 		}
 
 		public OxygenListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

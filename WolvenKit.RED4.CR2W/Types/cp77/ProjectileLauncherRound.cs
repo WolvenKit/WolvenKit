@@ -31,437 +31,152 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("projectileComponent")] 
 		public CHandle<gameprojectileComponent> ProjectileComponent
 		{
-			get
-			{
-				if (_projectileComponent == null)
-				{
-					_projectileComponent = (CHandle<gameprojectileComponent>) CR2WTypeManager.Create("handle:gameprojectileComponent", "projectileComponent", cr2w, this);
-				}
-				return _projectileComponent;
-			}
-			set
-			{
-				if (_projectileComponent == value)
-				{
-					return;
-				}
-				_projectileComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectileComponent);
+			set => SetProperty(ref _projectileComponent, value);
 		}
 
 		[Ordinal(44)] 
 		[RED("user")] 
 		public wCHandle<gameObject> User
 		{
-			get
-			{
-				if (_user == null)
-				{
-					_user = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "user", cr2w, this);
-				}
-				return _user;
-			}
-			set
-			{
-				if (_user == value)
-				{
-					return;
-				}
-				_user = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _user);
+			set => SetProperty(ref _user, value);
 		}
 
 		[Ordinal(45)] 
 		[RED("projectile")] 
 		public wCHandle<gameObject> Projectile
 		{
-			get
-			{
-				if (_projectile == null)
-				{
-					_projectile = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "projectile", cr2w, this);
-				}
-				return _projectile;
-			}
-			set
-			{
-				if (_projectile == value)
-				{
-					return;
-				}
-				_projectile = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectile);
+			set => SetProperty(ref _projectile, value);
 		}
 
 		[Ordinal(46)] 
 		[RED("weapon")] 
 		public wCHandle<gameweaponObject> Weapon
 		{
-			get
-			{
-				if (_weapon == null)
-				{
-					_weapon = (wCHandle<gameweaponObject>) CR2WTypeManager.Create("whandle:gameweaponObject", "weapon", cr2w, this);
-				}
-				return _weapon;
-			}
-			set
-			{
-				if (_weapon == value)
-				{
-					return;
-				}
-				_weapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weapon);
+			set => SetProperty(ref _weapon, value);
 		}
 
 		[Ordinal(47)] 
 		[RED("projectileSpawnPoint")] 
 		public Vector4 ProjectileSpawnPoint
 		{
-			get
-			{
-				if (_projectileSpawnPoint == null)
-				{
-					_projectileSpawnPoint = (Vector4) CR2WTypeManager.Create("Vector4", "projectileSpawnPoint", cr2w, this);
-				}
-				return _projectileSpawnPoint;
-			}
-			set
-			{
-				if (_projectileSpawnPoint == value)
-				{
-					return;
-				}
-				_projectileSpawnPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectileSpawnPoint);
+			set => SetProperty(ref _projectileSpawnPoint, value);
 		}
 
 		[Ordinal(48)] 
 		[RED("projectilePosition")] 
 		public Vector4 ProjectilePosition
 		{
-			get
-			{
-				if (_projectilePosition == null)
-				{
-					_projectilePosition = (Vector4) CR2WTypeManager.Create("Vector4", "projectilePosition", cr2w, this);
-				}
-				return _projectilePosition;
-			}
-			set
-			{
-				if (_projectilePosition == value)
-				{
-					return;
-				}
-				_projectilePosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectilePosition);
+			set => SetProperty(ref _projectilePosition, value);
 		}
 
 		[Ordinal(49)] 
 		[RED("launchMode")] 
 		public CEnum<gamedataProjectileLaunchMode> LaunchMode
 		{
-			get
-			{
-				if (_launchMode == null)
-				{
-					_launchMode = (CEnum<gamedataProjectileLaunchMode>) CR2WTypeManager.Create("gamedataProjectileLaunchMode", "launchMode", cr2w, this);
-				}
-				return _launchMode;
-			}
-			set
-			{
-				if (_launchMode == value)
-				{
-					return;
-				}
-				_launchMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _launchMode);
+			set => SetProperty(ref _launchMode, value);
 		}
 
 		[Ordinal(50)] 
 		[RED("projectileLauncherRound")] 
 		public CArray<gameSPartSlots> ProjectileLauncherRound_
 		{
-			get
-			{
-				if (_projectileLauncherRound == null)
-				{
-					_projectileLauncherRound = (CArray<gameSPartSlots>) CR2WTypeManager.Create("array:gameSPartSlots", "projectileLauncherRound", cr2w, this);
-				}
-				return _projectileLauncherRound;
-			}
-			set
-			{
-				if (_projectileLauncherRound == value)
-				{
-					return;
-				}
-				_projectileLauncherRound = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectileLauncherRound);
+			set => SetProperty(ref _projectileLauncherRound, value);
 		}
 
 		[Ordinal(51)] 
 		[RED("partSlots")] 
 		public gameSPartSlots PartSlots
 		{
-			get
-			{
-				if (_partSlots == null)
-				{
-					_partSlots = (gameSPartSlots) CR2WTypeManager.Create("gameSPartSlots", "partSlots", cr2w, this);
-				}
-				return _partSlots;
-			}
-			set
-			{
-				if (_partSlots == value)
-				{
-					return;
-				}
-				_partSlots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _partSlots);
+			set => SetProperty(ref _partSlots, value);
 		}
 
 		[Ordinal(52)] 
 		[RED("installedPart")] 
 		public gameItemID InstalledPart
 		{
-			get
-			{
-				if (_installedPart == null)
-				{
-					_installedPart = (gameItemID) CR2WTypeManager.Create("gameItemID", "installedPart", cr2w, this);
-				}
-				return _installedPart;
-			}
-			set
-			{
-				if (_installedPart == value)
-				{
-					return;
-				}
-				_installedPart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _installedPart);
+			set => SetProperty(ref _installedPart, value);
 		}
 
 		[Ordinal(53)] 
 		[RED("initialLaunchVelocity")] 
 		public CFloat InitialLaunchVelocity
 		{
-			get
-			{
-				if (_initialLaunchVelocity == null)
-				{
-					_initialLaunchVelocity = (CFloat) CR2WTypeManager.Create("Float", "initialLaunchVelocity", cr2w, this);
-				}
-				return _initialLaunchVelocity;
-			}
-			set
-			{
-				if (_initialLaunchVelocity == value)
-				{
-					return;
-				}
-				_initialLaunchVelocity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialLaunchVelocity);
+			set => SetProperty(ref _initialLaunchVelocity, value);
 		}
 
 		[Ordinal(54)] 
 		[RED("projectileLifetime")] 
 		public CFloat ProjectileLifetime
 		{
-			get
-			{
-				if (_projectileLifetime == null)
-				{
-					_projectileLifetime = (CFloat) CR2WTypeManager.Create("Float", "projectileLifetime", cr2w, this);
-				}
-				return _projectileLifetime;
-			}
-			set
-			{
-				if (_projectileLifetime == value)
-				{
-					return;
-				}
-				_projectileLifetime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectileLifetime);
+			set => SetProperty(ref _projectileLifetime, value);
 		}
 
 		[Ordinal(55)] 
 		[RED("installedProjectile")] 
 		public gameItemID InstalledProjectile
 		{
-			get
-			{
-				if (_installedProjectile == null)
-				{
-					_installedProjectile = (gameItemID) CR2WTypeManager.Create("gameItemID", "installedProjectile", cr2w, this);
-				}
-				return _installedProjectile;
-			}
-			set
-			{
-				if (_installedProjectile == value)
-				{
-					return;
-				}
-				_installedProjectile = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _installedProjectile);
+			set => SetProperty(ref _installedProjectile, value);
 		}
 
 		[Ordinal(56)] 
 		[RED("actionType")] 
 		public CEnum<ELauncherActionType> ActionType
 		{
-			get
-			{
-				if (_actionType == null)
-				{
-					_actionType = (CEnum<ELauncherActionType>) CR2WTypeManager.Create("ELauncherActionType", "actionType", cr2w, this);
-				}
-				return _actionType;
-			}
-			set
-			{
-				if (_actionType == value)
-				{
-					return;
-				}
-				_actionType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionType);
+			set => SetProperty(ref _actionType, value);
 		}
 
 		[Ordinal(57)] 
 		[RED("attackRecord")] 
 		public CHandle<gamedataAttack_Record> AttackRecord
 		{
-			get
-			{
-				if (_attackRecord == null)
-				{
-					_attackRecord = (CHandle<gamedataAttack_Record>) CR2WTypeManager.Create("handle:gamedataAttack_Record", "attackRecord", cr2w, this);
-				}
-				return _attackRecord;
-			}
-			set
-			{
-				if (_attackRecord == value)
-				{
-					return;
-				}
-				_attackRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackRecord);
+			set => SetProperty(ref _attackRecord, value);
 		}
 
 		[Ordinal(58)] 
 		[RED("lifetimeDelayId")] 
 		public gameDelayID LifetimeDelayId
 		{
-			get
-			{
-				if (_lifetimeDelayId == null)
-				{
-					_lifetimeDelayId = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "lifetimeDelayId", cr2w, this);
-				}
-				return _lifetimeDelayId;
-			}
-			set
-			{
-				if (_lifetimeDelayId == value)
-				{
-					return;
-				}
-				_lifetimeDelayId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lifetimeDelayId);
+			set => SetProperty(ref _lifetimeDelayId, value);
 		}
 
 		[Ordinal(59)] 
 		[RED("hitEventData")] 
 		public CHandle<gameprojectileHitEvent> HitEventData
 		{
-			get
-			{
-				if (_hitEventData == null)
-				{
-					_hitEventData = (CHandle<gameprojectileHitEvent>) CR2WTypeManager.Create("handle:gameprojectileHitEvent", "hitEventData", cr2w, this);
-				}
-				return _hitEventData;
-			}
-			set
-			{
-				if (_hitEventData == value)
-				{
-					return;
-				}
-				_hitEventData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitEventData);
+			set => SetProperty(ref _hitEventData, value);
 		}
 
 		[Ordinal(60)] 
 		[RED("projectileTrailName")] 
 		public CName ProjectileTrailName
 		{
-			get
-			{
-				if (_projectileTrailName == null)
-				{
-					_projectileTrailName = (CName) CR2WTypeManager.Create("CName", "projectileTrailName", cr2w, this);
-				}
-				return _projectileTrailName;
-			}
-			set
-			{
-				if (_projectileTrailName == value)
-				{
-					return;
-				}
-				_projectileTrailName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectileTrailName);
+			set => SetProperty(ref _projectileTrailName, value);
 		}
 
 		[Ordinal(61)] 
 		[RED("projectileCollisionEvaluator")] 
 		public CHandle<ProjectileLauncherRoundCollisionEvaluator> ProjectileCollisionEvaluator
 		{
-			get
-			{
-				if (_projectileCollisionEvaluator == null)
-				{
-					_projectileCollisionEvaluator = (CHandle<ProjectileLauncherRoundCollisionEvaluator>) CR2WTypeManager.Create("handle:ProjectileLauncherRoundCollisionEvaluator", "projectileCollisionEvaluator", cr2w, this);
-				}
-				return _projectileCollisionEvaluator;
-			}
-			set
-			{
-				if (_projectileCollisionEvaluator == value)
-				{
-					return;
-				}
-				_projectileCollisionEvaluator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectileCollisionEvaluator);
+			set => SetProperty(ref _projectileCollisionEvaluator, value);
 		}
 
 		public ProjectileLauncherRound(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

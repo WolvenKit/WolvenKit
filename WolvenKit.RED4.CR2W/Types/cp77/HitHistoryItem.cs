@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("instigator")] 
 		public wCHandle<gameObject> Instigator
 		{
-			get
-			{
-				if (_instigator == null)
-				{
-					_instigator = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "instigator", cr2w, this);
-				}
-				return _instigator;
-			}
-			set
-			{
-				if (_instigator == value)
-				{
-					return;
-				}
-				_instigator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instigator);
+			set => SetProperty(ref _instigator, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hitTime")] 
 		public CFloat HitTime
 		{
-			get
-			{
-				if (_hitTime == null)
-				{
-					_hitTime = (CFloat) CR2WTypeManager.Create("Float", "hitTime", cr2w, this);
-				}
-				return _hitTime;
-			}
-			set
-			{
-				if (_hitTime == value)
-				{
-					return;
-				}
-				_hitTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitTime);
+			set => SetProperty(ref _hitTime, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isMelee")] 
 		public CBool IsMelee
 		{
-			get
-			{
-				if (_isMelee == null)
-				{
-					_isMelee = (CBool) CR2WTypeManager.Create("Bool", "isMelee", cr2w, this);
-				}
-				return _isMelee;
-			}
-			set
-			{
-				if (_isMelee == value)
-				{
-					return;
-				}
-				_isMelee = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isMelee);
+			set => SetProperty(ref _isMelee, value);
 		}
 
 		public HitHistoryItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

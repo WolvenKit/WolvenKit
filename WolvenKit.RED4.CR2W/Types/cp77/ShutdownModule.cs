@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("module")] 
 		public CInt32 Module
 		{
-			get
-			{
-				if (_module == null)
-				{
-					_module = (CInt32) CR2WTypeManager.Create("Int32", "module", cr2w, this);
-				}
-				return _module;
-			}
-			set
-			{
-				if (_module == value)
-				{
-					return;
-				}
-				_module = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _module);
+			set => SetProperty(ref _module, value);
 		}
 
 		public ShutdownModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

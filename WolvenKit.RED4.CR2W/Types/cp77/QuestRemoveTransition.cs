@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("removeTransitionFrom")] 
 		public CInt32 RemoveTransitionFrom
 		{
-			get
-			{
-				if (_removeTransitionFrom == null)
-				{
-					_removeTransitionFrom = (CInt32) CR2WTypeManager.Create("Int32", "removeTransitionFrom", cr2w, this);
-				}
-				return _removeTransitionFrom;
-			}
-			set
-			{
-				if (_removeTransitionFrom == value)
-				{
-					return;
-				}
-				_removeTransitionFrom = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _removeTransitionFrom);
+			set => SetProperty(ref _removeTransitionFrom, value);
 		}
 
 		public QuestRemoveTransition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

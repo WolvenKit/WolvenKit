@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sceneInstanceId")] 
 		public scnSceneInstanceId SceneInstanceId
 		{
-			get
-			{
-				if (_sceneInstanceId == null)
-				{
-					_sceneInstanceId = (scnSceneInstanceId) CR2WTypeManager.Create("scnSceneInstanceId", "sceneInstanceId", cr2w, this);
-				}
-				return _sceneInstanceId;
-			}
-			set
-			{
-				if (_sceneInstanceId == value)
-				{
-					return;
-				}
-				_sceneInstanceId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneInstanceId);
+			set => SetProperty(ref _sceneInstanceId, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("workspotInstanceId")] 
 		public scnSceneWorkspotInstanceId WorkspotInstanceId
 		{
-			get
-			{
-				if (_workspotInstanceId == null)
-				{
-					_workspotInstanceId = (scnSceneWorkspotInstanceId) CR2WTypeManager.Create("scnSceneWorkspotInstanceId", "workspotInstanceId", cr2w, this);
-				}
-				return _workspotInstanceId;
-			}
-			set
-			{
-				if (_workspotInstanceId == value)
-				{
-					return;
-				}
-				_workspotInstanceId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotInstanceId);
+			set => SetProperty(ref _workspotInstanceId, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("itemOverride")] 
 		public workWorkspotItemOverride ItemOverride
 		{
-			get
-			{
-				if (_itemOverride == null)
-				{
-					_itemOverride = (workWorkspotItemOverride) CR2WTypeManager.Create("workWorkspotItemOverride", "itemOverride", cr2w, this);
-				}
-				return _itemOverride;
-			}
-			set
-			{
-				if (_itemOverride == value)
-				{
-					return;
-				}
-				_itemOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemOverride);
+			set => SetProperty(ref _itemOverride, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("nodeId")] 
 		public scnNodeId NodeId
 		{
-			get
-			{
-				if (_nodeId == null)
-				{
-					_nodeId = (scnNodeId) CR2WTypeManager.Create("scnNodeId", "nodeId", cr2w, this);
-				}
-				return _nodeId;
-			}
-			set
-			{
-				if (_nodeId == value)
-				{
-					return;
-				}
-				_nodeId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeId);
+			set => SetProperty(ref _nodeId, value);
 		}
 
 		public scnUseSceneWorkspotCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

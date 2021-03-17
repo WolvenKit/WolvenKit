@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isOpen")] 
 		public CBool IsOpen
 		{
-			get
-			{
-				if (_isOpen == null)
-				{
-					_isOpen = (CBool) CR2WTypeManager.Create("Bool", "isOpen", cr2w, this);
-				}
-				return _isOpen;
-			}
-			set
-			{
-				if (_isOpen == value)
-				{
-					return;
-				}
-				_isOpen = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isOpen);
+			set => SetProperty(ref _isOpen, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("wasImmediateChange")] 
 		public CBool WasImmediateChange
 		{
-			get
-			{
-				if (_wasImmediateChange == null)
-				{
-					_wasImmediateChange = (CBool) CR2WTypeManager.Create("Bool", "wasImmediateChange", cr2w, this);
-				}
-				return _wasImmediateChange;
-			}
-			set
-			{
-				if (_wasImmediateChange == value)
-				{
-					return;
-				}
-				_wasImmediateChange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasImmediateChange);
+			set => SetProperty(ref _wasImmediateChange, value);
 		}
 
 		public DoorReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

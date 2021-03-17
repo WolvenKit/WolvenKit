@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemUnequipContext")] 
 		public CEnum<gameItemUnequipContexts> ItemUnequipContext
 		{
-			get
-			{
-				if (_itemUnequipContext == null)
-				{
-					_itemUnequipContext = (CEnum<gameItemUnequipContexts>) CR2WTypeManager.Create("gameItemUnequipContexts", "itemUnequipContext", cr2w, this);
-				}
-				return _itemUnequipContext;
-			}
-			set
-			{
-				if (_itemUnequipContext == value)
-				{
-					return;
-				}
-				_itemUnequipContext = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemUnequipContext);
+			set => SetProperty(ref _itemUnequipContext, value);
 		}
 
 		public gameUnequipByContextRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

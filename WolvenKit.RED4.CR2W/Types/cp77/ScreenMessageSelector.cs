@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("replaceTextWithCustomNumber")] 
 		public CBool ReplaceTextWithCustomNumber
 		{
-			get
-			{
-				if (_replaceTextWithCustomNumber == null)
-				{
-					_replaceTextWithCustomNumber = (CBool) CR2WTypeManager.Create("Bool", "replaceTextWithCustomNumber", cr2w, this);
-				}
-				return _replaceTextWithCustomNumber;
-			}
-			set
-			{
-				if (_replaceTextWithCustomNumber == value)
-				{
-					return;
-				}
-				_replaceTextWithCustomNumber = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _replaceTextWithCustomNumber);
+			set => SetProperty(ref _replaceTextWithCustomNumber, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("customNumber")] 
 		public CInt32 CustomNumber
 		{
-			get
-			{
-				if (_customNumber == null)
-				{
-					_customNumber = (CInt32) CR2WTypeManager.Create("Int32", "customNumber", cr2w, this);
-				}
-				return _customNumber;
-			}
-			set
-			{
-				if (_customNumber == value)
-				{
-					return;
-				}
-				_customNumber = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customNumber);
+			set => SetProperty(ref _customNumber, value);
 		}
 
 		public ScreenMessageSelector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

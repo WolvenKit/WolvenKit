@@ -27,345 +27,120 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("selected")] 
 		public CBool Selected
 		{
-			get
-			{
-				if (_selected == null)
-				{
-					_selected = (CBool) CR2WTypeManager.Create("Bool", "selected", cr2w, this);
-				}
-				return _selected;
-			}
-			set
-			{
-				if (_selected == value)
-				{
-					return;
-				}
-				_selected = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selected);
+			set => SetProperty(ref _selected, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("inZoomLevel")] 
 		public CBool InZoomLevel
 		{
-			get
-			{
-				if (_inZoomLevel == null)
-				{
-					_inZoomLevel = (CBool) CR2WTypeManager.Create("Bool", "inZoomLevel", cr2w, this);
-				}
-				return _inZoomLevel;
-			}
-			set
-			{
-				if (_inZoomLevel == value)
-				{
-					return;
-				}
-				_inZoomLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inZoomLevel);
+			set => SetProperty(ref _inZoomLevel, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("inCustomFilter")] 
 		public CBool InCustomFilter
 		{
-			get
-			{
-				if (_inCustomFilter == null)
-				{
-					_inCustomFilter = (CBool) CR2WTypeManager.Create("Bool", "inCustomFilter", cr2w, this);
-				}
-				return _inCustomFilter;
-			}
-			set
-			{
-				if (_inCustomFilter == value)
-				{
-					return;
-				}
-				_inCustomFilter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inCustomFilter);
+			set => SetProperty(ref _inCustomFilter, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("hasCustomFilter")] 
 		public CBool HasCustomFilter
 		{
-			get
-			{
-				if (_hasCustomFilter == null)
-				{
-					_hasCustomFilter = (CBool) CR2WTypeManager.Create("Bool", "hasCustomFilter", cr2w, this);
-				}
-				return _hasCustomFilter;
-			}
-			set
-			{
-				if (_hasCustomFilter == value)
-				{
-					return;
-				}
-				_hasCustomFilter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasCustomFilter);
+			set => SetProperty(ref _hasCustomFilter, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("isFastTravelEnabled")] 
 		public CBool IsFastTravelEnabled
 		{
-			get
-			{
-				if (_isFastTravelEnabled == null)
-				{
-					_isFastTravelEnabled = (CBool) CR2WTypeManager.Create("Bool", "isFastTravelEnabled", cr2w, this);
-				}
-				return _isFastTravelEnabled;
-			}
-			set
-			{
-				if (_isFastTravelEnabled == value)
-				{
-					return;
-				}
-				_isFastTravelEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isFastTravelEnabled);
+			set => SetProperty(ref _isFastTravelEnabled, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("isVisibleInFilterAndZoom")] 
 		public CBool IsVisibleInFilterAndZoom
 		{
-			get
-			{
-				if (_isVisibleInFilterAndZoom == null)
-				{
-					_isVisibleInFilterAndZoom = (CBool) CR2WTypeManager.Create("Bool", "isVisibleInFilterAndZoom", cr2w, this);
-				}
-				return _isVisibleInFilterAndZoom;
-			}
-			set
-			{
-				if (_isVisibleInFilterAndZoom == value)
-				{
-					return;
-				}
-				_isVisibleInFilterAndZoom = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isVisibleInFilterAndZoom);
+			set => SetProperty(ref _isVisibleInFilterAndZoom, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("groupState")] 
 		public CEnum<gameuiMappinGroupState> GroupState
 		{
-			get
-			{
-				if (_groupState == null)
-				{
-					_groupState = (CEnum<gameuiMappinGroupState>) CR2WTypeManager.Create("gameuiMappinGroupState", "groupState", cr2w, this);
-				}
-				return _groupState;
-			}
-			set
-			{
-				if (_groupState == value)
-				{
-					return;
-				}
-				_groupState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _groupState);
+			set => SetProperty(ref _groupState, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("collectionCount")] 
 		public CUInt8 CollectionCount
 		{
-			get
-			{
-				if (_collectionCount == null)
-				{
-					_collectionCount = (CUInt8) CR2WTypeManager.Create("Uint8", "collectionCount", cr2w, this);
-				}
-				return _collectionCount;
-			}
-			set
-			{
-				if (_collectionCount == value)
-				{
-					return;
-				}
-				_collectionCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collectionCount);
+			set => SetProperty(ref _collectionCount, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("groupContainerWidget")] 
 		public inkWidgetReference GroupContainerWidget
 		{
-			get
-			{
-				if (_groupContainerWidget == null)
-				{
-					_groupContainerWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "groupContainerWidget", cr2w, this);
-				}
-				return _groupContainerWidget;
-			}
-			set
-			{
-				if (_groupContainerWidget == value)
-				{
-					return;
-				}
-				_groupContainerWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _groupContainerWidget);
+			set => SetProperty(ref _groupContainerWidget, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("groupCountTextWidget")] 
 		public inkTextWidgetReference GroupCountTextWidget
 		{
-			get
-			{
-				if (_groupCountTextWidget == null)
-				{
-					_groupCountTextWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "groupCountTextWidget", cr2w, this);
-				}
-				return _groupCountTextWidget;
-			}
-			set
-			{
-				if (_groupCountTextWidget == value)
-				{
-					return;
-				}
-				_groupCountTextWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _groupCountTextWidget);
+			set => SetProperty(ref _groupCountTextWidget, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("isNewContainer")] 
 		public inkWidgetReference IsNewContainer
 		{
-			get
-			{
-				if (_isNewContainer == null)
-				{
-					_isNewContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "isNewContainer", cr2w, this);
-				}
-				return _isNewContainer;
-			}
-			set
-			{
-				if (_isNewContainer == value)
-				{
-					return;
-				}
-				_isNewContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isNewContainer);
+			set => SetProperty(ref _isNewContainer, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("mappin")] 
 		public wCHandle<gamemappinsIMappin> Mappin
 		{
-			get
-			{
-				if (_mappin == null)
-				{
-					_mappin = (wCHandle<gamemappinsIMappin>) CR2WTypeManager.Create("whandle:gamemappinsIMappin", "mappin", cr2w, this);
-				}
-				return _mappin;
-			}
-			set
-			{
-				if (_mappin == value)
-				{
-					return;
-				}
-				_mappin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mappin);
+			set => SetProperty(ref _mappin, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("isCompletedPhase")] 
 		public CBool IsCompletedPhase
 		{
-			get
-			{
-				if (_isCompletedPhase == null)
-				{
-					_isCompletedPhase = (CBool) CR2WTypeManager.Create("Bool", "isCompletedPhase", cr2w, this);
-				}
-				return _isCompletedPhase;
-			}
-			set
-			{
-				if (_isCompletedPhase == value)
-				{
-					return;
-				}
-				_isCompletedPhase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isCompletedPhase);
+			set => SetProperty(ref _isCompletedPhase, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("fadeAnim")] 
 		public CHandle<inkanimProxy> FadeAnim
 		{
-			get
-			{
-				if (_fadeAnim == null)
-				{
-					_fadeAnim = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "fadeAnim", cr2w, this);
-				}
-				return _fadeAnim;
-			}
-			set
-			{
-				if (_fadeAnim == value)
-				{
-					return;
-				}
-				_fadeAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fadeAnim);
+			set => SetProperty(ref _fadeAnim, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("selectAnim")] 
 		public CHandle<inkanimProxy> SelectAnim
 		{
-			get
-			{
-				if (_selectAnim == null)
-				{
-					_selectAnim = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "selectAnim", cr2w, this);
-				}
-				return _selectAnim;
-			}
-			set
-			{
-				if (_selectAnim == value)
-				{
-					return;
-				}
-				_selectAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectAnim);
+			set => SetProperty(ref _selectAnim, value);
 		}
 
 		public gameuiBaseWorldMapMappinController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

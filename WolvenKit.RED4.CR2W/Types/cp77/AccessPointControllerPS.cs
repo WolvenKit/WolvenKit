@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rewardNotificationIcons")] 
 		public CArray<CString> RewardNotificationIcons
 		{
-			get
-			{
-				if (_rewardNotificationIcons == null)
-				{
-					_rewardNotificationIcons = (CArray<CString>) CR2WTypeManager.Create("array:String", "rewardNotificationIcons", cr2w, this);
-				}
-				return _rewardNotificationIcons;
-			}
-			set
-			{
-				if (_rewardNotificationIcons == value)
-				{
-					return;
-				}
-				_rewardNotificationIcons = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rewardNotificationIcons);
+			set => SetProperty(ref _rewardNotificationIcons, value);
 		}
 
 		[Ordinal(105)] 
 		[RED("rewardNotificationString")] 
 		public CString RewardNotificationString
 		{
-			get
-			{
-				if (_rewardNotificationString == null)
-				{
-					_rewardNotificationString = (CString) CR2WTypeManager.Create("String", "rewardNotificationString", cr2w, this);
-				}
-				return _rewardNotificationString;
-			}
-			set
-			{
-				if (_rewardNotificationString == value)
-				{
-					return;
-				}
-				_rewardNotificationString = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rewardNotificationString);
+			set => SetProperty(ref _rewardNotificationString, value);
 		}
 
 		[Ordinal(106)] 
 		[RED("accessPointSkillChecks")] 
 		public CHandle<HackingContainer> AccessPointSkillChecks
 		{
-			get
-			{
-				if (_accessPointSkillChecks == null)
-				{
-					_accessPointSkillChecks = (CHandle<HackingContainer>) CR2WTypeManager.Create("handle:HackingContainer", "accessPointSkillChecks", cr2w, this);
-				}
-				return _accessPointSkillChecks;
-			}
-			set
-			{
-				if (_accessPointSkillChecks == value)
-				{
-					return;
-				}
-				_accessPointSkillChecks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _accessPointSkillChecks);
+			set => SetProperty(ref _accessPointSkillChecks, value);
 		}
 
 		[Ordinal(107)] 
 		[RED("isBreached")] 
 		public CBool IsBreached
 		{
-			get
-			{
-				if (_isBreached == null)
-				{
-					_isBreached = (CBool) CR2WTypeManager.Create("Bool", "isBreached", cr2w, this);
-				}
-				return _isBreached;
-			}
-			set
-			{
-				if (_isBreached == value)
-				{
-					return;
-				}
-				_isBreached = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isBreached);
+			set => SetProperty(ref _isBreached, value);
 		}
 
 		[Ordinal(108)] 
 		[RED("isVirtual")] 
 		public CBool IsVirtual
 		{
-			get
-			{
-				if (_isVirtual == null)
-				{
-					_isVirtual = (CBool) CR2WTypeManager.Create("Bool", "isVirtual", cr2w, this);
-				}
-				return _isVirtual;
-			}
-			set
-			{
-				if (_isVirtual == value)
-				{
-					return;
-				}
-				_isVirtual = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isVirtual);
+			set => SetProperty(ref _isVirtual, value);
 		}
 
 		public AccessPointControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

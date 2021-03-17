@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("exclusiveMode")] 
 		public CBool ExclusiveMode
 		{
-			get
-			{
-				if (_exclusiveMode == null)
-				{
-					_exclusiveMode = (CBool) CR2WTypeManager.Create("Bool", "exclusiveMode", cr2w, this);
-				}
-				return _exclusiveMode;
-			}
-			set
-			{
-				if (_exclusiveMode == value)
-				{
-					return;
-				}
-				_exclusiveMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exclusiveMode);
+			set => SetProperty(ref _exclusiveMode, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("factActivated")] 
 		public CName FactActivated
 		{
-			get
-			{
-				if (_factActivated == null)
-				{
-					_factActivated = (CName) CR2WTypeManager.Create("CName", "factActivated", cr2w, this);
-				}
-				return _factActivated;
-			}
-			set
-			{
-				if (_factActivated == value)
-				{
-					return;
-				}
-				_factActivated = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factActivated);
+			set => SetProperty(ref _factActivated, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("debugName")] 
 		public CName DebugName
 		{
-			get
-			{
-				if (_debugName == null)
-				{
-					_debugName = (CName) CR2WTypeManager.Create("CName", "debugName", cr2w, this);
-				}
-				return _debugName;
-			}
-			set
-			{
-				if (_debugName == value)
-				{
-					return;
-				}
-				_debugName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _debugName);
+			set => SetProperty(ref _debugName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("layerIDs")] 
 		public CArray<CUInt32> LayerIDs
 		{
-			get
-			{
-				if (_layerIDs == null)
-				{
-					_layerIDs = (CArray<CUInt32>) CR2WTypeManager.Create("array:Uint32", "layerIDs", cr2w, this);
-				}
-				return _layerIDs;
-			}
-			set
-			{
-				if (_layerIDs == value)
-				{
-					return;
-				}
-				_layerIDs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _layerIDs);
+			set => SetProperty(ref _layerIDs, value);
 		}
 
 		public DebuggerProperties(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

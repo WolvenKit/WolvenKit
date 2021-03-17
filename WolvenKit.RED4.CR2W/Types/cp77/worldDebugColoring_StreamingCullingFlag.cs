@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cullableColor")] 
 		public CColor CullableColor
 		{
-			get
-			{
-				if (_cullableColor == null)
-				{
-					_cullableColor = (CColor) CR2WTypeManager.Create("Color", "cullableColor", cr2w, this);
-				}
-				return _cullableColor;
-			}
-			set
-			{
-				if (_cullableColor == value)
-				{
-					return;
-				}
-				_cullableColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cullableColor);
+			set => SetProperty(ref _cullableColor, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("forceCulledAlwaysColor")] 
 		public CColor ForceCulledAlwaysColor
 		{
-			get
-			{
-				if (_forceCulledAlwaysColor == null)
-				{
-					_forceCulledAlwaysColor = (CColor) CR2WTypeManager.Create("Color", "forceCulledAlwaysColor", cr2w, this);
-				}
-				return _forceCulledAlwaysColor;
-			}
-			set
-			{
-				if (_forceCulledAlwaysColor == value)
-				{
-					return;
-				}
-				_forceCulledAlwaysColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceCulledAlwaysColor);
+			set => SetProperty(ref _forceCulledAlwaysColor, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("forceCulledPeripheralColor")] 
 		public CColor ForceCulledPeripheralColor
 		{
-			get
-			{
-				if (_forceCulledPeripheralColor == null)
-				{
-					_forceCulledPeripheralColor = (CColor) CR2WTypeManager.Create("Color", "forceCulledPeripheralColor", cr2w, this);
-				}
-				return _forceCulledPeripheralColor;
-			}
-			set
-			{
-				if (_forceCulledPeripheralColor == value)
-				{
-					return;
-				}
-				_forceCulledPeripheralColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceCulledPeripheralColor);
+			set => SetProperty(ref _forceCulledPeripheralColor, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("defaultColor")] 
 		public CColor DefaultColor
 		{
-			get
-			{
-				if (_defaultColor == null)
-				{
-					_defaultColor = (CColor) CR2WTypeManager.Create("Color", "defaultColor", cr2w, this);
-				}
-				return _defaultColor;
-			}
-			set
-			{
-				if (_defaultColor == value)
-				{
-					return;
-				}
-				_defaultColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultColor);
+			set => SetProperty(ref _defaultColor, value);
 		}
 
 		public worldDebugColoring_StreamingCullingFlag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

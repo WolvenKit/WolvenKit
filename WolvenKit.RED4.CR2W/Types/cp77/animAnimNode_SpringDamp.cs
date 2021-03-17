@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("massFactor")] 
 		public CFloat MassFactor
 		{
-			get
-			{
-				if (_massFactor == null)
-				{
-					_massFactor = (CFloat) CR2WTypeManager.Create("Float", "massFactor", cr2w, this);
-				}
-				return _massFactor;
-			}
-			set
-			{
-				if (_massFactor == value)
-				{
-					return;
-				}
-				_massFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _massFactor);
+			set => SetProperty(ref _massFactor, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("springFactor")] 
 		public CFloat SpringFactor
 		{
-			get
-			{
-				if (_springFactor == null)
-				{
-					_springFactor = (CFloat) CR2WTypeManager.Create("Float", "springFactor", cr2w, this);
-				}
-				return _springFactor;
-			}
-			set
-			{
-				if (_springFactor == value)
-				{
-					return;
-				}
-				_springFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _springFactor);
+			set => SetProperty(ref _springFactor, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("dampFactor")] 
 		public CFloat DampFactor
 		{
-			get
-			{
-				if (_dampFactor == null)
-				{
-					_dampFactor = (CFloat) CR2WTypeManager.Create("Float", "dampFactor", cr2w, this);
-				}
-				return _dampFactor;
-			}
-			set
-			{
-				if (_dampFactor == value)
-				{
-					return;
-				}
-				_dampFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dampFactor);
+			set => SetProperty(ref _dampFactor, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("startFromDefaultValue")] 
 		public CBool StartFromDefaultValue
 		{
-			get
-			{
-				if (_startFromDefaultValue == null)
-				{
-					_startFromDefaultValue = (CBool) CR2WTypeManager.Create("Bool", "startFromDefaultValue", cr2w, this);
-				}
-				return _startFromDefaultValue;
-			}
-			set
-			{
-				if (_startFromDefaultValue == value)
-				{
-					return;
-				}
-				_startFromDefaultValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startFromDefaultValue);
+			set => SetProperty(ref _startFromDefaultValue, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("defaultInitialValue")] 
 		public CFloat DefaultInitialValue
 		{
-			get
-			{
-				if (_defaultInitialValue == null)
-				{
-					_defaultInitialValue = (CFloat) CR2WTypeManager.Create("Float", "defaultInitialValue", cr2w, this);
-				}
-				return _defaultInitialValue;
-			}
-			set
-			{
-				if (_defaultInitialValue == value)
-				{
-					return;
-				}
-				_defaultInitialValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultInitialValue);
+			set => SetProperty(ref _defaultInitialValue, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("wrapAroundRange")] 
 		public CBool WrapAroundRange
 		{
-			get
-			{
-				if (_wrapAroundRange == null)
-				{
-					_wrapAroundRange = (CBool) CR2WTypeManager.Create("Bool", "wrapAroundRange", cr2w, this);
-				}
-				return _wrapAroundRange;
-			}
-			set
-			{
-				if (_wrapAroundRange == value)
-				{
-					return;
-				}
-				_wrapAroundRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wrapAroundRange);
+			set => SetProperty(ref _wrapAroundRange, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("rangeMin")] 
 		public CFloat RangeMin
 		{
-			get
-			{
-				if (_rangeMin == null)
-				{
-					_rangeMin = (CFloat) CR2WTypeManager.Create("Float", "rangeMin", cr2w, this);
-				}
-				return _rangeMin;
-			}
-			set
-			{
-				if (_rangeMin == value)
-				{
-					return;
-				}
-				_rangeMin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rangeMin);
+			set => SetProperty(ref _rangeMin, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("rangeMax")] 
 		public CFloat RangeMax
 		{
-			get
-			{
-				if (_rangeMax == null)
-				{
-					_rangeMax = (CFloat) CR2WTypeManager.Create("Float", "rangeMax", cr2w, this);
-				}
-				return _rangeMax;
-			}
-			set
-			{
-				if (_rangeMax == value)
-				{
-					return;
-				}
-				_rangeMax = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rangeMax);
+			set => SetProperty(ref _rangeMax, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("timeStep")] 
 		public CFloat TimeStep
 		{
-			get
-			{
-				if (_timeStep == null)
-				{
-					_timeStep = (CFloat) CR2WTypeManager.Create("Float", "timeStep", cr2w, this);
-				}
-				return _timeStep;
-			}
-			set
-			{
-				if (_timeStep == value)
-				{
-					return;
-				}
-				_timeStep = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeStep);
+			set => SetProperty(ref _timeStep, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("inputNode")] 
 		public animFloatLink InputNode
 		{
-			get
-			{
-				if (_inputNode == null)
-				{
-					_inputNode = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "inputNode", cr2w, this);
-				}
-				return _inputNode;
-			}
-			set
-			{
-				if (_inputNode == value)
-				{
-					return;
-				}
-				_inputNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputNode);
+			set => SetProperty(ref _inputNode, value);
 		}
 
 		public animAnimNode_SpringDamp(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

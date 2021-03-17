@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get
-			{
-				if (_puppetRef == null)
-				{
-					_puppetRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "puppetRef", cr2w, this);
-				}
-				return _puppetRef;
-			}
-			set
-			{
-				if (_puppetRef == value)
-				{
-					return;
-				}
-				_puppetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppetRef);
+			set => SetProperty(ref _puppetRef, value);
 		}
 
 		public questCharacterCallReinforcements_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

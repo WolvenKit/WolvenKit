@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("displayName")] 
 		public CString DisplayName
 		{
-			get
-			{
-				if (_displayName == null)
-				{
-					_displayName = (CString) CR2WTypeManager.Create("String", "displayName", cr2w, this);
-				}
-				return _displayName;
-			}
-			set
-			{
-				if (_displayName == value)
-				{
-					return;
-				}
-				_displayName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _displayName);
+			set => SetProperty(ref _displayName, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("ownerID")] 
 		public gamePersistentID OwnerID
 		{
-			get
-			{
-				if (_ownerID == null)
-				{
-					_ownerID = (gamePersistentID) CR2WTypeManager.Create("gamePersistentID", "ownerID", cr2w, this);
-				}
-				return _ownerID;
-			}
-			set
-			{
-				if (_ownerID == value)
-				{
-					return;
-				}
-				_ownerID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerID);
+			set => SetProperty(ref _ownerID, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("ownerIDClassName")] 
 		public CName OwnerIDClassName
 		{
-			get
-			{
-				if (_ownerIDClassName == null)
-				{
-					_ownerIDClassName = (CName) CR2WTypeManager.Create("CName", "ownerIDClassName", cr2w, this);
-				}
-				return _ownerIDClassName;
-			}
-			set
-			{
-				if (_ownerIDClassName == value)
-				{
-					return;
-				}
-				_ownerIDClassName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerIDClassName);
+			set => SetProperty(ref _ownerIDClassName, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("customData")] 
 		public CHandle<WidgetCustomData> CustomData
 		{
-			get
-			{
-				if (_customData == null)
-				{
-					_customData = (CHandle<WidgetCustomData>) CR2WTypeManager.Create("handle:WidgetCustomData", "customData", cr2w, this);
-				}
-				return _customData;
-			}
-			set
-			{
-				if (_customData == value)
-				{
-					return;
-				}
-				_customData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customData);
+			set => SetProperty(ref _customData, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("isWidgetInactive")] 
 		public CBool IsWidgetInactive
 		{
-			get
-			{
-				if (_isWidgetInactive == null)
-				{
-					_isWidgetInactive = (CBool) CR2WTypeManager.Create("Bool", "isWidgetInactive", cr2w, this);
-				}
-				return _isWidgetInactive;
-			}
-			set
-			{
-				if (_isWidgetInactive == value)
-				{
-					return;
-				}
-				_isWidgetInactive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isWidgetInactive);
+			set => SetProperty(ref _isWidgetInactive, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("widgetState")] 
 		public CEnum<EWidgetState> WidgetState
 		{
-			get
-			{
-				if (_widgetState == null)
-				{
-					_widgetState = (CEnum<EWidgetState>) CR2WTypeManager.Create("EWidgetState", "widgetState", cr2w, this);
-				}
-				return _widgetState;
-			}
-			set
-			{
-				if (_widgetState == value)
-				{
-					return;
-				}
-				_widgetState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetState);
+			set => SetProperty(ref _widgetState, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("iconID")] 
 		public CName IconID
 		{
-			get
-			{
-				if (_iconID == null)
-				{
-					_iconID = (CName) CR2WTypeManager.Create("CName", "iconID", cr2w, this);
-				}
-				return _iconID;
-			}
-			set
-			{
-				if (_iconID == value)
-				{
-					return;
-				}
-				_iconID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _iconID);
+			set => SetProperty(ref _iconID, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("bckgroundTextureID")] 
 		public TweakDBID BckgroundTextureID
 		{
-			get
-			{
-				if (_bckgroundTextureID == null)
-				{
-					_bckgroundTextureID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "bckgroundTextureID", cr2w, this);
-				}
-				return _bckgroundTextureID;
-			}
-			set
-			{
-				if (_bckgroundTextureID == value)
-				{
-					return;
-				}
-				_bckgroundTextureID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bckgroundTextureID);
+			set => SetProperty(ref _bckgroundTextureID, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("iconTextureID")] 
 		public TweakDBID IconTextureID
 		{
-			get
-			{
-				if (_iconTextureID == null)
-				{
-					_iconTextureID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "iconTextureID", cr2w, this);
-				}
-				return _iconTextureID;
-			}
-			set
-			{
-				if (_iconTextureID == value)
-				{
-					return;
-				}
-				_iconTextureID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _iconTextureID);
+			set => SetProperty(ref _iconTextureID, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("textData")] 
 		public CHandle<textTextParameterSet> TextData
 		{
-			get
-			{
-				if (_textData == null)
-				{
-					_textData = (CHandle<textTextParameterSet>) CR2WTypeManager.Create("handle:textTextParameterSet", "textData", cr2w, this);
-				}
-				return _textData;
-			}
-			set
-			{
-				if (_textData == value)
-				{
-					return;
-				}
-				_textData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textData);
+			set => SetProperty(ref _textData, value);
 		}
 
 		public SWidgetPackage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

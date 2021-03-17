@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("redId")] 
 		public CName RedId
 		{
-			get
-			{
-				if (_redId == null)
-				{
-					_redId = (CName) CR2WTypeManager.Create("CName", "redId", cr2w, this);
-				}
-				return _redId;
-			}
-			set
-			{
-				if (_redId == value)
-				{
-					return;
-				}
-				_redId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _redId);
+			set => SetProperty(ref _redId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("wwiseId")] 
 		public CUInt32 WwiseId
 		{
-			get
-			{
-				if (_wwiseId == null)
-				{
-					_wwiseId = (CUInt32) CR2WTypeManager.Create("Uint32", "wwiseId", cr2w, this);
-				}
-				return _wwiseId;
-			}
-			set
-			{
-				if (_wwiseId == value)
-				{
-					return;
-				}
-				_wwiseId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wwiseId);
+			set => SetProperty(ref _wwiseId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("maxAttenuation")] 
 		public CFloat MaxAttenuation
 		{
-			get
-			{
-				if (_maxAttenuation == null)
-				{
-					_maxAttenuation = (CFloat) CR2WTypeManager.Create("Float", "maxAttenuation", cr2w, this);
-				}
-				return _maxAttenuation;
-			}
-			set
-			{
-				if (_maxAttenuation == value)
-				{
-					return;
-				}
-				_maxAttenuation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxAttenuation);
+			set => SetProperty(ref _maxAttenuation, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("minDuration")] 
 		public CFloat MinDuration
 		{
-			get
-			{
-				if (_minDuration == null)
-				{
-					_minDuration = (CFloat) CR2WTypeManager.Create("Float", "minDuration", cr2w, this);
-				}
-				return _minDuration;
-			}
-			set
-			{
-				if (_minDuration == value)
-				{
-					return;
-				}
-				_minDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minDuration);
+			set => SetProperty(ref _minDuration, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("maxDuration")] 
 		public CFloat MaxDuration
 		{
-			get
-			{
-				if (_maxDuration == null)
-				{
-					_maxDuration = (CFloat) CR2WTypeManager.Create("Float", "maxDuration", cr2w, this);
-				}
-				return _maxDuration;
-			}
-			set
-			{
-				if (_maxDuration == value)
-				{
-					return;
-				}
-				_maxDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxDuration);
+			set => SetProperty(ref _maxDuration, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isLooping")] 
 		public CBool IsLooping
 		{
-			get
-			{
-				if (_isLooping == null)
-				{
-					_isLooping = (CBool) CR2WTypeManager.Create("Bool", "isLooping", cr2w, this);
-				}
-				return _isLooping;
-			}
-			set
-			{
-				if (_isLooping == value)
-				{
-					return;
-				}
-				_isLooping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isLooping);
+			set => SetProperty(ref _isLooping, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("stopActionEvents")] 
 		public CArray<CName> StopActionEvents
 		{
-			get
-			{
-				if (_stopActionEvents == null)
-				{
-					_stopActionEvents = (CArray<CName>) CR2WTypeManager.Create("array:CName", "stopActionEvents", cr2w, this);
-				}
-				return _stopActionEvents;
-			}
-			set
-			{
-				if (_stopActionEvents == value)
-				{
-					return;
-				}
-				_stopActionEvents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stopActionEvents);
+			set => SetProperty(ref _stopActionEvents, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("tags")] 
 		public CArray<CName> Tags
 		{
-			get
-			{
-				if (_tags == null)
-				{
-					_tags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "tags", cr2w, this);
-				}
-				return _tags;
-			}
-			set
-			{
-				if (_tags == value)
-				{
-					return;
-				}
-				_tags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tags);
+			set => SetProperty(ref _tags, value);
 		}
 
 		public audioAudioEventMetadataArrayElement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

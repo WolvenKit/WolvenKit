@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CString Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CString) CR2WTypeManager.Create("String", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("value")] 
 		public CString Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CString) CR2WTypeManager.Create("String", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		public ShaderDefine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

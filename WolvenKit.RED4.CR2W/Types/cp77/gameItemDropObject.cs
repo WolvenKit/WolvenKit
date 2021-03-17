@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("wasItemInitialized")] 
 		public CBool WasItemInitialized
 		{
-			get
-			{
-				if (_wasItemInitialized == null)
-				{
-					_wasItemInitialized = (CBool) CR2WTypeManager.Create("Bool", "wasItemInitialized", cr2w, this);
-				}
-				return _wasItemInitialized;
-			}
-			set
-			{
-				if (_wasItemInitialized == value)
-				{
-					return;
-				}
-				_wasItemInitialized = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasItemInitialized);
+			set => SetProperty(ref _wasItemInitialized, value);
 		}
 
 		public gameItemDropObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

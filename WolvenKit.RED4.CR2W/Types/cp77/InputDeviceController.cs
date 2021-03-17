@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isStarted")] 
 		public CBool IsStarted
 		{
-			get
-			{
-				if (_isStarted == null)
-				{
-					_isStarted = (CBool) CR2WTypeManager.Create("Bool", "isStarted", cr2w, this);
-				}
-				return _isStarted;
-			}
-			set
-			{
-				if (_isStarted == value)
-				{
-					return;
-				}
-				_isStarted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isStarted);
+			set => SetProperty(ref _isStarted, value);
 		}
 
 		public InputDeviceController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

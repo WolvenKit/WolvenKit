@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("DevicesChain")] 
 		public gamebbScriptID_Variant DevicesChain
 		{
-			get
-			{
-				if (_devicesChain == null)
-				{
-					_devicesChain = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "DevicesChain", cr2w, this);
-				}
-				return _devicesChain;
-			}
-			set
-			{
-				if (_devicesChain == value)
-				{
-					return;
-				}
-				_devicesChain = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _devicesChain);
+			set => SetProperty(ref _devicesChain, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ActiveDevice")] 
 		public gamebbScriptID_EntityID ActiveDevice
 		{
-			get
-			{
-				if (_activeDevice == null)
-				{
-					_activeDevice = (gamebbScriptID_EntityID) CR2WTypeManager.Create("gamebbScriptID_EntityID", "ActiveDevice", cr2w, this);
-				}
-				return _activeDevice;
-			}
-			set
-			{
-				if (_activeDevice == value)
-				{
-					return;
-				}
-				_activeDevice = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeDevice);
+			set => SetProperty(ref _activeDevice, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("IsDeviceWorking")] 
 		public gamebbScriptID_Bool IsDeviceWorking
 		{
-			get
-			{
-				if (_isDeviceWorking == null)
-				{
-					_isDeviceWorking = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "IsDeviceWorking", cr2w, this);
-				}
-				return _isDeviceWorking;
-			}
-			set
-			{
-				if (_isDeviceWorking == value)
-				{
-					return;
-				}
-				_isDeviceWorking = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDeviceWorking);
+			set => SetProperty(ref _isDeviceWorking, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ChainLocked")] 
 		public gamebbScriptID_Bool ChainLocked
 		{
-			get
-			{
-				if (_chainLocked == null)
-				{
-					_chainLocked = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "ChainLocked", cr2w, this);
-				}
-				return _chainLocked;
-			}
-			set
-			{
-				if (_chainLocked == value)
-				{
-					return;
-				}
-				_chainLocked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chainLocked);
+			set => SetProperty(ref _chainLocked, value);
 		}
 
 		public DeviceTakeControlDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

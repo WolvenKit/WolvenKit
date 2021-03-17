@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("playlistName")] 
 		public CName PlaylistName
 		{
-			get
-			{
-				if (_playlistName == null)
-				{
-					_playlistName = (CName) CR2WTypeManager.Create("CName", "playlistName", cr2w, this);
-				}
-				return _playlistName;
-			}
-			set
-			{
-				if (_playlistName == value)
-				{
-					return;
-				}
-				_playlistName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playlistName);
+			set => SetProperty(ref _playlistName, value);
 		}
 
 		public questPlaylistTrackChanged_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

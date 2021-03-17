@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("defaultChoices")] 
 		public CArray<CString> DefaultChoices
 		{
-			get
-			{
-				if (_defaultChoices == null)
-				{
-					_defaultChoices = (CArray<CString>) CR2WTypeManager.Create("array:String", "defaultChoices", cr2w, this);
-				}
-				return _defaultChoices;
-			}
-			set
-			{
-				if (_defaultChoices == value)
-				{
-					return;
-				}
-				_defaultChoices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultChoices);
+			set => SetProperty(ref _defaultChoices, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("visualizer")] 
 		public CHandle<gameuiIChoiceVisualizer> Visualizer
 		{
-			get
-			{
-				if (_visualizer == null)
-				{
-					_visualizer = (CHandle<gameuiIChoiceVisualizer>) CR2WTypeManager.Create("handle:gameuiIChoiceVisualizer", "visualizer", cr2w, this);
-				}
-				return _visualizer;
-			}
-			set
-			{
-				if (_visualizer == value)
-				{
-					return;
-				}
-				_visualizer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualizer);
+			set => SetProperty(ref _visualizer, value);
 		}
 
 		public gameinteractionsCSharedDataDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

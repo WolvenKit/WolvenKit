@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("performerId")] 
 		public scnPerformerId PerformerId
 		{
-			get
-			{
-				if (_performerId == null)
-				{
-					_performerId = (scnPerformerId) CR2WTypeManager.Create("scnPerformerId", "performerId", cr2w, this);
-				}
-				return _performerId;
-			}
-			set
-			{
-				if (_performerId == value)
-				{
-					return;
-				}
-				_performerId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _performerId);
+			set => SetProperty(ref _performerId, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("itemId")] 
 		public TweakDBID ItemId
 		{
-			get
-			{
-				if (_itemId == null)
-				{
-					_itemId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "itemId", cr2w, this);
-				}
-				return _itemId;
-			}
-			set
-			{
-				if (_itemId == value)
-				{
-					return;
-				}
-				_itemId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemId);
+			set => SetProperty(ref _itemId, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("restoreGameplayItem")] 
 		public CBool RestoreGameplayItem
 		{
-			get
-			{
-				if (_restoreGameplayItem == null)
-				{
-					_restoreGameplayItem = (CBool) CR2WTypeManager.Create("Bool", "restoreGameplayItem", cr2w, this);
-				}
-				return _restoreGameplayItem;
-			}
-			set
-			{
-				if (_restoreGameplayItem == value)
-				{
-					return;
-				}
-				_restoreGameplayItem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _restoreGameplayItem);
+			set => SetProperty(ref _restoreGameplayItem, value);
 		}
 
 		public scneventsUnequipItemFromPerformerByItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -29,391 +29,136 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("symbolsRecordTDBID")] 
 		public TweakDBID SymbolsRecordTDBID
 		{
-			get
-			{
-				if (_symbolsRecordTDBID == null)
-				{
-					_symbolsRecordTDBID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "symbolsRecordTDBID", cr2w, this);
-				}
-				return _symbolsRecordTDBID;
-			}
-			set
-			{
-				if (_symbolsRecordTDBID == value)
-				{
-					return;
-				}
-				_symbolsRecordTDBID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _symbolsRecordTDBID);
+			set => SetProperty(ref _symbolsRecordTDBID, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("minigameDefaultsTDBID")] 
 		public TweakDBID MinigameDefaultsTDBID
 		{
-			get
-			{
-				if (_minigameDefaultsTDBID == null)
-				{
-					_minigameDefaultsTDBID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "minigameDefaultsTDBID", cr2w, this);
-				}
-				return _minigameDefaultsTDBID;
-			}
-			set
-			{
-				if (_minigameDefaultsTDBID == value)
-				{
-					return;
-				}
-				_minigameDefaultsTDBID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minigameDefaultsTDBID);
+			set => SetProperty(ref _minigameDefaultsTDBID, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("miniGameRecord")] 
 		public wCHandle<gamedataMinigame_Def_Record> MiniGameRecord
 		{
-			get
-			{
-				if (_miniGameRecord == null)
-				{
-					_miniGameRecord = (wCHandle<gamedataMinigame_Def_Record>) CR2WTypeManager.Create("whandle:gamedataMinigame_Def_Record", "miniGameRecord", cr2w, this);
-				}
-				return _miniGameRecord;
-			}
-			set
-			{
-				if (_miniGameRecord == value)
-				{
-					return;
-				}
-				_miniGameRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _miniGameRecord);
+			set => SetProperty(ref _miniGameRecord, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("dimension")] 
 		public CInt32 Dimension
 		{
-			get
-			{
-				if (_dimension == null)
-				{
-					_dimension = (CInt32) CR2WTypeManager.Create("Int32", "dimension", cr2w, this);
-				}
-				return _dimension;
-			}
-			set
-			{
-				if (_dimension == value)
-				{
-					return;
-				}
-				_dimension = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dimension);
+			set => SetProperty(ref _dimension, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isTutorialActive")] 
 		public CBool IsTutorialActive
 		{
-			get
-			{
-				if (_isTutorialActive == null)
-				{
-					_isTutorialActive = (CBool) CR2WTypeManager.Create("Bool", "isTutorialActive", cr2w, this);
-				}
-				return _isTutorialActive;
-			}
-			set
-			{
-				if (_isTutorialActive == value)
-				{
-					return;
-				}
-				_isTutorialActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isTutorialActive);
+			set => SetProperty(ref _isTutorialActive, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isOfficerBreach")] 
 		public CBool IsOfficerBreach
 		{
-			get
-			{
-				if (_isOfficerBreach == null)
-				{
-					_isOfficerBreach = (CBool) CR2WTypeManager.Create("Bool", "isOfficerBreach", cr2w, this);
-				}
-				return _isOfficerBreach;
-			}
-			set
-			{
-				if (_isOfficerBreach == value)
-				{
-					return;
-				}
-				_isOfficerBreach = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isOfficerBreach);
+			set => SetProperty(ref _isOfficerBreach, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isRemoteBreach")] 
 		public CBool IsRemoteBreach
 		{
-			get
-			{
-				if (_isRemoteBreach == null)
-				{
-					_isRemoteBreach = (CBool) CR2WTypeManager.Create("Bool", "isRemoteBreach", cr2w, this);
-				}
-				return _isRemoteBreach;
-			}
-			set
-			{
-				if (_isRemoteBreach == value)
-				{
-					return;
-				}
-				_isRemoteBreach = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isRemoteBreach);
+			set => SetProperty(ref _isRemoteBreach, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("isItemBreach")] 
 		public CBool IsItemBreach
 		{
-			get
-			{
-				if (_isItemBreach == null)
-				{
-					_isItemBreach = (CBool) CR2WTypeManager.Create("Bool", "isItemBreach", cr2w, this);
-				}
-				return _isItemBreach;
-			}
-			set
-			{
-				if (_isItemBreach == value)
-				{
-					return;
-				}
-				_isItemBreach = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isItemBreach);
+			set => SetProperty(ref _isItemBreach, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("numberAttempts")] 
 		public CInt32 NumberAttempts
 		{
-			get
-			{
-				if (_numberAttempts == null)
-				{
-					_numberAttempts = (CInt32) CR2WTypeManager.Create("Int32", "numberAttempts", cr2w, this);
-				}
-				return _numberAttempts;
-			}
-			set
-			{
-				if (_numberAttempts == value)
-				{
-					return;
-				}
-				_numberAttempts = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numberAttempts);
+			set => SetProperty(ref _numberAttempts, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("tooltipsManagerRef")] 
 		public inkWidgetReference TooltipsManagerRef
 		{
-			get
-			{
-				if (_tooltipsManagerRef == null)
-				{
-					_tooltipsManagerRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "tooltipsManagerRef", cr2w, this);
-				}
-				return _tooltipsManagerRef;
-			}
-			set
-			{
-				if (_tooltipsManagerRef == value)
-				{
-					return;
-				}
-				_tooltipsManagerRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsManagerRef);
+			set => SetProperty(ref _tooltipsManagerRef, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("TooltipsManager")] 
 		public wCHandle<gameuiTooltipsManager> TooltipsManager
 		{
-			get
-			{
-				if (_tooltipsManager == null)
-				{
-					_tooltipsManager = (wCHandle<gameuiTooltipsManager>) CR2WTypeManager.Create("whandle:gameuiTooltipsManager", "TooltipsManager", cr2w, this);
-				}
-				return _tooltipsManager;
-			}
-			set
-			{
-				if (_tooltipsManager == value)
-				{
-					return;
-				}
-				_tooltipsManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsManager);
+			set => SetProperty(ref _tooltipsManager, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("uiSystem")] 
 		public CHandle<gameuiGameSystemUI> UiSystem
 		{
-			get
-			{
-				if (_uiSystem == null)
-				{
-					_uiSystem = (CHandle<gameuiGameSystemUI>) CR2WTypeManager.Create("handle:gameuiGameSystemUI", "uiSystem", cr2w, this);
-				}
-				return _uiSystem;
-			}
-			set
-			{
-				if (_uiSystem == value)
-				{
-					return;
-				}
-				_uiSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uiSystem);
+			set => SetProperty(ref _uiSystem, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("contextHelpOverlay")] 
 		public CBool ContextHelpOverlay
 		{
-			get
-			{
-				if (_contextHelpOverlay == null)
-				{
-					_contextHelpOverlay = (CBool) CR2WTypeManager.Create("Bool", "contextHelpOverlay", cr2w, this);
-				}
-				return _contextHelpOverlay;
-			}
-			set
-			{
-				if (_contextHelpOverlay == value)
-				{
-					return;
-				}
-				_contextHelpOverlay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contextHelpOverlay);
+			set => SetProperty(ref _contextHelpOverlay, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("bbMinigame")] 
 		public CHandle<gameIBlackboard> BbMinigame
 		{
-			get
-			{
-				if (_bbMinigame == null)
-				{
-					_bbMinigame = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "bbMinigame", cr2w, this);
-				}
-				return _bbMinigame;
-			}
-			set
-			{
-				if (_bbMinigame == value)
-				{
-					return;
-				}
-				_bbMinigame = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbMinigame);
+			set => SetProperty(ref _bbMinigame, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("bbMinigameStateListener")] 
 		public CUInt32 BbMinigameStateListener
 		{
-			get
-			{
-				if (_bbMinigameStateListener == null)
-				{
-					_bbMinigameStateListener = (CUInt32) CR2WTypeManager.Create("Uint32", "bbMinigameStateListener", cr2w, this);
-				}
-				return _bbMinigameStateListener;
-			}
-			set
-			{
-				if (_bbMinigameStateListener == value)
-				{
-					return;
-				}
-				_bbMinigameStateListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbMinigameStateListener);
+			set => SetProperty(ref _bbMinigameStateListener, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("bbUiData")] 
 		public CHandle<gameIBlackboard> BbUiData
 		{
-			get
-			{
-				if (_bbUiData == null)
-				{
-					_bbUiData = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "bbUiData", cr2w, this);
-				}
-				return _bbUiData;
-			}
-			set
-			{
-				if (_bbUiData == value)
-				{
-					return;
-				}
-				_bbUiData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbUiData);
+			set => SetProperty(ref _bbUiData, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("bbControllerStateListener")] 
 		public CUInt32 BbControllerStateListener
 		{
-			get
-			{
-				if (_bbControllerStateListener == null)
-				{
-					_bbControllerStateListener = (CUInt32) CR2WTypeManager.Create("Uint32", "bbControllerStateListener", cr2w, this);
-				}
-				return _bbControllerStateListener;
-			}
-			set
-			{
-				if (_bbControllerStateListener == value)
-				{
-					return;
-				}
-				_bbControllerStateListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbControllerStateListener);
+			set => SetProperty(ref _bbControllerStateListener, value);
 		}
 
 		public gameuiHackingMinigameGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

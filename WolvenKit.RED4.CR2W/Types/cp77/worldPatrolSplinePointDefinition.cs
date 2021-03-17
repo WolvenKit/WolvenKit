@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("pointType")] 
 		public CEnum<worldPatrolSplinePointTypes> PointType
 		{
-			get
-			{
-				if (_pointType == null)
-				{
-					_pointType = (CEnum<worldPatrolSplinePointTypes>) CR2WTypeManager.Create("worldPatrolSplinePointTypes", "pointType", cr2w, this);
-				}
-				return _pointType;
-			}
-			set
-			{
-				if (_pointType == value)
-				{
-					return;
-				}
-				_pointType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pointType);
+			set => SetProperty(ref _pointType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("node")] 
 		public NodeRef Node
 		{
-			get
-			{
-				if (_node == null)
-				{
-					_node = (NodeRef) CR2WTypeManager.Create("NodeRef", "node", cr2w, this);
-				}
-				return _node;
-			}
-			set
-			{
-				if (_node == value)
-				{
-					return;
-				}
-				_node = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _node);
+			set => SetProperty(ref _node, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("target")] 
 		public gameEntityReference Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		public worldPatrolSplinePointDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

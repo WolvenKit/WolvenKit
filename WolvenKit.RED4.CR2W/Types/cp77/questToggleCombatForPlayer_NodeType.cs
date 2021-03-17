@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("startCombat")] 
 		public CBool StartCombat
 		{
-			get
-			{
-				if (_startCombat == null)
-				{
-					_startCombat = (CBool) CR2WTypeManager.Create("Bool", "startCombat", cr2w, this);
-				}
-				return _startCombat;
-			}
-			set
-			{
-				if (_startCombat == value)
-				{
-					return;
-				}
-				_startCombat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startCombat);
+			set => SetProperty(ref _startCombat, value);
 		}
 
 		public questToggleCombatForPlayer_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

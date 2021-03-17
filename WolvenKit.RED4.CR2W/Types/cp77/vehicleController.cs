@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("alarmCurve")] 
 		public CName AlarmCurve
 		{
-			get
-			{
-				if (_alarmCurve == null)
-				{
-					_alarmCurve = (CName) CR2WTypeManager.Create("CName", "alarmCurve", cr2w, this);
-				}
-				return _alarmCurve;
-			}
-			set
-			{
-				if (_alarmCurve == value)
-				{
-					return;
-				}
-				_alarmCurve = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alarmCurve);
+			set => SetProperty(ref _alarmCurve, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("alarmTime")] 
 		public CFloat AlarmTime
 		{
-			get
-			{
-				if (_alarmTime == null)
-				{
-					_alarmTime = (CFloat) CR2WTypeManager.Create("Float", "alarmTime", cr2w, this);
-				}
-				return _alarmTime;
-			}
-			set
-			{
-				if (_alarmTime == value)
-				{
-					return;
-				}
-				_alarmTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alarmTime);
+			set => SetProperty(ref _alarmTime, value);
 		}
 
 		public vehicleController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

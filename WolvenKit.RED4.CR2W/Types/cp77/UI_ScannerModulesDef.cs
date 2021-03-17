@@ -43,713 +43,248 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ScannerName")] 
 		public gamebbScriptID_Variant ScannerName
 		{
-			get
-			{
-				if (_scannerName == null)
-				{
-					_scannerName = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerName", cr2w, this);
-				}
-				return _scannerName;
-			}
-			set
-			{
-				if (_scannerName == value)
-				{
-					return;
-				}
-				_scannerName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerName);
+			set => SetProperty(ref _scannerName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ScannerHealth")] 
 		public gamebbScriptID_Variant ScannerHealth
 		{
-			get
-			{
-				if (_scannerHealth == null)
-				{
-					_scannerHealth = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerHealth", cr2w, this);
-				}
-				return _scannerHealth;
-			}
-			set
-			{
-				if (_scannerHealth == value)
-				{
-					return;
-				}
-				_scannerHealth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerHealth);
+			set => SetProperty(ref _scannerHealth, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ScannerLevel")] 
 		public gamebbScriptID_Variant ScannerLevel
 		{
-			get
-			{
-				if (_scannerLevel == null)
-				{
-					_scannerLevel = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerLevel", cr2w, this);
-				}
-				return _scannerLevel;
-			}
-			set
-			{
-				if (_scannerLevel == value)
-				{
-					return;
-				}
-				_scannerLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerLevel);
+			set => SetProperty(ref _scannerLevel, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ScannerAuthorization")] 
 		public gamebbScriptID_Variant ScannerAuthorization
 		{
-			get
-			{
-				if (_scannerAuthorization == null)
-				{
-					_scannerAuthorization = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerAuthorization", cr2w, this);
-				}
-				return _scannerAuthorization;
-			}
-			set
-			{
-				if (_scannerAuthorization == value)
-				{
-					return;
-				}
-				_scannerAuthorization = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerAuthorization);
+			set => SetProperty(ref _scannerAuthorization, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("ScannerRarity")] 
 		public gamebbScriptID_Variant ScannerRarity
 		{
-			get
-			{
-				if (_scannerRarity == null)
-				{
-					_scannerRarity = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerRarity", cr2w, this);
-				}
-				return _scannerRarity;
-			}
-			set
-			{
-				if (_scannerRarity == value)
-				{
-					return;
-				}
-				_scannerRarity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerRarity);
+			set => SetProperty(ref _scannerRarity, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ScannerArchetype")] 
 		public gamebbScriptID_Variant ScannerArchetype
 		{
-			get
-			{
-				if (_scannerArchetype == null)
-				{
-					_scannerArchetype = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerArchetype", cr2w, this);
-				}
-				return _scannerArchetype;
-			}
-			set
-			{
-				if (_scannerArchetype == value)
-				{
-					return;
-				}
-				_scannerArchetype = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerArchetype);
+			set => SetProperty(ref _scannerArchetype, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("ScannerFaction")] 
 		public gamebbScriptID_Variant ScannerFaction
 		{
-			get
-			{
-				if (_scannerFaction == null)
-				{
-					_scannerFaction = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerFaction", cr2w, this);
-				}
-				return _scannerFaction;
-			}
-			set
-			{
-				if (_scannerFaction == value)
-				{
-					return;
-				}
-				_scannerFaction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerFaction);
+			set => SetProperty(ref _scannerFaction, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("ScannerWeaponBasic")] 
 		public gamebbScriptID_Variant ScannerWeaponBasic
 		{
-			get
-			{
-				if (_scannerWeaponBasic == null)
-				{
-					_scannerWeaponBasic = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerWeaponBasic", cr2w, this);
-				}
-				return _scannerWeaponBasic;
-			}
-			set
-			{
-				if (_scannerWeaponBasic == value)
-				{
-					return;
-				}
-				_scannerWeaponBasic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerWeaponBasic);
+			set => SetProperty(ref _scannerWeaponBasic, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("ScannerWeaponDetailed")] 
 		public gamebbScriptID_Variant ScannerWeaponDetailed
 		{
-			get
-			{
-				if (_scannerWeaponDetailed == null)
-				{
-					_scannerWeaponDetailed = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerWeaponDetailed", cr2w, this);
-				}
-				return _scannerWeaponDetailed;
-			}
-			set
-			{
-				if (_scannerWeaponDetailed == value)
-				{
-					return;
-				}
-				_scannerWeaponDetailed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerWeaponDetailed);
+			set => SetProperty(ref _scannerWeaponDetailed, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("ScannerVulnerabilities")] 
 		public gamebbScriptID_Variant ScannerVulnerabilities
 		{
-			get
-			{
-				if (_scannerVulnerabilities == null)
-				{
-					_scannerVulnerabilities = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerVulnerabilities", cr2w, this);
-				}
-				return _scannerVulnerabilities;
-			}
-			set
-			{
-				if (_scannerVulnerabilities == value)
-				{
-					return;
-				}
-				_scannerVulnerabilities = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerVulnerabilities);
+			set => SetProperty(ref _scannerVulnerabilities, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("ScannerSquadInfo")] 
 		public gamebbScriptID_Variant ScannerSquadInfo
 		{
-			get
-			{
-				if (_scannerSquadInfo == null)
-				{
-					_scannerSquadInfo = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerSquadInfo", cr2w, this);
-				}
-				return _scannerSquadInfo;
-			}
-			set
-			{
-				if (_scannerSquadInfo == value)
-				{
-					return;
-				}
-				_scannerSquadInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerSquadInfo);
+			set => SetProperty(ref _scannerSquadInfo, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("ScannerResistances")] 
 		public gamebbScriptID_Variant ScannerResistances
 		{
-			get
-			{
-				if (_scannerResistances == null)
-				{
-					_scannerResistances = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerResistances", cr2w, this);
-				}
-				return _scannerResistances;
-			}
-			set
-			{
-				if (_scannerResistances == value)
-				{
-					return;
-				}
-				_scannerResistances = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerResistances);
+			set => SetProperty(ref _scannerResistances, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("ScannerAbilities")] 
 		public gamebbScriptID_Variant ScannerAbilities
 		{
-			get
-			{
-				if (_scannerAbilities == null)
-				{
-					_scannerAbilities = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerAbilities", cr2w, this);
-				}
-				return _scannerAbilities;
-			}
-			set
-			{
-				if (_scannerAbilities == value)
-				{
-					return;
-				}
-				_scannerAbilities = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerAbilities);
+			set => SetProperty(ref _scannerAbilities, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("ScannerAttitude")] 
 		public gamebbScriptID_Variant ScannerAttitude
 		{
-			get
-			{
-				if (_scannerAttitude == null)
-				{
-					_scannerAttitude = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerAttitude", cr2w, this);
-				}
-				return _scannerAttitude;
-			}
-			set
-			{
-				if (_scannerAttitude == value)
-				{
-					return;
-				}
-				_scannerAttitude = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerAttitude);
+			set => SetProperty(ref _scannerAttitude, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("ScannerBountySystem")] 
 		public gamebbScriptID_Variant ScannerBountySystem
 		{
-			get
-			{
-				if (_scannerBountySystem == null)
-				{
-					_scannerBountySystem = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerBountySystem", cr2w, this);
-				}
-				return _scannerBountySystem;
-			}
-			set
-			{
-				if (_scannerBountySystem == value)
-				{
-					return;
-				}
-				_scannerBountySystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerBountySystem);
+			set => SetProperty(ref _scannerBountySystem, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("ScannerDeviceStatus")] 
 		public gamebbScriptID_Variant ScannerDeviceStatus
 		{
-			get
-			{
-				if (_scannerDeviceStatus == null)
-				{
-					_scannerDeviceStatus = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerDeviceStatus", cr2w, this);
-				}
-				return _scannerDeviceStatus;
-			}
-			set
-			{
-				if (_scannerDeviceStatus == value)
-				{
-					return;
-				}
-				_scannerDeviceStatus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerDeviceStatus);
+			set => SetProperty(ref _scannerDeviceStatus, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("ScannerNetworkLevel")] 
 		public gamebbScriptID_Variant ScannerNetworkLevel
 		{
-			get
-			{
-				if (_scannerNetworkLevel == null)
-				{
-					_scannerNetworkLevel = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerNetworkLevel", cr2w, this);
-				}
-				return _scannerNetworkLevel;
-			}
-			set
-			{
-				if (_scannerNetworkLevel == value)
-				{
-					return;
-				}
-				_scannerNetworkLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerNetworkLevel);
+			set => SetProperty(ref _scannerNetworkLevel, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("ScannerNetworkStatus")] 
 		public gamebbScriptID_Variant ScannerNetworkStatus
 		{
-			get
-			{
-				if (_scannerNetworkStatus == null)
-				{
-					_scannerNetworkStatus = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerNetworkStatus", cr2w, this);
-				}
-				return _scannerNetworkStatus;
-			}
-			set
-			{
-				if (_scannerNetworkStatus == value)
-				{
-					return;
-				}
-				_scannerNetworkStatus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerNetworkStatus);
+			set => SetProperty(ref _scannerNetworkStatus, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("ScannerConnections")] 
 		public gamebbScriptID_Variant ScannerConnections
 		{
-			get
-			{
-				if (_scannerConnections == null)
-				{
-					_scannerConnections = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerConnections", cr2w, this);
-				}
-				return _scannerConnections;
-			}
-			set
-			{
-				if (_scannerConnections == value)
-				{
-					return;
-				}
-				_scannerConnections = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerConnections);
+			set => SetProperty(ref _scannerConnections, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("ScannerDescription")] 
 		public gamebbScriptID_Variant ScannerDescription
 		{
-			get
-			{
-				if (_scannerDescription == null)
-				{
-					_scannerDescription = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerDescription", cr2w, this);
-				}
-				return _scannerDescription;
-			}
-			set
-			{
-				if (_scannerDescription == value)
-				{
-					return;
-				}
-				_scannerDescription = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerDescription);
+			set => SetProperty(ref _scannerDescription, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("ScannerSkillChecks")] 
 		public gamebbScriptID_Variant ScannerSkillChecks
 		{
-			get
-			{
-				if (_scannerSkillChecks == null)
-				{
-					_scannerSkillChecks = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerSkillChecks", cr2w, this);
-				}
-				return _scannerSkillChecks;
-			}
-			set
-			{
-				if (_scannerSkillChecks == value)
-				{
-					return;
-				}
-				_scannerSkillChecks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerSkillChecks);
+			set => SetProperty(ref _scannerSkillChecks, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("ScannerVehicleName")] 
 		public gamebbScriptID_Variant ScannerVehicleName
 		{
-			get
-			{
-				if (_scannerVehicleName == null)
-				{
-					_scannerVehicleName = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerVehicleName", cr2w, this);
-				}
-				return _scannerVehicleName;
-			}
-			set
-			{
-				if (_scannerVehicleName == value)
-				{
-					return;
-				}
-				_scannerVehicleName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerVehicleName);
+			set => SetProperty(ref _scannerVehicleName, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("ScannerVehicleManufacturer")] 
 		public gamebbScriptID_Variant ScannerVehicleManufacturer
 		{
-			get
-			{
-				if (_scannerVehicleManufacturer == null)
-				{
-					_scannerVehicleManufacturer = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerVehicleManufacturer", cr2w, this);
-				}
-				return _scannerVehicleManufacturer;
-			}
-			set
-			{
-				if (_scannerVehicleManufacturer == value)
-				{
-					return;
-				}
-				_scannerVehicleManufacturer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerVehicleManufacturer);
+			set => SetProperty(ref _scannerVehicleManufacturer, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("ScannerVehicleProductionYears")] 
 		public gamebbScriptID_Variant ScannerVehicleProductionYears
 		{
-			get
-			{
-				if (_scannerVehicleProductionYears == null)
-				{
-					_scannerVehicleProductionYears = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerVehicleProductionYears", cr2w, this);
-				}
-				return _scannerVehicleProductionYears;
-			}
-			set
-			{
-				if (_scannerVehicleProductionYears == value)
-				{
-					return;
-				}
-				_scannerVehicleProductionYears = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerVehicleProductionYears);
+			set => SetProperty(ref _scannerVehicleProductionYears, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("ScannerVehicleDriveLayout")] 
 		public gamebbScriptID_Variant ScannerVehicleDriveLayout
 		{
-			get
-			{
-				if (_scannerVehicleDriveLayout == null)
-				{
-					_scannerVehicleDriveLayout = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerVehicleDriveLayout", cr2w, this);
-				}
-				return _scannerVehicleDriveLayout;
-			}
-			set
-			{
-				if (_scannerVehicleDriveLayout == value)
-				{
-					return;
-				}
-				_scannerVehicleDriveLayout = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerVehicleDriveLayout);
+			set => SetProperty(ref _scannerVehicleDriveLayout, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("ScannerVehicleHorsepower")] 
 		public gamebbScriptID_Variant ScannerVehicleHorsepower
 		{
-			get
-			{
-				if (_scannerVehicleHorsepower == null)
-				{
-					_scannerVehicleHorsepower = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerVehicleHorsepower", cr2w, this);
-				}
-				return _scannerVehicleHorsepower;
-			}
-			set
-			{
-				if (_scannerVehicleHorsepower == value)
-				{
-					return;
-				}
-				_scannerVehicleHorsepower = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerVehicleHorsepower);
+			set => SetProperty(ref _scannerVehicleHorsepower, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("ScannerVehicleMass")] 
 		public gamebbScriptID_Variant ScannerVehicleMass
 		{
-			get
-			{
-				if (_scannerVehicleMass == null)
-				{
-					_scannerVehicleMass = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerVehicleMass", cr2w, this);
-				}
-				return _scannerVehicleMass;
-			}
-			set
-			{
-				if (_scannerVehicleMass == value)
-				{
-					return;
-				}
-				_scannerVehicleMass = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerVehicleMass);
+			set => SetProperty(ref _scannerVehicleMass, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("ScannerVehicleState")] 
 		public gamebbScriptID_Variant ScannerVehicleState
 		{
-			get
-			{
-				if (_scannerVehicleState == null)
-				{
-					_scannerVehicleState = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerVehicleState", cr2w, this);
-				}
-				return _scannerVehicleState;
-			}
-			set
-			{
-				if (_scannerVehicleState == value)
-				{
-					return;
-				}
-				_scannerVehicleState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerVehicleState);
+			set => SetProperty(ref _scannerVehicleState, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("ScannerVehicleInfo")] 
 		public gamebbScriptID_Variant ScannerVehicleInfo
 		{
-			get
-			{
-				if (_scannerVehicleInfo == null)
-				{
-					_scannerVehicleInfo = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerVehicleInfo", cr2w, this);
-				}
-				return _scannerVehicleInfo;
-			}
-			set
-			{
-				if (_scannerVehicleInfo == value)
-				{
-					return;
-				}
-				_scannerVehicleInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerVehicleInfo);
+			set => SetProperty(ref _scannerVehicleInfo, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("ScannerQuickHackDescription")] 
 		public gamebbScriptID_Variant ScannerQuickHackDescription
 		{
-			get
-			{
-				if (_scannerQuickHackDescription == null)
-				{
-					_scannerQuickHackDescription = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ScannerQuickHackDescription", cr2w, this);
-				}
-				return _scannerQuickHackDescription;
-			}
-			set
-			{
-				if (_scannerQuickHackDescription == value)
-				{
-					return;
-				}
-				_scannerQuickHackDescription = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerQuickHackDescription);
+			set => SetProperty(ref _scannerQuickHackDescription, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("ObjectType")] 
 		public gamebbScriptID_Int32 ObjectType
 		{
-			get
-			{
-				if (_objectType == null)
-				{
-					_objectType = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "ObjectType", cr2w, this);
-				}
-				return _objectType;
-			}
-			set
-			{
-				if (_objectType == value)
-				{
-					return;
-				}
-				_objectType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectType);
+			set => SetProperty(ref _objectType, value);
 		}
 
 		public UI_ScannerModulesDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

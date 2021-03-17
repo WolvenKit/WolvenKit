@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("path")] 
 		public CHandle<AIArgumentMapping> Path
 		{
-			get
-			{
-				if (_path == null)
-				{
-					_path = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "path", cr2w, this);
-				}
-				return _path;
-			}
-			set
-			{
-				if (_path == value)
-				{
-					return;
-				}
-				_path = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _path);
+			set => SetProperty(ref _path, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("patrolProgress")] 
 		public CHandle<AIArgumentMapping> PatrolProgress
 		{
-			get
-			{
-				if (_patrolProgress == null)
-				{
-					_patrolProgress = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "patrolProgress", cr2w, this);
-				}
-				return _patrolProgress;
-			}
-			set
-			{
-				if (_patrolProgress == value)
-				{
-					return;
-				}
-				_patrolProgress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _patrolProgress);
+			set => SetProperty(ref _patrolProgress, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("positionOnPath")] 
 		public CHandle<AIArgumentMapping> PositionOnPath
 		{
-			get
-			{
-				if (_positionOnPath == null)
-				{
-					_positionOnPath = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "positionOnPath", cr2w, this);
-				}
-				return _positionOnPath;
-			}
-			set
-			{
-				if (_positionOnPath == value)
-				{
-					return;
-				}
-				_positionOnPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _positionOnPath);
+			set => SetProperty(ref _positionOnPath, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("entryTangent")] 
 		public CHandle<AIArgumentMapping> EntryTangent
 		{
-			get
-			{
-				if (_entryTangent == null)
-				{
-					_entryTangent = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "entryTangent", cr2w, this);
-				}
-				return _entryTangent;
-			}
-			set
-			{
-				if (_entryTangent == value)
-				{
-					return;
-				}
-				_entryTangent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryTangent);
+			set => SetProperty(ref _entryTangent, value);
 		}
 
 		public AIbehaviorFindClosestPointOnPathTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

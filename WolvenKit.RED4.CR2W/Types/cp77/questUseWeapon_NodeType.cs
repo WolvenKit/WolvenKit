@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("usageType")] 
 		public CEnum<questWeaponUsageType> UsageType
 		{
-			get
-			{
-				if (_usageType == null)
-				{
-					_usageType = (CEnum<questWeaponUsageType>) CR2WTypeManager.Create("questWeaponUsageType", "usageType", cr2w, this);
-				}
-				return _usageType;
-			}
-			set
-			{
-				if (_usageType == value)
-				{
-					return;
-				}
-				_usageType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _usageType);
+			set => SetProperty(ref _usageType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("objectRef")] 
 		public CHandle<questUniversalRef> ObjectRef
 		{
-			get
-			{
-				if (_objectRef == null)
-				{
-					_objectRef = (CHandle<questUniversalRef>) CR2WTypeManager.Create("handle:questUniversalRef", "objectRef", cr2w, this);
-				}
-				return _objectRef;
-			}
-			set
-			{
-				if (_objectRef == value)
-				{
-					return;
-				}
-				_objectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("overrideShootEffect")] 
 		public CName OverrideShootEffect
 		{
-			get
-			{
-				if (_overrideShootEffect == null)
-				{
-					_overrideShootEffect = (CName) CR2WTypeManager.Create("CName", "overrideShootEffect", cr2w, this);
-				}
-				return _overrideShootEffect;
-			}
-			set
-			{
-				if (_overrideShootEffect == value)
-				{
-					return;
-				}
-				_overrideShootEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideShootEffect);
+			set => SetProperty(ref _overrideShootEffect, value);
 		}
 
 		public questUseWeapon_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

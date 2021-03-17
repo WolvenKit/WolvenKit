@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bg")] 
 		public inkWidgetReference Bg
 		{
-			get
-			{
-				if (_bg == null)
-				{
-					_bg = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "bg", cr2w, this);
-				}
-				return _bg;
-			}
-			set
-			{
-				if (_bg == value)
-				{
-					return;
-				}
-				_bg = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bg);
+			set => SetProperty(ref _bg, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("timelineActiveAnimationName")] 
 		public CName TimelineActiveAnimationName
 		{
-			get
-			{
-				if (_timelineActiveAnimationName == null)
-				{
-					_timelineActiveAnimationName = (CName) CR2WTypeManager.Create("CName", "timelineActiveAnimationName", cr2w, this);
-				}
-				return _timelineActiveAnimationName;
-			}
-			set
-			{
-				if (_timelineActiveAnimationName == value)
-				{
-					return;
-				}
-				_timelineActiveAnimationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timelineActiveAnimationName);
+			set => SetProperty(ref _timelineActiveAnimationName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("timelineDisabledAnimationName")] 
 		public CName TimelineDisabledAnimationName
 		{
-			get
-			{
-				if (_timelineDisabledAnimationName == null)
-				{
-					_timelineDisabledAnimationName = (CName) CR2WTypeManager.Create("CName", "timelineDisabledAnimationName", cr2w, this);
-				}
-				return _timelineDisabledAnimationName;
-			}
-			set
-			{
-				if (_timelineDisabledAnimationName == value)
-				{
-					return;
-				}
-				_timelineDisabledAnimationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timelineDisabledAnimationName);
+			set => SetProperty(ref _timelineDisabledAnimationName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("timelineActiveAnimation")] 
 		public CHandle<inkanimProxy> TimelineActiveAnimation
 		{
-			get
-			{
-				if (_timelineActiveAnimation == null)
-				{
-					_timelineActiveAnimation = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "timelineActiveAnimation", cr2w, this);
-				}
-				return _timelineActiveAnimation;
-			}
-			set
-			{
-				if (_timelineActiveAnimation == value)
-				{
-					return;
-				}
-				_timelineActiveAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timelineActiveAnimation);
+			set => SetProperty(ref _timelineActiveAnimation, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("timelineDisabledAnimation")] 
 		public CHandle<inkanimProxy> TimelineDisabledAnimation
 		{
-			get
-			{
-				if (_timelineDisabledAnimation == null)
-				{
-					_timelineDisabledAnimation = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "timelineDisabledAnimation", cr2w, this);
-				}
-				return _timelineDisabledAnimation;
-			}
-			set
-			{
-				if (_timelineDisabledAnimation == value)
-				{
-					return;
-				}
-				_timelineDisabledAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timelineDisabledAnimation);
+			set => SetProperty(ref _timelineDisabledAnimation, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("state")] 
 		public CEnum<ClueState> State
 		{
-			get
-			{
-				if (_state == null)
-				{
-					_state = (CEnum<ClueState>) CR2WTypeManager.Create("ClueState", "state", cr2w, this);
-				}
-				return _state;
-			}
-			set
-			{
-				if (_state == value)
-				{
-					return;
-				}
-				_state = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("data")] 
 		public BraindanceClueData Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (BraindanceClueData) CR2WTypeManager.Create("BraindanceClueData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isInLayer")] 
 		public CBool IsInLayer
 		{
-			get
-			{
-				if (_isInLayer == null)
-				{
-					_isInLayer = (CBool) CR2WTypeManager.Create("Bool", "isInLayer", cr2w, this);
-				}
-				return _isInLayer;
-			}
-			set
-			{
-				if (_isInLayer == value)
-				{
-					return;
-				}
-				_isInLayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInLayer);
+			set => SetProperty(ref _isInLayer, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("isInTimeWindow")] 
 		public CBool IsInTimeWindow
 		{
-			get
-			{
-				if (_isInTimeWindow == null)
-				{
-					_isInTimeWindow = (CBool) CR2WTypeManager.Create("Bool", "isInTimeWindow", cr2w, this);
-				}
-				return _isInTimeWindow;
-			}
-			set
-			{
-				if (_isInTimeWindow == value)
-				{
-					return;
-				}
-				_isInTimeWindow = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInTimeWindow);
+			set => SetProperty(ref _isInTimeWindow, value);
 		}
 
 		public BraindanceClueLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

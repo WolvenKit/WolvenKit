@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("patrolPointDefs")] 
 		public CArray<CHandle<worldPatrolSplinePointDefinition>> PatrolPointDefs
 		{
-			get
-			{
-				if (_patrolPointDefs == null)
-				{
-					_patrolPointDefs = (CArray<CHandle<worldPatrolSplinePointDefinition>>) CR2WTypeManager.Create("array:handle:worldPatrolSplinePointDefinition", "patrolPointDefs", cr2w, this);
-				}
-				return _patrolPointDefs;
-			}
-			set
-			{
-				if (_patrolPointDefs == value)
-				{
-					return;
-				}
-				_patrolPointDefs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _patrolPointDefs);
+			set => SetProperty(ref _patrolPointDefs, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("patrolPoints")] 
 		public CArray<NodeRef> PatrolPoints
 		{
-			get
-			{
-				if (_patrolPoints == null)
-				{
-					_patrolPoints = (CArray<NodeRef>) CR2WTypeManager.Create("array:NodeRef", "patrolPoints", cr2w, this);
-				}
-				return _patrolPoints;
-			}
-			set
-			{
-				if (_patrolPoints == value)
-				{
-					return;
-				}
-				_patrolPoints = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _patrolPoints);
+			set => SetProperty(ref _patrolPoints, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("spots")] 
 		public CArray<CHandle<worldTrafficSpotDefinition>> Spots
 		{
-			get
-			{
-				if (_spots == null)
-				{
-					_spots = (CArray<CHandle<worldTrafficSpotDefinition>>) CR2WTypeManager.Create("array:handle:worldTrafficSpotDefinition", "spots", cr2w, this);
-				}
-				return _spots;
-			}
-			set
-			{
-				if (_spots == value)
-				{
-					return;
-				}
-				_spots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spots);
+			set => SetProperty(ref _spots, value);
 		}
 
 		public worldPatrolSplineNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

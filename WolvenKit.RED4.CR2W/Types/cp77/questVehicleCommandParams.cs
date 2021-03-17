@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("type")] 
 		public CEnum<questVehicleCommandType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<questVehicleCommandType>) CR2WTypeManager.Create("questVehicleCommandType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("additionalParamsOnSpline")] 
 		public CHandle<questvehicleOnSplineParams> AdditionalParamsOnSpline
 		{
-			get
-			{
-				if (_additionalParamsOnSpline == null)
-				{
-					_additionalParamsOnSpline = (CHandle<questvehicleOnSplineParams>) CR2WTypeManager.Create("handle:questvehicleOnSplineParams", "additionalParamsOnSpline", cr2w, this);
-				}
-				return _additionalParamsOnSpline;
-			}
-			set
-			{
-				if (_additionalParamsOnSpline == value)
-				{
-					return;
-				}
-				_additionalParamsOnSpline = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additionalParamsOnSpline);
+			set => SetProperty(ref _additionalParamsOnSpline, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("additionalParamsFollow")] 
 		public CHandle<questvehicleFollowParams> AdditionalParamsFollow
 		{
-			get
-			{
-				if (_additionalParamsFollow == null)
-				{
-					_additionalParamsFollow = (CHandle<questvehicleFollowParams>) CR2WTypeManager.Create("handle:questvehicleFollowParams", "additionalParamsFollow", cr2w, this);
-				}
-				return _additionalParamsFollow;
-			}
-			set
-			{
-				if (_additionalParamsFollow == value)
-				{
-					return;
-				}
-				_additionalParamsFollow = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additionalParamsFollow);
+			set => SetProperty(ref _additionalParamsFollow, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("additionalParamsToNode")] 
 		public CHandle<questvehicleToNodeParams> AdditionalParamsToNode
 		{
-			get
-			{
-				if (_additionalParamsToNode == null)
-				{
-					_additionalParamsToNode = (CHandle<questvehicleToNodeParams>) CR2WTypeManager.Create("handle:questvehicleToNodeParams", "additionalParamsToNode", cr2w, this);
-				}
-				return _additionalParamsToNode;
-			}
-			set
-			{
-				if (_additionalParamsToNode == value)
-				{
-					return;
-				}
-				_additionalParamsToNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additionalParamsToNode);
+			set => SetProperty(ref _additionalParamsToNode, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("additionalParamsRacing")] 
 		public CHandle<questvehicleRacingParams> AdditionalParamsRacing
 		{
-			get
-			{
-				if (_additionalParamsRacing == null)
-				{
-					_additionalParamsRacing = (CHandle<questvehicleRacingParams>) CR2WTypeManager.Create("handle:questvehicleRacingParams", "additionalParamsRacing", cr2w, this);
-				}
-				return _additionalParamsRacing;
-			}
-			set
-			{
-				if (_additionalParamsRacing == value)
-				{
-					return;
-				}
-				_additionalParamsRacing = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additionalParamsRacing);
+			set => SetProperty(ref _additionalParamsRacing, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("additionalParamsJoinTraffic")] 
 		public CHandle<questvehicleJoinTrafficParams> AdditionalParamsJoinTraffic
 		{
-			get
-			{
-				if (_additionalParamsJoinTraffic == null)
-				{
-					_additionalParamsJoinTraffic = (CHandle<questvehicleJoinTrafficParams>) CR2WTypeManager.Create("handle:questvehicleJoinTrafficParams", "additionalParamsJoinTraffic", cr2w, this);
-				}
-				return _additionalParamsJoinTraffic;
-			}
-			set
-			{
-				if (_additionalParamsJoinTraffic == value)
-				{
-					return;
-				}
-				_additionalParamsJoinTraffic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additionalParamsJoinTraffic);
+			set => SetProperty(ref _additionalParamsJoinTraffic, value);
 		}
 
 		public questVehicleCommandParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

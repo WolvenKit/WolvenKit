@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("textLayerId")] 
 		public CUInt32 TextLayerId
 		{
-			get
-			{
-				if (_textLayerId == null)
-				{
-					_textLayerId = (CUInt32) CR2WTypeManager.Create("Uint32", "textLayerId", cr2w, this);
-				}
-				return _textLayerId;
-			}
-			set
-			{
-				if (_textLayerId == value)
-				{
-					return;
-				}
-				_textLayerId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textLayerId);
+			set => SetProperty(ref _textLayerId, value);
 		}
 
 		public Stagger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("verticalPosition")] 
 		public Vector4 VerticalPosition
 		{
-			get
-			{
-				if (_verticalPosition == null)
-				{
-					_verticalPosition = (Vector4) CR2WTypeManager.Create("Vector4", "verticalPosition", cr2w, this);
-				}
-				return _verticalPosition;
-			}
-			set
-			{
-				if (_verticalPosition == value)
-				{
-					return;
-				}
-				_verticalPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _verticalPosition);
+			set => SetProperty(ref _verticalPosition, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("horizontalPosition")] 
 		public Vector4 HorizontalPosition
 		{
-			get
-			{
-				if (_horizontalPosition == null)
-				{
-					_horizontalPosition = (Vector4) CR2WTypeManager.Create("Vector4", "horizontalPosition", cr2w, this);
-				}
-				return _horizontalPosition;
-			}
-			set
-			{
-				if (_horizontalPosition == value)
-				{
-					return;
-				}
-				_horizontalPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _horizontalPosition);
+			set => SetProperty(ref _horizontalPosition, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("toVerticalTime")] 
 		public CFloat ToVerticalTime
 		{
-			get
-			{
-				if (_toVerticalTime == null)
-				{
-					_toVerticalTime = (CFloat) CR2WTypeManager.Create("Float", "toVerticalTime", cr2w, this);
-				}
-				return _toVerticalTime;
-			}
-			set
-			{
-				if (_toVerticalTime == value)
-				{
-					return;
-				}
-				_toVerticalTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toVerticalTime);
+			set => SetProperty(ref _toVerticalTime, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("verticalToHorizontalTime")] 
 		public CFloat VerticalToHorizontalTime
 		{
-			get
-			{
-				if (_verticalToHorizontalTime == null)
-				{
-					_verticalToHorizontalTime = (CFloat) CR2WTypeManager.Create("Float", "verticalToHorizontalTime", cr2w, this);
-				}
-				return _verticalToHorizontalTime;
-			}
-			set
-			{
-				if (_verticalToHorizontalTime == value)
-				{
-					return;
-				}
-				_verticalToHorizontalTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _verticalToHorizontalTime);
+			set => SetProperty(ref _verticalToHorizontalTime, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("frontEdgePosition")] 
 		public Vector4 FrontEdgePosition
 		{
-			get
-			{
-				if (_frontEdgePosition == null)
-				{
-					_frontEdgePosition = (Vector4) CR2WTypeManager.Create("Vector4", "frontEdgePosition", cr2w, this);
-				}
-				return _frontEdgePosition;
-			}
-			set
-			{
-				if (_frontEdgePosition == value)
-				{
-					return;
-				}
-				_frontEdgePosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frontEdgePosition);
+			set => SetProperty(ref _frontEdgePosition, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("frontEdgeNormal")] 
 		public Vector4 FrontEdgeNormal
 		{
-			get
-			{
-				if (_frontEdgeNormal == null)
-				{
-					_frontEdgeNormal = (Vector4) CR2WTypeManager.Create("Vector4", "frontEdgeNormal", cr2w, this);
-				}
-				return _frontEdgeNormal;
-			}
-			set
-			{
-				if (_frontEdgeNormal == value)
-				{
-					return;
-				}
-				_frontEdgeNormal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frontEdgeNormal);
+			set => SetProperty(ref _frontEdgeNormal, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("yawAngle")] 
 		public CFloat YawAngle
 		{
-			get
-			{
-				if (_yawAngle == null)
-				{
-					_yawAngle = (CFloat) CR2WTypeManager.Create("Float", "yawAngle", cr2w, this);
-				}
-				return _yawAngle;
-			}
-			set
-			{
-				if (_yawAngle == value)
-				{
-					return;
-				}
-				_yawAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _yawAngle);
+			set => SetProperty(ref _yawAngle, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("stateLength")] 
 		public CFloat StateLength
 		{
-			get
-			{
-				if (_stateLength == null)
-				{
-					_stateLength = (CFloat) CR2WTypeManager.Create("Float", "stateLength", cr2w, this);
-				}
-				return _stateLength;
-			}
-			set
-			{
-				if (_stateLength == value)
-				{
-					return;
-				}
-				_stateLength = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stateLength);
+			set => SetProperty(ref _stateLength, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("climbType")] 
 		public CInt32 ClimbType
 		{
-			get
-			{
-				if (_climbType == null)
-				{
-					_climbType = (CInt32) CR2WTypeManager.Create("Int32", "climbType", cr2w, this);
-				}
-				return _climbType;
-			}
-			set
-			{
-				if (_climbType == value)
-				{
-					return;
-				}
-				_climbType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _climbType);
+			set => SetProperty(ref _climbType, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("state")] 
 		public CInt32 State
 		{
-			get
-			{
-				if (_state == null)
-				{
-					_state = (CInt32) CR2WTypeManager.Create("Int32", "state", cr2w, this);
-				}
-				return _state;
-			}
-			set
-			{
-				if (_state == value)
-				{
-					return;
-				}
-				_state = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
 		}
 
 		public animAnimFeature_Climb(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("buildID")] 
 		public TweakDBID BuildID
 		{
-			get
-			{
-				if (_buildID == null)
-				{
-					_buildID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "buildID", cr2w, this);
-				}
-				return _buildID;
-			}
-			set
-			{
-				if (_buildID == value)
-				{
-					return;
-				}
-				_buildID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buildID);
+			set => SetProperty(ref _buildID, value);
 		}
 
 		public questSetProgressionBuildRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

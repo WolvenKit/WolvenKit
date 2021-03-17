@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("communityTemplate")] 
 		public CHandle<communityCommunityTemplateData> CommunityTemplate
 		{
-			get
-			{
-				if (_communityTemplate == null)
-				{
-					_communityTemplate = (CHandle<communityCommunityTemplateData>) CR2WTypeManager.Create("handle:communityCommunityTemplateData", "communityTemplate", cr2w, this);
-				}
-				return _communityTemplate;
-			}
-			set
-			{
-				if (_communityTemplate == value)
-				{
-					return;
-				}
-				_communityTemplate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _communityTemplate);
+			set => SetProperty(ref _communityTemplate, value);
 		}
 
 		public communityCommunityTemplate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

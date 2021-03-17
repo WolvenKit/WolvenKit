@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enableVoicesetLines")] 
 		public CBool EnableVoicesetLines
 		{
-			get
-			{
-				if (_enableVoicesetLines == null)
-				{
-					_enableVoicesetLines = (CBool) CR2WTypeManager.Create("Bool", "enableVoicesetLines", cr2w, this);
-				}
-				return _enableVoicesetLines;
-			}
-			set
-			{
-				if (_enableVoicesetLines == value)
-				{
-					return;
-				}
-				_enableVoicesetLines = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableVoicesetLines);
+			set => SetProperty(ref _enableVoicesetLines, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("enableVoicesetGrunts")] 
 		public CBool EnableVoicesetGrunts
 		{
-			get
-			{
-				if (_enableVoicesetGrunts == null)
-				{
-					_enableVoicesetGrunts = (CBool) CR2WTypeManager.Create("Bool", "enableVoicesetGrunts", cr2w, this);
-				}
-				return _enableVoicesetGrunts;
-			}
-			set
-			{
-				if (_enableVoicesetGrunts == value)
-				{
-					return;
-				}
-				_enableVoicesetGrunts = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableVoicesetGrunts);
+			set => SetProperty(ref _enableVoicesetGrunts, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("inputsToBlock")] 
 		public CArray<entVoicesetInputToBlock> InputsToBlock
 		{
-			get
-			{
-				if (_inputsToBlock == null)
-				{
-					_inputsToBlock = (CArray<entVoicesetInputToBlock>) CR2WTypeManager.Create("array:entVoicesetInputToBlock", "inputsToBlock", cr2w, this);
-				}
-				return _inputsToBlock;
-			}
-			set
-			{
-				if (_inputsToBlock == value)
-				{
-					return;
-				}
-				_inputsToBlock = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputsToBlock);
+			set => SetProperty(ref _inputsToBlock, value);
 		}
 
 		public entChangeVoicesetStateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

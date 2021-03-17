@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("animDatabase")] 
 		public rRef<C2dArray> AnimDatabase
 		{
-			get
-			{
-				if (_animDatabase == null)
-				{
-					_animDatabase = (rRef<C2dArray>) CR2WTypeManager.Create("rRef:C2dArray", "animDatabase", cr2w, this);
-				}
-				return _animDatabase;
-			}
-			set
-			{
-				if (_animDatabase == value)
-				{
-					return;
-				}
-				_animDatabase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animDatabase);
+			set => SetProperty(ref _animDatabase, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("overrideAnimDatabase")] 
 		public rRef<animGenericAnimDatabase> OverrideAnimDatabase
 		{
-			get
-			{
-				if (_overrideAnimDatabase == null)
-				{
-					_overrideAnimDatabase = (rRef<animGenericAnimDatabase>) CR2WTypeManager.Create("rRef:animGenericAnimDatabase", "overrideAnimDatabase", cr2w, this);
-				}
-				return _overrideAnimDatabase;
-			}
-			set
-			{
-				if (_overrideAnimDatabase == value)
-				{
-					return;
-				}
-				_overrideAnimDatabase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideAnimDatabase);
+			set => SetProperty(ref _overrideAnimDatabase, value);
 		}
 
 		public animAnimDatabaseCollectionEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

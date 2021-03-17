@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("thisIsReplicatedFieldInClass")] 
 		public CInt32 ThisIsReplicatedFieldInClass
 		{
-			get
-			{
-				if (_thisIsReplicatedFieldInClass == null)
-				{
-					_thisIsReplicatedFieldInClass = (CInt32) CR2WTypeManager.Create("Int32", "thisIsReplicatedFieldInClass", cr2w, this);
-				}
-				return _thisIsReplicatedFieldInClass;
-			}
-			set
-			{
-				if (_thisIsReplicatedFieldInClass == value)
-				{
-					return;
-				}
-				_thisIsReplicatedFieldInClass = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _thisIsReplicatedFieldInClass);
+			set => SetProperty(ref _thisIsReplicatedFieldInClass, value);
 		}
 
 		public Ref_6_ReplicatedVariables_Class(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

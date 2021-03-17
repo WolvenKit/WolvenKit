@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lineData")] 
 		public scnDialogLineData LineData
 		{
-			get
-			{
-				if (_lineData == null)
-				{
-					_lineData = (scnDialogLineData) CR2WTypeManager.Create("scnDialogLineData", "lineData", cr2w, this);
-				}
-				return _lineData;
-			}
-			set
-			{
-				if (_lineData == value)
-				{
-					return;
-				}
-				_lineData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lineData);
+			set => SetProperty(ref _lineData, value);
 		}
 
 		public LineSpawnData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

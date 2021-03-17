@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("caller")] 
 		public CHandle<gameJournalPath> Caller
 		{
-			get
-			{
-				if (_caller == null)
-				{
-					_caller = (CHandle<gameJournalPath>) CR2WTypeManager.Create("handle:gameJournalPath", "caller", cr2w, this);
-				}
-				return _caller;
-			}
-			set
-			{
-				if (_caller == value)
-				{
-					return;
-				}
-				_caller = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _caller);
+			set => SetProperty(ref _caller, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("addressee")] 
 		public CHandle<gameJournalPath> Addressee
 		{
-			get
-			{
-				if (_addressee == null)
-				{
-					_addressee = (CHandle<gameJournalPath>) CR2WTypeManager.Create("handle:gameJournalPath", "addressee", cr2w, this);
-				}
-				return _addressee;
-			}
-			set
-			{
-				if (_addressee == value)
-				{
-					return;
-				}
-				_addressee = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addressee);
+			set => SetProperty(ref _addressee, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("phase")] 
 		public CEnum<questPhoneCallPhase> Phase
 		{
-			get
-			{
-				if (_phase == null)
-				{
-					_phase = (CEnum<questPhoneCallPhase>) CR2WTypeManager.Create("questPhoneCallPhase", "phase", cr2w, this);
-				}
-				return _phase;
-			}
-			set
-			{
-				if (_phase == value)
-				{
-					return;
-				}
-				_phase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _phase);
+			set => SetProperty(ref _phase, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("mode")] 
 		public CEnum<questPhoneCallMode> Mode
 		{
-			get
-			{
-				if (_mode == null)
-				{
-					_mode = (CEnum<questPhoneCallMode>) CR2WTypeManager.Create("questPhoneCallMode", "mode", cr2w, this);
-				}
-				return _mode;
-			}
-			set
-			{
-				if (_mode == value)
-				{
-					return;
-				}
-				_mode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mode);
+			set => SetProperty(ref _mode, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("prefabNodeRef")] 
 		public NodeRef PrefabNodeRef
 		{
-			get
-			{
-				if (_prefabNodeRef == null)
-				{
-					_prefabNodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "prefabNodeRef", cr2w, this);
-				}
-				return _prefabNodeRef;
-			}
-			set
-			{
-				if (_prefabNodeRef == value)
-				{
-					return;
-				}
-				_prefabNodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prefabNodeRef);
+			set => SetProperty(ref _prefabNodeRef, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("applyPhoneRestriction")] 
 		public CBool ApplyPhoneRestriction
 		{
-			get
-			{
-				if (_applyPhoneRestriction == null)
-				{
-					_applyPhoneRestriction = (CBool) CR2WTypeManager.Create("Bool", "applyPhoneRestriction", cr2w, this);
-				}
-				return _applyPhoneRestriction;
-			}
-			set
-			{
-				if (_applyPhoneRestriction == value)
-				{
-					return;
-				}
-				_applyPhoneRestriction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _applyPhoneRestriction);
+			set => SetProperty(ref _applyPhoneRestriction, value);
 		}
 
 		public questCallContact_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("limit")] 
 		public LibTreeDefInt32 Limit
 		{
-			get
-			{
-				if (_limit == null)
-				{
-					_limit = (LibTreeDefInt32) CR2WTypeManager.Create("LibTreeDefInt32", "limit", cr2w, this);
-				}
-				return _limit;
-			}
-			set
-			{
-				if (_limit == value)
-				{
-					return;
-				}
-				_limit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _limit);
+			set => SetProperty(ref _limit, value);
 		}
 
 		public AITreeNodeRepeatDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

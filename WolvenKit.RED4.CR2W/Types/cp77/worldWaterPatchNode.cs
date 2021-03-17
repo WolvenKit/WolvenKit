@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("type")] 
 		public worldWaterPatchNodeType Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (worldWaterPatchNodeType) CR2WTypeManager.Create("worldWaterPatchNodeType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("depth")] 
 		public CFloat Depth
 		{
-			get
-			{
-				if (_depth == null)
-				{
-					_depth = (CFloat) CR2WTypeManager.Create("Float", "depth", cr2w, this);
-				}
-				return _depth;
-			}
-			set
-			{
-				if (_depth == value)
-				{
-					return;
-				}
-				_depth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _depth);
+			set => SetProperty(ref _depth, value);
 		}
 
 		public worldWaterPatchNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

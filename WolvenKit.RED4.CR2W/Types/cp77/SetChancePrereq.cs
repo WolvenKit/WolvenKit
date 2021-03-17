@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("setChance")] 
 		public CFloat SetChance
 		{
-			get
-			{
-				if (_setChance == null)
-				{
-					_setChance = (CFloat) CR2WTypeManager.Create("Float", "setChance", cr2w, this);
-				}
-				return _setChance;
-			}
-			set
-			{
-				if (_setChance == value)
-				{
-					return;
-				}
-				_setChance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setChance);
+			set => SetProperty(ref _setChance, value);
 		}
 
 		public SetChancePrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

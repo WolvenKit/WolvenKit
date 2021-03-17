@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("minValue")] 
 		public CUInt32 MinValue
 		{
-			get
-			{
-				if (_minValue == null)
-				{
-					_minValue = (CUInt32) CR2WTypeManager.Create("Uint32", "minValue", cr2w, this);
-				}
-				return _minValue;
-			}
-			set
-			{
-				if (_minValue == value)
-				{
-					return;
-				}
-				_minValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minValue);
+			set => SetProperty(ref _minValue, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("maxValue")] 
 		public CUInt32 MaxValue
 		{
-			get
-			{
-				if (_maxValue == null)
-				{
-					_maxValue = (CUInt32) CR2WTypeManager.Create("Uint32", "maxValue", cr2w, this);
-				}
-				return _maxValue;
-			}
-			set
-			{
-				if (_maxValue == value)
-				{
-					return;
-				}
-				_maxValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxValue);
+			set => SetProperty(ref _maxValue, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("name")] 
 		public CString Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CString) CR2WTypeManager.Create("String", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("units")] 
 		public CString Units
 		{
-			get
-			{
-				if (_units == null)
-				{
-					_units = (CString) CR2WTypeManager.Create("String", "units", cr2w, this);
-				}
-				return _units;
-			}
-			set
-			{
-				if (_units == value)
-				{
-					return;
-				}
-				_units = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _units);
+			set => SetProperty(ref _units, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("invert")] 
 		public CBool Invert
 		{
-			get
-			{
-				if (_invert == null)
-				{
-					_invert = (CBool) CR2WTypeManager.Create("Bool", "invert", cr2w, this);
-				}
-				return _invert;
-			}
-			set
-			{
-				if (_invert == value)
-				{
-					return;
-				}
-				_invert = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _invert);
+			set => SetProperty(ref _invert, value);
 		}
 
 		public worldHeatmapLayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("forceUpdate")] 
 		public CBool ForceUpdate
 		{
-			get
-			{
-				if (_forceUpdate == null)
-				{
-					_forceUpdate = (CBool) CR2WTypeManager.Create("Bool", "forceUpdate", cr2w, this);
-				}
-				return _forceUpdate;
-			}
-			set
-			{
-				if (_forceUpdate == value)
-				{
-					return;
-				}
-				_forceUpdate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceUpdate);
+			set => SetProperty(ref _forceUpdate, value);
 		}
 
 		public animAnimNode_DisableSleepMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

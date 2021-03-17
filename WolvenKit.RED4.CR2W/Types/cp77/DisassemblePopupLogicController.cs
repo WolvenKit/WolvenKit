@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("quantity")] 
 		public inkTextWidgetReference Quantity
 		{
-			get
-			{
-				if (_quantity == null)
-				{
-					_quantity = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "quantity", cr2w, this);
-				}
-				return _quantity;
-			}
-			set
-			{
-				if (_quantity == value)
-				{
-					return;
-				}
-				_quantity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quantity);
+			set => SetProperty(ref _quantity, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
-			get
-			{
-				if (_icon == null)
-				{
-					_icon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "icon", cr2w, this);
-				}
-				return _icon;
-			}
-			set
-			{
-				if (_icon == value)
-				{
-					return;
-				}
-				_icon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _icon);
+			set => SetProperty(ref _icon, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
-			get
-			{
-				if (_label == null)
-				{
-					_label = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "label", cr2w, this);
-				}
-				return _label;
-			}
-			set
-			{
-				if (_label == value)
-				{
-					return;
-				}
-				_label = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _label);
+			set => SetProperty(ref _label, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get
-			{
-				if (_animProxy == null)
-				{
-					_animProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animProxy", cr2w, this);
-				}
-				return _animProxy;
-			}
-			set
-			{
-				if (_animProxy == value)
-				{
-					return;
-				}
-				_animProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animProxy);
+			set => SetProperty(ref _animProxy, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("alpha_fadein")] 
 		public CHandle<inkanimDefinition> Alpha_fadein
 		{
-			get
-			{
-				if (_alpha_fadein == null)
-				{
-					_alpha_fadein = (CHandle<inkanimDefinition>) CR2WTypeManager.Create("handle:inkanimDefinition", "alpha_fadein", cr2w, this);
-				}
-				return _alpha_fadein;
-			}
-			set
-			{
-				if (_alpha_fadein == value)
-				{
-					return;
-				}
-				_alpha_fadein = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alpha_fadein);
+			set => SetProperty(ref _alpha_fadein, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("AnimOptions")] 
 		public inkanimPlaybackOptions AnimOptions
 		{
-			get
-			{
-				if (_animOptions == null)
-				{
-					_animOptions = (inkanimPlaybackOptions) CR2WTypeManager.Create("inkanimPlaybackOptions", "AnimOptions", cr2w, this);
-				}
-				return _animOptions;
-			}
-			set
-			{
-				if (_animOptions == value)
-				{
-					return;
-				}
-				_animOptions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animOptions);
+			set => SetProperty(ref _animOptions, value);
 		}
 
 		public DisassemblePopupLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

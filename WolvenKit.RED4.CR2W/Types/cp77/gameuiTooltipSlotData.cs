@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("margin")] 
 		public inkMargin Margin
 		{
-			get
-			{
-				if (_margin == null)
-				{
-					_margin = (inkMargin) CR2WTypeManager.Create("inkMargin", "margin", cr2w, this);
-				}
-				return _margin;
-			}
-			set
-			{
-				if (_margin == value)
-				{
-					return;
-				}
-				_margin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _margin);
+			set => SetProperty(ref _margin, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("placement")] 
 		public CEnum<gameuiETooltipPlacement> Placement
 		{
-			get
-			{
-				if (_placement == null)
-				{
-					_placement = (CEnum<gameuiETooltipPlacement>) CR2WTypeManager.Create("gameuiETooltipPlacement", "placement", cr2w, this);
-				}
-				return _placement;
-			}
-			set
-			{
-				if (_placement == value)
-				{
-					return;
-				}
-				_placement = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _placement);
+			set => SetProperty(ref _placement, value);
 		}
 
 		public gameuiTooltipSlotData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

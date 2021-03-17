@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mesh")] 
 		public raRef<CMesh> Mesh
 		{
-			get
-			{
-				if (_mesh == null)
-				{
-					_mesh = (raRef<CMesh>) CR2WTypeManager.Create("raRef:CMesh", "mesh", cr2w, this);
-				}
-				return _mesh;
-			}
-			set
-			{
-				if (_mesh == value)
-				{
-					return;
-				}
-				_mesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mesh);
+			set => SetProperty(ref _mesh, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("meshAppearance")] 
 		public CName MeshAppearance
 		{
-			get
-			{
-				if (_meshAppearance == null)
-				{
-					_meshAppearance = (CName) CR2WTypeManager.Create("CName", "meshAppearance", cr2w, this);
-				}
-				return _meshAppearance;
-			}
-			set
-			{
-				if (_meshAppearance == value)
-				{
-					return;
-				}
-				_meshAppearance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshAppearance);
+			set => SetProperty(ref _meshAppearance, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("forceLODLevel")] 
 		public CInt32 ForceLODLevel
 		{
-			get
-			{
-				if (_forceLODLevel == null)
-				{
-					_forceLODLevel = (CInt32) CR2WTypeManager.Create("Int32", "forceLODLevel", cr2w, this);
-				}
-				return _forceLODLevel;
-			}
-			set
-			{
-				if (_forceLODLevel == value)
-				{
-					return;
-				}
-				_forceLODLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceLODLevel);
+			set => SetProperty(ref _forceLODLevel, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("forceAutoHideDistance")] 
 		public CFloat ForceAutoHideDistance
 		{
-			get
-			{
-				if (_forceAutoHideDistance == null)
-				{
-					_forceAutoHideDistance = (CFloat) CR2WTypeManager.Create("Float", "forceAutoHideDistance", cr2w, this);
-				}
-				return _forceAutoHideDistance;
-			}
-			set
-			{
-				if (_forceAutoHideDistance == value)
-				{
-					return;
-				}
-				_forceAutoHideDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceAutoHideDistance);
+			set => SetProperty(ref _forceAutoHideDistance, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("destructionParams")] 
 		public physicsDestructionParams DestructionParams
 		{
-			get
-			{
-				if (_destructionParams == null)
-				{
-					_destructionParams = (physicsDestructionParams) CR2WTypeManager.Create("physicsDestructionParams", "destructionParams", cr2w, this);
-				}
-				return _destructionParams;
-			}
-			set
-			{
-				if (_destructionParams == value)
-				{
-					return;
-				}
-				_destructionParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _destructionParams);
+			set => SetProperty(ref _destructionParams, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("destructionLevelData")] 
 		public CArray<physicsDestructionLevelData> DestructionLevelData
 		{
-			get
-			{
-				if (_destructionLevelData == null)
-				{
-					_destructionLevelData = (CArray<physicsDestructionLevelData>) CR2WTypeManager.Create("array:physicsDestructionLevelData", "destructionLevelData", cr2w, this);
-				}
-				return _destructionLevelData;
-			}
-			set
-			{
-				if (_destructionLevelData == value)
-				{
-					return;
-				}
-				_destructionLevelData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _destructionLevelData);
+			set => SetProperty(ref _destructionLevelData, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("audioMetadata")] 
 		public CName AudioMetadata
 		{
-			get
-			{
-				if (_audioMetadata == null)
-				{
-					_audioMetadata = (CName) CR2WTypeManager.Create("CName", "audioMetadata", cr2w, this);
-				}
-				return _audioMetadata;
-			}
-			set
-			{
-				if (_audioMetadata == value)
-				{
-					return;
-				}
-				_audioMetadata = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioMetadata);
+			set => SetProperty(ref _audioMetadata, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("navigationSetting")] 
 		public NavGenNavigationSetting NavigationSetting
 		{
-			get
-			{
-				if (_navigationSetting == null)
-				{
-					_navigationSetting = (NavGenNavigationSetting) CR2WTypeManager.Create("NavGenNavigationSetting", "navigationSetting", cr2w, this);
-				}
-				return _navigationSetting;
-			}
-			set
-			{
-				if (_navigationSetting == value)
-				{
-					return;
-				}
-				_navigationSetting = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _navigationSetting);
+			set => SetProperty(ref _navigationSetting, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("useMeshNavmeshSettings")] 
 		public CBool UseMeshNavmeshSettings
 		{
-			get
-			{
-				if (_useMeshNavmeshSettings == null)
-				{
-					_useMeshNavmeshSettings = (CBool) CR2WTypeManager.Create("Bool", "useMeshNavmeshSettings", cr2w, this);
-				}
-				return _useMeshNavmeshSettings;
-			}
-			set
-			{
-				if (_useMeshNavmeshSettings == value)
-				{
-					return;
-				}
-				_useMeshNavmeshSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useMeshNavmeshSettings);
+			set => SetProperty(ref _useMeshNavmeshSettings, value);
 		}
 
 		public worldPhysicalDestructionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

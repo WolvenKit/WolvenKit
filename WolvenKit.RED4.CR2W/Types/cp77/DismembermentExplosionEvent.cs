@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("epicentrum")] 
 		public Vector4 Epicentrum
 		{
-			get
-			{
-				if (_epicentrum == null)
-				{
-					_epicentrum = (Vector4) CR2WTypeManager.Create("Vector4", "epicentrum", cr2w, this);
-				}
-				return _epicentrum;
-			}
-			set
-			{
-				if (_epicentrum == value)
-				{
-					return;
-				}
-				_epicentrum = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _epicentrum);
+			set => SetProperty(ref _epicentrum, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("strength")] 
 		public CFloat Strength
 		{
-			get
-			{
-				if (_strength == null)
-				{
-					_strength = (CFloat) CR2WTypeManager.Create("Float", "strength", cr2w, this);
-				}
-				return _strength;
-			}
-			set
-			{
-				if (_strength == value)
-				{
-					return;
-				}
-				_strength = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _strength);
+			set => SetProperty(ref _strength, value);
 		}
 
 		public DismembermentExplosionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

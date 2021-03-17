@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hitRepresentationOverrides")] 
 		public CArray<gameHitRepresentationOverride> HitRepresentationOverrides
 		{
-			get
-			{
-				if (_hitRepresentationOverrides == null)
-				{
-					_hitRepresentationOverrides = (CArray<gameHitRepresentationOverride>) CR2WTypeManager.Create("array:gameHitRepresentationOverride", "hitRepresentationOverrides", cr2w, this);
-				}
-				return _hitRepresentationOverrides;
-			}
-			set
-			{
-				if (_hitRepresentationOverrides == value)
-				{
-					return;
-				}
-				_hitRepresentationOverrides = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitRepresentationOverrides);
+			set => SetProperty(ref _hitRepresentationOverrides, value);
 		}
 
 		public entHitRepresentationDataParameter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

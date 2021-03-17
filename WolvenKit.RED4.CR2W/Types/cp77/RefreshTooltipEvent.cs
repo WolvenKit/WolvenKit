@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("widget")] 
 		public wCHandle<inkWidget> Widget
 		{
-			get
-			{
-				if (_widget == null)
-				{
-					_widget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "widget", cr2w, this);
-				}
-				return _widget;
-			}
-			set
-			{
-				if (_widget == value)
-				{
-					return;
-				}
-				_widget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widget);
+			set => SetProperty(ref _widget, value);
 		}
 
 		public RefreshTooltipEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

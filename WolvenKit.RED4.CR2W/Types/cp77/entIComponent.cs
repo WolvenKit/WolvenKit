@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isReplicable")] 
 		public CBool IsReplicable
 		{
-			get
-			{
-				if (_isReplicable == null)
-				{
-					_isReplicable = (CBool) CR2WTypeManager.Create("Bool", "isReplicable", cr2w, this);
-				}
-				return _isReplicable;
-			}
-			set
-			{
-				if (_isReplicable == value)
-				{
-					return;
-				}
-				_isReplicable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isReplicable);
+			set => SetProperty(ref _isReplicable, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("id")] 
 		public CRUID Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CRUID) CR2WTypeManager.Create("CRUID", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		public entIComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

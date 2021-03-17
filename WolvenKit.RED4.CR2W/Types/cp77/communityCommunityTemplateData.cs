@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entries")] 
 		public CArray<CHandle<communitySpawnEntry>> Entries
 		{
-			get
-			{
-				if (_entries == null)
-				{
-					_entries = (CArray<CHandle<communitySpawnEntry>>) CR2WTypeManager.Create("array:handle:communitySpawnEntry", "entries", cr2w, this);
-				}
-				return _entries;
-			}
-			set
-			{
-				if (_entries == value)
-				{
-					return;
-				}
-				_entries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("crowdEntries")] 
 		public CArray<gameCrowdTemplateEntry> CrowdEntries
 		{
-			get
-			{
-				if (_crowdEntries == null)
-				{
-					_crowdEntries = (CArray<gameCrowdTemplateEntry>) CR2WTypeManager.Create("array:gameCrowdTemplateEntry", "crowdEntries", cr2w, this);
-				}
-				return _crowdEntries;
-			}
-			set
-			{
-				if (_crowdEntries == value)
-				{
-					return;
-				}
-				_crowdEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _crowdEntries);
+			set => SetProperty(ref _crowdEntries, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("spawnSetReference")] 
 		public CName SpawnSetReference
 		{
-			get
-			{
-				if (_spawnSetReference == null)
-				{
-					_spawnSetReference = (CName) CR2WTypeManager.Create("CName", "spawnSetReference", cr2w, this);
-				}
-				return _spawnSetReference;
-			}
-			set
-			{
-				if (_spawnSetReference == value)
-				{
-					return;
-				}
-				_spawnSetReference = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnSetReference);
+			set => SetProperty(ref _spawnSetReference, value);
 		}
 
 		public communityCommunityTemplateData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

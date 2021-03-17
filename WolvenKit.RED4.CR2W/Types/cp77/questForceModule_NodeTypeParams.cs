@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectRef")] 
 		public NodeRef ObjectRef
 		{
-			get
-			{
-				if (_objectRef == null)
-				{
-					_objectRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "objectRef", cr2w, this);
-				}
-				return _objectRef;
-			}
-			set
-			{
-				if (_objectRef == value)
-				{
-					return;
-				}
-				_objectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("module")] 
 		public CString Module
 		{
-			get
-			{
-				if (_module == null)
-				{
-					_module = (CString) CR2WTypeManager.Create("String", "module", cr2w, this);
-				}
-				return _module;
-			}
-			set
-			{
-				if (_module == value)
-				{
-					return;
-				}
-				_module = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _module);
+			set => SetProperty(ref _module, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("components")] 
 		public CArray<CName> Components
 		{
-			get
-			{
-				if (_components == null)
-				{
-					_components = (CArray<CName>) CR2WTypeManager.Create("array:CName", "components", cr2w, this);
-				}
-				return _components;
-			}
-			set
-			{
-				if (_components == value)
-				{
-					return;
-				}
-				_components = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _components);
+			set => SetProperty(ref _components, value);
 		}
 
 		public questForceModule_NodeTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

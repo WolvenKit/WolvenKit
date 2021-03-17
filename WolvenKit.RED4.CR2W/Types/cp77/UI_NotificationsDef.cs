@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("WarningMessage")] 
 		public gamebbScriptID_Variant WarningMessage
 		{
-			get
-			{
-				if (_warningMessage == null)
-				{
-					_warningMessage = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "WarningMessage", cr2w, this);
-				}
-				return _warningMessage;
-			}
-			set
-			{
-				if (_warningMessage == value)
-				{
-					return;
-				}
-				_warningMessage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _warningMessage);
+			set => SetProperty(ref _warningMessage, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("OnscreenMessage")] 
 		public gamebbScriptID_Variant OnscreenMessage
 		{
-			get
-			{
-				if (_onscreenMessage == null)
-				{
-					_onscreenMessage = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "OnscreenMessage", cr2w, this);
-				}
-				return _onscreenMessage;
-			}
-			set
-			{
-				if (_onscreenMessage == value)
-				{
-					return;
-				}
-				_onscreenMessage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onscreenMessage);
+			set => SetProperty(ref _onscreenMessage, value);
 		}
 
 		public UI_NotificationsDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

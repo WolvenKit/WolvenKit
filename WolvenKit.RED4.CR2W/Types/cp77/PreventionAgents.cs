@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("groupName")] 
 		public CName GroupName
 		{
-			get
-			{
-				if (_groupName == null)
-				{
-					_groupName = (CName) CR2WTypeManager.Create("CName", "groupName", cr2w, this);
-				}
-				return _groupName;
-			}
-			set
-			{
-				if (_groupName == value)
-				{
-					return;
-				}
-				_groupName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _groupName);
+			set => SetProperty(ref _groupName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("requsteredAgents")] 
 		public CArray<SPreventionAgentData> RequsteredAgents
 		{
-			get
-			{
-				if (_requsteredAgents == null)
-				{
-					_requsteredAgents = (CArray<SPreventionAgentData>) CR2WTypeManager.Create("array:SPreventionAgentData", "requsteredAgents", cr2w, this);
-				}
-				return _requsteredAgents;
-			}
-			set
-			{
-				if (_requsteredAgents == value)
-				{
-					return;
-				}
-				_requsteredAgents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requsteredAgents);
+			set => SetProperty(ref _requsteredAgents, value);
 		}
 
 		public PreventionAgents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

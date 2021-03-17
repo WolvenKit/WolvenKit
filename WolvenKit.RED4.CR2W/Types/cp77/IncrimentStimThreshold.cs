@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("thresholdTimeout")] 
 		public CFloat ThresholdTimeout
 		{
-			get
-			{
-				if (_thresholdTimeout == null)
-				{
-					_thresholdTimeout = (CFloat) CR2WTypeManager.Create("Float", "thresholdTimeout", cr2w, this);
-				}
-				return _thresholdTimeout;
-			}
-			set
-			{
-				if (_thresholdTimeout == value)
-				{
-					return;
-				}
-				_thresholdTimeout = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _thresholdTimeout);
+			set => SetProperty(ref _thresholdTimeout, value);
 		}
 
 		public IncrimentStimThreshold(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

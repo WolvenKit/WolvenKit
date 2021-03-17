@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("landPosition")] 
 		public Vector4 LandPosition
 		{
-			get
-			{
-				if (_landPosition == null)
-				{
-					_landPosition = (Vector4) CR2WTypeManager.Create("Vector4", "landPosition", cr2w, this);
-				}
-				return _landPosition;
-			}
-			set
-			{
-				if (_landPosition == value)
-				{
-					return;
-				}
-				_landPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _landPosition);
+			set => SetProperty(ref _landPosition, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("travellingTime")] 
 		public CFloat TravellingTime
 		{
-			get
-			{
-				if (_travellingTime == null)
-				{
-					_travellingTime = (CFloat) CR2WTypeManager.Create("Float", "travellingTime", cr2w, this);
-				}
-				return _travellingTime;
-			}
-			set
-			{
-				if (_travellingTime == value)
-				{
-					return;
-				}
-				_travellingTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _travellingTime);
+			set => SetProperty(ref _travellingTime, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("obstacleDepth")] 
 		public CFloat ObstacleDepth
 		{
-			get
-			{
-				if (_obstacleDepth == null)
-				{
-					_obstacleDepth = (CFloat) CR2WTypeManager.Create("Float", "obstacleDepth", cr2w, this);
-				}
-				return _obstacleDepth;
-			}
-			set
-			{
-				if (_obstacleDepth == value)
-				{
-					return;
-				}
-				_obstacleDepth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _obstacleDepth);
+			set => SetProperty(ref _obstacleDepth, value);
 		}
 
 		public animAnimFeature_Vault(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

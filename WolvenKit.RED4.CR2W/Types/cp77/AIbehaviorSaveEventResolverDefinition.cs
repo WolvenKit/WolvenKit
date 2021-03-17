@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("eventData")] 
 		public CHandle<AIArgumentMapping> EventData
 		{
-			get
-			{
-				if (_eventData == null)
-				{
-					_eventData = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "eventData", cr2w, this);
-				}
-				return _eventData;
-			}
-			set
-			{
-				if (_eventData == value)
-				{
-					return;
-				}
-				_eventData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventData);
+			set => SetProperty(ref _eventData, value);
 		}
 
 		public AIbehaviorSaveEventResolverDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

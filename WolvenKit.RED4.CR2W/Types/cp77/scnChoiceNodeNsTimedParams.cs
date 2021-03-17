@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("action")] 
 		public CEnum<scnChoiceNodeNsTimedAction> Action
 		{
-			get
-			{
-				if (_action == null)
-				{
-					_action = (CEnum<scnChoiceNodeNsTimedAction>) CR2WTypeManager.Create("scnChoiceNodeNsTimedAction", "action", cr2w, this);
-				}
-				return _action;
-			}
-			set
-			{
-				if (_action == value)
-				{
-					return;
-				}
-				_action = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timeLimitedFinish")] 
 		public CBool TimeLimitedFinish
 		{
-			get
-			{
-				if (_timeLimitedFinish == null)
-				{
-					_timeLimitedFinish = (CBool) CR2WTypeManager.Create("Bool", "timeLimitedFinish", cr2w, this);
-				}
-				return _timeLimitedFinish;
-			}
-			set
-			{
-				if (_timeLimitedFinish == value)
-				{
-					return;
-				}
-				_timeLimitedFinish = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeLimitedFinish);
+			set => SetProperty(ref _timeLimitedFinish, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("duration")] 
 		public scnSceneTime Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (scnSceneTime) CR2WTypeManager.Create("scnSceneTime", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		public scnChoiceNodeNsTimedParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("subtype")] 
 		public CHandle<questIContentTokenManager_NodeSubType> Subtype
 		{
-			get
-			{
-				if (_subtype == null)
-				{
-					_subtype = (CHandle<questIContentTokenManager_NodeSubType>) CR2WTypeManager.Create("handle:questIContentTokenManager_NodeSubType", "subtype", cr2w, this);
-				}
-				return _subtype;
-			}
-			set
-			{
-				if (_subtype == value)
-				{
-					return;
-				}
-				_subtype = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subtype);
+			set => SetProperty(ref _subtype, value);
 		}
 
 		public questContentTokenManager_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

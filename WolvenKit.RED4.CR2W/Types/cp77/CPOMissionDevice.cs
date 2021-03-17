@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("compatibleDeviceName")] 
 		public CName CompatibleDeviceName
 		{
-			get
-			{
-				if (_compatibleDeviceName == null)
-				{
-					_compatibleDeviceName = (CName) CR2WTypeManager.Create("CName", "compatibleDeviceName", cr2w, this);
-				}
-				return _compatibleDeviceName;
-			}
-			set
-			{
-				if (_compatibleDeviceName == value)
-				{
-					return;
-				}
-				_compatibleDeviceName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _compatibleDeviceName);
+			set => SetProperty(ref _compatibleDeviceName, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("blockAfterOperation")] 
 		public CBool BlockAfterOperation
 		{
-			get
-			{
-				if (_blockAfterOperation == null)
-				{
-					_blockAfterOperation = (CBool) CR2WTypeManager.Create("Bool", "blockAfterOperation", cr2w, this);
-				}
-				return _blockAfterOperation;
-			}
-			set
-			{
-				if (_blockAfterOperation == value)
-				{
-					return;
-				}
-				_blockAfterOperation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blockAfterOperation);
+			set => SetProperty(ref _blockAfterOperation, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("factToUnblock")] 
 		public CName FactToUnblock
 		{
-			get
-			{
-				if (_factToUnblock == null)
-				{
-					_factToUnblock = (CName) CR2WTypeManager.Create("CName", "factToUnblock", cr2w, this);
-				}
-				return _factToUnblock;
-			}
-			set
-			{
-				if (_factToUnblock == value)
-				{
-					return;
-				}
-				_factToUnblock = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factToUnblock);
+			set => SetProperty(ref _factToUnblock, value);
 		}
 
 		[Ordinal(43)] 
 		[RED("isBlocked")] 
 		public CBool IsBlocked
 		{
-			get
-			{
-				if (_isBlocked == null)
-				{
-					_isBlocked = (CBool) CR2WTypeManager.Create("Bool", "isBlocked", cr2w, this);
-				}
-				return _isBlocked;
-			}
-			set
-			{
-				if (_isBlocked == value)
-				{
-					return;
-				}
-				_isBlocked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isBlocked);
+			set => SetProperty(ref _isBlocked, value);
 		}
 
 		[Ordinal(44)] 
 		[RED("factUnblockCallbackID")] 
 		public CUInt32 FactUnblockCallbackID
 		{
-			get
-			{
-				if (_factUnblockCallbackID == null)
-				{
-					_factUnblockCallbackID = (CUInt32) CR2WTypeManager.Create("Uint32", "factUnblockCallbackID", cr2w, this);
-				}
-				return _factUnblockCallbackID;
-			}
-			set
-			{
-				if (_factUnblockCallbackID == value)
-				{
-					return;
-				}
-				_factUnblockCallbackID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factUnblockCallbackID);
+			set => SetProperty(ref _factUnblockCallbackID, value);
 		}
 
 		public CPOMissionDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

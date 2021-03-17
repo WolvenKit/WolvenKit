@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stations")] 
 		public CArray<RadioStationsMap> Stations
 		{
-			get
-			{
-				if (_stations == null)
-				{
-					_stations = (CArray<RadioStationsMap>) CR2WTypeManager.Create("array:RadioStationsMap", "stations", cr2w, this);
-				}
-				return _stations;
-			}
-			set
-			{
-				if (_stations == value)
-				{
-					return;
-				}
-				_stations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stations);
+			set => SetProperty(ref _stations, value);
 		}
 
 		[Ordinal(94)] 
 		[RED("startingStation")] 
 		public CInt32 StartingStation
 		{
-			get
-			{
-				if (_startingStation == null)
-				{
-					_startingStation = (CInt32) CR2WTypeManager.Create("Int32", "startingStation", cr2w, this);
-				}
-				return _startingStation;
-			}
-			set
-			{
-				if (_startingStation == value)
-				{
-					return;
-				}
-				_startingStation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startingStation);
+			set => SetProperty(ref _startingStation, value);
 		}
 
 		[Ordinal(95)] 
 		[RED("isInteractive")] 
 		public CBool IsInteractive
 		{
-			get
-			{
-				if (_isInteractive == null)
-				{
-					_isInteractive = (CBool) CR2WTypeManager.Create("Bool", "isInteractive", cr2w, this);
-				}
-				return _isInteractive;
-			}
-			set
-			{
-				if (_isInteractive == value)
-				{
-					return;
-				}
-				_isInteractive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInteractive);
+			set => SetProperty(ref _isInteractive, value);
 		}
 
 		[Ordinal(96)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
-			get
-			{
-				if (_isShortGlitchActive == null)
-				{
-					_isShortGlitchActive = (CBool) CR2WTypeManager.Create("Bool", "isShortGlitchActive", cr2w, this);
-				}
-				return _isShortGlitchActive;
-			}
-			set
-			{
-				if (_isShortGlitchActive == value)
-				{
-					return;
-				}
-				_isShortGlitchActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isShortGlitchActive);
+			set => SetProperty(ref _isShortGlitchActive, value);
 		}
 
 		[Ordinal(97)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{
-			get
-			{
-				if (_shortGlitchDelayID == null)
-				{
-					_shortGlitchDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "shortGlitchDelayID", cr2w, this);
-				}
-				return _shortGlitchDelayID;
-			}
-			set
-			{
-				if (_shortGlitchDelayID == value)
-				{
-					return;
-				}
-				_shortGlitchDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shortGlitchDelayID);
+			set => SetProperty(ref _shortGlitchDelayID, value);
 		}
 
 		public Radio(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

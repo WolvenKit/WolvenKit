@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("overArrow")] 
 		public inkWidgetReference OverArrow
 		{
-			get
-			{
-				if (_overArrow == null)
-				{
-					_overArrow = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "overArrow", cr2w, this);
-				}
-				return _overArrow;
-			}
-			set
-			{
-				if (_overArrow == value)
-				{
-					return;
-				}
-				_overArrow = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overArrow);
+			set => SetProperty(ref _overArrow, value);
 		}
 
 		public characterCreationBodyMorphOptionSelectorButton(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

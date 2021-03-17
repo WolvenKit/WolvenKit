@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hitPositionEnter")] 
 		public Vector4 HitPositionEnter
 		{
-			get
-			{
-				if (_hitPositionEnter == null)
-				{
-					_hitPositionEnter = (Vector4) CR2WTypeManager.Create("Vector4", "hitPositionEnter", cr2w, this);
-				}
-				return _hitPositionEnter;
-			}
-			set
-			{
-				if (_hitPositionEnter == value)
-				{
-					return;
-				}
-				_hitPositionEnter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitPositionEnter);
+			set => SetProperty(ref _hitPositionEnter, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hitPositionExit")] 
 		public Vector4 HitPositionExit
 		{
-			get
-			{
-				if (_hitPositionExit == null)
-				{
-					_hitPositionExit = (Vector4) CR2WTypeManager.Create("Vector4", "hitPositionExit", cr2w, this);
-				}
-				return _hitPositionExit;
-			}
-			set
-			{
-				if (_hitPositionExit == value)
-				{
-					return;
-				}
-				_hitPositionExit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitPositionExit);
+			set => SetProperty(ref _hitPositionExit, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("enterDistanceFromOriginSq")] 
 		public CFloat EnterDistanceFromOriginSq
 		{
-			get
-			{
-				if (_enterDistanceFromOriginSq == null)
-				{
-					_enterDistanceFromOriginSq = (CFloat) CR2WTypeManager.Create("Float", "enterDistanceFromOriginSq", cr2w, this);
-				}
-				return _enterDistanceFromOriginSq;
-			}
-			set
-			{
-				if (_enterDistanceFromOriginSq == value)
-				{
-					return;
-				}
-				_enterDistanceFromOriginSq = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enterDistanceFromOriginSq);
+			set => SetProperty(ref _enterDistanceFromOriginSq, value);
 		}
 
 		public gameHitResult(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

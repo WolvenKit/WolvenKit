@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("backgroundPrefabRef")] 
 		public NodeRef BackgroundPrefabRef
 		{
-			get
-			{
-				if (_backgroundPrefabRef == null)
-				{
-					_backgroundPrefabRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "backgroundPrefabRef", cr2w, this);
-				}
-				return _backgroundPrefabRef;
-			}
-			set
-			{
-				if (_backgroundPrefabRef == value)
-				{
-					return;
-				}
-				_backgroundPrefabRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backgroundPrefabRef);
+			set => SetProperty(ref _backgroundPrefabRef, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("targetPointRef")] 
 		public NodeRef TargetPointRef
 		{
-			get
-			{
-				if (_targetPointRef == null)
-				{
-					_targetPointRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "targetPointRef", cr2w, this);
-				}
-				return _targetPointRef;
-			}
-			set
-			{
-				if (_targetPointRef == value)
-				{
-					return;
-				}
-				_targetPointRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetPointRef);
+			set => SetProperty(ref _targetPointRef, value);
 		}
 
 		public gamePhotoModeBackgroundViewComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

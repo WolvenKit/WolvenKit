@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("masterVolume")] 
 		public CFloat MasterVolume
 		{
-			get
-			{
-				if (_masterVolume == null)
-				{
-					_masterVolume = (CFloat) CR2WTypeManager.Create("Float", "masterVolume", cr2w, this);
-				}
-				return _masterVolume;
-			}
-			set
-			{
-				if (_masterVolume == value)
-				{
-					return;
-				}
-				_masterVolume = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _masterVolume);
+			set => SetProperty(ref _masterVolume, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("sfxVolume")] 
 		public CFloat SfxVolume
 		{
-			get
-			{
-				if (_sfxVolume == null)
-				{
-					_sfxVolume = (CFloat) CR2WTypeManager.Create("Float", "sfxVolume", cr2w, this);
-				}
-				return _sfxVolume;
-			}
-			set
-			{
-				if (_sfxVolume == value)
-				{
-					return;
-				}
-				_sfxVolume = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sfxVolume);
+			set => SetProperty(ref _sfxVolume, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("musicVolume")] 
 		public CFloat MusicVolume
 		{
-			get
-			{
-				if (_musicVolume == null)
-				{
-					_musicVolume = (CFloat) CR2WTypeManager.Create("Float", "musicVolume", cr2w, this);
-				}
-				return _musicVolume;
-			}
-			set
-			{
-				if (_musicVolume == value)
-				{
-					return;
-				}
-				_musicVolume = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _musicVolume);
+			set => SetProperty(ref _musicVolume, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("voVolume")] 
 		public CFloat VoVolume
 		{
-			get
-			{
-				if (_voVolume == null)
-				{
-					_voVolume = (CFloat) CR2WTypeManager.Create("Float", "voVolume", cr2w, this);
-				}
-				return _voVolume;
-			}
-			set
-			{
-				if (_voVolume == value)
-				{
-					return;
-				}
-				_voVolume = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _voVolume);
+			set => SetProperty(ref _voVolume, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("uiMenuVolume")] 
 		public CFloat UiMenuVolume
 		{
-			get
-			{
-				if (_uiMenuVolume == null)
-				{
-					_uiMenuVolume = (CFloat) CR2WTypeManager.Create("Float", "uiMenuVolume", cr2w, this);
-				}
-				return _uiMenuVolume;
-			}
-			set
-			{
-				if (_uiMenuVolume == value)
-				{
-					return;
-				}
-				_uiMenuVolume = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uiMenuVolume);
+			set => SetProperty(ref _uiMenuVolume, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("onStartupEvent")] 
 		public CName OnStartupEvent
 		{
-			get
-			{
-				if (_onStartupEvent == null)
-				{
-					_onStartupEvent = (CName) CR2WTypeManager.Create("CName", "onStartupEvent", cr2w, this);
-				}
-				return _onStartupEvent;
-			}
-			set
-			{
-				if (_onStartupEvent == value)
-				{
-					return;
-				}
-				_onStartupEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onStartupEvent);
+			set => SetProperty(ref _onStartupEvent, value);
 		}
 
 		public audioMixSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

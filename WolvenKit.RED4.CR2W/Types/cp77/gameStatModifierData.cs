@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statType")] 
 		public CEnum<gamedataStatType> StatType
 		{
-			get
-			{
-				if (_statType == null)
-				{
-					_statType = (CEnum<gamedataStatType>) CR2WTypeManager.Create("gamedataStatType", "statType", cr2w, this);
-				}
-				return _statType;
-			}
-			set
-			{
-				if (_statType == value)
-				{
-					return;
-				}
-				_statType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statType);
+			set => SetProperty(ref _statType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("modifierType")] 
 		public CEnum<gameStatModifierType> ModifierType
 		{
-			get
-			{
-				if (_modifierType == null)
-				{
-					_modifierType = (CEnum<gameStatModifierType>) CR2WTypeManager.Create("gameStatModifierType", "modifierType", cr2w, this);
-				}
-				return _modifierType;
-			}
-			set
-			{
-				if (_modifierType == value)
-				{
-					return;
-				}
-				_modifierType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _modifierType);
+			set => SetProperty(ref _modifierType, value);
 		}
 
 		public gameStatModifierData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

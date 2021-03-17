@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cameraRef")] 
 		public NodeRef CameraRef
 		{
-			get
-			{
-				if (_cameraRef == null)
-				{
-					_cameraRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "cameraRef", cr2w, this);
-				}
-				return _cameraRef;
-			}
-			set
-			{
-				if (_cameraRef == value)
-				{
-					return;
-				}
-				_cameraRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameraRef);
+			set => SetProperty(ref _cameraRef, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("cameraTransformLS")] 
 		public Transform CameraTransformLS
 		{
-			get
-			{
-				if (_cameraTransformLS == null)
-				{
-					_cameraTransformLS = (Transform) CR2WTypeManager.Create("Transform", "cameraTransformLS", cr2w, this);
-				}
-				return _cameraTransformLS;
-			}
-			set
-			{
-				if (_cameraTransformLS == value)
-				{
-					return;
-				}
-				_cameraTransformLS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameraTransformLS);
+			set => SetProperty(ref _cameraTransformLS, value);
 		}
 
 		public scneventsCameraPlacementEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

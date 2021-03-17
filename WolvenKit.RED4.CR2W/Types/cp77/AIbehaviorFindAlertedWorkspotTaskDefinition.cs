@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("usedTokens")] 
 		public CHandle<AIArgumentMapping> UsedTokens
 		{
-			get
-			{
-				if (_usedTokens == null)
-				{
-					_usedTokens = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "usedTokens", cr2w, this);
-				}
-				return _usedTokens;
-			}
-			set
-			{
-				if (_usedTokens == value)
-				{
-					return;
-				}
-				_usedTokens = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _usedTokens);
+			set => SetProperty(ref _usedTokens, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("spots")] 
 		public CHandle<AIArgumentMapping> Spots
 		{
-			get
-			{
-				if (_spots == null)
-				{
-					_spots = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "spots", cr2w, this);
-				}
-				return _spots;
-			}
-			set
-			{
-				if (_spots == value)
-				{
-					return;
-				}
-				_spots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spots);
+			set => SetProperty(ref _spots, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("radius")] 
 		public CHandle<AIArgumentMapping> Radius
 		{
-			get
-			{
-				if (_radius == null)
-				{
-					_radius = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "radius", cr2w, this);
-				}
-				return _radius;
-			}
-			set
-			{
-				if (_radius == value)
-				{
-					return;
-				}
-				_radius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radius);
+			set => SetProperty(ref _radius, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("outWorkspotData")] 
 		public CHandle<AIArgumentMapping> OutWorkspotData
 		{
-			get
-			{
-				if (_outWorkspotData == null)
-				{
-					_outWorkspotData = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outWorkspotData", cr2w, this);
-				}
-				return _outWorkspotData;
-			}
-			set
-			{
-				if (_outWorkspotData == value)
-				{
-					return;
-				}
-				_outWorkspotData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outWorkspotData);
+			set => SetProperty(ref _outWorkspotData, value);
 		}
 
 		public AIbehaviorFindAlertedWorkspotTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("datas")] 
 		public CArray<gameGodModeSharedStateData> Datas
 		{
-			get
-			{
-				if (_datas == null)
-				{
-					_datas = (CArray<gameGodModeSharedStateData>) CR2WTypeManager.Create("array:gameGodModeSharedStateData", "datas", cr2w, this);
-				}
-				return _datas;
-			}
-			set
-			{
-				if (_datas == value)
-				{
-					return;
-				}
-				_datas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _datas);
+			set => SetProperty(ref _datas, value);
 		}
 
 		public gameGodModeSharedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("newContext")] 
 		public CEnum<inputContextType> NewContext
 		{
-			get
-			{
-				if (_newContext == null)
-				{
-					_newContext = (CEnum<inputContextType>) CR2WTypeManager.Create("inputContextType", "newContext", cr2w, this);
-				}
-				return _newContext;
-			}
-			set
-			{
-				if (_newContext == value)
-				{
-					return;
-				}
-				_newContext = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newContext);
+			set => SetProperty(ref _newContext, value);
 		}
 
 		public ChangeActiveContextRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

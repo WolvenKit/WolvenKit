@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("position")] 
 		public CHandle<AIArgumentMapping> Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("rotation")] 
 		public CHandle<AIArgumentMapping> Rotation
 		{
-			get
-			{
-				if (_rotation == null)
-				{
-					_rotation = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "rotation", cr2w, this);
-				}
-				return _rotation;
-			}
-			set
-			{
-				if (_rotation == value)
-				{
-					return;
-				}
-				_rotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotation);
+			set => SetProperty(ref _rotation, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("doNavTest")] 
 		public CHandle<AIArgumentMapping> DoNavTest
 		{
-			get
-			{
-				if (_doNavTest == null)
-				{
-					_doNavTest = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "doNavTest", cr2w, this);
-				}
-				return _doNavTest;
-			}
-			set
-			{
-				if (_doNavTest == value)
-				{
-					return;
-				}
-				_doNavTest = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _doNavTest);
+			set => SetProperty(ref _doNavTest, value);
 		}
 
 		public TeleportCommandHandler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

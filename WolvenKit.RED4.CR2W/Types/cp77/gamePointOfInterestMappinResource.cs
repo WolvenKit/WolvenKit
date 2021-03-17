@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cookedData")] 
 		public CArray<gameCookedPointOfInterestMappinData> CookedData
 		{
-			get
-			{
-				if (_cookedData == null)
-				{
-					_cookedData = (CArray<gameCookedPointOfInterestMappinData>) CR2WTypeManager.Create("array:gameCookedPointOfInterestMappinData", "cookedData", cr2w, this);
-				}
-				return _cookedData;
-			}
-			set
-			{
-				if (_cookedData == value)
-				{
-					return;
-				}
-				_cookedData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cookedData);
+			set => SetProperty(ref _cookedData, value);
 		}
 
 		public gamePointOfInterestMappinResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

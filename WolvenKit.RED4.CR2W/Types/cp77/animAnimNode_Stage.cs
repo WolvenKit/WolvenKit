@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inputPoses")] 
 		public CArray<animPoseLink> InputPoses
 		{
-			get
-			{
-				if (_inputPoses == null)
-				{
-					_inputPoses = (CArray<animPoseLink>) CR2WTypeManager.Create("array:animPoseLink", "inputPoses", cr2w, this);
-				}
-				return _inputPoses;
-			}
-			set
-			{
-				if (_inputPoses == value)
-				{
-					return;
-				}
-				_inputPoses = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputPoses);
+			set => SetProperty(ref _inputPoses, value);
 		}
 
 		public animAnimNode_Stage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hipsPolePitch")] 
 		public CFloat HipsPolePitch
 		{
-			get
-			{
-				if (_hipsPolePitch == null)
-				{
-					_hipsPolePitch = (CFloat) CR2WTypeManager.Create("Float", "hipsPolePitch", cr2w, this);
-				}
-				return _hipsPolePitch;
-			}
-			set
-			{
-				if (_hipsPolePitch == value)
-				{
-					return;
-				}
-				_hipsPolePitch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hipsPolePitch);
+			set => SetProperty(ref _hipsPolePitch, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("speed")] 
 		public CFloat Speed
 		{
-			get
-			{
-				if (_speed == null)
-				{
-					_speed = (CFloat) CR2WTypeManager.Create("Float", "speed", cr2w, this);
-				}
-				return _speed;
-			}
-			set
-			{
-				if (_speed == value)
-				{
-					return;
-				}
-				_speed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speed);
+			set => SetProperty(ref _speed, value);
 		}
 
 		public AnimFeature_RagdollState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

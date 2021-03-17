@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("projectileThrown")] 
 		public CBool ProjectileThrown
 		{
-			get
-			{
-				if (_projectileThrown == null)
-				{
-					_projectileThrown = (CBool) CR2WTypeManager.Create("Bool", "projectileThrown", cr2w, this);
-				}
-				return _projectileThrown;
-			}
-			set
-			{
-				if (_projectileThrown == value)
-				{
-					return;
-				}
-				_projectileThrown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectileThrown);
+			set => SetProperty(ref _projectileThrown, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("targetObject")] 
 		public wCHandle<gameObject> TargetObject
 		{
-			get
-			{
-				if (_targetObject == null)
-				{
-					_targetObject = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "targetObject", cr2w, this);
-				}
-				return _targetObject;
-			}
-			set
-			{
-				if (_targetObject == value)
-				{
-					return;
-				}
-				_targetObject = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetObject);
+			set => SetProperty(ref _targetObject, value);
 		}
 
 		public MeleeThrowAttackEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

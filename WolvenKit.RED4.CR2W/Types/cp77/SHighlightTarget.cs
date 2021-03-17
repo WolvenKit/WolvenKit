@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetID")] 
 		public entEntityID TargetID
 		{
-			get
-			{
-				if (_targetID == null)
-				{
-					_targetID = (entEntityID) CR2WTypeManager.Create("entEntityID", "targetID", cr2w, this);
-				}
-				return _targetID;
-			}
-			set
-			{
-				if (_targetID == value)
-				{
-					return;
-				}
-				_targetID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetID);
+			set => SetProperty(ref _targetID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("highlightType")] 
 		public CEnum<EFocusForcedHighlightType> HighlightType
 		{
-			get
-			{
-				if (_highlightType == null)
-				{
-					_highlightType = (CEnum<EFocusForcedHighlightType>) CR2WTypeManager.Create("EFocusForcedHighlightType", "highlightType", cr2w, this);
-				}
-				return _highlightType;
-			}
-			set
-			{
-				if (_highlightType == value)
-				{
-					return;
-				}
-				_highlightType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highlightType);
+			set => SetProperty(ref _highlightType, value);
 		}
 
 		public SHighlightTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

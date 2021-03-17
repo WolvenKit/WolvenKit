@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("workspotData")] 
 		public CHandle<AIArgumentMapping> WorkspotData
 		{
-			get
-			{
-				if (_workspotData == null)
-				{
-					_workspotData = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "workspotData", cr2w, this);
-				}
-				return _workspotData;
-			}
-			set
-			{
-				if (_workspotData == value)
-				{
-					return;
-				}
-				_workspotData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotData);
+			set => SetProperty(ref _workspotData, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("returnPosition")] 
 		public CHandle<AIArgumentMapping> ReturnPosition
 		{
-			get
-			{
-				if (_returnPosition == null)
-				{
-					_returnPosition = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "returnPosition", cr2w, this);
-				}
-				return _returnPosition;
-			}
-			set
-			{
-				if (_returnPosition == value)
-				{
-					return;
-				}
-				_returnPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _returnPosition);
+			set => SetProperty(ref _returnPosition, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("returnPositionVector")] 
 		public CHandle<AIArgumentMapping> ReturnPositionVector
 		{
-			get
-			{
-				if (_returnPositionVector == null)
-				{
-					_returnPositionVector = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "returnPositionVector", cr2w, this);
-				}
-				return _returnPositionVector;
-			}
-			set
-			{
-				if (_returnPositionVector == value)
-				{
-					return;
-				}
-				_returnPositionVector = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _returnPositionVector);
+			set => SetProperty(ref _returnPositionVector, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("workspotExitTangent")] 
 		public CHandle<AIArgumentMapping> WorkspotExitTangent
 		{
-			get
-			{
-				if (_workspotExitTangent == null)
-				{
-					_workspotExitTangent = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "workspotExitTangent", cr2w, this);
-				}
-				return _workspotExitTangent;
-			}
-			set
-			{
-				if (_workspotExitTangent == value)
-				{
-					return;
-				}
-				_workspotExitTangent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotExitTangent);
+			set => SetProperty(ref _workspotExitTangent, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("joinTrafficSettings")] 
 		public CHandle<AIArgumentMapping> JoinTrafficSettings
 		{
-			get
-			{
-				if (_joinTrafficSettings == null)
-				{
-					_joinTrafficSettings = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "joinTrafficSettings", cr2w, this);
-				}
-				return _joinTrafficSettings;
-			}
-			set
-			{
-				if (_joinTrafficSettings == value)
-				{
-					return;
-				}
-				_joinTrafficSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _joinTrafficSettings);
+			set => SetProperty(ref _joinTrafficSettings, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("overrideExit")] 
 		public CHandle<AIArgumentMapping> OverrideExit
 		{
-			get
-			{
-				if (_overrideExit == null)
-				{
-					_overrideExit = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "overrideExit", cr2w, this);
-				}
-				return _overrideExit;
-			}
-			set
-			{
-				if (_overrideExit == value)
-				{
-					return;
-				}
-				_overrideExit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideExit);
+			set => SetProperty(ref _overrideExit, value);
 		}
 
 		public AIbehaviorPrepareReservedCrowdWorkspotNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

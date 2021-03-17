@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("storedItems")] 
 		public CArray<gameItemID> StoredItems
 		{
-			get
-			{
-				if (_storedItems == null)
-				{
-					_storedItems = (CArray<gameItemID>) CR2WTypeManager.Create("array:gameItemID", "storedItems", cr2w, this);
-				}
-				return _storedItems;
-			}
-			set
-			{
-				if (_storedItems == value)
-				{
-					return;
-				}
-				_storedItems = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _storedItems);
+			set => SetProperty(ref _storedItems, value);
 		}
 
 		public InvisibleSceneStashControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

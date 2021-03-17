@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("wasOpened")] 
 		public CBool WasOpened
 		{
-			get
-			{
-				if (_wasOpened == null)
-				{
-					_wasOpened = (CBool) CR2WTypeManager.Create("Bool", "wasOpened", cr2w, this);
-				}
-				return _wasOpened;
-			}
-			set
-			{
-				if (_wasOpened == value)
-				{
-					return;
-				}
-				_wasOpened = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasOpened);
+			set => SetProperty(ref _wasOpened, value);
 		}
 
 		public LootContainerObjectAnimatedByTransform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

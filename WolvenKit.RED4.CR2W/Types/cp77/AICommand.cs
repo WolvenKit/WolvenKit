@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("id")] 
 		public CUInt32 Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CUInt32) CR2WTypeManager.Create("Uint32", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("state")] 
 		public CEnum<AICommandState> State
 		{
-			get
-			{
-				if (_state == null)
-				{
-					_state = (CEnum<AICommandState>) CR2WTypeManager.Create("AICommandState", "state", cr2w, this);
-				}
-				return _state;
-			}
-			set
-			{
-				if (_state == value)
-				{
-					return;
-				}
-				_state = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("questBlockId")] 
 		public CUInt64 QuestBlockId
 		{
-			get
-			{
-				if (_questBlockId == null)
-				{
-					_questBlockId = (CUInt64) CR2WTypeManager.Create("Uint64", "questBlockId", cr2w, this);
-				}
-				return _questBlockId;
-			}
-			set
-			{
-				if (_questBlockId == value)
-				{
-					return;
-				}
-				_questBlockId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questBlockId);
+			set => SetProperty(ref _questBlockId, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("category")] 
 		public CName Category
 		{
-			get
-			{
-				if (_category == null)
-				{
-					_category = (CName) CR2WTypeManager.Create("CName", "category", cr2w, this);
-				}
-				return _category;
-			}
-			set
-			{
-				if (_category == value)
-				{
-					return;
-				}
-				_category = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _category);
+			set => SetProperty(ref _category, value);
 		}
 
 		public AICommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

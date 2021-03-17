@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("splineRef")] 
 		public NodeRef SplineRef
 		{
-			get
-			{
-				if (_splineRef == null)
-				{
-					_splineRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "splineRef", cr2w, this);
-				}
-				return _splineRef;
-			}
-			set
-			{
-				if (_splineRef == value)
-				{
-					return;
-				}
-				_splineRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _splineRef);
+			set => SetProperty(ref _splineRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("backwards")] 
 		public CBool Backwards
 		{
-			get
-			{
-				if (_backwards == null)
-				{
-					_backwards = (CBool) CR2WTypeManager.Create("Bool", "backwards", cr2w, this);
-				}
-				return _backwards;
-			}
-			set
-			{
-				if (_backwards == value)
-				{
-					return;
-				}
-				_backwards = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backwards);
+			set => SetProperty(ref _backwards, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("reverseSpline")] 
 		public CBool ReverseSpline
 		{
-			get
-			{
-				if (_reverseSpline == null)
-				{
-					_reverseSpline = (CBool) CR2WTypeManager.Create("Bool", "reverseSpline", cr2w, this);
-				}
-				return _reverseSpline;
-			}
-			set
-			{
-				if (_reverseSpline == value)
-				{
-					return;
-				}
-				_reverseSpline = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reverseSpline);
+			set => SetProperty(ref _reverseSpline, value);
 		}
 
 		public vehicleDriveSplineReverseEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("text")] 
 		public inkRichTextBoxWidgetReference Text
 		{
-			get
-			{
-				if (_text == null)
-				{
-					_text = (inkRichTextBoxWidgetReference) CR2WTypeManager.Create("inkRichTextBoxWidgetReference", "text", cr2w, this);
-				}
-				return _text;
-			}
-			set
-			{
-				if (_text == value)
-				{
-					return;
-				}
-				_text = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _text);
+			set => SetProperty(ref _text, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("buttonRef")] 
 		public inkWidgetReference ButtonRef
 		{
-			get
-			{
-				if (_buttonRef == null)
-				{
-					_buttonRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "buttonRef", cr2w, this);
-				}
-				return _buttonRef;
-			}
-			set
-			{
-				if (_buttonRef == value)
-				{
-					return;
-				}
-				_buttonRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonRef);
+			set => SetProperty(ref _buttonRef, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("editView")] 
 		public inkWidgetReference EditView
 		{
-			get
-			{
-				if (_editView == null)
-				{
-					_editView = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "editView", cr2w, this);
-				}
-				return _editView;
-			}
-			set
-			{
-				if (_editView == value)
-				{
-					return;
-				}
-				_editView = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _editView);
+			set => SetProperty(ref _editView, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("editOpacity")] 
 		public CFloat EditOpacity
 		{
-			get
-			{
-				if (_editOpacity == null)
-				{
-					_editOpacity = (CFloat) CR2WTypeManager.Create("Float", "editOpacity", cr2w, this);
-				}
-				return _editOpacity;
-			}
-			set
-			{
-				if (_editOpacity == value)
-				{
-					return;
-				}
-				_editOpacity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _editOpacity);
+			set => SetProperty(ref _editOpacity, value);
 		}
 
 		public inkSettingsSelectorControllerKeyBinding(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

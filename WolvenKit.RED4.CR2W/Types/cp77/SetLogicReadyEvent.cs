@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isReady")] 
 		public CBool IsReady
 		{
-			get
-			{
-				if (_isReady == null)
-				{
-					_isReady = (CBool) CR2WTypeManager.Create("Bool", "isReady", cr2w, this);
-				}
-				return _isReady;
-			}
-			set
-			{
-				if (_isReady == value)
-				{
-					return;
-				}
-				_isReady = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isReady);
+			set => SetProperty(ref _isReady, value);
 		}
 
 		public SetLogicReadyEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

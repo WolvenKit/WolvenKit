@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("iconRecord")] 
 		public wCHandle<gamedataChoiceCaptionIconPart_Record> IconRecord
 		{
-			get
-			{
-				if (_iconRecord == null)
-				{
-					_iconRecord = (wCHandle<gamedataChoiceCaptionIconPart_Record>) CR2WTypeManager.Create("whandle:gamedataChoiceCaptionIconPart_Record", "iconRecord", cr2w, this);
-				}
-				return _iconRecord;
-			}
-			set
-			{
-				if (_iconRecord == value)
-				{
-					return;
-				}
-				_iconRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _iconRecord);
+			set => SetProperty(ref _iconRecord, value);
 		}
 
 		public gameinteractionsChoiceCaptionIconPart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

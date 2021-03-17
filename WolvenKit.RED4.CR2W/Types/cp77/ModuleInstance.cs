@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isLookedAt")] 
 		public CBool IsLookedAt
 		{
-			get
-			{
-				if (_isLookedAt == null)
-				{
-					_isLookedAt = (CBool) CR2WTypeManager.Create("Bool", "isLookedAt", cr2w, this);
-				}
-				return _isLookedAt;
-			}
-			set
-			{
-				if (_isLookedAt == value)
-				{
-					return;
-				}
-				_isLookedAt = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isLookedAt);
+			set => SetProperty(ref _isLookedAt, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isRevealed")] 
 		public CBool IsRevealed
 		{
-			get
-			{
-				if (_isRevealed == null)
-				{
-					_isRevealed = (CBool) CR2WTypeManager.Create("Bool", "isRevealed", cr2w, this);
-				}
-				return _isRevealed;
-			}
-			set
-			{
-				if (_isRevealed == value)
-				{
-					return;
-				}
-				_isRevealed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isRevealed);
+			set => SetProperty(ref _isRevealed, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("wasProcessed")] 
 		public CBool WasProcessed
 		{
-			get
-			{
-				if (_wasProcessed == null)
-				{
-					_wasProcessed = (CBool) CR2WTypeManager.Create("Bool", "wasProcessed", cr2w, this);
-				}
-				return _wasProcessed;
-			}
-			set
-			{
-				if (_wasProcessed == value)
-				{
-					return;
-				}
-				_wasProcessed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasProcessed);
+			set => SetProperty(ref _wasProcessed, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("entityID")] 
 		public entEntityID EntityID
 		{
-			get
-			{
-				if (_entityID == null)
-				{
-					_entityID = (entEntityID) CR2WTypeManager.Create("entEntityID", "entityID", cr2w, this);
-				}
-				return _entityID;
-			}
-			set
-			{
-				if (_entityID == value)
-				{
-					return;
-				}
-				_entityID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityID);
+			set => SetProperty(ref _entityID, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("state")] 
 		public CEnum<InstanceState> State
 		{
-			get
-			{
-				if (_state == null)
-				{
-					_state = (CEnum<InstanceState>) CR2WTypeManager.Create("InstanceState", "state", cr2w, this);
-				}
-				return _state;
-			}
-			set
-			{
-				if (_state == value)
-				{
-					return;
-				}
-				_state = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("previousInstance")] 
 		public CHandle<ModuleInstance> PreviousInstance
 		{
-			get
-			{
-				if (_previousInstance == null)
-				{
-					_previousInstance = (CHandle<ModuleInstance>) CR2WTypeManager.Create("handle:ModuleInstance", "previousInstance", cr2w, this);
-				}
-				return _previousInstance;
-			}
-			set
-			{
-				if (_previousInstance == value)
-				{
-					return;
-				}
-				_previousInstance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousInstance);
+			set => SetProperty(ref _previousInstance, value);
 		}
 
 		public ModuleInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

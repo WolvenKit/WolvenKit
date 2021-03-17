@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timeChanged")] 
 		public CBool TimeChanged
 		{
-			get
-			{
-				if (_timeChanged == null)
-				{
-					_timeChanged = (CBool) CR2WTypeManager.Create("Bool", "timeChanged", cr2w, this);
-				}
-				return _timeChanged;
-			}
-			set
-			{
-				if (_timeChanged == value)
-				{
-					return;
-				}
-				_timeChanged = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeChanged);
+			set => SetProperty(ref _timeChanged, value);
 		}
 
 		public TimeSkipPopupCloseData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

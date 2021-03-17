@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("interruptions")] 
 		public CArray<CHandle<AIInterruptionHandlerDefinition>> Interruptions
 		{
-			get
-			{
-				if (_interruptions == null)
-				{
-					_interruptions = (CArray<CHandle<AIInterruptionHandlerDefinition>>) CR2WTypeManager.Create("array:handle:AIInterruptionHandlerDefinition", "interruptions", cr2w, this);
-				}
-				return _interruptions;
-			}
-			set
-			{
-				if (_interruptions == value)
-				{
-					return;
-				}
-				_interruptions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interruptions);
+			set => SetProperty(ref _interruptions, value);
 		}
 
 		public AITreeNodeInterruptionDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

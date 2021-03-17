@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("position")] 
 		public Vector3 Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (Vector3) CR2WTypeManager.Create("Vector3", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("normal")] 
 		public Vector3 Normal
 		{
-			get
-			{
-				if (_normal == null)
-				{
-					_normal = (Vector3) CR2WTypeManager.Create("Vector3", "normal", cr2w, this);
-				}
-				return _normal;
-			}
-			set
-			{
-				if (_normal == value)
-				{
-					return;
-				}
-				_normal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _normal);
+			set => SetProperty(ref _normal, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("material")] 
 		public CName Material
 		{
-			get
-			{
-				if (_material == null)
-				{
-					_material = (CName) CR2WTypeManager.Create("CName", "material", cr2w, this);
-				}
-				return _material;
-			}
-			set
-			{
-				if (_material == value)
-				{
-					return;
-				}
-				_material = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _material);
+			set => SetProperty(ref _material, value);
 		}
 
 		public physicsTraceResult(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

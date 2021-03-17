@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("movementType")] 
 		public CName MovementType
 		{
-			get
-			{
-				if (_movementType == null)
-				{
-					_movementType = (CName) CR2WTypeManager.Create("CName", "movementType", cr2w, this);
-				}
-				return _movementType;
-			}
-			set
-			{
-				if (_movementType == value)
-				{
-					return;
-				}
-				_movementType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movementType);
+			set => SetProperty(ref _movementType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("resetFear")] 
 		public CBool ResetFear
 		{
-			get
-			{
-				if (_resetFear == null)
-				{
-					_resetFear = (CBool) CR2WTypeManager.Create("Bool", "resetFear", cr2w, this);
-				}
-				return _resetFear;
-			}
-			set
-			{
-				if (_resetFear == value)
-				{
-					return;
-				}
-				_resetFear = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetFear);
+			set => SetProperty(ref _resetFear, value);
 		}
 
 		public CrowdSettingsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

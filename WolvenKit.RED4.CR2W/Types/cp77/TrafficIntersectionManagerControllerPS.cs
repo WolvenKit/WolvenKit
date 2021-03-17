@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("trafficLightStatus")] 
 		public CEnum<worldTrafficLightColor> TrafficLightStatus
 		{
-			get
-			{
-				if (_trafficLightStatus == null)
-				{
-					_trafficLightStatus = (CEnum<worldTrafficLightColor>) CR2WTypeManager.Create("worldTrafficLightColor", "trafficLightStatus", cr2w, this);
-				}
-				return _trafficLightStatus;
-			}
-			set
-			{
-				if (_trafficLightStatus == value)
-				{
-					return;
-				}
-				_trafficLightStatus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trafficLightStatus);
+			set => SetProperty(ref _trafficLightStatus, value);
 		}
 
 		public TrafficIntersectionManagerControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

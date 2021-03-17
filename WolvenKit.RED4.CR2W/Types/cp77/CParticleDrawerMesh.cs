@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("meshes")] 
 		public CArray<rRef<CMesh>> Meshes
 		{
-			get
-			{
-				if (_meshes == null)
-				{
-					_meshes = (CArray<rRef<CMesh>>) CR2WTypeManager.Create("array:rRef:CMesh", "meshes", cr2w, this);
-				}
-				return _meshes;
-			}
-			set
-			{
-				if (_meshes == value)
-				{
-					return;
-				}
-				_meshes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshes);
+			set => SetProperty(ref _meshes, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("orientationMode")] 
 		public CEnum<EMeshParticleOrientationMode> OrientationMode
 		{
-			get
-			{
-				if (_orientationMode == null)
-				{
-					_orientationMode = (CEnum<EMeshParticleOrientationMode>) CR2WTypeManager.Create("EMeshParticleOrientationMode", "orientationMode", cr2w, this);
-				}
-				return _orientationMode;
-			}
-			set
-			{
-				if (_orientationMode == value)
-				{
-					return;
-				}
-				_orientationMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _orientationMode);
+			set => SetProperty(ref _orientationMode, value);
 		}
 
 		public CParticleDrawerMesh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

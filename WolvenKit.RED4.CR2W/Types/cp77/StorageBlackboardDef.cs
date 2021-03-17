@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("StorageData")] 
 		public gamebbScriptID_Variant StorageData
 		{
-			get
-			{
-				if (_storageData == null)
-				{
-					_storageData = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "StorageData", cr2w, this);
-				}
-				return _storageData;
-			}
-			set
-			{
-				if (_storageData == value)
-				{
-					return;
-				}
-				_storageData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _storageData);
+			set => SetProperty(ref _storageData, value);
 		}
 
 		public StorageBlackboardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

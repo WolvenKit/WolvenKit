@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("securitySystemData")] 
 		public SecuritySystemData SecuritySystemData
 		{
-			get
-			{
-				if (_securitySystemData == null)
-				{
-					_securitySystemData = (SecuritySystemData) CR2WTypeManager.Create("SecuritySystemData", "securitySystemData", cr2w, this);
-				}
-				return _securitySystemData;
-			}
-			set
-			{
-				if (_securitySystemData == value)
-				{
-					return;
-				}
-				_securitySystemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securitySystemData);
+			set => SetProperty(ref _securitySystemData, value);
 		}
 
 		public PuppetDeviceLinkPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

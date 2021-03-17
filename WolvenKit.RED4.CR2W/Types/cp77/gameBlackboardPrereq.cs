@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("blackboardValue")] 
 		public gameBlackboardPropertyBindingDefinition BlackboardValue
 		{
-			get
-			{
-				if (_blackboardValue == null)
-				{
-					_blackboardValue = (gameBlackboardPropertyBindingDefinition) CR2WTypeManager.Create("gameBlackboardPropertyBindingDefinition", "blackboardValue", cr2w, this);
-				}
-				return _blackboardValue;
-			}
-			set
-			{
-				if (_blackboardValue == value)
-				{
-					return;
-				}
-				_blackboardValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboardValue);
+			set => SetProperty(ref _blackboardValue, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("value")] 
 		public CVariant Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CVariant) CR2WTypeManager.Create("Variant", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		public gameBlackboardPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

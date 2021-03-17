@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("trajectoryParams")] 
 		public CHandle<gameprojectileTrajectoryParams> TrajectoryParams
 		{
-			get
-			{
-				if (_trajectoryParams == null)
-				{
-					_trajectoryParams = (CHandle<gameprojectileTrajectoryParams>) CR2WTypeManager.Create("handle:gameprojectileTrajectoryParams", "trajectoryParams", cr2w, this);
-				}
-				return _trajectoryParams;
-			}
-			set
-			{
-				if (_trajectoryParams == value)
-				{
-					return;
-				}
-				_trajectoryParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trajectoryParams);
+			set => SetProperty(ref _trajectoryParams, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("lerpMultiplier")] 
 		public CFloat LerpMultiplier
 		{
-			get
-			{
-				if (_lerpMultiplier == null)
-				{
-					_lerpMultiplier = (CFloat) CR2WTypeManager.Create("Float", "lerpMultiplier", cr2w, this);
-				}
-				return _lerpMultiplier;
-			}
-			set
-			{
-				if (_lerpMultiplier == value)
-				{
-					return;
-				}
-				_lerpMultiplier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lerpMultiplier);
+			set => SetProperty(ref _lerpMultiplier, value);
 		}
 
 		public gameprojectileSetUpAndLaunchEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

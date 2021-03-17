@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stimType")] 
 		public CEnum<DeviceStimType> StimType
 		{
-			get
-			{
-				if (_stimType == null)
-				{
-					_stimType = (CEnum<DeviceStimType>) CR2WTypeManager.Create("DeviceStimType", "stimType", cr2w, this);
-				}
-				return _stimType;
-			}
-			set
-			{
-				if (_stimType == value)
-				{
-					return;
-				}
-				_stimType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stimType);
+			set => SetProperty(ref _stimType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lifeTime")] 
 		public CFloat LifeTime
 		{
-			get
-			{
-				if (_lifeTime == null)
-				{
-					_lifeTime = (CFloat) CR2WTypeManager.Create("Float", "lifeTime", cr2w, this);
-				}
-				return _lifeTime;
-			}
-			set
-			{
-				if (_lifeTime == value)
-				{
-					return;
-				}
-				_lifeTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lifeTime);
+			set => SetProperty(ref _lifeTime, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get
-			{
-				if (_radius == null)
-				{
-					_radius = (CFloat) CR2WTypeManager.Create("Float", "radius", cr2w, this);
-				}
-				return _radius;
-			}
-			set
-			{
-				if (_radius == value)
-				{
-					return;
-				}
-				_radius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radius);
+			set => SetProperty(ref _radius, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("operationType")] 
 		public CEnum<EEffectOperationType> OperationType
 		{
-			get
-			{
-				if (_operationType == null)
-				{
-					_operationType = (CEnum<EEffectOperationType>) CR2WTypeManager.Create("EEffectOperationType", "operationType", cr2w, this);
-				}
-				return _operationType;
-			}
-			set
-			{
-				if (_operationType == value)
-				{
-					return;
-				}
-				_operationType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _operationType);
+			set => SetProperty(ref _operationType, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get
-			{
-				if (_nodeRef == null)
-				{
-					_nodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "nodeRef", cr2w, this);
-				}
-				return _nodeRef;
-			}
-			set
-			{
-				if (_nodeRef == value)
-				{
-					return;
-				}
-				_nodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeRef);
+			set => SetProperty(ref _nodeRef, value);
 		}
 
 		public SStimOperationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

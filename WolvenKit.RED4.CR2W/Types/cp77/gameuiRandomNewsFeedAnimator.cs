@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("textWidget")] 
 		public inkTextWidgetReference TextWidget
 		{
-			get
-			{
-				if (_textWidget == null)
-				{
-					_textWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "textWidget", cr2w, this);
-				}
-				return _textWidget;
-			}
-			set
-			{
-				if (_textWidget == value)
-				{
-					return;
-				}
-				_textWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textWidget);
+			set => SetProperty(ref _textWidget, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("animDuration")] 
 		public CFloat AnimDuration
 		{
-			get
-			{
-				if (_animDuration == null)
-				{
-					_animDuration = (CFloat) CR2WTypeManager.Create("Float", "animDuration", cr2w, this);
-				}
-				return _animDuration;
-			}
-			set
-			{
-				if (_animDuration == value)
-				{
-					return;
-				}
-				_animDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animDuration);
+			set => SetProperty(ref _animDuration, value);
 		}
 
 		public gameuiRandomNewsFeedAnimator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("instigator")] 
 		public wCHandle<gameObject> Instigator
 		{
-			get
-			{
-				if (_instigator == null)
-				{
-					_instigator = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "instigator", cr2w, this);
-				}
-				return _instigator;
-			}
-			set
-			{
-				if (_instigator == value)
-				{
-					return;
-				}
-				_instigator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instigator);
+			set => SetProperty(ref _instigator, value);
 		}
 
 		public gameeventsPotentialDeathEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

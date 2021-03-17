@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("numVertices")] 
 		public CUInt32 NumVertices
 		{
-			get
-			{
-				if (_numVertices == null)
-				{
-					_numVertices = (CUInt32) CR2WTypeManager.Create("Uint32", "numVertices", cr2w, this);
-				}
-				return _numVertices;
-			}
-			set
-			{
-				if (_numVertices == value)
-				{
-					return;
-				}
-				_numVertices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numVertices);
+			set => SetProperty(ref _numVertices, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lodMask")] 
 		public CUInt8 LodMask
 		{
-			get
-			{
-				if (_lodMask == null)
-				{
-					_lodMask = (CUInt8) CR2WTypeManager.Create("Uint8", "lodMask", cr2w, this);
-				}
-				return _lodMask;
-			}
-			set
-			{
-				if (_lodMask == value)
-				{
-					return;
-				}
-				_lodMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lodMask);
+			set => SetProperty(ref _lodMask, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isTwoSided")] 
 		public CBool IsTwoSided
 		{
-			get
-			{
-				if (_isTwoSided == null)
-				{
-					_isTwoSided = (CBool) CR2WTypeManager.Create("Bool", "isTwoSided", cr2w, this);
-				}
-				return _isTwoSided;
-			}
-			set
-			{
-				if (_isTwoSided == value)
-				{
-					return;
-				}
-				_isTwoSided = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isTwoSided);
+			set => SetProperty(ref _isTwoSided, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("vertices")] 
 		public DataBuffer Vertices
 		{
-			get
-			{
-				if (_vertices == null)
-				{
-					_vertices = (DataBuffer) CR2WTypeManager.Create("DataBuffer", "vertices", cr2w, this);
-				}
-				return _vertices;
-			}
-			set
-			{
-				if (_vertices == value)
-				{
-					return;
-				}
-				_vertices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vertices);
+			set => SetProperty(ref _vertices, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("indices")] 
 		public DataBuffer Indices
 		{
-			get
-			{
-				if (_indices == null)
-				{
-					_indices = (DataBuffer) CR2WTypeManager.Create("DataBuffer", "indices", cr2w, this);
-				}
-				return _indices;
-			}
-			set
-			{
-				if (_indices == value)
-				{
-					return;
-				}
-				_indices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _indices);
+			set => SetProperty(ref _indices, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("morphOffsets")] 
 		public DataBuffer MorphOffsets
 		{
-			get
-			{
-				if (_morphOffsets == null)
-				{
-					_morphOffsets = (DataBuffer) CR2WTypeManager.Create("DataBuffer", "morphOffsets", cr2w, this);
-				}
-				return _morphOffsets;
-			}
-			set
-			{
-				if (_morphOffsets == value)
-				{
-					return;
-				}
-				_morphOffsets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _morphOffsets);
+			set => SetProperty(ref _morphOffsets, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("garmentFlags")] 
 		public DataBuffer GarmentFlags
 		{
-			get
-			{
-				if (_garmentFlags == null)
-				{
-					_garmentFlags = (DataBuffer) CR2WTypeManager.Create("DataBuffer", "garmentFlags", cr2w, this);
-				}
-				return _garmentFlags;
-			}
-			set
-			{
-				if (_garmentFlags == value)
-				{
-					return;
-				}
-				_garmentFlags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _garmentFlags);
+			set => SetProperty(ref _garmentFlags, value);
 		}
 
 		public garmentMeshParamGarmentChunkData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

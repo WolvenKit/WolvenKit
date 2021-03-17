@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("currValue")] 
 		public CUInt32 CurrValue
 		{
-			get
-			{
-				if (_currValue == null)
-				{
-					_currValue = (CUInt32) CR2WTypeManager.Create("Uint32", "currValue", cr2w, this);
-				}
-				return _currValue;
-			}
-			set
-			{
-				if (_currValue == value)
-				{
-					return;
-				}
-				_currValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currValue);
+			set => SetProperty(ref _currValue, value);
 		}
 
 		public WoundedTriggeredPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

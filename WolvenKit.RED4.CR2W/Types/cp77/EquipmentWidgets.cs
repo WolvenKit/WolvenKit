@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("widgetArray")] 
 		public CArray<inkWidgetReference> WidgetArray
 		{
-			get
-			{
-				if (_widgetArray == null)
-				{
-					_widgetArray = (CArray<inkWidgetReference>) CR2WTypeManager.Create("array:inkWidgetReference", "widgetArray", cr2w, this);
-				}
-				return _widgetArray;
-			}
-			set
-			{
-				if (_widgetArray == value)
-				{
-					return;
-				}
-				_widgetArray = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetArray);
+			set => SetProperty(ref _widgetArray, value);
 		}
 
 		public EquipmentWidgets(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

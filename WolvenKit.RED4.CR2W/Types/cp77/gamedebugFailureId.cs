@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("threadId")] 
 		public CUInt32 ThreadId
 		{
-			get
-			{
-				if (_threadId == null)
-				{
-					_threadId = (CUInt32) CR2WTypeManager.Create("Uint32", "threadId", cr2w, this);
-				}
-				return _threadId;
-			}
-			set
-			{
-				if (_threadId == value)
-				{
-					return;
-				}
-				_threadId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _threadId);
+			set => SetProperty(ref _threadId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("unsignedId")] 
 		public CUInt32 UnsignedId
 		{
-			get
-			{
-				if (_unsignedId == null)
-				{
-					_unsignedId = (CUInt32) CR2WTypeManager.Create("Uint32", "unsignedId", cr2w, this);
-				}
-				return _unsignedId;
-			}
-			set
-			{
-				if (_unsignedId == value)
-				{
-					return;
-				}
-				_unsignedId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unsignedId);
+			set => SetProperty(ref _unsignedId, value);
 		}
 
 		public gamedebugFailureId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

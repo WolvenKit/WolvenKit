@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("subType")] 
 		public CHandle<questIAudioCharacterManager_NodeSubType> SubType
 		{
-			get
-			{
-				if (_subType == null)
-				{
-					_subType = (CHandle<questIAudioCharacterManager_NodeSubType>) CR2WTypeManager.Create("handle:questIAudioCharacterManager_NodeSubType", "subType", cr2w, this);
-				}
-				return _subType;
-			}
-			set
-			{
-				if (_subType == value)
-				{
-					return;
-				}
-				_subType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subType);
+			set => SetProperty(ref _subType, value);
 		}
 
 		public questAudioCharacterSystemsManager_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

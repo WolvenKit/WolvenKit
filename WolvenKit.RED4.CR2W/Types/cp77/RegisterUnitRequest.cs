@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("unit")] 
 		public wCHandle<ScriptedPuppet> Unit
 		{
-			get
-			{
-				if (_unit == null)
-				{
-					_unit = (wCHandle<ScriptedPuppet>) CR2WTypeManager.Create("whandle:ScriptedPuppet", "unit", cr2w, this);
-				}
-				return _unit;
-			}
-			set
-			{
-				if (_unit == value)
-				{
-					return;
-				}
-				_unit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unit);
+			set => SetProperty(ref _unit, value);
 		}
 
 		public RegisterUnitRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

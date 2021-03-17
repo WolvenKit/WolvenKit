@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("soundName")] 
 		public CName SoundName
 		{
-			get
-			{
-				if (_soundName == null)
-				{
-					_soundName = (CName) CR2WTypeManager.Create("CName", "soundName", cr2w, this);
-				}
-				return _soundName;
-			}
-			set
-			{
-				if (_soundName == value)
-				{
-					return;
-				}
-				_soundName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soundName);
+			set => SetProperty(ref _soundName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("emitterName")] 
 		public CName EmitterName
 		{
-			get
-			{
-				if (_emitterName == null)
-				{
-					_emitterName = (CName) CR2WTypeManager.Create("CName", "emitterName", cr2w, this);
-				}
-				return _emitterName;
-			}
-			set
-			{
-				if (_emitterName == value)
-				{
-					return;
-				}
-				_emitterName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _emitterName);
+			set => SetProperty(ref _emitterName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("audioTag")] 
 		public CName AudioTag
 		{
-			get
-			{
-				if (_audioTag == null)
-				{
-					_audioTag = (CName) CR2WTypeManager.Create("CName", "audioTag", cr2w, this);
-				}
-				return _audioTag;
-			}
-			set
-			{
-				if (_audioTag == value)
-				{
-					return;
-				}
-				_audioTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioTag);
+			set => SetProperty(ref _audioTag, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("seekTime")] 
 		public CFloat SeekTime
 		{
-			get
-			{
-				if (_seekTime == null)
-				{
-					_seekTime = (CFloat) CR2WTypeManager.Create("Float", "seekTime", cr2w, this);
-				}
-				return _seekTime;
-			}
-			set
-			{
-				if (_seekTime == value)
-				{
-					return;
-				}
-				_seekTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _seekTime);
+			set => SetProperty(ref _seekTime, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("playUnique")] 
 		public CBool PlayUnique
 		{
-			get
-			{
-				if (_playUnique == null)
-				{
-					_playUnique = (CBool) CR2WTypeManager.Create("Bool", "playUnique", cr2w, this);
-				}
-				return _playUnique;
-			}
-			set
-			{
-				if (_playUnique == value)
-				{
-					return;
-				}
-				_playUnique = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playUnique);
+			set => SetProperty(ref _playUnique, value);
 		}
 
 		public gameaudioeventsPlaySound(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

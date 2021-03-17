@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("identifier")] 
 		public CName Identifier
 		{
-			get
-			{
-				if (_identifier == null)
-				{
-					_identifier = (CName) CR2WTypeManager.Create("CName", "identifier", cr2w, this);
-				}
-				return _identifier;
-			}
-			set
-			{
-				if (_identifier == value)
-				{
-					return;
-				}
-				_identifier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _identifier);
+			set => SetProperty(ref _identifier, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("data")] 
 		public CHandle<ATooltipData> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CHandle<ATooltipData>) CR2WTypeManager.Create("handle:ATooltipData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		public IdentifiedWrappedTooltipData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

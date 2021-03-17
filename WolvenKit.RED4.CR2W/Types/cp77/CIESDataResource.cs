@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("samples", 128)] 
 		public CArrayFixedSize<CUInt8> Samples
 		{
-			get
-			{
-				if (_samples == null)
-				{
-					_samples = (CArrayFixedSize<CUInt8>) CR2WTypeManager.Create("[128]Uint8", "samples", cr2w, this);
-				}
-				return _samples;
-			}
-			set
-			{
-				if (_samples == value)
-				{
-					return;
-				}
-				_samples = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _samples);
+			set => SetProperty(ref _samples, value);
 		}
 
 		public CIESDataResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("defaultAppearancePresets")] 
 		public CArray<gameDefaultAppearancePreset_Entity> DefaultAppearancePresets
 		{
-			get
-			{
-				if (_defaultAppearancePresets == null)
-				{
-					_defaultAppearancePresets = (CArray<gameDefaultAppearancePreset_Entity>) CR2WTypeManager.Create("array:gameDefaultAppearancePreset_Entity", "defaultAppearancePresets", cr2w, this);
-				}
-				return _defaultAppearancePresets;
-			}
-			set
-			{
-				if (_defaultAppearancePresets == value)
-				{
-					return;
-				}
-				_defaultAppearancePresets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultAppearancePresets);
+			set => SetProperty(ref _defaultAppearancePresets, value);
 		}
 
 		public gameEntityTemplateDefaultAppearancePreset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

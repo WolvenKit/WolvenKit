@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("speed")] 
 		public CFloat Speed
 		{
-			get
-			{
-				if (_speed == null)
-				{
-					_speed = (CFloat) CR2WTypeManager.Create("Float", "speed", cr2w, this);
-				}
-				return _speed;
-			}
-			set
-			{
-				if (_speed == value)
-				{
-					return;
-				}
-				_speed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speed);
+			set => SetProperty(ref _speed, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("slopeAngle")] 
 		public CFloat SlopeAngle
 		{
-			get
-			{
-				if (_slopeAngle == null)
-				{
-					_slopeAngle = (CFloat) CR2WTypeManager.Create("Float", "slopeAngle", cr2w, this);
-				}
-				return _slopeAngle;
-			}
-			set
-			{
-				if (_slopeAngle == value)
-				{
-					return;
-				}
-				_slopeAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slopeAngle);
+			set => SetProperty(ref _slopeAngle, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isCrowd")] 
 		public CBool IsCrowd
 		{
-			get
-			{
-				if (_isCrowd == null)
-				{
-					_isCrowd = (CBool) CR2WTypeManager.Create("Bool", "isCrowd", cr2w, this);
-				}
-				return _isCrowd;
-			}
-			set
-			{
-				if (_isCrowd == value)
-				{
-					return;
-				}
-				_isCrowd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isCrowd);
+			set => SetProperty(ref _isCrowd, value);
 		}
 
 		public animAnimFeature_CrowdLocomotion(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

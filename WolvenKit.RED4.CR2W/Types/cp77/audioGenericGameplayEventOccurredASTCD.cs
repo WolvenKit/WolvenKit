@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gameplayEvent")] 
 		public CName GameplayEvent
 		{
-			get
-			{
-				if (_gameplayEvent == null)
-				{
-					_gameplayEvent = (CName) CR2WTypeManager.Create("CName", "gameplayEvent", cr2w, this);
-				}
-				return _gameplayEvent;
-			}
-			set
-			{
-				if (_gameplayEvent == value)
-				{
-					return;
-				}
-				_gameplayEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameplayEvent);
+			set => SetProperty(ref _gameplayEvent, value);
 		}
 
 		public audioGenericGameplayEventOccurredASTCD(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -27,345 +27,120 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Canvas")] 
 		public inkCanvasWidgetReference Canvas
 		{
-			get
-			{
-				if (_canvas == null)
-				{
-					_canvas = (inkCanvasWidgetReference) CR2WTypeManager.Create("inkCanvasWidgetReference", "Canvas", cr2w, this);
-				}
-				return _canvas;
-			}
-			set
-			{
-				if (_canvas == value)
-				{
-					return;
-				}
-				_canvas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _canvas);
+			set => SetProperty(ref _canvas, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("HorizontalPanel")] 
 		public inkHorizontalPanelWidgetReference HorizontalPanel
 		{
-			get
-			{
-				if (_horizontalPanel == null)
-				{
-					_horizontalPanel = (inkHorizontalPanelWidgetReference) CR2WTypeManager.Create("inkHorizontalPanelWidgetReference", "HorizontalPanel", cr2w, this);
-				}
-				return _horizontalPanel;
-			}
-			set
-			{
-				if (_horizontalPanel == value)
-				{
-					return;
-				}
-				_horizontalPanel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _horizontalPanel);
+			set => SetProperty(ref _horizontalPanel, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("VerticalPanel")] 
 		public inkVerticalPanelWidgetReference VerticalPanel
 		{
-			get
-			{
-				if (_verticalPanel == null)
-				{
-					_verticalPanel = (inkVerticalPanelWidgetReference) CR2WTypeManager.Create("inkVerticalPanelWidgetReference", "VerticalPanel", cr2w, this);
-				}
-				return _verticalPanel;
-			}
-			set
-			{
-				if (_verticalPanel == value)
-				{
-					return;
-				}
-				_verticalPanel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _verticalPanel);
+			set => SetProperty(ref _verticalPanel, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("Flex")] 
 		public inkFlexWidgetReference Flex
 		{
-			get
-			{
-				if (_flex == null)
-				{
-					_flex = (inkFlexWidgetReference) CR2WTypeManager.Create("inkFlexWidgetReference", "Flex", cr2w, this);
-				}
-				return _flex;
-			}
-			set
-			{
-				if (_flex == value)
-				{
-					return;
-				}
-				_flex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flex);
+			set => SetProperty(ref _flex, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("UniformGrid")] 
 		public inkUniformGridWidgetReference UniformGrid
 		{
-			get
-			{
-				if (_uniformGrid == null)
-				{
-					_uniformGrid = (inkUniformGridWidgetReference) CR2WTypeManager.Create("inkUniformGridWidgetReference", "UniformGrid", cr2w, this);
-				}
-				return _uniformGrid;
-			}
-			set
-			{
-				if (_uniformGrid == value)
-				{
-					return;
-				}
-				_uniformGrid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uniformGrid);
+			set => SetProperty(ref _uniformGrid, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("Text")] 
 		public inkTextWidgetReference Text
 		{
-			get
-			{
-				if (_text == null)
-				{
-					_text = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "Text", cr2w, this);
-				}
-				return _text;
-			}
-			set
-			{
-				if (_text == value)
-				{
-					return;
-				}
-				_text = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _text);
+			set => SetProperty(ref _text, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("TextInput")] 
 		public inkTextInputWidgetReference TextInput
 		{
-			get
-			{
-				if (_textInput == null)
-				{
-					_textInput = (inkTextInputWidgetReference) CR2WTypeManager.Create("inkTextInputWidgetReference", "TextInput", cr2w, this);
-				}
-				return _textInput;
-			}
-			set
-			{
-				if (_textInput == value)
-				{
-					return;
-				}
-				_textInput = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textInput);
+			set => SetProperty(ref _textInput, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("Image")] 
 		public inkImageWidgetReference Image
 		{
-			get
-			{
-				if (_image == null)
-				{
-					_image = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "Image", cr2w, this);
-				}
-				return _image;
-			}
-			set
-			{
-				if (_image == value)
-				{
-					return;
-				}
-				_image = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _image);
+			set => SetProperty(ref _image, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("Video")] 
 		public inkVideoWidgetReference Video
 		{
-			get
-			{
-				if (_video == null)
-				{
-					_video = (inkVideoWidgetReference) CR2WTypeManager.Create("inkVideoWidgetReference", "Video", cr2w, this);
-				}
-				return _video;
-			}
-			set
-			{
-				if (_video == value)
-				{
-					return;
-				}
-				_video = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _video);
+			set => SetProperty(ref _video, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("Border")] 
 		public inkBorderWidgetReference Border
 		{
-			get
-			{
-				if (_border == null)
-				{
-					_border = (inkBorderWidgetReference) CR2WTypeManager.Create("inkBorderWidgetReference", "Border", cr2w, this);
-				}
-				return _border;
-			}
-			set
-			{
-				if (_border == value)
-				{
-					return;
-				}
-				_border = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _border);
+			set => SetProperty(ref _border, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("Rectangle")] 
 		public inkRectangleWidgetReference Rectangle
 		{
-			get
-			{
-				if (_rectangle == null)
-				{
-					_rectangle = (inkRectangleWidgetReference) CR2WTypeManager.Create("inkRectangleWidgetReference", "Rectangle", cr2w, this);
-				}
-				return _rectangle;
-			}
-			set
-			{
-				if (_rectangle == value)
-				{
-					return;
-				}
-				_rectangle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rectangle);
+			set => SetProperty(ref _rectangle, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("Circle")] 
 		public inkCircleWidgetReference Circle
 		{
-			get
-			{
-				if (_circle == null)
-				{
-					_circle = (inkCircleWidgetReference) CR2WTypeManager.Create("inkCircleWidgetReference", "Circle", cr2w, this);
-				}
-				return _circle;
-			}
-			set
-			{
-				if (_circle == value)
-				{
-					return;
-				}
-				_circle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _circle);
+			set => SetProperty(ref _circle, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("Shape")] 
 		public inkShapeWidgetReference Shape
 		{
-			get
-			{
-				if (_shape == null)
-				{
-					_shape = (inkShapeWidgetReference) CR2WTypeManager.Create("inkShapeWidgetReference", "Shape", cr2w, this);
-				}
-				return _shape;
-			}
-			set
-			{
-				if (_shape == value)
-				{
-					return;
-				}
-				_shape = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shape);
+			set => SetProperty(ref _shape, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("BasicInputFields")] 
 		public FUNC_TEST_Container_2 BasicInputFields
 		{
-			get
-			{
-				if (_basicInputFields == null)
-				{
-					_basicInputFields = (FUNC_TEST_Container_2) CR2WTypeManager.Create("FUNC_TEST_Container_2", "BasicInputFields", cr2w, this);
-				}
-				return _basicInputFields;
-			}
-			set
-			{
-				if (_basicInputFields == value)
-				{
-					return;
-				}
-				_basicInputFields = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _basicInputFields);
+			set => SetProperty(ref _basicInputFields, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("AdditionalFields")] 
 		public FUNC_TEST_Container AdditionalFields
 		{
-			get
-			{
-				if (_additionalFields == null)
-				{
-					_additionalFields = (FUNC_TEST_Container) CR2WTypeManager.Create("FUNC_TEST_Container", "AdditionalFields", cr2w, this);
-				}
-				return _additionalFields;
-			}
-			set
-			{
-				if (_additionalFields == value)
-				{
-					return;
-				}
-				_additionalFields = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additionalFields);
+			set => SetProperty(ref _additionalFields, value);
 		}
 
 		public FUNC_TEST_inkGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

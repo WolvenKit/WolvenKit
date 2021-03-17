@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("useMeshes")] 
 		public CBool UseMeshes
 		{
-			get
-			{
-				if (_useMeshes == null)
-				{
-					_useMeshes = (CBool) CR2WTypeManager.Create("Bool", "useMeshes", cr2w, this);
-				}
-				return _useMeshes;
-			}
-			set
-			{
-				if (_useMeshes == value)
-				{
-					return;
-				}
-				_useMeshes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useMeshes);
+			set => SetProperty(ref _useMeshes, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get
-			{
-				if (_radius == null)
-				{
-					_radius = (CFloat) CR2WTypeManager.Create("Float", "radius", cr2w, this);
-				}
-				return _radius;
-			}
-			set
-			{
-				if (_radius == value)
-				{
-					return;
-				}
-				_radius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radius);
+			set => SetProperty(ref _radius, value);
 		}
 
 		public gameinfluenceObstacleAgent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

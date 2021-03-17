@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("widget")] 
 		public wCHandle<inkWidget> Widget
 		{
-			get
-			{
-				if (_widget == null)
-				{
-					_widget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "widget", cr2w, this);
-				}
-				return _widget;
-			}
-			set
-			{
-				if (_widget == value)
-				{
-					return;
-				}
-				_widget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widget);
+			set => SetProperty(ref _widget, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("attributeType")] 
 		public CEnum<PerkMenuAttribute> AttributeType
 		{
-			get
-			{
-				if (_attributeType == null)
-				{
-					_attributeType = (CEnum<PerkMenuAttribute>) CR2WTypeManager.Create("PerkMenuAttribute", "attributeType", cr2w, this);
-				}
-				return _attributeType;
-			}
-			set
-			{
-				if (_attributeType == value)
-				{
-					return;
-				}
-				_attributeType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeType);
+			set => SetProperty(ref _attributeType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("attributeData")] 
 		public CHandle<AttributeData> AttributeData
 		{
-			get
-			{
-				if (_attributeData == null)
-				{
-					_attributeData = (CHandle<AttributeData>) CR2WTypeManager.Create("handle:AttributeData", "attributeData", cr2w, this);
-				}
-				return _attributeData;
-			}
-			set
-			{
-				if (_attributeData == value)
-				{
-					return;
-				}
-				_attributeData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeData);
+			set => SetProperty(ref _attributeData, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("actionName")] 
 		public CHandle<inkActionName> ActionName
 		{
-			get
-			{
-				if (_actionName == null)
-				{
-					_actionName = (CHandle<inkActionName>) CR2WTypeManager.Create("handle:inkActionName", "actionName", cr2w, this);
-				}
-				return _actionName;
-			}
-			set
-			{
-				if (_actionName == value)
-				{
-					return;
-				}
-				_actionName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionName);
+			set => SetProperty(ref _actionName, value);
 		}
 
 		public PerksMenuAttributeItemHoldStart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

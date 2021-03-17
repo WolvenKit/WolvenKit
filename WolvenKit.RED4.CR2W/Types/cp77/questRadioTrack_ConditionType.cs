@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("radioTrack")] 
 		public CName RadioTrack
 		{
-			get
-			{
-				if (_radioTrack == null)
-				{
-					_radioTrack = (CName) CR2WTypeManager.Create("CName", "radioTrack", cr2w, this);
-				}
-				return _radioTrack;
-			}
-			set
-			{
-				if (_radioTrack == value)
-				{
-					return;
-				}
-				_radioTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radioTrack);
+			set => SetProperty(ref _radioTrack, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("inverted")] 
 		public CBool Inverted
 		{
-			get
-			{
-				if (_inverted == null)
-				{
-					_inverted = (CBool) CR2WTypeManager.Create("Bool", "inverted", cr2w, this);
-				}
-				return _inverted;
-			}
-			set
-			{
-				if (_inverted == value)
-				{
-					return;
-				}
-				_inverted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inverted);
+			set => SetProperty(ref _inverted, value);
 		}
 
 		public questRadioTrack_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

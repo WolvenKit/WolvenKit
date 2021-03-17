@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isDriver")] 
 		public CBool IsDriver
 		{
-			get
-			{
-				if (_isDriver == null)
-				{
-					_isDriver = (CBool) CR2WTypeManager.Create("Bool", "isDriver", cr2w, this);
-				}
-				return _isDriver;
-			}
-			set
-			{
-				if (_isDriver == value)
-				{
-					return;
-				}
-				_isDriver = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDriver);
+			set => SetProperty(ref _isDriver, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("side")] 
 		public CInt32 Side
 		{
-			get
-			{
-				if (_side == null)
-				{
-					_side = (CInt32) CR2WTypeManager.Create("Int32", "side", cr2w, this);
-				}
-				return _side;
-			}
-			set
-			{
-				if (_side == value)
-				{
-					return;
-				}
-				_side = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _side);
+			set => SetProperty(ref _side, value);
 		}
 
 		public AnimFeature_VehicleNPCData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

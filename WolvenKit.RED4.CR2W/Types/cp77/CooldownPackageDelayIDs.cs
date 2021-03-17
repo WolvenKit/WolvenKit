@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("packageID")] 
 		public CooldownStorageID PackageID
 		{
-			get
-			{
-				if (_packageID == null)
-				{
-					_packageID = (CooldownStorageID) CR2WTypeManager.Create("CooldownStorageID", "packageID", cr2w, this);
-				}
-				return _packageID;
-			}
-			set
-			{
-				if (_packageID == value)
-				{
-					return;
-				}
-				_packageID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _packageID);
+			set => SetProperty(ref _packageID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("delayIDs")] 
 		public CArray<gameDelayID> DelayIDs
 		{
-			get
-			{
-				if (_delayIDs == null)
-				{
-					_delayIDs = (CArray<gameDelayID>) CR2WTypeManager.Create("array:gameDelayID", "delayIDs", cr2w, this);
-				}
-				return _delayIDs;
-			}
-			set
-			{
-				if (_delayIDs == value)
-				{
-					return;
-				}
-				_delayIDs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delayIDs);
+			set => SetProperty(ref _delayIDs, value);
 		}
 
 		public CooldownPackageDelayIDs(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

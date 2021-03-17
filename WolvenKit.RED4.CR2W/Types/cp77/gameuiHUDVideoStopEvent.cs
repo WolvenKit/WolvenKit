@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("videoPathHash")] 
 		public CUInt64 VideoPathHash
 		{
-			get
-			{
-				if (_videoPathHash == null)
-				{
-					_videoPathHash = (CUInt64) CR2WTypeManager.Create("Uint64", "videoPathHash", cr2w, this);
-				}
-				return _videoPathHash;
-			}
-			set
-			{
-				if (_videoPathHash == value)
-				{
-					return;
-				}
-				_videoPathHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _videoPathHash);
+			set => SetProperty(ref _videoPathHash, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isSkip")] 
 		public CBool IsSkip
 		{
-			get
-			{
-				if (_isSkip == null)
-				{
-					_isSkip = (CBool) CR2WTypeManager.Create("Bool", "isSkip", cr2w, this);
-				}
-				return _isSkip;
-			}
-			set
-			{
-				if (_isSkip == value)
-				{
-					return;
-				}
-				_isSkip = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isSkip);
+			set => SetProperty(ref _isSkip, value);
 		}
 
 		public gameuiHUDVideoStopEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

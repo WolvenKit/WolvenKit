@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("clueName")] 
 		public CName ClueName
 		{
-			get
-			{
-				if (_clueName == null)
-				{
-					_clueName = (CName) CR2WTypeManager.Create("CName", "clueName", cr2w, this);
-				}
-				return _clueName;
-			}
-			set
-			{
-				if (_clueName == value)
-				{
-					return;
-				}
-				_clueName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clueName);
+			set => SetProperty(ref _clueName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isScanned")] 
 		public CBool IsScanned
 		{
-			get
-			{
-				if (_isScanned == null)
-				{
-					_isScanned = (CBool) CR2WTypeManager.Create("Bool", "isScanned", cr2w, this);
-				}
-				return _isScanned;
-			}
-			set
-			{
-				if (_isScanned == value)
-				{
-					return;
-				}
-				_isScanned = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isScanned);
+			set => SetProperty(ref _isScanned, value);
 		}
 
 		public SInspectableClue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

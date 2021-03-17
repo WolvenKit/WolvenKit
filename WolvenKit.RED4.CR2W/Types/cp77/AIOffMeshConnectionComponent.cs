@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("offMeshConnectionNodesRefs")] 
 		public CArray<NodeRef> OffMeshConnectionNodesRefs
 		{
-			get
-			{
-				if (_offMeshConnectionNodesRefs == null)
-				{
-					_offMeshConnectionNodesRefs = (CArray<NodeRef>) CR2WTypeManager.Create("array:NodeRef", "offMeshConnectionNodesRefs", cr2w, this);
-				}
-				return _offMeshConnectionNodesRefs;
-			}
-			set
-			{
-				if (_offMeshConnectionNodesRefs == value)
-				{
-					return;
-				}
-				_offMeshConnectionNodesRefs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offMeshConnectionNodesRefs);
+			set => SetProperty(ref _offMeshConnectionNodesRefs, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("agentSize")] 
 		public CEnum<NavGenAgentSize> AgentSize
 		{
-			get
-			{
-				if (_agentSize == null)
-				{
-					_agentSize = (CEnum<NavGenAgentSize>) CR2WTypeManager.Create("NavGenAgentSize", "agentSize", cr2w, this);
-				}
-				return _agentSize;
-			}
-			set
-			{
-				if (_agentSize == value)
-				{
-					return;
-				}
-				_agentSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _agentSize);
+			set => SetProperty(ref _agentSize, value);
 		}
 
 		public AIOffMeshConnectionComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

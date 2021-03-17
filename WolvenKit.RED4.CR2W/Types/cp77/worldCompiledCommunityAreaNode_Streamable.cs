@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("streamingDistance")] 
 		public CFloat StreamingDistance
 		{
-			get
-			{
-				if (_streamingDistance == null)
-				{
-					_streamingDistance = (CFloat) CR2WTypeManager.Create("Float", "streamingDistance", cr2w, this);
-				}
-				return _streamingDistance;
-			}
-			set
-			{
-				if (_streamingDistance == value)
-				{
-					return;
-				}
-				_streamingDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _streamingDistance);
+			set => SetProperty(ref _streamingDistance, value);
 		}
 
 		public worldCompiledCommunityAreaNode_Streamable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

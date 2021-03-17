@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("VehPlayerStateData")] 
 		public gamebbScriptID_Variant VehPlayerStateData
 		{
-			get
-			{
-				if (_vehPlayerStateData == null)
-				{
-					_vehPlayerStateData = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "VehPlayerStateData", cr2w, this);
-				}
-				return _vehPlayerStateData;
-			}
-			set
-			{
-				if (_vehPlayerStateData == value)
-				{
-					return;
-				}
-				_vehPlayerStateData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehPlayerStateData);
+			set => SetProperty(ref _vehPlayerStateData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("IsPlayerMounted")] 
 		public gamebbScriptID_Bool IsPlayerMounted
 		{
-			get
-			{
-				if (_isPlayerMounted == null)
-				{
-					_isPlayerMounted = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "IsPlayerMounted", cr2w, this);
-				}
-				return _isPlayerMounted;
-			}
-			set
-			{
-				if (_isPlayerMounted == value)
-				{
-					return;
-				}
-				_isPlayerMounted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayerMounted);
+			set => SetProperty(ref _isPlayerMounted, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("IsTPPCameraOn")] 
 		public gamebbScriptID_Bool IsTPPCameraOn
 		{
-			get
-			{
-				if (_isTPPCameraOn == null)
-				{
-					_isTPPCameraOn = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "IsTPPCameraOn", cr2w, this);
-				}
-				return _isTPPCameraOn;
-			}
-			set
-			{
-				if (_isTPPCameraOn == value)
-				{
-					return;
-				}
-				_isTPPCameraOn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isTPPCameraOn);
+			set => SetProperty(ref _isTPPCameraOn, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("PositionInRace")] 
 		public gamebbScriptID_Int32 PositionInRace
 		{
-			get
-			{
-				if (_positionInRace == null)
-				{
-					_positionInRace = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "PositionInRace", cr2w, this);
-				}
-				return _positionInRace;
-			}
-			set
-			{
-				if (_positionInRace == value)
-				{
-					return;
-				}
-				_positionInRace = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _positionInRace);
+			set => SetProperty(ref _positionInRace, value);
 		}
 
 		public UI_ActiveVehicleDataDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

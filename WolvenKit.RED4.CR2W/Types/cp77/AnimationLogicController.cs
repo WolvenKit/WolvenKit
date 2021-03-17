@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("imageView")] 
 		public inkImageWidgetReference ImageView
 		{
-			get
-			{
-				if (_imageView == null)
-				{
-					_imageView = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "imageView", cr2w, this);
-				}
-				return _imageView;
-			}
-			set
-			{
-				if (_imageView == value)
-				{
-					return;
-				}
-				_imageView = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _imageView);
+			set => SetProperty(ref _imageView, value);
 		}
 
 		public AnimationLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("removeCachedStatusEffect")] 
 		public CBool RemoveCachedStatusEffect
 		{
-			get
-			{
-				if (_removeCachedStatusEffect == null)
-				{
-					_removeCachedStatusEffect = (CBool) CR2WTypeManager.Create("Bool", "removeCachedStatusEffect", cr2w, this);
-				}
-				return _removeCachedStatusEffect;
-			}
-			set
-			{
-				if (_removeCachedStatusEffect == value)
-				{
-					return;
-				}
-				_removeCachedStatusEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _removeCachedStatusEffect);
+			set => SetProperty(ref _removeCachedStatusEffect, value);
 		}
 
 		public CacheStatusEffectAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

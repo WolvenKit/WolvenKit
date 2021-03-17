@@ -23,253 +23,88 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attackGameEffectDelay")] 
 		public CFloat AttackGameEffectDelay
 		{
-			get
-			{
-				if (_attackGameEffectDelay == null)
-				{
-					_attackGameEffectDelay = (CFloat) CR2WTypeManager.Create("Float", "attackGameEffectDelay", cr2w, this);
-				}
-				return _attackGameEffectDelay;
-			}
-			set
-			{
-				if (_attackGameEffectDelay == value)
-				{
-					return;
-				}
-				_attackGameEffectDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackGameEffectDelay);
+			set => SetProperty(ref _attackGameEffectDelay, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("attackGameEffectDuration")] 
 		public CFloat AttackGameEffectDuration
 		{
-			get
-			{
-				if (_attackGameEffectDuration == null)
-				{
-					_attackGameEffectDuration = (CFloat) CR2WTypeManager.Create("Float", "attackGameEffectDuration", cr2w, this);
-				}
-				return _attackGameEffectDuration;
-			}
-			set
-			{
-				if (_attackGameEffectDuration == value)
-				{
-					return;
-				}
-				_attackGameEffectDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackGameEffectDuration);
+			set => SetProperty(ref _attackGameEffectDuration, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("attackRange")] 
 		public CFloat AttackRange
 		{
-			get
-			{
-				if (_attackRange == null)
-				{
-					_attackRange = (CFloat) CR2WTypeManager.Create("Float", "attackRange", cr2w, this);
-				}
-				return _attackRange;
-			}
-			set
-			{
-				if (_attackRange == value)
-				{
-					return;
-				}
-				_attackRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackRange);
+			set => SetProperty(ref _attackRange, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("forcePlayerToStand")] 
 		public CBool ForcePlayerToStand
 		{
-			get
-			{
-				if (_forcePlayerToStand == null)
-				{
-					_forcePlayerToStand = (CBool) CR2WTypeManager.Create("Bool", "forcePlayerToStand", cr2w, this);
-				}
-				return _forcePlayerToStand;
-			}
-			set
-			{
-				if (_forcePlayerToStand == value)
-				{
-					return;
-				}
-				_forcePlayerToStand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forcePlayerToStand);
+			set => SetProperty(ref _forcePlayerToStand, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("shouldAdjust")] 
 		public CBool ShouldAdjust
 		{
-			get
-			{
-				if (_shouldAdjust == null)
-				{
-					_shouldAdjust = (CBool) CR2WTypeManager.Create("Bool", "shouldAdjust", cr2w, this);
-				}
-				return _shouldAdjust;
-			}
-			set
-			{
-				if (_shouldAdjust == value)
-				{
-					return;
-				}
-				_shouldAdjust = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldAdjust);
+			set => SetProperty(ref _shouldAdjust, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("adjustmentRange")] 
 		public CFloat AdjustmentRange
 		{
-			get
-			{
-				if (_adjustmentRange == null)
-				{
-					_adjustmentRange = (CFloat) CR2WTypeManager.Create("Float", "adjustmentRange", cr2w, this);
-				}
-				return _adjustmentRange;
-			}
-			set
-			{
-				if (_adjustmentRange == value)
-				{
-					return;
-				}
-				_adjustmentRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _adjustmentRange);
+			set => SetProperty(ref _adjustmentRange, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("adjustmentDuration")] 
 		public CFloat AdjustmentDuration
 		{
-			get
-			{
-				if (_adjustmentDuration == null)
-				{
-					_adjustmentDuration = (CFloat) CR2WTypeManager.Create("Float", "adjustmentDuration", cr2w, this);
-				}
-				return _adjustmentDuration;
-			}
-			set
-			{
-				if (_adjustmentDuration == value)
-				{
-					return;
-				}
-				_adjustmentDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _adjustmentDuration);
+			set => SetProperty(ref _adjustmentDuration, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("adjustmentRadius")] 
 		public CFloat AdjustmentRadius
 		{
-			get
-			{
-				if (_adjustmentRadius == null)
-				{
-					_adjustmentRadius = (CFloat) CR2WTypeManager.Create("Float", "adjustmentRadius", cr2w, this);
-				}
-				return _adjustmentRadius;
-			}
-			set
-			{
-				if (_adjustmentRadius == value)
-				{
-					return;
-				}
-				_adjustmentRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _adjustmentRadius);
+			set => SetProperty(ref _adjustmentRadius, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("adjustmentCurve")] 
 		public CName AdjustmentCurve
 		{
-			get
-			{
-				if (_adjustmentCurve == null)
-				{
-					_adjustmentCurve = (CName) CR2WTypeManager.Create("CName", "adjustmentCurve", cr2w, this);
-				}
-				return _adjustmentCurve;
-			}
-			set
-			{
-				if (_adjustmentCurve == value)
-				{
-					return;
-				}
-				_adjustmentCurve = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _adjustmentCurve);
+			set => SetProperty(ref _adjustmentCurve, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("cooldown")] 
 		public CFloat Cooldown
 		{
-			get
-			{
-				if (_cooldown == null)
-				{
-					_cooldown = (CFloat) CR2WTypeManager.Create("Float", "cooldown", cr2w, this);
-				}
-				return _cooldown;
-			}
-			set
-			{
-				if (_cooldown == value)
-				{
-					return;
-				}
-				_cooldown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cooldown);
+			set => SetProperty(ref _cooldown, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		public QuickMeleeAttackData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

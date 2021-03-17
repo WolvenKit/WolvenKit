@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("workspotId")] 
 		public scnSceneWorkspotInstanceId WorkspotId
 		{
-			get
-			{
-				if (_workspotId == null)
-				{
-					_workspotId = (scnSceneWorkspotInstanceId) CR2WTypeManager.Create("scnSceneWorkspotInstanceId", "workspotId", cr2w, this);
-				}
-				return _workspotId;
-			}
-			set
-			{
-				if (_workspotId == value)
-				{
-					return;
-				}
-				_workspotId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotId);
+			set => SetProperty(ref _workspotId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sequenceEntryId")] 
 		public workWorkEntryId SequenceEntryId
 		{
-			get
-			{
-				if (_sequenceEntryId == null)
-				{
-					_sequenceEntryId = (workWorkEntryId) CR2WTypeManager.Create("workWorkEntryId", "sequenceEntryId", cr2w, this);
-				}
-				return _sequenceEntryId;
-			}
-			set
-			{
-				if (_sequenceEntryId == value)
-				{
-					return;
-				}
-				_sequenceEntryId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sequenceEntryId);
+			set => SetProperty(ref _sequenceEntryId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("idleOnlyMode")] 
 		public CBool IdleOnlyMode
 		{
-			get
-			{
-				if (_idleOnlyMode == null)
-				{
-					_idleOnlyMode = (CBool) CR2WTypeManager.Create("Bool", "idleOnlyMode", cr2w, this);
-				}
-				return _idleOnlyMode;
-			}
-			set
-			{
-				if (_idleOnlyMode == value)
-				{
-					return;
-				}
-				_idleOnlyMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _idleOnlyMode);
+			set => SetProperty(ref _idleOnlyMode, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("workExcludedGestures")] 
 		public CArray<workWorkEntryId> WorkExcludedGestures
 		{
-			get
-			{
-				if (_workExcludedGestures == null)
-				{
-					_workExcludedGestures = (CArray<workWorkEntryId>) CR2WTypeManager.Create("array:workWorkEntryId", "workExcludedGestures", cr2w, this);
-				}
-				return _workExcludedGestures;
-			}
-			set
-			{
-				if (_workExcludedGestures == value)
-				{
-					return;
-				}
-				_workExcludedGestures = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workExcludedGestures);
+			set => SetProperty(ref _workExcludedGestures, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("itemOverride")] 
 		public workWorkspotItemOverride ItemOverride
 		{
-			get
-			{
-				if (_itemOverride == null)
-				{
-					_itemOverride = (workWorkspotItemOverride) CR2WTypeManager.Create("workWorkspotItemOverride", "itemOverride", cr2w, this);
-				}
-				return _itemOverride;
-			}
-			set
-			{
-				if (_itemOverride == value)
-				{
-					return;
-				}
-				_itemOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemOverride);
+			set => SetProperty(ref _itemOverride, value);
 		}
 
 		public scnEventBlendWorkspotSetupParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

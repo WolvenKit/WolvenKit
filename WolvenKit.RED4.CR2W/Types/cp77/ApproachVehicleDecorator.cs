@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mountData")] 
 		public CHandle<AIArgumentMapping> MountData
 		{
-			get
-			{
-				if (_mountData == null)
-				{
-					_mountData = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "mountData", cr2w, this);
-				}
-				return _mountData;
-			}
-			set
-			{
-				if (_mountData == value)
-				{
-					return;
-				}
-				_mountData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mountData);
+			set => SetProperty(ref _mountData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("mountRequest")] 
 		public CHandle<AIArgumentMapping> MountRequest
 		{
-			get
-			{
-				if (_mountRequest == null)
-				{
-					_mountRequest = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "mountRequest", cr2w, this);
-				}
-				return _mountRequest;
-			}
-			set
-			{
-				if (_mountRequest == value)
-				{
-					return;
-				}
-				_mountRequest = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mountRequest);
+			set => SetProperty(ref _mountRequest, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entryPoint")] 
 		public CHandle<AIArgumentMapping> EntryPoint
 		{
-			get
-			{
-				if (_entryPoint == null)
-				{
-					_entryPoint = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "entryPoint", cr2w, this);
-				}
-				return _entryPoint;
-			}
-			set
-			{
-				if (_entryPoint == value)
-				{
-					return;
-				}
-				_entryPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryPoint);
+			set => SetProperty(ref _entryPoint, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("doorOpenRequestSent")] 
 		public CBool DoorOpenRequestSent
 		{
-			get
-			{
-				if (_doorOpenRequestSent == null)
-				{
-					_doorOpenRequestSent = (CBool) CR2WTypeManager.Create("Bool", "doorOpenRequestSent", cr2w, this);
-				}
-				return _doorOpenRequestSent;
-			}
-			set
-			{
-				if (_doorOpenRequestSent == value)
-				{
-					return;
-				}
-				_doorOpenRequestSent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _doorOpenRequestSent);
+			set => SetProperty(ref _doorOpenRequestSent, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("closeDoor")] 
 		public CBool CloseDoor
 		{
-			get
-			{
-				if (_closeDoor == null)
-				{
-					_closeDoor = (CBool) CR2WTypeManager.Create("Bool", "closeDoor", cr2w, this);
-				}
-				return _closeDoor;
-			}
-			set
-			{
-				if (_closeDoor == value)
-				{
-					return;
-				}
-				_closeDoor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _closeDoor);
+			set => SetProperty(ref _closeDoor, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("mountEventData")] 
 		public CHandle<gameMountEventData> MountEventData
 		{
-			get
-			{
-				if (_mountEventData == null)
-				{
-					_mountEventData = (CHandle<gameMountEventData>) CR2WTypeManager.Create("handle:gameMountEventData", "mountEventData", cr2w, this);
-				}
-				return _mountEventData;
-			}
-			set
-			{
-				if (_mountEventData == value)
-				{
-					return;
-				}
-				_mountEventData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mountEventData);
+			set => SetProperty(ref _mountEventData, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("mountRequestData")] 
 		public CHandle<gameMountEventData> MountRequestData
 		{
-			get
-			{
-				if (_mountRequestData == null)
-				{
-					_mountRequestData = (CHandle<gameMountEventData>) CR2WTypeManager.Create("handle:gameMountEventData", "mountRequestData", cr2w, this);
-				}
-				return _mountRequestData;
-			}
-			set
-			{
-				if (_mountRequestData == value)
-				{
-					return;
-				}
-				_mountRequestData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mountRequestData);
+			set => SetProperty(ref _mountRequestData, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("mountEntryPoint")] 
 		public Vector4 MountEntryPoint
 		{
-			get
-			{
-				if (_mountEntryPoint == null)
-				{
-					_mountEntryPoint = (Vector4) CR2WTypeManager.Create("Vector4", "mountEntryPoint", cr2w, this);
-				}
-				return _mountEntryPoint;
-			}
-			set
-			{
-				if (_mountEntryPoint == value)
-				{
-					return;
-				}
-				_mountEntryPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mountEntryPoint);
+			set => SetProperty(ref _mountEntryPoint, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("activationTime")] 
 		public EngineTime ActivationTime
 		{
-			get
-			{
-				if (_activationTime == null)
-				{
-					_activationTime = (EngineTime) CR2WTypeManager.Create("EngineTime", "activationTime", cr2w, this);
-				}
-				return _activationTime;
-			}
-			set
-			{
-				if (_activationTime == value)
-				{
-					return;
-				}
-				_activationTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activationTime);
+			set => SetProperty(ref _activationTime, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("runCompanionCheck")] 
 		public CBool RunCompanionCheck
 		{
-			get
-			{
-				if (_runCompanionCheck == null)
-				{
-					_runCompanionCheck = (CBool) CR2WTypeManager.Create("Bool", "runCompanionCheck", cr2w, this);
-				}
-				return _runCompanionCheck;
-			}
-			set
-			{
-				if (_runCompanionCheck == value)
-				{
-					return;
-				}
-				_runCompanionCheck = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _runCompanionCheck);
+			set => SetProperty(ref _runCompanionCheck, value);
 		}
 
 		public ApproachVehicleDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

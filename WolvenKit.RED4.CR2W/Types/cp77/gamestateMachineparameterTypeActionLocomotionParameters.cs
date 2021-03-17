@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("imperfectTurn")] 
 		public CBool ImperfectTurn
 		{
-			get
-			{
-				if (_imperfectTurn == null)
-				{
-					_imperfectTurn = (CBool) CR2WTypeManager.Create("Bool", "imperfectTurn", cr2w, this);
-				}
-				return _imperfectTurn;
-			}
-			set
-			{
-				if (_imperfectTurn == value)
-				{
-					return;
-				}
-				_imperfectTurn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _imperfectTurn);
+			set => SetProperty(ref _imperfectTurn, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("speedBoostInputRequired")] 
 		public CBool SpeedBoostInputRequired
 		{
-			get
-			{
-				if (_speedBoostInputRequired == null)
-				{
-					_speedBoostInputRequired = (CBool) CR2WTypeManager.Create("Bool", "speedBoostInputRequired", cr2w, this);
-				}
-				return _speedBoostInputRequired;
-			}
-			set
-			{
-				if (_speedBoostInputRequired == value)
-				{
-					return;
-				}
-				_speedBoostInputRequired = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speedBoostInputRequired);
+			set => SetProperty(ref _speedBoostInputRequired, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("speedBoostMultiplyByDot")] 
 		public CBool SpeedBoostMultiplyByDot
 		{
-			get
-			{
-				if (_speedBoostMultiplyByDot == null)
-				{
-					_speedBoostMultiplyByDot = (CBool) CR2WTypeManager.Create("Bool", "speedBoostMultiplyByDot", cr2w, this);
-				}
-				return _speedBoostMultiplyByDot;
-			}
-			set
-			{
-				if (_speedBoostMultiplyByDot == value)
-				{
-					return;
-				}
-				_speedBoostMultiplyByDot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speedBoostMultiplyByDot);
+			set => SetProperty(ref _speedBoostMultiplyByDot, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("useCameraHeadingForMovement")] 
 		public CBool UseCameraHeadingForMovement
 		{
-			get
-			{
-				if (_useCameraHeadingForMovement == null)
-				{
-					_useCameraHeadingForMovement = (CBool) CR2WTypeManager.Create("Bool", "useCameraHeadingForMovement", cr2w, this);
-				}
-				return _useCameraHeadingForMovement;
-			}
-			set
-			{
-				if (_useCameraHeadingForMovement == value)
-				{
-					return;
-				}
-				_useCameraHeadingForMovement = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useCameraHeadingForMovement);
+			set => SetProperty(ref _useCameraHeadingForMovement, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("validImperfectTurn")] 
 		public CBool ValidImperfectTurn
 		{
-			get
-			{
-				if (_validImperfectTurn == null)
-				{
-					_validImperfectTurn = (CBool) CR2WTypeManager.Create("Bool", "validImperfectTurn", cr2w, this);
-				}
-				return _validImperfectTurn;
-			}
-			set
-			{
-				if (_validImperfectTurn == value)
-				{
-					return;
-				}
-				_validImperfectTurn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _validImperfectTurn);
+			set => SetProperty(ref _validImperfectTurn, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("validSpeedBoostInputRequired")] 
 		public CBool ValidSpeedBoostInputRequired
 		{
-			get
-			{
-				if (_validSpeedBoostInputRequired == null)
-				{
-					_validSpeedBoostInputRequired = (CBool) CR2WTypeManager.Create("Bool", "validSpeedBoostInputRequired", cr2w, this);
-				}
-				return _validSpeedBoostInputRequired;
-			}
-			set
-			{
-				if (_validSpeedBoostInputRequired == value)
-				{
-					return;
-				}
-				_validSpeedBoostInputRequired = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _validSpeedBoostInputRequired);
+			set => SetProperty(ref _validSpeedBoostInputRequired, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("validSpeedBoostMultiplyByDot")] 
 		public CBool ValidSpeedBoostMultiplyByDot
 		{
-			get
-			{
-				if (_validSpeedBoostMultiplyByDot == null)
-				{
-					_validSpeedBoostMultiplyByDot = (CBool) CR2WTypeManager.Create("Bool", "validSpeedBoostMultiplyByDot", cr2w, this);
-				}
-				return _validSpeedBoostMultiplyByDot;
-			}
-			set
-			{
-				if (_validSpeedBoostMultiplyByDot == value)
-				{
-					return;
-				}
-				_validSpeedBoostMultiplyByDot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _validSpeedBoostMultiplyByDot);
+			set => SetProperty(ref _validSpeedBoostMultiplyByDot, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("validUseCameraHeadingForMovement")] 
 		public CBool ValidUseCameraHeadingForMovement
 		{
-			get
-			{
-				if (_validUseCameraHeadingForMovement == null)
-				{
-					_validUseCameraHeadingForMovement = (CBool) CR2WTypeManager.Create("Bool", "validUseCameraHeadingForMovement", cr2w, this);
-				}
-				return _validUseCameraHeadingForMovement;
-			}
-			set
-			{
-				if (_validUseCameraHeadingForMovement == value)
-				{
-					return;
-				}
-				_validUseCameraHeadingForMovement = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _validUseCameraHeadingForMovement);
+			set => SetProperty(ref _validUseCameraHeadingForMovement, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("doJump")] 
 		public CBool DoJump
 		{
-			get
-			{
-				if (_doJump == null)
-				{
-					_doJump = (CBool) CR2WTypeManager.Create("Bool", "doJump", cr2w, this);
-				}
-				return _doJump;
-			}
-			set
-			{
-				if (_doJump == value)
-				{
-					return;
-				}
-				_doJump = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _doJump);
+			set => SetProperty(ref _doJump, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("doSpeedBoost")] 
 		public CBool DoSpeedBoost
 		{
-			get
-			{
-				if (_doSpeedBoost == null)
-				{
-					_doSpeedBoost = (CBool) CR2WTypeManager.Create("Bool", "doSpeedBoost", cr2w, this);
-				}
-				return _doSpeedBoost;
-			}
-			set
-			{
-				if (_doSpeedBoost == value)
-				{
-					return;
-				}
-				_doSpeedBoost = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _doSpeedBoost);
+			set => SetProperty(ref _doSpeedBoost, value);
 		}
 
 		public gamestateMachineparameterTypeActionLocomotionParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

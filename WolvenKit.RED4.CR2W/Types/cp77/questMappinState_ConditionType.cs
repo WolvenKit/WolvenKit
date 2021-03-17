@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mappinPath")] 
 		public CHandle<gameJournalPath> MappinPath
 		{
-			get
-			{
-				if (_mappinPath == null)
-				{
-					_mappinPath = (CHandle<gameJournalPath>) CR2WTypeManager.Create("handle:gameJournalPath", "mappinPath", cr2w, this);
-				}
-				return _mappinPath;
-			}
-			set
-			{
-				if (_mappinPath == value)
-				{
-					return;
-				}
-				_mappinPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mappinPath);
+			set => SetProperty(ref _mappinPath, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("active")] 
 		public CBool Active
 		{
-			get
-			{
-				if (_active == null)
-				{
-					_active = (CBool) CR2WTypeManager.Create("Bool", "active", cr2w, this);
-				}
-				return _active;
-			}
-			set
-			{
-				if (_active == value)
-				{
-					return;
-				}
-				_active = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _active);
+			set => SetProperty(ref _active, value);
 		}
 
 		public questMappinState_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

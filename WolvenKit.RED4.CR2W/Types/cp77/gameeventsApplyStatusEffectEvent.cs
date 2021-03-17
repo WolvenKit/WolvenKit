@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isNewApplication")] 
 		public CBool IsNewApplication
 		{
-			get
-			{
-				if (_isNewApplication == null)
-				{
-					_isNewApplication = (CBool) CR2WTypeManager.Create("Bool", "isNewApplication", cr2w, this);
-				}
-				return _isNewApplication;
-			}
-			set
-			{
-				if (_isNewApplication == value)
-				{
-					return;
-				}
-				_isNewApplication = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isNewApplication);
+			set => SetProperty(ref _isNewApplication, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("instigatorEntityID")] 
 		public entEntityID InstigatorEntityID
 		{
-			get
-			{
-				if (_instigatorEntityID == null)
-				{
-					_instigatorEntityID = (entEntityID) CR2WTypeManager.Create("entEntityID", "instigatorEntityID", cr2w, this);
-				}
-				return _instigatorEntityID;
-			}
-			set
-			{
-				if (_instigatorEntityID == value)
-				{
-					return;
-				}
-				_instigatorEntityID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instigatorEntityID);
+			set => SetProperty(ref _instigatorEntityID, value);
 		}
 
 		public gameeventsApplyStatusEffectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

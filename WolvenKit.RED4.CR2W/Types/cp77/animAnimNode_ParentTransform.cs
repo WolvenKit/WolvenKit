@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mapping")] 
 		public CArray<animAnimTransformMappingEntry> Mapping
 		{
-			get
-			{
-				if (_mapping == null)
-				{
-					_mapping = (CArray<animAnimTransformMappingEntry>) CR2WTypeManager.Create("array:animAnimTransformMappingEntry", "mapping", cr2w, this);
-				}
-				return _mapping;
-			}
-			set
-			{
-				if (_mapping == value)
-				{
-					return;
-				}
-				_mapping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mapping);
+			set => SetProperty(ref _mapping, value);
 		}
 
 		public animAnimNode_ParentTransform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

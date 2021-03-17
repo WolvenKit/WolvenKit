@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("textWidget")] 
 		public inkTextWidgetReference TextWidget
 		{
-			get
-			{
-				if (_textWidget == null)
-				{
-					_textWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "textWidget", cr2w, this);
-				}
-				return _textWidget;
-			}
-			set
-			{
-				if (_textWidget == value)
-				{
-					return;
-				}
-				_textWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textWidget);
+			set => SetProperty(ref _textWidget, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("imageWidgetPath")] 
 		public inkWidgetPath ImageWidgetPath
 		{
-			get
-			{
-				if (_imageWidgetPath == null)
-				{
-					_imageWidgetPath = (inkWidgetPath) CR2WTypeManager.Create("inkWidgetPath", "imageWidgetPath", cr2w, this);
-				}
-				return _imageWidgetPath;
-			}
-			set
-			{
-				if (_imageWidgetPath == value)
-				{
-					return;
-				}
-				_imageWidgetPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _imageWidgetPath);
+			set => SetProperty(ref _imageWidgetPath, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("imageWidget")] 
 		public wCHandle<inkImageWidget> ImageWidget
 		{
-			get
-			{
-				if (_imageWidget == null)
-				{
-					_imageWidget = (wCHandle<inkImageWidget>) CR2WTypeManager.Create("whandle:inkImageWidget", "imageWidget", cr2w, this);
-				}
-				return _imageWidget;
-			}
-			set
-			{
-				if (_imageWidget == value)
-				{
-					return;
-				}
-				_imageWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _imageWidget);
+			set => SetProperty(ref _imageWidget, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("panelWidget")] 
 		public wCHandle<inkBasePanelWidget> PanelWidget
 		{
-			get
-			{
-				if (_panelWidget == null)
-				{
-					_panelWidget = (wCHandle<inkBasePanelWidget>) CR2WTypeManager.Create("whandle:inkBasePanelWidget", "panelWidget", cr2w, this);
-				}
-				return _panelWidget;
-			}
-			set
-			{
-				if (_panelWidget == value)
-				{
-					return;
-				}
-				_panelWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _panelWidget);
+			set => SetProperty(ref _panelWidget, value);
 		}
 
 		public sampleUIPathAndReferenceGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

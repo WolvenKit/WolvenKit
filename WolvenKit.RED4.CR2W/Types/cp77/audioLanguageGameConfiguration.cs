@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("langsInProject")] 
 		public CArray<audioLanguageMapItem> LangsInProject
 		{
-			get
-			{
-				if (_langsInProject == null)
-				{
-					_langsInProject = (CArray<audioLanguageMapItem>) CR2WTypeManager.Create("array:audioLanguageMapItem", "langsInProject", cr2w, this);
-				}
-				return _langsInProject;
-			}
-			set
-			{
-				if (_langsInProject == value)
-				{
-					return;
-				}
-				_langsInProject = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _langsInProject);
+			set => SetProperty(ref _langsInProject, value);
 		}
 
 		public audioLanguageGameConfiguration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

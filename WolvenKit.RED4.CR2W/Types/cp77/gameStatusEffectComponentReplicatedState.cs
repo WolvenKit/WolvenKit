@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("replicatedInfo")] 
 		public CArray<gameStatusEffectReplicatedInfo> ReplicatedInfo
 		{
-			get
-			{
-				if (_replicatedInfo == null)
-				{
-					_replicatedInfo = (CArray<gameStatusEffectReplicatedInfo>) CR2WTypeManager.Create("array:gameStatusEffectReplicatedInfo", "replicatedInfo", cr2w, this);
-				}
-				return _replicatedInfo;
-			}
-			set
-			{
-				if (_replicatedInfo == value)
-				{
-					return;
-				}
-				_replicatedInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _replicatedInfo);
+			set => SetProperty(ref _replicatedInfo, value);
 		}
 
 		public gameStatusEffectComponentReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

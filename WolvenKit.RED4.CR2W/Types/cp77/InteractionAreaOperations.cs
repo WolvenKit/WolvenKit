@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("interactionAreaOperations")] 
 		public CArray<SInteractionAreaOperationData> InteractionAreaOperations_
 		{
-			get
-			{
-				if (_interactionAreaOperations == null)
-				{
-					_interactionAreaOperations = (CArray<SInteractionAreaOperationData>) CR2WTypeManager.Create("array:SInteractionAreaOperationData", "interactionAreaOperations", cr2w, this);
-				}
-				return _interactionAreaOperations;
-			}
-			set
-			{
-				if (_interactionAreaOperations == value)
-				{
-					return;
-				}
-				_interactionAreaOperations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interactionAreaOperations);
+			set => SetProperty(ref _interactionAreaOperations, value);
 		}
 
 		public InteractionAreaOperations(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

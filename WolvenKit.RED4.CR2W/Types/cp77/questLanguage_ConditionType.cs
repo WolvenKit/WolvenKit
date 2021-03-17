@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mode")] 
 		public CEnum<questLanguageMode> Mode
 		{
-			get
-			{
-				if (_mode == null)
-				{
-					_mode = (CEnum<questLanguageMode>) CR2WTypeManager.Create("questLanguageMode", "mode", cr2w, this);
-				}
-				return _mode;
-			}
-			set
-			{
-				if (_mode == value)
-				{
-					return;
-				}
-				_mode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mode);
+			set => SetProperty(ref _mode, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("languageCode")] 
 		public CString LanguageCode
 		{
-			get
-			{
-				if (_languageCode == null)
-				{
-					_languageCode = (CString) CR2WTypeManager.Create("String", "languageCode", cr2w, this);
-				}
-				return _languageCode;
-			}
-			set
-			{
-				if (_languageCode == value)
-				{
-					return;
-				}
-				_languageCode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _languageCode);
+			set => SetProperty(ref _languageCode, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("inverted")] 
 		public CBool Inverted
 		{
-			get
-			{
-				if (_inverted == null)
-				{
-					_inverted = (CBool) CR2WTypeManager.Create("Bool", "inverted", cr2w, this);
-				}
-				return _inverted;
-			}
-			set
-			{
-				if (_inverted == value)
-				{
-					return;
-				}
-				_inverted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inverted);
+			set => SetProperty(ref _inverted, value);
 		}
 
 		public questLanguage_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

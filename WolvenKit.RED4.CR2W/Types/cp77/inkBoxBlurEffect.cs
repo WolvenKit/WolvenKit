@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("samples")] 
 		public CUInt8 Samples
 		{
-			get
-			{
-				if (_samples == null)
-				{
-					_samples = (CUInt8) CR2WTypeManager.Create("Uint8", "samples", cr2w, this);
-				}
-				return _samples;
-			}
-			set
-			{
-				if (_samples == value)
-				{
-					return;
-				}
-				_samples = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _samples);
+			set => SetProperty(ref _samples, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("intensity")] 
 		public CFloat Intensity
 		{
-			get
-			{
-				if (_intensity == null)
-				{
-					_intensity = (CFloat) CR2WTypeManager.Create("Float", "intensity", cr2w, this);
-				}
-				return _intensity;
-			}
-			set
-			{
-				if (_intensity == value)
-				{
-					return;
-				}
-				_intensity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _intensity);
+			set => SetProperty(ref _intensity, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("blurDimension")] 
 		public CEnum<inkEBlurDimension> BlurDimension
 		{
-			get
-			{
-				if (_blurDimension == null)
-				{
-					_blurDimension = (CEnum<inkEBlurDimension>) CR2WTypeManager.Create("inkEBlurDimension", "blurDimension", cr2w, this);
-				}
-				return _blurDimension;
-			}
-			set
-			{
-				if (_blurDimension == value)
-				{
-					return;
-				}
-				_blurDimension = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blurDimension);
+			set => SetProperty(ref _blurDimension, value);
 		}
 
 		public inkBoxBlurEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

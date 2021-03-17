@@ -25,299 +25,104 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get
-			{
-				if (_slotName == null)
-				{
-					_slotName = (CName) CR2WTypeManager.Create("CName", "slotName", cr2w, this);
-				}
-				return _slotName;
-			}
-			set
-			{
-				if (_slotName == value)
-				{
-					return;
-				}
-				_slotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotName);
+			set => SetProperty(ref _slotName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("offsetPos")] 
 		public Vector3 OffsetPos
 		{
-			get
-			{
-				if (_offsetPos == null)
-				{
-					_offsetPos = (Vector3) CR2WTypeManager.Create("Vector3", "offsetPos", cr2w, this);
-				}
-				return _offsetPos;
-			}
-			set
-			{
-				if (_offsetPos == value)
-				{
-					return;
-				}
-				_offsetPos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offsetPos);
+			set => SetProperty(ref _offsetPos, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("adjustPitch")] 
 		public CBool AdjustPitch
 		{
-			get
-			{
-				if (_adjustPitch == null)
-				{
-					_adjustPitch = (CBool) CR2WTypeManager.Create("Bool", "adjustPitch", cr2w, this);
-				}
-				return _adjustPitch;
-			}
-			set
-			{
-				if (_adjustPitch == value)
-				{
-					return;
-				}
-				_adjustPitch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _adjustPitch);
+			set => SetProperty(ref _adjustPitch, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("adjustYaw")] 
 		public CBool AdjustYaw
 		{
-			get
-			{
-				if (_adjustYaw == null)
-				{
-					_adjustYaw = (CBool) CR2WTypeManager.Create("Bool", "adjustYaw", cr2w, this);
-				}
-				return _adjustYaw;
-			}
-			set
-			{
-				if (_adjustYaw == value)
-				{
-					return;
-				}
-				_adjustYaw = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _adjustYaw);
+			set => SetProperty(ref _adjustYaw, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("endOnTargetReached")] 
 		public CBool EndOnTargetReached
 		{
-			get
-			{
-				if (_endOnTargetReached == null)
-				{
-					_endOnTargetReached = (CBool) CR2WTypeManager.Create("Bool", "endOnTargetReached", cr2w, this);
-				}
-				return _endOnTargetReached;
-			}
-			set
-			{
-				if (_endOnTargetReached == value)
-				{
-					return;
-				}
-				_endOnTargetReached = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endOnTargetReached);
+			set => SetProperty(ref _endOnTargetReached, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("endOnCameraInputApplied")] 
 		public CBool EndOnCameraInputApplied
 		{
-			get
-			{
-				if (_endOnCameraInputApplied == null)
-				{
-					_endOnCameraInputApplied = (CBool) CR2WTypeManager.Create("Bool", "endOnCameraInputApplied", cr2w, this);
-				}
-				return _endOnCameraInputApplied;
-			}
-			set
-			{
-				if (_endOnCameraInputApplied == value)
-				{
-					return;
-				}
-				_endOnCameraInputApplied = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endOnCameraInputApplied);
+			set => SetProperty(ref _endOnCameraInputApplied, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("endOnTimeExceeded")] 
 		public CBool EndOnTimeExceeded
 		{
-			get
-			{
-				if (_endOnTimeExceeded == null)
-				{
-					_endOnTimeExceeded = (CBool) CR2WTypeManager.Create("Bool", "endOnTimeExceeded", cr2w, this);
-				}
-				return _endOnTimeExceeded;
-			}
-			set
-			{
-				if (_endOnTimeExceeded == value)
-				{
-					return;
-				}
-				_endOnTimeExceeded = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endOnTimeExceeded);
+			set => SetProperty(ref _endOnTimeExceeded, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("cameraInputMagToBreak")] 
 		public CFloat CameraInputMagToBreak
 		{
-			get
-			{
-				if (_cameraInputMagToBreak == null)
-				{
-					_cameraInputMagToBreak = (CFloat) CR2WTypeManager.Create("Float", "cameraInputMagToBreak", cr2w, this);
-				}
-				return _cameraInputMagToBreak;
-			}
-			set
-			{
-				if (_cameraInputMagToBreak == value)
-				{
-					return;
-				}
-				_cameraInputMagToBreak = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameraInputMagToBreak);
+			set => SetProperty(ref _cameraInputMagToBreak, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("precision")] 
 		public CFloat Precision
 		{
-			get
-			{
-				if (_precision == null)
-				{
-					_precision = (CFloat) CR2WTypeManager.Create("Float", "precision", cr2w, this);
-				}
-				return _precision;
-			}
-			set
-			{
-				if (_precision == value)
-				{
-					return;
-				}
-				_precision = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _precision);
+			set => SetProperty(ref _precision, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("maxDuration")] 
 		public CFloat MaxDuration
 		{
-			get
-			{
-				if (_maxDuration == null)
-				{
-					_maxDuration = (CFloat) CR2WTypeManager.Create("Float", "maxDuration", cr2w, this);
-				}
-				return _maxDuration;
-			}
-			set
-			{
-				if (_maxDuration == value)
-				{
-					return;
-				}
-				_maxDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxDuration);
+			set => SetProperty(ref _maxDuration, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("easeIn")] 
 		public CBool EaseIn
 		{
-			get
-			{
-				if (_easeIn == null)
-				{
-					_easeIn = (CBool) CR2WTypeManager.Create("Bool", "easeIn", cr2w, this);
-				}
-				return _easeIn;
-			}
-			set
-			{
-				if (_easeIn == value)
-				{
-					return;
-				}
-				_easeIn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _easeIn);
+			set => SetProperty(ref _easeIn, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("easeOut")] 
 		public CBool EaseOut
 		{
-			get
-			{
-				if (_easeOut == null)
-				{
-					_easeOut = (CBool) CR2WTypeManager.Create("Bool", "easeOut", cr2w, this);
-				}
-				return _easeOut;
-			}
-			set
-			{
-				if (_easeOut == value)
-				{
-					return;
-				}
-				_easeOut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _easeOut);
+			set => SetProperty(ref _easeOut, value);
 		}
 
 		public scneventsPlayerLookAtEventParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

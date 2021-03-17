@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("brokenUIDs")] 
 		public CArray<worldTrafficLaneUID> BrokenUIDs
 		{
-			get
-			{
-				if (_brokenUIDs == null)
-				{
-					_brokenUIDs = (CArray<worldTrafficLaneUID>) CR2WTypeManager.Create("array:worldTrafficLaneUID", "brokenUIDs", cr2w, this);
-				}
-				return _brokenUIDs;
-			}
-			set
-			{
-				if (_brokenUIDs == value)
-				{
-					return;
-				}
-				_brokenUIDs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _brokenUIDs);
+			set => SetProperty(ref _brokenUIDs, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("brokenUIDsDeadEnds")] 
 		public CArray<worldTrafficLaneUID> BrokenUIDsDeadEnds
 		{
-			get
-			{
-				if (_brokenUIDsDeadEnds == null)
-				{
-					_brokenUIDsDeadEnds = (CArray<worldTrafficLaneUID>) CR2WTypeManager.Create("array:worldTrafficLaneUID", "brokenUIDsDeadEnds", cr2w, this);
-				}
-				return _brokenUIDsDeadEnds;
-			}
-			set
-			{
-				if (_brokenUIDsDeadEnds == value)
-				{
-					return;
-				}
-				_brokenUIDsDeadEnds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _brokenUIDsDeadEnds);
+			set => SetProperty(ref _brokenUIDsDeadEnds, value);
 		}
 
 		public worldTrafficPersistentDebugResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

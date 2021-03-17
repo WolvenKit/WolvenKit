@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetTrack")] 
 		public animNamedTrackIndex TargetTrack
 		{
-			get
-			{
-				if (_targetTrack == null)
-				{
-					_targetTrack = (animNamedTrackIndex) CR2WTypeManager.Create("animNamedTrackIndex", "targetTrack", cr2w, this);
-				}
-				return _targetTrack;
-			}
-			set
-			{
-				if (_targetTrack == value)
-				{
-					return;
-				}
-				_targetTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetTrack);
+			set => SetProperty(ref _targetTrack, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("multiplier")] 
 		public CFloat Multiplier
 		{
-			get
-			{
-				if (_multiplier == null)
-				{
-					_multiplier = (CFloat) CR2WTypeManager.Create("Float", "multiplier", cr2w, this);
-				}
-				return _multiplier;
-			}
-			set
-			{
-				if (_multiplier == value)
-				{
-					return;
-				}
-				_multiplier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _multiplier);
+			set => SetProperty(ref _multiplier, value);
 		}
 
 		public animSimpleBounceTrackOutput(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

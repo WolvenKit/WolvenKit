@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actionType")] 
 		public CEnum<audioMixingActionType> ActionType
 		{
-			get
-			{
-				if (_actionType == null)
-				{
-					_actionType = (CEnum<audioMixingActionType>) CR2WTypeManager.Create("audioMixingActionType", "actionType", cr2w, this);
-				}
-				return _actionType;
-			}
-			set
-			{
-				if (_actionType == value)
-				{
-					return;
-				}
-				_actionType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionType);
+			set => SetProperty(ref _actionType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("voContext")] 
 		public CEnum<locVoiceoverContext> VoContext
 		{
-			get
-			{
-				if (_voContext == null)
-				{
-					_voContext = (CEnum<locVoiceoverContext>) CR2WTypeManager.Create("locVoiceoverContext", "voContext", cr2w, this);
-				}
-				return _voContext;
-			}
-			set
-			{
-				if (_voContext == value)
-				{
-					return;
-				}
-				_voContext = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _voContext);
+			set => SetProperty(ref _voContext, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tagValue")] 
 		public CName TagValue
 		{
-			get
-			{
-				if (_tagValue == null)
-				{
-					_tagValue = (CName) CR2WTypeManager.Create("CName", "tagValue", cr2w, this);
-				}
-				return _tagValue;
-			}
-			set
-			{
-				if (_tagValue == value)
-				{
-					return;
-				}
-				_tagValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tagValue);
+			set => SetProperty(ref _tagValue, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("dbOffset")] 
 		public CFloat DbOffset
 		{
-			get
-			{
-				if (_dbOffset == null)
-				{
-					_dbOffset = (CFloat) CR2WTypeManager.Create("Float", "dbOffset", cr2w, this);
-				}
-				return _dbOffset;
-			}
-			set
-			{
-				if (_dbOffset == value)
-				{
-					return;
-				}
-				_dbOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dbOffset);
+			set => SetProperty(ref _dbOffset, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("distanceRolloffFactor")] 
 		public CFloat DistanceRolloffFactor
 		{
-			get
-			{
-				if (_distanceRolloffFactor == null)
-				{
-					_distanceRolloffFactor = (CFloat) CR2WTypeManager.Create("Float", "distanceRolloffFactor", cr2w, this);
-				}
-				return _distanceRolloffFactor;
-			}
-			set
-			{
-				if (_distanceRolloffFactor == value)
-				{
-					return;
-				}
-				_distanceRolloffFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distanceRolloffFactor);
+			set => SetProperty(ref _distanceRolloffFactor, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("voEventOverride")] 
 		public CName VoEventOverride
 		{
-			get
-			{
-				if (_voEventOverride == null)
-				{
-					_voEventOverride = (CName) CR2WTypeManager.Create("CName", "voEventOverride", cr2w, this);
-				}
-				return _voEventOverride;
-			}
-			set
-			{
-				if (_voEventOverride == value)
-				{
-					return;
-				}
-				_voEventOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _voEventOverride);
+			set => SetProperty(ref _voEventOverride, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("customParametersSetKey")] 
 		public CUInt64 CustomParametersSetKey
 		{
-			get
-			{
-				if (_customParametersSetKey == null)
-				{
-					_customParametersSetKey = (CUInt64) CR2WTypeManager.Create("Uint64", "customParametersSetKey", cr2w, this);
-				}
-				return _customParametersSetKey;
-			}
-			set
-			{
-				if (_customParametersSetKey == value)
-				{
-					return;
-				}
-				_customParametersSetKey = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customParametersSetKey);
+			set => SetProperty(ref _customParametersSetKey, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("customParameters")] 
 		public CArray<audioAudSimpleParameter> CustomParameters
 		{
-			get
-			{
-				if (_customParameters == null)
-				{
-					_customParameters = (CArray<audioAudSimpleParameter>) CR2WTypeManager.Create("array:audioAudSimpleParameter", "customParameters", cr2w, this);
-				}
-				return _customParameters;
-			}
-			set
-			{
-				if (_customParameters == value)
-				{
-					return;
-				}
-				_customParameters = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customParameters);
+			set => SetProperty(ref _customParameters, value);
 		}
 
 		public audioMixingActionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("basePersonalSpace")] 
 		public CFloat BasePersonalSpace
 		{
-			get
-			{
-				if (_basePersonalSpace == null)
-				{
-					_basePersonalSpace = (CFloat) CR2WTypeManager.Create("Float", "basePersonalSpace", cr2w, this);
-				}
-				return _basePersonalSpace;
-			}
-			set
-			{
-				if (_basePersonalSpace == value)
-				{
-					return;
-				}
-				_basePersonalSpace = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _basePersonalSpace);
+			set => SetProperty(ref _basePersonalSpace, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("baseHeight")] 
 		public CFloat BaseHeight
 		{
-			get
-			{
-				if (_baseHeight == null)
-				{
-					_baseHeight = (CFloat) CR2WTypeManager.Create("Float", "baseHeight", cr2w, this);
-				}
-				return _baseHeight;
-			}
-			set
-			{
-				if (_baseHeight == value)
-				{
-					return;
-				}
-				_baseHeight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _baseHeight);
+			set => SetProperty(ref _baseHeight, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("baseEyesHeightRatio")] 
 		public CFloat BaseEyesHeightRatio
 		{
-			get
-			{
-				if (_baseEyesHeightRatio == null)
-				{
-					_baseEyesHeightRatio = (CFloat) CR2WTypeManager.Create("Float", "baseEyesHeightRatio", cr2w, this);
-				}
-				return _baseEyesHeightRatio;
-			}
-			set
-			{
-				if (_baseEyesHeightRatio == value)
-				{
-					return;
-				}
-				_baseEyesHeightRatio = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _baseEyesHeightRatio);
+			set => SetProperty(ref _baseEyesHeightRatio, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("stanceAnimFeatureName")] 
 		public CName StanceAnimFeatureName
 		{
-			get
-			{
-				if (_stanceAnimFeatureName == null)
-				{
-					_stanceAnimFeatureName = (CName) CR2WTypeManager.Create("CName", "stanceAnimFeatureName", cr2w, this);
-				}
-				return _stanceAnimFeatureName;
-			}
-			set
-			{
-				if (_stanceAnimFeatureName == value)
-				{
-					return;
-				}
-				_stanceAnimFeatureName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stanceAnimFeatureName);
+			set => SetProperty(ref _stanceAnimFeatureName, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("aimAnimFeatureName")] 
 		public CName AimAnimFeatureName
 		{
-			get
-			{
-				if (_aimAnimFeatureName == null)
-				{
-					_aimAnimFeatureName = (CName) CR2WTypeManager.Create("CName", "aimAnimFeatureName", cr2w, this);
-				}
-				return _aimAnimFeatureName;
-			}
-			set
-			{
-				if (_aimAnimFeatureName == value)
-				{
-					return;
-				}
-				_aimAnimFeatureName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aimAnimFeatureName);
+			set => SetProperty(ref _aimAnimFeatureName, value);
 		}
 
 		public gameHumanoidBody(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

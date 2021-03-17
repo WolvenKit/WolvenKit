@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("screenDefinition")] 
 		public CHandle<gamedataDeviceUIDefinition_Record> ScreenDefinition
 		{
-			get
-			{
-				if (_screenDefinition == null)
-				{
-					_screenDefinition = (CHandle<gamedataDeviceUIDefinition_Record>) CR2WTypeManager.Create("handle:gamedataDeviceUIDefinition_Record", "screenDefinition", cr2w, this);
-				}
-				return _screenDefinition;
-			}
-			set
-			{
-				if (_screenDefinition == value)
-				{
-					return;
-				}
-				_screenDefinition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _screenDefinition);
+			set => SetProperty(ref _screenDefinition, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("style")] 
 		public CHandle<gamedataWidgetStyle_Record> Style
 		{
-			get
-			{
-				if (_style == null)
-				{
-					_style = (CHandle<gamedataWidgetStyle_Record>) CR2WTypeManager.Create("handle:gamedataWidgetStyle_Record", "style", cr2w, this);
-				}
-				return _style;
-			}
-			set
-			{
-				if (_style == value)
-				{
-					return;
-				}
-				_style = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _style);
+			set => SetProperty(ref _style, value);
 		}
 
 		public ScreenDefinitionPackage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

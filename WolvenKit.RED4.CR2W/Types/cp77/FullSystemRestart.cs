@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("restartDuration")] 
 		public CInt32 RestartDuration
 		{
-			get
-			{
-				if (_restartDuration == null)
-				{
-					_restartDuration = (CInt32) CR2WTypeManager.Create("Int32", "restartDuration", cr2w, this);
-				}
-				return _restartDuration;
-			}
-			set
-			{
-				if (_restartDuration == value)
-				{
-					return;
-				}
-				_restartDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _restartDuration);
+			set => SetProperty(ref _restartDuration, value);
 		}
 
 		public FullSystemRestart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

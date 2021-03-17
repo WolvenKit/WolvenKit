@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("MessegeData")] 
 		public gamebbScriptID_Variant MessegeData
 		{
-			get
-			{
-				if (_messegeData == null)
-				{
-					_messegeData = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "MessegeData", cr2w, this);
-				}
-				return _messegeData;
-			}
-			set
-			{
-				if (_messegeData == value)
-				{
-					return;
-				}
-				_messegeData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _messegeData);
+			set => SetProperty(ref _messegeData, value);
 		}
 
 		public LcdScreenBlackBoardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

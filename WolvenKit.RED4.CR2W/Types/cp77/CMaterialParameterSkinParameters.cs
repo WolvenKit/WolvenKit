@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("skinProfile")] 
 		public rRef<CSkinProfile> SkinProfile
 		{
-			get
-			{
-				if (_skinProfile == null)
-				{
-					_skinProfile = (rRef<CSkinProfile>) CR2WTypeManager.Create("rRef:CSkinProfile", "skinProfile", cr2w, this);
-				}
-				return _skinProfile;
-			}
-			set
-			{
-				if (_skinProfile == value)
-				{
-					return;
-				}
-				_skinProfile = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skinProfile);
+			set => SetProperty(ref _skinProfile, value);
 		}
 
 		public CMaterialParameterSkinParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

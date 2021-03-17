@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("zone")] 
 		public CUInt32 Zone
 		{
-			get
-			{
-				if (_zone == null)
-				{
-					_zone = (CUInt32) CR2WTypeManager.Create("Uint32", "zone", cr2w, this);
-				}
-				return _zone;
-			}
-			set
-			{
-				if (_zone == value)
-				{
-					return;
-				}
-				_zone = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _zone);
+			set => SetProperty(ref _zone, value);
 		}
 
 		public InterestingFactsListenersIds(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

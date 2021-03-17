@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get
-			{
-				if (_vehicleRef == null)
-				{
-					_vehicleRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "vehicleRef", cr2w, this);
-				}
-				return _vehicleRef;
-			}
-			set
-			{
-				if (_vehicleRef == value)
-				{
-					return;
-				}
-				_vehicleRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleRef);
+			set => SetProperty(ref _vehicleRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("speed")] 
 		public CFloat Speed
 		{
-			get
-			{
-				if (_speed == null)
-				{
-					_speed = (CFloat) CR2WTypeManager.Create("Float", "speed", cr2w, this);
-				}
-				return _speed;
-			}
-			set
-			{
-				if (_speed == value)
-				{
-					return;
-				}
-				_speed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speed);
+			set => SetProperty(ref _speed, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("adjustTime")] 
 		public CFloat AdjustTime
 		{
-			get
-			{
-				if (_adjustTime == null)
-				{
-					_adjustTime = (CFloat) CR2WTypeManager.Create("Float", "adjustTime", cr2w, this);
-				}
-				return _adjustTime;
-			}
-			set
-			{
-				if (_adjustTime == value)
-				{
-					return;
-				}
-				_adjustTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _adjustTime);
+			set => SetProperty(ref _adjustTime, value);
 		}
 
 		public questOverrideSplineSpeed_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

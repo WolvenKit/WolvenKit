@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("distantLightStartDistance")] 
 		public CFloat DistantLightStartDistance
 		{
-			get
-			{
-				if (_distantLightStartDistance == null)
-				{
-					_distantLightStartDistance = (CFloat) CR2WTypeManager.Create("Float", "distantLightStartDistance", cr2w, this);
-				}
-				return _distantLightStartDistance;
-			}
-			set
-			{
-				if (_distantLightStartDistance == value)
-				{
-					return;
-				}
-				_distantLightStartDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distantLightStartDistance);
+			set => SetProperty(ref _distantLightStartDistance, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("distantLightFadeDistance")] 
 		public CFloat DistantLightFadeDistance
 		{
-			get
-			{
-				if (_distantLightFadeDistance == null)
-				{
-					_distantLightFadeDistance = (CFloat) CR2WTypeManager.Create("Float", "distantLightFadeDistance", cr2w, this);
-				}
-				return _distantLightFadeDistance;
-			}
-			set
-			{
-				if (_distantLightFadeDistance == value)
-				{
-					return;
-				}
-				_distantLightFadeDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distantLightFadeDistance);
+			set => SetProperty(ref _distantLightFadeDistance, value);
 		}
 
 		public DistantLightsAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -8,7 +8,15 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
 	public class gameDeviceResourceData : gameDeviceResourceData_
     {
-        [Ordinal(1000)] [REDBuffer(true)] public CArray<gameCookedDeviceDataCompressed> CookedDeviceData { get; set; }
+        private CArray<gameCookedDeviceDataCompressed> _cookedDeviceData;
+
+        [Ordinal(1000)]
+        [REDBuffer(true)]
+        public CArray<gameCookedDeviceDataCompressed> CookedDeviceData
+        {
+            get => GetProperty(ref _cookedDeviceData);
+            set => SetProperty(ref _cookedDeviceData, value);
+        }
 
         public gameDeviceResourceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
@@ -41,11 +49,51 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class gameCookedDeviceDataCompressed : CVariable
     {
-        [Ordinal(0)] [RED("Hash")] public CUInt64 Hash { get; set; }
-        [Ordinal(1)] [RED("className")] public CName ClassName { get; set; }
-        [Ordinal(2)] [REDBuffer(true)] public CArrayCompressed<CUInt64> Parents { get; set; }
-        [Ordinal(3)] [REDBuffer(true)] public CArrayCompressed<CUInt64> Children { get; set; }
-        [Ordinal(4)] [REDBuffer(true)] public Vector3 NodePosition { get; set; }
+        private CUInt64 _hash;
+        private CName _className;
+        private CArrayCompressed<CUInt64> _parents;
+        private CArrayCompressed<CUInt64> _children;
+        private Vector3 _nodePosition;
+
+        [Ordinal(0)]
+        [RED("Hash")]
+        public CUInt64 Hash
+        {
+            get => GetProperty(ref _hash);
+            set => SetProperty(ref _hash, value);
+        }
+
+        [Ordinal(1)]
+        [RED("className")]
+        public CName ClassName
+        {
+            get => GetProperty(ref _className);
+            set => SetProperty(ref _className, value);
+        }
+
+        [Ordinal(2)]
+        [REDBuffer(true)]
+        public CArrayCompressed<CUInt64> Parents
+        {
+            get => GetProperty(ref _parents);
+            set => SetProperty(ref _parents, value);
+        }
+
+        [Ordinal(3)]
+        [REDBuffer(true)]
+        public CArrayCompressed<CUInt64> Children
+        {
+            get => GetProperty(ref _children);
+            set => SetProperty(ref _children, value);
+        }
+
+        [Ordinal(4)]
+        [REDBuffer(true)]
+        public Vector3 NodePosition
+        {
+            get => GetProperty(ref _nodePosition);
+            set => SetProperty(ref _nodePosition, value);
+        }
 
         public gameCookedDeviceDataCompressed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

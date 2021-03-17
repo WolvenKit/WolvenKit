@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("latitude")] 
 		public curveData<CFloat> Latitude
 		{
-			get
-			{
-				if (_latitude == null)
-				{
-					_latitude = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "latitude", cr2w, this);
-				}
-				return _latitude;
-			}
-			set
-			{
-				if (_latitude == value)
-				{
-					return;
-				}
-				_latitude = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _latitude);
+			set => SetProperty(ref _latitude, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("season")] 
 		public CEnum<ETimeOfYearSeason> Season
 		{
-			get
-			{
-				if (_season == null)
-				{
-					_season = (CEnum<ETimeOfYearSeason>) CR2WTypeManager.Create("ETimeOfYearSeason", "season", cr2w, this);
-				}
-				return _season;
-			}
-			set
-			{
-				if (_season == value)
-				{
-					return;
-				}
-				_season = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _season);
+			set => SetProperty(ref _season, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("sunRotationOffset")] 
 		public curveData<CFloat> SunRotationOffset
 		{
-			get
-			{
-				if (_sunRotationOffset == null)
-				{
-					_sunRotationOffset = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "sunRotationOffset", cr2w, this);
-				}
-				return _sunRotationOffset;
-			}
-			set
-			{
-				if (_sunRotationOffset == value)
-				{
-					return;
-				}
-				_sunRotationOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sunRotationOffset);
+			set => SetProperty(ref _sunRotationOffset, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("sunColor")] 
 		public curveData<HDRColor> SunColor
 		{
-			get
-			{
-				if (_sunColor == null)
-				{
-					_sunColor = (curveData<HDRColor>) CR2WTypeManager.Create("curveData:HDRColor", "sunColor", cr2w, this);
-				}
-				return _sunColor;
-			}
-			set
-			{
-				if (_sunColor == value)
-				{
-					return;
-				}
-				_sunColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sunColor);
+			set => SetProperty(ref _sunColor, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("sunSize")] 
 		public curveData<CFloat> SunSize
 		{
-			get
-			{
-				if (_sunSize == null)
-				{
-					_sunSize = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "sunSize", cr2w, this);
-				}
-				return _sunSize;
-			}
-			set
-			{
-				if (_sunSize == value)
-				{
-					return;
-				}
-				_sunSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sunSize);
+			set => SetProperty(ref _sunSize, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("moonRotationOffset")] 
 		public curveData<CFloat> MoonRotationOffset
 		{
-			get
-			{
-				if (_moonRotationOffset == null)
-				{
-					_moonRotationOffset = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "moonRotationOffset", cr2w, this);
-				}
-				return _moonRotationOffset;
-			}
-			set
-			{
-				if (_moonRotationOffset == value)
-				{
-					return;
-				}
-				_moonRotationOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _moonRotationOffset);
+			set => SetProperty(ref _moonRotationOffset, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("moonColor")] 
 		public curveData<HDRColor> MoonColor
 		{
-			get
-			{
-				if (_moonColor == null)
-				{
-					_moonColor = (curveData<HDRColor>) CR2WTypeManager.Create("curveData:HDRColor", "moonColor", cr2w, this);
-				}
-				return _moonColor;
-			}
-			set
-			{
-				if (_moonColor == value)
-				{
-					return;
-				}
-				_moonColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _moonColor);
+			set => SetProperty(ref _moonColor, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("moonSize")] 
 		public curveData<CFloat> MoonSize
 		{
-			get
-			{
-				if (_moonSize == null)
-				{
-					_moonSize = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "moonSize", cr2w, this);
-				}
-				return _moonSize;
-			}
-			set
-			{
-				if (_moonSize == value)
-				{
-					return;
-				}
-				_moonSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _moonSize);
+			set => SetProperty(ref _moonSize, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("specularTint")] 
 		public curveData<HDRColor> SpecularTint
 		{
-			get
-			{
-				if (_specularTint == null)
-				{
-					_specularTint = (curveData<HDRColor>) CR2WTypeManager.Create("curveData:HDRColor", "specularTint", cr2w, this);
-				}
-				return _specularTint;
-			}
-			set
-			{
-				if (_specularTint == value)
-				{
-					return;
-				}
-				_specularTint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _specularTint);
+			set => SetProperty(ref _specularTint, value);
 		}
 
 		public LightAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

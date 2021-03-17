@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("device")] 
 		public CHandle<ScriptableDeviceComponentPS> Device
 		{
-			get
-			{
-				if (_device == null)
-				{
-					_device = (CHandle<ScriptableDeviceComponentPS>) CR2WTypeManager.Create("handle:ScriptableDeviceComponentPS", "device", cr2w, this);
-				}
-				return _device;
-			}
-			set
-			{
-				if (_device == value)
-				{
-					return;
-				}
-				_device = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _device);
+			set => SetProperty(ref _device, value);
 		}
 
 		public NewBackdoorDeviceRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

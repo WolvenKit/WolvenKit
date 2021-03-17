@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entered")] 
 		public CBool Entered
 		{
-			get
-			{
-				if (_entered == null)
-				{
-					_entered = (CBool) CR2WTypeManager.Create("Bool", "entered", cr2w, this);
-				}
-				return _entered;
-			}
-			set
-			{
-				if (_entered == value)
-				{
-					return;
-				}
-				_entered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entered);
+			set => SetProperty(ref _entered, value);
 		}
 
 		public SecurityAreaCrossingPerimeter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("selectIntNode")] 
 		public animIntLink SelectIntNode
 		{
-			get
-			{
-				if (_selectIntNode == null)
-				{
-					_selectIntNode = (animIntLink) CR2WTypeManager.Create("animIntLink", "selectIntNode", cr2w, this);
-				}
-				return _selectIntNode;
-			}
-			set
-			{
-				if (_selectIntNode == value)
-				{
-					return;
-				}
-				_selectIntNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectIntNode);
+			set => SetProperty(ref _selectIntNode, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("selectFloatNode")] 
 		public animFloatLink SelectFloatNode
 		{
-			get
-			{
-				if (_selectFloatNode == null)
-				{
-					_selectFloatNode = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "selectFloatNode", cr2w, this);
-				}
-				return _selectFloatNode;
-			}
-			set
-			{
-				if (_selectFloatNode == value)
-				{
-					return;
-				}
-				_selectFloatNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectFloatNode);
+			set => SetProperty(ref _selectFloatNode, value);
 		}
 
 		public animAnimNode_InputSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

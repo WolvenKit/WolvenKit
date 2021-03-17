@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("activate")] 
 		public CBool Activate
 		{
-			get
-			{
-				if (_activate == null)
-				{
-					_activate = (CBool) CR2WTypeManager.Create("Bool", "activate", cr2w, this);
-				}
-				return _activate;
-			}
-			set
-			{
-				if (_activate == value)
-				{
-					return;
-				}
-				_activate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activate);
+			set => SetProperty(ref _activate, value);
 		}
 
 		public VehicleUIactivateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

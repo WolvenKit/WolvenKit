@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("id")] 
 		public TweakDBID Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rngSeed")] 
 		public CUInt32 RngSeed
 		{
-			get
-			{
-				if (_rngSeed == null)
-				{
-					_rngSeed = (CUInt32) CR2WTypeManager.Create("Uint32", "rngSeed", cr2w, this);
-				}
-				return _rngSeed;
-			}
-			set
-			{
-				if (_rngSeed == value)
-				{
-					return;
-				}
-				_rngSeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rngSeed);
+			set => SetProperty(ref _rngSeed, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("uniqueCounter")] 
 		public CUInt16 UniqueCounter
 		{
-			get
-			{
-				if (_uniqueCounter == null)
-				{
-					_uniqueCounter = (CUInt16) CR2WTypeManager.Create("Uint16", "uniqueCounter", cr2w, this);
-				}
-				return _uniqueCounter;
-			}
-			set
-			{
-				if (_uniqueCounter == value)
-				{
-					return;
-				}
-				_uniqueCounter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uniqueCounter);
+			set => SetProperty(ref _uniqueCounter, value);
 		}
 
 		public gameItemID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

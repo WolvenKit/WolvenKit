@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isUp")] 
 		public CBool IsUp
 		{
-			get
-			{
-				if (_isUp == null)
-				{
-					_isUp = (CBool) CR2WTypeManager.Create("Bool", "isUp", cr2w, this);
-				}
-				return _isUp;
-			}
-			set
-			{
-				if (_isUp == value)
-				{
-					return;
-				}
-				_isUp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isUp);
+			set => SetProperty(ref _isUp, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isDown")] 
 		public CBool IsDown
 		{
-			get
-			{
-				if (_isDown == null)
-				{
-					_isDown = (CBool) CR2WTypeManager.Create("Bool", "isDown", cr2w, this);
-				}
-				return _isDown;
-			}
-			set
-			{
-				if (_isDown == value)
-				{
-					return;
-				}
-				_isDown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDown);
+			set => SetProperty(ref _isDown, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("distract")] 
 		public CBool Distract
 		{
-			get
-			{
-				if (_distract == null)
-				{
-					_distract = (CBool) CR2WTypeManager.Create("Bool", "distract", cr2w, this);
-				}
-				return _distract;
-			}
-			set
-			{
-				if (_distract == value)
-				{
-					return;
-				}
-				_distract = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distract);
+			set => SetProperty(ref _distract, value);
 		}
 
 		public AnimFeature_ForkliftDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

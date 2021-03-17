@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("allowCurrAnimToFinish")] 
 		public CBool AllowCurrAnimToFinish
 		{
-			get
-			{
-				if (_allowCurrAnimToFinish == null)
-				{
-					_allowCurrAnimToFinish = (CBool) CR2WTypeManager.Create("Bool", "allowCurrAnimToFinish", cr2w, this);
-				}
-				return _allowCurrAnimToFinish;
-			}
-			set
-			{
-				if (_allowCurrAnimToFinish == value)
-				{
-					return;
-				}
-				_allowCurrAnimToFinish = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _allowCurrAnimToFinish);
+			set => SetProperty(ref _allowCurrAnimToFinish, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entryIdToJumpTo")] 
 		public CInt32 EntryIdToJumpTo
 		{
-			get
-			{
-				if (_entryIdToJumpTo == null)
-				{
-					_entryIdToJumpTo = (CInt32) CR2WTypeManager.Create("Int32", "entryIdToJumpTo", cr2w, this);
-				}
-				return _entryIdToJumpTo;
-			}
-			set
-			{
-				if (_entryIdToJumpTo == value)
-				{
-					return;
-				}
-				_entryIdToJumpTo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryIdToJumpTo);
+			set => SetProperty(ref _entryIdToJumpTo, value);
 		}
 
 		public questJumpWorkspotAnim_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("textWidget")] 
 		public inkWidgetReference TextWidget
 		{
-			get
-			{
-				if (_textWidget == null)
-				{
-					_textWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "textWidget", cr2w, this);
-				}
-				return _textWidget;
-			}
-			set
-			{
-				if (_textWidget == value)
-				{
-					return;
-				}
-				_textWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textWidget);
+			set => SetProperty(ref _textWidget, value);
 		}
 
 		public PhotoModeCameraLocation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

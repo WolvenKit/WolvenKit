@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("SoundPrefix")] 
 		public CName SoundPrefix
 		{
-			get
-			{
-				if (_soundPrefix == null)
-				{
-					_soundPrefix = (CName) CR2WTypeManager.Create("CName", "SoundPrefix", cr2w, this);
-				}
-				return _soundPrefix;
-			}
-			set
-			{
-				if (_soundPrefix == value)
-				{
-					return;
-				}
-				_soundPrefix = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soundPrefix);
+			set => SetProperty(ref _soundPrefix, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("PressSoundName")] 
 		public CName PressSoundName
 		{
-			get
-			{
-				if (_pressSoundName == null)
-				{
-					_pressSoundName = (CName) CR2WTypeManager.Create("CName", "PressSoundName", cr2w, this);
-				}
-				return _pressSoundName;
-			}
-			set
-			{
-				if (_pressSoundName == value)
-				{
-					return;
-				}
-				_pressSoundName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pressSoundName);
+			set => SetProperty(ref _pressSoundName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("HoverSoundName")] 
 		public CName HoverSoundName
 		{
-			get
-			{
-				if (_hoverSoundName == null)
-				{
-					_hoverSoundName = (CName) CR2WTypeManager.Create("CName", "HoverSoundName", cr2w, this);
-				}
-				return _hoverSoundName;
-			}
-			set
-			{
-				if (_hoverSoundName == value)
-				{
-					return;
-				}
-				_hoverSoundName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hoverSoundName);
+			set => SetProperty(ref _hoverSoundName, value);
 		}
 
 		public ButtonPlaySoundView(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

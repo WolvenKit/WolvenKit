@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("key")] 
 		public CUInt64 Key
 		{
-			get
-			{
-				if (_key == null)
-				{
-					_key = (CUInt64) CR2WTypeManager.Create("Uint64", "key", cr2w, this);
-				}
-				return _key;
-			}
-			set
-			{
-				if (_key == value)
-				{
-					return;
-				}
-				_key = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _key);
+			set => SetProperty(ref _key, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("policies")] 
 		public CHandle<movePolicies> Policies
 		{
-			get
-			{
-				if (_policies == null)
-				{
-					_policies = (CHandle<movePolicies>) CR2WTypeManager.Create("handle:movePolicies", "policies", cr2w, this);
-				}
-				return _policies;
-			}
-			set
-			{
-				if (_policies == value)
-				{
-					return;
-				}
-				_policies = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _policies);
+			set => SetProperty(ref _policies, value);
 		}
 
 		public moveReplicatedMovePolicies(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

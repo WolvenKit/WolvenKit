@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("combined")] 
 		public CUInt32 Combined
 		{
-			get
-			{
-				if (_combined == null)
-				{
-					_combined = (CUInt32) CR2WTypeManager.Create("Uint32", "combined", cr2w, this);
-				}
-				return _combined;
-			}
-			set
-			{
-				if (_combined == value)
-				{
-					return;
-				}
-				_combined = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _combined);
+			set => SetProperty(ref _combined, value);
 		}
 
 		public physicsDestructionHierarchyOffset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

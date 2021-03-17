@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enteredPlayerIDs", 7)] 
 		public CStatic<netPeerID> EnteredPlayerIDs
 		{
-			get
-			{
-				if (_enteredPlayerIDs == null)
-				{
-					_enteredPlayerIDs = (CStatic<netPeerID>) CR2WTypeManager.Create("static:7,netPeerID", "enteredPlayerIDs", cr2w, this);
-				}
-				return _enteredPlayerIDs;
-			}
-			set
-			{
-				if (_enteredPlayerIDs == value)
-				{
-					return;
-				}
-				_enteredPlayerIDs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enteredPlayerIDs);
+			set => SetProperty(ref _enteredPlayerIDs, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hasActiveQuestListener")] 
 		public CBool HasActiveQuestListener
 		{
-			get
-			{
-				if (_hasActiveQuestListener == null)
-				{
-					_hasActiveQuestListener = (CBool) CR2WTypeManager.Create("Bool", "hasActiveQuestListener", cr2w, this);
-				}
-				return _hasActiveQuestListener;
-			}
-			set
-			{
-				if (_hasActiveQuestListener == value)
-				{
-					return;
-				}
-				_hasActiveQuestListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasActiveQuestListener);
+			set => SetProperty(ref _hasActiveQuestListener, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("enabled")] 
 		public CBool Enabled
 		{
-			get
-			{
-				if (_enabled == null)
-				{
-					_enabled = (CBool) CR2WTypeManager.Create("Bool", "enabled", cr2w, this);
-				}
-				return _enabled;
-			}
-			set
-			{
-				if (_enabled == value)
-				{
-					return;
-				}
-				_enabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enabled);
+			set => SetProperty(ref _enabled, value);
 		}
 
 		public grsGatherAreaReplicatedInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

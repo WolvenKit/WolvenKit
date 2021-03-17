@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("prevItemId")] 
 		public TweakDBID PrevItemId
 		{
-			get
-			{
-				if (_prevItemId == null)
-				{
-					_prevItemId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "prevItemId", cr2w, this);
-				}
-				return _prevItemId;
-			}
-			set
-			{
-				if (_prevItemId == value)
-				{
-					return;
-				}
-				_prevItemId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prevItemId);
+			set => SetProperty(ref _prevItemId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("newItemId")] 
 		public TweakDBID NewItemId
 		{
-			get
-			{
-				if (_newItemId == null)
-				{
-					_newItemId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "newItemId", cr2w, this);
-				}
-				return _newItemId;
-			}
-			set
-			{
-				if (_newItemId == value)
-				{
-					return;
-				}
-				_newItemId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newItemId);
+			set => SetProperty(ref _newItemId, value);
 		}
 
 		public workWorkspotItemOverrideItemOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

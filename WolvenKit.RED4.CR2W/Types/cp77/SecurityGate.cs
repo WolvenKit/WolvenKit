@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sideA")] 
 		public CHandle<gameStaticTriggerAreaComponent> SideA
 		{
-			get
-			{
-				if (_sideA == null)
-				{
-					_sideA = (CHandle<gameStaticTriggerAreaComponent>) CR2WTypeManager.Create("handle:gameStaticTriggerAreaComponent", "sideA", cr2w, this);
-				}
-				return _sideA;
-			}
-			set
-			{
-				if (_sideA == value)
-				{
-					return;
-				}
-				_sideA = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sideA);
+			set => SetProperty(ref _sideA, value);
 		}
 
 		[Ordinal(94)] 
 		[RED("sideB")] 
 		public CHandle<gameStaticTriggerAreaComponent> SideB
 		{
-			get
-			{
-				if (_sideB == null)
-				{
-					_sideB = (CHandle<gameStaticTriggerAreaComponent>) CR2WTypeManager.Create("handle:gameStaticTriggerAreaComponent", "sideB", cr2w, this);
-				}
-				return _sideB;
-			}
-			set
-			{
-				if (_sideB == value)
-				{
-					return;
-				}
-				_sideB = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sideB);
+			set => SetProperty(ref _sideB, value);
 		}
 
 		[Ordinal(95)] 
 		[RED("scanningArea")] 
 		public CHandle<gameStaticTriggerAreaComponent> ScanningArea
 		{
-			get
-			{
-				if (_scanningArea == null)
-				{
-					_scanningArea = (CHandle<gameStaticTriggerAreaComponent>) CR2WTypeManager.Create("handle:gameStaticTriggerAreaComponent", "scanningArea", cr2w, this);
-				}
-				return _scanningArea;
-			}
-			set
-			{
-				if (_scanningArea == value)
-				{
-					return;
-				}
-				_scanningArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scanningArea);
+			set => SetProperty(ref _scanningArea, value);
 		}
 
 		[Ordinal(96)] 
 		[RED("trespassersDataList")] 
 		public CArray<TrespasserEntry> TrespassersDataList
 		{
-			get
-			{
-				if (_trespassersDataList == null)
-				{
-					_trespassersDataList = (CArray<TrespasserEntry>) CR2WTypeManager.Create("array:TrespasserEntry", "trespassersDataList", cr2w, this);
-				}
-				return _trespassersDataList;
-			}
-			set
-			{
-				if (_trespassersDataList == value)
-				{
-					return;
-				}
-				_trespassersDataList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trespassersDataList);
+			set => SetProperty(ref _trespassersDataList, value);
 		}
 
 		public SecurityGate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

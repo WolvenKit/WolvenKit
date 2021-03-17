@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("overridePrefabBuildParams")] 
 		public CBool OverridePrefabBuildParams
 		{
-			get
-			{
-				if (_overridePrefabBuildParams == null)
-				{
-					_overridePrefabBuildParams = (CBool) CR2WTypeManager.Create("Bool", "overridePrefabBuildParams", cr2w, this);
-				}
-				return _overridePrefabBuildParams;
-			}
-			set
-			{
-				if (_overridePrefabBuildParams == value)
-				{
-					return;
-				}
-				_overridePrefabBuildParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overridePrefabBuildParams);
+			set => SetProperty(ref _overridePrefabBuildParams, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("buildParams")] 
 		public worldGroupProxyMeshBuildParams BuildParams
 		{
-			get
-			{
-				if (_buildParams == null)
-				{
-					_buildParams = (worldGroupProxyMeshBuildParams) CR2WTypeManager.Create("worldGroupProxyMeshBuildParams", "buildParams", cr2w, this);
-				}
-				return _buildParams;
-			}
-			set
-			{
-				if (_buildParams == value)
-				{
-					return;
-				}
-				_buildParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buildParams);
+			set => SetProperty(ref _buildParams, value);
 		}
 
 		public worldProxyMeshGroupBuildParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

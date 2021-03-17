@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timings")] 
 		public CArray<animAnimProfilerData_Timings> Timings
 		{
-			get
-			{
-				if (_timings == null)
-				{
-					_timings = (CArray<animAnimProfilerData_Timings>) CR2WTypeManager.Create("array:animAnimProfilerData_Timings", "timings", cr2w, this);
-				}
-				return _timings;
-			}
-			set
-			{
-				if (_timings == value)
-				{
-					return;
-				}
-				_timings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timings);
+			set => SetProperty(ref _timings, value);
 		}
 
 		public animAnimProfilerData_TimingsRoot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

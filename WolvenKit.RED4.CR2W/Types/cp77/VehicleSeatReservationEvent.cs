@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotID")] 
 		public CName SlotID
 		{
-			get
-			{
-				if (_slotID == null)
-				{
-					_slotID = (CName) CR2WTypeManager.Create("CName", "slotID", cr2w, this);
-				}
-				return _slotID;
-			}
-			set
-			{
-				if (_slotID == value)
-				{
-					return;
-				}
-				_slotID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("reserve")] 
 		public CBool Reserve
 		{
-			get
-			{
-				if (_reserve == null)
-				{
-					_reserve = (CBool) CR2WTypeManager.Create("Bool", "reserve", cr2w, this);
-				}
-				return _reserve;
-			}
-			set
-			{
-				if (_reserve == value)
-				{
-					return;
-				}
-				_reserve = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reserve);
+			set => SetProperty(ref _reserve, value);
 		}
 
 		public VehicleSeatReservationEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

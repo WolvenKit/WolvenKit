@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("scanState")] 
 		public CEnum<rendPostFx_ScanningState> ScanState
 		{
-			get
-			{
-				if (_scanState == null)
-				{
-					_scanState = (CEnum<rendPostFx_ScanningState>) CR2WTypeManager.Create("rendPostFx_ScanningState", "scanState", cr2w, this);
-				}
-				return _scanState;
-			}
-			set
-			{
-				if (_scanState == value)
-				{
-					return;
-				}
-				_scanState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scanState);
+			set => SetProperty(ref _scanState, value);
 		}
 
 		public entRenderScanEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

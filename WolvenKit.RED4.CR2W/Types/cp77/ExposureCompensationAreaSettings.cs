@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("exposureCompensation")] 
 		public CFloat ExposureCompensation
 		{
-			get
-			{
-				if (_exposureCompensation == null)
-				{
-					_exposureCompensation = (CFloat) CR2WTypeManager.Create("Float", "exposureCompensation", cr2w, this);
-				}
-				return _exposureCompensation;
-			}
-			set
-			{
-				if (_exposureCompensation == value)
-				{
-					return;
-				}
-				_exposureCompensation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exposureCompensation);
+			set => SetProperty(ref _exposureCompensation, value);
 		}
 
 		public ExposureCompensationAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

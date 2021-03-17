@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("obj")] 
 		public wCHandle<gameObject> Obj
 		{
-			get
-			{
-				if (_obj == null)
-				{
-					_obj = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "obj", cr2w, this);
-				}
-				return _obj;
-			}
-			set
-			{
-				if (_obj == value)
-				{
-					return;
-				}
-				_obj = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _obj);
+			set => SetProperty(ref _obj, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("baseItem")] 
 		public gameItemID BaseItem
 		{
-			get
-			{
-				if (_baseItem == null)
-				{
-					_baseItem = (gameItemID) CR2WTypeManager.Create("gameItemID", "baseItem", cr2w, this);
-				}
-				return _baseItem;
-			}
-			set
-			{
-				if (_baseItem == value)
-				{
-					return;
-				}
-				_baseItem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _baseItem);
+			set => SetProperty(ref _baseItem, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("slotToEmpty")] 
 		public TweakDBID SlotToEmpty
 		{
-			get
-			{
-				if (_slotToEmpty == null)
-				{
-					_slotToEmpty = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "slotToEmpty", cr2w, this);
-				}
-				return _slotToEmpty;
-			}
-			set
-			{
-				if (_slotToEmpty == value)
-				{
-					return;
-				}
-				_slotToEmpty = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotToEmpty);
+			set => SetProperty(ref _slotToEmpty, value);
 		}
 
 		public RemoveItemPart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

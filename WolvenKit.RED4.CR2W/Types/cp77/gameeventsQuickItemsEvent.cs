@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("questName")] 
 		public CName QuestName
 		{
-			get
-			{
-				if (_questName == null)
-				{
-					_questName = (CName) CR2WTypeManager.Create("CName", "questName", cr2w, this);
-				}
-				return _questName;
-			}
-			set
-			{
-				if (_questName == value)
-				{
-					return;
-				}
-				_questName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questName);
+			set => SetProperty(ref _questName, value);
 		}
 
 		public gameeventsQuickItemsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

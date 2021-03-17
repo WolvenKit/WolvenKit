@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicle")] 
 		public CString Vehicle
 		{
-			get
-			{
-				if (_vehicle == null)
-				{
-					_vehicle = (CString) CR2WTypeManager.Create("String", "vehicle", cr2w, this);
-				}
-				return _vehicle;
-			}
-			set
-			{
-				if (_vehicle == value)
-				{
-					return;
-				}
-				_vehicle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicle);
+			set => SetProperty(ref _vehicle, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("enable")] 
 		public CBool Enable
 		{
-			get
-			{
-				if (_enable == null)
-				{
-					_enable = (CBool) CR2WTypeManager.Create("Bool", "enable", cr2w, this);
-				}
-				return _enable;
-			}
-			set
-			{
-				if (_enable == value)
-				{
-					return;
-				}
-				_enable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enable);
+			set => SetProperty(ref _enable, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("despawn")] 
 		public CBool Despawn
 		{
-			get
-			{
-				if (_despawn == null)
-				{
-					_despawn = (CBool) CR2WTypeManager.Create("Bool", "despawn", cr2w, this);
-				}
-				return _despawn;
-			}
-			set
-			{
-				if (_despawn == value)
-				{
-					return;
-				}
-				_despawn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _despawn);
+			set => SetProperty(ref _despawn, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("makePlayerActiveVehicle")] 
 		public CBool MakePlayerActiveVehicle
 		{
-			get
-			{
-				if (_makePlayerActiveVehicle == null)
-				{
-					_makePlayerActiveVehicle = (CBool) CR2WTypeManager.Create("Bool", "makePlayerActiveVehicle", cr2w, this);
-				}
-				return _makePlayerActiveVehicle;
-			}
-			set
-			{
-				if (_makePlayerActiveVehicle == value)
-				{
-					return;
-				}
-				_makePlayerActiveVehicle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _makePlayerActiveVehicle);
+			set => SetProperty(ref _makePlayerActiveVehicle, value);
 		}
 
 		public questEnablePlayerVehicle_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

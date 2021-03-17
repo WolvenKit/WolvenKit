@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dius")] 
 		public CFloat Dius
 		{
-			get
-			{
-				if (_dius == null)
-				{
-					_dius = (CFloat) CR2WTypeManager.Create("Float", "dius", cr2w, this);
-				}
-				return _dius;
-			}
-			set
-			{
-				if (_dius == value)
-				{
-					return;
-				}
-				_dius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dius);
+			set => SetProperty(ref _dius, value);
 		}
 
 		public vgVectorGraphicShape_Circle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

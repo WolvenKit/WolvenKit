@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animFeatureName")] 
 		public CName AnimFeatureName
 		{
-			get
-			{
-				if (_animFeatureName == null)
-				{
-					_animFeatureName = (CName) CR2WTypeManager.Create("CName", "animFeatureName", cr2w, this);
-				}
-				return _animFeatureName;
-			}
-			set
-			{
-				if (_animFeatureName == value)
-				{
-					return;
-				}
-				_animFeatureName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animFeatureName);
+			set => SetProperty(ref _animFeatureName, value);
 		}
 
 		public gameContainerObjectAnimated(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

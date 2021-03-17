@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("originPoint")] 
 		public CHandle<AIArgumentMapping> OriginPoint
 		{
-			get
-			{
-				if (_originPoint == null)
-				{
-					_originPoint = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "originPoint", cr2w, this);
-				}
-				return _originPoint;
-			}
-			set
-			{
-				if (_originPoint == value)
-				{
-					return;
-				}
-				_originPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _originPoint);
+			set => SetProperty(ref _originPoint, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("distanceMin")] 
 		public CHandle<AIArgumentMapping> DistanceMin
 		{
-			get
-			{
-				if (_distanceMin == null)
-				{
-					_distanceMin = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "distanceMin", cr2w, this);
-				}
-				return _distanceMin;
-			}
-			set
-			{
-				if (_distanceMin == value)
-				{
-					return;
-				}
-				_distanceMin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distanceMin);
+			set => SetProperty(ref _distanceMin, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("distanceMax")] 
 		public CHandle<AIArgumentMapping> DistanceMax
 		{
-			get
-			{
-				if (_distanceMax == null)
-				{
-					_distanceMax = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "distanceMax", cr2w, this);
-				}
-				return _distanceMax;
-			}
-			set
-			{
-				if (_distanceMax == value)
-				{
-					return;
-				}
-				_distanceMax = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distanceMax);
+			set => SetProperty(ref _distanceMax, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("angleMin")] 
 		public CHandle<AIArgumentMapping> AngleMin
 		{
-			get
-			{
-				if (_angleMin == null)
-				{
-					_angleMin = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "angleMin", cr2w, this);
-				}
-				return _angleMin;
-			}
-			set
-			{
-				if (_angleMin == value)
-				{
-					return;
-				}
-				_angleMin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _angleMin);
+			set => SetProperty(ref _angleMin, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("angleMax")] 
 		public CHandle<AIArgumentMapping> AngleMax
 		{
-			get
-			{
-				if (_angleMax == null)
-				{
-					_angleMax = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "angleMax", cr2w, this);
-				}
-				return _angleMax;
-			}
-			set
-			{
-				if (_angleMax == value)
-				{
-					return;
-				}
-				_angleMax = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _angleMax);
+			set => SetProperty(ref _angleMax, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("outPositionArgument")] 
 		public CHandle<AIArgumentMapping> OutPositionArgument
 		{
-			get
-			{
-				if (_outPositionArgument == null)
-				{
-					_outPositionArgument = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outPositionArgument", cr2w, this);
-				}
-				return _outPositionArgument;
-			}
-			set
-			{
-				if (_outPositionArgument == value)
-				{
-					return;
-				}
-				_outPositionArgument = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outPositionArgument);
+			set => SetProperty(ref _outPositionArgument, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("finalPosition")] 
 		public Vector4 FinalPosition
 		{
-			get
-			{
-				if (_finalPosition == null)
-				{
-					_finalPosition = (Vector4) CR2WTypeManager.Create("Vector4", "finalPosition", cr2w, this);
-				}
-				return _finalPosition;
-			}
-			set
-			{
-				if (_finalPosition == value)
-				{
-					return;
-				}
-				_finalPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _finalPosition);
+			set => SetProperty(ref _finalPosition, value);
 		}
 
 		public GetRandomPositionAroundPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

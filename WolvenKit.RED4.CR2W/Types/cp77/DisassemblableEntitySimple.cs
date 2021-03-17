@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mesh")] 
 		public CHandle<entMeshComponent> Mesh
 		{
-			get
-			{
-				if (_mesh == null)
-				{
-					_mesh = (CHandle<entMeshComponent>) CR2WTypeManager.Create("handle:entMeshComponent", "mesh", cr2w, this);
-				}
-				return _mesh;
-			}
-			set
-			{
-				if (_mesh == value)
-				{
-					return;
-				}
-				_mesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mesh);
+			set => SetProperty(ref _mesh, value);
 		}
 
 		[Ordinal(94)] 
 		[RED("collider")] 
 		public CHandle<entIComponent> Collider
 		{
-			get
-			{
-				if (_collider == null)
-				{
-					_collider = (CHandle<entIComponent>) CR2WTypeManager.Create("handle:entIComponent", "collider", cr2w, this);
-				}
-				return _collider;
-			}
-			set
-			{
-				if (_collider == value)
-				{
-					return;
-				}
-				_collider = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collider);
+			set => SetProperty(ref _collider, value);
 		}
 
 		public DisassemblableEntitySimple(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

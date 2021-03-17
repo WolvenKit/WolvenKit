@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("windowOpenEvent")] 
 		public CHandle<VehicleExternalWindowRequestEvent> WindowOpenEvent
 		{
-			get
-			{
-				if (_windowOpenEvent == null)
-				{
-					_windowOpenEvent = (CHandle<VehicleExternalWindowRequestEvent>) CR2WTypeManager.Create("handle:VehicleExternalWindowRequestEvent", "windowOpenEvent", cr2w, this);
-				}
-				return _windowOpenEvent;
-			}
-			set
-			{
-				if (_windowOpenEvent == value)
-				{
-					return;
-				}
-				_windowOpenEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _windowOpenEvent);
+			set => SetProperty(ref _windowOpenEvent, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("mountInfo")] 
 		public gamemountingMountingInfo MountInfo
 		{
-			get
-			{
-				if (_mountInfo == null)
-				{
-					_mountInfo = (gamemountingMountingInfo) CR2WTypeManager.Create("gamemountingMountingInfo", "mountInfo", cr2w, this);
-				}
-				return _mountInfo;
-			}
-			set
-			{
-				if (_mountInfo == value)
-				{
-					return;
-				}
-				_mountInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mountInfo);
+			set => SetProperty(ref _mountInfo, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("vehicle")] 
 		public wCHandle<gameObject> Vehicle
 		{
-			get
-			{
-				if (_vehicle == null)
-				{
-					_vehicle = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "vehicle", cr2w, this);
-				}
-				return _vehicle;
-			}
-			set
-			{
-				if (_vehicle == value)
-				{
-					return;
-				}
-				_vehicle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicle);
+			set => SetProperty(ref _vehicle, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get
-			{
-				if (_slotName == null)
-				{
-					_slotName = (CName) CR2WTypeManager.Create("CName", "slotName", cr2w, this);
-				}
-				return _slotName;
-			}
-			set
-			{
-				if (_slotName == value)
-				{
-					return;
-				}
-				_slotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotName);
+			set => SetProperty(ref _slotName, value);
 		}
 
 		public GetOnWindowCombatDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

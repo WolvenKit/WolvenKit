@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("IsHighlightON")] 
 		public CBool IsHighlightON
 		{
-			get
-			{
-				if (_isHighlightON == null)
-				{
-					_isHighlightON = (CBool) CR2WTypeManager.Create("Bool", "IsHighlightON", cr2w, this);
-				}
-				return _isHighlightON;
-			}
-			set
-			{
-				if (_isHighlightON == value)
-				{
-					return;
-				}
-				_isHighlightON = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isHighlightON);
+			set => SetProperty(ref _isHighlightON, value);
 		}
 
 		public HighlightConnectionComponentEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

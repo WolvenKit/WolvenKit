@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isRegisteredShared")] 
 		public CBool IsRegisteredShared
 		{
-			get
-			{
-				if (_isRegisteredShared == null)
-				{
-					_isRegisteredShared = (CBool) CR2WTypeManager.Create("Bool", "isRegisteredShared", cr2w, this);
-				}
-				return _isRegisteredShared;
-			}
-			set
-			{
-				if (_isRegisteredShared == value)
-				{
-					return;
-				}
-				_isRegisteredShared = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isRegisteredShared);
+			set => SetProperty(ref _isRegisteredShared, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("accessible")] 
 		public CBool Accessible
 		{
-			get
-			{
-				if (_accessible == null)
-				{
-					_accessible = (CBool) CR2WTypeManager.Create("Bool", "accessible", cr2w, this);
-				}
-				return _accessible;
-			}
-			set
-			{
-				if (_accessible == value)
-				{
-					return;
-				}
-				_accessible = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _accessible);
+			set => SetProperty(ref _accessible, value);
 		}
 
 		public gameInventoryPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

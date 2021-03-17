@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("numTargets")] 
 		public CUInt8 NumTargets
 		{
-			get
-			{
-				if (_numTargets == null)
-				{
-					_numTargets = (CUInt8) CR2WTypeManager.Create("Uint8", "numTargets", cr2w, this);
-				}
-				return _numTargets;
-			}
-			set
-			{
-				if (_numTargets == value)
-				{
-					return;
-				}
-				_numTargets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numTargets);
+			set => SetProperty(ref _numTargets, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("independent")] 
 		public CBool Independent
 		{
-			get
-			{
-				if (_independent == null)
-				{
-					_independent = (CBool) CR2WTypeManager.Create("Bool", "independent", cr2w, this);
-				}
-				return _independent;
-			}
-			set
-			{
-				if (_independent == value)
-				{
-					return;
-				}
-				_independent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _independent);
+			set => SetProperty(ref _independent, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("alphaToCoverage")] 
 		public CBool AlphaToCoverage
 		{
-			get
-			{
-				if (_alphaToCoverage == null)
-				{
-					_alphaToCoverage = (CBool) CR2WTypeManager.Create("Bool", "alphaToCoverage", cr2w, this);
-				}
-				return _alphaToCoverage;
-			}
-			set
-			{
-				if (_alphaToCoverage == value)
-				{
-					return;
-				}
-				_alphaToCoverage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alphaToCoverage);
+			set => SetProperty(ref _alphaToCoverage, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("renderTarget", 8)] 
 		public CArrayFixedSize<PSODescRenderTarget> RenderTarget
 		{
-			get
-			{
-				if (_renderTarget == null)
-				{
-					_renderTarget = (CArrayFixedSize<PSODescRenderTarget>) CR2WTypeManager.Create("[8]PSODescRenderTarget", "renderTarget", cr2w, this);
-				}
-				return _renderTarget;
-			}
-			set
-			{
-				if (_renderTarget == value)
-				{
-					return;
-				}
-				_renderTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _renderTarget);
+			set => SetProperty(ref _renderTarget, value);
 		}
 
 		public PSODescBlendModeDesc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

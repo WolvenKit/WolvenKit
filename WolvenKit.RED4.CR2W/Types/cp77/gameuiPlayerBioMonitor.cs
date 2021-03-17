@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("currentHealth")] 
 		public CInt32 CurrentHealth
 		{
-			get
-			{
-				if (_currentHealth == null)
-				{
-					_currentHealth = (CInt32) CR2WTypeManager.Create("Int32", "currentHealth", cr2w, this);
-				}
-				return _currentHealth;
-			}
-			set
-			{
-				if (_currentHealth == value)
-				{
-					return;
-				}
-				_currentHealth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentHealth);
+			set => SetProperty(ref _currentHealth, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("maximumHealth")] 
 		public CInt32 MaximumHealth
 		{
-			get
-			{
-				if (_maximumHealth == null)
-				{
-					_maximumHealth = (CInt32) CR2WTypeManager.Create("Int32", "maximumHealth", cr2w, this);
-				}
-				return _maximumHealth;
-			}
-			set
-			{
-				if (_maximumHealth == value)
-				{
-					return;
-				}
-				_maximumHealth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maximumHealth);
+			set => SetProperty(ref _maximumHealth, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("currentCyberwarePct")] 
 		public CInt32 CurrentCyberwarePct
 		{
-			get
-			{
-				if (_currentCyberwarePct == null)
-				{
-					_currentCyberwarePct = (CInt32) CR2WTypeManager.Create("Int32", "currentCyberwarePct", cr2w, this);
-				}
-				return _currentCyberwarePct;
-			}
-			set
-			{
-				if (_currentCyberwarePct == value)
-				{
-					return;
-				}
-				_currentCyberwarePct = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentCyberwarePct);
+			set => SetProperty(ref _currentCyberwarePct, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("currentArmor")] 
 		public CInt32 CurrentArmor
 		{
-			get
-			{
-				if (_currentArmor == null)
-				{
-					_currentArmor = (CInt32) CR2WTypeManager.Create("Int32", "currentArmor", cr2w, this);
-				}
-				return _currentArmor;
-			}
-			set
-			{
-				if (_currentArmor == value)
-				{
-					return;
-				}
-				_currentArmor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentArmor);
+			set => SetProperty(ref _currentArmor, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("maximumArmor")] 
 		public CInt32 MaximumArmor
 		{
-			get
-			{
-				if (_maximumArmor == null)
-				{
-					_maximumArmor = (CInt32) CR2WTypeManager.Create("Int32", "maximumArmor", cr2w, this);
-				}
-				return _maximumArmor;
-			}
-			set
-			{
-				if (_maximumArmor == value)
-				{
-					return;
-				}
-				_maximumArmor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maximumArmor);
+			set => SetProperty(ref _maximumArmor, value);
 		}
 
 		public gameuiPlayerBioMonitor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

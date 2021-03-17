@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("reset")] 
 		public CBool Reset
 		{
-			get
-			{
-				if (_reset == null)
-				{
-					_reset = (CBool) CR2WTypeManager.Create("Bool", "reset", cr2w, this);
-				}
-				return _reset;
-			}
-			set
-			{
-				if (_reset == value)
-				{
-					return;
-				}
-				_reset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reset);
+			set => SetProperty(ref _reset, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timeThreshold")] 
 		public CFloat TimeThreshold
 		{
-			get
-			{
-				if (_timeThreshold == null)
-				{
-					_timeThreshold = (CFloat) CR2WTypeManager.Create("Float", "timeThreshold", cr2w, this);
-				}
-				return _timeThreshold;
-			}
-			set
-			{
-				if (_timeThreshold == value)
-				{
-					return;
-				}
-				_timeThreshold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeThreshold);
+			set => SetProperty(ref _timeThreshold, value);
 		}
 
 		public StealthStimThresholdEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

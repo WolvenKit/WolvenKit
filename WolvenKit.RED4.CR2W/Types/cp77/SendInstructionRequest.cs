@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("jobs")] 
 		public CArray<HUDJob> Jobs
 		{
-			get
-			{
-				if (_jobs == null)
-				{
-					_jobs = (CArray<HUDJob>) CR2WTypeManager.Create("array:HUDJob", "jobs", cr2w, this);
-				}
-				return _jobs;
-			}
-			set
-			{
-				if (_jobs == value)
-				{
-					return;
-				}
-				_jobs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _jobs);
+			set => SetProperty(ref _jobs, value);
 		}
 
 		public SendInstructionRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

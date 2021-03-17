@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("currentFilter")] 
 		public CEnum<CodexCategoryType> CurrentFilter
 		{
-			get
-			{
-				if (_currentFilter == null)
-				{
-					_currentFilter = (CEnum<CodexCategoryType>) CR2WTypeManager.Create("CodexCategoryType", "currentFilter", cr2w, this);
-				}
-				return _currentFilter;
-			}
-			set
-			{
-				if (_currentFilter == value)
-				{
-					return;
-				}
-				_currentFilter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentFilter);
+			set => SetProperty(ref _currentFilter, value);
 		}
 
 		public CodexListVirtualNestedDataView(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

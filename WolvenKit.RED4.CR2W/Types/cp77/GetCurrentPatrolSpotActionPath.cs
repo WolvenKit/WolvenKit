@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("outPathArgument")] 
 		public CHandle<AIArgumentMapping> OutPathArgument
 		{
-			get
-			{
-				if (_outPathArgument == null)
-				{
-					_outPathArgument = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outPathArgument", cr2w, this);
-				}
-				return _outPathArgument;
-			}
-			set
-			{
-				if (_outPathArgument == value)
-				{
-					return;
-				}
-				_outPathArgument = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outPathArgument);
+			set => SetProperty(ref _outPathArgument, value);
 		}
 
 		public GetCurrentPatrolSpotActionPath(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

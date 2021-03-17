@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mask1")] 
 		public CUInt64 Mask1
 		{
-			get
-			{
-				if (_mask1 == null)
-				{
-					_mask1 = (CUInt64) CR2WTypeManager.Create("Uint64", "mask1", cr2w, this);
-				}
-				return _mask1;
-			}
-			set
-			{
-				if (_mask1 == value)
-				{
-					return;
-				}
-				_mask1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mask1);
+			set => SetProperty(ref _mask1, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("mask2")] 
 		public CUInt64 Mask2
 		{
-			get
-			{
-				if (_mask2 == null)
-				{
-					_mask2 = (CUInt64) CR2WTypeManager.Create("Uint64", "mask2", cr2w, this);
-				}
-				return _mask2;
-			}
-			set
-			{
-				if (_mask2 == value)
-				{
-					return;
-				}
-				_mask2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mask2);
+			set => SetProperty(ref _mask2, value);
 		}
 
 		public physicsQueryFilter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

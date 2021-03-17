@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gradient")] 
 		public rRef<CGradient> Gradient
 		{
-			get
-			{
-				if (_gradient == null)
-				{
-					_gradient = (rRef<CGradient>) CR2WTypeManager.Create("rRef:CGradient", "gradient", cr2w, this);
-				}
-				return _gradient;
-			}
-			set
-			{
-				if (_gradient == value)
-				{
-					return;
-				}
-				_gradient = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gradient);
+			set => SetProperty(ref _gradient, value);
 		}
 
 		public CMaterialParameterGradient(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

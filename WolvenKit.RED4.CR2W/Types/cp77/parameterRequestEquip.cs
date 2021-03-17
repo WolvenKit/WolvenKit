@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("valid")] 
 		public CBool Valid
 		{
-			get
-			{
-				if (_valid == null)
-				{
-					_valid = (CBool) CR2WTypeManager.Create("Bool", "valid", cr2w, this);
-				}
-				return _valid;
-			}
-			set
-			{
-				if (_valid == value)
-				{
-					return;
-				}
-				_valid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _valid);
+			set => SetProperty(ref _valid, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		public parameterRequestEquip(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

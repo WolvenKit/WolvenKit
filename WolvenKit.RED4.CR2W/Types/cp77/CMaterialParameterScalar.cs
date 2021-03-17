@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("scalar")] 
 		public CFloat Scalar
 		{
-			get
-			{
-				if (_scalar == null)
-				{
-					_scalar = (CFloat) CR2WTypeManager.Create("Float", "scalar", cr2w, this);
-				}
-				return _scalar;
-			}
-			set
-			{
-				if (_scalar == value)
-				{
-					return;
-				}
-				_scalar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scalar);
+			set => SetProperty(ref _scalar, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("min")] 
 		public CFloat Min
 		{
-			get
-			{
-				if (_min == null)
-				{
-					_min = (CFloat) CR2WTypeManager.Create("Float", "min", cr2w, this);
-				}
-				return _min;
-			}
-			set
-			{
-				if (_min == value)
-				{
-					return;
-				}
-				_min = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _min);
+			set => SetProperty(ref _min, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("max")] 
 		public CFloat Max
 		{
-			get
-			{
-				if (_max == null)
-				{
-					_max = (CFloat) CR2WTypeManager.Create("Float", "max", cr2w, this);
-				}
-				return _max;
-			}
-			set
-			{
-				if (_max == value)
-				{
-					return;
-				}
-				_max = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _max);
+			set => SetProperty(ref _max, value);
 		}
 
 		public CMaterialParameterScalar(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

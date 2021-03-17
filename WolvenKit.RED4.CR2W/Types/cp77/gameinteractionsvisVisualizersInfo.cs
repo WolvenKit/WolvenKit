@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("activeVisId")] 
 		public CInt32 ActiveVisId
 		{
-			get
-			{
-				if (_activeVisId == null)
-				{
-					_activeVisId = (CInt32) CR2WTypeManager.Create("Int32", "activeVisId", cr2w, this);
-				}
-				return _activeVisId;
-			}
-			set
-			{
-				if (_activeVisId == value)
-				{
-					return;
-				}
-				_activeVisId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeVisId);
+			set => SetProperty(ref _activeVisId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("visIds")] 
 		public CArray<CInt32> VisIds
 		{
-			get
-			{
-				if (_visIds == null)
-				{
-					_visIds = (CArray<CInt32>) CR2WTypeManager.Create("array:Int32", "visIds", cr2w, this);
-				}
-				return _visIds;
-			}
-			set
-			{
-				if (_visIds == value)
-				{
-					return;
-				}
-				_visIds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visIds);
+			set => SetProperty(ref _visIds, value);
 		}
 
 		public gameinteractionsvisVisualizersInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

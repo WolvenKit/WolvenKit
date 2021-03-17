@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("flags")] 
 		public CArray<SHitFlag> Flags
 		{
-			get
-			{
-				if (_flags == null)
-				{
-					_flags = (CArray<SHitFlag>) CR2WTypeManager.Create("array:SHitFlag", "flags", cr2w, this);
-				}
-				return _flags;
-			}
-			set
-			{
-				if (_flags == value)
-				{
-					return;
-				}
-				_flags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flags);
+			set => SetProperty(ref _flags, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hitShapeType")] 
 		public CEnum<EHitShapeType> HitShapeType
 		{
-			get
-			{
-				if (_hitShapeType == null)
-				{
-					_hitShapeType = (CEnum<EHitShapeType>) CR2WTypeManager.Create("EHitShapeType", "hitShapeType", cr2w, this);
-				}
-				return _hitShapeType;
-			}
-			set
-			{
-				if (_hitShapeType == value)
-				{
-					return;
-				}
-				_hitShapeType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitShapeType);
+			set => SetProperty(ref _hitShapeType, value);
 		}
 
 		public gameuiDamageInfoUserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("recordID")] 
 		public TweakDBID RecordID
 		{
-			get
-			{
-				if (_recordID == null)
-				{
-					_recordID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "recordID", cr2w, this);
-				}
-				return _recordID;
-			}
-			set
-			{
-				if (_recordID == value)
-				{
-					return;
-				}
-				_recordID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recordID);
+			set => SetProperty(ref _recordID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("finalTransform")] 
 		public Transform FinalTransform
 		{
-			get
-			{
-				if (_finalTransform == null)
-				{
-					_finalTransform = (Transform) CR2WTypeManager.Create("Transform", "finalTransform", cr2w, this);
-				}
-				return _finalTransform;
-			}
-			set
-			{
-				if (_finalTransform == value)
-				{
-					return;
-				}
-				_finalTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _finalTransform);
+			set => SetProperty(ref _finalTransform, value);
 		}
 
 		public scnprvSpawnDespawnItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

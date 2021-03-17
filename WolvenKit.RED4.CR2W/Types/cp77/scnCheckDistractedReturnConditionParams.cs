@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("distracted")] 
 		public CBool Distracted
 		{
-			get
-			{
-				if (_distracted == null)
-				{
-					_distracted = (CBool) CR2WTypeManager.Create("Bool", "distracted", cr2w, this);
-				}
-				return _distracted;
-			}
-			set
-			{
-				if (_distracted == value)
-				{
-					return;
-				}
-				_distracted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distracted);
+			set => SetProperty(ref _distracted, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("target")] 
 		public CEnum<scnDistractedConditionTarget> Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (CEnum<scnDistractedConditionTarget>) CR2WTypeManager.Create("scnDistractedConditionTarget", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		public scnCheckDistractedReturnConditionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

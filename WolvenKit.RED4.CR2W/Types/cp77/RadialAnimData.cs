@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hover_in")] 
 		public CName Hover_in
 		{
-			get
-			{
-				if (_hover_in == null)
-				{
-					_hover_in = (CName) CR2WTypeManager.Create("CName", "hover_in", cr2w, this);
-				}
-				return _hover_in;
-			}
-			set
-			{
-				if (_hover_in == value)
-				{
-					return;
-				}
-				_hover_in = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hover_in);
+			set => SetProperty(ref _hover_in, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hover_out")] 
 		public CName Hover_out
 		{
-			get
-			{
-				if (_hover_out == null)
-				{
-					_hover_out = (CName) CR2WTypeManager.Create("CName", "hover_out", cr2w, this);
-				}
-				return _hover_out;
-			}
-			set
-			{
-				if (_hover_out == value)
-				{
-					return;
-				}
-				_hover_out = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hover_out);
+			set => SetProperty(ref _hover_out, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("cycle_in")] 
 		public CName Cycle_in
 		{
-			get
-			{
-				if (_cycle_in == null)
-				{
-					_cycle_in = (CName) CR2WTypeManager.Create("CName", "cycle_in", cr2w, this);
-				}
-				return _cycle_in;
-			}
-			set
-			{
-				if (_cycle_in == value)
-				{
-					return;
-				}
-				_cycle_in = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cycle_in);
+			set => SetProperty(ref _cycle_in, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("cycle_out")] 
 		public CName Cycle_out
 		{
-			get
-			{
-				if (_cycle_out == null)
-				{
-					_cycle_out = (CName) CR2WTypeManager.Create("CName", "cycle_out", cr2w, this);
-				}
-				return _cycle_out;
-			}
-			set
-			{
-				if (_cycle_out == value)
-				{
-					return;
-				}
-				_cycle_out = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cycle_out);
+			set => SetProperty(ref _cycle_out, value);
 		}
 
 		public RadialAnimData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

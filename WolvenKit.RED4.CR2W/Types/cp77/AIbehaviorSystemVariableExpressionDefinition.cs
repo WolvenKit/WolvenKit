@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("variable")] 
 		public CEnum<AIbehaviorSystemVariableExpressionTypes> Variable
 		{
-			get
-			{
-				if (_variable == null)
-				{
-					_variable = (CEnum<AIbehaviorSystemVariableExpressionTypes>) CR2WTypeManager.Create("AIbehaviorSystemVariableExpressionTypes", "variable", cr2w, this);
-				}
-				return _variable;
-			}
-			set
-			{
-				if (_variable == value)
-				{
-					return;
-				}
-				_variable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _variable);
+			set => SetProperty(ref _variable, value);
 		}
 
 		public AIbehaviorSystemVariableExpressionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

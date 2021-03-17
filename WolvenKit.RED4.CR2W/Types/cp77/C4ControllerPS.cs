@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemTweakDBString")] 
 		public CName ItemTweakDBString
 		{
-			get
-			{
-				if (_itemTweakDBString == null)
-				{
-					_itemTweakDBString = (CName) CR2WTypeManager.Create("CName", "itemTweakDBString", cr2w, this);
-				}
-				return _itemTweakDBString;
-			}
-			set
-			{
-				if (_itemTweakDBString == value)
-				{
-					return;
-				}
-				_itemTweakDBString = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemTweakDBString);
+			set => SetProperty(ref _itemTweakDBString, value);
 		}
 
 		public C4ControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

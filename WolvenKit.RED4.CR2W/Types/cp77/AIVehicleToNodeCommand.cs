@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get
-			{
-				if (_nodeRef == null)
-				{
-					_nodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "nodeRef", cr2w, this);
-				}
-				return _nodeRef;
-			}
-			set
-			{
-				if (_nodeRef == value)
-				{
-					return;
-				}
-				_nodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeRef);
+			set => SetProperty(ref _nodeRef, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("stopAtPathEnd")] 
 		public CBool StopAtPathEnd
 		{
-			get
-			{
-				if (_stopAtPathEnd == null)
-				{
-					_stopAtPathEnd = (CBool) CR2WTypeManager.Create("Bool", "stopAtPathEnd", cr2w, this);
-				}
-				return _stopAtPathEnd;
-			}
-			set
-			{
-				if (_stopAtPathEnd == value)
-				{
-					return;
-				}
-				_stopAtPathEnd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stopAtPathEnd);
+			set => SetProperty(ref _stopAtPathEnd, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("secureTimeOut")] 
 		public CFloat SecureTimeOut
 		{
-			get
-			{
-				if (_secureTimeOut == null)
-				{
-					_secureTimeOut = (CFloat) CR2WTypeManager.Create("Float", "secureTimeOut", cr2w, this);
-				}
-				return _secureTimeOut;
-			}
-			set
-			{
-				if (_secureTimeOut == value)
-				{
-					return;
-				}
-				_secureTimeOut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _secureTimeOut);
+			set => SetProperty(ref _secureTimeOut, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get
-			{
-				if (_isPlayer == null)
-				{
-					_isPlayer = (CBool) CR2WTypeManager.Create("Bool", "isPlayer", cr2w, this);
-				}
-				return _isPlayer;
-			}
-			set
-			{
-				if (_isPlayer == value)
-				{
-					return;
-				}
-				_isPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("useTraffic")] 
 		public CBool UseTraffic
 		{
-			get
-			{
-				if (_useTraffic == null)
-				{
-					_useTraffic = (CBool) CR2WTypeManager.Create("Bool", "useTraffic", cr2w, this);
-				}
-				return _useTraffic;
-			}
-			set
-			{
-				if (_useTraffic == value)
-				{
-					return;
-				}
-				_useTraffic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useTraffic);
+			set => SetProperty(ref _useTraffic, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("speedInTraffic")] 
 		public CFloat SpeedInTraffic
 		{
-			get
-			{
-				if (_speedInTraffic == null)
-				{
-					_speedInTraffic = (CFloat) CR2WTypeManager.Create("Float", "speedInTraffic", cr2w, this);
-				}
-				return _speedInTraffic;
-			}
-			set
-			{
-				if (_speedInTraffic == value)
-				{
-					return;
-				}
-				_speedInTraffic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speedInTraffic);
+			set => SetProperty(ref _speedInTraffic, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("forceGreenLights")] 
 		public CBool ForceGreenLights
 		{
-			get
-			{
-				if (_forceGreenLights == null)
-				{
-					_forceGreenLights = (CBool) CR2WTypeManager.Create("Bool", "forceGreenLights", cr2w, this);
-				}
-				return _forceGreenLights;
-			}
-			set
-			{
-				if (_forceGreenLights == value)
-				{
-					return;
-				}
-				_forceGreenLights = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceGreenLights);
+			set => SetProperty(ref _forceGreenLights, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("portals")] 
 		public CHandle<vehiclePortalsList> Portals
 		{
-			get
-			{
-				if (_portals == null)
-				{
-					_portals = (CHandle<vehiclePortalsList>) CR2WTypeManager.Create("handle:vehiclePortalsList", "portals", cr2w, this);
-				}
-				return _portals;
-			}
-			set
-			{
-				if (_portals == value)
-				{
-					return;
-				}
-				_portals = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _portals);
+			set => SetProperty(ref _portals, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("trafficTryNeighborsForStart")] 
 		public CBool TrafficTryNeighborsForStart
 		{
-			get
-			{
-				if (_trafficTryNeighborsForStart == null)
-				{
-					_trafficTryNeighborsForStart = (CBool) CR2WTypeManager.Create("Bool", "trafficTryNeighborsForStart", cr2w, this);
-				}
-				return _trafficTryNeighborsForStart;
-			}
-			set
-			{
-				if (_trafficTryNeighborsForStart == value)
-				{
-					return;
-				}
-				_trafficTryNeighborsForStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trafficTryNeighborsForStart);
+			set => SetProperty(ref _trafficTryNeighborsForStart, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("trafficTryNeighborsForEnd")] 
 		public CBool TrafficTryNeighborsForEnd
 		{
-			get
-			{
-				if (_trafficTryNeighborsForEnd == null)
-				{
-					_trafficTryNeighborsForEnd = (CBool) CR2WTypeManager.Create("Bool", "trafficTryNeighborsForEnd", cr2w, this);
-				}
-				return _trafficTryNeighborsForEnd;
-			}
-			set
-			{
-				if (_trafficTryNeighborsForEnd == value)
-				{
-					return;
-				}
-				_trafficTryNeighborsForEnd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trafficTryNeighborsForEnd);
+			set => SetProperty(ref _trafficTryNeighborsForEnd, value);
 		}
 
 		public AIVehicleToNodeCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

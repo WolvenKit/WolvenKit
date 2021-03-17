@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("outMoveToWorkspot")] 
 		public CHandle<AIArgumentMapping> OutMoveToWorkspot
 		{
-			get
-			{
-				if (_outMoveToWorkspot == null)
-				{
-					_outMoveToWorkspot = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outMoveToWorkspot", cr2w, this);
-				}
-				return _outMoveToWorkspot;
-			}
-			set
-			{
-				if (_outMoveToWorkspot == value)
-				{
-					return;
-				}
-				_outMoveToWorkspot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outMoveToWorkspot);
+			set => SetProperty(ref _outMoveToWorkspot, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("outForceEntryAnimName")] 
 		public CHandle<AIArgumentMapping> OutForceEntryAnimName
 		{
-			get
-			{
-				if (_outForceEntryAnimName == null)
-				{
-					_outForceEntryAnimName = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outForceEntryAnimName", cr2w, this);
-				}
-				return _outForceEntryAnimName;
-			}
-			set
-			{
-				if (_outForceEntryAnimName == value)
-				{
-					return;
-				}
-				_outForceEntryAnimName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outForceEntryAnimName);
+			set => SetProperty(ref _outForceEntryAnimName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("outContinueInCombat")] 
 		public CHandle<AIArgumentMapping> OutContinueInCombat
 		{
-			get
-			{
-				if (_outContinueInCombat == null)
-				{
-					_outContinueInCombat = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outContinueInCombat", cr2w, this);
-				}
-				return _outContinueInCombat;
-			}
-			set
-			{
-				if (_outContinueInCombat == value)
-				{
-					return;
-				}
-				_outContinueInCombat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outContinueInCombat);
+			set => SetProperty(ref _outContinueInCombat, value);
 		}
 
 		public UseWorkspotCommandHandler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

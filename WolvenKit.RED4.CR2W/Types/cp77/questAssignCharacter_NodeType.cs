@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("characterRef")] 
 		public gameEntityReference CharacterRef
 		{
-			get
-			{
-				if (_characterRef == null)
-				{
-					_characterRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "characterRef", cr2w, this);
-				}
-				return _characterRef;
-			}
-			set
-			{
-				if (_characterRef == value)
-				{
-					return;
-				}
-				_characterRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _characterRef);
+			set => SetProperty(ref _characterRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get
-			{
-				if (_vehicleRef == null)
-				{
-					_vehicleRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "vehicleRef", cr2w, this);
-				}
-				return _vehicleRef;
-			}
-			set
-			{
-				if (_vehicleRef == value)
-				{
-					return;
-				}
-				_vehicleRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleRef);
+			set => SetProperty(ref _vehicleRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get
-			{
-				if (_isPlayer == null)
-				{
-					_isPlayer = (CBool) CR2WTypeManager.Create("Bool", "isPlayer", cr2w, this);
-				}
-				return _isPlayer;
-			}
-			set
-			{
-				if (_isPlayer == value)
-				{
-					return;
-				}
-				_isPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("assign")] 
 		public CBool Assign
 		{
-			get
-			{
-				if (_assign == null)
-				{
-					_assign = (CBool) CR2WTypeManager.Create("Bool", "assign", cr2w, this);
-				}
-				return _assign;
-			}
-			set
-			{
-				if (_assign == value)
-				{
-					return;
-				}
-				_assign = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _assign);
+			set => SetProperty(ref _assign, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get
-			{
-				if (_slotName == null)
-				{
-					_slotName = (CName) CR2WTypeManager.Create("CName", "slotName", cr2w, this);
-				}
-				return _slotName;
-			}
-			set
-			{
-				if (_slotName == value)
-				{
-					return;
-				}
-				_slotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotName);
+			set => SetProperty(ref _slotName, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isInstant")] 
 		public CBool IsInstant
 		{
-			get
-			{
-				if (_isInstant == null)
-				{
-					_isInstant = (CBool) CR2WTypeManager.Create("Bool", "isInstant", cr2w, this);
-				}
-				return _isInstant;
-			}
-			set
-			{
-				if (_isInstant == value)
-				{
-					return;
-				}
-				_isInstant = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInstant);
+			set => SetProperty(ref _isInstant, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("entryAnimName")] 
 		public CName EntryAnimName
 		{
-			get
-			{
-				if (_entryAnimName == null)
-				{
-					_entryAnimName = (CName) CR2WTypeManager.Create("CName", "entryAnimName", cr2w, this);
-				}
-				return _entryAnimName;
-			}
-			set
-			{
-				if (_entryAnimName == value)
-				{
-					return;
-				}
-				_entryAnimName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryAnimName);
+			set => SetProperty(ref _entryAnimName, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("entrySlotName")] 
 		public CName EntrySlotName
 		{
-			get
-			{
-				if (_entrySlotName == null)
-				{
-					_entrySlotName = (CName) CR2WTypeManager.Create("CName", "entrySlotName", cr2w, this);
-				}
-				return _entrySlotName;
-			}
-			set
-			{
-				if (_entrySlotName == value)
-				{
-					return;
-				}
-				_entrySlotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entrySlotName);
+			set => SetProperty(ref _entrySlotName, value);
 		}
 
 		public questAssignCharacter_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

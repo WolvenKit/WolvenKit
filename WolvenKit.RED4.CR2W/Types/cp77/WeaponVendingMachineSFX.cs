@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("processing")] 
 		public CName Processing
 		{
-			get
-			{
-				if (_processing == null)
-				{
-					_processing = (CName) CR2WTypeManager.Create("CName", "processing", cr2w, this);
-				}
-				return _processing;
-			}
-			set
-			{
-				if (_processing == value)
-				{
-					return;
-				}
-				_processing = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _processing);
+			set => SetProperty(ref _processing, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("gunFalls")] 
 		public CName GunFalls
 		{
-			get
-			{
-				if (_gunFalls == null)
-				{
-					_gunFalls = (CName) CR2WTypeManager.Create("CName", "gunFalls", cr2w, this);
-				}
-				return _gunFalls;
-			}
-			set
-			{
-				if (_gunFalls == value)
-				{
-					return;
-				}
-				_gunFalls = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gunFalls);
+			set => SetProperty(ref _gunFalls, value);
 		}
 
 		public WeaponVendingMachineSFX(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

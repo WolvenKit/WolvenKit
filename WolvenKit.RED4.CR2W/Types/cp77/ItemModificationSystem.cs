@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("blackboard")] 
 		public wCHandle<gameIBlackboard> Blackboard
 		{
-			get
-			{
-				if (_blackboard == null)
-				{
-					_blackboard = (wCHandle<gameIBlackboard>) CR2WTypeManager.Create("whandle:gameIBlackboard", "blackboard", cr2w, this);
-				}
-				return _blackboard;
-			}
-			set
-			{
-				if (_blackboard == value)
-				{
-					return;
-				}
-				_blackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboard);
+			set => SetProperty(ref _blackboard, value);
 		}
 
 		public ItemModificationSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

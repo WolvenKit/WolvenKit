@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("grenadeThrown")] 
 		public CBool GrenadeThrown
 		{
-			get
-			{
-				if (_grenadeThrown == null)
-				{
-					_grenadeThrown = (CBool) CR2WTypeManager.Create("Bool", "grenadeThrown", cr2w, this);
-				}
-				return _grenadeThrown;
-			}
-			set
-			{
-				if (_grenadeThrown == value)
-				{
-					return;
-				}
-				_grenadeThrown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grenadeThrown);
+			set => SetProperty(ref _grenadeThrown, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("localAimForward")] 
 		public Vector4 LocalAimForward
 		{
-			get
-			{
-				if (_localAimForward == null)
-				{
-					_localAimForward = (Vector4) CR2WTypeManager.Create("Vector4", "localAimForward", cr2w, this);
-				}
-				return _localAimForward;
-			}
-			set
-			{
-				if (_localAimForward == value)
-				{
-					return;
-				}
-				_localAimForward = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localAimForward);
+			set => SetProperty(ref _localAimForward, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("localAimPosition")] 
 		public Vector4 LocalAimPosition
 		{
-			get
-			{
-				if (_localAimPosition == null)
-				{
-					_localAimPosition = (Vector4) CR2WTypeManager.Create("Vector4", "localAimPosition", cr2w, this);
-				}
-				return _localAimPosition;
-			}
-			set
-			{
-				if (_localAimPosition == value)
-				{
-					return;
-				}
-				_localAimPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localAimPosition);
+			set => SetProperty(ref _localAimPosition, value);
 		}
 
 		public CombatGadgetChargedThrowEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

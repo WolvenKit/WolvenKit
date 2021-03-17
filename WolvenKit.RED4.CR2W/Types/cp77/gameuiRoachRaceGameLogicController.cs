@@ -31,437 +31,152 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("jumpAcceleration")] 
 		public CFloat JumpAcceleration
 		{
-			get
-			{
-				if (_jumpAcceleration == null)
-				{
-					_jumpAcceleration = (CFloat) CR2WTypeManager.Create("Float", "jumpAcceleration", cr2w, this);
-				}
-				return _jumpAcceleration;
-			}
-			set
-			{
-				if (_jumpAcceleration == value)
-				{
-					return;
-				}
-				_jumpAcceleration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _jumpAcceleration);
+			set => SetProperty(ref _jumpAcceleration, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("jumpCancelAcceleration")] 
 		public CFloat JumpCancelAcceleration
 		{
-			get
-			{
-				if (_jumpCancelAcceleration == null)
-				{
-					_jumpCancelAcceleration = (CFloat) CR2WTypeManager.Create("Float", "jumpCancelAcceleration", cr2w, this);
-				}
-				return _jumpCancelAcceleration;
-			}
-			set
-			{
-				if (_jumpCancelAcceleration == value)
-				{
-					return;
-				}
-				_jumpCancelAcceleration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _jumpCancelAcceleration);
+			set => SetProperty(ref _jumpCancelAcceleration, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("gravity")] 
 		public CFloat Gravity
 		{
-			get
-			{
-				if (_gravity == null)
-				{
-					_gravity = (CFloat) CR2WTypeManager.Create("Float", "gravity", cr2w, this);
-				}
-				return _gravity;
-			}
-			set
-			{
-				if (_gravity == value)
-				{
-					return;
-				}
-				_gravity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gravity);
+			set => SetProperty(ref _gravity, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("playerSpawnPoint")] 
 		public Vector2 PlayerSpawnPoint
 		{
-			get
-			{
-				if (_playerSpawnPoint == null)
-				{
-					_playerSpawnPoint = (Vector2) CR2WTypeManager.Create("Vector2", "playerSpawnPoint", cr2w, this);
-				}
-				return _playerSpawnPoint;
-			}
-			set
-			{
-				if (_playerSpawnPoint == value)
-				{
-					return;
-				}
-				_playerSpawnPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerSpawnPoint);
+			set => SetProperty(ref _playerSpawnPoint, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("pixelsPerScore")] 
 		public CFloat PixelsPerScore
 		{
-			get
-			{
-				if (_pixelsPerScore == null)
-				{
-					_pixelsPerScore = (CFloat) CR2WTypeManager.Create("Float", "pixelsPerScore", cr2w, this);
-				}
-				return _pixelsPerScore;
-			}
-			set
-			{
-				if (_pixelsPerScore == value)
-				{
-					return;
-				}
-				_pixelsPerScore = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pixelsPerScore);
+			set => SetProperty(ref _pixelsPerScore, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("invincibilityTime")] 
 		public CFloat InvincibilityTime
 		{
-			get
-			{
-				if (_invincibilityTime == null)
-				{
-					_invincibilityTime = (CFloat) CR2WTypeManager.Create("Float", "invincibilityTime", cr2w, this);
-				}
-				return _invincibilityTime;
-			}
-			set
-			{
-				if (_invincibilityTime == value)
-				{
-					return;
-				}
-				_invincibilityTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _invincibilityTime);
+			set => SetProperty(ref _invincibilityTime, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("maxSpeedMultiplier")] 
 		public CFloat MaxSpeedMultiplier
 		{
-			get
-			{
-				if (_maxSpeedMultiplier == null)
-				{
-					_maxSpeedMultiplier = (CFloat) CR2WTypeManager.Create("Float", "maxSpeedMultiplier", cr2w, this);
-				}
-				return _maxSpeedMultiplier;
-			}
-			set
-			{
-				if (_maxSpeedMultiplier == value)
-				{
-					return;
-				}
-				_maxSpeedMultiplier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxSpeedMultiplier);
+			set => SetProperty(ref _maxSpeedMultiplier, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("multiplierPerScore")] 
 		public CFloat MultiplierPerScore
 		{
-			get
-			{
-				if (_multiplierPerScore == null)
-				{
-					_multiplierPerScore = (CFloat) CR2WTypeManager.Create("Float", "multiplierPerScore", cr2w, this);
-				}
-				return _multiplierPerScore;
-			}
-			set
-			{
-				if (_multiplierPerScore == value)
-				{
-					return;
-				}
-				_multiplierPerScore = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _multiplierPerScore);
+			set => SetProperty(ref _multiplierPerScore, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("house")] 
 		public inkWidgetReference House
 		{
-			get
-			{
-				if (_house == null)
-				{
-					_house = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "house", cr2w, this);
-				}
-				return _house;
-			}
-			set
-			{
-				if (_house == value)
-				{
-					return;
-				}
-				_house = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _house);
+			set => SetProperty(ref _house, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("ground")] 
 		public inkWidgetReference Ground
 		{
-			get
-			{
-				if (_ground == null)
-				{
-					_ground = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "ground", cr2w, this);
-				}
-				return _ground;
-			}
-			set
-			{
-				if (_ground == value)
-				{
-					return;
-				}
-				_ground = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ground);
+			set => SetProperty(ref _ground, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("startAnimation")] 
 		public CName StartAnimation
 		{
-			get
-			{
-				if (_startAnimation == null)
-				{
-					_startAnimation = (CName) CR2WTypeManager.Create("CName", "startAnimation", cr2w, this);
-				}
-				return _startAnimation;
-			}
-			set
-			{
-				if (_startAnimation == value)
-				{
-					return;
-				}
-				_startAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startAnimation);
+			set => SetProperty(ref _startAnimation, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("deathAnimation")] 
 		public CName DeathAnimation
 		{
-			get
-			{
-				if (_deathAnimation == null)
-				{
-					_deathAnimation = (CName) CR2WTypeManager.Create("CName", "deathAnimation", cr2w, this);
-				}
-				return _deathAnimation;
-			}
-			set
-			{
-				if (_deathAnimation == value)
-				{
-					return;
-				}
-				_deathAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deathAnimation);
+			set => SetProperty(ref _deathAnimation, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("layers")] 
 		public CArray<gameuiRoachRaceChunkLayer> Layers
 		{
-			get
-			{
-				if (_layers == null)
-				{
-					_layers = (CArray<gameuiRoachRaceChunkLayer>) CR2WTypeManager.Create("array:gameuiRoachRaceChunkLayer", "layers", cr2w, this);
-				}
-				return _layers;
-			}
-			set
-			{
-				if (_layers == value)
-				{
-					return;
-				}
-				_layers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _layers);
+			set => SetProperty(ref _layers, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("damageAnimation")] 
 		public CName DamageAnimation
 		{
-			get
-			{
-				if (_damageAnimation == null)
-				{
-					_damageAnimation = (CName) CR2WTypeManager.Create("CName", "damageAnimation", cr2w, this);
-				}
-				return _damageAnimation;
-			}
-			set
-			{
-				if (_damageAnimation == value)
-				{
-					return;
-				}
-				_damageAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damageAnimation);
+			set => SetProperty(ref _damageAnimation, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("healAnimation")] 
 		public CName HealAnimation
 		{
-			get
-			{
-				if (_healAnimation == null)
-				{
-					_healAnimation = (CName) CR2WTypeManager.Create("CName", "healAnimation", cr2w, this);
-				}
-				return _healAnimation;
-			}
-			set
-			{
-				if (_healAnimation == value)
-				{
-					return;
-				}
-				_healAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _healAnimation);
+			set => SetProperty(ref _healAnimation, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("healthText")] 
 		public inkTextWidgetReference HealthText
 		{
-			get
-			{
-				if (_healthText == null)
-				{
-					_healthText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "healthText", cr2w, this);
-				}
-				return _healthText;
-			}
-			set
-			{
-				if (_healthText == value)
-				{
-					return;
-				}
-				_healthText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _healthText);
+			set => SetProperty(ref _healthText, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("scoreText")] 
 		public inkTextWidgetReference ScoreText
 		{
-			get
-			{
-				if (_scoreText == null)
-				{
-					_scoreText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "scoreText", cr2w, this);
-				}
-				return _scoreText;
-			}
-			set
-			{
-				if (_scoreText == value)
-				{
-					return;
-				}
-				_scoreText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scoreText);
+			set => SetProperty(ref _scoreText, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("scoreMultiplierText")] 
 		public inkTextWidgetReference ScoreMultiplierText
 		{
-			get
-			{
-				if (_scoreMultiplierText == null)
-				{
-					_scoreMultiplierText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "scoreMultiplierText", cr2w, this);
-				}
-				return _scoreMultiplierText;
-			}
-			set
-			{
-				if (_scoreMultiplierText == value)
-				{
-					return;
-				}
-				_scoreMultiplierText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scoreMultiplierText);
+			set => SetProperty(ref _scoreMultiplierText, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("previousHealth")] 
 		public CInt32 PreviousHealth
 		{
-			get
-			{
-				if (_previousHealth == null)
-				{
-					_previousHealth = (CInt32) CR2WTypeManager.Create("Int32", "previousHealth", cr2w, this);
-				}
-				return _previousHealth;
-			}
-			set
-			{
-				if (_previousHealth == value)
-				{
-					return;
-				}
-				_previousHealth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousHealth);
+			set => SetProperty(ref _previousHealth, value);
 		}
 
 		public gameuiRoachRaceGameLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

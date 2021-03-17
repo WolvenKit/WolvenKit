@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stimEvent")] 
 		public CHandle<senseStimuliEvent> StimEvent
 		{
-			get
-			{
-				if (_stimEvent == null)
-				{
-					_stimEvent = (CHandle<senseStimuliEvent>) CR2WTypeManager.Create("handle:senseStimuliEvent", "stimEvent", cr2w, this);
-				}
-				return _stimEvent;
-			}
-			set
-			{
-				if (_stimEvent == value)
-				{
-					return;
-				}
-				_stimEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stimEvent);
+			set => SetProperty(ref _stimEvent, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("vehicleFearPhase")] 
 		public CInt32 VehicleFearPhase
 		{
-			get
-			{
-				if (_vehicleFearPhase == null)
-				{
-					_vehicleFearPhase = (CInt32) CR2WTypeManager.Create("Int32", "vehicleFearPhase", cr2w, this);
-				}
-				return _vehicleFearPhase;
-			}
-			set
-			{
-				if (_vehicleFearPhase == value)
-				{
-					return;
-				}
-				_vehicleFearPhase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleFearPhase);
+			set => SetProperty(ref _vehicleFearPhase, value);
 		}
 
 		public DelayedCrowdReactionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

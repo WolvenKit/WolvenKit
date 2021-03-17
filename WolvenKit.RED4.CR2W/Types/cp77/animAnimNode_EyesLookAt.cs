@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetALink")] 
 		public animVectorLink TargetALink
 		{
-			get
-			{
-				if (_targetALink == null)
-				{
-					_targetALink = (animVectorLink) CR2WTypeManager.Create("animVectorLink", "targetALink", cr2w, this);
-				}
-				return _targetALink;
-			}
-			set
-			{
-				if (_targetALink == value)
-				{
-					return;
-				}
-				_targetALink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetALink);
+			set => SetProperty(ref _targetALink, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("weightALink")] 
 		public animFloatLink WeightALink
 		{
-			get
-			{
-				if (_weightALink == null)
-				{
-					_weightALink = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "weightALink", cr2w, this);
-				}
-				return _weightALink;
-			}
-			set
-			{
-				if (_weightALink == value)
-				{
-					return;
-				}
-				_weightALink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightALink);
+			set => SetProperty(ref _weightALink, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("targetBLink")] 
 		public animVectorLink TargetBLink
 		{
-			get
-			{
-				if (_targetBLink == null)
-				{
-					_targetBLink = (animVectorLink) CR2WTypeManager.Create("animVectorLink", "targetBLink", cr2w, this);
-				}
-				return _targetBLink;
-			}
-			set
-			{
-				if (_targetBLink == value)
-				{
-					return;
-				}
-				_targetBLink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetBLink);
+			set => SetProperty(ref _targetBLink, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("weightBLink")] 
 		public animFloatLink WeightBLink
 		{
-			get
-			{
-				if (_weightBLink == null)
-				{
-					_weightBLink = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "weightBLink", cr2w, this);
-				}
-				return _weightBLink;
-			}
-			set
-			{
-				if (_weightBLink == value)
-				{
-					return;
-				}
-				_weightBLink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightBLink);
+			set => SetProperty(ref _weightBLink, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("transitionWeightLink")] 
 		public animFloatLink TransitionWeightLink
 		{
-			get
-			{
-				if (_transitionWeightLink == null)
-				{
-					_transitionWeightLink = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "transitionWeightLink", cr2w, this);
-				}
-				return _transitionWeightLink;
-			}
-			set
-			{
-				if (_transitionWeightLink == value)
-				{
-					return;
-				}
-				_transitionWeightLink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transitionWeightLink);
+			set => SetProperty(ref _transitionWeightLink, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("leftEye")] 
 		public animTransformIndex LeftEye
 		{
-			get
-			{
-				if (_leftEye == null)
-				{
-					_leftEye = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "leftEye", cr2w, this);
-				}
-				return _leftEye;
-			}
-			set
-			{
-				if (_leftEye == value)
-				{
-					return;
-				}
-				_leftEye = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _leftEye);
+			set => SetProperty(ref _leftEye, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("rightEye")] 
 		public animTransformIndex RightEye
 		{
-			get
-			{
-				if (_rightEye == null)
-				{
-					_rightEye = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "rightEye", cr2w, this);
-				}
-				return _rightEye;
-			}
-			set
-			{
-				if (_rightEye == value)
-				{
-					return;
-				}
-				_rightEye = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rightEye);
+			set => SetProperty(ref _rightEye, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("head")] 
 		public animTransformIndex Head
 		{
-			get
-			{
-				if (_head == null)
-				{
-					_head = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "head", cr2w, this);
-				}
-				return _head;
-			}
-			set
-			{
-				if (_head == value)
-				{
-					return;
-				}
-				_head = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _head);
+			set => SetProperty(ref _head, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("forwardDirection")] 
 		public CEnum<animAxis> ForwardDirection
 		{
-			get
-			{
-				if (_forwardDirection == null)
-				{
-					_forwardDirection = (CEnum<animAxis>) CR2WTypeManager.Create("animAxis", "forwardDirection", cr2w, this);
-				}
-				return _forwardDirection;
-			}
-			set
-			{
-				if (_forwardDirection == value)
-				{
-					return;
-				}
-				_forwardDirection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forwardDirection);
+			set => SetProperty(ref _forwardDirection, value);
 		}
 
 		public animAnimNode_EyesLookAt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lane")] 
 		public worldTrafficLaneUID Lane
 		{
-			get
-			{
-				if (_lane == null)
-				{
-					_lane = (worldTrafficLaneUID) CR2WTypeManager.Create("worldTrafficLaneUID", "lane", cr2w, this);
-				}
-				return _lane;
-			}
-			set
-			{
-				if (_lane == value)
-				{
-					return;
-				}
-				_lane = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lane);
+			set => SetProperty(ref _lane, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("collisions")] 
 		public CArray<worldTrafficStaticCollisionSphere> Collisions
 		{
-			get
-			{
-				if (_collisions == null)
-				{
-					_collisions = (CArray<worldTrafficStaticCollisionSphere>) CR2WTypeManager.Create("array:worldTrafficStaticCollisionSphere", "collisions", cr2w, this);
-				}
-				return _collisions;
-			}
-			set
-			{
-				if (_collisions == value)
-				{
-					return;
-				}
-				_collisions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collisions);
+			set => SetProperty(ref _collisions, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("deadEndStart")] 
 		public CFloat DeadEndStart
 		{
-			get
-			{
-				if (_deadEndStart == null)
-				{
-					_deadEndStart = (CFloat) CR2WTypeManager.Create("Float", "deadEndStart", cr2w, this);
-				}
-				return _deadEndStart;
-			}
-			set
-			{
-				if (_deadEndStart == value)
-				{
-					return;
-				}
-				_deadEndStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deadEndStart);
+			set => SetProperty(ref _deadEndStart, value);
 		}
 
 		public worldStaticLaneCollisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

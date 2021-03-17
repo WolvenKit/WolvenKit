@@ -27,345 +27,120 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("headerHolder")] 
 		public inkCompoundWidgetReference HeaderHolder
 		{
-			get
-			{
-				if (_headerHolder == null)
-				{
-					_headerHolder = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "headerHolder", cr2w, this);
-				}
-				return _headerHolder;
-			}
-			set
-			{
-				if (_headerHolder == value)
-				{
-					return;
-				}
-				_headerHolder = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _headerHolder);
+			set => SetProperty(ref _headerHolder, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("LBBtn")] 
 		public inkWidgetReference LBBtn
 		{
-			get
-			{
-				if (_lBBtn == null)
-				{
-					_lBBtn = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "LBBtn", cr2w, this);
-				}
-				return _lBBtn;
-			}
-			set
-			{
-				if (_lBBtn == value)
-				{
-					return;
-				}
-				_lBBtn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lBBtn);
+			set => SetProperty(ref _lBBtn, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("RBBtn")] 
 		public inkWidgetReference RBBtn
 		{
-			get
-			{
-				if (_rBBtn == null)
-				{
-					_rBBtn = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "RBBtn", cr2w, this);
-				}
-				return _rBBtn;
-			}
-			set
-			{
-				if (_rBBtn == value)
-				{
-					return;
-				}
-				_rBBtn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rBBtn);
+			set => SetProperty(ref _rBBtn, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("fluffHolderRight")] 
 		public inkCompoundWidgetReference FluffHolderRight
 		{
-			get
-			{
-				if (_fluffHolderRight == null)
-				{
-					_fluffHolderRight = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "fluffHolderRight", cr2w, this);
-				}
-				return _fluffHolderRight;
-			}
-			set
-			{
-				if (_fluffHolderRight == value)
-				{
-					return;
-				}
-				_fluffHolderRight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fluffHolderRight);
+			set => SetProperty(ref _fluffHolderRight, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("fluffHolderDown")] 
 		public inkCompoundWidgetReference FluffHolderDown
 		{
-			get
-			{
-				if (_fluffHolderDown == null)
-				{
-					_fluffHolderDown = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "fluffHolderDown", cr2w, this);
-				}
-				return _fluffHolderDown;
-			}
-			set
-			{
-				if (_fluffHolderDown == value)
-				{
-					return;
-				}
-				_fluffHolderDown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fluffHolderDown);
+			set => SetProperty(ref _fluffHolderDown, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("fluffHolderLeft")] 
 		public inkCompoundWidgetReference FluffHolderLeft
 		{
-			get
-			{
-				if (_fluffHolderLeft == null)
-				{
-					_fluffHolderLeft = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "fluffHolderLeft", cr2w, this);
-				}
-				return _fluffHolderLeft;
-			}
-			set
-			{
-				if (_fluffHolderLeft == value)
-				{
-					return;
-				}
-				_fluffHolderLeft = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fluffHolderLeft);
+			set => SetProperty(ref _fluffHolderLeft, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("fluffText1")] 
 		public inkTextWidgetReference FluffText1
 		{
-			get
-			{
-				if (_fluffText1 == null)
-				{
-					_fluffText1 = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "fluffText1", cr2w, this);
-				}
-				return _fluffText1;
-			}
-			set
-			{
-				if (_fluffText1 == value)
-				{
-					return;
-				}
-				_fluffText1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fluffText1);
+			set => SetProperty(ref _fluffText1, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("fluffTextRight")] 
 		public inkTextWidgetReference FluffTextRight
 		{
-			get
-			{
-				if (_fluffTextRight == null)
-				{
-					_fluffTextRight = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "fluffTextRight", cr2w, this);
-				}
-				return _fluffTextRight;
-			}
-			set
-			{
-				if (_fluffTextRight == value)
-				{
-					return;
-				}
-				_fluffTextRight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fluffTextRight);
+			set => SetProperty(ref _fluffTextRight, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("fluffTextDown")] 
 		public inkTextWidgetReference FluffTextDown
 		{
-			get
-			{
-				if (_fluffTextDown == null)
-				{
-					_fluffTextDown = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "fluffTextDown", cr2w, this);
-				}
-				return _fluffTextDown;
-			}
-			set
-			{
-				if (_fluffTextDown == value)
-				{
-					return;
-				}
-				_fluffTextDown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fluffTextDown);
+			set => SetProperty(ref _fluffTextDown, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("fluffTextLeft")] 
 		public inkTextWidgetReference FluffTextLeft
 		{
-			get
-			{
-				if (_fluffTextLeft == null)
-				{
-					_fluffTextLeft = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "fluffTextLeft", cr2w, this);
-				}
-				return _fluffTextLeft;
-			}
-			set
-			{
-				if (_fluffTextLeft == value)
-				{
-					return;
-				}
-				_fluffTextLeft = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fluffTextLeft);
+			set => SetProperty(ref _fluffTextLeft, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("headers")] 
 		public CArray<CHandle<CharacterCreationTopBarHeader>> Headers
 		{
-			get
-			{
-				if (_headers == null)
-				{
-					_headers = (CArray<CHandle<CharacterCreationTopBarHeader>>) CR2WTypeManager.Create("array:handle:CharacterCreationTopBarHeader", "headers", cr2w, this);
-				}
-				return _headers;
-			}
-			set
-			{
-				if (_headers == value)
-				{
-					return;
-				}
-				_headers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _headers);
+			set => SetProperty(ref _headers, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("selectedHeader")] 
 		public CHandle<CharacterCreationTopBarHeader> SelectedHeader
 		{
-			get
-			{
-				if (_selectedHeader == null)
-				{
-					_selectedHeader = (CHandle<CharacterCreationTopBarHeader>) CR2WTypeManager.Create("handle:CharacterCreationTopBarHeader", "selectedHeader", cr2w, this);
-				}
-				return _selectedHeader;
-			}
-			set
-			{
-				if (_selectedHeader == value)
-				{
-					return;
-				}
-				_selectedHeader = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectedHeader);
+			set => SetProperty(ref _selectedHeader, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("c_fluffMaxX")] 
 		public CFloat C_fluffMaxX
 		{
-			get
-			{
-				if (_c_fluffMaxX == null)
-				{
-					_c_fluffMaxX = (CFloat) CR2WTypeManager.Create("Float", "c_fluffMaxX", cr2w, this);
-				}
-				return _c_fluffMaxX;
-			}
-			set
-			{
-				if (_c_fluffMaxX == value)
-				{
-					return;
-				}
-				_c_fluffMaxX = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _c_fluffMaxX);
+			set => SetProperty(ref _c_fluffMaxX, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("c_fluffMinY")] 
 		public CFloat C_fluffMinY
 		{
-			get
-			{
-				if (_c_fluffMinY == null)
-				{
-					_c_fluffMinY = (CFloat) CR2WTypeManager.Create("Float", "c_fluffMinY", cr2w, this);
-				}
-				return _c_fluffMinY;
-			}
-			set
-			{
-				if (_c_fluffMinY == value)
-				{
-					return;
-				}
-				_c_fluffMinY = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _c_fluffMinY);
+			set => SetProperty(ref _c_fluffMinY, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("c_fluffMaxY")] 
 		public CFloat C_fluffMaxY
 		{
-			get
-			{
-				if (_c_fluffMaxY == null)
-				{
-					_c_fluffMaxY = (CFloat) CR2WTypeManager.Create("Float", "c_fluffMaxY", cr2w, this);
-				}
-				return _c_fluffMaxY;
-			}
-			set
-			{
-				if (_c_fluffMaxY == value)
-				{
-					return;
-				}
-				_c_fluffMaxY = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _c_fluffMaxY);
+			set => SetProperty(ref _c_fluffMaxY, value);
 		}
 
 		public CharacterCreationPersistantElements(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

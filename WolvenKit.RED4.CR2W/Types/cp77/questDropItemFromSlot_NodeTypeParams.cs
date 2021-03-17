@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get
-			{
-				if (_objectRef == null)
-				{
-					_objectRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "objectRef", cr2w, this);
-				}
-				return _objectRef;
-			}
-			set
-			{
-				if (_objectRef == value)
-				{
-					return;
-				}
-				_objectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("slotId")] 
 		public TweakDBID SlotId
 		{
-			get
-			{
-				if (_slotId == null)
-				{
-					_slotId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "slotId", cr2w, this);
-				}
-				return _slotId;
-			}
-			set
-			{
-				if (_slotId == value)
-				{
-					return;
-				}
-				_slotId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotId);
+			set => SetProperty(ref _slotId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("useGravity")] 
 		public CBool UseGravity
 		{
-			get
-			{
-				if (_useGravity == null)
-				{
-					_useGravity = (CBool) CR2WTypeManager.Create("Bool", "useGravity", cr2w, this);
-				}
-				return _useGravity;
-			}
-			set
-			{
-				if (_useGravity == value)
-				{
-					return;
-				}
-				_useGravity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useGravity);
+			set => SetProperty(ref _useGravity, value);
 		}
 
 		public questDropItemFromSlot_NodeTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

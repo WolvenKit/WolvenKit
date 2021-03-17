@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timeMin")] 
 		public CFloat TimeMin
 		{
-			get
-			{
-				if (_timeMin == null)
-				{
-					_timeMin = (CFloat) CR2WTypeManager.Create("Float", "timeMin", cr2w, this);
-				}
-				return _timeMin;
-			}
-			set
-			{
-				if (_timeMin == value)
-				{
-					return;
-				}
-				_timeMin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeMin);
+			set => SetProperty(ref _timeMin, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timeMax")] 
 		public CFloat TimeMax
 		{
-			get
-			{
-				if (_timeMax == null)
-				{
-					_timeMax = (CFloat) CR2WTypeManager.Create("Float", "timeMax", cr2w, this);
-				}
-				return _timeMax;
-			}
-			set
-			{
-				if (_timeMax == value)
-				{
-					return;
-				}
-				_timeMax = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeMax);
+			set => SetProperty(ref _timeMax, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CEnum<EAIBackgroundCombatStep> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<EAIBackgroundCombatStep>) CR2WTypeManager.Create("EAIBackgroundCombatStep", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("argument")] 
 		public gameEntityReference Argument
 		{
-			get
-			{
-				if (_argument == null)
-				{
-					_argument = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "argument", cr2w, this);
-				}
-				return _argument;
-			}
-			set
-			{
-				if (_argument == value)
-				{
-					return;
-				}
-				_argument = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _argument);
+			set => SetProperty(ref _argument, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("exposureMethod")] 
 		public CEnum<AICoverExposureMethod> ExposureMethod
 		{
-			get
-			{
-				if (_exposureMethod == null)
-				{
-					_exposureMethod = (CEnum<AICoverExposureMethod>) CR2WTypeManager.Create("AICoverExposureMethod", "exposureMethod", cr2w, this);
-				}
-				return _exposureMethod;
-			}
-			set
-			{
-				if (_exposureMethod == value)
-				{
-					return;
-				}
-				_exposureMethod = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exposureMethod);
+			set => SetProperty(ref _exposureMethod, value);
 		}
 
 		public AIBackgroundCombatStep(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

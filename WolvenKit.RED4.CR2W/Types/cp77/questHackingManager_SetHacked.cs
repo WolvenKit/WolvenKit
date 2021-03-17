@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hacked")] 
 		public CBool Hacked
 		{
-			get
-			{
-				if (_hacked == null)
-				{
-					_hacked = (CBool) CR2WTypeManager.Create("Bool", "hacked", cr2w, this);
-				}
-				return _hacked;
-			}
-			set
-			{
-				if (_hacked == value)
-				{
-					return;
-				}
-				_hacked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hacked);
+			set => SetProperty(ref _hacked, value);
 		}
 
 		public questHackingManager_SetHacked(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

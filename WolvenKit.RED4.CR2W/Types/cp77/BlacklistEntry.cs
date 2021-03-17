@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entryID")] 
 		public entEntityID EntryID
 		{
-			get
-			{
-				if (_entryID == null)
-				{
-					_entryID = (entEntityID) CR2WTypeManager.Create("entEntityID", "entryID", cr2w, this);
-				}
-				return _entryID;
-			}
-			set
-			{
-				if (_entryID == value)
-				{
-					return;
-				}
-				_entryID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryID);
+			set => SetProperty(ref _entryID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entryReason")] 
 		public CEnum<BlacklistReason> EntryReason
 		{
-			get
-			{
-				if (_entryReason == null)
-				{
-					_entryReason = (CEnum<BlacklistReason>) CR2WTypeManager.Create("BlacklistReason", "entryReason", cr2w, this);
-				}
-				return _entryReason;
-			}
-			set
-			{
-				if (_entryReason == value)
-				{
-					return;
-				}
-				_entryReason = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryReason);
+			set => SetProperty(ref _entryReason, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("warningsCount")] 
 		public CInt32 WarningsCount
 		{
-			get
-			{
-				if (_warningsCount == null)
-				{
-					_warningsCount = (CInt32) CR2WTypeManager.Create("Int32", "warningsCount", cr2w, this);
-				}
-				return _warningsCount;
-			}
-			set
-			{
-				if (_warningsCount == value)
-				{
-					return;
-				}
-				_warningsCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _warningsCount);
+			set => SetProperty(ref _warningsCount, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("reprimandID")] 
 		public CInt32 ReprimandID
 		{
-			get
-			{
-				if (_reprimandID == null)
-				{
-					_reprimandID = (CInt32) CR2WTypeManager.Create("Int32", "reprimandID", cr2w, this);
-				}
-				return _reprimandID;
-			}
-			set
-			{
-				if (_reprimandID == value)
-				{
-					return;
-				}
-				_reprimandID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reprimandID);
+			set => SetProperty(ref _reprimandID, value);
 		}
 
 		public BlacklistEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

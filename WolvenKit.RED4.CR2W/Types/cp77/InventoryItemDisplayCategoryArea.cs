@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("areasToHide")] 
 		public CArray<inkWidgetReference> AreasToHide
 		{
-			get
-			{
-				if (_areasToHide == null)
-				{
-					_areasToHide = (CArray<inkWidgetReference>) CR2WTypeManager.Create("array:inkWidgetReference", "areasToHide", cr2w, this);
-				}
-				return _areasToHide;
-			}
-			set
-			{
-				if (_areasToHide == value)
-				{
-					return;
-				}
-				_areasToHide = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areasToHide);
+			set => SetProperty(ref _areasToHide, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("equipmentAreas")] 
 		public CArray<inkCompoundWidgetReference> EquipmentAreas
 		{
-			get
-			{
-				if (_equipmentAreas == null)
-				{
-					_equipmentAreas = (CArray<inkCompoundWidgetReference>) CR2WTypeManager.Create("array:inkCompoundWidgetReference", "equipmentAreas", cr2w, this);
-				}
-				return _equipmentAreas;
-			}
-			set
-			{
-				if (_equipmentAreas == value)
-				{
-					return;
-				}
-				_equipmentAreas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipmentAreas);
+			set => SetProperty(ref _equipmentAreas, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("newItemsWrapper")] 
 		public inkWidgetReference NewItemsWrapper
 		{
-			get
-			{
-				if (_newItemsWrapper == null)
-				{
-					_newItemsWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "newItemsWrapper", cr2w, this);
-				}
-				return _newItemsWrapper;
-			}
-			set
-			{
-				if (_newItemsWrapper == value)
-				{
-					return;
-				}
-				_newItemsWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newItemsWrapper);
+			set => SetProperty(ref _newItemsWrapper, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("newItemsCounter")] 
 		public inkTextWidgetReference NewItemsCounter
 		{
-			get
-			{
-				if (_newItemsCounter == null)
-				{
-					_newItemsCounter = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "newItemsCounter", cr2w, this);
-				}
-				return _newItemsCounter;
-			}
-			set
-			{
-				if (_newItemsCounter == value)
-				{
-					return;
-				}
-				_newItemsCounter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newItemsCounter);
+			set => SetProperty(ref _newItemsCounter, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("categoryAreas")] 
 		public CArray<CHandle<InventoryItemDisplayEquipmentArea>> CategoryAreas
 		{
-			get
-			{
-				if (_categoryAreas == null)
-				{
-					_categoryAreas = (CArray<CHandle<InventoryItemDisplayEquipmentArea>>) CR2WTypeManager.Create("array:handle:InventoryItemDisplayEquipmentArea", "categoryAreas", cr2w, this);
-				}
-				return _categoryAreas;
-			}
-			set
-			{
-				if (_categoryAreas == value)
-				{
-					return;
-				}
-				_categoryAreas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _categoryAreas);
+			set => SetProperty(ref _categoryAreas, value);
 		}
 
 		public InventoryItemDisplayCategoryArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

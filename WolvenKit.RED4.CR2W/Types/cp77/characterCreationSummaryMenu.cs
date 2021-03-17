@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("backstoryTitle")] 
 		public inkTextWidgetReference BackstoryTitle
 		{
-			get
-			{
-				if (_backstoryTitle == null)
-				{
-					_backstoryTitle = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "backstoryTitle", cr2w, this);
-				}
-				return _backstoryTitle;
-			}
-			set
-			{
-				if (_backstoryTitle == value)
-				{
-					return;
-				}
-				_backstoryTitle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backstoryTitle);
+			set => SetProperty(ref _backstoryTitle, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("backstoryIcon")] 
 		public inkImageWidgetReference BackstoryIcon
 		{
-			get
-			{
-				if (_backstoryIcon == null)
-				{
-					_backstoryIcon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "backstoryIcon", cr2w, this);
-				}
-				return _backstoryIcon;
-			}
-			set
-			{
-				if (_backstoryIcon == value)
-				{
-					return;
-				}
-				_backstoryIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backstoryIcon);
+			set => SetProperty(ref _backstoryIcon, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("backstory")] 
 		public inkTextWidgetReference Backstory
 		{
-			get
-			{
-				if (_backstory == null)
-				{
-					_backstory = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "backstory", cr2w, this);
-				}
-				return _backstory;
-			}
-			set
-			{
-				if (_backstory == value)
-				{
-					return;
-				}
-				_backstory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backstory);
+			set => SetProperty(ref _backstory, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("attributeBodyValue")] 
 		public inkTextWidgetReference AttributeBodyValue
 		{
-			get
-			{
-				if (_attributeBodyValue == null)
-				{
-					_attributeBodyValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "attributeBodyValue", cr2w, this);
-				}
-				return _attributeBodyValue;
-			}
-			set
-			{
-				if (_attributeBodyValue == value)
-				{
-					return;
-				}
-				_attributeBodyValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeBodyValue);
+			set => SetProperty(ref _attributeBodyValue, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("attributeIntelligenceValue")] 
 		public inkTextWidgetReference AttributeIntelligenceValue
 		{
-			get
-			{
-				if (_attributeIntelligenceValue == null)
-				{
-					_attributeIntelligenceValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "attributeIntelligenceValue", cr2w, this);
-				}
-				return _attributeIntelligenceValue;
-			}
-			set
-			{
-				if (_attributeIntelligenceValue == value)
-				{
-					return;
-				}
-				_attributeIntelligenceValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeIntelligenceValue);
+			set => SetProperty(ref _attributeIntelligenceValue, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("attributeReflexesValue")] 
 		public inkTextWidgetReference AttributeReflexesValue
 		{
-			get
-			{
-				if (_attributeReflexesValue == null)
-				{
-					_attributeReflexesValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "attributeReflexesValue", cr2w, this);
-				}
-				return _attributeReflexesValue;
-			}
-			set
-			{
-				if (_attributeReflexesValue == value)
-				{
-					return;
-				}
-				_attributeReflexesValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeReflexesValue);
+			set => SetProperty(ref _attributeReflexesValue, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("attributeTechnicalAbilityValue")] 
 		public inkTextWidgetReference AttributeTechnicalAbilityValue
 		{
-			get
-			{
-				if (_attributeTechnicalAbilityValue == null)
-				{
-					_attributeTechnicalAbilityValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "attributeTechnicalAbilityValue", cr2w, this);
-				}
-				return _attributeTechnicalAbilityValue;
-			}
-			set
-			{
-				if (_attributeTechnicalAbilityValue == value)
-				{
-					return;
-				}
-				_attributeTechnicalAbilityValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeTechnicalAbilityValue);
+			set => SetProperty(ref _attributeTechnicalAbilityValue, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("attributeCoolValue")] 
 		public inkTextWidgetReference AttributeCoolValue
 		{
-			get
-			{
-				if (_attributeCoolValue == null)
-				{
-					_attributeCoolValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "attributeCoolValue", cr2w, this);
-				}
-				return _attributeCoolValue;
-			}
-			set
-			{
-				if (_attributeCoolValue == value)
-				{
-					return;
-				}
-				_attributeCoolValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeCoolValue);
+			set => SetProperty(ref _attributeCoolValue, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("previousPageBtn")] 
 		public inkWidgetReference PreviousPageBtn
 		{
-			get
-			{
-				if (_previousPageBtn == null)
-				{
-					_previousPageBtn = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "previousPageBtn", cr2w, this);
-				}
-				return _previousPageBtn;
-			}
-			set
-			{
-				if (_previousPageBtn == value)
-				{
-					return;
-				}
-				_previousPageBtn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousPageBtn);
+			set => SetProperty(ref _previousPageBtn, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("glitchBtn")] 
 		public inkWidgetReference GlitchBtn
 		{
-			get
-			{
-				if (_glitchBtn == null)
-				{
-					_glitchBtn = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "glitchBtn", cr2w, this);
-				}
-				return _glitchBtn;
-			}
-			set
-			{
-				if (_glitchBtn == value)
-				{
-					return;
-				}
-				_glitchBtn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _glitchBtn);
+			set => SetProperty(ref _glitchBtn, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
-			get
-			{
-				if (_animationProxy == null)
-				{
-					_animationProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animationProxy", cr2w, this);
-				}
-				return _animationProxy;
-			}
-			set
-			{
-				if (_animationProxy == value)
-				{
-					return;
-				}
-				_animationProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationProxy);
+			set => SetProperty(ref _animationProxy, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("loadingAnimationProxy")] 
 		public CHandle<inkanimProxy> LoadingAnimationProxy
 		{
-			get
-			{
-				if (_loadingAnimationProxy == null)
-				{
-					_loadingAnimationProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "loadingAnimationProxy", cr2w, this);
-				}
-				return _loadingAnimationProxy;
-			}
-			set
-			{
-				if (_loadingAnimationProxy == value)
-				{
-					return;
-				}
-				_loadingAnimationProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _loadingAnimationProxy);
+			set => SetProperty(ref _loadingAnimationProxy, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("loadingFinished")] 
 		public CBool LoadingFinished
 		{
-			get
-			{
-				if (_loadingFinished == null)
-				{
-					_loadingFinished = (CBool) CR2WTypeManager.Create("Bool", "loadingFinished", cr2w, this);
-				}
-				return _loadingFinished;
-			}
-			set
-			{
-				if (_loadingFinished == value)
-				{
-					return;
-				}
-				_loadingFinished = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _loadingFinished);
+			set => SetProperty(ref _loadingFinished, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("glitchClicks")] 
 		public CInt32 GlitchClicks
 		{
-			get
-			{
-				if (_glitchClicks == null)
-				{
-					_glitchClicks = (CInt32) CR2WTypeManager.Create("Int32", "glitchClicks", cr2w, this);
-				}
-				return _glitchClicks;
-			}
-			set
-			{
-				if (_glitchClicks == value)
-				{
-					return;
-				}
-				_glitchClicks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _glitchClicks);
+			set => SetProperty(ref _glitchClicks, value);
 		}
 
 		public characterCreationSummaryMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

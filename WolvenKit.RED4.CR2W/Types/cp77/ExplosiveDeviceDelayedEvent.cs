@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("arrayIndex")] 
 		public CInt32 ArrayIndex
 		{
-			get
-			{
-				if (_arrayIndex == null)
-				{
-					_arrayIndex = (CInt32) CR2WTypeManager.Create("Int32", "arrayIndex", cr2w, this);
-				}
-				return _arrayIndex;
-			}
-			set
-			{
-				if (_arrayIndex == value)
-				{
-					return;
-				}
-				_arrayIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _arrayIndex);
+			set => SetProperty(ref _arrayIndex, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("instigator")] 
 		public wCHandle<gameObject> Instigator
 		{
-			get
-			{
-				if (_instigator == null)
-				{
-					_instigator = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "instigator", cr2w, this);
-				}
-				return _instigator;
-			}
-			set
-			{
-				if (_instigator == value)
-				{
-					return;
-				}
-				_instigator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instigator);
+			set => SetProperty(ref _instigator, value);
 		}
 
 		public ExplosiveDeviceDelayedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

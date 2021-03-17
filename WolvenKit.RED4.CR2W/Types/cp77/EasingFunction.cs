@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("transitionType")] 
 		public CEnum<ETransitionType> TransitionType
 		{
-			get
-			{
-				if (_transitionType == null)
-				{
-					_transitionType = (CEnum<ETransitionType>) CR2WTypeManager.Create("ETransitionType", "transitionType", cr2w, this);
-				}
-				return _transitionType;
-			}
-			set
-			{
-				if (_transitionType == value)
-				{
-					return;
-				}
-				_transitionType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transitionType);
+			set => SetProperty(ref _transitionType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("easingType")] 
 		public CEnum<EEasingType> EasingType
 		{
-			get
-			{
-				if (_easingType == null)
-				{
-					_easingType = (CEnum<EEasingType>) CR2WTypeManager.Create("EEasingType", "easingType", cr2w, this);
-				}
-				return _easingType;
-			}
-			set
-			{
-				if (_easingType == value)
-				{
-					return;
-				}
-				_easingType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _easingType);
+			set => SetProperty(ref _easingType, value);
 		}
 
 		public EasingFunction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

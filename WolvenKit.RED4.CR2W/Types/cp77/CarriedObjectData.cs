@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("instant")] 
 		public CBool Instant
 		{
-			get
-			{
-				if (_instant == null)
-				{
-					_instant = (CBool) CR2WTypeManager.Create("Bool", "instant", cr2w, this);
-				}
-				return _instant;
-			}
-			set
-			{
-				if (_instant == value)
-				{
-					return;
-				}
-				_instant = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instant);
+			set => SetProperty(ref _instant, value);
 		}
 
 		public CarriedObjectData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("data")] 
 		public gameuiInputHintData Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (gameuiInputHintData) CR2WTypeManager.Create("gameuiInputHintData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("show")] 
 		public CBool Show
 		{
-			get
-			{
-				if (_show == null)
-				{
-					_show = (CBool) CR2WTypeManager.Create("Bool", "show", cr2w, this);
-				}
-				return _show;
-			}
-			set
-			{
-				if (_show == value)
-				{
-					return;
-				}
-				_show = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _show);
+			set => SetProperty(ref _show, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("targetHintContainer")] 
 		public CName TargetHintContainer
 		{
-			get
-			{
-				if (_targetHintContainer == null)
-				{
-					_targetHintContainer = (CName) CR2WTypeManager.Create("CName", "targetHintContainer", cr2w, this);
-				}
-				return _targetHintContainer;
-			}
-			set
-			{
-				if (_targetHintContainer == value)
-				{
-					return;
-				}
-				_targetHintContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetHintContainer);
+			set => SetProperty(ref _targetHintContainer, value);
 		}
 
 		public gameuiUpdateInputHintEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

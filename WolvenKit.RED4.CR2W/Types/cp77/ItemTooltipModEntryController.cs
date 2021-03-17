@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("modName")] 
 		public inkTextWidgetReference ModName
 		{
-			get
-			{
-				if (_modName == null)
-				{
-					_modName = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "modName", cr2w, this);
-				}
-				return _modName;
-			}
-			set
-			{
-				if (_modName == value)
-				{
-					return;
-				}
-				_modName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _modName);
+			set => SetProperty(ref _modName, value);
 		}
 
 		public ItemTooltipModEntryController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("renderResourceBlobPC")] 
 		public CHandle<IRenderResourceBlob> RenderResourceBlobPC
 		{
-			get
-			{
-				if (_renderResourceBlobPC == null)
-				{
-					_renderResourceBlobPC = (CHandle<IRenderResourceBlob>) CR2WTypeManager.Create("handle:IRenderResourceBlob", "renderResourceBlobPC", cr2w, this);
-				}
-				return _renderResourceBlobPC;
-			}
-			set
-			{
-				if (_renderResourceBlobPC == value)
-				{
-					return;
-				}
-				_renderResourceBlobPC = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _renderResourceBlobPC);
+			set => SetProperty(ref _renderResourceBlobPC, value);
 		}
 
 		public rendRenderMultilayerMaskResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

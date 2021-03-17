@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("impulseForce")] 
 		public CFloat ImpulseForce
 		{
-			get
-			{
-				if (_impulseForce == null)
-				{
-					_impulseForce = (CFloat) CR2WTypeManager.Create("Float", "impulseForce", cr2w, this);
-				}
-				return _impulseForce;
-			}
-			set
-			{
-				if (_impulseForce == value)
-				{
-					return;
-				}
-				_impulseForce = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _impulseForce);
+			set => SetProperty(ref _impulseForce, value);
 		}
 
 		[Ordinal(94)] 
 		[RED("impulseVector")] 
 		public Vector4 ImpulseVector
 		{
-			get
-			{
-				if (_impulseVector == null)
-				{
-					_impulseVector = (Vector4) CR2WTypeManager.Create("Vector4", "impulseVector", cr2w, this);
-				}
-				return _impulseVector;
-			}
-			set
-			{
-				if (_impulseVector == value)
-				{
-					return;
-				}
-				_impulseVector = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _impulseVector);
+			set => SetProperty(ref _impulseVector, value);
 		}
 
 		[Ordinal(95)] 
 		[RED("sideTriggerNames")] 
 		public CArray<CName> SideTriggerNames
 		{
-			get
-			{
-				if (_sideTriggerNames == null)
-				{
-					_sideTriggerNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "sideTriggerNames", cr2w, this);
-				}
-				return _sideTriggerNames;
-			}
-			set
-			{
-				if (_sideTriggerNames == value)
-				{
-					return;
-				}
-				_sideTriggerNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sideTriggerNames);
+			set => SetProperty(ref _sideTriggerNames, value);
 		}
 
 		[Ordinal(96)] 
 		[RED("triggerComponents")] 
 		public CArray<CHandle<gameStaticTriggerAreaComponent>> TriggerComponents
 		{
-			get
-			{
-				if (_triggerComponents == null)
-				{
-					_triggerComponents = (CArray<CHandle<gameStaticTriggerAreaComponent>>) CR2WTypeManager.Create("array:handle:gameStaticTriggerAreaComponent", "triggerComponents", cr2w, this);
-				}
-				return _triggerComponents;
-			}
-			set
-			{
-				if (_triggerComponents == value)
-				{
-					return;
-				}
-				_triggerComponents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerComponents);
+			set => SetProperty(ref _triggerComponents, value);
 		}
 
 		[Ordinal(97)] 
 		[RED("currentWorkspotSuffix")] 
 		public CName CurrentWorkspotSuffix
 		{
-			get
-			{
-				if (_currentWorkspotSuffix == null)
-				{
-					_currentWorkspotSuffix = (CName) CR2WTypeManager.Create("CName", "currentWorkspotSuffix", cr2w, this);
-				}
-				return _currentWorkspotSuffix;
-			}
-			set
-			{
-				if (_currentWorkspotSuffix == value)
-				{
-					return;
-				}
-				_currentWorkspotSuffix = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentWorkspotSuffix);
+			set => SetProperty(ref _currentWorkspotSuffix, value);
 		}
 
 		[Ordinal(98)] 
 		[RED("offMeshConnectionComponent")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionComponent
 		{
-			get
-			{
-				if (_offMeshConnectionComponent == null)
-				{
-					_offMeshConnectionComponent = (CHandle<AIOffMeshConnectionComponent>) CR2WTypeManager.Create("handle:AIOffMeshConnectionComponent", "offMeshConnectionComponent", cr2w, this);
-				}
-				return _offMeshConnectionComponent;
-			}
-			set
-			{
-				if (_offMeshConnectionComponent == value)
-				{
-					return;
-				}
-				_offMeshConnectionComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offMeshConnectionComponent);
+			set => SetProperty(ref _offMeshConnectionComponent, value);
 		}
 
 		[Ordinal(99)] 
 		[RED("physicalMesh")] 
 		public CHandle<entIPlacedComponent> PhysicalMesh
 		{
-			get
-			{
-				if (_physicalMesh == null)
-				{
-					_physicalMesh = (CHandle<entIPlacedComponent>) CR2WTypeManager.Create("handle:entIPlacedComponent", "physicalMesh", cr2w, this);
-				}
-				return _physicalMesh;
-			}
-			set
-			{
-				if (_physicalMesh == value)
-				{
-					return;
-				}
-				_physicalMesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _physicalMesh);
+			set => SetProperty(ref _physicalMesh, value);
 		}
 
 		public WeakFence(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

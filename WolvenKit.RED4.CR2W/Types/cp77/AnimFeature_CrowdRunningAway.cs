@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isRunningAwayFromPlayersCar")] 
 		public CBool IsRunningAwayFromPlayersCar
 		{
-			get
-			{
-				if (_isRunningAwayFromPlayersCar == null)
-				{
-					_isRunningAwayFromPlayersCar = (CBool) CR2WTypeManager.Create("Bool", "isRunningAwayFromPlayersCar", cr2w, this);
-				}
-				return _isRunningAwayFromPlayersCar;
-			}
-			set
-			{
-				if (_isRunningAwayFromPlayersCar == value)
-				{
-					return;
-				}
-				_isRunningAwayFromPlayersCar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isRunningAwayFromPlayersCar);
+			set => SetProperty(ref _isRunningAwayFromPlayersCar, value);
 		}
 
 		public AnimFeature_CrowdRunningAway(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("behaviour")] 
 		public CHandle<AIResourceReference> Behaviour
 		{
-			get
-			{
-				if (_behaviour == null)
-				{
-					_behaviour = (CHandle<AIResourceReference>) CR2WTypeManager.Create("handle:AIResourceReference", "behaviour", cr2w, this);
-				}
-				return _behaviour;
-			}
-			set
-			{
-				if (_behaviour == value)
-				{
-					return;
-				}
-				_behaviour = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _behaviour);
+			set => SetProperty(ref _behaviour, value);
 		}
 
 		public AIBehaviourSpot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

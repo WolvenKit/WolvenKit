@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isPlayerCompanionCached")] 
 		public CBool IsPlayerCompanionCached
 		{
-			get
-			{
-				if (_isPlayerCompanionCached == null)
-				{
-					_isPlayerCompanionCached = (CBool) CR2WTypeManager.Create("Bool", "isPlayerCompanionCached", cr2w, this);
-				}
-				return _isPlayerCompanionCached;
-			}
-			set
-			{
-				if (_isPlayerCompanionCached == value)
-				{
-					return;
-				}
-				_isPlayerCompanionCached = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayerCompanionCached);
+			set => SetProperty(ref _isPlayerCompanionCached, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isPlayerCompanionCachedTimeStamp")] 
 		public CFloat IsPlayerCompanionCachedTimeStamp
 		{
-			get
-			{
-				if (_isPlayerCompanionCachedTimeStamp == null)
-				{
-					_isPlayerCompanionCachedTimeStamp = (CFloat) CR2WTypeManager.Create("Float", "isPlayerCompanionCachedTimeStamp", cr2w, this);
-				}
-				return _isPlayerCompanionCachedTimeStamp;
-			}
-			set
-			{
-				if (_isPlayerCompanionCachedTimeStamp == value)
-				{
-					return;
-				}
-				_isPlayerCompanionCachedTimeStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayerCompanionCachedTimeStamp);
+			set => SetProperty(ref _isPlayerCompanionCachedTimeStamp, value);
 		}
 
 		public PlayerCompanionCacheDataEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tresspasserList")] 
 		public CArray<TrespasserEntry> TresspasserList
 		{
-			get
-			{
-				if (_tresspasserList == null)
-				{
-					_tresspasserList = (CArray<TrespasserEntry>) CR2WTypeManager.Create("array:TrespasserEntry", "tresspasserList", cr2w, this);
-				}
-				return _tresspasserList;
-			}
-			set
-			{
-				if (_tresspasserList == value)
-				{
-					return;
-				}
-				_tresspasserList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tresspasserList);
+			set => SetProperty(ref _tresspasserList, value);
 		}
 
 		[Ordinal(104)] 
 		[RED("entranceToken")] 
 		public entEntityID EntranceToken
 		{
-			get
-			{
-				if (_entranceToken == null)
-				{
-					_entranceToken = (entEntityID) CR2WTypeManager.Create("entEntityID", "entranceToken", cr2w, this);
-				}
-				return _entranceToken;
-			}
-			set
-			{
-				if (_entranceToken == value)
-				{
-					return;
-				}
-				_entranceToken = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entranceToken);
+			set => SetProperty(ref _entranceToken, value);
 		}
 
 		[Ordinal(105)] 
 		[RED("isLeaving")] 
 		public CBool IsLeaving
 		{
-			get
-			{
-				if (_isLeaving == null)
-				{
-					_isLeaving = (CBool) CR2WTypeManager.Create("Bool", "isLeaving", cr2w, this);
-				}
-				return _isLeaving;
-			}
-			set
-			{
-				if (_isLeaving == value)
-				{
-					return;
-				}
-				_isLeaving = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isLeaving);
+			set => SetProperty(ref _isLeaving, value);
 		}
 
 		[Ordinal(106)] 
 		[RED("isLocked")] 
 		public CBool IsLocked
 		{
-			get
-			{
-				if (_isLocked == null)
-				{
-					_isLocked = (CBool) CR2WTypeManager.Create("Bool", "isLocked", cr2w, this);
-				}
-				return _isLocked;
-			}
-			set
-			{
-				if (_isLocked == value)
-				{
-					return;
-				}
-				_isLocked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isLocked);
+			set => SetProperty(ref _isLocked, value);
 		}
 
 		public SecurityGateLockControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

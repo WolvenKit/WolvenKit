@@ -35,529 +35,184 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("networkLinks")] 
 		public CArray<SNetworkLinkData> NetworkLinks
 		{
-			get
-			{
-				if (_networkLinks == null)
-				{
-					_networkLinks = (CArray<SNetworkLinkData>) CR2WTypeManager.Create("array:SNetworkLinkData", "networkLinks", cr2w, this);
-				}
-				return _networkLinks;
-			}
-			set
-			{
-				if (_networkLinks == value)
-				{
-					return;
-				}
-				_networkLinks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _networkLinks);
+			set => SetProperty(ref _networkLinks, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("networkRevealTargets")] 
 		public CArray<entEntityID> NetworkRevealTargets
 		{
-			get
-			{
-				if (_networkRevealTargets == null)
-				{
-					_networkRevealTargets = (CArray<entEntityID>) CR2WTypeManager.Create("array:entEntityID", "networkRevealTargets", cr2w, this);
-				}
-				return _networkRevealTargets;
-			}
-			set
-			{
-				if (_networkRevealTargets == value)
-				{
-					return;
-				}
-				_networkRevealTargets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _networkRevealTargets);
+			set => SetProperty(ref _networkRevealTargets, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("sessionStarted")] 
 		public CBool SessionStarted
 		{
-			get
-			{
-				if (_sessionStarted == null)
-				{
-					_sessionStarted = (CBool) CR2WTypeManager.Create("Bool", "sessionStarted", cr2w, this);
-				}
-				return _sessionStarted;
-			}
-			set
-			{
-				if (_sessionStarted == value)
-				{
-					return;
-				}
-				_sessionStarted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sessionStarted);
+			set => SetProperty(ref _sessionStarted, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("visionModeChangedCallback")] 
 		public CUInt32 VisionModeChangedCallback
 		{
-			get
-			{
-				if (_visionModeChangedCallback == null)
-				{
-					_visionModeChangedCallback = (CUInt32) CR2WTypeManager.Create("Uint32", "visionModeChangedCallback", cr2w, this);
-				}
-				return _visionModeChangedCallback;
-			}
-			set
-			{
-				if (_visionModeChangedCallback == value)
-				{
-					return;
-				}
-				_visionModeChangedCallback = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visionModeChangedCallback);
+			set => SetProperty(ref _visionModeChangedCallback, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("focusModeToggleCallback")] 
 		public CUInt32 FocusModeToggleCallback
 		{
-			get
-			{
-				if (_focusModeToggleCallback == null)
-				{
-					_focusModeToggleCallback = (CUInt32) CR2WTypeManager.Create("Uint32", "focusModeToggleCallback", cr2w, this);
-				}
-				return _focusModeToggleCallback;
-			}
-			set
-			{
-				if (_focusModeToggleCallback == value)
-				{
-					return;
-				}
-				_focusModeToggleCallback = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _focusModeToggleCallback);
+			set => SetProperty(ref _focusModeToggleCallback, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("playerSpawnCallback")] 
 		public CUInt32 PlayerSpawnCallback
 		{
-			get
-			{
-				if (_playerSpawnCallback == null)
-				{
-					_playerSpawnCallback = (CUInt32) CR2WTypeManager.Create("Uint32", "playerSpawnCallback", cr2w, this);
-				}
-				return _playerSpawnCallback;
-			}
-			set
-			{
-				if (_playerSpawnCallback == value)
-				{
-					return;
-				}
-				_playerSpawnCallback = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerSpawnCallback);
+			set => SetProperty(ref _playerSpawnCallback, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("currentPlayerTargetCallbackID")] 
 		public CUInt32 CurrentPlayerTargetCallbackID
 		{
-			get
-			{
-				if (_currentPlayerTargetCallbackID == null)
-				{
-					_currentPlayerTargetCallbackID = (CUInt32) CR2WTypeManager.Create("Uint32", "currentPlayerTargetCallbackID", cr2w, this);
-				}
-				return _currentPlayerTargetCallbackID;
-			}
-			set
-			{
-				if (_currentPlayerTargetCallbackID == value)
-				{
-					return;
-				}
-				_currentPlayerTargetCallbackID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentPlayerTargetCallbackID);
+			set => SetProperty(ref _currentPlayerTargetCallbackID, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("lastTargetSlaveID")] 
 		public entEntityID LastTargetSlaveID
 		{
-			get
-			{
-				if (_lastTargetSlaveID == null)
-				{
-					_lastTargetSlaveID = (entEntityID) CR2WTypeManager.Create("entEntityID", "lastTargetSlaveID", cr2w, this);
-				}
-				return _lastTargetSlaveID;
-			}
-			set
-			{
-				if (_lastTargetSlaveID == value)
-				{
-					return;
-				}
-				_lastTargetSlaveID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastTargetSlaveID);
+			set => SetProperty(ref _lastTargetSlaveID, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("lastTargetMasterID")] 
 		public entEntityID LastTargetMasterID
 		{
-			get
-			{
-				if (_lastTargetMasterID == null)
-				{
-					_lastTargetMasterID = (entEntityID) CR2WTypeManager.Create("entEntityID", "lastTargetMasterID", cr2w, this);
-				}
-				return _lastTargetMasterID;
-			}
-			set
-			{
-				if (_lastTargetMasterID == value)
-				{
-					return;
-				}
-				_lastTargetMasterID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastTargetMasterID);
+			set => SetProperty(ref _lastTargetMasterID, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("unregisterLinksRequestDelay")] 
 		public gameDelayID UnregisterLinksRequestDelay
 		{
-			get
-			{
-				if (_unregisterLinksRequestDelay == null)
-				{
-					_unregisterLinksRequestDelay = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "unregisterLinksRequestDelay", cr2w, this);
-				}
-				return _unregisterLinksRequestDelay;
-			}
-			set
-			{
-				if (_unregisterLinksRequestDelay == value)
-				{
-					return;
-				}
-				_unregisterLinksRequestDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unregisterLinksRequestDelay);
+			set => SetProperty(ref _unregisterLinksRequestDelay, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("focusModeActive")] 
 		public CBool FocusModeActive
 		{
-			get
-			{
-				if (_focusModeActive == null)
-				{
-					_focusModeActive = (CBool) CR2WTypeManager.Create("Bool", "focusModeActive", cr2w, this);
-				}
-				return _focusModeActive;
-			}
-			set
-			{
-				if (_focusModeActive == value)
-				{
-					return;
-				}
-				_focusModeActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _focusModeActive);
+			set => SetProperty(ref _focusModeActive, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("lastBeamResource")] 
 		public gameFxResource LastBeamResource
 		{
-			get
-			{
-				if (_lastBeamResource == null)
-				{
-					_lastBeamResource = (gameFxResource) CR2WTypeManager.Create("gameFxResource", "lastBeamResource", cr2w, this);
-				}
-				return _lastBeamResource;
-			}
-			set
-			{
-				if (_lastBeamResource == value)
-				{
-					return;
-				}
-				_lastBeamResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastBeamResource);
+			set => SetProperty(ref _lastBeamResource, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("pingNetworkEffect")] 
 		public CHandle<gameEffectInstance> PingNetworkEffect
 		{
-			get
-			{
-				if (_pingNetworkEffect == null)
-				{
-					_pingNetworkEffect = (CHandle<gameEffectInstance>) CR2WTypeManager.Create("handle:gameEffectInstance", "pingNetworkEffect", cr2w, this);
-				}
-				return _pingNetworkEffect;
-			}
-			set
-			{
-				if (_pingNetworkEffect == value)
-				{
-					return;
-				}
-				_pingNetworkEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pingNetworkEffect);
+			set => SetProperty(ref _pingNetworkEffect, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("pingCachedData")] 
 		public CHandle<PingCachedData> PingCachedData
 		{
-			get
-			{
-				if (_pingCachedData == null)
-				{
-					_pingCachedData = (CHandle<PingCachedData>) CR2WTypeManager.Create("handle:PingCachedData", "pingCachedData", cr2w, this);
-				}
-				return _pingCachedData;
-			}
-			set
-			{
-				if (_pingCachedData == value)
-				{
-					return;
-				}
-				_pingCachedData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pingCachedData);
+			set => SetProperty(ref _pingCachedData, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("lastPingSourceID")] 
 		public entEntityID LastPingSourceID
 		{
-			get
-			{
-				if (_lastPingSourceID == null)
-				{
-					_lastPingSourceID = (entEntityID) CR2WTypeManager.Create("entEntityID", "lastPingSourceID", cr2w, this);
-				}
-				return _lastPingSourceID;
-			}
-			set
-			{
-				if (_lastPingSourceID == value)
-				{
-					return;
-				}
-				_lastPingSourceID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastPingSourceID);
+			set => SetProperty(ref _lastPingSourceID, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("activePings")] 
 		public CArray<CHandle<PingCachedData>> ActivePings
 		{
-			get
-			{
-				if (_activePings == null)
-				{
-					_activePings = (CArray<CHandle<PingCachedData>>) CR2WTypeManager.Create("array:handle:PingCachedData", "activePings", cr2w, this);
-				}
-				return _activePings;
-			}
-			set
-			{
-				if (_activePings == value)
-				{
-					return;
-				}
-				_activePings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activePings);
+			set => SetProperty(ref _activePings, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("pingLinksCounter")] 
 		public CInt32 PingLinksCounter
 		{
-			get
-			{
-				if (_pingLinksCounter == null)
-				{
-					_pingLinksCounter = (CInt32) CR2WTypeManager.Create("Int32", "pingLinksCounter", cr2w, this);
-				}
-				return _pingLinksCounter;
-			}
-			set
-			{
-				if (_pingLinksCounter == value)
-				{
-					return;
-				}
-				_pingLinksCounter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pingLinksCounter);
+			set => SetProperty(ref _pingLinksCounter, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("networkPresetTBDID")] 
 		public TweakDBID NetworkPresetTBDID
 		{
-			get
-			{
-				if (_networkPresetTBDID == null)
-				{
-					_networkPresetTBDID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "networkPresetTBDID", cr2w, this);
-				}
-				return _networkPresetTBDID;
-			}
-			set
-			{
-				if (_networkPresetTBDID == value)
-				{
-					return;
-				}
-				_networkPresetTBDID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _networkPresetTBDID);
+			set => SetProperty(ref _networkPresetTBDID, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("networkPresetRecord")] 
 		public wCHandle<gamedataNetworkPingingParameteres_Record> NetworkPresetRecord
 		{
-			get
-			{
-				if (_networkPresetRecord == null)
-				{
-					_networkPresetRecord = (wCHandle<gamedataNetworkPingingParameteres_Record>) CR2WTypeManager.Create("whandle:gamedataNetworkPingingParameteres_Record", "networkPresetRecord", cr2w, this);
-				}
-				return _networkPresetRecord;
-			}
-			set
-			{
-				if (_networkPresetRecord == value)
-				{
-					return;
-				}
-				_networkPresetRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _networkPresetRecord);
+			set => SetProperty(ref _networkPresetRecord, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("backdoors")] 
 		public CArray<gamePersistentID> Backdoors
 		{
-			get
-			{
-				if (_backdoors == null)
-				{
-					_backdoors = (CArray<gamePersistentID>) CR2WTypeManager.Create("array:gamePersistentID", "backdoors", cr2w, this);
-				}
-				return _backdoors;
-			}
-			set
-			{
-				if (_backdoors == value)
-				{
-					return;
-				}
-				_backdoors = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backdoors);
+			set => SetProperty(ref _backdoors, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("revealedBackdoorsCount")] 
 		public CInt32 RevealedBackdoorsCount
 		{
-			get
-			{
-				if (_revealedBackdoorsCount == null)
-				{
-					_revealedBackdoorsCount = (CInt32) CR2WTypeManager.Create("Int32", "revealedBackdoorsCount", cr2w, this);
-				}
-				return _revealedBackdoorsCount;
-			}
-			set
-			{
-				if (_revealedBackdoorsCount == value)
-				{
-					return;
-				}
-				_revealedBackdoorsCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revealedBackdoorsCount);
+			set => SetProperty(ref _revealedBackdoorsCount, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("debugCashedPingFxResource")] 
 		public gameFxResource DebugCashedPingFxResource
 		{
-			get
-			{
-				if (_debugCashedPingFxResource == null)
-				{
-					_debugCashedPingFxResource = (gameFxResource) CR2WTypeManager.Create("gameFxResource", "debugCashedPingFxResource", cr2w, this);
-				}
-				return _debugCashedPingFxResource;
-			}
-			set
-			{
-				if (_debugCashedPingFxResource == value)
-				{
-					return;
-				}
-				_debugCashedPingFxResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _debugCashedPingFxResource);
+			set => SetProperty(ref _debugCashedPingFxResource, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("debugQueryNumber")] 
 		public CInt32 DebugQueryNumber
 		{
-			get
-			{
-				if (_debugQueryNumber == null)
-				{
-					_debugQueryNumber = (CInt32) CR2WTypeManager.Create("Int32", "debugQueryNumber", cr2w, this);
-				}
-				return _debugQueryNumber;
-			}
-			set
-			{
-				if (_debugQueryNumber == value)
-				{
-					return;
-				}
-				_debugQueryNumber = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _debugQueryNumber);
+			set => SetProperty(ref _debugQueryNumber, value);
 		}
 
 		public NetworkSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

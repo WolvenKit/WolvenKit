@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("defaultColor")] 
 		public CColor DefaultColor
 		{
-			get
-			{
-				if (_defaultColor == null)
-				{
-					_defaultColor = (CColor) CR2WTypeManager.Create("Color", "defaultColor", cr2w, this);
-				}
-				return _defaultColor;
-			}
-			set
-			{
-				if (_defaultColor == value)
-				{
-					return;
-				}
-				_defaultColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultColor);
+			set => SetProperty(ref _defaultColor, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("prefabColor")] 
 		public CColor PrefabColor
 		{
-			get
-			{
-				if (_prefabColor == null)
-				{
-					_prefabColor = (CColor) CR2WTypeManager.Create("Color", "prefabColor", cr2w, this);
-				}
-				return _prefabColor;
-			}
-			set
-			{
-				if (_prefabColor == value)
-				{
-					return;
-				}
-				_prefabColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prefabColor);
+			set => SetProperty(ref _prefabColor, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("collisionMeshColor")] 
 		public CColor CollisionMeshColor
 		{
-			get
-			{
-				if (_collisionMeshColor == null)
-				{
-					_collisionMeshColor = (CColor) CR2WTypeManager.Create("Color", "collisionMeshColor", cr2w, this);
-				}
-				return _collisionMeshColor;
-			}
-			set
-			{
-				if (_collisionMeshColor == value)
-				{
-					return;
-				}
-				_collisionMeshColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collisionMeshColor);
+			set => SetProperty(ref _collisionMeshColor, value);
 		}
 
 		public worldDebugColoring_CollisionMeshes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

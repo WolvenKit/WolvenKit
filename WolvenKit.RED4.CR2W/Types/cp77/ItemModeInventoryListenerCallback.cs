@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemModeInstance")] 
 		public wCHandle<InventoryItemModeLogicController> ItemModeInstance
 		{
-			get
-			{
-				if (_itemModeInstance == null)
-				{
-					_itemModeInstance = (wCHandle<InventoryItemModeLogicController>) CR2WTypeManager.Create("whandle:InventoryItemModeLogicController", "itemModeInstance", cr2w, this);
-				}
-				return _itemModeInstance;
-			}
-			set
-			{
-				if (_itemModeInstance == value)
-				{
-					return;
-				}
-				_itemModeInstance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemModeInstance);
+			set => SetProperty(ref _itemModeInstance, value);
 		}
 
 		public ItemModeInventoryListenerCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

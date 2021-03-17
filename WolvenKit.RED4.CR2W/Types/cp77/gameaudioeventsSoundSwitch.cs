@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("switchName")] 
 		public CName SwitchName
 		{
-			get
-			{
-				if (_switchName == null)
-				{
-					_switchName = (CName) CR2WTypeManager.Create("CName", "switchName", cr2w, this);
-				}
-				return _switchName;
-			}
-			set
-			{
-				if (_switchName == value)
-				{
-					return;
-				}
-				_switchName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _switchName);
+			set => SetProperty(ref _switchName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("switchValue")] 
 		public CName SwitchValue
 		{
-			get
-			{
-				if (_switchValue == null)
-				{
-					_switchValue = (CName) CR2WTypeManager.Create("CName", "switchValue", cr2w, this);
-				}
-				return _switchValue;
-			}
-			set
-			{
-				if (_switchValue == value)
-				{
-					return;
-				}
-				_switchValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _switchValue);
+			set => SetProperty(ref _switchValue, value);
 		}
 
 		public gameaudioeventsSoundSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

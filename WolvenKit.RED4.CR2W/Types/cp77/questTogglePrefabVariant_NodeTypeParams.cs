@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("prefabNodeRef")] 
 		public NodeRef PrefabNodeRef
 		{
-			get
-			{
-				if (_prefabNodeRef == null)
-				{
-					_prefabNodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "prefabNodeRef", cr2w, this);
-				}
-				return _prefabNodeRef;
-			}
-			set
-			{
-				if (_prefabNodeRef == value)
-				{
-					return;
-				}
-				_prefabNodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prefabNodeRef);
+			set => SetProperty(ref _prefabNodeRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("variantStates")] 
 		public CArray<questVariantState> VariantStates
 		{
-			get
-			{
-				if (_variantStates == null)
-				{
-					_variantStates = (CArray<questVariantState>) CR2WTypeManager.Create("array:questVariantState", "variantStates", cr2w, this);
-				}
-				return _variantStates;
-			}
-			set
-			{
-				if (_variantStates == value)
-				{
-					return;
-				}
-				_variantStates = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _variantStates);
+			set => SetProperty(ref _variantStates, value);
 		}
 
 		public questTogglePrefabVariant_NodeTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

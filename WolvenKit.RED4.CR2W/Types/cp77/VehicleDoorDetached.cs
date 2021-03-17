@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotID")] 
 		public CName SlotID
 		{
-			get
-			{
-				if (_slotID == null)
-				{
-					_slotID = (CName) CR2WTypeManager.Create("CName", "slotID", cr2w, this);
-				}
-				return _slotID;
-			}
-			set
-			{
-				if (_slotID == value)
-				{
-					return;
-				}
-				_slotID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("isInteractionSource")] 
 		public CBool IsInteractionSource
 		{
-			get
-			{
-				if (_isInteractionSource == null)
-				{
-					_isInteractionSource = (CBool) CR2WTypeManager.Create("Bool", "isInteractionSource", cr2w, this);
-				}
-				return _isInteractionSource;
-			}
-			set
-			{
-				if (_isInteractionSource == value)
-				{
-					return;
-				}
-				_isInteractionSource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInteractionSource);
+			set => SetProperty(ref _isInteractionSource, value);
 		}
 
 		public VehicleDoorDetached(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

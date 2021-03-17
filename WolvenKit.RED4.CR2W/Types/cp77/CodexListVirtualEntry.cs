@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("title")] 
 		public inkTextWidgetReference Title
 		{
-			get
-			{
-				if (_title == null)
-				{
-					_title = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "title", cr2w, this);
-				}
-				return _title;
-			}
-			set
-			{
-				if (_title == value)
-				{
-					return;
-				}
-				_title = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _title);
+			set => SetProperty(ref _title, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
-			get
-			{
-				if (_icon == null)
-				{
-					_icon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "icon", cr2w, this);
-				}
-				return _icon;
-			}
-			set
-			{
-				if (_icon == value)
-				{
-					return;
-				}
-				_icon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _icon);
+			set => SetProperty(ref _icon, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("newWrapper")] 
 		public inkWidgetReference NewWrapper
 		{
-			get
-			{
-				if (_newWrapper == null)
-				{
-					_newWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "newWrapper", cr2w, this);
-				}
-				return _newWrapper;
-			}
-			set
-			{
-				if (_newWrapper == value)
-				{
-					return;
-				}
-				_newWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newWrapper);
+			set => SetProperty(ref _newWrapper, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("entryData")] 
 		public CHandle<CodexEntryData> EntryData
 		{
-			get
-			{
-				if (_entryData == null)
-				{
-					_entryData = (CHandle<CodexEntryData>) CR2WTypeManager.Create("handle:CodexEntryData", "entryData", cr2w, this);
-				}
-				return _entryData;
-			}
-			set
-			{
-				if (_entryData == value)
-				{
-					return;
-				}
-				_entryData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryData);
+			set => SetProperty(ref _entryData, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("nestedListData")] 
 		public CHandle<VirutalNestedListData> NestedListData
 		{
-			get
-			{
-				if (_nestedListData == null)
-				{
-					_nestedListData = (CHandle<VirutalNestedListData>) CR2WTypeManager.Create("handle:VirutalNestedListData", "nestedListData", cr2w, this);
-				}
-				return _nestedListData;
-			}
-			set
-			{
-				if (_nestedListData == value)
-				{
-					return;
-				}
-				_nestedListData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nestedListData);
+			set => SetProperty(ref _nestedListData, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("activeItemSync")] 
 		public wCHandle<CodexListSyncData> ActiveItemSync
 		{
-			get
-			{
-				if (_activeItemSync == null)
-				{
-					_activeItemSync = (wCHandle<CodexListSyncData>) CR2WTypeManager.Create("whandle:CodexListSyncData", "activeItemSync", cr2w, this);
-				}
-				return _activeItemSync;
-			}
-			set
-			{
-				if (_activeItemSync == value)
-				{
-					return;
-				}
-				_activeItemSync = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeItemSync);
+			set => SetProperty(ref _activeItemSync, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("isItemHovered")] 
 		public CBool IsItemHovered
 		{
-			get
-			{
-				if (_isItemHovered == null)
-				{
-					_isItemHovered = (CBool) CR2WTypeManager.Create("Bool", "isItemHovered", cr2w, this);
-				}
-				return _isItemHovered;
-			}
-			set
-			{
-				if (_isItemHovered == value)
-				{
-					return;
-				}
-				_isItemHovered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isItemHovered);
+			set => SetProperty(ref _isItemHovered, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("isItemToggled")] 
 		public CBool IsItemToggled
 		{
-			get
-			{
-				if (_isItemToggled == null)
-				{
-					_isItemToggled = (CBool) CR2WTypeManager.Create("Bool", "isItemToggled", cr2w, this);
-				}
-				return _isItemToggled;
-			}
-			set
-			{
-				if (_isItemToggled == value)
-				{
-					return;
-				}
-				_isItemToggled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isItemToggled);
+			set => SetProperty(ref _isItemToggled, value);
 		}
 
 		public CodexListVirtualEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

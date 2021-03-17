@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("durationLink")] 
 		public animFloatLink DurationLink
 		{
-			get
-			{
-				if (_durationLink == null)
-				{
-					_durationLink = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "durationLink", cr2w, this);
-				}
-				return _durationLink;
-			}
-			set
-			{
-				if (_durationLink == value)
-				{
-					return;
-				}
-				_durationLink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _durationLink);
+			set => SetProperty(ref _durationLink, value);
 		}
 
 		public animAnimNode_SkPhaseWithDurationAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

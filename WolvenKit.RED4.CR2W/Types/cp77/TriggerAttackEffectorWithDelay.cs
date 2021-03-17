@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attack")] 
 		public CHandle<gameAttack_GameEffect> Attack
 		{
-			get
-			{
-				if (_attack == null)
-				{
-					_attack = (CHandle<gameAttack_GameEffect>) CR2WTypeManager.Create("handle:gameAttack_GameEffect", "attack", cr2w, this);
-				}
-				return _attack;
-			}
-			set
-			{
-				if (_attack == value)
-				{
-					return;
-				}
-				_attack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attack);
+			set => SetProperty(ref _attack, value);
 		}
 
 		public TriggerAttackEffectorWithDelay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

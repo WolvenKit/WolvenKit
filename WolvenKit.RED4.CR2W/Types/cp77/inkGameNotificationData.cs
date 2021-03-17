@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("notificationName")] 
 		public CName NotificationName
 		{
-			get
-			{
-				if (_notificationName == null)
-				{
-					_notificationName = (CName) CR2WTypeManager.Create("CName", "notificationName", cr2w, this);
-				}
-				return _notificationName;
-			}
-			set
-			{
-				if (_notificationName == value)
-				{
-					return;
-				}
-				_notificationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _notificationName);
+			set => SetProperty(ref _notificationName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isBlocking")] 
 		public CBool IsBlocking
 		{
-			get
-			{
-				if (_isBlocking == null)
-				{
-					_isBlocking = (CBool) CR2WTypeManager.Create("Bool", "isBlocking", cr2w, this);
-				}
-				return _isBlocking;
-			}
-			set
-			{
-				if (_isBlocking == value)
-				{
-					return;
-				}
-				_isBlocking = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isBlocking);
+			set => SetProperty(ref _isBlocking, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("useCursor")] 
 		public CBool UseCursor
 		{
-			get
-			{
-				if (_useCursor == null)
-				{
-					_useCursor = (CBool) CR2WTypeManager.Create("Bool", "useCursor", cr2w, this);
-				}
-				return _useCursor;
-			}
-			set
-			{
-				if (_useCursor == value)
-				{
-					return;
-				}
-				_useCursor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useCursor);
+			set => SetProperty(ref _useCursor, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("queueName")] 
 		public CName QueueName
 		{
-			get
-			{
-				if (_queueName == null)
-				{
-					_queueName = (CName) CR2WTypeManager.Create("CName", "queueName", cr2w, this);
-				}
-				return _queueName;
-			}
-			set
-			{
-				if (_queueName == value)
-				{
-					return;
-				}
-				_queueName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _queueName);
+			set => SetProperty(ref _queueName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("introAnimation")] 
 		public CName IntroAnimation
 		{
-			get
-			{
-				if (_introAnimation == null)
-				{
-					_introAnimation = (CName) CR2WTypeManager.Create("CName", "introAnimation", cr2w, this);
-				}
-				return _introAnimation;
-			}
-			set
-			{
-				if (_introAnimation == value)
-				{
-					return;
-				}
-				_introAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _introAnimation);
+			set => SetProperty(ref _introAnimation, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("token")] 
 		public wCHandle<inkGameNotificationToken> Token
 		{
-			get
-			{
-				if (_token == null)
-				{
-					_token = (wCHandle<inkGameNotificationToken>) CR2WTypeManager.Create("whandle:inkGameNotificationToken", "token", cr2w, this);
-				}
-				return _token;
-			}
-			set
-			{
-				if (_token == value)
-				{
-					return;
-				}
-				_token = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _token);
+			set => SetProperty(ref _token, value);
 		}
 
 		public inkGameNotificationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

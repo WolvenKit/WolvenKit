@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("grabPointStart")] 
 		public Vector4 GrabPointStart
 		{
-			get
-			{
-				if (_grabPointStart == null)
-				{
-					_grabPointStart = (Vector4) CR2WTypeManager.Create("Vector4", "grabPointStart", cr2w, this);
-				}
-				return _grabPointStart;
-			}
-			set
-			{
-				if (_grabPointStart == value)
-				{
-					return;
-				}
-				_grabPointStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grabPointStart);
+			set => SetProperty(ref _grabPointStart, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("grabPointEnd")] 
 		public Vector4 GrabPointEnd
 		{
-			get
-			{
-				if (_grabPointEnd == null)
-				{
-					_grabPointEnd = (Vector4) CR2WTypeManager.Create("Vector4", "grabPointEnd", cr2w, this);
-				}
-				return _grabPointEnd;
-			}
-			set
-			{
-				if (_grabPointEnd == value)
-				{
-					return;
-				}
-				_grabPointEnd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grabPointEnd);
+			set => SetProperty(ref _grabPointEnd, value);
 		}
 
 		public worldgeometryHandIKDescriptionResult(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

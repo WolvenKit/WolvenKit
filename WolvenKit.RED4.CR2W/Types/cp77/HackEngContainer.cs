@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hackingCheck")] 
 		public CHandle<HackingSkillCheck> HackingCheck
 		{
-			get
-			{
-				if (_hackingCheck == null)
-				{
-					_hackingCheck = (CHandle<HackingSkillCheck>) CR2WTypeManager.Create("handle:HackingSkillCheck", "hackingCheck", cr2w, this);
-				}
-				return _hackingCheck;
-			}
-			set
-			{
-				if (_hackingCheck == value)
-				{
-					return;
-				}
-				_hackingCheck = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hackingCheck);
+			set => SetProperty(ref _hackingCheck, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("engineeringCheck")] 
 		public CHandle<EngineeringSkillCheck> EngineeringCheck
 		{
-			get
-			{
-				if (_engineeringCheck == null)
-				{
-					_engineeringCheck = (CHandle<EngineeringSkillCheck>) CR2WTypeManager.Create("handle:EngineeringSkillCheck", "engineeringCheck", cr2w, this);
-				}
-				return _engineeringCheck;
-			}
-			set
-			{
-				if (_engineeringCheck == value)
-				{
-					return;
-				}
-				_engineeringCheck = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _engineeringCheck);
+			set => SetProperty(ref _engineeringCheck, value);
 		}
 
 		public HackEngContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("titleRef")] 
 		public inkTextWidgetReference TitleRef
 		{
-			get
-			{
-				if (_titleRef == null)
-				{
-					_titleRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "titleRef", cr2w, this);
-				}
-				return _titleRef;
-			}
-			set
-			{
-				if (_titleRef == value)
-				{
-					return;
-				}
-				_titleRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _titleRef);
+			set => SetProperty(ref _titleRef, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("shortTextRef")] 
 		public inkTextWidgetReference ShortTextRef
 		{
-			get
-			{
-				if (_shortTextRef == null)
-				{
-					_shortTextRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "shortTextRef", cr2w, this);
-				}
-				return _shortTextRef;
-			}
-			set
-			{
-				if (_shortTextRef == value)
-				{
-					return;
-				}
-				_shortTextRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shortTextRef);
+			set => SetProperty(ref _shortTextRef, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("longTextRef")] 
 		public inkTextWidgetReference LongTextRef
 		{
-			get
-			{
-				if (_longTextRef == null)
-				{
-					_longTextRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "longTextRef", cr2w, this);
-				}
-				return _longTextRef;
-			}
-			set
-			{
-				if (_longTextRef == value)
-				{
-					return;
-				}
-				_longTextRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _longTextRef);
+			set => SetProperty(ref _longTextRef, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("shortTextHolderRef")] 
 		public inkWidgetReference ShortTextHolderRef
 		{
-			get
-			{
-				if (_shortTextHolderRef == null)
-				{
-					_shortTextHolderRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "shortTextHolderRef", cr2w, this);
-				}
-				return _shortTextHolderRef;
-			}
-			set
-			{
-				if (_shortTextHolderRef == value)
-				{
-					return;
-				}
-				_shortTextHolderRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shortTextHolderRef);
+			set => SetProperty(ref _shortTextHolderRef, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("longTextHolderRef")] 
 		public inkWidgetReference LongTextHolderRef
 		{
-			get
-			{
-				if (_longTextHolderRef == null)
-				{
-					_longTextHolderRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "longTextHolderRef", cr2w, this);
-				}
-				return _longTextHolderRef;
-			}
-			set
-			{
-				if (_longTextHolderRef == value)
-				{
-					return;
-				}
-				_longTextHolderRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _longTextHolderRef);
+			set => SetProperty(ref _longTextHolderRef, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("buttonHintsManagerRef")] 
 		public inkWidgetReference ButtonHintsManagerRef
 		{
-			get
-			{
-				if (_buttonHintsManagerRef == null)
-				{
-					_buttonHintsManagerRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "buttonHintsManagerRef", cr2w, this);
-				}
-				return _buttonHintsManagerRef;
-			}
-			set
-			{
-				if (_buttonHintsManagerRef == value)
-				{
-					return;
-				}
-				_buttonHintsManagerRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonHintsManagerRef);
+			set => SetProperty(ref _buttonHintsManagerRef, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("buttonHintsManagerParentRef")] 
 		public inkWidgetReference ButtonHintsManagerParentRef
 		{
-			get
-			{
-				if (_buttonHintsManagerParentRef == null)
-				{
-					_buttonHintsManagerParentRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "buttonHintsManagerParentRef", cr2w, this);
-				}
-				return _buttonHintsManagerParentRef;
-			}
-			set
-			{
-				if (_buttonHintsManagerParentRef == value)
-				{
-					return;
-				}
-				_buttonHintsManagerParentRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonHintsManagerParentRef);
+			set => SetProperty(ref _buttonHintsManagerParentRef, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("buttonHintsSecondaryManagerRef")] 
 		public inkWidgetReference ButtonHintsSecondaryManagerRef
 		{
-			get
-			{
-				if (_buttonHintsSecondaryManagerRef == null)
-				{
-					_buttonHintsSecondaryManagerRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "buttonHintsSecondaryManagerRef", cr2w, this);
-				}
-				return _buttonHintsSecondaryManagerRef;
-			}
-			set
-			{
-				if (_buttonHintsSecondaryManagerRef == value)
-				{
-					return;
-				}
-				_buttonHintsSecondaryManagerRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonHintsSecondaryManagerRef);
+			set => SetProperty(ref _buttonHintsSecondaryManagerRef, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("buttonHintsSecondaryManagerParentRef")] 
 		public inkWidgetReference ButtonHintsSecondaryManagerParentRef
 		{
-			get
-			{
-				if (_buttonHintsSecondaryManagerParentRef == null)
-				{
-					_buttonHintsSecondaryManagerParentRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "buttonHintsSecondaryManagerParentRef", cr2w, this);
-				}
-				return _buttonHintsSecondaryManagerParentRef;
-			}
-			set
-			{
-				if (_buttonHintsSecondaryManagerParentRef == value)
-				{
-					return;
-				}
-				_buttonHintsSecondaryManagerParentRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonHintsSecondaryManagerParentRef);
+			set => SetProperty(ref _buttonHintsSecondaryManagerParentRef, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("data")] 
 		public CHandle<ShardReadPopupData> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CHandle<ShardReadPopupData>) CR2WTypeManager.Create("handle:ShardReadPopupData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("longTextTrashold")] 
 		public CInt32 LongTextTrashold
 		{
-			get
-			{
-				if (_longTextTrashold == null)
-				{
-					_longTextTrashold = (CInt32) CR2WTypeManager.Create("Int32", "longTextTrashold", cr2w, this);
-				}
-				return _longTextTrashold;
-			}
-			set
-			{
-				if (_longTextTrashold == value)
-				{
-					return;
-				}
-				_longTextTrashold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _longTextTrashold);
+			set => SetProperty(ref _longTextTrashold, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
-			get
-			{
-				if (_animationProxy == null)
-				{
-					_animationProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animationProxy", cr2w, this);
-				}
-				return _animationProxy;
-			}
-			set
-			{
-				if (_animationProxy == value)
-				{
-					return;
-				}
-				_animationProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationProxy);
+			set => SetProperty(ref _animationProxy, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("player")] 
 		public wCHandle<PlayerPuppet> Player
 		{
-			get
-			{
-				if (_player == null)
-				{
-					_player = (wCHandle<PlayerPuppet>) CR2WTypeManager.Create("whandle:PlayerPuppet", "player", cr2w, this);
-				}
-				return _player;
-			}
-			set
-			{
-				if (_player == value)
-				{
-					return;
-				}
-				_player = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _player);
+			set => SetProperty(ref _player, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("mingameBB")] 
 		public CHandle<gameIBlackboard> MingameBB
 		{
-			get
-			{
-				if (_mingameBB == null)
-				{
-					_mingameBB = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "mingameBB", cr2w, this);
-				}
-				return _mingameBB;
-			}
-			set
-			{
-				if (_mingameBB == value)
-				{
-					return;
-				}
-				_mingameBB = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mingameBB);
+			set => SetProperty(ref _mingameBB, value);
 		}
 
 		public ShardNotificationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

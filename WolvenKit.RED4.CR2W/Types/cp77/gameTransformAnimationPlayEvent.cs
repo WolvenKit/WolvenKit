@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timeScale")] 
 		public CFloat TimeScale
 		{
-			get
-			{
-				if (_timeScale == null)
-				{
-					_timeScale = (CFloat) CR2WTypeManager.Create("Float", "timeScale", cr2w, this);
-				}
-				return _timeScale;
-			}
-			set
-			{
-				if (_timeScale == value)
-				{
-					return;
-				}
-				_timeScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeScale);
+			set => SetProperty(ref _timeScale, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("looping")] 
 		public CBool Looping
 		{
-			get
-			{
-				if (_looping == null)
-				{
-					_looping = (CBool) CR2WTypeManager.Create("Bool", "looping", cr2w, this);
-				}
-				return _looping;
-			}
-			set
-			{
-				if (_looping == value)
-				{
-					return;
-				}
-				_looping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _looping);
+			set => SetProperty(ref _looping, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("timesPlayed")] 
 		public CUInt32 TimesPlayed
 		{
-			get
-			{
-				if (_timesPlayed == null)
-				{
-					_timesPlayed = (CUInt32) CR2WTypeManager.Create("Uint32", "timesPlayed", cr2w, this);
-				}
-				return _timesPlayed;
-			}
-			set
-			{
-				if (_timesPlayed == value)
-				{
-					return;
-				}
-				_timesPlayed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timesPlayed);
+			set => SetProperty(ref _timesPlayed, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("useEntitySetup")] 
 		public CBool UseEntitySetup
 		{
-			get
-			{
-				if (_useEntitySetup == null)
-				{
-					_useEntitySetup = (CBool) CR2WTypeManager.Create("Bool", "useEntitySetup", cr2w, this);
-				}
-				return _useEntitySetup;
-			}
-			set
-			{
-				if (_useEntitySetup == value)
-				{
-					return;
-				}
-				_useEntitySetup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useEntitySetup);
+			set => SetProperty(ref _useEntitySetup, value);
 		}
 
 		public gameTransformAnimationPlayEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

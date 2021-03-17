@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tier")] 
 		public CInt32 Tier
 		{
-			get
-			{
-				if (_tier == null)
-				{
-					_tier = (CInt32) CR2WTypeManager.Create("Int32", "tier", cr2w, this);
-				}
-				return _tier;
-			}
-			set
-			{
-				if (_tier == value)
-				{
-					return;
-				}
-				_tier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tier);
+			set => SetProperty(ref _tier, value);
 		}
 
 		public AnimFeature_SceneSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

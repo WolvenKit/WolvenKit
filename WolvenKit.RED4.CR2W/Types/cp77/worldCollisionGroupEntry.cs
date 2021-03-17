@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("neRef")] 
 		public NodeRef NeRef
 		{
-			get
-			{
-				if (_neRef == null)
-				{
-					_neRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "neRef", cr2w, this);
-				}
-				return _neRef;
-			}
-			set
-			{
-				if (_neRef == value)
-				{
-					return;
-				}
-				_neRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _neRef);
+			set => SetProperty(ref _neRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("Reversed")] 
 		public CBool Reversed
 		{
-			get
-			{
-				if (_reversed == null)
-				{
-					_reversed = (CBool) CR2WTypeManager.Create("Bool", "Reversed", cr2w, this);
-				}
-				return _reversed;
-			}
-			set
-			{
-				if (_reversed == value)
-				{
-					return;
-				}
-				_reversed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reversed);
+			set => SetProperty(ref _reversed, value);
 		}
 
 		public worldCollisionGroupEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

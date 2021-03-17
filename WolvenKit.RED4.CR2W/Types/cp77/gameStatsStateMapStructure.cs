@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("keys")] 
 		public CArray<gameStatsObjectID> Keys
 		{
-			get
-			{
-				if (_keys == null)
-				{
-					_keys = (CArray<gameStatsObjectID>) CR2WTypeManager.Create("array:gameStatsObjectID", "keys", cr2w, this);
-				}
-				return _keys;
-			}
-			set
-			{
-				if (_keys == value)
-				{
-					return;
-				}
-				_keys = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _keys);
+			set => SetProperty(ref _keys, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("values")] 
 		public CArray<gameSavedStatsData> Values
 		{
-			get
-			{
-				if (_values == null)
-				{
-					_values = (CArray<gameSavedStatsData>) CR2WTypeManager.Create("array:gameSavedStatsData", "values", cr2w, this);
-				}
-				return _values;
-			}
-			set
-			{
-				if (_values == value)
-				{
-					return;
-				}
-				_values = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _values);
+			set => SetProperty(ref _values, value);
 		}
 
 		public gameStatsStateMapStructure(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

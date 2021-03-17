@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hasFailed")] 
 		public CBool HasFailed
 		{
-			get
-			{
-				if (_hasFailed == null)
-				{
-					_hasFailed = (CBool) CR2WTypeManager.Create("Bool", "hasFailed", cr2w, this);
-				}
-				return _hasFailed;
-			}
-			set
-			{
-				if (_hasFailed == value)
-				{
-					return;
-				}
-				_hasFailed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasFailed);
+			set => SetProperty(ref _hasFailed, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hasPath")] 
 		public CBool HasPath
 		{
-			get
-			{
-				if (_hasPath == null)
-				{
-					_hasPath = (CBool) CR2WTypeManager.Create("Bool", "hasPath", cr2w, this);
-				}
-				return _hasPath;
-			}
-			set
-			{
-				if (_hasPath == value)
-				{
-					return;
-				}
-				_hasPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasPath);
+			set => SetProperty(ref _hasPath, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hasClosestPointOnNavmesh")] 
 		public CBool HasClosestPointOnNavmesh
 		{
-			get
-			{
-				if (_hasClosestPointOnNavmesh == null)
-				{
-					_hasClosestPointOnNavmesh = (CBool) CR2WTypeManager.Create("Bool", "hasClosestPointOnNavmesh", cr2w, this);
-				}
-				return _hasClosestPointOnNavmesh;
-			}
-			set
-			{
-				if (_hasClosestPointOnNavmesh == value)
-				{
-					return;
-				}
-				_hasClosestPointOnNavmesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasClosestPointOnNavmesh);
+			set => SetProperty(ref _hasClosestPointOnNavmesh, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hasClosestReachablePoint")] 
 		public CBool HasClosestReachablePoint
 		{
-			get
-			{
-				if (_hasClosestReachablePoint == null)
-				{
-					_hasClosestReachablePoint = (CBool) CR2WTypeManager.Create("Bool", "hasClosestReachablePoint", cr2w, this);
-				}
-				return _hasClosestReachablePoint;
-			}
-			set
-			{
-				if (_hasClosestReachablePoint == value)
-				{
-					return;
-				}
-				_hasClosestReachablePoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasClosestReachablePoint);
+			set => SetProperty(ref _hasClosestReachablePoint, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("lastSourcePosition")] 
 		public WorldPosition LastSourcePosition
 		{
-			get
-			{
-				if (_lastSourcePosition == null)
-				{
-					_lastSourcePosition = (WorldPosition) CR2WTypeManager.Create("WorldPosition", "lastSourcePosition", cr2w, this);
-				}
-				return _lastSourcePosition;
-			}
-			set
-			{
-				if (_lastSourcePosition == value)
-				{
-					return;
-				}
-				_lastSourcePosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastSourcePosition);
+			set => SetProperty(ref _lastSourcePosition, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("lastTargetPosition")] 
 		public WorldPosition LastTargetPosition
 		{
-			get
-			{
-				if (_lastTargetPosition == null)
-				{
-					_lastTargetPosition = (WorldPosition) CR2WTypeManager.Create("WorldPosition", "lastTargetPosition", cr2w, this);
-				}
-				return _lastTargetPosition;
-			}
-			set
-			{
-				if (_lastTargetPosition == value)
-				{
-					return;
-				}
-				_lastTargetPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastTargetPosition);
+			set => SetProperty(ref _lastTargetPosition, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("adjustedTargetPosition")] 
 		public WorldPosition AdjustedTargetPosition
 		{
-			get
-			{
-				if (_adjustedTargetPosition == null)
-				{
-					_adjustedTargetPosition = (WorldPosition) CR2WTypeManager.Create("WorldPosition", "adjustedTargetPosition", cr2w, this);
-				}
-				return _adjustedTargetPosition;
-			}
-			set
-			{
-				if (_adjustedTargetPosition == value)
-				{
-					return;
-				}
-				_adjustedTargetPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _adjustedTargetPosition);
+			set => SetProperty(ref _adjustedTargetPosition, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("closestPointOnNavmesh")] 
 		public WorldPosition ClosestPointOnNavmesh
 		{
-			get
-			{
-				if (_closestPointOnNavmesh == null)
-				{
-					_closestPointOnNavmesh = (WorldPosition) CR2WTypeManager.Create("WorldPosition", "closestPointOnNavmesh", cr2w, this);
-				}
-				return _closestPointOnNavmesh;
-			}
-			set
-			{
-				if (_closestPointOnNavmesh == value)
-				{
-					return;
-				}
-				_closestPointOnNavmesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _closestPointOnNavmesh);
+			set => SetProperty(ref _closestPointOnNavmesh, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("closestReachablePoint")] 
 		public WorldPosition ClosestReachablePoint
 		{
-			get
-			{
-				if (_closestReachablePoint == null)
-				{
-					_closestReachablePoint = (WorldPosition) CR2WTypeManager.Create("WorldPosition", "closestReachablePoint", cr2w, this);
-				}
-				return _closestReachablePoint;
-			}
-			set
-			{
-				if (_closestReachablePoint == value)
-				{
-					return;
-				}
-				_closestReachablePoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _closestReachablePoint);
+			set => SetProperty(ref _closestReachablePoint, value);
 		}
 
 		public AINavigationSystemResult(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("result")] 
 		public CEnum<AIbehaviorUpdateOutcome> Result
 		{
-			get
-			{
-				if (_result == null)
-				{
-					_result = (CEnum<AIbehaviorUpdateOutcome>) CR2WTypeManager.Create("AIbehaviorUpdateOutcome", "result", cr2w, this);
-				}
-				return _result;
-			}
-			set
-			{
-				if (_result == value)
-				{
-					return;
-				}
-				_result = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _result);
+			set => SetProperty(ref _result, value);
 		}
 
 		public MountAssigendVehicle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

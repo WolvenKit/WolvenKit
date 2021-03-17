@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stimEvent")] 
 		public CHandle<senseStimuliEvent> StimEvent
 		{
-			get
-			{
-				if (_stimEvent == null)
-				{
-					_stimEvent = (CHandle<senseStimuliEvent>) CR2WTypeManager.Create("handle:senseStimuliEvent", "stimEvent", cr2w, this);
-				}
-				return _stimEvent;
-			}
-			set
-			{
-				if (_stimEvent == value)
-				{
-					return;
-				}
-				_stimEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stimEvent);
+			set => SetProperty(ref _stimEvent, value);
 		}
 
 		public CleanEnvironmentalHazardEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

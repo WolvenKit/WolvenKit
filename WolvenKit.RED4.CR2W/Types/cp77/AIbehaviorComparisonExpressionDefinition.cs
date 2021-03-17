@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("leftHandSide")] 
 		public CHandle<AIbehaviorExpressionSocket> LeftHandSide
 		{
-			get
-			{
-				if (_leftHandSide == null)
-				{
-					_leftHandSide = (CHandle<AIbehaviorExpressionSocket>) CR2WTypeManager.Create("handle:AIbehaviorExpressionSocket", "leftHandSide", cr2w, this);
-				}
-				return _leftHandSide;
-			}
-			set
-			{
-				if (_leftHandSide == value)
-				{
-					return;
-				}
-				_leftHandSide = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _leftHandSide);
+			set => SetProperty(ref _leftHandSide, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("operator")] 
 		public CEnum<EComparisonType> Operator
 		{
-			get
-			{
-				if (_operator == null)
-				{
-					_operator = (CEnum<EComparisonType>) CR2WTypeManager.Create("EComparisonType", "operator", cr2w, this);
-				}
-				return _operator;
-			}
-			set
-			{
-				if (_operator == value)
-				{
-					return;
-				}
-				_operator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _operator);
+			set => SetProperty(ref _operator, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("rightHandSide")] 
 		public CHandle<AIbehaviorExpressionSocket> RightHandSide
 		{
-			get
-			{
-				if (_rightHandSide == null)
-				{
-					_rightHandSide = (CHandle<AIbehaviorExpressionSocket>) CR2WTypeManager.Create("handle:AIbehaviorExpressionSocket", "rightHandSide", cr2w, this);
-				}
-				return _rightHandSide;
-			}
-			set
-			{
-				if (_rightHandSide == value)
-				{
-					return;
-				}
-				_rightHandSide = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rightHandSide);
+			set => SetProperty(ref _rightHandSide, value);
 		}
 
 		public AIbehaviorComparisonExpressionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

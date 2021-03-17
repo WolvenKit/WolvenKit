@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("increaseWithDistance")] 
 		public CBool IncreaseWithDistance
 		{
-			get
-			{
-				if (_increaseWithDistance == null)
-				{
-					_increaseWithDistance = (CBool) CR2WTypeManager.Create("Bool", "increaseWithDistance", cr2w, this);
-				}
-				return _increaseWithDistance;
-			}
-			set
-			{
-				if (_increaseWithDistance == value)
-				{
-					return;
-				}
-				_increaseWithDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _increaseWithDistance);
+			set => SetProperty(ref _increaseWithDistance, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("percentMult")] 
 		public CFloat PercentMult
 		{
-			get
-			{
-				if (_percentMult == null)
-				{
-					_percentMult = (CFloat) CR2WTypeManager.Create("Float", "percentMult", cr2w, this);
-				}
-				return _percentMult;
-			}
-			set
-			{
-				if (_percentMult == value)
-				{
-					return;
-				}
-				_percentMult = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _percentMult);
+			set => SetProperty(ref _percentMult, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("unitThreshold")] 
 		public CFloat UnitThreshold
 		{
-			get
-			{
-				if (_unitThreshold == null)
-				{
-					_unitThreshold = (CFloat) CR2WTypeManager.Create("Float", "unitThreshold", cr2w, this);
-				}
-				return _unitThreshold;
-			}
-			set
-			{
-				if (_unitThreshold == value)
-				{
-					return;
-				}
-				_unitThreshold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unitThreshold);
+			set => SetProperty(ref _unitThreshold, value);
 		}
 
 		public ModifyDamageWithDistance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

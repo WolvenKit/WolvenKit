@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("applyServerTime")] 
 		public netTime ApplyServerTime
 		{
-			get
-			{
-				if (_applyServerTime == null)
-				{
-					_applyServerTime = (netTime) CR2WTypeManager.Create("netTime", "applyServerTime", cr2w, this);
-				}
-				return _applyServerTime;
-			}
-			set
-			{
-				if (_applyServerTime == value)
-				{
-					return;
-				}
-				_applyServerTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _applyServerTime);
+			set => SetProperty(ref _applyServerTime, value);
 		}
 
 		public gameReplAnimTransformRequestBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

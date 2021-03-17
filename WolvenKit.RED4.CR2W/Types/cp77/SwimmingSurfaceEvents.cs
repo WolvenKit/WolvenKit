@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lapsedTime")] 
 		public CFloat LapsedTime
 		{
-			get
-			{
-				if (_lapsedTime == null)
-				{
-					_lapsedTime = (CFloat) CR2WTypeManager.Create("Float", "lapsedTime", cr2w, this);
-				}
-				return _lapsedTime;
-			}
-			set
-			{
-				if (_lapsedTime == value)
-				{
-					return;
-				}
-				_lapsedTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lapsedTime);
+			set => SetProperty(ref _lapsedTime, value);
 		}
 
 		public SwimmingSurfaceEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

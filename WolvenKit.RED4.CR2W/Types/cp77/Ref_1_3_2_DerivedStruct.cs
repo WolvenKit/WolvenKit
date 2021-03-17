@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("prop3")] 
 		public CBool Prop3
 		{
-			get
-			{
-				if (_prop3 == null)
-				{
-					_prop3 = (CBool) CR2WTypeManager.Create("Bool", "prop3", cr2w, this);
-				}
-				return _prop3;
-			}
-			set
-			{
-				if (_prop3 == value)
-				{
-					return;
-				}
-				_prop3 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prop3);
+			set => SetProperty(ref _prop3, value);
 		}
 
 		public Ref_1_3_2_DerivedStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

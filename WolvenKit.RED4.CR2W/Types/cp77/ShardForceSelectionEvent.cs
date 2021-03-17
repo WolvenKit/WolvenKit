@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("selectionIndex")] 
 		public CInt32 SelectionIndex
 		{
-			get
-			{
-				if (_selectionIndex == null)
-				{
-					_selectionIndex = (CInt32) CR2WTypeManager.Create("Int32", "selectionIndex", cr2w, this);
-				}
-				return _selectionIndex;
-			}
-			set
-			{
-				if (_selectionIndex == value)
-				{
-					return;
-				}
-				_selectionIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectionIndex);
+			set => SetProperty(ref _selectionIndex, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hash")] 
 		public CInt32 Hash
 		{
-			get
-			{
-				if (_hash == null)
-				{
-					_hash = (CInt32) CR2WTypeManager.Create("Int32", "hash", cr2w, this);
-				}
-				return _hash;
-			}
-			set
-			{
-				if (_hash == value)
-				{
-					return;
-				}
-				_hash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hash);
+			set => SetProperty(ref _hash, value);
 		}
 
 		public ShardForceSelectionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

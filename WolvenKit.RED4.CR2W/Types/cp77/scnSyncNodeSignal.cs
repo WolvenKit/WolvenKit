@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nodeId")] 
 		public CUInt32 NodeId
 		{
-			get
-			{
-				if (_nodeId == null)
-				{
-					_nodeId = (CUInt32) CR2WTypeManager.Create("Uint32", "nodeId", cr2w, this);
-				}
-				return _nodeId;
-			}
-			set
-			{
-				if (_nodeId == value)
-				{
-					return;
-				}
-				_nodeId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeId);
+			set => SetProperty(ref _nodeId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("name")] 
 		public CUInt16 Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CUInt16) CR2WTypeManager.Create("Uint16", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ordinal")] 
 		public CUInt16 Ordinal
 		{
-			get
-			{
-				if (_ordinal == null)
-				{
-					_ordinal = (CUInt16) CR2WTypeManager.Create("Uint16", "ordinal", cr2w, this);
-				}
-				return _ordinal;
-			}
-			set
-			{
-				if (_ordinal == value)
-				{
-					return;
-				}
-				_ordinal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ordinal);
+			set => SetProperty(ref _ordinal, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("numRuns")] 
 		public CUInt16 NumRuns
 		{
-			get
-			{
-				if (_numRuns == null)
-				{
-					_numRuns = (CUInt16) CR2WTypeManager.Create("Uint16", "numRuns", cr2w, this);
-				}
-				return _numRuns;
-			}
-			set
-			{
-				if (_numRuns == value)
-				{
-					return;
-				}
-				_numRuns = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numRuns);
+			set => SetProperty(ref _numRuns, value);
 		}
 
 		public scnSyncNodeSignal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

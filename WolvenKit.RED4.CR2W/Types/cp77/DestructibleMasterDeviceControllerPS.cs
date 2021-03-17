@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isDestroyed")] 
 		public CBool IsDestroyed
 		{
-			get
-			{
-				if (_isDestroyed == null)
-				{
-					_isDestroyed = (CBool) CR2WTypeManager.Create("Bool", "isDestroyed", cr2w, this);
-				}
-				return _isDestroyed;
-			}
-			set
-			{
-				if (_isDestroyed == value)
-				{
-					return;
-				}
-				_isDestroyed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDestroyed);
+			set => SetProperty(ref _isDestroyed, value);
 		}
 
 		public DestructibleMasterDeviceControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

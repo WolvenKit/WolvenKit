@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fastTravelPointData")] 
 		public CHandle<gameFastTravelPointData> FastTravelPointData
 		{
-			get
-			{
-				if (_fastTravelPointData == null)
-				{
-					_fastTravelPointData = (CHandle<gameFastTravelPointData>) CR2WTypeManager.Create("handle:gameFastTravelPointData", "fastTravelPointData", cr2w, this);
-				}
-				return _fastTravelPointData;
-			}
-			set
-			{
-				if (_fastTravelPointData == value)
-				{
-					return;
-				}
-				_fastTravelPointData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fastTravelPointData);
+			set => SetProperty(ref _fastTravelPointData, value);
 		}
 
 		public OpenWorldMapDeviceAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

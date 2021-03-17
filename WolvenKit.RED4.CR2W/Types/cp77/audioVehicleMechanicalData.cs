@@ -30,414 +30,144 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("engineStartEvent")] 
 		public CName EngineStartEvent
 		{
-			get
-			{
-				if (_engineStartEvent == null)
-				{
-					_engineStartEvent = (CName) CR2WTypeManager.Create("CName", "engineStartEvent", cr2w, this);
-				}
-				return _engineStartEvent;
-			}
-			set
-			{
-				if (_engineStartEvent == value)
-				{
-					return;
-				}
-				_engineStartEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _engineStartEvent);
+			set => SetProperty(ref _engineStartEvent, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("engineStopEvent")] 
 		public CName EngineStopEvent
 		{
-			get
-			{
-				if (_engineStopEvent == null)
-				{
-					_engineStopEvent = (CName) CR2WTypeManager.Create("CName", "engineStopEvent", cr2w, this);
-				}
-				return _engineStopEvent;
-			}
-			set
-			{
-				if (_engineStopEvent == value)
-				{
-					return;
-				}
-				_engineStopEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _engineStopEvent);
+			set => SetProperty(ref _engineStopEvent, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("gearUpBeginEvent")] 
 		public CName GearUpBeginEvent
 		{
-			get
-			{
-				if (_gearUpBeginEvent == null)
-				{
-					_gearUpBeginEvent = (CName) CR2WTypeManager.Create("CName", "gearUpBeginEvent", cr2w, this);
-				}
-				return _gearUpBeginEvent;
-			}
-			set
-			{
-				if (_gearUpBeginEvent == value)
-				{
-					return;
-				}
-				_gearUpBeginEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gearUpBeginEvent);
+			set => SetProperty(ref _gearUpBeginEvent, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("gearUpEndEvent")] 
 		public CName GearUpEndEvent
 		{
-			get
-			{
-				if (_gearUpEndEvent == null)
-				{
-					_gearUpEndEvent = (CName) CR2WTypeManager.Create("CName", "gearUpEndEvent", cr2w, this);
-				}
-				return _gearUpEndEvent;
-			}
-			set
-			{
-				if (_gearUpEndEvent == value)
-				{
-					return;
-				}
-				_gearUpEndEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gearUpEndEvent);
+			set => SetProperty(ref _gearUpEndEvent, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("gearDownBeginEvent")] 
 		public CName GearDownBeginEvent
 		{
-			get
-			{
-				if (_gearDownBeginEvent == null)
-				{
-					_gearDownBeginEvent = (CName) CR2WTypeManager.Create("CName", "gearDownBeginEvent", cr2w, this);
-				}
-				return _gearDownBeginEvent;
-			}
-			set
-			{
-				if (_gearDownBeginEvent == value)
-				{
-					return;
-				}
-				_gearDownBeginEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gearDownBeginEvent);
+			set => SetProperty(ref _gearDownBeginEvent, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("gearDownEndEvent")] 
 		public CName GearDownEndEvent
 		{
-			get
-			{
-				if (_gearDownEndEvent == null)
-				{
-					_gearDownEndEvent = (CName) CR2WTypeManager.Create("CName", "gearDownEndEvent", cr2w, this);
-				}
-				return _gearDownEndEvent;
-			}
-			set
-			{
-				if (_gearDownEndEvent == value)
-				{
-					return;
-				}
-				_gearDownEndEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gearDownEndEvent);
+			set => SetProperty(ref _gearDownEndEvent, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("throttleOnEvent")] 
 		public CName ThrottleOnEvent
 		{
-			get
-			{
-				if (_throttleOnEvent == null)
-				{
-					_throttleOnEvent = (CName) CR2WTypeManager.Create("CName", "throttleOnEvent", cr2w, this);
-				}
-				return _throttleOnEvent;
-			}
-			set
-			{
-				if (_throttleOnEvent == value)
-				{
-					return;
-				}
-				_throttleOnEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _throttleOnEvent);
+			set => SetProperty(ref _throttleOnEvent, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("throttleOffEvent")] 
 		public CName ThrottleOffEvent
 		{
-			get
-			{
-				if (_throttleOffEvent == null)
-				{
-					_throttleOffEvent = (CName) CR2WTypeManager.Create("CName", "throttleOffEvent", cr2w, this);
-				}
-				return _throttleOffEvent;
-			}
-			set
-			{
-				if (_throttleOffEvent == value)
-				{
-					return;
-				}
-				_throttleOffEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _throttleOffEvent);
+			set => SetProperty(ref _throttleOffEvent, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("suspensionSqueekEvent")] 
 		public CName SuspensionSqueekEvent
 		{
-			get
-			{
-				if (_suspensionSqueekEvent == null)
-				{
-					_suspensionSqueekEvent = (CName) CR2WTypeManager.Create("CName", "suspensionSqueekEvent", cr2w, this);
-				}
-				return _suspensionSqueekEvent;
-			}
-			set
-			{
-				if (_suspensionSqueekEvent == value)
-				{
-					return;
-				}
-				_suspensionSqueekEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _suspensionSqueekEvent);
+			set => SetProperty(ref _suspensionSqueekEvent, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("acelleration")] 
 		public CName Acelleration
 		{
-			get
-			{
-				if (_acelleration == null)
-				{
-					_acelleration = (CName) CR2WTypeManager.Create("CName", "acelleration", cr2w, this);
-				}
-				return _acelleration;
-			}
-			set
-			{
-				if (_acelleration == value)
-				{
-					return;
-				}
-				_acelleration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _acelleration);
+			set => SetProperty(ref _acelleration, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("speed")] 
 		public CName Speed
 		{
-			get
-			{
-				if (_speed == null)
-				{
-					_speed = (CName) CR2WTypeManager.Create("CName", "speed", cr2w, this);
-				}
-				return _speed;
-			}
-			set
-			{
-				if (_speed == value)
-				{
-					return;
-				}
-				_speed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speed);
+			set => SetProperty(ref _speed, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("gear")] 
 		public CName Gear
 		{
-			get
-			{
-				if (_gear == null)
-				{
-					_gear = (CName) CR2WTypeManager.Create("CName", "gear", cr2w, this);
-				}
-				return _gear;
-			}
-			set
-			{
-				if (_gear == value)
-				{
-					return;
-				}
-				_gear = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gear);
+			set => SetProperty(ref _gear, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("brake")] 
 		public CName Brake
 		{
-			get
-			{
-				if (_brake == null)
-				{
-					_brake = (CName) CR2WTypeManager.Create("CName", "brake", cr2w, this);
-				}
-				return _brake;
-			}
-			set
-			{
-				if (_brake == value)
-				{
-					return;
-				}
-				_brake = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _brake);
+			set => SetProperty(ref _brake, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("rpm")] 
 		public CName Rpm
 		{
-			get
-			{
-				if (_rpm == null)
-				{
-					_rpm = (CName) CR2WTypeManager.Create("CName", "rpm", cr2w, this);
-				}
-				return _rpm;
-			}
-			set
-			{
-				if (_rpm == value)
-				{
-					return;
-				}
-				_rpm = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rpm);
+			set => SetProperty(ref _rpm, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("throttle")] 
 		public CName Throttle
 		{
-			get
-			{
-				if (_throttle == null)
-				{
-					_throttle = (CName) CR2WTypeManager.Create("CName", "throttle", cr2w, this);
-				}
-				return _throttle;
-			}
-			set
-			{
-				if (_throttle == value)
-				{
-					return;
-				}
-				_throttle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _throttle);
+			set => SetProperty(ref _throttle, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("sidewaysThrottle")] 
 		public CName SidewaysThrottle
 		{
-			get
-			{
-				if (_sidewaysThrottle == null)
-				{
-					_sidewaysThrottle = (CName) CR2WTypeManager.Create("CName", "sidewaysThrottle", cr2w, this);
-				}
-				return _sidewaysThrottle;
-			}
-			set
-			{
-				if (_sidewaysThrottle == value)
-				{
-					return;
-				}
-				_sidewaysThrottle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sidewaysThrottle);
+			set => SetProperty(ref _sidewaysThrottle, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("thrust")] 
 		public CName Thrust
 		{
-			get
-			{
-				if (_thrust == null)
-				{
-					_thrust = (CName) CR2WTypeManager.Create("CName", "thrust", cr2w, this);
-				}
-				return _thrust;
-			}
-			set
-			{
-				if (_thrust == value)
-				{
-					return;
-				}
-				_thrust = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _thrust);
+			set => SetProperty(ref _thrust, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("temperature")] 
 		public CName Temperature
 		{
-			get
-			{
-				if (_temperature == null)
-				{
-					_temperature = (CName) CR2WTypeManager.Create("CName", "temperature", cr2w, this);
-				}
-				return _temperature;
-			}
-			set
-			{
-				if (_temperature == value)
-				{
-					return;
-				}
-				_temperature = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _temperature);
+			set => SetProperty(ref _temperature, value);
 		}
 
 		public audioVehicleMechanicalData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("menuEventDispatcher")] 
 		public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
-			get
-			{
-				if (_menuEventDispatcher == null)
-				{
-					_menuEventDispatcher = (wCHandle<inkMenuEventDispatcher>) CR2WTypeManager.Create("whandle:inkMenuEventDispatcher", "menuEventDispatcher", cr2w, this);
-				}
-				return _menuEventDispatcher;
-			}
-			set
-			{
-				if (_menuEventDispatcher == value)
-				{
-					return;
-				}
-				_menuEventDispatcher = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuEventDispatcher);
+			set => SetProperty(ref _menuEventDispatcher, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("menuData")] 
 		public CHandle<IScriptable> MenuData
 		{
-			get
-			{
-				if (_menuData == null)
-				{
-					_menuData = (CHandle<IScriptable>) CR2WTypeManager.Create("handle:IScriptable", "menuData", cr2w, this);
-				}
-				return _menuData;
-			}
-			set
-			{
-				if (_menuData == value)
-				{
-					return;
-				}
-				_menuData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuData);
+			set => SetProperty(ref _menuData, value);
 		}
 
 		public BaseHubMenuController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -23,253 +23,88 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("patrolPathOverride")] 
 		public gamebbScriptID_Variant PatrolPathOverride
 		{
-			get
-			{
-				if (_patrolPathOverride == null)
-				{
-					_patrolPathOverride = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "patrolPathOverride", cr2w, this);
-				}
-				return _patrolPathOverride;
-			}
-			set
-			{
-				if (_patrolPathOverride == value)
-				{
-					return;
-				}
-				_patrolPathOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _patrolPathOverride);
+			set => SetProperty(ref _patrolPathOverride, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("patrolWithWeapon")] 
 		public gamebbScriptID_Bool PatrolWithWeapon
 		{
-			get
-			{
-				if (_patrolWithWeapon == null)
-				{
-					_patrolWithWeapon = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "patrolWithWeapon", cr2w, this);
-				}
-				return _patrolWithWeapon;
-			}
-			set
-			{
-				if (_patrolWithWeapon == value)
-				{
-					return;
-				}
-				_patrolWithWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _patrolWithWeapon);
+			set => SetProperty(ref _patrolWithWeapon, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("forceAlerted")] 
 		public gamebbScriptID_Bool ForceAlerted
 		{
-			get
-			{
-				if (_forceAlerted == null)
-				{
-					_forceAlerted = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "forceAlerted", cr2w, this);
-				}
-				return _forceAlerted;
-			}
-			set
-			{
-				if (_forceAlerted == value)
-				{
-					return;
-				}
-				_forceAlerted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceAlerted);
+			set => SetProperty(ref _forceAlerted, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("sprint")] 
 		public gamebbScriptID_Bool Sprint
 		{
-			get
-			{
-				if (_sprint == null)
-				{
-					_sprint = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "sprint", cr2w, this);
-				}
-				return _sprint;
-			}
-			set
-			{
-				if (_sprint == value)
-				{
-					return;
-				}
-				_sprint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sprint);
+			set => SetProperty(ref _sprint, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("selectedPath")] 
 		public gamebbScriptID_Variant SelectedPath
 		{
-			get
-			{
-				if (_selectedPath == null)
-				{
-					_selectedPath = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "selectedPath", cr2w, this);
-				}
-				return _selectedPath;
-			}
-			set
-			{
-				if (_selectedPath == value)
-				{
-					return;
-				}
-				_selectedPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectedPath);
+			set => SetProperty(ref _selectedPath, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("closestPathPoint")] 
 		public gamebbScriptID_Vector4 ClosestPathPoint
 		{
-			get
-			{
-				if (_closestPathPoint == null)
-				{
-					_closestPathPoint = (gamebbScriptID_Vector4) CR2WTypeManager.Create("gamebbScriptID_Vector4", "closestPathPoint", cr2w, this);
-				}
-				return _closestPathPoint;
-			}
-			set
-			{
-				if (_closestPathPoint == value)
-				{
-					return;
-				}
-				_closestPathPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _closestPathPoint);
+			set => SetProperty(ref _closestPathPoint, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("workspotData")] 
 		public gamebbScriptID_Variant WorkspotData
 		{
-			get
-			{
-				if (_workspotData == null)
-				{
-					_workspotData = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "workspotData", cr2w, this);
-				}
-				return _workspotData;
-			}
-			set
-			{
-				if (_workspotData == value)
-				{
-					return;
-				}
-				_workspotData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotData);
+			set => SetProperty(ref _workspotData, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("workspotEntryPosition")] 
 		public gamebbScriptID_Vector4 WorkspotEntryPosition
 		{
-			get
-			{
-				if (_workspotEntryPosition == null)
-				{
-					_workspotEntryPosition = (gamebbScriptID_Vector4) CR2WTypeManager.Create("gamebbScriptID_Vector4", "workspotEntryPosition", cr2w, this);
-				}
-				return _workspotEntryPosition;
-			}
-			set
-			{
-				if (_workspotEntryPosition == value)
-				{
-					return;
-				}
-				_workspotEntryPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotEntryPosition);
+			set => SetProperty(ref _workspotEntryPosition, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("workspotExitPosition")] 
 		public gamebbScriptID_Vector4 WorkspotExitPosition
 		{
-			get
-			{
-				if (_workspotExitPosition == null)
-				{
-					_workspotExitPosition = (gamebbScriptID_Vector4) CR2WTypeManager.Create("gamebbScriptID_Vector4", "workspotExitPosition", cr2w, this);
-				}
-				return _workspotExitPosition;
-			}
-			set
-			{
-				if (_workspotExitPosition == value)
-				{
-					return;
-				}
-				_workspotExitPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotExitPosition);
+			set => SetProperty(ref _workspotExitPosition, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("patrolAction")] 
 		public gamebbScriptID_Variant PatrolAction
 		{
-			get
-			{
-				if (_patrolAction == null)
-				{
-					_patrolAction = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "patrolAction", cr2w, this);
-				}
-				return _patrolAction;
-			}
-			set
-			{
-				if (_patrolAction == value)
-				{
-					return;
-				}
-				_patrolAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _patrolAction);
+			set => SetProperty(ref _patrolAction, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("patrolInProgress")] 
 		public gamebbScriptID_Bool PatrolInProgress
 		{
-			get
-			{
-				if (_patrolInProgress == null)
-				{
-					_patrolInProgress = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "patrolInProgress", cr2w, this);
-				}
-				return _patrolInProgress;
-			}
-			set
-			{
-				if (_patrolInProgress == value)
-				{
-					return;
-				}
-				_patrolInProgress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _patrolInProgress);
+			set => SetProperty(ref _patrolInProgress, value);
 		}
 
 		public AIPatrolDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

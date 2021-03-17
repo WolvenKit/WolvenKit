@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("QualityRootRef")] 
 		public inkWidgetReference QualityRootRef
 		{
-			get
-			{
-				if (_qualityRootRef == null)
-				{
-					_qualityRootRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "QualityRootRef", cr2w, this);
-				}
-				return _qualityRootRef;
-			}
-			set
-			{
-				if (_qualityRootRef == value)
-				{
-					return;
-				}
-				_qualityRootRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _qualityRootRef);
+			set => SetProperty(ref _qualityRootRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ShapeRef")] 
 		public inkWidgetReference ShapeRef
 		{
-			get
-			{
-				if (_shapeRef == null)
-				{
-					_shapeRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "ShapeRef", cr2w, this);
-				}
-				return _shapeRef;
-			}
-			set
-			{
-				if (_shapeRef == value)
-				{
-					return;
-				}
-				_shapeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shapeRef);
+			set => SetProperty(ref _shapeRef, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("BorderRef")] 
 		public inkWidgetReference BorderRef
 		{
-			get
-			{
-				if (_borderRef == null)
-				{
-					_borderRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "BorderRef", cr2w, this);
-				}
-				return _borderRef;
-			}
-			set
-			{
-				if (_borderRef == value)
-				{
-					return;
-				}
-				_borderRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _borderRef);
+			set => SetProperty(ref _borderRef, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("MarkedStateName")] 
 		public CName MarkedStateName
 		{
-			get
-			{
-				if (_markedStateName == null)
-				{
-					_markedStateName = (CName) CR2WTypeManager.Create("CName", "MarkedStateName", cr2w, this);
-				}
-				return _markedStateName;
-			}
-			set
-			{
-				if (_markedStateName == value)
-				{
-					return;
-				}
-				_markedStateName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _markedStateName);
+			set => SetProperty(ref _markedStateName, value);
 		}
 
 		public InventoryItemAttachmentDisplay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

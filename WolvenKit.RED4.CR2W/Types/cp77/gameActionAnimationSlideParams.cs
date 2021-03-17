@@ -28,368 +28,128 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("distance")] 
 		public CFloat Distance
 		{
-			get
-			{
-				if (_distance == null)
-				{
-					_distance = (CFloat) CR2WTypeManager.Create("Float", "distance", cr2w, this);
-				}
-				return _distance;
-			}
-			set
-			{
-				if (_distance == value)
-				{
-					return;
-				}
-				_distance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distance);
+			set => SetProperty(ref _distance, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("directionAngle")] 
 		public CFloat DirectionAngle
 		{
-			get
-			{
-				if (_directionAngle == null)
-				{
-					_directionAngle = (CFloat) CR2WTypeManager.Create("Float", "directionAngle", cr2w, this);
-				}
-				return _directionAngle;
-			}
-			set
-			{
-				if (_directionAngle == value)
-				{
-					return;
-				}
-				_directionAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _directionAngle);
+			set => SetProperty(ref _directionAngle, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("finalRotationAngle")] 
 		public CFloat FinalRotationAngle
 		{
-			get
-			{
-				if (_finalRotationAngle == null)
-				{
-					_finalRotationAngle = (CFloat) CR2WTypeManager.Create("Float", "finalRotationAngle", cr2w, this);
-				}
-				return _finalRotationAngle;
-			}
-			set
-			{
-				if (_finalRotationAngle == value)
-				{
-					return;
-				}
-				_finalRotationAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _finalRotationAngle);
+			set => SetProperty(ref _finalRotationAngle, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("offsetToTarget")] 
 		public CFloat OffsetToTarget
 		{
-			get
-			{
-				if (_offsetToTarget == null)
-				{
-					_offsetToTarget = (CFloat) CR2WTypeManager.Create("Float", "offsetToTarget", cr2w, this);
-				}
-				return _offsetToTarget;
-			}
-			set
-			{
-				if (_offsetToTarget == value)
-				{
-					return;
-				}
-				_offsetToTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offsetToTarget);
+			set => SetProperty(ref _offsetToTarget, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("offsetAroundTarget")] 
 		public CFloat OffsetAroundTarget
 		{
-			get
-			{
-				if (_offsetAroundTarget == null)
-				{
-					_offsetAroundTarget = (CFloat) CR2WTypeManager.Create("Float", "offsetAroundTarget", cr2w, this);
-				}
-				return _offsetAroundTarget;
-			}
-			set
-			{
-				if (_offsetAroundTarget == value)
-				{
-					return;
-				}
-				_offsetAroundTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offsetAroundTarget);
+			set => SetProperty(ref _offsetAroundTarget, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("slideToTarget")] 
 		public CBool SlideToTarget
 		{
-			get
-			{
-				if (_slideToTarget == null)
-				{
-					_slideToTarget = (CBool) CR2WTypeManager.Create("Bool", "slideToTarget", cr2w, this);
-				}
-				return _slideToTarget;
-			}
-			set
-			{
-				if (_slideToTarget == value)
-				{
-					return;
-				}
-				_slideToTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slideToTarget);
+			set => SetProperty(ref _slideToTarget, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("positionSpeed")] 
 		public CFloat PositionSpeed
 		{
-			get
-			{
-				if (_positionSpeed == null)
-				{
-					_positionSpeed = (CFloat) CR2WTypeManager.Create("Float", "positionSpeed", cr2w, this);
-				}
-				return _positionSpeed;
-			}
-			set
-			{
-				if (_positionSpeed == value)
-				{
-					return;
-				}
-				_positionSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _positionSpeed);
+			set => SetProperty(ref _positionSpeed, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("rotationSpeed")] 
 		public CFloat RotationSpeed
 		{
-			get
-			{
-				if (_rotationSpeed == null)
-				{
-					_rotationSpeed = (CFloat) CR2WTypeManager.Create("Float", "rotationSpeed", cr2w, this);
-				}
-				return _rotationSpeed;
-			}
-			set
-			{
-				if (_rotationSpeed == value)
-				{
-					return;
-				}
-				_rotationSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotationSpeed);
+			set => SetProperty(ref _rotationSpeed, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("maxSlidePositionDistance")] 
 		public CFloat MaxSlidePositionDistance
 		{
-			get
-			{
-				if (_maxSlidePositionDistance == null)
-				{
-					_maxSlidePositionDistance = (CFloat) CR2WTypeManager.Create("Float", "maxSlidePositionDistance", cr2w, this);
-				}
-				return _maxSlidePositionDistance;
-			}
-			set
-			{
-				if (_maxSlidePositionDistance == value)
-				{
-					return;
-				}
-				_maxSlidePositionDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxSlidePositionDistance);
+			set => SetProperty(ref _maxSlidePositionDistance, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("maxSlideRotationAngle")] 
 		public CFloat MaxSlideRotationAngle
 		{
-			get
-			{
-				if (_maxSlideRotationAngle == null)
-				{
-					_maxSlideRotationAngle = (CFloat) CR2WTypeManager.Create("Float", "maxSlideRotationAngle", cr2w, this);
-				}
-				return _maxSlideRotationAngle;
-			}
-			set
-			{
-				if (_maxSlideRotationAngle == value)
-				{
-					return;
-				}
-				_maxSlideRotationAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxSlideRotationAngle);
+			set => SetProperty(ref _maxSlideRotationAngle, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("slideStartDelay")] 
 		public CFloat SlideStartDelay
 		{
-			get
-			{
-				if (_slideStartDelay == null)
-				{
-					_slideStartDelay = (CFloat) CR2WTypeManager.Create("Float", "slideStartDelay", cr2w, this);
-				}
-				return _slideStartDelay;
-			}
-			set
-			{
-				if (_slideStartDelay == value)
-				{
-					return;
-				}
-				_slideStartDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slideStartDelay);
+			set => SetProperty(ref _slideStartDelay, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("usePositionSlide")] 
 		public CBool UsePositionSlide
 		{
-			get
-			{
-				if (_usePositionSlide == null)
-				{
-					_usePositionSlide = (CBool) CR2WTypeManager.Create("Bool", "usePositionSlide", cr2w, this);
-				}
-				return _usePositionSlide;
-			}
-			set
-			{
-				if (_usePositionSlide == value)
-				{
-					return;
-				}
-				_usePositionSlide = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _usePositionSlide);
+			set => SetProperty(ref _usePositionSlide, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("useRotationSlide")] 
 		public CBool UseRotationSlide
 		{
-			get
-			{
-				if (_useRotationSlide == null)
-				{
-					_useRotationSlide = (CBool) CR2WTypeManager.Create("Bool", "useRotationSlide", cr2w, this);
-				}
-				return _useRotationSlide;
-			}
-			set
-			{
-				if (_useRotationSlide == value)
-				{
-					return;
-				}
-				_useRotationSlide = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useRotationSlide);
+			set => SetProperty(ref _useRotationSlide, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("maxTargetVelocity")] 
 		public CFloat MaxTargetVelocity
 		{
-			get
-			{
-				if (_maxTargetVelocity == null)
-				{
-					_maxTargetVelocity = (CFloat) CR2WTypeManager.Create("Float", "maxTargetVelocity", cr2w, this);
-				}
-				return _maxTargetVelocity;
-			}
-			set
-			{
-				if (_maxTargetVelocity == value)
-				{
-					return;
-				}
-				_maxTargetVelocity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxTargetVelocity);
+			set => SetProperty(ref _maxTargetVelocity, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("zAlignmentThreshold")] 
 		public CFloat ZAlignmentThreshold
 		{
-			get
-			{
-				if (_zAlignmentThreshold == null)
-				{
-					_zAlignmentThreshold = (CFloat) CR2WTypeManager.Create("Float", "zAlignmentThreshold", cr2w, this);
-				}
-				return _zAlignmentThreshold;
-			}
-			set
-			{
-				if (_zAlignmentThreshold == value)
-				{
-					return;
-				}
-				_zAlignmentThreshold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _zAlignmentThreshold);
+			set => SetProperty(ref _zAlignmentThreshold, value);
 		}
 
 		public gameActionAnimationSlideParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

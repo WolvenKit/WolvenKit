@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("maintenancePanelSkillChecks")] 
 		public CHandle<EngineeringContainer> MaintenancePanelSkillChecks
 		{
-			get
-			{
-				if (_maintenancePanelSkillChecks == null)
-				{
-					_maintenancePanelSkillChecks = (CHandle<EngineeringContainer>) CR2WTypeManager.Create("handle:EngineeringContainer", "maintenancePanelSkillChecks", cr2w, this);
-				}
-				return _maintenancePanelSkillChecks;
-			}
-			set
-			{
-				if (_maintenancePanelSkillChecks == value)
-				{
-					return;
-				}
-				_maintenancePanelSkillChecks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maintenancePanelSkillChecks);
+			set => SetProperty(ref _maintenancePanelSkillChecks, value);
 		}
 
 		public MaintenancePanelControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

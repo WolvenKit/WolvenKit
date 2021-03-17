@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rows")] 
 		public CArray<animGenericAnimDatabase_DatabaseRow> Rows
 		{
-			get
-			{
-				if (_rows == null)
-				{
-					_rows = (CArray<animGenericAnimDatabase_DatabaseRow>) CR2WTypeManager.Create("array:animGenericAnimDatabase_DatabaseRow", "rows", cr2w, this);
-				}
-				return _rows;
-			}
-			set
-			{
-				if (_rows == value)
-				{
-					return;
-				}
-				_rows = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rows);
+			set => SetProperty(ref _rows, value);
 		}
 
 		public animGenericAnimDatabase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

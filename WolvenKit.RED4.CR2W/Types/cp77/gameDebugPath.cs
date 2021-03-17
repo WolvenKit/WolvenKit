@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("str")] 
 		public CString Str
 		{
-			get
-			{
-				if (_str == null)
-				{
-					_str = (CString) CR2WTypeManager.Create("String", "str", cr2w, this);
-				}
-				return _str;
-			}
-			set
-			{
-				if (_str == value)
-				{
-					return;
-				}
-				_str = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _str);
+			set => SetProperty(ref _str, value);
 		}
 
 		public gameDebugPath(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

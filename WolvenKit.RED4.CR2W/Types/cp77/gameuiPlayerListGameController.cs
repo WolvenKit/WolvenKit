@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("playerEntries")] 
 		public CArray<PlayerListEntryData> PlayerEntries
 		{
-			get
-			{
-				if (_playerEntries == null)
-				{
-					_playerEntries = (CArray<PlayerListEntryData>) CR2WTypeManager.Create("array:PlayerListEntryData", "playerEntries", cr2w, this);
-				}
-				return _playerEntries;
-			}
-			set
-			{
-				if (_playerEntries == value)
-				{
-					return;
-				}
-				_playerEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerEntries);
+			set => SetProperty(ref _playerEntries, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("container")] 
 		public inkCompoundWidgetReference Container
 		{
-			get
-			{
-				if (_container == null)
-				{
-					_container = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "container", cr2w, this);
-				}
-				return _container;
-			}
-			set
-			{
-				if (_container == value)
-				{
-					return;
-				}
-				_container = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _container);
+			set => SetProperty(ref _container, value);
 		}
 
 		public gameuiPlayerListGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

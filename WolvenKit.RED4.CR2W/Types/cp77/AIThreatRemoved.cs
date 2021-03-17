@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("owner")] 
 		public wCHandle<entEntity> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("threat")] 
 		public wCHandle<entEntity> Threat
 		{
-			get
-			{
-				if (_threat == null)
-				{
-					_threat = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "threat", cr2w, this);
-				}
-				return _threat;
-			}
-			set
-			{
-				if (_threat == value)
-				{
-					return;
-				}
-				_threat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _threat);
+			set => SetProperty(ref _threat, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isHostile")] 
 		public CBool IsHostile
 		{
-			get
-			{
-				if (_isHostile == null)
-				{
-					_isHostile = (CBool) CR2WTypeManager.Create("Bool", "isHostile", cr2w, this);
-				}
-				return _isHostile;
-			}
-			set
-			{
-				if (_isHostile == value)
-				{
-					return;
-				}
-				_isHostile = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isHostile);
+			set => SetProperty(ref _isHostile, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isEnemy")] 
 		public CBool IsEnemy
 		{
-			get
-			{
-				if (_isEnemy == null)
-				{
-					_isEnemy = (CBool) CR2WTypeManager.Create("Bool", "isEnemy", cr2w, this);
-				}
-				return _isEnemy;
-			}
-			set
-			{
-				if (_isEnemy == value)
-				{
-					return;
-				}
-				_isEnemy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnemy);
+			set => SetProperty(ref _isEnemy, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isDead")] 
 		public CBool IsDead
 		{
-			get
-			{
-				if (_isDead == null)
-				{
-					_isDead = (CBool) CR2WTypeManager.Create("Bool", "isDead", cr2w, this);
-				}
-				return _isDead;
-			}
-			set
-			{
-				if (_isDead == value)
-				{
-					return;
-				}
-				_isDead = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDead);
+			set => SetProperty(ref _isDead, value);
 		}
 
 		public AIThreatRemoved(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

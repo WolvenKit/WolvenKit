@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("player")] 
 		public wCHandle<PlayerPuppet> Player
 		{
-			get
-			{
-				if (_player == null)
-				{
-					_player = (wCHandle<PlayerPuppet>) CR2WTypeManager.Create("whandle:PlayerPuppet", "player", cr2w, this);
-				}
-				return _player;
-			}
-			set
-			{
-				if (_player == value)
-				{
-					return;
-				}
-				_player = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _player);
+			set => SetProperty(ref _player, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("playerDevSystem")] 
 		public CHandle<PlayerDevelopmentSystem> PlayerDevSystem
 		{
-			get
-			{
-				if (_playerDevSystem == null)
-				{
-					_playerDevSystem = (CHandle<PlayerDevelopmentSystem>) CR2WTypeManager.Create("handle:PlayerDevelopmentSystem", "playerDevSystem", cr2w, this);
-				}
-				return _playerDevSystem;
-			}
-			set
-			{
-				if (_playerDevSystem == value)
-				{
-					return;
-				}
-				_playerDevSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerDevSystem);
+			set => SetProperty(ref _playerDevSystem, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("parentGameCtrl")] 
 		public wCHandle<gameuiWidgetGameController> ParentGameCtrl
 		{
-			get
-			{
-				if (_parentGameCtrl == null)
-				{
-					_parentGameCtrl = (wCHandle<gameuiWidgetGameController>) CR2WTypeManager.Create("whandle:gameuiWidgetGameController", "parentGameCtrl", cr2w, this);
-				}
-				return _parentGameCtrl;
-			}
-			set
-			{
-				if (_parentGameCtrl == value)
-				{
-					return;
-				}
-				_parentGameCtrl = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentGameCtrl);
+			set => SetProperty(ref _parentGameCtrl, value);
 		}
 
 		public PlayerDevelopmentDataManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

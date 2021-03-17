@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("startReprimand")] 
 		public CBool StartReprimand
 		{
-			get
-			{
-				if (_startReprimand == null)
-				{
-					_startReprimand = (CBool) CR2WTypeManager.Create("Bool", "startReprimand", cr2w, this);
-				}
-				return _startReprimand;
-			}
-			set
-			{
-				if (_startReprimand == value)
-				{
-					return;
-				}
-				_startReprimand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startReprimand);
+			set => SetProperty(ref _startReprimand, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("startDeescalate")] 
 		public CBool StartDeescalate
 		{
-			get
-			{
-				if (_startDeescalate == null)
-				{
-					_startDeescalate = (CBool) CR2WTypeManager.Create("Bool", "startDeescalate", cr2w, this);
-				}
-				return _startDeescalate;
-			}
-			set
-			{
-				if (_startDeescalate == value)
-				{
-					return;
-				}
-				_startDeescalate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startDeescalate);
+			set => SetProperty(ref _startDeescalate, value);
 		}
 
 		public ReprimandEscalationEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

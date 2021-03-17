@@ -23,253 +23,88 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("video")] 
 		public raRef<Bink> Video
 		{
-			get
-			{
-				if (_video == null)
-				{
-					_video = (raRef<Bink>) CR2WTypeManager.Create("raRef:Bink", "video", cr2w, this);
-				}
-				return _video;
-			}
-			set
-			{
-				if (_video == value)
-				{
-					return;
-				}
-				_video = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _video);
+			set => SetProperty(ref _video, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("skippable")] 
 		public CBool Skippable
 		{
-			get
-			{
-				if (_skippable == null)
-				{
-					_skippable = (CBool) CR2WTypeManager.Create("Bool", "skippable", cr2w, this);
-				}
-				return _skippable;
-			}
-			set
-			{
-				if (_skippable == value)
-				{
-					return;
-				}
-				_skippable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skippable);
+			set => SetProperty(ref _skippable, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("audioEvent")] 
 		public CName AudioEvent
 		{
-			get
-			{
-				if (_audioEvent == null)
-				{
-					_audioEvent = (CName) CR2WTypeManager.Create("CName", "audioEvent", cr2w, this);
-				}
-				return _audioEvent;
-			}
-			set
-			{
-				if (_audioEvent == value)
-				{
-					return;
-				}
-				_audioEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioEvent);
+			set => SetProperty(ref _audioEvent, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("syncToAudio")] 
 		public CBool SyncToAudio
 		{
-			get
-			{
-				if (_syncToAudio == null)
-				{
-					_syncToAudio = (CBool) CR2WTypeManager.Create("Bool", "syncToAudio", cr2w, this);
-				}
-				return _syncToAudio;
-			}
-			set
-			{
-				if (_syncToAudio == value)
-				{
-					return;
-				}
-				_syncToAudio = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _syncToAudio);
+			set => SetProperty(ref _syncToAudio, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("retriggerAudioOnLoop")] 
 		public CBool RetriggerAudioOnLoop
 		{
-			get
-			{
-				if (_retriggerAudioOnLoop == null)
-				{
-					_retriggerAudioOnLoop = (CBool) CR2WTypeManager.Create("Bool", "retriggerAudioOnLoop", cr2w, this);
-				}
-				return _retriggerAudioOnLoop;
-			}
-			set
-			{
-				if (_retriggerAudioOnLoop == value)
-				{
-					return;
-				}
-				_retriggerAudioOnLoop = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _retriggerAudioOnLoop);
+			set => SetProperty(ref _retriggerAudioOnLoop, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("looped")] 
 		public CBool Looped
 		{
-			get
-			{
-				if (_looped == null)
-				{
-					_looped = (CBool) CR2WTypeManager.Create("Bool", "looped", cr2w, this);
-				}
-				return _looped;
-			}
-			set
-			{
-				if (_looped == value)
-				{
-					return;
-				}
-				_looped = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _looped);
+			set => SetProperty(ref _looped, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("forceVideoFrameRate")] 
 		public CBool ForceVideoFrameRate
 		{
-			get
-			{
-				if (_forceVideoFrameRate == null)
-				{
-					_forceVideoFrameRate = (CBool) CR2WTypeManager.Create("Bool", "forceVideoFrameRate", cr2w, this);
-				}
-				return _forceVideoFrameRate;
-			}
-			set
-			{
-				if (_forceVideoFrameRate == value)
-				{
-					return;
-				}
-				_forceVideoFrameRate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceVideoFrameRate);
+			set => SetProperty(ref _forceVideoFrameRate, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("playOnHud")] 
 		public CBool PlayOnHud
 		{
-			get
-			{
-				if (_playOnHud == null)
-				{
-					_playOnHud = (CBool) CR2WTypeManager.Create("Bool", "playOnHud", cr2w, this);
-				}
-				return _playOnHud;
-			}
-			set
-			{
-				if (_playOnHud == value)
-				{
-					return;
-				}
-				_playOnHud = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playOnHud);
+			set => SetProperty(ref _playOnHud, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("fullScreen")] 
 		public CBool FullScreen
 		{
-			get
-			{
-				if (_fullScreen == null)
-				{
-					_fullScreen = (CBool) CR2WTypeManager.Create("Bool", "fullScreen", cr2w, this);
-				}
-				return _fullScreen;
-			}
-			set
-			{
-				if (_fullScreen == value)
-				{
-					return;
-				}
-				_fullScreen = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fullScreen);
+			set => SetProperty(ref _fullScreen, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("position")] 
 		public Vector2 Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (Vector2) CR2WTypeManager.Create("Vector2", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("size")] 
 		public Vector2 Size
 		{
-			get
-			{
-				if (_size == null)
-				{
-					_size = (Vector2) CR2WTypeManager.Create("Vector2", "size", cr2w, this);
-				}
-				return _size;
-			}
-			set
-			{
-				if (_size == value)
-				{
-					return;
-				}
-				_size = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _size);
+			set => SetProperty(ref _size, value);
 		}
 
 		public questHUDVideo_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

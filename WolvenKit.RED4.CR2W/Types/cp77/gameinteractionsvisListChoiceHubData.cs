@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("id")] 
 		public CInt32 Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CInt32) CR2WTypeManager.Create("Int32", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("activityState")] 
 		public CEnum<gameinteractionsvisEVisualizerActivityState> ActivityState
 		{
-			get
-			{
-				if (_activityState == null)
-				{
-					_activityState = (CEnum<gameinteractionsvisEVisualizerActivityState>) CR2WTypeManager.Create("gameinteractionsvisEVisualizerActivityState", "activityState", cr2w, this);
-				}
-				return _activityState;
-			}
-			set
-			{
-				if (_activityState == value)
-				{
-					return;
-				}
-				_activityState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activityState);
+			set => SetProperty(ref _activityState, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("flags")] 
 		public CEnum<gameinteractionsvisEVisualizerDefinitionFlags> Flags
 		{
-			get
-			{
-				if (_flags == null)
-				{
-					_flags = (CEnum<gameinteractionsvisEVisualizerDefinitionFlags>) CR2WTypeManager.Create("gameinteractionsvisEVisualizerDefinitionFlags", "flags", cr2w, this);
-				}
-				return _flags;
-			}
-			set
-			{
-				if (_flags == value)
-				{
-					return;
-				}
-				_flags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flags);
+			set => SetProperty(ref _flags, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isPhoneLockActive")] 
 		public CBool IsPhoneLockActive
 		{
-			get
-			{
-				if (_isPhoneLockActive == null)
-				{
-					_isPhoneLockActive = (CBool) CR2WTypeManager.Create("Bool", "isPhoneLockActive", cr2w, this);
-				}
-				return _isPhoneLockActive;
-			}
-			set
-			{
-				if (_isPhoneLockActive == value)
-				{
-					return;
-				}
-				_isPhoneLockActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPhoneLockActive);
+			set => SetProperty(ref _isPhoneLockActive, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("title")] 
 		public CString Title
 		{
-			get
-			{
-				if (_title == null)
-				{
-					_title = (CString) CR2WTypeManager.Create("String", "title", cr2w, this);
-				}
-				return _title;
-			}
-			set
-			{
-				if (_title == value)
-				{
-					return;
-				}
-				_title = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _title);
+			set => SetProperty(ref _title, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("choices")] 
 		public CArray<gameinteractionsvisListChoiceData> Choices
 		{
-			get
-			{
-				if (_choices == null)
-				{
-					_choices = (CArray<gameinteractionsvisListChoiceData>) CR2WTypeManager.Create("array:gameinteractionsvisListChoiceData", "choices", cr2w, this);
-				}
-				return _choices;
-			}
-			set
-			{
-				if (_choices == value)
-				{
-					return;
-				}
-				_choices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _choices);
+			set => SetProperty(ref _choices, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("timeProvider")] 
 		public wCHandle<gameinteractionsvisIVisualizerTimeProvider> TimeProvider
 		{
-			get
-			{
-				if (_timeProvider == null)
-				{
-					_timeProvider = (wCHandle<gameinteractionsvisIVisualizerTimeProvider>) CR2WTypeManager.Create("whandle:gameinteractionsvisIVisualizerTimeProvider", "timeProvider", cr2w, this);
-				}
-				return _timeProvider;
-			}
-			set
-			{
-				if (_timeProvider == value)
-				{
-					return;
-				}
-				_timeProvider = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeProvider);
+			set => SetProperty(ref _timeProvider, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("hubPriority")] 
 		public CUInt8 HubPriority
 		{
-			get
-			{
-				if (_hubPriority == null)
-				{
-					_hubPriority = (CUInt8) CR2WTypeManager.Create("Uint8", "hubPriority", cr2w, this);
-				}
-				return _hubPriority;
-			}
-			set
-			{
-				if (_hubPriority == value)
-				{
-					return;
-				}
-				_hubPriority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hubPriority);
+			set => SetProperty(ref _hubPriority, value);
 		}
 
 		public gameinteractionsvisListChoiceHubData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

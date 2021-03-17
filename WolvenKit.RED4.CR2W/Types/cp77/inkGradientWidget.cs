@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gradientMode")] 
 		public CEnum<inkGradientMode> GradientMode
 		{
-			get
-			{
-				if (_gradientMode == null)
-				{
-					_gradientMode = (CEnum<inkGradientMode>) CR2WTypeManager.Create("inkGradientMode", "gradientMode", cr2w, this);
-				}
-				return _gradientMode;
-			}
-			set
-			{
-				if (_gradientMode == value)
-				{
-					return;
-				}
-				_gradientMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gradientMode);
+			set => SetProperty(ref _gradientMode, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("startColor")] 
 		public HDRColor StartColor
 		{
-			get
-			{
-				if (_startColor == null)
-				{
-					_startColor = (HDRColor) CR2WTypeManager.Create("HDRColor", "startColor", cr2w, this);
-				}
-				return _startColor;
-			}
-			set
-			{
-				if (_startColor == value)
-				{
-					return;
-				}
-				_startColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startColor);
+			set => SetProperty(ref _startColor, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("endColor")] 
 		public HDRColor EndColor
 		{
-			get
-			{
-				if (_endColor == null)
-				{
-					_endColor = (HDRColor) CR2WTypeManager.Create("HDRColor", "endColor", cr2w, this);
-				}
-				return _endColor;
-			}
-			set
-			{
-				if (_endColor == value)
-				{
-					return;
-				}
-				_endColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endColor);
+			set => SetProperty(ref _endColor, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("angle")] 
 		public CFloat Angle
 		{
-			get
-			{
-				if (_angle == null)
-				{
-					_angle = (CFloat) CR2WTypeManager.Create("Float", "angle", cr2w, this);
-				}
-				return _angle;
-			}
-			set
-			{
-				if (_angle == value)
-				{
-					return;
-				}
-				_angle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _angle);
+			set => SetProperty(ref _angle, value);
 		}
 
 		public inkGradientWidget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

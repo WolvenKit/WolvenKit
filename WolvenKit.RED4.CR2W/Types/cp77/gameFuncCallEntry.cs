@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("callTime")] 
 		public EngineTime CallTime
 		{
-			get
-			{
-				if (_callTime == null)
-				{
-					_callTime = (EngineTime) CR2WTypeManager.Create("EngineTime", "callTime", cr2w, this);
-				}
-				return _callTime;
-			}
-			set
-			{
-				if (_callTime == value)
-				{
-					return;
-				}
-				_callTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callTime);
+			set => SetProperty(ref _callTime, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("callId")] 
 		public CUInt32 CallId
 		{
-			get
-			{
-				if (_callId == null)
-				{
-					_callId = (CUInt32) CR2WTypeManager.Create("Uint32", "callId", cr2w, this);
-				}
-				return _callId;
-			}
-			set
-			{
-				if (_callId == value)
-				{
-					return;
-				}
-				_callId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callId);
+			set => SetProperty(ref _callId, value);
 		}
 
 		public gameFuncCallEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

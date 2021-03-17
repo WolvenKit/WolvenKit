@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("textureAtlas")] 
 		public raRef<inkTextureAtlas> TextureAtlas
 		{
-			get
-			{
-				if (_textureAtlas == null)
-				{
-					_textureAtlas = (raRef<inkTextureAtlas>) CR2WTypeManager.Create("raRef:inkTextureAtlas", "textureAtlas", cr2w, this);
-				}
-				return _textureAtlas;
-			}
-			set
-			{
-				if (_textureAtlas == value)
-				{
-					return;
-				}
-				_textureAtlas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textureAtlas);
+			set => SetProperty(ref _textureAtlas, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("texturePart")] 
 		public CName TexturePart
 		{
-			get
-			{
-				if (_texturePart == null)
-				{
-					_texturePart = (CName) CR2WTypeManager.Create("CName", "texturePart", cr2w, this);
-				}
-				return _texturePart;
-			}
-			set
-			{
-				if (_texturePart == value)
-				{
-					return;
-				}
-				_texturePart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _texturePart);
+			set => SetProperty(ref _texturePart, value);
 		}
 
 		public gameJournalInternetImage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

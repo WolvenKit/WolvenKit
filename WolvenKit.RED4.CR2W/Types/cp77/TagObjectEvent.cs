@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isTagged")] 
 		public CBool IsTagged
 		{
-			get
-			{
-				if (_isTagged == null)
-				{
-					_isTagged = (CBool) CR2WTypeManager.Create("Bool", "isTagged", cr2w, this);
-				}
-				return _isTagged;
-			}
-			set
-			{
-				if (_isTagged == value)
-				{
-					return;
-				}
-				_isTagged = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isTagged);
+			set => SetProperty(ref _isTagged, value);
 		}
 
 		public TagObjectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

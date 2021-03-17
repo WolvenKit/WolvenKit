@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vectorGraphicDef")] 
 		public CHandle<vgVectorGraphicDefinition> VectorGraphicDef
 		{
-			get
-			{
-				if (_vectorGraphicDef == null)
-				{
-					_vectorGraphicDef = (CHandle<vgVectorGraphicDefinition>) CR2WTypeManager.Create("handle:vgVectorGraphicDefinition", "vectorGraphicDef", cr2w, this);
-				}
-				return _vectorGraphicDef;
-			}
-			set
-			{
-				if (_vectorGraphicDef == value)
-				{
-					return;
-				}
-				_vectorGraphicDef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vectorGraphicDef);
+			set => SetProperty(ref _vectorGraphicDef, value);
 		}
 
 		public SvgResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

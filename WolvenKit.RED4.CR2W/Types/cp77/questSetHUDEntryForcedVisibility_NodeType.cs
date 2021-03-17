@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hudEntryName")] 
 		public CArray<CName> HudEntryName
 		{
-			get
-			{
-				if (_hudEntryName == null)
-				{
-					_hudEntryName = (CArray<CName>) CR2WTypeManager.Create("array:CName", "hudEntryName", cr2w, this);
-				}
-				return _hudEntryName;
-			}
-			set
-			{
-				if (_hudEntryName == value)
-				{
-					return;
-				}
-				_hudEntryName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hudEntryName);
+			set => SetProperty(ref _hudEntryName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("usePreset")] 
 		public CBool UsePreset
 		{
-			get
-			{
-				if (_usePreset == null)
-				{
-					_usePreset = (CBool) CR2WTypeManager.Create("Bool", "usePreset", cr2w, this);
-				}
-				return _usePreset;
-			}
-			set
-			{
-				if (_usePreset == value)
-				{
-					return;
-				}
-				_usePreset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _usePreset);
+			set => SetProperty(ref _usePreset, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hudVisibilityPreset")] 
 		public TweakDBID HudVisibilityPreset
 		{
-			get
-			{
-				if (_hudVisibilityPreset == null)
-				{
-					_hudVisibilityPreset = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "hudVisibilityPreset", cr2w, this);
-				}
-				return _hudVisibilityPreset;
-			}
-			set
-			{
-				if (_hudVisibilityPreset == value)
-				{
-					return;
-				}
-				_hudVisibilityPreset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hudVisibilityPreset);
+			set => SetProperty(ref _hudVisibilityPreset, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("visibility")] 
 		public CEnum<worlduiEntryVisibility> Visibility
 		{
-			get
-			{
-				if (_visibility == null)
-				{
-					_visibility = (CEnum<worlduiEntryVisibility>) CR2WTypeManager.Create("worlduiEntryVisibility", "visibility", cr2w, this);
-				}
-				return _visibility;
-			}
-			set
-			{
-				if (_visibility == value)
-				{
-					return;
-				}
-				_visibility = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visibility);
+			set => SetProperty(ref _visibility, value);
 		}
 
 		public questSetHUDEntryForcedVisibility_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

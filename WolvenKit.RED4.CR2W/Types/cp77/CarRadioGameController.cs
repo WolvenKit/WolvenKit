@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("radioStationName")] 
 		public inkTextWidgetReference RadioStationName
 		{
-			get
-			{
-				if (_radioStationName == null)
-				{
-					_radioStationName = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "radioStationName", cr2w, this);
-				}
-				return _radioStationName;
-			}
-			set
-			{
-				if (_radioStationName == value)
-				{
-					return;
-				}
-				_radioStationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radioStationName);
+			set => SetProperty(ref _radioStationName, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("songName")] 
 		public inkTextWidgetReference SongName
 		{
-			get
-			{
-				if (_songName == null)
-				{
-					_songName = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "songName", cr2w, this);
-				}
-				return _songName;
-			}
-			set
-			{
-				if (_songName == value)
-				{
-					return;
-				}
-				_songName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _songName);
+			set => SetProperty(ref _songName, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("root")] 
 		public CHandle<inkWidget> Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (CHandle<inkWidget>) CR2WTypeManager.Create("handle:inkWidget", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("stateChangesBlackboardId")] 
 		public CUInt32 StateChangesBlackboardId
 		{
-			get
-			{
-				if (_stateChangesBlackboardId == null)
-				{
-					_stateChangesBlackboardId = (CUInt32) CR2WTypeManager.Create("Uint32", "stateChangesBlackboardId", cr2w, this);
-				}
-				return _stateChangesBlackboardId;
-			}
-			set
-			{
-				if (_stateChangesBlackboardId == value)
-				{
-					return;
-				}
-				_stateChangesBlackboardId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stateChangesBlackboardId);
+			set => SetProperty(ref _stateChangesBlackboardId, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("songNameChangeBlackboardId")] 
 		public CUInt32 SongNameChangeBlackboardId
 		{
-			get
-			{
-				if (_songNameChangeBlackboardId == null)
-				{
-					_songNameChangeBlackboardId = (CUInt32) CR2WTypeManager.Create("Uint32", "songNameChangeBlackboardId", cr2w, this);
-				}
-				return _songNameChangeBlackboardId;
-			}
-			set
-			{
-				if (_songNameChangeBlackboardId == value)
-				{
-					return;
-				}
-				_songNameChangeBlackboardId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _songNameChangeBlackboardId);
+			set => SetProperty(ref _songNameChangeBlackboardId, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("blackboard")] 
 		public CHandle<gameIBlackboard> Blackboard
 		{
-			get
-			{
-				if (_blackboard == null)
-				{
-					_blackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "blackboard", cr2w, this);
-				}
-				return _blackboard;
-			}
-			set
-			{
-				if (_blackboard == value)
-				{
-					return;
-				}
-				_blackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboard);
+			set => SetProperty(ref _blackboard, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
-			get
-			{
-				if (_animationProxy == null)
-				{
-					_animationProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animationProxy", cr2w, this);
-				}
-				return _animationProxy;
-			}
-			set
-			{
-				if (_animationProxy == value)
-				{
-					return;
-				}
-				_animationProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationProxy);
+			set => SetProperty(ref _animationProxy, value);
 		}
 
 		public CarRadioGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

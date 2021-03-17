@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("pointer")] 
 		public inkImageWidgetReference Pointer
 		{
-			get
-			{
-				if (_pointer == null)
-				{
-					_pointer = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "pointer", cr2w, this);
-				}
-				return _pointer;
-			}
-			set
-			{
-				if (_pointer == value)
-				{
-					return;
-				}
-				_pointer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pointer);
+			set => SetProperty(ref _pointer, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("feedback")] 
 		public inkImageWidgetReference Feedback
 		{
-			get
-			{
-				if (_feedback == null)
-				{
-					_feedback = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "feedback", cr2w, this);
-				}
-				return _feedback;
-			}
-			set
-			{
-				if (_feedback == value)
-				{
-					return;
-				}
-				_feedback = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _feedback);
+			set => SetProperty(ref _feedback, value);
 		}
 
 		public RadialPointerController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

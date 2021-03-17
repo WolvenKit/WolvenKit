@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("restrictMovementAreaRef")] 
 		public NodeRef RestrictMovementAreaRef
 		{
-			get
-			{
-				if (_restrictMovementAreaRef == null)
-				{
-					_restrictMovementAreaRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "restrictMovementAreaRef", cr2w, this);
-				}
-				return _restrictMovementAreaRef;
-			}
-			set
-			{
-				if (_restrictMovementAreaRef == value)
-				{
-					return;
-				}
-				_restrictMovementAreaRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _restrictMovementAreaRef);
+			set => SetProperty(ref _restrictMovementAreaRef, value);
 		}
 
 		public AIAssignGuardAreaCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

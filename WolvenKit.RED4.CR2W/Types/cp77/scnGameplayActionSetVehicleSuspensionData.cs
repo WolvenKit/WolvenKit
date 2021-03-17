@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("active")] 
 		public CBool Active
 		{
-			get
-			{
-				if (_active == null)
-				{
-					_active = (CBool) CR2WTypeManager.Create("Bool", "active", cr2w, this);
-				}
-				return _active;
-			}
-			set
-			{
-				if (_active == value)
-				{
-					return;
-				}
-				_active = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _active);
+			set => SetProperty(ref _active, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("cooldownTime")] 
 		public CFloat CooldownTime
 		{
-			get
-			{
-				if (_cooldownTime == null)
-				{
-					_cooldownTime = (CFloat) CR2WTypeManager.Create("Float", "cooldownTime", cr2w, this);
-				}
-				return _cooldownTime;
-			}
-			set
-			{
-				if (_cooldownTime == value)
-				{
-					return;
-				}
-				_cooldownTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cooldownTime);
+			set => SetProperty(ref _cooldownTime, value);
 		}
 
 		public scnGameplayActionSetVehicleSuspensionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

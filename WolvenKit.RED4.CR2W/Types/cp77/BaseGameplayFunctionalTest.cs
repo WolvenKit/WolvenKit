@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("maxExecutionTimeSec")] 
 		public CFloat MaxExecutionTimeSec
 		{
-			get
-			{
-				if (_maxExecutionTimeSec == null)
-				{
-					_maxExecutionTimeSec = (CFloat) CR2WTypeManager.Create("Float", "maxExecutionTimeSec", cr2w, this);
-				}
-				return _maxExecutionTimeSec;
-			}
-			set
-			{
-				if (_maxExecutionTimeSec == value)
-				{
-					return;
-				}
-				_maxExecutionTimeSec = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxExecutionTimeSec);
+			set => SetProperty(ref _maxExecutionTimeSec, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("executionTimeSec")] 
 		public CFloat ExecutionTimeSec
 		{
-			get
-			{
-				if (_executionTimeSec == null)
-				{
-					_executionTimeSec = (CFloat) CR2WTypeManager.Create("Float", "executionTimeSec", cr2w, this);
-				}
-				return _executionTimeSec;
-			}
-			set
-			{
-				if (_executionTimeSec == value)
-				{
-					return;
-				}
-				_executionTimeSec = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _executionTimeSec);
+			set => SetProperty(ref _executionTimeSec, value);
 		}
 
 		public BaseGameplayFunctionalTest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("spawnRecordID")] 
 		public TweakDBID SpawnRecordID
 		{
-			get
-			{
-				if (_spawnRecordID == null)
-				{
-					_spawnRecordID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "spawnRecordID", cr2w, this);
-				}
-				return _spawnRecordID;
-			}
-			set
-			{
-				if (_spawnRecordID == value)
-				{
-					return;
-				}
-				_spawnRecordID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnRecordID);
+			set => SetProperty(ref _spawnRecordID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entityID")] 
 		public entEntityID EntityID
 		{
-			get
-			{
-				if (_entityID == null)
-				{
-					_entityID = (entEntityID) CR2WTypeManager.Create("entEntityID", "entityID", cr2w, this);
-				}
-				return _entityID;
-			}
-			set
-			{
-				if (_entityID == value)
-				{
-					return;
-				}
-				_entityID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityID);
+			set => SetProperty(ref _entityID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("vehicleNameNodeRef")] 
 		public NodeRef VehicleNameNodeRef
 		{
-			get
-			{
-				if (_vehicleNameNodeRef == null)
-				{
-					_vehicleNameNodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "vehicleNameNodeRef", cr2w, this);
-				}
-				return _vehicleNameNodeRef;
-			}
-			set
-			{
-				if (_vehicleNameNodeRef == value)
-				{
-					return;
-				}
-				_vehicleNameNodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleNameNodeRef);
+			set => SetProperty(ref _vehicleNameNodeRef, value);
 		}
 
 		public vehicleGarageComponentVehicleData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

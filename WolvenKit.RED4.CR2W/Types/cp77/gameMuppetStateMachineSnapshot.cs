@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stateMachineId")] 
 		public CName StateMachineId
 		{
-			get
-			{
-				if (_stateMachineId == null)
-				{
-					_stateMachineId = (CName) CR2WTypeManager.Create("CName", "stateMachineId", cr2w, this);
-				}
-				return _stateMachineId;
-			}
-			set
-			{
-				if (_stateMachineId == value)
-				{
-					return;
-				}
-				_stateMachineId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stateMachineId);
+			set => SetProperty(ref _stateMachineId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("stateId")] 
 		public CName StateId
 		{
-			get
-			{
-				if (_stateId == null)
-				{
-					_stateId = (CName) CR2WTypeManager.Create("CName", "stateId", cr2w, this);
-				}
-				return _stateId;
-			}
-			set
-			{
-				if (_stateId == value)
-				{
-					return;
-				}
-				_stateId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stateId);
+			set => SetProperty(ref _stateId, value);
 		}
 
 		public gameMuppetStateMachineSnapshot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

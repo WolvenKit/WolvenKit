@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
     public interface ICurveDataAccessor
     {
-        string Elementtype { get; set; }
+        string Elementtype { get; }
     }
 
     public interface IDataBufferAccessor

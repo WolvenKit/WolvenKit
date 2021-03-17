@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actionType")] 
 		public CEnum<gameMuppetInputActionType> ActionType
 		{
-			get
-			{
-				if (_actionType == null)
-				{
-					_actionType = (CEnum<gameMuppetInputActionType>) CR2WTypeManager.Create("gameMuppetInputActionType", "actionType", cr2w, this);
-				}
-				return _actionType;
-			}
-			set
-			{
-				if (_actionType == value)
-				{
-					return;
-				}
-				_actionType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionType);
+			set => SetProperty(ref _actionType, value);
 		}
 
 		public gameMuppetInputActionRangedAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fontBuffer")] 
 		public DataBuffer FontBuffer
 		{
-			get
-			{
-				if (_fontBuffer == null)
-				{
-					_fontBuffer = (DataBuffer) CR2WTypeManager.Create("DataBuffer", "fontBuffer", cr2w, this);
-				}
-				return _fontBuffer;
-			}
-			set
-			{
-				if (_fontBuffer == value)
-				{
-					return;
-				}
-				_fontBuffer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fontBuffer);
+			set => SetProperty(ref _fontBuffer, value);
 		}
 
 		public rendFont(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get
-			{
-				if (_puppetRef == null)
-				{
-					_puppetRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "puppetRef", cr2w, this);
-				}
-				return _puppetRef;
-			}
-			set
-			{
-				if (_puppetRef == value)
-				{
-					return;
-				}
-				_puppetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppetRef);
+			set => SetProperty(ref _puppetRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("level")] 
 		public questInt32ValueWrapper Level
 		{
-			get
-			{
-				if (_level == null)
-				{
-					_level = (questInt32ValueWrapper) CR2WTypeManager.Create("questInt32ValueWrapper", "level", cr2w, this);
-				}
-				return _level;
-			}
-			set
-			{
-				if (_level == value)
-				{
-					return;
-				}
-				_level = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _level);
+			set => SetProperty(ref _level, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("setExactLevel")] 
 		public CBool SetExactLevel
 		{
-			get
-			{
-				if (_setExactLevel == null)
-				{
-					_setExactLevel = (CBool) CR2WTypeManager.Create("Bool", "setExactLevel", cr2w, this);
-				}
-				return _setExactLevel;
-			}
-			set
-			{
-				if (_setExactLevel == value)
-				{
-					return;
-				}
-				_setExactLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setExactLevel);
+			set => SetProperty(ref _setExactLevel, value);
 		}
 
 		public questCharacterManagerCombat_ChangeLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

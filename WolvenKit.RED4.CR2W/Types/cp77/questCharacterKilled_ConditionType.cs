@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get
-			{
-				if (_objectRef == null)
-				{
-					_objectRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "objectRef", cr2w, this);
-				}
-				return _objectRef;
-			}
-			set
-			{
-				if (_objectRef == value)
-				{
-					return;
-				}
-				_objectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("comparisonParams")] 
 		public CHandle<questComparisonParam> ComparisonParams
 		{
-			get
-			{
-				if (_comparisonParams == null)
-				{
-					_comparisonParams = (CHandle<questComparisonParam>) CR2WTypeManager.Create("handle:questComparisonParam", "comparisonParams", cr2w, this);
-				}
-				return _comparisonParams;
-			}
-			set
-			{
-				if (_comparisonParams == value)
-				{
-					return;
-				}
-				_comparisonParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comparisonParams);
+			set => SetProperty(ref _comparisonParams, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("killed")] 
 		public CBool Killed
 		{
-			get
-			{
-				if (_killed == null)
-				{
-					_killed = (CBool) CR2WTypeManager.Create("Bool", "killed", cr2w, this);
-				}
-				return _killed;
-			}
-			set
-			{
-				if (_killed == value)
-				{
-					return;
-				}
-				_killed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _killed);
+			set => SetProperty(ref _killed, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("unconscious")] 
 		public CBool Unconscious
 		{
-			get
-			{
-				if (_unconscious == null)
-				{
-					_unconscious = (CBool) CR2WTypeManager.Create("Bool", "unconscious", cr2w, this);
-				}
-				return _unconscious;
-			}
-			set
-			{
-				if (_unconscious == value)
-				{
-					return;
-				}
-				_unconscious = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unconscious);
+			set => SetProperty(ref _unconscious, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("defeated")] 
 		public CBool Defeated
 		{
-			get
-			{
-				if (_defeated == null)
-				{
-					_defeated = (CBool) CR2WTypeManager.Create("Bool", "defeated", cr2w, this);
-				}
-				return _defeated;
-			}
-			set
-			{
-				if (_defeated == value)
-				{
-					return;
-				}
-				_defeated = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defeated);
+			set => SetProperty(ref _defeated, value);
 		}
 
 		public questCharacterKilled_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

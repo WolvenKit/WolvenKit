@@ -46,782 +46,272 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("AvatarControllerRef")] 
 		public inkWidgetReference AvatarControllerRef
 		{
-			get
-			{
-				if (_avatarControllerRef == null)
-				{
-					_avatarControllerRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "AvatarControllerRef", cr2w, this);
-				}
-				return _avatarControllerRef;
-			}
-			set
-			{
-				if (_avatarControllerRef == value)
-				{
-					return;
-				}
-				_avatarControllerRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _avatarControllerRef);
+			set => SetProperty(ref _avatarControllerRef, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("AvatarController")] 
 		public wCHandle<HudPhoneAvatarController> AvatarController
 		{
-			get
-			{
-				if (_avatarController == null)
-				{
-					_avatarController = (wCHandle<HudPhoneAvatarController>) CR2WTypeManager.Create("whandle:HudPhoneAvatarController", "AvatarController", cr2w, this);
-				}
-				return _avatarController;
-			}
-			set
-			{
-				if (_avatarController == value)
-				{
-					return;
-				}
-				_avatarController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _avatarController);
+			set => SetProperty(ref _avatarController, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("RootWidget")] 
 		public wCHandle<inkWidget> RootWidget
 		{
-			get
-			{
-				if (_rootWidget == null)
-				{
-					_rootWidget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "RootWidget", cr2w, this);
-				}
-				return _rootWidget;
-			}
-			set
-			{
-				if (_rootWidget == value)
-				{
-					return;
-				}
-				_rootWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rootWidget);
+			set => SetProperty(ref _rootWidget, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("SoundNameActionOnOpen")] 
 		public CName SoundNameActionOnOpen
 		{
-			get
-			{
-				if (_soundNameActionOnOpen == null)
-				{
-					_soundNameActionOnOpen = (CName) CR2WTypeManager.Create("CName", "SoundNameActionOnOpen", cr2w, this);
-				}
-				return _soundNameActionOnOpen;
-			}
-			set
-			{
-				if (_soundNameActionOnOpen == value)
-				{
-					return;
-				}
-				_soundNameActionOnOpen = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soundNameActionOnOpen);
+			set => SetProperty(ref _soundNameActionOnOpen, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("SoundNameActionOnClose")] 
 		public CName SoundNameActionOnClose
 		{
-			get
-			{
-				if (_soundNameActionOnClose == null)
-				{
-					_soundNameActionOnClose = (CName) CR2WTypeManager.Create("CName", "SoundNameActionOnClose", cr2w, this);
-				}
-				return _soundNameActionOnClose;
-			}
-			set
-			{
-				if (_soundNameActionOnClose == value)
-				{
-					return;
-				}
-				_soundNameActionOnClose = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soundNameActionOnClose);
+			set => SetProperty(ref _soundNameActionOnClose, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("AudioInitiateCallPositiveEvent")] 
 		public CName AudioInitiateCallPositiveEvent
 		{
-			get
-			{
-				if (_audioInitiateCallPositiveEvent == null)
-				{
-					_audioInitiateCallPositiveEvent = (CName) CR2WTypeManager.Create("CName", "AudioInitiateCallPositiveEvent", cr2w, this);
-				}
-				return _audioInitiateCallPositiveEvent;
-			}
-			set
-			{
-				if (_audioInitiateCallPositiveEvent == value)
-				{
-					return;
-				}
-				_audioInitiateCallPositiveEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioInitiateCallPositiveEvent);
+			set => SetProperty(ref _audioInitiateCallPositiveEvent, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("AudioInitiateCallNegativeEvent")] 
 		public CName AudioInitiateCallNegativeEvent
 		{
-			get
-			{
-				if (_audioInitiateCallNegativeEvent == null)
-				{
-					_audioInitiateCallNegativeEvent = (CName) CR2WTypeManager.Create("CName", "AudioInitiateCallNegativeEvent", cr2w, this);
-				}
-				return _audioInitiateCallNegativeEvent;
-			}
-			set
-			{
-				if (_audioInitiateCallNegativeEvent == value)
-				{
-					return;
-				}
-				_audioInitiateCallNegativeEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioInitiateCallNegativeEvent);
+			set => SetProperty(ref _audioInitiateCallNegativeEvent, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("AudioInitiateCallEvent")] 
 		public CName AudioInitiateCallEvent
 		{
-			get
-			{
-				if (_audioInitiateCallEvent == null)
-				{
-					_audioInitiateCallEvent = (CName) CR2WTypeManager.Create("CName", "AudioInitiateCallEvent", cr2w, this);
-				}
-				return _audioInitiateCallEvent;
-			}
-			set
-			{
-				if (_audioInitiateCallEvent == value)
-				{
-					return;
-				}
-				_audioInitiateCallEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioInitiateCallEvent);
+			set => SetProperty(ref _audioInitiateCallEvent, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("AudioPhoneOnEvent")] 
 		public CName AudioPhoneOnEvent
 		{
-			get
-			{
-				if (_audioPhoneOnEvent == null)
-				{
-					_audioPhoneOnEvent = (CName) CR2WTypeManager.Create("CName", "AudioPhoneOnEvent", cr2w, this);
-				}
-				return _audioPhoneOnEvent;
-			}
-			set
-			{
-				if (_audioPhoneOnEvent == value)
-				{
-					return;
-				}
-				_audioPhoneOnEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioPhoneOnEvent);
+			set => SetProperty(ref _audioPhoneOnEvent, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("AudioPhoneOffEvent")] 
 		public CName AudioPhoneOffEvent
 		{
-			get
-			{
-				if (_audioPhoneOffEvent == null)
-				{
-					_audioPhoneOffEvent = (CName) CR2WTypeManager.Create("CName", "AudioPhoneOffEvent", cr2w, this);
-				}
-				return _audioPhoneOffEvent;
-			}
-			set
-			{
-				if (_audioPhoneOffEvent == value)
-				{
-					return;
-				}
-				_audioPhoneOffEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioPhoneOffEvent);
+			set => SetProperty(ref _audioPhoneOffEvent, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("Holder")] 
 		public inkWidgetReference Holder
 		{
-			get
-			{
-				if (_holder == null)
-				{
-					_holder = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "Holder", cr2w, this);
-				}
-				return _holder;
-			}
-			set
-			{
-				if (_holder == value)
-				{
-					return;
-				}
-				_holder = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _holder);
+			set => SetProperty(ref _holder, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("Owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "Owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("UnreadMessages")] 
 		public CArray<wCHandle<gameJournalPhoneMessage>> UnreadMessages
 		{
-			get
-			{
-				if (_unreadMessages == null)
-				{
-					_unreadMessages = (CArray<wCHandle<gameJournalPhoneMessage>>) CR2WTypeManager.Create("array:whandle:gameJournalPhoneMessage", "UnreadMessages", cr2w, this);
-				}
-				return _unreadMessages;
-			}
-			set
-			{
-				if (_unreadMessages == value)
-				{
-					return;
-				}
-				_unreadMessages = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unreadMessages);
+			set => SetProperty(ref _unreadMessages, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("CurrentFunction")] 
 		public CEnum<EHudPhoneFunction> CurrentFunction
 		{
-			get
-			{
-				if (_currentFunction == null)
-				{
-					_currentFunction = (CEnum<EHudPhoneFunction>) CR2WTypeManager.Create("EHudPhoneFunction", "CurrentFunction", cr2w, this);
-				}
-				return _currentFunction;
-			}
-			set
-			{
-				if (_currentFunction == value)
-				{
-					return;
-				}
-				_currentFunction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentFunction);
+			set => SetProperty(ref _currentFunction, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("CurrentCallInformation")] 
 		public questPhoneCallInformation CurrentCallInformation
 		{
-			get
-			{
-				if (_currentCallInformation == null)
-				{
-					_currentCallInformation = (questPhoneCallInformation) CR2WTypeManager.Create("questPhoneCallInformation", "CurrentCallInformation", cr2w, this);
-				}
-				return _currentCallInformation;
-			}
-			set
-			{
-				if (_currentCallInformation == value)
-				{
-					return;
-				}
-				_currentCallInformation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentCallInformation);
+			set => SetProperty(ref _currentCallInformation, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("CurrentPhoneCallContact")] 
 		public wCHandle<gameJournalContact> CurrentPhoneCallContact
 		{
-			get
-			{
-				if (_currentPhoneCallContact == null)
-				{
-					_currentPhoneCallContact = (wCHandle<gameJournalContact>) CR2WTypeManager.Create("whandle:gameJournalContact", "CurrentPhoneCallContact", cr2w, this);
-				}
-				return _currentPhoneCallContact;
-			}
-			set
-			{
-				if (_currentPhoneCallContact == value)
-				{
-					return;
-				}
-				_currentPhoneCallContact = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentPhoneCallContact);
+			set => SetProperty(ref _currentPhoneCallContact, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("DelaySystem")] 
 		public wCHandle<gameDelaySystem> DelaySystem
 		{
-			get
-			{
-				if (_delaySystem == null)
-				{
-					_delaySystem = (wCHandle<gameDelaySystem>) CR2WTypeManager.Create("whandle:gameDelaySystem", "DelaySystem", cr2w, this);
-				}
-				return _delaySystem;
-			}
-			set
-			{
-				if (_delaySystem == value)
-				{
-					return;
-				}
-				_delaySystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delaySystem);
+			set => SetProperty(ref _delaySystem, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("PhoneSystem")] 
 		public wCHandle<PhoneSystem> PhoneSystem
 		{
-			get
-			{
-				if (_phoneSystem == null)
-				{
-					_phoneSystem = (wCHandle<PhoneSystem>) CR2WTypeManager.Create("whandle:PhoneSystem", "PhoneSystem", cr2w, this);
-				}
-				return _phoneSystem;
-			}
-			set
-			{
-				if (_phoneSystem == value)
-				{
-					return;
-				}
-				_phoneSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _phoneSystem);
+			set => SetProperty(ref _phoneSystem, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("JournalMgr")] 
 		public wCHandle<gameJournalManager> JournalMgr
 		{
-			get
-			{
-				if (_journalMgr == null)
-				{
-					_journalMgr = (wCHandle<gameJournalManager>) CR2WTypeManager.Create("whandle:gameJournalManager", "JournalMgr", cr2w, this);
-				}
-				return _journalMgr;
-			}
-			set
-			{
-				if (_journalMgr == value)
-				{
-					return;
-				}
-				_journalMgr = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _journalMgr);
+			set => SetProperty(ref _journalMgr, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("gameplayRestrictions")] 
 		public CArray<CName> GameplayRestrictions
 		{
-			get
-			{
-				if (_gameplayRestrictions == null)
-				{
-					_gameplayRestrictions = (CArray<CName>) CR2WTypeManager.Create("array:CName", "gameplayRestrictions", cr2w, this);
-				}
-				return _gameplayRestrictions;
-			}
-			set
-			{
-				if (_gameplayRestrictions == value)
-				{
-					return;
-				}
-				_gameplayRestrictions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameplayRestrictions);
+			set => SetProperty(ref _gameplayRestrictions, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("Blackboard")] 
 		public wCHandle<gameIBlackboard> Blackboard
 		{
-			get
-			{
-				if (_blackboard == null)
-				{
-					_blackboard = (wCHandle<gameIBlackboard>) CR2WTypeManager.Create("whandle:gameIBlackboard", "Blackboard", cr2w, this);
-				}
-				return _blackboard;
-			}
-			set
-			{
-				if (_blackboard == value)
-				{
-					return;
-				}
-				_blackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboard);
+			set => SetProperty(ref _blackboard, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("BlackboardDef")] 
 		public CHandle<UI_ComDeviceDef> BlackboardDef
 		{
-			get
-			{
-				if (_blackboardDef == null)
-				{
-					_blackboardDef = (CHandle<UI_ComDeviceDef>) CR2WTypeManager.Create("handle:UI_ComDeviceDef", "BlackboardDef", cr2w, this);
-				}
-				return _blackboardDef;
-			}
-			set
-			{
-				if (_blackboardDef == value)
-				{
-					return;
-				}
-				_blackboardDef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboardDef);
+			set => SetProperty(ref _blackboardDef, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("CallInformationBBID")] 
 		public CUInt32 CallInformationBBID
 		{
-			get
-			{
-				if (_callInformationBBID == null)
-				{
-					_callInformationBBID = (CUInt32) CR2WTypeManager.Create("Uint32", "CallInformationBBID", cr2w, this);
-				}
-				return _callInformationBBID;
-			}
-			set
-			{
-				if (_callInformationBBID == value)
-				{
-					return;
-				}
-				_callInformationBBID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callInformationBBID);
+			set => SetProperty(ref _callInformationBBID, value);
 		}
 
 		[Ordinal(32)] 
 		[RED("StatusNameBBID")] 
 		public CUInt32 StatusNameBBID
 		{
-			get
-			{
-				if (_statusNameBBID == null)
-				{
-					_statusNameBBID = (CUInt32) CR2WTypeManager.Create("Uint32", "StatusNameBBID", cr2w, this);
-				}
-				return _statusNameBBID;
-			}
-			set
-			{
-				if (_statusNameBBID == value)
-				{
-					return;
-				}
-				_statusNameBBID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statusNameBBID);
+			set => SetProperty(ref _statusNameBBID, value);
 		}
 
 		[Ordinal(33)] 
 		[RED("MinimizedListener")] 
 		public CUInt32 MinimizedListener
 		{
-			get
-			{
-				if (_minimizedListener == null)
-				{
-					_minimizedListener = (CUInt32) CR2WTypeManager.Create("Uint32", "MinimizedListener", cr2w, this);
-				}
-				return _minimizedListener;
-			}
-			set
-			{
-				if (_minimizedListener == value)
-				{
-					return;
-				}
-				_minimizedListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minimizedListener);
+			set => SetProperty(ref _minimizedListener, value);
 		}
 
 		[Ordinal(34)] 
 		[RED("DelayedCallbackId")] 
 		public gameDelayID DelayedCallbackId
 		{
-			get
-			{
-				if (_delayedCallbackId == null)
-				{
-					_delayedCallbackId = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "DelayedCallbackId", cr2w, this);
-				}
-				return _delayedCallbackId;
-			}
-			set
-			{
-				if (_delayedCallbackId == value)
-				{
-					return;
-				}
-				_delayedCallbackId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delayedCallbackId);
+			set => SetProperty(ref _delayedCallbackId, value);
 		}
 
 		[Ordinal(35)] 
 		[RED("DelayedTimeoutCallbackId")] 
 		public gameDelayID DelayedTimeoutCallbackId
 		{
-			get
-			{
-				if (_delayedTimeoutCallbackId == null)
-				{
-					_delayedTimeoutCallbackId = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "DelayedTimeoutCallbackId", cr2w, this);
-				}
-				return _delayedTimeoutCallbackId;
-			}
-			set
-			{
-				if (_delayedTimeoutCallbackId == value)
-				{
-					return;
-				}
-				_delayedTimeoutCallbackId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delayedTimeoutCallbackId);
+			set => SetProperty(ref _delayedTimeoutCallbackId, value);
 		}
 
 		[Ordinal(36)] 
 		[RED("TimeoutPeroid")] 
 		public CFloat TimeoutPeroid
 		{
-			get
-			{
-				if (_timeoutPeroid == null)
-				{
-					_timeoutPeroid = (CFloat) CR2WTypeManager.Create("Float", "TimeoutPeroid", cr2w, this);
-				}
-				return _timeoutPeroid;
-			}
-			set
-			{
-				if (_timeoutPeroid == value)
-				{
-					return;
-				}
-				_timeoutPeroid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeoutPeroid);
+			set => SetProperty(ref _timeoutPeroid, value);
 		}
 
 		[Ordinal(37)] 
 		[RED("portraitIntroAnim")] 
 		public CHandle<inkanimProxy> PortraitIntroAnim
 		{
-			get
-			{
-				if (_portraitIntroAnim == null)
-				{
-					_portraitIntroAnim = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "portraitIntroAnim", cr2w, this);
-				}
-				return _portraitIntroAnim;
-			}
-			set
-			{
-				if (_portraitIntroAnim == value)
-				{
-					return;
-				}
-				_portraitIntroAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _portraitIntroAnim);
+			set => SetProperty(ref _portraitIntroAnim, value);
 		}
 
 		[Ordinal(38)] 
 		[RED("portraitOutroAnim")] 
 		public CHandle<inkanimProxy> PortraitOutroAnim
 		{
-			get
-			{
-				if (_portraitOutroAnim == null)
-				{
-					_portraitOutroAnim = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "portraitOutroAnim", cr2w, this);
-				}
-				return _portraitOutroAnim;
-			}
-			set
-			{
-				if (_portraitOutroAnim == value)
-				{
-					return;
-				}
-				_portraitOutroAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _portraitOutroAnim);
+			set => SetProperty(ref _portraitOutroAnim, value);
 		}
 
 		[Ordinal(39)] 
 		[RED("portraitLoopAnim")] 
 		public CHandle<inkanimProxy> PortraitLoopAnim
 		{
-			get
-			{
-				if (_portraitLoopAnim == null)
-				{
-					_portraitLoopAnim = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "portraitLoopAnim", cr2w, this);
-				}
-				return _portraitLoopAnim;
-			}
-			set
-			{
-				if (_portraitLoopAnim == value)
-				{
-					return;
-				}
-				_portraitLoopAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _portraitLoopAnim);
+			set => SetProperty(ref _portraitLoopAnim, value);
 		}
 
 		[Ordinal(40)] 
 		[RED("options")] 
 		public inkanimPlaybackOptions Options
 		{
-			get
-			{
-				if (_options == null)
-				{
-					_options = (inkanimPlaybackOptions) CR2WTypeManager.Create("inkanimPlaybackOptions", "options", cr2w, this);
-				}
-				return _options;
-			}
-			set
-			{
-				if (_options == value)
-				{
-					return;
-				}
-				_options = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _options);
+			set => SetProperty(ref _options, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("updatesProjection")] 
 		public CHandle<inkScreenProjection> UpdatesProjection
 		{
-			get
-			{
-				if (_updatesProjection == null)
-				{
-					_updatesProjection = (CHandle<inkScreenProjection>) CR2WTypeManager.Create("handle:inkScreenProjection", "updatesProjection", cr2w, this);
-				}
-				return _updatesProjection;
-			}
-			set
-			{
-				if (_updatesProjection == value)
-				{
-					return;
-				}
-				_updatesProjection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _updatesProjection);
+			set => SetProperty(ref _updatesProjection, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("buttonPressed")] 
 		public CBool ButtonPressed
 		{
-			get
-			{
-				if (_buttonPressed == null)
-				{
-					_buttonPressed = (CBool) CR2WTypeManager.Create("Bool", "buttonPressed", cr2w, this);
-				}
-				return _buttonPressed;
-			}
-			set
-			{
-				if (_buttonPressed == value)
-				{
-					return;
-				}
-				_buttonPressed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonPressed);
+			set => SetProperty(ref _buttonPressed, value);
 		}
 
 		public HudPhoneGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

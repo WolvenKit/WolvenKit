@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("layerId")] 
 		public CUInt32 LayerId
 		{
-			get
-			{
-				if (_layerId == null)
-				{
-					_layerId = (CUInt32) CR2WTypeManager.Create("Uint32", "layerId", cr2w, this);
-				}
-				return _layerId;
-			}
-			set
-			{
-				if (_layerId == value)
-				{
-					return;
-				}
-				_layerId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _layerId);
+			set => SetProperty(ref _layerId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("statPoolsSystem")] 
 		public CHandle<gameStatPoolsSystem> StatPoolsSystem
 		{
-			get
-			{
-				if (_statPoolsSystem == null)
-				{
-					_statPoolsSystem = (CHandle<gameStatPoolsSystem>) CR2WTypeManager.Create("handle:gameStatPoolsSystem", "statPoolsSystem", cr2w, this);
-				}
-				return _statPoolsSystem;
-			}
-			set
-			{
-				if (_statPoolsSystem == value)
-				{
-					return;
-				}
-				_statPoolsSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statPoolsSystem);
+			set => SetProperty(ref _statPoolsSystem, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("statsSystem")] 
 		public CHandle<gameStatsSystem> StatsSystem
 		{
-			get
-			{
-				if (_statsSystem == null)
-				{
-					_statsSystem = (CHandle<gameStatsSystem>) CR2WTypeManager.Create("handle:gameStatsSystem", "statsSystem", cr2w, this);
-				}
-				return _statsSystem;
-			}
-			set
-			{
-				if (_statsSystem == value)
-				{
-					return;
-				}
-				_statsSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statsSystem);
+			set => SetProperty(ref _statsSystem, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("weaponID")] 
 		public entEntityID WeaponID
 		{
-			get
-			{
-				if (_weaponID == null)
-				{
-					_weaponID = (entEntityID) CR2WTypeManager.Create("entEntityID", "weaponID", cr2w, this);
-				}
-				return _weaponID;
-			}
-			set
-			{
-				if (_weaponID == value)
-				{
-					return;
-				}
-				_weaponID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponID);
+			set => SetProperty(ref _weaponID, value);
 		}
 
 		public DischargeEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemData")] 
 		public InventoryItemData ItemData
 		{
-			get
-			{
-				if (_itemData == null)
-				{
-					_itemData = (InventoryItemData) CR2WTypeManager.Create("InventoryItemData", "itemData", cr2w, this);
-				}
-				return _itemData;
-			}
-			set
-			{
-				if (_itemData == value)
-				{
-					return;
-				}
-				_itemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemData);
+			set => SetProperty(ref _itemData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("actionName")] 
 		public CHandle<inkActionName> ActionName
 		{
-			get
-			{
-				if (_actionName == null)
-				{
-					_actionName = (CHandle<inkActionName>) CR2WTypeManager.Create("handle:inkActionName", "actionName", cr2w, this);
-				}
-				return _actionName;
-			}
-			set
-			{
-				if (_actionName == value)
-				{
-					return;
-				}
-				_actionName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionName);
+			set => SetProperty(ref _actionName, value);
 		}
 
 		public ItemDisplayHoldEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("multiBouceScale")] 
 		public curveData<CFloat> MultiBouceScale
 		{
-			get
-			{
-				if (_multiBouceScale == null)
-				{
-					_multiBouceScale = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "multiBouceScale", cr2w, this);
-				}
-				return _multiBouceScale;
-			}
-			set
-			{
-				if (_multiBouceScale == value)
-				{
-					return;
-				}
-				_multiBouceScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _multiBouceScale);
+			set => SetProperty(ref _multiBouceScale, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("multiBouceSaturation")] 
 		public curveData<CFloat> MultiBouceSaturation
 		{
-			get
-			{
-				if (_multiBouceSaturation == null)
-				{
-					_multiBouceSaturation = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "multiBouceSaturation", cr2w, this);
-				}
-				return _multiBouceSaturation;
-			}
-			set
-			{
-				if (_multiBouceSaturation == value)
-				{
-					return;
-				}
-				_multiBouceSaturation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _multiBouceSaturation);
+			set => SetProperty(ref _multiBouceSaturation, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("emissiveScale")] 
 		public curveData<CFloat> EmissiveScale
 		{
-			get
-			{
-				if (_emissiveScale == null)
-				{
-					_emissiveScale = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "emissiveScale", cr2w, this);
-				}
-				return _emissiveScale;
-			}
-			set
-			{
-				if (_emissiveScale == value)
-				{
-					return;
-				}
-				_emissiveScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _emissiveScale);
+			set => SetProperty(ref _emissiveScale, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("diffuseScale")] 
 		public curveData<CFloat> DiffuseScale
 		{
-			get
-			{
-				if (_diffuseScale == null)
-				{
-					_diffuseScale = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "diffuseScale", cr2w, this);
-				}
-				return _diffuseScale;
-			}
-			set
-			{
-				if (_diffuseScale == value)
-				{
-					return;
-				}
-				_diffuseScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _diffuseScale);
+			set => SetProperty(ref _diffuseScale, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("localLightsScale")] 
 		public curveData<CFloat> LocalLightsScale
 		{
-			get
-			{
-				if (_localLightsScale == null)
-				{
-					_localLightsScale = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "localLightsScale", cr2w, this);
-				}
-				return _localLightsScale;
-			}
-			set
-			{
-				if (_localLightsScale == value)
-				{
-					return;
-				}
-				_localLightsScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localLightsScale);
+			set => SetProperty(ref _localLightsScale, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("lightScaleCompenensation")] 
 		public curveData<CFloat> LightScaleCompenensation
 		{
-			get
-			{
-				if (_lightScaleCompenensation == null)
-				{
-					_lightScaleCompenensation = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "lightScaleCompenensation", cr2w, this);
-				}
-				return _lightScaleCompenensation;
-			}
-			set
-			{
-				if (_lightScaleCompenensation == value)
-				{
-					return;
-				}
-				_lightScaleCompenensation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lightScaleCompenensation);
+			set => SetProperty(ref _lightScaleCompenensation, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("reflectionCompensation")] 
 		public curveData<CFloat> ReflectionCompensation
 		{
-			get
-			{
-				if (_reflectionCompensation == null)
-				{
-					_reflectionCompensation = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "reflectionCompensation", cr2w, this);
-				}
-				return _reflectionCompensation;
-			}
-			set
-			{
-				if (_reflectionCompensation == value)
-				{
-					return;
-				}
-				_reflectionCompensation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reflectionCompensation);
+			set => SetProperty(ref _reflectionCompensation, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("ambientBase")] 
 		public curveData<HDRColor> AmbientBase
 		{
-			get
-			{
-				if (_ambientBase == null)
-				{
-					_ambientBase = (curveData<HDRColor>) CR2WTypeManager.Create("curveData:HDRColor", "ambientBase", cr2w, this);
-				}
-				return _ambientBase;
-			}
-			set
-			{
-				if (_ambientBase == value)
-				{
-					return;
-				}
-				_ambientBase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ambientBase);
+			set => SetProperty(ref _ambientBase, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("rayTracedSkyRadianceScale")] 
 		public curveData<CFloat> RayTracedSkyRadianceScale
 		{
-			get
-			{
-				if (_rayTracedSkyRadianceScale == null)
-				{
-					_rayTracedSkyRadianceScale = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "rayTracedSkyRadianceScale", cr2w, this);
-				}
-				return _rayTracedSkyRadianceScale;
-			}
-			set
-			{
-				if (_rayTracedSkyRadianceScale == value)
-				{
-					return;
-				}
-				_rayTracedSkyRadianceScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rayTracedSkyRadianceScale);
+			set => SetProperty(ref _rayTracedSkyRadianceScale, value);
 		}
 
 		public GlobalIlluminationSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

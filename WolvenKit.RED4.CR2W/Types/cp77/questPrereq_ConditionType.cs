@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get
-			{
-				if (_objectRef == null)
-				{
-					_objectRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "objectRef", cr2w, this);
-				}
-				return _objectRef;
-			}
-			set
-			{
-				if (_objectRef == value)
-				{
-					return;
-				}
-				_objectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isObjectPlayer")] 
 		public CBool IsObjectPlayer
 		{
-			get
-			{
-				if (_isObjectPlayer == null)
-				{
-					_isObjectPlayer = (CBool) CR2WTypeManager.Create("Bool", "isObjectPlayer", cr2w, this);
-				}
-				return _isObjectPlayer;
-			}
-			set
-			{
-				if (_isObjectPlayer == value)
-				{
-					return;
-				}
-				_isObjectPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isObjectPlayer);
+			set => SetProperty(ref _isObjectPlayer, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("prereq")] 
 		public CHandle<gameIPrereq> Prereq
 		{
-			get
-			{
-				if (_prereq == null)
-				{
-					_prereq = (CHandle<gameIPrereq>) CR2WTypeManager.Create("handle:gameIPrereq", "prereq", cr2w, this);
-				}
-				return _prereq;
-			}
-			set
-			{
-				if (_prereq == value)
-				{
-					return;
-				}
-				_prereq = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prereq);
+			set => SetProperty(ref _prereq, value);
 		}
 
 		public questPrereq_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

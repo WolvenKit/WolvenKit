@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get
-			{
-				if (_vehicleRef == null)
-				{
-					_vehicleRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "vehicleRef", cr2w, this);
-				}
-				return _vehicleRef;
-			}
-			set
-			{
-				if (_vehicleRef == value)
-				{
-					return;
-				}
-				_vehicleRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleRef);
+			set => SetProperty(ref _vehicleRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("speed")] 
 		public CFloat Speed
 		{
-			get
-			{
-				if (_speed == null)
-				{
-					_speed = (CFloat) CR2WTypeManager.Create("Float", "speed", cr2w, this);
-				}
-				return _speed;
-			}
-			set
-			{
-				if (_speed == value)
-				{
-					return;
-				}
-				_speed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speed);
+			set => SetProperty(ref _speed, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("comparisonType")] 
 		public CEnum<vehicleEVehicleSpeedConditionType> ComparisonType
 		{
-			get
-			{
-				if (_comparisonType == null)
-				{
-					_comparisonType = (CEnum<vehicleEVehicleSpeedConditionType>) CR2WTypeManager.Create("vehicleEVehicleSpeedConditionType", "comparisonType", cr2w, this);
-				}
-				return _comparisonType;
-			}
-			set
-			{
-				if (_comparisonType == value)
-				{
-					return;
-				}
-				_comparisonType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comparisonType);
+			set => SetProperty(ref _comparisonType, value);
 		}
 
 		public questVehicleSpeed_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

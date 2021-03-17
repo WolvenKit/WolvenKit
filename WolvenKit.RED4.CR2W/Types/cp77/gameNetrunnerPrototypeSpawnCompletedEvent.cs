@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("spawnedObject")] 
 		public wCHandle<gameObject> SpawnedObject
 		{
-			get
-			{
-				if (_spawnedObject == null)
-				{
-					_spawnedObject = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "spawnedObject", cr2w, this);
-				}
-				return _spawnedObject;
-			}
-			set
-			{
-				if (_spawnedObject == value)
-				{
-					return;
-				}
-				_spawnedObject = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnedObject);
+			set => SetProperty(ref _spawnedObject, value);
 		}
 
 		public gameNetrunnerPrototypeSpawnCompletedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

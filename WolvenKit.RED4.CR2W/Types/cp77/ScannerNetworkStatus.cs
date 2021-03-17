@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("networkStatus")] 
 		public CEnum<ScannerNetworkState> NetworkStatus
 		{
-			get
-			{
-				if (_networkStatus == null)
-				{
-					_networkStatus = (CEnum<ScannerNetworkState>) CR2WTypeManager.Create("ScannerNetworkState", "networkStatus", cr2w, this);
-				}
-				return _networkStatus;
-			}
-			set
-			{
-				if (_networkStatus == value)
-				{
-					return;
-				}
-				_networkStatus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _networkStatus);
+			set => SetProperty(ref _networkStatus, value);
 		}
 
 		public ScannerNetworkStatus(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

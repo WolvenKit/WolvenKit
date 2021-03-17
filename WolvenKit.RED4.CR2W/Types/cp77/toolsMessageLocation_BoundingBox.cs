@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("resourcePath")] 
 		public MessageResourcePath ResourcePath
 		{
-			get
-			{
-				if (_resourcePath == null)
-				{
-					_resourcePath = (MessageResourcePath) CR2WTypeManager.Create("MessageResourcePath", "resourcePath", cr2w, this);
-				}
-				return _resourcePath;
-			}
-			set
-			{
-				if (_resourcePath == value)
-				{
-					return;
-				}
-				_resourcePath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resourcePath);
+			set => SetProperty(ref _resourcePath, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("box")] 
 		public Box Box
 		{
-			get
-			{
-				if (_box == null)
-				{
-					_box = (Box) CR2WTypeManager.Create("Box", "box", cr2w, this);
-				}
-				return _box;
-			}
-			set
-			{
-				if (_box == value)
-				{
-					return;
-				}
-				_box = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _box);
+			set => SetProperty(ref _box, value);
 		}
 
 		public toolsMessageLocation_BoundingBox(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

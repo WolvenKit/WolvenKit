@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("immediate")] 
 		public CBool Immediate
 		{
-			get
-			{
-				if (_immediate == null)
-				{
-					_immediate = (CBool) CR2WTypeManager.Create("Bool", "immediate", cr2w, this);
-				}
-				return _immediate;
-			}
-			set
-			{
-				if (_immediate == value)
-				{
-					return;
-				}
-				_immediate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _immediate);
+			set => SetProperty(ref _immediate, value);
 		}
 
 		public questSpawnToken_NodeSubType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

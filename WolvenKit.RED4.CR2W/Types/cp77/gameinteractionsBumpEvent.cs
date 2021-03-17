@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("side")] 
 		public CEnum<gameinteractionsBumpSide> Side
 		{
-			get
-			{
-				if (_side == null)
-				{
-					_side = (CEnum<gameinteractionsBumpSide>) CR2WTypeManager.Create("gameinteractionsBumpSide", "side", cr2w, this);
-				}
-				return _side;
-			}
-			set
-			{
-				if (_side == value)
-				{
-					return;
-				}
-				_side = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _side);
+			set => SetProperty(ref _side, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sourceLocation")] 
 		public CEnum<gameinteractionsBumpLocation> SourceLocation
 		{
-			get
-			{
-				if (_sourceLocation == null)
-				{
-					_sourceLocation = (CEnum<gameinteractionsBumpLocation>) CR2WTypeManager.Create("gameinteractionsBumpLocation", "sourceLocation", cr2w, this);
-				}
-				return _sourceLocation;
-			}
-			set
-			{
-				if (_sourceLocation == value)
-				{
-					return;
-				}
-				_sourceLocation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sourceLocation);
+			set => SetProperty(ref _sourceLocation, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("direction")] 
 		public Vector4 Direction
 		{
-			get
-			{
-				if (_direction == null)
-				{
-					_direction = (Vector4) CR2WTypeManager.Create("Vector4", "direction", cr2w, this);
-				}
-				return _direction;
-			}
-			set
-			{
-				if (_direction == value)
-				{
-					return;
-				}
-				_direction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _direction);
+			set => SetProperty(ref _direction, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("sourcePosition")] 
 		public Vector4 SourcePosition
 		{
-			get
-			{
-				if (_sourcePosition == null)
-				{
-					_sourcePosition = (Vector4) CR2WTypeManager.Create("Vector4", "sourcePosition", cr2w, this);
-				}
-				return _sourcePosition;
-			}
-			set
-			{
-				if (_sourcePosition == value)
-				{
-					return;
-				}
-				_sourcePosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sourcePosition);
+			set => SetProperty(ref _sourcePosition, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("sourceSquaredDistance")] 
 		public CFloat SourceSquaredDistance
 		{
-			get
-			{
-				if (_sourceSquaredDistance == null)
-				{
-					_sourceSquaredDistance = (CFloat) CR2WTypeManager.Create("Float", "sourceSquaredDistance", cr2w, this);
-				}
-				return _sourceSquaredDistance;
-			}
-			set
-			{
-				if (_sourceSquaredDistance == value)
-				{
-					return;
-				}
-				_sourceSquaredDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sourceSquaredDistance);
+			set => SetProperty(ref _sourceSquaredDistance, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("sourceSpeed")] 
 		public CFloat SourceSpeed
 		{
-			get
-			{
-				if (_sourceSpeed == null)
-				{
-					_sourceSpeed = (CFloat) CR2WTypeManager.Create("Float", "sourceSpeed", cr2w, this);
-				}
-				return _sourceSpeed;
-			}
-			set
-			{
-				if (_sourceSpeed == value)
-				{
-					return;
-				}
-				_sourceSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sourceSpeed);
+			set => SetProperty(ref _sourceSpeed, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isMounted")] 
 		public CBool IsMounted
 		{
-			get
-			{
-				if (_isMounted == null)
-				{
-					_isMounted = (CBool) CR2WTypeManager.Create("Bool", "isMounted", cr2w, this);
-				}
-				return _isMounted;
-			}
-			set
-			{
-				if (_isMounted == value)
-				{
-					return;
-				}
-				_isMounted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isMounted);
+			set => SetProperty(ref _isMounted, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("sourceRadius")] 
 		public CFloat SourceRadius
 		{
-			get
-			{
-				if (_sourceRadius == null)
-				{
-					_sourceRadius = (CFloat) CR2WTypeManager.Create("Float", "sourceRadius", cr2w, this);
-				}
-				return _sourceRadius;
-			}
-			set
-			{
-				if (_sourceRadius == value)
-				{
-					return;
-				}
-				_sourceRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sourceRadius);
+			set => SetProperty(ref _sourceRadius, value);
 		}
 
 		public gameinteractionsBumpEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

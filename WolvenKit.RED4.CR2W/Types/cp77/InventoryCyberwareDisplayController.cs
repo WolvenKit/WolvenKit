@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ownedFrame")] 
 		public inkWidgetReference OwnedFrame
 		{
-			get
-			{
-				if (_ownedFrame == null)
-				{
-					_ownedFrame = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "ownedFrame", cr2w, this);
-				}
-				return _ownedFrame;
-			}
-			set
-			{
-				if (_ownedFrame == value)
-				{
-					return;
-				}
-				_ownedFrame = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownedFrame);
+			set => SetProperty(ref _ownedFrame, value);
 		}
 
 		[Ordinal(79)] 
 		[RED("selectedFrame")] 
 		public inkWidgetReference SelectedFrame
 		{
-			get
-			{
-				if (_selectedFrame == null)
-				{
-					_selectedFrame = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "selectedFrame", cr2w, this);
-				}
-				return _selectedFrame;
-			}
-			set
-			{
-				if (_selectedFrame == value)
-				{
-					return;
-				}
-				_selectedFrame = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectedFrame);
+			set => SetProperty(ref _selectedFrame, value);
 		}
 
 		[Ordinal(80)] 
 		[RED("amountPanel")] 
 		public inkWidgetReference AmountPanel
 		{
-			get
-			{
-				if (_amountPanel == null)
-				{
-					_amountPanel = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "amountPanel", cr2w, this);
-				}
-				return _amountPanel;
-			}
-			set
-			{
-				if (_amountPanel == value)
-				{
-					return;
-				}
-				_amountPanel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _amountPanel);
+			set => SetProperty(ref _amountPanel, value);
 		}
 
 		[Ordinal(81)] 
 		[RED("amount")] 
 		public inkTextWidgetReference Amount
 		{
-			get
-			{
-				if (_amount == null)
-				{
-					_amount = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "amount", cr2w, this);
-				}
-				return _amount;
-			}
-			set
-			{
-				if (_amount == value)
-				{
-					return;
-				}
-				_amount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _amount);
+			set => SetProperty(ref _amount, value);
 		}
 
 		public InventoryCyberwareDisplayController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

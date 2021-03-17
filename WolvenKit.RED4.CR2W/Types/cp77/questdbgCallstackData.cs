@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("resourceHash")] 
 		public CUInt64 ResourceHash
 		{
-			get
-			{
-				if (_resourceHash == null)
-				{
-					_resourceHash = (CUInt64) CR2WTypeManager.Create("Uint64", "resourceHash", cr2w, this);
-				}
-				return _resourceHash;
-			}
-			set
-			{
-				if (_resourceHash == value)
-				{
-					return;
-				}
-				_resourceHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resourceHash);
+			set => SetProperty(ref _resourceHash, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("phases")] 
 		public CArray<questdbgCallstackPhase> Phases
 		{
-			get
-			{
-				if (_phases == null)
-				{
-					_phases = (CArray<questdbgCallstackPhase>) CR2WTypeManager.Create("array:questdbgCallstackPhase", "phases", cr2w, this);
-				}
-				return _phases;
-			}
-			set
-			{
-				if (_phases == value)
-				{
-					return;
-				}
-				_phases = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _phases);
+			set => SetProperty(ref _phases, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("blocks")] 
 		public CArray<questdbgCallstackBlock> Blocks
 		{
-			get
-			{
-				if (_blocks == null)
-				{
-					_blocks = (CArray<questdbgCallstackBlock>) CR2WTypeManager.Create("array:questdbgCallstackBlock", "blocks", cr2w, this);
-				}
-				return _blocks;
-			}
-			set
-			{
-				if (_blocks == value)
-				{
-					return;
-				}
-				_blocks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blocks);
+			set => SetProperty(ref _blocks, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("executed")] 
 		public CArray<CUInt64> Executed
 		{
-			get
-			{
-				if (_executed == null)
-				{
-					_executed = (CArray<CUInt64>) CR2WTypeManager.Create("array:Uint64", "executed", cr2w, this);
-				}
-				return _executed;
-			}
-			set
-			{
-				if (_executed == value)
-				{
-					return;
-				}
-				_executed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _executed);
+			set => SetProperty(ref _executed, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("failed")] 
 		public CArray<CUInt64> Failed
 		{
-			get
-			{
-				if (_failed == null)
-				{
-					_failed = (CArray<CUInt64>) CR2WTypeManager.Create("array:Uint64", "failed", cr2w, this);
-				}
-				return _failed;
-			}
-			set
-			{
-				if (_failed == value)
-				{
-					return;
-				}
-				_failed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _failed);
+			set => SetProperty(ref _failed, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("callstackRevision")] 
 		public CUInt32 CallstackRevision
 		{
-			get
-			{
-				if (_callstackRevision == null)
-				{
-					_callstackRevision = (CUInt32) CR2WTypeManager.Create("Uint32", "callstackRevision", cr2w, this);
-				}
-				return _callstackRevision;
-			}
-			set
-			{
-				if (_callstackRevision == value)
-				{
-					return;
-				}
-				_callstackRevision = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callstackRevision);
+			set => SetProperty(ref _callstackRevision, value);
 		}
 
 		public questdbgCallstackData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

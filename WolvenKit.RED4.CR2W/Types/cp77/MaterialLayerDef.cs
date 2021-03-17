@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("size")] 
 		public CUInt32 Size
 		{
-			get
-			{
-				if (_size == null)
-				{
-					_size = (CUInt32) CR2WTypeManager.Create("Uint32", "size", cr2w, this);
-				}
-				return _size;
-			}
-			set
-			{
-				if (_size == value)
-				{
-					return;
-				}
-				_size = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _size);
+			set => SetProperty(ref _size, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("colorPalette")] 
 		public CArray<CColor> ColorPalette
 		{
-			get
-			{
-				if (_colorPalette == null)
-				{
-					_colorPalette = (CArray<CColor>) CR2WTypeManager.Create("array:Color", "colorPalette", cr2w, this);
-				}
-				return _colorPalette;
-			}
-			set
-			{
-				if (_colorPalette == value)
-				{
-					return;
-				}
-				_colorPalette = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _colorPalette);
+			set => SetProperty(ref _colorPalette, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("material")] 
 		public rRef<CMaterialInstance> Material
 		{
-			get
-			{
-				if (_material == null)
-				{
-					_material = (rRef<CMaterialInstance>) CR2WTypeManager.Create("rRef:CMaterialInstance", "material", cr2w, this);
-				}
-				return _material;
-			}
-			set
-			{
-				if (_material == value)
-				{
-					return;
-				}
-				_material = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _material);
+			set => SetProperty(ref _material, value);
 		}
 
 		public MaterialLayerDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

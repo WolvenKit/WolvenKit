@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("velocity")] 
 		public Vector4 Velocity
 		{
-			get
-			{
-				if (_velocity == null)
-				{
-					_velocity = (Vector4) CR2WTypeManager.Create("Vector4", "velocity", cr2w, this);
-				}
-				return _velocity;
-			}
-			set
-			{
-				if (_velocity == value)
-				{
-					return;
-				}
-				_velocity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _velocity);
+			set => SetProperty(ref _velocity, value);
 		}
 
 		public entRagdollNotifyVelocityTresholdEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

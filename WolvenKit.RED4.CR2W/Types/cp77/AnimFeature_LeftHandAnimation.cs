@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lockLeftHandAnimation")] 
 		public CBool LockLeftHandAnimation
 		{
-			get
-			{
-				if (_lockLeftHandAnimation == null)
-				{
-					_lockLeftHandAnimation = (CBool) CR2WTypeManager.Create("Bool", "lockLeftHandAnimation", cr2w, this);
-				}
-				return _lockLeftHandAnimation;
-			}
-			set
-			{
-				if (_lockLeftHandAnimation == value)
-				{
-					return;
-				}
-				_lockLeftHandAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lockLeftHandAnimation);
+			set => SetProperty(ref _lockLeftHandAnimation, value);
 		}
 
 		public AnimFeature_LeftHandAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

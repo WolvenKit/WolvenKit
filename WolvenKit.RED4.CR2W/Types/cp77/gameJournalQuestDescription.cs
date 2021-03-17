@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("description")] 
 		public LocalizationString Description
 		{
-			get
-			{
-				if (_description == null)
-				{
-					_description = (LocalizationString) CR2WTypeManager.Create("LocalizationString", "description", cr2w, this);
-				}
-				return _description;
-			}
-			set
-			{
-				if (_description == value)
-				{
-					return;
-				}
-				_description = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _description);
+			set => SetProperty(ref _description, value);
 		}
 
 		public gameJournalQuestDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

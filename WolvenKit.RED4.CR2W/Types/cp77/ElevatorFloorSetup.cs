@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isHidden")] 
 		public CBool IsHidden
 		{
-			get
-			{
-				if (_isHidden == null)
-				{
-					_isHidden = (CBool) CR2WTypeManager.Create("Bool", "isHidden", cr2w, this);
-				}
-				return _isHidden;
-			}
-			set
-			{
-				if (_isHidden == value)
-				{
-					return;
-				}
-				_isHidden = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isHidden);
+			set => SetProperty(ref _isHidden, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isInactive")] 
 		public CBool IsInactive
 		{
-			get
-			{
-				if (_isInactive == null)
-				{
-					_isInactive = (CBool) CR2WTypeManager.Create("Bool", "isInactive", cr2w, this);
-				}
-				return _isInactive;
-			}
-			set
-			{
-				if (_isInactive == value)
-				{
-					return;
-				}
-				_isInactive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInactive);
+			set => SetProperty(ref _isInactive, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("floorMarker")] 
 		public NodeRef FloorMarker
 		{
-			get
-			{
-				if (_floorMarker == null)
-				{
-					_floorMarker = (NodeRef) CR2WTypeManager.Create("NodeRef", "floorMarker", cr2w, this);
-				}
-				return _floorMarker;
-			}
-			set
-			{
-				if (_floorMarker == value)
-				{
-					return;
-				}
-				_floorMarker = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _floorMarker);
+			set => SetProperty(ref _floorMarker, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("floorName")] 
 		public CString FloorName
 		{
-			get
-			{
-				if (_floorName == null)
-				{
-					_floorName = (CString) CR2WTypeManager.Create("String", "floorName", cr2w, this);
-				}
-				return _floorName;
-			}
-			set
-			{
-				if (_floorName == value)
-				{
-					return;
-				}
-				_floorName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _floorName);
+			set => SetProperty(ref _floorName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("floorDisplayName")] 
 		public CName FloorDisplayName
 		{
-			get
-			{
-				if (_floorDisplayName == null)
-				{
-					_floorDisplayName = (CName) CR2WTypeManager.Create("CName", "floorDisplayName", cr2w, this);
-				}
-				return _floorDisplayName;
-			}
-			set
-			{
-				if (_floorDisplayName == value)
-				{
-					return;
-				}
-				_floorDisplayName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _floorDisplayName);
+			set => SetProperty(ref _floorDisplayName, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("authorizationTextOverride")] 
 		public CString AuthorizationTextOverride
 		{
-			get
-			{
-				if (_authorizationTextOverride == null)
-				{
-					_authorizationTextOverride = (CString) CR2WTypeManager.Create("String", "authorizationTextOverride", cr2w, this);
-				}
-				return _authorizationTextOverride;
-			}
-			set
-			{
-				if (_authorizationTextOverride == value)
-				{
-					return;
-				}
-				_authorizationTextOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _authorizationTextOverride);
+			set => SetProperty(ref _authorizationTextOverride, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("doorShouldOpenFrontLeftRight")] 
 		public CArray<CBool> DoorShouldOpenFrontLeftRight
 		{
-			get
-			{
-				if (_doorShouldOpenFrontLeftRight == null)
-				{
-					_doorShouldOpenFrontLeftRight = (CArray<CBool>) CR2WTypeManager.Create("array:Bool", "doorShouldOpenFrontLeftRight", cr2w, this);
-				}
-				return _doorShouldOpenFrontLeftRight;
-			}
-			set
-			{
-				if (_doorShouldOpenFrontLeftRight == value)
-				{
-					return;
-				}
-				_doorShouldOpenFrontLeftRight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _doorShouldOpenFrontLeftRight);
+			set => SetProperty(ref _doorShouldOpenFrontLeftRight, value);
 		}
 
 		public ElevatorFloorSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

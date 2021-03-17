@@ -23,253 +23,88 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tags")] 
 		public redTagList Tags
 		{
-			get
-			{
-				if (_tags == null)
-				{
-					_tags = (redTagList) CR2WTypeManager.Create("redTagList", "tags", cr2w, this);
-				}
-				return _tags;
-			}
-			set
-			{
-				if (_tags == value)
-				{
-					return;
-				}
-				_tags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tags);
+			set => SetProperty(ref _tags, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("animationType")] 
 		public CEnum<animAnimationType> AnimationType
 		{
-			get
-			{
-				if (_animationType == null)
-				{
-					_animationType = (CEnum<animAnimationType>) CR2WTypeManager.Create("animAnimationType", "animationType", cr2w, this);
-				}
-				return _animationType;
-			}
-			set
-			{
-				if (_animationType == value)
-				{
-					return;
-				}
-				_animationType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationType);
+			set => SetProperty(ref _animationType, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("animBuffer")] 
 		public CHandle<animIAnimationBuffer> AnimBuffer
 		{
-			get
-			{
-				if (_animBuffer == null)
-				{
-					_animBuffer = (CHandle<animIAnimationBuffer>) CR2WTypeManager.Create("handle:animIAnimationBuffer", "animBuffer", cr2w, this);
-				}
-				return _animBuffer;
-			}
-			set
-			{
-				if (_animBuffer == value)
-				{
-					return;
-				}
-				_animBuffer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animBuffer);
+			set => SetProperty(ref _animBuffer, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("additionalTransforms")] 
 		public animAdditionalTransformContainer AdditionalTransforms
 		{
-			get
-			{
-				if (_additionalTransforms == null)
-				{
-					_additionalTransforms = (animAdditionalTransformContainer) CR2WTypeManager.Create("animAdditionalTransformContainer", "additionalTransforms", cr2w, this);
-				}
-				return _additionalTransforms;
-			}
-			set
-			{
-				if (_additionalTransforms == value)
-				{
-					return;
-				}
-				_additionalTransforms = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additionalTransforms);
+			set => SetProperty(ref _additionalTransforms, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("additionalTracks")] 
 		public animAdditionalFloatTrackContainer AdditionalTracks
 		{
-			get
-			{
-				if (_additionalTracks == null)
-				{
-					_additionalTracks = (animAdditionalFloatTrackContainer) CR2WTypeManager.Create("animAdditionalFloatTrackContainer", "additionalTracks", cr2w, this);
-				}
-				return _additionalTracks;
-			}
-			set
-			{
-				if (_additionalTracks == value)
-				{
-					return;
-				}
-				_additionalTracks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additionalTracks);
+			set => SetProperty(ref _additionalTracks, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("motionExtraction")] 
 		public CHandle<animIMotionExtraction> MotionExtraction
 		{
-			get
-			{
-				if (_motionExtraction == null)
-				{
-					_motionExtraction = (CHandle<animIMotionExtraction>) CR2WTypeManager.Create("handle:animIMotionExtraction", "motionExtraction", cr2w, this);
-				}
-				return _motionExtraction;
-			}
-			set
-			{
-				if (_motionExtraction == value)
-				{
-					return;
-				}
-				_motionExtraction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _motionExtraction);
+			set => SetProperty(ref _motionExtraction, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("frameClamping")] 
 		public CBool FrameClamping
 		{
-			get
-			{
-				if (_frameClamping == null)
-				{
-					_frameClamping = (CBool) CR2WTypeManager.Create("Bool", "frameClamping", cr2w, this);
-				}
-				return _frameClamping;
-			}
-			set
-			{
-				if (_frameClamping == value)
-				{
-					return;
-				}
-				_frameClamping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frameClamping);
+			set => SetProperty(ref _frameClamping, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("frameClampingStartFrame")] 
 		public CInt8 FrameClampingStartFrame
 		{
-			get
-			{
-				if (_frameClampingStartFrame == null)
-				{
-					_frameClampingStartFrame = (CInt8) CR2WTypeManager.Create("Int8", "frameClampingStartFrame", cr2w, this);
-				}
-				return _frameClampingStartFrame;
-			}
-			set
-			{
-				if (_frameClampingStartFrame == value)
-				{
-					return;
-				}
-				_frameClampingStartFrame = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frameClampingStartFrame);
+			set => SetProperty(ref _frameClampingStartFrame, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("frameClampingEndFrame")] 
 		public CInt8 FrameClampingEndFrame
 		{
-			get
-			{
-				if (_frameClampingEndFrame == null)
-				{
-					_frameClampingEndFrame = (CInt8) CR2WTypeManager.Create("Int8", "frameClampingEndFrame", cr2w, this);
-				}
-				return _frameClampingEndFrame;
-			}
-			set
-			{
-				if (_frameClampingEndFrame == value)
-				{
-					return;
-				}
-				_frameClampingEndFrame = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frameClampingEndFrame);
+			set => SetProperty(ref _frameClampingEndFrame, value);
 		}
 
 		public animAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

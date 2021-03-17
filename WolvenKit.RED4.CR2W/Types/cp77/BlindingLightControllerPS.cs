@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("reflectorSFX")] 
 		public ReflectorSFX ReflectorSFX
 		{
-			get
-			{
-				if (_reflectorSFX == null)
-				{
-					_reflectorSFX = (ReflectorSFX) CR2WTypeManager.Create("ReflectorSFX", "reflectorSFX", cr2w, this);
-				}
-				return _reflectorSFX;
-			}
-			set
-			{
-				if (_reflectorSFX == value)
-				{
-					return;
-				}
-				_reflectorSFX = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reflectorSFX);
+			set => SetProperty(ref _reflectorSFX, value);
 		}
 
 		public BlindingLightControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

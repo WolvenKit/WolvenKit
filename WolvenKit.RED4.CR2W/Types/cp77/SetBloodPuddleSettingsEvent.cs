@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("shouldSpawnBloodPuddle")] 
 		public CBool ShouldSpawnBloodPuddle
 		{
-			get
-			{
-				if (_shouldSpawnBloodPuddle == null)
-				{
-					_shouldSpawnBloodPuddle = (CBool) CR2WTypeManager.Create("Bool", "shouldSpawnBloodPuddle", cr2w, this);
-				}
-				return _shouldSpawnBloodPuddle;
-			}
-			set
-			{
-				if (_shouldSpawnBloodPuddle == value)
-				{
-					return;
-				}
-				_shouldSpawnBloodPuddle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldSpawnBloodPuddle);
+			set => SetProperty(ref _shouldSpawnBloodPuddle, value);
 		}
 
 		public SetBloodPuddleSettingsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

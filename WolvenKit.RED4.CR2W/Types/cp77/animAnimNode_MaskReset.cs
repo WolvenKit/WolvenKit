@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weightNode")] 
 		public animFloatLink WeightNode
 		{
-			get
-			{
-				if (_weightNode == null)
-				{
-					_weightNode = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "weightNode", cr2w, this);
-				}
-				return _weightNode;
-			}
-			set
-			{
-				if (_weightNode == value)
-				{
-					return;
-				}
-				_weightNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightNode);
+			set => SetProperty(ref _weightNode, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("transforms")] 
 		public CArray<animTransformIndex> Transforms
 		{
-			get
-			{
-				if (_transforms == null)
-				{
-					_transforms = (CArray<animTransformIndex>) CR2WTypeManager.Create("array:animTransformIndex", "transforms", cr2w, this);
-				}
-				return _transforms;
-			}
-			set
-			{
-				if (_transforms == value)
-				{
-					return;
-				}
-				_transforms = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transforms);
+			set => SetProperty(ref _transforms, value);
 		}
 
 		public animAnimNode_MaskReset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

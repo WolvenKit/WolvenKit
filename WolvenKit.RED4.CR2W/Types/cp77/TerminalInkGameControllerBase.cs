@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("layoutID")] 
 		public TweakDBID LayoutID
 		{
-			get
-			{
-				if (_layoutID == null)
-				{
-					_layoutID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "layoutID", cr2w, this);
-				}
-				return _layoutID;
-			}
-			set
-			{
-				if (_layoutID == value)
-				{
-					return;
-				}
-				_layoutID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _layoutID);
+			set => SetProperty(ref _layoutID, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("currentLayoutLibraryID")] 
 		public CName CurrentLayoutLibraryID
 		{
-			get
-			{
-				if (_currentLayoutLibraryID == null)
-				{
-					_currentLayoutLibraryID = (CName) CR2WTypeManager.Create("CName", "currentLayoutLibraryID", cr2w, this);
-				}
-				return _currentLayoutLibraryID;
-			}
-			set
-			{
-				if (_currentLayoutLibraryID == value)
-				{
-					return;
-				}
-				_currentLayoutLibraryID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentLayoutLibraryID);
+			set => SetProperty(ref _currentLayoutLibraryID, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("mainLayout")] 
 		public wCHandle<inkWidget> MainLayout
 		{
-			get
-			{
-				if (_mainLayout == null)
-				{
-					_mainLayout = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "mainLayout", cr2w, this);
-				}
-				return _mainLayout;
-			}
-			set
-			{
-				if (_mainLayout == value)
-				{
-					return;
-				}
-				_mainLayout = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mainLayout);
+			set => SetProperty(ref _mainLayout, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("currentlyActiveDevices")] 
 		public CArray<gamePersistentID> CurrentlyActiveDevices
 		{
-			get
-			{
-				if (_currentlyActiveDevices == null)
-				{
-					_currentlyActiveDevices = (CArray<gamePersistentID>) CR2WTypeManager.Create("array:gamePersistentID", "currentlyActiveDevices", cr2w, this);
-				}
-				return _currentlyActiveDevices;
-			}
-			set
-			{
-				if (_currentlyActiveDevices == value)
-				{
-					return;
-				}
-				_currentlyActiveDevices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentlyActiveDevices);
+			set => SetProperty(ref _currentlyActiveDevices, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("mainDisplayWidget")] 
 		public wCHandle<inkVideoWidget> MainDisplayWidget
 		{
-			get
-			{
-				if (_mainDisplayWidget == null)
-				{
-					_mainDisplayWidget = (wCHandle<inkVideoWidget>) CR2WTypeManager.Create("whandle:inkVideoWidget", "mainDisplayWidget", cr2w, this);
-				}
-				return _mainDisplayWidget;
-			}
-			set
-			{
-				if (_mainDisplayWidget == value)
-				{
-					return;
-				}
-				_mainDisplayWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mainDisplayWidget);
+			set => SetProperty(ref _mainDisplayWidget, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("terminalTitle")] 
 		public CString TerminalTitle
 		{
-			get
-			{
-				if (_terminalTitle == null)
-				{
-					_terminalTitle = (CString) CR2WTypeManager.Create("String", "terminalTitle", cr2w, this);
-				}
-				return _terminalTitle;
-			}
-			set
-			{
-				if (_terminalTitle == value)
-				{
-					return;
-				}
-				_terminalTitle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _terminalTitle);
+			set => SetProperty(ref _terminalTitle, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("onGlitchingStateChangedListener")] 
 		public CUInt32 OnGlitchingStateChangedListener
 		{
-			get
-			{
-				if (_onGlitchingStateChangedListener == null)
-				{
-					_onGlitchingStateChangedListener = (CUInt32) CR2WTypeManager.Create("Uint32", "onGlitchingStateChangedListener", cr2w, this);
-				}
-				return _onGlitchingStateChangedListener;
-			}
-			set
-			{
-				if (_onGlitchingStateChangedListener == value)
-				{
-					return;
-				}
-				_onGlitchingStateChangedListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onGlitchingStateChangedListener);
+			set => SetProperty(ref _onGlitchingStateChangedListener, value);
 		}
 
 		public TerminalInkGameControllerBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

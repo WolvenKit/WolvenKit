@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targets")] 
 		public CArray<gamesmartGunUITargetParameters> Targets
 		{
-			get
-			{
-				if (_targets == null)
-				{
-					_targets = (CArray<gamesmartGunUITargetParameters>) CR2WTypeManager.Create("array:gamesmartGunUITargetParameters", "targets", cr2w, this);
-				}
-				return _targets;
-			}
-			set
-			{
-				if (_targets == value)
-				{
-					return;
-				}
-				_targets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targets);
+			set => SetProperty(ref _targets, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sight")] 
 		public gamesmartGunUISightParameters Sight
 		{
-			get
-			{
-				if (_sight == null)
-				{
-					_sight = (gamesmartGunUISightParameters) CR2WTypeManager.Create("gamesmartGunUISightParameters", "sight", cr2w, this);
-				}
-				return _sight;
-			}
-			set
-			{
-				if (_sight == value)
-				{
-					return;
-				}
-				_sight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sight);
+			set => SetProperty(ref _sight, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("crosshairPos")] 
 		public Vector2 CrosshairPos
 		{
-			get
-			{
-				if (_crosshairPos == null)
-				{
-					_crosshairPos = (Vector2) CR2WTypeManager.Create("Vector2", "crosshairPos", cr2w, this);
-				}
-				return _crosshairPos;
-			}
-			set
-			{
-				if (_crosshairPos == value)
-				{
-					return;
-				}
-				_crosshairPos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _crosshairPos);
+			set => SetProperty(ref _crosshairPos, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hasRequiredCyberware")] 
 		public CBool HasRequiredCyberware
 		{
-			get
-			{
-				if (_hasRequiredCyberware == null)
-				{
-					_hasRequiredCyberware = (CBool) CR2WTypeManager.Create("Bool", "hasRequiredCyberware", cr2w, this);
-				}
-				return _hasRequiredCyberware;
-			}
-			set
-			{
-				if (_hasRequiredCyberware == value)
-				{
-					return;
-				}
-				_hasRequiredCyberware = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasRequiredCyberware);
+			set => SetProperty(ref _hasRequiredCyberware, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("timeToRemoveOccludedTarget")] 
 		public CFloat TimeToRemoveOccludedTarget
 		{
-			get
-			{
-				if (_timeToRemoveOccludedTarget == null)
-				{
-					_timeToRemoveOccludedTarget = (CFloat) CR2WTypeManager.Create("Float", "timeToRemoveOccludedTarget", cr2w, this);
-				}
-				return _timeToRemoveOccludedTarget;
-			}
-			set
-			{
-				if (_timeToRemoveOccludedTarget == value)
-				{
-					return;
-				}
-				_timeToRemoveOccludedTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeToRemoveOccludedTarget);
+			set => SetProperty(ref _timeToRemoveOccludedTarget, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("timeToLock")] 
 		public CFloat TimeToLock
 		{
-			get
-			{
-				if (_timeToLock == null)
-				{
-					_timeToLock = (CFloat) CR2WTypeManager.Create("Float", "timeToLock", cr2w, this);
-				}
-				return _timeToLock;
-			}
-			set
-			{
-				if (_timeToLock == value)
-				{
-					return;
-				}
-				_timeToLock = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeToLock);
+			set => SetProperty(ref _timeToLock, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("timeToUnlock")] 
 		public CFloat TimeToUnlock
 		{
-			get
-			{
-				if (_timeToUnlock == null)
-				{
-					_timeToUnlock = (CFloat) CR2WTypeManager.Create("Float", "timeToUnlock", cr2w, this);
-				}
-				return _timeToUnlock;
-			}
-			set
-			{
-				if (_timeToUnlock == value)
-				{
-					return;
-				}
-				_timeToUnlock = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeToUnlock);
+			set => SetProperty(ref _timeToUnlock, value);
 		}
 
 		public gamesmartGunUIParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

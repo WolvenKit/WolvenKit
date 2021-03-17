@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("healthbar")] 
 		public CHandle<CompanionHealthBarGameController> Healthbar
 		{
-			get
-			{
-				if (_healthbar == null)
-				{
-					_healthbar = (CHandle<CompanionHealthBarGameController>) CR2WTypeManager.Create("handle:CompanionHealthBarGameController", "healthbar", cr2w, this);
-				}
-				return _healthbar;
-			}
-			set
-			{
-				if (_healthbar == value)
-				{
-					return;
-				}
-				_healthbar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _healthbar);
+			set => SetProperty(ref _healthbar, value);
 		}
 
 		public CompanionHealthStatListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

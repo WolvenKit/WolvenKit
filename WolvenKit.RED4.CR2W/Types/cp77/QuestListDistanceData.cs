@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objective")] 
 		public wCHandle<gameJournalQuestObjective> Objective
 		{
-			get
-			{
-				if (_objective == null)
-				{
-					_objective = (wCHandle<gameJournalQuestObjective>) CR2WTypeManager.Create("whandle:gameJournalQuestObjective", "objective", cr2w, this);
-				}
-				return _objective;
-			}
-			set
-			{
-				if (_objective == value)
-				{
-					return;
-				}
-				_objective = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objective);
+			set => SetProperty(ref _objective, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("distance")] 
 		public CFloat Distance
 		{
-			get
-			{
-				if (_distance == null)
-				{
-					_distance = (CFloat) CR2WTypeManager.Create("Float", "distance", cr2w, this);
-				}
-				return _distance;
-			}
-			set
-			{
-				if (_distance == value)
-				{
-					return;
-				}
-				_distance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distance);
+			set => SetProperty(ref _distance, value);
 		}
 
 		public QuestListDistanceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

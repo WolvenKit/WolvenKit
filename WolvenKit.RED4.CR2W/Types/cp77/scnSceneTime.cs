@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stu")] 
 		public CUInt32 Stu
 		{
-			get
-			{
-				if (_stu == null)
-				{
-					_stu = (CUInt32) CR2WTypeManager.Create("Uint32", "stu", cr2w, this);
-				}
-				return _stu;
-			}
-			set
-			{
-				if (_stu == value)
-				{
-					return;
-				}
-				_stu = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stu);
+			set => SetProperty(ref _stu, value);
 		}
 
 		public scnSceneTime(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

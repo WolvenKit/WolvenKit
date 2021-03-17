@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weaponLocalBB")] 
 		public CHandle<gameIBlackboard> WeaponLocalBB
 		{
-			get
-			{
-				if (_weaponLocalBB == null)
-				{
-					_weaponLocalBB = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "weaponLocalBB", cr2w, this);
-				}
-				return _weaponLocalBB;
-			}
-			set
-			{
-				if (_weaponLocalBB == value)
-				{
-					return;
-				}
-				_weaponLocalBB = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponLocalBB);
+			set => SetProperty(ref _weaponLocalBB, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("weaponBBID")] 
 		public CUInt32 WeaponBBID
 		{
-			get
-			{
-				if (_weaponBBID == null)
-				{
-					_weaponBBID = (CUInt32) CR2WTypeManager.Create("Uint32", "weaponBBID", cr2w, this);
-				}
-				return _weaponBBID;
-			}
-			set
-			{
-				if (_weaponBBID == value)
-				{
-					return;
-				}
-				_weaponBBID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponBBID);
+			set => SetProperty(ref _weaponBBID, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("meleeWeaponState")] 
 		public CEnum<gamePSMMeleeWeapon> MeleeWeaponState
 		{
-			get
-			{
-				if (_meleeWeaponState == null)
-				{
-					_meleeWeaponState = (CEnum<gamePSMMeleeWeapon>) CR2WTypeManager.Create("gamePSMMeleeWeapon", "meleeWeaponState", cr2w, this);
-				}
-				return _meleeWeaponState;
-			}
-			set
-			{
-				if (_meleeWeaponState == value)
-				{
-					return;
-				}
-				_meleeWeaponState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meleeWeaponState);
+			set => SetProperty(ref _meleeWeaponState, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("targetColorChange")] 
 		public inkWidgetReference TargetColorChange
 		{
-			get
-			{
-				if (_targetColorChange == null)
-				{
-					_targetColorChange = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "targetColorChange", cr2w, this);
-				}
-				return _targetColorChange;
-			}
-			set
-			{
-				if (_targetColorChange == value)
-				{
-					return;
-				}
-				_targetColorChange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetColorChange);
+			set => SetProperty(ref _targetColorChange, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("holdAnim")] 
 		public CHandle<inkanimProxy> HoldAnim
 		{
-			get
-			{
-				if (_holdAnim == null)
-				{
-					_holdAnim = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "holdAnim", cr2w, this);
-				}
-				return _holdAnim;
-			}
-			set
-			{
-				if (_holdAnim == value)
-				{
-					return;
-				}
-				_holdAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _holdAnim);
+			set => SetProperty(ref _holdAnim, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("aimAnim")] 
 		public CHandle<inkanimProxy> AimAnim
 		{
-			get
-			{
-				if (_aimAnim == null)
-				{
-					_aimAnim = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "aimAnim", cr2w, this);
-				}
-				return _aimAnim;
-			}
-			set
-			{
-				if (_aimAnim == value)
-				{
-					return;
-				}
-				_aimAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aimAnim);
+			set => SetProperty(ref _aimAnim, value);
 		}
 
 		public CrosshairGameController_Mantis_Blade(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("startTime")] 
 		public CFloat StartTime
 		{
-			get
-			{
-				if (_startTime == null)
-				{
-					_startTime = (CFloat) CR2WTypeManager.Create("Float", "startTime", cr2w, this);
-				}
-				return _startTime;
-			}
-			set
-			{
-				if (_startTime == value)
-				{
-					return;
-				}
-				_startTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startTime);
+			set => SetProperty(ref _startTime, value);
 		}
 
 		public inkanimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

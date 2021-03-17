@@ -27,14 +27,19 @@ namespace WolvenKit.RED4.CR2W.Types
 
         [Browsable(false)]
         public List<int> Flags { get; set; }
-        public string Elementtype { get; set; }
+
+        public string Elementtype
+        {
+            get => REDReflection.GetREDTypeString(typeof(T));
+            set => throw new NotSupportedException();
+        }
         public Type InnerType => this.GetType().GetGenericArguments().Single();
         #endregion
 
 
 
         [Browsable(false)]
-        public override string REDType => $"array:{Elementtype}";
+        public override string REDType => REDReflection.GetREDTypeString(GetType());
 
         public override List<IEditableVariable> GetEditableVariables()
         {
@@ -52,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
             for (int i = 0; i < elementcount; i++)
             {
-                var element = CR2WTypeManager.Create(Elementtype, i.ToString(), cr2w, this);
+                var element = Create<T>(i.ToString(), new int[0]);
 
                 // no actual way to find out the elementsize of an array element
                 // bacause cdpr serialized classes have no fixed size

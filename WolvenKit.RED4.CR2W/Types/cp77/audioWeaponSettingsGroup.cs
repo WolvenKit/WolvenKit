@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("playerSettings")] 
 		public CName PlayerSettings
 		{
-			get
-			{
-				if (_playerSettings == null)
-				{
-					_playerSettings = (CName) CR2WTypeManager.Create("CName", "playerSettings", cr2w, this);
-				}
-				return _playerSettings;
-			}
-			set
-			{
-				if (_playerSettings == value)
-				{
-					return;
-				}
-				_playerSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerSettings);
+			set => SetProperty(ref _playerSettings, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("playerSilenced")] 
 		public CName PlayerSilenced
 		{
-			get
-			{
-				if (_playerSilenced == null)
-				{
-					_playerSilenced = (CName) CR2WTypeManager.Create("CName", "playerSilenced", cr2w, this);
-				}
-				return _playerSilenced;
-			}
-			set
-			{
-				if (_playerSilenced == value)
-				{
-					return;
-				}
-				_playerSilenced = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerSilenced);
+			set => SetProperty(ref _playerSilenced, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("npcSettings")] 
 		public CName NpcSettings
 		{
-			get
-			{
-				if (_npcSettings == null)
-				{
-					_npcSettings = (CName) CR2WTypeManager.Create("CName", "npcSettings", cr2w, this);
-				}
-				return _npcSettings;
-			}
-			set
-			{
-				if (_npcSettings == value)
-				{
-					return;
-				}
-				_npcSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _npcSettings);
+			set => SetProperty(ref _npcSettings, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("npcSilenced")] 
 		public CName NpcSilenced
 		{
-			get
-			{
-				if (_npcSilenced == null)
-				{
-					_npcSilenced = (CName) CR2WTypeManager.Create("CName", "npcSilenced", cr2w, this);
-				}
-				return _npcSilenced;
-			}
-			set
-			{
-				if (_npcSilenced == value)
-				{
-					return;
-				}
-				_npcSilenced = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _npcSilenced);
+			set => SetProperty(ref _npcSilenced, value);
 		}
 
 		public audioWeaponSettingsGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

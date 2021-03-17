@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sensePreset")] 
 		public TweakDBID SensePreset
 		{
-			get
-			{
-				if (_sensePreset == null)
-				{
-					_sensePreset = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "sensePreset", cr2w, this);
-				}
-				return _sensePreset;
-			}
-			set
-			{
-				if (_sensePreset == value)
-				{
-					return;
-				}
-				_sensePreset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sensePreset);
+			set => SetProperty(ref _sensePreset, value);
 		}
 
 		public gameHACK_UseSensePresetEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

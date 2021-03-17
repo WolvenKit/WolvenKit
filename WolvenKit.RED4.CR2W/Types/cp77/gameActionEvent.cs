@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("eventAction")] 
 		public CName EventAction
 		{
-			get
-			{
-				if (_eventAction == null)
-				{
-					_eventAction = (CName) CR2WTypeManager.Create("CName", "eventAction", cr2w, this);
-				}
-				return _eventAction;
-			}
-			set
-			{
-				if (_eventAction == value)
-				{
-					return;
-				}
-				_eventAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventAction);
+			set => SetProperty(ref _eventAction, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("internalEvent")] 
 		public CHandle<gameActionInternalEvent> InternalEvent
 		{
-			get
-			{
-				if (_internalEvent == null)
-				{
-					_internalEvent = (CHandle<gameActionInternalEvent>) CR2WTypeManager.Create("handle:gameActionInternalEvent", "internalEvent", cr2w, this);
-				}
-				return _internalEvent;
-			}
-			set
-			{
-				if (_internalEvent == value)
-				{
-					return;
-				}
-				_internalEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _internalEvent);
+			set => SetProperty(ref _internalEvent, value);
 		}
 
 		public gameActionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

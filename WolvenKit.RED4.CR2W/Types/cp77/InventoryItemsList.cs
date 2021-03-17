@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("InventoryItemName")] 
 		public CName InventoryItemName
 		{
-			get
-			{
-				if (_inventoryItemName == null)
-				{
-					_inventoryItemName = (CName) CR2WTypeManager.Create("CName", "InventoryItemName", cr2w, this);
-				}
-				return _inventoryItemName;
-			}
-			set
-			{
-				if (_inventoryItemName == value)
-				{
-					return;
-				}
-				_inventoryItemName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryItemName);
+			set => SetProperty(ref _inventoryItemName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ItemsLayoutRef")] 
 		public inkCompoundWidgetReference ItemsLayoutRef
 		{
-			get
-			{
-				if (_itemsLayoutRef == null)
-				{
-					_itemsLayoutRef = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "ItemsLayoutRef", cr2w, this);
-				}
-				return _itemsLayoutRef;
-			}
-			set
-			{
-				if (_itemsLayoutRef == value)
-				{
-					return;
-				}
-				_itemsLayoutRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemsLayoutRef);
+			set => SetProperty(ref _itemsLayoutRef, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("TooltipsData")] 
 		public CArray<CHandle<ATooltipData>> TooltipsData
 		{
-			get
-			{
-				if (_tooltipsData == null)
-				{
-					_tooltipsData = (CArray<CHandle<ATooltipData>>) CR2WTypeManager.Create("array:handle:ATooltipData", "TooltipsData", cr2w, this);
-				}
-				return _tooltipsData;
-			}
-			set
-			{
-				if (_tooltipsData == value)
-				{
-					return;
-				}
-				_tooltipsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsData);
+			set => SetProperty(ref _tooltipsData, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("ItemsOwner")] 
 		public wCHandle<gameObject> ItemsOwner
 		{
-			get
-			{
-				if (_itemsOwner == null)
-				{
-					_itemsOwner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "ItemsOwner", cr2w, this);
-				}
-				return _itemsOwner;
-			}
-			set
-			{
-				if (_itemsOwner == value)
-				{
-					return;
-				}
-				_itemsOwner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemsOwner);
+			set => SetProperty(ref _itemsOwner, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ItemsLayout")] 
 		public wCHandle<inkCompoundWidget> ItemsLayout
 		{
-			get
-			{
-				if (_itemsLayout == null)
-				{
-					_itemsLayout = (wCHandle<inkCompoundWidget>) CR2WTypeManager.Create("whandle:inkCompoundWidget", "ItemsLayout", cr2w, this);
-				}
-				return _itemsLayout;
-			}
-			set
-			{
-				if (_itemsLayout == value)
-				{
-					return;
-				}
-				_itemsLayout = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemsLayout);
+			set => SetProperty(ref _itemsLayout, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("InventoryItems")] 
 		public CArray<wCHandle<inkWidget>> InventoryItems
 		{
-			get
-			{
-				if (_inventoryItems == null)
-				{
-					_inventoryItems = (CArray<wCHandle<inkWidget>>) CR2WTypeManager.Create("array:whandle:inkWidget", "InventoryItems", cr2w, this);
-				}
-				return _inventoryItems;
-			}
-			set
-			{
-				if (_inventoryItems == value)
-				{
-					return;
-				}
-				_inventoryItems = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryItems);
+			set => SetProperty(ref _inventoryItems, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("IsDevice")] 
 		public CBool IsDevice
 		{
-			get
-			{
-				if (_isDevice == null)
-				{
-					_isDevice = (CBool) CR2WTypeManager.Create("Bool", "IsDevice", cr2w, this);
-				}
-				return _isDevice;
-			}
-			set
-			{
-				if (_isDevice == value)
-				{
-					return;
-				}
-				_isDevice = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDevice);
+			set => SetProperty(ref _isDevice, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
-			get
-			{
-				if (_inventoryManager == null)
-				{
-					_inventoryManager = (CHandle<InventoryDataManagerV2>) CR2WTypeManager.Create("handle:InventoryDataManagerV2", "InventoryManager", cr2w, this);
-				}
-				return _inventoryManager;
-			}
-			set
-			{
-				if (_inventoryManager == value)
-				{
-					return;
-				}
-				_inventoryManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryManager);
+			set => SetProperty(ref _inventoryManager, value);
 		}
 
 		public InventoryItemsList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

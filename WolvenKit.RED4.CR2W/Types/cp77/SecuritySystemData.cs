@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("suppressIncomingEvents")] 
 		public CBool SuppressIncomingEvents
 		{
-			get
-			{
-				if (_suppressIncomingEvents == null)
-				{
-					_suppressIncomingEvents = (CBool) CR2WTypeManager.Create("Bool", "suppressIncomingEvents", cr2w, this);
-				}
-				return _suppressIncomingEvents;
-			}
-			set
-			{
-				if (_suppressIncomingEvents == value)
-				{
-					return;
-				}
-				_suppressIncomingEvents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _suppressIncomingEvents);
+			set => SetProperty(ref _suppressIncomingEvents, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("suppressOutgoingEvents")] 
 		public CBool SuppressOutgoingEvents
 		{
-			get
-			{
-				if (_suppressOutgoingEvents == null)
-				{
-					_suppressOutgoingEvents = (CBool) CR2WTypeManager.Create("Bool", "suppressOutgoingEvents", cr2w, this);
-				}
-				return _suppressOutgoingEvents;
-			}
-			set
-			{
-				if (_suppressOutgoingEvents == value)
-				{
-					return;
-				}
-				_suppressOutgoingEvents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _suppressOutgoingEvents);
+			set => SetProperty(ref _suppressOutgoingEvents, value);
 		}
 
 		public SecuritySystemData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

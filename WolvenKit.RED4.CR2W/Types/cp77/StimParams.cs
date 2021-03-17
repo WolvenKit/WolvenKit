@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("reactionOutput")] 
 		public ReactionOutput ReactionOutput
 		{
-			get
-			{
-				if (_reactionOutput == null)
-				{
-					_reactionOutput = (ReactionOutput) CR2WTypeManager.Create("ReactionOutput", "reactionOutput", cr2w, this);
-				}
-				return _reactionOutput;
-			}
-			set
-			{
-				if (_reactionOutput == value)
-				{
-					return;
-				}
-				_reactionOutput = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reactionOutput);
+			set => SetProperty(ref _reactionOutput, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("stimData")] 
 		public StimEventData StimData
 		{
-			get
-			{
-				if (_stimData == null)
-				{
-					_stimData = (StimEventData) CR2WTypeManager.Create("StimEventData", "stimData", cr2w, this);
-				}
-				return _stimData;
-			}
-			set
-			{
-				if (_stimData == value)
-				{
-					return;
-				}
-				_stimData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stimData);
+			set => SetProperty(ref _stimData, value);
 		}
 
 		public StimParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

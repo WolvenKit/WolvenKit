@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("None")] 
 		public gamebbID None
 		{
-			get
-			{
-				if (_none == null)
-				{
-					_none = (gamebbID) CR2WTypeManager.Create("gamebbID", "None", cr2w, this);
-				}
-				return _none;
-			}
-			set
-			{
-				if (_none == value)
-				{
-					return;
-				}
-				_none = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _none);
+			set => SetProperty(ref _none, value);
 		}
 
 		public gamebbScriptID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("originalNotification")] 
 		public CHandle<SecuritySystemInput> OriginalNotification
 		{
-			get
-			{
-				if (_originalNotification == null)
-				{
-					_originalNotification = (CHandle<SecuritySystemInput>) CR2WTypeManager.Create("handle:SecuritySystemInput", "originalNotification", cr2w, this);
-				}
-				return _originalNotification;
-			}
-			set
-			{
-				if (_originalNotification == value)
-				{
-					return;
-				}
-				_originalNotification = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _originalNotification);
+			set => SetProperty(ref _originalNotification, value);
 		}
 
 		public AutomaticDeescalationEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

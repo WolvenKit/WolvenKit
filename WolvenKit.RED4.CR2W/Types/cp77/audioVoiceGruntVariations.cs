@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cachedVariations")] 
 		public CArray<CName> CachedVariations
 		{
-			get
-			{
-				if (_cachedVariations == null)
-				{
-					_cachedVariations = (CArray<CName>) CR2WTypeManager.Create("array:CName", "cachedVariations", cr2w, this);
-				}
-				return _cachedVariations;
-			}
-			set
-			{
-				if (_cachedVariations == value)
-				{
-					return;
-				}
-				_cachedVariations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cachedVariations);
+			set => SetProperty(ref _cachedVariations, value);
 		}
 
 		public audioVoiceGruntVariations(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

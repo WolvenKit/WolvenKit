@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("health")] 
 		public CFloat Health
 		{
-			get
-			{
-				if (_health == null)
-				{
-					_health = (CFloat) CR2WTypeManager.Create("Float", "health", cr2w, this);
-				}
-				return _health;
-			}
-			set
-			{
-				if (_health == value)
-				{
-					return;
-				}
-				_health = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _health);
+			set => SetProperty(ref _health, value);
 		}
 
 		public gameMuppetHealthState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

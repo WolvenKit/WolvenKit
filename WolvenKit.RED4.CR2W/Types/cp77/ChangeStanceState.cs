@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("newState")] 
 		public CEnum<gamedataNPCStanceState> NewState
 		{
-			get
-			{
-				if (_newState == null)
-				{
-					_newState = (CEnum<gamedataNPCStanceState>) CR2WTypeManager.Create("gamedataNPCStanceState", "newState", cr2w, this);
-				}
-				return _newState;
-			}
-			set
-			{
-				if (_newState == value)
-				{
-					return;
-				}
-				_newState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newState);
+			set => SetProperty(ref _newState, value);
 		}
 
 		public ChangeStanceState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

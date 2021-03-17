@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("triggerComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerComponent
 		{
-			get
-			{
-				if (_triggerComponent == null)
-				{
-					_triggerComponent = (CHandle<gameStaticTriggerAreaComponent>) CR2WTypeManager.Create("handle:gameStaticTriggerAreaComponent", "triggerComponent", cr2w, this);
-				}
-				return _triggerComponent;
-			}
-			set
-			{
-				if (_triggerComponent == value)
-				{
-					return;
-				}
-				_triggerComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerComponent);
+			set => SetProperty(ref _triggerComponent, value);
 		}
 
 		[Ordinal(94)] 
 		[RED("triggerExitComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerExitComponent
 		{
-			get
-			{
-				if (_triggerExitComponent == null)
-				{
-					_triggerExitComponent = (CHandle<gameStaticTriggerAreaComponent>) CR2WTypeManager.Create("handle:gameStaticTriggerAreaComponent", "triggerExitComponent", cr2w, this);
-				}
-				return _triggerExitComponent;
-			}
-			set
-			{
-				if (_triggerExitComponent == value)
-				{
-					return;
-				}
-				_triggerExitComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerExitComponent);
+			set => SetProperty(ref _triggerExitComponent, value);
 		}
 
 		[Ordinal(95)] 
 		[RED("aduiComponent")] 
 		public CHandle<WorldWidgetComponent> AduiComponent
 		{
-			get
-			{
-				if (_aduiComponent == null)
-				{
-					_aduiComponent = (CHandle<WorldWidgetComponent>) CR2WTypeManager.Create("handle:WorldWidgetComponent", "aduiComponent", cr2w, this);
-				}
-				return _aduiComponent;
-			}
-			set
-			{
-				if (_aduiComponent == value)
-				{
-					return;
-				}
-				_aduiComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aduiComponent);
+			set => SetProperty(ref _aduiComponent, value);
 		}
 
 		[Ordinal(96)] 
 		[RED("showAd")] 
 		public CBool ShowAd
 		{
-			get
-			{
-				if (_showAd == null)
-				{
-					_showAd = (CBool) CR2WTypeManager.Create("Bool", "showAd", cr2w, this);
-				}
-				return _showAd;
-			}
-			set
-			{
-				if (_showAd == value)
-				{
-					return;
-				}
-				_showAd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showAd);
+			set => SetProperty(ref _showAd, value);
 		}
 
 		[Ordinal(97)] 
 		[RED("showVendor")] 
 		public CBool ShowVendor
 		{
-			get
-			{
-				if (_showVendor == null)
-				{
-					_showVendor = (CBool) CR2WTypeManager.Create("Bool", "showVendor", cr2w, this);
-				}
-				return _showVendor;
-			}
-			set
-			{
-				if (_showVendor == value)
-				{
-					return;
-				}
-				_showVendor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showVendor);
+			set => SetProperty(ref _showVendor, value);
 		}
 
 		public InteractiveAd(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

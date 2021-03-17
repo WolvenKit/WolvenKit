@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("component")] 
 		public CHandle<gameDeviceCameraControlComponent> Component
 		{
-			get
-			{
-				if (_component == null)
-				{
-					_component = (CHandle<gameDeviceCameraControlComponent>) CR2WTypeManager.Create("handle:gameDeviceCameraControlComponent", "component", cr2w, this);
-				}
-				return _component;
-			}
-			set
-			{
-				if (_component == value)
-				{
-					return;
-				}
-				_component = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _component);
+			set => SetProperty(ref _component, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("register")] 
 		public CBool Register
 		{
-			get
-			{
-				if (_register == null)
-				{
-					_register = (CBool) CR2WTypeManager.Create("Bool", "register", cr2w, this);
-				}
-				return _register;
-			}
-			set
-			{
-				if (_register == value)
-				{
-					return;
-				}
-				_register = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _register);
+			set => SetProperty(ref _register, value);
 		}
 
 		public gameeventsDeviceRegisterCameraControlOnPuppetEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

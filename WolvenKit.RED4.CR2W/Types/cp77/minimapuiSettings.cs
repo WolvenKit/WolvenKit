@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("showTime")] 
 		public CFloat ShowTime
 		{
-			get
-			{
-				if (_showTime == null)
-				{
-					_showTime = (CFloat) CR2WTypeManager.Create("Float", "showTime", cr2w, this);
-				}
-				return _showTime;
-			}
-			set
-			{
-				if (_showTime == value)
-				{
-					return;
-				}
-				_showTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showTime);
+			set => SetProperty(ref _showTime, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hideTime")] 
 		public CFloat HideTime
 		{
-			get
-			{
-				if (_hideTime == null)
-				{
-					_hideTime = (CFloat) CR2WTypeManager.Create("Float", "hideTime", cr2w, this);
-				}
-				return _hideTime;
-			}
-			set
-			{
-				if (_hideTime == value)
-				{
-					return;
-				}
-				_hideTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hideTime);
+			set => SetProperty(ref _hideTime, value);
 		}
 
 		public minimapuiSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

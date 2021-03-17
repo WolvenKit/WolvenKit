@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("appearance")] 
 		public CName Appearance
 		{
-			get
-			{
-				if (_appearance == null)
-				{
-					_appearance = (CName) CR2WTypeManager.Create("CName", "appearance", cr2w, this);
-				}
-				return _appearance;
-			}
-			set
-			{
-				if (_appearance == value)
-				{
-					return;
-				}
-				_appearance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _appearance);
+			set => SetProperty(ref _appearance, value);
 		}
 
 		public SetAppearance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("pushOtherVehiclesAside")] 
 		public CBool PushOtherVehiclesAside
 		{
-			get
-			{
-				if (_pushOtherVehiclesAside == null)
-				{
-					_pushOtherVehiclesAside = (CBool) CR2WTypeManager.Create("Bool", "pushOtherVehiclesAside", cr2w, this);
-				}
-				return _pushOtherVehiclesAside;
-			}
-			set
-			{
-				if (_pushOtherVehiclesAside == value)
-				{
-					return;
-				}
-				_pushOtherVehiclesAside = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pushOtherVehiclesAside);
+			set => SetProperty(ref _pushOtherVehiclesAside, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("needDriver")] 
 		public CBool NeedDriver
 		{
-			get
-			{
-				if (_needDriver == null)
-				{
-					_needDriver = (CBool) CR2WTypeManager.Create("Bool", "needDriver", cr2w, this);
-				}
-				return _needDriver;
-			}
-			set
-			{
-				if (_needDriver == value)
-				{
-					return;
-				}
-				_needDriver = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _needDriver);
+			set => SetProperty(ref _needDriver, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("secureTimeOut")] 
 		public CFloat SecureTimeOut
 		{
-			get
-			{
-				if (_secureTimeOut == null)
-				{
-					_secureTimeOut = (CFloat) CR2WTypeManager.Create("Float", "secureTimeOut", cr2w, this);
-				}
-				return _secureTimeOut;
-			}
-			set
-			{
-				if (_secureTimeOut == value)
-				{
-					return;
-				}
-				_secureTimeOut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _secureTimeOut);
+			set => SetProperty(ref _secureTimeOut, value);
 		}
 
 		public questVehicleSpecificCommandParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

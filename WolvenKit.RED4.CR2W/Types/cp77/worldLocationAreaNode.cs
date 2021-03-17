@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("locationName")] 
 		public CString LocationName
 		{
-			get
-			{
-				if (_locationName == null)
-				{
-					_locationName = (CString) CR2WTypeManager.Create("String", "locationName", cr2w, this);
-				}
-				return _locationName;
-			}
-			set
-			{
-				if (_locationName == value)
-				{
-					return;
-				}
-				_locationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _locationName);
+			set => SetProperty(ref _locationName, value);
 		}
 
 		public worldLocationAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

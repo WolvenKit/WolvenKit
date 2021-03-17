@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("source")] 
 		public CName Source
 		{
-			get
-			{
-				if (_source == null)
-				{
-					_source = (CName) CR2WTypeManager.Create("CName", "source", cr2w, this);
-				}
-				return _source;
-			}
-			set
-			{
-				if (_source == value)
-				{
-					return;
-				}
-				_source = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
 		}
 
 		public SourceTypeHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

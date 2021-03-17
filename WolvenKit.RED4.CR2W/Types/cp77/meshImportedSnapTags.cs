@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("includeTags")] 
 		public CArray<CName> IncludeTags
 		{
-			get
-			{
-				if (_includeTags == null)
-				{
-					_includeTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "includeTags", cr2w, this);
-				}
-				return _includeTags;
-			}
-			set
-			{
-				if (_includeTags == value)
-				{
-					return;
-				}
-				_includeTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _includeTags);
+			set => SetProperty(ref _includeTags, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("excludeTags")] 
 		public CArray<CName> ExcludeTags
 		{
-			get
-			{
-				if (_excludeTags == null)
-				{
-					_excludeTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "excludeTags", cr2w, this);
-				}
-				return _excludeTags;
-			}
-			set
-			{
-				if (_excludeTags == value)
-				{
-					return;
-				}
-				_excludeTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _excludeTags);
+			set => SetProperty(ref _excludeTags, value);
 		}
 
 		public meshImportedSnapTags(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

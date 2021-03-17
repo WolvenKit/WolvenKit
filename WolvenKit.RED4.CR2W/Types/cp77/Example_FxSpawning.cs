@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("effect")] 
 		public gameFxResource Effect
 		{
-			get
-			{
-				if (_effect == null)
-				{
-					_effect = (gameFxResource) CR2WTypeManager.Create("gameFxResource", "effect", cr2w, this);
-				}
-				return _effect;
-			}
-			set
-			{
-				if (_effect == value)
-				{
-					return;
-				}
-				_effect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effect);
+			set => SetProperty(ref _effect, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("effectBeam")] 
 		public gameFxResource EffectBeam
 		{
-			get
-			{
-				if (_effectBeam == null)
-				{
-					_effectBeam = (gameFxResource) CR2WTypeManager.Create("gameFxResource", "effectBeam", cr2w, this);
-				}
-				return _effectBeam;
-			}
-			set
-			{
-				if (_effectBeam == value)
-				{
-					return;
-				}
-				_effectBeam = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectBeam);
+			set => SetProperty(ref _effectBeam, value);
 		}
 
 		public Example_FxSpawning(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

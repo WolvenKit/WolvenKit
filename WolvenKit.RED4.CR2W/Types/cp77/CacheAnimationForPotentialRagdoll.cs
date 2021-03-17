@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("currentBehavior")] 
 		public CName CurrentBehavior
 		{
-			get
-			{
-				if (_currentBehavior == null)
-				{
-					_currentBehavior = (CName) CR2WTypeManager.Create("CName", "currentBehavior", cr2w, this);
-				}
-				return _currentBehavior;
-			}
-			set
-			{
-				if (_currentBehavior == value)
-				{
-					return;
-				}
-				_currentBehavior = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentBehavior);
+			set => SetProperty(ref _currentBehavior, value);
 		}
 
 		public CacheAnimationForPotentialRagdoll(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

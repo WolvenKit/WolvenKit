@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("voiceTags")] 
 		public CArray<CName> VoiceTags
 		{
-			get
-			{
-				if (_voiceTags == null)
-				{
-					_voiceTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "voiceTags", cr2w, this);
-				}
-				return _voiceTags;
-			}
-			set
-			{
-				if (_voiceTags == value)
-				{
-					return;
-				}
-				_voiceTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _voiceTags);
+			set => SetProperty(ref _voiceTags, value);
 		}
 
 		public audioVoiceTagGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

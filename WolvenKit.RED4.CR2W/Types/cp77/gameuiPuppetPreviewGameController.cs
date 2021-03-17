@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cameraController")] 
 		public gameuiPuppetPreviewCameraController CameraController
 		{
-			get
-			{
-				if (_cameraController == null)
-				{
-					_cameraController = (gameuiPuppetPreviewCameraController) CR2WTypeManager.Create("gameuiPuppetPreviewCameraController", "cameraController", cr2w, this);
-				}
-				return _cameraController;
-			}
-			set
-			{
-				if (_cameraController == value)
-				{
-					return;
-				}
-				_cameraController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameraController);
+			set => SetProperty(ref _cameraController, value);
 		}
 
 		public gameuiPuppetPreviewGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

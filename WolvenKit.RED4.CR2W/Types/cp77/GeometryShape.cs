@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vertices")] 
 		public CArray<Vector3> Vertices
 		{
-			get
-			{
-				if (_vertices == null)
-				{
-					_vertices = (CArray<Vector3>) CR2WTypeManager.Create("array:Vector3", "vertices", cr2w, this);
-				}
-				return _vertices;
-			}
-			set
-			{
-				if (_vertices == value)
-				{
-					return;
-				}
-				_vertices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vertices);
+			set => SetProperty(ref _vertices, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("indices")] 
 		public CArray<CUInt16> Indices
 		{
-			get
-			{
-				if (_indices == null)
-				{
-					_indices = (CArray<CUInt16>) CR2WTypeManager.Create("array:Uint16", "indices", cr2w, this);
-				}
-				return _indices;
-			}
-			set
-			{
-				if (_indices == value)
-				{
-					return;
-				}
-				_indices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _indices);
+			set => SetProperty(ref _indices, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("faces")] 
 		public CArray<GeometryShapeFace> Faces
 		{
-			get
-			{
-				if (_faces == null)
-				{
-					_faces = (CArray<GeometryShapeFace>) CR2WTypeManager.Create("array:GeometryShapeFace", "faces", cr2w, this);
-				}
-				return _faces;
-			}
-			set
-			{
-				if (_faces == value)
-				{
-					return;
-				}
-				_faces = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _faces);
+			set => SetProperty(ref _faces, value);
 		}
 
 		public GeometryShape(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

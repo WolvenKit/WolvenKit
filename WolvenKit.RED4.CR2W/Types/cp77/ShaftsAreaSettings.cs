@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("shaftsLevelIndex")] 
 		public CUInt32 ShaftsLevelIndex
 		{
-			get
-			{
-				if (_shaftsLevelIndex == null)
-				{
-					_shaftsLevelIndex = (CUInt32) CR2WTypeManager.Create("Uint32", "shaftsLevelIndex", cr2w, this);
-				}
-				return _shaftsLevelIndex;
-			}
-			set
-			{
-				if (_shaftsLevelIndex == value)
-				{
-					return;
-				}
-				_shaftsLevelIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shaftsLevelIndex);
+			set => SetProperty(ref _shaftsLevelIndex, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("shaftsIntensity")] 
 		public CFloat ShaftsIntensity
 		{
-			get
-			{
-				if (_shaftsIntensity == null)
-				{
-					_shaftsIntensity = (CFloat) CR2WTypeManager.Create("Float", "shaftsIntensity", cr2w, this);
-				}
-				return _shaftsIntensity;
-			}
-			set
-			{
-				if (_shaftsIntensity == value)
-				{
-					return;
-				}
-				_shaftsIntensity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shaftsIntensity);
+			set => SetProperty(ref _shaftsIntensity, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("shaftsThresholdsScale")] 
 		public CFloat ShaftsThresholdsScale
 		{
-			get
-			{
-				if (_shaftsThresholdsScale == null)
-				{
-					_shaftsThresholdsScale = (CFloat) CR2WTypeManager.Create("Float", "shaftsThresholdsScale", cr2w, this);
-				}
-				return _shaftsThresholdsScale;
-			}
-			set
-			{
-				if (_shaftsThresholdsScale == value)
-				{
-					return;
-				}
-				_shaftsThresholdsScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shaftsThresholdsScale);
+			set => SetProperty(ref _shaftsThresholdsScale, value);
 		}
 
 		public ShaftsAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

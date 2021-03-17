@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bottomDerivedProp")] 
 		public CBool BottomDerivedProp
 		{
-			get
-			{
-				if (_bottomDerivedProp == null)
-				{
-					_bottomDerivedProp = (CBool) CR2WTypeManager.Create("Bool", "bottomDerivedProp", cr2w, this);
-				}
-				return _bottomDerivedProp;
-			}
-			set
-			{
-				if (_bottomDerivedProp == value)
-				{
-					return;
-				}
-				_bottomDerivedProp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bottomDerivedProp);
+			set => SetProperty(ref _bottomDerivedProp, value);
 		}
 
 		public Ref_1_3_2_1_BottomDerivedStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("requesterID")] 
 		public entEntityID RequesterID
 		{
-			get
-			{
-				if (_requesterID == null)
-				{
-					_requesterID = (entEntityID) CR2WTypeManager.Create("entEntityID", "requesterID", cr2w, this);
-				}
-				return _requesterID;
-			}
-			set
-			{
-				if (_requesterID == value)
-				{
-					return;
-				}
-				_requesterID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requesterID);
+			set => SetProperty(ref _requesterID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("requestType")] 
 		public CEnum<gamedeviceRequestType> RequestType
 		{
-			get
-			{
-				if (_requestType == null)
-				{
-					_requestType = (CEnum<gamedeviceRequestType>) CR2WTypeManager.Create("gamedeviceRequestType", "requestType", cr2w, this);
-				}
-				return _requestType;
-			}
-			set
-			{
-				if (_requestType == value)
-				{
-					return;
-				}
-				_requestType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requestType);
+			set => SetProperty(ref _requestType, value);
 		}
 
 		public PuppetActionContext(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

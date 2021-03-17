@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("blendEnable")] 
 		public CBool BlendEnable
 		{
-			get
-			{
-				if (_blendEnable == null)
-				{
-					_blendEnable = (CBool) CR2WTypeManager.Create("Bool", "blendEnable", cr2w, this);
-				}
-				return _blendEnable;
-			}
-			set
-			{
-				if (_blendEnable == value)
-				{
-					return;
-				}
-				_blendEnable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendEnable);
+			set => SetProperty(ref _blendEnable, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("writeMask")] 
 		public CEnum<PSODescBlendModeWriteMask> WriteMask
 		{
-			get
-			{
-				if (_writeMask == null)
-				{
-					_writeMask = (CEnum<PSODescBlendModeWriteMask>) CR2WTypeManager.Create("PSODescBlendModeWriteMask", "writeMask", cr2w, this);
-				}
-				return _writeMask;
-			}
-			set
-			{
-				if (_writeMask == value)
-				{
-					return;
-				}
-				_writeMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _writeMask);
+			set => SetProperty(ref _writeMask, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("colorOp")] 
 		public CEnum<PSODescBlendModeOp> ColorOp
 		{
-			get
-			{
-				if (_colorOp == null)
-				{
-					_colorOp = (CEnum<PSODescBlendModeOp>) CR2WTypeManager.Create("PSODescBlendModeOp", "colorOp", cr2w, this);
-				}
-				return _colorOp;
-			}
-			set
-			{
-				if (_colorOp == value)
-				{
-					return;
-				}
-				_colorOp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _colorOp);
+			set => SetProperty(ref _colorOp, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("alphaOp")] 
 		public CEnum<PSODescBlendModeOp> AlphaOp
 		{
-			get
-			{
-				if (_alphaOp == null)
-				{
-					_alphaOp = (CEnum<PSODescBlendModeOp>) CR2WTypeManager.Create("PSODescBlendModeOp", "alphaOp", cr2w, this);
-				}
-				return _alphaOp;
-			}
-			set
-			{
-				if (_alphaOp == value)
-				{
-					return;
-				}
-				_alphaOp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alphaOp);
+			set => SetProperty(ref _alphaOp, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("destFactor")] 
 		public CEnum<PSODescBlendModeFactor> DestFactor
 		{
-			get
-			{
-				if (_destFactor == null)
-				{
-					_destFactor = (CEnum<PSODescBlendModeFactor>) CR2WTypeManager.Create("PSODescBlendModeFactor", "destFactor", cr2w, this);
-				}
-				return _destFactor;
-			}
-			set
-			{
-				if (_destFactor == value)
-				{
-					return;
-				}
-				_destFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _destFactor);
+			set => SetProperty(ref _destFactor, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("destAlphaFactor")] 
 		public CEnum<PSODescBlendModeFactor> DestAlphaFactor
 		{
-			get
-			{
-				if (_destAlphaFactor == null)
-				{
-					_destAlphaFactor = (CEnum<PSODescBlendModeFactor>) CR2WTypeManager.Create("PSODescBlendModeFactor", "destAlphaFactor", cr2w, this);
-				}
-				return _destAlphaFactor;
-			}
-			set
-			{
-				if (_destAlphaFactor == value)
-				{
-					return;
-				}
-				_destAlphaFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _destAlphaFactor);
+			set => SetProperty(ref _destAlphaFactor, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("srcFactor")] 
 		public CEnum<PSODescBlendModeFactor> SrcFactor
 		{
-			get
-			{
-				if (_srcFactor == null)
-				{
-					_srcFactor = (CEnum<PSODescBlendModeFactor>) CR2WTypeManager.Create("PSODescBlendModeFactor", "srcFactor", cr2w, this);
-				}
-				return _srcFactor;
-			}
-			set
-			{
-				if (_srcFactor == value)
-				{
-					return;
-				}
-				_srcFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _srcFactor);
+			set => SetProperty(ref _srcFactor, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("srcAlphaFactor")] 
 		public CEnum<PSODescBlendModeFactor> SrcAlphaFactor
 		{
-			get
-			{
-				if (_srcAlphaFactor == null)
-				{
-					_srcAlphaFactor = (CEnum<PSODescBlendModeFactor>) CR2WTypeManager.Create("PSODescBlendModeFactor", "srcAlphaFactor", cr2w, this);
-				}
-				return _srcAlphaFactor;
-			}
-			set
-			{
-				if (_srcAlphaFactor == value)
-				{
-					return;
-				}
-				_srcAlphaFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _srcAlphaFactor);
+			set => SetProperty(ref _srcAlphaFactor, value);
 		}
 
 		public PSODescRenderTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inCommand")] 
 		public CHandle<AIArgumentMapping> InCommand
 		{
-			get
-			{
-				if (_inCommand == null)
-				{
-					_inCommand = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "inCommand", cr2w, this);
-				}
-				return _inCommand;
-			}
-			set
-			{
-				if (_inCommand == value)
-				{
-					return;
-				}
-				_inCommand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inCommand);
+			set => SetProperty(ref _inCommand, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("currentCommand")] 
 		public wCHandle<AIMeleeAttackCommand> CurrentCommand
 		{
-			get
-			{
-				if (_currentCommand == null)
-				{
-					_currentCommand = (wCHandle<AIMeleeAttackCommand>) CR2WTypeManager.Create("whandle:AIMeleeAttackCommand", "currentCommand", cr2w, this);
-				}
-				return _currentCommand;
-			}
-			set
-			{
-				if (_currentCommand == value)
-				{
-					return;
-				}
-				_currentCommand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentCommand);
+			set => SetProperty(ref _currentCommand, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("activationTimeStamp")] 
 		public CFloat ActivationTimeStamp
 		{
-			get
-			{
-				if (_activationTimeStamp == null)
-				{
-					_activationTimeStamp = (CFloat) CR2WTypeManager.Create("Float", "activationTimeStamp", cr2w, this);
-				}
-				return _activationTimeStamp;
-			}
-			set
-			{
-				if (_activationTimeStamp == value)
-				{
-					return;
-				}
-				_activationTimeStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activationTimeStamp);
+			set => SetProperty(ref _activationTimeStamp, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("commandDuration")] 
 		public CFloat CommandDuration
 		{
-			get
-			{
-				if (_commandDuration == null)
-				{
-					_commandDuration = (CFloat) CR2WTypeManager.Create("Float", "commandDuration", cr2w, this);
-				}
-				return _commandDuration;
-			}
-			set
-			{
-				if (_commandDuration == value)
-				{
-					return;
-				}
-				_commandDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _commandDuration);
+			set => SetProperty(ref _commandDuration, value);
 		}
 
 		public MeleeAttackCommandTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

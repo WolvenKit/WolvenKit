@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rewireComponent")] 
 		public CHandle<RewireComponent> RewireComponent
 		{
-			get
-			{
-				if (_rewireComponent == null)
-				{
-					_rewireComponent = (CHandle<RewireComponent>) CR2WTypeManager.Create("handle:RewireComponent", "rewireComponent", cr2w, this);
-				}
-				return _rewireComponent;
-			}
-			set
-			{
-				if (_rewireComponent == value)
-				{
-					return;
-				}
-				_rewireComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rewireComponent);
+			set => SetProperty(ref _rewireComponent, value);
 		}
 
 		[Ordinal(58)] 
 		[RED("player")] 
 		public wCHandle<gameObject> Player
 		{
-			get
-			{
-				if (_player == null)
-				{
-					_player = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "player", cr2w, this);
-				}
-				return _player;
-			}
-			set
-			{
-				if (_player == value)
-				{
-					return;
-				}
-				_player = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _player);
+			set => SetProperty(ref _player, value);
 		}
 
 		[Ordinal(59)] 
 		[RED("scanManager")] 
 		public CHandle<DrillMachineScanManager> ScanManager
 		{
-			get
-			{
-				if (_scanManager == null)
-				{
-					_scanManager = (CHandle<DrillMachineScanManager>) CR2WTypeManager.Create("handle:DrillMachineScanManager", "scanManager", cr2w, this);
-				}
-				return _scanManager;
-			}
-			set
-			{
-				if (_scanManager == value)
-				{
-					return;
-				}
-				_scanManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scanManager);
+			set => SetProperty(ref _scanManager, value);
 		}
 
 		[Ordinal(60)] 
 		[RED("screen_postprocess")] 
 		public CHandle<entIVisualComponent> Screen_postprocess
 		{
-			get
-			{
-				if (_screen_postprocess == null)
-				{
-					_screen_postprocess = (CHandle<entIVisualComponent>) CR2WTypeManager.Create("handle:entIVisualComponent", "screen_postprocess", cr2w, this);
-				}
-				return _screen_postprocess;
-			}
-			set
-			{
-				if (_screen_postprocess == value)
-				{
-					return;
-				}
-				_screen_postprocess = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _screen_postprocess);
+			set => SetProperty(ref _screen_postprocess, value);
 		}
 
 		[Ordinal(61)] 
 		[RED("screen_backside")] 
 		public CHandle<entIVisualComponent> Screen_backside
 		{
-			get
-			{
-				if (_screen_backside == null)
-				{
-					_screen_backside = (CHandle<entIVisualComponent>) CR2WTypeManager.Create("handle:entIVisualComponent", "screen_backside", cr2w, this);
-				}
-				return _screen_backside;
-			}
-			set
-			{
-				if (_screen_backside == value)
-				{
-					return;
-				}
-				_screen_backside = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _screen_backside);
+			set => SetProperty(ref _screen_backside, value);
 		}
 
 		[Ordinal(62)] 
 		[RED("isScanning")] 
 		public CBool IsScanning
 		{
-			get
-			{
-				if (_isScanning == null)
-				{
-					_isScanning = (CBool) CR2WTypeManager.Create("Bool", "isScanning", cr2w, this);
-				}
-				return _isScanning;
-			}
-			set
-			{
-				if (_isScanning == value)
-				{
-					return;
-				}
-				_isScanning = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isScanning);
+			set => SetProperty(ref _isScanning, value);
 		}
 
 		[Ordinal(63)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		[Ordinal(64)] 
 		[RED("targetDevice")] 
 		public wCHandle<gameObject> TargetDevice
 		{
-			get
-			{
-				if (_targetDevice == null)
-				{
-					_targetDevice = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "targetDevice", cr2w, this);
-				}
-				return _targetDevice;
-			}
-			set
-			{
-				if (_targetDevice == value)
-				{
-					return;
-				}
-				_targetDevice = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetDevice);
+			set => SetProperty(ref _targetDevice, value);
 		}
 
 		public drillMachine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

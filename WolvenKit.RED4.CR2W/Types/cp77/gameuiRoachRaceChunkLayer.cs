@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("chunks")] 
 		public CArray<gameuiRoachRaceChunk> Chunks
 		{
-			get
-			{
-				if (_chunks == null)
-				{
-					_chunks = (CArray<gameuiRoachRaceChunk>) CR2WTypeManager.Create("array:gameuiRoachRaceChunk", "chunks", cr2w, this);
-				}
-				return _chunks;
-			}
-			set
-			{
-				if (_chunks == value)
-				{
-					return;
-				}
-				_chunks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chunks);
+			set => SetProperty(ref _chunks, value);
 		}
 
 		public gameuiRoachRaceChunkLayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

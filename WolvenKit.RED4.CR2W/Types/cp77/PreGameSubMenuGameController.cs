@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("menuEventDispatcher")] 
 		public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
-			get
-			{
-				if (_menuEventDispatcher == null)
-				{
-					_menuEventDispatcher = (wCHandle<inkMenuEventDispatcher>) CR2WTypeManager.Create("whandle:inkMenuEventDispatcher", "menuEventDispatcher", cr2w, this);
-				}
-				return _menuEventDispatcher;
-			}
-			set
-			{
-				if (_menuEventDispatcher == value)
-				{
-					return;
-				}
-				_menuEventDispatcher = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuEventDispatcher);
+			set => SetProperty(ref _menuEventDispatcher, value);
 		}
 
 		public PreGameSubMenuGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

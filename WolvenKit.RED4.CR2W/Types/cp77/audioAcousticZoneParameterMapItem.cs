@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("param")] 
 		public CName Param
 		{
-			get
-			{
-				if (_param == null)
-				{
-					_param = (CName) CR2WTypeManager.Create("CName", "param", cr2w, this);
-				}
-				return _param;
-			}
-			set
-			{
-				if (_param == value)
-				{
-					return;
-				}
-				_param = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _param);
+			set => SetProperty(ref _param, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("value")] 
 		public CFloat Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CFloat) CR2WTypeManager.Create("Float", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("enterCurveTime")] 
 		public CFloat EnterCurveTime
 		{
-			get
-			{
-				if (_enterCurveTime == null)
-				{
-					_enterCurveTime = (CFloat) CR2WTypeManager.Create("Float", "enterCurveTime", cr2w, this);
-				}
-				return _enterCurveTime;
-			}
-			set
-			{
-				if (_enterCurveTime == value)
-				{
-					return;
-				}
-				_enterCurveTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enterCurveTime);
+			set => SetProperty(ref _enterCurveTime, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("exitCurveTime")] 
 		public CFloat ExitCurveTime
 		{
-			get
-			{
-				if (_exitCurveTime == null)
-				{
-					_exitCurveTime = (CFloat) CR2WTypeManager.Create("Float", "exitCurveTime", cr2w, this);
-				}
-				return _exitCurveTime;
-			}
-			set
-			{
-				if (_exitCurveTime == value)
-				{
-					return;
-				}
-				_exitCurveTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitCurveTime);
+			set => SetProperty(ref _exitCurveTime, value);
 		}
 
 		public audioAcousticZoneParameterMapItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

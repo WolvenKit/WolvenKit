@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("scene")] 
 		public raRef<scnSceneResource> Scene
 		{
-			get
-			{
-				if (_scene == null)
-				{
-					_scene = (raRef<scnSceneResource>) CR2WTypeManager.Create("raRef:scnSceneResource", "scene", cr2w, this);
-				}
-				return _scene;
-			}
-			set
-			{
-				if (_scene == value)
-				{
-					return;
-				}
-				_scene = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scene);
+			set => SetProperty(ref _scene, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sceneChanges")] 
 		public CArray<scnScenesVersionsChangedRecord> SceneChanges
 		{
-			get
-			{
-				if (_sceneChanges == null)
-				{
-					_sceneChanges = (CArray<scnScenesVersionsChangedRecord>) CR2WTypeManager.Create("array:scnScenesVersionsChangedRecord", "sceneChanges", cr2w, this);
-				}
-				return _sceneChanges;
-			}
-			set
-			{
-				if (_sceneChanges == value)
-				{
-					return;
-				}
-				_sceneChanges = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneChanges);
+			set => SetProperty(ref _sceneChanges, value);
 		}
 
 		public scnScenesVersionsSceneChanges(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

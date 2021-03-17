@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animation")] 
 		public CInt32 Animation
 		{
-			get
-			{
-				if (_animation == null)
-				{
-					_animation = (CInt32) CR2WTypeManager.Create("Int32", "animation", cr2w, this);
-				}
-				return _animation;
-			}
-			set
-			{
-				if (_animation == value)
-				{
-					return;
-				}
-				_animation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animation);
+			set => SetProperty(ref _animation, value);
 		}
 
 		public AnimFeature_PlayerDeathAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

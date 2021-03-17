@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rig")] 
 		public raRef<animRig> Rig
 		{
-			get
-			{
-				if (_rig == null)
-				{
-					_rig = (raRef<animRig>) CR2WTypeManager.Create("raRef:animRig", "rig", cr2w, this);
-				}
-				return _rig;
-			}
-			set
-			{
-				if (_rig == value)
-				{
-					return;
-				}
-				_rig = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rig);
+			set => SetProperty(ref _rig, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("animsets")] 
 		public CArray<raRef<animAnimSet>> Animsets
 		{
-			get
-			{
-				if (_animsets == null)
-				{
-					_animsets = (CArray<raRef<animAnimSet>>) CR2WTypeManager.Create("array:raRef:animAnimSet", "animsets", cr2w, this);
-				}
-				return _animsets;
-			}
-			set
-			{
-				if (_animsets == value)
-				{
-					return;
-				}
-				_animsets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animsets);
+			set => SetProperty(ref _animsets, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("overrides")] 
 		public CArray<gameAnimationOverrideDefinition> Overrides
 		{
-			get
-			{
-				if (_overrides == null)
-				{
-					_overrides = (CArray<gameAnimationOverrideDefinition>) CR2WTypeManager.Create("array:gameAnimationOverrideDefinition", "overrides", cr2w, this);
-				}
-				return _overrides;
-			}
-			set
-			{
-				if (_overrides == value)
-				{
-					return;
-				}
-				_overrides = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrides);
+			set => SetProperty(ref _overrides, value);
 		}
 
 		public gameBodyTypeAnimationDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

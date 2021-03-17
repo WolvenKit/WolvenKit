@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("coordinateSystem")] 
 		public EulerAngles CoordinateSystem
 		{
-			get
-			{
-				if (_coordinateSystem == null)
-				{
-					_coordinateSystem = (EulerAngles) CR2WTypeManager.Create("EulerAngles", "coordinateSystem", cr2w, this);
-				}
-				return _coordinateSystem;
-			}
-			set
-			{
-				if (_coordinateSystem == value)
-				{
-					return;
-				}
-				_coordinateSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _coordinateSystem);
+			set => SetProperty(ref _coordinateSystem, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isGPUBased")] 
 		public CBool IsGPUBased
 		{
-			get
-			{
-				if (_isGPUBased == null)
-				{
-					_isGPUBased = (CBool) CR2WTypeManager.Create("Bool", "isGPUBased", cr2w, this);
-				}
-				return _isGPUBased;
-			}
-			set
-			{
-				if (_isGPUBased == value)
-				{
-					return;
-				}
-				_isGPUBased = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isGPUBased);
+			set => SetProperty(ref _isGPUBased, value);
 		}
 
 		public CParticleDrawerEmitterOrientation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

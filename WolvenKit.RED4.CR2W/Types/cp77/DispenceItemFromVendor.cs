@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("price")] 
 		public CInt32 Price
 		{
-			get
-			{
-				if (_price == null)
-				{
-					_price = (CInt32) CR2WTypeManager.Create("Int32", "price", cr2w, this);
-				}
-				return _price;
-			}
-			set
-			{
-				if (_price == value)
-				{
-					return;
-				}
-				_price = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _price);
+			set => SetProperty(ref _price, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("atlasTexture")] 
 		public CName AtlasTexture
 		{
-			get
-			{
-				if (_atlasTexture == null)
-				{
-					_atlasTexture = (CName) CR2WTypeManager.Create("CName", "atlasTexture", cr2w, this);
-				}
-				return _atlasTexture;
-			}
-			set
-			{
-				if (_atlasTexture == value)
-				{
-					return;
-				}
-				_atlasTexture = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _atlasTexture);
+			set => SetProperty(ref _atlasTexture, value);
 		}
 
 		public DispenceItemFromVendor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

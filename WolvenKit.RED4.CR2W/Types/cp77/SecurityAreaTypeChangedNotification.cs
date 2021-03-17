@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("previousType")] 
 		public CEnum<ESecurityAreaType> PreviousType
 		{
-			get
-			{
-				if (_previousType == null)
-				{
-					_previousType = (CEnum<ESecurityAreaType>) CR2WTypeManager.Create("ESecurityAreaType", "previousType", cr2w, this);
-				}
-				return _previousType;
-			}
-			set
-			{
-				if (_previousType == value)
-				{
-					return;
-				}
-				_previousType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousType);
+			set => SetProperty(ref _previousType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("currentType")] 
 		public CEnum<ESecurityAreaType> CurrentType
 		{
-			get
-			{
-				if (_currentType == null)
-				{
-					_currentType = (CEnum<ESecurityAreaType>) CR2WTypeManager.Create("ESecurityAreaType", "currentType", cr2w, this);
-				}
-				return _currentType;
-			}
-			set
-			{
-				if (_currentType == value)
-				{
-					return;
-				}
-				_currentType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentType);
+			set => SetProperty(ref _currentType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("area")] 
 		public wCHandle<SecurityAreaControllerPS> Area
 		{
-			get
-			{
-				if (_area == null)
-				{
-					_area = (wCHandle<SecurityAreaControllerPS>) CR2WTypeManager.Create("whandle:SecurityAreaControllerPS", "area", cr2w, this);
-				}
-				return _area;
-			}
-			set
-			{
-				if (_area == value)
-				{
-					return;
-				}
-				_area = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _area);
+			set => SetProperty(ref _area, value);
 		}
 
 		public SecurityAreaTypeChangedNotification(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

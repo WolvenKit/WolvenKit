@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("advertText")] 
 		public inkTextWidgetReference AdvertText
 		{
-			get
-			{
-				if (_advertText == null)
-				{
-					_advertText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "advertText", cr2w, this);
-				}
-				return _advertText;
-			}
-			set
-			{
-				if (_advertText == value)
-				{
-					return;
-				}
-				_advertText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _advertText);
+			set => SetProperty(ref _advertText, value);
 		}
 
 		public gameuiAdvertTranslationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

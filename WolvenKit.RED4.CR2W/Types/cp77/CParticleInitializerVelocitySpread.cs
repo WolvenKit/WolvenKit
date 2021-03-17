@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("scale")] 
 		public CHandle<IEvaluatorFloat> Scale
 		{
-			get
-			{
-				if (_scale == null)
-				{
-					_scale = (CHandle<IEvaluatorFloat>) CR2WTypeManager.Create("handle:IEvaluatorFloat", "scale", cr2w, this);
-				}
-				return _scale;
-			}
-			set
-			{
-				if (_scale == value)
-				{
-					return;
-				}
-				_scale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scale);
+			set => SetProperty(ref _scale, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("conserveMomentum")] 
 		public CBool ConserveMomentum
 		{
-			get
-			{
-				if (_conserveMomentum == null)
-				{
-					_conserveMomentum = (CBool) CR2WTypeManager.Create("Bool", "conserveMomentum", cr2w, this);
-				}
-				return _conserveMomentum;
-			}
-			set
-			{
-				if (_conserveMomentum == value)
-				{
-					return;
-				}
-				_conserveMomentum = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _conserveMomentum);
+			set => SetProperty(ref _conserveMomentum, value);
 		}
 
 		public CParticleInitializerVelocitySpread(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("root")] 
 		public CHandle<inkWidget> Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (CHandle<inkWidget>) CR2WTypeManager.Create("handle:inkWidget", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isKiroshiEnabled")] 
 		public CBool IsKiroshiEnabled
 		{
-			get
-			{
-				if (_isKiroshiEnabled == null)
-				{
-					_isKiroshiEnabled = (CBool) CR2WTypeManager.Create("Bool", "isKiroshiEnabled", cr2w, this);
-				}
-				return _isKiroshiEnabled;
-			}
-			set
-			{
-				if (_isKiroshiEnabled == value)
-				{
-					return;
-				}
-				_isKiroshiEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isKiroshiEnabled);
+			set => SetProperty(ref _isKiroshiEnabled, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("c_tier1_duration")] 
 		public CFloat C_tier1_duration
 		{
-			get
-			{
-				if (_c_tier1_duration == null)
-				{
-					_c_tier1_duration = (CFloat) CR2WTypeManager.Create("Float", "c_tier1_duration", cr2w, this);
-				}
-				return _c_tier1_duration;
-			}
-			set
-			{
-				if (_c_tier1_duration == value)
-				{
-					return;
-				}
-				_c_tier1_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _c_tier1_duration);
+			set => SetProperty(ref _c_tier1_duration, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("c_tier2_duration")] 
 		public CFloat C_tier2_duration
 		{
-			get
-			{
-				if (_c_tier2_duration == null)
-				{
-					_c_tier2_duration = (CFloat) CR2WTypeManager.Create("Float", "c_tier2_duration", cr2w, this);
-				}
-				return _c_tier2_duration;
-			}
-			set
-			{
-				if (_c_tier2_duration == value)
-				{
-					return;
-				}
-				_c_tier2_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _c_tier2_duration);
+			set => SetProperty(ref _c_tier2_duration, value);
 		}
 
 		public BaseSubtitleLineLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

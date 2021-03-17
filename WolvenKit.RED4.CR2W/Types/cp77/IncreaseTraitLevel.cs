@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("trait")] 
 		public CEnum<gamedataTraitType> Trait
 		{
-			get
-			{
-				if (_trait == null)
-				{
-					_trait = (CEnum<gamedataTraitType>) CR2WTypeManager.Create("gamedataTraitType", "trait", cr2w, this);
-				}
-				return _trait;
-			}
-			set
-			{
-				if (_trait == value)
-				{
-					return;
-				}
-				_trait = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trait);
+			set => SetProperty(ref _trait, value);
 		}
 
 		public IncreaseTraitLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

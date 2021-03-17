@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("interval")] 
 		public CFloat Interval
 		{
-			get
-			{
-				if (_interval == null)
-				{
-					_interval = (CFloat) CR2WTypeManager.Create("Float", "interval", cr2w, this);
-				}
-				return _interval;
-			}
-			set
-			{
-				if (_interval == value)
-				{
-					return;
-				}
-				_interval = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interval);
+			set => SetProperty(ref _interval, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("dynObjectType")] 
 		public CName DynObjectType
 		{
-			get
-			{
-				if (_dynObjectType == null)
-				{
-					_dynObjectType = (CName) CR2WTypeManager.Create("CName", "dynObjectType", cr2w, this);
-				}
-				return _dynObjectType;
-			}
-			set
-			{
-				if (_dynObjectType == value)
-				{
-					return;
-				}
-				_dynObjectType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dynObjectType);
+			set => SetProperty(ref _dynObjectType, value);
 		}
 
 		public gameuiRoachRaceObstacle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

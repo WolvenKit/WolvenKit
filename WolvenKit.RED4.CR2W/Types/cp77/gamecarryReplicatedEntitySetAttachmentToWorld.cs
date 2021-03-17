@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("localTransform")] 
 		public Transform LocalTransform
 		{
-			get
-			{
-				if (_localTransform == null)
-				{
-					_localTransform = (Transform) CR2WTypeManager.Create("Transform", "localTransform", cr2w, this);
-				}
-				return _localTransform;
-			}
-			set
-			{
-				if (_localTransform == value)
-				{
-					return;
-				}
-				_localTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localTransform);
+			set => SetProperty(ref _localTransform, value);
 		}
 
 		public gamecarryReplicatedEntitySetAttachmentToWorld(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inheritRotation")] 
 		public CBool InheritRotation
 		{
-			get
-			{
-				if (_inheritRotation == null)
-				{
-					_inheritRotation = (CBool) CR2WTypeManager.Create("Bool", "inheritRotation", cr2w, this);
-				}
-				return _inheritRotation;
-			}
-			set
-			{
-				if (_inheritRotation == value)
-				{
-					return;
-				}
-				_inheritRotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inheritRotation);
+			set => SetProperty(ref _inheritRotation, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("roots")] 
 		public CArray<effectRootEntry> Roots
 		{
-			get
-			{
-				if (_roots == null)
-				{
-					_roots = (CArray<effectRootEntry>) CR2WTypeManager.Create("array:effectRootEntry", "roots", cr2w, this);
-				}
-				return _roots;
-			}
-			set
-			{
-				if (_roots == value)
-				{
-					return;
-				}
-				_roots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _roots);
+			set => SetProperty(ref _roots, value);
 		}
 
 		public effectRootEntries(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

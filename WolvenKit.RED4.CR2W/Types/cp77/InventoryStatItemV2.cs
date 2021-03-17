@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("LabelRef")] 
 		public inkTextWidgetReference LabelRef
 		{
-			get
-			{
-				if (_labelRef == null)
-				{
-					_labelRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "LabelRef", cr2w, this);
-				}
-				return _labelRef;
-			}
-			set
-			{
-				if (_labelRef == value)
-				{
-					return;
-				}
-				_labelRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _labelRef);
+			set => SetProperty(ref _labelRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ValueRef")] 
 		public inkTextWidgetReference ValueRef
 		{
-			get
-			{
-				if (_valueRef == null)
-				{
-					_valueRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "ValueRef", cr2w, this);
-				}
-				return _valueRef;
-			}
-			set
-			{
-				if (_valueRef == value)
-				{
-					return;
-				}
-				_valueRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _valueRef);
+			set => SetProperty(ref _valueRef, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("Icon")] 
 		public inkImageWidgetReference Icon
 		{
-			get
-			{
-				if (_icon == null)
-				{
-					_icon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "Icon", cr2w, this);
-				}
-				return _icon;
-			}
-			set
-			{
-				if (_icon == value)
-				{
-					return;
-				}
-				_icon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _icon);
+			set => SetProperty(ref _icon, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("BackgroundIcon")] 
 		public inkImageWidgetReference BackgroundIcon
 		{
-			get
-			{
-				if (_backgroundIcon == null)
-				{
-					_backgroundIcon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "BackgroundIcon", cr2w, this);
-				}
-				return _backgroundIcon;
-			}
-			set
-			{
-				if (_backgroundIcon == value)
-				{
-					return;
-				}
-				_backgroundIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backgroundIcon);
+			set => SetProperty(ref _backgroundIcon, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("TextGroup")] 
 		public inkWidgetReference TextGroup
 		{
-			get
-			{
-				if (_textGroup == null)
-				{
-					_textGroup = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "TextGroup", cr2w, this);
-				}
-				return _textGroup;
-			}
-			set
-			{
-				if (_textGroup == value)
-				{
-					return;
-				}
-				_textGroup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textGroup);
+			set => SetProperty(ref _textGroup, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("IntroPlayed")] 
 		public CBool IntroPlayed
 		{
-			get
-			{
-				if (_introPlayed == null)
-				{
-					_introPlayed = (CBool) CR2WTypeManager.Create("Bool", "IntroPlayed", cr2w, this);
-				}
-				return _introPlayed;
-			}
-			set
-			{
-				if (_introPlayed == value)
-				{
-					return;
-				}
-				_introPlayed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _introPlayed);
+			set => SetProperty(ref _introPlayed, value);
 		}
 
 		public InventoryStatItemV2(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

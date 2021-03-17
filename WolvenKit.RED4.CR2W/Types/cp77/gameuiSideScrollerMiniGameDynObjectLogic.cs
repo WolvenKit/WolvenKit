@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("spawnPoolSize")] 
 		public CUInt32 SpawnPoolSize
 		{
-			get
-			{
-				if (_spawnPoolSize == null)
-				{
-					_spawnPoolSize = (CUInt32) CR2WTypeManager.Create("Uint32", "spawnPoolSize", cr2w, this);
-				}
-				return _spawnPoolSize;
-			}
-			set
-			{
-				if (_spawnPoolSize == value)
-				{
-					return;
-				}
-				_spawnPoolSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnPoolSize);
+			set => SetProperty(ref _spawnPoolSize, value);
 		}
 
 		public gameuiSideScrollerMiniGameDynObjectLogic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("quantity")] 
 		public CInt32 Quantity
 		{
-			get
-			{
-				if (_quantity == null)
-				{
-					_quantity = (CInt32) CR2WTypeManager.Create("Int32", "quantity", cr2w, this);
-				}
-				return _quantity;
-			}
-			set
-			{
-				if (_quantity == value)
-				{
-					return;
-				}
-				_quantity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quantity);
+			set => SetProperty(ref _quantity, value);
 		}
 
 		public gameDropInstruction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

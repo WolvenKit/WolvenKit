@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("fpp")] 
 		public CName Fpp
 		{
-			get
-			{
-				if (_fpp == null)
-				{
-					_fpp = (CName) CR2WTypeManager.Create("CName", "fpp", cr2w, this);
-				}
-				return _fpp;
-			}
-			set
-			{
-				if (_fpp == value)
-				{
-					return;
-				}
-				_fpp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fpp);
+			set => SetProperty(ref _fpp, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tpp")] 
 		public CName Tpp
 		{
-			get
-			{
-				if (_tpp == null)
-				{
-					_tpp = (CName) CR2WTypeManager.Create("CName", "tpp", cr2w, this);
-				}
-				return _tpp;
-			}
-			set
-			{
-				if (_tpp == value)
-				{
-					return;
-				}
-				_tpp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tpp);
+			set => SetProperty(ref _tpp, value);
 		}
 
 		public gameuiPerspectiveInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

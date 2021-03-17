@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemFilterType")] 
 		public CEnum<RipperdocFilter> ItemFilterType
 		{
-			get
-			{
-				if (_itemFilterType == null)
-				{
-					_itemFilterType = (CEnum<RipperdocFilter>) CR2WTypeManager.Create("RipperdocFilter", "itemFilterType", cr2w, this);
-				}
-				return _itemFilterType;
-			}
-			set
-			{
-				if (_itemFilterType == value)
-				{
-					return;
-				}
-				_itemFilterType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemFilterType);
+			set => SetProperty(ref _itemFilterType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemSortMode")] 
 		public CEnum<ItemSortMode> ItemSortMode
 		{
-			get
-			{
-				if (_itemSortMode == null)
-				{
-					_itemSortMode = (CEnum<ItemSortMode>) CR2WTypeManager.Create("ItemSortMode", "itemSortMode", cr2w, this);
-				}
-				return _itemSortMode;
-			}
-			set
-			{
-				if (_itemSortMode == value)
-				{
-					return;
-				}
-				_itemSortMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemSortMode);
+			set => SetProperty(ref _itemSortMode, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("uiScriptableSystem")] 
 		public wCHandle<UIScriptableSystem> UiScriptableSystem
 		{
-			get
-			{
-				if (_uiScriptableSystem == null)
-				{
-					_uiScriptableSystem = (wCHandle<UIScriptableSystem>) CR2WTypeManager.Create("whandle:UIScriptableSystem", "uiScriptableSystem", cr2w, this);
-				}
-				return _uiScriptableSystem;
-			}
-			set
-			{
-				if (_uiScriptableSystem == value)
-				{
-					return;
-				}
-				_uiScriptableSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uiScriptableSystem);
+			set => SetProperty(ref _uiScriptableSystem, value);
 		}
 
 		public CyberwareDataView(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

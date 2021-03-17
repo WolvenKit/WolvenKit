@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entityHash")] 
 		public CUInt64 EntityHash
 		{
-			get
-			{
-				if (_entityHash == null)
-				{
-					_entityHash = (CUInt64) CR2WTypeManager.Create("Uint64", "entityHash", cr2w, this);
-				}
-				return _entityHash;
-			}
-			set
-			{
-				if (_entityHash == value)
-				{
-					return;
-				}
-				_entityHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityHash);
+			set => SetProperty(ref _entityHash, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("idType")] 
 		public CEnum<gameStatIDType> IdType
 		{
-			get
-			{
-				if (_idType == null)
-				{
-					_idType = (CEnum<gameStatIDType>) CR2WTypeManager.Create("gameStatIDType", "idType", cr2w, this);
-				}
-				return _idType;
-			}
-			set
-			{
-				if (_idType == value)
-				{
-					return;
-				}
-				_idType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _idType);
+			set => SetProperty(ref _idType, value);
 		}
 
 		public gameStatsObjectID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

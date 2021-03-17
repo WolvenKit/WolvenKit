@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("measurementsIntreval")] 
 		public CFloat MeasurementsIntreval
 		{
-			get
-			{
-				if (_measurementsIntreval == null)
-				{
-					_measurementsIntreval = (CFloat) CR2WTypeManager.Create("Float", "measurementsIntreval", cr2w, this);
-				}
-				return _measurementsIntreval;
-			}
-			set
-			{
-				if (_measurementsIntreval == value)
-				{
-					return;
-				}
-				_measurementsIntreval = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _measurementsIntreval);
+			set => SetProperty(ref _measurementsIntreval, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("measurementsCount")] 
 		public CInt32 MeasurementsCount
 		{
-			get
-			{
-				if (_measurementsCount == null)
-				{
-					_measurementsCount = (CInt32) CR2WTypeManager.Create("Int32", "measurementsCount", cr2w, this);
-				}
-				return _measurementsCount;
-			}
-			set
-			{
-				if (_measurementsCount == value)
-				{
-					return;
-				}
-				_measurementsCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _measurementsCount);
+			set => SetProperty(ref _measurementsCount, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("barItemName")] 
 		public CName BarItemName
 		{
-			get
-			{
-				if (_barItemName == null)
-				{
-					_barItemName = (CName) CR2WTypeManager.Create("CName", "barItemName", cr2w, this);
-				}
-				return _barItemName;
-			}
-			set
-			{
-				if (_barItemName == value)
-				{
-					return;
-				}
-				_barItemName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _barItemName);
+			set => SetProperty(ref _barItemName, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("root")] 
 		public wCHandle<inkCompoundWidget> Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (wCHandle<inkCompoundWidget>) CR2WTypeManager.Create("whandle:inkCompoundWidget", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("bars")] 
 		public CArray<wCHandle<inkWidget>> Bars
 		{
-			get
-			{
-				if (_bars == null)
-				{
-					_bars = (CArray<wCHandle<inkWidget>>) CR2WTypeManager.Create("array:whandle:inkWidget", "bars", cr2w, this);
-				}
-				return _bars;
-			}
-			set
-			{
-				if (_bars == value)
-				{
-					return;
-				}
-				_bars = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bars);
+			set => SetProperty(ref _bars, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("traces")] 
 		public CArray<wCHandle<inkWidget>> Traces
 		{
-			get
-			{
-				if (_traces == null)
-				{
-					_traces = (CArray<wCHandle<inkWidget>>) CR2WTypeManager.Create("array:whandle:inkWidget", "traces", cr2w, this);
-				}
-				return _traces;
-			}
-			set
-			{
-				if (_traces == value)
-				{
-					return;
-				}
-				_traces = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _traces);
+			set => SetProperty(ref _traces, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("cachedRootSize")] 
 		public Vector2 CachedRootSize
 		{
-			get
-			{
-				if (_cachedRootSize == null)
-				{
-					_cachedRootSize = (Vector2) CR2WTypeManager.Create("Vector2", "cachedRootSize", cr2w, this);
-				}
-				return _cachedRootSize;
-			}
-			set
-			{
-				if (_cachedRootSize == value)
-				{
-					return;
-				}
-				_cachedRootSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cachedRootSize);
+			set => SetProperty(ref _cachedRootSize, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("maxValue")] 
 		public CFloat MaxValue
 		{
-			get
-			{
-				if (_maxValue == null)
-				{
-					_maxValue = (CFloat) CR2WTypeManager.Create("Float", "maxValue", cr2w, this);
-				}
-				return _maxValue;
-			}
-			set
-			{
-				if (_maxValue == value)
-				{
-					return;
-				}
-				_maxValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxValue);
+			set => SetProperty(ref _maxValue, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("barsPadding")] 
 		public CFloat BarsPadding
 		{
-			get
-			{
-				if (_barsPadding == null)
-				{
-					_barsPadding = (CFloat) CR2WTypeManager.Create("Float", "barsPadding", cr2w, this);
-				}
-				return _barsPadding;
-			}
-			set
-			{
-				if (_barsPadding == value)
-				{
-					return;
-				}
-				_barsPadding = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _barsPadding);
+			set => SetProperty(ref _barsPadding, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("barSize")] 
 		public Vector2 BarSize
 		{
-			get
-			{
-				if (_barSize == null)
-				{
-					_barSize = (Vector2) CR2WTypeManager.Create("Vector2", "barSize", cr2w, this);
-				}
-				return _barSize;
-			}
-			set
-			{
-				if (_barSize == value)
-				{
-					return;
-				}
-				_barSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _barSize);
+			set => SetProperty(ref _barSize, value);
 		}
 
 		public gameuiPhoneWaveformGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

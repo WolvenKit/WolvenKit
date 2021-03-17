@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isGlitching")] 
 		public CBool IsGlitching
 		{
-			get
-			{
-				if (_isGlitching == null)
-				{
-					_isGlitching = (CBool) CR2WTypeManager.Create("Bool", "isGlitching", cr2w, this);
-				}
-				return _isGlitching;
-			}
-			set
-			{
-				if (_isGlitching == value)
-				{
-					return;
-				}
-				_isGlitching = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isGlitching);
+			set => SetProperty(ref _isGlitching, value);
 		}
 
 		public AlarmLight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

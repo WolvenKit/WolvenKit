@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bodyToDump")] 
 		public wCHandle<gameObject> BodyToDump
 		{
-			get
-			{
-				if (_bodyToDump == null)
-				{
-					_bodyToDump = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "bodyToDump", cr2w, this);
-				}
-				return _bodyToDump;
-			}
-			set
-			{
-				if (_bodyToDump == value)
-				{
-					return;
-				}
-				_bodyToDump = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyToDump);
+			set => SetProperty(ref _bodyToDump, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("psm")] 
 		public CHandle<gameIBlackboard> Psm
 		{
-			get
-			{
-				if (_psm == null)
-				{
-					_psm = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "psm", cr2w, this);
-				}
-				return _psm;
-			}
-			set
-			{
-				if (_psm == value)
-				{
-					return;
-				}
-				_psm = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _psm);
+			set => SetProperty(ref _psm, value);
 		}
 
 		public VehicleDumpBodyDelayEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

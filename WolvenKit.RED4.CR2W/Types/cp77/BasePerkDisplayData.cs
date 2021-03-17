@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attributeId")] 
 		public TweakDBID AttributeId
 		{
-			get
-			{
-				if (_attributeId == null)
-				{
-					_attributeId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "attributeId", cr2w, this);
-				}
-				return _attributeId;
-			}
-			set
-			{
-				if (_attributeId == value)
-				{
-					return;
-				}
-				_attributeId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeId);
+			set => SetProperty(ref _attributeId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("localizedName")] 
 		public CString LocalizedName
 		{
-			get
-			{
-				if (_localizedName == null)
-				{
-					_localizedName = (CString) CR2WTypeManager.Create("String", "localizedName", cr2w, this);
-				}
-				return _localizedName;
-			}
-			set
-			{
-				if (_localizedName == value)
-				{
-					return;
-				}
-				_localizedName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localizedName);
+			set => SetProperty(ref _localizedName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("localizedDescription")] 
 		public CString LocalizedDescription
 		{
-			get
-			{
-				if (_localizedDescription == null)
-				{
-					_localizedDescription = (CString) CR2WTypeManager.Create("String", "localizedDescription", cr2w, this);
-				}
-				return _localizedDescription;
-			}
-			set
-			{
-				if (_localizedDescription == value)
-				{
-					return;
-				}
-				_localizedDescription = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localizedDescription);
+			set => SetProperty(ref _localizedDescription, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("iconID")] 
 		public CName IconID
 		{
-			get
-			{
-				if (_iconID == null)
-				{
-					_iconID = (CName) CR2WTypeManager.Create("CName", "iconID", cr2w, this);
-				}
-				return _iconID;
-			}
-			set
-			{
-				if (_iconID == value)
-				{
-					return;
-				}
-				_iconID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _iconID);
+			set => SetProperty(ref _iconID, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("binkRef")] 
 		public redResourceReferenceScriptToken BinkRef
 		{
-			get
-			{
-				if (_binkRef == null)
-				{
-					_binkRef = (redResourceReferenceScriptToken) CR2WTypeManager.Create("redResourceReferenceScriptToken", "binkRef", cr2w, this);
-				}
-				return _binkRef;
-			}
-			set
-			{
-				if (_binkRef == value)
-				{
-					return;
-				}
-				_binkRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _binkRef);
+			set => SetProperty(ref _binkRef, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("level")] 
 		public CInt32 Level
 		{
-			get
-			{
-				if (_level == null)
-				{
-					_level = (CInt32) CR2WTypeManager.Create("Int32", "level", cr2w, this);
-				}
-				return _level;
-			}
-			set
-			{
-				if (_level == value)
-				{
-					return;
-				}
-				_level = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _level);
+			set => SetProperty(ref _level, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("maxLevel")] 
 		public CInt32 MaxLevel
 		{
-			get
-			{
-				if (_maxLevel == null)
-				{
-					_maxLevel = (CInt32) CR2WTypeManager.Create("Int32", "maxLevel", cr2w, this);
-				}
-				return _maxLevel;
-			}
-			set
-			{
-				if (_maxLevel == value)
-				{
-					return;
-				}
-				_maxLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxLevel);
+			set => SetProperty(ref _maxLevel, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("locked")] 
 		public CBool Locked
 		{
-			get
-			{
-				if (_locked == null)
-				{
-					_locked = (CBool) CR2WTypeManager.Create("Bool", "locked", cr2w, this);
-				}
-				return _locked;
-			}
-			set
-			{
-				if (_locked == value)
-				{
-					return;
-				}
-				_locked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _locked);
+			set => SetProperty(ref _locked, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("proficiency")] 
 		public CEnum<gamedataProficiencyType> Proficiency
 		{
-			get
-			{
-				if (_proficiency == null)
-				{
-					_proficiency = (CEnum<gamedataProficiencyType>) CR2WTypeManager.Create("gamedataProficiencyType", "proficiency", cr2w, this);
-				}
-				return _proficiency;
-			}
-			set
-			{
-				if (_proficiency == value)
-				{
-					return;
-				}
-				_proficiency = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _proficiency);
+			set => SetProperty(ref _proficiency, value);
 		}
 
 		public BasePerkDisplayData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

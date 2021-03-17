@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("resource")] 
 		public raRef<worldTrafficPersistentResource> Resource
 		{
-			get
-			{
-				if (_resource == null)
-				{
-					_resource = (raRef<worldTrafficPersistentResource>) CR2WTypeManager.Create("raRef:worldTrafficPersistentResource", "resource", cr2w, this);
-				}
-				return _resource;
-			}
-			set
-			{
-				if (_resource == value)
-				{
-					return;
-				}
-				_resource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resource);
+			set => SetProperty(ref _resource, value);
 		}
 
 		public worldTrafficPersistentNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

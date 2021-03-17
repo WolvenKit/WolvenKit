@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("FleshBodyMask")] 
 		public CEnum<physicsRagdollBodyPartE> FleshBodyMask
 		{
-			get
-			{
-				if (_fleshBodyMask == null)
-				{
-					_fleshBodyMask = (CEnum<physicsRagdollBodyPartE>) CR2WTypeManager.Create("physicsRagdollBodyPartE", "FleshBodyMask", cr2w, this);
-				}
-				return _fleshBodyMask;
-			}
-			set
-			{
-				if (_fleshBodyMask == value)
-				{
-					return;
-				}
-				_fleshBodyMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fleshBodyMask);
+			set => SetProperty(ref _fleshBodyMask, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("CyberBodyMask")] 
 		public CEnum<physicsRagdollBodyPartE> CyberBodyMask
 		{
-			get
-			{
-				if (_cyberBodyMask == null)
-				{
-					_cyberBodyMask = (CEnum<physicsRagdollBodyPartE>) CR2WTypeManager.Create("physicsRagdollBodyPartE", "CyberBodyMask", cr2w, this);
-				}
-				return _cyberBodyMask;
-			}
-			set
-			{
-				if (_cyberBodyMask == value)
-				{
-					return;
-				}
-				_cyberBodyMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cyberBodyMask);
+			set => SetProperty(ref _cyberBodyMask, value);
 		}
 
 		public entdismembermentBodyMaterialConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

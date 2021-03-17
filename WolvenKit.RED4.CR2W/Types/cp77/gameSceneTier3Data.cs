@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cameraSettings")] 
 		public gameTier3CameraSettings CameraSettings
 		{
-			get
-			{
-				if (_cameraSettings == null)
-				{
-					_cameraSettings = (gameTier3CameraSettings) CR2WTypeManager.Create("gameTier3CameraSettings", "cameraSettings", cr2w, this);
-				}
-				return _cameraSettings;
-			}
-			set
-			{
-				if (_cameraSettings == value)
-				{
-					return;
-				}
-				_cameraSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameraSettings);
+			set => SetProperty(ref _cameraSettings, value);
 		}
 
 		public gameSceneTier3Data(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

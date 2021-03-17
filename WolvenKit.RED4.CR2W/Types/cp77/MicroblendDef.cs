@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("texture")] 
 		public rRef<CBitmapTexture> Texture
 		{
-			get
-			{
-				if (_texture == null)
-				{
-					_texture = (rRef<CBitmapTexture>) CR2WTypeManager.Create("rRef:CBitmapTexture", "texture", cr2w, this);
-				}
-				return _texture;
-			}
-			set
-			{
-				if (_texture == value)
-				{
-					return;
-				}
-				_texture = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _texture);
+			set => SetProperty(ref _texture, value);
 		}
 
 		public MicroblendDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lifetime")] 
 		public CFloat Lifetime
 		{
-			get
-			{
-				if (_lifetime == null)
-				{
-					_lifetime = (CFloat) CR2WTypeManager.Create("Float", "lifetime", cr2w, this);
-				}
-				return _lifetime;
-			}
-			set
-			{
-				if (_lifetime == value)
-				{
-					return;
-				}
-				_lifetime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lifetime);
+			set => SetProperty(ref _lifetime, value);
 		}
 
 		public EMPHitEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

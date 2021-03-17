@@ -23,253 +23,88 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("propId")] 
 		public scnPropId PropId
 		{
-			get
-			{
-				if (_propId == null)
-				{
-					_propId = (scnPropId) CR2WTypeManager.Create("scnPropId", "propId", cr2w, this);
-				}
-				return _propId;
-			}
-			set
-			{
-				if (_propId == value)
-				{
-					return;
-				}
-				_propId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _propId);
+			set => SetProperty(ref _propId, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("offsetMode")] 
 		public CEnum<scnOffsetMode> OffsetMode
 		{
-			get
-			{
-				if (_offsetMode == null)
-				{
-					_offsetMode = (CEnum<scnOffsetMode>) CR2WTypeManager.Create("scnOffsetMode", "offsetMode", cr2w, this);
-				}
-				return _offsetMode;
-			}
-			set
-			{
-				if (_offsetMode == value)
-				{
-					return;
-				}
-				_offsetMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offsetMode);
+			set => SetProperty(ref _offsetMode, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("customOffsetPos")] 
 		public Vector3 CustomOffsetPos
 		{
-			get
-			{
-				if (_customOffsetPos == null)
-				{
-					_customOffsetPos = (Vector3) CR2WTypeManager.Create("Vector3", "customOffsetPos", cr2w, this);
-				}
-				return _customOffsetPos;
-			}
-			set
-			{
-				if (_customOffsetPos == value)
-				{
-					return;
-				}
-				_customOffsetPos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customOffsetPos);
+			set => SetProperty(ref _customOffsetPos, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("customOffsetRot")] 
 		public Quaternion CustomOffsetRot
 		{
-			get
-			{
-				if (_customOffsetRot == null)
-				{
-					_customOffsetRot = (Quaternion) CR2WTypeManager.Create("Quaternion", "customOffsetRot", cr2w, this);
-				}
-				return _customOffsetRot;
-			}
-			set
-			{
-				if (_customOffsetRot == value)
-				{
-					return;
-				}
-				_customOffsetRot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customOffsetRot);
+			set => SetProperty(ref _customOffsetRot, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("referencePerformer")] 
 		public scnPerformerId ReferencePerformer
 		{
-			get
-			{
-				if (_referencePerformer == null)
-				{
-					_referencePerformer = (scnPerformerId) CR2WTypeManager.Create("scnPerformerId", "referencePerformer", cr2w, this);
-				}
-				return _referencePerformer;
-			}
-			set
-			{
-				if (_referencePerformer == value)
-				{
-					return;
-				}
-				_referencePerformer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _referencePerformer);
+			set => SetProperty(ref _referencePerformer, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("referencePerformerSlotId")] 
 		public TweakDBID ReferencePerformerSlotId
 		{
-			get
-			{
-				if (_referencePerformerSlotId == null)
-				{
-					_referencePerformerSlotId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "referencePerformerSlotId", cr2w, this);
-				}
-				return _referencePerformerSlotId;
-			}
-			set
-			{
-				if (_referencePerformerSlotId == value)
-				{
-					return;
-				}
-				_referencePerformerSlotId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _referencePerformerSlotId);
+			set => SetProperty(ref _referencePerformerSlotId, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("referencePerformerItemId")] 
 		public TweakDBID ReferencePerformerItemId
 		{
-			get
-			{
-				if (_referencePerformerItemId == null)
-				{
-					_referencePerformerItemId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "referencePerformerItemId", cr2w, this);
-				}
-				return _referencePerformerItemId;
-			}
-			set
-			{
-				if (_referencePerformerItemId == value)
-				{
-					return;
-				}
-				_referencePerformerItemId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _referencePerformerItemId);
+			set => SetProperty(ref _referencePerformerItemId, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("fallbackCachedBones", 2)] 
 		public CStatic<scneventsAttachPropToWorldCachedFallbackBone> FallbackCachedBones
 		{
-			get
-			{
-				if (_fallbackCachedBones == null)
-				{
-					_fallbackCachedBones = (CStatic<scneventsAttachPropToWorldCachedFallbackBone>) CR2WTypeManager.Create("static:2,scneventsAttachPropToWorldCachedFallbackBone", "fallbackCachedBones", cr2w, this);
-				}
-				return _fallbackCachedBones;
-			}
-			set
-			{
-				if (_fallbackCachedBones == value)
-				{
-					return;
-				}
-				_fallbackCachedBones = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fallbackCachedBones);
+			set => SetProperty(ref _fallbackCachedBones, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("fallbackAnimset")] 
 		public rRef<animAnimSet> FallbackAnimset
 		{
-			get
-			{
-				if (_fallbackAnimset == null)
-				{
-					_fallbackAnimset = (rRef<animAnimSet>) CR2WTypeManager.Create("rRef:animAnimSet", "fallbackAnimset", cr2w, this);
-				}
-				return _fallbackAnimset;
-			}
-			set
-			{
-				if (_fallbackAnimset == value)
-				{
-					return;
-				}
-				_fallbackAnimset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fallbackAnimset);
+			set => SetProperty(ref _fallbackAnimset, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("fallbackAnimationName")] 
 		public CName FallbackAnimationName
 		{
-			get
-			{
-				if (_fallbackAnimationName == null)
-				{
-					_fallbackAnimationName = (CName) CR2WTypeManager.Create("CName", "fallbackAnimationName", cr2w, this);
-				}
-				return _fallbackAnimationName;
-			}
-			set
-			{
-				if (_fallbackAnimationName == value)
-				{
-					return;
-				}
-				_fallbackAnimationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fallbackAnimationName);
+			set => SetProperty(ref _fallbackAnimationName, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("fallbackAnimTime")] 
 		public CFloat FallbackAnimTime
 		{
-			get
-			{
-				if (_fallbackAnimTime == null)
-				{
-					_fallbackAnimTime = (CFloat) CR2WTypeManager.Create("Float", "fallbackAnimTime", cr2w, this);
-				}
-				return _fallbackAnimTime;
-			}
-			set
-			{
-				if (_fallbackAnimTime == value)
-				{
-					return;
-				}
-				_fallbackAnimTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fallbackAnimTime);
+			set => SetProperty(ref _fallbackAnimTime, value);
 		}
 
 		public scneventsAttachPropToWorld(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

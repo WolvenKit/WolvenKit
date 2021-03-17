@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("workingAlarm")] 
 		public CHandle<entMeshComponent> WorkingAlarm
 		{
-			get
-			{
-				if (_workingAlarm == null)
-				{
-					_workingAlarm = (CHandle<entMeshComponent>) CR2WTypeManager.Create("handle:entMeshComponent", "workingAlarm", cr2w, this);
-				}
-				return _workingAlarm;
-			}
-			set
-			{
-				if (_workingAlarm == value)
-				{
-					return;
-				}
-				_workingAlarm = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workingAlarm);
+			set => SetProperty(ref _workingAlarm, value);
 		}
 
 		[Ordinal(94)] 
 		[RED("destroyedAlarm")] 
 		public CHandle<entMeshComponent> DestroyedAlarm
 		{
-			get
-			{
-				if (_destroyedAlarm == null)
-				{
-					_destroyedAlarm = (CHandle<entMeshComponent>) CR2WTypeManager.Create("handle:entMeshComponent", "destroyedAlarm", cr2w, this);
-				}
-				return _destroyedAlarm;
-			}
-			set
-			{
-				if (_destroyedAlarm == value)
-				{
-					return;
-				}
-				_destroyedAlarm = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _destroyedAlarm);
+			set => SetProperty(ref _destroyedAlarm, value);
 		}
 
 		[Ordinal(95)] 
 		[RED("isGlitching")] 
 		public CBool IsGlitching
 		{
-			get
-			{
-				if (_isGlitching == null)
-				{
-					_isGlitching = (CBool) CR2WTypeManager.Create("Bool", "isGlitching", cr2w, this);
-				}
-				return _isGlitching;
-			}
-			set
-			{
-				if (_isGlitching == value)
-				{
-					return;
-				}
-				_isGlitching = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isGlitching);
+			set => SetProperty(ref _isGlitching, value);
 		}
 
 		public SecurityAlarm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

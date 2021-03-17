@@ -29,391 +29,136 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nameText")] 
 		public inkTextWidgetReference NameText
 		{
-			get
-			{
-				if (_nameText == null)
-				{
-					_nameText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "nameText", cr2w, this);
-				}
-				return _nameText;
-			}
-			set
-			{
-				if (_nameText == value)
-				{
-					return;
-				}
-				_nameText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nameText);
+			set => SetProperty(ref _nameText, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("fluffText")] 
 		public inkTextWidgetReference FluffText
 		{
-			get
-			{
-				if (_fluffText == null)
-				{
-					_fluffText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "fluffText", cr2w, this);
-				}
-				return _fluffText;
-			}
-			set
-			{
-				if (_fluffText == value)
-				{
-					return;
-				}
-				_fluffText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fluffText);
+			set => SetProperty(ref _fluffText, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("separator1")] 
 		public inkRectangleWidgetReference Separator1
 		{
-			get
-			{
-				if (_separator1 == null)
-				{
-					_separator1 = (inkRectangleWidgetReference) CR2WTypeManager.Create("inkRectangleWidgetReference", "separator1", cr2w, this);
-				}
-				return _separator1;
-			}
-			set
-			{
-				if (_separator1 == value)
-				{
-					return;
-				}
-				_separator1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _separator1);
+			set => SetProperty(ref _separator1, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("separator2")] 
 		public inkRectangleWidgetReference Separator2
 		{
-			get
-			{
-				if (_separator2 == null)
-				{
-					_separator2 = (inkRectangleWidgetReference) CR2WTypeManager.Create("inkRectangleWidgetReference", "separator2", cr2w, this);
-				}
-				return _separator2;
-			}
-			set
-			{
-				if (_separator2 == value)
-				{
-					return;
-				}
-				_separator2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _separator2);
+			set => SetProperty(ref _separator2, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("levelText")] 
 		public inkTextWidgetReference LevelText
 		{
-			get
-			{
-				if (_levelText == null)
-				{
-					_levelText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "levelText", cr2w, this);
-				}
-				return _levelText;
-			}
-			set
-			{
-				if (_levelText == value)
-				{
-					return;
-				}
-				_levelText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelText);
+			set => SetProperty(ref _levelText, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("status")] 
 		public inkTextWidgetReference Status
 		{
-			get
-			{
-				if (_status == null)
-				{
-					_status = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "status", cr2w, this);
-				}
-				return _status;
-			}
-			set
-			{
-				if (_status == value)
-				{
-					return;
-				}
-				_status = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _status);
+			set => SetProperty(ref _status, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("statusIcon")] 
 		public inkImageWidgetReference StatusIcon
 		{
-			get
-			{
-				if (_statusIcon == null)
-				{
-					_statusIcon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "statusIcon", cr2w, this);
-				}
-				return _statusIcon;
-			}
-			set
-			{
-				if (_statusIcon == value)
-				{
-					return;
-				}
-				_statusIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statusIcon);
+			set => SetProperty(ref _statusIcon, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("levelWrapper")] 
 		public inkWidgetReference LevelWrapper
 		{
-			get
-			{
-				if (_levelWrapper == null)
-				{
-					_levelWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "levelWrapper", cr2w, this);
-				}
-				return _levelWrapper;
-			}
-			set
-			{
-				if (_levelWrapper == value)
-				{
-					return;
-				}
-				_levelWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelWrapper);
+			set => SetProperty(ref _levelWrapper, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("nameCallbackID")] 
 		public CUInt32 NameCallbackID
 		{
-			get
-			{
-				if (_nameCallbackID == null)
-				{
-					_nameCallbackID = (CUInt32) CR2WTypeManager.Create("Uint32", "nameCallbackID", cr2w, this);
-				}
-				return _nameCallbackID;
-			}
-			set
-			{
-				if (_nameCallbackID == value)
-				{
-					return;
-				}
-				_nameCallbackID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nameCallbackID);
+			set => SetProperty(ref _nameCallbackID, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("networkLevelCallbackID")] 
 		public CUInt32 NetworkLevelCallbackID
 		{
-			get
-			{
-				if (_networkLevelCallbackID == null)
-				{
-					_networkLevelCallbackID = (CUInt32) CR2WTypeManager.Create("Uint32", "networkLevelCallbackID", cr2w, this);
-				}
-				return _networkLevelCallbackID;
-			}
-			set
-			{
-				if (_networkLevelCallbackID == value)
-				{
-					return;
-				}
-				_networkLevelCallbackID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _networkLevelCallbackID);
+			set => SetProperty(ref _networkLevelCallbackID, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("networkStatusCallbackID")] 
 		public CUInt32 NetworkStatusCallbackID
 		{
-			get
-			{
-				if (_networkStatusCallbackID == null)
-				{
-					_networkStatusCallbackID = (CUInt32) CR2WTypeManager.Create("Uint32", "networkStatusCallbackID", cr2w, this);
-				}
-				return _networkStatusCallbackID;
-			}
-			set
-			{
-				if (_networkStatusCallbackID == value)
-				{
-					return;
-				}
-				_networkStatusCallbackID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _networkStatusCallbackID);
+			set => SetProperty(ref _networkStatusCallbackID, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("deviceStatusCallbackID")] 
 		public CUInt32 DeviceStatusCallbackID
 		{
-			get
-			{
-				if (_deviceStatusCallbackID == null)
-				{
-					_deviceStatusCallbackID = (CUInt32) CR2WTypeManager.Create("Uint32", "deviceStatusCallbackID", cr2w, this);
-				}
-				return _deviceStatusCallbackID;
-			}
-			set
-			{
-				if (_deviceStatusCallbackID == value)
-				{
-					return;
-				}
-				_deviceStatusCallbackID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deviceStatusCallbackID);
+			set => SetProperty(ref _deviceStatusCallbackID, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("attitudeCallbackID")] 
 		public CUInt32 AttitudeCallbackID
 		{
-			get
-			{
-				if (_attitudeCallbackID == null)
-				{
-					_attitudeCallbackID = (CUInt32) CR2WTypeManager.Create("Uint32", "attitudeCallbackID", cr2w, this);
-				}
-				return _attitudeCallbackID;
-			}
-			set
-			{
-				if (_attitudeCallbackID == value)
-				{
-					return;
-				}
-				_attitudeCallbackID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attitudeCallbackID);
+			set => SetProperty(ref _attitudeCallbackID, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("isValidName")] 
 		public CBool IsValidName
 		{
-			get
-			{
-				if (_isValidName == null)
-				{
-					_isValidName = (CBool) CR2WTypeManager.Create("Bool", "isValidName", cr2w, this);
-				}
-				return _isValidName;
-			}
-			set
-			{
-				if (_isValidName == value)
-				{
-					return;
-				}
-				_isValidName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isValidName);
+			set => SetProperty(ref _isValidName, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("isValidNetworkLevel")] 
 		public CBool IsValidNetworkLevel
 		{
-			get
-			{
-				if (_isValidNetworkLevel == null)
-				{
-					_isValidNetworkLevel = (CBool) CR2WTypeManager.Create("Bool", "isValidNetworkLevel", cr2w, this);
-				}
-				return _isValidNetworkLevel;
-			}
-			set
-			{
-				if (_isValidNetworkLevel == value)
-				{
-					return;
-				}
-				_isValidNetworkLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isValidNetworkLevel);
+			set => SetProperty(ref _isValidNetworkLevel, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("isValidnetworkStatus")] 
 		public CBool IsValidnetworkStatus
 		{
-			get
-			{
-				if (_isValidnetworkStatus == null)
-				{
-					_isValidnetworkStatus = (CBool) CR2WTypeManager.Create("Bool", "isValidnetworkStatus", cr2w, this);
-				}
-				return _isValidnetworkStatus;
-			}
-			set
-			{
-				if (_isValidnetworkStatus == value)
-				{
-					return;
-				}
-				_isValidnetworkStatus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isValidnetworkStatus);
+			set => SetProperty(ref _isValidnetworkStatus, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("isValidDeviceStatus")] 
 		public CBool IsValidDeviceStatus
 		{
-			get
-			{
-				if (_isValidDeviceStatus == null)
-				{
-					_isValidDeviceStatus = (CBool) CR2WTypeManager.Create("Bool", "isValidDeviceStatus", cr2w, this);
-				}
-				return _isValidDeviceStatus;
-			}
-			set
-			{
-				if (_isValidDeviceStatus == value)
-				{
-					return;
-				}
-				_isValidDeviceStatus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isValidDeviceStatus);
+			set => SetProperty(ref _isValidDeviceStatus, value);
 		}
 
 		public ScannerDeviceHeaderGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

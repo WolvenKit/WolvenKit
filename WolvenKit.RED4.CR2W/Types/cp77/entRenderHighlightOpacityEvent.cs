@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("opacity")] 
 		public CFloat Opacity
 		{
-			get
-			{
-				if (_opacity == null)
-				{
-					_opacity = (CFloat) CR2WTypeManager.Create("Float", "opacity", cr2w, this);
-				}
-				return _opacity;
-			}
-			set
-			{
-				if (_opacity == value)
-				{
-					return;
-				}
-				_opacity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _opacity);
+			set => SetProperty(ref _opacity, value);
 		}
 
 		public entRenderHighlightOpacityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("serialNumber")] 
 		public CUInt32 SerialNumber
 		{
-			get
-			{
-				if (_serialNumber == null)
-				{
-					_serialNumber = (CUInt32) CR2WTypeManager.Create("Uint32", "serialNumber", cr2w, this);
-				}
-				return _serialNumber;
-			}
-			set
-			{
-				if (_serialNumber == value)
-				{
-					return;
-				}
-				_serialNumber = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _serialNumber);
+			set => SetProperty(ref _serialNumber, value);
 		}
 
 		public scnRidSerialNumber(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

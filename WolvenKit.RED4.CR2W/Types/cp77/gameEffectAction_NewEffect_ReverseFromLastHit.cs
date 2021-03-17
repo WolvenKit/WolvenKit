@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tagInThisFile")] 
 		public CName TagInThisFile
 		{
-			get
-			{
-				if (_tagInThisFile == null)
-				{
-					_tagInThisFile = (CName) CR2WTypeManager.Create("CName", "tagInThisFile", cr2w, this);
-				}
-				return _tagInThisFile;
-			}
-			set
-			{
-				if (_tagInThisFile == value)
-				{
-					return;
-				}
-				_tagInThisFile = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tagInThisFile);
+			set => SetProperty(ref _tagInThisFile, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("forwardOffset")] 
 		public CFloat ForwardOffset
 		{
-			get
-			{
-				if (_forwardOffset == null)
-				{
-					_forwardOffset = (CFloat) CR2WTypeManager.Create("Float", "forwardOffset", cr2w, this);
-				}
-				return _forwardOffset;
-			}
-			set
-			{
-				if (_forwardOffset == value)
-				{
-					return;
-				}
-				_forwardOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forwardOffset);
+			set => SetProperty(ref _forwardOffset, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("childEffect")] 
 		public CBool ChildEffect
 		{
-			get
-			{
-				if (_childEffect == null)
-				{
-					_childEffect = (CBool) CR2WTypeManager.Create("Bool", "childEffect", cr2w, this);
-				}
-				return _childEffect;
-			}
-			set
-			{
-				if (_childEffect == value)
-				{
-					return;
-				}
-				_childEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _childEffect);
+			set => SetProperty(ref _childEffect, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("childEffectTag")] 
 		public CName ChildEffectTag
 		{
-			get
-			{
-				if (_childEffectTag == null)
-				{
-					_childEffectTag = (CName) CR2WTypeManager.Create("CName", "childEffectTag", cr2w, this);
-				}
-				return _childEffectTag;
-			}
-			set
-			{
-				if (_childEffectTag == value)
-				{
-					return;
-				}
-				_childEffectTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _childEffectTag);
+			set => SetProperty(ref _childEffectTag, value);
 		}
 
 		public gameEffectAction_NewEffect_ReverseFromLastHit(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

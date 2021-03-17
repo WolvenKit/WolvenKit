@@ -29,391 +29,136 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("throwtype")] 
 		public CEnum<ThrowType> Throwtype
 		{
-			get
-			{
-				if (_throwtype == null)
-				{
-					_throwtype = (CEnum<ThrowType>) CR2WTypeManager.Create("ThrowType", "throwtype", cr2w, this);
-				}
-				return _throwtype;
-			}
-			set
-			{
-				if (_throwtype == value)
-				{
-					return;
-				}
-				_throwtype = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _throwtype);
+			set => SetProperty(ref _throwtype, value);
 		}
 
 		[Ordinal(52)] 
 		[RED("targetAcquired")] 
 		public CBool TargetAcquired
 		{
-			get
-			{
-				if (_targetAcquired == null)
-				{
-					_targetAcquired = (CBool) CR2WTypeManager.Create("Bool", "targetAcquired", cr2w, this);
-				}
-				return _targetAcquired;
-			}
-			set
-			{
-				if (_targetAcquired == value)
-				{
-					return;
-				}
-				_targetAcquired = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetAcquired);
+			set => SetProperty(ref _targetAcquired, value);
 		}
 
 		[Ordinal(53)] 
 		[RED("player")] 
 		public wCHandle<gameObject> Player
 		{
-			get
-			{
-				if (_player == null)
-				{
-					_player = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "player", cr2w, this);
-				}
-				return _player;
-			}
-			set
-			{
-				if (_player == value)
-				{
-					return;
-				}
-				_player = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _player);
+			set => SetProperty(ref _player, value);
 		}
 
 		[Ordinal(54)] 
 		[RED("disc")] 
 		public wCHandle<gameObject> Disc
 		{
-			get
-			{
-				if (_disc == null)
-				{
-					_disc = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "disc", cr2w, this);
-				}
-				return _disc;
-			}
-			set
-			{
-				if (_disc == value)
-				{
-					return;
-				}
-				_disc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _disc);
+			set => SetProperty(ref _disc, value);
 		}
 
 		[Ordinal(55)] 
 		[RED("target")] 
 		public wCHandle<gameObject> Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		[Ordinal(56)] 
 		[RED("blackboard")] 
 		public wCHandle<gameIBlackboard> Blackboard
 		{
-			get
-			{
-				if (_blackboard == null)
-				{
-					_blackboard = (wCHandle<gameIBlackboard>) CR2WTypeManager.Create("whandle:gameIBlackboard", "blackboard", cr2w, this);
-				}
-				return _blackboard;
-			}
-			set
-			{
-				if (_blackboard == value)
-				{
-					return;
-				}
-				_blackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboard);
+			set => SetProperty(ref _blackboard, value);
 		}
 
 		[Ordinal(57)] 
 		[RED("discSpawnPoint")] 
 		public Vector4 DiscSpawnPoint
 		{
-			get
-			{
-				if (_discSpawnPoint == null)
-				{
-					_discSpawnPoint = (Vector4) CR2WTypeManager.Create("Vector4", "discSpawnPoint", cr2w, this);
-				}
-				return _discSpawnPoint;
-			}
-			set
-			{
-				if (_discSpawnPoint == value)
-				{
-					return;
-				}
-				_discSpawnPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _discSpawnPoint);
+			set => SetProperty(ref _discSpawnPoint, value);
 		}
 
 		[Ordinal(58)] 
 		[RED("discPosition")] 
 		public Vector4 DiscPosition
 		{
-			get
-			{
-				if (_discPosition == null)
-				{
-					_discPosition = (Vector4) CR2WTypeManager.Create("Vector4", "discPosition", cr2w, this);
-				}
-				return _discPosition;
-			}
-			set
-			{
-				if (_discPosition == value)
-				{
-					return;
-				}
-				_discPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _discPosition);
+			set => SetProperty(ref _discPosition, value);
 		}
 
 		[Ordinal(59)] 
 		[RED("collisionCount")] 
 		public CInt32 CollisionCount
 		{
-			get
-			{
-				if (_collisionCount == null)
-				{
-					_collisionCount = (CInt32) CR2WTypeManager.Create("Int32", "collisionCount", cr2w, this);
-				}
-				return _collisionCount;
-			}
-			set
-			{
-				if (_collisionCount == value)
-				{
-					return;
-				}
-				_collisionCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collisionCount);
+			set => SetProperty(ref _collisionCount, value);
 		}
 
 		[Ordinal(60)] 
 		[RED("airTime")] 
 		public CFloat AirTime
 		{
-			get
-			{
-				if (_airTime == null)
-				{
-					_airTime = (CFloat) CR2WTypeManager.Create("Float", "airTime", cr2w, this);
-				}
-				return _airTime;
-			}
-			set
-			{
-				if (_airTime == value)
-				{
-					return;
-				}
-				_airTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _airTime);
+			set => SetProperty(ref _airTime, value);
 		}
 
 		[Ordinal(61)] 
 		[RED("destroyTimer")] 
 		public CFloat DestroyTimer
 		{
-			get
-			{
-				if (_destroyTimer == null)
-				{
-					_destroyTimer = (CFloat) CR2WTypeManager.Create("Float", "destroyTimer", cr2w, this);
-				}
-				return _destroyTimer;
-			}
-			set
-			{
-				if (_destroyTimer == value)
-				{
-					return;
-				}
-				_destroyTimer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _destroyTimer);
+			set => SetProperty(ref _destroyTimer, value);
 		}
 
 		[Ordinal(62)] 
 		[RED("returningToPlayer")] 
 		public CBool ReturningToPlayer
 		{
-			get
-			{
-				if (_returningToPlayer == null)
-				{
-					_returningToPlayer = (CBool) CR2WTypeManager.Create("Bool", "returningToPlayer", cr2w, this);
-				}
-				return _returningToPlayer;
-			}
-			set
-			{
-				if (_returningToPlayer == value)
-				{
-					return;
-				}
-				_returningToPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _returningToPlayer);
+			set => SetProperty(ref _returningToPlayer, value);
 		}
 
 		[Ordinal(63)] 
 		[RED("catchingPlayer")] 
 		public CBool CatchingPlayer
 		{
-			get
-			{
-				if (_catchingPlayer == null)
-				{
-					_catchingPlayer = (CBool) CR2WTypeManager.Create("Bool", "catchingPlayer", cr2w, this);
-				}
-				return _catchingPlayer;
-			}
-			set
-			{
-				if (_catchingPlayer == value)
-				{
-					return;
-				}
-				_catchingPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _catchingPlayer);
+			set => SetProperty(ref _catchingPlayer, value);
 		}
 
 		[Ordinal(64)] 
 		[RED("discCaught")] 
 		public CBool DiscCaught
 		{
-			get
-			{
-				if (_discCaught == null)
-				{
-					_discCaught = (CBool) CR2WTypeManager.Create("Bool", "discCaught", cr2w, this);
-				}
-				return _discCaught;
-			}
-			set
-			{
-				if (_discCaught == value)
-				{
-					return;
-				}
-				_discCaught = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _discCaught);
+			set => SetProperty(ref _discCaught, value);
 		}
 
 		[Ordinal(65)] 
 		[RED("discLodgedToSurface")] 
 		public CBool DiscLodgedToSurface
 		{
-			get
-			{
-				if (_discLodgedToSurface == null)
-				{
-					_discLodgedToSurface = (CBool) CR2WTypeManager.Create("Bool", "discLodgedToSurface", cr2w, this);
-				}
-				return _discLodgedToSurface;
-			}
-			set
-			{
-				if (_discLodgedToSurface == value)
-				{
-					return;
-				}
-				_discLodgedToSurface = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _discLodgedToSurface);
+			set => SetProperty(ref _discLodgedToSurface, value);
 		}
 
 		[Ordinal(66)] 
 		[RED("wasNPCHit")] 
 		public CBool WasNPCHit
 		{
-			get
-			{
-				if (_wasNPCHit == null)
-				{
-					_wasNPCHit = (CBool) CR2WTypeManager.Create("Bool", "wasNPCHit", cr2w, this);
-				}
-				return _wasNPCHit;
-			}
-			set
-			{
-				if (_wasNPCHit == value)
-				{
-					return;
-				}
-				_wasNPCHit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasNPCHit);
+			set => SetProperty(ref _wasNPCHit, value);
 		}
 
 		[Ordinal(67)] 
 		[RED("animationController")] 
 		public CHandle<entAnimationControllerComponent> AnimationController
 		{
-			get
-			{
-				if (_animationController == null)
-				{
-					_animationController = (CHandle<entAnimationControllerComponent>) CR2WTypeManager.Create("handle:entAnimationControllerComponent", "animationController", cr2w, this);
-				}
-				return _animationController;
-			}
-			set
-			{
-				if (_animationController == value)
-				{
-					return;
-				}
-				_animationController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationController);
+			set => SetProperty(ref _animationController, value);
 		}
 
 		public MonoDisc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

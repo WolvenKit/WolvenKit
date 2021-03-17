@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("defaultIncreaseSpeed")] 
 		public Vector4 DefaultIncreaseSpeed
 		{
-			get
-			{
-				if (_defaultIncreaseSpeed == null)
-				{
-					_defaultIncreaseSpeed = (Vector4) CR2WTypeManager.Create("Vector4", "defaultIncreaseSpeed", cr2w, this);
-				}
-				return _defaultIncreaseSpeed;
-			}
-			set
-			{
-				if (_defaultIncreaseSpeed == value)
-				{
-					return;
-				}
-				_defaultIncreaseSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultIncreaseSpeed);
+			set => SetProperty(ref _defaultIncreaseSpeed, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("defaultDecreaseSpeed")] 
 		public Vector4 DefaultDecreaseSpeed
 		{
-			get
-			{
-				if (_defaultDecreaseSpeed == null)
-				{
-					_defaultDecreaseSpeed = (Vector4) CR2WTypeManager.Create("Vector4", "defaultDecreaseSpeed", cr2w, this);
-				}
-				return _defaultDecreaseSpeed;
-			}
-			set
-			{
-				if (_defaultDecreaseSpeed == value)
-				{
-					return;
-				}
-				_defaultDecreaseSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultDecreaseSpeed);
+			set => SetProperty(ref _defaultDecreaseSpeed, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("startFromDefaultValue")] 
 		public CBool StartFromDefaultValue
 		{
-			get
-			{
-				if (_startFromDefaultValue == null)
-				{
-					_startFromDefaultValue = (CBool) CR2WTypeManager.Create("Bool", "startFromDefaultValue", cr2w, this);
-				}
-				return _startFromDefaultValue;
-			}
-			set
-			{
-				if (_startFromDefaultValue == value)
-				{
-					return;
-				}
-				_startFromDefaultValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startFromDefaultValue);
+			set => SetProperty(ref _startFromDefaultValue, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("defaultInitialValue")] 
 		public Vector4 DefaultInitialValue
 		{
-			get
-			{
-				if (_defaultInitialValue == null)
-				{
-					_defaultInitialValue = (Vector4) CR2WTypeManager.Create("Vector4", "defaultInitialValue", cr2w, this);
-				}
-				return _defaultInitialValue;
-			}
-			set
-			{
-				if (_defaultInitialValue == value)
-				{
-					return;
-				}
-				_defaultInitialValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultInitialValue);
+			set => SetProperty(ref _defaultInitialValue, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("inputNode")] 
 		public animVectorLink InputNode
 		{
-			get
-			{
-				if (_inputNode == null)
-				{
-					_inputNode = (animVectorLink) CR2WTypeManager.Create("animVectorLink", "inputNode", cr2w, this);
-				}
-				return _inputNode;
-			}
-			set
-			{
-				if (_inputNode == value)
-				{
-					return;
-				}
-				_inputNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputNode);
+			set => SetProperty(ref _inputNode, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("increaseSpeedNode")] 
 		public animVectorLink IncreaseSpeedNode
 		{
-			get
-			{
-				if (_increaseSpeedNode == null)
-				{
-					_increaseSpeedNode = (animVectorLink) CR2WTypeManager.Create("animVectorLink", "increaseSpeedNode", cr2w, this);
-				}
-				return _increaseSpeedNode;
-			}
-			set
-			{
-				if (_increaseSpeedNode == value)
-				{
-					return;
-				}
-				_increaseSpeedNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _increaseSpeedNode);
+			set => SetProperty(ref _increaseSpeedNode, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("decreaseSpeedNode")] 
 		public animVectorLink DecreaseSpeedNode
 		{
-			get
-			{
-				if (_decreaseSpeedNode == null)
-				{
-					_decreaseSpeedNode = (animVectorLink) CR2WTypeManager.Create("animVectorLink", "decreaseSpeedNode", cr2w, this);
-				}
-				return _decreaseSpeedNode;
-			}
-			set
-			{
-				if (_decreaseSpeedNode == value)
-				{
-					return;
-				}
-				_decreaseSpeedNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _decreaseSpeedNode);
+			set => SetProperty(ref _decreaseSpeedNode, value);
 		}
 
 		public animAnimNode_DampVector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

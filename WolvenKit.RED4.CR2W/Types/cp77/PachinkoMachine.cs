@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("distractionFXName")] 
 		public CName DistractionFXName
 		{
-			get
-			{
-				if (_distractionFXName == null)
-				{
-					_distractionFXName = (CName) CR2WTypeManager.Create("CName", "distractionFXName", cr2w, this);
-				}
-				return _distractionFXName;
-			}
-			set
-			{
-				if (_distractionFXName == value)
-				{
-					return;
-				}
-				_distractionFXName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distractionFXName);
+			set => SetProperty(ref _distractionFXName, value);
 		}
 
 		public PachinkoMachine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

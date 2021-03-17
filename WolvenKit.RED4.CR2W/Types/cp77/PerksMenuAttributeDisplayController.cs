@@ -28,368 +28,128 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("widgetWrapper")] 
 		public inkWidgetReference WidgetWrapper
 		{
-			get
-			{
-				if (_widgetWrapper == null)
-				{
-					_widgetWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "widgetWrapper", cr2w, this);
-				}
-				return _widgetWrapper;
-			}
-			set
-			{
-				if (_widgetWrapper == value)
-				{
-					return;
-				}
-				_widgetWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetWrapper);
+			set => SetProperty(ref _widgetWrapper, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("foregroundWrapper")] 
 		public inkWidgetReference ForegroundWrapper
 		{
-			get
-			{
-				if (_foregroundWrapper == null)
-				{
-					_foregroundWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "foregroundWrapper", cr2w, this);
-				}
-				return _foregroundWrapper;
-			}
-			set
-			{
-				if (_foregroundWrapper == value)
-				{
-					return;
-				}
-				_foregroundWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _foregroundWrapper);
+			set => SetProperty(ref _foregroundWrapper, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("johnnyWrapper")] 
 		public inkWidgetReference JohnnyWrapper
 		{
-			get
-			{
-				if (_johnnyWrapper == null)
-				{
-					_johnnyWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "johnnyWrapper", cr2w, this);
-				}
-				return _johnnyWrapper;
-			}
-			set
-			{
-				if (_johnnyWrapper == value)
-				{
-					return;
-				}
-				_johnnyWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _johnnyWrapper);
+			set => SetProperty(ref _johnnyWrapper, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("attributeName")] 
 		public inkTextWidgetReference AttributeName
 		{
-			get
-			{
-				if (_attributeName == null)
-				{
-					_attributeName = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "attributeName", cr2w, this);
-				}
-				return _attributeName;
-			}
-			set
-			{
-				if (_attributeName == value)
-				{
-					return;
-				}
-				_attributeName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeName);
+			set => SetProperty(ref _attributeName, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("attributeIcon")] 
 		public inkImageWidgetReference AttributeIcon
 		{
-			get
-			{
-				if (_attributeIcon == null)
-				{
-					_attributeIcon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "attributeIcon", cr2w, this);
-				}
-				return _attributeIcon;
-			}
-			set
-			{
-				if (_attributeIcon == value)
-				{
-					return;
-				}
-				_attributeIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeIcon);
+			set => SetProperty(ref _attributeIcon, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("attributeLevel")] 
 		public inkTextWidgetReference AttributeLevel
 		{
-			get
-			{
-				if (_attributeLevel == null)
-				{
-					_attributeLevel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "attributeLevel", cr2w, this);
-				}
-				return _attributeLevel;
-			}
-			set
-			{
-				if (_attributeLevel == value)
-				{
-					return;
-				}
-				_attributeLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeLevel);
+			set => SetProperty(ref _attributeLevel, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("frameHovered")] 
 		public inkWidgetReference FrameHovered
 		{
-			get
-			{
-				if (_frameHovered == null)
-				{
-					_frameHovered = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "frameHovered", cr2w, this);
-				}
-				return _frameHovered;
-			}
-			set
-			{
-				if (_frameHovered == value)
-				{
-					return;
-				}
-				_frameHovered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frameHovered);
+			set => SetProperty(ref _frameHovered, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("accent1Hovered")] 
 		public inkWidgetReference Accent1Hovered
 		{
-			get
-			{
-				if (_accent1Hovered == null)
-				{
-					_accent1Hovered = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "accent1Hovered", cr2w, this);
-				}
-				return _accent1Hovered;
-			}
-			set
-			{
-				if (_accent1Hovered == value)
-				{
-					return;
-				}
-				_accent1Hovered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _accent1Hovered);
+			set => SetProperty(ref _accent1Hovered, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("accent1BGHovered")] 
 		public inkWidgetReference Accent1BGHovered
 		{
-			get
-			{
-				if (_accent1BGHovered == null)
-				{
-					_accent1BGHovered = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "accent1BGHovered", cr2w, this);
-				}
-				return _accent1BGHovered;
-			}
-			set
-			{
-				if (_accent1BGHovered == value)
-				{
-					return;
-				}
-				_accent1BGHovered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _accent1BGHovered);
+			set => SetProperty(ref _accent1BGHovered, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("accent2Hovered")] 
 		public inkWidgetReference Accent2Hovered
 		{
-			get
-			{
-				if (_accent2Hovered == null)
-				{
-					_accent2Hovered = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "accent2Hovered", cr2w, this);
-				}
-				return _accent2Hovered;
-			}
-			set
-			{
-				if (_accent2Hovered == value)
-				{
-					return;
-				}
-				_accent2Hovered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _accent2Hovered);
+			set => SetProperty(ref _accent2Hovered, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("accent2BGHovered")] 
 		public inkWidgetReference Accent2BGHovered
 		{
-			get
-			{
-				if (_accent2BGHovered == null)
-				{
-					_accent2BGHovered = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "accent2BGHovered", cr2w, this);
-				}
-				return _accent2BGHovered;
-			}
-			set
-			{
-				if (_accent2BGHovered == value)
-				{
-					return;
-				}
-				_accent2BGHovered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _accent2BGHovered);
+			set => SetProperty(ref _accent2BGHovered, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("topConnectionContainer")] 
 		public inkWidgetReference TopConnectionContainer
 		{
-			get
-			{
-				if (_topConnectionContainer == null)
-				{
-					_topConnectionContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "topConnectionContainer", cr2w, this);
-				}
-				return _topConnectionContainer;
-			}
-			set
-			{
-				if (_topConnectionContainer == value)
-				{
-					return;
-				}
-				_topConnectionContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _topConnectionContainer);
+			set => SetProperty(ref _topConnectionContainer, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("bottomConnectionContainer")] 
 		public inkWidgetReference BottomConnectionContainer
 		{
-			get
-			{
-				if (_bottomConnectionContainer == null)
-				{
-					_bottomConnectionContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "bottomConnectionContainer", cr2w, this);
-				}
-				return _bottomConnectionContainer;
-			}
-			set
-			{
-				if (_bottomConnectionContainer == value)
-				{
-					return;
-				}
-				_bottomConnectionContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bottomConnectionContainer);
+			set => SetProperty(ref _bottomConnectionContainer, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("dataManager")] 
 		public CHandle<PlayerDevelopmentDataManager> DataManager
 		{
-			get
-			{
-				if (_dataManager == null)
-				{
-					_dataManager = (CHandle<PlayerDevelopmentDataManager>) CR2WTypeManager.Create("handle:PlayerDevelopmentDataManager", "dataManager", cr2w, this);
-				}
-				return _dataManager;
-			}
-			set
-			{
-				if (_dataManager == value)
-				{
-					return;
-				}
-				_dataManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dataManager);
+			set => SetProperty(ref _dataManager, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("attribute")] 
 		public CEnum<PerkMenuAttribute> Attribute
 		{
-			get
-			{
-				if (_attribute == null)
-				{
-					_attribute = (CEnum<PerkMenuAttribute>) CR2WTypeManager.Create("PerkMenuAttribute", "attribute", cr2w, this);
-				}
-				return _attribute;
-			}
-			set
-			{
-				if (_attribute == value)
-				{
-					return;
-				}
-				_attribute = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attribute);
+			set => SetProperty(ref _attribute, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("attributeData")] 
 		public CHandle<AttributeData> AttributeData
 		{
-			get
-			{
-				if (_attributeData == null)
-				{
-					_attributeData = (CHandle<AttributeData>) CR2WTypeManager.Create("handle:AttributeData", "attributeData", cr2w, this);
-				}
-				return _attributeData;
-			}
-			set
-			{
-				if (_attributeData == value)
-				{
-					return;
-				}
-				_attributeData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeData);
+			set => SetProperty(ref _attributeData, value);
 		}
 
 		public PerksMenuAttributeDisplayController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

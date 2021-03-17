@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("doorTypeSideOne")] 
 		public CEnum<EDoorType> DoorTypeSideOne
 		{
-			get
-			{
-				if (_doorTypeSideOne == null)
-				{
-					_doorTypeSideOne = (CEnum<EDoorType>) CR2WTypeManager.Create("EDoorType", "doorTypeSideOne", cr2w, this);
-				}
-				return _doorTypeSideOne;
-			}
-			set
-			{
-				if (_doorTypeSideOne == value)
-				{
-					return;
-				}
-				_doorTypeSideOne = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _doorTypeSideOne);
+			set => SetProperty(ref _doorTypeSideOne, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("doorTypeSideTwo")] 
 		public CEnum<EDoorType> DoorTypeSideTwo
 		{
-			get
-			{
-				if (_doorTypeSideTwo == null)
-				{
-					_doorTypeSideTwo = (CEnum<EDoorType>) CR2WTypeManager.Create("EDoorType", "doorTypeSideTwo", cr2w, this);
-				}
-				return _doorTypeSideTwo;
-			}
-			set
-			{
-				if (_doorTypeSideTwo == value)
-				{
-					return;
-				}
-				_doorTypeSideTwo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _doorTypeSideTwo);
+			set => SetProperty(ref _doorTypeSideTwo, value);
 		}
 
 		public SetDoorType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

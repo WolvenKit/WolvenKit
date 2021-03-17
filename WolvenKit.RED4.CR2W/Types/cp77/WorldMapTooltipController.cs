@@ -32,460 +32,160 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("titleText")] 
 		public inkTextWidgetReference TitleText
 		{
-			get
-			{
-				if (_titleText == null)
-				{
-					_titleText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "titleText", cr2w, this);
-				}
-				return _titleText;
-			}
-			set
-			{
-				if (_titleText == value)
-				{
-					return;
-				}
-				_titleText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _titleText);
+			set => SetProperty(ref _titleText, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("descText")] 
 		public inkTextWidgetReference DescText
 		{
-			get
-			{
-				if (_descText == null)
-				{
-					_descText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "descText", cr2w, this);
-				}
-				return _descText;
-			}
-			set
-			{
-				if (_descText == value)
-				{
-					return;
-				}
-				_descText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _descText);
+			set => SetProperty(ref _descText, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("trackedQuestContainer")] 
 		public inkWidgetReference TrackedQuestContainer
 		{
-			get
-			{
-				if (_trackedQuestContainer == null)
-				{
-					_trackedQuestContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "trackedQuestContainer", cr2w, this);
-				}
-				return _trackedQuestContainer;
-			}
-			set
-			{
-				if (_trackedQuestContainer == value)
-				{
-					return;
-				}
-				_trackedQuestContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trackedQuestContainer);
+			set => SetProperty(ref _trackedQuestContainer, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("requiredLevelCanvas")] 
 		public inkWidgetReference RequiredLevelCanvas
 		{
-			get
-			{
-				if (_requiredLevelCanvas == null)
-				{
-					_requiredLevelCanvas = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "requiredLevelCanvas", cr2w, this);
-				}
-				return _requiredLevelCanvas;
-			}
-			set
-			{
-				if (_requiredLevelCanvas == value)
-				{
-					return;
-				}
-				_requiredLevelCanvas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requiredLevelCanvas);
+			set => SetProperty(ref _requiredLevelCanvas, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("requiredLevelText")] 
 		public inkTextWidgetReference RequiredLevelText
 		{
-			get
-			{
-				if (_requiredLevelText == null)
-				{
-					_requiredLevelText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "requiredLevelText", cr2w, this);
-				}
-				return _requiredLevelText;
-			}
-			set
-			{
-				if (_requiredLevelText == value)
-				{
-					return;
-				}
-				_requiredLevelText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requiredLevelText);
+			set => SetProperty(ref _requiredLevelText, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("requiredLevelValue")] 
 		public inkTextWidgetReference RequiredLevelValue
 		{
-			get
-			{
-				if (_requiredLevelValue == null)
-				{
-					_requiredLevelValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "requiredLevelValue", cr2w, this);
-				}
-				return _requiredLevelValue;
-			}
-			set
-			{
-				if (_requiredLevelValue == value)
-				{
-					return;
-				}
-				_requiredLevelValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requiredLevelValue);
+			set => SetProperty(ref _requiredLevelValue, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("inputSetWaypointContainer")] 
 		public inkCompoundWidgetReference InputSetWaypointContainer
 		{
-			get
-			{
-				if (_inputSetWaypointContainer == null)
-				{
-					_inputSetWaypointContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "inputSetWaypointContainer", cr2w, this);
-				}
-				return _inputSetWaypointContainer;
-			}
-			set
-			{
-				if (_inputSetWaypointContainer == value)
-				{
-					return;
-				}
-				_inputSetWaypointContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputSetWaypointContainer);
+			set => SetProperty(ref _inputSetWaypointContainer, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("inputSetWaypointText")] 
 		public inkTextWidgetReference InputSetWaypointText
 		{
-			get
-			{
-				if (_inputSetWaypointText == null)
-				{
-					_inputSetWaypointText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "inputSetWaypointText", cr2w, this);
-				}
-				return _inputSetWaypointText;
-			}
-			set
-			{
-				if (_inputSetWaypointText == value)
-				{
-					return;
-				}
-				_inputSetWaypointText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputSetWaypointText);
+			set => SetProperty(ref _inputSetWaypointText, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("inputTrackQuestContainer")] 
 		public inkCompoundWidgetReference InputTrackQuestContainer
 		{
-			get
-			{
-				if (_inputTrackQuestContainer == null)
-				{
-					_inputTrackQuestContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "inputTrackQuestContainer", cr2w, this);
-				}
-				return _inputTrackQuestContainer;
-			}
-			set
-			{
-				if (_inputTrackQuestContainer == value)
-				{
-					return;
-				}
-				_inputTrackQuestContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputTrackQuestContainer);
+			set => SetProperty(ref _inputTrackQuestContainer, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("inputTrackQuestText")] 
 		public inkTextWidgetReference InputTrackQuestText
 		{
-			get
-			{
-				if (_inputTrackQuestText == null)
-				{
-					_inputTrackQuestText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "inputTrackQuestText", cr2w, this);
-				}
-				return _inputTrackQuestText;
-			}
-			set
-			{
-				if (_inputTrackQuestText == value)
-				{
-					return;
-				}
-				_inputTrackQuestText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputTrackQuestText);
+			set => SetProperty(ref _inputTrackQuestText, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("inputInteractContainer")] 
 		public inkCompoundWidgetReference InputInteractContainer
 		{
-			get
-			{
-				if (_inputInteractContainer == null)
-				{
-					_inputInteractContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "inputInteractContainer", cr2w, this);
-				}
-				return _inputInteractContainer;
-			}
-			set
-			{
-				if (_inputInteractContainer == value)
-				{
-					return;
-				}
-				_inputInteractContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputInteractContainer);
+			set => SetProperty(ref _inputInteractContainer, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("inputInteractText")] 
 		public inkTextWidgetReference InputInteractText
 		{
-			get
-			{
-				if (_inputInteractText == null)
-				{
-					_inputInteractText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "inputInteractText", cr2w, this);
-				}
-				return _inputInteractText;
-			}
-			set
-			{
-				if (_inputInteractText == value)
-				{
-					return;
-				}
-				_inputInteractText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputInteractText);
+			set => SetProperty(ref _inputInteractText, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("inputOpenJournalContainer")] 
 		public inkCompoundWidgetReference InputOpenJournalContainer
 		{
-			get
-			{
-				if (_inputOpenJournalContainer == null)
-				{
-					_inputOpenJournalContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "inputOpenJournalContainer", cr2w, this);
-				}
-				return _inputOpenJournalContainer;
-			}
-			set
-			{
-				if (_inputOpenJournalContainer == value)
-				{
-					return;
-				}
-				_inputOpenJournalContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputOpenJournalContainer);
+			set => SetProperty(ref _inputOpenJournalContainer, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("inputOpenJournalText")] 
 		public inkTextWidgetReference InputOpenJournalText
 		{
-			get
-			{
-				if (_inputOpenJournalText == null)
-				{
-					_inputOpenJournalText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "inputOpenJournalText", cr2w, this);
-				}
-				return _inputOpenJournalText;
-			}
-			set
-			{
-				if (_inputOpenJournalText == value)
-				{
-					return;
-				}
-				_inputOpenJournalText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputOpenJournalText);
+			set => SetProperty(ref _inputOpenJournalText, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("inputZoomToContainer")] 
 		public inkCompoundWidgetReference InputZoomToContainer
 		{
-			get
-			{
-				if (_inputZoomToContainer == null)
-				{
-					_inputZoomToContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "inputZoomToContainer", cr2w, this);
-				}
-				return _inputZoomToContainer;
-			}
-			set
-			{
-				if (_inputZoomToContainer == value)
-				{
-					return;
-				}
-				_inputZoomToContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputZoomToContainer);
+			set => SetProperty(ref _inputZoomToContainer, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("inputZoomToText")] 
 		public inkTextWidgetReference InputZoomToText
 		{
-			get
-			{
-				if (_inputZoomToText == null)
-				{
-					_inputZoomToText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "inputZoomToText", cr2w, this);
-				}
-				return _inputZoomToText;
-			}
-			set
-			{
-				if (_inputZoomToText == value)
-				{
-					return;
-				}
-				_inputZoomToText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputZoomToText);
+			set => SetProperty(ref _inputZoomToText, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("threatLevelCaption")] 
 		public inkTextWidgetReference ThreatLevelCaption
 		{
-			get
-			{
-				if (_threatLevelCaption == null)
-				{
-					_threatLevelCaption = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "threatLevelCaption", cr2w, this);
-				}
-				return _threatLevelCaption;
-			}
-			set
-			{
-				if (_threatLevelCaption == value)
-				{
-					return;
-				}
-				_threatLevelCaption = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _threatLevelCaption);
+			set => SetProperty(ref _threatLevelCaption, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("threatLevelValue")] 
 		public inkTextWidgetReference ThreatLevelValue
 		{
-			get
-			{
-				if (_threatLevelValue == null)
-				{
-					_threatLevelValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "threatLevelValue", cr2w, this);
-				}
-				return _threatLevelValue;
-			}
-			set
-			{
-				if (_threatLevelValue == value)
-				{
-					return;
-				}
-				_threatLevelValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _threatLevelValue);
+			set => SetProperty(ref _threatLevelValue, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("collectionCountContainer")] 
 		public inkCompoundWidgetReference CollectionCountContainer
 		{
-			get
-			{
-				if (_collectionCountContainer == null)
-				{
-					_collectionCountContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "collectionCountContainer", cr2w, this);
-				}
-				return _collectionCountContainer;
-			}
-			set
-			{
-				if (_collectionCountContainer == value)
-				{
-					return;
-				}
-				_collectionCountContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collectionCountContainer);
+			set => SetProperty(ref _collectionCountContainer, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("collectionCountText")] 
 		public inkTextWidgetReference CollectionCountText
 		{
-			get
-			{
-				if (_collectionCountText == null)
-				{
-					_collectionCountText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "collectionCountText", cr2w, this);
-				}
-				return _collectionCountText;
-			}
-			set
-			{
-				if (_collectionCountText == value)
-				{
-					return;
-				}
-				_collectionCountText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collectionCountText);
+			set => SetProperty(ref _collectionCountText, value);
 		}
 
 		public WorldMapTooltipController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

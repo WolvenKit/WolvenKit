@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("normalAppearence")] 
 		public inkCompoundWidgetReference NormalAppearence
 		{
-			get
-			{
-				if (_normalAppearence == null)
-				{
-					_normalAppearence = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "normalAppearence", cr2w, this);
-				}
-				return _normalAppearence;
-			}
-			set
-			{
-				if (_normalAppearence == value)
-				{
-					return;
-				}
-				_normalAppearence = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _normalAppearence);
+			set => SetProperty(ref _normalAppearence, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("controller")] 
 		public wCHandle<InventoryItemDisplayController> Controller
 		{
-			get
-			{
-				if (_controller == null)
-				{
-					_controller = (wCHandle<InventoryItemDisplayController>) CR2WTypeManager.Create("whandle:InventoryItemDisplayController", "controller", cr2w, this);
-				}
-				return _controller;
-			}
-			set
-			{
-				if (_controller == value)
-				{
-					return;
-				}
-				_controller = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _controller);
+			set => SetProperty(ref _controller, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("isSelected")] 
 		public CBool IsSelected
 		{
-			get
-			{
-				if (_isSelected == null)
-				{
-					_isSelected = (CBool) CR2WTypeManager.Create("Bool", "isSelected", cr2w, this);
-				}
-				return _isSelected;
-			}
-			set
-			{
-				if (_isSelected == value)
-				{
-					return;
-				}
-				_isSelected = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isSelected);
+			set => SetProperty(ref _isSelected, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("displayToCreate")] 
 		public CName DisplayToCreate
 		{
-			get
-			{
-				if (_displayToCreate == null)
-				{
-					_displayToCreate = (CName) CR2WTypeManager.Create("CName", "displayToCreate", cr2w, this);
-				}
-				return _displayToCreate;
-			}
-			set
-			{
-				if (_displayToCreate == value)
-				{
-					return;
-				}
-				_displayToCreate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _displayToCreate);
+			set => SetProperty(ref _displayToCreate, value);
 		}
 
 		public CraftableItemLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

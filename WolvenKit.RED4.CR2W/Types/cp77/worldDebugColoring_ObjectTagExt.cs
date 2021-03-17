@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tag")] 
 		public CEnum<worldObjectTagExt> Tag
 		{
-			get
-			{
-				if (_tag == null)
-				{
-					_tag = (CEnum<worldObjectTagExt>) CR2WTypeManager.Create("worldObjectTagExt", "tag", cr2w, this);
-				}
-				return _tag;
-			}
-			set
-			{
-				if (_tag == value)
-				{
-					return;
-				}
-				_tag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tag);
+			set => SetProperty(ref _tag, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("color")] 
 		public CColor Color
 		{
-			get
-			{
-				if (_color == null)
-				{
-					_color = (CColor) CR2WTypeManager.Create("Color", "color", cr2w, this);
-				}
-				return _color;
-			}
-			set
-			{
-				if (_color == value)
-				{
-					return;
-				}
-				_color = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _color);
+			set => SetProperty(ref _color, value);
 		}
 
 		public worldDebugColoring_ObjectTagExt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

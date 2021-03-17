@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("linkAddress")] 
 		public CString LinkAddress
 		{
-			get
-			{
-				if (_linkAddress == null)
-				{
-					_linkAddress = (CString) CR2WTypeManager.Create("String", "linkAddress", cr2w, this);
-				}
-				return _linkAddress;
-			}
-			set
-			{
-				if (_linkAddress == value)
-				{
-					return;
-				}
-				_linkAddress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linkAddress);
+			set => SetProperty(ref _linkAddress, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tintColor")] 
 		public CColor TintColor
 		{
-			get
-			{
-				if (_tintColor == null)
-				{
-					_tintColor = (CColor) CR2WTypeManager.Create("Color", "tintColor", cr2w, this);
-				}
-				return _tintColor;
-			}
-			set
-			{
-				if (_tintColor == value)
-				{
-					return;
-				}
-				_tintColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tintColor);
+			set => SetProperty(ref _tintColor, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hoverTintColor")] 
 		public CColor HoverTintColor
 		{
-			get
-			{
-				if (_hoverTintColor == null)
-				{
-					_hoverTintColor = (CColor) CR2WTypeManager.Create("Color", "hoverTintColor", cr2w, this);
-				}
-				return _hoverTintColor;
-			}
-			set
-			{
-				if (_hoverTintColor == value)
-				{
-					return;
-				}
-				_hoverTintColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hoverTintColor);
+			set => SetProperty(ref _hoverTintColor, value);
 		}
 
 		public gameJournalInternetBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

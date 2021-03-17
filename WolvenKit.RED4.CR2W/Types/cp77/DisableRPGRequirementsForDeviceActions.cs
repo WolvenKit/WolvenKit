@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("action")] 
 		public TweakDBID Action
 		{
-			get
-			{
-				if (_action == null)
-				{
-					_action = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "action", cr2w, this);
-				}
-				return _action;
-			}
-			set
-			{
-				if (_action == value)
-				{
-					return;
-				}
-				_action = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("disable")] 
 		public CBool Disable
 		{
-			get
-			{
-				if (_disable == null)
-				{
-					_disable = (CBool) CR2WTypeManager.Create("Bool", "disable", cr2w, this);
-				}
-				return _disable;
-			}
-			set
-			{
-				if (_disable == value)
-				{
-					return;
-				}
-				_disable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _disable);
+			set => SetProperty(ref _disable, value);
 		}
 
 		public DisableRPGRequirementsForDeviceActions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -34,506 +34,176 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("movementParamsRecord")] 
 		public TweakDBID MovementParamsRecord
 		{
-			get
-			{
-				if (_movementParamsRecord == null)
-				{
-					_movementParamsRecord = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "movementParamsRecord", cr2w, this);
-				}
-				return _movementParamsRecord;
-			}
-			set
-			{
-				if (_movementParamsRecord == value)
-				{
-					return;
-				}
-				_movementParamsRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movementParamsRecord);
+			set => SetProperty(ref _movementParamsRecord, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("shootingBlackboard")] 
 		public CHandle<gameIBlackboard> ShootingBlackboard
 		{
-			get
-			{
-				if (_shootingBlackboard == null)
-				{
-					_shootingBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "shootingBlackboard", cr2w, this);
-				}
-				return _shootingBlackboard;
-			}
-			set
-			{
-				if (_shootingBlackboard == value)
-				{
-					return;
-				}
-				_shootingBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shootingBlackboard);
+			set => SetProperty(ref _shootingBlackboard, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("gadgetBlackboard")] 
 		public CHandle<gameIBlackboard> GadgetBlackboard
 		{
-			get
-			{
-				if (_gadgetBlackboard == null)
-				{
-					_gadgetBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "gadgetBlackboard", cr2w, this);
-				}
-				return _gadgetBlackboard;
-			}
-			set
-			{
-				if (_gadgetBlackboard == value)
-				{
-					return;
-				}
-				_gadgetBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gadgetBlackboard);
+			set => SetProperty(ref _gadgetBlackboard, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("coverBlackboard")] 
 		public CHandle<gameIBlackboard> CoverBlackboard
 		{
-			get
-			{
-				if (_coverBlackboard == null)
-				{
-					_coverBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "coverBlackboard", cr2w, this);
-				}
-				return _coverBlackboard;
-			}
-			set
-			{
-				if (_coverBlackboard == value)
-				{
-					return;
-				}
-				_coverBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _coverBlackboard);
+			set => SetProperty(ref _coverBlackboard, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("actionBlackboard")] 
 		public CHandle<gameIBlackboard> ActionBlackboard
 		{
-			get
-			{
-				if (_actionBlackboard == null)
-				{
-					_actionBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "actionBlackboard", cr2w, this);
-				}
-				return _actionBlackboard;
-			}
-			set
-			{
-				if (_actionBlackboard == value)
-				{
-					return;
-				}
-				_actionBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionBlackboard);
+			set => SetProperty(ref _actionBlackboard, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("patrolBlackboard")] 
 		public CHandle<gameIBlackboard> PatrolBlackboard
 		{
-			get
-			{
-				if (_patrolBlackboard == null)
-				{
-					_patrolBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "patrolBlackboard", cr2w, this);
-				}
-				return _patrolBlackboard;
-			}
-			set
-			{
-				if (_patrolBlackboard == value)
-				{
-					return;
-				}
-				_patrolBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _patrolBlackboard);
+			set => SetProperty(ref _patrolBlackboard, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("alertedPatrolBlackboard")] 
 		public CHandle<gameIBlackboard> AlertedPatrolBlackboard
 		{
-			get
-			{
-				if (_alertedPatrolBlackboard == null)
-				{
-					_alertedPatrolBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "alertedPatrolBlackboard", cr2w, this);
-				}
-				return _alertedPatrolBlackboard;
-			}
-			set
-			{
-				if (_alertedPatrolBlackboard == value)
-				{
-					return;
-				}
-				_alertedPatrolBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alertedPatrolBlackboard);
+			set => SetProperty(ref _alertedPatrolBlackboard, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("friendlyFireCheckID")] 
 		public CUInt32 FriendlyFireCheckID
 		{
-			get
-			{
-				if (_friendlyFireCheckID == null)
-				{
-					_friendlyFireCheckID = (CUInt32) CR2WTypeManager.Create("Uint32", "friendlyFireCheckID", cr2w, this);
-				}
-				return _friendlyFireCheckID;
-			}
-			set
-			{
-				if (_friendlyFireCheckID == value)
-				{
-					return;
-				}
-				_friendlyFireCheckID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _friendlyFireCheckID);
+			set => SetProperty(ref _friendlyFireCheckID, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("ffs")] 
 		public CHandle<gameIFriendlyFireSystem> Ffs
 		{
-			get
-			{
-				if (_ffs == null)
-				{
-					_ffs = (CHandle<gameIFriendlyFireSystem>) CR2WTypeManager.Create("handle:gameIFriendlyFireSystem", "ffs", cr2w, this);
-				}
-				return _ffs;
-			}
-			set
-			{
-				if (_ffs == value)
-				{
-					return;
-				}
-				_ffs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ffs);
+			set => SetProperty(ref _ffs, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("LoSFinderCheckID")] 
 		public CUInt32 LoSFinderCheckID
 		{
-			get
-			{
-				if (_loSFinderCheckID == null)
-				{
-					_loSFinderCheckID = (CUInt32) CR2WTypeManager.Create("Uint32", "LoSFinderCheckID", cr2w, this);
-				}
-				return _loSFinderCheckID;
-			}
-			set
-			{
-				if (_loSFinderCheckID == value)
-				{
-					return;
-				}
-				_loSFinderCheckID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _loSFinderCheckID);
+			set => SetProperty(ref _loSFinderCheckID, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("loSFinderSystem")] 
 		public CHandle<gameLoSIFinderSystem> LoSFinderSystem
 		{
-			get
-			{
-				if (_loSFinderSystem == null)
-				{
-					_loSFinderSystem = (CHandle<gameLoSIFinderSystem>) CR2WTypeManager.Create("handle:gameLoSIFinderSystem", "loSFinderSystem", cr2w, this);
-				}
-				return _loSFinderSystem;
-			}
-			set
-			{
-				if (_loSFinderSystem == value)
-				{
-					return;
-				}
-				_loSFinderSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _loSFinderSystem);
+			set => SetProperty(ref _loSFinderSystem, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("LoSFinderVisibleObject")] 
 		public wCHandle<senseVisibleObject> LoSFinderVisibleObject
 		{
-			get
-			{
-				if (_loSFinderVisibleObject == null)
-				{
-					_loSFinderVisibleObject = (wCHandle<senseVisibleObject>) CR2WTypeManager.Create("whandle:senseVisibleObject", "LoSFinderVisibleObject", cr2w, this);
-				}
-				return _loSFinderVisibleObject;
-			}
-			set
-			{
-				if (_loSFinderVisibleObject == value)
-				{
-					return;
-				}
-				_loSFinderVisibleObject = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _loSFinderVisibleObject);
+			set => SetProperty(ref _loSFinderVisibleObject, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("actionAnimationScriptProxy")] 
 		public CHandle<ActionAnimationScriptProxy> ActionAnimationScriptProxy
 		{
-			get
-			{
-				if (_actionAnimationScriptProxy == null)
-				{
-					_actionAnimationScriptProxy = (CHandle<ActionAnimationScriptProxy>) CR2WTypeManager.Create("handle:ActionAnimationScriptProxy", "actionAnimationScriptProxy", cr2w, this);
-				}
-				return _actionAnimationScriptProxy;
-			}
-			set
-			{
-				if (_actionAnimationScriptProxy == value)
-				{
-					return;
-				}
-				_actionAnimationScriptProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionAnimationScriptProxy);
+			set => SetProperty(ref _actionAnimationScriptProxy, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("lastOwnerBlockedAttackEventID")] 
 		public gameDelayID LastOwnerBlockedAttackEventID
 		{
-			get
-			{
-				if (_lastOwnerBlockedAttackEventID == null)
-				{
-					_lastOwnerBlockedAttackEventID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "lastOwnerBlockedAttackEventID", cr2w, this);
-				}
-				return _lastOwnerBlockedAttackEventID;
-			}
-			set
-			{
-				if (_lastOwnerBlockedAttackEventID == value)
-				{
-					return;
-				}
-				_lastOwnerBlockedAttackEventID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastOwnerBlockedAttackEventID);
+			set => SetProperty(ref _lastOwnerBlockedAttackEventID, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("lastOwnerParriedAttackEventID")] 
 		public gameDelayID LastOwnerParriedAttackEventID
 		{
-			get
-			{
-				if (_lastOwnerParriedAttackEventID == null)
-				{
-					_lastOwnerParriedAttackEventID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "lastOwnerParriedAttackEventID", cr2w, this);
-				}
-				return _lastOwnerParriedAttackEventID;
-			}
-			set
-			{
-				if (_lastOwnerParriedAttackEventID == value)
-				{
-					return;
-				}
-				_lastOwnerParriedAttackEventID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastOwnerParriedAttackEventID);
+			set => SetProperty(ref _lastOwnerParriedAttackEventID, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("lastOwnerDodgedAttackEventID")] 
 		public gameDelayID LastOwnerDodgedAttackEventID
 		{
-			get
-			{
-				if (_lastOwnerDodgedAttackEventID == null)
-				{
-					_lastOwnerDodgedAttackEventID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "lastOwnerDodgedAttackEventID", cr2w, this);
-				}
-				return _lastOwnerDodgedAttackEventID;
-			}
-			set
-			{
-				if (_lastOwnerDodgedAttackEventID == value)
-				{
-					return;
-				}
-				_lastOwnerDodgedAttackEventID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastOwnerDodgedAttackEventID);
+			set => SetProperty(ref _lastOwnerDodgedAttackEventID, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("grenadeThrowQueryTarget")] 
 		public wCHandle<gameObject> GrenadeThrowQueryTarget
 		{
-			get
-			{
-				if (_grenadeThrowQueryTarget == null)
-				{
-					_grenadeThrowQueryTarget = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "grenadeThrowQueryTarget", cr2w, this);
-				}
-				return _grenadeThrowQueryTarget;
-			}
-			set
-			{
-				if (_grenadeThrowQueryTarget == value)
-				{
-					return;
-				}
-				_grenadeThrowQueryTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grenadeThrowQueryTarget);
+			set => SetProperty(ref _grenadeThrowQueryTarget, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("grenadeThrowQueryId")] 
 		public CInt32 GrenadeThrowQueryId
 		{
-			get
-			{
-				if (_grenadeThrowQueryId == null)
-				{
-					_grenadeThrowQueryId = (CInt32) CR2WTypeManager.Create("Int32", "grenadeThrowQueryId", cr2w, this);
-				}
-				return _grenadeThrowQueryId;
-			}
-			set
-			{
-				if (_grenadeThrowQueryId == value)
-				{
-					return;
-				}
-				_grenadeThrowQueryId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grenadeThrowQueryId);
+			set => SetProperty(ref _grenadeThrowQueryId, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("scriptContext")] 
 		public AIbehaviorScriptExecutionContext ScriptContext
 		{
-			get
-			{
-				if (_scriptContext == null)
-				{
-					_scriptContext = (AIbehaviorScriptExecutionContext) CR2WTypeManager.Create("AIbehaviorScriptExecutionContext", "scriptContext", cr2w, this);
-				}
-				return _scriptContext;
-			}
-			set
-			{
-				if (_scriptContext == value)
-				{
-					return;
-				}
-				_scriptContext = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scriptContext);
+			set => SetProperty(ref _scriptContext, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("scriptContextInitialized")] 
 		public CBool ScriptContextInitialized
 		{
-			get
-			{
-				if (_scriptContextInitialized == null)
-				{
-					_scriptContextInitialized = (CBool) CR2WTypeManager.Create("Bool", "scriptContextInitialized", cr2w, this);
-				}
-				return _scriptContextInitialized;
-			}
-			set
-			{
-				if (_scriptContextInitialized == value)
-				{
-					return;
-				}
-				_scriptContextInitialized = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scriptContextInitialized);
+			set => SetProperty(ref _scriptContextInitialized, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("highLevelCb")] 
 		public CUInt32 HighLevelCb
 		{
-			get
-			{
-				if (_highLevelCb == null)
-				{
-					_highLevelCb = (CUInt32) CR2WTypeManager.Create("Uint32", "highLevelCb", cr2w, this);
-				}
-				return _highLevelCb;
-			}
-			set
-			{
-				if (_highLevelCb == value)
-				{
-					return;
-				}
-				_highLevelCb = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highLevelCb);
+			set => SetProperty(ref _highLevelCb, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("activeCommands")] 
 		public AIbehaviorUniqueActiveCommandList ActiveCommands
 		{
-			get
-			{
-				if (_activeCommands == null)
-				{
-					_activeCommands = (AIbehaviorUniqueActiveCommandList) CR2WTypeManager.Create("AIbehaviorUniqueActiveCommandList", "activeCommands", cr2w, this);
-				}
-				return _activeCommands;
-			}
-			set
-			{
-				if (_activeCommands == value)
-				{
-					return;
-				}
-				_activeCommands = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeCommands);
+			set => SetProperty(ref _activeCommands, value);
 		}
 
 		public AIHumanComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("label")] 
 		public wCHandle<inkTextWidget> Label
 		{
-			get
-			{
-				if (_label == null)
-				{
-					_label = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "label", cr2w, this);
-				}
-				return _label;
-			}
-			set
-			{
-				if (_label == value)
-				{
-					return;
-				}
-				_label = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _label);
+			set => SetProperty(ref _label, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("value")] 
 		public wCHandle<inkTextWidget> Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		public InventoryStatItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (Vector4) CR2WTypeManager.Create("Vector4", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("shouldPay")] 
 		public CBool ShouldPay
 		{
-			get
-			{
-				if (_shouldPay == null)
-				{
-					_shouldPay = (CBool) CR2WTypeManager.Create("Bool", "shouldPay", cr2w, this);
-				}
-				return _shouldPay;
-			}
-			set
-			{
-				if (_shouldPay == value)
-				{
-					return;
-				}
-				_shouldPay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldPay);
+			set => SetProperty(ref _shouldPay, value);
 		}
 
 		public DispenseRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

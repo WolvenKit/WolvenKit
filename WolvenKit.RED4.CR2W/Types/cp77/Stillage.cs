@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("collider")] 
 		public CHandle<entIPlacedComponent> Collider
 		{
-			get
-			{
-				if (_collider == null)
-				{
-					_collider = (CHandle<entIPlacedComponent>) CR2WTypeManager.Create("handle:entIPlacedComponent", "collider", cr2w, this);
-				}
-				return _collider;
-			}
-			set
-			{
-				if (_collider == value)
-				{
-					return;
-				}
-				_collider = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collider);
+			set => SetProperty(ref _collider, value);
 		}
 
 		public Stillage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

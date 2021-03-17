@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectRecordId")] 
 		public TweakDBID ObjectRecordId
 		{
-			get
-			{
-				if (_objectRecordId == null)
-				{
-					_objectRecordId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "objectRecordId", cr2w, this);
-				}
-				return _objectRecordId;
-			}
-			set
-			{
-				if (_objectRecordId == value)
-				{
-					return;
-				}
-				_objectRecordId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRecordId);
+			set => SetProperty(ref _objectRecordId, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("appearance")] 
 		public CName Appearance
 		{
-			get
-			{
-				if (_appearance == null)
-				{
-					_appearance = (CName) CR2WTypeManager.Create("CName", "appearance", cr2w, this);
-				}
-				return _appearance;
-			}
-			set
-			{
-				if (_appearance == value)
-				{
-					return;
-				}
-				_appearance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _appearance);
+			set => SetProperty(ref _appearance, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		[Ordinal(43)] 
 		[RED("alwaysSpawned")] 
 		public CEnum<gameAlwaysSpawnedState> AlwaysSpawned
 		{
-			get
-			{
-				if (_alwaysSpawned == null)
-				{
-					_alwaysSpawned = (CEnum<gameAlwaysSpawnedState>) CR2WTypeManager.Create("gameAlwaysSpawnedState", "alwaysSpawned", cr2w, this);
-				}
-				return _alwaysSpawned;
-			}
-			set
-			{
-				if (_alwaysSpawned == value)
-				{
-					return;
-				}
-				_alwaysSpawned = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alwaysSpawned);
+			set => SetProperty(ref _alwaysSpawned, value);
 		}
 
 		public dbgSpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

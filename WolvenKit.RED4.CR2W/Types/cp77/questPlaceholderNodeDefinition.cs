@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("replacedNodeClassName")] 
 		public CName ReplacedNodeClassName
 		{
-			get
-			{
-				if (_replacedNodeClassName == null)
-				{
-					_replacedNodeClassName = (CName) CR2WTypeManager.Create("CName", "replacedNodeClassName", cr2w, this);
-				}
-				return _replacedNodeClassName;
-			}
-			set
-			{
-				if (_replacedNodeClassName == value)
-				{
-					return;
-				}
-				_replacedNodeClassName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _replacedNodeClassName);
+			set => SetProperty(ref _replacedNodeClassName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("copiedSockets")] 
 		public CArray<questPlaceholderNodeSocketInfo> CopiedSockets
 		{
-			get
-			{
-				if (_copiedSockets == null)
-				{
-					_copiedSockets = (CArray<questPlaceholderNodeSocketInfo>) CR2WTypeManager.Create("array:questPlaceholderNodeSocketInfo", "copiedSockets", cr2w, this);
-				}
-				return _copiedSockets;
-			}
-			set
-			{
-				if (_copiedSockets == value)
-				{
-					return;
-				}
-				_copiedSockets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _copiedSockets);
+			set => SetProperty(ref _copiedSockets, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("clipboardHolder")] 
 		public CHandle<ISerializable> ClipboardHolder
 		{
-			get
-			{
-				if (_clipboardHolder == null)
-				{
-					_clipboardHolder = (CHandle<ISerializable>) CR2WTypeManager.Create("handle:ISerializable", "clipboardHolder", cr2w, this);
-				}
-				return _clipboardHolder;
-			}
-			set
-			{
-				if (_clipboardHolder == value)
-				{
-					return;
-				}
-				_clipboardHolder = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clipboardHolder);
+			set => SetProperty(ref _clipboardHolder, value);
 		}
 
 		public questPlaceholderNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

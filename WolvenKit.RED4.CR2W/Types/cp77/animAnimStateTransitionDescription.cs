@@ -25,299 +25,104 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetStateIndex")] 
 		public CUInt32 TargetStateIndex
 		{
-			get
-			{
-				if (_targetStateIndex == null)
-				{
-					_targetStateIndex = (CUInt32) CR2WTypeManager.Create("Uint32", "targetStateIndex", cr2w, this);
-				}
-				return _targetStateIndex;
-			}
-			set
-			{
-				if (_targetStateIndex == value)
-				{
-					return;
-				}
-				_targetStateIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetStateIndex);
+			set => SetProperty(ref _targetStateIndex, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("condition")] 
 		public CHandle<animIAnimStateTransitionCondition> Condition
 		{
-			get
-			{
-				if (_condition == null)
-				{
-					_condition = (CHandle<animIAnimStateTransitionCondition>) CR2WTypeManager.Create("handle:animIAnimStateTransitionCondition", "condition", cr2w, this);
-				}
-				return _condition;
-			}
-			set
-			{
-				if (_condition == value)
-				{
-					return;
-				}
-				_condition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _condition);
+			set => SetProperty(ref _condition, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get
-			{
-				if (_isEnabled == null)
-				{
-					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
-				}
-				return _isEnabled;
-			}
-			set
-			{
-				if (_isEnabled == value)
-				{
-					return;
-				}
-				_isEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("interpolator")] 
 		public CHandle<animIAnimStateTransitionInterpolator> Interpolator
 		{
-			get
-			{
-				if (_interpolator == null)
-				{
-					_interpolator = (CHandle<animIAnimStateTransitionInterpolator>) CR2WTypeManager.Create("handle:animIAnimStateTransitionInterpolator", "interpolator", cr2w, this);
-				}
-				return _interpolator;
-			}
-			set
-			{
-				if (_interpolator == value)
-				{
-					return;
-				}
-				_interpolator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interpolator);
+			set => SetProperty(ref _interpolator, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("priority")] 
 		public CInt32 Priority
 		{
-			get
-			{
-				if (_priority == null)
-				{
-					_priority = (CInt32) CR2WTypeManager.Create("Int32", "priority", cr2w, this);
-				}
-				return _priority;
-			}
-			set
-			{
-				if (_priority == value)
-				{
-					return;
-				}
-				_priority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _priority);
+			set => SetProperty(ref _priority, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("syncMethod")] 
 		public CHandle<animISyncMethod> SyncMethod
 		{
-			get
-			{
-				if (_syncMethod == null)
-				{
-					_syncMethod = (CHandle<animISyncMethod>) CR2WTypeManager.Create("handle:animISyncMethod", "syncMethod", cr2w, this);
-				}
-				return _syncMethod;
-			}
-			set
-			{
-				if (_syncMethod == value)
-				{
-					return;
-				}
-				_syncMethod = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _syncMethod);
+			set => SetProperty(ref _syncMethod, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isForcedToTrue")] 
 		public CBool IsForcedToTrue
 		{
-			get
-			{
-				if (_isForcedToTrue == null)
-				{
-					_isForcedToTrue = (CBool) CR2WTypeManager.Create("Bool", "isForcedToTrue", cr2w, this);
-				}
-				return _isForcedToTrue;
-			}
-			set
-			{
-				if (_isForcedToTrue == value)
-				{
-					return;
-				}
-				_isForcedToTrue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isForcedToTrue);
+			set => SetProperty(ref _isForcedToTrue, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("supportBlendFromPose")] 
 		public CBool SupportBlendFromPose
 		{
-			get
-			{
-				if (_supportBlendFromPose == null)
-				{
-					_supportBlendFromPose = (CBool) CR2WTypeManager.Create("Bool", "supportBlendFromPose", cr2w, this);
-				}
-				return _supportBlendFromPose;
-			}
-			set
-			{
-				if (_supportBlendFromPose == value)
-				{
-					return;
-				}
-				_supportBlendFromPose = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _supportBlendFromPose);
+			set => SetProperty(ref _supportBlendFromPose, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("canRequestInertialization")] 
 		public CBool CanRequestInertialization
 		{
-			get
-			{
-				if (_canRequestInertialization == null)
-				{
-					_canRequestInertialization = (CBool) CR2WTypeManager.Create("Bool", "canRequestInertialization", cr2w, this);
-				}
-				return _canRequestInertialization;
-			}
-			set
-			{
-				if (_canRequestInertialization == value)
-				{
-					return;
-				}
-				_canRequestInertialization = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _canRequestInertialization);
+			set => SetProperty(ref _canRequestInertialization, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("animFeatureName")] 
 		public CName AnimFeatureName
 		{
-			get
-			{
-				if (_animFeatureName == null)
-				{
-					_animFeatureName = (CName) CR2WTypeManager.Create("CName", "animFeatureName", cr2w, this);
-				}
-				return _animFeatureName;
-			}
-			set
-			{
-				if (_animFeatureName == value)
-				{
-					return;
-				}
-				_animFeatureName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animFeatureName);
+			set => SetProperty(ref _animFeatureName, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("actionAnimDatabaseRef")] 
 		public rRef<animActionAnimDatabase> ActionAnimDatabaseRef
 		{
-			get
-			{
-				if (_actionAnimDatabaseRef == null)
-				{
-					_actionAnimDatabaseRef = (rRef<animActionAnimDatabase>) CR2WTypeManager.Create("rRef:animActionAnimDatabase", "actionAnimDatabaseRef", cr2w, this);
-				}
-				return _actionAnimDatabaseRef;
-			}
-			set
-			{
-				if (_actionAnimDatabaseRef == value)
-				{
-					return;
-				}
-				_actionAnimDatabaseRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionAnimDatabaseRef);
+			set => SetProperty(ref _actionAnimDatabaseRef, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("isOutTransitionFromAction")] 
 		public CBool IsOutTransitionFromAction
 		{
-			get
-			{
-				if (_isOutTransitionFromAction == null)
-				{
-					_isOutTransitionFromAction = (CBool) CR2WTypeManager.Create("Bool", "isOutTransitionFromAction", cr2w, this);
-				}
-				return _isOutTransitionFromAction;
-			}
-			set
-			{
-				if (_isOutTransitionFromAction == value)
-				{
-					return;
-				}
-				_isOutTransitionFromAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isOutTransitionFromAction);
+			set => SetProperty(ref _isOutTransitionFromAction, value);
 		}
 
 		public animAnimStateTransitionDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

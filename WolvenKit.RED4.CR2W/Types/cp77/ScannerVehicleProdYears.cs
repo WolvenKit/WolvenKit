@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicleProdYears")] 
 		public CString VehicleProdYears
 		{
-			get
-			{
-				if (_vehicleProdYears == null)
-				{
-					_vehicleProdYears = (CString) CR2WTypeManager.Create("String", "vehicleProdYears", cr2w, this);
-				}
-				return _vehicleProdYears;
-			}
-			set
-			{
-				if (_vehicleProdYears == value)
-				{
-					return;
-				}
-				_vehicleProdYears = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleProdYears);
+			set => SetProperty(ref _vehicleProdYears, value);
 		}
 
 		public ScannerVehicleProdYears(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

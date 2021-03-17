@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("expressionData")] 
 		public animMathExpressionNodeData ExpressionData
 		{
-			get
-			{
-				if (_expressionData == null)
-				{
-					_expressionData = (animMathExpressionNodeData) CR2WTypeManager.Create("animMathExpressionNodeData", "expressionData", cr2w, this);
-				}
-				return _expressionData;
-			}
-			set
-			{
-				if (_expressionData == value)
-				{
-					return;
-				}
-				_expressionData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _expressionData);
+			set => SetProperty(ref _expressionData, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("outputFloatTrack")] 
 		public animNamedTrackIndex OutputFloatTrack
 		{
-			get
-			{
-				if (_outputFloatTrack == null)
-				{
-					_outputFloatTrack = (animNamedTrackIndex) CR2WTypeManager.Create("animNamedTrackIndex", "outputFloatTrack", cr2w, this);
-				}
-				return _outputFloatTrack;
-			}
-			set
-			{
-				if (_outputFloatTrack == value)
-				{
-					return;
-				}
-				_outputFloatTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outputFloatTrack);
+			set => SetProperty(ref _outputFloatTrack, value);
 		}
 
 		public animAnimNode_MathExpressionPose_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

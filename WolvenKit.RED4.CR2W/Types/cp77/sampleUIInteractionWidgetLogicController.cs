@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enableStateColor")] 
 		public CColor EnableStateColor
 		{
-			get
-			{
-				if (_enableStateColor == null)
-				{
-					_enableStateColor = (CColor) CR2WTypeManager.Create("Color", "enableStateColor", cr2w, this);
-				}
-				return _enableStateColor;
-			}
-			set
-			{
-				if (_enableStateColor == value)
-				{
-					return;
-				}
-				_enableStateColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableStateColor);
+			set => SetProperty(ref _enableStateColor, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("disableStateColor")] 
 		public CColor DisableStateColor
 		{
-			get
-			{
-				if (_disableStateColor == null)
-				{
-					_disableStateColor = (CColor) CR2WTypeManager.Create("Color", "disableStateColor", cr2w, this);
-				}
-				return _disableStateColor;
-			}
-			set
-			{
-				if (_disableStateColor == value)
-				{
-					return;
-				}
-				_disableStateColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _disableStateColor);
+			set => SetProperty(ref _disableStateColor, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("textWidget")] 
 		public wCHandle<inkTextWidget> TextWidget
 		{
-			get
-			{
-				if (_textWidget == null)
-				{
-					_textWidget = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "textWidget", cr2w, this);
-				}
-				return _textWidget;
-			}
-			set
-			{
-				if (_textWidget == value)
-				{
-					return;
-				}
-				_textWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textWidget);
+			set => SetProperty(ref _textWidget, value);
 		}
 
 		public sampleUIInteractionWidgetLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("levelLabel")] 
 		public inkTextWidgetReference LevelLabel
 		{
-			get
-			{
-				if (_levelLabel == null)
-				{
-					_levelLabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "levelLabel", cr2w, this);
-				}
-				return _levelLabel;
-			}
-			set
-			{
-				if (_levelLabel == value)
-				{
-					return;
-				}
-				_levelLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelLabel);
+			set => SetProperty(ref _levelLabel, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("levelBar")] 
 		public inkWidgetReference LevelBar
 		{
-			get
-			{
-				if (_levelBar == null)
-				{
-					_levelBar = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "levelBar", cr2w, this);
-				}
-				return _levelBar;
-			}
-			set
-			{
-				if (_levelBar == value)
-				{
-					return;
-				}
-				_levelBar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelBar);
+			set => SetProperty(ref _levelBar, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("skillData")] 
 		public CHandle<ProficiencyDisplayData> SkillData
 		{
-			get
-			{
-				if (_skillData == null)
-				{
-					_skillData = (CHandle<ProficiencyDisplayData>) CR2WTypeManager.Create("handle:ProficiencyDisplayData", "skillData", cr2w, this);
-				}
-				return _skillData;
-			}
-			set
-			{
-				if (_skillData == value)
-				{
-					return;
-				}
-				_skillData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skillData);
+			set => SetProperty(ref _skillData, value);
 		}
 
 		public PerksSkillLabelContentContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("constrainedTransform")] 
 		public animTransformIndex ConstrainedTransform
 		{
-			get
-			{
-				if (_constrainedTransform == null)
-				{
-					_constrainedTransform = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "constrainedTransform", cr2w, this);
-				}
-				return _constrainedTransform;
-			}
-			set
-			{
-				if (_constrainedTransform == value)
-				{
-					return;
-				}
-				_constrainedTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _constrainedTransform);
+			set => SetProperty(ref _constrainedTransform, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("parentTransform")] 
 		public animTransformIndex ParentTransform
 		{
-			get
-			{
-				if (_parentTransform == null)
-				{
-					_parentTransform = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "parentTransform", cr2w, this);
-				}
-				return _parentTransform;
-			}
-			set
-			{
-				if (_parentTransform == value)
-				{
-					return;
-				}
-				_parentTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentTransform);
+			set => SetProperty(ref _parentTransform, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("limitOnXAxis")] 
 		public animFloatClamp LimitOnXAxis
 		{
-			get
-			{
-				if (_limitOnXAxis == null)
-				{
-					_limitOnXAxis = (animFloatClamp) CR2WTypeManager.Create("animFloatClamp", "limitOnXAxis", cr2w, this);
-				}
-				return _limitOnXAxis;
-			}
-			set
-			{
-				if (_limitOnXAxis == value)
-				{
-					return;
-				}
-				_limitOnXAxis = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _limitOnXAxis);
+			set => SetProperty(ref _limitOnXAxis, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("limitOnYAxis")] 
 		public animFloatClamp LimitOnYAxis
 		{
-			get
-			{
-				if (_limitOnYAxis == null)
-				{
-					_limitOnYAxis = (animFloatClamp) CR2WTypeManager.Create("animFloatClamp", "limitOnYAxis", cr2w, this);
-				}
-				return _limitOnYAxis;
-			}
-			set
-			{
-				if (_limitOnYAxis == value)
-				{
-					return;
-				}
-				_limitOnYAxis = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _limitOnYAxis);
+			set => SetProperty(ref _limitOnYAxis, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("limitOnZAxis")] 
 		public animFloatClamp LimitOnZAxis
 		{
-			get
-			{
-				if (_limitOnZAxis == null)
-				{
-					_limitOnZAxis = (animFloatClamp) CR2WTypeManager.Create("animFloatClamp", "limitOnZAxis", cr2w, this);
-				}
-				return _limitOnZAxis;
-			}
-			set
-			{
-				if (_limitOnZAxis == value)
-				{
-					return;
-				}
-				_limitOnZAxis = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _limitOnZAxis);
+			set => SetProperty(ref _limitOnZAxis, value);
 		}
 
 		public animAnimNode_TranslationLimit(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

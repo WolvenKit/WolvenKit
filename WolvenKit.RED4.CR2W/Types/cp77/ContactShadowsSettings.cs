@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("contactShadows")] 
 		public ContactShadowsConfig ContactShadows
 		{
-			get
-			{
-				if (_contactShadows == null)
-				{
-					_contactShadows = (ContactShadowsConfig) CR2WTypeManager.Create("ContactShadowsConfig", "contactShadows", cr2w, this);
-				}
-				return _contactShadows;
-			}
-			set
-			{
-				if (_contactShadows == value)
-				{
-					return;
-				}
-				_contactShadows = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contactShadows);
+			set => SetProperty(ref _contactShadows, value);
 		}
 
 		public ContactShadowsSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

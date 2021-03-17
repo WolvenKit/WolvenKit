@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("runner")] 
 		public wCHandle<entEntity> Runner
 		{
-			get
-			{
-				if (_runner == null)
-				{
-					_runner = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "runner", cr2w, this);
-				}
-				return _runner;
-			}
-			set
-			{
-				if (_runner == value)
-				{
-					return;
-				}
-				_runner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _runner);
+			set => SetProperty(ref _runner, value);
 		}
 
 		public UnregisterFleeingNPC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

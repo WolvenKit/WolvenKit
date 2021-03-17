@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sender")] 
 		public entEntityID Sender
 		{
-			get
-			{
-				if (_sender == null)
-				{
-					_sender = (entEntityID) CR2WTypeManager.Create("entEntityID", "sender", cr2w, this);
-				}
-				return _sender;
-			}
-			set
-			{
-				if (_sender == value)
-				{
-					return;
-				}
-				_sender = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sender);
+			set => SetProperty(ref _sender, value);
 		}
 
 		public CommunicationEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

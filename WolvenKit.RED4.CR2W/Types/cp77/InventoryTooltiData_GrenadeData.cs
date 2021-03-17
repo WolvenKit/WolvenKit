@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("type")] 
 		public CEnum<GrenadeDamageType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<GrenadeDamageType>) CR2WTypeManager.Create("GrenadeDamageType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("range")] 
 		public CFloat Range
 		{
-			get
-			{
-				if (_range == null)
-				{
-					_range = (CFloat) CR2WTypeManager.Create("Float", "range", cr2w, this);
-				}
-				return _range;
-			}
-			set
-			{
-				if (_range == value)
-				{
-					return;
-				}
-				_range = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _range);
+			set => SetProperty(ref _range, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("delay")] 
 		public CFloat Delay
 		{
-			get
-			{
-				if (_delay == null)
-				{
-					_delay = (CFloat) CR2WTypeManager.Create("Float", "delay", cr2w, this);
-				}
-				return _delay;
-			}
-			set
-			{
-				if (_delay == value)
-				{
-					return;
-				}
-				_delay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delay);
+			set => SetProperty(ref _delay, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("damagePerTick")] 
 		public CFloat DamagePerTick
 		{
-			get
-			{
-				if (_damagePerTick == null)
-				{
-					_damagePerTick = (CFloat) CR2WTypeManager.Create("Float", "damagePerTick", cr2w, this);
-				}
-				return _damagePerTick;
-			}
-			set
-			{
-				if (_damagePerTick == value)
-				{
-					return;
-				}
-				_damagePerTick = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damagePerTick);
+			set => SetProperty(ref _damagePerTick, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("damageType")] 
 		public CEnum<gamedataStatType> DamageType
 		{
-			get
-			{
-				if (_damageType == null)
-				{
-					_damageType = (CEnum<gamedataStatType>) CR2WTypeManager.Create("gamedataStatType", "damageType", cr2w, this);
-				}
-				return _damageType;
-			}
-			set
-			{
-				if (_damageType == value)
-				{
-					return;
-				}
-				_damageType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damageType);
+			set => SetProperty(ref _damageType, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("detonationTimer")] 
 		public CFloat DetonationTimer
 		{
-			get
-			{
-				if (_detonationTimer == null)
-				{
-					_detonationTimer = (CFloat) CR2WTypeManager.Create("Float", "detonationTimer", cr2w, this);
-				}
-				return _detonationTimer;
-			}
-			set
-			{
-				if (_detonationTimer == value)
-				{
-					return;
-				}
-				_detonationTimer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _detonationTimer);
+			set => SetProperty(ref _detonationTimer, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("deliveryMethod")] 
 		public CEnum<gamedataGrenadeDeliveryMethodType> DeliveryMethod
 		{
-			get
-			{
-				if (_deliveryMethod == null)
-				{
-					_deliveryMethod = (CEnum<gamedataGrenadeDeliveryMethodType>) CR2WTypeManager.Create("gamedataGrenadeDeliveryMethodType", "deliveryMethod", cr2w, this);
-				}
-				return _deliveryMethod;
-			}
-			set
-			{
-				if (_deliveryMethod == value)
-				{
-					return;
-				}
-				_deliveryMethod = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deliveryMethod);
+			set => SetProperty(ref _deliveryMethod, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("totalDamage")] 
 		public CFloat TotalDamage
 		{
-			get
-			{
-				if (_totalDamage == null)
-				{
-					_totalDamage = (CFloat) CR2WTypeManager.Create("Float", "totalDamage", cr2w, this);
-				}
-				return _totalDamage;
-			}
-			set
-			{
-				if (_totalDamage == value)
-				{
-					return;
-				}
-				_totalDamage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _totalDamage);
+			set => SetProperty(ref _totalDamage, value);
 		}
 
 		public InventoryTooltiData_GrenadeData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

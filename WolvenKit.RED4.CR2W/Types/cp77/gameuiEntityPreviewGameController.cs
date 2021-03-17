@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entityToPreview")] 
 		public raRef<entEntityTemplate> EntityToPreview
 		{
-			get
-			{
-				if (_entityToPreview == null)
-				{
-					_entityToPreview = (raRef<entEntityTemplate>) CR2WTypeManager.Create("raRef:entEntityTemplate", "entityToPreview", cr2w, this);
-				}
-				return _entityToPreview;
-			}
-			set
-			{
-				if (_entityToPreview == value)
-				{
-					return;
-				}
-				_entityToPreview = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityToPreview);
+			set => SetProperty(ref _entityToPreview, value);
 		}
 
 		public gameuiEntityPreviewGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

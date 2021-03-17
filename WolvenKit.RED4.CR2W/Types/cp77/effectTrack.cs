@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("items")] 
 		public CArray<CHandle<effectTrackItem>> Items
 		{
-			get
-			{
-				if (_items == null)
-				{
-					_items = (CArray<CHandle<effectTrackItem>>) CR2WTypeManager.Create("array:handle:effectTrackItem", "items", cr2w, this);
-				}
-				return _items;
-			}
-			set
-			{
-				if (_items == value)
-				{
-					return;
-				}
-				_items = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _items);
+			set => SetProperty(ref _items, value);
 		}
 
 		public effectTrack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

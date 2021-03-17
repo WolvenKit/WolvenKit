@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get
-			{
-				if (_radius == null)
-				{
-					_radius = (CFloat) CR2WTypeManager.Create("Float", "radius", cr2w, this);
-				}
-				return _radius;
-			}
-			set
-			{
-				if (_radius == value)
-				{
-					return;
-				}
-				_radius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radius);
+			set => SetProperty(ref _radius, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("lightBlockerComponentVersion")] 
 		public CUInt8 LightBlockerComponentVersion
 		{
-			get
-			{
-				if (_lightBlockerComponentVersion == null)
-				{
-					_lightBlockerComponentVersion = (CUInt8) CR2WTypeManager.Create("Uint8", "lightBlockerComponentVersion", cr2w, this);
-				}
-				return _lightBlockerComponentVersion;
-			}
-			set
-			{
-				if (_lightBlockerComponentVersion == value)
-				{
-					return;
-				}
-				_lightBlockerComponentVersion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lightBlockerComponentVersion);
+			set => SetProperty(ref _lightBlockerComponentVersion, value);
 		}
 
 		public entLightBlockingComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

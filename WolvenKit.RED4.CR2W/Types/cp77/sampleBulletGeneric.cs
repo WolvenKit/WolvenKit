@@ -11,145 +11,55 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameEffectInstance> _damage;
 		private CFloat _countTime;
 		private CFloat _startVelocity;
-		private CFloat _lifetime;
+		private CFloat _lifetime_472;
 		private CBool _alive;
 
 		[Ordinal(51)] 
 		[RED("meshComponent")] 
 		public CHandle<entIComponent> MeshComponent
 		{
-			get
-			{
-				if (_meshComponent == null)
-				{
-					_meshComponent = (CHandle<entIComponent>) CR2WTypeManager.Create("handle:entIComponent", "meshComponent", cr2w, this);
-				}
-				return _meshComponent;
-			}
-			set
-			{
-				if (_meshComponent == value)
-				{
-					return;
-				}
-				_meshComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshComponent);
+			set => SetProperty(ref _meshComponent, value);
 		}
 
 		[Ordinal(52)] 
 		[RED("damage")] 
 		public CHandle<gameEffectInstance> Damage
 		{
-			get
-			{
-				if (_damage == null)
-				{
-					_damage = (CHandle<gameEffectInstance>) CR2WTypeManager.Create("handle:gameEffectInstance", "damage", cr2w, this);
-				}
-				return _damage;
-			}
-			set
-			{
-				if (_damage == value)
-				{
-					return;
-				}
-				_damage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damage);
+			set => SetProperty(ref _damage, value);
 		}
 
 		[Ordinal(53)] 
 		[RED("countTime")] 
 		public CFloat CountTime
 		{
-			get
-			{
-				if (_countTime == null)
-				{
-					_countTime = (CFloat) CR2WTypeManager.Create("Float", "countTime", cr2w, this);
-				}
-				return _countTime;
-			}
-			set
-			{
-				if (_countTime == value)
-				{
-					return;
-				}
-				_countTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _countTime);
+			set => SetProperty(ref _countTime, value);
 		}
 
 		[Ordinal(54)] 
 		[RED("startVelocity")] 
 		public CFloat StartVelocity
 		{
-			get
-			{
-				if (_startVelocity == null)
-				{
-					_startVelocity = (CFloat) CR2WTypeManager.Create("Float", "startVelocity", cr2w, this);
-				}
-				return _startVelocity;
-			}
-			set
-			{
-				if (_startVelocity == value)
-				{
-					return;
-				}
-				_startVelocity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startVelocity);
+			set => SetProperty(ref _startVelocity, value);
 		}
 
 		[Ordinal(55)] 
 		[RED("lifetime")] 
 		public CFloat Lifetime_472
 		{
-			get
-			{
-				if (_lifetime == null)
-				{
-					_lifetime = (CFloat) CR2WTypeManager.Create("Float", "lifetime", cr2w, this);
-				}
-				return _lifetime;
-			}
-			set
-			{
-				if (_lifetime == value)
-				{
-					return;
-				}
-				_lifetime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lifetime_472);
+			set => SetProperty(ref _lifetime_472, value);
 		}
 
 		[Ordinal(56)] 
 		[RED("alive")] 
 		public CBool Alive
 		{
-			get
-			{
-				if (_alive == null)
-				{
-					_alive = (CBool) CR2WTypeManager.Create("Bool", "alive", cr2w, this);
-				}
-				return _alive;
-			}
-			set
-			{
-				if (_alive == value)
-				{
-					return;
-				}
-				_alive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alive);
+			set => SetProperty(ref _alive, value);
 		}
 
 		public sampleBulletGeneric(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

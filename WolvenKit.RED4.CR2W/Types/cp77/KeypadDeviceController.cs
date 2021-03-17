@@ -23,253 +23,88 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enteredPasswordWidget")] 
 		public wCHandle<inkTextWidget> EnteredPasswordWidget
 		{
-			get
-			{
-				if (_enteredPasswordWidget == null)
-				{
-					_enteredPasswordWidget = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "enteredPasswordWidget", cr2w, this);
-				}
-				return _enteredPasswordWidget;
-			}
-			set
-			{
-				if (_enteredPasswordWidget == value)
-				{
-					return;
-				}
-				_enteredPasswordWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enteredPasswordWidget);
+			set => SetProperty(ref _enteredPasswordWidget, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("passwordStatusWidget")] 
 		public wCHandle<inkTextWidget> PasswordStatusWidget
 		{
-			get
-			{
-				if (_passwordStatusWidget == null)
-				{
-					_passwordStatusWidget = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "passwordStatusWidget", cr2w, this);
-				}
-				return _passwordStatusWidget;
-			}
-			set
-			{
-				if (_passwordStatusWidget == value)
-				{
-					return;
-				}
-				_passwordStatusWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _passwordStatusWidget);
+			set => SetProperty(ref _passwordStatusWidget, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("actionButton")] 
 		public wCHandle<inkWidget> ActionButton
 		{
-			get
-			{
-				if (_actionButton == null)
-				{
-					_actionButton = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "actionButton", cr2w, this);
-				}
-				return _actionButton;
-			}
-			set
-			{
-				if (_actionButton == value)
-				{
-					return;
-				}
-				_actionButton = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionButton);
+			set => SetProperty(ref _actionButton, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("ActionText")] 
 		public wCHandle<inkTextWidget> ActionText
 		{
-			get
-			{
-				if (_actionText == null)
-				{
-					_actionText = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "ActionText", cr2w, this);
-				}
-				return _actionText;
-			}
-			set
-			{
-				if (_actionText == value)
-				{
-					return;
-				}
-				_actionText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionText);
+			set => SetProperty(ref _actionText, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("passwordsList")] 
 		public CArray<CName> PasswordsList
 		{
-			get
-			{
-				if (_passwordsList == null)
-				{
-					_passwordsList = (CArray<CName>) CR2WTypeManager.Create("array:CName", "passwordsList", cr2w, this);
-				}
-				return _passwordsList;
-			}
-			set
-			{
-				if (_passwordsList == value)
-				{
-					return;
-				}
-				_passwordsList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _passwordsList);
+			set => SetProperty(ref _passwordsList, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("cardName")] 
 		public CString CardName
 		{
-			get
-			{
-				if (_cardName == null)
-				{
-					_cardName = (CString) CR2WTypeManager.Create("String", "cardName", cr2w, this);
-				}
-				return _cardName;
-			}
-			set
-			{
-				if (_cardName == value)
-				{
-					return;
-				}
-				_cardName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cardName);
+			set => SetProperty(ref _cardName, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("isPasswordKnown")] 
 		public CBool IsPasswordKnown
 		{
-			get
-			{
-				if (_isPasswordKnown == null)
-				{
-					_isPasswordKnown = (CBool) CR2WTypeManager.Create("Bool", "isPasswordKnown", cr2w, this);
-				}
-				return _isPasswordKnown;
-			}
-			set
-			{
-				if (_isPasswordKnown == value)
-				{
-					return;
-				}
-				_isPasswordKnown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPasswordKnown);
+			set => SetProperty(ref _isPasswordKnown, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("row1")] 
 		public wCHandle<inkHorizontalPanelWidget> Row1
 		{
-			get
-			{
-				if (_row1 == null)
-				{
-					_row1 = (wCHandle<inkHorizontalPanelWidget>) CR2WTypeManager.Create("whandle:inkHorizontalPanelWidget", "row1", cr2w, this);
-				}
-				return _row1;
-			}
-			set
-			{
-				if (_row1 == value)
-				{
-					return;
-				}
-				_row1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _row1);
+			set => SetProperty(ref _row1, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("row2")] 
 		public wCHandle<inkHorizontalPanelWidget> Row2
 		{
-			get
-			{
-				if (_row2 == null)
-				{
-					_row2 = (wCHandle<inkHorizontalPanelWidget>) CR2WTypeManager.Create("whandle:inkHorizontalPanelWidget", "row2", cr2w, this);
-				}
-				return _row2;
-			}
-			set
-			{
-				if (_row2 == value)
-				{
-					return;
-				}
-				_row2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _row2);
+			set => SetProperty(ref _row2, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("row3")] 
 		public wCHandle<inkHorizontalPanelWidget> Row3
 		{
-			get
-			{
-				if (_row3 == null)
-				{
-					_row3 = (wCHandle<inkHorizontalPanelWidget>) CR2WTypeManager.Create("whandle:inkHorizontalPanelWidget", "row3", cr2w, this);
-				}
-				return _row3;
-			}
-			set
-			{
-				if (_row3 == value)
-				{
-					return;
-				}
-				_row3 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _row3);
+			set => SetProperty(ref _row3, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("row4")] 
 		public wCHandle<inkHorizontalPanelWidget> Row4
 		{
-			get
-			{
-				if (_row4 == null)
-				{
-					_row4 = (wCHandle<inkHorizontalPanelWidget>) CR2WTypeManager.Create("whandle:inkHorizontalPanelWidget", "row4", cr2w, this);
-				}
-				return _row4;
-			}
-			set
-			{
-				if (_row4 == value)
-				{
-					return;
-				}
-				_row4 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _row4);
+			set => SetProperty(ref _row4, value);
 		}
 
 		public KeypadDeviceController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

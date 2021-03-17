@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ints")] 
 		public CArray<Vector2> Ints
 		{
-			get
-			{
-				if (_ints == null)
-				{
-					_ints = (CArray<Vector2>) CR2WTypeManager.Create("array:Vector2", "ints", cr2w, this);
-				}
-				return _ints;
-			}
-			set
-			{
-				if (_ints == value)
-				{
-					return;
-				}
-				_ints = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ints);
+			set => SetProperty(ref _ints, value);
 		}
 
 		public vgVectorGraphicShape_Polygon(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

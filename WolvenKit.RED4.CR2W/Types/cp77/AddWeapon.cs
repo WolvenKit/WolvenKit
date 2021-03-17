@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weapon")] 
 		public CEnum<EquipmentPriority> Weapon
 		{
-			get
-			{
-				if (_weapon == null)
-				{
-					_weapon = (CEnum<EquipmentPriority>) CR2WTypeManager.Create("EquipmentPriority", "weapon", cr2w, this);
-				}
-				return _weapon;
-			}
-			set
-			{
-				if (_weapon == value)
-				{
-					return;
-				}
-				_weapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weapon);
+			set => SetProperty(ref _weapon, value);
 		}
 
 		public AddWeapon(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

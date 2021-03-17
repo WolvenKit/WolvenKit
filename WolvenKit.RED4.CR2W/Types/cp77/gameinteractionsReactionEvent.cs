@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("interactionType")] 
 		public CName InteractionType
 		{
-			get
-			{
-				if (_interactionType == null)
-				{
-					_interactionType = (CName) CR2WTypeManager.Create("CName", "interactionType", cr2w, this);
-				}
-				return _interactionType;
-			}
-			set
-			{
-				if (_interactionType == value)
-				{
-					return;
-				}
-				_interactionType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interactionType);
+			set => SetProperty(ref _interactionType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("interactionItems")] 
 		public CArray<gameEquipParam> InteractionItems
 		{
-			get
-			{
-				if (_interactionItems == null)
-				{
-					_interactionItems = (CArray<gameEquipParam>) CR2WTypeManager.Create("array:gameEquipParam", "interactionItems", cr2w, this);
-				}
-				return _interactionItems;
-			}
-			set
-			{
-				if (_interactionItems == value)
-				{
-					return;
-				}
-				_interactionItems = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interactionItems);
+			set => SetProperty(ref _interactionItems, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("state")] 
 		public CEnum<gameinteractionsReactionState> State
 		{
-			get
-			{
-				if (_state == null)
-				{
-					_state = (CEnum<gameinteractionsReactionState>) CR2WTypeManager.Create("gameinteractionsReactionState", "state", cr2w, this);
-				}
-				return _state;
-			}
-			set
-			{
-				if (_state == value)
-				{
-					return;
-				}
-				_state = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
 		}
 
 		public gameinteractionsReactionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

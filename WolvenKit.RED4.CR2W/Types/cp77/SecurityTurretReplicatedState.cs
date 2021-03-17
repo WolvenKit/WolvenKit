@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isOn")] 
 		public CBool IsOn
 		{
-			get
-			{
-				if (_isOn == null)
-				{
-					_isOn = (CBool) CR2WTypeManager.Create("Bool", "isOn", cr2w, this);
-				}
-				return _isOn;
-			}
-			set
-			{
-				if (_isOn == value)
-				{
-					return;
-				}
-				_isOn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isOn);
+			set => SetProperty(ref _isOn, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isShooting")] 
 		public CBool IsShooting
 		{
-			get
-			{
-				if (_isShooting == null)
-				{
-					_isShooting = (CBool) CR2WTypeManager.Create("Bool", "isShooting", cr2w, this);
-				}
-				return _isShooting;
-			}
-			set
-			{
-				if (_isShooting == value)
-				{
-					return;
-				}
-				_isShooting = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isShooting);
+			set => SetProperty(ref _isShooting, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isDead")] 
 		public CBool IsDead
 		{
-			get
-			{
-				if (_isDead == null)
-				{
-					_isDead = (CBool) CR2WTypeManager.Create("Bool", "isDead", cr2w, this);
-				}
-				return _isDead;
-			}
-			set
-			{
-				if (_isDead == value)
-				{
-					return;
-				}
-				_isDead = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDead);
+			set => SetProperty(ref _isDead, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("health")] 
 		public CFloat Health
 		{
-			get
-			{
-				if (_health == null)
-				{
-					_health = (CFloat) CR2WTypeManager.Create("Float", "health", cr2w, this);
-				}
-				return _health;
-			}
-			set
-			{
-				if (_health == value)
-				{
-					return;
-				}
-				_health = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _health);
+			set => SetProperty(ref _health, value);
 		}
 
 		public SecurityTurretReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("version")] 
 		public CUInt32 Version
 		{
-			get
-			{
-				if (_version == null)
-				{
-					_version = (CUInt32) CR2WTypeManager.Create("Uint32", "version", cr2w, this);
-				}
-				return _version;
-			}
-			set
-			{
-				if (_version == value)
-				{
-					return;
-				}
-				_version = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _version);
+			set => SetProperty(ref _version, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("headCustomizationOptions")] 
 		public CArray<CHandle<gameuiCharacterCustomizationInfo>> HeadCustomizationOptions
 		{
-			get
-			{
-				if (_headCustomizationOptions == null)
-				{
-					_headCustomizationOptions = (CArray<CHandle<gameuiCharacterCustomizationInfo>>) CR2WTypeManager.Create("array:handle:gameuiCharacterCustomizationInfo", "headCustomizationOptions", cr2w, this);
-				}
-				return _headCustomizationOptions;
-			}
-			set
-			{
-				if (_headCustomizationOptions == value)
-				{
-					return;
-				}
-				_headCustomizationOptions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _headCustomizationOptions);
+			set => SetProperty(ref _headCustomizationOptions, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("bodyCustomizationOptions")] 
 		public CArray<CHandle<gameuiCharacterCustomizationInfo>> BodyCustomizationOptions
 		{
-			get
-			{
-				if (_bodyCustomizationOptions == null)
-				{
-					_bodyCustomizationOptions = (CArray<CHandle<gameuiCharacterCustomizationInfo>>) CR2WTypeManager.Create("array:handle:gameuiCharacterCustomizationInfo", "bodyCustomizationOptions", cr2w, this);
-				}
-				return _bodyCustomizationOptions;
-			}
-			set
-			{
-				if (_bodyCustomizationOptions == value)
-				{
-					return;
-				}
-				_bodyCustomizationOptions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyCustomizationOptions);
+			set => SetProperty(ref _bodyCustomizationOptions, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("armsCustomizationOptions")] 
 		public CArray<CHandle<gameuiCharacterCustomizationInfo>> ArmsCustomizationOptions
 		{
-			get
-			{
-				if (_armsCustomizationOptions == null)
-				{
-					_armsCustomizationOptions = (CArray<CHandle<gameuiCharacterCustomizationInfo>>) CR2WTypeManager.Create("array:handle:gameuiCharacterCustomizationInfo", "armsCustomizationOptions", cr2w, this);
-				}
-				return _armsCustomizationOptions;
-			}
-			set
-			{
-				if (_armsCustomizationOptions == value)
-				{
-					return;
-				}
-				_armsCustomizationOptions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _armsCustomizationOptions);
+			set => SetProperty(ref _armsCustomizationOptions, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("armsGroups")] 
 		public CArray<gameuiOptionsGroup> ArmsGroups
 		{
-			get
-			{
-				if (_armsGroups == null)
-				{
-					_armsGroups = (CArray<gameuiOptionsGroup>) CR2WTypeManager.Create("array:gameuiOptionsGroup", "armsGroups", cr2w, this);
-				}
-				return _armsGroups;
-			}
-			set
-			{
-				if (_armsGroups == value)
-				{
-					return;
-				}
-				_armsGroups = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _armsGroups);
+			set => SetProperty(ref _armsGroups, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("headGroups")] 
 		public CArray<gameuiOptionsGroup> HeadGroups
 		{
-			get
-			{
-				if (_headGroups == null)
-				{
-					_headGroups = (CArray<gameuiOptionsGroup>) CR2WTypeManager.Create("array:gameuiOptionsGroup", "headGroups", cr2w, this);
-				}
-				return _headGroups;
-			}
-			set
-			{
-				if (_headGroups == value)
-				{
-					return;
-				}
-				_headGroups = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _headGroups);
+			set => SetProperty(ref _headGroups, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("bodyGroups")] 
 		public CArray<gameuiOptionsGroup> BodyGroups
 		{
-			get
-			{
-				if (_bodyGroups == null)
-				{
-					_bodyGroups = (CArray<gameuiOptionsGroup>) CR2WTypeManager.Create("array:gameuiOptionsGroup", "bodyGroups", cr2w, this);
-				}
-				return _bodyGroups;
-			}
-			set
-			{
-				if (_bodyGroups == value)
-				{
-					return;
-				}
-				_bodyGroups = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyGroups);
+			set => SetProperty(ref _bodyGroups, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("perspectiveInfo")] 
 		public CArray<gameuiPerspectiveInfo> PerspectiveInfo
 		{
-			get
-			{
-				if (_perspectiveInfo == null)
-				{
-					_perspectiveInfo = (CArray<gameuiPerspectiveInfo>) CR2WTypeManager.Create("array:gameuiPerspectiveInfo", "perspectiveInfo", cr2w, this);
-				}
-				return _perspectiveInfo;
-			}
-			set
-			{
-				if (_perspectiveInfo == value)
-				{
-					return;
-				}
-				_perspectiveInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perspectiveInfo);
+			set => SetProperty(ref _perspectiveInfo, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("uiPresets")] 
 		public CArray<gameuiCharacterCustomizationUiPresetInfo> UiPresets
 		{
-			get
-			{
-				if (_uiPresets == null)
-				{
-					_uiPresets = (CArray<gameuiCharacterCustomizationUiPresetInfo>) CR2WTypeManager.Create("array:gameuiCharacterCustomizationUiPresetInfo", "uiPresets", cr2w, this);
-				}
-				return _uiPresets;
-			}
-			set
-			{
-				if (_uiPresets == value)
-				{
-					return;
-				}
-				_uiPresets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uiPresets);
+			set => SetProperty(ref _uiPresets, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("excludedFromRandomize")] 
 		public CArray<CName> ExcludedFromRandomize
 		{
-			get
-			{
-				if (_excludedFromRandomize == null)
-				{
-					_excludedFromRandomize = (CArray<CName>) CR2WTypeManager.Create("array:CName", "excludedFromRandomize", cr2w, this);
-				}
-				return _excludedFromRandomize;
-			}
-			set
-			{
-				if (_excludedFromRandomize == value)
-				{
-					return;
-				}
-				_excludedFromRandomize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _excludedFromRandomize);
+			set => SetProperty(ref _excludedFromRandomize, value);
 		}
 
 		public gameuiCharacterCustomizationInfoResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get
-			{
-				if (_vehicleRef == null)
-				{
-					_vehicleRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "vehicleRef", cr2w, this);
-				}
-				return _vehicleRef;
-			}
-			set
-			{
-				if (_vehicleRef == value)
-				{
-					return;
-				}
-				_vehicleRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleRef);
+			set => SetProperty(ref _vehicleRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("keepDistanceFromRef")] 
 		public gameEntityReference KeepDistanceFromRef
 		{
-			get
-			{
-				if (_keepDistanceFromRef == null)
-				{
-					_keepDistanceFromRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "keepDistanceFromRef", cr2w, this);
-				}
-				return _keepDistanceFromRef;
-			}
-			set
-			{
-				if (_keepDistanceFromRef == value)
-				{
-					return;
-				}
-				_keepDistanceFromRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _keepDistanceFromRef);
+			set => SetProperty(ref _keepDistanceFromRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("splineRef")] 
 		public NodeRef SplineRef
 		{
-			get
-			{
-				if (_splineRef == null)
-				{
-					_splineRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "splineRef", cr2w, this);
-				}
-				return _splineRef;
-			}
-			set
-			{
-				if (_splineRef == value)
-				{
-					return;
-				}
-				_splineRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _splineRef);
+			set => SetProperty(ref _splineRef, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("distance")] 
 		public CFloat Distance
 		{
-			get
-			{
-				if (_distance == null)
-				{
-					_distance = (CFloat) CR2WTypeManager.Create("Float", "distance", cr2w, this);
-				}
-				return _distance;
-			}
-			set
-			{
-				if (_distance == value)
-				{
-					return;
-				}
-				_distance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distance);
+			set => SetProperty(ref _distance, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("blendTime")] 
 		public CFloat BlendTime
 		{
-			get
-			{
-				if (_blendTime == null)
-				{
-					_blendTime = (CFloat) CR2WTypeManager.Create("Float", "blendTime", cr2w, this);
-				}
-				return _blendTime;
-			}
-			set
-			{
-				if (_blendTime == value)
-				{
-					return;
-				}
-				_blendTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendTime);
+			set => SetProperty(ref _blendTime, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("minSpeed")] 
 		public CFloat MinSpeed
 		{
-			get
-			{
-				if (_minSpeed == null)
-				{
-					_minSpeed = (CFloat) CR2WTypeManager.Create("Float", "minSpeed", cr2w, this);
-				}
-				return _minSpeed;
-			}
-			set
-			{
-				if (_minSpeed == value)
-				{
-					return;
-				}
-				_minSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minSpeed);
+			set => SetProperty(ref _minSpeed, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("reduceSpeedOnTurns")] 
 		public CBool ReduceSpeedOnTurns
 		{
-			get
-			{
-				if (_reduceSpeedOnTurns == null)
-				{
-					_reduceSpeedOnTurns = (CBool) CR2WTypeManager.Create("Bool", "reduceSpeedOnTurns", cr2w, this);
-				}
-				return _reduceSpeedOnTurns;
-			}
-			set
-			{
-				if (_reduceSpeedOnTurns == value)
-				{
-					return;
-				}
-				_reduceSpeedOnTurns = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reduceSpeedOnTurns);
+			set => SetProperty(ref _reduceSpeedOnTurns, value);
 		}
 
 		public questMoveOnSplineAndKeepDistance_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

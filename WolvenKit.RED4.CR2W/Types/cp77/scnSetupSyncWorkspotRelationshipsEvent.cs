@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("syncedWorkspotIds", 4)] 
 		public CStatic<scnSceneWorkspotInstanceId> SyncedWorkspotIds
 		{
-			get
-			{
-				if (_syncedWorkspotIds == null)
-				{
-					_syncedWorkspotIds = (CStatic<scnSceneWorkspotInstanceId>) CR2WTypeManager.Create("static:4,scnSceneWorkspotInstanceId", "syncedWorkspotIds", cr2w, this);
-				}
-				return _syncedWorkspotIds;
-			}
-			set
-			{
-				if (_syncedWorkspotIds == value)
-				{
-					return;
-				}
-				_syncedWorkspotIds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _syncedWorkspotIds);
+			set => SetProperty(ref _syncedWorkspotIds, value);
 		}
 
 		public scnSetupSyncWorkspotRelationshipsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("status")] 
 		public CEnum<AIbehaviorUpdateOutcome> Status
 		{
-			get
-			{
-				if (_status == null)
-				{
-					_status = (CEnum<AIbehaviorUpdateOutcome>) CR2WTypeManager.Create("AIbehaviorUpdateOutcome", "status", cr2w, this);
-				}
-				return _status;
-			}
-			set
-			{
-				if (_status == value)
-				{
-					return;
-				}
-				_status = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _status);
+			set => SetProperty(ref _status, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("reactionData")] 
 		public CHandle<AIReactionData> ReactionData
 		{
-			get
-			{
-				if (_reactionData == null)
-				{
-					_reactionData = (CHandle<AIReactionData>) CR2WTypeManager.Create("handle:AIReactionData", "reactionData", cr2w, this);
-				}
-				return _reactionData;
-			}
-			set
-			{
-				if (_reactionData == value)
-				{
-					return;
-				}
-				_reactionData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reactionData);
+			set => SetProperty(ref _reactionData, value);
 		}
 
 		public ReactionBehaviorStatus(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("side")] 
 		public CEnum<animEventSide> Side
 		{
-			get
-			{
-				if (_side == null)
-				{
-					_side = (CEnum<animEventSide>) CR2WTypeManager.Create("animEventSide", "side", cr2w, this);
-				}
-				return _side;
-			}
-			set
-			{
-				if (_side == value)
-				{
-					return;
-				}
-				_side = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _side);
+			set => SetProperty(ref _side, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("customEvent")] 
 		public CName CustomEvent
 		{
-			get
-			{
-				if (_customEvent == null)
-				{
-					_customEvent = (CName) CR2WTypeManager.Create("CName", "customEvent", cr2w, this);
-				}
-				return _customEvent;
-			}
-			set
-			{
-				if (_customEvent == value)
-				{
-					return;
-				}
-				_customEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customEvent);
+			set => SetProperty(ref _customEvent, value);
 		}
 
 		public animAnimEvent_FootPlant(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

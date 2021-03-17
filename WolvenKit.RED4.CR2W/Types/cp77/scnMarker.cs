@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("type")] 
 		public CEnum<scnMarkerType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<scnMarkerType>) CR2WTypeManager.Create("scnMarkerType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("localMarkerId")] 
 		public CName LocalMarkerId
 		{
-			get
-			{
-				if (_localMarkerId == null)
-				{
-					_localMarkerId = (CName) CR2WTypeManager.Create("CName", "localMarkerId", cr2w, this);
-				}
-				return _localMarkerId;
-			}
-			set
-			{
-				if (_localMarkerId == value)
-				{
-					return;
-				}
-				_localMarkerId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localMarkerId);
+			set => SetProperty(ref _localMarkerId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get
-			{
-				if (_nodeRef == null)
-				{
-					_nodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "nodeRef", cr2w, this);
-				}
-				return _nodeRef;
-			}
-			set
-			{
-				if (_nodeRef == value)
-				{
-					return;
-				}
-				_nodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeRef);
+			set => SetProperty(ref _nodeRef, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("entityRef")] 
 		public gameEntityReference EntityRef
 		{
-			get
-			{
-				if (_entityRef == null)
-				{
-					_entityRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "entityRef", cr2w, this);
-				}
-				return _entityRef;
-			}
-			set
-			{
-				if (_entityRef == value)
-				{
-					return;
-				}
-				_entityRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityRef);
+			set => SetProperty(ref _entityRef, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get
-			{
-				if (_slotName == null)
-				{
-					_slotName = (CName) CR2WTypeManager.Create("CName", "slotName", cr2w, this);
-				}
-				return _slotName;
-			}
-			set
-			{
-				if (_slotName == value)
-				{
-					return;
-				}
-				_slotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotName);
+			set => SetProperty(ref _slotName, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isMounted")] 
 		public CBool IsMounted
 		{
-			get
-			{
-				if (_isMounted == null)
-				{
-					_isMounted = (CBool) CR2WTypeManager.Create("Bool", "isMounted", cr2w, this);
-				}
-				return _isMounted;
-			}
-			set
-			{
-				if (_isMounted == value)
-				{
-					return;
-				}
-				_isMounted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isMounted);
+			set => SetProperty(ref _isMounted, value);
 		}
 
 		public scnMarker(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

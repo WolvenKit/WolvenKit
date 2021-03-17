@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("areaType")] 
 		public CEnum<gameCityAreaType> AreaType
 		{
-			get
-			{
-				if (_areaType == null)
-				{
-					_areaType = (CEnum<gameCityAreaType>) CR2WTypeManager.Create("gameCityAreaType", "areaType", cr2w, this);
-				}
-				return _areaType;
-			}
-			set
-			{
-				if (_areaType == value)
-				{
-					return;
-				}
-				_areaType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaType);
+			set => SetProperty(ref _areaType, value);
 		}
 
 		public questCharacterManagerCombat_SetWeaponState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

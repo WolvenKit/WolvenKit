@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get
-			{
-				if (_nodeRef == null)
-				{
-					_nodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "nodeRef", cr2w, this);
-				}
-				return _nodeRef;
-			}
-			set
-			{
-				if (_nodeRef == value)
-				{
-					return;
-				}
-				_nodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeRef);
+			set => SetProperty(ref _nodeRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("variantId")] 
 		public CUInt32 VariantId
 		{
-			get
-			{
-				if (_variantId == null)
-				{
-					_variantId = (CUInt32) CR2WTypeManager.Create("Uint32", "variantId", cr2w, this);
-				}
-				return _variantId;
-			}
-			set
-			{
-				if (_variantId == value)
-				{
-					return;
-				}
-				_variantId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _variantId);
+			set => SetProperty(ref _variantId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("parentVariantID")] 
 		public CUInt32 ParentVariantID
 		{
-			get
-			{
-				if (_parentVariantID == null)
-				{
-					_parentVariantID = (CUInt32) CR2WTypeManager.Create("Uint32", "parentVariantID", cr2w, this);
-				}
-				return _parentVariantID;
-			}
-			set
-			{
-				if (_parentVariantID == value)
-				{
-					return;
-				}
-				_parentVariantID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentVariantID);
+			set => SetProperty(ref _parentVariantID, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("rangeIndex")] 
 		public CUInt32 RangeIndex
 		{
-			get
-			{
-				if (_rangeIndex == null)
-				{
-					_rangeIndex = (CUInt32) CR2WTypeManager.Create("Uint32", "rangeIndex", cr2w, this);
-				}
-				return _rangeIndex;
-			}
-			set
-			{
-				if (_rangeIndex == value)
-				{
-					return;
-				}
-				_rangeIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rangeIndex);
+			set => SetProperty(ref _rangeIndex, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("enabledByDefault")] 
 		public CBool EnabledByDefault
 		{
-			get
-			{
-				if (_enabledByDefault == null)
-				{
-					_enabledByDefault = (CBool) CR2WTypeManager.Create("Bool", "enabledByDefault", cr2w, this);
-				}
-				return _enabledByDefault;
-			}
-			set
-			{
-				if (_enabledByDefault == value)
-				{
-					return;
-				}
-				_enabledByDefault = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enabledByDefault);
+			set => SetProperty(ref _enabledByDefault, value);
 		}
 
 		public worldStreamingSectorVariant(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

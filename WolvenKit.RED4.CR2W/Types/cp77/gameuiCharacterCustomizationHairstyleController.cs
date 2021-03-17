@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("headGroupName")] 
 		public CName HeadGroupName
 		{
-			get
-			{
-				if (_headGroupName == null)
-				{
-					_headGroupName = (CName) CR2WTypeManager.Create("CName", "headGroupName", cr2w, this);
-				}
-				return _headGroupName;
-			}
-			set
-			{
-				if (_headGroupName == value)
-				{
-					return;
-				}
-				_headGroupName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _headGroupName);
+			set => SetProperty(ref _headGroupName, value);
 		}
 
 		public gameuiCharacterCustomizationHairstyleController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

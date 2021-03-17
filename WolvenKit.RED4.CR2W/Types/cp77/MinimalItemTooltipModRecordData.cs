@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dataPackage")] 
 		public CHandle<gameUILocalizationDataPackage> DataPackage
 		{
-			get
-			{
-				if (_dataPackage == null)
-				{
-					_dataPackage = (CHandle<gameUILocalizationDataPackage>) CR2WTypeManager.Create("handle:gameUILocalizationDataPackage", "dataPackage", cr2w, this);
-				}
-				return _dataPackage;
-			}
-			set
-			{
-				if (_dataPackage == value)
-				{
-					return;
-				}
-				_dataPackage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dataPackage);
+			set => SetProperty(ref _dataPackage, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("description")] 
 		public CString Description
 		{
-			get
-			{
-				if (_description == null)
-				{
-					_description = (CString) CR2WTypeManager.Create("String", "description", cr2w, this);
-				}
-				return _description;
-			}
-			set
-			{
-				if (_description == value)
-				{
-					return;
-				}
-				_description = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _description);
+			set => SetProperty(ref _description, value);
 		}
 
 		public MinimalItemTooltipModRecordData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

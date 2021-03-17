@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("exportAsProperty")] 
 		public CBool ExportAsProperty
 		{
-			get
-			{
-				if (_exportAsProperty == null)
-				{
-					_exportAsProperty = (CBool) CR2WTypeManager.Create("Bool", "exportAsProperty", cr2w, this);
-				}
-				return _exportAsProperty;
-			}
-			set
-			{
-				if (_exportAsProperty == value)
-				{
-					return;
-				}
-				_exportAsProperty = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exportAsProperty);
+			set => SetProperty(ref _exportAsProperty, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("defaultValue")] 
 		public CBool DefaultValue
 		{
-			get
-			{
-				if (_defaultValue == null)
-				{
-					_defaultValue = (CBool) CR2WTypeManager.Create("Bool", "defaultValue", cr2w, this);
-				}
-				return _defaultValue;
-			}
-			set
-			{
-				if (_defaultValue == value)
-				{
-					return;
-				}
-				_defaultValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultValue);
+			set => SetProperty(ref _defaultValue, value);
 		}
 
 		public LibTreeDefTreeVariableBool(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

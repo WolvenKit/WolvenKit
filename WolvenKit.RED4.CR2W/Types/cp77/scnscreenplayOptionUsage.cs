@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("playerGenderMask")] 
 		public scnGenderMask PlayerGenderMask
 		{
-			get
-			{
-				if (_playerGenderMask == null)
-				{
-					_playerGenderMask = (scnGenderMask) CR2WTypeManager.Create("scnGenderMask", "playerGenderMask", cr2w, this);
-				}
-				return _playerGenderMask;
-			}
-			set
-			{
-				if (_playerGenderMask == value)
-				{
-					return;
-				}
-				_playerGenderMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerGenderMask);
+			set => SetProperty(ref _playerGenderMask, value);
 		}
 
 		public scnscreenplayOptionUsage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

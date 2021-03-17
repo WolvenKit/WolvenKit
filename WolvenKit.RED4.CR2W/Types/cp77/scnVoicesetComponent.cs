@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("combatVoSettingsName")] 
 		public CName CombatVoSettingsName
 		{
-			get
-			{
-				if (_combatVoSettingsName == null)
-				{
-					_combatVoSettingsName = (CName) CR2WTypeManager.Create("CName", "combatVoSettingsName", cr2w, this);
-				}
-				return _combatVoSettingsName;
-			}
-			set
-			{
-				if (_combatVoSettingsName == value)
-				{
-					return;
-				}
-				_combatVoSettingsName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _combatVoSettingsName);
+			set => SetProperty(ref _combatVoSettingsName, value);
 		}
 
 		public scnVoicesetComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

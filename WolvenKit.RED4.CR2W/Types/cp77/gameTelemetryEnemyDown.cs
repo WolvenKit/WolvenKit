@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enemy")] 
 		public gameTelemetryEnemy Enemy
 		{
-			get
-			{
-				if (_enemy == null)
-				{
-					_enemy = (gameTelemetryEnemy) CR2WTypeManager.Create("gameTelemetryEnemy", "enemy", cr2w, this);
-				}
-				return _enemy;
-			}
-			set
-			{
-				if (_enemy == value)
-				{
-					return;
-				}
-				_enemy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enemy);
+			set => SetProperty(ref _enemy, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("situation")] 
 		public CEnum<gameTelemetryDamageSituation> Situation
 		{
-			get
-			{
-				if (_situation == null)
-				{
-					_situation = (CEnum<gameTelemetryDamageSituation>) CR2WTypeManager.Create("gameTelemetryDamageSituation", "situation", cr2w, this);
-				}
-				return _situation;
-			}
-			set
-			{
-				if (_situation == value)
-				{
-					return;
-				}
-				_situation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _situation);
+			set => SetProperty(ref _situation, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("killType")] 
 		public CEnum<gameKillType> KillType
 		{
-			get
-			{
-				if (_killType == null)
-				{
-					_killType = (CEnum<gameKillType>) CR2WTypeManager.Create("gameKillType", "killType", cr2w, this);
-				}
-				return _killType;
-			}
-			set
-			{
-				if (_killType == value)
-				{
-					return;
-				}
-				_killType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _killType);
+			set => SetProperty(ref _killType, value);
 		}
 
 		public gameTelemetryEnemyDown(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

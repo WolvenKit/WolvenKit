@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enableProtection")] 
 		public CBool EnableProtection
 		{
-			get
-			{
-				if (_enableProtection == null)
-				{
-					_enableProtection = (CBool) CR2WTypeManager.Create("Bool", "enableProtection", cr2w, this);
-				}
-				return _enableProtection;
-			}
-			set
-			{
-				if (_enableProtection == value)
-				{
-					return;
-				}
-				_enableProtection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableProtection);
+			set => SetProperty(ref _enableProtection, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("protectedEntityID")] 
 		public entEntityID ProtectedEntityID
 		{
-			get
-			{
-				if (_protectedEntityID == null)
-				{
-					_protectedEntityID = (entEntityID) CR2WTypeManager.Create("entEntityID", "protectedEntityID", cr2w, this);
-				}
-				return _protectedEntityID;
-			}
-			set
-			{
-				if (_protectedEntityID == value)
-				{
-					return;
-				}
-				_protectedEntityID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _protectedEntityID);
+			set => SetProperty(ref _protectedEntityID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entered")] 
 		public CBool Entered
 		{
-			get
-			{
-				if (_entered == null)
-				{
-					_entered = (CBool) CR2WTypeManager.Create("Bool", "entered", cr2w, this);
-				}
-				return _entered;
-			}
-			set
-			{
-				if (_entered == value)
-				{
-					return;
-				}
-				_entered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entered);
+			set => SetProperty(ref _entered, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hasEntityWithdrawn")] 
 		public CBool HasEntityWithdrawn
 		{
-			get
-			{
-				if (_hasEntityWithdrawn == null)
-				{
-					_hasEntityWithdrawn = (CBool) CR2WTypeManager.Create("Bool", "hasEntityWithdrawn", cr2w, this);
-				}
-				return _hasEntityWithdrawn;
-			}
-			set
-			{
-				if (_hasEntityWithdrawn == value)
-				{
-					return;
-				}
-				_hasEntityWithdrawn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasEntityWithdrawn);
+			set => SetProperty(ref _hasEntityWithdrawn, value);
 		}
 
 		public SuppressSecuritySystemReaction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("offMeshConnectionComponent")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionComponent
 		{
-			get
-			{
-				if (_offMeshConnectionComponent == null)
-				{
-					_offMeshConnectionComponent = (CHandle<AIOffMeshConnectionComponent>) CR2WTypeManager.Create("handle:AIOffMeshConnectionComponent", "offMeshConnectionComponent", cr2w, this);
-				}
-				return _offMeshConnectionComponent;
-			}
-			set
-			{
-				if (_offMeshConnectionComponent == value)
-				{
-					return;
-				}
-				_offMeshConnectionComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offMeshConnectionComponent);
+			set => SetProperty(ref _offMeshConnectionComponent, value);
 		}
 
 		[Ordinal(94)] 
 		[RED("currentSpiderbotAction")] 
 		public CHandle<CustomDeviceAction> CurrentSpiderbotAction
 		{
-			get
-			{
-				if (_currentSpiderbotAction == null)
-				{
-					_currentSpiderbotAction = (CHandle<CustomDeviceAction>) CR2WTypeManager.Create("handle:CustomDeviceAction", "currentSpiderbotAction", cr2w, this);
-				}
-				return _currentSpiderbotAction;
-			}
-			set
-			{
-				if (_currentSpiderbotAction == value)
-				{
-					return;
-				}
-				_currentSpiderbotAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentSpiderbotAction);
+			set => SetProperty(ref _currentSpiderbotAction, value);
 		}
 
 		public GenericDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("CurrentNormal")] 
 		public gamebbScriptID_Vector4 CurrentNormal
 		{
-			get
-			{
-				if (_currentNormal == null)
-				{
-					_currentNormal = (gamebbScriptID_Vector4) CR2WTypeManager.Create("gamebbScriptID_Vector4", "CurrentNormal", cr2w, this);
-				}
-				return _currentNormal;
-			}
-			set
-			{
-				if (_currentNormal == value)
-				{
-					return;
-				}
-				_currentNormal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentNormal);
+			set => SetProperty(ref _currentNormal, value);
 		}
 
 		public MinesDataDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

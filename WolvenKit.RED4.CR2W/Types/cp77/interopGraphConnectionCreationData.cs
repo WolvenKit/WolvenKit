@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("data")] 
 		public CString Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CString) CR2WTypeManager.Create("String", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("extraData")] 
 		public CArray<CString> ExtraData
 		{
-			get
-			{
-				if (_extraData == null)
-				{
-					_extraData = (CArray<CString>) CR2WTypeManager.Create("array:String", "extraData", cr2w, this);
-				}
-				return _extraData;
-			}
-			set
-			{
-				if (_extraData == value)
-				{
-					return;
-				}
-				_extraData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _extraData);
+			set => SetProperty(ref _extraData, value);
 		}
 
 		public interopGraphConnectionCreationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

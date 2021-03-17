@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inheritVelocity")] 
 		public CBool InheritVelocity
 		{
-			get
-			{
-				if (_inheritVelocity == null)
-				{
-					_inheritVelocity = (CBool) CR2WTypeManager.Create("Bool", "inheritVelocity", cr2w, this);
-				}
-				return _inheritVelocity;
-			}
-			set
-			{
-				if (_inheritVelocity == value)
-				{
-					return;
-				}
-				_inheritVelocity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inheritVelocity);
+			set => SetProperty(ref _inheritVelocity, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("attract")] 
 		public CBool Attract
 		{
-			get
-			{
-				if (_attract == null)
-				{
-					_attract = (CBool) CR2WTypeManager.Create("Bool", "attract", cr2w, this);
-				}
-				return _attract;
-			}
-			set
-			{
-				if (_attract == value)
-				{
-					return;
-				}
-				_attract = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attract);
+			set => SetProperty(ref _attract, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("drag")] 
 		public CBool Drag
 		{
-			get
-			{
-				if (_drag == null)
-				{
-					_drag = (CBool) CR2WTypeManager.Create("Bool", "drag", cr2w, this);
-				}
-				return _drag;
-			}
-			set
-			{
-				if (_drag == value)
-				{
-					return;
-				}
-				_drag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _drag);
+			set => SetProperty(ref _drag, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("restitution")] 
 		public CHandle<IEvaluatorFloat> Restitution
 		{
-			get
-			{
-				if (_restitution == null)
-				{
-					_restitution = (CHandle<IEvaluatorFloat>) CR2WTypeManager.Create("handle:IEvaluatorFloat", "restitution", cr2w, this);
-				}
-				return _restitution;
-			}
-			set
-			{
-				if (_restitution == value)
-				{
-					return;
-				}
-				_restitution = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _restitution);
+			set => SetProperty(ref _restitution, value);
 		}
 
 		public CParticleModificatorVectorFieldAttractor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

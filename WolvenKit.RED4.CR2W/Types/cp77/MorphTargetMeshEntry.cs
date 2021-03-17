@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("regionName")] 
 		public CName RegionName
 		{
-			get
-			{
-				if (_regionName == null)
-				{
-					_regionName = (CName) CR2WTypeManager.Create("CName", "regionName", cr2w, this);
-				}
-				return _regionName;
-			}
-			set
-			{
-				if (_regionName == value)
-				{
-					return;
-				}
-				_regionName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _regionName);
+			set => SetProperty(ref _regionName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("faceRegion")] 
 		public CEnum<MorphTargetsFaceRegion> FaceRegion
 		{
-			get
-			{
-				if (_faceRegion == null)
-				{
-					_faceRegion = (CEnum<MorphTargetsFaceRegion>) CR2WTypeManager.Create("MorphTargetsFaceRegion", "faceRegion", cr2w, this);
-				}
-				return _faceRegion;
-			}
-			set
-			{
-				if (_faceRegion == value)
-				{
-					return;
-				}
-				_faceRegion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _faceRegion);
+			set => SetProperty(ref _faceRegion, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("boneNames")] 
 		public CArray<CName> BoneNames
 		{
-			get
-			{
-				if (_boneNames == null)
-				{
-					_boneNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "boneNames", cr2w, this);
-				}
-				return _boneNames;
-			}
-			set
-			{
-				if (_boneNames == value)
-				{
-					return;
-				}
-				_boneNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _boneNames);
+			set => SetProperty(ref _boneNames, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("boneRigMatrices")] 
 		public CArray<CMatrix> BoneRigMatrices
 		{
-			get
-			{
-				if (_boneRigMatrices == null)
-				{
-					_boneRigMatrices = (CArray<CMatrix>) CR2WTypeManager.Create("array:Matrix", "boneRigMatrices", cr2w, this);
-				}
-				return _boneRigMatrices;
-			}
-			set
-			{
-				if (_boneRigMatrices == value)
-				{
-					return;
-				}
-				_boneRigMatrices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _boneRigMatrices);
+			set => SetProperty(ref _boneRigMatrices, value);
 		}
 
 		public MorphTargetMeshEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

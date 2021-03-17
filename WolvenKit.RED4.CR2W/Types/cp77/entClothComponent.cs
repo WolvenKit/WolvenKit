@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mesh")] 
 		public rRef<CMesh> Mesh
 		{
-			get
-			{
-				if (_mesh == null)
-				{
-					_mesh = (rRef<CMesh>) CR2WTypeManager.Create("rRef:CMesh", "mesh", cr2w, this);
-				}
-				return _mesh;
-			}
-			set
-			{
-				if (_mesh == value)
-				{
-					return;
-				}
-				_mesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mesh);
+			set => SetProperty(ref _mesh, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get
-			{
-				if (_isEnabled == null)
-				{
-					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
-				}
-				return _isEnabled;
-			}
-			set
-			{
-				if (_isEnabled == value)
-				{
-					return;
-				}
-				_isEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
 		}
 
 		public entClothComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

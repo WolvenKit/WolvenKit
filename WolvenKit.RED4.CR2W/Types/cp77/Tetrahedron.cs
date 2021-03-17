@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("point1")] 
 		public Vector4 Point1
 		{
-			get
-			{
-				if (_point1 == null)
-				{
-					_point1 = (Vector4) CR2WTypeManager.Create("Vector4", "point1", cr2w, this);
-				}
-				return _point1;
-			}
-			set
-			{
-				if (_point1 == value)
-				{
-					return;
-				}
-				_point1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _point1);
+			set => SetProperty(ref _point1, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("point2")] 
 		public Vector4 Point2
 		{
-			get
-			{
-				if (_point2 == null)
-				{
-					_point2 = (Vector4) CR2WTypeManager.Create("Vector4", "point2", cr2w, this);
-				}
-				return _point2;
-			}
-			set
-			{
-				if (_point2 == value)
-				{
-					return;
-				}
-				_point2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _point2);
+			set => SetProperty(ref _point2, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("point3")] 
 		public Vector4 Point3
 		{
-			get
-			{
-				if (_point3 == null)
-				{
-					_point3 = (Vector4) CR2WTypeManager.Create("Vector4", "point3", cr2w, this);
-				}
-				return _point3;
-			}
-			set
-			{
-				if (_point3 == value)
-				{
-					return;
-				}
-				_point3 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _point3);
+			set => SetProperty(ref _point3, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("point4")] 
 		public Vector4 Point4
 		{
-			get
-			{
-				if (_point4 == null)
-				{
-					_point4 = (Vector4) CR2WTypeManager.Create("Vector4", "point4", cr2w, this);
-				}
-				return _point4;
-			}
-			set
-			{
-				if (_point4 == value)
-				{
-					return;
-				}
-				_point4 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _point4);
+			set => SetProperty(ref _point4, value);
 		}
 
 		public Tetrahedron(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

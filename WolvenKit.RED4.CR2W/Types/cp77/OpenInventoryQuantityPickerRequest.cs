@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemData")] 
 		public InventoryItemData ItemData
 		{
-			get
-			{
-				if (_itemData == null)
-				{
-					_itemData = (InventoryItemData) CR2WTypeManager.Create("InventoryItemData", "itemData", cr2w, this);
-				}
-				return _itemData;
-			}
-			set
-			{
-				if (_itemData == value)
-				{
-					return;
-				}
-				_itemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemData);
+			set => SetProperty(ref _itemData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("actionType")] 
 		public CEnum<QuantityPickerActionType> ActionType
 		{
-			get
-			{
-				if (_actionType == null)
-				{
-					_actionType = (CEnum<QuantityPickerActionType>) CR2WTypeManager.Create("QuantityPickerActionType", "actionType", cr2w, this);
-				}
-				return _actionType;
-			}
-			set
-			{
-				if (_actionType == value)
-				{
-					return;
-				}
-				_actionType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionType);
+			set => SetProperty(ref _actionType, value);
 		}
 
 		public OpenInventoryQuantityPickerRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

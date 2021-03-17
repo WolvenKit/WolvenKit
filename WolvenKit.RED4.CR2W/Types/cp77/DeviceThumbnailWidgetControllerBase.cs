@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("deviceIconRef")] 
 		public inkImageWidgetReference DeviceIconRef
 		{
-			get
-			{
-				if (_deviceIconRef == null)
-				{
-					_deviceIconRef = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "deviceIconRef", cr2w, this);
-				}
-				return _deviceIconRef;
-			}
-			set
-			{
-				if (_deviceIconRef == value)
-				{
-					return;
-				}
-				_deviceIconRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deviceIconRef);
+			set => SetProperty(ref _deviceIconRef, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("statusNameWidget")] 
 		public inkTextWidgetReference StatusNameWidget
 		{
-			get
-			{
-				if (_statusNameWidget == null)
-				{
-					_statusNameWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "statusNameWidget", cr2w, this);
-				}
-				return _statusNameWidget;
-			}
-			set
-			{
-				if (_statusNameWidget == value)
-				{
-					return;
-				}
-				_statusNameWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statusNameWidget);
+			set => SetProperty(ref _statusNameWidget, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("thumbnailAction")] 
 		public wCHandle<ThumbnailUI> ThumbnailAction
 		{
-			get
-			{
-				if (_thumbnailAction == null)
-				{
-					_thumbnailAction = (wCHandle<ThumbnailUI>) CR2WTypeManager.Create("whandle:ThumbnailUI", "thumbnailAction", cr2w, this);
-				}
-				return _thumbnailAction;
-			}
-			set
-			{
-				if (_thumbnailAction == value)
-				{
-					return;
-				}
-				_thumbnailAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _thumbnailAction);
+			set => SetProperty(ref _thumbnailAction, value);
 		}
 
 		public DeviceThumbnailWidgetControllerBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

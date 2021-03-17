@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isAnyInput")] 
 		public CBool IsAnyInput
 		{
-			get
-			{
-				if (_isAnyInput == null)
-				{
-					_isAnyInput = (CBool) CR2WTypeManager.Create("Bool", "isAnyInput", cr2w, this);
-				}
-				return _isAnyInput;
-			}
-			set
-			{
-				if (_isAnyInput == value)
-				{
-					return;
-				}
-				_isAnyInput = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isAnyInput);
+			set => SetProperty(ref _isAnyInput, value);
 		}
 
 		public TCSInputXYAxisEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

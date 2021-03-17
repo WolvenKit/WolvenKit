@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lod")] 
 		public CUInt8 Lod
 		{
-			get
-			{
-				if (_lod == null)
-				{
-					_lod = (CUInt8) CR2WTypeManager.Create("Uint8", "lod", cr2w, this);
-				}
-				return _lod;
-			}
-			set
-			{
-				if (_lod == value)
-				{
-					return;
-				}
-				_lod = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lod);
+			set => SetProperty(ref _lod, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("type")] 
 		public CUInt8 Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CUInt8) CR2WTypeManager.Create("Uint8", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("trackIndex")] 
 		public CUInt16 TrackIndex
 		{
-			get
-			{
-				if (_trackIndex == null)
-				{
-					_trackIndex = (CUInt16) CR2WTypeManager.Create("Uint16", "trackIndex", cr2w, this);
-				}
-				return _trackIndex;
-			}
-			set
-			{
-				if (_trackIndex == value)
-				{
-					return;
-				}
-				_trackIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trackIndex);
+			set => SetProperty(ref _trackIndex, value);
 		}
 
 		public animSermoPoseInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

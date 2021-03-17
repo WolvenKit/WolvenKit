@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("glitchEffect")] 
 		public rRef<worldEffect> GlitchEffect
 		{
-			get
-			{
-				if (_glitchEffect == null)
-				{
-					_glitchEffect = (rRef<worldEffect>) CR2WTypeManager.Create("rRef:worldEffect", "glitchEffect", cr2w, this);
-				}
-				return _glitchEffect;
-			}
-			set
-			{
-				if (_glitchEffect == value)
-				{
-					return;
-				}
-				_glitchEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _glitchEffect);
+			set => SetProperty(ref _glitchEffect, value);
 		}
 
 		public inkFastTravelLoadingControllerSupervisor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

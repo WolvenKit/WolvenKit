@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("spawnedAgent")] 
 		public DeviceLink SpawnedAgent
 		{
-			get
-			{
-				if (_spawnedAgent == null)
-				{
-					_spawnedAgent = (DeviceLink) CR2WTypeManager.Create("DeviceLink", "spawnedAgent", cr2w, this);
-				}
-				return _spawnedAgent;
-			}
-			set
-			{
-				if (_spawnedAgent == value)
-				{
-					return;
-				}
-				_spawnedAgent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnedAgent);
+			set => SetProperty(ref _spawnedAgent, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("eventType")] 
 		public CEnum<gameEntitySpawnerEventType> EventType
 		{
-			get
-			{
-				if (_eventType == null)
-				{
-					_eventType = (CEnum<gameEntitySpawnerEventType>) CR2WTypeManager.Create("gameEntitySpawnerEventType", "eventType", cr2w, this);
-				}
-				return _eventType;
-			}
-			set
-			{
-				if (_eventType == value)
-				{
-					return;
-				}
-				_eventType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventType);
+			set => SetProperty(ref _eventType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("securityAreas")] 
 		public CArray<CHandle<SecurityAreaControllerPS>> SecurityAreas
 		{
-			get
-			{
-				if (_securityAreas == null)
-				{
-					_securityAreas = (CArray<CHandle<SecurityAreaControllerPS>>) CR2WTypeManager.Create("array:handle:SecurityAreaControllerPS", "securityAreas", cr2w, this);
-				}
-				return _securityAreas;
-			}
-			set
-			{
-				if (_securityAreas == value)
-				{
-					return;
-				}
-				_securityAreas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securityAreas);
+			set => SetProperty(ref _securityAreas, value);
 		}
 
 		public SecurityAgentSpawnedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

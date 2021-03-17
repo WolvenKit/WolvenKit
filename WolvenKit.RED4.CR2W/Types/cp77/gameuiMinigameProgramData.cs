@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actionID")] 
 		public TweakDBID ActionID
 		{
-			get
-			{
-				if (_actionID == null)
-				{
-					_actionID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "actionID", cr2w, this);
-				}
-				return _actionID;
-			}
-			set
-			{
-				if (_actionID == value)
-				{
-					return;
-				}
-				_actionID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionID);
+			set => SetProperty(ref _actionID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("programName")] 
 		public CName ProgramName
 		{
-			get
-			{
-				if (_programName == null)
-				{
-					_programName = (CName) CR2WTypeManager.Create("CName", "programName", cr2w, this);
-				}
-				return _programName;
-			}
-			set
-			{
-				if (_programName == value)
-				{
-					return;
-				}
-				_programName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _programName);
+			set => SetProperty(ref _programName, value);
 		}
 
 		public gameuiMinigameProgramData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

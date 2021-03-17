@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bodyPart")] 
 		public CName BodyPart
 		{
-			get
-			{
-				if (_bodyPart == null)
-				{
-					_bodyPart = (CName) CR2WTypeManager.Create("CName", "bodyPart", cr2w, this);
-				}
-				return _bodyPart;
-			}
-			set
-			{
-				if (_bodyPart == value)
-				{
-					return;
-				}
-				_bodyPart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyPart);
+			set => SetProperty(ref _bodyPart, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("attackSubtype")] 
 		public CEnum<gamedataAttackSubtype> AttackSubtype
 		{
-			get
-			{
-				if (_attackSubtype == null)
-				{
-					_attackSubtype = (CEnum<gamedataAttackSubtype>) CR2WTypeManager.Create("gamedataAttackSubtype", "attackSubtype", cr2w, this);
-				}
-				return _attackSubtype;
-			}
-			set
-			{
-				if (_attackSubtype == value)
-				{
-					return;
-				}
-				_attackSubtype = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackSubtype);
+			set => SetProperty(ref _attackSubtype, value);
 		}
 
 		public BodyPartHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

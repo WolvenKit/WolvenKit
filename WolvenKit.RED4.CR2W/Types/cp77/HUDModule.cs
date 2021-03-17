@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hud")] 
 		public wCHandle<HUDManager> Hud
 		{
-			get
-			{
-				if (_hud == null)
-				{
-					_hud = (wCHandle<HUDManager>) CR2WTypeManager.Create("whandle:HUDManager", "hud", cr2w, this);
-				}
-				return _hud;
-			}
-			set
-			{
-				if (_hud == value)
-				{
-					return;
-				}
-				_hud = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hud);
+			set => SetProperty(ref _hud, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("state")] 
 		public CEnum<ModuleState> State
 		{
-			get
-			{
-				if (_state == null)
-				{
-					_state = (CEnum<ModuleState>) CR2WTypeManager.Create("ModuleState", "state", cr2w, this);
-				}
-				return _state;
-			}
-			set
-			{
-				if (_state == value)
-				{
-					return;
-				}
-				_state = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("instancesList")] 
 		public CArray<CHandle<ModuleInstance>> InstancesList
 		{
-			get
-			{
-				if (_instancesList == null)
-				{
-					_instancesList = (CArray<CHandle<ModuleInstance>>) CR2WTypeManager.Create("array:handle:ModuleInstance", "instancesList", cr2w, this);
-				}
-				return _instancesList;
-			}
-			set
-			{
-				if (_instancesList == value)
-				{
-					return;
-				}
-				_instancesList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instancesList);
+			set => SetProperty(ref _instancesList, value);
 		}
 
 		public HUDModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

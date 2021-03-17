@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isVisible")] 
 		public CUInt32 IsVisible
 		{
-			get
-			{
-				if (_isVisible == null)
-				{
-					_isVisible = (CUInt32) CR2WTypeManager.Create("Uint32", "isVisible", cr2w, this);
-				}
-				return _isVisible;
-			}
-			set
-			{
-				if (_isVisible == value)
-				{
-					return;
-				}
-				_isVisible = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isVisible);
+			set => SetProperty(ref _isVisible, value);
 		}
 
 		public gameDeviceVisibilityChangedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

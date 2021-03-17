@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("show")] 
 		public CBool Show
 		{
-			get
-			{
-				if (_show == null)
-				{
-					_show = (CBool) CR2WTypeManager.Create("Bool", "show", cr2w, this);
-				}
-				return _show;
-			}
-			set
-			{
-				if (_show == value)
-				{
-					return;
-				}
-				_show = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _show);
+			set => SetProperty(ref _show, value);
 		}
 
 		public gameeventsToggleMinimapVisibilityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

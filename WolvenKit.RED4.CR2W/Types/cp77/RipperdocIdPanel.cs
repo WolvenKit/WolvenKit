@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("NameLabel")] 
 		public inkTextWidgetReference NameLabel
 		{
-			get
-			{
-				if (_nameLabel == null)
-				{
-					_nameLabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "NameLabel", cr2w, this);
-				}
-				return _nameLabel;
-			}
-			set
-			{
-				if (_nameLabel == value)
-				{
-					return;
-				}
-				_nameLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nameLabel);
+			set => SetProperty(ref _nameLabel, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("MoneyLabel")] 
 		public inkTextWidgetReference MoneyLabel
 		{
-			get
-			{
-				if (_moneyLabel == null)
-				{
-					_moneyLabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "MoneyLabel", cr2w, this);
-				}
-				return _moneyLabel;
-			}
-			set
-			{
-				if (_moneyLabel == value)
-				{
-					return;
-				}
-				_moneyLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _moneyLabel);
+			set => SetProperty(ref _moneyLabel, value);
 		}
 
 		public RipperdocIdPanel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

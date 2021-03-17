@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vendorData")] 
 		public CHandle<questVendorPanelData> VendorData
 		{
-			get
-			{
-				if (_vendorData == null)
-				{
-					_vendorData = (CHandle<questVendorPanelData>) CR2WTypeManager.Create("handle:questVendorPanelData", "vendorData", cr2w, this);
-				}
-				return _vendorData;
-			}
-			set
-			{
-				if (_vendorData == value)
-				{
-					return;
-				}
-				_vendorData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vendorData);
+			set => SetProperty(ref _vendorData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("menu")] 
 		public CString Menu
 		{
-			get
-			{
-				if (_menu == null)
-				{
-					_menu = (CString) CR2WTypeManager.Create("String", "menu", cr2w, this);
-				}
-				return _menu;
-			}
-			set
-			{
-				if (_menu == value)
-				{
-					return;
-				}
-				_menu = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menu);
+			set => SetProperty(ref _menu, value);
 		}
 
 		public VendorUserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

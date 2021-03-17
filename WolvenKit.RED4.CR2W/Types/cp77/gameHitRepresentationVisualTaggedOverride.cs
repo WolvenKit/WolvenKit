@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("visualTags")] 
 		public redTagList VisualTags
 		{
-			get
-			{
-				if (_visualTags == null)
-				{
-					_visualTags = (redTagList) CR2WTypeManager.Create("redTagList", "visualTags", cr2w, this);
-				}
-				return _visualTags;
-			}
-			set
-			{
-				if (_visualTags == value)
-				{
-					return;
-				}
-				_visualTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualTags);
+			set => SetProperty(ref _visualTags, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("represenationOverride")] 
 		public gameHitShapeContainer RepresenationOverride
 		{
-			get
-			{
-				if (_represenationOverride == null)
-				{
-					_represenationOverride = (gameHitShapeContainer) CR2WTypeManager.Create("gameHitShapeContainer", "represenationOverride", cr2w, this);
-				}
-				return _represenationOverride;
-			}
-			set
-			{
-				if (_represenationOverride == value)
-				{
-					return;
-				}
-				_represenationOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _represenationOverride);
+			set => SetProperty(ref _represenationOverride, value);
 		}
 
 		public gameHitRepresentationVisualTaggedOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

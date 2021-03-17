@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("aabb")] 
 		public Box Aabb
 		{
-			get
-			{
-				if (_aabb == null)
-				{
-					_aabb = (Box) CR2WTypeManager.Create("Box", "aabb", cr2w, this);
-				}
-				return _aabb;
-			}
-			set
-			{
-				if (_aabb == value)
-				{
-					return;
-				}
-				_aabb = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aabb);
+			set => SetProperty(ref _aabb, value);
 		}
 
 		public worldTrafficCompiledNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

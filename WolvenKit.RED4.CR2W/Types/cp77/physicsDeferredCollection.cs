@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("buffer")] 
 		public serializationDeferredDataBuffer Buffer
 		{
-			get
-			{
-				if (_buffer == null)
-				{
-					_buffer = (serializationDeferredDataBuffer) CR2WTypeManager.Create("serializationDeferredDataBuffer", "buffer", cr2w, this);
-				}
-				return _buffer;
-			}
-			set
-			{
-				if (_buffer == value)
-				{
-					return;
-				}
-				_buffer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buffer);
+			set => SetProperty(ref _buffer, value);
 		}
 
 		public physicsDeferredCollection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

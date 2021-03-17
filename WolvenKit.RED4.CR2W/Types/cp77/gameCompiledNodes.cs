@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("compiledSmartObjects")] 
 		public CArray<gameCompiledSmartObjectNode> CompiledSmartObjects
 		{
-			get
-			{
-				if (_compiledSmartObjects == null)
-				{
-					_compiledSmartObjects = (CArray<gameCompiledSmartObjectNode>) CR2WTypeManager.Create("array:gameCompiledSmartObjectNode", "compiledSmartObjects", cr2w, this);
-				}
-				return _compiledSmartObjects;
-			}
-			set
-			{
-				if (_compiledSmartObjects == value)
-				{
-					return;
-				}
-				_compiledSmartObjects = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _compiledSmartObjects);
+			set => SetProperty(ref _compiledSmartObjects, value);
 		}
 
 		public gameCompiledNodes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

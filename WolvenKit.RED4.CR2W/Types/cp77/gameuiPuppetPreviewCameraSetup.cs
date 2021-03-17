@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get
-			{
-				if (_slotName == null)
-				{
-					_slotName = (CName) CR2WTypeManager.Create("CName", "slotName", cr2w, this);
-				}
-				return _slotName;
-			}
-			set
-			{
-				if (_slotName == value)
-				{
-					return;
-				}
-				_slotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotName);
+			set => SetProperty(ref _slotName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("cameraZoom")] 
 		public CFloat CameraZoom
 		{
-			get
-			{
-				if (_cameraZoom == null)
-				{
-					_cameraZoom = (CFloat) CR2WTypeManager.Create("Float", "cameraZoom", cr2w, this);
-				}
-				return _cameraZoom;
-			}
-			set
-			{
-				if (_cameraZoom == value)
-				{
-					return;
-				}
-				_cameraZoom = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameraZoom);
+			set => SetProperty(ref _cameraZoom, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("interpolationTime")] 
 		public CFloat InterpolationTime
 		{
-			get
-			{
-				if (_interpolationTime == null)
-				{
-					_interpolationTime = (CFloat) CR2WTypeManager.Create("Float", "interpolationTime", cr2w, this);
-				}
-				return _interpolationTime;
-			}
-			set
-			{
-				if (_interpolationTime == value)
-				{
-					return;
-				}
-				_interpolationTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interpolationTime);
+			set => SetProperty(ref _interpolationTime, value);
 		}
 
 		public gameuiPuppetPreviewCameraSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

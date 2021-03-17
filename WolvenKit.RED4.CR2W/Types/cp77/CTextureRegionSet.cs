@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("regions")] 
 		public CArray<rendTextureRegion> Regions
 		{
-			get
-			{
-				if (_regions == null)
-				{
-					_regions = (CArray<rendTextureRegion>) CR2WTypeManager.Create("array:rendTextureRegion", "regions", cr2w, this);
-				}
-				return _regions;
-			}
-			set
-			{
-				if (_regions == value)
-				{
-					return;
-				}
-				_regions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _regions);
+			set => SetProperty(ref _regions, value);
 		}
 
 		public CTextureRegionSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

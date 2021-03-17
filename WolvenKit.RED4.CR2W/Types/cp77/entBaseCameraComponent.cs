@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fov")] 
 		public CFloat Fov
 		{
-			get
-			{
-				if (_fov == null)
-				{
-					_fov = (CFloat) CR2WTypeManager.Create("Float", "fov", cr2w, this);
-				}
-				return _fov;
-			}
-			set
-			{
-				if (_fov == value)
-				{
-					return;
-				}
-				_fov = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fov);
+			set => SetProperty(ref _fov, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("zoom")] 
 		public CFloat Zoom
 		{
-			get
-			{
-				if (_zoom == null)
-				{
-					_zoom = (CFloat) CR2WTypeManager.Create("Float", "zoom", cr2w, this);
-				}
-				return _zoom;
-			}
-			set
-			{
-				if (_zoom == value)
-				{
-					return;
-				}
-				_zoom = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _zoom);
+			set => SetProperty(ref _zoom, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("nearPlaneOverride")] 
 		public CFloat NearPlaneOverride
 		{
-			get
-			{
-				if (_nearPlaneOverride == null)
-				{
-					_nearPlaneOverride = (CFloat) CR2WTypeManager.Create("Float", "nearPlaneOverride", cr2w, this);
-				}
-				return _nearPlaneOverride;
-			}
-			set
-			{
-				if (_nearPlaneOverride == value)
-				{
-					return;
-				}
-				_nearPlaneOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nearPlaneOverride);
+			set => SetProperty(ref _nearPlaneOverride, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("farPlaneOverride")] 
 		public CFloat FarPlaneOverride
 		{
-			get
-			{
-				if (_farPlaneOverride == null)
-				{
-					_farPlaneOverride = (CFloat) CR2WTypeManager.Create("Float", "farPlaneOverride", cr2w, this);
-				}
-				return _farPlaneOverride;
-			}
-			set
-			{
-				if (_farPlaneOverride == value)
-				{
-					return;
-				}
-				_farPlaneOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _farPlaneOverride);
+			set => SetProperty(ref _farPlaneOverride, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("motionBlurScale")] 
 		public CFloat MotionBlurScale
 		{
-			get
-			{
-				if (_motionBlurScale == null)
-				{
-					_motionBlurScale = (CFloat) CR2WTypeManager.Create("Float", "motionBlurScale", cr2w, this);
-				}
-				return _motionBlurScale;
-			}
-			set
-			{
-				if (_motionBlurScale == value)
-				{
-					return;
-				}
-				_motionBlurScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _motionBlurScale);
+			set => SetProperty(ref _motionBlurScale, value);
 		}
 
 		public entBaseCameraComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

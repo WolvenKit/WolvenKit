@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isRestarting")] 
 		public CBool IsRestarting
 		{
-			get
-			{
-				if (_isRestarting == null)
-				{
-					_isRestarting = (CBool) CR2WTypeManager.Create("Bool", "isRestarting", cr2w, this);
-				}
-				return _isRestarting;
-			}
-			set
-			{
-				if (_isRestarting == value)
-				{
-					return;
-				}
-				_isRestarting = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isRestarting);
+			set => SetProperty(ref _isRestarting, value);
 		}
 
 		public BaseDeviceStatus(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

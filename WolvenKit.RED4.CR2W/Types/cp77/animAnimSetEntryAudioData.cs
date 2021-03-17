@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("events")] 
 		public CArray<CHandle<animAnimEvent>> Events
 		{
-			get
-			{
-				if (_events == null)
-				{
-					_events = (CArray<CHandle<animAnimEvent>>) CR2WTypeManager.Create("array:handle:animAnimEvent", "events", cr2w, this);
-				}
-				return _events;
-			}
-			set
-			{
-				if (_events == value)
-				{
-					return;
-				}
-				_events = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _events);
+			set => SetProperty(ref _events, value);
 		}
 
 		public animAnimSetEntryAudioData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

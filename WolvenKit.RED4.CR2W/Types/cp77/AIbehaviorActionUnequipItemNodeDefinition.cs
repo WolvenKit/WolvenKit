@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotId")] 
 		public CHandle<AIArgumentMapping> SlotId
 		{
-			get
-			{
-				if (_slotId == null)
-				{
-					_slotId = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "slotId", cr2w, this);
-				}
-				return _slotId;
-			}
-			set
-			{
-				if (_slotId == value)
-				{
-					return;
-				}
-				_slotId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotId);
+			set => SetProperty(ref _slotId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("duration")] 
 		public CHandle<AIArgumentMapping> Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		public AIbehaviorActionUnequipItemNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isHighCover")] 
 		public CBool IsHighCover
 		{
-			get
-			{
-				if (_isHighCover == null)
-				{
-					_isHighCover = (CBool) CR2WTypeManager.Create("Bool", "isHighCover", cr2w, this);
-				}
-				return _isHighCover;
-			}
-			set
-			{
-				if (_isHighCover == value)
-				{
-					return;
-				}
-				_isHighCover = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isHighCover);
+			set => SetProperty(ref _isHighCover, value);
 		}
 
 		public workCoverTypeCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

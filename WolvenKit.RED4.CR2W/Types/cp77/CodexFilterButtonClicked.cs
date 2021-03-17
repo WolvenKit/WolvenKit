@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("category")] 
 		public CEnum<CodexCategoryType> Category
 		{
-			get
-			{
-				if (_category == null)
-				{
-					_category = (CEnum<CodexCategoryType>) CR2WTypeManager.Create("CodexCategoryType", "category", cr2w, this);
-				}
-				return _category;
-			}
-			set
-			{
-				if (_category == value)
-				{
-					return;
-				}
-				_category = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _category);
+			set => SetProperty(ref _category, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("toggled")] 
 		public CBool Toggled
 		{
-			get
-			{
-				if (_toggled == null)
-				{
-					_toggled = (CBool) CR2WTypeManager.Create("Bool", "toggled", cr2w, this);
-				}
-				return _toggled;
-			}
-			set
-			{
-				if (_toggled == value)
-				{
-					return;
-				}
-				_toggled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toggled);
+			set => SetProperty(ref _toggled, value);
 		}
 
 		public CodexFilterButtonClicked(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

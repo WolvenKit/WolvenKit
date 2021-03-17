@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("distanceToCamera")] 
 		public CFloat DistanceToCamera
 		{
-			get
-			{
-				if (_distanceToCamera == null)
-				{
-					_distanceToCamera = (CFloat) CR2WTypeManager.Create("Float", "distanceToCamera", cr2w, this);
-				}
-				return _distanceToCamera;
-			}
-			set
-			{
-				if (_distanceToCamera == value)
-				{
-					return;
-				}
-				_distanceToCamera = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distanceToCamera);
+			set => SetProperty(ref _distanceToCamera, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("previousPosition")] 
 		public Vector2 PreviousPosition
 		{
-			get
-			{
-				if (_previousPosition == null)
-				{
-					_previousPosition = (Vector2) CR2WTypeManager.Create("Vector2", "previousPosition", cr2w, this);
-				}
-				return _previousPosition;
-			}
-			set
-			{
-				if (_previousPosition == value)
-				{
-					return;
-				}
-				_previousPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousPosition);
+			set => SetProperty(ref _previousPosition, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("currentPosition")] 
 		public Vector2 CurrentPosition
 		{
-			get
-			{
-				if (_currentPosition == null)
-				{
-					_currentPosition = (Vector2) CR2WTypeManager.Create("Vector2", "currentPosition", cr2w, this);
-				}
-				return _currentPosition;
-			}
-			set
-			{
-				if (_currentPosition == value)
-				{
-					return;
-				}
-				_currentPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentPosition);
+			set => SetProperty(ref _currentPosition, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("uvPosition")] 
 		public Vector2 UvPosition
 		{
-			get
-			{
-				if (_uvPosition == null)
-				{
-					_uvPosition = (Vector2) CR2WTypeManager.Create("Vector2", "uvPosition", cr2w, this);
-				}
-				return _uvPosition;
-			}
-			set
-			{
-				if (_uvPosition == value)
-				{
-					return;
-				}
-				_uvPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uvPosition);
+			set => SetProperty(ref _uvPosition, value);
 		}
 
 		public inkScreenProjection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

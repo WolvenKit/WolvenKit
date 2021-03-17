@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("profile")] 
 		public CName Profile
 		{
-			get
-			{
-				if (_profile == null)
-				{
-					_profile = (CName) CR2WTypeManager.Create("CName", "profile", cr2w, this);
-				}
-				return _profile;
-			}
-			set
-			{
-				if (_profile == value)
-				{
-					return;
-				}
-				_profile = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _profile);
+			set => SetProperty(ref _profile, value);
 		}
 
 		public worldPlayerProximityStartEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

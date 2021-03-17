@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("trafficLightColor")] 
 		public CEnum<worldTrafficLightColor> TrafficLightColor
 		{
-			get
-			{
-				if (_trafficLightColor == null)
-				{
-					_trafficLightColor = (CEnum<worldTrafficLightColor>) CR2WTypeManager.Create("worldTrafficLightColor", "trafficLightColor", cr2w, this);
-				}
-				return _trafficLightColor;
-			}
-			set
-			{
-				if (_trafficLightColor == value)
-				{
-					return;
-				}
-				_trafficLightColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trafficLightColor);
+			set => SetProperty(ref _trafficLightColor, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("oldTrafficLightColor")] 
 		public CEnum<worldTrafficLightColor> OldTrafficLightColor
 		{
-			get
-			{
-				if (_oldTrafficLightColor == null)
-				{
-					_oldTrafficLightColor = (CEnum<worldTrafficLightColor>) CR2WTypeManager.Create("worldTrafficLightColor", "oldTrafficLightColor", cr2w, this);
-				}
-				return _oldTrafficLightColor;
-			}
-			set
-			{
-				if (_oldTrafficLightColor == value)
-				{
-					return;
-				}
-				_oldTrafficLightColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _oldTrafficLightColor);
+			set => SetProperty(ref _oldTrafficLightColor, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("totalDistance")] 
 		public CFloat TotalDistance
 		{
-			get
-			{
-				if (_totalDistance == null)
-				{
-					_totalDistance = (CFloat) CR2WTypeManager.Create("Float", "totalDistance", cr2w, this);
-				}
-				return _totalDistance;
-			}
-			set
-			{
-				if (_totalDistance == value)
-				{
-					return;
-				}
-				_totalDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _totalDistance);
+			set => SetProperty(ref _totalDistance, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("distanceLeft")] 
 		public CFloat DistanceLeft
 		{
-			get
-			{
-				if (_distanceLeft == null)
-				{
-					_distanceLeft = (CFloat) CR2WTypeManager.Create("Float", "distanceLeft", cr2w, this);
-				}
-				return _distanceLeft;
-			}
-			set
-			{
-				if (_distanceLeft == value)
-				{
-					return;
-				}
-				_distanceLeft = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distanceLeft);
+			set => SetProperty(ref _distanceLeft, value);
 		}
 
 		public gameinteractionsCrosswalkEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

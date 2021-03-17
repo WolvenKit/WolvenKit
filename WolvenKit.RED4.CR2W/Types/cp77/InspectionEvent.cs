@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enabled")] 
 		public CBool Enabled
 		{
-			get
-			{
-				if (_enabled == null)
-				{
-					_enabled = (CBool) CR2WTypeManager.Create("Bool", "enabled", cr2w, this);
-				}
-				return _enabled;
-			}
-			set
-			{
-				if (_enabled == value)
-				{
-					return;
-				}
-				_enabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enabled);
+			set => SetProperty(ref _enabled, value);
 		}
 
 		public InspectionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

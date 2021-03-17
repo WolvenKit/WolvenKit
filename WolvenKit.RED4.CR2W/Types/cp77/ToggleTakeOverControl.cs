@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isRequestedFormOtherDevice")] 
 		public CBool IsRequestedFormOtherDevice
 		{
-			get
-			{
-				if (_isRequestedFormOtherDevice == null)
-				{
-					_isRequestedFormOtherDevice = (CBool) CR2WTypeManager.Create("Bool", "isRequestedFormOtherDevice", cr2w, this);
-				}
-				return _isRequestedFormOtherDevice;
-			}
-			set
-			{
-				if (_isRequestedFormOtherDevice == value)
-				{
-					return;
-				}
-				_isRequestedFormOtherDevice = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isRequestedFormOtherDevice);
+			set => SetProperty(ref _isRequestedFormOtherDevice, value);
 		}
 
 		public ToggleTakeOverControl(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

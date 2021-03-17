@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
-			get
-			{
-				if (_label == null)
-				{
-					_label = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "label", cr2w, this);
-				}
-				return _label;
-			}
-			set
-			{
-				if (_label == value)
-				{
-					return;
-				}
-				_label = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _label);
+			set => SetProperty(ref _label, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("counter")] 
 		public inkTextWidgetReference Counter
 		{
-			get
-			{
-				if (_counter == null)
-				{
-					_counter = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "counter", cr2w, this);
-				}
-				return _counter;
-			}
-			set
-			{
-				if (_counter == value)
-				{
-					return;
-				}
-				_counter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _counter);
+			set => SetProperty(ref _counter, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("collapseIcon")] 
 		public inkWidgetReference CollapseIcon
 		{
-			get
-			{
-				if (_collapseIcon == null)
-				{
-					_collapseIcon = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "collapseIcon", cr2w, this);
-				}
-				return _collapseIcon;
-			}
-			set
-			{
-				if (_collapseIcon == value)
-				{
-					return;
-				}
-				_collapseIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collapseIcon);
+			set => SetProperty(ref _collapseIcon, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("isNewFlag")] 
 		public inkWidgetReference IsNewFlag
 		{
-			get
-			{
-				if (_isNewFlag == null)
-				{
-					_isNewFlag = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "isNewFlag", cr2w, this);
-				}
-				return _isNewFlag;
-			}
-			set
-			{
-				if (_isNewFlag == value)
-				{
-					return;
-				}
-				_isNewFlag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isNewFlag);
+			set => SetProperty(ref _isNewFlag, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("entryData")] 
 		public CHandle<ShardEntryData> EntryData
 		{
-			get
-			{
-				if (_entryData == null)
-				{
-					_entryData = (CHandle<ShardEntryData>) CR2WTypeManager.Create("handle:ShardEntryData", "entryData", cr2w, this);
-				}
-				return _entryData;
-			}
-			set
-			{
-				if (_entryData == value)
-				{
-					return;
-				}
-				_entryData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryData);
+			set => SetProperty(ref _entryData, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("nestedListData")] 
 		public CHandle<VirutalNestedListData> NestedListData
 		{
-			get
-			{
-				if (_nestedListData == null)
-				{
-					_nestedListData = (CHandle<VirutalNestedListData>) CR2WTypeManager.Create("handle:VirutalNestedListData", "nestedListData", cr2w, this);
-				}
-				return _nestedListData;
-			}
-			set
-			{
-				if (_nestedListData == value)
-				{
-					return;
-				}
-				_nestedListData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nestedListData);
+			set => SetProperty(ref _nestedListData, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("activeItemSync")] 
 		public wCHandle<CodexListSyncData> ActiveItemSync
 		{
-			get
-			{
-				if (_activeItemSync == null)
-				{
-					_activeItemSync = (wCHandle<CodexListSyncData>) CR2WTypeManager.Create("whandle:CodexListSyncData", "activeItemSync", cr2w, this);
-				}
-				return _activeItemSync;
-			}
-			set
-			{
-				if (_activeItemSync == value)
-				{
-					return;
-				}
-				_activeItemSync = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeItemSync);
+			set => SetProperty(ref _activeItemSync, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("isItemHovered")] 
 		public CBool IsItemHovered
 		{
-			get
-			{
-				if (_isItemHovered == null)
-				{
-					_isItemHovered = (CBool) CR2WTypeManager.Create("Bool", "isItemHovered", cr2w, this);
-				}
-				return _isItemHovered;
-			}
-			set
-			{
-				if (_isItemHovered == value)
-				{
-					return;
-				}
-				_isItemHovered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isItemHovered);
+			set => SetProperty(ref _isItemHovered, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("isItemToggled")] 
 		public CBool IsItemToggled
 		{
-			get
-			{
-				if (_isItemToggled == null)
-				{
-					_isItemToggled = (CBool) CR2WTypeManager.Create("Bool", "isItemToggled", cr2w, this);
-				}
-				return _isItemToggled;
-			}
-			set
-			{
-				if (_isItemToggled == value)
-				{
-					return;
-				}
-				_isItemToggled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isItemToggled);
+			set => SetProperty(ref _isItemToggled, value);
 		}
 
 		public ShardItemVirtualController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("variableName")] 
 		public CName VariableName
 		{
-			get
-			{
-				if (_variableName == null)
-				{
-					_variableName = (CName) CR2WTypeManager.Create("CName", "variableName", cr2w, this);
-				}
-				return _variableName;
-			}
-			set
-			{
-				if (_variableName == value)
-				{
-					return;
-				}
-				_variableName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _variableName);
+			set => SetProperty(ref _variableName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("compareValue")] 
 		public CBool CompareValue
 		{
-			get
-			{
-				if (_compareValue == null)
-				{
-					_compareValue = (CBool) CR2WTypeManager.Create("Bool", "compareValue", cr2w, this);
-				}
-				return _compareValue;
-			}
-			set
-			{
-				if (_compareValue == value)
-				{
-					return;
-				}
-				_compareValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _compareValue);
+			set => SetProperty(ref _compareValue, value);
 		}
 
 		public animAnimStateTransitionCondition_BoolVariable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

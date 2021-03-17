@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("minAutoHideDistance")] 
 		public CFloat MinAutoHideDistance
 		{
-			get
-			{
-				if (_minAutoHideDistance == null)
-				{
-					_minAutoHideDistance = (CFloat) CR2WTypeManager.Create("Float", "minAutoHideDistance", cr2w, this);
-				}
-				return _minAutoHideDistance;
-			}
-			set
-			{
-				if (_minAutoHideDistance == value)
-				{
-					return;
-				}
-				_minAutoHideDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minAutoHideDistance);
+			set => SetProperty(ref _minAutoHideDistance, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("multiplier")] 
 		public CFloat Multiplier
 		{
-			get
-			{
-				if (_multiplier == null)
-				{
-					_multiplier = (CFloat) CR2WTypeManager.Create("Float", "multiplier", cr2w, this);
-				}
-				return _multiplier;
-			}
-			set
-			{
-				if (_multiplier == value)
-				{
-					return;
-				}
-				_multiplier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _multiplier);
+			set => SetProperty(ref _multiplier, value);
 		}
 
 		public worldEditorForceAutoHideDistance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

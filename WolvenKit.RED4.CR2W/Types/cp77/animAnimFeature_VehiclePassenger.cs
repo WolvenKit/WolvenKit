@@ -31,437 +31,152 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("overallForceMS")] 
 		public Vector4 OverallForceMS
 		{
-			get
-			{
-				if (_overallForceMS == null)
-				{
-					_overallForceMS = (Vector4) CR2WTypeManager.Create("Vector4", "overallForceMS", cr2w, this);
-				}
-				return _overallForceMS;
-			}
-			set
-			{
-				if (_overallForceMS == value)
-				{
-					return;
-				}
-				_overallForceMS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overallForceMS);
+			set => SetProperty(ref _overallForceMS, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("turnSpeed")] 
 		public CFloat TurnSpeed
 		{
-			get
-			{
-				if (_turnSpeed == null)
-				{
-					_turnSpeed = (CFloat) CR2WTypeManager.Create("Float", "turnSpeed", cr2w, this);
-				}
-				return _turnSpeed;
-			}
-			set
-			{
-				if (_turnSpeed == value)
-				{
-					return;
-				}
-				_turnSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _turnSpeed);
+			set => SetProperty(ref _turnSpeed, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("bankSpeed")] 
 		public CFloat BankSpeed
 		{
-			get
-			{
-				if (_bankSpeed == null)
-				{
-					_bankSpeed = (CFloat) CR2WTypeManager.Create("Float", "bankSpeed", cr2w, this);
-				}
-				return _bankSpeed;
-			}
-			set
-			{
-				if (_bankSpeed == value)
-				{
-					return;
-				}
-				_bankSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bankSpeed);
+			set => SetProperty(ref _bankSpeed, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("longitudinalForce")] 
 		public CFloat LongitudinalForce
 		{
-			get
-			{
-				if (_longitudinalForce == null)
-				{
-					_longitudinalForce = (CFloat) CR2WTypeManager.Create("Float", "longitudinalForce", cr2w, this);
-				}
-				return _longitudinalForce;
-			}
-			set
-			{
-				if (_longitudinalForce == value)
-				{
-					return;
-				}
-				_longitudinalForce = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _longitudinalForce);
+			set => SetProperty(ref _longitudinalForce, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("transversalForce")] 
 		public CFloat TransversalForce
 		{
-			get
-			{
-				if (_transversalForce == null)
-				{
-					_transversalForce = (CFloat) CR2WTypeManager.Create("Float", "transversalForce", cr2w, this);
-				}
-				return _transversalForce;
-			}
-			set
-			{
-				if (_transversalForce == value)
-				{
-					return;
-				}
-				_transversalForce = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transversalForce);
+			set => SetProperty(ref _transversalForce, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("collisionForceLR")] 
 		public CFloat CollisionForceLR
 		{
-			get
-			{
-				if (_collisionForceLR == null)
-				{
-					_collisionForceLR = (CFloat) CR2WTypeManager.Create("Float", "collisionForceLR", cr2w, this);
-				}
-				return _collisionForceLR;
-			}
-			set
-			{
-				if (_collisionForceLR == value)
-				{
-					return;
-				}
-				_collisionForceLR = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collisionForceLR);
+			set => SetProperty(ref _collisionForceLR, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("collisionForceFB")] 
 		public CFloat CollisionForceFB
 		{
-			get
-			{
-				if (_collisionForceFB == null)
-				{
-					_collisionForceFB = (CFloat) CR2WTypeManager.Create("Float", "collisionForceFB", cr2w, this);
-				}
-				return _collisionForceFB;
-			}
-			set
-			{
-				if (_collisionForceFB == value)
-				{
-					return;
-				}
-				_collisionForceFB = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collisionForceFB);
+			set => SetProperty(ref _collisionForceFB, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("speed")] 
 		public CFloat Speed
 		{
-			get
-			{
-				if (_speed == null)
-				{
-					_speed = (CFloat) CR2WTypeManager.Create("Float", "speed", cr2w, this);
-				}
-				return _speed;
-			}
-			set
-			{
-				if (_speed == value)
-				{
-					return;
-				}
-				_speed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speed);
+			set => SetProperty(ref _speed, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("inputLR")] 
 		public CFloat InputLR
 		{
-			get
-			{
-				if (_inputLR == null)
-				{
-					_inputLR = (CFloat) CR2WTypeManager.Create("Float", "inputLR", cr2w, this);
-				}
-				return _inputLR;
-			}
-			set
-			{
-				if (_inputLR == value)
-				{
-					return;
-				}
-				_inputLR = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputLR);
+			set => SetProperty(ref _inputLR, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("inputFB")] 
 		public CFloat InputFB
 		{
-			get
-			{
-				if (_inputFB == null)
-				{
-					_inputFB = (CFloat) CR2WTypeManager.Create("Float", "inputFB", cr2w, this);
-				}
-				return _inputFB;
-			}
-			set
-			{
-				if (_inputFB == value)
-				{
-					return;
-				}
-				_inputFB = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputFB);
+			set => SetProperty(ref _inputFB, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("inputGas")] 
 		public CFloat InputGas
 		{
-			get
-			{
-				if (_inputGas == null)
-				{
-					_inputGas = (CFloat) CR2WTypeManager.Create("Float", "inputGas", cr2w, this);
-				}
-				return _inputGas;
-			}
-			set
-			{
-				if (_inputGas == value)
-				{
-					return;
-				}
-				_inputGas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputGas);
+			set => SetProperty(ref _inputGas, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("inputBreak")] 
 		public CFloat InputBreak
 		{
-			get
-			{
-				if (_inputBreak == null)
-				{
-					_inputBreak = (CFloat) CR2WTypeManager.Create("Float", "inputBreak", cr2w, this);
-				}
-				return _inputBreak;
-			}
-			set
-			{
-				if (_inputBreak == value)
-				{
-					return;
-				}
-				_inputBreak = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputBreak);
+			set => SetProperty(ref _inputBreak, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("inputHandBreak")] 
 		public CFloat InputHandBreak
 		{
-			get
-			{
-				if (_inputHandBreak == null)
-				{
-					_inputHandBreak = (CFloat) CR2WTypeManager.Create("Float", "inputHandBreak", cr2w, this);
-				}
-				return _inputHandBreak;
-			}
-			set
-			{
-				if (_inputHandBreak == value)
-				{
-					return;
-				}
-				_inputHandBreak = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputHandBreak);
+			set => SetProperty(ref _inputHandBreak, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("vehicleRoll")] 
 		public CFloat VehicleRoll
 		{
-			get
-			{
-				if (_vehicleRoll == null)
-				{
-					_vehicleRoll = (CFloat) CR2WTypeManager.Create("Float", "vehicleRoll", cr2w, this);
-				}
-				return _vehicleRoll;
-			}
-			set
-			{
-				if (_vehicleRoll == value)
-				{
-					return;
-				}
-				_vehicleRoll = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleRoll);
+			set => SetProperty(ref _vehicleRoll, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("vehiclePitch")] 
 		public CFloat VehiclePitch
 		{
-			get
-			{
-				if (_vehiclePitch == null)
-				{
-					_vehiclePitch = (CFloat) CR2WTypeManager.Create("Float", "vehiclePitch", cr2w, this);
-				}
-				return _vehiclePitch;
-			}
-			set
-			{
-				if (_vehiclePitch == value)
-				{
-					return;
-				}
-				_vehiclePitch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehiclePitch);
+			set => SetProperty(ref _vehiclePitch, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("isCar")] 
 		public CBool IsCar
 		{
-			get
-			{
-				if (_isCar == null)
-				{
-					_isCar = (CBool) CR2WTypeManager.Create("Bool", "isCar", cr2w, this);
-				}
-				return _isCar;
-			}
-			set
-			{
-				if (_isCar == value)
-				{
-					return;
-				}
-				_isCar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isCar);
+			set => SetProperty(ref _isCar, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("inAir")] 
 		public CBool InAir
 		{
-			get
-			{
-				if (_inAir == null)
-				{
-					_inAir = (CBool) CR2WTypeManager.Create("Bool", "inAir", cr2w, this);
-				}
-				return _inAir;
-			}
-			set
-			{
-				if (_inAir == value)
-				{
-					return;
-				}
-				_inAir = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inAir);
+			set => SetProperty(ref _inAir, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("clutchInUse")] 
 		public CBool ClutchInUse
 		{
-			get
-			{
-				if (_clutchInUse == null)
-				{
-					_clutchInUse = (CBool) CR2WTypeManager.Create("Bool", "clutchInUse", cr2w, this);
-				}
-				return _clutchInUse;
-			}
-			set
-			{
-				if (_clutchInUse == value)
-				{
-					return;
-				}
-				_clutchInUse = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clutchInUse);
+			set => SetProperty(ref _clutchInUse, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("headCollision")] 
 		public CBool HeadCollision
 		{
-			get
-			{
-				if (_headCollision == null)
-				{
-					_headCollision = (CBool) CR2WTypeManager.Create("Bool", "headCollision", cr2w, this);
-				}
-				return _headCollision;
-			}
-			set
-			{
-				if (_headCollision == value)
-				{
-					return;
-				}
-				_headCollision = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _headCollision);
+			set => SetProperty(ref _headCollision, value);
 		}
 
 		public animAnimFeature_VehiclePassenger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

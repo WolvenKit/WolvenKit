@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gravityType")] 
 		public CEnum<EGravityType> GravityType
 		{
-			get
-			{
-				if (_gravityType == null)
-				{
-					_gravityType = (CEnum<EGravityType>) CR2WTypeManager.Create("EGravityType", "gravityType", cr2w, this);
-				}
-				return _gravityType;
-			}
-			set
-			{
-				if (_gravityType == value)
-				{
-					return;
-				}
-				_gravityType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gravityType);
+			set => SetProperty(ref _gravityType, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("regularStateMachineName")] 
 		public CName RegularStateMachineName
 		{
-			get
-			{
-				if (_regularStateMachineName == null)
-				{
-					_regularStateMachineName = (CName) CR2WTypeManager.Create("CName", "regularStateMachineName", cr2w, this);
-				}
-				return _regularStateMachineName;
-			}
-			set
-			{
-				if (_regularStateMachineName == value)
-				{
-					return;
-				}
-				_regularStateMachineName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _regularStateMachineName);
+			set => SetProperty(ref _regularStateMachineName, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("lowGravityStateMachineName")] 
 		public CName LowGravityStateMachineName
 		{
-			get
-			{
-				if (_lowGravityStateMachineName == null)
-				{
-					_lowGravityStateMachineName = (CName) CR2WTypeManager.Create("CName", "lowGravityStateMachineName", cr2w, this);
-				}
-				return _lowGravityStateMachineName;
-			}
-			set
-			{
-				if (_lowGravityStateMachineName == value)
-				{
-					return;
-				}
-				_lowGravityStateMachineName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lowGravityStateMachineName);
+			set => SetProperty(ref _lowGravityStateMachineName, value);
 		}
 
 		public GravityChangeTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

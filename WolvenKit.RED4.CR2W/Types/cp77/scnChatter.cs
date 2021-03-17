@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("id")] 
 		public CUInt16 Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CUInt16) CR2WTypeManager.Create("Uint16", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("voicesetComponent")] 
 		public wCHandle<scnVoicesetComponent> VoicesetComponent
 		{
-			get
-			{
-				if (_voicesetComponent == null)
-				{
-					_voicesetComponent = (wCHandle<scnVoicesetComponent>) CR2WTypeManager.Create("whandle:scnVoicesetComponent", "voicesetComponent", cr2w, this);
-				}
-				return _voicesetComponent;
-			}
-			set
-			{
-				if (_voicesetComponent == value)
-				{
-					return;
-				}
-				_voicesetComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _voicesetComponent);
+			set => SetProperty(ref _voicesetComponent, value);
 		}
 
 		public scnChatter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

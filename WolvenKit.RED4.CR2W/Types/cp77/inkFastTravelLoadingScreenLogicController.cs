@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mainBackgroundImage")] 
 		public inkImageWidgetReference MainBackgroundImage
 		{
-			get
-			{
-				if (_mainBackgroundImage == null)
-				{
-					_mainBackgroundImage = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "mainBackgroundImage", cr2w, this);
-				}
-				return _mainBackgroundImage;
-			}
-			set
-			{
-				if (_mainBackgroundImage == value)
-				{
-					return;
-				}
-				_mainBackgroundImage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mainBackgroundImage);
+			set => SetProperty(ref _mainBackgroundImage, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("supportBackgroundImage")] 
 		public inkImageWidgetReference SupportBackgroundImage
 		{
-			get
-			{
-				if (_supportBackgroundImage == null)
-				{
-					_supportBackgroundImage = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "supportBackgroundImage", cr2w, this);
-				}
-				return _supportBackgroundImage;
-			}
-			set
-			{
-				if (_supportBackgroundImage == value)
-				{
-					return;
-				}
-				_supportBackgroundImage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _supportBackgroundImage);
+			set => SetProperty(ref _supportBackgroundImage, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("introAnimationName")] 
 		public CName IntroAnimationName
 		{
-			get
-			{
-				if (_introAnimationName == null)
-				{
-					_introAnimationName = (CName) CR2WTypeManager.Create("CName", "introAnimationName", cr2w, this);
-				}
-				return _introAnimationName;
-			}
-			set
-			{
-				if (_introAnimationName == value)
-				{
-					return;
-				}
-				_introAnimationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _introAnimationName);
+			set => SetProperty(ref _introAnimationName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("loopAnimationName")] 
 		public CName LoopAnimationName
 		{
-			get
-			{
-				if (_loopAnimationName == null)
-				{
-					_loopAnimationName = (CName) CR2WTypeManager.Create("CName", "loopAnimationName", cr2w, this);
-				}
-				return _loopAnimationName;
-			}
-			set
-			{
-				if (_loopAnimationName == value)
-				{
-					return;
-				}
-				_loopAnimationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _loopAnimationName);
+			set => SetProperty(ref _loopAnimationName, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("tooltipAnimName")] 
 		public CName TooltipAnimName
 		{
-			get
-			{
-				if (_tooltipAnimName == null)
-				{
-					_tooltipAnimName = (CName) CR2WTypeManager.Create("CName", "tooltipAnimName", cr2w, this);
-				}
-				return _tooltipAnimName;
-			}
-			set
-			{
-				if (_tooltipAnimName == value)
-				{
-					return;
-				}
-				_tooltipAnimName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipAnimName);
+			set => SetProperty(ref _tooltipAnimName, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("breathInAnimName")] 
 		public CName BreathInAnimName
 		{
-			get
-			{
-				if (_breathInAnimName == null)
-				{
-					_breathInAnimName = (CName) CR2WTypeManager.Create("CName", "breathInAnimName", cr2w, this);
-				}
-				return _breathInAnimName;
-			}
-			set
-			{
-				if (_breathInAnimName == value)
-				{
-					return;
-				}
-				_breathInAnimName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _breathInAnimName);
+			set => SetProperty(ref _breathInAnimName, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("breathOutAnimName")] 
 		public CName BreathOutAnimName
 		{
-			get
-			{
-				if (_breathOutAnimName == null)
-				{
-					_breathOutAnimName = (CName) CR2WTypeManager.Create("CName", "breathOutAnimName", cr2w, this);
-				}
-				return _breathOutAnimName;
-			}
-			set
-			{
-				if (_breathOutAnimName == value)
-				{
-					return;
-				}
-				_breathOutAnimName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _breathOutAnimName);
+			set => SetProperty(ref _breathOutAnimName, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("tooltipsWidget")] 
 		public inkRichTextBoxWidgetReference TooltipsWidget
 		{
-			get
-			{
-				if (_tooltipsWidget == null)
-				{
-					_tooltipsWidget = (inkRichTextBoxWidgetReference) CR2WTypeManager.Create("inkRichTextBoxWidgetReference", "tooltipsWidget", cr2w, this);
-				}
-				return _tooltipsWidget;
-			}
-			set
-			{
-				if (_tooltipsWidget == value)
-				{
-					return;
-				}
-				_tooltipsWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsWidget);
+			set => SetProperty(ref _tooltipsWidget, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("progressBarRoot")] 
 		public inkWidgetReference ProgressBarRoot
 		{
-			get
-			{
-				if (_progressBarRoot == null)
-				{
-					_progressBarRoot = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "progressBarRoot", cr2w, this);
-				}
-				return _progressBarRoot;
-			}
-			set
-			{
-				if (_progressBarRoot == value)
-				{
-					return;
-				}
-				_progressBarRoot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _progressBarRoot);
+			set => SetProperty(ref _progressBarRoot, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("progressBarController")] 
 		public wCHandle<LoadingScreenProgressBarController> ProgressBarController
 		{
-			get
-			{
-				if (_progressBarController == null)
-				{
-					_progressBarController = (wCHandle<LoadingScreenProgressBarController>) CR2WTypeManager.Create("whandle:LoadingScreenProgressBarController", "progressBarController", cr2w, this);
-				}
-				return _progressBarController;
-			}
-			set
-			{
-				if (_progressBarController == value)
-				{
-					return;
-				}
-				_progressBarController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _progressBarController);
+			set => SetProperty(ref _progressBarController, value);
 		}
 
 		public inkFastTravelLoadingScreenLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

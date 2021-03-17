@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vertexList")] 
 		public CArray<inkLineVertex> VertexList
 		{
-			get
-			{
-				if (_vertexList == null)
-				{
-					_vertexList = (CArray<inkLineVertex>) CR2WTypeManager.Create("array:inkLineVertex", "vertexList", cr2w, this);
-				}
-				return _vertexList;
-			}
-			set
-			{
-				if (_vertexList == value)
-				{
-					return;
-				}
-				_vertexList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vertexList);
+			set => SetProperty(ref _vertexList, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("spacing")] 
 		public CFloat Spacing
 		{
-			get
-			{
-				if (_spacing == null)
-				{
-					_spacing = (CFloat) CR2WTypeManager.Create("Float", "spacing", cr2w, this);
-				}
-				return _spacing;
-			}
-			set
-			{
-				if (_spacing == value)
-				{
-					return;
-				}
-				_spacing = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spacing);
+			set => SetProperty(ref _spacing, value);
 		}
 
 		[Ordinal(32)] 
 		[RED("looseSpacing")] 
 		public CFloat LooseSpacing
 		{
-			get
-			{
-				if (_looseSpacing == null)
-				{
-					_looseSpacing = (CFloat) CR2WTypeManager.Create("Float", "looseSpacing", cr2w, this);
-				}
-				return _looseSpacing;
-			}
-			set
-			{
-				if (_looseSpacing == value)
-				{
-					return;
-				}
-				_looseSpacing = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _looseSpacing);
+			set => SetProperty(ref _looseSpacing, value);
 		}
 
 		[Ordinal(33)] 
 		[RED("startOffset")] 
 		public CFloat StartOffset
 		{
-			get
-			{
-				if (_startOffset == null)
-				{
-					_startOffset = (CFloat) CR2WTypeManager.Create("Float", "startOffset", cr2w, this);
-				}
-				return _startOffset;
-			}
-			set
-			{
-				if (_startOffset == value)
-				{
-					return;
-				}
-				_startOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startOffset);
+			set => SetProperty(ref _startOffset, value);
 		}
 
 		[Ordinal(34)] 
 		[RED("endOffset")] 
 		public CFloat EndOffset
 		{
-			get
-			{
-				if (_endOffset == null)
-				{
-					_endOffset = (CFloat) CR2WTypeManager.Create("Float", "endOffset", cr2w, this);
-				}
-				return _endOffset;
-			}
-			set
-			{
-				if (_endOffset == value)
-				{
-					return;
-				}
-				_endOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endOffset);
+			set => SetProperty(ref _endOffset, value);
 		}
 
 		[Ordinal(35)] 
 		[RED("fadeInLength")] 
 		public CFloat FadeInLength
 		{
-			get
-			{
-				if (_fadeInLength == null)
-				{
-					_fadeInLength = (CFloat) CR2WTypeManager.Create("Float", "fadeInLength", cr2w, this);
-				}
-				return _fadeInLength;
-			}
-			set
-			{
-				if (_fadeInLength == value)
-				{
-					return;
-				}
-				_fadeInLength = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fadeInLength);
+			set => SetProperty(ref _fadeInLength, value);
 		}
 
 		[Ordinal(36)] 
 		[RED("rotateWithSegment")] 
 		public CBool RotateWithSegment
 		{
-			get
-			{
-				if (_rotateWithSegment == null)
-				{
-					_rotateWithSegment = (CBool) CR2WTypeManager.Create("Bool", "rotateWithSegment", cr2w, this);
-				}
-				return _rotateWithSegment;
-			}
-			set
-			{
-				if (_rotateWithSegment == value)
-				{
-					return;
-				}
-				_rotateWithSegment = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotateWithSegment);
+			set => SetProperty(ref _rotateWithSegment, value);
 		}
 
 		[Ordinal(37)] 
 		[RED("patternDirection")] 
 		public CEnum<inkEChildOrder> PatternDirection
 		{
-			get
-			{
-				if (_patternDirection == null)
-				{
-					_patternDirection = (CEnum<inkEChildOrder>) CR2WTypeManager.Create("inkEChildOrder", "patternDirection", cr2w, this);
-				}
-				return _patternDirection;
-			}
-			set
-			{
-				if (_patternDirection == value)
-				{
-					return;
-				}
-				_patternDirection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _patternDirection);
+			set => SetProperty(ref _patternDirection, value);
 		}
 
 		public inkLinePatternWidget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

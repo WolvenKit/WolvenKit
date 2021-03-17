@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("followObject")] 
 		public wCHandle<gameObject> FollowObject
 		{
-			get
-			{
-				if (_followObject == null)
-				{
-					_followObject = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "followObject", cr2w, this);
-				}
-				return _followObject;
-			}
-			set
-			{
-				if (_followObject == value)
-				{
-					return;
-				}
-				_followObject = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _followObject);
+			set => SetProperty(ref _followObject, value);
 		}
 
 		public gameprojectileFollowEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

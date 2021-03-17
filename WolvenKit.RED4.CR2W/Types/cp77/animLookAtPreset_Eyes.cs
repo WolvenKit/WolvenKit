@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("softLimitAngle")] 
 		public CFloat SoftLimitAngle
 		{
-			get
-			{
-				if (_softLimitAngle == null)
-				{
-					_softLimitAngle = (CFloat) CR2WTypeManager.Create("Float", "softLimitAngle", cr2w, this);
-				}
-				return _softLimitAngle;
-			}
-			set
-			{
-				if (_softLimitAngle == value)
-				{
-					return;
-				}
-				_softLimitAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _softLimitAngle);
+			set => SetProperty(ref _softLimitAngle, value);
 		}
 
 		public animLookAtPreset_Eyes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

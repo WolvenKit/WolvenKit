@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemIDsToIgnore")] 
 		public CArray<TweakDBID> ItemIDsToIgnore
 		{
-			get
-			{
-				if (_itemIDsToIgnore == null)
-				{
-					_itemIDsToIgnore = (CArray<TweakDBID>) CR2WTypeManager.Create("array:TweakDBID", "itemIDsToIgnore", cr2w, this);
-				}
-				return _itemIDsToIgnore;
-			}
-			set
-			{
-				if (_itemIDsToIgnore == value)
-				{
-					return;
-				}
-				_itemIDsToIgnore = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemIDsToIgnore);
+			set => SetProperty(ref _itemIDsToIgnore, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("tagsToIgnore")] 
 		public CArray<CName> TagsToIgnore
 		{
-			get
-			{
-				if (_tagsToIgnore == null)
-				{
-					_tagsToIgnore = (CArray<CName>) CR2WTypeManager.Create("array:CName", "tagsToIgnore", cr2w, this);
-				}
-				return _tagsToIgnore;
-			}
-			set
-			{
-				if (_tagsToIgnore == value)
-				{
-					return;
-				}
-				_tagsToIgnore = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tagsToIgnore);
+			set => SetProperty(ref _tagsToIgnore, value);
 		}
 
 		public questTransferItems_NodeTypeParams_TransferAllOperationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

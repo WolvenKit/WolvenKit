@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("npcSpawnerNodeRef")] 
 		public NodeRef NpcSpawnerNodeRef
 		{
-			get
-			{
-				if (_npcSpawnerNodeRef == null)
-				{
-					_npcSpawnerNodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "npcSpawnerNodeRef", cr2w, this);
-				}
-				return _npcSpawnerNodeRef;
-			}
-			set
-			{
-				if (_npcSpawnerNodeRef == value)
-				{
-					return;
-				}
-				_npcSpawnerNodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _npcSpawnerNodeRef);
+			set => SetProperty(ref _npcSpawnerNodeRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("npcSpawned")] 
 		public wCHandle<NPCPuppet> NpcSpawned
 		{
-			get
-			{
-				if (_npcSpawned == null)
-				{
-					_npcSpawned = (wCHandle<NPCPuppet>) CR2WTypeManager.Create("whandle:NPCPuppet", "npcSpawned", cr2w, this);
-				}
-				return _npcSpawned;
-			}
-			set
-			{
-				if (_npcSpawned == value)
-				{
-					return;
-				}
-				_npcSpawned = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _npcSpawned);
+			set => SetProperty(ref _npcSpawned, value);
 		}
 
 		public ActivatedDeviceNPCSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dropQueue")] 
 		public CArray<gameItemModParams> DropQueue
 		{
-			get
-			{
-				if (_dropQueue == null)
-				{
-					_dropQueue = (CArray<gameItemModParams>) CR2WTypeManager.Create("array:gameItemModParams", "dropQueue", cr2w, this);
-				}
-				return _dropQueue;
-			}
-			set
-			{
-				if (_dropQueue == value)
-				{
-					return;
-				}
-				_dropQueue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dropQueue);
+			set => SetProperty(ref _dropQueue, value);
 		}
 
 		public DropQueueUpdatedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

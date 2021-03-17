@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timetable")] 
 		public SPresetTimetableEntry Timetable
 		{
-			get
-			{
-				if (_timetable == null)
-				{
-					_timetable = (SPresetTimetableEntry) CR2WTypeManager.Create("SPresetTimetableEntry", "timetable", cr2w, this);
-				}
-				return _timetable;
-			}
-			set
-			{
-				if (_timetable == value)
-				{
-					return;
-				}
-				_timetable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timetable);
+			set => SetProperty(ref _timetable, value);
 		}
 
 		public SmartHousePreset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

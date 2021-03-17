@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("et")] 
 		public wCHandle<entEntity> Et
 		{
-			get
-			{
-				if (_et == null)
-				{
-					_et = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "et", cr2w, this);
-				}
-				return _et;
-			}
-			set
-			{
-				if (_et == value)
-				{
-					return;
-				}
-				_et = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _et);
+			set => SetProperty(ref _et, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isPersistent")] 
 		public CBool IsPersistent
 		{
-			get
-			{
-				if (_isPersistent == null)
-				{
-					_isPersistent = (CBool) CR2WTypeManager.Create("Bool", "isPersistent", cr2w, this);
-				}
-				return _isPersistent;
-			}
-			set
-			{
-				if (_isPersistent == value)
-				{
-					return;
-				}
-				_isPersistent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPersistent);
+			set => SetProperty(ref _isPersistent, value);
 		}
 
 		public SetThreatsPersistenceRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

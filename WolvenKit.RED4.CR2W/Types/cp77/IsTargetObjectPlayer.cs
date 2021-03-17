@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetObject")] 
 		public CHandle<AIArgumentMapping> TargetObject
 		{
-			get
-			{
-				if (_targetObject == null)
-				{
-					_targetObject = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "targetObject", cr2w, this);
-				}
-				return _targetObject;
-			}
-			set
-			{
-				if (_targetObject == value)
-				{
-					return;
-				}
-				_targetObject = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetObject);
+			set => SetProperty(ref _targetObject, value);
 		}
 
 		public IsTargetObjectPlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

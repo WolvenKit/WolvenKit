@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("components")] 
 		public CArray<wCHandle<entIPlacedComponent>> Components
 		{
-			get
-			{
-				if (_components == null)
-				{
-					_components = (CArray<wCHandle<entIPlacedComponent>>) CR2WTypeManager.Create("array:whandle:entIPlacedComponent", "components", cr2w, this);
-				}
-				return _components;
-			}
-			set
-			{
-				if (_components == value)
-				{
-					return;
-				}
-				_components = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _components);
+			set => SetProperty(ref _components, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("fxInstances")] 
 		public CArray<SVfxInstanceData> FxInstances
 		{
-			get
-			{
-				if (_fxInstances == null)
-				{
-					_fxInstances = (CArray<SVfxInstanceData>) CR2WTypeManager.Create("array:SVfxInstanceData", "fxInstances", cr2w, this);
-				}
-				return _fxInstances;
-			}
-			set
-			{
-				if (_fxInstances == value)
-				{
-					return;
-				}
-				_fxInstances = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fxInstances);
+			set => SetProperty(ref _fxInstances, value);
 		}
 
 		public DeviceOperations(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

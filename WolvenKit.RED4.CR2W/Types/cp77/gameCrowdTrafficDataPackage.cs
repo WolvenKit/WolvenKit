@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("crowdEntryOwners")] 
 		public gameCrowdCommunityEntryOwnersData CrowdEntryOwners
 		{
-			get
-			{
-				if (_crowdEntryOwners == null)
-				{
-					_crowdEntryOwners = (gameCrowdCommunityEntryOwnersData) CR2WTypeManager.Create("gameCrowdCommunityEntryOwnersData", "crowdEntryOwners", cr2w, this);
-				}
-				return _crowdEntryOwners;
-			}
-			set
-			{
-				if (_crowdEntryOwners == value)
-				{
-					return;
-				}
-				_crowdEntryOwners = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _crowdEntryOwners);
+			set => SetProperty(ref _crowdEntryOwners, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("crowdTrafficData")] 
 		public gameCompiledCrowdTrafficData CrowdTrafficData
 		{
-			get
-			{
-				if (_crowdTrafficData == null)
-				{
-					_crowdTrafficData = (gameCompiledCrowdTrafficData) CR2WTypeManager.Create("gameCompiledCrowdTrafficData", "crowdTrafficData", cr2w, this);
-				}
-				return _crowdTrafficData;
-			}
-			set
-			{
-				if (_crowdTrafficData == value)
-				{
-					return;
-				}
-				_crowdTrafficData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _crowdTrafficData);
+			set => SetProperty(ref _crowdTrafficData, value);
 		}
 
 		public gameCrowdTrafficDataPackage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("healthbar")] 
 		public inkWidgetReference Healthbar
 		{
-			get
-			{
-				if (_healthbar == null)
-				{
-					_healthbar = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "healthbar", cr2w, this);
-				}
-				return _healthbar;
-			}
-			set
-			{
-				if (_healthbar == value)
-				{
-					return;
-				}
-				_healthbar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _healthbar);
+			set => SetProperty(ref _healthbar, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("root")] 
 		public wCHandle<inkWidget> Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("flatheadListener")] 
 		public CUInt32 FlatheadListener
 		{
-			get
-			{
-				if (_flatheadListener == null)
-				{
-					_flatheadListener = (CUInt32) CR2WTypeManager.Create("Uint32", "flatheadListener", cr2w, this);
-				}
-				return _flatheadListener;
-			}
-			set
-			{
-				if (_flatheadListener == value)
-				{
-					return;
-				}
-				_flatheadListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flatheadListener);
+			set => SetProperty(ref _flatheadListener, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("maxHealth")] 
 		public CFloat MaxHealth
 		{
-			get
-			{
-				if (_maxHealth == null)
-				{
-					_maxHealth = (CFloat) CR2WTypeManager.Create("Float", "maxHealth", cr2w, this);
-				}
-				return _maxHealth;
-			}
-			set
-			{
-				if (_maxHealth == value)
-				{
-					return;
-				}
-				_maxHealth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxHealth);
+			set => SetProperty(ref _maxHealth, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("healthStatListener")] 
 		public CHandle<CompanionHealthStatListener> HealthStatListener
 		{
-			get
-			{
-				if (_healthStatListener == null)
-				{
-					_healthStatListener = (CHandle<CompanionHealthStatListener>) CR2WTypeManager.Create("handle:CompanionHealthStatListener", "healthStatListener", cr2w, this);
-				}
-				return _healthStatListener;
-			}
-			set
-			{
-				if (_healthStatListener == value)
-				{
-					return;
-				}
-				_healthStatListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _healthStatListener);
+			set => SetProperty(ref _healthStatListener, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("companionBlackboard")] 
 		public CHandle<gameIBlackboard> CompanionBlackboard
 		{
-			get
-			{
-				if (_companionBlackboard == null)
-				{
-					_companionBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "companionBlackboard", cr2w, this);
-				}
-				return _companionBlackboard;
-			}
-			set
-			{
-				if (_companionBlackboard == value)
-				{
-					return;
-				}
-				_companionBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _companionBlackboard);
+			set => SetProperty(ref _companionBlackboard, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
-			get
-			{
-				if (_gameInstance == null)
-				{
-					_gameInstance = (ScriptGameInstance) CR2WTypeManager.Create("ScriptGameInstance", "gameInstance", cr2w, this);
-				}
-				return _gameInstance;
-			}
-			set
-			{
-				if (_gameInstance == value)
-				{
-					return;
-				}
-				_gameInstance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameInstance);
+			set => SetProperty(ref _gameInstance, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("statSystem")] 
 		public CHandle<gameStatPoolsSystem> StatSystem
 		{
-			get
-			{
-				if (_statSystem == null)
-				{
-					_statSystem = (CHandle<gameStatPoolsSystem>) CR2WTypeManager.Create("handle:gameStatPoolsSystem", "statSystem", cr2w, this);
-				}
-				return _statSystem;
-			}
-			set
-			{
-				if (_statSystem == value)
-				{
-					return;
-				}
-				_statSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statSystem);
+			set => SetProperty(ref _statSystem, value);
 		}
 
 		public CompanionHealthBarGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stateName")] 
 		public CName StateName
 		{
-			get
-			{
-				if (_stateName == null)
-				{
-					_stateName = (CName) CR2WTypeManager.Create("CName", "stateName", cr2w, this);
-				}
-				return _stateName;
-			}
-			set
-			{
-				if (_stateName == value)
-				{
-					return;
-				}
-				_stateName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stateName);
+			set => SetProperty(ref _stateName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useBackgroundTexture")] 
 		public CBool UseBackgroundTexture
 		{
-			get
-			{
-				if (_useBackgroundTexture == null)
-				{
-					_useBackgroundTexture = (CBool) CR2WTypeManager.Create("Bool", "useBackgroundTexture", cr2w, this);
-				}
-				return _useBackgroundTexture;
-			}
-			set
-			{
-				if (_useBackgroundTexture == value)
-				{
-					return;
-				}
-				_useBackgroundTexture = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useBackgroundTexture);
+			set => SetProperty(ref _useBackgroundTexture, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("shaderParams")] 
 		public fxCompositionShaderParams ShaderParams
 		{
-			get
-			{
-				if (_shaderParams == null)
-				{
-					_shaderParams = (fxCompositionShaderParams) CR2WTypeManager.Create("fxCompositionShaderParams", "shaderParams", cr2w, this);
-				}
-				return _shaderParams;
-			}
-			set
-			{
-				if (_shaderParams == value)
-				{
-					return;
-				}
-				_shaderParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shaderParams);
+			set => SetProperty(ref _shaderParams, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("transitions")] 
 		public CArray<inkCompositionTransition> Transitions
 		{
-			get
-			{
-				if (_transitions == null)
-				{
-					_transitions = (CArray<inkCompositionTransition>) CR2WTypeManager.Create("array:inkCompositionTransition", "transitions", cr2w, this);
-				}
-				return _transitions;
-			}
-			set
-			{
-				if (_transitions == value)
-				{
-					return;
-				}
-				_transitions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transitions);
+			set => SetProperty(ref _transitions, value);
 		}
 
 		public inkCompositionPreset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

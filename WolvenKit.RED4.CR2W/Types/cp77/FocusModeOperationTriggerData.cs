@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("operationType")] 
 		public CEnum<ETriggerOperationType> OperationType
 		{
-			get
-			{
-				if (_operationType == null)
-				{
-					_operationType = (CEnum<ETriggerOperationType>) CR2WTypeManager.Create("ETriggerOperationType", "operationType", cr2w, this);
-				}
-				return _operationType;
-			}
-			set
-			{
-				if (_operationType == value)
-				{
-					return;
-				}
-				_operationType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _operationType);
+			set => SetProperty(ref _operationType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isLookedAt")] 
 		public CBool IsLookedAt
 		{
-			get
-			{
-				if (_isLookedAt == null)
-				{
-					_isLookedAt = (CBool) CR2WTypeManager.Create("Bool", "isLookedAt", cr2w, this);
-				}
-				return _isLookedAt;
-			}
-			set
-			{
-				if (_isLookedAt == value)
-				{
-					return;
-				}
-				_isLookedAt = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isLookedAt);
+			set => SetProperty(ref _isLookedAt, value);
 		}
 
 		public FocusModeOperationTriggerData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("queryId")] 
 		public CUInt32 QueryId
 		{
-			get
-			{
-				if (_queryId == null)
-				{
-					_queryId = (CUInt32) CR2WTypeManager.Create("Uint32", "queryId", cr2w, this);
-				}
-				return _queryId;
-			}
-			set
-			{
-				if (_queryId == value)
-				{
-					return;
-				}
-				_queryId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _queryId);
+			set => SetProperty(ref _queryId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("queryStarted")] 
 		public CBool QueryStarted
 		{
-			get
-			{
-				if (_queryStarted == null)
-				{
-					_queryStarted = (CBool) CR2WTypeManager.Create("Bool", "queryStarted", cr2w, this);
-				}
-				return _queryStarted;
-			}
-			set
-			{
-				if (_queryStarted == value)
-				{
-					return;
-				}
-				_queryStarted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _queryStarted);
+			set => SetProperty(ref _queryStarted, value);
 		}
 
 		public ExampleNavigationTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("version")] 
 		public CUInt32 Version
 		{
-			get
-			{
-				if (_version == null)
-				{
-					_version = (CUInt32) CR2WTypeManager.Create("Uint32", "version", cr2w, this);
-				}
-				return _version;
-			}
-			set
-			{
-				if (_version == value)
-				{
-					return;
-				}
-				_version = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _version);
+			set => SetProperty(ref _version, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("emitterInfo")] 
 		public rendRenderParticleBlobEmitterInfo EmitterInfo
 		{
-			get
-			{
-				if (_emitterInfo == null)
-				{
-					_emitterInfo = (rendRenderParticleBlobEmitterInfo) CR2WTypeManager.Create("rendRenderParticleBlobEmitterInfo", "emitterInfo", cr2w, this);
-				}
-				return _emitterInfo;
-			}
-			set
-			{
-				if (_emitterInfo == value)
-				{
-					return;
-				}
-				_emitterInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _emitterInfo);
+			set => SetProperty(ref _emitterInfo, value);
 		}
 
 		public rendRenderParticleBlobHeader(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

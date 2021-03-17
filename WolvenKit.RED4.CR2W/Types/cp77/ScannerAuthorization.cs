@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("keycard")] 
 		public CBool Keycard
 		{
-			get
-			{
-				if (_keycard == null)
-				{
-					_keycard = (CBool) CR2WTypeManager.Create("Bool", "keycard", cr2w, this);
-				}
-				return _keycard;
-			}
-			set
-			{
-				if (_keycard == value)
-				{
-					return;
-				}
-				_keycard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _keycard);
+			set => SetProperty(ref _keycard, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("password")] 
 		public CBool Password
 		{
-			get
-			{
-				if (_password == null)
-				{
-					_password = (CBool) CR2WTypeManager.Create("Bool", "password", cr2w, this);
-				}
-				return _password;
-			}
-			set
-			{
-				if (_password == value)
-				{
-					return;
-				}
-				_password = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _password);
+			set => SetProperty(ref _password, value);
 		}
 
 		public ScannerAuthorization(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

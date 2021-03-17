@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isBlocked")] 
 		public CBool IsBlocked
 		{
-			get
-			{
-				if (_isBlocked == null)
-				{
-					_isBlocked = (CBool) CR2WTypeManager.Create("Bool", "isBlocked", cr2w, this);
-				}
-				return _isBlocked;
-			}
-			set
-			{
-				if (_isBlocked == value)
-				{
-					return;
-				}
-				_isBlocked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isBlocked);
+			set => SetProperty(ref _isBlocked, value);
 		}
 
 		public gameSetScanningBlockedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

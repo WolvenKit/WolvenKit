@@ -24,276 +24,96 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("initialPose")] 
 		public CArray<animImportFacialInitialPoseEntryDesc> InitialPose
 		{
-			get
-			{
-				if (_initialPose == null)
-				{
-					_initialPose = (CArray<animImportFacialInitialPoseEntryDesc>) CR2WTypeManager.Create("array:animImportFacialInitialPoseEntryDesc", "initialPose", cr2w, this);
-				}
-				return _initialPose;
-			}
-			set
-			{
-				if (_initialPose == value)
-				{
-					return;
-				}
-				_initialPose = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialPose);
+			set => SetProperty(ref _initialPose, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("initialControls")] 
 		public animImportFacialInitialControlsDesc InitialControls
 		{
-			get
-			{
-				if (_initialControls == null)
-				{
-					_initialControls = (animImportFacialInitialControlsDesc) CR2WTypeManager.Create("animImportFacialInitialControlsDesc", "initialControls", cr2w, this);
-				}
-				return _initialControls;
-			}
-			set
-			{
-				if (_initialControls == value)
-				{
-					return;
-				}
-				_initialControls = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialControls);
+			set => SetProperty(ref _initialControls, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("mainPoses")] 
 		public CArray<animImportFacialMainPoseDesc> MainPoses
 		{
-			get
-			{
-				if (_mainPoses == null)
-				{
-					_mainPoses = (CArray<animImportFacialMainPoseDesc>) CR2WTypeManager.Create("array:animImportFacialMainPoseDesc", "mainPoses", cr2w, this);
-				}
-				return _mainPoses;
-			}
-			set
-			{
-				if (_mainPoses == value)
-				{
-					return;
-				}
-				_mainPoses = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mainPoses);
+			set => SetProperty(ref _mainPoses, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("mainPosesInfo")] 
 		public CArray<animSermoPoseInfo> MainPosesInfo
 		{
-			get
-			{
-				if (_mainPosesInfo == null)
-				{
-					_mainPosesInfo = (CArray<animSermoPoseInfo>) CR2WTypeManager.Create("array:animSermoPoseInfo", "mainPosesInfo", cr2w, this);
-				}
-				return _mainPosesInfo;
-			}
-			set
-			{
-				if (_mainPosesInfo == value)
-				{
-					return;
-				}
-				_mainPosesInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mainPosesInfo);
+			set => SetProperty(ref _mainPosesInfo, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("jawAreaTrackIndices")] 
 		public CArray<CInt16> JawAreaTrackIndices
 		{
-			get
-			{
-				if (_jawAreaTrackIndices == null)
-				{
-					_jawAreaTrackIndices = (CArray<CInt16>) CR2WTypeManager.Create("array:Int16", "jawAreaTrackIndices", cr2w, this);
-				}
-				return _jawAreaTrackIndices;
-			}
-			set
-			{
-				if (_jawAreaTrackIndices == value)
-				{
-					return;
-				}
-				_jawAreaTrackIndices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _jawAreaTrackIndices);
+			set => SetProperty(ref _jawAreaTrackIndices, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("lipsAreaTrackIndices")] 
 		public CArray<CInt16> LipsAreaTrackIndices
 		{
-			get
-			{
-				if (_lipsAreaTrackIndices == null)
-				{
-					_lipsAreaTrackIndices = (CArray<CInt16>) CR2WTypeManager.Create("array:Int16", "lipsAreaTrackIndices", cr2w, this);
-				}
-				return _lipsAreaTrackIndices;
-			}
-			set
-			{
-				if (_lipsAreaTrackIndices == value)
-				{
-					return;
-				}
-				_lipsAreaTrackIndices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lipsAreaTrackIndices);
+			set => SetProperty(ref _lipsAreaTrackIndices, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("eyesAreaTrackIndices")] 
 		public CArray<CInt16> EyesAreaTrackIndices
 		{
-			get
-			{
-				if (_eyesAreaTrackIndices == null)
-				{
-					_eyesAreaTrackIndices = (CArray<CInt16>) CR2WTypeManager.Create("array:Int16", "eyesAreaTrackIndices", cr2w, this);
-				}
-				return _eyesAreaTrackIndices;
-			}
-			set
-			{
-				if (_eyesAreaTrackIndices == value)
-				{
-					return;
-				}
-				_eyesAreaTrackIndices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eyesAreaTrackIndices);
+			set => SetProperty(ref _eyesAreaTrackIndices, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("numCachedPoseTracks")] 
 		public CUInt16 NumCachedPoseTracks
 		{
-			get
-			{
-				if (_numCachedPoseTracks == null)
-				{
-					_numCachedPoseTracks = (CUInt16) CR2WTypeManager.Create("Uint16", "numCachedPoseTracks", cr2w, this);
-				}
-				return _numCachedPoseTracks;
-			}
-			set
-			{
-				if (_numCachedPoseTracks == value)
-				{
-					return;
-				}
-				_numCachedPoseTracks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numCachedPoseTracks);
+			set => SetProperty(ref _numCachedPoseTracks, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("correctivePoses")] 
 		public CArray<animImportFacialCorrectivePoseDesc> CorrectivePoses
 		{
-			get
-			{
-				if (_correctivePoses == null)
-				{
-					_correctivePoses = (CArray<animImportFacialCorrectivePoseDesc>) CR2WTypeManager.Create("array:animImportFacialCorrectivePoseDesc", "correctivePoses", cr2w, this);
-				}
-				return _correctivePoses;
-			}
-			set
-			{
-				if (_correctivePoses == value)
-				{
-					return;
-				}
-				_correctivePoses = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _correctivePoses);
+			set => SetProperty(ref _correctivePoses, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("globalPoseLimits")] 
 		public CArray<animPoseLimitWeights> GlobalPoseLimits
 		{
-			get
-			{
-				if (_globalPoseLimits == null)
-				{
-					_globalPoseLimits = (CArray<animPoseLimitWeights>) CR2WTypeManager.Create("array:animPoseLimitWeights", "globalPoseLimits", cr2w, this);
-				}
-				return _globalPoseLimits;
-			}
-			set
-			{
-				if (_globalPoseLimits == value)
-				{
-					return;
-				}
-				_globalPoseLimits = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _globalPoseLimits);
+			set => SetProperty(ref _globalPoseLimits, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("wrinkleStartingIndex")] 
 		public CUInt16 WrinkleStartingIndex
 		{
-			get
-			{
-				if (_wrinkleStartingIndex == null)
-				{
-					_wrinkleStartingIndex = (CUInt16) CR2WTypeManager.Create("Uint16", "wrinkleStartingIndex", cr2w, this);
-				}
-				return _wrinkleStartingIndex;
-			}
-			set
-			{
-				if (_wrinkleStartingIndex == value)
-				{
-					return;
-				}
-				_wrinkleStartingIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wrinkleStartingIndex);
+			set => SetProperty(ref _wrinkleStartingIndex, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("wrinkleMapping")] 
 		public CArray<CUInt16> WrinkleMapping
 		{
-			get
-			{
-				if (_wrinkleMapping == null)
-				{
-					_wrinkleMapping = (CArray<CUInt16>) CR2WTypeManager.Create("array:Uint16", "wrinkleMapping", cr2w, this);
-				}
-				return _wrinkleMapping;
-			}
-			set
-			{
-				if (_wrinkleMapping == value)
-				{
-					return;
-				}
-				_wrinkleMapping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wrinkleMapping);
+			set => SetProperty(ref _wrinkleMapping, value);
 		}
 
 		public animImportFacialSetupDesc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

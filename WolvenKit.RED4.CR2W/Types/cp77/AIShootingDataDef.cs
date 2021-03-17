@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("shootingPatternPackage")] 
 		public gamebbScriptID_Variant ShootingPatternPackage
 		{
-			get
-			{
-				if (_shootingPatternPackage == null)
-				{
-					_shootingPatternPackage = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "shootingPatternPackage", cr2w, this);
-				}
-				return _shootingPatternPackage;
-			}
-			set
-			{
-				if (_shootingPatternPackage == value)
-				{
-					return;
-				}
-				_shootingPatternPackage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shootingPatternPackage);
+			set => SetProperty(ref _shootingPatternPackage, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("shootingPattern")] 
 		public gamebbScriptID_Variant ShootingPattern
 		{
-			get
-			{
-				if (_shootingPattern == null)
-				{
-					_shootingPattern = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "shootingPattern", cr2w, this);
-				}
-				return _shootingPattern;
-			}
-			set
-			{
-				if (_shootingPattern == value)
-				{
-					return;
-				}
-				_shootingPattern = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shootingPattern);
+			set => SetProperty(ref _shootingPattern, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("patternList")] 
 		public gamebbScriptID_Variant PatternList
 		{
-			get
-			{
-				if (_patternList == null)
-				{
-					_patternList = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "patternList", cr2w, this);
-				}
-				return _patternList;
-			}
-			set
-			{
-				if (_patternList == value)
-				{
-					return;
-				}
-				_patternList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _patternList);
+			set => SetProperty(ref _patternList, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("rightArmLookAtLimitReached")] 
 		public gamebbScriptID_Int32 RightArmLookAtLimitReached
 		{
-			get
-			{
-				if (_rightArmLookAtLimitReached == null)
-				{
-					_rightArmLookAtLimitReached = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "rightArmLookAtLimitReached", cr2w, this);
-				}
-				return _rightArmLookAtLimitReached;
-			}
-			set
-			{
-				if (_rightArmLookAtLimitReached == value)
-				{
-					return;
-				}
-				_rightArmLookAtLimitReached = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rightArmLookAtLimitReached);
+			set => SetProperty(ref _rightArmLookAtLimitReached, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("totalShotsFired")] 
 		public gamebbScriptID_Int32 TotalShotsFired
 		{
-			get
-			{
-				if (_totalShotsFired == null)
-				{
-					_totalShotsFired = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "totalShotsFired", cr2w, this);
-				}
-				return _totalShotsFired;
-			}
-			set
-			{
-				if (_totalShotsFired == value)
-				{
-					return;
-				}
-				_totalShotsFired = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _totalShotsFired);
+			set => SetProperty(ref _totalShotsFired, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("shotsInBurstFired")] 
 		public gamebbScriptID_Int32 ShotsInBurstFired
 		{
-			get
-			{
-				if (_shotsInBurstFired == null)
-				{
-					_shotsInBurstFired = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "shotsInBurstFired", cr2w, this);
-				}
-				return _shotsInBurstFired;
-			}
-			set
-			{
-				if (_shotsInBurstFired == value)
-				{
-					return;
-				}
-				_shotsInBurstFired = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shotsInBurstFired);
+			set => SetProperty(ref _shotsInBurstFired, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("desiredNumberOfShots")] 
 		public gamebbScriptID_Int32 DesiredNumberOfShots
 		{
-			get
-			{
-				if (_desiredNumberOfShots == null)
-				{
-					_desiredNumberOfShots = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "desiredNumberOfShots", cr2w, this);
-				}
-				return _desiredNumberOfShots;
-			}
-			set
-			{
-				if (_desiredNumberOfShots == value)
-				{
-					return;
-				}
-				_desiredNumberOfShots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _desiredNumberOfShots);
+			set => SetProperty(ref _desiredNumberOfShots, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("nextShotTimeStamp")] 
 		public gamebbScriptID_Float NextShotTimeStamp
 		{
-			get
-			{
-				if (_nextShotTimeStamp == null)
-				{
-					_nextShotTimeStamp = (gamebbScriptID_Float) CR2WTypeManager.Create("gamebbScriptID_Float", "nextShotTimeStamp", cr2w, this);
-				}
-				return _nextShotTimeStamp;
-			}
-			set
-			{
-				if (_nextShotTimeStamp == value)
-				{
-					return;
-				}
-				_nextShotTimeStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nextShotTimeStamp);
+			set => SetProperty(ref _nextShotTimeStamp, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("shotTimeStamp")] 
 		public gamebbScriptID_Float ShotTimeStamp
 		{
-			get
-			{
-				if (_shotTimeStamp == null)
-				{
-					_shotTimeStamp = (gamebbScriptID_Float) CR2WTypeManager.Create("gamebbScriptID_Float", "shotTimeStamp", cr2w, this);
-				}
-				return _shotTimeStamp;
-			}
-			set
-			{
-				if (_shotTimeStamp == value)
-				{
-					return;
-				}
-				_shotTimeStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shotTimeStamp);
+			set => SetProperty(ref _shotTimeStamp, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("maxChargedTimeStamp")] 
 		public gamebbScriptID_Float MaxChargedTimeStamp
 		{
-			get
-			{
-				if (_maxChargedTimeStamp == null)
-				{
-					_maxChargedTimeStamp = (gamebbScriptID_Float) CR2WTypeManager.Create("gamebbScriptID_Float", "maxChargedTimeStamp", cr2w, this);
-				}
-				return _maxChargedTimeStamp;
-			}
-			set
-			{
-				if (_maxChargedTimeStamp == value)
-				{
-					return;
-				}
-				_maxChargedTimeStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxChargedTimeStamp);
+			set => SetProperty(ref _maxChargedTimeStamp, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("chargeStartTimeStamp")] 
 		public gamebbScriptID_Float ChargeStartTimeStamp
 		{
-			get
-			{
-				if (_chargeStartTimeStamp == null)
-				{
-					_chargeStartTimeStamp = (gamebbScriptID_Float) CR2WTypeManager.Create("gamebbScriptID_Float", "chargeStartTimeStamp", cr2w, this);
-				}
-				return _chargeStartTimeStamp;
-			}
-			set
-			{
-				if (_chargeStartTimeStamp == value)
-				{
-					return;
-				}
-				_chargeStartTimeStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeStartTimeStamp);
+			set => SetProperty(ref _chargeStartTimeStamp, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("fullyCharged")] 
 		public gamebbScriptID_Bool FullyCharged
 		{
-			get
-			{
-				if (_fullyCharged == null)
-				{
-					_fullyCharged = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "fullyCharged", cr2w, this);
-				}
-				return _fullyCharged;
-			}
-			set
-			{
-				if (_fullyCharged == value)
-				{
-					return;
-				}
-				_fullyCharged = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fullyCharged);
+			set => SetProperty(ref _fullyCharged, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("weaponOverheated")] 
 		public gamebbScriptID_Bool WeaponOverheated
 		{
-			get
-			{
-				if (_weaponOverheated == null)
-				{
-					_weaponOverheated = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "weaponOverheated", cr2w, this);
-				}
-				return _weaponOverheated;
-			}
-			set
-			{
-				if (_weaponOverheated == value)
-				{
-					return;
-				}
-				_weaponOverheated = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponOverheated);
+			set => SetProperty(ref _weaponOverheated, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("requestedTriggerMode")] 
 		public gamebbScriptID_Int32 RequestedTriggerMode
 		{
-			get
-			{
-				if (_requestedTriggerMode == null)
-				{
-					_requestedTriggerMode = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "requestedTriggerMode", cr2w, this);
-				}
-				return _requestedTriggerMode;
-			}
-			set
-			{
-				if (_requestedTriggerMode == value)
-				{
-					return;
-				}
-				_requestedTriggerMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requestedTriggerMode);
+			set => SetProperty(ref _requestedTriggerMode, value);
 		}
 
 		public AIShootingDataDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

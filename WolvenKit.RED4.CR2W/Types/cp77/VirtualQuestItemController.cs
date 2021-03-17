@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("questItem")] 
 		public inkWidgetReference QuestItem
 		{
-			get
-			{
-				if (_questItem == null)
-				{
-					_questItem = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "questItem", cr2w, this);
-				}
-				return _questItem;
-			}
-			set
-			{
-				if (_questItem == value)
-				{
-					return;
-				}
-				_questItem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questItem);
+			set => SetProperty(ref _questItem, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("data")] 
 		public CHandle<VirutalNestedListData> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CHandle<VirutalNestedListData>) CR2WTypeManager.Create("handle:VirutalNestedListData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		public VirtualQuestItemController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

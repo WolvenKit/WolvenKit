@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sensesOperations")] 
 		public CArray<SSensesOperationData> SensesOperations_
 		{
-			get
-			{
-				if (_sensesOperations == null)
-				{
-					_sensesOperations = (CArray<SSensesOperationData>) CR2WTypeManager.Create("array:SSensesOperationData", "sensesOperations", cr2w, this);
-				}
-				return _sensesOperations;
-			}
-			set
-			{
-				if (_sensesOperations == value)
-				{
-					return;
-				}
-				_sensesOperations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sensesOperations);
+			set => SetProperty(ref _sensesOperations, value);
 		}
 
 		public SensesOperations(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bulletType")] 
 		public CEnum<audioWeaponBulletType> BulletType
 		{
-			get
-			{
-				if (_bulletType == null)
-				{
-					_bulletType = (CEnum<audioWeaponBulletType>) CR2WTypeManager.Create("audioWeaponBulletType", "bulletType", cr2w, this);
-				}
-				return _bulletType;
-			}
-			set
-			{
-				if (_bulletType == value)
-				{
-					return;
-				}
-				_bulletType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bulletType);
+			set => SetProperty(ref _bulletType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("shellCasingType")] 
 		public CEnum<audioWeaponShellCasingType> ShellCasingType
 		{
-			get
-			{
-				if (_shellCasingType == null)
-				{
-					_shellCasingType = (CEnum<audioWeaponShellCasingType>) CR2WTypeManager.Create("audioWeaponShellCasingType", "shellCasingType", cr2w, this);
-				}
-				return _shellCasingType;
-			}
-			set
-			{
-				if (_shellCasingType == value)
-				{
-					return;
-				}
-				_shellCasingType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shellCasingType);
+			set => SetProperty(ref _shellCasingType, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("weaponHandlingSettings")] 
 		public audioWeaponHandlingSettings WeaponHandlingSettings
 		{
-			get
-			{
-				if (_weaponHandlingSettings == null)
-				{
-					_weaponHandlingSettings = (audioWeaponHandlingSettings) CR2WTypeManager.Create("audioWeaponHandlingSettings", "weaponHandlingSettings", cr2w, this);
-				}
-				return _weaponHandlingSettings;
-			}
-			set
-			{
-				if (_weaponHandlingSettings == value)
-				{
-					return;
-				}
-				_weaponHandlingSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponHandlingSettings);
+			set => SetProperty(ref _weaponHandlingSettings, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("singleShotInSandevistan")] 
 		public CBool SingleShotInSandevistan
 		{
-			get
-			{
-				if (_singleShotInSandevistan == null)
-				{
-					_singleShotInSandevistan = (CBool) CR2WTypeManager.Create("Bool", "singleShotInSandevistan", cr2w, this);
-				}
-				return _singleShotInSandevistan;
-			}
-			set
-			{
-				if (_singleShotInSandevistan == value)
-				{
-					return;
-				}
-				_singleShotInSandevistan = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _singleShotInSandevistan);
+			set => SetProperty(ref _singleShotInSandevistan, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("chargeStartSound")] 
 		public CName ChargeStartSound
 		{
-			get
-			{
-				if (_chargeStartSound == null)
-				{
-					_chargeStartSound = (CName) CR2WTypeManager.Create("CName", "chargeStartSound", cr2w, this);
-				}
-				return _chargeStartSound;
-			}
-			set
-			{
-				if (_chargeStartSound == value)
-				{
-					return;
-				}
-				_chargeStartSound = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeStartSound);
+			set => SetProperty(ref _chargeStartSound, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("chargeReadySound")] 
 		public CName ChargeReadySound
 		{
-			get
-			{
-				if (_chargeReadySound == null)
-				{
-					_chargeReadySound = (CName) CR2WTypeManager.Create("CName", "chargeReadySound", cr2w, this);
-				}
-				return _chargeReadySound;
-			}
-			set
-			{
-				if (_chargeReadySound == value)
-				{
-					return;
-				}
-				_chargeReadySound = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeReadySound);
+			set => SetProperty(ref _chargeReadySound, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("chargeOverchargeSound")] 
 		public CName ChargeOverchargeSound
 		{
-			get
-			{
-				if (_chargeOverchargeSound == null)
-				{
-					_chargeOverchargeSound = (CName) CR2WTypeManager.Create("CName", "chargeOverchargeSound", cr2w, this);
-				}
-				return _chargeOverchargeSound;
-			}
-			set
-			{
-				if (_chargeOverchargeSound == value)
-				{
-					return;
-				}
-				_chargeOverchargeSound = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeOverchargeSound);
+			set => SetProperty(ref _chargeOverchargeSound, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("chargeDischargeSound")] 
 		public CName ChargeDischargeSound
 		{
-			get
-			{
-				if (_chargeDischargeSound == null)
-				{
-					_chargeDischargeSound = (CName) CR2WTypeManager.Create("CName", "chargeDischargeSound", cr2w, this);
-				}
-				return _chargeDischargeSound;
-			}
-			set
-			{
-				if (_chargeDischargeSound == value)
-				{
-					return;
-				}
-				_chargeDischargeSound = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeDischargeSound);
+			set => SetProperty(ref _chargeDischargeSound, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("fireModeSounds")] 
 		public audioWeaponFireModeSounds FireModeSounds
 		{
-			get
-			{
-				if (_fireModeSounds == null)
-				{
-					_fireModeSounds = (audioWeaponFireModeSounds) CR2WTypeManager.Create("audioWeaponFireModeSounds", "fireModeSounds", cr2w, this);
-				}
-				return _fireModeSounds;
-			}
-			set
-			{
-				if (_fireModeSounds == value)
-				{
-					return;
-				}
-				_fireModeSounds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fireModeSounds);
+			set => SetProperty(ref _fireModeSounds, value);
 		}
 
 		public audioWeaponSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("contextualAudEventMapItems")] 
 		public CArray<audioContextualAudEventMapItem> ContextualAudEventMapItems
 		{
-			get
-			{
-				if (_contextualAudEventMapItems == null)
-				{
-					_contextualAudEventMapItems = (CArray<audioContextualAudEventMapItem>) CR2WTypeManager.Create("array:audioContextualAudEventMapItem", "contextualAudEventMapItems", cr2w, this);
-				}
-				return _contextualAudEventMapItems;
-			}
-			set
-			{
-				if (_contextualAudEventMapItems == value)
-				{
-					return;
-				}
-				_contextualAudEventMapItems = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contextualAudEventMapItems);
+			set => SetProperty(ref _contextualAudEventMapItems, value);
 		}
 
 		public audioContextualAudEventMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

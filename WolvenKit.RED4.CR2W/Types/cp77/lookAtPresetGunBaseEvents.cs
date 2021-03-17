@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("overrideLookAtEvents")] 
 		public CArray<CHandle<entLookAtAddEvent>> OverrideLookAtEvents
 		{
-			get
-			{
-				if (_overrideLookAtEvents == null)
-				{
-					_overrideLookAtEvents = (CArray<CHandle<entLookAtAddEvent>>) CR2WTypeManager.Create("array:handle:entLookAtAddEvent", "overrideLookAtEvents", cr2w, this);
-				}
-				return _overrideLookAtEvents;
-			}
-			set
-			{
-				if (_overrideLookAtEvents == value)
-				{
-					return;
-				}
-				_overrideLookAtEvents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideLookAtEvents);
+			set => SetProperty(ref _overrideLookAtEvents, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("gunState")] 
 		public CInt32 GunState
 		{
-			get
-			{
-				if (_gunState == null)
-				{
-					_gunState = (CInt32) CR2WTypeManager.Create("Int32", "gunState", cr2w, this);
-				}
-				return _gunState;
-			}
-			set
-			{
-				if (_gunState == value)
-				{
-					return;
-				}
-				_gunState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gunState);
+			set => SetProperty(ref _gunState, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("originalAttachLeft")] 
 		public CBool OriginalAttachLeft
 		{
-			get
-			{
-				if (_originalAttachLeft == null)
-				{
-					_originalAttachLeft = (CBool) CR2WTypeManager.Create("Bool", "originalAttachLeft", cr2w, this);
-				}
-				return _originalAttachLeft;
-			}
-			set
-			{
-				if (_originalAttachLeft == value)
-				{
-					return;
-				}
-				_originalAttachLeft = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _originalAttachLeft);
+			set => SetProperty(ref _originalAttachLeft, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("originalAttachRight")] 
 		public CBool OriginalAttachRight
 		{
-			get
-			{
-				if (_originalAttachRight == null)
-				{
-					_originalAttachRight = (CBool) CR2WTypeManager.Create("Bool", "originalAttachRight", cr2w, this);
-				}
-				return _originalAttachRight;
-			}
-			set
-			{
-				if (_originalAttachRight == value)
-				{
-					return;
-				}
-				_originalAttachRight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _originalAttachRight);
+			set => SetProperty(ref _originalAttachRight, value);
 		}
 
 		public lookAtPresetGunBaseEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CString Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CString) CR2WTypeManager.Create("String", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("score")] 
 		public CUInt32 Score
 		{
-			get
-			{
-				if (_score == null)
-				{
-					_score = (CUInt32) CR2WTypeManager.Create("Uint32", "score", cr2w, this);
-				}
-				return _score;
-			}
-			set
-			{
-				if (_score == value)
-				{
-					return;
-				}
-				_score = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _score);
+			set => SetProperty(ref _score, value);
 		}
 
 		public gameuiPanzerScoreRecordData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("elevatorRef")] 
 		public NodeRef ElevatorRef
 		{
-			get
-			{
-				if (_elevatorRef == null)
-				{
-					_elevatorRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "elevatorRef", cr2w, this);
-				}
-				return _elevatorRef;
-			}
-			set
-			{
-				if (_elevatorRef == value)
-				{
-					return;
-				}
-				_elevatorRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _elevatorRef);
+			set => SetProperty(ref _elevatorRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("npcRef")] 
 		public gameEntityReference NpcRef
 		{
-			get
-			{
-				if (_npcRef == null)
-				{
-					_npcRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "npcRef", cr2w, this);
-				}
-				return _npcRef;
-			}
-			set
-			{
-				if (_npcRef == value)
-				{
-					return;
-				}
-				_npcRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _npcRef);
+			set => SetProperty(ref _npcRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("action")] 
 		public CEnum<questElevator_ManageNPCAttachment_NodeTypeParamsAction> Action
 		{
-			get
-			{
-				if (_action == null)
-				{
-					_action = (CEnum<questElevator_ManageNPCAttachment_NodeTypeParamsAction>) CR2WTypeManager.Create("questElevator_ManageNPCAttachment_NodeTypeParamsAction", "action", cr2w, this);
-				}
-				return _action;
-			}
-			set
-			{
-				if (_action == value)
-				{
-					return;
-				}
-				_action = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
 		}
 
 		public questElevator_ManageNPCAttachment_NodeTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("time")] 
 		public netTime Time
 		{
-			get
-			{
-				if (_time == null)
-				{
-					_time = (netTime) CR2WTypeManager.Create("netTime", "time", cr2w, this);
-				}
-				return _time;
-			}
-			set
-			{
-				if (_time == value)
-				{
-					return;
-				}
-				_time = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _time);
+			set => SetProperty(ref _time, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("status")] 
 		public CEnum<grsDeathmatchStatus> Status
 		{
-			get
-			{
-				if (_status == null)
-				{
-					_status = (CEnum<grsDeathmatchStatus>) CR2WTypeManager.Create("grsDeathmatchStatus", "status", cr2w, this);
-				}
-				return _status;
-			}
-			set
-			{
-				if (_status == value)
-				{
-					return;
-				}
-				_status = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _status);
+			set => SetProperty(ref _status, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("sessionLength")] 
 		public netTime SessionLength
 		{
-			get
-			{
-				if (_sessionLength == null)
-				{
-					_sessionLength = (netTime) CR2WTypeManager.Create("netTime", "sessionLength", cr2w, this);
-				}
-				return _sessionLength;
-			}
-			set
-			{
-				if (_sessionLength == value)
-				{
-					return;
-				}
-				_sessionLength = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sessionLength);
+			set => SetProperty(ref _sessionLength, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("playersInfo", 7)] 
 		public CStatic<grsDeathmatchPlayerGameInfo> PlayersInfo
 		{
-			get
-			{
-				if (_playersInfo == null)
-				{
-					_playersInfo = (CStatic<grsDeathmatchPlayerGameInfo>) CR2WTypeManager.Create("static:7,grsDeathmatchPlayerGameInfo", "playersInfo", cr2w, this);
-				}
-				return _playersInfo;
-			}
-			set
-			{
-				if (_playersInfo == value)
-				{
-					return;
-				}
-				_playersInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playersInfo);
+			set => SetProperty(ref _playersInfo, value);
 		}
 
 		public grsDeathmatchState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

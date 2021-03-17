@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weaponNearPlaneCM")] 
 		public CFloat WeaponNearPlaneCM
 		{
-			get
-			{
-				if (_weaponNearPlaneCM == null)
-				{
-					_weaponNearPlaneCM = (CFloat) CR2WTypeManager.Create("Float", "weaponNearPlaneCM", cr2w, this);
-				}
-				return _weaponNearPlaneCM;
-			}
-			set
-			{
-				if (_weaponNearPlaneCM == value)
-				{
-					return;
-				}
-				_weaponNearPlaneCM = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponNearPlaneCM);
+			set => SetProperty(ref _weaponNearPlaneCM, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("blurIntensity")] 
 		public CFloat BlurIntensity
 		{
-			get
-			{
-				if (_blurIntensity == null)
-				{
-					_blurIntensity = (CFloat) CR2WTypeManager.Create("Float", "blurIntensity", cr2w, this);
-				}
-				return _blurIntensity;
-			}
-			set
-			{
-				if (_blurIntensity == value)
-				{
-					return;
-				}
-				_blurIntensity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blurIntensity);
+			set => SetProperty(ref _blurIntensity, value);
 		}
 
 		public SWeaponPlaneParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

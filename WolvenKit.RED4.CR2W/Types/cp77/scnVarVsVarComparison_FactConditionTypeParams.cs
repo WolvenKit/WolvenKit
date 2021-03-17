@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("factName1")] 
 		public CName FactName1
 		{
-			get
-			{
-				if (_factName1 == null)
-				{
-					_factName1 = (CName) CR2WTypeManager.Create("CName", "factName1", cr2w, this);
-				}
-				return _factName1;
-			}
-			set
-			{
-				if (_factName1 == value)
-				{
-					return;
-				}
-				_factName1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factName1);
+			set => SetProperty(ref _factName1, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("factName2")] 
 		public CName FactName2
 		{
-			get
-			{
-				if (_factName2 == null)
-				{
-					_factName2 = (CName) CR2WTypeManager.Create("CName", "factName2", cr2w, this);
-				}
-				return _factName2;
-			}
-			set
-			{
-				if (_factName2 == value)
-				{
-					return;
-				}
-				_factName2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factName2);
+			set => SetProperty(ref _factName2, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("comparisonType")] 
 		public CEnum<EComparisonType> ComparisonType
 		{
-			get
-			{
-				if (_comparisonType == null)
-				{
-					_comparisonType = (CEnum<EComparisonType>) CR2WTypeManager.Create("EComparisonType", "comparisonType", cr2w, this);
-				}
-				return _comparisonType;
-			}
-			set
-			{
-				if (_comparisonType == value)
-				{
-					return;
-				}
-				_comparisonType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comparisonType);
+			set => SetProperty(ref _comparisonType, value);
 		}
 
 		public scnVarVsVarComparison_FactConditionTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

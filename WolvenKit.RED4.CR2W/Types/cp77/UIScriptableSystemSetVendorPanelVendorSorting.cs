@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sortMode")] 
 		public CInt32 SortMode
 		{
-			get
-			{
-				if (_sortMode == null)
-				{
-					_sortMode = (CInt32) CR2WTypeManager.Create("Int32", "sortMode", cr2w, this);
-				}
-				return _sortMode;
-			}
-			set
-			{
-				if (_sortMode == value)
-				{
-					return;
-				}
-				_sortMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sortMode);
+			set => SetProperty(ref _sortMode, value);
 		}
 
 		public UIScriptableSystemSetVendorPanelVendorSorting(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

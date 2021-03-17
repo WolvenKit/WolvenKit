@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animFeatureDataDistractor")] 
 		public CHandle<AnimFeature_DistractionState> AnimFeatureDataDistractor
 		{
-			get
-			{
-				if (_animFeatureDataDistractor == null)
-				{
-					_animFeatureDataDistractor = (CHandle<AnimFeature_DistractionState>) CR2WTypeManager.Create("handle:AnimFeature_DistractionState", "animFeatureDataDistractor", cr2w, this);
-				}
-				return _animFeatureDataDistractor;
-			}
-			set
-			{
-				if (_animFeatureDataDistractor == value)
-				{
-					return;
-				}
-				_animFeatureDataDistractor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animFeatureDataDistractor);
+			set => SetProperty(ref _animFeatureDataDistractor, value);
 		}
 
 		[Ordinal(94)] 
 		[RED("animFeatureDataNameDistractor")] 
 		public CName AnimFeatureDataNameDistractor
 		{
-			get
-			{
-				if (_animFeatureDataNameDistractor == null)
-				{
-					_animFeatureDataNameDistractor = (CName) CR2WTypeManager.Create("CName", "animFeatureDataNameDistractor", cr2w, this);
-				}
-				return _animFeatureDataNameDistractor;
-			}
-			set
-			{
-				if (_animFeatureDataNameDistractor == value)
-				{
-					return;
-				}
-				_animFeatureDataNameDistractor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animFeatureDataNameDistractor);
+			set => SetProperty(ref _animFeatureDataNameDistractor, value);
 		}
 
 		[Ordinal(95)] 
 		[RED("distractionComponentSwapNamesToON")] 
 		public CArray<CName> DistractionComponentSwapNamesToON
 		{
-			get
-			{
-				if (_distractionComponentSwapNamesToON == null)
-				{
-					_distractionComponentSwapNamesToON = (CArray<CName>) CR2WTypeManager.Create("array:CName", "distractionComponentSwapNamesToON", cr2w, this);
-				}
-				return _distractionComponentSwapNamesToON;
-			}
-			set
-			{
-				if (_distractionComponentSwapNamesToON == value)
-				{
-					return;
-				}
-				_distractionComponentSwapNamesToON = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distractionComponentSwapNamesToON);
+			set => SetProperty(ref _distractionComponentSwapNamesToON, value);
 		}
 
 		[Ordinal(96)] 
 		[RED("distractionComponentSwapNamesToOFF")] 
 		public CArray<CName> DistractionComponentSwapNamesToOFF
 		{
-			get
-			{
-				if (_distractionComponentSwapNamesToOFF == null)
-				{
-					_distractionComponentSwapNamesToOFF = (CArray<CName>) CR2WTypeManager.Create("array:CName", "distractionComponentSwapNamesToOFF", cr2w, this);
-				}
-				return _distractionComponentSwapNamesToOFF;
-			}
-			set
-			{
-				if (_distractionComponentSwapNamesToOFF == value)
-				{
-					return;
-				}
-				_distractionComponentSwapNamesToOFF = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distractionComponentSwapNamesToOFF);
+			set => SetProperty(ref _distractionComponentSwapNamesToOFF, value);
 		}
 
 		[Ordinal(97)] 
 		[RED("distractionComponentON")] 
 		public CArray<CHandle<entIPlacedComponent>> DistractionComponentON
 		{
-			get
-			{
-				if (_distractionComponentON == null)
-				{
-					_distractionComponentON = (CArray<CHandle<entIPlacedComponent>>) CR2WTypeManager.Create("array:handle:entIPlacedComponent", "distractionComponentON", cr2w, this);
-				}
-				return _distractionComponentON;
-			}
-			set
-			{
-				if (_distractionComponentON == value)
-				{
-					return;
-				}
-				_distractionComponentON = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distractionComponentON);
+			set => SetProperty(ref _distractionComponentON, value);
 		}
 
 		[Ordinal(98)] 
 		[RED("cdistractionComponentOFF")] 
 		public CArray<CHandle<entIPlacedComponent>> CdistractionComponentOFF
 		{
-			get
-			{
-				if (_cdistractionComponentOFF == null)
-				{
-					_cdistractionComponentOFF = (CArray<CHandle<entIPlacedComponent>>) CR2WTypeManager.Create("array:handle:entIPlacedComponent", "cdistractionComponentOFF", cr2w, this);
-				}
-				return _cdistractionComponentOFF;
-			}
-			set
-			{
-				if (_cdistractionComponentOFF == value)
-				{
-					return;
-				}
-				_cdistractionComponentOFF = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cdistractionComponentOFF);
+			set => SetProperty(ref _cdistractionComponentOFF, value);
 		}
 
 		public BasicDistractionDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

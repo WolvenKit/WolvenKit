@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("appearances")] 
 		public CArray<CName> Appearances
 		{
-			get
-			{
-				if (_appearances == null)
-				{
-					_appearances = (CArray<CName>) CR2WTypeManager.Create("array:CName", "appearances", cr2w, this);
-				}
-				return _appearances;
-			}
-			set
-			{
-				if (_appearances == value)
-				{
-					return;
-				}
-				_appearances = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _appearances);
+			set => SetProperty(ref _appearances, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get
-			{
-				if (_isEnabled == null)
-				{
-					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
-				}
-				return _isEnabled;
-			}
-			set
-			{
-				if (_isEnabled == value)
-				{
-					return;
-				}
-				_isEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
 		}
 
 		public AppearanceRandomizerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

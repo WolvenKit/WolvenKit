@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("partName")] 
 		public CName PartName
 		{
-			get
-			{
-				if (_partName == null)
-				{
-					_partName = (CName) CR2WTypeManager.Create("CName", "partName", cr2w, this);
-				}
-				return _partName;
-			}
-			set
-			{
-				if (_partName == value)
-				{
-					return;
-				}
-				_partName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _partName);
+			set => SetProperty(ref _partName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get
-			{
-				if (_weight == null)
-				{
-					_weight = (CFloat) CR2WTypeManager.Create("Float", "weight", cr2w, this);
-				}
-				return _weight;
-			}
-			set
-			{
-				if (_weight == value)
-				{
-					return;
-				}
-				_weight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weight);
+			set => SetProperty(ref _weight, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("suppress")] 
 		public CFloat Suppress
 		{
-			get
-			{
-				if (_suppress == null)
-				{
-					_suppress = (CFloat) CR2WTypeManager.Create("Float", "suppress", cr2w, this);
-				}
-				return _suppress;
-			}
-			set
-			{
-				if (_suppress == value)
-				{
-					return;
-				}
-				_suppress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _suppress);
+			set => SetProperty(ref _suppress, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("mode")] 
 		public CInt32 Mode
 		{
-			get
-			{
-				if (_mode == null)
-				{
-					_mode = (CInt32) CR2WTypeManager.Create("Int32", "mode", cr2w, this);
-				}
-				return _mode;
-			}
-			set
-			{
-				if (_mode == value)
-				{
-					return;
-				}
-				_mode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mode);
+			set => SetProperty(ref _mode, value);
 		}
 
 		public animLookAtPartRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

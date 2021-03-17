@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animFeatureName")] 
 		public CName AnimFeatureName
 		{
-			get
-			{
-				if (_animFeatureName == null)
-				{
-					_animFeatureName = (CName) CR2WTypeManager.Create("CName", "animFeatureName", cr2w, this);
-				}
-				return _animFeatureName;
-			}
-			set
-			{
-				if (_animFeatureName == value)
-				{
-					return;
-				}
-				_animFeatureName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animFeatureName);
+			set => SetProperty(ref _animFeatureName, value);
 		}
 
 		[Ordinal(33)] 
 		[RED("actionAnimDatabaseRef")] 
 		public rRef<animActionAnimDatabase> ActionAnimDatabaseRef
 		{
-			get
-			{
-				if (_actionAnimDatabaseRef == null)
-				{
-					_actionAnimDatabaseRef = (rRef<animActionAnimDatabase>) CR2WTypeManager.Create("rRef:animActionAnimDatabase", "actionAnimDatabaseRef", cr2w, this);
-				}
-				return _actionAnimDatabaseRef;
-			}
-			set
-			{
-				if (_actionAnimDatabaseRef == value)
-				{
-					return;
-				}
-				_actionAnimDatabaseRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionAnimDatabaseRef);
+			set => SetProperty(ref _actionAnimDatabaseRef, value);
 		}
 
 		public animAnimNode_SkPhaseSlotWithDurationAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isOpened")] 
 		public CBool IsOpened
 		{
-			get
-			{
-				if (_isOpened == null)
-				{
-					_isOpened = (CBool) CR2WTypeManager.Create("Bool", "isOpened", cr2w, this);
-				}
-				return _isOpened;
-			}
-			set
-			{
-				if (_isOpened == value)
-				{
-					return;
-				}
-				_isOpened = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isOpened);
+			set => SetProperty(ref _isOpened, value);
 		}
 
 		public QuickHackPanelStateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

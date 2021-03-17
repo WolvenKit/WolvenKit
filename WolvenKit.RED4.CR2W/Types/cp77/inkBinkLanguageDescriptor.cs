@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bink")] 
 		public raRef<Bink> Bink
 		{
-			get
-			{
-				if (_bink == null)
-				{
-					_bink = (raRef<Bink>) CR2WTypeManager.Create("raRef:Bink", "bink", cr2w, this);
-				}
-				return _bink;
-			}
-			set
-			{
-				if (_bink == value)
-				{
-					return;
-				}
-				_bink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bink);
+			set => SetProperty(ref _bink, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("languageId")] 
 		public CEnum<inkLanguageId> LanguageId
 		{
-			get
-			{
-				if (_languageId == null)
-				{
-					_languageId = (CEnum<inkLanguageId>) CR2WTypeManager.Create("inkLanguageId", "languageId", cr2w, this);
-				}
-				return _languageId;
-			}
-			set
-			{
-				if (_languageId == value)
-				{
-					return;
-				}
-				_languageId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _languageId);
+			set => SetProperty(ref _languageId, value);
 		}
 
 		public inkBinkLanguageDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

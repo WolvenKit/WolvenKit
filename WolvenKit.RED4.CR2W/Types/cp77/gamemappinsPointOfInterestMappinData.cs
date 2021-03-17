@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("typedVariant")] 
 		public CHandle<gamemappinsIPointOfInterestVariant> TypedVariant
 		{
-			get
-			{
-				if (_typedVariant == null)
-				{
-					_typedVariant = (CHandle<gamemappinsIPointOfInterestVariant>) CR2WTypeManager.Create("handle:gamemappinsIPointOfInterestVariant", "typedVariant", cr2w, this);
-				}
-				return _typedVariant;
-			}
-			set
-			{
-				if (_typedVariant == value)
-				{
-					return;
-				}
-				_typedVariant = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _typedVariant);
+			set => SetProperty(ref _typedVariant, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("active")] 
 		public CBool Active
 		{
-			get
-			{
-				if (_active == null)
-				{
-					_active = (CBool) CR2WTypeManager.Create("Bool", "active", cr2w, this);
-				}
-				return _active;
-			}
-			set
-			{
-				if (_active == value)
-				{
-					return;
-				}
-				_active = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _active);
+			set => SetProperty(ref _active, value);
 		}
 
 		public gamemappinsPointOfInterestMappinData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

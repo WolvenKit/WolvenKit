@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attributeName")] 
 		public CEnum<gamedataStatType> AttributeName
 		{
-			get
-			{
-				if (_attributeName == null)
-				{
-					_attributeName = (CEnum<gamedataStatType>) CR2WTypeManager.Create("gamedataStatType", "attributeName", cr2w, this);
-				}
-				return _attributeName;
-			}
-			set
-			{
-				if (_attributeName == value)
-				{
-					return;
-				}
-				_attributeName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeName);
+			set => SetProperty(ref _attributeName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("value")] 
 		public CInt32 Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CInt32) CR2WTypeManager.Create("Int32", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("id")] 
 		public TweakDBID Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		public SAttribute(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

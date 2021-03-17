@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemLibraryID")] 
 		public CName ItemLibraryID
 		{
-			get
-			{
-				if (_itemLibraryID == null)
-				{
-					_itemLibraryID = (CName) CR2WTypeManager.Create("CName", "itemLibraryID", cr2w, this);
-				}
-				return _itemLibraryID;
-			}
-			set
-			{
-				if (_itemLibraryID == value)
-				{
-					return;
-				}
-				_itemLibraryID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemLibraryID);
+			set => SetProperty(ref _itemLibraryID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("cycledNavigation")] 
 		public CBool CycledNavigation
 		{
-			get
-			{
-				if (_cycledNavigation == null)
-				{
-					_cycledNavigation = (CBool) CR2WTypeManager.Create("Bool", "cycledNavigation", cr2w, this);
-				}
-				return _cycledNavigation;
-			}
-			set
-			{
-				if (_cycledNavigation == value)
-				{
-					return;
-				}
-				_cycledNavigation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cycledNavigation);
+			set => SetProperty(ref _cycledNavigation, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("beginToggled")] 
 		public CBool BeginToggled
 		{
-			get
-			{
-				if (_beginToggled == null)
-				{
-					_beginToggled = (CBool) CR2WTypeManager.Create("Bool", "beginToggled", cr2w, this);
-				}
-				return _beginToggled;
-			}
-			set
-			{
-				if (_beginToggled == value)
-				{
-					return;
-				}
-				_beginToggled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _beginToggled);
+			set => SetProperty(ref _beginToggled, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("ItemSelected")] 
 		public inkListControllerCallback ItemSelected
 		{
-			get
-			{
-				if (_itemSelected == null)
-				{
-					_itemSelected = (inkListControllerCallback) CR2WTypeManager.Create("inkListControllerCallback", "ItemSelected", cr2w, this);
-				}
-				return _itemSelected;
-			}
-			set
-			{
-				if (_itemSelected == value)
-				{
-					return;
-				}
-				_itemSelected = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemSelected);
+			set => SetProperty(ref _itemSelected, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ItemActivated")] 
 		public inkListControllerCallback ItemActivated
 		{
-			get
-			{
-				if (_itemActivated == null)
-				{
-					_itemActivated = (inkListControllerCallback) CR2WTypeManager.Create("inkListControllerCallback", "ItemActivated", cr2w, this);
-				}
-				return _itemActivated;
-			}
-			set
-			{
-				if (_itemActivated == value)
-				{
-					return;
-				}
-				_itemActivated = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemActivated);
+			set => SetProperty(ref _itemActivated, value);
 		}
 
 		public inkListController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

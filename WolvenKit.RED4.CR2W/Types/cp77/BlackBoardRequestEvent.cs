@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("blackBoard")] 
 		public CHandle<gameIBlackboard> BlackBoard
 		{
-			get
-			{
-				if (_blackBoard == null)
-				{
-					_blackBoard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "blackBoard", cr2w, this);
-				}
-				return _blackBoard;
-			}
-			set
-			{
-				if (_blackBoard == value)
-				{
-					return;
-				}
-				_blackBoard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackBoard);
+			set => SetProperty(ref _blackBoard, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("storageClass")] 
 		public CEnum<gameScriptedBlackboardStorage> StorageClass
 		{
-			get
-			{
-				if (_storageClass == null)
-				{
-					_storageClass = (CEnum<gameScriptedBlackboardStorage>) CR2WTypeManager.Create("gameScriptedBlackboardStorage", "storageClass", cr2w, this);
-				}
-				return _storageClass;
-			}
-			set
-			{
-				if (_storageClass == value)
-				{
-					return;
-				}
-				_storageClass = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _storageClass);
+			set => SetProperty(ref _storageClass, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entryTag")] 
 		public CName EntryTag
 		{
-			get
-			{
-				if (_entryTag == null)
-				{
-					_entryTag = (CName) CR2WTypeManager.Create("CName", "entryTag", cr2w, this);
-				}
-				return _entryTag;
-			}
-			set
-			{
-				if (_entryTag == value)
-				{
-					return;
-				}
-				_entryTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryTag);
+			set => SetProperty(ref _entryTag, value);
 		}
 
 		public BlackBoardRequestEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

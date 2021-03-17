@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("value")] 
 		public CFloat Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CFloat) CR2WTypeManager.Create("Float", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("enterCurveType")] 
 		public CEnum<audioESoundCurveType> EnterCurveType
 		{
-			get
-			{
-				if (_enterCurveType == null)
-				{
-					_enterCurveType = (CEnum<audioESoundCurveType>) CR2WTypeManager.Create("audioESoundCurveType", "enterCurveType", cr2w, this);
-				}
-				return _enterCurveType;
-			}
-			set
-			{
-				if (_enterCurveType == value)
-				{
-					return;
-				}
-				_enterCurveType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enterCurveType);
+			set => SetProperty(ref _enterCurveType, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("enterCurveTime")] 
 		public CFloat EnterCurveTime
 		{
-			get
-			{
-				if (_enterCurveTime == null)
-				{
-					_enterCurveTime = (CFloat) CR2WTypeManager.Create("Float", "enterCurveTime", cr2w, this);
-				}
-				return _enterCurveTime;
-			}
-			set
-			{
-				if (_enterCurveTime == value)
-				{
-					return;
-				}
-				_enterCurveTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enterCurveTime);
+			set => SetProperty(ref _enterCurveTime, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("exitCurveType")] 
 		public CEnum<audioESoundCurveType> ExitCurveType
 		{
-			get
-			{
-				if (_exitCurveType == null)
-				{
-					_exitCurveType = (CEnum<audioESoundCurveType>) CR2WTypeManager.Create("audioESoundCurveType", "exitCurveType", cr2w, this);
-				}
-				return _exitCurveType;
-			}
-			set
-			{
-				if (_exitCurveType == value)
-				{
-					return;
-				}
-				_exitCurveType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitCurveType);
+			set => SetProperty(ref _exitCurveType, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("exitCurveTime")] 
 		public CFloat ExitCurveTime
 		{
-			get
-			{
-				if (_exitCurveTime == null)
-				{
-					_exitCurveTime = (CFloat) CR2WTypeManager.Create("Float", "exitCurveTime", cr2w, this);
-				}
-				return _exitCurveTime;
-			}
-			set
-			{
-				if (_exitCurveTime == value)
-				{
-					return;
-				}
-				_exitCurveTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitCurveTime);
+			set => SetProperty(ref _exitCurveTime, value);
 		}
 
 		public audioAudParameter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

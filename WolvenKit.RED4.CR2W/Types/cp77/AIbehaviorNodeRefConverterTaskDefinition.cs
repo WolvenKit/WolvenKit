@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nodeRef")] 
 		public CHandle<AIArgumentMapping> NodeRef
 		{
-			get
-			{
-				if (_nodeRef == null)
-				{
-					_nodeRef = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "nodeRef", cr2w, this);
-				}
-				return _nodeRef;
-			}
-			set
-			{
-				if (_nodeRef == value)
-				{
-					return;
-				}
-				_nodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeRef);
+			set => SetProperty(ref _nodeRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("result")] 
 		public CHandle<AIArgumentMapping> Result
 		{
-			get
-			{
-				if (_result == null)
-				{
-					_result = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "result", cr2w, this);
-				}
-				return _result;
-			}
-			set
-			{
-				if (_result == value)
-				{
-					return;
-				}
-				_result = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _result);
+			set => SetProperty(ref _result, value);
 		}
 
 		public AIbehaviorNodeRefConverterTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tweakDBName")] 
 		public CString TweakDBName
 		{
-			get
-			{
-				if (_tweakDBName == null)
-				{
-					_tweakDBName = (CString) CR2WTypeManager.Create("String", "tweakDBName", cr2w, this);
-				}
-				return _tweakDBName;
-			}
-			set
-			{
-				if (_tweakDBName == value)
-				{
-					return;
-				}
-				_tweakDBName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tweakDBName);
+			set => SetProperty(ref _tweakDBName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("tweakDBID")] 
 		public TweakDBID TweakDBID
 		{
-			get
-			{
-				if (_tweakDBID == null)
-				{
-					_tweakDBID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "tweakDBID", cr2w, this);
-				}
-				return _tweakDBID;
-			}
-			set
-			{
-				if (_tweakDBID == value)
-				{
-					return;
-				}
-				_tweakDBID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tweakDBID);
+			set => SetProperty(ref _tweakDBID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("type")] 
 		public gameinteractionsChoiceTypeWrapper Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (gameinteractionsChoiceTypeWrapper) CR2WTypeManager.Create("gameinteractionsChoiceTypeWrapper", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		public gameinteractionsChoiceMetaData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

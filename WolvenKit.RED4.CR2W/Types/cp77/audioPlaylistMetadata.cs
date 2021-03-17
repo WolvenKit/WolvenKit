@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("broadcastChannel")] 
 		public CUInt8 BroadcastChannel
 		{
-			get
-			{
-				if (_broadcastChannel == null)
-				{
-					_broadcastChannel = (CUInt8) CR2WTypeManager.Create("Uint8", "broadcastChannel", cr2w, this);
-				}
-				return _broadcastChannel;
-			}
-			set
-			{
-				if (_broadcastChannel == value)
-				{
-					return;
-				}
-				_broadcastChannel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _broadcastChannel);
+			set => SetProperty(ref _broadcastChannel, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tracks")] 
 		public CArray<CName> Tracks
 		{
-			get
-			{
-				if (_tracks == null)
-				{
-					_tracks = (CArray<CName>) CR2WTypeManager.Create("array:CName", "tracks", cr2w, this);
-				}
-				return _tracks;
-			}
-			set
-			{
-				if (_tracks == value)
-				{
-					return;
-				}
-				_tracks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tracks);
+			set => SetProperty(ref _tracks, value);
 		}
 
 		public audioPlaylistMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

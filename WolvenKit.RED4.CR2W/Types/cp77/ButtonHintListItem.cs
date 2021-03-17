@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inputDisplay")] 
 		public inkWidgetReference InputDisplay
 		{
-			get
-			{
-				if (_inputDisplay == null)
-				{
-					_inputDisplay = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "inputDisplay", cr2w, this);
-				}
-				return _inputDisplay;
-			}
-			set
-			{
-				if (_inputDisplay == value)
-				{
-					return;
-				}
-				_inputDisplay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputDisplay);
+			set => SetProperty(ref _inputDisplay, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
-			get
-			{
-				if (_label == null)
-				{
-					_label = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "label", cr2w, this);
-				}
-				return _label;
-			}
-			set
-			{
-				if (_label == value)
-				{
-					return;
-				}
-				_label = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _label);
+			set => SetProperty(ref _label, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("buttonHint")] 
 		public wCHandle<inkInputDisplayController> ButtonHint
 		{
-			get
-			{
-				if (_buttonHint == null)
-				{
-					_buttonHint = (wCHandle<inkInputDisplayController>) CR2WTypeManager.Create("whandle:inkInputDisplayController", "buttonHint", cr2w, this);
-				}
-				return _buttonHint;
-			}
-			set
-			{
-				if (_buttonHint == value)
-				{
-					return;
-				}
-				_buttonHint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonHint);
+			set => SetProperty(ref _buttonHint, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("actionName")] 
 		public CName ActionName
 		{
-			get
-			{
-				if (_actionName == null)
-				{
-					_actionName = (CName) CR2WTypeManager.Create("CName", "actionName", cr2w, this);
-				}
-				return _actionName;
-			}
-			set
-			{
-				if (_actionName == value)
-				{
-					return;
-				}
-				_actionName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionName);
+			set => SetProperty(ref _actionName, value);
 		}
 
 		public ButtonHintListItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

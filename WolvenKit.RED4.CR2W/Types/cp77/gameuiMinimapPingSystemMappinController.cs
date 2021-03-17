@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rootWidget")] 
 		public inkWidgetReference RootWidget
 		{
-			get
-			{
-				if (_rootWidget == null)
-				{
-					_rootWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "rootWidget", cr2w, this);
-				}
-				return _rootWidget;
-			}
-			set
-			{
-				if (_rootWidget == value)
-				{
-					return;
-				}
-				_rootWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rootWidget);
+			set => SetProperty(ref _rootWidget, value);
 		}
 
 		public gameuiMinimapPingSystemMappinController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

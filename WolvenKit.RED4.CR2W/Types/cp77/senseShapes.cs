@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("shapes")] 
 		public CArray<CHandle<senseIShape>> Shapes
 		{
-			get
-			{
-				if (_shapes == null)
-				{
-					_shapes = (CArray<CHandle<senseIShape>>) CR2WTypeManager.Create("array:handle:senseIShape", "shapes", cr2w, this);
-				}
-				return _shapes;
-			}
-			set
-			{
-				if (_shapes == value)
-				{
-					return;
-				}
-				_shapes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shapes);
+			set => SetProperty(ref _shapes, value);
 		}
 
 		public senseShapes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

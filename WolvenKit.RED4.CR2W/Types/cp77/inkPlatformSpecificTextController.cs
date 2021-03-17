@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("textLocKey")] 
 		public CName TextLocKey
 		{
-			get
-			{
-				if (_textLocKey == null)
-				{
-					_textLocKey = (CName) CR2WTypeManager.Create("CName", "textLocKey", cr2w, this);
-				}
-				return _textLocKey;
-			}
-			set
-			{
-				if (_textLocKey == value)
-				{
-					return;
-				}
-				_textLocKey = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textLocKey);
+			set => SetProperty(ref _textLocKey, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("textLocKey_PS4")] 
 		public CName TextLocKey_PS4
 		{
-			get
-			{
-				if (_textLocKey_PS4 == null)
-				{
-					_textLocKey_PS4 = (CName) CR2WTypeManager.Create("CName", "textLocKey_PS4", cr2w, this);
-				}
-				return _textLocKey_PS4;
-			}
-			set
-			{
-				if (_textLocKey_PS4 == value)
-				{
-					return;
-				}
-				_textLocKey_PS4 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textLocKey_PS4);
+			set => SetProperty(ref _textLocKey_PS4, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("textLocKey_XB1")] 
 		public CName TextLocKey_XB1
 		{
-			get
-			{
-				if (_textLocKey_XB1 == null)
-				{
-					_textLocKey_XB1 = (CName) CR2WTypeManager.Create("CName", "textLocKey_XB1", cr2w, this);
-				}
-				return _textLocKey_XB1;
-			}
-			set
-			{
-				if (_textLocKey_XB1 == value)
-				{
-					return;
-				}
-				_textLocKey_XB1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textLocKey_XB1);
+			set => SetProperty(ref _textLocKey_XB1, value);
 		}
 
 		public inkPlatformSpecificTextController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("socketName")] 
 		public CName SocketName
 		{
-			get
-			{
-				if (_socketName == null)
-				{
-					_socketName = (CName) CR2WTypeManager.Create("CName", "socketName", cr2w, this);
-				}
-				return _socketName;
-			}
-			set
-			{
-				if (_socketName == value)
-				{
-					return;
-				}
-				_socketName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _socketName);
+			set => SetProperty(ref _socketName, value);
 		}
 
 		public questIONodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

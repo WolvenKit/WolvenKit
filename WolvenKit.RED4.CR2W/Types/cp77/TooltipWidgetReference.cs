@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("identifier")] 
 		public CName Identifier
 		{
-			get
-			{
-				if (_identifier == null)
-				{
-					_identifier = (CName) CR2WTypeManager.Create("CName", "identifier", cr2w, this);
-				}
-				return _identifier;
-			}
-			set
-			{
-				if (_identifier == value)
-				{
-					return;
-				}
-				_identifier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _identifier);
+			set => SetProperty(ref _identifier, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("widgetLibraryReference")] 
 		public inkWidgetLibraryReference WidgetLibraryReference
 		{
-			get
-			{
-				if (_widgetLibraryReference == null)
-				{
-					_widgetLibraryReference = (inkWidgetLibraryReference) CR2WTypeManager.Create("inkWidgetLibraryReference", "widgetLibraryReference", cr2w, this);
-				}
-				return _widgetLibraryReference;
-			}
-			set
-			{
-				if (_widgetLibraryReference == value)
-				{
-					return;
-				}
-				_widgetLibraryReference = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetLibraryReference);
+			set => SetProperty(ref _widgetLibraryReference, value);
 		}
 
 		public TooltipWidgetReference(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

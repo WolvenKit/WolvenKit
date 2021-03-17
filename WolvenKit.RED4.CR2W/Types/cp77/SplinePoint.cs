@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("position")] 
 		public Vector3 Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (Vector3) CR2WTypeManager.Create("Vector3", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rotation")] 
 		public Quaternion Rotation
 		{
-			get
-			{
-				if (_rotation == null)
-				{
-					_rotation = (Quaternion) CR2WTypeManager.Create("Quaternion", "rotation", cr2w, this);
-				}
-				return _rotation;
-			}
-			set
-			{
-				if (_rotation == value)
-				{
-					return;
-				}
-				_rotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotation);
+			set => SetProperty(ref _rotation, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tangents", 2)] 
 		public CArrayFixedSize<Vector3> Tangents
 		{
-			get
-			{
-				if (_tangents == null)
-				{
-					_tangents = (CArrayFixedSize<Vector3>) CR2WTypeManager.Create("[2]Vector3", "tangents", cr2w, this);
-				}
-				return _tangents;
-			}
-			set
-			{
-				if (_tangents == value)
-				{
-					return;
-				}
-				_tangents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tangents);
+			set => SetProperty(ref _tangents, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("continuousTangents")] 
 		public CBool ContinuousTangents
 		{
-			get
-			{
-				if (_continuousTangents == null)
-				{
-					_continuousTangents = (CBool) CR2WTypeManager.Create("Bool", "continuousTangents", cr2w, this);
-				}
-				return _continuousTangents;
-			}
-			set
-			{
-				if (_continuousTangents == value)
-				{
-					return;
-				}
-				_continuousTangents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _continuousTangents);
+			set => SetProperty(ref _continuousTangents, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("automaticTangents")] 
 		public CBool AutomaticTangents
 		{
-			get
-			{
-				if (_automaticTangents == null)
-				{
-					_automaticTangents = (CBool) CR2WTypeManager.Create("Bool", "automaticTangents", cr2w, this);
-				}
-				return _automaticTangents;
-			}
-			set
-			{
-				if (_automaticTangents == value)
-				{
-					return;
-				}
-				_automaticTangents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _automaticTangents);
+			set => SetProperty(ref _automaticTangents, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("id")] 
 		public CUInt32 Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CUInt32) CR2WTypeManager.Create("Uint32", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		public SplinePoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

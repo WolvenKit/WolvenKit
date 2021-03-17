@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("conditions")] 
 		public CArray<animGraphSlotCondition> Conditions
 		{
-			get
-			{
-				if (_conditions == null)
-				{
-					_conditions = (CArray<animGraphSlotCondition>) CR2WTypeManager.Create("array:animGraphSlotCondition", "conditions", cr2w, this);
-				}
-				return _conditions;
-			}
-			set
-			{
-				if (_conditions == value)
-				{
-					return;
-				}
-				_conditions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _conditions);
+			set => SetProperty(ref _conditions, value);
 		}
 
 		public animAnimNode_GraphSlotConditions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

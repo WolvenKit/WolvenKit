@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sender")] 
 		public wCHandle<entEntity> Sender
 		{
-			get
-			{
-				if (_sender == null)
-				{
-					_sender = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "sender", cr2w, this);
-				}
-				return _sender;
-			}
-			set
-			{
-				if (_sender == value)
-				{
-					return;
-				}
-				_sender = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sender);
+			set => SetProperty(ref _sender, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("areaComponent")] 
 		public wCHandle<gameStaticAreaShapeComponent> AreaComponent
 		{
-			get
-			{
-				if (_areaComponent == null)
-				{
-					_areaComponent = (wCHandle<gameStaticAreaShapeComponent>) CR2WTypeManager.Create("whandle:gameStaticAreaShapeComponent", "areaComponent", cr2w, this);
-				}
-				return _areaComponent;
-			}
-			set
-			{
-				if (_areaComponent == value)
-				{
-					return;
-				}
-				_areaComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaComponent);
+			set => SetProperty(ref _areaComponent, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isPassingThrough")] 
 		public CBool IsPassingThrough
 		{
-			get
-			{
-				if (_isPassingThrough == null)
-				{
-					_isPassingThrough = (CBool) CR2WTypeManager.Create("Bool", "isPassingThrough", cr2w, this);
-				}
-				return _isPassingThrough;
-			}
-			set
-			{
-				if (_isPassingThrough == value)
-				{
-					return;
-				}
-				_isPassingThrough = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPassingThrough);
+			set => SetProperty(ref _isPassingThrough, value);
 		}
 
 		public AIApproachingAreaResponseEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

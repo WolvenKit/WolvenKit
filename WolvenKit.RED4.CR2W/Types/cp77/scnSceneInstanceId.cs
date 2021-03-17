@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sceneId")] 
 		public scnSceneId SceneId
 		{
-			get
-			{
-				if (_sceneId == null)
-				{
-					_sceneId = (scnSceneId) CR2WTypeManager.Create("scnSceneId", "sceneId", cr2w, this);
-				}
-				return _sceneId;
-			}
-			set
-			{
-				if (_sceneId == value)
-				{
-					return;
-				}
-				_sceneId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneId);
+			set => SetProperty(ref _sceneId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ownerId")] 
 		public scnSceneInstanceOwnerId OwnerId
 		{
-			get
-			{
-				if (_ownerId == null)
-				{
-					_ownerId = (scnSceneInstanceOwnerId) CR2WTypeManager.Create("scnSceneInstanceOwnerId", "ownerId", cr2w, this);
-				}
-				return _ownerId;
-			}
-			set
-			{
-				if (_ownerId == value)
-				{
-					return;
-				}
-				_ownerId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerId);
+			set => SetProperty(ref _ownerId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("internalId")] 
 		public CUInt8 InternalId
 		{
-			get
-			{
-				if (_internalId == null)
-				{
-					_internalId = (CUInt8) CR2WTypeManager.Create("Uint8", "internalId", cr2w, this);
-				}
-				return _internalId;
-			}
-			set
-			{
-				if (_internalId == value)
-				{
-					return;
-				}
-				_internalId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _internalId);
+			set => SetProperty(ref _internalId, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hash")] 
 		public CUInt64 Hash
 		{
-			get
-			{
-				if (_hash == null)
-				{
-					_hash = (CUInt64) CR2WTypeManager.Create("Uint64", "hash", cr2w, this);
-				}
-				return _hash;
-			}
-			set
-			{
-				if (_hash == value)
-				{
-					return;
-				}
-				_hash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hash);
+			set => SetProperty(ref _hash, value);
 		}
 
 		public scnSceneInstanceId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

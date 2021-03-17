@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("launchMode")] 
 		public CEnum<gameprojectileELaunchMode> LaunchMode
 		{
-			get
-			{
-				if (_launchMode == null)
-				{
-					_launchMode = (CEnum<gameprojectileELaunchMode>) CR2WTypeManager.Create("gameprojectileELaunchMode", "launchMode", cr2w, this);
-				}
-				return _launchMode;
-			}
-			set
-			{
-				if (_launchMode == value)
-				{
-					return;
-				}
-				_launchMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _launchMode);
+			set => SetProperty(ref _launchMode, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("logicalPositionProvider")] 
 		public CHandle<entIPositionProvider> LogicalPositionProvider
 		{
-			get
-			{
-				if (_logicalPositionProvider == null)
-				{
-					_logicalPositionProvider = (CHandle<entIPositionProvider>) CR2WTypeManager.Create("handle:entIPositionProvider", "logicalPositionProvider", cr2w, this);
-				}
-				return _logicalPositionProvider;
-			}
-			set
-			{
-				if (_logicalPositionProvider == value)
-				{
-					return;
-				}
-				_logicalPositionProvider = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _logicalPositionProvider);
+			set => SetProperty(ref _logicalPositionProvider, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("logicalOrientationProvider")] 
 		public CHandle<entIOrientationProvider> LogicalOrientationProvider
 		{
-			get
-			{
-				if (_logicalOrientationProvider == null)
-				{
-					_logicalOrientationProvider = (CHandle<entIOrientationProvider>) CR2WTypeManager.Create("handle:entIOrientationProvider", "logicalOrientationProvider", cr2w, this);
-				}
-				return _logicalOrientationProvider;
-			}
-			set
-			{
-				if (_logicalOrientationProvider == value)
-				{
-					return;
-				}
-				_logicalOrientationProvider = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _logicalOrientationProvider);
+			set => SetProperty(ref _logicalOrientationProvider, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("visualPositionProvider")] 
 		public CHandle<entIPositionProvider> VisualPositionProvider
 		{
-			get
-			{
-				if (_visualPositionProvider == null)
-				{
-					_visualPositionProvider = (CHandle<entIPositionProvider>) CR2WTypeManager.Create("handle:entIPositionProvider", "visualPositionProvider", cr2w, this);
-				}
-				return _visualPositionProvider;
-			}
-			set
-			{
-				if (_visualPositionProvider == value)
-				{
-					return;
-				}
-				_visualPositionProvider = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualPositionProvider);
+			set => SetProperty(ref _visualPositionProvider, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("visualOrientationProvider")] 
 		public CHandle<entIOrientationProvider> VisualOrientationProvider
 		{
-			get
-			{
-				if (_visualOrientationProvider == null)
-				{
-					_visualOrientationProvider = (CHandle<entIOrientationProvider>) CR2WTypeManager.Create("handle:entIOrientationProvider", "visualOrientationProvider", cr2w, this);
-				}
-				return _visualOrientationProvider;
-			}
-			set
-			{
-				if (_visualOrientationProvider == value)
-				{
-					return;
-				}
-				_visualOrientationProvider = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualOrientationProvider);
+			set => SetProperty(ref _visualOrientationProvider, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ownerVelocityProvider")] 
 		public CHandle<entIVelocityProvider> OwnerVelocityProvider
 		{
-			get
-			{
-				if (_ownerVelocityProvider == null)
-				{
-					_ownerVelocityProvider = (CHandle<entIVelocityProvider>) CR2WTypeManager.Create("handle:entIVelocityProvider", "ownerVelocityProvider", cr2w, this);
-				}
-				return _ownerVelocityProvider;
-			}
-			set
-			{
-				if (_ownerVelocityProvider == value)
-				{
-					return;
-				}
-				_ownerVelocityProvider = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerVelocityProvider);
+			set => SetProperty(ref _ownerVelocityProvider, value);
 		}
 
 		public gameprojectileLaunchParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

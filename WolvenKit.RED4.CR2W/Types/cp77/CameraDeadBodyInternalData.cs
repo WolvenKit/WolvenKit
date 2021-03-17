@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ownerID")] 
 		public entEntityID OwnerID
 		{
-			get
-			{
-				if (_ownerID == null)
-				{
-					_ownerID = (entEntityID) CR2WTypeManager.Create("entEntityID", "ownerID", cr2w, this);
-				}
-				return _ownerID;
-			}
-			set
-			{
-				if (_ownerID == value)
-				{
-					return;
-				}
-				_ownerID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerID);
+			set => SetProperty(ref _ownerID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("bodyIDs")] 
 		public CArray<entEntityID> BodyIDs
 		{
-			get
-			{
-				if (_bodyIDs == null)
-				{
-					_bodyIDs = (CArray<entEntityID>) CR2WTypeManager.Create("array:entEntityID", "bodyIDs", cr2w, this);
-				}
-				return _bodyIDs;
-			}
-			set
-			{
-				if (_bodyIDs == value)
-				{
-					return;
-				}
-				_bodyIDs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyIDs);
+			set => SetProperty(ref _bodyIDs, value);
 		}
 
 		public CameraDeadBodyInternalData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

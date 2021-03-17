@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectActionRecord")] 
 		public wCHandle<gamedataObjectAction_Record> ObjectActionRecord
 		{
-			get
-			{
-				if (_objectActionRecord == null)
-				{
-					_objectActionRecord = (wCHandle<gamedataObjectAction_Record>) CR2WTypeManager.Create("whandle:gamedataObjectAction_Record", "objectActionRecord", cr2w, this);
-				}
-				return _objectActionRecord;
-			}
-			set
-			{
-				if (_objectActionRecord == value)
-				{
-					return;
-				}
-				_objectActionRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectActionRecord);
+			set => SetProperty(ref _objectActionRecord, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("effectorRecord")] 
 		public CHandle<gamedataSpreadInitEffector_Record> EffectorRecord
 		{
-			get
-			{
-				if (_effectorRecord == null)
-				{
-					_effectorRecord = (CHandle<gamedataSpreadInitEffector_Record>) CR2WTypeManager.Create("handle:gamedataSpreadInitEffector_Record", "effectorRecord", cr2w, this);
-				}
-				return _effectorRecord;
-			}
-			set
-			{
-				if (_effectorRecord == value)
-				{
-					return;
-				}
-				_effectorRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectorRecord);
+			set => SetProperty(ref _effectorRecord, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("player")] 
 		public wCHandle<PlayerPuppet> Player
 		{
-			get
-			{
-				if (_player == null)
-				{
-					_player = (wCHandle<PlayerPuppet>) CR2WTypeManager.Create("whandle:PlayerPuppet", "player", cr2w, this);
-				}
-				return _player;
-			}
-			set
-			{
-				if (_player == value)
-				{
-					return;
-				}
-				_player = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _player);
+			set => SetProperty(ref _player, value);
 		}
 
 		public SpreadInitEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("resourceId")] 
 		public scnRidResourceId ResourceId
 		{
-			get
-			{
-				if (_resourceId == null)
-				{
-					_resourceId = (scnRidResourceId) CR2WTypeManager.Create("scnRidResourceId", "resourceId", cr2w, this);
-				}
-				return _resourceId;
-			}
-			set
-			{
-				if (_resourceId == value)
-				{
-					return;
-				}
-				_resourceId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resourceId);
+			set => SetProperty(ref _resourceId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("animationSN")] 
 		public scnRidSerialNumber AnimationSN
 		{
-			get
-			{
-				if (_animationSN == null)
-				{
-					_animationSN = (scnRidSerialNumber) CR2WTypeManager.Create("scnRidSerialNumber", "animationSN", cr2w, this);
-				}
-				return _animationSN;
-			}
-			set
-			{
-				if (_animationSN == value)
-				{
-					return;
-				}
-				_animationSN = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationSN);
+			set => SetProperty(ref _animationSN, value);
 		}
 
 		public scnRidAnimationSRRef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

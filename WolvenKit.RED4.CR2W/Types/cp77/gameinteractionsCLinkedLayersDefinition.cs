@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("layersDefinitions")] 
 		public CArray<CHandle<gameinteractionsCHotSpotLayerDefinition>> LayersDefinitions
 		{
-			get
-			{
-				if (_layersDefinitions == null)
-				{
-					_layersDefinitions = (CArray<CHandle<gameinteractionsCHotSpotLayerDefinition>>) CR2WTypeManager.Create("array:handle:gameinteractionsCHotSpotLayerDefinition", "layersDefinitions", cr2w, this);
-				}
-				return _layersDefinitions;
-			}
-			set
-			{
-				if (_layersDefinitions == value)
-				{
-					return;
-				}
-				_layersDefinitions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _layersDefinitions);
+			set => SetProperty(ref _layersDefinitions, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("visualizerDefinition")] 
 		public CHandle<gameinteractionsvisIVisualizerDefinition> VisualizerDefinition
 		{
-			get
-			{
-				if (_visualizerDefinition == null)
-				{
-					_visualizerDefinition = (CHandle<gameinteractionsvisIVisualizerDefinition>) CR2WTypeManager.Create("handle:gameinteractionsvisIVisualizerDefinition", "visualizerDefinition", cr2w, this);
-				}
-				return _visualizerDefinition;
-			}
-			set
-			{
-				if (_visualizerDefinition == value)
-				{
-					return;
-				}
-				_visualizerDefinition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualizerDefinition);
+			set => SetProperty(ref _visualizerDefinition, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tag")] 
 		public CName Tag
 		{
-			get
-			{
-				if (_tag == null)
-				{
-					_tag = (CName) CR2WTypeManager.Create("CName", "tag", cr2w, this);
-				}
-				return _tag;
-			}
-			set
-			{
-				if (_tag == value)
-				{
-					return;
-				}
-				_tag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tag);
+			set => SetProperty(ref _tag, value);
 		}
 
 		public gameinteractionsCLinkedLayersDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

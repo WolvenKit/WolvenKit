@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gameVideosPaths")] 
 		public CArray<redResourceReferenceScriptToken> GameVideosPaths
 		{
-			get
-			{
-				if (_gameVideosPaths == null)
-				{
-					_gameVideosPaths = (CArray<redResourceReferenceScriptToken>) CR2WTypeManager.Create("array:redResourceReferenceScriptToken", "gameVideosPaths", cr2w, this);
-				}
-				return _gameVideosPaths;
-			}
-			set
-			{
-				if (_gameVideosPaths == value)
-				{
-					return;
-				}
-				_gameVideosPaths = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameVideosPaths);
+			set => SetProperty(ref _gameVideosPaths, value);
 		}
 
 		public ArcadeMachineControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

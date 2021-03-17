@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("logicControllerRef")] 
 		public inkWidgetReference LogicControllerRef
 		{
-			get
-			{
-				if (_logicControllerRef == null)
-				{
-					_logicControllerRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "logicControllerRef", cr2w, this);
-				}
-				return _logicControllerRef;
-			}
-			set
-			{
-				if (_logicControllerRef == value)
-				{
-					return;
-				}
-				_logicControllerRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _logicControllerRef);
+			set => SetProperty(ref _logicControllerRef, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("journalManager")] 
 		public wCHandle<gameJournalManager> JournalManager
 		{
-			get
-			{
-				if (_journalManager == null)
-				{
-					_journalManager = (wCHandle<gameJournalManager>) CR2WTypeManager.Create("whandle:gameJournalManager", "journalManager", cr2w, this);
-				}
-				return _journalManager;
-			}
-			set
-			{
-				if (_journalManager == value)
-				{
-					return;
-				}
-				_journalManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _journalManager);
+			set => SetProperty(ref _journalManager, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("locationTags")] 
 		public CArray<CName> LocationTags
 		{
-			get
-			{
-				if (_locationTags == null)
-				{
-					_locationTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "locationTags", cr2w, this);
-				}
-				return _locationTags;
-			}
-			set
-			{
-				if (_locationTags == value)
-				{
-					return;
-				}
-				_locationTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _locationTags);
+			set => SetProperty(ref _locationTags, value);
 		}
 
 		public BrowserGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

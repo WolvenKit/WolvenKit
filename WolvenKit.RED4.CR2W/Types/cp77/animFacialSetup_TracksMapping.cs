@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("numEnvelopes")] 
 		public CUInt16 NumEnvelopes
 		{
-			get
-			{
-				if (_numEnvelopes == null)
-				{
-					_numEnvelopes = (CUInt16) CR2WTypeManager.Create("Uint16", "numEnvelopes", cr2w, this);
-				}
-				return _numEnvelopes;
-			}
-			set
-			{
-				if (_numEnvelopes == value)
-				{
-					return;
-				}
-				_numEnvelopes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numEnvelopes);
+			set => SetProperty(ref _numEnvelopes, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("numMainPoses")] 
 		public CUInt16 NumMainPoses
 		{
-			get
-			{
-				if (_numMainPoses == null)
-				{
-					_numMainPoses = (CUInt16) CR2WTypeManager.Create("Uint16", "numMainPoses", cr2w, this);
-				}
-				return _numMainPoses;
-			}
-			set
-			{
-				if (_numMainPoses == value)
-				{
-					return;
-				}
-				_numMainPoses = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numMainPoses);
+			set => SetProperty(ref _numMainPoses, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("numLipsyncOverrides")] 
 		public CUInt16 NumLipsyncOverrides
 		{
-			get
-			{
-				if (_numLipsyncOverrides == null)
-				{
-					_numLipsyncOverrides = (CUInt16) CR2WTypeManager.Create("Uint16", "numLipsyncOverrides", cr2w, this);
-				}
-				return _numLipsyncOverrides;
-			}
-			set
-			{
-				if (_numLipsyncOverrides == value)
-				{
-					return;
-				}
-				_numLipsyncOverrides = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numLipsyncOverrides);
+			set => SetProperty(ref _numLipsyncOverrides, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("numWrinkles")] 
 		public CUInt16 NumWrinkles
 		{
-			get
-			{
-				if (_numWrinkles == null)
-				{
-					_numWrinkles = (CUInt16) CR2WTypeManager.Create("Uint16", "numWrinkles", cr2w, this);
-				}
-				return _numWrinkles;
-			}
-			set
-			{
-				if (_numWrinkles == value)
-				{
-					return;
-				}
-				_numWrinkles = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numWrinkles);
+			set => SetProperty(ref _numWrinkles, value);
 		}
 
 		public animFacialSetup_TracksMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

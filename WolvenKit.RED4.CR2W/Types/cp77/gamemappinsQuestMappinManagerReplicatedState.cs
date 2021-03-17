@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dynamicQuestMappinRepInfo")] 
 		public CArray<gamemappinsDynamicQuestMappinRepInfo> DynamicQuestMappinRepInfo
 		{
-			get
-			{
-				if (_dynamicQuestMappinRepInfo == null)
-				{
-					_dynamicQuestMappinRepInfo = (CArray<gamemappinsDynamicQuestMappinRepInfo>) CR2WTypeManager.Create("array:gamemappinsDynamicQuestMappinRepInfo", "dynamicQuestMappinRepInfo", cr2w, this);
-				}
-				return _dynamicQuestMappinRepInfo;
-			}
-			set
-			{
-				if (_dynamicQuestMappinRepInfo == value)
-				{
-					return;
-				}
-				_dynamicQuestMappinRepInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dynamicQuestMappinRepInfo);
+			set => SetProperty(ref _dynamicQuestMappinRepInfo, value);
 		}
 
 		public gamemappinsQuestMappinManagerReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

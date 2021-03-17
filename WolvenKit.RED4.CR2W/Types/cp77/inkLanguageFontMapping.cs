@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("languageCode")] 
 		public CName LanguageCode
 		{
-			get
-			{
-				if (_languageCode == null)
-				{
-					_languageCode = (CName) CR2WTypeManager.Create("CName", "languageCode", cr2w, this);
-				}
-				return _languageCode;
-			}
-			set
-			{
-				if (_languageCode == value)
-				{
-					return;
-				}
-				_languageCode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _languageCode);
+			set => SetProperty(ref _languageCode, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("font")] 
 		public raRef<inkFontFamilyResource> Font
 		{
-			get
-			{
-				if (_font == null)
-				{
-					_font = (raRef<inkFontFamilyResource>) CR2WTypeManager.Create("raRef:inkFontFamilyResource", "font", cr2w, this);
-				}
-				return _font;
-			}
-			set
-			{
-				if (_font == value)
-				{
-					return;
-				}
-				_font = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _font);
+			set => SetProperty(ref _font, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("fontSizeModifier")] 
 		public CInt16 FontSizeModifier
 		{
-			get
-			{
-				if (_fontSizeModifier == null)
-				{
-					_fontSizeModifier = (CInt16) CR2WTypeManager.Create("Int16", "fontSizeModifier", cr2w, this);
-				}
-				return _fontSizeModifier;
-			}
-			set
-			{
-				if (_fontSizeModifier == value)
-				{
-					return;
-				}
-				_fontSizeModifier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fontSizeModifier);
+			set => SetProperty(ref _fontSizeModifier, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("trackingModifier")] 
 		public CUInt32 TrackingModifier
 		{
-			get
-			{
-				if (_trackingModifier == null)
-				{
-					_trackingModifier = (CUInt32) CR2WTypeManager.Create("Uint32", "trackingModifier", cr2w, this);
-				}
-				return _trackingModifier;
-			}
-			set
-			{
-				if (_trackingModifier == value)
-				{
-					return;
-				}
-				_trackingModifier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trackingModifier);
+			set => SetProperty(ref _trackingModifier, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("lineHeightModifier")] 
 		public CFloat LineHeightModifier
 		{
-			get
-			{
-				if (_lineHeightModifier == null)
-				{
-					_lineHeightModifier = (CFloat) CR2WTypeManager.Create("Float", "lineHeightModifier", cr2w, this);
-				}
-				return _lineHeightModifier;
-			}
-			set
-			{
-				if (_lineHeightModifier == value)
-				{
-					return;
-				}
-				_lineHeightModifier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lineHeightModifier);
+			set => SetProperty(ref _lineHeightModifier, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("fontSizeModifierFloat")] 
 		public CFloat FontSizeModifierFloat
 		{
-			get
-			{
-				if (_fontSizeModifierFloat == null)
-				{
-					_fontSizeModifierFloat = (CFloat) CR2WTypeManager.Create("Float", "fontSizeModifierFloat", cr2w, this);
-				}
-				return _fontSizeModifierFloat;
-			}
-			set
-			{
-				if (_fontSizeModifierFloat == value)
-				{
-					return;
-				}
-				_fontSizeModifierFloat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fontSizeModifierFloat);
+			set => SetProperty(ref _fontSizeModifierFloat, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("styleModifer")] 
 		public CName StyleModifer
 		{
-			get
-			{
-				if (_styleModifer == null)
-				{
-					_styleModifer = (CName) CR2WTypeManager.Create("CName", "styleModifer", cr2w, this);
-				}
-				return _styleModifer;
-			}
-			set
-			{
-				if (_styleModifer == value)
-				{
-					return;
-				}
-				_styleModifer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _styleModifer);
+			set => SetProperty(ref _styleModifer, value);
 		}
 
 		public inkLanguageFontMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

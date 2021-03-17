@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("menuResource")] 
 		public rRef<inkMenuResource> MenuResource
 		{
-			get
-			{
-				if (_menuResource == null)
-				{
-					_menuResource = (rRef<inkMenuResource>) CR2WTypeManager.Create("rRef:inkMenuResource", "menuResource", cr2w, this);
-				}
-				return _menuResource;
-			}
-			set
-			{
-				if (_menuResource == value)
-				{
-					return;
-				}
-				_menuResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuResource);
+			set => SetProperty(ref _menuResource, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("cursorResource")] 
 		public rRef<inkWidgetLibraryResource> CursorResource
 		{
-			get
-			{
-				if (_cursorResource == null)
-				{
-					_cursorResource = (rRef<inkWidgetLibraryResource>) CR2WTypeManager.Create("rRef:inkWidgetLibraryResource", "cursorResource", cr2w, this);
-				}
-				return _cursorResource;
-			}
-			set
-			{
-				if (_cursorResource == value)
-				{
-					return;
-				}
-				_cursorResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cursorResource);
+			set => SetProperty(ref _cursorResource, value);
 		}
 
 		public inkMenuLayerDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

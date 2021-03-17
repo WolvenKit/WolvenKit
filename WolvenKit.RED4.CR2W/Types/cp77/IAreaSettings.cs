@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enable")] 
 		public CBool Enable
 		{
-			get
-			{
-				if (_enable == null)
-				{
-					_enable = (CBool) CR2WTypeManager.Create("Bool", "enable", cr2w, this);
-				}
-				return _enable;
-			}
-			set
-			{
-				if (_enable == value)
-				{
-					return;
-				}
-				_enable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enable);
+			set => SetProperty(ref _enable, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("disabledIndexedProperties")] 
 		public CUInt64 DisabledIndexedProperties
 		{
-			get
-			{
-				if (_disabledIndexedProperties == null)
-				{
-					_disabledIndexedProperties = (CUInt64) CR2WTypeManager.Create("Uint64", "disabledIndexedProperties", cr2w, this);
-				}
-				return _disabledIndexedProperties;
-			}
-			set
-			{
-				if (_disabledIndexedProperties == value)
-				{
-					return;
-				}
-				_disabledIndexedProperties = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _disabledIndexedProperties);
+			set => SetProperty(ref _disabledIndexedProperties, value);
 		}
 
 		public IAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

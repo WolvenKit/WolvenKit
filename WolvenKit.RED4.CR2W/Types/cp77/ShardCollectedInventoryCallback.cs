@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("notificationQueue")] 
 		public CHandle<JournalNotificationQueue> NotificationQueue
 		{
-			get
-			{
-				if (_notificationQueue == null)
-				{
-					_notificationQueue = (CHandle<JournalNotificationQueue>) CR2WTypeManager.Create("handle:JournalNotificationQueue", "notificationQueue", cr2w, this);
-				}
-				return _notificationQueue;
-			}
-			set
-			{
-				if (_notificationQueue == value)
-				{
-					return;
-				}
-				_notificationQueue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _notificationQueue);
+			set => SetProperty(ref _notificationQueue, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("journalManager")] 
 		public wCHandle<gameJournalManager> JournalManager
 		{
-			get
-			{
-				if (_journalManager == null)
-				{
-					_journalManager = (wCHandle<gameJournalManager>) CR2WTypeManager.Create("whandle:gameJournalManager", "journalManager", cr2w, this);
-				}
-				return _journalManager;
-			}
-			set
-			{
-				if (_journalManager == value)
-				{
-					return;
-				}
-				_journalManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _journalManager);
+			set => SetProperty(ref _journalManager, value);
 		}
 
 		public ShardCollectedInventoryCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

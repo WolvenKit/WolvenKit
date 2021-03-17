@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ignoredNames")] 
 		public CArray<CName> IgnoredNames
 		{
-			get
-			{
-				if (_ignoredNames == null)
-				{
-					_ignoredNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "ignoredNames", cr2w, this);
-				}
-				return _ignoredNames;
-			}
-			set
-			{
-				if (_ignoredNames == value)
-				{
-					return;
-				}
-				_ignoredNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ignoredNames);
+			set => SetProperty(ref _ignoredNames, value);
 		}
 
 		public audioWwiseIgnoredNames(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

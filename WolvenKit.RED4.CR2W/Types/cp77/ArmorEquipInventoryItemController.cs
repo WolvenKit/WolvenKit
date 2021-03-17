@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("itemData")] 
 		public CHandle<gameItemData> ItemData
 		{
-			get
-			{
-				if (_itemData == null)
-				{
-					_itemData = (CHandle<gameItemData>) CR2WTypeManager.Create("handle:gameItemData", "itemData", cr2w, this);
-				}
-				return _itemData;
-			}
-			set
-			{
-				if (_itemData == value)
-				{
-					return;
-				}
-				_itemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemData);
+			set => SetProperty(ref _itemData, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("empty")] 
 		public CBool Empty
 		{
-			get
-			{
-				if (_empty == null)
-				{
-					_empty = (CBool) CR2WTypeManager.Create("Bool", "empty", cr2w, this);
-				}
-				return _empty;
-			}
-			set
-			{
-				if (_empty == value)
-				{
-					return;
-				}
-				_empty = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _empty);
+			set => SetProperty(ref _empty, value);
 		}
 
 		public ArmorEquipInventoryItemController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

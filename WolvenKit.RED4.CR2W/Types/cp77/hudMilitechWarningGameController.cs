@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("root")] 
 		public wCHandle<inkCompoundWidget> Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (wCHandle<inkCompoundWidget>) CR2WTypeManager.Create("whandle:inkCompoundWidget", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("anim")] 
 		public CHandle<inkanimProxy> Anim
 		{
-			get
-			{
-				if (_anim == null)
-				{
-					_anim = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "anim", cr2w, this);
-				}
-				return _anim;
-			}
-			set
-			{
-				if (_anim == value)
-				{
-					return;
-				}
-				_anim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _anim);
+			set => SetProperty(ref _anim, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("factListenerId")] 
 		public CUInt32 FactListenerId
 		{
-			get
-			{
-				if (_factListenerId == null)
-				{
-					_factListenerId = (CUInt32) CR2WTypeManager.Create("Uint32", "factListenerId", cr2w, this);
-				}
-				return _factListenerId;
-			}
-			set
-			{
-				if (_factListenerId == value)
-				{
-					return;
-				}
-				_factListenerId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factListenerId);
+			set => SetProperty(ref _factListenerId, value);
 		}
 
 		public hudMilitechWarningGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

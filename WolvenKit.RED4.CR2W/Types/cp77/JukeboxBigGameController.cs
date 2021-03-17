@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("onTogglePlayListener")] 
 		public CUInt32 OnTogglePlayListener
 		{
-			get
-			{
-				if (_onTogglePlayListener == null)
-				{
-					_onTogglePlayListener = (CUInt32) CR2WTypeManager.Create("Uint32", "onTogglePlayListener", cr2w, this);
-				}
-				return _onTogglePlayListener;
-			}
-			set
-			{
-				if (_onTogglePlayListener == value)
-				{
-					return;
-				}
-				_onTogglePlayListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onTogglePlayListener);
+			set => SetProperty(ref _onTogglePlayListener, value);
 		}
 
 		public JukeboxBigGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

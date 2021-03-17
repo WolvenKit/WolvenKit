@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weightLink")] 
 		public animFloatLink WeightLink
 		{
-			get
-			{
-				if (_weightLink == null)
-				{
-					_weightLink = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "weightLink", cr2w, this);
-				}
-				return _weightLink;
-			}
-			set
-			{
-				if (_weightLink == value)
-				{
-					return;
-				}
-				_weightLink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightLink);
+			set => SetProperty(ref _weightLink, value);
 		}
 
 		public animAnimNode_SharedMetaPose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

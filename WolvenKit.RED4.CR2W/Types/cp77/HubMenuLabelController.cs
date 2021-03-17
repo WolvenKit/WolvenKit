@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("container")] 
 		public inkCompoundWidgetReference Container
 		{
-			get
-			{
-				if (_container == null)
-				{
-					_container = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "container", cr2w, this);
-				}
-				return _container;
-			}
-			set
-			{
-				if (_container == value)
-				{
-					return;
-				}
-				_container = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _container);
+			set => SetProperty(ref _container, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("wrapper")] 
 		public wCHandle<inkWidget> Wrapper
 		{
-			get
-			{
-				if (_wrapper == null)
-				{
-					_wrapper = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "wrapper", cr2w, this);
-				}
-				return _wrapper;
-			}
-			set
-			{
-				if (_wrapper == value)
-				{
-					return;
-				}
-				_wrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wrapper);
+			set => SetProperty(ref _wrapper, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("wrapperNext")] 
 		public wCHandle<inkWidget> WrapperNext
 		{
-			get
-			{
-				if (_wrapperNext == null)
-				{
-					_wrapperNext = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "wrapperNext", cr2w, this);
-				}
-				return _wrapperNext;
-			}
-			set
-			{
-				if (_wrapperNext == value)
-				{
-					return;
-				}
-				_wrapperNext = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wrapperNext);
+			set => SetProperty(ref _wrapperNext, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("wrapperController")] 
 		public wCHandle<HubMenuLabelContentContainer> WrapperController
 		{
-			get
-			{
-				if (_wrapperController == null)
-				{
-					_wrapperController = (wCHandle<HubMenuLabelContentContainer>) CR2WTypeManager.Create("whandle:HubMenuLabelContentContainer", "wrapperController", cr2w, this);
-				}
-				return _wrapperController;
-			}
-			set
-			{
-				if (_wrapperController == value)
-				{
-					return;
-				}
-				_wrapperController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wrapperController);
+			set => SetProperty(ref _wrapperController, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("wrapperNextController")] 
 		public wCHandle<HubMenuLabelContentContainer> WrapperNextController
 		{
-			get
-			{
-				if (_wrapperNextController == null)
-				{
-					_wrapperNextController = (wCHandle<HubMenuLabelContentContainer>) CR2WTypeManager.Create("whandle:HubMenuLabelContentContainer", "wrapperNextController", cr2w, this);
-				}
-				return _wrapperNextController;
-			}
-			set
-			{
-				if (_wrapperNextController == value)
-				{
-					return;
-				}
-				_wrapperNextController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wrapperNextController);
+			set => SetProperty(ref _wrapperNextController, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("data")] 
 		public MenuData Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (MenuData) CR2WTypeManager.Create("MenuData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("watchForSize")] 
 		public CBool WatchForSize
 		{
-			get
-			{
-				if (_watchForSize == null)
-				{
-					_watchForSize = (CBool) CR2WTypeManager.Create("Bool", "watchForSize", cr2w, this);
-				}
-				return _watchForSize;
-			}
-			set
-			{
-				if (_watchForSize == value)
-				{
-					return;
-				}
-				_watchForSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _watchForSize);
+			set => SetProperty(ref _watchForSize, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("watchForInstatnSize")] 
 		public CBool WatchForInstatnSize
 		{
-			get
-			{
-				if (_watchForInstatnSize == null)
-				{
-					_watchForInstatnSize = (CBool) CR2WTypeManager.Create("Bool", "watchForInstatnSize", cr2w, this);
-				}
-				return _watchForInstatnSize;
-			}
-			set
-			{
-				if (_watchForInstatnSize == value)
-				{
-					return;
-				}
-				_watchForInstatnSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _watchForInstatnSize);
+			set => SetProperty(ref _watchForInstatnSize, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("once")] 
 		public CBool Once
 		{
-			get
-			{
-				if (_once == null)
-				{
-					_once = (CBool) CR2WTypeManager.Create("Bool", "once", cr2w, this);
-				}
-				return _once;
-			}
-			set
-			{
-				if (_once == value)
-				{
-					return;
-				}
-				_once = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _once);
+			set => SetProperty(ref _once, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("direction")] 
 		public CInt32 Direction
 		{
-			get
-			{
-				if (_direction == null)
-				{
-					_direction = (CInt32) CR2WTypeManager.Create("Int32", "direction", cr2w, this);
-				}
-				return _direction;
-			}
-			set
-			{
-				if (_direction == value)
-				{
-					return;
-				}
-				_direction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _direction);
+			set => SetProperty(ref _direction, value);
 		}
 
 		public HubMenuLabelController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

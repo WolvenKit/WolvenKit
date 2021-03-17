@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inCover")] 
 		public CBool InCover
 		{
-			get
-			{
-				if (_inCover == null)
-				{
-					_inCover = (CBool) CR2WTypeManager.Create("Bool", "inCover", cr2w, this);
-				}
-				return _inCover;
-			}
-			set
-			{
-				if (_inCover == value)
-				{
-					return;
-				}
-				_inCover = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inCover);
+			set => SetProperty(ref _inCover, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("debugVar")] 
 		public CBool DebugVar
 		{
-			get
-			{
-				if (_debugVar == null)
-				{
-					_debugVar = (CBool) CR2WTypeManager.Create("Bool", "debugVar", cr2w, this);
-				}
-				return _debugVar;
-			}
-			set
-			{
-				if (_debugVar == value)
-				{
-					return;
-				}
-				_debugVar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _debugVar);
+			set => SetProperty(ref _debugVar, value);
 		}
 
 		public AnimFeature_CoverState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

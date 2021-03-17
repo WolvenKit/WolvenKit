@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("widget")] 
 		public CHandle<inkWidget> Widget
 		{
-			get
-			{
-				if (_widget == null)
-				{
-					_widget = (CHandle<inkWidget>) CR2WTypeManager.Create("handle:inkWidget", "widget", cr2w, this);
-				}
-				return _widget;
-			}
-			set
-			{
-				if (_widget == value)
-				{
-					return;
-				}
-				_widget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widget);
+			set => SetProperty(ref _widget, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("widgetPath")] 
 		public inkWidgetPath WidgetPath
 		{
-			get
-			{
-				if (_widgetPath == null)
-				{
-					_widgetPath = (inkWidgetPath) CR2WTypeManager.Create("inkWidgetPath", "widgetPath", cr2w, this);
-				}
-				return _widgetPath;
-			}
-			set
-			{
-				if (_widgetPath == value)
-				{
-					return;
-				}
-				_widgetPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetPath);
+			set => SetProperty(ref _widgetPath, value);
 		}
 
 		public inkWidgetClipboardData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

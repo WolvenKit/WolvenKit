@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("forceDefeatReward")] 
 		public CBool ForceDefeatReward
 		{
-			get
-			{
-				if (_forceDefeatReward == null)
-				{
-					_forceDefeatReward = (CBool) CR2WTypeManager.Create("Bool", "forceDefeatReward", cr2w, this);
-				}
-				return _forceDefeatReward;
-			}
-			set
-			{
-				if (_forceDefeatReward == value)
-				{
-					return;
-				}
-				_forceDefeatReward = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceDefeatReward);
+			set => SetProperty(ref _forceDefeatReward, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("disableKillReward")] 
 		public CBool DisableKillReward
 		{
-			get
-			{
-				if (_disableKillReward == null)
-				{
-					_disableKillReward = (CBool) CR2WTypeManager.Create("Bool", "disableKillReward", cr2w, this);
-				}
-				return _disableKillReward;
-			}
-			set
-			{
-				if (_disableKillReward == value)
-				{
-					return;
-				}
-				_disableKillReward = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _disableKillReward);
+			set => SetProperty(ref _disableKillReward, value);
 		}
 
 		public ChangeRewardSettingsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

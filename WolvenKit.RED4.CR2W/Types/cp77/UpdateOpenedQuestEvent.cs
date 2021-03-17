@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("openedQuest")] 
 		public wCHandle<gameJournalQuest> OpenedQuest
 		{
-			get
-			{
-				if (_openedQuest == null)
-				{
-					_openedQuest = (wCHandle<gameJournalQuest>) CR2WTypeManager.Create("whandle:gameJournalQuest", "openedQuest", cr2w, this);
-				}
-				return _openedQuest;
-			}
-			set
-			{
-				if (_openedQuest == value)
-				{
-					return;
-				}
-				_openedQuest = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _openedQuest);
+			set => SetProperty(ref _openedQuest, value);
 		}
 
 		public UpdateOpenedQuestEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("executionTag")] 
 		public CUInt8 ExecutionTag
 		{
-			get
-			{
-				if (_executionTag == null)
-				{
-					_executionTag = (CUInt8) CR2WTypeManager.Create("Uint8", "executionTag", cr2w, this);
-				}
-				return _executionTag;
-			}
-			set
-			{
-				if (_executionTag == value)
-				{
-					return;
-				}
-				_executionTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _executionTag);
+			set => SetProperty(ref _executionTag, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("additionalSpeakerId")] 
 		public scnActorId AdditionalSpeakerId
 		{
-			get
-			{
-				if (_additionalSpeakerId == null)
-				{
-					_additionalSpeakerId = (scnActorId) CR2WTypeManager.Create("scnActorId", "additionalSpeakerId", cr2w, this);
-				}
-				return _additionalSpeakerId;
-			}
-			set
-			{
-				if (_additionalSpeakerId == value)
-				{
-					return;
-				}
-				_additionalSpeakerId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additionalSpeakerId);
+			set => SetProperty(ref _additionalSpeakerId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isHolocallSpeaker")] 
 		public CBool IsHolocallSpeaker
 		{
-			get
-			{
-				if (_isHolocallSpeaker == null)
-				{
-					_isHolocallSpeaker = (CBool) CR2WTypeManager.Create("Bool", "isHolocallSpeaker", cr2w, this);
-				}
-				return _isHolocallSpeaker;
-			}
-			set
-			{
-				if (_isHolocallSpeaker == value)
-				{
-					return;
-				}
-				_isHolocallSpeaker = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isHolocallSpeaker);
+			set => SetProperty(ref _isHolocallSpeaker, value);
 		}
 
 		public scnDialogLineDuplicationParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

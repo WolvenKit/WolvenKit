@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("buffer")] 
 		public DataBuffer Buffer
 		{
-			get
-			{
-				if (_buffer == null)
-				{
-					_buffer = (DataBuffer) CR2WTypeManager.Create("DataBuffer", "buffer", cr2w, this);
-				}
-				return _buffer;
-			}
-			set
-			{
-				if (_buffer == value)
-				{
-					return;
-				}
-				_buffer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buffer);
+			set => SetProperty(ref _buffer, value);
 		}
 
 		public worldPrefabInstanceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statusEffectRecord")] 
 		public wCHandle<gamedataStatusEffect_Record> StatusEffectRecord
 		{
-			get
-			{
-				if (_statusEffectRecord == null)
-				{
-					_statusEffectRecord = (wCHandle<gamedataStatusEffect_Record>) CR2WTypeManager.Create("whandle:gamedataStatusEffect_Record", "statusEffectRecord", cr2w, this);
-				}
-				return _statusEffectRecord;
-			}
-			set
-			{
-				if (_statusEffectRecord == value)
-				{
-					return;
-				}
-				_statusEffectRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statusEffectRecord);
+			set => SetProperty(ref _statusEffectRecord, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("playerStatusEffectRecordData")] 
 		public wCHandle<gamedataStatusEffectPlayerData_Record> PlayerStatusEffectRecordData
 		{
-			get
-			{
-				if (_playerStatusEffectRecordData == null)
-				{
-					_playerStatusEffectRecordData = (wCHandle<gamedataStatusEffectPlayerData_Record>) CR2WTypeManager.Create("whandle:gamedataStatusEffectPlayerData_Record", "playerStatusEffectRecordData", cr2w, this);
-				}
-				return _playerStatusEffectRecordData;
-			}
-			set
-			{
-				if (_playerStatusEffectRecordData == value)
-				{
-					return;
-				}
-				_playerStatusEffectRecordData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerStatusEffectRecordData);
+			set => SetProperty(ref _playerStatusEffectRecordData, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("animFeatureStatusEffect")] 
 		public CHandle<AnimFeature_StatusEffect> AnimFeatureStatusEffect
 		{
-			get
-			{
-				if (_animFeatureStatusEffect == null)
-				{
-					_animFeatureStatusEffect = (CHandle<AnimFeature_StatusEffect>) CR2WTypeManager.Create("handle:AnimFeature_StatusEffect", "animFeatureStatusEffect", cr2w, this);
-				}
-				return _animFeatureStatusEffect;
-			}
-			set
-			{
-				if (_animFeatureStatusEffect == value)
-				{
-					return;
-				}
-				_animFeatureStatusEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animFeatureStatusEffect);
+			set => SetProperty(ref _animFeatureStatusEffect, value);
 		}
 
 		public StatusEffectEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("description")] 
 		public CName Description
 		{
-			get
-			{
-				if (_description == null)
-				{
-					_description = (CName) CR2WTypeManager.Create("CName", "description", cr2w, this);
-				}
-				return _description;
-			}
-			set
-			{
-				if (_description == value)
-				{
-					return;
-				}
-				_description = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _description);
+			set => SetProperty(ref _description, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("visibilityDistance")] 
 		public CFloat VisibilityDistance
 		{
-			get
-			{
-				if (_visibilityDistance == null)
-				{
-					_visibilityDistance = (CFloat) CR2WTypeManager.Create("Float", "visibilityDistance", cr2w, this);
-				}
-				return _visibilityDistance;
-			}
-			set
-			{
-				if (_visibilityDistance == value)
-				{
-					return;
-				}
-				_visibilityDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visibilityDistance);
+			set => SetProperty(ref _visibilityDistance, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("visibleObjectType")] 
 		public CEnum<gamedataSenseObjectType> VisibleObjectType
 		{
-			get
-			{
-				if (_visibleObjectType == null)
-				{
-					_visibleObjectType = (CEnum<gamedataSenseObjectType>) CR2WTypeManager.Create("gamedataSenseObjectType", "visibleObjectType", cr2w, this);
-				}
-				return _visibleObjectType;
-			}
-			set
-			{
-				if (_visibleObjectType == value)
-				{
-					return;
-				}
-				_visibleObjectType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visibleObjectType);
+			set => SetProperty(ref _visibleObjectType, value);
 		}
 
 		public senseVisibleObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

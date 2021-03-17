@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("securityGateResponseType")] 
 		public CEnum<ESecurityGateResponseType> SecurityGateResponseType
 		{
-			get
-			{
-				if (_securityGateResponseType == null)
-				{
-					_securityGateResponseType = (CEnum<ESecurityGateResponseType>) CR2WTypeManager.Create("ESecurityGateResponseType", "securityGateResponseType", cr2w, this);
-				}
-				return _securityGateResponseType;
-			}
-			set
-			{
-				if (_securityGateResponseType == value)
-				{
-					return;
-				}
-				_securityGateResponseType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securityGateResponseType);
+			set => SetProperty(ref _securityGateResponseType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("securityLevelAccessGranted")] 
 		public CEnum<ESecurityAccessLevel> SecurityLevelAccessGranted
 		{
-			get
-			{
-				if (_securityLevelAccessGranted == null)
-				{
-					_securityLevelAccessGranted = (CEnum<ESecurityAccessLevel>) CR2WTypeManager.Create("ESecurityAccessLevel", "securityLevelAccessGranted", cr2w, this);
-				}
-				return _securityLevelAccessGranted;
-			}
-			set
-			{
-				if (_securityLevelAccessGranted == value)
-				{
-					return;
-				}
-				_securityLevelAccessGranted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securityLevelAccessGranted);
+			set => SetProperty(ref _securityLevelAccessGranted, value);
 		}
 
 		public SecurityGateResponseProperties(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

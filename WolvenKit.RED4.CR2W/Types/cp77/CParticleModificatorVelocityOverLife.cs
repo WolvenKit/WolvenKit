@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("velocity")] 
 		public CHandle<IEvaluatorVector> Velocity
 		{
-			get
-			{
-				if (_velocity == null)
-				{
-					_velocity = (CHandle<IEvaluatorVector>) CR2WTypeManager.Create("handle:IEvaluatorVector", "velocity", cr2w, this);
-				}
-				return _velocity;
-			}
-			set
-			{
-				if (_velocity == value)
-				{
-					return;
-				}
-				_velocity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _velocity);
+			set => SetProperty(ref _velocity, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("scale")] 
 		public CFloat Scale
 		{
-			get
-			{
-				if (_scale == null)
-				{
-					_scale = (CFloat) CR2WTypeManager.Create("Float", "scale", cr2w, this);
-				}
-				return _scale;
-			}
-			set
-			{
-				if (_scale == value)
-				{
-					return;
-				}
-				_scale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scale);
+			set => SetProperty(ref _scale, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("modulate")] 
 		public CBool Modulate
 		{
-			get
-			{
-				if (_modulate == null)
-				{
-					_modulate = (CBool) CR2WTypeManager.Create("Bool", "modulate", cr2w, this);
-				}
-				return _modulate;
-			}
-			set
-			{
-				if (_modulate == value)
-				{
-					return;
-				}
-				_modulate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _modulate);
+			set => SetProperty(ref _modulate, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("absolute")] 
 		public CBool Absolute
 		{
-			get
-			{
-				if (_absolute == null)
-				{
-					_absolute = (CBool) CR2WTypeManager.Create("Bool", "absolute", cr2w, this);
-				}
-				return _absolute;
-			}
-			set
-			{
-				if (_absolute == value)
-				{
-					return;
-				}
-				_absolute = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _absolute);
+			set => SetProperty(ref _absolute, value);
 		}
 
 		public CParticleModificatorVelocityOverLife(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

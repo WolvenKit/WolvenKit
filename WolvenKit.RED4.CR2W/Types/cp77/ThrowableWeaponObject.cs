@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("projectileComponent")] 
 		public CHandle<gameprojectileComponent> ProjectileComponent
 		{
-			get
-			{
-				if (_projectileComponent == null)
-				{
-					_projectileComponent = (CHandle<gameprojectileComponent>) CR2WTypeManager.Create("handle:gameprojectileComponent", "projectileComponent", cr2w, this);
-				}
-				return _projectileComponent;
-			}
-			set
-			{
-				if (_projectileComponent == value)
-				{
-					return;
-				}
-				_projectileComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectileComponent);
+			set => SetProperty(ref _projectileComponent, value);
 		}
 
 		[Ordinal(58)] 
 		[RED("weaponOwner")] 
 		public wCHandle<gameObject> WeaponOwner
 		{
-			get
-			{
-				if (_weaponOwner == null)
-				{
-					_weaponOwner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "weaponOwner", cr2w, this);
-				}
-				return _weaponOwner;
-			}
-			set
-			{
-				if (_weaponOwner == value)
-				{
-					return;
-				}
-				_weaponOwner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponOwner);
+			set => SetProperty(ref _weaponOwner, value);
 		}
 
 		public ThrowableWeaponObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

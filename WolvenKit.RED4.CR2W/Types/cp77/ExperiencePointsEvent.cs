@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("amount")] 
 		public CInt32 Amount
 		{
-			get
-			{
-				if (_amount == null)
-				{
-					_amount = (CInt32) CR2WTypeManager.Create("Int32", "amount", cr2w, this);
-				}
-				return _amount;
-			}
-			set
-			{
-				if (_amount == value)
-				{
-					return;
-				}
-				_amount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _amount);
+			set => SetProperty(ref _amount, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("type")] 
 		public CEnum<gamedataProficiencyType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<gamedataProficiencyType>) CR2WTypeManager.Create("gamedataProficiencyType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isDebug")] 
 		public CBool IsDebug
 		{
-			get
-			{
-				if (_isDebug == null)
-				{
-					_isDebug = (CBool) CR2WTypeManager.Create("Bool", "isDebug", cr2w, this);
-				}
-				return _isDebug;
-			}
-			set
-			{
-				if (_isDebug == value)
-				{
-					return;
-				}
-				_isDebug = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDebug);
+			set => SetProperty(ref _isDebug, value);
 		}
 
 		public ExperiencePointsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

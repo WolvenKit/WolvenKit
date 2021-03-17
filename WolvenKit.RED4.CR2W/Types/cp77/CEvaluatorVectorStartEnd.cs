@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("start")] 
 		public Vector4 Start
 		{
-			get
-			{
-				if (_start == null)
-				{
-					_start = (Vector4) CR2WTypeManager.Create("Vector4", "start", cr2w, this);
-				}
-				return _start;
-			}
-			set
-			{
-				if (_start == value)
-				{
-					return;
-				}
-				_start = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _start);
+			set => SetProperty(ref _start, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("end")] 
 		public Vector4 End
 		{
-			get
-			{
-				if (_end == null)
-				{
-					_end = (Vector4) CR2WTypeManager.Create("Vector4", "end", cr2w, this);
-				}
-				return _end;
-			}
-			set
-			{
-				if (_end == value)
-				{
-					return;
-				}
-				_end = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _end);
+			set => SetProperty(ref _end, value);
 		}
 
 		public CEvaluatorVectorStartEnd(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("prefabNodeRef")] 
 		public NodeRef PrefabNodeRef
 		{
-			get
-			{
-				if (_prefabNodeRef == null)
-				{
-					_prefabNodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "prefabNodeRef", cr2w, this);
-				}
-				return _prefabNodeRef;
-			}
-			set
-			{
-				if (_prefabNodeRef == value)
-				{
-					return;
-				}
-				_prefabNodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prefabNodeRef);
+			set => SetProperty(ref _prefabNodeRef, value);
 		}
 
 		public questQuestPrefabEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

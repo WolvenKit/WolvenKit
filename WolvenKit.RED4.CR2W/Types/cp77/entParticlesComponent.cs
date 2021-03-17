@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("emissionRate")] 
 		public CFloat EmissionRate
 		{
-			get
-			{
-				if (_emissionRate == null)
-				{
-					_emissionRate = (CFloat) CR2WTypeManager.Create("Float", "emissionRate", cr2w, this);
-				}
-				return _emissionRate;
-			}
-			set
-			{
-				if (_emissionRate == value)
-				{
-					return;
-				}
-				_emissionRate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _emissionRate);
+			set => SetProperty(ref _emissionRate, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("particleSystem")] 
 		public rRef<CParticleSystem> ParticleSystem
 		{
-			get
-			{
-				if (_particleSystem == null)
-				{
-					_particleSystem = (rRef<CParticleSystem>) CR2WTypeManager.Create("rRef:CParticleSystem", "particleSystem", cr2w, this);
-				}
-				return _particleSystem;
-			}
-			set
-			{
-				if (_particleSystem == value)
-				{
-					return;
-				}
-				_particleSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _particleSystem);
+			set => SetProperty(ref _particleSystem, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("autoHideRange")] 
 		public CFloat AutoHideRange
 		{
-			get
-			{
-				if (_autoHideRange == null)
-				{
-					_autoHideRange = (CFloat) CR2WTypeManager.Create("Float", "autoHideRange", cr2w, this);
-				}
-				return _autoHideRange;
-			}
-			set
-			{
-				if (_autoHideRange == value)
-				{
-					return;
-				}
-				_autoHideRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _autoHideRange);
+			set => SetProperty(ref _autoHideRange, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("renderLayerMask")] 
 		public CEnum<RenderSceneLayerMask> RenderLayerMask
 		{
-			get
-			{
-				if (_renderLayerMask == null)
-				{
-					_renderLayerMask = (CEnum<RenderSceneLayerMask>) CR2WTypeManager.Create("RenderSceneLayerMask", "renderLayerMask", cr2w, this);
-				}
-				return _renderLayerMask;
-			}
-			set
-			{
-				if (_renderLayerMask == value)
-				{
-					return;
-				}
-				_renderLayerMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _renderLayerMask);
+			set => SetProperty(ref _renderLayerMask, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get
-			{
-				if (_isEnabled == null)
-				{
-					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
-				}
-				return _isEnabled;
-			}
-			set
-			{
-				if (_isEnabled == value)
-				{
-					return;
-				}
-				_isEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
 		}
 
 		public entParticlesComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

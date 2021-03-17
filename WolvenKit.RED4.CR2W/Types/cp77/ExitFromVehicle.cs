@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("useFastExit")] 
 		public CBool UseFastExit
 		{
-			get
-			{
-				if (_useFastExit == null)
-				{
-					_useFastExit = (CBool) CR2WTypeManager.Create("Bool", "useFastExit", cr2w, this);
-				}
-				return _useFastExit;
-			}
-			set
-			{
-				if (_useFastExit == value)
-				{
-					return;
-				}
-				_useFastExit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useFastExit);
+			set => SetProperty(ref _useFastExit, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("tryBlendToWalk")] 
 		public CBool TryBlendToWalk
 		{
-			get
-			{
-				if (_tryBlendToWalk == null)
-				{
-					_tryBlendToWalk = (CBool) CR2WTypeManager.Create("Bool", "tryBlendToWalk", cr2w, this);
-				}
-				return _tryBlendToWalk;
-			}
-			set
-			{
-				if (_tryBlendToWalk == value)
-				{
-					return;
-				}
-				_tryBlendToWalk = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tryBlendToWalk);
+			set => SetProperty(ref _tryBlendToWalk, value);
 		}
 
 		public ExitFromVehicle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("baseEvent")] 
 		public CName BaseEvent
 		{
-			get
-			{
-				if (_baseEvent == null)
-				{
-					_baseEvent = (CName) CR2WTypeManager.Create("CName", "baseEvent", cr2w, this);
-				}
-				return _baseEvent;
-			}
-			set
-			{
-				if (_baseEvent == value)
-				{
-					return;
-				}
-				_baseEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _baseEvent);
+			set => SetProperty(ref _baseEvent, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("customActionsDictionary")] 
 		public CHandle<audioKeySoundEventDictionary> CustomActionsDictionary
 		{
-			get
-			{
-				if (_customActionsDictionary == null)
-				{
-					_customActionsDictionary = (CHandle<audioKeySoundEventDictionary>) CR2WTypeManager.Create("handle:audioKeySoundEventDictionary", "customActionsDictionary", cr2w, this);
-				}
-				return _customActionsDictionary;
-			}
-			set
-			{
-				if (_customActionsDictionary == value)
-				{
-					return;
-				}
-				_customActionsDictionary = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customActionsDictionary);
+			set => SetProperty(ref _customActionsDictionary, value);
 		}
 
 		public audioUiControlEventsSettingsMapItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

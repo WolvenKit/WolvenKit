@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cache")] 
 		public CArray<CHandle<SoldItem>> Cache
 		{
-			get
-			{
-				if (_cache == null)
-				{
-					_cache = (CArray<CHandle<SoldItem>>) CR2WTypeManager.Create("array:handle:SoldItem", "cache", cr2w, this);
-				}
-				return _cache;
-			}
-			set
-			{
-				if (_cache == value)
-				{
-					return;
-				}
-				_cache = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cache);
+			set => SetProperty(ref _cache, value);
 		}
 
 		public SoldItemsCache(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

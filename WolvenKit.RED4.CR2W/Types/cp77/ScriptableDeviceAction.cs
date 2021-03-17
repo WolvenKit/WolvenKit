@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("prop")] 
 		public CHandle<gamedeviceActionProperty> Prop
 		{
-			get
-			{
-				if (_prop == null)
-				{
-					_prop = (CHandle<gamedeviceActionProperty>) CR2WTypeManager.Create("handle:gamedeviceActionProperty", "prop", cr2w, this);
-				}
-				return _prop;
-			}
-			set
-			{
-				if (_prop == value)
-				{
-					return;
-				}
-				_prop = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prop);
+			set => SetProperty(ref _prop, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("actionWidgetPackage")] 
 		public SActionWidgetPackage ActionWidgetPackage
 		{
-			get
-			{
-				if (_actionWidgetPackage == null)
-				{
-					_actionWidgetPackage = (SActionWidgetPackage) CR2WTypeManager.Create("SActionWidgetPackage", "actionWidgetPackage", cr2w, this);
-				}
-				return _actionWidgetPackage;
-			}
-			set
-			{
-				if (_actionWidgetPackage == value)
-				{
-					return;
-				}
-				_actionWidgetPackage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionWidgetPackage);
+			set => SetProperty(ref _actionWidgetPackage, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("spiderbotActionLocationOverride")] 
 		public NodeRef SpiderbotActionLocationOverride
 		{
-			get
-			{
-				if (_spiderbotActionLocationOverride == null)
-				{
-					_spiderbotActionLocationOverride = (NodeRef) CR2WTypeManager.Create("NodeRef", "spiderbotActionLocationOverride", cr2w, this);
-				}
-				return _spiderbotActionLocationOverride;
-			}
-			set
-			{
-				if (_spiderbotActionLocationOverride == value)
-				{
-					return;
-				}
-				_spiderbotActionLocationOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spiderbotActionLocationOverride);
+			set => SetProperty(ref _spiderbotActionLocationOverride, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("canTriggerStim")] 
 		public CBool CanTriggerStim
 		{
-			get
-			{
-				if (_canTriggerStim == null)
-				{
-					_canTriggerStim = (CBool) CR2WTypeManager.Create("Bool", "canTriggerStim", cr2w, this);
-				}
-				return _canTriggerStim;
-			}
-			set
-			{
-				if (_canTriggerStim == value)
-				{
-					return;
-				}
-				_canTriggerStim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _canTriggerStim);
+			set => SetProperty(ref _canTriggerStim, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("wasPerformedOnOwner")] 
 		public CBool WasPerformedOnOwner
 		{
-			get
-			{
-				if (_wasPerformedOnOwner == null)
-				{
-					_wasPerformedOnOwner = (CBool) CR2WTypeManager.Create("Bool", "wasPerformedOnOwner", cr2w, this);
-				}
-				return _wasPerformedOnOwner;
-			}
-			set
-			{
-				if (_wasPerformedOnOwner == value)
-				{
-					return;
-				}
-				_wasPerformedOnOwner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasPerformedOnOwner);
+			set => SetProperty(ref _wasPerformedOnOwner, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("shouldActivateDevice")] 
 		public CBool ShouldActivateDevice
 		{
-			get
-			{
-				if (_shouldActivateDevice == null)
-				{
-					_shouldActivateDevice = (CBool) CR2WTypeManager.Create("Bool", "shouldActivateDevice", cr2w, this);
-				}
-				return _shouldActivateDevice;
-			}
-			set
-			{
-				if (_shouldActivateDevice == value)
-				{
-					return;
-				}
-				_shouldActivateDevice = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldActivateDevice);
+			set => SetProperty(ref _shouldActivateDevice, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("isQuickHack")] 
 		public CBool IsQuickHack
 		{
-			get
-			{
-				if (_isQuickHack == null)
-				{
-					_isQuickHack = (CBool) CR2WTypeManager.Create("Bool", "isQuickHack", cr2w, this);
-				}
-				return _isQuickHack;
-			}
-			set
-			{
-				if (_isQuickHack == value)
-				{
-					return;
-				}
-				_isQuickHack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isQuickHack);
+			set => SetProperty(ref _isQuickHack, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("isSpiderbotAction")] 
 		public CBool IsSpiderbotAction
 		{
-			get
-			{
-				if (_isSpiderbotAction == null)
-				{
-					_isSpiderbotAction = (CBool) CR2WTypeManager.Create("Bool", "isSpiderbotAction", cr2w, this);
-				}
-				return _isSpiderbotAction;
-			}
-			set
-			{
-				if (_isSpiderbotAction == value)
-				{
-					return;
-				}
-				_isSpiderbotAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isSpiderbotAction);
+			set => SetProperty(ref _isSpiderbotAction, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("attachedProgram")] 
 		public TweakDBID AttachedProgram
 		{
-			get
-			{
-				if (_attachedProgram == null)
-				{
-					_attachedProgram = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "attachedProgram", cr2w, this);
-				}
-				return _attachedProgram;
-			}
-			set
-			{
-				if (_attachedProgram == value)
-				{
-					return;
-				}
-				_attachedProgram = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attachedProgram);
+			set => SetProperty(ref _attachedProgram, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("activeStatusEffect")] 
 		public TweakDBID ActiveStatusEffect
 		{
-			get
-			{
-				if (_activeStatusEffect == null)
-				{
-					_activeStatusEffect = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "activeStatusEffect", cr2w, this);
-				}
-				return _activeStatusEffect;
-			}
-			set
-			{
-				if (_activeStatusEffect == value)
-				{
-					return;
-				}
-				_activeStatusEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeStatusEffect);
+			set => SetProperty(ref _activeStatusEffect, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("interactionIconType")] 
 		public TweakDBID InteractionIconType
 		{
-			get
-			{
-				if (_interactionIconType == null)
-				{
-					_interactionIconType = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "interactionIconType", cr2w, this);
-				}
-				return _interactionIconType;
-			}
-			set
-			{
-				if (_interactionIconType == value)
-				{
-					return;
-				}
-				_interactionIconType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interactionIconType);
+			set => SetProperty(ref _interactionIconType, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("hasInteraction")] 
 		public CBool HasInteraction
 		{
-			get
-			{
-				if (_hasInteraction == null)
-				{
-					_hasInteraction = (CBool) CR2WTypeManager.Create("Bool", "hasInteraction", cr2w, this);
-				}
-				return _hasInteraction;
-			}
-			set
-			{
-				if (_hasInteraction == value)
-				{
-					return;
-				}
-				_hasInteraction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasInteraction);
+			set => SetProperty(ref _hasInteraction, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("inactiveReason")] 
 		public CString InactiveReason
 		{
-			get
-			{
-				if (_inactiveReason == null)
-				{
-					_inactiveReason = (CString) CR2WTypeManager.Create("String", "inactiveReason", cr2w, this);
-				}
-				return _inactiveReason;
-			}
-			set
-			{
-				if (_inactiveReason == value)
-				{
-					return;
-				}
-				_inactiveReason = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inactiveReason);
+			set => SetProperty(ref _inactiveReason, value);
 		}
 
 		public ScriptableDeviceAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

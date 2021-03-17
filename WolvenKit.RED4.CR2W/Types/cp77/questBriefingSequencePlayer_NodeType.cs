@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("function")] 
 		public CEnum<questBriefingSequencePlayerFunction> Function
 		{
-			get
-			{
-				if (_function == null)
-				{
-					_function = (CEnum<questBriefingSequencePlayerFunction>) CR2WTypeManager.Create("questBriefingSequencePlayerFunction", "function", cr2w, this);
-				}
-				return _function;
-			}
-			set
-			{
-				if (_function == value)
-				{
-					return;
-				}
-				_function = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _function);
+			set => SetProperty(ref _function, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("briefingResource")] 
 		public raRef<inkWidgetLibraryResource> BriefingResource
 		{
-			get
-			{
-				if (_briefingResource == null)
-				{
-					_briefingResource = (raRef<inkWidgetLibraryResource>) CR2WTypeManager.Create("raRef:inkWidgetLibraryResource", "briefingResource", cr2w, this);
-				}
-				return _briefingResource;
-			}
-			set
-			{
-				if (_briefingResource == value)
-				{
-					return;
-				}
-				_briefingResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _briefingResource);
+			set => SetProperty(ref _briefingResource, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("userData")] 
 		public CHandle<inkUserData> UserData
 		{
-			get
-			{
-				if (_userData == null)
-				{
-					_userData = (CHandle<inkUserData>) CR2WTypeManager.Create("handle:inkUserData", "userData", cr2w, this);
-				}
-				return _userData;
-			}
-			set
-			{
-				if (_userData == value)
-				{
-					return;
-				}
-				_userData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _userData);
+			set => SetProperty(ref _userData, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("audioEvent")] 
 		public CName AudioEvent
 		{
-			get
-			{
-				if (_audioEvent == null)
-				{
-					_audioEvent = (CName) CR2WTypeManager.Create("CName", "audioEvent", cr2w, this);
-				}
-				return _audioEvent;
-			}
-			set
-			{
-				if (_audioEvent == value)
-				{
-					return;
-				}
-				_audioEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioEvent);
+			set => SetProperty(ref _audioEvent, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("animationName")] 
 		public CName AnimationName
 		{
-			get
-			{
-				if (_animationName == null)
-				{
-					_animationName = (CName) CR2WTypeManager.Create("CName", "animationName", cr2w, this);
-				}
-				return _animationName;
-			}
-			set
-			{
-				if (_animationName == value)
-				{
-					return;
-				}
-				_animationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationName);
+			set => SetProperty(ref _animationName, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("startMarkerName")] 
 		public CName StartMarkerName
 		{
-			get
-			{
-				if (_startMarkerName == null)
-				{
-					_startMarkerName = (CName) CR2WTypeManager.Create("CName", "startMarkerName", cr2w, this);
-				}
-				return _startMarkerName;
-			}
-			set
-			{
-				if (_startMarkerName == value)
-				{
-					return;
-				}
-				_startMarkerName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startMarkerName);
+			set => SetProperty(ref _startMarkerName, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("endMarkerName")] 
 		public CName EndMarkerName
 		{
-			get
-			{
-				if (_endMarkerName == null)
-				{
-					_endMarkerName = (CName) CR2WTypeManager.Create("CName", "endMarkerName", cr2w, this);
-				}
-				return _endMarkerName;
-			}
-			set
-			{
-				if (_endMarkerName == value)
-				{
-					return;
-				}
-				_endMarkerName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endMarkerName);
+			set => SetProperty(ref _endMarkerName, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("loopType")] 
 		public CEnum<inkanimLoopType> LoopType
 		{
-			get
-			{
-				if (_loopType == null)
-				{
-					_loopType = (CEnum<inkanimLoopType>) CR2WTypeManager.Create("inkanimLoopType", "loopType", cr2w, this);
-				}
-				return _loopType;
-			}
-			set
-			{
-				if (_loopType == value)
-				{
-					return;
-				}
-				_loopType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _loopType);
+			set => SetProperty(ref _loopType, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("briefingType")] 
 		public CEnum<questBriefingType> BriefingType
 		{
-			get
-			{
-				if (_briefingType == null)
-				{
-					_briefingType = (CEnum<questBriefingType>) CR2WTypeManager.Create("questBriefingType", "briefingType", cr2w, this);
-				}
-				return _briefingType;
-			}
-			set
-			{
-				if (_briefingType == value)
-				{
-					return;
-				}
-				_briefingType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _briefingType);
+			set => SetProperty(ref _briefingType, value);
 		}
 
 		public questBriefingSequencePlayer_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

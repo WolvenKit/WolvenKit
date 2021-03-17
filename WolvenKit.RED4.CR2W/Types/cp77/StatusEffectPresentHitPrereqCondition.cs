@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("checkType")] 
 		public CName CheckType
 		{
-			get
-			{
-				if (_checkType == null)
-				{
-					_checkType = (CName) CR2WTypeManager.Create("CName", "checkType", cr2w, this);
-				}
-				return _checkType;
-			}
-			set
-			{
-				if (_checkType == value)
-				{
-					return;
-				}
-				_checkType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _checkType);
+			set => SetProperty(ref _checkType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("statusEffectParam")] 
 		public CName StatusEffectParam
 		{
-			get
-			{
-				if (_statusEffectParam == null)
-				{
-					_statusEffectParam = (CName) CR2WTypeManager.Create("CName", "statusEffectParam", cr2w, this);
-				}
-				return _statusEffectParam;
-			}
-			set
-			{
-				if (_statusEffectParam == value)
-				{
-					return;
-				}
-				_statusEffectParam = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statusEffectParam);
+			set => SetProperty(ref _statusEffectParam, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("tag")] 
 		public CName Tag
 		{
-			get
-			{
-				if (_tag == null)
-				{
-					_tag = (CName) CR2WTypeManager.Create("CName", "tag", cr2w, this);
-				}
-				return _tag;
-			}
-			set
-			{
-				if (_tag == value)
-				{
-					return;
-				}
-				_tag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tag);
+			set => SetProperty(ref _tag, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("objectToCheck")] 
 		public CName ObjectToCheck
 		{
-			get
-			{
-				if (_objectToCheck == null)
-				{
-					_objectToCheck = (CName) CR2WTypeManager.Create("CName", "objectToCheck", cr2w, this);
-				}
-				return _objectToCheck;
-			}
-			set
-			{
-				if (_objectToCheck == value)
-				{
-					return;
-				}
-				_objectToCheck = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectToCheck);
+			set => SetProperty(ref _objectToCheck, value);
 		}
 
 		public StatusEffectPresentHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

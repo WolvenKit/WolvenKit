@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("talkOnReturn")] 
 		public CBool TalkOnReturn
 		{
-			get
-			{
-				if (_talkOnReturn == null)
-				{
-					_talkOnReturn = (CBool) CR2WTypeManager.Create("Bool", "talkOnReturn", cr2w, this);
-				}
-				return _talkOnReturn;
-			}
-			set
-			{
-				if (_talkOnReturn == value)
-				{
-					return;
-				}
-				_talkOnReturn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _talkOnReturn);
+			set => SetProperty(ref _talkOnReturn, value);
 		}
 
 		public scnOverrideTalkOnReturn_InterruptionScenarioOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

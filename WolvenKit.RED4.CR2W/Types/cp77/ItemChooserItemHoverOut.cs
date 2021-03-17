@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sourceEvent")] 
 		public CHandle<inkPointerEvent> SourceEvent
 		{
-			get
-			{
-				if (_sourceEvent == null)
-				{
-					_sourceEvent = (CHandle<inkPointerEvent>) CR2WTypeManager.Create("handle:inkPointerEvent", "sourceEvent", cr2w, this);
-				}
-				return _sourceEvent;
-			}
-			set
-			{
-				if (_sourceEvent == value)
-				{
-					return;
-				}
-				_sourceEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sourceEvent);
+			set => SetProperty(ref _sourceEvent, value);
 		}
 
 		public ItemChooserItemHoverOut(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

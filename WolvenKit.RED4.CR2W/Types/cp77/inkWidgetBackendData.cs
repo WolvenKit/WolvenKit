@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("owner")] 
 		public wCHandle<inkWidget> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isHiddenInEditor")] 
 		public CBool IsHiddenInEditor
 		{
-			get
-			{
-				if (_isHiddenInEditor == null)
-				{
-					_isHiddenInEditor = (CBool) CR2WTypeManager.Create("Bool", "isHiddenInEditor", cr2w, this);
-				}
-				return _isHiddenInEditor;
-			}
-			set
-			{
-				if (_isHiddenInEditor == value)
-				{
-					return;
-				}
-				_isHiddenInEditor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isHiddenInEditor);
+			set => SetProperty(ref _isHiddenInEditor, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isLocked")] 
 		public CBool IsLocked
 		{
-			get
-			{
-				if (_isLocked == null)
-				{
-					_isLocked = (CBool) CR2WTypeManager.Create("Bool", "isLocked", cr2w, this);
-				}
-				return _isLocked;
-			}
-			set
-			{
-				if (_isLocked == value)
-				{
-					return;
-				}
-				_isLocked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isLocked);
+			set => SetProperty(ref _isLocked, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("boundLibraryItemName")] 
 		public CName BoundLibraryItemName
 		{
-			get
-			{
-				if (_boundLibraryItemName == null)
-				{
-					_boundLibraryItemName = (CName) CR2WTypeManager.Create("CName", "boundLibraryItemName", cr2w, this);
-				}
-				return _boundLibraryItemName;
-			}
-			set
-			{
-				if (_boundLibraryItemName == value)
-				{
-					return;
-				}
-				_boundLibraryItemName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _boundLibraryItemName);
+			set => SetProperty(ref _boundLibraryItemName, value);
 		}
 
 		public inkWidgetBackendData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

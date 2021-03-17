@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("node")] 
 		public animPoseLink Node
 		{
-			get
-			{
-				if (_node == null)
-				{
-					_node = (animPoseLink) CR2WTypeManager.Create("animPoseLink", "node", cr2w, this);
-				}
-				return _node;
-			}
-			set
-			{
-				if (_node == value)
-				{
-					return;
-				}
-				_node = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _node);
+			set => SetProperty(ref _node, value);
 		}
 
 		public animAnimNode_Output(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

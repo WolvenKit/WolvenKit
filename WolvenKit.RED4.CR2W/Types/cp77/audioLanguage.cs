@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("longName")] 
 		public CString LongName
 		{
-			get
-			{
-				if (_longName == null)
-				{
-					_longName = (CString) CR2WTypeManager.Create("String", "longName", cr2w, this);
-				}
-				return _longName;
-			}
-			set
-			{
-				if (_longName == value)
-				{
-					return;
-				}
-				_longName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _longName);
+			set => SetProperty(ref _longName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("codeName")] 
 		public CString CodeName
 		{
-			get
-			{
-				if (_codeName == null)
-				{
-					_codeName = (CString) CR2WTypeManager.Create("String", "codeName", cr2w, this);
-				}
-				return _codeName;
-			}
-			set
-			{
-				if (_codeName == value)
-				{
-					return;
-				}
-				_codeName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _codeName);
+			set => SetProperty(ref _codeName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hasVO")] 
 		public CBool HasVO
 		{
-			get
-			{
-				if (_hasVO == null)
-				{
-					_hasVO = (CBool) CR2WTypeManager.Create("Bool", "hasVO", cr2w, this);
-				}
-				return _hasVO;
-			}
-			set
-			{
-				if (_hasVO == value)
-				{
-					return;
-				}
-				_hasVO = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasVO);
+			set => SetProperty(ref _hasVO, value);
 		}
 
 		public audioLanguage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

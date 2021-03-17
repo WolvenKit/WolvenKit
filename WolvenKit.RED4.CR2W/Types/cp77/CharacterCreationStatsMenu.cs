@@ -37,575 +37,200 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attribute_01")] 
 		public inkWidgetReference Attribute_01
 		{
-			get
-			{
-				if (_attribute_01 == null)
-				{
-					_attribute_01 = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "attribute_01", cr2w, this);
-				}
-				return _attribute_01;
-			}
-			set
-			{
-				if (_attribute_01 == value)
-				{
-					return;
-				}
-				_attribute_01 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attribute_01);
+			set => SetProperty(ref _attribute_01, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("attribute_02")] 
 		public inkWidgetReference Attribute_02
 		{
-			get
-			{
-				if (_attribute_02 == null)
-				{
-					_attribute_02 = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "attribute_02", cr2w, this);
-				}
-				return _attribute_02;
-			}
-			set
-			{
-				if (_attribute_02 == value)
-				{
-					return;
-				}
-				_attribute_02 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attribute_02);
+			set => SetProperty(ref _attribute_02, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("attribute_03")] 
 		public inkWidgetReference Attribute_03
 		{
-			get
-			{
-				if (_attribute_03 == null)
-				{
-					_attribute_03 = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "attribute_03", cr2w, this);
-				}
-				return _attribute_03;
-			}
-			set
-			{
-				if (_attribute_03 == value)
-				{
-					return;
-				}
-				_attribute_03 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attribute_03);
+			set => SetProperty(ref _attribute_03, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("attribute_04")] 
 		public inkWidgetReference Attribute_04
 		{
-			get
-			{
-				if (_attribute_04 == null)
-				{
-					_attribute_04 = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "attribute_04", cr2w, this);
-				}
-				return _attribute_04;
-			}
-			set
-			{
-				if (_attribute_04 == value)
-				{
-					return;
-				}
-				_attribute_04 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attribute_04);
+			set => SetProperty(ref _attribute_04, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("attribute_05")] 
 		public inkWidgetReference Attribute_05
 		{
-			get
-			{
-				if (_attribute_05 == null)
-				{
-					_attribute_05 = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "attribute_05", cr2w, this);
-				}
-				return _attribute_05;
-			}
-			set
-			{
-				if (_attribute_05 == value)
-				{
-					return;
-				}
-				_attribute_05 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attribute_05);
+			set => SetProperty(ref _attribute_05, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("pointsLabel")] 
 		public inkWidgetReference PointsLabel
 		{
-			get
-			{
-				if (_pointsLabel == null)
-				{
-					_pointsLabel = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "pointsLabel", cr2w, this);
-				}
-				return _pointsLabel;
-			}
-			set
-			{
-				if (_pointsLabel == value)
-				{
-					return;
-				}
-				_pointsLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pointsLabel);
+			set => SetProperty(ref _pointsLabel, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("tooltipSlot")] 
 		public inkWidgetReference TooltipSlot
 		{
-			get
-			{
-				if (_tooltipSlot == null)
-				{
-					_tooltipSlot = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "tooltipSlot", cr2w, this);
-				}
-				return _tooltipSlot;
-			}
-			set
-			{
-				if (_tooltipSlot == value)
-				{
-					return;
-				}
-				_tooltipSlot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipSlot);
+			set => SetProperty(ref _tooltipSlot, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("skillPointLabel")] 
 		public inkTextWidgetReference SkillPointLabel
 		{
-			get
-			{
-				if (_skillPointLabel == null)
-				{
-					_skillPointLabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "skillPointLabel", cr2w, this);
-				}
-				return _skillPointLabel;
-			}
-			set
-			{
-				if (_skillPointLabel == value)
-				{
-					return;
-				}
-				_skillPointLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skillPointLabel);
+			set => SetProperty(ref _skillPointLabel, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("reset")] 
 		public inkWidgetReference Reset
 		{
-			get
-			{
-				if (_reset == null)
-				{
-					_reset = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "reset", cr2w, this);
-				}
-				return _reset;
-			}
-			set
-			{
-				if (_reset == value)
-				{
-					return;
-				}
-				_reset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reset);
+			set => SetProperty(ref _reset, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("nextMenuConfirmation")] 
 		public inkWidgetReference NextMenuConfirmation
 		{
-			get
-			{
-				if (_nextMenuConfirmation == null)
-				{
-					_nextMenuConfirmation = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "nextMenuConfirmation", cr2w, this);
-				}
-				return _nextMenuConfirmation;
-			}
-			set
-			{
-				if (_nextMenuConfirmation == value)
-				{
-					return;
-				}
-				_nextMenuConfirmation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nextMenuConfirmation);
+			set => SetProperty(ref _nextMenuConfirmation, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("nextMenukConfirmationLibraryWidget")] 
 		public inkWidgetReference NextMenukConfirmationLibraryWidget
 		{
-			get
-			{
-				if (_nextMenukConfirmationLibraryWidget == null)
-				{
-					_nextMenukConfirmationLibraryWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "nextMenukConfirmationLibraryWidget", cr2w, this);
-				}
-				return _nextMenukConfirmationLibraryWidget;
-			}
-			set
-			{
-				if (_nextMenukConfirmationLibraryWidget == value)
-				{
-					return;
-				}
-				_nextMenukConfirmationLibraryWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nextMenukConfirmationLibraryWidget);
+			set => SetProperty(ref _nextMenukConfirmationLibraryWidget, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("ConfirmationConfirmBtn")] 
 		public inkWidgetReference ConfirmationConfirmBtn
 		{
-			get
-			{
-				if (_confirmationConfirmBtn == null)
-				{
-					_confirmationConfirmBtn = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "ConfirmationConfirmBtn", cr2w, this);
-				}
-				return _confirmationConfirmBtn;
-			}
-			set
-			{
-				if (_confirmationConfirmBtn == value)
-				{
-					return;
-				}
-				_confirmationConfirmBtn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _confirmationConfirmBtn);
+			set => SetProperty(ref _confirmationConfirmBtn, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("ConfirmationCloseBtn")] 
 		public inkWidgetReference ConfirmationCloseBtn
 		{
-			get
-			{
-				if (_confirmationCloseBtn == null)
-				{
-					_confirmationCloseBtn = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "ConfirmationCloseBtn", cr2w, this);
-				}
-				return _confirmationCloseBtn;
-			}
-			set
-			{
-				if (_confirmationCloseBtn == value)
-				{
-					return;
-				}
-				_confirmationCloseBtn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _confirmationCloseBtn);
+			set => SetProperty(ref _confirmationCloseBtn, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("TooltipsManagerRef")] 
 		public inkWidgetReference TooltipsManagerRef
 		{
-			get
-			{
-				if (_tooltipsManagerRef == null)
-				{
-					_tooltipsManagerRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "TooltipsManagerRef", cr2w, this);
-				}
-				return _tooltipsManagerRef;
-			}
-			set
-			{
-				if (_tooltipsManagerRef == value)
-				{
-					return;
-				}
-				_tooltipsManagerRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsManagerRef);
+			set => SetProperty(ref _tooltipsManagerRef, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("previousPageBtn")] 
 		public inkWidgetReference PreviousPageBtn
 		{
-			get
-			{
-				if (_previousPageBtn == null)
-				{
-					_previousPageBtn = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "previousPageBtn", cr2w, this);
-				}
-				return _previousPageBtn;
-			}
-			set
-			{
-				if (_previousPageBtn == value)
-				{
-					return;
-				}
-				_previousPageBtn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousPageBtn);
+			set => SetProperty(ref _previousPageBtn, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("navigationButtons")] 
 		public inkWidgetReference NavigationButtons
 		{
-			get
-			{
-				if (_navigationButtons == null)
-				{
-					_navigationButtons = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "navigationButtons", cr2w, this);
-				}
-				return _navigationButtons;
-			}
-			set
-			{
-				if (_navigationButtons == value)
-				{
-					return;
-				}
-				_navigationButtons = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _navigationButtons);
+			set => SetProperty(ref _navigationButtons, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("optionSwitchHint")] 
 		public inkWidgetReference OptionSwitchHint
 		{
-			get
-			{
-				if (_optionSwitchHint == null)
-				{
-					_optionSwitchHint = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "optionSwitchHint", cr2w, this);
-				}
-				return _optionSwitchHint;
-			}
-			set
-			{
-				if (_optionSwitchHint == value)
-				{
-					return;
-				}
-				_optionSwitchHint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _optionSwitchHint);
+			set => SetProperty(ref _optionSwitchHint, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("attributesControllers")] 
 		public CArray<CHandle<characterCreationStatsAttributeBtn>> AttributesControllers
 		{
-			get
-			{
-				if (_attributesControllers == null)
-				{
-					_attributesControllers = (CArray<CHandle<characterCreationStatsAttributeBtn>>) CR2WTypeManager.Create("array:handle:characterCreationStatsAttributeBtn", "attributesControllers", cr2w, this);
-				}
-				return _attributesControllers;
-			}
-			set
-			{
-				if (_attributesControllers == value)
-				{
-					return;
-				}
-				_attributesControllers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributesControllers);
+			set => SetProperty(ref _attributesControllers, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("attributePointsAvailable")] 
 		public CInt32 AttributePointsAvailable
 		{
-			get
-			{
-				if (_attributePointsAvailable == null)
-				{
-					_attributePointsAvailable = (CInt32) CR2WTypeManager.Create("Int32", "attributePointsAvailable", cr2w, this);
-				}
-				return _attributePointsAvailable;
-			}
-			set
-			{
-				if (_attributePointsAvailable == value)
-				{
-					return;
-				}
-				_attributePointsAvailable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributePointsAvailable);
+			set => SetProperty(ref _attributePointsAvailable, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("startingAttributePoints")] 
 		public CInt32 StartingAttributePoints
 		{
-			get
-			{
-				if (_startingAttributePoints == null)
-				{
-					_startingAttributePoints = (CInt32) CR2WTypeManager.Create("Int32", "startingAttributePoints", cr2w, this);
-				}
-				return _startingAttributePoints;
-			}
-			set
-			{
-				if (_startingAttributePoints == value)
-				{
-					return;
-				}
-				_startingAttributePoints = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startingAttributePoints);
+			set => SetProperty(ref _startingAttributePoints, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("TooltipsManager")] 
 		public wCHandle<gameuiTooltipsManager> TooltipsManager
 		{
-			get
-			{
-				if (_tooltipsManager == null)
-				{
-					_tooltipsManager = (wCHandle<gameuiTooltipsManager>) CR2WTypeManager.Create("whandle:gameuiTooltipsManager", "TooltipsManager", cr2w, this);
-				}
-				return _tooltipsManager;
-			}
-			set
-			{
-				if (_tooltipsManager == value)
-				{
-					return;
-				}
-				_tooltipsManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsManager);
+			set => SetProperty(ref _tooltipsManager, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("toolTipOffset")] 
 		public inkMargin ToolTipOffset
 		{
-			get
-			{
-				if (_toolTipOffset == null)
-				{
-					_toolTipOffset = (inkMargin) CR2WTypeManager.Create("inkMargin", "toolTipOffset", cr2w, this);
-				}
-				return _toolTipOffset;
-			}
-			set
-			{
-				if (_toolTipOffset == value)
-				{
-					return;
-				}
-				_toolTipOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toolTipOffset);
+			set => SetProperty(ref _toolTipOffset, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
-			get
-			{
-				if (_animationProxy == null)
-				{
-					_animationProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animationProxy", cr2w, this);
-				}
-				return _animationProxy;
-			}
-			set
-			{
-				if (_animationProxy == value)
-				{
-					return;
-				}
-				_animationProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationProxy);
+			set => SetProperty(ref _animationProxy, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("confirmAnimationProxy")] 
 		public CHandle<inkanimProxy> ConfirmAnimationProxy
 		{
-			get
-			{
-				if (_confirmAnimationProxy == null)
-				{
-					_confirmAnimationProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "confirmAnimationProxy", cr2w, this);
-				}
-				return _confirmAnimationProxy;
-			}
-			set
-			{
-				if (_confirmAnimationProxy == value)
-				{
-					return;
-				}
-				_confirmAnimationProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _confirmAnimationProxy);
+			set => SetProperty(ref _confirmAnimationProxy, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("hoverdWidget")] 
 		public wCHandle<inkWidget> HoverdWidget
 		{
-			get
-			{
-				if (_hoverdWidget == null)
-				{
-					_hoverdWidget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "hoverdWidget", cr2w, this);
-				}
-				return _hoverdWidget;
-			}
-			set
-			{
-				if (_hoverdWidget == value)
-				{
-					return;
-				}
-				_hoverdWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hoverdWidget);
+			set => SetProperty(ref _hoverdWidget, value);
 		}
 
 		public CharacterCreationStatsMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

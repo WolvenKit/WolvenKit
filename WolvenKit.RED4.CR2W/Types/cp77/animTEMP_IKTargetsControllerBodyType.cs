@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("genderTag")] 
 		public CName GenderTag
 		{
-			get
-			{
-				if (_genderTag == null)
-				{
-					_genderTag = (CName) CR2WTypeManager.Create("CName", "genderTag", cr2w, this);
-				}
-				return _genderTag;
-			}
-			set
-			{
-				if (_genderTag == value)
-				{
-					return;
-				}
-				_genderTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _genderTag);
+			set => SetProperty(ref _genderTag, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("bodyTypeTag")] 
 		public CName BodyTypeTag
 		{
-			get
-			{
-				if (_bodyTypeTag == null)
-				{
-					_bodyTypeTag = (CName) CR2WTypeManager.Create("CName", "bodyTypeTag", cr2w, this);
-				}
-				return _bodyTypeTag;
-			}
-			set
-			{
-				if (_bodyTypeTag == value)
-				{
-					return;
-				}
-				_bodyTypeTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyTypeTag);
+			set => SetProperty(ref _bodyTypeTag, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ikChainSettings")] 
 		public CArray<animIKChainSettings> IkChainSettings
 		{
-			get
-			{
-				if (_ikChainSettings == null)
-				{
-					_ikChainSettings = (CArray<animIKChainSettings>) CR2WTypeManager.Create("array:animIKChainSettings", "ikChainSettings", cr2w, this);
-				}
-				return _ikChainSettings;
-			}
-			set
-			{
-				if (_ikChainSettings == value)
-				{
-					return;
-				}
-				_ikChainSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ikChainSettings);
+			set => SetProperty(ref _ikChainSettings, value);
 		}
 
 		public animTEMP_IKTargetsControllerBodyType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

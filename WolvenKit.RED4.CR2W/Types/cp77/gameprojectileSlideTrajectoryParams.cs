@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stickiness")] 
 		public CFloat Stickiness
 		{
-			get
-			{
-				if (_stickiness == null)
-				{
-					_stickiness = (CFloat) CR2WTypeManager.Create("Float", "stickiness", cr2w, this);
-				}
-				return _stickiness;
-			}
-			set
-			{
-				if (_stickiness == value)
-				{
-					return;
-				}
-				_stickiness = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stickiness);
+			set => SetProperty(ref _stickiness, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("constAccel")] 
 		public Vector4 ConstAccel
 		{
-			get
-			{
-				if (_constAccel == null)
-				{
-					_constAccel = (Vector4) CR2WTypeManager.Create("Vector4", "constAccel", cr2w, this);
-				}
-				return _constAccel;
-			}
-			set
-			{
-				if (_constAccel == value)
-				{
-					return;
-				}
-				_constAccel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _constAccel);
+			set => SetProperty(ref _constAccel, value);
 		}
 
 		public gameprojectileSlideTrajectoryParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

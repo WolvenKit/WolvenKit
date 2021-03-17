@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("startScenarioName")] 
 		public CName StartScenarioName
 		{
-			get
-			{
-				if (_startScenarioName == null)
-				{
-					_startScenarioName = (CName) CR2WTypeManager.Create("CName", "startScenarioName", cr2w, this);
-				}
-				return _startScenarioName;
-			}
-			set
-			{
-				if (_startScenarioName == value)
-				{
-					return;
-				}
-				_startScenarioName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startScenarioName);
+			set => SetProperty(ref _startScenarioName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("endScenarioName")] 
 		public CName EndScenarioName
 		{
-			get
-			{
-				if (_endScenarioName == null)
-				{
-					_endScenarioName = (CName) CR2WTypeManager.Create("CName", "endScenarioName", cr2w, this);
-				}
-				return _endScenarioName;
-			}
-			set
-			{
-				if (_endScenarioName == value)
-				{
-					return;
-				}
-				_endScenarioName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endScenarioName);
+			set => SetProperty(ref _endScenarioName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("userData")] 
 		public CHandle<inkUserData> UserData
 		{
-			get
-			{
-				if (_userData == null)
-				{
-					_userData = (CHandle<inkUserData>) CR2WTypeManager.Create("handle:inkUserData", "userData", cr2w, this);
-				}
-				return _userData;
-			}
-			set
-			{
-				if (_userData == value)
-				{
-					return;
-				}
-				_userData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _userData);
+			set => SetProperty(ref _userData, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("forceOpenDuringFadeout")] 
 		public CBool ForceOpenDuringFadeout
 		{
-			get
-			{
-				if (_forceOpenDuringFadeout == null)
-				{
-					_forceOpenDuringFadeout = (CBool) CR2WTypeManager.Create("Bool", "forceOpenDuringFadeout", cr2w, this);
-				}
-				return _forceOpenDuringFadeout;
-			}
-			set
-			{
-				if (_forceOpenDuringFadeout == value)
-				{
-					return;
-				}
-				_forceOpenDuringFadeout = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceOpenDuringFadeout);
+			set => SetProperty(ref _forceOpenDuringFadeout, value);
 		}
 
 		public questSwitchToScenario_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

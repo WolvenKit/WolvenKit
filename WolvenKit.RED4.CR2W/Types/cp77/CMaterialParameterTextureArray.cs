@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("texture")] 
 		public rRef<ITexture> Texture
 		{
-			get
-			{
-				if (_texture == null)
-				{
-					_texture = (rRef<ITexture>) CR2WTypeManager.Create("rRef:ITexture", "texture", cr2w, this);
-				}
-				return _texture;
-			}
-			set
-			{
-				if (_texture == value)
-				{
-					return;
-				}
-				_texture = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _texture);
+			set => SetProperty(ref _texture, value);
 		}
 
 		public CMaterialParameterTextureArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

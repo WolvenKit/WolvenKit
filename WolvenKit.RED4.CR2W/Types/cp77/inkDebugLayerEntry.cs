@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("widgetResource")] 
 		public raRef<inkWidgetLibraryResource> WidgetResource
 		{
-			get
-			{
-				if (_widgetResource == null)
-				{
-					_widgetResource = (raRef<inkWidgetLibraryResource>) CR2WTypeManager.Create("raRef:inkWidgetLibraryResource", "widgetResource", cr2w, this);
-				}
-				return _widgetResource;
-			}
-			set
-			{
-				if (_widgetResource == value)
-				{
-					return;
-				}
-				_widgetResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetResource);
+			set => SetProperty(ref _widgetResource, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("anchorPlace")] 
 		public CEnum<inkEAnchor> AnchorPlace
 		{
-			get
-			{
-				if (_anchorPlace == null)
-				{
-					_anchorPlace = (CEnum<inkEAnchor>) CR2WTypeManager.Create("inkEAnchor", "anchorPlace", cr2w, this);
-				}
-				return _anchorPlace;
-			}
-			set
-			{
-				if (_anchorPlace == value)
-				{
-					return;
-				}
-				_anchorPlace = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _anchorPlace);
+			set => SetProperty(ref _anchorPlace, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("anchorPoint")] 
 		public Vector2 AnchorPoint
 		{
-			get
-			{
-				if (_anchorPoint == null)
-				{
-					_anchorPoint = (Vector2) CR2WTypeManager.Create("Vector2", "anchorPoint", cr2w, this);
-				}
-				return _anchorPoint;
-			}
-			set
-			{
-				if (_anchorPoint == value)
-				{
-					return;
-				}
-				_anchorPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _anchorPoint);
+			set => SetProperty(ref _anchorPoint, value);
 		}
 
 		public inkDebugLayerEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

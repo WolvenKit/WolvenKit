@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
-			get
-			{
-				if (_label == null)
-				{
-					_label = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "label", cr2w, this);
-				}
-				return _label;
-			}
-			set
-			{
-				if (_label == value)
-				{
-					return;
-				}
-				_label = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _label);
+			set => SetProperty(ref _label, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
-			get
-			{
-				if (_icon == null)
-				{
-					_icon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "icon", cr2w, this);
-				}
-				return _icon;
-			}
-			set
-			{
-				if (_icon == value)
-				{
-					return;
-				}
-				_icon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _icon);
+			set => SetProperty(ref _icon, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("desiredSizeWrapper")] 
 		public inkWidgetReference DesiredSizeWrapper
 		{
-			get
-			{
-				if (_desiredSizeWrapper == null)
-				{
-					_desiredSizeWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "desiredSizeWrapper", cr2w, this);
-				}
-				return _desiredSizeWrapper;
-			}
-			set
-			{
-				if (_desiredSizeWrapper == value)
-				{
-					return;
-				}
-				_desiredSizeWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _desiredSizeWrapper);
+			set => SetProperty(ref _desiredSizeWrapper, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("border")] 
 		public inkBorderWidgetReference Border
 		{
-			get
-			{
-				if (_border == null)
-				{
-					_border = (inkBorderWidgetReference) CR2WTypeManager.Create("inkBorderWidgetReference", "border", cr2w, this);
-				}
-				return _border;
-			}
-			set
-			{
-				if (_border == value)
-				{
-					return;
-				}
-				_border = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _border);
+			set => SetProperty(ref _border, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("carouselPosition")] 
 		public CInt32 CarouselPosition
 		{
-			get
-			{
-				if (_carouselPosition == null)
-				{
-					_carouselPosition = (CInt32) CR2WTypeManager.Create("Int32", "carouselPosition", cr2w, this);
-				}
-				return _carouselPosition;
-			}
-			set
-			{
-				if (_carouselPosition == value)
-				{
-					return;
-				}
-				_carouselPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _carouselPosition);
+			set => SetProperty(ref _carouselPosition, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("labelName")] 
 		public CString LabelName
 		{
-			get
-			{
-				if (_labelName == null)
-				{
-					_labelName = (CString) CR2WTypeManager.Create("String", "labelName", cr2w, this);
-				}
-				return _labelName;
-			}
-			set
-			{
-				if (_labelName == value)
-				{
-					return;
-				}
-				_labelName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _labelName);
+			set => SetProperty(ref _labelName, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("data")] 
 		public MenuData Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (MenuData) CR2WTypeManager.Create("MenuData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		public HubMenuLabelContentContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

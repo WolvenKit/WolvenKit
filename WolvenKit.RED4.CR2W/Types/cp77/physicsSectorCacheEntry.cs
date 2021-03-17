@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entryOffset")] 
 		public CUInt32 EntryOffset
 		{
-			get
-			{
-				if (_entryOffset == null)
-				{
-					_entryOffset = (CUInt32) CR2WTypeManager.Create("Uint32", "entryOffset", cr2w, this);
-				}
-				return _entryOffset;
-			}
-			set
-			{
-				if (_entryOffset == value)
-				{
-					return;
-				}
-				_entryOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryOffset);
+			set => SetProperty(ref _entryOffset, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entrySize")] 
 		public CUInt32 EntrySize
 		{
-			get
-			{
-				if (_entrySize == null)
-				{
-					_entrySize = (CUInt32) CR2WTypeManager.Create("Uint32", "entrySize", cr2w, this);
-				}
-				return _entrySize;
-			}
-			set
-			{
-				if (_entrySize == value)
-				{
-					return;
-				}
-				_entrySize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entrySize);
+			set => SetProperty(ref _entrySize, value);
 		}
 
 		public physicsSectorCacheEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

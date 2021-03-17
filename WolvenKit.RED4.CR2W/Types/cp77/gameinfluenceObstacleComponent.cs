@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("boundingBoxType")] 
 		public CEnum<gameinfluenceEBoundingBoxType> BoundingBoxType
 		{
-			get
-			{
-				if (_boundingBoxType == null)
-				{
-					_boundingBoxType = (CEnum<gameinfluenceEBoundingBoxType>) CR2WTypeManager.Create("gameinfluenceEBoundingBoxType", "boundingBoxType", cr2w, this);
-				}
-				return _boundingBoxType;
-			}
-			set
-			{
-				if (_boundingBoxType == value)
-				{
-					return;
-				}
-				_boundingBoxType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _boundingBoxType);
+			set => SetProperty(ref _boundingBoxType, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("customBoundingBox")] 
 		public Box CustomBoundingBox
 		{
-			get
-			{
-				if (_customBoundingBox == null)
-				{
-					_customBoundingBox = (Box) CR2WTypeManager.Create("Box", "customBoundingBox", cr2w, this);
-				}
-				return _customBoundingBox;
-			}
-			set
-			{
-				if (_customBoundingBox == value)
-				{
-					return;
-				}
-				_customBoundingBox = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customBoundingBox);
+			set => SetProperty(ref _customBoundingBox, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("obstacleAgent")] 
 		public gameinfluenceObstacleAgent ObstacleAgent
 		{
-			get
-			{
-				if (_obstacleAgent == null)
-				{
-					_obstacleAgent = (gameinfluenceObstacleAgent) CR2WTypeManager.Create("gameinfluenceObstacleAgent", "obstacleAgent", cr2w, this);
-				}
-				return _obstacleAgent;
-			}
-			set
-			{
-				if (_obstacleAgent == value)
-				{
-					return;
-				}
-				_obstacleAgent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _obstacleAgent);
+			set => SetProperty(ref _obstacleAgent, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get
-			{
-				if (_isEnabled == null)
-				{
-					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
-				}
-				return _isEnabled;
-			}
-			set
-			{
-				if (_isEnabled == value)
-				{
-					return;
-				}
-				_isEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
 		}
 
 		public gameinfluenceObstacleComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

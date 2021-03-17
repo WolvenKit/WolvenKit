@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("eyeTransform")] 
 		public animTransformIndex EyeTransform
 		{
-			get
-			{
-				if (_eyeTransform == null)
-				{
-					_eyeTransform = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "eyeTransform", cr2w, this);
-				}
-				return _eyeTransform;
-			}
-			set
-			{
-				if (_eyeTransform == value)
-				{
-					return;
-				}
-				_eyeTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eyeTransform);
+			set => SetProperty(ref _eyeTransform, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("leftTrack")] 
 		public animNamedTrackIndex LeftTrack
 		{
-			get
-			{
-				if (_leftTrack == null)
-				{
-					_leftTrack = (animNamedTrackIndex) CR2WTypeManager.Create("animNamedTrackIndex", "leftTrack", cr2w, this);
-				}
-				return _leftTrack;
-			}
-			set
-			{
-				if (_leftTrack == value)
-				{
-					return;
-				}
-				_leftTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _leftTrack);
+			set => SetProperty(ref _leftTrack, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("rightTrack")] 
 		public animNamedTrackIndex RightTrack
 		{
-			get
-			{
-				if (_rightTrack == null)
-				{
-					_rightTrack = (animNamedTrackIndex) CR2WTypeManager.Create("animNamedTrackIndex", "rightTrack", cr2w, this);
-				}
-				return _rightTrack;
-			}
-			set
-			{
-				if (_rightTrack == value)
-				{
-					return;
-				}
-				_rightTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rightTrack);
+			set => SetProperty(ref _rightTrack, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("upTrack")] 
 		public animNamedTrackIndex UpTrack
 		{
-			get
-			{
-				if (_upTrack == null)
-				{
-					_upTrack = (animNamedTrackIndex) CR2WTypeManager.Create("animNamedTrackIndex", "upTrack", cr2w, this);
-				}
-				return _upTrack;
-			}
-			set
-			{
-				if (_upTrack == value)
-				{
-					return;
-				}
-				_upTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _upTrack);
+			set => SetProperty(ref _upTrack, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("downTrack")] 
 		public animNamedTrackIndex DownTrack
 		{
-			get
-			{
-				if (_downTrack == null)
-				{
-					_downTrack = (animNamedTrackIndex) CR2WTypeManager.Create("animNamedTrackIndex", "downTrack", cr2w, this);
-				}
-				return _downTrack;
-			}
-			set
-			{
-				if (_downTrack == value)
-				{
-					return;
-				}
-				_downTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _downTrack);
+			set => SetProperty(ref _downTrack, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("debug")] 
 		public CBool Debug
 		{
-			get
-			{
-				if (_debug == null)
-				{
-					_debug = (CBool) CR2WTypeManager.Create("Bool", "debug", cr2w, this);
-				}
-				return _debug;
-			}
-			set
-			{
-				if (_debug == value)
-				{
-					return;
-				}
-				_debug = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _debug);
+			set => SetProperty(ref _debug, value);
 		}
 
 		public animAnimNode_EyesTracksLookAt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

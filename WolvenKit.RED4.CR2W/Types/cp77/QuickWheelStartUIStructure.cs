@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("WheelItems")] 
 		public CArray<QuickSlotCommand> WheelItems
 		{
-			get
-			{
-				if (_wheelItems == null)
-				{
-					_wheelItems = (CArray<QuickSlotCommand>) CR2WTypeManager.Create("array:QuickSlotCommand", "WheelItems", cr2w, this);
-				}
-				return _wheelItems;
-			}
-			set
-			{
-				if (_wheelItems == value)
-				{
-					return;
-				}
-				_wheelItems = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wheelItems);
+			set => SetProperty(ref _wheelItems, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("dpadSlot")] 
 		public CEnum<EDPadSlot> DpadSlot
 		{
-			get
-			{
-				if (_dpadSlot == null)
-				{
-					_dpadSlot = (CEnum<EDPadSlot>) CR2WTypeManager.Create("EDPadSlot", "dpadSlot", cr2w, this);
-				}
-				return _dpadSlot;
-			}
-			set
-			{
-				if (_dpadSlot == value)
-				{
-					return;
-				}
-				_dpadSlot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dpadSlot);
+			set => SetProperty(ref _dpadSlot, value);
 		}
 
 		public QuickWheelStartUIStructure(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

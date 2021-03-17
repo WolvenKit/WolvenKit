@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("componentName")] 
 		public CName ComponentName
 		{
-			get
-			{
-				if (_componentName == null)
-				{
-					_componentName = (CName) CR2WTypeManager.Create("CName", "componentName", cr2w, this);
-				}
-				return _componentName;
-			}
-			set
-			{
-				if (_componentName == value)
-				{
-					return;
-				}
-				_componentName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _componentName);
+			set => SetProperty(ref _componentName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("levelOfDestruction")] 
 		public CUInt8 LevelOfDestruction
 		{
-			get
-			{
-				if (_levelOfDestruction == null)
-				{
-					_levelOfDestruction = (CUInt8) CR2WTypeManager.Create("Uint8", "levelOfDestruction", cr2w, this);
-				}
-				return _levelOfDestruction;
-			}
-			set
-			{
-				if (_levelOfDestruction == value)
-				{
-					return;
-				}
-				_levelOfDestruction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelOfDestruction);
+			set => SetProperty(ref _levelOfDestruction, value);
 		}
 
 		public entPhysicalDestructionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

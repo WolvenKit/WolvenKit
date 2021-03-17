@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetHintContainer")] 
 		public CName TargetHintContainer
 		{
-			get
-			{
-				if (_targetHintContainer == null)
-				{
-					_targetHintContainer = (CName) CR2WTypeManager.Create("CName", "targetHintContainer", cr2w, this);
-				}
-				return _targetHintContainer;
-			}
-			set
-			{
-				if (_targetHintContainer == value)
-				{
-					return;
-				}
-				_targetHintContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetHintContainer);
+			set => SetProperty(ref _targetHintContainer, value);
 		}
 
 		public gameuiInputHintInitializedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

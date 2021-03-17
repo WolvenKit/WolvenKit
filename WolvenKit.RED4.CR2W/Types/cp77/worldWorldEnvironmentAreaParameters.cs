@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enable")] 
 		public CBool Enable
 		{
-			get
-			{
-				if (_enable == null)
-				{
-					_enable = (CBool) CR2WTypeManager.Create("Bool", "enable", cr2w, this);
-				}
-				return _enable;
-			}
-			set
-			{
-				if (_enable == value)
-				{
-					return;
-				}
-				_enable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enable);
+			set => SetProperty(ref _enable, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("globalLight")] 
 		public worldWorldGlobalLightParameters GlobalLight
 		{
-			get
-			{
-				if (_globalLight == null)
-				{
-					_globalLight = (worldWorldGlobalLightParameters) CR2WTypeManager.Create("worldWorldGlobalLightParameters", "globalLight", cr2w, this);
-				}
-				return _globalLight;
-			}
-			set
-			{
-				if (_globalLight == value)
-				{
-					return;
-				}
-				_globalLight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _globalLight);
+			set => SetProperty(ref _globalLight, value);
 		}
 
 		public worldWorldEnvironmentAreaParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

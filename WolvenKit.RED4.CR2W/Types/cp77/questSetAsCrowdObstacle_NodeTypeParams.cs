@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get
-			{
-				if (_puppetRef == null)
-				{
-					_puppetRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "puppetRef", cr2w, this);
-				}
-				return _puppetRef;
-			}
-			set
-			{
-				if (_puppetRef == value)
-				{
-					return;
-				}
-				_puppetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppetRef);
+			set => SetProperty(ref _puppetRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("enable")] 
 		public CBool Enable
 		{
-			get
-			{
-				if (_enable == null)
-				{
-					_enable = (CBool) CR2WTypeManager.Create("Bool", "enable", cr2w, this);
-				}
-				return _enable;
-			}
-			set
-			{
-				if (_enable == value)
-				{
-					return;
-				}
-				_enable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enable);
+			set => SetProperty(ref _enable, value);
 		}
 
 		public questSetAsCrowdObstacle_NodeTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

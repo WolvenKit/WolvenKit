@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inputLinks")] 
 		public CArray<animFloatLink> InputLinks
 		{
-			get
-			{
-				if (_inputLinks == null)
-				{
-					_inputLinks = (CArray<animFloatLink>) CR2WTypeManager.Create("array:animFloatLink", "inputLinks", cr2w, this);
-				}
-				return _inputLinks;
-			}
-			set
-			{
-				if (_inputLinks == value)
-				{
-					return;
-				}
-				_inputLinks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputLinks);
+			set => SetProperty(ref _inputLinks, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("blendSpace")] 
 		public animAnimNode_BlendSpace_InternalsBlendSpace BlendSpace
 		{
-			get
-			{
-				if (_blendSpace == null)
-				{
-					_blendSpace = (animAnimNode_BlendSpace_InternalsBlendSpace) CR2WTypeManager.Create("animAnimNode_BlendSpace_InternalsBlendSpace", "blendSpace", cr2w, this);
-				}
-				return _blendSpace;
-			}
-			set
-			{
-				if (_blendSpace == value)
-				{
-					return;
-				}
-				_blendSpace = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendSpace);
+			set => SetProperty(ref _blendSpace, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("progressLink")] 
 		public animFloatLink ProgressLink
 		{
-			get
-			{
-				if (_progressLink == null)
-				{
-					_progressLink = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "progressLink", cr2w, this);
-				}
-				return _progressLink;
-			}
-			set
-			{
-				if (_progressLink == value)
-				{
-					return;
-				}
-				_progressLink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _progressLink);
+			set => SetProperty(ref _progressLink, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("fireAnimEndEvent")] 
 		public CBool FireAnimEndEvent
 		{
-			get
-			{
-				if (_fireAnimEndEvent == null)
-				{
-					_fireAnimEndEvent = (CBool) CR2WTypeManager.Create("Bool", "fireAnimEndEvent", cr2w, this);
-				}
-				return _fireAnimEndEvent;
-			}
-			set
-			{
-				if (_fireAnimEndEvent == value)
-				{
-					return;
-				}
-				_fireAnimEndEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fireAnimEndEvent);
+			set => SetProperty(ref _fireAnimEndEvent, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("animEndEventName")] 
 		public CName AnimEndEventName
 		{
-			get
-			{
-				if (_animEndEventName == null)
-				{
-					_animEndEventName = (CName) CR2WTypeManager.Create("CName", "animEndEventName", cr2w, this);
-				}
-				return _animEndEventName;
-			}
-			set
-			{
-				if (_animEndEventName == value)
-				{
-					return;
-				}
-				_animEndEventName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animEndEventName);
+			set => SetProperty(ref _animEndEventName, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("isLooped")] 
 		public CBool IsLooped
 		{
-			get
-			{
-				if (_isLooped == null)
-				{
-					_isLooped = (CBool) CR2WTypeManager.Create("Bool", "isLooped", cr2w, this);
-				}
-				return _isLooped;
-			}
-			set
-			{
-				if (_isLooped == value)
-				{
-					return;
-				}
-				_isLooped = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isLooped);
+			set => SetProperty(ref _isLooped, value);
 		}
 
 		public animAnimNode_BlendSpace(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

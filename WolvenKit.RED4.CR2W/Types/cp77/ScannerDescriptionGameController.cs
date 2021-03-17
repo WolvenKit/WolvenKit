@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("descriptionText")] 
 		public inkTextWidgetReference DescriptionText
 		{
-			get
-			{
-				if (_descriptionText == null)
-				{
-					_descriptionText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "descriptionText", cr2w, this);
-				}
-				return _descriptionText;
-			}
-			set
-			{
-				if (_descriptionText == value)
-				{
-					return;
-				}
-				_descriptionText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _descriptionText);
+			set => SetProperty(ref _descriptionText, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("customDescriptionText")] 
 		public inkTextWidgetReference CustomDescriptionText
 		{
-			get
-			{
-				if (_customDescriptionText == null)
-				{
-					_customDescriptionText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "customDescriptionText", cr2w, this);
-				}
-				return _customDescriptionText;
-			}
-			set
-			{
-				if (_customDescriptionText == value)
-				{
-					return;
-				}
-				_customDescriptionText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customDescriptionText);
+			set => SetProperty(ref _customDescriptionText, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("descriptionCallbackID")] 
 		public CUInt32 DescriptionCallbackID
 		{
-			get
-			{
-				if (_descriptionCallbackID == null)
-				{
-					_descriptionCallbackID = (CUInt32) CR2WTypeManager.Create("Uint32", "descriptionCallbackID", cr2w, this);
-				}
-				return _descriptionCallbackID;
-			}
-			set
-			{
-				if (_descriptionCallbackID == value)
-				{
-					return;
-				}
-				_descriptionCallbackID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _descriptionCallbackID);
+			set => SetProperty(ref _descriptionCallbackID, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isValidDescription")] 
 		public CBool IsValidDescription
 		{
-			get
-			{
-				if (_isValidDescription == null)
-				{
-					_isValidDescription = (CBool) CR2WTypeManager.Create("Bool", "isValidDescription", cr2w, this);
-				}
-				return _isValidDescription;
-			}
-			set
-			{
-				if (_isValidDescription == value)
-				{
-					return;
-				}
-				_isValidDescription = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isValidDescription);
+			set => SetProperty(ref _isValidDescription, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("isValidCustomDescription")] 
 		public CBool IsValidCustomDescription
 		{
-			get
-			{
-				if (_isValidCustomDescription == null)
-				{
-					_isValidCustomDescription = (CBool) CR2WTypeManager.Create("Bool", "isValidCustomDescription", cr2w, this);
-				}
-				return _isValidCustomDescription;
-			}
-			set
-			{
-				if (_isValidCustomDescription == value)
-				{
-					return;
-				}
-				_isValidCustomDescription = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isValidCustomDescription);
+			set => SetProperty(ref _isValidCustomDescription, value);
 		}
 
 		public ScannerDescriptionGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

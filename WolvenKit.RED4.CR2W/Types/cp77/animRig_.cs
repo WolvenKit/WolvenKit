@@ -29,391 +29,136 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("boneNames")] 
 		public CArray<CName> BoneNames
 		{
-			get
-			{
-				if (_boneNames == null)
-				{
-					_boneNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "boneNames", cr2w, this);
-				}
-				return _boneNames;
-			}
-			set
-			{
-				if (_boneNames == value)
-				{
-					return;
-				}
-				_boneNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _boneNames);
+			set => SetProperty(ref _boneNames, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("trackNames")] 
 		public CArray<CName> TrackNames
 		{
-			get
-			{
-				if (_trackNames == null)
-				{
-					_trackNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "trackNames", cr2w, this);
-				}
-				return _trackNames;
-			}
-			set
-			{
-				if (_trackNames == value)
-				{
-					return;
-				}
-				_trackNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trackNames);
+			set => SetProperty(ref _trackNames, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("rigExtraTracks")] 
 		public CArray<animFloatTrackInfo> RigExtraTracks
 		{
-			get
-			{
-				if (_rigExtraTracks == null)
-				{
-					_rigExtraTracks = (CArray<animFloatTrackInfo>) CR2WTypeManager.Create("array:animFloatTrackInfo", "rigExtraTracks", cr2w, this);
-				}
-				return _rigExtraTracks;
-			}
-			set
-			{
-				if (_rigExtraTracks == value)
-				{
-					return;
-				}
-				_rigExtraTracks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rigExtraTracks);
+			set => SetProperty(ref _rigExtraTracks, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("levelOfDetailStartIndices")] 
 		public CArray<CInt16> LevelOfDetailStartIndices
 		{
-			get
-			{
-				if (_levelOfDetailStartIndices == null)
-				{
-					_levelOfDetailStartIndices = (CArray<CInt16>) CR2WTypeManager.Create("array:Int16", "levelOfDetailStartIndices", cr2w, this);
-				}
-				return _levelOfDetailStartIndices;
-			}
-			set
-			{
-				if (_levelOfDetailStartIndices == value)
-				{
-					return;
-				}
-				_levelOfDetailStartIndices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelOfDetailStartIndices);
+			set => SetProperty(ref _levelOfDetailStartIndices, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("distanceCategoryToLodMap")] 
 		public CArray<CInt16> DistanceCategoryToLodMap
 		{
-			get
-			{
-				if (_distanceCategoryToLodMap == null)
-				{
-					_distanceCategoryToLodMap = (CArray<CInt16>) CR2WTypeManager.Create("array:Int16", "distanceCategoryToLodMap", cr2w, this);
-				}
-				return _distanceCategoryToLodMap;
-			}
-			set
-			{
-				if (_distanceCategoryToLodMap == value)
-				{
-					return;
-				}
-				_distanceCategoryToLodMap = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distanceCategoryToLodMap);
+			set => SetProperty(ref _distanceCategoryToLodMap, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("turnOffLOD")] 
 		public CInt32 TurnOffLOD
 		{
-			get
-			{
-				if (_turnOffLOD == null)
-				{
-					_turnOffLOD = (CInt32) CR2WTypeManager.Create("Int32", "turnOffLOD", cr2w, this);
-				}
-				return _turnOffLOD;
-			}
-			set
-			{
-				if (_turnOffLOD == value)
-				{
-					return;
-				}
-				_turnOffLOD = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _turnOffLOD);
+			set => SetProperty(ref _turnOffLOD, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("turningOffUpdateAndSample")] 
 		public CBool TurningOffUpdateAndSample
 		{
-			get
-			{
-				if (_turningOffUpdateAndSample == null)
-				{
-					_turningOffUpdateAndSample = (CBool) CR2WTypeManager.Create("Bool", "turningOffUpdateAndSample", cr2w, this);
-				}
-				return _turningOffUpdateAndSample;
-			}
-			set
-			{
-				if (_turningOffUpdateAndSample == value)
-				{
-					return;
-				}
-				_turningOffUpdateAndSample = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _turningOffUpdateAndSample);
+			set => SetProperty(ref _turningOffUpdateAndSample, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("referenceTracks")] 
 		public CArray<CFloat> ReferenceTracks
 		{
-			get
-			{
-				if (_referenceTracks == null)
-				{
-					_referenceTracks = (CArray<CFloat>) CR2WTypeManager.Create("array:Float", "referenceTracks", cr2w, this);
-				}
-				return _referenceTracks;
-			}
-			set
-			{
-				if (_referenceTracks == value)
-				{
-					return;
-				}
-				_referenceTracks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _referenceTracks);
+			set => SetProperty(ref _referenceTracks, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("referencePoseMS")] 
 		public CArray<QsTransform> ReferencePoseMS
 		{
-			get
-			{
-				if (_referencePoseMS == null)
-				{
-					_referencePoseMS = (CArray<QsTransform>) CR2WTypeManager.Create("array:QsTransform", "referencePoseMS", cr2w, this);
-				}
-				return _referencePoseMS;
-			}
-			set
-			{
-				if (_referencePoseMS == value)
-				{
-					return;
-				}
-				_referencePoseMS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _referencePoseMS);
+			set => SetProperty(ref _referencePoseMS, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("aPoseLS")] 
 		public CArray<QsTransform> APoseLS
 		{
-			get
-			{
-				if (_aPoseLS == null)
-				{
-					_aPoseLS = (CArray<QsTransform>) CR2WTypeManager.Create("array:QsTransform", "aPoseLS", cr2w, this);
-				}
-				return _aPoseLS;
-			}
-			set
-			{
-				if (_aPoseLS == value)
-				{
-					return;
-				}
-				_aPoseLS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aPoseLS);
+			set => SetProperty(ref _aPoseLS, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("aPoseMS")] 
 		public CArray<QsTransform> APoseMS
 		{
-			get
-			{
-				if (_aPoseMS == null)
-				{
-					_aPoseMS = (CArray<QsTransform>) CR2WTypeManager.Create("array:QsTransform", "aPoseMS", cr2w, this);
-				}
-				return _aPoseMS;
-			}
-			set
-			{
-				if (_aPoseMS == value)
-				{
-					return;
-				}
-				_aPoseMS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aPoseMS);
+			set => SetProperty(ref _aPoseMS, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("tags")] 
 		public redTagList Tags
 		{
-			get
-			{
-				if (_tags == null)
-				{
-					_tags = (redTagList) CR2WTypeManager.Create("redTagList", "tags", cr2w, this);
-				}
-				return _tags;
-			}
-			set
-			{
-				if (_tags == value)
-				{
-					return;
-				}
-				_tags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tags);
+			set => SetProperty(ref _tags, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("parts")] 
 		public CArray<animRigPart> Parts
 		{
-			get
-			{
-				if (_parts == null)
-				{
-					_parts = (CArray<animRigPart>) CR2WTypeManager.Create("array:animRigPart", "parts", cr2w, this);
-				}
-				return _parts;
-			}
-			set
-			{
-				if (_parts == value)
-				{
-					return;
-				}
-				_parts = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parts);
+			set => SetProperty(ref _parts, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("retargets")] 
 		public CArray<animRigRetarget> Retargets
 		{
-			get
-			{
-				if (_retargets == null)
-				{
-					_retargets = (CArray<animRigRetarget>) CR2WTypeManager.Create("array:animRigRetarget", "retargets", cr2w, this);
-				}
-				return _retargets;
-			}
-			set
-			{
-				if (_retargets == value)
-				{
-					return;
-				}
-				_retargets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _retargets);
+			set => SetProperty(ref _retargets, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("ikSetups")] 
 		public CArray<CHandle<animIRigIkSetup>> IkSetups
 		{
-			get
-			{
-				if (_ikSetups == null)
-				{
-					_ikSetups = (CArray<CHandle<animIRigIkSetup>>) CR2WTypeManager.Create("array:handle:animIRigIkSetup", "ikSetups", cr2w, this);
-				}
-				return _ikSetups;
-			}
-			set
-			{
-				if (_ikSetups == value)
-				{
-					return;
-				}
-				_ikSetups = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ikSetups);
+			set => SetProperty(ref _ikSetups, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("ragdollDesc")] 
 		public CArray<physicsRagdollBodyInfo> RagdollDesc
 		{
-			get
-			{
-				if (_ragdollDesc == null)
-				{
-					_ragdollDesc = (CArray<physicsRagdollBodyInfo>) CR2WTypeManager.Create("array:physicsRagdollBodyInfo", "ragdollDesc", cr2w, this);
-				}
-				return _ragdollDesc;
-			}
-			set
-			{
-				if (_ragdollDesc == value)
-				{
-					return;
-				}
-				_ragdollDesc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ragdollDesc);
+			set => SetProperty(ref _ragdollDesc, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("ragdollNames")] 
 		public CArray<physicsRagdollBodyNames> RagdollNames
 		{
-			get
-			{
-				if (_ragdollNames == null)
-				{
-					_ragdollNames = (CArray<physicsRagdollBodyNames>) CR2WTypeManager.Create("array:physicsRagdollBodyNames", "ragdollNames", cr2w, this);
-				}
-				return _ragdollNames;
-			}
-			set
-			{
-				if (_ragdollNames == value)
-				{
-					return;
-				}
-				_ragdollNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ragdollNames);
+			set => SetProperty(ref _ragdollNames, value);
 		}
 
 		public animRig_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

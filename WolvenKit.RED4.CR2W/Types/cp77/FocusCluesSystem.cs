@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("linkedClues")] 
 		public CArray<LinkedFocusClueData> LinkedClues
 		{
-			get
-			{
-				if (_linkedClues == null)
-				{
-					_linkedClues = (CArray<LinkedFocusClueData>) CR2WTypeManager.Create("array:LinkedFocusClueData", "linkedClues", cr2w, this);
-				}
-				return _linkedClues;
-			}
-			set
-			{
-				if (_linkedClues == value)
-				{
-					return;
-				}
-				_linkedClues = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linkedClues);
+			set => SetProperty(ref _linkedClues, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("disabledGroupes")] 
 		public CArray<CName> DisabledGroupes
 		{
-			get
-			{
-				if (_disabledGroupes == null)
-				{
-					_disabledGroupes = (CArray<CName>) CR2WTypeManager.Create("array:CName", "disabledGroupes", cr2w, this);
-				}
-				return _disabledGroupes;
-			}
-			set
-			{
-				if (_disabledGroupes == value)
-				{
-					return;
-				}
-				_disabledGroupes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _disabledGroupes);
+			set => SetProperty(ref _disabledGroupes, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("activeLinkedClue")] 
 		public LinkedFocusClueData ActiveLinkedClue
 		{
-			get
-			{
-				if (_activeLinkedClue == null)
-				{
-					_activeLinkedClue = (LinkedFocusClueData) CR2WTypeManager.Create("LinkedFocusClueData", "activeLinkedClue", cr2w, this);
-				}
-				return _activeLinkedClue;
-			}
-			set
-			{
-				if (_activeLinkedClue == value)
-				{
-					return;
-				}
-				_activeLinkedClue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeLinkedClue);
+			set => SetProperty(ref _activeLinkedClue, value);
 		}
 
 		public FocusCluesSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("laneRefs")] 
 		public CArray<NodeRef> LaneRefs
 		{
-			get
-			{
-				if (_laneRefs == null)
-				{
-					_laneRefs = (CArray<NodeRef>) CR2WTypeManager.Create("array:NodeRef", "laneRefs", cr2w, this);
-				}
-				return _laneRefs;
-			}
-			set
-			{
-				if (_laneRefs == value)
-				{
-					return;
-				}
-				_laneRefs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _laneRefs);
+			set => SetProperty(ref _laneRefs, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lanePositions")] 
 		public CArray<CFloat> LanePositions
 		{
-			get
-			{
-				if (_lanePositions == null)
-				{
-					_lanePositions = (CArray<CFloat>) CR2WTypeManager.Create("array:Float", "lanePositions", cr2w, this);
-				}
-				return _lanePositions;
-			}
-			set
-			{
-				if (_lanePositions == value)
-				{
-					return;
-				}
-				_lanePositions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lanePositions);
+			set => SetProperty(ref _lanePositions, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("length")] 
 		public CFloat Length
 		{
-			get
-			{
-				if (_length == null)
-				{
-					_length = (CFloat) CR2WTypeManager.Create("Float", "length", cr2w, this);
-				}
-				return _length;
-			}
-			set
-			{
-				if (_length == value)
-				{
-					return;
-				}
-				_length = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _length);
+			set => SetProperty(ref _length, value);
 		}
 
 		public worldTrafficSyncPointDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

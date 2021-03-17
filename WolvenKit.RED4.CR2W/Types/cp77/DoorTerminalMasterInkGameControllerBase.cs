@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("currentlyActiveDevices")] 
 		public CArray<gamePersistentID> CurrentlyActiveDevices
 		{
-			get
-			{
-				if (_currentlyActiveDevices == null)
-				{
-					_currentlyActiveDevices = (CArray<gamePersistentID>) CR2WTypeManager.Create("array:gamePersistentID", "currentlyActiveDevices", cr2w, this);
-				}
-				return _currentlyActiveDevices;
-			}
-			set
-			{
-				if (_currentlyActiveDevices == value)
-				{
-					return;
-				}
-				_currentlyActiveDevices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentlyActiveDevices);
+			set => SetProperty(ref _currentlyActiveDevices, value);
 		}
 
 		public DoorTerminalMasterInkGameControllerBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

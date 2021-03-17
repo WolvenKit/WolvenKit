@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("setUnconscious")] 
 		public CBool SetUnconscious
 		{
-			get
-			{
-				if (_setUnconscious == null)
-				{
-					_setUnconscious = (CBool) CR2WTypeManager.Create("Bool", "setUnconscious", cr2w, this);
-				}
-				return _setUnconscious;
-			}
-			set
-			{
-				if (_setUnconscious == value)
-				{
-					return;
-				}
-				_setUnconscious = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setUnconscious);
+			set => SetProperty(ref _setUnconscious, value);
 		}
 
 		public questPuppetsUnconscious(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

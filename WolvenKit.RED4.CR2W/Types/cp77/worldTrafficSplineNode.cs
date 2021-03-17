@@ -24,276 +24,96 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("usage")] 
 		public CEnum<worldTrafficSplineNodeUsage> Usage
 		{
-			get
-			{
-				if (_usage == null)
-				{
-					_usage = (CEnum<worldTrafficSplineNodeUsage>) CR2WTypeManager.Create("worldTrafficSplineNodeUsage", "usage", cr2w, this);
-				}
-				return _usage;
-			}
-			set
-			{
-				if (_usage == value)
-				{
-					return;
-				}
-				_usage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _usage);
+			set => SetProperty(ref _usage, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("maxSlotMaxSpeed")] 
 		public CFloat MaxSlotMaxSpeed
 		{
-			get
-			{
-				if (_maxSlotMaxSpeed == null)
-				{
-					_maxSlotMaxSpeed = (CFloat) CR2WTypeManager.Create("Float", "maxSlotMaxSpeed", cr2w, this);
-				}
-				return _maxSlotMaxSpeed;
-			}
-			set
-			{
-				if (_maxSlotMaxSpeed == value)
-				{
-					return;
-				}
-				_maxSlotMaxSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxSlotMaxSpeed);
+			set => SetProperty(ref _maxSlotMaxSpeed, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("width")] 
 		public CFloat Width
 		{
-			get
-			{
-				if (_width == null)
-				{
-					_width = (CFloat) CR2WTypeManager.Create("Float", "width", cr2w, this);
-				}
-				return _width;
-			}
-			set
-			{
-				if (_width == value)
-				{
-					return;
-				}
-				_width = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _width);
+			set => SetProperty(ref _width, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("pathSamplingDistance")] 
 		public CFloat PathSamplingDistance
 		{
-			get
-			{
-				if (_pathSamplingDistance == null)
-				{
-					_pathSamplingDistance = (CFloat) CR2WTypeManager.Create("Float", "pathSamplingDistance", cr2w, this);
-				}
-				return _pathSamplingDistance;
-			}
-			set
-			{
-				if (_pathSamplingDistance == value)
-				{
-					return;
-				}
-				_pathSamplingDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pathSamplingDistance);
+			set => SetProperty(ref _pathSamplingDistance, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("bidirectional")] 
 		public CBool Bidirectional
 		{
-			get
-			{
-				if (_bidirectional == null)
-				{
-					_bidirectional = (CBool) CR2WTypeManager.Create("Bool", "bidirectional", cr2w, this);
-				}
-				return _bidirectional;
-			}
-			set
-			{
-				if (_bidirectional == value)
-				{
-					return;
-				}
-				_bidirectional = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bidirectional);
+			set => SetProperty(ref _bidirectional, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("autoConnectionRange")] 
 		public CFloat AutoConnectionRange
 		{
-			get
-			{
-				if (_autoConnectionRange == null)
-				{
-					_autoConnectionRange = (CFloat) CR2WTypeManager.Create("Float", "autoConnectionRange", cr2w, this);
-				}
-				return _autoConnectionRange;
-			}
-			set
-			{
-				if (_autoConnectionRange == value)
-				{
-					return;
-				}
-				_autoConnectionRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _autoConnectionRange);
+			set => SetProperty(ref _autoConnectionRange, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("markings")] 
 		public CArray<CName> Markings
 		{
-			get
-			{
-				if (_markings == null)
-				{
-					_markings = (CArray<CName>) CR2WTypeManager.Create("array:CName", "markings", cr2w, this);
-				}
-				return _markings;
-			}
-			set
-			{
-				if (_markings == value)
-				{
-					return;
-				}
-				_markings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _markings);
+			set => SetProperty(ref _markings, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("outLanes")] 
 		public CArray<worldTrafficLaneExitDefinition> OutLanes
 		{
-			get
-			{
-				if (_outLanes == null)
-				{
-					_outLanes = (CArray<worldTrafficLaneExitDefinition>) CR2WTypeManager.Create("array:worldTrafficLaneExitDefinition", "outLanes", cr2w, this);
-				}
-				return _outLanes;
-			}
-			set
-			{
-				if (_outLanes == value)
-				{
-					return;
-				}
-				_outLanes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outLanes);
+			set => SetProperty(ref _outLanes, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("lights")] 
 		public CArray<worldTrafficLightDefinition> Lights
 		{
-			get
-			{
-				if (_lights == null)
-				{
-					_lights = (CArray<worldTrafficLightDefinition>) CR2WTypeManager.Create("array:worldTrafficLightDefinition", "lights", cr2w, this);
-				}
-				return _lights;
-			}
-			set
-			{
-				if (_lights == value)
-				{
-					return;
-				}
-				_lights = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lights);
+			set => SetProperty(ref _lights, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("neverDeadEnd")] 
 		public CBool NeverDeadEnd
 		{
-			get
-			{
-				if (_neverDeadEnd == null)
-				{
-					_neverDeadEnd = (CBool) CR2WTypeManager.Create("Bool", "neverDeadEnd", cr2w, this);
-				}
-				return _neverDeadEnd;
-			}
-			set
-			{
-				if (_neverDeadEnd == value)
-				{
-					return;
-				}
-				_neverDeadEnd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _neverDeadEnd);
+			set => SetProperty(ref _neverDeadEnd, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("trafficDisabled")] 
 		public CBool TrafficDisabled
 		{
-			get
-			{
-				if (_trafficDisabled == null)
-				{
-					_trafficDisabled = (CBool) CR2WTypeManager.Create("Bool", "trafficDisabled", cr2w, this);
-				}
-				return _trafficDisabled;
-			}
-			set
-			{
-				if (_trafficDisabled == value)
-				{
-					return;
-				}
-				_trafficDisabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trafficDisabled);
+			set => SetProperty(ref _trafficDisabled, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("laneSamplingAngle")] 
 		public CFloat LaneSamplingAngle
 		{
-			get
-			{
-				if (_laneSamplingAngle == null)
-				{
-					_laneSamplingAngle = (CFloat) CR2WTypeManager.Create("Float", "laneSamplingAngle", cr2w, this);
-				}
-				return _laneSamplingAngle;
-			}
-			set
-			{
-				if (_laneSamplingAngle == value)
-				{
-					return;
-				}
-				_laneSamplingAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _laneSamplingAngle);
+			set => SetProperty(ref _laneSamplingAngle, value);
 		}
 
 		public worldTrafficSplineNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

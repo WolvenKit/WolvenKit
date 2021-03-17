@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotId")] 
 		public TweakDBID SlotId
 		{
-			get
-			{
-				if (_slotId == null)
-				{
-					_slotId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "slotId", cr2w, this);
-				}
-				return _slotId;
-			}
-			set
-			{
-				if (_slotId == value)
-				{
-					return;
-				}
-				_slotId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotId);
+			set => SetProperty(ref _slotId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("unequipDurationOverride")] 
 		public CFloat UnequipDurationOverride
 		{
-			get
-			{
-				if (_unequipDurationOverride == null)
-				{
-					_unequipDurationOverride = (CFloat) CR2WTypeManager.Create("Float", "unequipDurationOverride", cr2w, this);
-				}
-				return _unequipDurationOverride;
-			}
-			set
-			{
-				if (_unequipDurationOverride == value)
-				{
-					return;
-				}
-				_unequipDurationOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unequipDurationOverride);
+			set => SetProperty(ref _unequipDurationOverride, value);
 		}
 
 		public questUnequipItemParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

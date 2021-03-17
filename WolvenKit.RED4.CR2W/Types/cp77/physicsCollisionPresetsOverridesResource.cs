@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("overrides")] 
 		public CArray<physicsCollisionPresetOverride> Overrides
 		{
-			get
-			{
-				if (_overrides == null)
-				{
-					_overrides = (CArray<physicsCollisionPresetOverride>) CR2WTypeManager.Create("array:physicsCollisionPresetOverride", "overrides", cr2w, this);
-				}
-				return _overrides;
-			}
-			set
-			{
-				if (_overrides == value)
-				{
-					return;
-				}
-				_overrides = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrides);
+			set => SetProperty(ref _overrides, value);
 		}
 
 		public physicsCollisionPresetsOverridesResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

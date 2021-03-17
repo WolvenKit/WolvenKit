@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("title")] 
 		public LocalizationString Title
 		{
-			get
-			{
-				if (_title == null)
-				{
-					_title = (LocalizationString) CR2WTypeManager.Create("LocalizationString", "title", cr2w, this);
-				}
-				return _title;
-			}
-			set
-			{
-				if (_title == value)
-				{
-					return;
-				}
-				_title = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _title);
+			set => SetProperty(ref _title, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("imageId")] 
 		public TweakDBID ImageId
 		{
-			get
-			{
-				if (_imageId == null)
-				{
-					_imageId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "imageId", cr2w, this);
-				}
-				return _imageId;
-			}
-			set
-			{
-				if (_imageId == value)
-				{
-					return;
-				}
-				_imageId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _imageId);
+			set => SetProperty(ref _imageId, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("linkImageId")] 
 		public TweakDBID LinkImageId
 		{
-			get
-			{
-				if (_linkImageId == null)
-				{
-					_linkImageId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "linkImageId", cr2w, this);
-				}
-				return _linkImageId;
-			}
-			set
-			{
-				if (_linkImageId == value)
-				{
-					return;
-				}
-				_linkImageId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linkImageId);
+			set => SetProperty(ref _linkImageId, value);
 		}
 
 		public gameJournalCodexEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

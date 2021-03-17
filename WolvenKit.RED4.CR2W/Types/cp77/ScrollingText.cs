@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("textArray")] 
 		public CArray<CString> TextArray
 		{
-			get
-			{
-				if (_textArray == null)
-				{
-					_textArray = (CArray<CString>) CR2WTypeManager.Create("array:String", "textArray", cr2w, this);
-				}
-				return _textArray;
-			}
-			set
-			{
-				if (_textArray == value)
-				{
-					return;
-				}
-				_textArray = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textArray);
+			set => SetProperty(ref _textArray, value);
 		}
 
 		public ScrollingText(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

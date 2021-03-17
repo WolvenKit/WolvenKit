@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timeSystemCallbackID")] 
 		public CUInt32 TimeSystemCallbackID
 		{
-			get
-			{
-				if (_timeSystemCallbackID == null)
-				{
-					_timeSystemCallbackID = (CUInt32) CR2WTypeManager.Create("Uint32", "timeSystemCallbackID", cr2w, this);
-				}
-				return _timeSystemCallbackID;
-			}
-			set
-			{
-				if (_timeSystemCallbackID == value)
-				{
-					return;
-				}
-				_timeSystemCallbackID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeSystemCallbackID);
+			set => SetProperty(ref _timeSystemCallbackID, value);
 		}
 
 		public ApartmentScreen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

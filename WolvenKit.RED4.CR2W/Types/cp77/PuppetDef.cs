@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("IsCrowd")] 
 		public gamebbScriptID_Bool IsCrowd
 		{
-			get
-			{
-				if (_isCrowd == null)
-				{
-					_isCrowd = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "IsCrowd", cr2w, this);
-				}
-				return _isCrowd;
-			}
-			set
-			{
-				if (_isCrowd == value)
-				{
-					return;
-				}
-				_isCrowd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isCrowd);
+			set => SetProperty(ref _isCrowd, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("HideNameplate")] 
 		public gamebbScriptID_Bool HideNameplate
 		{
-			get
-			{
-				if (_hideNameplate == null)
-				{
-					_hideNameplate = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "HideNameplate", cr2w, this);
-				}
-				return _hideNameplate;
-			}
-			set
-			{
-				if (_hideNameplate == value)
-				{
-					return;
-				}
-				_hideNameplate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hideNameplate);
+			set => SetProperty(ref _hideNameplate, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ForceFriendlyCarry")] 
 		public gamebbScriptID_Bool ForceFriendlyCarry
 		{
-			get
-			{
-				if (_forceFriendlyCarry == null)
-				{
-					_forceFriendlyCarry = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "ForceFriendlyCarry", cr2w, this);
-				}
-				return _forceFriendlyCarry;
-			}
-			set
-			{
-				if (_forceFriendlyCarry == value)
-				{
-					return;
-				}
-				_forceFriendlyCarry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceFriendlyCarry);
+			set => SetProperty(ref _forceFriendlyCarry, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ForcedCarryStyle")] 
 		public gamebbScriptID_Int32 ForcedCarryStyle
 		{
-			get
-			{
-				if (_forcedCarryStyle == null)
-				{
-					_forcedCarryStyle = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "ForcedCarryStyle", cr2w, this);
-				}
-				return _forcedCarryStyle;
-			}
-			set
-			{
-				if (_forcedCarryStyle == value)
-				{
-					return;
-				}
-				_forcedCarryStyle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forcedCarryStyle);
+			set => SetProperty(ref _forcedCarryStyle, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("HasCPOMissionData")] 
 		public gamebbScriptID_Bool HasCPOMissionData
 		{
-			get
-			{
-				if (_hasCPOMissionData == null)
-				{
-					_hasCPOMissionData = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "HasCPOMissionData", cr2w, this);
-				}
-				return _hasCPOMissionData;
-			}
-			set
-			{
-				if (_hasCPOMissionData == value)
-				{
-					return;
-				}
-				_hasCPOMissionData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasCPOMissionData);
+			set => SetProperty(ref _hasCPOMissionData, value);
 		}
 
 		public PuppetDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

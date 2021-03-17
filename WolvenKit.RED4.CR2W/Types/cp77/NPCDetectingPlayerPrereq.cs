@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("threshold")] 
 		public CFloat Threshold
 		{
-			get
-			{
-				if (_threshold == null)
-				{
-					_threshold = (CFloat) CR2WTypeManager.Create("Float", "threshold", cr2w, this);
-				}
-				return _threshold;
-			}
-			set
-			{
-				if (_threshold == value)
-				{
-					return;
-				}
-				_threshold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _threshold);
+			set => SetProperty(ref _threshold, value);
 		}
 
 		public NPCDetectingPlayerPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

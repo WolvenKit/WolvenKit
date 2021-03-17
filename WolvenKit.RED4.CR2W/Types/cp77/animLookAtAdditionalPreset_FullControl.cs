@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("useRightHand")] 
 		public CBool UseRightHand
 		{
-			get
-			{
-				if (_useRightHand == null)
-				{
-					_useRightHand = (CBool) CR2WTypeManager.Create("Bool", "useRightHand", cr2w, this);
-				}
-				return _useRightHand;
-			}
-			set
-			{
-				if (_useRightHand == value)
-				{
-					return;
-				}
-				_useRightHand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useRightHand);
+			set => SetProperty(ref _useRightHand, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("attachHandToOtherOne")] 
 		public CBool AttachHandToOtherOne
 		{
-			get
-			{
-				if (_attachHandToOtherOne == null)
-				{
-					_attachHandToOtherOne = (CBool) CR2WTypeManager.Create("Bool", "attachHandToOtherOne", cr2w, this);
-				}
-				return _attachHandToOtherOne;
-			}
-			set
-			{
-				if (_attachHandToOtherOne == value)
-				{
-					return;
-				}
-				_attachHandToOtherOne = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attachHandToOtherOne);
+			set => SetProperty(ref _attachHandToOtherOne, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("limits")] 
 		public animLookAtLimits Limits
 		{
-			get
-			{
-				if (_limits == null)
-				{
-					_limits = (animLookAtLimits) CR2WTypeManager.Create("animLookAtLimits", "limits", cr2w, this);
-				}
-				return _limits;
-			}
-			set
-			{
-				if (_limits == value)
-				{
-					return;
-				}
-				_limits = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _limits);
+			set => SetProperty(ref _limits, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("suppress")] 
 		public CFloat Suppress
 		{
-			get
-			{
-				if (_suppress == null)
-				{
-					_suppress = (CFloat) CR2WTypeManager.Create("Float", "suppress", cr2w, this);
-				}
-				return _suppress;
-			}
-			set
-			{
-				if (_suppress == value)
-				{
-					return;
-				}
-				_suppress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _suppress);
+			set => SetProperty(ref _suppress, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("mode")] 
 		public CInt32 Mode
 		{
-			get
-			{
-				if (_mode == null)
-				{
-					_mode = (CInt32) CR2WTypeManager.Create("Int32", "mode", cr2w, this);
-				}
-				return _mode;
-			}
-			set
-			{
-				if (_mode == value)
-				{
-					return;
-				}
-				_mode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mode);
+			set => SetProperty(ref _mode, value);
 		}
 
 		public animLookAtAdditionalPreset_FullControl(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

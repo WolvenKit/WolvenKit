@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("defaultForwardFovRange")] 
 		public CFloat DefaultForwardFovRange
 		{
-			get
-			{
-				if (_defaultForwardFovRange == null)
-				{
-					_defaultForwardFovRange = (CFloat) CR2WTypeManager.Create("Float", "defaultForwardFovRange", cr2w, this);
-				}
-				return _defaultForwardFovRange;
-			}
-			set
-			{
-				if (_defaultForwardFovRange == value)
-				{
-					return;
-				}
-				_defaultForwardFovRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultForwardFovRange);
+			set => SetProperty(ref _defaultForwardFovRange, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("adjustedForwardFovRange")] 
 		public CFloat AdjustedForwardFovRange
 		{
-			get
-			{
-				if (_adjustedForwardFovRange == null)
-				{
-					_adjustedForwardFovRange = (CFloat) CR2WTypeManager.Create("Float", "adjustedForwardFovRange", cr2w, this);
-				}
-				return _adjustedForwardFovRange;
-			}
-			set
-			{
-				if (_adjustedForwardFovRange == value)
-				{
-					return;
-				}
-				_adjustedForwardFovRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _adjustedForwardFovRange);
+			set => SetProperty(ref _adjustedForwardFovRange, value);
 		}
 
 		public gameuiBaseDirectionalIndicatorPartLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

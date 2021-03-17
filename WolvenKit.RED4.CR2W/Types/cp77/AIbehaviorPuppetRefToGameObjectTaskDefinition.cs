@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("puppetRef")] 
 		public CHandle<AIArgumentMapping> PuppetRef
 		{
-			get
-			{
-				if (_puppetRef == null)
-				{
-					_puppetRef = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "puppetRef", cr2w, this);
-				}
-				return _puppetRef;
-			}
-			set
-			{
-				if (_puppetRef == value)
-				{
-					return;
-				}
-				_puppetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppetRef);
+			set => SetProperty(ref _puppetRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("result")] 
 		public CHandle<AIArgumentMapping> Result
 		{
-			get
-			{
-				if (_result == null)
-				{
-					_result = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "result", cr2w, this);
-				}
-				return _result;
-			}
-			set
-			{
-				if (_result == value)
-				{
-					return;
-				}
-				_result = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _result);
+			set => SetProperty(ref _result, value);
 		}
 
 		public AIbehaviorPuppetRefToGameObjectTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("yawSpeed")] 
 		public CFloat YawSpeed
 		{
-			get
-			{
-				if (_yawSpeed == null)
-				{
-					_yawSpeed = (CFloat) CR2WTypeManager.Create("Float", "yawSpeed", cr2w, this);
-				}
-				return _yawSpeed;
-			}
-			set
-			{
-				if (_yawSpeed == value)
-				{
-					return;
-				}
-				_yawSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _yawSpeed);
+			set => SetProperty(ref _yawSpeed, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("yawDefault")] 
 		public CFloat YawDefault
 		{
-			get
-			{
-				if (_yawDefault == null)
-				{
-					_yawDefault = (CFloat) CR2WTypeManager.Create("Float", "yawDefault", cr2w, this);
-				}
-				return _yawDefault;
-			}
-			set
-			{
-				if (_yawDefault == value)
-				{
-					return;
-				}
-				_yawDefault = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _yawDefault);
+			set => SetProperty(ref _yawDefault, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isRotatable")] 
 		public CBool IsRotatable
 		{
-			get
-			{
-				if (_isRotatable == null)
-				{
-					_isRotatable = (CBool) CR2WTypeManager.Create("Bool", "isRotatable", cr2w, this);
-				}
-				return _isRotatable;
-			}
-			set
-			{
-				if (_isRotatable == value)
-				{
-					return;
-				}
-				_isRotatable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isRotatable);
+			set => SetProperty(ref _isRotatable, value);
 		}
 
 		public gameuiPreviewGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

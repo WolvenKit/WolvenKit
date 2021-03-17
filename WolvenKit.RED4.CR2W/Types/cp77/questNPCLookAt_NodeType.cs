@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get
-			{
-				if (_puppetRef == null)
-				{
-					_puppetRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "puppetRef", cr2w, this);
-				}
-				return _puppetRef;
-			}
-			set
-			{
-				if (_puppetRef == value)
-				{
-					return;
-				}
-				_puppetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppetRef);
+			set => SetProperty(ref _puppetRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lookAtTargetRef")] 
 		public gameEntityReference LookAtTargetRef
 		{
-			get
-			{
-				if (_lookAtTargetRef == null)
-				{
-					_lookAtTargetRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "lookAtTargetRef", cr2w, this);
-				}
-				return _lookAtTargetRef;
-			}
-			set
-			{
-				if (_lookAtTargetRef == value)
-				{
-					return;
-				}
-				_lookAtTargetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lookAtTargetRef);
+			set => SetProperty(ref _lookAtTargetRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("assignLookAt")] 
 		public CBool AssignLookAt
 		{
-			get
-			{
-				if (_assignLookAt == null)
-				{
-					_assignLookAt = (CBool) CR2WTypeManager.Create("Bool", "assignLookAt", cr2w, this);
-				}
-				return _assignLookAt;
-			}
-			set
-			{
-				if (_assignLookAt == value)
-				{
-					return;
-				}
-				_assignLookAt = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _assignLookAt);
+			set => SetProperty(ref _assignLookAt, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("refPlayer")] 
 		public CBool RefPlayer
 		{
-			get
-			{
-				if (_refPlayer == null)
-				{
-					_refPlayer = (CBool) CR2WTypeManager.Create("Bool", "refPlayer", cr2w, this);
-				}
-				return _refPlayer;
-			}
-			set
-			{
-				if (_refPlayer == value)
-				{
-					return;
-				}
-				_refPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _refPlayer);
+			set => SetProperty(ref _refPlayer, value);
 		}
 
 		public questNPCLookAt_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

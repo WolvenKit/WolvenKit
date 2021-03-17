@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get
-			{
-				if (_puppetRef == null)
-				{
-					_puppetRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "puppetRef", cr2w, this);
-				}
-				return _puppetRef;
-			}
-			set
-			{
-				if (_puppetRef == value)
-				{
-					return;
-				}
-				_puppetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppetRef);
+			set => SetProperty(ref _puppetRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("upperBodyComparisonType")] 
 		public CEnum<questEComparisonTypeEquality> UpperBodyComparisonType
 		{
-			get
-			{
-				if (_upperBodyComparisonType == null)
-				{
-					_upperBodyComparisonType = (CEnum<questEComparisonTypeEquality>) CR2WTypeManager.Create("questEComparisonTypeEquality", "upperBodyComparisonType", cr2w, this);
-				}
-				return _upperBodyComparisonType;
-			}
-			set
-			{
-				if (_upperBodyComparisonType == value)
-				{
-					return;
-				}
-				_upperBodyComparisonType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _upperBodyComparisonType);
+			set => SetProperty(ref _upperBodyComparisonType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("upperBodyState")] 
 		public CInt32 UpperBodyState
 		{
-			get
-			{
-				if (_upperBodyState == null)
-				{
-					_upperBodyState = (CInt32) CR2WTypeManager.Create("Int32", "upperBodyState", cr2w, this);
-				}
-				return _upperBodyState;
-			}
-			set
-			{
-				if (_upperBodyState == value)
-				{
-					return;
-				}
-				_upperBodyState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _upperBodyState);
+			set => SetProperty(ref _upperBodyState, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("highLevelComparisonType")] 
 		public CEnum<questEComparisonTypeEquality> HighLevelComparisonType
 		{
-			get
-			{
-				if (_highLevelComparisonType == null)
-				{
-					_highLevelComparisonType = (CEnum<questEComparisonTypeEquality>) CR2WTypeManager.Create("questEComparisonTypeEquality", "highLevelComparisonType", cr2w, this);
-				}
-				return _highLevelComparisonType;
-			}
-			set
-			{
-				if (_highLevelComparisonType == value)
-				{
-					return;
-				}
-				_highLevelComparisonType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highLevelComparisonType);
+			set => SetProperty(ref _highLevelComparisonType, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("highLevelState")] 
 		public CInt32 HighLevelState
 		{
-			get
-			{
-				if (_highLevelState == null)
-				{
-					_highLevelState = (CInt32) CR2WTypeManager.Create("Int32", "highLevelState", cr2w, this);
-				}
-				return _highLevelState;
-			}
-			set
-			{
-				if (_highLevelState == value)
-				{
-					return;
-				}
-				_highLevelState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highLevelState);
+			set => SetProperty(ref _highLevelState, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("stanceComparisonType")] 
 		public CEnum<questEComparisonTypeEquality> StanceComparisonType
 		{
-			get
-			{
-				if (_stanceComparisonType == null)
-				{
-					_stanceComparisonType = (CEnum<questEComparisonTypeEquality>) CR2WTypeManager.Create("questEComparisonTypeEquality", "stanceComparisonType", cr2w, this);
-				}
-				return _stanceComparisonType;
-			}
-			set
-			{
-				if (_stanceComparisonType == value)
-				{
-					return;
-				}
-				_stanceComparisonType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stanceComparisonType);
+			set => SetProperty(ref _stanceComparisonType, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("stanceState")] 
 		public CInt32 StanceState
 		{
-			get
-			{
-				if (_stanceState == null)
-				{
-					_stanceState = (CInt32) CR2WTypeManager.Create("Int32", "stanceState", cr2w, this);
-				}
-				return _stanceState;
-			}
-			set
-			{
-				if (_stanceState == value)
-				{
-					return;
-				}
-				_stanceState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stanceState);
+			set => SetProperty(ref _stanceState, value);
 		}
 
 		public questCharacterState_PuppetSubType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

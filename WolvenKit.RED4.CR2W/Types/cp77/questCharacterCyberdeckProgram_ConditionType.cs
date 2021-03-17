@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cyberdeckProgramID")] 
 		public TweakDBID CyberdeckProgramID
 		{
-			get
-			{
-				if (_cyberdeckProgramID == null)
-				{
-					_cyberdeckProgramID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "cyberdeckProgramID", cr2w, this);
-				}
-				return _cyberdeckProgramID;
-			}
-			set
-			{
-				if (_cyberdeckProgramID == value)
-				{
-					return;
-				}
-				_cyberdeckProgramID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cyberdeckProgramID);
+			set => SetProperty(ref _cyberdeckProgramID, value);
 		}
 
 		public questCharacterCyberdeckProgram_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

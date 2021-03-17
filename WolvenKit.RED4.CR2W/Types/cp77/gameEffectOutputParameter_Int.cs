@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("blackboardProperty")] 
 		public gameBlackboardPropertyBindingDefinition BlackboardProperty
 		{
-			get
-			{
-				if (_blackboardProperty == null)
-				{
-					_blackboardProperty = (gameBlackboardPropertyBindingDefinition) CR2WTypeManager.Create("gameBlackboardPropertyBindingDefinition", "blackboardProperty", cr2w, this);
-				}
-				return _blackboardProperty;
-			}
-			set
-			{
-				if (_blackboardProperty == value)
-				{
-					return;
-				}
-				_blackboardProperty = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboardProperty);
+			set => SetProperty(ref _blackboardProperty, value);
 		}
 
 		public gameEffectOutputParameter_Int(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

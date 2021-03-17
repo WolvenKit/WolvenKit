@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("impactEvent")] 
 		public CName ImpactEvent
 		{
-			get
-			{
-				if (_impactEvent == null)
-				{
-					_impactEvent = (CName) CR2WTypeManager.Create("CName", "impactEvent", cr2w, this);
-				}
-				return _impactEvent;
-			}
-			set
-			{
-				if (_impactEvent == value)
-				{
-					return;
-				}
-				_impactEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _impactEvent);
+			set => SetProperty(ref _impactEvent, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("impactDetailEvent")] 
 		public CName ImpactDetailEvent
 		{
-			get
-			{
-				if (_impactDetailEvent == null)
-				{
-					_impactDetailEvent = (CName) CR2WTypeManager.Create("CName", "impactDetailEvent", cr2w, this);
-				}
-				return _impactDetailEvent;
-			}
-			set
-			{
-				if (_impactDetailEvent == value)
-				{
-					return;
-				}
-				_impactDetailEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _impactDetailEvent);
+			set => SetProperty(ref _impactDetailEvent, value);
 		}
 
 		public audioVehicleDestructionGridCell(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

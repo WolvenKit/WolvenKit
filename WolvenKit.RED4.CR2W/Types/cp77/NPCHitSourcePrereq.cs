@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hitSource")] 
 		public CEnum<EAIHitSource> HitSource
 		{
-			get
-			{
-				if (_hitSource == null)
-				{
-					_hitSource = (CEnum<EAIHitSource>) CR2WTypeManager.Create("EAIHitSource", "hitSource", cr2w, this);
-				}
-				return _hitSource;
-			}
-			set
-			{
-				if (_hitSource == value)
-				{
-					return;
-				}
-				_hitSource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitSource);
+			set => SetProperty(ref _hitSource, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("invert")] 
 		public CBool Invert
 		{
-			get
-			{
-				if (_invert == null)
-				{
-					_invert = (CBool) CR2WTypeManager.Create("Bool", "invert", cr2w, this);
-				}
-				return _invert;
-			}
-			set
-			{
-				if (_invert == value)
-				{
-					return;
-				}
-				_invert = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _invert);
+			set => SetProperty(ref _invert, value);
 		}
 
 		public NPCHitSourcePrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

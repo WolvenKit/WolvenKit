@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hitReactionToCheck")] 
 		public CEnum<animHitReactionType> HitReactionToCheck
 		{
-			get
-			{
-				if (_hitReactionToCheck == null)
-				{
-					_hitReactionToCheck = (CEnum<animHitReactionType>) CR2WTypeManager.Create("animHitReactionType", "hitReactionToCheck", cr2w, this);
-				}
-				return _hitReactionToCheck;
-			}
-			set
-			{
-				if (_hitReactionToCheck == value)
-				{
-					return;
-				}
-				_hitReactionToCheck = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitReactionToCheck);
+			set => SetProperty(ref _hitReactionToCheck, value);
 		}
 
 		public CheckLastHitReaction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

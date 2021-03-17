@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inputNode")] 
 		public animPoseLink InputNode
 		{
-			get
-			{
-				if (_inputNode == null)
-				{
-					_inputNode = (animPoseLink) CR2WTypeManager.Create("animPoseLink", "inputNode", cr2w, this);
-				}
-				return _inputNode;
-			}
-			set
-			{
-				if (_inputNode == value)
-				{
-					return;
-				}
-				_inputNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputNode);
+			set => SetProperty(ref _inputNode, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("quaternionNode")] 
 		public animQuaternionLink QuaternionNode
 		{
-			get
-			{
-				if (_quaternionNode == null)
-				{
-					_quaternionNode = (animQuaternionLink) CR2WTypeManager.Create("animQuaternionLink", "quaternionNode", cr2w, this);
-				}
-				return _quaternionNode;
-			}
-			set
-			{
-				if (_quaternionNode == value)
-				{
-					return;
-				}
-				_quaternionNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quaternionNode);
+			set => SetProperty(ref _quaternionNode, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("bone")] 
 		public animTransformIndex Bone
 		{
-			get
-			{
-				if (_bone == null)
-				{
-					_bone = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "bone", cr2w, this);
-				}
-				return _bone;
-			}
-			set
-			{
-				if (_bone == value)
-				{
-					return;
-				}
-				_bone = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bone);
+			set => SetProperty(ref _bone, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("useIncrementalMode")] 
 		public CBool UseIncrementalMode
 		{
-			get
-			{
-				if (_useIncrementalMode == null)
-				{
-					_useIncrementalMode = (CBool) CR2WTypeManager.Create("Bool", "useIncrementalMode", cr2w, this);
-				}
-				return _useIncrementalMode;
-			}
-			set
-			{
-				if (_useIncrementalMode == value)
-				{
-					return;
-				}
-				_useIncrementalMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useIncrementalMode);
+			set => SetProperty(ref _useIncrementalMode, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("resetOnActivation")] 
 		public CBool ResetOnActivation
 		{
-			get
-			{
-				if (_resetOnActivation == null)
-				{
-					_resetOnActivation = (CBool) CR2WTypeManager.Create("Bool", "resetOnActivation", cr2w, this);
-				}
-				return _resetOnActivation;
-			}
-			set
-			{
-				if (_resetOnActivation == value)
-				{
-					return;
-				}
-				_resetOnActivation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetOnActivation);
+			set => SetProperty(ref _resetOnActivation, value);
 		}
 
 		public animAnimNode_RotateBoneByQuaternion(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

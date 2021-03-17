@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("instigatorType")] 
 		public CName InstigatorType
 		{
-			get
-			{
-				if (_instigatorType == null)
-				{
-					_instigatorType = (CName) CR2WTypeManager.Create("CName", "instigatorType", cr2w, this);
-				}
-				return _instigatorType;
-			}
-			set
-			{
-				if (_instigatorType == value)
-				{
-					return;
-				}
-				_instigatorType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instigatorType);
+			set => SetProperty(ref _instigatorType, value);
 		}
 
 		public InstigatorTypeHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

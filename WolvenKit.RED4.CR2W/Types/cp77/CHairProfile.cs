@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sampleCount")] 
 		public CUInt16 SampleCount
 		{
-			get
-			{
-				if (_sampleCount == null)
-				{
-					_sampleCount = (CUInt16) CR2WTypeManager.Create("Uint16", "sampleCount", cr2w, this);
-				}
-				return _sampleCount;
-			}
-			set
-			{
-				if (_sampleCount == value)
-				{
-					return;
-				}
-				_sampleCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sampleCount);
+			set => SetProperty(ref _sampleCount, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("gradientEntriesID")] 
 		public CArray<rendGradientEntry> GradientEntriesID
 		{
-			get
-			{
-				if (_gradientEntriesID == null)
-				{
-					_gradientEntriesID = (CArray<rendGradientEntry>) CR2WTypeManager.Create("array:rendGradientEntry", "gradientEntriesID", cr2w, this);
-				}
-				return _gradientEntriesID;
-			}
-			set
-			{
-				if (_gradientEntriesID == value)
-				{
-					return;
-				}
-				_gradientEntriesID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gradientEntriesID);
+			set => SetProperty(ref _gradientEntriesID, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("gradientEntriesRootToTip")] 
 		public CArray<rendGradientEntry> GradientEntriesRootToTip
 		{
-			get
-			{
-				if (_gradientEntriesRootToTip == null)
-				{
-					_gradientEntriesRootToTip = (CArray<rendGradientEntry>) CR2WTypeManager.Create("array:rendGradientEntry", "gradientEntriesRootToTip", cr2w, this);
-				}
-				return _gradientEntriesRootToTip;
-			}
-			set
-			{
-				if (_gradientEntriesRootToTip == value)
-				{
-					return;
-				}
-				_gradientEntriesRootToTip = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gradientEntriesRootToTip);
+			set => SetProperty(ref _gradientEntriesRootToTip, value);
 		}
 
 		public CHairProfile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

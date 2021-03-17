@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isLiftDoor")] 
 		public CBool IsLiftDoor
 		{
-			get
-			{
-				if (_isLiftDoor == null)
-				{
-					_isLiftDoor = (CBool) CR2WTypeManager.Create("Bool", "isLiftDoor", cr2w, this);
-				}
-				return _isLiftDoor;
-			}
-			set
-			{
-				if (_isLiftDoor == value)
-				{
-					return;
-				}
-				_isLiftDoor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isLiftDoor);
+			set => SetProperty(ref _isLiftDoor, value);
 		}
 
 		public PlayerUnauthorized(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

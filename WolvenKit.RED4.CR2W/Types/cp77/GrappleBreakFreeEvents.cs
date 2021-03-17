@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("playerPositionVerified")] 
 		public CBool PlayerPositionVerified
 		{
-			get
-			{
-				if (_playerPositionVerified == null)
-				{
-					_playerPositionVerified = (CBool) CR2WTypeManager.Create("Bool", "playerPositionVerified", cr2w, this);
-				}
-				return _playerPositionVerified;
-			}
-			set
-			{
-				if (_playerPositionVerified == value)
-				{
-					return;
-				}
-				_playerPositionVerified = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerPositionVerified);
+			set => SetProperty(ref _playerPositionVerified, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("shouldPushPlayerAway")] 
 		public CBool ShouldPushPlayerAway
 		{
-			get
-			{
-				if (_shouldPushPlayerAway == null)
-				{
-					_shouldPushPlayerAway = (CBool) CR2WTypeManager.Create("Bool", "shouldPushPlayerAway", cr2w, this);
-				}
-				return _shouldPushPlayerAway;
-			}
-			set
-			{
-				if (_shouldPushPlayerAway == value)
-				{
-					return;
-				}
-				_shouldPushPlayerAway = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldPushPlayerAway);
+			set => SetProperty(ref _shouldPushPlayerAway, value);
 		}
 
 		public GrappleBreakFreeEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

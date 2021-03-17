@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("currentLives")] 
 		public CInt32 CurrentLives
 		{
-			get
-			{
-				if (_currentLives == null)
-				{
-					_currentLives = (CInt32) CR2WTypeManager.Create("Int32", "currentLives", cr2w, this);
-				}
-				return _currentLives;
-			}
-			set
-			{
-				if (_currentLives == value)
-				{
-					return;
-				}
-				_currentLives = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentLives);
+			set => SetProperty(ref _currentLives, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("currentScore")] 
 		public CInt32 CurrentScore
 		{
-			get
-			{
-				if (_currentScore == null)
-				{
-					_currentScore = (CInt32) CR2WTypeManager.Create("Int32", "currentScore", cr2w, this);
-				}
-				return _currentScore;
-			}
-			set
-			{
-				if (_currentScore == value)
-				{
-					return;
-				}
-				_currentScore = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentScore);
+			set => SetProperty(ref _currentScore, value);
 		}
 
 		public gameuiMinigameState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

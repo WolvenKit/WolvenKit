@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("requesterID")] 
 		public entEntityID RequesterID
 		{
-			get
-			{
-				if (_requesterID == null)
-				{
-					_requesterID = (entEntityID) CR2WTypeManager.Create("entEntityID", "requesterID", cr2w, this);
-				}
-				return _requesterID;
-			}
-			set
-			{
-				if (_requesterID == value)
-				{
-					return;
-				}
-				_requesterID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requesterID);
+			set => SetProperty(ref _requesterID, value);
 		}
 
 		public InitializeFocusCluesEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

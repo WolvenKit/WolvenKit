@@ -33,483 +33,168 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("function")] 
 		public CEnum<questUseWorkspotNodeFunctions> Function
 		{
-			get
-			{
-				if (_function == null)
-				{
-					_function = (CEnum<questUseWorkspotNodeFunctions>) CR2WTypeManager.Create("questUseWorkspotNodeFunctions", "function", cr2w, this);
-				}
-				return _function;
-			}
-			set
-			{
-				if (_function == value)
-				{
-					return;
-				}
-				_function = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _function);
+			set => SetProperty(ref _function, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("workspotNode")] 
 		public NodeRef WorkspotNode
 		{
-			get
-			{
-				if (_workspotNode == null)
-				{
-					_workspotNode = (NodeRef) CR2WTypeManager.Create("NodeRef", "workspotNode", cr2w, this);
-				}
-				return _workspotNode;
-			}
-			set
-			{
-				if (_workspotNode == value)
-				{
-					return;
-				}
-				_workspotNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotNode);
+			set => SetProperty(ref _workspotNode, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("teleport")] 
 		public CBool Teleport
 		{
-			get
-			{
-				if (_teleport == null)
-				{
-					_teleport = (CBool) CR2WTypeManager.Create("Bool", "teleport", cr2w, this);
-				}
-				return _teleport;
-			}
-			set
-			{
-				if (_teleport == value)
-				{
-					return;
-				}
-				_teleport = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _teleport);
+			set => SetProperty(ref _teleport, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("finishAnimation")] 
 		public CBool FinishAnimation
 		{
-			get
-			{
-				if (_finishAnimation == null)
-				{
-					_finishAnimation = (CBool) CR2WTypeManager.Create("Bool", "finishAnimation", cr2w, this);
-				}
-				return _finishAnimation;
-			}
-			set
-			{
-				if (_finishAnimation == value)
-				{
-					return;
-				}
-				_finishAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _finishAnimation);
+			set => SetProperty(ref _finishAnimation, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("forceEntryAnimName")] 
 		public CName ForceEntryAnimName
 		{
-			get
-			{
-				if (_forceEntryAnimName == null)
-				{
-					_forceEntryAnimName = (CName) CR2WTypeManager.Create("CName", "forceEntryAnimName", cr2w, this);
-				}
-				return _forceEntryAnimName;
-			}
-			set
-			{
-				if (_forceEntryAnimName == value)
-				{
-					return;
-				}
-				_forceEntryAnimName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceEntryAnimName);
+			set => SetProperty(ref _forceEntryAnimName, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("jumpToEntry")] 
 		public CBool JumpToEntry
 		{
-			get
-			{
-				if (_jumpToEntry == null)
-				{
-					_jumpToEntry = (CBool) CR2WTypeManager.Create("Bool", "jumpToEntry", cr2w, this);
-				}
-				return _jumpToEntry;
-			}
-			set
-			{
-				if (_jumpToEntry == value)
-				{
-					return;
-				}
-				_jumpToEntry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _jumpToEntry);
+			set => SetProperty(ref _jumpToEntry, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("entryId")] 
 		public workWorkEntryId EntryId
 		{
-			get
-			{
-				if (_entryId == null)
-				{
-					_entryId = (workWorkEntryId) CR2WTypeManager.Create("workWorkEntryId", "entryId", cr2w, this);
-				}
-				return _entryId;
-			}
-			set
-			{
-				if (_entryId == value)
-				{
-					return;
-				}
-				_entryId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryId);
+			set => SetProperty(ref _entryId, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("entryTag")] 
 		public CName EntryTag
 		{
-			get
-			{
-				if (_entryTag == null)
-				{
-					_entryTag = (CName) CR2WTypeManager.Create("CName", "entryTag", cr2w, this);
-				}
-				return _entryTag;
-			}
-			set
-			{
-				if (_entryTag == value)
-				{
-					return;
-				}
-				_entryTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryTag);
+			set => SetProperty(ref _entryTag, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("changeWorkspot")] 
 		public CBool ChangeWorkspot
 		{
-			get
-			{
-				if (_changeWorkspot == null)
-				{
-					_changeWorkspot = (CBool) CR2WTypeManager.Create("Bool", "changeWorkspot", cr2w, this);
-				}
-				return _changeWorkspot;
-			}
-			set
-			{
-				if (_changeWorkspot == value)
-				{
-					return;
-				}
-				_changeWorkspot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _changeWorkspot);
+			set => SetProperty(ref _changeWorkspot, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("enableIdleMode")] 
 		public CBool EnableIdleMode
 		{
-			get
-			{
-				if (_enableIdleMode == null)
-				{
-					_enableIdleMode = (CBool) CR2WTypeManager.Create("Bool", "enableIdleMode", cr2w, this);
-				}
-				return _enableIdleMode;
-			}
-			set
-			{
-				if (_enableIdleMode == value)
-				{
-					return;
-				}
-				_enableIdleMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableIdleMode);
+			set => SetProperty(ref _enableIdleMode, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("exitEntryId")] 
 		public workWorkEntryId ExitEntryId
 		{
-			get
-			{
-				if (_exitEntryId == null)
-				{
-					_exitEntryId = (workWorkEntryId) CR2WTypeManager.Create("workWorkEntryId", "exitEntryId", cr2w, this);
-				}
-				return _exitEntryId;
-			}
-			set
-			{
-				if (_exitEntryId == value)
-				{
-					return;
-				}
-				_exitEntryId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitEntryId);
+			set => SetProperty(ref _exitEntryId, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("exitAnimName")] 
 		public CName ExitAnimName
 		{
-			get
-			{
-				if (_exitAnimName == null)
-				{
-					_exitAnimName = (CName) CR2WTypeManager.Create("CName", "exitAnimName", cr2w, this);
-				}
-				return _exitAnimName;
-			}
-			set
-			{
-				if (_exitAnimName == value)
-				{
-					return;
-				}
-				_exitAnimName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitAnimName);
+			set => SetProperty(ref _exitAnimName, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("instant")] 
 		public CBool Instant
 		{
-			get
-			{
-				if (_instant == null)
-				{
-					_instant = (CBool) CR2WTypeManager.Create("Bool", "instant", cr2w, this);
-				}
-				return _instant;
-			}
-			set
-			{
-				if (_instant == value)
-				{
-					return;
-				}
-				_instant = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instant);
+			set => SetProperty(ref _instant, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("isWorkspotInfinite")] 
 		public CBool IsWorkspotInfinite
 		{
-			get
-			{
-				if (_isWorkspotInfinite == null)
-				{
-					_isWorkspotInfinite = (CBool) CR2WTypeManager.Create("Bool", "isWorkspotInfinite", cr2w, this);
-				}
-				return _isWorkspotInfinite;
-			}
-			set
-			{
-				if (_isWorkspotInfinite == value)
-				{
-					return;
-				}
-				_isWorkspotInfinite = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isWorkspotInfinite);
+			set => SetProperty(ref _isWorkspotInfinite, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get
-			{
-				if (_isPlayer == null)
-				{
-					_isPlayer = (CBool) CR2WTypeManager.Create("Bool", "isPlayer", cr2w, this);
-				}
-				return _isPlayer;
-			}
-			set
-			{
-				if (_isPlayer == value)
-				{
-					return;
-				}
-				_isPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("playerParams")] 
 		public questUseWorkspotPlayerParams PlayerParams
 		{
-			get
-			{
-				if (_playerParams == null)
-				{
-					_playerParams = (questUseWorkspotPlayerParams) CR2WTypeManager.Create("questUseWorkspotPlayerParams", "playerParams", cr2w, this);
-				}
-				return _playerParams;
-			}
-			set
-			{
-				if (_playerParams == value)
-				{
-					return;
-				}
-				_playerParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerParams);
+			set => SetProperty(ref _playerParams, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("repeatCommandOnInterrupt")] 
 		public CBool RepeatCommandOnInterrupt
 		{
-			get
-			{
-				if (_repeatCommandOnInterrupt == null)
-				{
-					_repeatCommandOnInterrupt = (CBool) CR2WTypeManager.Create("Bool", "repeatCommandOnInterrupt", cr2w, this);
-				}
-				return _repeatCommandOnInterrupt;
-			}
-			set
-			{
-				if (_repeatCommandOnInterrupt == value)
-				{
-					return;
-				}
-				_repeatCommandOnInterrupt = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _repeatCommandOnInterrupt);
+			set => SetProperty(ref _repeatCommandOnInterrupt, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("workExcludedGestures")] 
 		public CArray<workWorkEntryId> WorkExcludedGestures
 		{
-			get
-			{
-				if (_workExcludedGestures == null)
-				{
-					_workExcludedGestures = (CArray<workWorkEntryId>) CR2WTypeManager.Create("array:workWorkEntryId", "workExcludedGestures", cr2w, this);
-				}
-				return _workExcludedGestures;
-			}
-			set
-			{
-				if (_workExcludedGestures == value)
-				{
-					return;
-				}
-				_workExcludedGestures = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workExcludedGestures);
+			set => SetProperty(ref _workExcludedGestures, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("movementType")] 
 		public CEnum<moveMovementType> MovementType
 		{
-			get
-			{
-				if (_movementType == null)
-				{
-					_movementType = (CEnum<moveMovementType>) CR2WTypeManager.Create("moveMovementType", "movementType", cr2w, this);
-				}
-				return _movementType;
-			}
-			set
-			{
-				if (_movementType == value)
-				{
-					return;
-				}
-				_movementType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movementType);
+			set => SetProperty(ref _movementType, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("continueInCombat")] 
 		public CBool ContinueInCombat
 		{
-			get
-			{
-				if (_continueInCombat == null)
-				{
-					_continueInCombat = (CBool) CR2WTypeManager.Create("Bool", "continueInCombat", cr2w, this);
-				}
-				return _continueInCombat;
-			}
-			set
-			{
-				if (_continueInCombat == value)
-				{
-					return;
-				}
-				_continueInCombat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _continueInCombat);
+			set => SetProperty(ref _continueInCombat, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("maxAnimTimeLimit")] 
 		public CFloat MaxAnimTimeLimit
 		{
-			get
-			{
-				if (_maxAnimTimeLimit == null)
-				{
-					_maxAnimTimeLimit = (CFloat) CR2WTypeManager.Create("Float", "maxAnimTimeLimit", cr2w, this);
-				}
-				return _maxAnimTimeLimit;
-			}
-			set
-			{
-				if (_maxAnimTimeLimit == value)
-				{
-					return;
-				}
-				_maxAnimTimeLimit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxAnimTimeLimit);
+			set => SetProperty(ref _maxAnimTimeLimit, value);
 		}
 
 		public questUseWorkspotParamsV1(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

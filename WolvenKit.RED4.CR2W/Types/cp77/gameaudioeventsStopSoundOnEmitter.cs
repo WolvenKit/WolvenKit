@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("soundName")] 
 		public CName SoundName
 		{
-			get
-			{
-				if (_soundName == null)
-				{
-					_soundName = (CName) CR2WTypeManager.Create("CName", "soundName", cr2w, this);
-				}
-				return _soundName;
-			}
-			set
-			{
-				if (_soundName == value)
-				{
-					return;
-				}
-				_soundName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soundName);
+			set => SetProperty(ref _soundName, value);
 		}
 
 		public gameaudioeventsStopSoundOnEmitter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

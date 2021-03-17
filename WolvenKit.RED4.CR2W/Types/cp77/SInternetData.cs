@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("startingPage")] 
 		public CString StartingPage
 		{
-			get
-			{
-				if (_startingPage == null)
-				{
-					_startingPage = (CString) CR2WTypeManager.Create("String", "startingPage", cr2w, this);
-				}
-				return _startingPage;
-			}
-			set
-			{
-				if (_startingPage == value)
-				{
-					return;
-				}
-				_startingPage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startingPage);
+			set => SetProperty(ref _startingPage, value);
 		}
 
 		public SInternetData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

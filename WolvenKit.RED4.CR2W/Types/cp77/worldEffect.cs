@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("length")] 
 		public CFloat Length
 		{
-			get
-			{
-				if (_length == null)
-				{
-					_length = (CFloat) CR2WTypeManager.Create("Float", "length", cr2w, this);
-				}
-				return _length;
-			}
-			set
-			{
-				if (_length == value)
-				{
-					return;
-				}
-				_length = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _length);
+			set => SetProperty(ref _length, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("inputParameterNames")] 
 		public CArray<CName> InputParameterNames
 		{
-			get
-			{
-				if (_inputParameterNames == null)
-				{
-					_inputParameterNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "inputParameterNames", cr2w, this);
-				}
-				return _inputParameterNames;
-			}
-			set
-			{
-				if (_inputParameterNames == value)
-				{
-					return;
-				}
-				_inputParameterNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputParameterNames);
+			set => SetProperty(ref _inputParameterNames, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("trackRoot")] 
 		public CHandle<effectTrackGroup> TrackRoot
 		{
-			get
-			{
-				if (_trackRoot == null)
-				{
-					_trackRoot = (CHandle<effectTrackGroup>) CR2WTypeManager.Create("handle:effectTrackGroup", "trackRoot", cr2w, this);
-				}
-				return _trackRoot;
-			}
-			set
-			{
-				if (_trackRoot == value)
-				{
-					return;
-				}
-				_trackRoot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trackRoot);
+			set => SetProperty(ref _trackRoot, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("events")] 
 		public CArray<CHandle<effectTrackItem>> Events
 		{
-			get
-			{
-				if (_events == null)
-				{
-					_events = (CArray<CHandle<effectTrackItem>>) CR2WTypeManager.Create("array:handle:effectTrackItem", "events", cr2w, this);
-				}
-				return _events;
-			}
-			set
-			{
-				if (_events == value)
-				{
-					return;
-				}
-				_events = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _events);
+			set => SetProperty(ref _events, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("effectLoops")] 
 		public CArray<effectLoopData> EffectLoops
 		{
-			get
-			{
-				if (_effectLoops == null)
-				{
-					_effectLoops = (CArray<effectLoopData>) CR2WTypeManager.Create("array:effectLoopData", "effectLoops", cr2w, this);
-				}
-				return _effectLoops;
-			}
-			set
-			{
-				if (_effectLoops == value)
-				{
-					return;
-				}
-				_effectLoops = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectLoops);
+			set => SetProperty(ref _effectLoops, value);
 		}
 
 		public worldEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

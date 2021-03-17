@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rotation")] 
 		public Quaternion Rotation
 		{
-			get
-			{
-				if (_rotation == null)
-				{
-					_rotation = (Quaternion) CR2WTypeManager.Create("Quaternion", "rotation", cr2w, this);
-				}
-				return _rotation;
-			}
-			set
-			{
-				if (_rotation == value)
-				{
-					return;
-				}
-				_rotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotation);
+			set => SetProperty(ref _rotation, value);
 		}
 
 		public gameTransformAnimation_Rotation_LocalRotation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

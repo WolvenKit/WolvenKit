@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("spline")] 
 		public CHandle<AIArgumentMapping> Spline
 		{
-			get
-			{
-				if (_spline == null)
-				{
-					_spline = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "spline", cr2w, this);
-				}
-				return _spline;
-			}
-			set
-			{
-				if (_spline == value)
-				{
-					return;
-				}
-				_spline = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spline);
+			set => SetProperty(ref _spline, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("companion")] 
 		public CHandle<AIArgumentMapping> Companion
 		{
-			get
-			{
-				if (_companion == null)
-				{
-					_companion = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "companion", cr2w, this);
-				}
-				return _companion;
-			}
-			set
-			{
-				if (_companion == value)
-				{
-					return;
-				}
-				_companion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _companion);
+			set => SetProperty(ref _companion, value);
 		}
 
 		public AIbehaviorCompanionConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

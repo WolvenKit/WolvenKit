@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bbValue")] 
 		public CBool BbValue
 		{
-			get
-			{
-				if (_bbValue == null)
-				{
-					_bbValue = (CBool) CR2WTypeManager.Create("Bool", "bbValue", cr2w, this);
-				}
-				return _bbValue;
-			}
-			set
-			{
-				if (_bbValue == value)
-				{
-					return;
-				}
-				_bbValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbValue);
+			set => SetProperty(ref _bbValue, value);
 		}
 
 		public IsPlayerMovingPrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

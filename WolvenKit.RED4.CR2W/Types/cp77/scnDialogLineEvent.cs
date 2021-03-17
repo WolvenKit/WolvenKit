@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("screenplayLineId")] 
 		public scnscreenplayItemId ScreenplayLineId
 		{
-			get
-			{
-				if (_screenplayLineId == null)
-				{
-					_screenplayLineId = (scnscreenplayItemId) CR2WTypeManager.Create("scnscreenplayItemId", "screenplayLineId", cr2w, this);
-				}
-				return _screenplayLineId;
-			}
-			set
-			{
-				if (_screenplayLineId == value)
-				{
-					return;
-				}
-				_screenplayLineId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _screenplayLineId);
+			set => SetProperty(ref _screenplayLineId, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("voParams")] 
 		public scnDialogLineVoParams VoParams
 		{
-			get
-			{
-				if (_voParams == null)
-				{
-					_voParams = (scnDialogLineVoParams) CR2WTypeManager.Create("scnDialogLineVoParams", "voParams", cr2w, this);
-				}
-				return _voParams;
-			}
-			set
-			{
-				if (_voParams == value)
-				{
-					return;
-				}
-				_voParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _voParams);
+			set => SetProperty(ref _voParams, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("visualStyle")] 
 		public CEnum<scnDialogLineVisualStyle> VisualStyle
 		{
-			get
-			{
-				if (_visualStyle == null)
-				{
-					_visualStyle = (CEnum<scnDialogLineVisualStyle>) CR2WTypeManager.Create("scnDialogLineVisualStyle", "visualStyle", cr2w, this);
-				}
-				return _visualStyle;
-			}
-			set
-			{
-				if (_visualStyle == value)
-				{
-					return;
-				}
-				_visualStyle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualStyle);
+			set => SetProperty(ref _visualStyle, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("additionalSpeakers")] 
 		public scnAdditionalSpeakers AdditionalSpeakers
 		{
-			get
-			{
-				if (_additionalSpeakers == null)
-				{
-					_additionalSpeakers = (scnAdditionalSpeakers) CR2WTypeManager.Create("scnAdditionalSpeakers", "additionalSpeakers", cr2w, this);
-				}
-				return _additionalSpeakers;
-			}
-			set
-			{
-				if (_additionalSpeakers == value)
-				{
-					return;
-				}
-				_additionalSpeakers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additionalSpeakers);
+			set => SetProperty(ref _additionalSpeakers, value);
 		}
 
 		public scnDialogLineEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

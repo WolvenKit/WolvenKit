@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("withFriendlyFire")] 
 		public CBool WithFriendlyFire
 		{
-			get
-			{
-				if (_withFriendlyFire == null)
-				{
-					_withFriendlyFire = (CBool) CR2WTypeManager.Create("Bool", "withFriendlyFire", cr2w, this);
-				}
-				return _withFriendlyFire;
-			}
-			set
-			{
-				if (_withFriendlyFire == value)
-				{
-					return;
-				}
-				_withFriendlyFire = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _withFriendlyFire);
+			set => SetProperty(ref _withFriendlyFire, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("withSelfDamage")] 
 		public CBool WithSelfDamage
 		{
-			get
-			{
-				if (_withSelfDamage == null)
-				{
-					_withSelfDamage = (CBool) CR2WTypeManager.Create("Bool", "withSelfDamage", cr2w, this);
-				}
-				return _withSelfDamage;
-			}
-			set
-			{
-				if (_withSelfDamage == value)
-				{
-					return;
-				}
-				_withSelfDamage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _withSelfDamage);
+			set => SetProperty(ref _withSelfDamage, value);
 		}
 
 		public EffectPreAction_PreAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

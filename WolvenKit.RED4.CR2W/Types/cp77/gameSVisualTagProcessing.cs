@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("areaType")] 
 		public CEnum<gamedataEquipmentArea> AreaType
 		{
-			get
-			{
-				if (_areaType == null)
-				{
-					_areaType = (CEnum<gamedataEquipmentArea>) CR2WTypeManager.Create("gamedataEquipmentArea", "areaType", cr2w, this);
-				}
-				return _areaType;
-			}
-			set
-			{
-				if (_areaType == value)
-				{
-					return;
-				}
-				_areaType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaType);
+			set => SetProperty(ref _areaType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("showItem")] 
 		public CBool ShowItem
 		{
-			get
-			{
-				if (_showItem == null)
-				{
-					_showItem = (CBool) CR2WTypeManager.Create("Bool", "showItem", cr2w, this);
-				}
-				return _showItem;
-			}
-			set
-			{
-				if (_showItem == value)
-				{
-					return;
-				}
-				_showItem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showItem);
+			set => SetProperty(ref _showItem, value);
 		}
 
 		public gameSVisualTagProcessing(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

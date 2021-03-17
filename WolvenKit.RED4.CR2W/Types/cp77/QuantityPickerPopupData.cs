@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("maxValue")] 
 		public CInt32 MaxValue
 		{
-			get
-			{
-				if (_maxValue == null)
-				{
-					_maxValue = (CInt32) CR2WTypeManager.Create("Int32", "maxValue", cr2w, this);
-				}
-				return _maxValue;
-			}
-			set
-			{
-				if (_maxValue == value)
-				{
-					return;
-				}
-				_maxValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxValue);
+			set => SetProperty(ref _maxValue, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("gameItemData")] 
 		public InventoryItemData GameItemData
 		{
-			get
-			{
-				if (_gameItemData == null)
-				{
-					_gameItemData = (InventoryItemData) CR2WTypeManager.Create("InventoryItemData", "gameItemData", cr2w, this);
-				}
-				return _gameItemData;
-			}
-			set
-			{
-				if (_gameItemData == value)
-				{
-					return;
-				}
-				_gameItemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameItemData);
+			set => SetProperty(ref _gameItemData, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("actionType")] 
 		public CEnum<QuantityPickerActionType> ActionType
 		{
-			get
-			{
-				if (_actionType == null)
-				{
-					_actionType = (CEnum<QuantityPickerActionType>) CR2WTypeManager.Create("QuantityPickerActionType", "actionType", cr2w, this);
-				}
-				return _actionType;
-			}
-			set
-			{
-				if (_actionType == value)
-				{
-					return;
-				}
-				_actionType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionType);
+			set => SetProperty(ref _actionType, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("vendor")] 
 		public wCHandle<gameObject> Vendor
 		{
-			get
-			{
-				if (_vendor == null)
-				{
-					_vendor = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "vendor", cr2w, this);
-				}
-				return _vendor;
-			}
-			set
-			{
-				if (_vendor == value)
-				{
-					return;
-				}
-				_vendor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vendor);
+			set => SetProperty(ref _vendor, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("isBuyback")] 
 		public CBool IsBuyback
 		{
-			get
-			{
-				if (_isBuyback == null)
-				{
-					_isBuyback = (CBool) CR2WTypeManager.Create("Bool", "isBuyback", cr2w, this);
-				}
-				return _isBuyback;
-			}
-			set
-			{
-				if (_isBuyback == value)
-				{
-					return;
-				}
-				_isBuyback = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isBuyback);
+			set => SetProperty(ref _isBuyback, value);
 		}
 
 		public QuantityPickerPopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

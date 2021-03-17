@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("id")] 
 		public CInt32 Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CInt32) CR2WTypeManager.Create("Int32", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("part")] 
 		public CName Part
 		{
-			get
-			{
-				if (_part == null)
-				{
-					_part = (CName) CR2WTypeManager.Create("CName", "part", cr2w, this);
-				}
-				return _part;
-			}
-			set
-			{
-				if (_part == value)
-				{
-					return;
-				}
-				_part = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _part);
+			set => SetProperty(ref _part, value);
 		}
 
 		public animIKTargetRef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

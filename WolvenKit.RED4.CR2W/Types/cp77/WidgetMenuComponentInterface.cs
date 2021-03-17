@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("widgetResource")] 
 		public rRef<inkWidgetLibraryResource> WidgetResource
 		{
-			get
-			{
-				if (_widgetResource == null)
-				{
-					_widgetResource = (rRef<inkWidgetLibraryResource>) CR2WTypeManager.Create("rRef:inkWidgetLibraryResource", "widgetResource", cr2w, this);
-				}
-				return _widgetResource;
-			}
-			set
-			{
-				if (_widgetResource == value)
-				{
-					return;
-				}
-				_widgetResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetResource);
+			set => SetProperty(ref _widgetResource, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("cursorResource")] 
 		public rRef<inkWidgetLibraryResource> CursorResource
 		{
-			get
-			{
-				if (_cursorResource == null)
-				{
-					_cursorResource = (rRef<inkWidgetLibraryResource>) CR2WTypeManager.Create("rRef:inkWidgetLibraryResource", "cursorResource", cr2w, this);
-				}
-				return _cursorResource;
-			}
-			set
-			{
-				if (_cursorResource == value)
-				{
-					return;
-				}
-				_cursorResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cursorResource);
+			set => SetProperty(ref _cursorResource, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("externalMaterial")] 
 		public rRef<CMaterialTemplate> ExternalMaterial
 		{
-			get
-			{
-				if (_externalMaterial == null)
-				{
-					_externalMaterial = (rRef<CMaterialTemplate>) CR2WTypeManager.Create("rRef:CMaterialTemplate", "externalMaterial", cr2w, this);
-				}
-				return _externalMaterial;
-			}
-			set
-			{
-				if (_externalMaterial == value)
-				{
-					return;
-				}
-				_externalMaterial = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _externalMaterial);
+			set => SetProperty(ref _externalMaterial, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("meshTargetBinding")] 
 		public CHandle<worlduiMeshTargetBinding> MeshTargetBinding
 		{
-			get
-			{
-				if (_meshTargetBinding == null)
-				{
-					_meshTargetBinding = (CHandle<worlduiMeshTargetBinding>) CR2WTypeManager.Create("handle:worlduiMeshTargetBinding", "meshTargetBinding", cr2w, this);
-				}
-				return _meshTargetBinding;
-			}
-			set
-			{
-				if (_meshTargetBinding == value)
-				{
-					return;
-				}
-				_meshTargetBinding = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshTargetBinding);
+			set => SetProperty(ref _meshTargetBinding, value);
 		}
 
 		public WidgetMenuComponentInterface(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

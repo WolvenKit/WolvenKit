@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nodes")] 
 		public CArray<CHandle<graphGraphNodeDefinition>> Nodes
 		{
-			get
-			{
-				if (_nodes == null)
-				{
-					_nodes = (CArray<CHandle<graphGraphNodeDefinition>>) CR2WTypeManager.Create("array:handle:graphGraphNodeDefinition", "nodes", cr2w, this);
-				}
-				return _nodes;
-			}
-			set
-			{
-				if (_nodes == value)
-				{
-					return;
-				}
-				_nodes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodes);
+			set => SetProperty(ref _nodes, value);
 		}
 
 		public graphGraphDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

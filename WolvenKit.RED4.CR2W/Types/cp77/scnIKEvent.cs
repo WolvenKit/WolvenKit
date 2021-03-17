@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ikData")] 
 		public scnIKEventData IkData
 		{
-			get
-			{
-				if (_ikData == null)
-				{
-					_ikData = (scnIKEventData) CR2WTypeManager.Create("scnIKEventData", "ikData", cr2w, this);
-				}
-				return _ikData;
-			}
-			set
-			{
-				if (_ikData == value)
-				{
-					return;
-				}
-				_ikData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ikData);
+			set => SetProperty(ref _ikData, value);
 		}
 
 		public scnIKEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

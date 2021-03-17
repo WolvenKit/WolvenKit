@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("moveType")] 
 		public CHandle<AIArgumentMapping> MoveType
 		{
-			get
-			{
-				if (_moveType == null)
-				{
-					_moveType = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "moveType", cr2w, this);
-				}
-				return _moveType;
-			}
-			set
-			{
-				if (_moveType == value)
-				{
-					return;
-				}
-				_moveType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _moveType);
+			set => SetProperty(ref _moveType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("target")] 
 		public CHandle<AIArgumentMapping> Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("movementTarget")] 
 		public CHandle<AIArgumentMapping> MovementTarget
 		{
-			get
-			{
-				if (_movementTarget == null)
-				{
-					_movementTarget = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "movementTarget", cr2w, this);
-				}
-				return _movementTarget;
-			}
-			set
-			{
-				if (_movementTarget == value)
-				{
-					return;
-				}
-				_movementTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movementTarget);
+			set => SetProperty(ref _movementTarget, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("toleranceRadius")] 
 		public CHandle<AIArgumentMapping> ToleranceRadius
 		{
-			get
-			{
-				if (_toleranceRadius == null)
-				{
-					_toleranceRadius = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "toleranceRadius", cr2w, this);
-				}
-				return _toleranceRadius;
-			}
-			set
-			{
-				if (_toleranceRadius == value)
-				{
-					return;
-				}
-				_toleranceRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toleranceRadius);
+			set => SetProperty(ref _toleranceRadius, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("desiredDistanceFromTarget")] 
 		public CHandle<AIArgumentMapping> DesiredDistanceFromTarget
 		{
-			get
-			{
-				if (_desiredDistanceFromTarget == null)
-				{
-					_desiredDistanceFromTarget = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "desiredDistanceFromTarget", cr2w, this);
-				}
-				return _desiredDistanceFromTarget;
-			}
-			set
-			{
-				if (_desiredDistanceFromTarget == value)
-				{
-					return;
-				}
-				_desiredDistanceFromTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _desiredDistanceFromTarget);
+			set => SetProperty(ref _desiredDistanceFromTarget, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("strafingTarget")] 
 		public CHandle<AIArgumentMapping> StrafingTarget
 		{
-			get
-			{
-				if (_strafingTarget == null)
-				{
-					_strafingTarget = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "strafingTarget", cr2w, this);
-				}
-				return _strafingTarget;
-			}
-			set
-			{
-				if (_strafingTarget == value)
-				{
-					return;
-				}
-				_strafingTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _strafingTarget);
+			set => SetProperty(ref _strafingTarget, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("stopWhenDestinationReached")] 
 		public CHandle<AIArgumentMapping> StopWhenDestinationReached
 		{
-			get
-			{
-				if (_stopWhenDestinationReached == null)
-				{
-					_stopWhenDestinationReached = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "stopWhenDestinationReached", cr2w, this);
-				}
-				return _stopWhenDestinationReached;
-			}
-			set
-			{
-				if (_stopWhenDestinationReached == value)
-				{
-					return;
-				}
-				_stopWhenDestinationReached = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stopWhenDestinationReached);
+			set => SetProperty(ref _stopWhenDestinationReached, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("rotateEntity")] 
 		public CHandle<AIArgumentMapping> RotateEntity
 		{
-			get
-			{
-				if (_rotateEntity == null)
-				{
-					_rotateEntity = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "rotateEntity", cr2w, this);
-				}
-				return _rotateEntity;
-			}
-			set
-			{
-				if (_rotateEntity == value)
-				{
-					return;
-				}
-				_rotateEntity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotateEntity);
+			set => SetProperty(ref _rotateEntity, value);
 		}
 
 		public AIbehaviorActionDroneMoveTreeNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

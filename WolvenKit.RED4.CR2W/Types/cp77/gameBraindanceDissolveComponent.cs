@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dissolveRadius")] 
 		public CFloat DissolveRadius
 		{
-			get
-			{
-				if (_dissolveRadius == null)
-				{
-					_dissolveRadius = (CFloat) CR2WTypeManager.Create("Float", "dissolveRadius", cr2w, this);
-				}
-				return _dissolveRadius;
-			}
-			set
-			{
-				if (_dissolveRadius == value)
-				{
-					return;
-				}
-				_dissolveRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dissolveRadius);
+			set => SetProperty(ref _dissolveRadius, value);
 		}
 
 		public gameBraindanceDissolveComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

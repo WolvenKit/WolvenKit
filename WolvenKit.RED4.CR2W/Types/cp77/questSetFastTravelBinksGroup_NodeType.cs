@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("selectedBinkDataGroup")] 
 		public TweakDBID SelectedBinkDataGroup
 		{
-			get
-			{
-				if (_selectedBinkDataGroup == null)
-				{
-					_selectedBinkDataGroup = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "selectedBinkDataGroup", cr2w, this);
-				}
-				return _selectedBinkDataGroup;
-			}
-			set
-			{
-				if (_selectedBinkDataGroup == value)
-				{
-					return;
-				}
-				_selectedBinkDataGroup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectedBinkDataGroup);
+			set => SetProperty(ref _selectedBinkDataGroup, value);
 		}
 
 		public questSetFastTravelBinksGroup_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

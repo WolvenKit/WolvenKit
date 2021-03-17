@@ -28,368 +28,128 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("physicalMeshNames")] 
 		public CArray<CName> PhysicalMeshNames
 		{
-			get
-			{
-				if (_physicalMeshNames == null)
-				{
-					_physicalMeshNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "physicalMeshNames", cr2w, this);
-				}
-				return _physicalMeshNames;
-			}
-			set
-			{
-				if (_physicalMeshNames == value)
-				{
-					return;
-				}
-				_physicalMeshNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _physicalMeshNames);
+			set => SetProperty(ref _physicalMeshNames, value);
 		}
 
 		[Ordinal(96)] 
 		[RED("physicalMeshes")] 
 		public CArray<CHandle<entPhysicalMeshComponent>> PhysicalMeshes
 		{
-			get
-			{
-				if (_physicalMeshes == null)
-				{
-					_physicalMeshes = (CArray<CHandle<entPhysicalMeshComponent>>) CR2WTypeManager.Create("array:handle:entPhysicalMeshComponent", "physicalMeshes", cr2w, this);
-				}
-				return _physicalMeshes;
-			}
-			set
-			{
-				if (_physicalMeshes == value)
-				{
-					return;
-				}
-				_physicalMeshes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _physicalMeshes);
+			set => SetProperty(ref _physicalMeshes, value);
 		}
 
 		[Ordinal(97)] 
 		[RED("hideMeshNames")] 
 		public CArray<CName> HideMeshNames
 		{
-			get
-			{
-				if (_hideMeshNames == null)
-				{
-					_hideMeshNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "hideMeshNames", cr2w, this);
-				}
-				return _hideMeshNames;
-			}
-			set
-			{
-				if (_hideMeshNames == value)
-				{
-					return;
-				}
-				_hideMeshNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hideMeshNames);
+			set => SetProperty(ref _hideMeshNames, value);
 		}
 
 		[Ordinal(98)] 
 		[RED("hideMeshes")] 
 		public CArray<CHandle<entIPlacedComponent>> HideMeshes
 		{
-			get
-			{
-				if (_hideMeshes == null)
-				{
-					_hideMeshes = (CArray<CHandle<entIPlacedComponent>>) CR2WTypeManager.Create("array:handle:entIPlacedComponent", "hideMeshes", cr2w, this);
-				}
-				return _hideMeshes;
-			}
-			set
-			{
-				if (_hideMeshes == value)
-				{
-					return;
-				}
-				_hideMeshes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hideMeshes);
+			set => SetProperty(ref _hideMeshes, value);
 		}
 
 		[Ordinal(99)] 
 		[RED("hitColliderNames")] 
 		public CArray<CName> HitColliderNames
 		{
-			get
-			{
-				if (_hitColliderNames == null)
-				{
-					_hitColliderNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "hitColliderNames", cr2w, this);
-				}
-				return _hitColliderNames;
-			}
-			set
-			{
-				if (_hitColliderNames == value)
-				{
-					return;
-				}
-				_hitColliderNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitColliderNames);
+			set => SetProperty(ref _hitColliderNames, value);
 		}
 
 		[Ordinal(100)] 
 		[RED("hitColliders")] 
 		public CArray<CHandle<entIPlacedComponent>> HitColliders
 		{
-			get
-			{
-				if (_hitColliders == null)
-				{
-					_hitColliders = (CArray<CHandle<entIPlacedComponent>>) CR2WTypeManager.Create("array:handle:entIPlacedComponent", "hitColliders", cr2w, this);
-				}
-				return _hitColliders;
-			}
-			set
-			{
-				if (_hitColliders == value)
-				{
-					return;
-				}
-				_hitColliders = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitColliders);
+			set => SetProperty(ref _hitColliders, value);
 		}
 
 		[Ordinal(101)] 
 		[RED("impulseVector")] 
 		public Vector4 ImpulseVector
 		{
-			get
-			{
-				if (_impulseVector == null)
-				{
-					_impulseVector = (Vector4) CR2WTypeManager.Create("Vector4", "impulseVector", cr2w, this);
-				}
-				return _impulseVector;
-			}
-			set
-			{
-				if (_impulseVector == value)
-				{
-					return;
-				}
-				_impulseVector = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _impulseVector);
+			set => SetProperty(ref _impulseVector, value);
 		}
 
 		[Ordinal(102)] 
 		[RED("physicalMeshImpactVFX")] 
 		public CArray<gameFxResource> PhysicalMeshImpactVFX
 		{
-			get
-			{
-				if (_physicalMeshImpactVFX == null)
-				{
-					_physicalMeshImpactVFX = (CArray<gameFxResource>) CR2WTypeManager.Create("array:gameFxResource", "physicalMeshImpactVFX", cr2w, this);
-				}
-				return _physicalMeshImpactVFX;
-			}
-			set
-			{
-				if (_physicalMeshImpactVFX == value)
-				{
-					return;
-				}
-				_physicalMeshImpactVFX = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _physicalMeshImpactVFX);
+			set => SetProperty(ref _physicalMeshImpactVFX, value);
 		}
 
 		[Ordinal(103)] 
 		[RED("componentsToEnableNames")] 
 		public CArray<CName> ComponentsToEnableNames
 		{
-			get
-			{
-				if (_componentsToEnableNames == null)
-				{
-					_componentsToEnableNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "componentsToEnableNames", cr2w, this);
-				}
-				return _componentsToEnableNames;
-			}
-			set
-			{
-				if (_componentsToEnableNames == value)
-				{
-					return;
-				}
-				_componentsToEnableNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _componentsToEnableNames);
+			set => SetProperty(ref _componentsToEnableNames, value);
 		}
 
 		[Ordinal(104)] 
 		[RED("componentsToEnable")] 
 		public CArray<CHandle<entIPlacedComponent>> ComponentsToEnable
 		{
-			get
-			{
-				if (_componentsToEnable == null)
-				{
-					_componentsToEnable = (CArray<CHandle<entIPlacedComponent>>) CR2WTypeManager.Create("array:handle:entIPlacedComponent", "componentsToEnable", cr2w, this);
-				}
-				return _componentsToEnable;
-			}
-			set
-			{
-				if (_componentsToEnable == value)
-				{
-					return;
-				}
-				_componentsToEnable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _componentsToEnable);
+			set => SetProperty(ref _componentsToEnable, value);
 		}
 
 		[Ordinal(105)] 
 		[RED("hitCount")] 
 		public CInt32 HitCount
 		{
-			get
-			{
-				if (_hitCount == null)
-				{
-					_hitCount = (CInt32) CR2WTypeManager.Create("Int32", "hitCount", cr2w, this);
-				}
-				return _hitCount;
-			}
-			set
-			{
-				if (_hitCount == value)
-				{
-					return;
-				}
-				_hitCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitCount);
+			set => SetProperty(ref _hitCount, value);
 		}
 
 		[Ordinal(106)] 
 		[RED("wasAttackPerformed")] 
 		public CBool WasAttackPerformed
 		{
-			get
-			{
-				if (_wasAttackPerformed == null)
-				{
-					_wasAttackPerformed = (CBool) CR2WTypeManager.Create("Bool", "wasAttackPerformed", cr2w, this);
-				}
-				return _wasAttackPerformed;
-			}
-			set
-			{
-				if (_wasAttackPerformed == value)
-				{
-					return;
-				}
-				_wasAttackPerformed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasAttackPerformed);
+			set => SetProperty(ref _wasAttackPerformed, value);
 		}
 
 		[Ordinal(107)] 
 		[RED("alreadyPlayedVFXComponents")] 
 		public CArray<CName> AlreadyPlayedVFXComponents
 		{
-			get
-			{
-				if (_alreadyPlayedVFXComponents == null)
-				{
-					_alreadyPlayedVFXComponents = (CArray<CName>) CR2WTypeManager.Create("array:CName", "alreadyPlayedVFXComponents", cr2w, this);
-				}
-				return _alreadyPlayedVFXComponents;
-			}
-			set
-			{
-				if (_alreadyPlayedVFXComponents == value)
-				{
-					return;
-				}
-				_alreadyPlayedVFXComponents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alreadyPlayedVFXComponents);
+			set => SetProperty(ref _alreadyPlayedVFXComponents, value);
 		}
 
 		[Ordinal(108)] 
 		[RED("shouldCheckPhysicalCollisions")] 
 		public CBool ShouldCheckPhysicalCollisions
 		{
-			get
-			{
-				if (_shouldCheckPhysicalCollisions == null)
-				{
-					_shouldCheckPhysicalCollisions = (CBool) CR2WTypeManager.Create("Bool", "shouldCheckPhysicalCollisions", cr2w, this);
-				}
-				return _shouldCheckPhysicalCollisions;
-			}
-			set
-			{
-				if (_shouldCheckPhysicalCollisions == value)
-				{
-					return;
-				}
-				_shouldCheckPhysicalCollisions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldCheckPhysicalCollisions);
+			set => SetProperty(ref _shouldCheckPhysicalCollisions, value);
 		}
 
 		[Ordinal(109)] 
 		[RED("lastEntityHit")] 
 		public wCHandle<IScriptable> LastEntityHit
 		{
-			get
-			{
-				if (_lastEntityHit == null)
-				{
-					_lastEntityHit = (wCHandle<IScriptable>) CR2WTypeManager.Create("whandle:IScriptable", "lastEntityHit", cr2w, this);
-				}
-				return _lastEntityHit;
-			}
-			set
-			{
-				if (_lastEntityHit == value)
-				{
-					return;
-				}
-				_lastEntityHit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastEntityHit);
+			set => SetProperty(ref _lastEntityHit, value);
 		}
 
 		[Ordinal(110)] 
 		[RED("timeToActivatePhysics")] 
 		public CFloat TimeToActivatePhysics
 		{
-			get
-			{
-				if (_timeToActivatePhysics == null)
-				{
-					_timeToActivatePhysics = (CFloat) CR2WTypeManager.Create("Float", "timeToActivatePhysics", cr2w, this);
-				}
-				return _timeToActivatePhysics;
-			}
-			set
-			{
-				if (_timeToActivatePhysics == value)
-				{
-					return;
-				}
-				_timeToActivatePhysics = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeToActivatePhysics);
+			set => SetProperty(ref _timeToActivatePhysics, value);
 		}
 
 		public ActivatedDeviceTrapDestruction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("componentNameKey")] 
 		public CName ComponentNameKey
 		{
-			get
-			{
-				if (_componentNameKey == null)
-				{
-					_componentNameKey = (CName) CR2WTypeManager.Create("CName", "componentNameKey", cr2w, this);
-				}
-				return _componentNameKey;
-			}
-			set
-			{
-				if (_componentNameKey == value)
-				{
-					return;
-				}
-				_componentNameKey = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _componentNameKey);
+			set => SetProperty(ref _componentNameKey, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("enableCollision")] 
 		public CBool EnableCollision
 		{
-			get
-			{
-				if (_enableCollision == null)
-				{
-					_enableCollision = (CBool) CR2WTypeManager.Create("Bool", "enableCollision", cr2w, this);
-				}
-				return _enableCollision;
-			}
-			set
-			{
-				if (_enableCollision == value)
-				{
-					return;
-				}
-				_enableCollision = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableCollision);
+			set => SetProperty(ref _enableCollision, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("enableQueries")] 
 		public CBool EnableQueries
 		{
-			get
-			{
-				if (_enableQueries == null)
-				{
-					_enableQueries = (CBool) CR2WTypeManager.Create("Bool", "enableQueries", cr2w, this);
-				}
-				return _enableQueries;
-			}
-			set
-			{
-				if (_enableQueries == value)
-				{
-					return;
-				}
-				_enableQueries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableQueries);
+			set => SetProperty(ref _enableQueries, value);
 		}
 
 		public questComponentCollisionMapArrayElement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

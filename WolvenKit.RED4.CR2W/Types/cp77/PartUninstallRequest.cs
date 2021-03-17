@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("partID")] 
 		public gameItemID PartID
 		{
-			get
-			{
-				if (_partID == null)
-				{
-					_partID = (gameItemID) CR2WTypeManager.Create("gameItemID", "partID", cr2w, this);
-				}
-				return _partID;
-			}
-			set
-			{
-				if (_partID == value)
-				{
-					return;
-				}
-				_partID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _partID);
+			set => SetProperty(ref _partID, value);
 		}
 
 		public PartUninstallRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

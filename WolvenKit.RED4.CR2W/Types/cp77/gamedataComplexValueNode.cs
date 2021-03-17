@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("data")] 
 		public CArray<CString> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CArray<CString>) CR2WTypeManager.Create("array:String", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		public gamedataComplexValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

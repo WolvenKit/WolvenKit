@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("background")] 
 		public inkWidgetReference Background
 		{
-			get
-			{
-				if (_background == null)
-				{
-					_background = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "background", cr2w, this);
-				}
-				return _background;
-			}
-			set
-			{
-				if (_background == value)
-				{
-					return;
-				}
-				_background = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _background);
+			set => SetProperty(ref _background, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("previewImage")] 
 		public inkImageWidgetReference PreviewImage
 		{
-			get
-			{
-				if (_previewImage == null)
-				{
-					_previewImage = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "previewImage", cr2w, this);
-				}
-				return _previewImage;
-			}
-			set
-			{
-				if (_previewImage == value)
-				{
-					return;
-				}
-				_previewImage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previewImage);
+			set => SetProperty(ref _previewImage, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("previewTitle")] 
 		public inkTextWidgetReference PreviewTitle
 		{
-			get
-			{
-				if (_previewTitle == null)
-				{
-					_previewTitle = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "previewTitle", cr2w, this);
-				}
-				return _previewTitle;
-			}
-			set
-			{
-				if (_previewTitle == value)
-				{
-					return;
-				}
-				_previewTitle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previewTitle);
+			set => SetProperty(ref _previewTitle, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("previewDescription")] 
 		public inkTextWidgetReference PreviewDescription
 		{
-			get
-			{
-				if (_previewDescription == null)
-				{
-					_previewDescription = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "previewDescription", cr2w, this);
-				}
-				return _previewDescription;
-			}
-			set
-			{
-				if (_previewDescription == value)
-				{
-					return;
-				}
-				_previewDescription = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previewDescription);
+			set => SetProperty(ref _previewDescription, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("data")] 
 		public CHandle<TarotCardPreviewData> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CHandle<TarotCardPreviewData>) CR2WTypeManager.Create("handle:TarotCardPreviewData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		public TarotPreviewGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

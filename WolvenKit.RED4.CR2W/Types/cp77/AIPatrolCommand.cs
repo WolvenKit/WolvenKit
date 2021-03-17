@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("pathParams")] 
 		public CHandle<AIPatrolPathParameters> PathParams
 		{
-			get
-			{
-				if (_pathParams == null)
-				{
-					_pathParams = (CHandle<AIPatrolPathParameters>) CR2WTypeManager.Create("handle:AIPatrolPathParameters", "pathParams", cr2w, this);
-				}
-				return _pathParams;
-			}
-			set
-			{
-				if (_pathParams == value)
-				{
-					return;
-				}
-				_pathParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pathParams);
+			set => SetProperty(ref _pathParams, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("alertedPathParams")] 
 		public CHandle<AIPatrolPathParameters> AlertedPathParams
 		{
-			get
-			{
-				if (_alertedPathParams == null)
-				{
-					_alertedPathParams = (CHandle<AIPatrolPathParameters>) CR2WTypeManager.Create("handle:AIPatrolPathParameters", "alertedPathParams", cr2w, this);
-				}
-				return _alertedPathParams;
-			}
-			set
-			{
-				if (_alertedPathParams == value)
-				{
-					return;
-				}
-				_alertedPathParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alertedPathParams);
+			set => SetProperty(ref _alertedPathParams, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("alertedRadius")] 
 		public CFloat AlertedRadius
 		{
-			get
-			{
-				if (_alertedRadius == null)
-				{
-					_alertedRadius = (CFloat) CR2WTypeManager.Create("Float", "alertedRadius", cr2w, this);
-				}
-				return _alertedRadius;
-			}
-			set
-			{
-				if (_alertedRadius == value)
-				{
-					return;
-				}
-				_alertedRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alertedRadius);
+			set => SetProperty(ref _alertedRadius, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("alertedSpots")] 
 		public CArray<NodeRef> AlertedSpots
 		{
-			get
-			{
-				if (_alertedSpots == null)
-				{
-					_alertedSpots = (CArray<NodeRef>) CR2WTypeManager.Create("array:NodeRef", "alertedSpots", cr2w, this);
-				}
-				return _alertedSpots;
-			}
-			set
-			{
-				if (_alertedSpots == value)
-				{
-					return;
-				}
-				_alertedSpots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alertedSpots);
+			set => SetProperty(ref _alertedSpots, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("patrolWithWeapon")] 
 		public CBool PatrolWithWeapon
 		{
-			get
-			{
-				if (_patrolWithWeapon == null)
-				{
-					_patrolWithWeapon = (CBool) CR2WTypeManager.Create("Bool", "patrolWithWeapon", cr2w, this);
-				}
-				return _patrolWithWeapon;
-			}
-			set
-			{
-				if (_patrolWithWeapon == value)
-				{
-					return;
-				}
-				_patrolWithWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _patrolWithWeapon);
+			set => SetProperty(ref _patrolWithWeapon, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("patrolAction")] 
 		public TweakDBID PatrolAction
 		{
-			get
-			{
-				if (_patrolAction == null)
-				{
-					_patrolAction = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "patrolAction", cr2w, this);
-				}
-				return _patrolAction;
-			}
-			set
-			{
-				if (_patrolAction == value)
-				{
-					return;
-				}
-				_patrolAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _patrolAction);
+			set => SetProperty(ref _patrolAction, value);
 		}
 
 		public AIPatrolCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

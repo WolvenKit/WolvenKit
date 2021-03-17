@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("states")] 
 		public CArray<CHandle<AIbehaviorFSMStateDefinition>> States
 		{
-			get
-			{
-				if (_states == null)
-				{
-					_states = (CArray<CHandle<AIbehaviorFSMStateDefinition>>) CR2WTypeManager.Create("array:handle:AIbehaviorFSMStateDefinition", "states", cr2w, this);
-				}
-				return _states;
-			}
-			set
-			{
-				if (_states == value)
-				{
-					return;
-				}
-				_states = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _states);
+			set => SetProperty(ref _states, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("transitions")] 
 		public CArray<CHandle<AIbehaviorFSMTransitionDefinition>> Transitions
 		{
-			get
-			{
-				if (_transitions == null)
-				{
-					_transitions = (CArray<CHandle<AIbehaviorFSMTransitionDefinition>>) CR2WTypeManager.Create("array:handle:AIbehaviorFSMTransitionDefinition", "transitions", cr2w, this);
-				}
-				return _transitions;
-			}
-			set
-			{
-				if (_transitions == value)
-				{
-					return;
-				}
-				_transitions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transitions);
+			set => SetProperty(ref _transitions, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("initialState")] 
 		public CHandle<AIbehaviorFSMStateDefinition> InitialState
 		{
-			get
-			{
-				if (_initialState == null)
-				{
-					_initialState = (CHandle<AIbehaviorFSMStateDefinition>) CR2WTypeManager.Create("handle:AIbehaviorFSMStateDefinition", "initialState", cr2w, this);
-				}
-				return _initialState;
-			}
-			set
-			{
-				if (_initialState == value)
-				{
-					return;
-				}
-				_initialState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialState);
+			set => SetProperty(ref _initialState, value);
 		}
 
 		public AIbehaviorFSMTreeNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

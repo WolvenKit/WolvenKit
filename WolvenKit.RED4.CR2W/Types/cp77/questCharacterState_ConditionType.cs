@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("subType")] 
 		public CHandle<questICharacterConditionSubType> SubType
 		{
-			get
-			{
-				if (_subType == null)
-				{
-					_subType = (CHandle<questICharacterConditionSubType>) CR2WTypeManager.Create("handle:questICharacterConditionSubType", "subType", cr2w, this);
-				}
-				return _subType;
-			}
-			set
-			{
-				if (_subType == value)
-				{
-					return;
-				}
-				_subType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subType);
+			set => SetProperty(ref _subType, value);
 		}
 
 		public questCharacterState_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

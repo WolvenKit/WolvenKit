@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("physicalToAudioMaterialAssignments")] 
 		public CArray<audioAudioMaterialMetadataMapItem> PhysicalToAudioMaterialAssignments
 		{
-			get
-			{
-				if (_physicalToAudioMaterialAssignments == null)
-				{
-					_physicalToAudioMaterialAssignments = (CArray<audioAudioMaterialMetadataMapItem>) CR2WTypeManager.Create("array:audioAudioMaterialMetadataMapItem", "physicalToAudioMaterialAssignments", cr2w, this);
-				}
-				return _physicalToAudioMaterialAssignments;
-			}
-			set
-			{
-				if (_physicalToAudioMaterialAssignments == value)
-				{
-					return;
-				}
-				_physicalToAudioMaterialAssignments = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _physicalToAudioMaterialAssignments);
+			set => SetProperty(ref _physicalToAudioMaterialAssignments, value);
 		}
 
 		public audioPhysicalMaterialToAudioMetadataMatrix(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

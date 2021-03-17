@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("IsActive")] 
 		public gamebbScriptID_Bool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "IsActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("AnimationIndex")] 
 		public gamebbScriptID_Int32 AnimationIndex
 		{
-			get
-			{
-				if (_animationIndex == null)
-				{
-					_animationIndex = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "AnimationIndex", cr2w, this);
-				}
-				return _animationIndex;
-			}
-			set
-			{
-				if (_animationIndex == value)
-				{
-					return;
-				}
-				_animationIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationIndex);
+			set => SetProperty(ref _animationIndex, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("UseBothHands")] 
 		public gamebbScriptID_Bool UseBothHands
 		{
-			get
-			{
-				if (_useBothHands == null)
-				{
-					_useBothHands = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "UseBothHands", cr2w, this);
-				}
-				return _useBothHands;
-			}
-			set
-			{
-				if (_useBothHands == value)
-				{
-					return;
-				}
-				_useBothHands = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useBothHands);
+			set => SetProperty(ref _useBothHands, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("UnequipWeapon")] 
 		public gamebbScriptID_Bool UnequipWeapon
 		{
-			get
-			{
-				if (_unequipWeapon == null)
-				{
-					_unequipWeapon = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "UnequipWeapon", cr2w, this);
-				}
-				return _unequipWeapon;
-			}
-			set
-			{
-				if (_unequipWeapon == value)
-				{
-					return;
-				}
-				_unequipWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unequipWeapon);
+			set => SetProperty(ref _unequipWeapon, value);
 		}
 
 		public AdHocAnimationDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

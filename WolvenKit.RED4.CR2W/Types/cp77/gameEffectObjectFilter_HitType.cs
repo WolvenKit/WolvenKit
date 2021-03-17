@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("action")] 
 		public CEnum<gameEffectObjectFilter_HitTypeAction> Action
 		{
-			get
-			{
-				if (_action == null)
-				{
-					_action = (CEnum<gameEffectObjectFilter_HitTypeAction>) CR2WTypeManager.Create("gameEffectObjectFilter_HitTypeAction", "action", cr2w, this);
-				}
-				return _action;
-			}
-			set
-			{
-				if (_action == value)
-				{
-					return;
-				}
-				_action = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hitType")] 
 		public CEnum<gameEffectHitDataType> HitType
 		{
-			get
-			{
-				if (_hitType == null)
-				{
-					_hitType = (CEnum<gameEffectHitDataType>) CR2WTypeManager.Create("gameEffectHitDataType", "hitType", cr2w, this);
-				}
-				return _hitType;
-			}
-			set
-			{
-				if (_hitType == value)
-				{
-					return;
-				}
-				_hitType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitType);
+			set => SetProperty(ref _hitType, value);
 		}
 
 		public gameEffectObjectFilter_HitType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

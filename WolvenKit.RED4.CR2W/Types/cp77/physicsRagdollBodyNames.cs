@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ParentAnimName")] 
 		public CName ParentAnimName
 		{
-			get
-			{
-				if (_parentAnimName == null)
-				{
-					_parentAnimName = (CName) CR2WTypeManager.Create("CName", "ParentAnimName", cr2w, this);
-				}
-				return _parentAnimName;
-			}
-			set
-			{
-				if (_parentAnimName == value)
-				{
-					return;
-				}
-				_parentAnimName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentAnimName);
+			set => SetProperty(ref _parentAnimName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ChildAnimName")] 
 		public CName ChildAnimName
 		{
-			get
-			{
-				if (_childAnimName == null)
-				{
-					_childAnimName = (CName) CR2WTypeManager.Create("CName", "ChildAnimName", cr2w, this);
-				}
-				return _childAnimName;
-			}
-			set
-			{
-				if (_childAnimName == value)
-				{
-					return;
-				}
-				_childAnimName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _childAnimName);
+			set => SetProperty(ref _childAnimName, value);
 		}
 
 		public physicsRagdollBodyNames(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

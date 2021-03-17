@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("armouryItemID")] 
 		public TweakDBID ArmouryItemID
 		{
-			get
-			{
-				if (_armouryItemID == null)
-				{
-					_armouryItemID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "armouryItemID", cr2w, this);
-				}
-				return _armouryItemID;
-			}
-			set
-			{
-				if (_armouryItemID == value)
-				{
-					return;
-				}
-				_armouryItemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _armouryItemID);
+			set => SetProperty(ref _armouryItemID, value);
 		}
 
 		public gameCpoArmouryItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

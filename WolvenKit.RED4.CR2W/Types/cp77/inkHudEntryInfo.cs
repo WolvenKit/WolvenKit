@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("size")] 
 		public Vector2 Size
 		{
-			get
-			{
-				if (_size == null)
-				{
-					_size = (Vector2) CR2WTypeManager.Create("Vector2", "size", cr2w, this);
-				}
-				return _size;
-			}
-			set
-			{
-				if (_size == value)
-				{
-					return;
-				}
-				_size = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _size);
+			set => SetProperty(ref _size, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("offset")] 
 		public Vector2 Offset
 		{
-			get
-			{
-				if (_offset == null)
-				{
-					_offset = (Vector2) CR2WTypeManager.Create("Vector2", "offset", cr2w, this);
-				}
-				return _offset;
-			}
-			set
-			{
-				if (_offset == value)
-				{
-					return;
-				}
-				_offset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offset);
+			set => SetProperty(ref _offset, value);
 		}
 
 		public inkHudEntryInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

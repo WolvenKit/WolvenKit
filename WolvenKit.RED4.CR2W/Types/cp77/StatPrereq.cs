@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fireAndForget")] 
 		public CBool FireAndForget
 		{
-			get
-			{
-				if (_fireAndForget == null)
-				{
-					_fireAndForget = (CBool) CR2WTypeManager.Create("Bool", "fireAndForget", cr2w, this);
-				}
-				return _fireAndForget;
-			}
-			set
-			{
-				if (_fireAndForget == value)
-				{
-					return;
-				}
-				_fireAndForget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fireAndForget);
+			set => SetProperty(ref _fireAndForget, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("statType")] 
 		public CEnum<gamedataStatType> StatType
 		{
-			get
-			{
-				if (_statType == null)
-				{
-					_statType = (CEnum<gamedataStatType>) CR2WTypeManager.Create("gamedataStatType", "statType", cr2w, this);
-				}
-				return _statType;
-			}
-			set
-			{
-				if (_statType == value)
-				{
-					return;
-				}
-				_statType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statType);
+			set => SetProperty(ref _statType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("valueToCheck")] 
 		public CFloat ValueToCheck
 		{
-			get
-			{
-				if (_valueToCheck == null)
-				{
-					_valueToCheck = (CFloat) CR2WTypeManager.Create("Float", "valueToCheck", cr2w, this);
-				}
-				return _valueToCheck;
-			}
-			set
-			{
-				if (_valueToCheck == value)
-				{
-					return;
-				}
-				_valueToCheck = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _valueToCheck);
+			set => SetProperty(ref _valueToCheck, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("comparisonType")] 
 		public CEnum<EComparisonType> ComparisonType
 		{
-			get
-			{
-				if (_comparisonType == null)
-				{
-					_comparisonType = (CEnum<EComparisonType>) CR2WTypeManager.Create("EComparisonType", "comparisonType", cr2w, this);
-				}
-				return _comparisonType;
-			}
-			set
-			{
-				if (_comparisonType == value)
-				{
-					return;
-				}
-				_comparisonType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comparisonType);
+			set => SetProperty(ref _comparisonType, value);
 		}
 
 		public StatPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

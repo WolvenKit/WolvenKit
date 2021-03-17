@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PerkDisplayTooltipController : AGenericTooltipController
 	{
-		private inkWidgetReference _root;
+		private inkWidgetReference _root_16;
 		private inkTextWidgetReference _perkNameText;
 		private inkWidgetReference _videoWrapper;
 		private inkVideoWidgetReference _videoWidget;
@@ -33,483 +33,168 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("root")] 
 		public inkWidgetReference Root_16
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root_16);
+			set => SetProperty(ref _root_16, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("perkNameText")] 
 		public inkTextWidgetReference PerkNameText
 		{
-			get
-			{
-				if (_perkNameText == null)
-				{
-					_perkNameText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "perkNameText", cr2w, this);
-				}
-				return _perkNameText;
-			}
-			set
-			{
-				if (_perkNameText == value)
-				{
-					return;
-				}
-				_perkNameText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perkNameText);
+			set => SetProperty(ref _perkNameText, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("videoWrapper")] 
 		public inkWidgetReference VideoWrapper
 		{
-			get
-			{
-				if (_videoWrapper == null)
-				{
-					_videoWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "videoWrapper", cr2w, this);
-				}
-				return _videoWrapper;
-			}
-			set
-			{
-				if (_videoWrapper == value)
-				{
-					return;
-				}
-				_videoWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _videoWrapper);
+			set => SetProperty(ref _videoWrapper, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("videoWidget")] 
 		public inkVideoWidgetReference VideoWidget
 		{
-			get
-			{
-				if (_videoWidget == null)
-				{
-					_videoWidget = (inkVideoWidgetReference) CR2WTypeManager.Create("inkVideoWidgetReference", "videoWidget", cr2w, this);
-				}
-				return _videoWidget;
-			}
-			set
-			{
-				if (_videoWidget == value)
-				{
-					return;
-				}
-				_videoWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _videoWidget);
+			set => SetProperty(ref _videoWidget, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("unlockStateText")] 
 		public inkTextWidgetReference UnlockStateText
 		{
-			get
-			{
-				if (_unlockStateText == null)
-				{
-					_unlockStateText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "unlockStateText", cr2w, this);
-				}
-				return _unlockStateText;
-			}
-			set
-			{
-				if (_unlockStateText == value)
-				{
-					return;
-				}
-				_unlockStateText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unlockStateText);
+			set => SetProperty(ref _unlockStateText, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("perkTypeText")] 
 		public inkTextWidgetReference PerkTypeText
 		{
-			get
-			{
-				if (_perkTypeText == null)
-				{
-					_perkTypeText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "perkTypeText", cr2w, this);
-				}
-				return _perkTypeText;
-			}
-			set
-			{
-				if (_perkTypeText == value)
-				{
-					return;
-				}
-				_perkTypeText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perkTypeText);
+			set => SetProperty(ref _perkTypeText, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("perkTypeWrapper")] 
 		public inkWidgetReference PerkTypeWrapper
 		{
-			get
-			{
-				if (_perkTypeWrapper == null)
-				{
-					_perkTypeWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "perkTypeWrapper", cr2w, this);
-				}
-				return _perkTypeWrapper;
-			}
-			set
-			{
-				if (_perkTypeWrapper == value)
-				{
-					return;
-				}
-				_perkTypeWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perkTypeWrapper);
+			set => SetProperty(ref _perkTypeWrapper, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("unlockInfoWrapper")] 
 		public inkWidgetReference UnlockInfoWrapper
 		{
-			get
-			{
-				if (_unlockInfoWrapper == null)
-				{
-					_unlockInfoWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "unlockInfoWrapper", cr2w, this);
-				}
-				return _unlockInfoWrapper;
-			}
-			set
-			{
-				if (_unlockInfoWrapper == value)
-				{
-					return;
-				}
-				_unlockInfoWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unlockInfoWrapper);
+			set => SetProperty(ref _unlockInfoWrapper, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("unlockPointsText")] 
 		public inkTextWidgetReference UnlockPointsText
 		{
-			get
-			{
-				if (_unlockPointsText == null)
-				{
-					_unlockPointsText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "unlockPointsText", cr2w, this);
-				}
-				return _unlockPointsText;
-			}
-			set
-			{
-				if (_unlockPointsText == value)
-				{
-					return;
-				}
-				_unlockPointsText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unlockPointsText);
+			set => SetProperty(ref _unlockPointsText, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("unlockPointsDesc")] 
 		public inkTextWidgetReference UnlockPointsDesc
 		{
-			get
-			{
-				if (_unlockPointsDesc == null)
-				{
-					_unlockPointsDesc = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "unlockPointsDesc", cr2w, this);
-				}
-				return _unlockPointsDesc;
-			}
-			set
-			{
-				if (_unlockPointsDesc == value)
-				{
-					return;
-				}
-				_unlockPointsDesc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unlockPointsDesc);
+			set => SetProperty(ref _unlockPointsDesc, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("unlockPerkWrapper")] 
 		public inkWidgetReference UnlockPerkWrapper
 		{
-			get
-			{
-				if (_unlockPerkWrapper == null)
-				{
-					_unlockPerkWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "unlockPerkWrapper", cr2w, this);
-				}
-				return _unlockPerkWrapper;
-			}
-			set
-			{
-				if (_unlockPerkWrapper == value)
-				{
-					return;
-				}
-				_unlockPerkWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unlockPerkWrapper);
+			set => SetProperty(ref _unlockPerkWrapper, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("levelText")] 
 		public inkTextWidgetReference LevelText
 		{
-			get
-			{
-				if (_levelText == null)
-				{
-					_levelText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "levelText", cr2w, this);
-				}
-				return _levelText;
-			}
-			set
-			{
-				if (_levelText == value)
-				{
-					return;
-				}
-				_levelText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelText);
+			set => SetProperty(ref _levelText, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("levelDescriptionText")] 
 		public inkTextWidgetReference LevelDescriptionText
 		{
-			get
-			{
-				if (_levelDescriptionText == null)
-				{
-					_levelDescriptionText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "levelDescriptionText", cr2w, this);
-				}
-				return _levelDescriptionText;
-			}
-			set
-			{
-				if (_levelDescriptionText == value)
-				{
-					return;
-				}
-				_levelDescriptionText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelDescriptionText);
+			set => SetProperty(ref _levelDescriptionText, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("nextLevelWrapper")] 
 		public inkWidgetReference NextLevelWrapper
 		{
-			get
-			{
-				if (_nextLevelWrapper == null)
-				{
-					_nextLevelWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "nextLevelWrapper", cr2w, this);
-				}
-				return _nextLevelWrapper;
-			}
-			set
-			{
-				if (_nextLevelWrapper == value)
-				{
-					return;
-				}
-				_nextLevelWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nextLevelWrapper);
+			set => SetProperty(ref _nextLevelWrapper, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("nextLevelText")] 
 		public inkTextWidgetReference NextLevelText
 		{
-			get
-			{
-				if (_nextLevelText == null)
-				{
-					_nextLevelText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "nextLevelText", cr2w, this);
-				}
-				return _nextLevelText;
-			}
-			set
-			{
-				if (_nextLevelText == value)
-				{
-					return;
-				}
-				_nextLevelText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nextLevelText);
+			set => SetProperty(ref _nextLevelText, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("nextLevelDescriptionText")] 
 		public inkTextWidgetReference NextLevelDescriptionText
 		{
-			get
-			{
-				if (_nextLevelDescriptionText == null)
-				{
-					_nextLevelDescriptionText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "nextLevelDescriptionText", cr2w, this);
-				}
-				return _nextLevelDescriptionText;
-			}
-			set
-			{
-				if (_nextLevelDescriptionText == value)
-				{
-					return;
-				}
-				_nextLevelDescriptionText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nextLevelDescriptionText);
+			set => SetProperty(ref _nextLevelDescriptionText, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("traitLevelGrowthText")] 
 		public inkTextWidgetReference TraitLevelGrowthText
 		{
-			get
-			{
-				if (_traitLevelGrowthText == null)
-				{
-					_traitLevelGrowthText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "traitLevelGrowthText", cr2w, this);
-				}
-				return _traitLevelGrowthText;
-			}
-			set
-			{
-				if (_traitLevelGrowthText == value)
-				{
-					return;
-				}
-				_traitLevelGrowthText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _traitLevelGrowthText);
+			set => SetProperty(ref _traitLevelGrowthText, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("unlockTraitPointsText")] 
 		public inkTextWidgetReference UnlockTraitPointsText
 		{
-			get
-			{
-				if (_unlockTraitPointsText == null)
-				{
-					_unlockTraitPointsText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "unlockTraitPointsText", cr2w, this);
-				}
-				return _unlockTraitPointsText;
-			}
-			set
-			{
-				if (_unlockTraitPointsText == value)
-				{
-					return;
-				}
-				_unlockTraitPointsText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unlockTraitPointsText);
+			set => SetProperty(ref _unlockTraitPointsText, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("unlockTraitWrapper")] 
 		public inkWidgetReference UnlockTraitWrapper
 		{
-			get
-			{
-				if (_unlockTraitWrapper == null)
-				{
-					_unlockTraitWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "unlockTraitWrapper", cr2w, this);
-				}
-				return _unlockTraitWrapper;
-			}
-			set
-			{
-				if (_unlockTraitWrapper == value)
-				{
-					return;
-				}
-				_unlockTraitWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unlockTraitWrapper);
+			set => SetProperty(ref _unlockTraitWrapper, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("holdToUpgradeHint")] 
 		public inkWidgetReference HoldToUpgradeHint
 		{
-			get
-			{
-				if (_holdToUpgradeHint == null)
-				{
-					_holdToUpgradeHint = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "holdToUpgradeHint", cr2w, this);
-				}
-				return _holdToUpgradeHint;
-			}
-			set
-			{
-				if (_holdToUpgradeHint == value)
-				{
-					return;
-				}
-				_holdToUpgradeHint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _holdToUpgradeHint);
+			set => SetProperty(ref _holdToUpgradeHint, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("data")] 
 		public CHandle<BasePerksMenuTooltipData> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CHandle<BasePerksMenuTooltipData>) CR2WTypeManager.Create("handle:BasePerksMenuTooltipData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		public PerkDisplayTooltipController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

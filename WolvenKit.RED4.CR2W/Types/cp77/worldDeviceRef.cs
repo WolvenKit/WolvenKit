@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get
-			{
-				if (_nodeRef == null)
-				{
-					_nodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "nodeRef", cr2w, this);
-				}
-				return _nodeRef;
-			}
-			set
-			{
-				if (_nodeRef == value)
-				{
-					return;
-				}
-				_nodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeRef);
+			set => SetProperty(ref _nodeRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("componentName")] 
 		public CName ComponentName
 		{
-			get
-			{
-				if (_componentName == null)
-				{
-					_componentName = (CName) CR2WTypeManager.Create("CName", "componentName", cr2w, this);
-				}
-				return _componentName;
-			}
-			set
-			{
-				if (_componentName == value)
-				{
-					return;
-				}
-				_componentName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _componentName);
+			set => SetProperty(ref _componentName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("deviceClassName")] 
 		public CName DeviceClassName
 		{
-			get
-			{
-				if (_deviceClassName == null)
-				{
-					_deviceClassName = (CName) CR2WTypeManager.Create("CName", "deviceClassName", cr2w, this);
-				}
-				return _deviceClassName;
-			}
-			set
-			{
-				if (_deviceClassName == value)
-				{
-					return;
-				}
-				_deviceClassName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deviceClassName);
+			set => SetProperty(ref _deviceClassName, value);
 		}
 
 		public worldDeviceRef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("clue")] 
 		public CString Clue
 		{
-			get
-			{
-				if (_clue == null)
-				{
-					_clue = (CString) CR2WTypeManager.Create("String", "clue", cr2w, this);
-				}
-				return _clue;
-			}
-			set
-			{
-				if (_clue == value)
-				{
-					return;
-				}
-				_clue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clue);
+			set => SetProperty(ref _clue, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isAvailable")] 
 		public CBool IsAvailable
 		{
-			get
-			{
-				if (_isAvailable == null)
-				{
-					_isAvailable = (CBool) CR2WTypeManager.Create("Bool", "isAvailable", cr2w, this);
-				}
-				return _isAvailable;
-			}
-			set
-			{
-				if (_isAvailable == value)
-				{
-					return;
-				}
-				_isAvailable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isAvailable);
+			set => SetProperty(ref _isAvailable, value);
 		}
 
 		public ScanEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

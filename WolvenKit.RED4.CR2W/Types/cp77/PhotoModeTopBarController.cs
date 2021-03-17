@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("photoModeTogglesArray")] 
 		public CArray<inkWidgetReference> PhotoModeTogglesArray
 		{
-			get
-			{
-				if (_photoModeTogglesArray == null)
-				{
-					_photoModeTogglesArray = (CArray<inkWidgetReference>) CR2WTypeManager.Create("array:inkWidgetReference", "photoModeTogglesArray", cr2w, this);
-				}
-				return _photoModeTogglesArray;
-			}
-			set
-			{
-				if (_photoModeTogglesArray == value)
-				{
-					return;
-				}
-				_photoModeTogglesArray = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _photoModeTogglesArray);
+			set => SetProperty(ref _photoModeTogglesArray, value);
 		}
 
 		public PhotoModeTopBarController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attackNumber")] 
 		public CInt32 AttackNumber
 		{
-			get
-			{
-				if (_attackNumber == null)
-				{
-					_attackNumber = (CInt32) CR2WTypeManager.Create("Int32", "attackNumber", cr2w, this);
-				}
-				return _attackNumber;
-			}
-			set
-			{
-				if (_attackNumber == value)
-				{
-					return;
-				}
-				_attackNumber = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackNumber);
+			set => SetProperty(ref _attackNumber, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("effectNames")] 
 		public CArray<CName> EffectNames
 		{
-			get
-			{
-				if (_effectNames == null)
-				{
-					_effectNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "effectNames", cr2w, this);
-				}
-				return _effectNames;
-			}
-			set
-			{
-				if (_effectNames == value)
-				{
-					return;
-				}
-				_effectNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectNames);
+			set => SetProperty(ref _effectNames, value);
 		}
 
 		public EffectExecutor_SlashEffect_Entry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

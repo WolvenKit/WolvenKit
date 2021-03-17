@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("interactionDuration")] 
 		public CFloat InteractionDuration
 		{
-			get
-			{
-				if (_interactionDuration == null)
-				{
-					_interactionDuration = (CFloat) CR2WTypeManager.Create("Float", "interactionDuration", cr2w, this);
-				}
-				return _interactionDuration;
-			}
-			set
-			{
-				if (_interactionDuration == value)
-				{
-					return;
-				}
-				_interactionDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interactionDuration);
+			set => SetProperty(ref _interactionDuration, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("interactionStage")] 
 		public CInt32 InteractionStage
 		{
-			get
-			{
-				if (_interactionStage == null)
-				{
-					_interactionStage = (CInt32) CR2WTypeManager.Create("Int32", "interactionStage", cr2w, this);
-				}
-				return _interactionStage;
-			}
-			set
-			{
-				if (_interactionStage == value)
-				{
-					return;
-				}
-				_interactionStage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interactionStage);
+			set => SetProperty(ref _interactionStage, value);
 		}
 
 		public animAnimFeature_Interaction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

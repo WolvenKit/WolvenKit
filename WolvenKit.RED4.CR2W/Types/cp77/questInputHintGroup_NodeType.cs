@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("show")] 
 		public CBool Show
 		{
-			get
-			{
-				if (_show == null)
-				{
-					_show = (CBool) CR2WTypeManager.Create("Bool", "show", cr2w, this);
-				}
-				return _show;
-			}
-			set
-			{
-				if (_show == value)
-				{
-					return;
-				}
-				_show = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _show);
+			set => SetProperty(ref _show, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("iconID")] 
 		public TweakDBID IconID
 		{
-			get
-			{
-				if (_iconID == null)
-				{
-					_iconID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "iconID", cr2w, this);
-				}
-				return _iconID;
-			}
-			set
-			{
-				if (_iconID == value)
-				{
-					return;
-				}
-				_iconID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _iconID);
+			set => SetProperty(ref _iconID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("groupId")] 
 		public CName GroupId
 		{
-			get
-			{
-				if (_groupId == null)
-				{
-					_groupId = (CName) CR2WTypeManager.Create("CName", "groupId", cr2w, this);
-				}
-				return _groupId;
-			}
-			set
-			{
-				if (_groupId == value)
-				{
-					return;
-				}
-				_groupId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _groupId);
+			set => SetProperty(ref _groupId, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("localizedTitle")] 
 		public CString LocalizedTitle
 		{
-			get
-			{
-				if (_localizedTitle == null)
-				{
-					_localizedTitle = (CString) CR2WTypeManager.Create("String", "localizedTitle", cr2w, this);
-				}
-				return _localizedTitle;
-			}
-			set
-			{
-				if (_localizedTitle == value)
-				{
-					return;
-				}
-				_localizedTitle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localizedTitle);
+			set => SetProperty(ref _localizedTitle, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("localizedDescription")] 
 		public CString LocalizedDescription
 		{
-			get
-			{
-				if (_localizedDescription == null)
-				{
-					_localizedDescription = (CString) CR2WTypeManager.Create("String", "localizedDescription", cr2w, this);
-				}
-				return _localizedDescription;
-			}
-			set
-			{
-				if (_localizedDescription == value)
-				{
-					return;
-				}
-				_localizedDescription = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localizedDescription);
+			set => SetProperty(ref _localizedDescription, value);
 		}
 
 		public questInputHintGroup_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

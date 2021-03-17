@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stiffness")] 
 		public CFloat Stiffness
 		{
-			get
-			{
-				if (_stiffness == null)
-				{
-					_stiffness = (CFloat) CR2WTypeManager.Create("Float", "stiffness", cr2w, this);
-				}
-				return _stiffness;
-			}
-			set
-			{
-				if (_stiffness == value)
-				{
-					return;
-				}
-				_stiffness = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stiffness);
+			set => SetProperty(ref _stiffness, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("stiffnessMultiplier")] 
 		public CFloat StiffnessMultiplier
 		{
-			get
-			{
-				if (_stiffnessMultiplier == null)
-				{
-					_stiffnessMultiplier = (CFloat) CR2WTypeManager.Create("Float", "stiffnessMultiplier", cr2w, this);
-				}
-				return _stiffnessMultiplier;
-			}
-			set
-			{
-				if (_stiffnessMultiplier == value)
-				{
-					return;
-				}
-				_stiffnessMultiplier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stiffnessMultiplier);
+			set => SetProperty(ref _stiffnessMultiplier, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("compressionLimit")] 
 		public CFloat CompressionLimit
 		{
-			get
-			{
-				if (_compressionLimit == null)
-				{
-					_compressionLimit = (CFloat) CR2WTypeManager.Create("Float", "compressionLimit", cr2w, this);
-				}
-				return _compressionLimit;
-			}
-			set
-			{
-				if (_compressionLimit == value)
-				{
-					return;
-				}
-				_compressionLimit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _compressionLimit);
+			set => SetProperty(ref _compressionLimit, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("stretchLimit")] 
 		public CFloat StretchLimit
 		{
-			get
-			{
-				if (_stretchLimit == null)
-				{
-					_stretchLimit = (CFloat) CR2WTypeManager.Create("Float", "stretchLimit", cr2w, this);
-				}
-				return _stretchLimit;
-			}
-			set
-			{
-				if (_stretchLimit == value)
-				{
-					return;
-				}
-				_stretchLimit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stretchLimit);
+			set => SetProperty(ref _stretchLimit, value);
 		}
 
 		public physicsclothPhaseConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

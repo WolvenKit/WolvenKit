@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("key")] 
 		public CName Key
 		{
-			get
-			{
-				if (_key == null)
-				{
-					_key = (CName) CR2WTypeManager.Create("CName", "key", cr2w, this);
-				}
-				return _key;
-			}
-			set
-			{
-				if (_key == value)
-				{
-					return;
-				}
-				_key = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _key);
+			set => SetProperty(ref _key, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("string")] 
 		public LocalizationString String
 		{
-			get
-			{
-				if (_string == null)
-				{
-					_string = (LocalizationString) CR2WTypeManager.Create("LocalizationString", "string", cr2w, this);
-				}
-				return _string;
-			}
-			set
-			{
-				if (_string == value)
-				{
-					return;
-				}
-				_string = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _string);
+			set => SetProperty(ref _string, value);
 		}
 
 		public entLocalizationStringMapEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

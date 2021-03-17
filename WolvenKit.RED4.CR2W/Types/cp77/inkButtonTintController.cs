@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("NormalColor")] 
 		public CColor NormalColor
 		{
-			get
-			{
-				if (_normalColor == null)
-				{
-					_normalColor = (CColor) CR2WTypeManager.Create("Color", "NormalColor", cr2w, this);
-				}
-				return _normalColor;
-			}
-			set
-			{
-				if (_normalColor == value)
-				{
-					return;
-				}
-				_normalColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _normalColor);
+			set => SetProperty(ref _normalColor, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("HoverColor")] 
 		public CColor HoverColor
 		{
-			get
-			{
-				if (_hoverColor == null)
-				{
-					_hoverColor = (CColor) CR2WTypeManager.Create("Color", "HoverColor", cr2w, this);
-				}
-				return _hoverColor;
-			}
-			set
-			{
-				if (_hoverColor == value)
-				{
-					return;
-				}
-				_hoverColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hoverColor);
+			set => SetProperty(ref _hoverColor, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("PressColor")] 
 		public CColor PressColor
 		{
-			get
-			{
-				if (_pressColor == null)
-				{
-					_pressColor = (CColor) CR2WTypeManager.Create("Color", "PressColor", cr2w, this);
-				}
-				return _pressColor;
-			}
-			set
-			{
-				if (_pressColor == value)
-				{
-					return;
-				}
-				_pressColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pressColor);
+			set => SetProperty(ref _pressColor, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("DisableColor")] 
 		public CColor DisableColor
 		{
-			get
-			{
-				if (_disableColor == null)
-				{
-					_disableColor = (CColor) CR2WTypeManager.Create("Color", "DisableColor", cr2w, this);
-				}
-				return _disableColor;
-			}
-			set
-			{
-				if (_disableColor == value)
-				{
-					return;
-				}
-				_disableColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _disableColor);
+			set => SetProperty(ref _disableColor, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("TintControlRef")] 
 		public inkWidgetReference TintControlRef
 		{
-			get
-			{
-				if (_tintControlRef == null)
-				{
-					_tintControlRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "TintControlRef", cr2w, this);
-				}
-				return _tintControlRef;
-			}
-			set
-			{
-				if (_tintControlRef == value)
-				{
-					return;
-				}
-				_tintControlRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tintControlRef);
+			set => SetProperty(ref _tintControlRef, value);
 		}
 
 		public inkButtonTintController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("journalEntry")] 
 		public wCHandle<gameJournalQuestObjectiveBase> JournalEntry
 		{
-			get
-			{
-				if (_journalEntry == null)
-				{
-					_journalEntry = (wCHandle<gameJournalQuestObjectiveBase>) CR2WTypeManager.Create("whandle:gameJournalQuestObjectiveBase", "journalEntry", cr2w, this);
-				}
-				return _journalEntry;
-			}
-			set
-			{
-				if (_journalEntry == value)
-				{
-					return;
-				}
-				_journalEntry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _journalEntry);
+			set => SetProperty(ref _journalEntry, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("objective")] 
 		public wCHandle<QuestItemController> Objective
 		{
-			get
-			{
-				if (_objective == null)
-				{
-					_objective = (wCHandle<QuestItemController>) CR2WTypeManager.Create("whandle:QuestItemController", "objective", cr2w, this);
-				}
-				return _objective;
-			}
-			set
-			{
-				if (_objective == value)
-				{
-					return;
-				}
-				_objective = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objective);
+			set => SetProperty(ref _objective, value);
 		}
 
 		public QuestTrackingEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

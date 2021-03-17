@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("source")] 
 		public wCHandle<entIComponent> Source
 		{
-			get
-			{
-				if (_source == null)
-				{
-					_source = (wCHandle<entIComponent>) CR2WTypeManager.Create("whandle:entIComponent", "source", cr2w, this);
-				}
-				return _source;
-			}
-			set
-			{
-				if (_source == value)
-				{
-					return;
-				}
-				_source = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("destination")] 
 		public wCHandle<entIComponent> Destination
 		{
-			get
-			{
-				if (_destination == null)
-				{
-					_destination = (wCHandle<entIComponent>) CR2WTypeManager.Create("whandle:entIComponent", "destination", cr2w, this);
-				}
-				return _destination;
-			}
-			set
-			{
-				if (_destination == value)
-				{
-					return;
-				}
-				_destination = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _destination);
+			set => SetProperty(ref _destination, value);
 		}
 
 		public entIAttachment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

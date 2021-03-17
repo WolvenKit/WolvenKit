@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("categoryName")] 
 		public CName CategoryName
 		{
-			get
-			{
-				if (_categoryName == null)
-				{
-					_categoryName = (CName) CR2WTypeManager.Create("CName", "categoryName", cr2w, this);
-				}
-				return _categoryName;
-			}
-			set
-			{
-				if (_categoryName == value)
-				{
-					return;
-				}
-				_categoryName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _categoryName);
+			set => SetProperty(ref _categoryName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entryName")] 
 		public CName EntryName
 		{
-			get
-			{
-				if (_entryName == null)
-				{
-					_entryName = (CName) CR2WTypeManager.Create("CName", "entryName", cr2w, this);
-				}
-				return _entryName;
-			}
-			set
-			{
-				if (_entryName == value)
-				{
-					return;
-				}
-				_entryName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryName);
+			set => SetProperty(ref _entryName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("recordID")] 
 		public TweakDBID RecordID
 		{
-			get
-			{
-				if (_recordID == null)
-				{
-					_recordID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "recordID", cr2w, this);
-				}
-				return _recordID;
-			}
-			set
-			{
-				if (_recordID == value)
-				{
-					return;
-				}
-				_recordID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recordID);
+			set => SetProperty(ref _recordID, value);
 		}
 
 		public scannerQuestEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

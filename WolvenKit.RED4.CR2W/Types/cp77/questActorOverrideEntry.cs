@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("MetadataForOverride")] 
 		public CName MetadataForOverride
 		{
-			get
-			{
-				if (_metadataForOverride == null)
-				{
-					_metadataForOverride = (CName) CR2WTypeManager.Create("CName", "MetadataForOverride", cr2w, this);
-				}
-				return _metadataForOverride;
-			}
-			set
-			{
-				if (_metadataForOverride == value)
-				{
-					return;
-				}
-				_metadataForOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metadataForOverride);
+			set => SetProperty(ref _metadataForOverride, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ActorName")] 
 		public CName ActorName
 		{
-			get
-			{
-				if (_actorName == null)
-				{
-					_actorName = (CName) CR2WTypeManager.Create("CName", "ActorName", cr2w, this);
-				}
-				return _actorName;
-			}
-			set
-			{
-				if (_actorName == value)
-				{
-					return;
-				}
-				_actorName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actorName);
+			set => SetProperty(ref _actorName, value);
 		}
 
 		public questActorOverrideEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

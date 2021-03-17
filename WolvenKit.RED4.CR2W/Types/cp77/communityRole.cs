@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("roleName")] 
 		public CName RoleName
 		{
-			get
-			{
-				if (_roleName == null)
-				{
-					_roleName = (CName) CR2WTypeManager.Create("CName", "roleName", cr2w, this);
-				}
-				return _roleName;
-			}
-			set
-			{
-				if (_roleName == value)
-				{
-					return;
-				}
-				_roleName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _roleName);
+			set => SetProperty(ref _roleName, value);
 		}
 
 		public communityRole(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

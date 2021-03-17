@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("channel")] 
 		public CHandle<animIAnimNodeSourceChannel_Vector> Channel
 		{
-			get
-			{
-				if (_channel == null)
-				{
-					_channel = (CHandle<animIAnimNodeSourceChannel_Vector>) CR2WTypeManager.Create("handle:animIAnimNodeSourceChannel_Vector", "channel", cr2w, this);
-				}
-				return _channel;
-			}
-			set
-			{
-				if (_channel == value)
-				{
-					return;
-				}
-				_channel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _channel);
+			set => SetProperty(ref _channel, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get
-			{
-				if (_weight == null)
-				{
-					_weight = (CFloat) CR2WTypeManager.Create("Float", "weight", cr2w, this);
-				}
-				return _weight;
-			}
-			set
-			{
-				if (_weight == value)
-				{
-					return;
-				}
-				_weight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weight);
+			set => SetProperty(ref _weight, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("weightLink")] 
 		public animFloatLink WeightLink
 		{
-			get
-			{
-				if (_weightLink == null)
-				{
-					_weightLink = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "weightLink", cr2w, this);
-				}
-				return _weightLink;
-			}
-			set
-			{
-				if (_weightLink == value)
-				{
-					return;
-				}
-				_weightLink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightLink);
+			set => SetProperty(ref _weightLink, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("weightFloatTrack")] 
 		public animNamedTrackIndex WeightFloatTrack
 		{
-			get
-			{
-				if (_weightFloatTrack == null)
-				{
-					_weightFloatTrack = (animNamedTrackIndex) CR2WTypeManager.Create("animNamedTrackIndex", "weightFloatTrack", cr2w, this);
-				}
-				return _weightFloatTrack;
-			}
-			set
-			{
-				if (_weightFloatTrack == value)
-				{
-					return;
-				}
-				_weightFloatTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightFloatTrack);
+			set => SetProperty(ref _weightFloatTrack, value);
 		}
 
 		public animAnimNodeSourceChannel_WeightedVector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

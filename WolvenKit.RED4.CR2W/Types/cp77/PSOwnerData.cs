@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("id")] 
 		public gamePersistentID Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (gamePersistentID) CR2WTypeManager.Create("gamePersistentID", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("className")] 
 		public CName ClassName
 		{
-			get
-			{
-				if (_className == null)
-				{
-					_className = (CName) CR2WTypeManager.Create("CName", "className", cr2w, this);
-				}
-				return _className;
-			}
-			set
-			{
-				if (_className == value)
-				{
-					return;
-				}
-				_className = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _className);
+			set => SetProperty(ref _className, value);
 		}
 
 		public PSOwnerData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

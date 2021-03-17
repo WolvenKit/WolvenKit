@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("AppearanceName")] 
 		public CName AppearanceName
 		{
-			get
-			{
-				if (_appearanceName == null)
-				{
-					_appearanceName = (CName) CR2WTypeManager.Create("CName", "AppearanceName", cr2w, this);
-				}
-				return _appearanceName;
-			}
-			set
-			{
-				if (_appearanceName == value)
-				{
-					return;
-				}
-				_appearanceName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _appearanceName);
+			set => SetProperty(ref _appearanceName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("Wounds")] 
 		public CArray<entdismembermentWoundConfig> Wounds
 		{
-			get
-			{
-				if (_wounds == null)
-				{
-					_wounds = (CArray<entdismembermentWoundConfig>) CR2WTypeManager.Create("array:entdismembermentWoundConfig", "Wounds", cr2w, this);
-				}
-				return _wounds;
-			}
-			set
-			{
-				if (_wounds == value)
-				{
-					return;
-				}
-				_wounds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wounds);
+			set => SetProperty(ref _wounds, value);
 		}
 
 		public entdismembermentWoundConfigContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

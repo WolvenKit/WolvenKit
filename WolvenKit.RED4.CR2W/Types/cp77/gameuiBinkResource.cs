@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("video")] 
 		public raRef<Bink> Video
 		{
-			get
-			{
-				if (_video == null)
-				{
-					_video = (raRef<Bink>) CR2WTypeManager.Create("raRef:Bink", "video", cr2w, this);
-				}
-				return _video;
-			}
-			set
-			{
-				if (_video == value)
-				{
-					return;
-				}
-				_video = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _video);
+			set => SetProperty(ref _video, value);
 		}
 
 		public gameuiBinkResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

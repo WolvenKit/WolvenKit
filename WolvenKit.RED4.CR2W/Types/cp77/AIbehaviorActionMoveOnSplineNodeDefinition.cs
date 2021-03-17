@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("spline")] 
 		public CHandle<AIArgumentMapping> Spline
 		{
-			get
-			{
-				if (_spline == null)
-				{
-					_spline = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "spline", cr2w, this);
-				}
-				return _spline;
-			}
-			set
-			{
-				if (_spline == value)
-				{
-					return;
-				}
-				_spline = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spline);
+			set => SetProperty(ref _spline, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("strafingTarget")] 
 		public CHandle<AIArgumentMapping> StrafingTarget
 		{
-			get
-			{
-				if (_strafingTarget == null)
-				{
-					_strafingTarget = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "strafingTarget", cr2w, this);
-				}
-				return _strafingTarget;
-			}
-			set
-			{
-				if (_strafingTarget == value)
-				{
-					return;
-				}
-				_strafingTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _strafingTarget);
+			set => SetProperty(ref _strafingTarget, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("movementType")] 
 		public CHandle<AIArgumentMapping> MovementType
 		{
-			get
-			{
-				if (_movementType == null)
-				{
-					_movementType = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "movementType", cr2w, this);
-				}
-				return _movementType;
-			}
-			set
-			{
-				if (_movementType == value)
-				{
-					return;
-				}
-				_movementType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movementType);
+			set => SetProperty(ref _movementType, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("ignoreNavigation")] 
 		public CHandle<AIArgumentMapping> IgnoreNavigation
 		{
-			get
-			{
-				if (_ignoreNavigation == null)
-				{
-					_ignoreNavigation = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "ignoreNavigation", cr2w, this);
-				}
-				return _ignoreNavigation;
-			}
-			set
-			{
-				if (_ignoreNavigation == value)
-				{
-					return;
-				}
-				_ignoreNavigation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ignoreNavigation);
+			set => SetProperty(ref _ignoreNavigation, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("snapToTerrain")] 
 		public CHandle<AIArgumentMapping> SnapToTerrain
 		{
-			get
-			{
-				if (_snapToTerrain == null)
-				{
-					_snapToTerrain = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "snapToTerrain", cr2w, this);
-				}
-				return _snapToTerrain;
-			}
-			set
-			{
-				if (_snapToTerrain == value)
-				{
-					return;
-				}
-				_snapToTerrain = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _snapToTerrain);
+			set => SetProperty(ref _snapToTerrain, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("rotateEntity")] 
 		public CHandle<AIArgumentMapping> RotateEntity
 		{
-			get
-			{
-				if (_rotateEntity == null)
-				{
-					_rotateEntity = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "rotateEntity", cr2w, this);
-				}
-				return _rotateEntity;
-			}
-			set
-			{
-				if (_rotateEntity == value)
-				{
-					return;
-				}
-				_rotateEntity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotateEntity);
+			set => SetProperty(ref _rotateEntity, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("startFromClosestPoint")] 
 		public CHandle<AIArgumentMapping> StartFromClosestPoint
 		{
-			get
-			{
-				if (_startFromClosestPoint == null)
-				{
-					_startFromClosestPoint = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "startFromClosestPoint", cr2w, this);
-				}
-				return _startFromClosestPoint;
-			}
-			set
-			{
-				if (_startFromClosestPoint == value)
-				{
-					return;
-				}
-				_startFromClosestPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startFromClosestPoint);
+			set => SetProperty(ref _startFromClosestPoint, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("useStart")] 
 		public CHandle<AIArgumentMapping> UseStart
 		{
-			get
-			{
-				if (_useStart == null)
-				{
-					_useStart = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "useStart", cr2w, this);
-				}
-				return _useStart;
-			}
-			set
-			{
-				if (_useStart == value)
-				{
-					return;
-				}
-				_useStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useStart);
+			set => SetProperty(ref _useStart, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("useStop")] 
 		public CHandle<AIArgumentMapping> UseStop
 		{
-			get
-			{
-				if (_useStop == null)
-				{
-					_useStop = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "useStop", cr2w, this);
-				}
-				return _useStop;
-			}
-			set
-			{
-				if (_useStop == value)
-				{
-					return;
-				}
-				_useStop = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useStop);
+			set => SetProperty(ref _useStop, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("reverse")] 
 		public CHandle<AIArgumentMapping> Reverse
 		{
-			get
-			{
-				if (_reverse == null)
-				{
-					_reverse = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "reverse", cr2w, this);
-				}
-				return _reverse;
-			}
-			set
-			{
-				if (_reverse == value)
-				{
-					return;
-				}
-				_reverse = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reverse);
+			set => SetProperty(ref _reverse, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("isBackAndForth")] 
 		public CHandle<AIArgumentMapping> IsBackAndForth
 		{
-			get
-			{
-				if (_isBackAndForth == null)
-				{
-					_isBackAndForth = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "isBackAndForth", cr2w, this);
-				}
-				return _isBackAndForth;
-			}
-			set
-			{
-				if (_isBackAndForth == value)
-				{
-					return;
-				}
-				_isBackAndForth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isBackAndForth);
+			set => SetProperty(ref _isBackAndForth, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("isInfinite")] 
 		public CHandle<AIArgumentMapping> IsInfinite
 		{
-			get
-			{
-				if (_isInfinite == null)
-				{
-					_isInfinite = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "isInfinite", cr2w, this);
-				}
-				return _isInfinite;
-			}
-			set
-			{
-				if (_isInfinite == value)
-				{
-					return;
-				}
-				_isInfinite = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInfinite);
+			set => SetProperty(ref _isInfinite, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("numberOfLoops")] 
 		public CHandle<AIArgumentMapping> NumberOfLoops
 		{
-			get
-			{
-				if (_numberOfLoops == null)
-				{
-					_numberOfLoops = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "numberOfLoops", cr2w, this);
-				}
-				return _numberOfLoops;
-			}
-			set
-			{
-				if (_numberOfLoops == value)
-				{
-					return;
-				}
-				_numberOfLoops = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numberOfLoops);
+			set => SetProperty(ref _numberOfLoops, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("useOffMeshLinkReservation")] 
 		public CHandle<AIArgumentMapping> UseOffMeshLinkReservation
 		{
-			get
-			{
-				if (_useOffMeshLinkReservation == null)
-				{
-					_useOffMeshLinkReservation = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "useOffMeshLinkReservation", cr2w, this);
-				}
-				return _useOffMeshLinkReservation;
-			}
-			set
-			{
-				if (_useOffMeshLinkReservation == value)
-				{
-					return;
-				}
-				_useOffMeshLinkReservation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useOffMeshLinkReservation);
+			set => SetProperty(ref _useOffMeshLinkReservation, value);
 		}
 
 		public AIbehaviorActionMoveOnSplineNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

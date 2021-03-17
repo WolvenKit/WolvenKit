@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectDescription")] 
 		public CHandle<ObjectScanningDescription> ObjectDescription
 		{
-			get
-			{
-				if (_objectDescription == null)
-				{
-					_objectDescription = (CHandle<ObjectScanningDescription>) CR2WTypeManager.Create("handle:ObjectScanningDescription", "objectDescription", cr2w, this);
-				}
-				return _objectDescription;
-			}
-			set
-			{
-				if (_objectDescription == value)
-				{
-					return;
-				}
-				_objectDescription = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectDescription);
+			set => SetProperty(ref _objectDescription, value);
 		}
 
 		public SetCustomObjectDescriptionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

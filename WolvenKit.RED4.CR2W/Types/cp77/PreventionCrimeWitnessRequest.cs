@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("criminalPosition")] 
 		public Vector4 CriminalPosition
 		{
-			get
-			{
-				if (_criminalPosition == null)
-				{
-					_criminalPosition = (Vector4) CR2WTypeManager.Create("Vector4", "criminalPosition", cr2w, this);
-				}
-				return _criminalPosition;
-			}
-			set
-			{
-				if (_criminalPosition == value)
-				{
-					return;
-				}
-				_criminalPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _criminalPosition);
+			set => SetProperty(ref _criminalPosition, value);
 		}
 
 		public PreventionCrimeWitnessRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

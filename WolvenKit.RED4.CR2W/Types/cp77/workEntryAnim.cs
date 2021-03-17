@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animName")] 
 		public CName AnimName
 		{
-			get
-			{
-				if (_animName == null)
-				{
-					_animName = (CName) CR2WTypeManager.Create("CName", "animName", cr2w, this);
-				}
-				return _animName;
-			}
-			set
-			{
-				if (_animName == value)
-				{
-					return;
-				}
-				_animName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animName);
+			set => SetProperty(ref _animName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("idleAnim")] 
 		public CName IdleAnim
 		{
-			get
-			{
-				if (_idleAnim == null)
-				{
-					_idleAnim = (CName) CR2WTypeManager.Create("CName", "idleAnim", cr2w, this);
-				}
-				return _idleAnim;
-			}
-			set
-			{
-				if (_idleAnim == value)
-				{
-					return;
-				}
-				_idleAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _idleAnim);
+			set => SetProperty(ref _idleAnim, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("movementType")] 
 		public CEnum<moveMovementType> MovementType
 		{
-			get
-			{
-				if (_movementType == null)
-				{
-					_movementType = (CEnum<moveMovementType>) CR2WTypeManager.Create("moveMovementType", "movementType", cr2w, this);
-				}
-				return _movementType;
-			}
-			set
-			{
-				if (_movementType == value)
-				{
-					return;
-				}
-				_movementType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movementType);
+			set => SetProperty(ref _movementType, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("orientationType")] 
 		public CEnum<moveMovementOrientationType> OrientationType
 		{
-			get
-			{
-				if (_orientationType == null)
-				{
-					_orientationType = (CEnum<moveMovementOrientationType>) CR2WTypeManager.Create("moveMovementOrientationType", "orientationType", cr2w, this);
-				}
-				return _orientationType;
-			}
-			set
-			{
-				if (_orientationType == value)
-				{
-					return;
-				}
-				_orientationType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _orientationType);
+			set => SetProperty(ref _orientationType, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isSynchronized")] 
 		public CBool IsSynchronized
 		{
-			get
-			{
-				if (_isSynchronized == null)
-				{
-					_isSynchronized = (CBool) CR2WTypeManager.Create("Bool", "isSynchronized", cr2w, this);
-				}
-				return _isSynchronized;
-			}
-			set
-			{
-				if (_isSynchronized == value)
-				{
-					return;
-				}
-				_isSynchronized = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isSynchronized);
+			set => SetProperty(ref _isSynchronized, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get
-			{
-				if (_slotName == null)
-				{
-					_slotName = (CName) CR2WTypeManager.Create("CName", "slotName", cr2w, this);
-				}
-				return _slotName;
-			}
-			set
-			{
-				if (_slotName == value)
-				{
-					return;
-				}
-				_slotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotName);
+			set => SetProperty(ref _slotName, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("syncOffset")] 
 		public Transform SyncOffset
 		{
-			get
-			{
-				if (_syncOffset == null)
-				{
-					_syncOffset = (Transform) CR2WTypeManager.Create("Transform", "syncOffset", cr2w, this);
-				}
-				return _syncOffset;
-			}
-			set
-			{
-				if (_syncOffset == value)
-				{
-					return;
-				}
-				_syncOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _syncOffset);
+			set => SetProperty(ref _syncOffset, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("blendOutTime")] 
 		public CFloat BlendOutTime
 		{
-			get
-			{
-				if (_blendOutTime == null)
-				{
-					_blendOutTime = (CFloat) CR2WTypeManager.Create("Float", "blendOutTime", cr2w, this);
-				}
-				return _blendOutTime;
-			}
-			set
-			{
-				if (_blendOutTime == value)
-				{
-					return;
-				}
-				_blendOutTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendOutTime);
+			set => SetProperty(ref _blendOutTime, value);
 		}
 
 		public workEntryAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("notificationsData")] 
 		public CArray<gameuiGenericNotificationData> NotificationsData
 		{
-			get
-			{
-				if (_notificationsData == null)
-				{
-					_notificationsData = (CArray<gameuiGenericNotificationData>) CR2WTypeManager.Create("array:gameuiGenericNotificationData", "notificationsData", cr2w, this);
-				}
-				return _notificationsData;
-			}
-			set
-			{
-				if (_notificationsData == value)
-				{
-					return;
-				}
-				_notificationsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _notificationsData);
+			set => SetProperty(ref _notificationsData, value);
 		}
 
 		public gameuiGenericNotificationSaveData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

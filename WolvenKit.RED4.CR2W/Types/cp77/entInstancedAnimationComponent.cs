@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animations")] 
 		public rRef<animAnimSet> Animations
 		{
-			get
-			{
-				if (_animations == null)
-				{
-					_animations = (rRef<animAnimSet>) CR2WTypeManager.Create("rRef:animAnimSet", "animations", cr2w, this);
-				}
-				return _animations;
-			}
-			set
-			{
-				if (_animations == value)
-				{
-					return;
-				}
-				_animations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animations);
+			set => SetProperty(ref _animations, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("animToSample")] 
 		public CName AnimToSample
 		{
-			get
-			{
-				if (_animToSample == null)
-				{
-					_animToSample = (CName) CR2WTypeManager.Create("CName", "animToSample", cr2w, this);
-				}
-				return _animToSample;
-			}
-			set
-			{
-				if (_animToSample == value)
-				{
-					return;
-				}
-				_animToSample = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animToSample);
+			set => SetProperty(ref _animToSample, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("variantAnimToSample")] 
 		public CName VariantAnimToSample
 		{
-			get
-			{
-				if (_variantAnimToSample == null)
-				{
-					_variantAnimToSample = (CName) CR2WTypeManager.Create("CName", "variantAnimToSample", cr2w, this);
-				}
-				return _variantAnimToSample;
-			}
-			set
-			{
-				if (_variantAnimToSample == value)
-				{
-					return;
-				}
-				_variantAnimToSample = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _variantAnimToSample);
+			set => SetProperty(ref _variantAnimToSample, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("variantTriggerTag")] 
 		public CName VariantTriggerTag
 		{
-			get
-			{
-				if (_variantTriggerTag == null)
-				{
-					_variantTriggerTag = (CName) CR2WTypeManager.Create("CName", "variantTriggerTag", cr2w, this);
-				}
-				return _variantTriggerTag;
-			}
-			set
-			{
-				if (_variantTriggerTag == value)
-				{
-					return;
-				}
-				_variantTriggerTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _variantTriggerTag);
+			set => SetProperty(ref _variantTriggerTag, value);
 		}
 
 		public entInstancedAnimationComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("familyName")] 
 		public CName FamilyName
 		{
-			get
-			{
-				if (_familyName == null)
-				{
-					_familyName = (CName) CR2WTypeManager.Create("CName", "familyName", cr2w, this);
-				}
-				return _familyName;
-			}
-			set
-			{
-				if (_familyName == value)
-				{
-					return;
-				}
-				_familyName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _familyName);
+			set => SetProperty(ref _familyName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("fontStyles")] 
 		public CArray<inkFontStyle> FontStyles
 		{
-			get
-			{
-				if (_fontStyles == null)
-				{
-					_fontStyles = (CArray<inkFontStyle>) CR2WTypeManager.Create("array:inkFontStyle", "fontStyles", cr2w, this);
-				}
-				return _fontStyles;
-			}
-			set
-			{
-				if (_fontStyles == value)
-				{
-					return;
-				}
-				_fontStyles = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fontStyles);
+			set => SetProperty(ref _fontStyles, value);
 		}
 
 		public inkFontFamilyResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

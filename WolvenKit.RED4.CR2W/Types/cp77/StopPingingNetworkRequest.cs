@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("source")] 
 		public wCHandle<gameObject> Source
 		{
-			get
-			{
-				if (_source == null)
-				{
-					_source = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "source", cr2w, this);
-				}
-				return _source;
-			}
-			set
-			{
-				if (_source == value)
-				{
-					return;
-				}
-				_source = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("pingData")] 
 		public CHandle<PingCachedData> PingData
 		{
-			get
-			{
-				if (_pingData == null)
-				{
-					_pingData = (CHandle<PingCachedData>) CR2WTypeManager.Create("handle:PingCachedData", "pingData", cr2w, this);
-				}
-				return _pingData;
-			}
-			set
-			{
-				if (_pingData == value)
-				{
-					return;
-				}
-				_pingData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pingData);
+			set => SetProperty(ref _pingData, value);
 		}
 
 		public StopPingingNetworkRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

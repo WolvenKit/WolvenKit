@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("translation")] 
 		public Vector3 Translation
 		{
-			get
-			{
-				if (_translation == null)
-				{
-					_translation = (Vector3) CR2WTypeManager.Create("Vector3", "translation", cr2w, this);
-				}
-				return _translation;
-			}
-			set
-			{
-				if (_translation == value)
-				{
-					return;
-				}
-				_translation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _translation);
+			set => SetProperty(ref _translation, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rotation")] 
 		public Quaternion Rotation
 		{
-			get
-			{
-				if (_rotation == null)
-				{
-					_rotation = (Quaternion) CR2WTypeManager.Create("Quaternion", "rotation", cr2w, this);
-				}
-				return _rotation;
-			}
-			set
-			{
-				if (_rotation == value)
-				{
-					return;
-				}
-				_rotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotation);
+			set => SetProperty(ref _rotation, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("localTransform")] 
 		public CMatrix LocalTransform
 		{
-			get
-			{
-				if (_localTransform == null)
-				{
-					_localTransform = (CMatrix) CR2WTypeManager.Create("Matrix", "localTransform", cr2w, this);
-				}
-				return _localTransform;
-			}
-			set
-			{
-				if (_localTransform == value)
-				{
-					return;
-				}
-				_localTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localTransform);
+			set => SetProperty(ref _localTransform, value);
 		}
 
 		public gameHitShapeBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

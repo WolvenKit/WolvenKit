@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("otherAgent")] 
 		public wCHandle<gameAttitudeAgent> OtherAgent
 		{
-			get
-			{
-				if (_otherAgent == null)
-				{
-					_otherAgent = (wCHandle<gameAttitudeAgent>) CR2WTypeManager.Create("whandle:gameAttitudeAgent", "otherAgent", cr2w, this);
-				}
-				return _otherAgent;
-			}
-			set
-			{
-				if (_otherAgent == value)
-				{
-					return;
-				}
-				_otherAgent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _otherAgent);
+			set => SetProperty(ref _otherAgent, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("attitude")] 
 		public CEnum<EAIAttitude> Attitude
 		{
-			get
-			{
-				if (_attitude == null)
-				{
-					_attitude = (CEnum<EAIAttitude>) CR2WTypeManager.Create("EAIAttitude", "attitude", cr2w, this);
-				}
-				return _attitude;
-			}
-			set
-			{
-				if (_attitude == value)
-				{
-					return;
-				}
-				_attitude = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attitude);
+			set => SetProperty(ref _attitude, value);
 		}
 
 		public gameeventsAttitudeChangedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

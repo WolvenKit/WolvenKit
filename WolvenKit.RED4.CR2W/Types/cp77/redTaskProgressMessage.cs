@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("id")] 
 		public CUInt32 Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CUInt32) CR2WTypeManager.Create("Uint32", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("progress")] 
 		public CFloat Progress
 		{
-			get
-			{
-				if (_progress == null)
-				{
-					_progress = (CFloat) CR2WTypeManager.Create("Float", "progress", cr2w, this);
-				}
-				return _progress;
-			}
-			set
-			{
-				if (_progress == value)
-				{
-					return;
-				}
-				_progress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _progress);
+			set => SetProperty(ref _progress, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("processingTime")] 
 		public CFloat ProcessingTime
 		{
-			get
-			{
-				if (_processingTime == null)
-				{
-					_processingTime = (CFloat) CR2WTypeManager.Create("Float", "processingTime", cr2w, this);
-				}
-				return _processingTime;
-			}
-			set
-			{
-				if (_processingTime == value)
-				{
-					return;
-				}
-				_processingTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _processingTime);
+			set => SetProperty(ref _processingTime, value);
 		}
 
 		public redTaskProgressMessage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

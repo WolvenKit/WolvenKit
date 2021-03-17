@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("healthValueToSet")] 
 		public CFloat HealthValueToSet
 		{
-			get
-			{
-				if (_healthValueToSet == null)
-				{
-					_healthValueToSet = (CFloat) CR2WTypeManager.Create("Float", "healthValueToSet", cr2w, this);
-				}
-				return _healthValueToSet;
-			}
-			set
-			{
-				if (_healthValueToSet == value)
-				{
-					return;
-				}
-				_healthValueToSet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _healthValueToSet);
+			set => SetProperty(ref _healthValueToSet, value);
 		}
 
 		public SetTargetHealthEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("changeInVersion")] 
 		public CUInt32 ChangeInVersion
 		{
-			get
-			{
-				if (_changeInVersion == null)
-				{
-					_changeInVersion = (CUInt32) CR2WTypeManager.Create("Uint32", "changeInVersion", cr2w, this);
-				}
-				return _changeInVersion;
-			}
-			set
-			{
-				if (_changeInVersion == value)
-				{
-					return;
-				}
-				_changeInVersion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _changeInVersion);
+			set => SetProperty(ref _changeInVersion, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sceneBeforeChange")] 
 		public raRef<scnSceneResource> SceneBeforeChange
 		{
-			get
-			{
-				if (_sceneBeforeChange == null)
-				{
-					_sceneBeforeChange = (raRef<scnSceneResource>) CR2WTypeManager.Create("raRef:scnSceneResource", "sceneBeforeChange", cr2w, this);
-				}
-				return _sceneBeforeChange;
-			}
-			set
-			{
-				if (_sceneBeforeChange == value)
-				{
-					return;
-				}
-				_sceneBeforeChange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneBeforeChange);
+			set => SetProperty(ref _sceneBeforeChange, value);
 		}
 
 		public scnScenesVersionsChangedRecord(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

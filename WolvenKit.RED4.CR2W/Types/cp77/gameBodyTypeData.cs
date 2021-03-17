@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rigHash")] 
 		public CUInt64 RigHash
 		{
-			get
-			{
-				if (_rigHash == null)
-				{
-					_rigHash = (CUInt64) CR2WTypeManager.Create("Uint64", "rigHash", cr2w, this);
-				}
-				return _rigHash;
-			}
-			set
-			{
-				if (_rigHash == value)
-				{
-					return;
-				}
-				_rigHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rigHash);
+			set => SetProperty(ref _rigHash, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("animsetHashes")] 
 		public CArray<CUInt64> AnimsetHashes
 		{
-			get
-			{
-				if (_animsetHashes == null)
-				{
-					_animsetHashes = (CArray<CUInt64>) CR2WTypeManager.Create("array:Uint64", "animsetHashes", cr2w, this);
-				}
-				return _animsetHashes;
-			}
-			set
-			{
-				if (_animsetHashes == value)
-				{
-					return;
-				}
-				_animsetHashes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animsetHashes);
+			set => SetProperty(ref _animsetHashes, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("overrides")] 
 		public CArray<gameAnimsetOverrideData> Overrides
 		{
-			get
-			{
-				if (_overrides == null)
-				{
-					_overrides = (CArray<gameAnimsetOverrideData>) CR2WTypeManager.Create("array:gameAnimsetOverrideData", "overrides", cr2w, this);
-				}
-				return _overrides;
-			}
-			set
-			{
-				if (_overrides == value)
-				{
-					return;
-				}
-				_overrides = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrides);
+			set => SetProperty(ref _overrides, value);
 		}
 
 		public gameBodyTypeData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

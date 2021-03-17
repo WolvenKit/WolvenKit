@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("contact")] 
 		public CName Contact
 		{
-			get
-			{
-				if (_contact == null)
-				{
-					_contact = (CName) CR2WTypeManager.Create("CName", "contact", cr2w, this);
-				}
-				return _contact;
-			}
-			set
-			{
-				if (_contact == value)
-				{
-					return;
-				}
-				_contact = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contact);
+			set => SetProperty(ref _contact, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("addContact")] 
 		public CBool AddContact
 		{
-			get
-			{
-				if (_addContact == null)
-				{
-					_addContact = (CBool) CR2WTypeManager.Create("Bool", "addContact", cr2w, this);
-				}
-				return _addContact;
-			}
-			set
-			{
-				if (_addContact == value)
-				{
-					return;
-				}
-				_addContact = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addContact);
+			set => SetProperty(ref _addContact, value);
 		}
 
 		public questAddRemoveContact_NodeTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

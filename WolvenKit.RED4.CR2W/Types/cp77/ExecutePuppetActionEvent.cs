@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actionID")] 
 		public TweakDBID ActionID
 		{
-			get
-			{
-				if (_actionID == null)
-				{
-					_actionID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "actionID", cr2w, this);
-				}
-				return _actionID;
-			}
-			set
-			{
-				if (_actionID == value)
-				{
-					return;
-				}
-				_actionID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionID);
+			set => SetProperty(ref _actionID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("action")] 
 		public CHandle<PuppetAction> Action
 		{
-			get
-			{
-				if (_action == null)
-				{
-					_action = (CHandle<PuppetAction>) CR2WTypeManager.Create("handle:PuppetAction", "action", cr2w, this);
-				}
-				return _action;
-			}
-			set
-			{
-				if (_action == value)
-				{
-					return;
-				}
-				_action = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
 		}
 
 		public ExecutePuppetActionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

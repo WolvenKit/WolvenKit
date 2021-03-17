@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("eventDispatcher")] 
 		public wCHandle<worlduiIWidgetGameController> EventDispatcher
 		{
-			get
-			{
-				if (_eventDispatcher == null)
-				{
-					_eventDispatcher = (wCHandle<worlduiIWidgetGameController>) CR2WTypeManager.Create("whandle:worlduiIWidgetGameController", "eventDispatcher", cr2w, this);
-				}
-				return _eventDispatcher;
-			}
-			set
-			{
-				if (_eventDispatcher == value)
-				{
-					return;
-				}
-				_eventDispatcher = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventDispatcher);
+			set => SetProperty(ref _eventDispatcher, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("journalEntry")] 
 		public wCHandle<gameJournalEntry> JournalEntry
 		{
-			get
-			{
-				if (_journalEntry == null)
-				{
-					_journalEntry = (wCHandle<gameJournalEntry>) CR2WTypeManager.Create("whandle:gameJournalEntry", "journalEntry", cr2w, this);
-				}
-				return _journalEntry;
-			}
-			set
-			{
-				if (_journalEntry == value)
-				{
-					return;
-				}
-				_journalEntry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _journalEntry);
+			set => SetProperty(ref _journalEntry, value);
 		}
 
 		public OpenMessengerNotificationAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

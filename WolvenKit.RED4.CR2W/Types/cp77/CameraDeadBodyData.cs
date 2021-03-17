@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dataType")] 
 		public CEnum<EGameSessionDataType> DataType
 		{
-			get
-			{
-				if (_dataType == null)
-				{
-					_dataType = (CEnum<EGameSessionDataType>) CR2WTypeManager.Create("EGameSessionDataType", "dataType", cr2w, this);
-				}
-				return _dataType;
-			}
-			set
-			{
-				if (_dataType == value)
-				{
-					return;
-				}
-				_dataType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dataType);
+			set => SetProperty(ref _dataType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ownerID")] 
 		public entEntityID OwnerID
 		{
-			get
-			{
-				if (_ownerID == null)
-				{
-					_ownerID = (entEntityID) CR2WTypeManager.Create("entEntityID", "ownerID", cr2w, this);
-				}
-				return _ownerID;
-			}
-			set
-			{
-				if (_ownerID == value)
-				{
-					return;
-				}
-				_ownerID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerID);
+			set => SetProperty(ref _ownerID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("bodyID")] 
 		public entEntityID BodyID
 		{
-			get
-			{
-				if (_bodyID == null)
-				{
-					_bodyID = (entEntityID) CR2WTypeManager.Create("entEntityID", "bodyID", cr2w, this);
-				}
-				return _bodyID;
-			}
-			set
-			{
-				if (_bodyID == value)
-				{
-					return;
-				}
-				_bodyID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyID);
+			set => SetProperty(ref _bodyID, value);
 		}
 
 		public CameraDeadBodyData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

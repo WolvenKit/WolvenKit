@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("packageName")] 
 		public CString PackageName
 		{
-			get
-			{
-				if (_packageName == null)
-				{
-					_packageName = (CString) CR2WTypeManager.Create("String", "packageName", cr2w, this);
-				}
-				return _packageName;
-			}
-			set
-			{
-				if (_packageName == value)
-				{
-					return;
-				}
-				_packageName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _packageName);
+			set => SetProperty(ref _packageName, value);
 		}
 
 		public gamestateMachineComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

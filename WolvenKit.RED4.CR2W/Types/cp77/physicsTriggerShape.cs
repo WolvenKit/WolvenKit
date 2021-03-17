@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("shapeType")] 
 		public CEnum<physicsShapeType> ShapeType
 		{
-			get
-			{
-				if (_shapeType == null)
-				{
-					_shapeType = (CEnum<physicsShapeType>) CR2WTypeManager.Create("physicsShapeType", "shapeType", cr2w, this);
-				}
-				return _shapeType;
-			}
-			set
-			{
-				if (_shapeType == value)
-				{
-					return;
-				}
-				_shapeType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shapeType);
+			set => SetProperty(ref _shapeType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("shapeSize")] 
 		public Vector3 ShapeSize
 		{
-			get
-			{
-				if (_shapeSize == null)
-				{
-					_shapeSize = (Vector3) CR2WTypeManager.Create("Vector3", "shapeSize", cr2w, this);
-				}
-				return _shapeSize;
-			}
-			set
-			{
-				if (_shapeSize == value)
-				{
-					return;
-				}
-				_shapeSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shapeSize);
+			set => SetProperty(ref _shapeSize, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("shapeLocalPose")] 
 		public Transform ShapeLocalPose
 		{
-			get
-			{
-				if (_shapeLocalPose == null)
-				{
-					_shapeLocalPose = (Transform) CR2WTypeManager.Create("Transform", "shapeLocalPose", cr2w, this);
-				}
-				return _shapeLocalPose;
-			}
-			set
-			{
-				if (_shapeLocalPose == value)
-				{
-					return;
-				}
-				_shapeLocalPose = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shapeLocalPose);
+			set => SetProperty(ref _shapeLocalPose, value);
 		}
 
 		public physicsTriggerShape(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

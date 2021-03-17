@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetPosition")] 
 		public CHandle<AIArgumentMapping> TargetPosition
 		{
-			get
-			{
-				if (_targetPosition == null)
-				{
-					_targetPosition = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "targetPosition", cr2w, this);
-				}
-				return _targetPosition;
-			}
-			set
-			{
-				if (_targetPosition == value)
-				{
-					return;
-				}
-				_targetPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetPosition);
+			set => SetProperty(ref _targetPosition, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("secureTimeOut")] 
 		public CHandle<AIArgumentMapping> SecureTimeOut
 		{
-			get
-			{
-				if (_secureTimeOut == null)
-				{
-					_secureTimeOut = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "secureTimeOut", cr2w, this);
-				}
-				return _secureTimeOut;
-			}
-			set
-			{
-				if (_secureTimeOut == value)
-				{
-					return;
-				}
-				_secureTimeOut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _secureTimeOut);
+			set => SetProperty(ref _secureTimeOut, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("useTraffic")] 
 		public CHandle<AIArgumentMapping> UseTraffic
 		{
-			get
-			{
-				if (_useTraffic == null)
-				{
-					_useTraffic = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "useTraffic", cr2w, this);
-				}
-				return _useTraffic;
-			}
-			set
-			{
-				if (_useTraffic == value)
-				{
-					return;
-				}
-				_useTraffic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useTraffic);
+			set => SetProperty(ref _useTraffic, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("speedInTraffic")] 
 		public CHandle<AIArgumentMapping> SpeedInTraffic
 		{
-			get
-			{
-				if (_speedInTraffic == null)
-				{
-					_speedInTraffic = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "speedInTraffic", cr2w, this);
-				}
-				return _speedInTraffic;
-			}
-			set
-			{
-				if (_speedInTraffic == value)
-				{
-					return;
-				}
-				_speedInTraffic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speedInTraffic);
+			set => SetProperty(ref _speedInTraffic, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("forceGreenLights")] 
 		public CHandle<AIArgumentMapping> ForceGreenLights
 		{
-			get
-			{
-				if (_forceGreenLights == null)
-				{
-					_forceGreenLights = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "forceGreenLights", cr2w, this);
-				}
-				return _forceGreenLights;
-			}
-			set
-			{
-				if (_forceGreenLights == value)
-				{
-					return;
-				}
-				_forceGreenLights = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceGreenLights);
+			set => SetProperty(ref _forceGreenLights, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("portals")] 
 		public CHandle<AIArgumentMapping> Portals
 		{
-			get
-			{
-				if (_portals == null)
-				{
-					_portals = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "portals", cr2w, this);
-				}
-				return _portals;
-			}
-			set
-			{
-				if (_portals == value)
-				{
-					return;
-				}
-				_portals = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _portals);
+			set => SetProperty(ref _portals, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("trafficTryNeighborsForStart")] 
 		public CHandle<AIArgumentMapping> TrafficTryNeighborsForStart
 		{
-			get
-			{
-				if (_trafficTryNeighborsForStart == null)
-				{
-					_trafficTryNeighborsForStart = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "trafficTryNeighborsForStart", cr2w, this);
-				}
-				return _trafficTryNeighborsForStart;
-			}
-			set
-			{
-				if (_trafficTryNeighborsForStart == value)
-				{
-					return;
-				}
-				_trafficTryNeighborsForStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trafficTryNeighborsForStart);
+			set => SetProperty(ref _trafficTryNeighborsForStart, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("trafficTryNeighborsForEnd")] 
 		public CHandle<AIArgumentMapping> TrafficTryNeighborsForEnd
 		{
-			get
-			{
-				if (_trafficTryNeighborsForEnd == null)
-				{
-					_trafficTryNeighborsForEnd = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "trafficTryNeighborsForEnd", cr2w, this);
-				}
-				return _trafficTryNeighborsForEnd;
-			}
-			set
-			{
-				if (_trafficTryNeighborsForEnd == value)
-				{
-					return;
-				}
-				_trafficTryNeighborsForEnd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trafficTryNeighborsForEnd);
+			set => SetProperty(ref _trafficTryNeighborsForEnd, value);
 		}
 
 		public AIbehaviorDriveToPointTreeNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

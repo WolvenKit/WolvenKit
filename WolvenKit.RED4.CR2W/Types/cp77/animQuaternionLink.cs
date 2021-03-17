@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("node")] 
 		public wCHandle<animAnimNode_QuaternionValue> Node
 		{
-			get
-			{
-				if (_node == null)
-				{
-					_node = (wCHandle<animAnimNode_QuaternionValue>) CR2WTypeManager.Create("whandle:animAnimNode_QuaternionValue", "node", cr2w, this);
-				}
-				return _node;
-			}
-			set
-			{
-				if (_node == value)
-				{
-					return;
-				}
-				_node = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _node);
+			set => SetProperty(ref _node, value);
 		}
 
 		public animQuaternionLink(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

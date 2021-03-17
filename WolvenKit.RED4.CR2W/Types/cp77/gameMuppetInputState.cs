@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("frameId")] 
 		public CUInt32 FrameId
 		{
-			get
-			{
-				if (_frameId == null)
-				{
-					_frameId = (CUInt32) CR2WTypeManager.Create("Uint32", "frameId", cr2w, this);
-				}
-				return _frameId;
-			}
-			set
-			{
-				if (_frameId == value)
-				{
-					return;
-				}
-				_frameId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frameId);
+			set => SetProperty(ref _frameId, value);
 		}
 
 		public gameMuppetInputState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

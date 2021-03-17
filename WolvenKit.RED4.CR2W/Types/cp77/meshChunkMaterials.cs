@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("materialNames")] 
 		public CArray<CName> MaterialNames
 		{
-			get
-			{
-				if (_materialNames == null)
-				{
-					_materialNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "materialNames", cr2w, this);
-				}
-				return _materialNames;
-			}
-			set
-			{
-				if (_materialNames == value)
-				{
-					return;
-				}
-				_materialNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _materialNames);
+			set => SetProperty(ref _materialNames, value);
 		}
 
 		public meshChunkMaterials(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

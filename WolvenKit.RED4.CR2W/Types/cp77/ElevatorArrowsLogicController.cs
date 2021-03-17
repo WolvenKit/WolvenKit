@@ -23,253 +23,88 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("arrow1Widget")] 
 		public inkWidgetReference Arrow1Widget
 		{
-			get
-			{
-				if (_arrow1Widget == null)
-				{
-					_arrow1Widget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "arrow1Widget", cr2w, this);
-				}
-				return _arrow1Widget;
-			}
-			set
-			{
-				if (_arrow1Widget == value)
-				{
-					return;
-				}
-				_arrow1Widget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _arrow1Widget);
+			set => SetProperty(ref _arrow1Widget, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("arrow2Widget")] 
 		public inkWidgetReference Arrow2Widget
 		{
-			get
-			{
-				if (_arrow2Widget == null)
-				{
-					_arrow2Widget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "arrow2Widget", cr2w, this);
-				}
-				return _arrow2Widget;
-			}
-			set
-			{
-				if (_arrow2Widget == value)
-				{
-					return;
-				}
-				_arrow2Widget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _arrow2Widget);
+			set => SetProperty(ref _arrow2Widget, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("arrow3Widget")] 
 		public inkWidgetReference Arrow3Widget
 		{
-			get
-			{
-				if (_arrow3Widget == null)
-				{
-					_arrow3Widget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "arrow3Widget", cr2w, this);
-				}
-				return _arrow3Widget;
-			}
-			set
-			{
-				if (_arrow3Widget == value)
-				{
-					return;
-				}
-				_arrow3Widget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _arrow3Widget);
+			set => SetProperty(ref _arrow3Widget, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("animFade1")] 
 		public CHandle<inkanimDefinition> AnimFade1
 		{
-			get
-			{
-				if (_animFade1 == null)
-				{
-					_animFade1 = (CHandle<inkanimDefinition>) CR2WTypeManager.Create("handle:inkanimDefinition", "animFade1", cr2w, this);
-				}
-				return _animFade1;
-			}
-			set
-			{
-				if (_animFade1 == value)
-				{
-					return;
-				}
-				_animFade1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animFade1);
+			set => SetProperty(ref _animFade1, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("animFade2")] 
 		public CHandle<inkanimDefinition> AnimFade2
 		{
-			get
-			{
-				if (_animFade2 == null)
-				{
-					_animFade2 = (CHandle<inkanimDefinition>) CR2WTypeManager.Create("handle:inkanimDefinition", "animFade2", cr2w, this);
-				}
-				return _animFade2;
-			}
-			set
-			{
-				if (_animFade2 == value)
-				{
-					return;
-				}
-				_animFade2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animFade2);
+			set => SetProperty(ref _animFade2, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("animFade3")] 
 		public CHandle<inkanimDefinition> AnimFade3
 		{
-			get
-			{
-				if (_animFade3 == null)
-				{
-					_animFade3 = (CHandle<inkanimDefinition>) CR2WTypeManager.Create("handle:inkanimDefinition", "animFade3", cr2w, this);
-				}
-				return _animFade3;
-			}
-			set
-			{
-				if (_animFade3 == value)
-				{
-					return;
-				}
-				_animFade3 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animFade3);
+			set => SetProperty(ref _animFade3, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("animSlow1")] 
 		public CHandle<inkanimDefinition> AnimSlow1
 		{
-			get
-			{
-				if (_animSlow1 == null)
-				{
-					_animSlow1 = (CHandle<inkanimDefinition>) CR2WTypeManager.Create("handle:inkanimDefinition", "animSlow1", cr2w, this);
-				}
-				return _animSlow1;
-			}
-			set
-			{
-				if (_animSlow1 == value)
-				{
-					return;
-				}
-				_animSlow1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animSlow1);
+			set => SetProperty(ref _animSlow1, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("animSlow2")] 
 		public CHandle<inkanimDefinition> AnimSlow2
 		{
-			get
-			{
-				if (_animSlow2 == null)
-				{
-					_animSlow2 = (CHandle<inkanimDefinition>) CR2WTypeManager.Create("handle:inkanimDefinition", "animSlow2", cr2w, this);
-				}
-				return _animSlow2;
-			}
-			set
-			{
-				if (_animSlow2 == value)
-				{
-					return;
-				}
-				_animSlow2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animSlow2);
+			set => SetProperty(ref _animSlow2, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("animOptions1")] 
 		public inkanimPlaybackOptions AnimOptions1
 		{
-			get
-			{
-				if (_animOptions1 == null)
-				{
-					_animOptions1 = (inkanimPlaybackOptions) CR2WTypeManager.Create("inkanimPlaybackOptions", "animOptions1", cr2w, this);
-				}
-				return _animOptions1;
-			}
-			set
-			{
-				if (_animOptions1 == value)
-				{
-					return;
-				}
-				_animOptions1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animOptions1);
+			set => SetProperty(ref _animOptions1, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("animOptions2")] 
 		public inkanimPlaybackOptions AnimOptions2
 		{
-			get
-			{
-				if (_animOptions2 == null)
-				{
-					_animOptions2 = (inkanimPlaybackOptions) CR2WTypeManager.Create("inkanimPlaybackOptions", "animOptions2", cr2w, this);
-				}
-				return _animOptions2;
-			}
-			set
-			{
-				if (_animOptions2 == value)
-				{
-					return;
-				}
-				_animOptions2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animOptions2);
+			set => SetProperty(ref _animOptions2, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("animOptions3")] 
 		public inkanimPlaybackOptions AnimOptions3
 		{
-			get
-			{
-				if (_animOptions3 == null)
-				{
-					_animOptions3 = (inkanimPlaybackOptions) CR2WTypeManager.Create("inkanimPlaybackOptions", "animOptions3", cr2w, this);
-				}
-				return _animOptions3;
-			}
-			set
-			{
-				if (_animOptions3 == value)
-				{
-					return;
-				}
-				_animOptions3 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animOptions3);
+			set => SetProperty(ref _animOptions3, value);
 		}
 
 		public ElevatorArrowsLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

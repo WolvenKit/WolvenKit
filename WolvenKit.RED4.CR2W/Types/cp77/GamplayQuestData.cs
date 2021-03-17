@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("questUniqueID")] 
 		public CString QuestUniqueID
 		{
-			get
-			{
-				if (_questUniqueID == null)
-				{
-					_questUniqueID = (CString) CR2WTypeManager.Create("String", "questUniqueID", cr2w, this);
-				}
-				return _questUniqueID;
-			}
-			set
-			{
-				if (_questUniqueID == value)
-				{
-					return;
-				}
-				_questUniqueID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questUniqueID);
+			set => SetProperty(ref _questUniqueID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("objectives")] 
 		public CArray<CHandle<GemplayObjectiveData>> Objectives
 		{
-			get
-			{
-				if (_objectives == null)
-				{
-					_objectives = (CArray<CHandle<GemplayObjectiveData>>) CR2WTypeManager.Create("array:handle:GemplayObjectiveData", "objectives", cr2w, this);
-				}
-				return _objectives;
-			}
-			set
-			{
-				if (_objectives == value)
-				{
-					return;
-				}
-				_objectives = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectives);
+			set => SetProperty(ref _objectives, value);
 		}
 
 		public GamplayQuestData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stopOnTransparent")] 
 		public CBool StopOnTransparent
 		{
-			get
-			{
-				if (_stopOnTransparent == null)
-				{
-					_stopOnTransparent = (CBool) CR2WTypeManager.Create("Bool", "stopOnTransparent", cr2w, this);
-				}
-				return _stopOnTransparent;
-			}
-			set
-			{
-				if (_stopOnTransparent == value)
-				{
-					return;
-				}
-				_stopOnTransparent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stopOnTransparent);
+			set => SetProperty(ref _stopOnTransparent, value);
 		}
 
 		public gameinteractionsVisibleTargetPredicate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

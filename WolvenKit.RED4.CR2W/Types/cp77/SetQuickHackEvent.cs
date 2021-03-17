@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("wasQuickHacked")] 
 		public CBool WasQuickHacked
 		{
-			get
-			{
-				if (_wasQuickHacked == null)
-				{
-					_wasQuickHacked = (CBool) CR2WTypeManager.Create("Bool", "wasQuickHacked", cr2w, this);
-				}
-				return _wasQuickHacked;
-			}
-			set
-			{
-				if (_wasQuickHacked == value)
-				{
-					return;
-				}
-				_wasQuickHacked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasQuickHacked);
+			set => SetProperty(ref _wasQuickHacked, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("quickHackName")] 
 		public CName QuickHackName
 		{
-			get
-			{
-				if (_quickHackName == null)
-				{
-					_quickHackName = (CName) CR2WTypeManager.Create("CName", "quickHackName", cr2w, this);
-				}
-				return _quickHackName;
-			}
-			set
-			{
-				if (_quickHackName == value)
-				{
-					return;
-				}
-				_quickHackName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quickHackName);
+			set => SetProperty(ref _quickHackName, value);
 		}
 
 		public SetQuickHackEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

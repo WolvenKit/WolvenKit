@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tweakDBPackage")] 
 		public TweakDBID TweakDBPackage
 		{
-			get
-			{
-				if (_tweakDBPackage == null)
-				{
-					_tweakDBPackage = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "tweakDBPackage", cr2w, this);
-				}
-				return _tweakDBPackage;
-			}
-			set
-			{
-				if (_tweakDBPackage == value)
-				{
-					return;
-				}
-				_tweakDBPackage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tweakDBPackage);
+			set => SetProperty(ref _tweakDBPackage, value);
 		}
 
 		public ImpactReactionTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("box")] 
 		public Box Box
 		{
-			get
-			{
-				if (_box == null)
-				{
-					_box = (Box) CR2WTypeManager.Create("Box", "box", cr2w, this);
-				}
-				return _box;
-			}
-			set
-			{
-				if (_box == value)
-				{
-					return;
-				}
-				_box = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _box);
+			set => SetProperty(ref _box, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("transform")] 
 		public Transform Transform
 		{
-			get
-			{
-				if (_transform == null)
-				{
-					_transform = (Transform) CR2WTypeManager.Create("Transform", "transform", cr2w, this);
-				}
-				return _transform;
-			}
-			set
-			{
-				if (_transform == value)
-				{
-					return;
-				}
-				_transform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transform);
+			set => SetProperty(ref _transform, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("level")] 
 		public CUInt32 Level
 		{
-			get
-			{
-				if (_level == null)
-				{
-					_level = (CUInt32) CR2WTypeManager.Create("Uint32", "level", cr2w, this);
-				}
-				return _level;
-			}
-			set
-			{
-				if (_level == value)
-				{
-					return;
-				}
-				_level = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _level);
+			set => SetProperty(ref _level, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isHit")] 
 		public CBool IsHit
 		{
-			get
-			{
-				if (_isHit == null)
-				{
-					_isHit = (CBool) CR2WTypeManager.Create("Bool", "isHit", cr2w, this);
-				}
-				return _isHit;
-			}
-			set
-			{
-				if (_isHit == value)
-				{
-					return;
-				}
-				_isHit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isHit);
+			set => SetProperty(ref _isHit, value);
 		}
 
 		public worldDbgOverlapBox(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

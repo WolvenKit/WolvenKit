@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemData")] 
 		public wCHandle<gameItemData> ItemData
 		{
-			get
-			{
-				if (_itemData == null)
-				{
-					_itemData = (wCHandle<gameItemData>) CR2WTypeManager.Create("whandle:gameItemData", "itemData", cr2w, this);
-				}
-				return _itemData;
-			}
-			set
-			{
-				if (_itemData == value)
-				{
-					return;
-				}
-				_itemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemData);
+			set => SetProperty(ref _itemData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("amount")] 
 		public CInt32 Amount
 		{
-			get
-			{
-				if (_amount == null)
-				{
-					_amount = (CInt32) CR2WTypeManager.Create("Int32", "amount", cr2w, this);
-				}
-				return _amount;
-			}
-			set
-			{
-				if (_amount == value)
-				{
-					return;
-				}
-				_amount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _amount);
+			set => SetProperty(ref _amount, value);
 		}
 
 		public VendorShoppingCartItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

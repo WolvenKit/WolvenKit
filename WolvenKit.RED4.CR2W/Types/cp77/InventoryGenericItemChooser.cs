@@ -24,276 +24,96 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemContainer")] 
 		public inkCompoundWidgetReference ItemContainer
 		{
-			get
-			{
-				if (_itemContainer == null)
-				{
-					_itemContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "itemContainer", cr2w, this);
-				}
-				return _itemContainer;
-			}
-			set
-			{
-				if (_itemContainer == value)
-				{
-					return;
-				}
-				_itemContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemContainer);
+			set => SetProperty(ref _itemContainer, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("slotsCategory")] 
 		public inkWidgetReference SlotsCategory
 		{
-			get
-			{
-				if (_slotsCategory == null)
-				{
-					_slotsCategory = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "slotsCategory", cr2w, this);
-				}
-				return _slotsCategory;
-			}
-			set
-			{
-				if (_slotsCategory == value)
-				{
-					return;
-				}
-				_slotsCategory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotsCategory);
+			set => SetProperty(ref _slotsCategory, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("slotsRootContainer")] 
 		public inkWidgetReference SlotsRootContainer
 		{
-			get
-			{
-				if (_slotsRootContainer == null)
-				{
-					_slotsRootContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "slotsRootContainer", cr2w, this);
-				}
-				return _slotsRootContainer;
-			}
-			set
-			{
-				if (_slotsRootContainer == value)
-				{
-					return;
-				}
-				_slotsRootContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotsRootContainer);
+			set => SetProperty(ref _slotsRootContainer, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("slotsRootLabel")] 
 		public inkTextWidgetReference SlotsRootLabel
 		{
-			get
-			{
-				if (_slotsRootLabel == null)
-				{
-					_slotsRootLabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "slotsRootLabel", cr2w, this);
-				}
-				return _slotsRootLabel;
-			}
-			set
-			{
-				if (_slotsRootLabel == value)
-				{
-					return;
-				}
-				_slotsRootLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotsRootLabel);
+			set => SetProperty(ref _slotsRootLabel, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("slotsContainer")] 
 		public inkCompoundWidgetReference SlotsContainer
 		{
-			get
-			{
-				if (_slotsContainer == null)
-				{
-					_slotsContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "slotsContainer", cr2w, this);
-				}
-				return _slotsContainer;
-			}
-			set
-			{
-				if (_slotsContainer == value)
-				{
-					return;
-				}
-				_slotsContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotsContainer);
+			set => SetProperty(ref _slotsContainer, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("player")] 
 		public wCHandle<PlayerPuppet> Player
 		{
-			get
-			{
-				if (_player == null)
-				{
-					_player = (wCHandle<PlayerPuppet>) CR2WTypeManager.Create("whandle:PlayerPuppet", "player", cr2w, this);
-				}
-				return _player;
-			}
-			set
-			{
-				if (_player == value)
-				{
-					return;
-				}
-				_player = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _player);
+			set => SetProperty(ref _player, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("inventoryDataManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryDataManager
 		{
-			get
-			{
-				if (_inventoryDataManager == null)
-				{
-					_inventoryDataManager = (CHandle<InventoryDataManagerV2>) CR2WTypeManager.Create("handle:InventoryDataManagerV2", "inventoryDataManager", cr2w, this);
-				}
-				return _inventoryDataManager;
-			}
-			set
-			{
-				if (_inventoryDataManager == value)
-				{
-					return;
-				}
-				_inventoryDataManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryDataManager);
+			set => SetProperty(ref _inventoryDataManager, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("equipmentArea")] 
 		public CEnum<gamedataEquipmentArea> EquipmentArea
 		{
-			get
-			{
-				if (_equipmentArea == null)
-				{
-					_equipmentArea = (CEnum<gamedataEquipmentArea>) CR2WTypeManager.Create("gamedataEquipmentArea", "equipmentArea", cr2w, this);
-				}
-				return _equipmentArea;
-			}
-			set
-			{
-				if (_equipmentArea == value)
-				{
-					return;
-				}
-				_equipmentArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipmentArea);
+			set => SetProperty(ref _equipmentArea, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("itemDisplay")] 
 		public CHandle<InventoryItemDisplayController> ItemDisplay
 		{
-			get
-			{
-				if (_itemDisplay == null)
-				{
-					_itemDisplay = (CHandle<InventoryItemDisplayController>) CR2WTypeManager.Create("handle:InventoryItemDisplayController", "itemDisplay", cr2w, this);
-				}
-				return _itemDisplay;
-			}
-			set
-			{
-				if (_itemDisplay == value)
-				{
-					return;
-				}
-				_itemDisplay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemDisplay);
+			set => SetProperty(ref _itemDisplay, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("slotIndex")] 
 		public CInt32 SlotIndex
 		{
-			get
-			{
-				if (_slotIndex == null)
-				{
-					_slotIndex = (CInt32) CR2WTypeManager.Create("Int32", "slotIndex", cr2w, this);
-				}
-				return _slotIndex;
-			}
-			set
-			{
-				if (_slotIndex == value)
-				{
-					return;
-				}
-				_slotIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotIndex);
+			set => SetProperty(ref _slotIndex, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("selectedItem")] 
 		public CHandle<InventoryItemDisplayController> SelectedItem
 		{
-			get
-			{
-				if (_selectedItem == null)
-				{
-					_selectedItem = (CHandle<InventoryItemDisplayController>) CR2WTypeManager.Create("handle:InventoryItemDisplayController", "selectedItem", cr2w, this);
-				}
-				return _selectedItem;
-			}
-			set
-			{
-				if (_selectedItem == value)
-				{
-					return;
-				}
-				_selectedItem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectedItem);
+			set => SetProperty(ref _selectedItem, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("tooltipsManager")] 
 		public wCHandle<gameuiTooltipsManager> TooltipsManager
 		{
-			get
-			{
-				if (_tooltipsManager == null)
-				{
-					_tooltipsManager = (wCHandle<gameuiTooltipsManager>) CR2WTypeManager.Create("whandle:gameuiTooltipsManager", "tooltipsManager", cr2w, this);
-				}
-				return _tooltipsManager;
-			}
-			set
-			{
-				if (_tooltipsManager == value)
-				{
-					return;
-				}
-				_tooltipsManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsManager);
+			set => SetProperty(ref _tooltipsManager, value);
 		}
 
 		public InventoryGenericItemChooser(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("controller")] 
 		public CHandle<InventoryItemDisplayController> Controller
 		{
-			get
-			{
-				if (_controller == null)
-				{
-					_controller = (CHandle<InventoryItemDisplayController>) CR2WTypeManager.Create("handle:InventoryItemDisplayController", "controller", cr2w, this);
-				}
-				return _controller;
-			}
-			set
-			{
-				if (_controller == value)
-				{
-					return;
-				}
-				_controller = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _controller);
+			set => SetProperty(ref _controller, value);
 		}
 
 		public CyberwareDisplayWrapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

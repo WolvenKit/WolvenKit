@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("opened")] 
 		public CBool Opened
 		{
-			get
-			{
-				if (_opened == null)
-				{
-					_opened = (CBool) CR2WTypeManager.Create("Bool", "opened", cr2w, this);
-				}
-				return _opened;
-			}
-			set
-			{
-				if (_opened == value)
-				{
-					return;
-				}
-				_opened = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _opened);
+			set => SetProperty(ref _opened, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("transitionDuration")] 
 		public CFloat TransitionDuration
 		{
-			get
-			{
-				if (_transitionDuration == null)
-				{
-					_transitionDuration = (CFloat) CR2WTypeManager.Create("Float", "transitionDuration", cr2w, this);
-				}
-				return _transitionDuration;
-			}
-			set
-			{
-				if (_transitionDuration == value)
-				{
-					return;
-				}
-				_transitionDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transitionDuration);
+			set => SetProperty(ref _transitionDuration, value);
 		}
 
 		public AnimFeature_Container(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

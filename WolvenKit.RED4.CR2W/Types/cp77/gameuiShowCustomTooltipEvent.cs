@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("text")] 
 		public CString Text
 		{
-			get
-			{
-				if (_text == null)
-				{
-					_text = (CString) CR2WTypeManager.Create("String", "text", cr2w, this);
-				}
-				return _text;
-			}
-			set
-			{
-				if (_text == value)
-				{
-					return;
-				}
-				_text = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _text);
+			set => SetProperty(ref _text, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("inputAction")] 
 		public CString InputAction
 		{
-			get
-			{
-				if (_inputAction == null)
-				{
-					_inputAction = (CString) CR2WTypeManager.Create("String", "inputAction", cr2w, this);
-				}
-				return _inputAction;
-			}
-			set
-			{
-				if (_inputAction == value)
-				{
-					return;
-				}
-				_inputAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputAction);
+			set => SetProperty(ref _inputAction, value);
 		}
 
 		public gameuiShowCustomTooltipEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

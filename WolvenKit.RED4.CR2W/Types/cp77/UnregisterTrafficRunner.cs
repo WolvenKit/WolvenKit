@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("onDeactivation")] 
 		public CBool OnDeactivation
 		{
-			get
-			{
-				if (_onDeactivation == null)
-				{
-					_onDeactivation = (CBool) CR2WTypeManager.Create("Bool", "onDeactivation", cr2w, this);
-				}
-				return _onDeactivation;
-			}
-			set
-			{
-				if (_onDeactivation == value)
-				{
-					return;
-				}
-				_onDeactivation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onDeactivation);
+			set => SetProperty(ref _onDeactivation, value);
 		}
 
 		public UnregisterTrafficRunner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

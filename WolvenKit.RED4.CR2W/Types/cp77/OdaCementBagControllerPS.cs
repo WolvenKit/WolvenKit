@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cementEffectCooldown")] 
 		public CFloat CementEffectCooldown
 		{
-			get
-			{
-				if (_cementEffectCooldown == null)
-				{
-					_cementEffectCooldown = (CFloat) CR2WTypeManager.Create("Float", "cementEffectCooldown", cr2w, this);
-				}
-				return _cementEffectCooldown;
-			}
-			set
-			{
-				if (_cementEffectCooldown == value)
-				{
-					return;
-				}
-				_cementEffectCooldown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cementEffectCooldown);
+			set => SetProperty(ref _cementEffectCooldown, value);
 		}
 
 		public OdaCementBagControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

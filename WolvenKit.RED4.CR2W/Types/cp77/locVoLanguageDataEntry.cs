@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("languageCode")] 
 		public CName LanguageCode
 		{
-			get
-			{
-				if (_languageCode == null)
-				{
-					_languageCode = (CName) CR2WTypeManager.Create("CName", "languageCode", cr2w, this);
-				}
-				return _languageCode;
-			}
-			set
-			{
-				if (_languageCode == value)
-				{
-					return;
-				}
-				_languageCode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _languageCode);
+			set => SetProperty(ref _languageCode, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("voiceverMapReport")] 
 		public raRef<JsonResource> VoiceverMapReport
 		{
-			get
-			{
-				if (_voiceverMapReport == null)
-				{
-					_voiceverMapReport = (raRef<JsonResource>) CR2WTypeManager.Create("raRef:JsonResource", "voiceverMapReport", cr2w, this);
-				}
-				return _voiceverMapReport;
-			}
-			set
-			{
-				if (_voiceverMapReport == value)
-				{
-					return;
-				}
-				_voiceverMapReport = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _voiceverMapReport);
+			set => SetProperty(ref _voiceverMapReport, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lenghtMapReport")] 
 		public raRef<JsonResource> LenghtMapReport
 		{
-			get
-			{
-				if (_lenghtMapReport == null)
-				{
-					_lenghtMapReport = (raRef<JsonResource>) CR2WTypeManager.Create("raRef:JsonResource", "lenghtMapReport", cr2w, this);
-				}
-				return _lenghtMapReport;
-			}
-			set
-			{
-				if (_lenghtMapReport == value)
-				{
-					return;
-				}
-				_lenghtMapReport = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lenghtMapReport);
+			set => SetProperty(ref _lenghtMapReport, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("voMapChunks")] 
 		public CArray<raRef<JsonResource>> VoMapChunks
 		{
-			get
-			{
-				if (_voMapChunks == null)
-				{
-					_voMapChunks = (CArray<raRef<JsonResource>>) CR2WTypeManager.Create("array:raRef:JsonResource", "voMapChunks", cr2w, this);
-				}
-				return _voMapChunks;
-			}
-			set
-			{
-				if (_voMapChunks == value)
-				{
-					return;
-				}
-				_voMapChunks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _voMapChunks);
+			set => SetProperty(ref _voMapChunks, value);
 		}
 
 		public locVoLanguageDataEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

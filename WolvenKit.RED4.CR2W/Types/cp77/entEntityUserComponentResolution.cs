@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("id")] 
 		public CRUID Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CRUID) CR2WTypeManager.Create("CRUID", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("include")] 
 		public raRef<entEntityTemplate> Include
 		{
-			get
-			{
-				if (_include == null)
-				{
-					_include = (raRef<entEntityTemplate>) CR2WTypeManager.Create("raRef:entEntityTemplate", "include", cr2w, this);
-				}
-				return _include;
-			}
-			set
-			{
-				if (_include == value)
-				{
-					return;
-				}
-				_include = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _include);
+			set => SetProperty(ref _include, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("mode")] 
 		public CEnum<entEntityUserComponentResolutionMode> Mode
 		{
-			get
-			{
-				if (_mode == null)
-				{
-					_mode = (CEnum<entEntityUserComponentResolutionMode>) CR2WTypeManager.Create("entEntityUserComponentResolutionMode", "mode", cr2w, this);
-				}
-				return _mode;
-			}
-			set
-			{
-				if (_mode == value)
-				{
-					return;
-				}
-				_mode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mode);
+			set => SetProperty(ref _mode, value);
 		}
 
 		public entEntityUserComponentResolution(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

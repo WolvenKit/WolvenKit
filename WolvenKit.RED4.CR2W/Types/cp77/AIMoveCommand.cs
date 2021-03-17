@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("removeAfterCombat")] 
 		public CBool RemoveAfterCombat
 		{
-			get
-			{
-				if (_removeAfterCombat == null)
-				{
-					_removeAfterCombat = (CBool) CR2WTypeManager.Create("Bool", "removeAfterCombat", cr2w, this);
-				}
-				return _removeAfterCombat;
-			}
-			set
-			{
-				if (_removeAfterCombat == value)
-				{
-					return;
-				}
-				_removeAfterCombat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _removeAfterCombat);
+			set => SetProperty(ref _removeAfterCombat, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ignoreInCombat")] 
 		public CBool IgnoreInCombat
 		{
-			get
-			{
-				if (_ignoreInCombat == null)
-				{
-					_ignoreInCombat = (CBool) CR2WTypeManager.Create("Bool", "ignoreInCombat", cr2w, this);
-				}
-				return _ignoreInCombat;
-			}
-			set
-			{
-				if (_ignoreInCombat == value)
-				{
-					return;
-				}
-				_ignoreInCombat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ignoreInCombat);
+			set => SetProperty(ref _ignoreInCombat, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("alwaysUseStealth")] 
 		public CBool AlwaysUseStealth
 		{
-			get
-			{
-				if (_alwaysUseStealth == null)
-				{
-					_alwaysUseStealth = (CBool) CR2WTypeManager.Create("Bool", "alwaysUseStealth", cr2w, this);
-				}
-				return _alwaysUseStealth;
-			}
-			set
-			{
-				if (_alwaysUseStealth == value)
-				{
-					return;
-				}
-				_alwaysUseStealth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alwaysUseStealth);
+			set => SetProperty(ref _alwaysUseStealth, value);
 		}
 
 		public AIMoveCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

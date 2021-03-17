@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("aiVisibility")] 
 		public CEnum<physicsMaterialTagAIVisibility> AiVisibility
 		{
-			get
-			{
-				if (_aiVisibility == null)
-				{
-					_aiVisibility = (CEnum<physicsMaterialTagAIVisibility>) CR2WTypeManager.Create("physicsMaterialTagAIVisibility", "aiVisibility", cr2w, this);
-				}
-				return _aiVisibility;
-			}
-			set
-			{
-				if (_aiVisibility == value)
-				{
-					return;
-				}
-				_aiVisibility = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aiVisibility);
+			set => SetProperty(ref _aiVisibility, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("projectilePenetration")] 
 		public CEnum<physicsMaterialTagProjectilePenetration> ProjectilePenetration
 		{
-			get
-			{
-				if (_projectilePenetration == null)
-				{
-					_projectilePenetration = (CEnum<physicsMaterialTagProjectilePenetration>) CR2WTypeManager.Create("physicsMaterialTagProjectilePenetration", "projectilePenetration", cr2w, this);
-				}
-				return _projectilePenetration;
-			}
-			set
-			{
-				if (_projectilePenetration == value)
-				{
-					return;
-				}
-				_projectilePenetration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectilePenetration);
+			set => SetProperty(ref _projectilePenetration, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("vehicleTraction")] 
 		public CEnum<physicsMaterialTagVehicleTraction> VehicleTraction
 		{
-			get
-			{
-				if (_vehicleTraction == null)
-				{
-					_vehicleTraction = (CEnum<physicsMaterialTagVehicleTraction>) CR2WTypeManager.Create("physicsMaterialTagVehicleTraction", "vehicleTraction", cr2w, this);
-				}
-				return _vehicleTraction;
-			}
-			set
-			{
-				if (_vehicleTraction == value)
-				{
-					return;
-				}
-				_vehicleTraction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleTraction);
+			set => SetProperty(ref _vehicleTraction, value);
 		}
 
 		public physicsMaterialTags(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("spawnPosition")] 
 		public Vector4 SpawnPosition
 		{
-			get
-			{
-				if (_spawnPosition == null)
-				{
-					_spawnPosition = (Vector4) CR2WTypeManager.Create("Vector4", "spawnPosition", cr2w, this);
-				}
-				return _spawnPosition;
-			}
-			set
-			{
-				if (_spawnPosition == value)
-				{
-					return;
-				}
-				_spawnPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnPosition);
+			set => SetProperty(ref _spawnPosition, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("spawnNormal")] 
 		public Vector4 SpawnNormal
 		{
-			get
-			{
-				if (_spawnNormal == null)
-				{
-					_spawnNormal = (Vector4) CR2WTypeManager.Create("Vector4", "spawnNormal", cr2w, this);
-				}
-				return _spawnNormal;
-			}
-			set
-			{
-				if (_spawnNormal == value)
-				{
-					return;
-				}
-				_spawnNormal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnNormal);
+			set => SetProperty(ref _spawnNormal, value);
 		}
 
 		public MineDispenserPlaceDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

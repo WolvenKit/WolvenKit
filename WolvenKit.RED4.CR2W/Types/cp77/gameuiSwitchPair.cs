@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("prevOption")] 
 		public wCHandle<gameuiCharacterCustomizationOption> PrevOption
 		{
-			get
-			{
-				if (_prevOption == null)
-				{
-					_prevOption = (wCHandle<gameuiCharacterCustomizationOption>) CR2WTypeManager.Create("whandle:gameuiCharacterCustomizationOption", "prevOption", cr2w, this);
-				}
-				return _prevOption;
-			}
-			set
-			{
-				if (_prevOption == value)
-				{
-					return;
-				}
-				_prevOption = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prevOption);
+			set => SetProperty(ref _prevOption, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("currOption")] 
 		public wCHandle<gameuiCharacterCustomizationOption> CurrOption
 		{
-			get
-			{
-				if (_currOption == null)
-				{
-					_currOption = (wCHandle<gameuiCharacterCustomizationOption>) CR2WTypeManager.Create("whandle:gameuiCharacterCustomizationOption", "currOption", cr2w, this);
-				}
-				return _currOption;
-			}
-			set
-			{
-				if (_currOption == value)
-				{
-					return;
-				}
-				_currOption = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currOption);
+			set => SetProperty(ref _currOption, value);
 		}
 
 		public gameuiSwitchPair(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

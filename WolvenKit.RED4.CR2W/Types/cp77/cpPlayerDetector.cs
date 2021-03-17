@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("range")] 
 		public CFloat Range
 		{
-			get
-			{
-				if (_range == null)
-				{
-					_range = (CFloat) CR2WTypeManager.Create("Float", "range", cr2w, this);
-				}
-				return _range;
-			}
-			set
-			{
-				if (_range == value)
-				{
-					return;
-				}
-				_range = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _range);
+			set => SetProperty(ref _range, value);
 		}
 
 		public cpPlayerDetector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

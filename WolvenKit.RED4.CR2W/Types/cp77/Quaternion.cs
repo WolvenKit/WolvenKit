@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("i")] 
 		public CFloat I
 		{
-			get
-			{
-				if (_i == null)
-				{
-					_i = (CFloat) CR2WTypeManager.Create("Float", "i", cr2w, this);
-				}
-				return _i;
-			}
-			set
-			{
-				if (_i == value)
-				{
-					return;
-				}
-				_i = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _i);
+			set => SetProperty(ref _i, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("j")] 
 		public CFloat J
 		{
-			get
-			{
-				if (_j == null)
-				{
-					_j = (CFloat) CR2WTypeManager.Create("Float", "j", cr2w, this);
-				}
-				return _j;
-			}
-			set
-			{
-				if (_j == value)
-				{
-					return;
-				}
-				_j = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _j);
+			set => SetProperty(ref _j, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("k")] 
 		public CFloat K
 		{
-			get
-			{
-				if (_k == null)
-				{
-					_k = (CFloat) CR2WTypeManager.Create("Float", "k", cr2w, this);
-				}
-				return _k;
-			}
-			set
-			{
-				if (_k == value)
-				{
-					return;
-				}
-				_k = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _k);
+			set => SetProperty(ref _k, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("r")] 
 		public CFloat R
 		{
-			get
-			{
-				if (_r == null)
-				{
-					_r = (CFloat) CR2WTypeManager.Create("Float", "r", cr2w, this);
-				}
-				return _r;
-			}
-			set
-			{
-				if (_r == value)
-				{
-					return;
-				}
-				_r = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _r);
+			set => SetProperty(ref _r, value);
 		}
 
 		public Quaternion(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

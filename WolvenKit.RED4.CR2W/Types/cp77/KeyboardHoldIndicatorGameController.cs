@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("progress")] 
 		public inkImageWidgetReference Progress
 		{
-			get
-			{
-				if (_progress == null)
-				{
-					_progress = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "progress", cr2w, this);
-				}
-				return _progress;
-			}
-			set
-			{
-				if (_progress == value)
-				{
-					return;
-				}
-				_progress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _progress);
+			set => SetProperty(ref _progress, value);
 		}
 
 		public KeyboardHoldIndicatorGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

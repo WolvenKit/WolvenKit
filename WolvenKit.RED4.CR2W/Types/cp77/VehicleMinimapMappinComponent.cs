@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("minimapPOIMappinController")] 
 		public wCHandle<MinimapPOIMappinController> MinimapPOIMappinController
 		{
-			get
-			{
-				if (_minimapPOIMappinController == null)
-				{
-					_minimapPOIMappinController = (wCHandle<MinimapPOIMappinController>) CR2WTypeManager.Create("whandle:MinimapPOIMappinController", "minimapPOIMappinController", cr2w, this);
-				}
-				return _minimapPOIMappinController;
-			}
-			set
-			{
-				if (_minimapPOIMappinController == value)
-				{
-					return;
-				}
-				_minimapPOIMappinController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minimapPOIMappinController);
+			set => SetProperty(ref _minimapPOIMappinController, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("vehicleIsLatestSummoned")] 
 		public CBool VehicleIsLatestSummoned
 		{
-			get
-			{
-				if (_vehicleIsLatestSummoned == null)
-				{
-					_vehicleIsLatestSummoned = (CBool) CR2WTypeManager.Create("Bool", "vehicleIsLatestSummoned", cr2w, this);
-				}
-				return _vehicleIsLatestSummoned;
-			}
-			set
-			{
-				if (_vehicleIsLatestSummoned == value)
-				{
-					return;
-				}
-				_vehicleIsLatestSummoned = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleIsLatestSummoned);
+			set => SetProperty(ref _vehicleIsLatestSummoned, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("vehicleEntityID")] 
 		public entEntityID VehicleEntityID
 		{
-			get
-			{
-				if (_vehicleEntityID == null)
-				{
-					_vehicleEntityID = (entEntityID) CR2WTypeManager.Create("entEntityID", "vehicleEntityID", cr2w, this);
-				}
-				return _vehicleEntityID;
-			}
-			set
-			{
-				if (_vehicleEntityID == value)
-				{
-					return;
-				}
-				_vehicleEntityID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleEntityID);
+			set => SetProperty(ref _vehicleEntityID, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("vehicleSummonDataDef")] 
 		public CHandle<VehicleSummonDataDef> VehicleSummonDataDef
 		{
-			get
-			{
-				if (_vehicleSummonDataDef == null)
-				{
-					_vehicleSummonDataDef = (CHandle<VehicleSummonDataDef>) CR2WTypeManager.Create("handle:VehicleSummonDataDef", "vehicleSummonDataDef", cr2w, this);
-				}
-				return _vehicleSummonDataDef;
-			}
-			set
-			{
-				if (_vehicleSummonDataDef == value)
-				{
-					return;
-				}
-				_vehicleSummonDataDef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleSummonDataDef);
+			set => SetProperty(ref _vehicleSummonDataDef, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("vehicleSummonDataBB")] 
 		public CHandle<gameIBlackboard> VehicleSummonDataBB
 		{
-			get
-			{
-				if (_vehicleSummonDataBB == null)
-				{
-					_vehicleSummonDataBB = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "vehicleSummonDataBB", cr2w, this);
-				}
-				return _vehicleSummonDataBB;
-			}
-			set
-			{
-				if (_vehicleSummonDataBB == value)
-				{
-					return;
-				}
-				_vehicleSummonDataBB = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleSummonDataBB);
+			set => SetProperty(ref _vehicleSummonDataBB, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("vehicleSummonStateCallback")] 
 		public CUInt32 VehicleSummonStateCallback
 		{
-			get
-			{
-				if (_vehicleSummonStateCallback == null)
-				{
-					_vehicleSummonStateCallback = (CUInt32) CR2WTypeManager.Create("Uint32", "vehicleSummonStateCallback", cr2w, this);
-				}
-				return _vehicleSummonStateCallback;
-			}
-			set
-			{
-				if (_vehicleSummonStateCallback == value)
-				{
-					return;
-				}
-				_vehicleSummonStateCallback = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleSummonStateCallback);
+			set => SetProperty(ref _vehicleSummonStateCallback, value);
 		}
 
 		public VehicleMinimapMappinComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

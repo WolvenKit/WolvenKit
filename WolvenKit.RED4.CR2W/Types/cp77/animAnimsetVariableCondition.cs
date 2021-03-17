@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("variableToCompare")] 
 		public CName VariableToCompare
 		{
-			get
-			{
-				if (_variableToCompare == null)
-				{
-					_variableToCompare = (CName) CR2WTypeManager.Create("CName", "variableToCompare", cr2w, this);
-				}
-				return _variableToCompare;
-			}
-			set
-			{
-				if (_variableToCompare == value)
-				{
-					return;
-				}
-				_variableToCompare = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _variableToCompare);
+			set => SetProperty(ref _variableToCompare, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("valueToCompare")] 
 		public CFloat ValueToCompare
 		{
-			get
-			{
-				if (_valueToCompare == null)
-				{
-					_valueToCompare = (CFloat) CR2WTypeManager.Create("Float", "valueToCompare", cr2w, this);
-				}
-				return _valueToCompare;
-			}
-			set
-			{
-				if (_valueToCompare == value)
-				{
-					return;
-				}
-				_valueToCompare = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _valueToCompare);
+			set => SetProperty(ref _valueToCompare, value);
 		}
 
 		public animAnimsetVariableCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

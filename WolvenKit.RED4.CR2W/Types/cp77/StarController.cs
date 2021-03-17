@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bountyBadgeWidget")] 
 		public inkWidgetReference BountyBadgeWidget
 		{
-			get
-			{
-				if (_bountyBadgeWidget == null)
-				{
-					_bountyBadgeWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "bountyBadgeWidget", cr2w, this);
-				}
-				return _bountyBadgeWidget;
-			}
-			set
-			{
-				if (_bountyBadgeWidget == value)
-				{
-					return;
-				}
-				_bountyBadgeWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bountyBadgeWidget);
+			set => SetProperty(ref _bountyBadgeWidget, value);
 		}
 
 		public StarController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

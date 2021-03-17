@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("showItem")] 
 		public CBool ShowItem
 		{
-			get
-			{
-				if (_showItem == null)
-				{
-					_showItem = (CBool) CR2WTypeManager.Create("Bool", "showItem", cr2w, this);
-				}
-				return _showItem;
-			}
-			set
-			{
-				if (_showItem == value)
-				{
-					return;
-				}
-				_showItem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showItem);
+			set => SetProperty(ref _showItem, value);
 		}
 
 		public ObjectInspectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

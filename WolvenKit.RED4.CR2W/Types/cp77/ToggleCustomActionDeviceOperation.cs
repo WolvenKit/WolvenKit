@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("customActionID")] 
 		public CName CustomActionID
 		{
-			get
-			{
-				if (_customActionID == null)
-				{
-					_customActionID = (CName) CR2WTypeManager.Create("CName", "customActionID", cr2w, this);
-				}
-				return _customActionID;
-			}
-			set
-			{
-				if (_customActionID == value)
-				{
-					return;
-				}
-				_customActionID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customActionID);
+			set => SetProperty(ref _customActionID, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("enabled")] 
 		public CBool Enabled
 		{
-			get
-			{
-				if (_enabled == null)
-				{
-					_enabled = (CBool) CR2WTypeManager.Create("Bool", "enabled", cr2w, this);
-				}
-				return _enabled;
-			}
-			set
-			{
-				if (_enabled == value)
-				{
-					return;
-				}
-				_enabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enabled);
+			set => SetProperty(ref _enabled, value);
 		}
 
 		public ToggleCustomActionDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attackerWorkspot")] 
 		public raRef<workWorkspotResource> AttackerWorkspot
 		{
-			get
-			{
-				if (_attackerWorkspot == null)
-				{
-					_attackerWorkspot = (raRef<workWorkspotResource>) CR2WTypeManager.Create("raRef:workWorkspotResource", "attackerWorkspot", cr2w, this);
-				}
-				return _attackerWorkspot;
-			}
-			set
-			{
-				if (_attackerWorkspot == value)
-				{
-					return;
-				}
-				_attackerWorkspot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackerWorkspot);
+			set => SetProperty(ref _attackerWorkspot, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("targetWorkspot")] 
 		public raRef<workWorkspotResource> TargetWorkspot
 		{
-			get
-			{
-				if (_targetWorkspot == null)
-				{
-					_targetWorkspot = (raRef<workWorkspotResource>) CR2WTypeManager.Create("raRef:workWorkspotResource", "targetWorkspot", cr2w, this);
-				}
-				return _targetWorkspot;
-			}
-			set
-			{
-				if (_targetWorkspot == value)
-				{
-					return;
-				}
-				_targetWorkspot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetWorkspot);
+			set => SetProperty(ref _targetWorkspot, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("syncAnimSlotName")] 
 		public CName SyncAnimSlotName
 		{
-			get
-			{
-				if (_syncAnimSlotName == null)
-				{
-					_syncAnimSlotName = (CName) CR2WTypeManager.Create("CName", "syncAnimSlotName", cr2w, this);
-				}
-				return _syncAnimSlotName;
-			}
-			set
-			{
-				if (_syncAnimSlotName == value)
-				{
-					return;
-				}
-				_syncAnimSlotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _syncAnimSlotName);
+			set => SetProperty(ref _syncAnimSlotName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("targetPlaybackDelay")] 
 		public CFloat TargetPlaybackDelay
 		{
-			get
-			{
-				if (_targetPlaybackDelay == null)
-				{
-					_targetPlaybackDelay = (CFloat) CR2WTypeManager.Create("Float", "targetPlaybackDelay", cr2w, this);
-				}
-				return _targetPlaybackDelay;
-			}
-			set
-			{
-				if (_targetPlaybackDelay == value)
-				{
-					return;
-				}
-				_targetPlaybackDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetPlaybackDelay);
+			set => SetProperty(ref _targetPlaybackDelay, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("targetBlendTime")] 
 		public CFloat TargetBlendTime
 		{
-			get
-			{
-				if (_targetBlendTime == null)
-				{
-					_targetBlendTime = (CFloat) CR2WTypeManager.Create("Float", "targetBlendTime", cr2w, this);
-				}
-				return _targetBlendTime;
-			}
-			set
-			{
-				if (_targetBlendTime == value)
-				{
-					return;
-				}
-				_targetBlendTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetBlendTime);
+			set => SetProperty(ref _targetBlendTime, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("attackerPlaybackDelay")] 
 		public CFloat AttackerPlaybackDelay
 		{
-			get
-			{
-				if (_attackerPlaybackDelay == null)
-				{
-					_attackerPlaybackDelay = (CFloat) CR2WTypeManager.Create("Float", "attackerPlaybackDelay", cr2w, this);
-				}
-				return _attackerPlaybackDelay;
-			}
-			set
-			{
-				if (_attackerPlaybackDelay == value)
-				{
-					return;
-				}
-				_attackerPlaybackDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackerPlaybackDelay);
+			set => SetProperty(ref _attackerPlaybackDelay, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("attackerBlendTime")] 
 		public CFloat AttackerBlendTime
 		{
-			get
-			{
-				if (_attackerBlendTime == null)
-				{
-					_attackerBlendTime = (CFloat) CR2WTypeManager.Create("Float", "attackerBlendTime", cr2w, this);
-				}
-				return _attackerBlendTime;
-			}
-			set
-			{
-				if (_attackerBlendTime == value)
-				{
-					return;
-				}
-				_attackerBlendTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackerBlendTime);
+			set => SetProperty(ref _attackerBlendTime, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("pivotSettings")] 
 		public CEnum<gameRegular1v1FinisherScenarioPivotSetting> PivotSettings
 		{
-			get
-			{
-				if (_pivotSettings == null)
-				{
-					_pivotSettings = (CEnum<gameRegular1v1FinisherScenarioPivotSetting>) CR2WTypeManager.Create("gameRegular1v1FinisherScenarioPivotSetting", "pivotSettings", cr2w, this);
-				}
-				return _pivotSettings;
-			}
-			set
-			{
-				if (_pivotSettings == value)
-				{
-					return;
-				}
-				_pivotSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pivotSettings);
+			set => SetProperty(ref _pivotSettings, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("attackerIsMaster")] 
 		public CBool AttackerIsMaster
 		{
-			get
-			{
-				if (_attackerIsMaster == null)
-				{
-					_attackerIsMaster = (CBool) CR2WTypeManager.Create("Bool", "attackerIsMaster", cr2w, this);
-				}
-				return _attackerIsMaster;
-			}
-			set
-			{
-				if (_attackerIsMaster == value)
-				{
-					return;
-				}
-				_attackerIsMaster = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackerIsMaster);
+			set => SetProperty(ref _attackerIsMaster, value);
 		}
 
 		public gameRegular1v1FinisherScenario(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

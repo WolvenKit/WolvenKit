@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actionID")] 
 		public TweakDBID ActionID
 		{
-			get
-			{
-				if (_actionID == null)
-				{
-					_actionID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "actionID", cr2w, this);
-				}
-				return _actionID;
-			}
-			set
-			{
-				if (_actionID == value)
-				{
-					return;
-				}
-				_actionID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionID);
+			set => SetProperty(ref _actionID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("triggered")] 
 		public CBool Triggered
 		{
-			get
-			{
-				if (_triggered == null)
-				{
-					_triggered = (CBool) CR2WTypeManager.Create("Bool", "triggered", cr2w, this);
-				}
-				return _triggered;
-			}
-			set
-			{
-				if (_triggered == value)
-				{
-					return;
-				}
-				_triggered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggered);
+			set => SetProperty(ref _triggered, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("probability")] 
 		public CFloat Probability
 		{
-			get
-			{
-				if (_probability == null)
-				{
-					_probability = (CFloat) CR2WTypeManager.Create("Float", "probability", cr2w, this);
-				}
-				return _probability;
-			}
-			set
-			{
-				if (_probability == value)
-				{
-					return;
-				}
-				_probability = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _probability);
+			set => SetProperty(ref _probability, value);
 		}
 
 		public ApplyObjectActionEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

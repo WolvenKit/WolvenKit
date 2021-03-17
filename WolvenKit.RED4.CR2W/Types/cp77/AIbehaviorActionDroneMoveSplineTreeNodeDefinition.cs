@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("spline")] 
 		public CHandle<AIArgumentMapping> Spline
 		{
-			get
-			{
-				if (_spline == null)
-				{
-					_spline = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "spline", cr2w, this);
-				}
-				return _spline;
-			}
-			set
-			{
-				if (_spline == value)
-				{
-					return;
-				}
-				_spline = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spline);
+			set => SetProperty(ref _spline, value);
 		}
 
 		public AIbehaviorActionDroneMoveSplineTreeNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

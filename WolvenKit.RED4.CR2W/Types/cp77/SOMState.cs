@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("depthStencilModeDesc")] 
 		public PSODescDepthStencilModeDesc DepthStencilModeDesc
 		{
-			get
-			{
-				if (_depthStencilModeDesc == null)
-				{
-					_depthStencilModeDesc = (PSODescDepthStencilModeDesc) CR2WTypeManager.Create("PSODescDepthStencilModeDesc", "depthStencilModeDesc", cr2w, this);
-				}
-				return _depthStencilModeDesc;
-			}
-			set
-			{
-				if (_depthStencilModeDesc == value)
-				{
-					return;
-				}
-				_depthStencilModeDesc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _depthStencilModeDesc);
+			set => SetProperty(ref _depthStencilModeDesc, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rasterizerModeDesc")] 
 		public PSODescRasterizerModeDesc RasterizerModeDesc
 		{
-			get
-			{
-				if (_rasterizerModeDesc == null)
-				{
-					_rasterizerModeDesc = (PSODescRasterizerModeDesc) CR2WTypeManager.Create("PSODescRasterizerModeDesc", "rasterizerModeDesc", cr2w, this);
-				}
-				return _rasterizerModeDesc;
-			}
-			set
-			{
-				if (_rasterizerModeDesc == value)
-				{
-					return;
-				}
-				_rasterizerModeDesc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rasterizerModeDesc);
+			set => SetProperty(ref _rasterizerModeDesc, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("blendModeDesc")] 
 		public PSODescBlendModeDesc BlendModeDesc
 		{
-			get
-			{
-				if (_blendModeDesc == null)
-				{
-					_blendModeDesc = (PSODescBlendModeDesc) CR2WTypeManager.Create("PSODescBlendModeDesc", "blendModeDesc", cr2w, this);
-				}
-				return _blendModeDesc;
-			}
-			set
-			{
-				if (_blendModeDesc == value)
-				{
-					return;
-				}
-				_blendModeDesc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendModeDesc);
+			set => SetProperty(ref _blendModeDesc, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("stencilReadMask")] 
 		public CUInt8 StencilReadMask
 		{
-			get
-			{
-				if (_stencilReadMask == null)
-				{
-					_stencilReadMask = (CUInt8) CR2WTypeManager.Create("Uint8", "stencilReadMask", cr2w, this);
-				}
-				return _stencilReadMask;
-			}
-			set
-			{
-				if (_stencilReadMask == value)
-				{
-					return;
-				}
-				_stencilReadMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stencilReadMask);
+			set => SetProperty(ref _stencilReadMask, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("stencilWriteMask")] 
 		public CUInt8 StencilWriteMask
 		{
-			get
-			{
-				if (_stencilWriteMask == null)
-				{
-					_stencilWriteMask = (CUInt8) CR2WTypeManager.Create("Uint8", "stencilWriteMask", cr2w, this);
-				}
-				return _stencilWriteMask;
-			}
-			set
-			{
-				if (_stencilWriteMask == value)
-				{
-					return;
-				}
-				_stencilWriteMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stencilWriteMask);
+			set => SetProperty(ref _stencilWriteMask, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("stencilRef")] 
 		public CUInt8 StencilRef
 		{
-			get
-			{
-				if (_stencilRef == null)
-				{
-					_stencilRef = (CUInt8) CR2WTypeManager.Create("Uint8", "stencilRef", cr2w, this);
-				}
-				return _stencilRef;
-			}
-			set
-			{
-				if (_stencilRef == value)
-				{
-					return;
-				}
-				_stencilRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stencilRef);
+			set => SetProperty(ref _stencilRef, value);
 		}
 
 		public SOMState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

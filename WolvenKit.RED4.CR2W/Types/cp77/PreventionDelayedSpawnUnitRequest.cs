@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("recordID")] 
 		public TweakDBID RecordID
 		{
-			get
-			{
-				if (_recordID == null)
-				{
-					_recordID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "recordID", cr2w, this);
-				}
-				return _recordID;
-			}
-			set
-			{
-				if (_recordID == value)
-				{
-					return;
-				}
-				_recordID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recordID);
+			set => SetProperty(ref _recordID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("preventionLevel")] 
 		public CUInt32 PreventionLevel
 		{
-			get
-			{
-				if (_preventionLevel == null)
-				{
-					_preventionLevel = (CUInt32) CR2WTypeManager.Create("Uint32", "preventionLevel", cr2w, this);
-				}
-				return _preventionLevel;
-			}
-			set
-			{
-				if (_preventionLevel == value)
-				{
-					return;
-				}
-				_preventionLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _preventionLevel);
+			set => SetProperty(ref _preventionLevel, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("spawnTransform")] 
 		public WorldTransform SpawnTransform
 		{
-			get
-			{
-				if (_spawnTransform == null)
-				{
-					_spawnTransform = (WorldTransform) CR2WTypeManager.Create("WorldTransform", "spawnTransform", cr2w, this);
-				}
-				return _spawnTransform;
-			}
-			set
-			{
-				if (_spawnTransform == value)
-				{
-					return;
-				}
-				_spawnTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnTransform);
+			set => SetProperty(ref _spawnTransform, value);
 		}
 
 		public PreventionDelayedSpawnUnitRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

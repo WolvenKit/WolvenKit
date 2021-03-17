@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicle")] 
 		public wCHandle<vehicleBaseObject> Vehicle
 		{
-			get
-			{
-				if (_vehicle == null)
-				{
-					_vehicle = (wCHandle<vehicleBaseObject>) CR2WTypeManager.Create("whandle:vehicleBaseObject", "vehicle", cr2w, this);
-				}
-				return _vehicle;
-			}
-			set
-			{
-				if (_vehicle == value)
-				{
-					return;
-				}
-				_vehicle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicle);
+			set => SetProperty(ref _vehicle, value);
 		}
 
 		public RegisterVehicleRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

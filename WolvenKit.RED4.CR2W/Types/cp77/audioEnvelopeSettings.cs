@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attackTime")] 
 		public CFloat AttackTime
 		{
-			get
-			{
-				if (_attackTime == null)
-				{
-					_attackTime = (CFloat) CR2WTypeManager.Create("Float", "attackTime", cr2w, this);
-				}
-				return _attackTime;
-			}
-			set
-			{
-				if (_attackTime == value)
-				{
-					return;
-				}
-				_attackTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackTime);
+			set => SetProperty(ref _attackTime, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("releaseTime")] 
 		public CFloat ReleaseTime
 		{
-			get
-			{
-				if (_releaseTime == null)
-				{
-					_releaseTime = (CFloat) CR2WTypeManager.Create("Float", "releaseTime", cr2w, this);
-				}
-				return _releaseTime;
-			}
-			set
-			{
-				if (_releaseTime == value)
-				{
-					return;
-				}
-				_releaseTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _releaseTime);
+			set => SetProperty(ref _releaseTime, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("holdTime")] 
 		public CFloat HoldTime
 		{
-			get
-			{
-				if (_holdTime == null)
-				{
-					_holdTime = (CFloat) CR2WTypeManager.Create("Float", "holdTime", cr2w, this);
-				}
-				return _holdTime;
-			}
-			set
-			{
-				if (_holdTime == value)
-				{
-					return;
-				}
-				_holdTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _holdTime);
+			set => SetProperty(ref _holdTime, value);
 		}
 
 		public audioEnvelopeSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

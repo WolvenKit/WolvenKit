@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timeToSkip")] 
 		public CFloat TimeToSkip
 		{
-			get
-			{
-				if (_timeToSkip == null)
-				{
-					_timeToSkip = (CFloat) CR2WTypeManager.Create("Float", "timeToSkip", cr2w, this);
-				}
-				return _timeToSkip;
-			}
-			set
-			{
-				if (_timeToSkip == value)
-				{
-					return;
-				}
-				_timeToSkip = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeToSkip);
+			set => SetProperty(ref _timeToSkip, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("widgetTextUsage")] 
 		public CEnum<inkTextReplaceAnimationControllerWidgetTextUsage> WidgetTextUsage
 		{
-			get
-			{
-				if (_widgetTextUsage == null)
-				{
-					_widgetTextUsage = (CEnum<inkTextReplaceAnimationControllerWidgetTextUsage>) CR2WTypeManager.Create("inkTextReplaceAnimationControllerWidgetTextUsage", "widgetTextUsage", cr2w, this);
-				}
-				return _widgetTextUsage;
-			}
-			set
-			{
-				if (_widgetTextUsage == value)
-				{
-					return;
-				}
-				_widgetTextUsage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetTextUsage);
+			set => SetProperty(ref _widgetTextUsage, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("baseTextLocalized")] 
 		public LocalizationString BaseTextLocalized
 		{
-			get
-			{
-				if (_baseTextLocalized == null)
-				{
-					_baseTextLocalized = (LocalizationString) CR2WTypeManager.Create("LocalizationString", "baseTextLocalized", cr2w, this);
-				}
-				return _baseTextLocalized;
-			}
-			set
-			{
-				if (_baseTextLocalized == value)
-				{
-					return;
-				}
-				_baseTextLocalized = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _baseTextLocalized);
+			set => SetProperty(ref _baseTextLocalized, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("targetText")] 
 		public CString TargetText
 		{
-			get
-			{
-				if (_targetText == null)
-				{
-					_targetText = (CString) CR2WTypeManager.Create("String", "targetText", cr2w, this);
-				}
-				return _targetText;
-			}
-			set
-			{
-				if (_targetText == value)
-				{
-					return;
-				}
-				_targetText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetText);
+			set => SetProperty(ref _targetText, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("targetTextLocalized")] 
 		public LocalizationString TargetTextLocalized
 		{
-			get
-			{
-				if (_targetTextLocalized == null)
-				{
-					_targetTextLocalized = (LocalizationString) CR2WTypeManager.Create("LocalizationString", "targetTextLocalized", cr2w, this);
-				}
-				return _targetTextLocalized;
-			}
-			set
-			{
-				if (_targetTextLocalized == value)
-				{
-					return;
-				}
-				_targetTextLocalized = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetTextLocalized);
+			set => SetProperty(ref _targetTextLocalized, value);
 		}
 
 		public inkTextReplaceAnimationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

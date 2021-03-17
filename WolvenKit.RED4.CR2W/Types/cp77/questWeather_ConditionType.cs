@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weather")] 
 		public CName Weather
 		{
-			get
-			{
-				if (_weather == null)
-				{
-					_weather = (CName) CR2WTypeManager.Create("CName", "weather", cr2w, this);
-				}
-				return _weather;
-			}
-			set
-			{
-				if (_weather == value)
-				{
-					return;
-				}
-				_weather = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weather);
+			set => SetProperty(ref _weather, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("inverted")] 
 		public CBool Inverted
 		{
-			get
-			{
-				if (_inverted == null)
-				{
-					_inverted = (CBool) CR2WTypeManager.Create("Bool", "inverted", cr2w, this);
-				}
-				return _inverted;
-			}
-			set
-			{
-				if (_inverted == value)
-				{
-					return;
-				}
-				_inverted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inverted);
+			set => SetProperty(ref _inverted, value);
 		}
 
 		public questWeather_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

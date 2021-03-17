@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("DensityScale")] 
 		public CFloat DensityScale
 		{
-			get
-			{
-				if (_densityScale == null)
-				{
-					_densityScale = (CFloat) CR2WTypeManager.Create("Float", "DensityScale", cr2w, this);
-				}
-				return _densityScale;
-			}
-			set
-			{
-				if (_densityScale == value)
-				{
-					return;
-				}
-				_densityScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _densityScale);
+			set => SetProperty(ref _densityScale, value);
 		}
 
 		public entdismembermentPhysicsInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

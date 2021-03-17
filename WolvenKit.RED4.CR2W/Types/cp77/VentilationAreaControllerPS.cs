@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ventilationAreaSetup")] 
 		public VentilationAreaSetup VentilationAreaSetup
 		{
-			get
-			{
-				if (_ventilationAreaSetup == null)
-				{
-					_ventilationAreaSetup = (VentilationAreaSetup) CR2WTypeManager.Create("VentilationAreaSetup", "ventilationAreaSetup", cr2w, this);
-				}
-				return _ventilationAreaSetup;
-			}
-			set
-			{
-				if (_ventilationAreaSetup == value)
-				{
-					return;
-				}
-				_ventilationAreaSetup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ventilationAreaSetup);
+			set => SetProperty(ref _ventilationAreaSetup, value);
 		}
 
 		[Ordinal(105)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		public VentilationAreaControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

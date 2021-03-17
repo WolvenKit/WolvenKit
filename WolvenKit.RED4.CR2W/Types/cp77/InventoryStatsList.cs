@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("titleText")] 
 		public wCHandle<inkTextWidget> TitleText
 		{
-			get
-			{
-				if (_titleText == null)
-				{
-					_titleText = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "titleText", cr2w, this);
-				}
-				return _titleText;
-			}
-			set
-			{
-				if (_titleText == value)
-				{
-					return;
-				}
-				_titleText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _titleText);
+			set => SetProperty(ref _titleText, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("containerWidget")] 
 		public wCHandle<inkCompoundWidget> ContainerWidget
 		{
-			get
-			{
-				if (_containerWidget == null)
-				{
-					_containerWidget = (wCHandle<inkCompoundWidget>) CR2WTypeManager.Create("whandle:inkCompoundWidget", "containerWidget", cr2w, this);
-				}
-				return _containerWidget;
-			}
-			set
-			{
-				if (_containerWidget == value)
-				{
-					return;
-				}
-				_containerWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _containerWidget);
+			set => SetProperty(ref _containerWidget, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("widgtesList")] 
 		public CArray<wCHandle<inkWidget>> WidgtesList
 		{
-			get
-			{
-				if (_widgtesList == null)
-				{
-					_widgtesList = (CArray<wCHandle<inkWidget>>) CR2WTypeManager.Create("array:whandle:inkWidget", "widgtesList", cr2w, this);
-				}
-				return _widgtesList;
-			}
-			set
-			{
-				if (_widgtesList == value)
-				{
-					return;
-				}
-				_widgtesList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgtesList);
+			set => SetProperty(ref _widgtesList, value);
 		}
 
 		public InventoryStatsList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

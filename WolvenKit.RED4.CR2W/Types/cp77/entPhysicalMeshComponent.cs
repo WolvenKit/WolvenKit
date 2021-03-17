@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("visibilityAnimationParam")] 
 		public CName VisibilityAnimationParam
 		{
-			get
-			{
-				if (_visibilityAnimationParam == null)
-				{
-					_visibilityAnimationParam = (CName) CR2WTypeManager.Create("CName", "visibilityAnimationParam", cr2w, this);
-				}
-				return _visibilityAnimationParam;
-			}
-			set
-			{
-				if (_visibilityAnimationParam == value)
-				{
-					return;
-				}
-				_visibilityAnimationParam = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visibilityAnimationParam);
+			set => SetProperty(ref _visibilityAnimationParam, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("simulationType")] 
 		public CEnum<physicsSimulationType> SimulationType
 		{
-			get
-			{
-				if (_simulationType == null)
-				{
-					_simulationType = (CEnum<physicsSimulationType>) CR2WTypeManager.Create("physicsSimulationType", "simulationType", cr2w, this);
-				}
-				return _simulationType;
-			}
-			set
-			{
-				if (_simulationType == value)
-				{
-					return;
-				}
-				_simulationType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _simulationType);
+			set => SetProperty(ref _simulationType, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("useResourceSimulationType")] 
 		public CBool UseResourceSimulationType
 		{
-			get
-			{
-				if (_useResourceSimulationType == null)
-				{
-					_useResourceSimulationType = (CBool) CR2WTypeManager.Create("Bool", "useResourceSimulationType", cr2w, this);
-				}
-				return _useResourceSimulationType;
-			}
-			set
-			{
-				if (_useResourceSimulationType == value)
-				{
-					return;
-				}
-				_useResourceSimulationType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useResourceSimulationType);
+			set => SetProperty(ref _useResourceSimulationType, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("startInactive")] 
 		public CBool StartInactive
 		{
-			get
-			{
-				if (_startInactive == null)
-				{
-					_startInactive = (CBool) CR2WTypeManager.Create("Bool", "startInactive", cr2w, this);
-				}
-				return _startInactive;
-			}
-			set
-			{
-				if (_startInactive == value)
-				{
-					return;
-				}
-				_startInactive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startInactive);
+			set => SetProperty(ref _startInactive, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("filterDataSource")] 
 		public CEnum<physicsFilterDataSource> FilterDataSource
 		{
-			get
-			{
-				if (_filterDataSource == null)
-				{
-					_filterDataSource = (CEnum<physicsFilterDataSource>) CR2WTypeManager.Create("physicsFilterDataSource", "filterDataSource", cr2w, this);
-				}
-				return _filterDataSource;
-			}
-			set
-			{
-				if (_filterDataSource == value)
-				{
-					return;
-				}
-				_filterDataSource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filterDataSource);
+			set => SetProperty(ref _filterDataSource, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
-			get
-			{
-				if (_filterData == null)
-				{
-					_filterData = (CHandle<physicsFilterData>) CR2WTypeManager.Create("handle:physicsFilterData", "filterData", cr2w, this);
-				}
-				return _filterData;
-			}
-			set
-			{
-				if (_filterData == value)
-				{
-					return;
-				}
-				_filterData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filterData);
+			set => SetProperty(ref _filterData, value);
 		}
 
 		public entPhysicalMeshComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

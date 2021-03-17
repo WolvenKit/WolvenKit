@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("forceKnockdown")] 
 		public CBool ForceKnockdown
 		{
-			get
-			{
-				if (_forceKnockdown == null)
-				{
-					_forceKnockdown = (CBool) CR2WTypeManager.Create("Bool", "forceKnockdown", cr2w, this);
-				}
-				return _forceKnockdown;
-			}
-			set
-			{
-				if (_forceKnockdown == value)
-				{
-					return;
-				}
-				_forceKnockdown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceKnockdown);
+			set => SetProperty(ref _forceKnockdown, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("applyDirectionalForce")] 
 		public CBool ApplyDirectionalForce
 		{
-			get
-			{
-				if (_applyDirectionalForce == null)
-				{
-					_applyDirectionalForce = (CBool) CR2WTypeManager.Create("Bool", "applyDirectionalForce", cr2w, this);
-				}
-				return _applyDirectionalForce;
-			}
-			set
-			{
-				if (_applyDirectionalForce == value)
-				{
-					return;
-				}
-				_applyDirectionalForce = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _applyDirectionalForce);
+			set => SetProperty(ref _applyDirectionalForce, value);
 		}
 
 		public KnockOverBikeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

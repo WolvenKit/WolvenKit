@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ItemChanged")] 
 		public inkEmptyCallback ItemChanged
 		{
-			get
-			{
-				if (_itemChanged == null)
-				{
-					_itemChanged = (inkEmptyCallback) CR2WTypeManager.Create("inkEmptyCallback", "ItemChanged", cr2w, this);
-				}
-				return _itemChanged;
-			}
-			set
-			{
-				if (_itemChanged == value)
-				{
-					return;
-				}
-				_itemChanged = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemChanged);
+			set => SetProperty(ref _itemChanged, value);
 		}
 
 		public gameuiGenericNotificationReceiverGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

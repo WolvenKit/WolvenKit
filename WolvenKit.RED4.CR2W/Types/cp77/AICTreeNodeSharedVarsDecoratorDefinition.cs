@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sharedVars")] 
 		public AISharedVarTableDefinition SharedVars
 		{
-			get
-			{
-				if (_sharedVars == null)
-				{
-					_sharedVars = (AISharedVarTableDefinition) CR2WTypeManager.Create("AISharedVarTableDefinition", "sharedVars", cr2w, this);
-				}
-				return _sharedVars;
-			}
-			set
-			{
-				if (_sharedVars == value)
-				{
-					return;
-				}
-				_sharedVars = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sharedVars);
+			set => SetProperty(ref _sharedVars, value);
 		}
 
 		public AICTreeNodeSharedVarsDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

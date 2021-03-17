@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("connectedFragments")] 
 		public CArray<worldTrafficLaneCrowdFragment> ConnectedFragments
 		{
-			get
-			{
-				if (_connectedFragments == null)
-				{
-					_connectedFragments = (CArray<worldTrafficLaneCrowdFragment>) CR2WTypeManager.Create("array:worldTrafficLaneCrowdFragment", "connectedFragments", cr2w, this);
-				}
-				return _connectedFragments;
-			}
-			set
-			{
-				if (_connectedFragments == value)
-				{
-					return;
-				}
-				_connectedFragments = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _connectedFragments);
+			set => SetProperty(ref _connectedFragments, value);
 		}
 
 		public worldTrafficLaneCrowdCreationInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

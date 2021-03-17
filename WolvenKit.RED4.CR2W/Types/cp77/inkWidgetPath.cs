@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("names")] 
 		public CArray<CName> Names
 		{
-			get
-			{
-				if (_names == null)
-				{
-					_names = (CArray<CName>) CR2WTypeManager.Create("array:CName", "names", cr2w, this);
-				}
-				return _names;
-			}
-			set
-			{
-				if (_names == value)
-				{
-					return;
-				}
-				_names = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _names);
+			set => SetProperty(ref _names, value);
 		}
 
 		public inkWidgetPath(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

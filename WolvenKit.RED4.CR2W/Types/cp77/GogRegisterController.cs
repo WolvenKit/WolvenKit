@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("linkWidget")] 
 		public inkWidgetReference LinkWidget
 		{
-			get
-			{
-				if (_linkWidget == null)
-				{
-					_linkWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "linkWidget", cr2w, this);
-				}
-				return _linkWidget;
-			}
-			set
-			{
-				if (_linkWidget == value)
-				{
-					return;
-				}
-				_linkWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linkWidget);
+			set => SetProperty(ref _linkWidget, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("qrImageWidget")] 
 		public inkWidgetReference QrImageWidget
 		{
-			get
-			{
-				if (_qrImageWidget == null)
-				{
-					_qrImageWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "qrImageWidget", cr2w, this);
-				}
-				return _qrImageWidget;
-			}
-			set
-			{
-				if (_qrImageWidget == value)
-				{
-					return;
-				}
-				_qrImageWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _qrImageWidget);
+			set => SetProperty(ref _qrImageWidget, value);
 		}
 
 		public GogRegisterController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("buttonHold")] 
 		public CUInt32 ButtonHold
 		{
-			get
-			{
-				if (_buttonHold == null)
-				{
-					_buttonHold = (CUInt32) CR2WTypeManager.Create("Uint32", "buttonHold", cr2w, this);
-				}
-				return _buttonHold;
-			}
-			set
-			{
-				if (_buttonHold == value)
-				{
-					return;
-				}
-				_buttonHold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonHold);
+			set => SetProperty(ref _buttonHold, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("buttonToggle")] 
 		public CUInt32 ButtonToggle
 		{
-			get
-			{
-				if (_buttonToggle == null)
-				{
-					_buttonToggle = (CUInt32) CR2WTypeManager.Create("Uint32", "buttonToggle", cr2w, this);
-				}
-				return _buttonToggle;
-			}
-			set
-			{
-				if (_buttonToggle == value)
-				{
-					return;
-				}
-				_buttonToggle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonToggle);
+			set => SetProperty(ref _buttonToggle, value);
 		}
 
 		public PlayerVisionModeControllerInputListeners(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

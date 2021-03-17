@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inCommand")] 
 		public CHandle<AIArgumentMapping> InCommand
 		{
-			get
-			{
-				if (_inCommand == null)
-				{
-					_inCommand = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "inCommand", cr2w, this);
-				}
-				return _inCommand;
-			}
-			set
-			{
-				if (_inCommand == value)
-				{
-					return;
-				}
-				_inCommand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inCommand);
+			set => SetProperty(ref _inCommand, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("currentCommand")] 
 		public wCHandle<AIMoveToCoverCommand> CurrentCommand
 		{
-			get
-			{
-				if (_currentCommand == null)
-				{
-					_currentCommand = (wCHandle<AIMoveToCoverCommand>) CR2WTypeManager.Create("whandle:AIMoveToCoverCommand", "currentCommand", cr2w, this);
-				}
-				return _currentCommand;
-			}
-			set
-			{
-				if (_currentCommand == value)
-				{
-					return;
-				}
-				_currentCommand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentCommand);
+			set => SetProperty(ref _currentCommand, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("coverID")] 
 		public CUInt64 CoverID
 		{
-			get
-			{
-				if (_coverID == null)
-				{
-					_coverID = (CUInt64) CR2WTypeManager.Create("Uint64", "coverID", cr2w, this);
-				}
-				return _coverID;
-			}
-			set
-			{
-				if (_coverID == value)
-				{
-					return;
-				}
-				_coverID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _coverID);
+			set => SetProperty(ref _coverID, value);
 		}
 
 		public MoveToCoverCommandTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

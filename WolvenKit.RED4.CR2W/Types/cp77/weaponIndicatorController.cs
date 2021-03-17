@@ -27,345 +27,120 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("triggerModeControllers")] 
 		public CArray<CName> TriggerModeControllers
 		{
-			get
-			{
-				if (_triggerModeControllers == null)
-				{
-					_triggerModeControllers = (CArray<CName>) CR2WTypeManager.Create("array:CName", "triggerModeControllers", cr2w, this);
-				}
-				return _triggerModeControllers;
-			}
-			set
-			{
-				if (_triggerModeControllers == value)
-				{
-					return;
-				}
-				_triggerModeControllers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerModeControllers);
+			set => SetProperty(ref _triggerModeControllers, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("ammoLogicControllers")] 
 		public CArray<CName> AmmoLogicControllers
 		{
-			get
-			{
-				if (_ammoLogicControllers == null)
-				{
-					_ammoLogicControllers = (CArray<CName>) CR2WTypeManager.Create("array:CName", "ammoLogicControllers", cr2w, this);
-				}
-				return _ammoLogicControllers;
-			}
-			set
-			{
-				if (_ammoLogicControllers == value)
-				{
-					return;
-				}
-				_ammoLogicControllers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ammoLogicControllers);
+			set => SetProperty(ref _ammoLogicControllers, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("chargeLogicControllers")] 
 		public CArray<CName> ChargeLogicControllers
 		{
-			get
-			{
-				if (_chargeLogicControllers == null)
-				{
-					_chargeLogicControllers = (CArray<CName>) CR2WTypeManager.Create("array:CName", "chargeLogicControllers", cr2w, this);
-				}
-				return _chargeLogicControllers;
-			}
-			set
-			{
-				if (_chargeLogicControllers == value)
-				{
-					return;
-				}
-				_chargeLogicControllers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeLogicControllers);
+			set => SetProperty(ref _chargeLogicControllers, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("triggerModeInstances")] 
 		public CArray<wCHandle<TriggerModeLogicController>> TriggerModeInstances
 		{
-			get
-			{
-				if (_triggerModeInstances == null)
-				{
-					_triggerModeInstances = (CArray<wCHandle<TriggerModeLogicController>>) CR2WTypeManager.Create("array:whandle:TriggerModeLogicController", "triggerModeInstances", cr2w, this);
-				}
-				return _triggerModeInstances;
-			}
-			set
-			{
-				if (_triggerModeInstances == value)
-				{
-					return;
-				}
-				_triggerModeInstances = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerModeInstances);
+			set => SetProperty(ref _triggerModeInstances, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("ammoLogicInstances")] 
 		public CArray<wCHandle<AmmoLogicController>> AmmoLogicInstances
 		{
-			get
-			{
-				if (_ammoLogicInstances == null)
-				{
-					_ammoLogicInstances = (CArray<wCHandle<AmmoLogicController>>) CR2WTypeManager.Create("array:whandle:AmmoLogicController", "ammoLogicInstances", cr2w, this);
-				}
-				return _ammoLogicInstances;
-			}
-			set
-			{
-				if (_ammoLogicInstances == value)
-				{
-					return;
-				}
-				_ammoLogicInstances = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ammoLogicInstances);
+			set => SetProperty(ref _ammoLogicInstances, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("chargeLogicInstances")] 
 		public CArray<wCHandle<ChargeLogicController>> ChargeLogicInstances
 		{
-			get
-			{
-				if (_chargeLogicInstances == null)
-				{
-					_chargeLogicInstances = (CArray<wCHandle<ChargeLogicController>>) CR2WTypeManager.Create("array:whandle:ChargeLogicController", "chargeLogicInstances", cr2w, this);
-				}
-				return _chargeLogicInstances;
-			}
-			set
-			{
-				if (_chargeLogicInstances == value)
-				{
-					return;
-				}
-				_chargeLogicInstances = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeLogicInstances);
+			set => SetProperty(ref _chargeLogicInstances, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("bb")] 
 		public wCHandle<gameIBlackboard> Bb
 		{
-			get
-			{
-				if (_bb == null)
-				{
-					_bb = (wCHandle<gameIBlackboard>) CR2WTypeManager.Create("whandle:gameIBlackboard", "bb", cr2w, this);
-				}
-				return _bb;
-			}
-			set
-			{
-				if (_bb == value)
-				{
-					return;
-				}
-				_bb = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bb);
+			set => SetProperty(ref _bb, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("blackboard")] 
 		public wCHandle<gameIBlackboard> Blackboard
 		{
-			get
-			{
-				if (_blackboard == null)
-				{
-					_blackboard = (wCHandle<gameIBlackboard>) CR2WTypeManager.Create("whandle:gameIBlackboard", "blackboard", cr2w, this);
-				}
-				return _blackboard;
-			}
-			set
-			{
-				if (_blackboard == value)
-				{
-					return;
-				}
-				_blackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboard);
+			set => SetProperty(ref _blackboard, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("onCharge")] 
 		public CUInt32 OnCharge
 		{
-			get
-			{
-				if (_onCharge == null)
-				{
-					_onCharge = (CUInt32) CR2WTypeManager.Create("Uint32", "onCharge", cr2w, this);
-				}
-				return _onCharge;
-			}
-			set
-			{
-				if (_onCharge == value)
-				{
-					return;
-				}
-				_onCharge = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onCharge);
+			set => SetProperty(ref _onCharge, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("onTriggerMode")] 
 		public CUInt32 OnTriggerMode
 		{
-			get
-			{
-				if (_onTriggerMode == null)
-				{
-					_onTriggerMode = (CUInt32) CR2WTypeManager.Create("Uint32", "onTriggerMode", cr2w, this);
-				}
-				return _onTriggerMode;
-			}
-			set
-			{
-				if (_onTriggerMode == value)
-				{
-					return;
-				}
-				_onTriggerMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onTriggerMode);
+			set => SetProperty(ref _onTriggerMode, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("onMagazineAmmoCount")] 
 		public CUInt32 OnMagazineAmmoCount
 		{
-			get
-			{
-				if (_onMagazineAmmoCount == null)
-				{
-					_onMagazineAmmoCount = (CUInt32) CR2WTypeManager.Create("Uint32", "onMagazineAmmoCount", cr2w, this);
-				}
-				return _onMagazineAmmoCount;
-			}
-			set
-			{
-				if (_onMagazineAmmoCount == value)
-				{
-					return;
-				}
-				_onMagazineAmmoCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onMagazineAmmoCount);
+			set => SetProperty(ref _onMagazineAmmoCount, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("onMagazineAmmoCapacity")] 
 		public CUInt32 OnMagazineAmmoCapacity
 		{
-			get
-			{
-				if (_onMagazineAmmoCapacity == null)
-				{
-					_onMagazineAmmoCapacity = (CUInt32) CR2WTypeManager.Create("Uint32", "onMagazineAmmoCapacity", cr2w, this);
-				}
-				return _onMagazineAmmoCapacity;
-			}
-			set
-			{
-				if (_onMagazineAmmoCapacity == value)
-				{
-					return;
-				}
-				_onMagazineAmmoCapacity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onMagazineAmmoCapacity);
+			set => SetProperty(ref _onMagazineAmmoCapacity, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("BufferedRosterData")] 
 		public CHandle<gameSlotDataHolder> BufferedRosterData
 		{
-			get
-			{
-				if (_bufferedRosterData == null)
-				{
-					_bufferedRosterData = (CHandle<gameSlotDataHolder>) CR2WTypeManager.Create("handle:gameSlotDataHolder", "BufferedRosterData", cr2w, this);
-				}
-				return _bufferedRosterData;
-			}
-			set
-			{
-				if (_bufferedRosterData == value)
-				{
-					return;
-				}
-				_bufferedRosterData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bufferedRosterData);
+			set => SetProperty(ref _bufferedRosterData, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("ActiveWeapon")] 
 		public gameSlotWeaponData ActiveWeapon
 		{
-			get
-			{
-				if (_activeWeapon == null)
-				{
-					_activeWeapon = (gameSlotWeaponData) CR2WTypeManager.Create("gameSlotWeaponData", "ActiveWeapon", cr2w, this);
-				}
-				return _activeWeapon;
-			}
-			set
-			{
-				if (_activeWeapon == value)
-				{
-					return;
-				}
-				_activeWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeWeapon);
+			set => SetProperty(ref _activeWeapon, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
-			get
-			{
-				if (_inventoryManager == null)
-				{
-					_inventoryManager = (CHandle<InventoryDataManagerV2>) CR2WTypeManager.Create("handle:InventoryDataManagerV2", "InventoryManager", cr2w, this);
-				}
-				return _inventoryManager;
-			}
-			set
-			{
-				if (_inventoryManager == value)
-				{
-					return;
-				}
-				_inventoryManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryManager);
+			set => SetProperty(ref _inventoryManager, value);
 		}
 
 		public weaponIndicatorController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

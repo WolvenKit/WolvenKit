@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attributeId")] 
 		public TweakDBID AttributeId
 		{
-			get
-			{
-				if (_attributeId == null)
-				{
-					_attributeId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "attributeId", cr2w, this);
-				}
-				return _attributeId;
-			}
-			set
-			{
-				if (_attributeId == value)
-				{
-					return;
-				}
-				_attributeId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeId);
+			set => SetProperty(ref _attributeId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("attributeType")] 
 		public CEnum<PerkMenuAttribute> AttributeType
 		{
-			get
-			{
-				if (_attributeType == null)
-				{
-					_attributeType = (CEnum<PerkMenuAttribute>) CR2WTypeManager.Create("PerkMenuAttribute", "attributeType", cr2w, this);
-				}
-				return _attributeType;
-			}
-			set
-			{
-				if (_attributeType == value)
-				{
-					return;
-				}
-				_attributeType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeType);
+			set => SetProperty(ref _attributeType, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("attributeData")] 
 		public CHandle<AttributeData> AttributeData
 		{
-			get
-			{
-				if (_attributeData == null)
-				{
-					_attributeData = (CHandle<AttributeData>) CR2WTypeManager.Create("handle:AttributeData", "attributeData", cr2w, this);
-				}
-				return _attributeData;
-			}
-			set
-			{
-				if (_attributeData == value)
-				{
-					return;
-				}
-				_attributeData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeData);
+			set => SetProperty(ref _attributeData, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("displayData")] 
 		public CHandle<AttributeDisplayData> DisplayData
 		{
-			get
-			{
-				if (_displayData == null)
-				{
-					_displayData = (CHandle<AttributeDisplayData>) CR2WTypeManager.Create("handle:AttributeDisplayData", "displayData", cr2w, this);
-				}
-				return _displayData;
-			}
-			set
-			{
-				if (_displayData == value)
-				{
-					return;
-				}
-				_displayData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _displayData);
+			set => SetProperty(ref _displayData, value);
 		}
 
 		public AttributeTooltipData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("value")] 
 		public Vector4 Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (Vector4) CR2WTypeManager.Create("Vector4", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("valid")] 
 		public CBool Valid
 		{
-			get
-			{
-				if (_valid == null)
-				{
-					_valid = (CBool) CR2WTypeManager.Create("Bool", "valid", cr2w, this);
-				}
-				return _valid;
-			}
-			set
-			{
-				if (_valid == value)
-				{
-					return;
-				}
-				_valid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _valid);
+			set => SetProperty(ref _valid, value);
 		}
 
 		public gamestateMachineResultVector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

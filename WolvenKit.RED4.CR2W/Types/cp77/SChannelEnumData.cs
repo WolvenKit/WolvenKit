@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("channel")] 
 		public CEnum<ETVChannel> Channel
 		{
-			get
-			{
-				if (_channel == null)
-				{
-					_channel = (CEnum<ETVChannel>) CR2WTypeManager.Create("ETVChannel", "channel", cr2w, this);
-				}
-				return _channel;
-			}
-			set
-			{
-				if (_channel == value)
-				{
-					return;
-				}
-				_channel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _channel);
+			set => SetProperty(ref _channel, value);
 		}
 
 		public SChannelEnumData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("instruction")] 
 		public CEnum<EFastTravelSystemInstruction> Instruction
 		{
-			get
-			{
-				if (_instruction == null)
-				{
-					_instruction = (CEnum<EFastTravelSystemInstruction>) CR2WTypeManager.Create("EFastTravelSystemInstruction", "instruction", cr2w, this);
-				}
-				return _instruction;
-			}
-			set
-			{
-				if (_instruction == value)
-				{
-					return;
-				}
-				_instruction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instruction);
+			set => SetProperty(ref _instruction, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("magicFloat")] 
 		public CFloat MagicFloat
 		{
-			get
-			{
-				if (_magicFloat == null)
-				{
-					_magicFloat = (CFloat) CR2WTypeManager.Create("Float", "magicFloat", cr2w, this);
-				}
-				return _magicFloat;
-			}
-			set
-			{
-				if (_magicFloat == value)
-				{
-					return;
-				}
-				_magicFloat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _magicFloat);
+			set => SetProperty(ref _magicFloat, value);
 		}
 
 		public FastTravelConsoleInstructionRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

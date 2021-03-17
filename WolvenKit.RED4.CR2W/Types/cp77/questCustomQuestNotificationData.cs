@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("header")] 
 		public CString Header
 		{
-			get
-			{
-				if (_header == null)
-				{
-					_header = (CString) CR2WTypeManager.Create("String", "header", cr2w, this);
-				}
-				return _header;
-			}
-			set
-			{
-				if (_header == value)
-				{
-					return;
-				}
-				_header = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _header);
+			set => SetProperty(ref _header, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("desc")] 
 		public CString Desc
 		{
-			get
-			{
-				if (_desc == null)
-				{
-					_desc = (CString) CR2WTypeManager.Create("String", "desc", cr2w, this);
-				}
-				return _desc;
-			}
-			set
-			{
-				if (_desc == value)
-				{
-					return;
-				}
-				_desc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _desc);
+			set => SetProperty(ref _desc, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("icon")] 
 		public CName Icon
 		{
-			get
-			{
-				if (_icon == null)
-				{
-					_icon = (CName) CR2WTypeManager.Create("CName", "icon", cr2w, this);
-				}
-				return _icon;
-			}
-			set
-			{
-				if (_icon == value)
-				{
-					return;
-				}
-				_icon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _icon);
+			set => SetProperty(ref _icon, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("fluffHeader")] 
 		public CString FluffHeader
 		{
-			get
-			{
-				if (_fluffHeader == null)
-				{
-					_fluffHeader = (CString) CR2WTypeManager.Create("String", "fluffHeader", cr2w, this);
-				}
-				return _fluffHeader;
-			}
-			set
-			{
-				if (_fluffHeader == value)
-				{
-					return;
-				}
-				_fluffHeader = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fluffHeader);
+			set => SetProperty(ref _fluffHeader, value);
 		}
 
 		public questCustomQuestNotificationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

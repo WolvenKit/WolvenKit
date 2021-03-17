@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lootAppearance")] 
 		public CName LootAppearance
 		{
-			get
-			{
-				if (_lootAppearance == null)
-				{
-					_lootAppearance = (CName) CR2WTypeManager.Create("CName", "lootAppearance", cr2w, this);
-				}
-				return _lootAppearance;
-			}
-			set
-			{
-				if (_lootAppearance == value)
-				{
-					return;
-				}
-				_lootAppearance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lootAppearance);
+			set => SetProperty(ref _lootAppearance, value);
 		}
 
 		public gameLootSlotSingleAppearance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

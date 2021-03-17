@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("currentDataView")] 
 		public wCHandle<CodexListVirtualNestedDataView> CurrentDataView
 		{
-			get
-			{
-				if (_currentDataView == null)
-				{
-					_currentDataView = (wCHandle<CodexListVirtualNestedDataView>) CR2WTypeManager.Create("whandle:CodexListVirtualNestedDataView", "currentDataView", cr2w, this);
-				}
-				return _currentDataView;
-			}
-			set
-			{
-				if (_currentDataView == value)
-				{
-					return;
-				}
-				_currentDataView = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentDataView);
+			set => SetProperty(ref _currentDataView, value);
 		}
 
 		public CodexListVirtualNestedListController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

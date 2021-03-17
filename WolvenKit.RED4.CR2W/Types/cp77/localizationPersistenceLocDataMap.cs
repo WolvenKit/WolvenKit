@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entries")] 
 		public CArray<localizationPersistenceLocDataMapEntry> Entries
 		{
-			get
-			{
-				if (_entries == null)
-				{
-					_entries = (CArray<localizationPersistenceLocDataMapEntry>) CR2WTypeManager.Create("array:localizationPersistenceLocDataMapEntry", "entries", cr2w, this);
-				}
-				return _entries;
-			}
-			set
-			{
-				if (_entries == value)
-				{
-					return;
-				}
-				_entries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
 		}
 
 		public localizationPersistenceLocDataMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

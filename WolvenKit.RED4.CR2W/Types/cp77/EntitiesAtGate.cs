@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entitiesAtGate")] 
 		public CArray<entEntityID> EntitiesAtGate_
 		{
-			get
-			{
-				if (_entitiesAtGate == null)
-				{
-					_entitiesAtGate = (CArray<entEntityID>) CR2WTypeManager.Create("array:entEntityID", "entitiesAtGate", cr2w, this);
-				}
-				return _entitiesAtGate;
-			}
-			set
-			{
-				if (_entitiesAtGate == value)
-				{
-					return;
-				}
-				_entitiesAtGate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entitiesAtGate);
+			set => SetProperty(ref _entitiesAtGate, value);
 		}
 
 		public EntitiesAtGate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

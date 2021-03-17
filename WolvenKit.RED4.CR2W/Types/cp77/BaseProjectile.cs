@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("projectileComponent")] 
 		public CHandle<gameprojectileComponent> ProjectileComponent
 		{
-			get
-			{
-				if (_projectileComponent == null)
-				{
-					_projectileComponent = (CHandle<gameprojectileComponent>) CR2WTypeManager.Create("handle:gameprojectileComponent", "projectileComponent", cr2w, this);
-				}
-				return _projectileComponent;
-			}
-			set
-			{
-				if (_projectileComponent == value)
-				{
-					return;
-				}
-				_projectileComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectileComponent);
+			set => SetProperty(ref _projectileComponent, value);
 		}
 
 		[Ordinal(44)] 
 		[RED("user")] 
 		public wCHandle<gameObject> User
 		{
-			get
-			{
-				if (_user == null)
-				{
-					_user = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "user", cr2w, this);
-				}
-				return _user;
-			}
-			set
-			{
-				if (_user == value)
-				{
-					return;
-				}
-				_user = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _user);
+			set => SetProperty(ref _user, value);
 		}
 
 		[Ordinal(45)] 
 		[RED("projectile")] 
 		public wCHandle<gameObject> Projectile
 		{
-			get
-			{
-				if (_projectile == null)
-				{
-					_projectile = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "projectile", cr2w, this);
-				}
-				return _projectile;
-			}
-			set
-			{
-				if (_projectile == value)
-				{
-					return;
-				}
-				_projectile = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectile);
+			set => SetProperty(ref _projectile, value);
 		}
 
 		[Ordinal(46)] 
 		[RED("projectileSpawnPoint")] 
 		public Vector4 ProjectileSpawnPoint
 		{
-			get
-			{
-				if (_projectileSpawnPoint == null)
-				{
-					_projectileSpawnPoint = (Vector4) CR2WTypeManager.Create("Vector4", "projectileSpawnPoint", cr2w, this);
-				}
-				return _projectileSpawnPoint;
-			}
-			set
-			{
-				if (_projectileSpawnPoint == value)
-				{
-					return;
-				}
-				_projectileSpawnPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectileSpawnPoint);
+			set => SetProperty(ref _projectileSpawnPoint, value);
 		}
 
 		[Ordinal(47)] 
 		[RED("projectilePosition")] 
 		public Vector4 ProjectilePosition
 		{
-			get
-			{
-				if (_projectilePosition == null)
-				{
-					_projectilePosition = (Vector4) CR2WTypeManager.Create("Vector4", "projectilePosition", cr2w, this);
-				}
-				return _projectilePosition;
-			}
-			set
-			{
-				if (_projectilePosition == value)
-				{
-					return;
-				}
-				_projectilePosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectilePosition);
+			set => SetProperty(ref _projectilePosition, value);
 		}
 
 		[Ordinal(48)] 
 		[RED("initialLaunchVelocity")] 
 		public CFloat InitialLaunchVelocity
 		{
-			get
-			{
-				if (_initialLaunchVelocity == null)
-				{
-					_initialLaunchVelocity = (CFloat) CR2WTypeManager.Create("Float", "initialLaunchVelocity", cr2w, this);
-				}
-				return _initialLaunchVelocity;
-			}
-			set
-			{
-				if (_initialLaunchVelocity == value)
-				{
-					return;
-				}
-				_initialLaunchVelocity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialLaunchVelocity);
+			set => SetProperty(ref _initialLaunchVelocity, value);
 		}
 
 		[Ordinal(49)] 
 		[RED("lifeTime")] 
 		public CFloat LifeTime
 		{
-			get
-			{
-				if (_lifeTime == null)
-				{
-					_lifeTime = (CFloat) CR2WTypeManager.Create("Float", "lifeTime", cr2w, this);
-				}
-				return _lifeTime;
-			}
-			set
-			{
-				if (_lifeTime == value)
-				{
-					return;
-				}
-				_lifeTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lifeTime);
+			set => SetProperty(ref _lifeTime, value);
 		}
 
 		[Ordinal(50)] 
 		[RED("tweakDBPath")] 
 		public CString TweakDBPath
 		{
-			get
-			{
-				if (_tweakDBPath == null)
-				{
-					_tweakDBPath = (CString) CR2WTypeManager.Create("String", "tweakDBPath", cr2w, this);
-				}
-				return _tweakDBPath;
-			}
-			set
-			{
-				if (_tweakDBPath == value)
-				{
-					return;
-				}
-				_tweakDBPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tweakDBPath);
+			set => SetProperty(ref _tweakDBPath, value);
 		}
 
 		public BaseProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

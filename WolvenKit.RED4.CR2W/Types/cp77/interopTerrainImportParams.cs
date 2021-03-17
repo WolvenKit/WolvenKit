@@ -28,368 +28,128 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cellRes")] 
 		public CUInt32 CellRes
 		{
-			get
-			{
-				if (_cellRes == null)
-				{
-					_cellRes = (CUInt32) CR2WTypeManager.Create("Uint32", "cellRes", cr2w, this);
-				}
-				return _cellRes;
-			}
-			set
-			{
-				if (_cellRes == value)
-				{
-					return;
-				}
-				_cellRes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cellRes);
+			set => SetProperty(ref _cellRes, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("cellSize")] 
 		public CUInt32 CellSize
 		{
-			get
-			{
-				if (_cellSize == null)
-				{
-					_cellSize = (CUInt32) CR2WTypeManager.Create("Uint32", "cellSize", cr2w, this);
-				}
-				return _cellSize;
-			}
-			set
-			{
-				if (_cellSize == value)
-				{
-					return;
-				}
-				_cellSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cellSize);
+			set => SetProperty(ref _cellSize, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("scale")] 
 		public Vector3 Scale
 		{
-			get
-			{
-				if (_scale == null)
-				{
-					_scale = (Vector3) CR2WTypeManager.Create("Vector3", "scale", cr2w, this);
-				}
-				return _scale;
-			}
-			set
-			{
-				if (_scale == value)
-				{
-					return;
-				}
-				_scale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scale);
+			set => SetProperty(ref _scale, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("position")] 
 		public Vector3 Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (Vector3) CR2WTypeManager.Create("Vector3", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("extraOffset")] 
 		public Vector2 ExtraOffset
 		{
-			get
-			{
-				if (_extraOffset == null)
-				{
-					_extraOffset = (Vector2) CR2WTypeManager.Create("Vector2", "extraOffset", cr2w, this);
-				}
-				return _extraOffset;
-			}
-			set
-			{
-				if (_extraOffset == value)
-				{
-					return;
-				}
-				_extraOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _extraOffset);
+			set => SetProperty(ref _extraOffset, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("tileWidth")] 
 		public CUInt32 TileWidth
 		{
-			get
-			{
-				if (_tileWidth == null)
-				{
-					_tileWidth = (CUInt32) CR2WTypeManager.Create("Uint32", "tileWidth", cr2w, this);
-				}
-				return _tileWidth;
-			}
-			set
-			{
-				if (_tileWidth == value)
-				{
-					return;
-				}
-				_tileWidth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tileWidth);
+			set => SetProperty(ref _tileWidth, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("tileHeight")] 
 		public CUInt32 TileHeight
 		{
-			get
-			{
-				if (_tileHeight == null)
-				{
-					_tileHeight = (CUInt32) CR2WTypeManager.Create("Uint32", "tileHeight", cr2w, this);
-				}
-				return _tileHeight;
-			}
-			set
-			{
-				if (_tileHeight == value)
-				{
-					return;
-				}
-				_tileHeight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tileHeight);
+			set => SetProperty(ref _tileHeight, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("prefabPlacementInterval")] 
 		public CUInt32 PrefabPlacementInterval
 		{
-			get
-			{
-				if (_prefabPlacementInterval == null)
-				{
-					_prefabPlacementInterval = (CUInt32) CR2WTypeManager.Create("Uint32", "prefabPlacementInterval", cr2w, this);
-				}
-				return _prefabPlacementInterval;
-			}
-			set
-			{
-				if (_prefabPlacementInterval == value)
-				{
-					return;
-				}
-				_prefabPlacementInterval = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prefabPlacementInterval);
+			set => SetProperty(ref _prefabPlacementInterval, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("importHeightMaps")] 
 		public CBool ImportHeightMaps
 		{
-			get
-			{
-				if (_importHeightMaps == null)
-				{
-					_importHeightMaps = (CBool) CR2WTypeManager.Create("Bool", "importHeightMaps", cr2w, this);
-				}
-				return _importHeightMaps;
-			}
-			set
-			{
-				if (_importHeightMaps == value)
-				{
-					return;
-				}
-				_importHeightMaps = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _importHeightMaps);
+			set => SetProperty(ref _importHeightMaps, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("importColorMaps")] 
 		public CBool ImportColorMaps
 		{
-			get
-			{
-				if (_importColorMaps == null)
-				{
-					_importColorMaps = (CBool) CR2WTypeManager.Create("Bool", "importColorMaps", cr2w, this);
-				}
-				return _importColorMaps;
-			}
-			set
-			{
-				if (_importColorMaps == value)
-				{
-					return;
-				}
-				_importColorMaps = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _importColorMaps);
+			set => SetProperty(ref _importColorMaps, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("importControlMaps")] 
 		public CBool ImportControlMaps
 		{
-			get
-			{
-				if (_importControlMaps == null)
-				{
-					_importControlMaps = (CBool) CR2WTypeManager.Create("Bool", "importControlMaps", cr2w, this);
-				}
-				return _importControlMaps;
-			}
-			set
-			{
-				if (_importControlMaps == value)
-				{
-					return;
-				}
-				_importControlMaps = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _importControlMaps);
+			set => SetProperty(ref _importControlMaps, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("overwriteTransformsOfExistingNodes")] 
 		public CBool OverwriteTransformsOfExistingNodes
 		{
-			get
-			{
-				if (_overwriteTransformsOfExistingNodes == null)
-				{
-					_overwriteTransformsOfExistingNodes = (CBool) CR2WTypeManager.Create("Bool", "overwriteTransformsOfExistingNodes", cr2w, this);
-				}
-				return _overwriteTransformsOfExistingNodes;
-			}
-			set
-			{
-				if (_overwriteTransformsOfExistingNodes == value)
-				{
-					return;
-				}
-				_overwriteTransformsOfExistingNodes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overwriteTransformsOfExistingNodes);
+			set => SetProperty(ref _overwriteTransformsOfExistingNodes, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("nodesNamingPattern")] 
 		public CString NodesNamingPattern
 		{
-			get
-			{
-				if (_nodesNamingPattern == null)
-				{
-					_nodesNamingPattern = (CString) CR2WTypeManager.Create("String", "nodesNamingPattern", cr2w, this);
-				}
-				return _nodesNamingPattern;
-			}
-			set
-			{
-				if (_nodesNamingPattern == value)
-				{
-					return;
-				}
-				_nodesNamingPattern = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodesNamingPattern);
+			set => SetProperty(ref _nodesNamingPattern, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("prefabsNamingPattern")] 
 		public CString PrefabsNamingPattern
 		{
-			get
-			{
-				if (_prefabsNamingPattern == null)
-				{
-					_prefabsNamingPattern = (CString) CR2WTypeManager.Create("String", "prefabsNamingPattern", cr2w, this);
-				}
-				return _prefabsNamingPattern;
-			}
-			set
-			{
-				if (_prefabsNamingPattern == value)
-				{
-					return;
-				}
-				_prefabsNamingPattern = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prefabsNamingPattern);
+			set => SetProperty(ref _prefabsNamingPattern, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("prefabsDestinationPath")] 
 		public CString PrefabsDestinationPath
 		{
-			get
-			{
-				if (_prefabsDestinationPath == null)
-				{
-					_prefabsDestinationPath = (CString) CR2WTypeManager.Create("String", "prefabsDestinationPath", cr2w, this);
-				}
-				return _prefabsDestinationPath;
-			}
-			set
-			{
-				if (_prefabsDestinationPath == value)
-				{
-					return;
-				}
-				_prefabsDestinationPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prefabsDestinationPath);
+			set => SetProperty(ref _prefabsDestinationPath, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("dstPrefabNodePath")] 
 		public toolsEditorObjectIDPath DstPrefabNodePath
 		{
-			get
-			{
-				if (_dstPrefabNodePath == null)
-				{
-					_dstPrefabNodePath = (toolsEditorObjectIDPath) CR2WTypeManager.Create("toolsEditorObjectIDPath", "dstPrefabNodePath", cr2w, this);
-				}
-				return _dstPrefabNodePath;
-			}
-			set
-			{
-				if (_dstPrefabNodePath == value)
-				{
-					return;
-				}
-				_dstPrefabNodePath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dstPrefabNodePath);
+			set => SetProperty(ref _dstPrefabNodePath, value);
 		}
 
 		public interopTerrainImportParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

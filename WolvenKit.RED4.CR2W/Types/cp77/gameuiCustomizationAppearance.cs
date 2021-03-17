@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("resource")] 
 		public raRef<appearanceAppearanceResource> Resource
 		{
-			get
-			{
-				if (_resource == null)
-				{
-					_resource = (raRef<appearanceAppearanceResource>) CR2WTypeManager.Create("raRef:appearanceAppearanceResource", "resource", cr2w, this);
-				}
-				return _resource;
-			}
-			set
-			{
-				if (_resource == value)
-				{
-					return;
-				}
-				_resource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resource);
+			set => SetProperty(ref _resource, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("definition")] 
 		public CName Definition
 		{
-			get
-			{
-				if (_definition == null)
-				{
-					_definition = (CName) CR2WTypeManager.Create("CName", "definition", cr2w, this);
-				}
-				return _definition;
-			}
-			set
-			{
-				if (_definition == value)
-				{
-					return;
-				}
-				_definition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _definition);
+			set => SetProperty(ref _definition, value);
 		}
 
 		public gameuiCustomizationAppearance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

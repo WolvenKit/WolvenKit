@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("recipe")] 
 		public TweakDBID Recipe
 		{
-			get
-			{
-				if (_recipe == null)
-				{
-					_recipe = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "recipe", cr2w, this);
-				}
-				return _recipe;
-			}
-			set
-			{
-				if (_recipe == value)
-				{
-					return;
-				}
-				_recipe = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recipe);
+			set => SetProperty(ref _recipe, value);
 		}
 
 		public HideRecipeRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

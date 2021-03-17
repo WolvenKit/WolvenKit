@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("squadInterface")] 
 		public wCHandle<AISquadScriptInterface> SquadInterface
 		{
-			get
-			{
-				if (_squadInterface == null)
-				{
-					_squadInterface = (wCHandle<AISquadScriptInterface>) CR2WTypeManager.Create("whandle:AISquadScriptInterface", "squadInterface", cr2w, this);
-				}
-				return _squadInterface;
-			}
-			set
-			{
-				if (_squadInterface == value)
-				{
-					return;
-				}
-				_squadInterface = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _squadInterface);
+			set => SetProperty(ref _squadInterface, value);
 		}
 
 		public AIHostLeftSquad(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

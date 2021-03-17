@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actors")] 
 		public CArray<scnActorRid> Actors
 		{
-			get
-			{
-				if (_actors == null)
-				{
-					_actors = (CArray<scnActorRid>) CR2WTypeManager.Create("array:scnActorRid", "actors", cr2w, this);
-				}
-				return _actors;
-			}
-			set
-			{
-				if (_actors == value)
-				{
-					return;
-				}
-				_actors = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actors);
+			set => SetProperty(ref _actors, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("cameras")] 
 		public CArray<scnCameraRid> Cameras
 		{
-			get
-			{
-				if (_cameras == null)
-				{
-					_cameras = (CArray<scnCameraRid>) CR2WTypeManager.Create("array:scnCameraRid", "cameras", cr2w, this);
-				}
-				return _cameras;
-			}
-			set
-			{
-				if (_cameras == value)
-				{
-					return;
-				}
-				_cameras = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameras);
+			set => SetProperty(ref _cameras, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("nextSerialNumber")] 
 		public scnRidSerialNumber NextSerialNumber
 		{
-			get
-			{
-				if (_nextSerialNumber == null)
-				{
-					_nextSerialNumber = (scnRidSerialNumber) CR2WTypeManager.Create("scnRidSerialNumber", "nextSerialNumber", cr2w, this);
-				}
-				return _nextSerialNumber;
-			}
-			set
-			{
-				if (_nextSerialNumber == value)
-				{
-					return;
-				}
-				_nextSerialNumber = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nextSerialNumber);
+			set => SetProperty(ref _nextSerialNumber, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("version")] 
 		public CUInt32 Version
 		{
-			get
-			{
-				if (_version == null)
-				{
-					_version = (CUInt32) CR2WTypeManager.Create("Uint32", "version", cr2w, this);
-				}
-				return _version;
-			}
-			set
-			{
-				if (_version == value)
-				{
-					return;
-				}
-				_version = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _version);
+			set => SetProperty(ref _version, value);
 		}
 
 		public scnRidResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

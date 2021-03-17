@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (Vector4) CR2WTypeManager.Create("Vector4", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("size")] 
 		public CFloat Size
 		{
-			get
-			{
-				if (_size == null)
-				{
-					_size = (CFloat) CR2WTypeManager.Create("Float", "size", cr2w, this);
-				}
-				return _size;
-			}
-			set
-			{
-				if (_size == value)
-				{
-					return;
-				}
-				_size = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _size);
+			set => SetProperty(ref _size, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CEnum<gameEAreaType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<gameEAreaType>) CR2WTypeManager.Create("gameEAreaType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("shape")] 
 		public CEnum<gameEAreaShape> Shape
 		{
-			get
-			{
-				if (_shape == null)
-				{
-					_shape = (CEnum<gameEAreaShape>) CR2WTypeManager.Create("gameEAreaShape", "shape", cr2w, this);
-				}
-				return _shape;
-			}
-			set
-			{
-				if (_shape == value)
-				{
-					return;
-				}
-				_shape = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shape);
+			set => SetProperty(ref _shape, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("priority")] 
 		public CUInt32 Priority
 		{
-			get
-			{
-				if (_priority == null)
-				{
-					_priority = (CUInt32) CR2WTypeManager.Create("Uint32", "priority", cr2w, this);
-				}
-				return _priority;
-			}
-			set
-			{
-				if (_priority == value)
-				{
-					return;
-				}
-				_priority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _priority);
+			set => SetProperty(ref _priority, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("lootID")] 
 		public TweakDBID LootID
 		{
-			get
-			{
-				if (_lootID == null)
-				{
-					_lootID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "lootID", cr2w, this);
-				}
-				return _lootID;
-			}
-			set
-			{
-				if (_lootID == value)
-				{
-					return;
-				}
-				_lootID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lootID);
+			set => SetProperty(ref _lootID, value);
 		}
 
 		public gameAreaData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

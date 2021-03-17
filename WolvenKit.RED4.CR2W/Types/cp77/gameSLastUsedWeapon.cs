@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lastUsedWeapon")] 
 		public gameItemID LastUsedWeapon
 		{
-			get
-			{
-				if (_lastUsedWeapon == null)
-				{
-					_lastUsedWeapon = (gameItemID) CR2WTypeManager.Create("gameItemID", "lastUsedWeapon", cr2w, this);
-				}
-				return _lastUsedWeapon;
-			}
-			set
-			{
-				if (_lastUsedWeapon == value)
-				{
-					return;
-				}
-				_lastUsedWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastUsedWeapon);
+			set => SetProperty(ref _lastUsedWeapon, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lastUsedRanged")] 
 		public gameItemID LastUsedRanged
 		{
-			get
-			{
-				if (_lastUsedRanged == null)
-				{
-					_lastUsedRanged = (gameItemID) CR2WTypeManager.Create("gameItemID", "lastUsedRanged", cr2w, this);
-				}
-				return _lastUsedRanged;
-			}
-			set
-			{
-				if (_lastUsedRanged == value)
-				{
-					return;
-				}
-				_lastUsedRanged = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastUsedRanged);
+			set => SetProperty(ref _lastUsedRanged, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lastUsedMelee")] 
 		public gameItemID LastUsedMelee
 		{
-			get
-			{
-				if (_lastUsedMelee == null)
-				{
-					_lastUsedMelee = (gameItemID) CR2WTypeManager.Create("gameItemID", "lastUsedMelee", cr2w, this);
-				}
-				return _lastUsedMelee;
-			}
-			set
-			{
-				if (_lastUsedMelee == value)
-				{
-					return;
-				}
-				_lastUsedMelee = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastUsedMelee);
+			set => SetProperty(ref _lastUsedMelee, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("lastUsedHeavy")] 
 		public gameItemID LastUsedHeavy
 		{
-			get
-			{
-				if (_lastUsedHeavy == null)
-				{
-					_lastUsedHeavy = (gameItemID) CR2WTypeManager.Create("gameItemID", "lastUsedHeavy", cr2w, this);
-				}
-				return _lastUsedHeavy;
-			}
-			set
-			{
-				if (_lastUsedHeavy == value)
-				{
-					return;
-				}
-				_lastUsedHeavy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastUsedHeavy);
+			set => SetProperty(ref _lastUsedHeavy, value);
 		}
 
 		public gameSLastUsedWeapon(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

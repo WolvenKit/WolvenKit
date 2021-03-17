@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemName")] 
 		public inkTextWidgetReference ItemName
 		{
-			get
-			{
-				if (_itemName == null)
-				{
-					_itemName = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "itemName", cr2w, this);
-				}
-				return _itemName;
-			}
-			set
-			{
-				if (_itemName == value)
-				{
-					return;
-				}
-				_itemName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemName);
+			set => SetProperty(ref _itemName, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("inventoryQuantity")] 
 		public inkTextWidgetReference InventoryQuantity
 		{
-			get
-			{
-				if (_inventoryQuantity == null)
-				{
-					_inventoryQuantity = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "inventoryQuantity", cr2w, this);
-				}
-				return _inventoryQuantity;
-			}
-			set
-			{
-				if (_inventoryQuantity == value)
-				{
-					return;
-				}
-				_inventoryQuantity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryQuantity);
+			set => SetProperty(ref _inventoryQuantity, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("ingredientQuantity")] 
 		public inkTextWidgetReference IngredientQuantity
 		{
-			get
-			{
-				if (_ingredientQuantity == null)
-				{
-					_ingredientQuantity = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "ingredientQuantity", cr2w, this);
-				}
-				return _ingredientQuantity;
-			}
-			set
-			{
-				if (_ingredientQuantity == value)
-				{
-					return;
-				}
-				_ingredientQuantity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ingredientQuantity);
+			set => SetProperty(ref _ingredientQuantity, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("availability")] 
 		public inkTextWidgetReference Availability
 		{
-			get
-			{
-				if (_availability == null)
-				{
-					_availability = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "availability", cr2w, this);
-				}
-				return _availability;
-			}
-			set
-			{
-				if (_availability == value)
-				{
-					return;
-				}
-				_availability = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _availability);
+			set => SetProperty(ref _availability, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
-			get
-			{
-				if (_icon == null)
-				{
-					_icon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "icon", cr2w, this);
-				}
-				return _icon;
-			}
-			set
-			{
-				if (_icon == value)
-				{
-					return;
-				}
-				_icon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _icon);
+			set => SetProperty(ref _icon, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("emptyIcon")] 
 		public inkImageWidgetReference EmptyIcon
 		{
-			get
-			{
-				if (_emptyIcon == null)
-				{
-					_emptyIcon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "emptyIcon", cr2w, this);
-				}
-				return _emptyIcon;
-			}
-			set
-			{
-				if (_emptyIcon == value)
-				{
-					return;
-				}
-				_emptyIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _emptyIcon);
+			set => SetProperty(ref _emptyIcon, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("availableBgElements")] 
 		public CArray<inkWidgetReference> AvailableBgElements
 		{
-			get
-			{
-				if (_availableBgElements == null)
-				{
-					_availableBgElements = (CArray<inkWidgetReference>) CR2WTypeManager.Create("array:inkWidgetReference", "availableBgElements", cr2w, this);
-				}
-				return _availableBgElements;
-			}
-			set
-			{
-				if (_availableBgElements == value)
-				{
-					return;
-				}
-				_availableBgElements = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _availableBgElements);
+			set => SetProperty(ref _availableBgElements, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("unavailableBgElements")] 
 		public CArray<inkWidgetReference> UnavailableBgElements
 		{
-			get
-			{
-				if (_unavailableBgElements == null)
-				{
-					_unavailableBgElements = (CArray<inkWidgetReference>) CR2WTypeManager.Create("array:inkWidgetReference", "unavailableBgElements", cr2w, this);
-				}
-				return _unavailableBgElements;
-			}
-			set
-			{
-				if (_unavailableBgElements == value)
-				{
-					return;
-				}
-				_unavailableBgElements = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unavailableBgElements);
+			set => SetProperty(ref _unavailableBgElements, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("buyButton")] 
 		public inkWidgetReference BuyButton
 		{
-			get
-			{
-				if (_buyButton == null)
-				{
-					_buyButton = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "buyButton", cr2w, this);
-				}
-				return _buyButton;
-			}
-			set
-			{
-				if (_buyButton == value)
-				{
-					return;
-				}
-				_buyButton = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buyButton);
+			set => SetProperty(ref _buyButton, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("countWrapper")] 
 		public inkWidgetReference CountWrapper
 		{
-			get
-			{
-				if (_countWrapper == null)
-				{
-					_countWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "countWrapper", cr2w, this);
-				}
-				return _countWrapper;
-			}
-			set
-			{
-				if (_countWrapper == value)
-				{
-					return;
-				}
-				_countWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _countWrapper);
+			set => SetProperty(ref _countWrapper, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("itemRarity")] 
 		public inkWidgetReference ItemRarity
 		{
-			get
-			{
-				if (_itemRarity == null)
-				{
-					_itemRarity = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "itemRarity", cr2w, this);
-				}
-				return _itemRarity;
-			}
-			set
-			{
-				if (_itemRarity == value)
-				{
-					return;
-				}
-				_itemRarity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemRarity);
+			set => SetProperty(ref _itemRarity, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("data")] 
 		public IngredientData Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (IngredientData) CR2WTypeManager.Create("IngredientData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("root")] 
 		public wCHandle<inkWidget> Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("TooltipsManager")] 
 		public wCHandle<gameuiTooltipsManager> TooltipsManager
 		{
-			get
-			{
-				if (_tooltipsManager == null)
-				{
-					_tooltipsManager = (wCHandle<gameuiTooltipsManager>) CR2WTypeManager.Create("whandle:gameuiTooltipsManager", "TooltipsManager", cr2w, this);
-				}
-				return _tooltipsManager;
-			}
-			set
-			{
-				if (_tooltipsManager == value)
-				{
-					return;
-				}
-				_tooltipsManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsManager);
+			set => SetProperty(ref _tooltipsManager, value);
 		}
 
 		public IngredientListItemLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

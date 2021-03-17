@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("archetype")] 
 		public CEnum<gamedataArchetypeType> Archetype
 		{
-			get
-			{
-				if (_archetype == null)
-				{
-					_archetype = (CEnum<gamedataArchetypeType>) CR2WTypeManager.Create("gamedataArchetypeType", "archetype", cr2w, this);
-				}
-				return _archetype;
-			}
-			set
-			{
-				if (_archetype == value)
-				{
-					return;
-				}
-				_archetype = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _archetype);
+			set => SetProperty(ref _archetype, value);
 		}
 
 		public ScannerArchetype(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

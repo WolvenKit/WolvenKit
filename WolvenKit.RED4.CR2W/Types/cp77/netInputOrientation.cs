@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("yaw")] 
 		public CFloat Yaw
 		{
-			get
-			{
-				if (_yaw == null)
-				{
-					_yaw = (CFloat) CR2WTypeManager.Create("Float", "yaw", cr2w, this);
-				}
-				return _yaw;
-			}
-			set
-			{
-				if (_yaw == value)
-				{
-					return;
-				}
-				_yaw = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _yaw);
+			set => SetProperty(ref _yaw, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("pitch")] 
 		public CFloat Pitch
 		{
-			get
-			{
-				if (_pitch == null)
-				{
-					_pitch = (CFloat) CR2WTypeManager.Create("Float", "pitch", cr2w, this);
-				}
-				return _pitch;
-			}
-			set
-			{
-				if (_pitch == value)
-				{
-					return;
-				}
-				_pitch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pitch);
+			set => SetProperty(ref _pitch, value);
 		}
 
 		public netInputOrientation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

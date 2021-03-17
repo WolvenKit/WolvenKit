@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("widgetLibraryResource")] 
 		public redResourceReferenceScriptToken WidgetLibraryResource
 		{
-			get
-			{
-				if (_widgetLibraryResource == null)
-				{
-					_widgetLibraryResource = (redResourceReferenceScriptToken) CR2WTypeManager.Create("redResourceReferenceScriptToken", "widgetLibraryResource", cr2w, this);
-				}
-				return _widgetLibraryResource;
-			}
-			set
-			{
-				if (_widgetLibraryResource == value)
-				{
-					return;
-				}
-				_widgetLibraryResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetLibraryResource);
+			set => SetProperty(ref _widgetLibraryResource, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemName")] 
 		public CName ItemName
 		{
-			get
-			{
-				if (_itemName == null)
-				{
-					_itemName = (CName) CR2WTypeManager.Create("CName", "itemName", cr2w, this);
-				}
-				return _itemName;
-			}
-			set
-			{
-				if (_itemName == value)
-				{
-					return;
-				}
-				_itemName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemName);
+			set => SetProperty(ref _itemName, value);
 		}
 
 		public gameTutorialOverlayData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

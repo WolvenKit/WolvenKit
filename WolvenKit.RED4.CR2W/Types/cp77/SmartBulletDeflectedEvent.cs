@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("localToWorld")] 
 		public CMatrix LocalToWorld
 		{
-			get
-			{
-				if (_localToWorld == null)
-				{
-					_localToWorld = (CMatrix) CR2WTypeManager.Create("Matrix", "localToWorld", cr2w, this);
-				}
-				return _localToWorld;
-			}
-			set
-			{
-				if (_localToWorld == value)
-				{
-					return;
-				}
-				_localToWorld = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localToWorld);
+			set => SetProperty(ref _localToWorld, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("instigator")] 
 		public wCHandle<gameObject> Instigator
 		{
-			get
-			{
-				if (_instigator == null)
-				{
-					_instigator = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "instigator", cr2w, this);
-				}
-				return _instigator;
-			}
-			set
-			{
-				if (_instigator == value)
-				{
-					return;
-				}
-				_instigator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instigator);
+			set => SetProperty(ref _instigator, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("weapon")] 
 		public wCHandle<gameObject> Weapon
 		{
-			get
-			{
-				if (_weapon == null)
-				{
-					_weapon = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "weapon", cr2w, this);
-				}
-				return _weapon;
-			}
-			set
-			{
-				if (_weapon == value)
-				{
-					return;
-				}
-				_weapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weapon);
+			set => SetProperty(ref _weapon, value);
 		}
 
 		public SmartBulletDeflectedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

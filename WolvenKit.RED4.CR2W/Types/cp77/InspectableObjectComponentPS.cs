@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isStarted")] 
 		public CBool IsStarted
 		{
-			get
-			{
-				if (_isStarted == null)
-				{
-					_isStarted = (CBool) CR2WTypeManager.Create("Bool", "isStarted", cr2w, this);
-				}
-				return _isStarted;
-			}
-			set
-			{
-				if (_isStarted == value)
-				{
-					return;
-				}
-				_isStarted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isStarted);
+			set => SetProperty(ref _isStarted, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isFinished")] 
 		public CBool IsFinished
 		{
-			get
-			{
-				if (_isFinished == null)
-				{
-					_isFinished = (CBool) CR2WTypeManager.Create("Bool", "isFinished", cr2w, this);
-				}
-				return _isFinished;
-			}
-			set
-			{
-				if (_isFinished == value)
-				{
-					return;
-				}
-				_isFinished = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isFinished);
+			set => SetProperty(ref _isFinished, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("listeners")] 
 		public CArray<CHandle<questObjectInspectListener>> Listeners
 		{
-			get
-			{
-				if (_listeners == null)
-				{
-					_listeners = (CArray<CHandle<questObjectInspectListener>>) CR2WTypeManager.Create("array:handle:questObjectInspectListener", "listeners", cr2w, this);
-				}
-				return _listeners;
-			}
-			set
-			{
-				if (_listeners == value)
-				{
-					return;
-				}
-				_listeners = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _listeners);
+			set => SetProperty(ref _listeners, value);
 		}
 
 		public InspectableObjectComponentPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("currentTimeMs")] 
 		public CUInt32 CurrentTimeMs
 		{
-			get
-			{
-				if (_currentTimeMs == null)
-				{
-					_currentTimeMs = (CUInt32) CR2WTypeManager.Create("Uint32", "currentTimeMs", cr2w, this);
-				}
-				return _currentTimeMs;
-			}
-			set
-			{
-				if (_currentTimeMs == value)
-				{
-					return;
-				}
-				_currentTimeMs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentTimeMs);
+			set => SetProperty(ref _currentTimeMs, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("totalTimeMs")] 
 		public CUInt32 TotalTimeMs
 		{
-			get
-			{
-				if (_totalTimeMs == null)
-				{
-					_totalTimeMs = (CUInt32) CR2WTypeManager.Create("Uint32", "totalTimeMs", cr2w, this);
-				}
-				return _totalTimeMs;
-			}
-			set
-			{
-				if (_totalTimeMs == value)
-				{
-					return;
-				}
-				_totalTimeMs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _totalTimeMs);
+			set => SetProperty(ref _totalTimeMs, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("currentFrame")] 
 		public CUInt32 CurrentFrame
 		{
-			get
-			{
-				if (_currentFrame == null)
-				{
-					_currentFrame = (CUInt32) CR2WTypeManager.Create("Uint32", "currentFrame", cr2w, this);
-				}
-				return _currentFrame;
-			}
-			set
-			{
-				if (_currentFrame == value)
-				{
-					return;
-				}
-				_currentFrame = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentFrame);
+			set => SetProperty(ref _currentFrame, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("totalFrames")] 
 		public CUInt32 TotalFrames
 		{
-			get
-			{
-				if (_totalFrames == null)
-				{
-					_totalFrames = (CUInt32) CR2WTypeManager.Create("Uint32", "totalFrames", cr2w, this);
-				}
-				return _totalFrames;
-			}
-			set
-			{
-				if (_totalFrames == value)
-				{
-					return;
-				}
-				_totalFrames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _totalFrames);
+			set => SetProperty(ref _totalFrames, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("frameRate")] 
 		public CUInt32 FrameRate
 		{
-			get
-			{
-				if (_frameRate == null)
-				{
-					_frameRate = (CUInt32) CR2WTypeManager.Create("Uint32", "frameRate", cr2w, this);
-				}
-				return _frameRate;
-			}
-			set
-			{
-				if (_frameRate == value)
-				{
-					return;
-				}
-				_frameRate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frameRate);
+			set => SetProperty(ref _frameRate, value);
 		}
 
 		public gameBinkVideoSummary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

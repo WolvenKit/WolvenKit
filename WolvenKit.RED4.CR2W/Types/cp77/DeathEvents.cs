@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isDyingEffectPlaying")] 
 		public CBool IsDyingEffectPlaying
 		{
-			get
-			{
-				if (_isDyingEffectPlaying == null)
-				{
-					_isDyingEffectPlaying = (CBool) CR2WTypeManager.Create("Bool", "isDyingEffectPlaying", cr2w, this);
-				}
-				return _isDyingEffectPlaying;
-			}
-			set
-			{
-				if (_isDyingEffectPlaying == value)
-				{
-					return;
-				}
-				_isDyingEffectPlaying = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDyingEffectPlaying);
+			set => SetProperty(ref _isDyingEffectPlaying, value);
 		}
 
 		public DeathEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

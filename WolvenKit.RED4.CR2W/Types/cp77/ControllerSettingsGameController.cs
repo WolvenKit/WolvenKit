@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("buttonHintsManagerRef")] 
 		public inkWidgetReference ButtonHintsManagerRef
 		{
-			get
-			{
-				if (_buttonHintsManagerRef == null)
-				{
-					_buttonHintsManagerRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "buttonHintsManagerRef", cr2w, this);
-				}
-				return _buttonHintsManagerRef;
-			}
-			set
-			{
-				if (_buttonHintsManagerRef == value)
-				{
-					return;
-				}
-				_buttonHintsManagerRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonHintsManagerRef);
+			set => SetProperty(ref _buttonHintsManagerRef, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("buttonHintsController")] 
 		public wCHandle<ButtonHints> ButtonHintsController
 		{
-			get
-			{
-				if (_buttonHintsController == null)
-				{
-					_buttonHintsController = (wCHandle<ButtonHints>) CR2WTypeManager.Create("whandle:ButtonHints", "buttonHintsController", cr2w, this);
-				}
-				return _buttonHintsController;
-			}
-			set
-			{
-				if (_buttonHintsController == value)
-				{
-					return;
-				}
-				_buttonHintsController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonHintsController);
+			set => SetProperty(ref _buttonHintsController, value);
 		}
 
 		public ControllerSettingsGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

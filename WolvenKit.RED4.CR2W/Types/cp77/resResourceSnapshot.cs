@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("resources")] 
 		public CArray<raRef<CResource>> Resources
 		{
-			get
-			{
-				if (_resources == null)
-				{
-					_resources = (CArray<raRef<CResource>>) CR2WTypeManager.Create("array:raRef:CResource", "resources", cr2w, this);
-				}
-				return _resources;
-			}
-			set
-			{
-				if (_resources == value)
-				{
-					return;
-				}
-				_resources = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resources);
+			set => SetProperty(ref _resources, value);
 		}
 
 		public resResourceSnapshot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

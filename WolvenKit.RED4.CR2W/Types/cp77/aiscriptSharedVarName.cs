@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("varName")] 
 		public LibTreeSharedVarReferenceName VarName
 		{
-			get
-			{
-				if (_varName == null)
-				{
-					_varName = (LibTreeSharedVarReferenceName) CR2WTypeManager.Create("LibTreeSharedVarReferenceName", "varName", cr2w, this);
-				}
-				return _varName;
-			}
-			set
-			{
-				if (_varName == value)
-				{
-					return;
-				}
-				_varName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _varName);
+			set => SetProperty(ref _varName, value);
 		}
 
 		public aiscriptSharedVarName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

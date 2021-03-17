@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("combatPreset")] 
 		public CEnum<EAICombatPreset> CombatPreset
 		{
-			get
-			{
-				if (_combatPreset == null)
-				{
-					_combatPreset = (CEnum<EAICombatPreset>) CR2WTypeManager.Create("EAICombatPreset", "combatPreset", cr2w, this);
-				}
-				return _combatPreset;
-			}
-			set
-			{
-				if (_combatPreset == value)
-				{
-					return;
-				}
-				_combatPreset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _combatPreset);
+			set => SetProperty(ref _combatPreset, value);
 		}
 
 		public AISetCombatPresetCommandParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("properties")] 
 		public CArray<gameSmartObjectPropertyDictionaryPropertyEntry> Properties
 		{
-			get
-			{
-				if (_properties == null)
-				{
-					_properties = (CArray<gameSmartObjectPropertyDictionaryPropertyEntry>) CR2WTypeManager.Create("array:gameSmartObjectPropertyDictionaryPropertyEntry", "properties", cr2w, this);
-				}
-				return _properties;
-			}
-			set
-			{
-				if (_properties == value)
-				{
-					return;
-				}
-				_properties = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _properties);
+			set => SetProperty(ref _properties, value);
 		}
 
 		public gameSmartObjectPropertyDictionary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

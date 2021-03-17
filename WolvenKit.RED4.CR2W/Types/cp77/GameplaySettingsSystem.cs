@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gameplaySettingsListener")] 
 		public CHandle<GameplaySettingsListener> GameplaySettingsListener
 		{
-			get
-			{
-				if (_gameplaySettingsListener == null)
-				{
-					_gameplaySettingsListener = (CHandle<GameplaySettingsListener>) CR2WTypeManager.Create("handle:GameplaySettingsListener", "gameplaySettingsListener", cr2w, this);
-				}
-				return _gameplaySettingsListener;
-			}
-			set
-			{
-				if (_gameplaySettingsListener == value)
-				{
-					return;
-				}
-				_gameplaySettingsListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameplaySettingsListener);
+			set => SetProperty(ref _gameplaySettingsListener, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("wasEverJohnny")] 
 		public CBool WasEverJohnny
 		{
-			get
-			{
-				if (_wasEverJohnny == null)
-				{
-					_wasEverJohnny = (CBool) CR2WTypeManager.Create("Bool", "wasEverJohnny", cr2w, this);
-				}
-				return _wasEverJohnny;
-			}
-			set
-			{
-				if (_wasEverJohnny == value)
-				{
-					return;
-				}
-				_wasEverJohnny = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasEverJohnny);
+			set => SetProperty(ref _wasEverJohnny, value);
 		}
 
 		public GameplaySettingsSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

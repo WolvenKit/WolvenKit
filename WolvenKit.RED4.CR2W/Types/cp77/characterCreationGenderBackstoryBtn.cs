@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("selector")] 
 		public inkWidgetReference Selector
 		{
-			get
-			{
-				if (_selector == null)
-				{
-					_selector = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "selector", cr2w, this);
-				}
-				return _selector;
-			}
-			set
-			{
-				if (_selector == value)
-				{
-					return;
-				}
-				_selector = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selector);
+			set => SetProperty(ref _selector, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("fluffText")] 
 		public inkWidgetReference FluffText
 		{
-			get
-			{
-				if (_fluffText == null)
-				{
-					_fluffText = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "fluffText", cr2w, this);
-				}
-				return _fluffText;
-			}
-			set
-			{
-				if (_fluffText == value)
-				{
-					return;
-				}
-				_fluffText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fluffText);
+			set => SetProperty(ref _fluffText, value);
 		}
 
 		public characterCreationGenderBackstoryBtn(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

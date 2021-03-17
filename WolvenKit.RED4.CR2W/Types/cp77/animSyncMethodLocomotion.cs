@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("locomotionFeatureName")] 
 		public CName LocomotionFeatureName
 		{
-			get
-			{
-				if (_locomotionFeatureName == null)
-				{
-					_locomotionFeatureName = (CName) CR2WTypeManager.Create("CName", "locomotionFeatureName", cr2w, this);
-				}
-				return _locomotionFeatureName;
-			}
-			set
-			{
-				if (_locomotionFeatureName == value)
-				{
-					return;
-				}
-				_locomotionFeatureName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _locomotionFeatureName);
+			set => SetProperty(ref _locomotionFeatureName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("accelStopTimeEvent")] 
 		public CName AccelStopTimeEvent
 		{
-			get
-			{
-				if (_accelStopTimeEvent == null)
-				{
-					_accelStopTimeEvent = (CName) CR2WTypeManager.Create("CName", "accelStopTimeEvent", cr2w, this);
-				}
-				return _accelStopTimeEvent;
-			}
-			set
-			{
-				if (_accelStopTimeEvent == value)
-				{
-					return;
-				}
-				_accelStopTimeEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _accelStopTimeEvent);
+			set => SetProperty(ref _accelStopTimeEvent, value);
 		}
 
 		public animSyncMethodLocomotion(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

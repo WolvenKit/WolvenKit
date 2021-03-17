@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("description")] 
 		public CString Description
 		{
-			get
-			{
-				if (_description == null)
-				{
-					_description = (CString) CR2WTypeManager.Create("String", "description", cr2w, this);
-				}
-				return _description;
-			}
-			set
-			{
-				if (_description == value)
-				{
-					return;
-				}
-				_description = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _description);
+			set => SetProperty(ref _description, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("payload")] 
 		public CString Payload
 		{
-			get
-			{
-				if (_payload == null)
-				{
-					_payload = (CString) CR2WTypeManager.Create("String", "payload", cr2w, this);
-				}
-				return _payload;
-			}
-			set
-			{
-				if (_payload == value)
-				{
-					return;
-				}
-				_payload = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _payload);
+			set => SetProperty(ref _payload, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("version")] 
 		public CInt32 Version
 		{
-			get
-			{
-				if (_version == null)
-				{
-					_version = (CInt32) CR2WTypeManager.Create("Int32", "version", cr2w, this);
-				}
-				return _version;
-			}
-			set
-			{
-				if (_version == value)
-				{
-					return;
-				}
-				_version = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _version);
+			set => SetProperty(ref _version, value);
 		}
 
 		public interopOpaqueData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

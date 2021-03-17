@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("startAngle")] 
 		public CFloat StartAngle
 		{
-			get
-			{
-				if (_startAngle == null)
-				{
-					_startAngle = (CFloat) CR2WTypeManager.Create("Float", "startAngle", cr2w, this);
-				}
-				return _startAngle;
-			}
-			set
-			{
-				if (_startAngle == value)
-				{
-					return;
-				}
-				_startAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startAngle);
+			set => SetProperty(ref _startAngle, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("transition")] 
 		public CFloat Transition
 		{
-			get
-			{
-				if (_transition == null)
-				{
-					_transition = (CFloat) CR2WTypeManager.Create("Float", "transition", cr2w, this);
-				}
-				return _transition;
-			}
-			set
-			{
-				if (_transition == value)
-				{
-					return;
-				}
-				_transition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transition);
+			set => SetProperty(ref _transition, value);
 		}
 
 		public inkRadialWipeEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

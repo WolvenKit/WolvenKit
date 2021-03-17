@@ -24,276 +24,96 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("owner")] 
 		public wCHandle<ScriptedPuppet> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<ScriptedPuppet>) CR2WTypeManager.Create("whandle:ScriptedPuppet", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ownerID")] 
 		public entEntityID OwnerID
 		{
-			get
-			{
-				if (_ownerID == null)
-				{
-					_ownerID = (entEntityID) CR2WTypeManager.Create("entEntityID", "ownerID", cr2w, this);
-				}
-				return _ownerID;
-			}
-			set
-			{
-				if (_ownerID == value)
-				{
-					return;
-				}
-				_ownerID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerID);
+			set => SetProperty(ref _ownerID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("equipment")] 
 		public gameSLoadout Equipment
 		{
-			get
-			{
-				if (_equipment == null)
-				{
-					_equipment = (gameSLoadout) CR2WTypeManager.Create("gameSLoadout", "equipment", cr2w, this);
-				}
-				return _equipment;
-			}
-			set
-			{
-				if (_equipment == value)
-				{
-					return;
-				}
-				_equipment = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipment);
+			set => SetProperty(ref _equipment, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("lastUsedStruct")] 
 		public gameSLastUsedWeapon LastUsedStruct
 		{
-			get
-			{
-				if (_lastUsedStruct == null)
-				{
-					_lastUsedStruct = (gameSLastUsedWeapon) CR2WTypeManager.Create("gameSLastUsedWeapon", "lastUsedStruct", cr2w, this);
-				}
-				return _lastUsedStruct;
-			}
-			set
-			{
-				if (_lastUsedStruct == value)
-				{
-					return;
-				}
-				_lastUsedStruct = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastUsedStruct);
+			set => SetProperty(ref _lastUsedStruct, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("slotActiveItemsInHands")] 
 		public gameSSlotActiveItems SlotActiveItemsInHands
 		{
-			get
-			{
-				if (_slotActiveItemsInHands == null)
-				{
-					_slotActiveItemsInHands = (gameSSlotActiveItems) CR2WTypeManager.Create("gameSSlotActiveItems", "slotActiveItemsInHands", cr2w, this);
-				}
-				return _slotActiveItemsInHands;
-			}
-			set
-			{
-				if (_slotActiveItemsInHands == value)
-				{
-					return;
-				}
-				_slotActiveItemsInHands = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotActiveItemsInHands);
+			set => SetProperty(ref _slotActiveItemsInHands, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("hiddenItems")] 
 		public CArray<gameItemID> HiddenItems
 		{
-			get
-			{
-				if (_hiddenItems == null)
-				{
-					_hiddenItems = (CArray<gameItemID>) CR2WTypeManager.Create("array:gameItemID", "hiddenItems", cr2w, this);
-				}
-				return _hiddenItems;
-			}
-			set
-			{
-				if (_hiddenItems == value)
-				{
-					return;
-				}
-				_hiddenItems = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hiddenItems);
+			set => SetProperty(ref _hiddenItems, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("clothingSlotsInfo")] 
 		public CArray<gameSSlotInfo> ClothingSlotsInfo
 		{
-			get
-			{
-				if (_clothingSlotsInfo == null)
-				{
-					_clothingSlotsInfo = (CArray<gameSSlotInfo>) CR2WTypeManager.Create("array:gameSSlotInfo", "clothingSlotsInfo", cr2w, this);
-				}
-				return _clothingSlotsInfo;
-			}
-			set
-			{
-				if (_clothingSlotsInfo == value)
-				{
-					return;
-				}
-				_clothingSlotsInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clothingSlotsInfo);
+			set => SetProperty(ref _clothingSlotsInfo, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isPartialVisualTagActive")] 
 		public CBool IsPartialVisualTagActive
 		{
-			get
-			{
-				if (_isPartialVisualTagActive == null)
-				{
-					_isPartialVisualTagActive = (CBool) CR2WTypeManager.Create("Bool", "isPartialVisualTagActive", cr2w, this);
-				}
-				return _isPartialVisualTagActive;
-			}
-			set
-			{
-				if (_isPartialVisualTagActive == value)
-				{
-					return;
-				}
-				_isPartialVisualTagActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPartialVisualTagActive);
+			set => SetProperty(ref _isPartialVisualTagActive, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("visualTagProcessingInfo")] 
 		public CArray<gameSVisualTagProcessing> VisualTagProcessingInfo
 		{
-			get
-			{
-				if (_visualTagProcessingInfo == null)
-				{
-					_visualTagProcessingInfo = (CArray<gameSVisualTagProcessing>) CR2WTypeManager.Create("array:gameSVisualTagProcessing", "visualTagProcessingInfo", cr2w, this);
-				}
-				return _visualTagProcessingInfo;
-			}
-			set
-			{
-				if (_visualTagProcessingInfo == value)
-				{
-					return;
-				}
-				_visualTagProcessingInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualTagProcessingInfo);
+			set => SetProperty(ref _visualTagProcessingInfo, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("eventsSent")] 
 		public CInt32 EventsSent
 		{
-			get
-			{
-				if (_eventsSent == null)
-				{
-					_eventsSent = (CInt32) CR2WTypeManager.Create("Int32", "eventsSent", cr2w, this);
-				}
-				return _eventsSent;
-			}
-			set
-			{
-				if (_eventsSent == value)
-				{
-					return;
-				}
-				_eventsSent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventsSent);
+			set => SetProperty(ref _eventsSent, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("hotkeys")] 
 		public CArray<CHandle<Hotkey>> Hotkeys
 		{
-			get
-			{
-				if (_hotkeys == null)
-				{
-					_hotkeys = (CArray<CHandle<Hotkey>>) CR2WTypeManager.Create("array:handle:Hotkey", "hotkeys", cr2w, this);
-				}
-				return _hotkeys;
-			}
-			set
-			{
-				if (_hotkeys == value)
-				{
-					return;
-				}
-				_hotkeys = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hotkeys);
+			set => SetProperty(ref _hotkeys, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("inventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
-			get
-			{
-				if (_inventoryManager == null)
-				{
-					_inventoryManager = (CHandle<InventoryDataManagerV2>) CR2WTypeManager.Create("handle:InventoryDataManagerV2", "inventoryManager", cr2w, this);
-				}
-				return _inventoryManager;
-			}
-			set
-			{
-				if (_inventoryManager == value)
-				{
-					return;
-				}
-				_inventoryManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryManager);
+			set => SetProperty(ref _inventoryManager, value);
 		}
 
 		public EquipmentSystemPlayerData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

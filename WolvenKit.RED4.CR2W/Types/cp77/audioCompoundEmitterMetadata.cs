@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("childrenNames")] 
 		public CArray<CName> ChildrenNames
 		{
-			get
-			{
-				if (_childrenNames == null)
-				{
-					_childrenNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "childrenNames", cr2w, this);
-				}
-				return _childrenNames;
-			}
-			set
-			{
-				if (_childrenNames == value)
-				{
-					return;
-				}
-				_childrenNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _childrenNames);
+			set => SetProperty(ref _childrenNames, value);
 		}
 
 		public audioCompoundEmitterMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

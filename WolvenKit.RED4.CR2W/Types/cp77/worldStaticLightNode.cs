@@ -58,1058 +58,368 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("type")] 
 		public CEnum<ELightType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<ELightType>) CR2WTypeManager.Create("ELightType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("color")] 
 		public CColor Color
 		{
-			get
-			{
-				if (_color == null)
-				{
-					_color = (CColor) CR2WTypeManager.Create("Color", "color", cr2w, this);
-				}
-				return _color;
-			}
-			set
-			{
-				if (_color == value)
-				{
-					return;
-				}
-				_color = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _color);
+			set => SetProperty(ref _color, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get
-			{
-				if (_radius == null)
-				{
-					_radius = (CFloat) CR2WTypeManager.Create("Float", "radius", cr2w, this);
-				}
-				return _radius;
-			}
-			set
-			{
-				if (_radius == value)
-				{
-					return;
-				}
-				_radius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radius);
+			set => SetProperty(ref _radius, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("unit")] 
 		public CEnum<ELightUnit> Unit
 		{
-			get
-			{
-				if (_unit == null)
-				{
-					_unit = (CEnum<ELightUnit>) CR2WTypeManager.Create("ELightUnit", "unit", cr2w, this);
-				}
-				return _unit;
-			}
-			set
-			{
-				if (_unit == value)
-				{
-					return;
-				}
-				_unit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unit);
+			set => SetProperty(ref _unit, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("intensity")] 
 		public CFloat Intensity
 		{
-			get
-			{
-				if (_intensity == null)
-				{
-					_intensity = (CFloat) CR2WTypeManager.Create("Float", "intensity", cr2w, this);
-				}
-				return _intensity;
-			}
-			set
-			{
-				if (_intensity == value)
-				{
-					return;
-				}
-				_intensity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _intensity);
+			set => SetProperty(ref _intensity, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("rayTracingIntensityScale")] 
 		public CFloat RayTracingIntensityScale
 		{
-			get
-			{
-				if (_rayTracingIntensityScale == null)
-				{
-					_rayTracingIntensityScale = (CFloat) CR2WTypeManager.Create("Float", "rayTracingIntensityScale", cr2w, this);
-				}
-				return _rayTracingIntensityScale;
-			}
-			set
-			{
-				if (_rayTracingIntensityScale == value)
-				{
-					return;
-				}
-				_rayTracingIntensityScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rayTracingIntensityScale);
+			set => SetProperty(ref _rayTracingIntensityScale, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("EV")] 
 		public CFloat EV
 		{
-			get
-			{
-				if (_eV == null)
-				{
-					_eV = (CFloat) CR2WTypeManager.Create("Float", "EV", cr2w, this);
-				}
-				return _eV;
-			}
-			set
-			{
-				if (_eV == value)
-				{
-					return;
-				}
-				_eV = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eV);
+			set => SetProperty(ref _eV, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("temperature")] 
 		public CFloat Temperature
 		{
-			get
-			{
-				if (_temperature == null)
-				{
-					_temperature = (CFloat) CR2WTypeManager.Create("Float", "temperature", cr2w, this);
-				}
-				return _temperature;
-			}
-			set
-			{
-				if (_temperature == value)
-				{
-					return;
-				}
-				_temperature = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _temperature);
+			set => SetProperty(ref _temperature, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("lightChannel")] 
 		public CEnum<rendLightChannel> LightChannel
 		{
-			get
-			{
-				if (_lightChannel == null)
-				{
-					_lightChannel = (CEnum<rendLightChannel>) CR2WTypeManager.Create("rendLightChannel", "lightChannel", cr2w, this);
-				}
-				return _lightChannel;
-			}
-			set
-			{
-				if (_lightChannel == value)
-				{
-					return;
-				}
-				_lightChannel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lightChannel);
+			set => SetProperty(ref _lightChannel, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("sceneDiffuse")] 
 		public CBool SceneDiffuse
 		{
-			get
-			{
-				if (_sceneDiffuse == null)
-				{
-					_sceneDiffuse = (CBool) CR2WTypeManager.Create("Bool", "sceneDiffuse", cr2w, this);
-				}
-				return _sceneDiffuse;
-			}
-			set
-			{
-				if (_sceneDiffuse == value)
-				{
-					return;
-				}
-				_sceneDiffuse = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneDiffuse);
+			set => SetProperty(ref _sceneDiffuse, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("sceneSpecular")] 
 		public CBool SceneSpecular
 		{
-			get
-			{
-				if (_sceneSpecular == null)
-				{
-					_sceneSpecular = (CBool) CR2WTypeManager.Create("Bool", "sceneSpecular", cr2w, this);
-				}
-				return _sceneSpecular;
-			}
-			set
-			{
-				if (_sceneSpecular == value)
-				{
-					return;
-				}
-				_sceneSpecular = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneSpecular);
+			set => SetProperty(ref _sceneSpecular, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("directional")] 
 		public CBool Directional
 		{
-			get
-			{
-				if (_directional == null)
-				{
-					_directional = (CBool) CR2WTypeManager.Create("Bool", "directional", cr2w, this);
-				}
-				return _directional;
-			}
-			set
-			{
-				if (_directional == value)
-				{
-					return;
-				}
-				_directional = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _directional);
+			set => SetProperty(ref _directional, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("roughnessBias")] 
 		public CInt8 RoughnessBias
 		{
-			get
-			{
-				if (_roughnessBias == null)
-				{
-					_roughnessBias = (CInt8) CR2WTypeManager.Create("Int8", "roughnessBias", cr2w, this);
-				}
-				return _roughnessBias;
-			}
-			set
-			{
-				if (_roughnessBias == value)
-				{
-					return;
-				}
-				_roughnessBias = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _roughnessBias);
+			set => SetProperty(ref _roughnessBias, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("useInGI")] 
 		public CBool UseInGI
 		{
-			get
-			{
-				if (_useInGI == null)
-				{
-					_useInGI = (CBool) CR2WTypeManager.Create("Bool", "useInGI", cr2w, this);
-				}
-				return _useInGI;
-			}
-			set
-			{
-				if (_useInGI == value)
-				{
-					return;
-				}
-				_useInGI = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useInGI);
+			set => SetProperty(ref _useInGI, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("useInEnvProbes")] 
 		public CBool UseInEnvProbes
 		{
-			get
-			{
-				if (_useInEnvProbes == null)
-				{
-					_useInEnvProbes = (CBool) CR2WTypeManager.Create("Bool", "useInEnvProbes", cr2w, this);
-				}
-				return _useInEnvProbes;
-			}
-			set
-			{
-				if (_useInEnvProbes == value)
-				{
-					return;
-				}
-				_useInEnvProbes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useInEnvProbes);
+			set => SetProperty(ref _useInEnvProbes, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("useInTransparents")] 
 		public CBool UseInTransparents
 		{
-			get
-			{
-				if (_useInTransparents == null)
-				{
-					_useInTransparents = (CBool) CR2WTypeManager.Create("Bool", "useInTransparents", cr2w, this);
-				}
-				return _useInTransparents;
-			}
-			set
-			{
-				if (_useInTransparents == value)
-				{
-					return;
-				}
-				_useInTransparents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useInTransparents);
+			set => SetProperty(ref _useInTransparents, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("useInFog")] 
 		public CBool UseInFog
 		{
-			get
-			{
-				if (_useInFog == null)
-				{
-					_useInFog = (CBool) CR2WTypeManager.Create("Bool", "useInFog", cr2w, this);
-				}
-				return _useInFog;
-			}
-			set
-			{
-				if (_useInFog == value)
-				{
-					return;
-				}
-				_useInFog = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useInFog);
+			set => SetProperty(ref _useInFog, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("useInParticles")] 
 		public CBool UseInParticles
 		{
-			get
-			{
-				if (_useInParticles == null)
-				{
-					_useInParticles = (CBool) CR2WTypeManager.Create("Bool", "useInParticles", cr2w, this);
-				}
-				return _useInParticles;
-			}
-			set
-			{
-				if (_useInParticles == value)
-				{
-					return;
-				}
-				_useInParticles = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useInParticles);
+			set => SetProperty(ref _useInParticles, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("attenuation")] 
 		public CEnum<rendLightAttenuation> Attenuation
 		{
-			get
-			{
-				if (_attenuation == null)
-				{
-					_attenuation = (CEnum<rendLightAttenuation>) CR2WTypeManager.Create("rendLightAttenuation", "attenuation", cr2w, this);
-				}
-				return _attenuation;
-			}
-			set
-			{
-				if (_attenuation == value)
-				{
-					return;
-				}
-				_attenuation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attenuation);
+			set => SetProperty(ref _attenuation, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("clampAttenuation")] 
 		public CBool ClampAttenuation
 		{
-			get
-			{
-				if (_clampAttenuation == null)
-				{
-					_clampAttenuation = (CBool) CR2WTypeManager.Create("Bool", "clampAttenuation", cr2w, this);
-				}
-				return _clampAttenuation;
-			}
-			set
-			{
-				if (_clampAttenuation == value)
-				{
-					return;
-				}
-				_clampAttenuation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clampAttenuation);
+			set => SetProperty(ref _clampAttenuation, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("group")] 
 		public CEnum<rendLightGroup> Group
 		{
-			get
-			{
-				if (_group == null)
-				{
-					_group = (CEnum<rendLightGroup>) CR2WTypeManager.Create("rendLightGroup", "group", cr2w, this);
-				}
-				return _group;
-			}
-			set
-			{
-				if (_group == value)
-				{
-					return;
-				}
-				_group = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _group);
+			set => SetProperty(ref _group, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("areaShape")] 
 		public CEnum<EAreaLightShape> AreaShape
 		{
-			get
-			{
-				if (_areaShape == null)
-				{
-					_areaShape = (CEnum<EAreaLightShape>) CR2WTypeManager.Create("EAreaLightShape", "areaShape", cr2w, this);
-				}
-				return _areaShape;
-			}
-			set
-			{
-				if (_areaShape == value)
-				{
-					return;
-				}
-				_areaShape = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaShape);
+			set => SetProperty(ref _areaShape, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("areaTwoSided")] 
 		public CBool AreaTwoSided
 		{
-			get
-			{
-				if (_areaTwoSided == null)
-				{
-					_areaTwoSided = (CBool) CR2WTypeManager.Create("Bool", "areaTwoSided", cr2w, this);
-				}
-				return _areaTwoSided;
-			}
-			set
-			{
-				if (_areaTwoSided == value)
-				{
-					return;
-				}
-				_areaTwoSided = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaTwoSided);
+			set => SetProperty(ref _areaTwoSided, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("spotCapsule")] 
 		public CBool SpotCapsule
 		{
-			get
-			{
-				if (_spotCapsule == null)
-				{
-					_spotCapsule = (CBool) CR2WTypeManager.Create("Bool", "spotCapsule", cr2w, this);
-				}
-				return _spotCapsule;
-			}
-			set
-			{
-				if (_spotCapsule == value)
-				{
-					return;
-				}
-				_spotCapsule = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spotCapsule);
+			set => SetProperty(ref _spotCapsule, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("sourceRadius")] 
 		public CFloat SourceRadius
 		{
-			get
-			{
-				if (_sourceRadius == null)
-				{
-					_sourceRadius = (CFloat) CR2WTypeManager.Create("Float", "sourceRadius", cr2w, this);
-				}
-				return _sourceRadius;
-			}
-			set
-			{
-				if (_sourceRadius == value)
-				{
-					return;
-				}
-				_sourceRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sourceRadius);
+			set => SetProperty(ref _sourceRadius, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("capsuleLength")] 
 		public CFloat CapsuleLength
 		{
-			get
-			{
-				if (_capsuleLength == null)
-				{
-					_capsuleLength = (CFloat) CR2WTypeManager.Create("Float", "capsuleLength", cr2w, this);
-				}
-				return _capsuleLength;
-			}
-			set
-			{
-				if (_capsuleLength == value)
-				{
-					return;
-				}
-				_capsuleLength = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _capsuleLength);
+			set => SetProperty(ref _capsuleLength, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("areaRectSideA")] 
 		public CFloat AreaRectSideA
 		{
-			get
-			{
-				if (_areaRectSideA == null)
-				{
-					_areaRectSideA = (CFloat) CR2WTypeManager.Create("Float", "areaRectSideA", cr2w, this);
-				}
-				return _areaRectSideA;
-			}
-			set
-			{
-				if (_areaRectSideA == value)
-				{
-					return;
-				}
-				_areaRectSideA = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaRectSideA);
+			set => SetProperty(ref _areaRectSideA, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("areaRectSideB")] 
 		public CFloat AreaRectSideB
 		{
-			get
-			{
-				if (_areaRectSideB == null)
-				{
-					_areaRectSideB = (CFloat) CR2WTypeManager.Create("Float", "areaRectSideB", cr2w, this);
-				}
-				return _areaRectSideB;
-			}
-			set
-			{
-				if (_areaRectSideB == value)
-				{
-					return;
-				}
-				_areaRectSideB = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaRectSideB);
+			set => SetProperty(ref _areaRectSideB, value);
 		}
 
 		[Ordinal(32)] 
 		[RED("innerAngle")] 
 		public CFloat InnerAngle
 		{
-			get
-			{
-				if (_innerAngle == null)
-				{
-					_innerAngle = (CFloat) CR2WTypeManager.Create("Float", "innerAngle", cr2w, this);
-				}
-				return _innerAngle;
-			}
-			set
-			{
-				if (_innerAngle == value)
-				{
-					return;
-				}
-				_innerAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _innerAngle);
+			set => SetProperty(ref _innerAngle, value);
 		}
 
 		[Ordinal(33)] 
 		[RED("outerAngle")] 
 		public CFloat OuterAngle
 		{
-			get
-			{
-				if (_outerAngle == null)
-				{
-					_outerAngle = (CFloat) CR2WTypeManager.Create("Float", "outerAngle", cr2w, this);
-				}
-				return _outerAngle;
-			}
-			set
-			{
-				if (_outerAngle == value)
-				{
-					return;
-				}
-				_outerAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outerAngle);
+			set => SetProperty(ref _outerAngle, value);
 		}
 
 		[Ordinal(34)] 
 		[RED("softness")] 
 		public CFloat Softness
 		{
-			get
-			{
-				if (_softness == null)
-				{
-					_softness = (CFloat) CR2WTypeManager.Create("Float", "softness", cr2w, this);
-				}
-				return _softness;
-			}
-			set
-			{
-				if (_softness == value)
-				{
-					return;
-				}
-				_softness = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _softness);
+			set => SetProperty(ref _softness, value);
 		}
 
 		[Ordinal(35)] 
 		[RED("enableLocalShadows")] 
 		public CBool EnableLocalShadows
 		{
-			get
-			{
-				if (_enableLocalShadows == null)
-				{
-					_enableLocalShadows = (CBool) CR2WTypeManager.Create("Bool", "enableLocalShadows", cr2w, this);
-				}
-				return _enableLocalShadows;
-			}
-			set
-			{
-				if (_enableLocalShadows == value)
-				{
-					return;
-				}
-				_enableLocalShadows = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableLocalShadows);
+			set => SetProperty(ref _enableLocalShadows, value);
 		}
 
 		[Ordinal(36)] 
 		[RED("enableLocalShadowsForceStaticsOnly")] 
 		public CBool EnableLocalShadowsForceStaticsOnly
 		{
-			get
-			{
-				if (_enableLocalShadowsForceStaticsOnly == null)
-				{
-					_enableLocalShadowsForceStaticsOnly = (CBool) CR2WTypeManager.Create("Bool", "enableLocalShadowsForceStaticsOnly", cr2w, this);
-				}
-				return _enableLocalShadowsForceStaticsOnly;
-			}
-			set
-			{
-				if (_enableLocalShadowsForceStaticsOnly == value)
-				{
-					return;
-				}
-				_enableLocalShadowsForceStaticsOnly = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableLocalShadowsForceStaticsOnly);
+			set => SetProperty(ref _enableLocalShadowsForceStaticsOnly, value);
 		}
 
 		[Ordinal(37)] 
 		[RED("contactShadows")] 
 		public CEnum<rendContactShadowReciever> ContactShadows
 		{
-			get
-			{
-				if (_contactShadows == null)
-				{
-					_contactShadows = (CEnum<rendContactShadowReciever>) CR2WTypeManager.Create("rendContactShadowReciever", "contactShadows", cr2w, this);
-				}
-				return _contactShadows;
-			}
-			set
-			{
-				if (_contactShadows == value)
-				{
-					return;
-				}
-				_contactShadows = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contactShadows);
+			set => SetProperty(ref _contactShadows, value);
 		}
 
 		[Ordinal(38)] 
 		[RED("shadowAngle")] 
 		public CFloat ShadowAngle
 		{
-			get
-			{
-				if (_shadowAngle == null)
-				{
-					_shadowAngle = (CFloat) CR2WTypeManager.Create("Float", "shadowAngle", cr2w, this);
-				}
-				return _shadowAngle;
-			}
-			set
-			{
-				if (_shadowAngle == value)
-				{
-					return;
-				}
-				_shadowAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shadowAngle);
+			set => SetProperty(ref _shadowAngle, value);
 		}
 
 		[Ordinal(39)] 
 		[RED("shadowRadius")] 
 		public CFloat ShadowRadius
 		{
-			get
-			{
-				if (_shadowRadius == null)
-				{
-					_shadowRadius = (CFloat) CR2WTypeManager.Create("Float", "shadowRadius", cr2w, this);
-				}
-				return _shadowRadius;
-			}
-			set
-			{
-				if (_shadowRadius == value)
-				{
-					return;
-				}
-				_shadowRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shadowRadius);
+			set => SetProperty(ref _shadowRadius, value);
 		}
 
 		[Ordinal(40)] 
 		[RED("shadowFadeDistance")] 
 		public CFloat ShadowFadeDistance
 		{
-			get
-			{
-				if (_shadowFadeDistance == null)
-				{
-					_shadowFadeDistance = (CFloat) CR2WTypeManager.Create("Float", "shadowFadeDistance", cr2w, this);
-				}
-				return _shadowFadeDistance;
-			}
-			set
-			{
-				if (_shadowFadeDistance == value)
-				{
-					return;
-				}
-				_shadowFadeDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shadowFadeDistance);
+			set => SetProperty(ref _shadowFadeDistance, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("shadowFadeRange")] 
 		public CFloat ShadowFadeRange
 		{
-			get
-			{
-				if (_shadowFadeRange == null)
-				{
-					_shadowFadeRange = (CFloat) CR2WTypeManager.Create("Float", "shadowFadeRange", cr2w, this);
-				}
-				return _shadowFadeRange;
-			}
-			set
-			{
-				if (_shadowFadeRange == value)
-				{
-					return;
-				}
-				_shadowFadeRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shadowFadeRange);
+			set => SetProperty(ref _shadowFadeRange, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("shadowSoftnessMode")] 
 		public CEnum<ELightShadowSoftnessMode> ShadowSoftnessMode
 		{
-			get
-			{
-				if (_shadowSoftnessMode == null)
-				{
-					_shadowSoftnessMode = (CEnum<ELightShadowSoftnessMode>) CR2WTypeManager.Create("ELightShadowSoftnessMode", "shadowSoftnessMode", cr2w, this);
-				}
-				return _shadowSoftnessMode;
-			}
-			set
-			{
-				if (_shadowSoftnessMode == value)
-				{
-					return;
-				}
-				_shadowSoftnessMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shadowSoftnessMode);
+			set => SetProperty(ref _shadowSoftnessMode, value);
 		}
 
 		[Ordinal(43)] 
 		[RED("iesProfile")] 
 		public raRef<CIESDataResource> IesProfile
 		{
-			get
-			{
-				if (_iesProfile == null)
-				{
-					_iesProfile = (raRef<CIESDataResource>) CR2WTypeManager.Create("raRef:CIESDataResource", "iesProfile", cr2w, this);
-				}
-				return _iesProfile;
-			}
-			set
-			{
-				if (_iesProfile == value)
-				{
-					return;
-				}
-				_iesProfile = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _iesProfile);
+			set => SetProperty(ref _iesProfile, value);
 		}
 
 		[Ordinal(44)] 
 		[RED("flicker")] 
 		public rendSLightFlickering Flicker
 		{
-			get
-			{
-				if (_flicker == null)
-				{
-					_flicker = (rendSLightFlickering) CR2WTypeManager.Create("rendSLightFlickering", "flicker", cr2w, this);
-				}
-				return _flicker;
-			}
-			set
-			{
-				if (_flicker == value)
-				{
-					return;
-				}
-				_flicker = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flicker);
+			set => SetProperty(ref _flicker, value);
 		}
 
 		[Ordinal(45)] 
 		[RED("envColorGroup")] 
 		public CEnum<EEnvColorGroup> EnvColorGroup
 		{
-			get
-			{
-				if (_envColorGroup == null)
-				{
-					_envColorGroup = (CEnum<EEnvColorGroup>) CR2WTypeManager.Create("EEnvColorGroup", "envColorGroup", cr2w, this);
-				}
-				return _envColorGroup;
-			}
-			set
-			{
-				if (_envColorGroup == value)
-				{
-					return;
-				}
-				_envColorGroup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _envColorGroup);
+			set => SetProperty(ref _envColorGroup, value);
 		}
 
 		[Ordinal(46)] 
 		[RED("colorGroupSaturation")] 
 		public CUInt8 ColorGroupSaturation
 		{
-			get
-			{
-				if (_colorGroupSaturation == null)
-				{
-					_colorGroupSaturation = (CUInt8) CR2WTypeManager.Create("Uint8", "colorGroupSaturation", cr2w, this);
-				}
-				return _colorGroupSaturation;
-			}
-			set
-			{
-				if (_colorGroupSaturation == value)
-				{
-					return;
-				}
-				_colorGroupSaturation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _colorGroupSaturation);
+			set => SetProperty(ref _colorGroupSaturation, value);
 		}
 
 		[Ordinal(47)] 
 		[RED("portalAngleCutoff")] 
 		public CUInt8 PortalAngleCutoff
 		{
-			get
-			{
-				if (_portalAngleCutoff == null)
-				{
-					_portalAngleCutoff = (CUInt8) CR2WTypeManager.Create("Uint8", "portalAngleCutoff", cr2w, this);
-				}
-				return _portalAngleCutoff;
-			}
-			set
-			{
-				if (_portalAngleCutoff == value)
-				{
-					return;
-				}
-				_portalAngleCutoff = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _portalAngleCutoff);
+			set => SetProperty(ref _portalAngleCutoff, value);
 		}
 
 		[Ordinal(48)] 
 		[RED("allowDistantLight")] 
 		public CBool AllowDistantLight
 		{
-			get
-			{
-				if (_allowDistantLight == null)
-				{
-					_allowDistantLight = (CBool) CR2WTypeManager.Create("Bool", "allowDistantLight", cr2w, this);
-				}
-				return _allowDistantLight;
-			}
-			set
-			{
-				if (_allowDistantLight == value)
-				{
-					return;
-				}
-				_allowDistantLight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _allowDistantLight);
+			set => SetProperty(ref _allowDistantLight, value);
 		}
 
 		[Ordinal(49)] 
 		[RED("autoHideDistance")] 
 		public CFloat AutoHideDistance
 		{
-			get
-			{
-				if (_autoHideDistance == null)
-				{
-					_autoHideDistance = (CFloat) CR2WTypeManager.Create("Float", "autoHideDistance", cr2w, this);
-				}
-				return _autoHideDistance;
-			}
-			set
-			{
-				if (_autoHideDistance == value)
-				{
-					return;
-				}
-				_autoHideDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _autoHideDistance);
+			set => SetProperty(ref _autoHideDistance, value);
 		}
 
 		public worldStaticLightNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

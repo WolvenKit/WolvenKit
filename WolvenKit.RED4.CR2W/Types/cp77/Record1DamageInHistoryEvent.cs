@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("source")] 
 		public wCHandle<gameObject> Source
 		{
-			get
-			{
-				if (_source == null)
-				{
-					_source = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "source", cr2w, this);
-				}
-				return _source;
-			}
-			set
-			{
-				if (_source == value)
-				{
-					return;
-				}
-				_source = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
 		}
 
 		public Record1DamageInHistoryEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

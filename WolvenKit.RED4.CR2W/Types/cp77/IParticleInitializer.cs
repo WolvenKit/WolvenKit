@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("seed")] 
 		public CUInt32 Seed
 		{
-			get
-			{
-				if (_seed == null)
-				{
-					_seed = (CUInt32) CR2WTypeManager.Create("Uint32", "seed", cr2w, this);
-				}
-				return _seed;
-			}
-			set
-			{
-				if (_seed == value)
-				{
-					return;
-				}
-				_seed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _seed);
+			set => SetProperty(ref _seed, value);
 		}
 
 		public IParticleInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

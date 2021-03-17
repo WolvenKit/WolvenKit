@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("parentHash")] 
 		public CInt32 ParentHash
 		{
-			get
-			{
-				if (_parentHash == null)
-				{
-					_parentHash = (CInt32) CR2WTypeManager.Create("Int32", "parentHash", cr2w, this);
-				}
-				return _parentHash;
-			}
-			set
-			{
-				if (_parentHash == value)
-				{
-					return;
-				}
-				_parentHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentHash);
+			set => SetProperty(ref _parentHash, value);
 		}
 
 		public MessageThreadReadEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

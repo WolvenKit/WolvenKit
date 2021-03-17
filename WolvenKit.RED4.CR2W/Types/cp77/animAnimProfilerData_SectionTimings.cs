@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sectionName")] 
 		public CName SectionName
 		{
-			get
-			{
-				if (_sectionName == null)
-				{
-					_sectionName = (CName) CR2WTypeManager.Create("CName", "sectionName", cr2w, this);
-				}
-				return _sectionName;
-			}
-			set
-			{
-				if (_sectionName == value)
-				{
-					return;
-				}
-				_sectionName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sectionName);
+			set => SetProperty(ref _sectionName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("updateTimeMS")] 
 		public CFloat UpdateTimeMS
 		{
-			get
-			{
-				if (_updateTimeMS == null)
-				{
-					_updateTimeMS = (CFloat) CR2WTypeManager.Create("Float", "updateTimeMS", cr2w, this);
-				}
-				return _updateTimeMS;
-			}
-			set
-			{
-				if (_updateTimeMS == value)
-				{
-					return;
-				}
-				_updateTimeMS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _updateTimeMS);
+			set => SetProperty(ref _updateTimeMS, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("sampleTimeMS")] 
 		public CFloat SampleTimeMS
 		{
-			get
-			{
-				if (_sampleTimeMS == null)
-				{
-					_sampleTimeMS = (CFloat) CR2WTypeManager.Create("Float", "sampleTimeMS", cr2w, this);
-				}
-				return _sampleTimeMS;
-			}
-			set
-			{
-				if (_sampleTimeMS == value)
-				{
-					return;
-				}
-				_sampleTimeMS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sampleTimeMS);
+			set => SetProperty(ref _sampleTimeMS, value);
 		}
 
 		public animAnimProfilerData_SectionTimings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

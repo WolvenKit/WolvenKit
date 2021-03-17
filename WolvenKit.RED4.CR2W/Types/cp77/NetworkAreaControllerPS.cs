@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		[Ordinal(105)] 
 		[RED("visualizerID")] 
 		public CUInt32 VisualizerID
 		{
-			get
-			{
-				if (_visualizerID == null)
-				{
-					_visualizerID = (CUInt32) CR2WTypeManager.Create("Uint32", "visualizerID", cr2w, this);
-				}
-				return _visualizerID;
-			}
-			set
-			{
-				if (_visualizerID == value)
-				{
-					return;
-				}
-				_visualizerID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualizerID);
+			set => SetProperty(ref _visualizerID, value);
 		}
 
 		[Ordinal(106)] 
 		[RED("hudActivated")] 
 		public CBool HudActivated
 		{
-			get
-			{
-				if (_hudActivated == null)
-				{
-					_hudActivated = (CBool) CR2WTypeManager.Create("Bool", "hudActivated", cr2w, this);
-				}
-				return _hudActivated;
-			}
-			set
-			{
-				if (_hudActivated == value)
-				{
-					return;
-				}
-				_hudActivated = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hudActivated);
+			set => SetProperty(ref _hudActivated, value);
 		}
 
 		[Ordinal(107)] 
 		[RED("currentlyAvailableCharges")] 
 		public CInt32 CurrentlyAvailableCharges
 		{
-			get
-			{
-				if (_currentlyAvailableCharges == null)
-				{
-					_currentlyAvailableCharges = (CInt32) CR2WTypeManager.Create("Int32", "currentlyAvailableCharges", cr2w, this);
-				}
-				return _currentlyAvailableCharges;
-			}
-			set
-			{
-				if (_currentlyAvailableCharges == value)
-				{
-					return;
-				}
-				_currentlyAvailableCharges = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentlyAvailableCharges);
+			set => SetProperty(ref _currentlyAvailableCharges, value);
 		}
 
 		[Ordinal(108)] 
 		[RED("maxAvailableCharges")] 
 		public CInt32 MaxAvailableCharges
 		{
-			get
-			{
-				if (_maxAvailableCharges == null)
-				{
-					_maxAvailableCharges = (CInt32) CR2WTypeManager.Create("Int32", "maxAvailableCharges", cr2w, this);
-				}
-				return _maxAvailableCharges;
-			}
-			set
-			{
-				if (_maxAvailableCharges == value)
-				{
-					return;
-				}
-				_maxAvailableCharges = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxAvailableCharges);
+			set => SetProperty(ref _maxAvailableCharges, value);
 		}
 
 		public NetworkAreaControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

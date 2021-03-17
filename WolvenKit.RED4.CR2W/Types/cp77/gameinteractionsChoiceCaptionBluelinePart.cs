@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("blueline")] 
 		public CHandle<gameinteractionsvisBluelineDescription> Blueline
 		{
-			get
-			{
-				if (_blueline == null)
-				{
-					_blueline = (CHandle<gameinteractionsvisBluelineDescription>) CR2WTypeManager.Create("handle:gameinteractionsvisBluelineDescription", "blueline", cr2w, this);
-				}
-				return _blueline;
-			}
-			set
-			{
-				if (_blueline == value)
-				{
-					return;
-				}
-				_blueline = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blueline);
+			set => SetProperty(ref _blueline, value);
 		}
 
 		public gameinteractionsChoiceCaptionBluelinePart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

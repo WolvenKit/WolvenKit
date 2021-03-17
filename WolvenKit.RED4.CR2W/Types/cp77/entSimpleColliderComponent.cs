@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("colliders")] 
 		public CArray<CHandle<physicsICollider>> Colliders
 		{
-			get
-			{
-				if (_colliders == null)
-				{
-					_colliders = (CArray<CHandle<physicsICollider>>) CR2WTypeManager.Create("array:handle:physicsICollider", "colliders", cr2w, this);
-				}
-				return _colliders;
-			}
-			set
-			{
-				if (_colliders == value)
-				{
-					return;
-				}
-				_colliders = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _colliders);
+			set => SetProperty(ref _colliders, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("filter")] 
 		public CHandle<physicsFilterData> Filter
 		{
-			get
-			{
-				if (_filter == null)
-				{
-					_filter = (CHandle<physicsFilterData>) CR2WTypeManager.Create("handle:physicsFilterData", "filter", cr2w, this);
-				}
-				return _filter;
-			}
-			set
-			{
-				if (_filter == value)
-				{
-					return;
-				}
-				_filter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filter);
+			set => SetProperty(ref _filter, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("compiledBuffer")] 
 		public DataBuffer CompiledBuffer
 		{
-			get
-			{
-				if (_compiledBuffer == null)
-				{
-					_compiledBuffer = (DataBuffer) CR2WTypeManager.Create("DataBuffer", "compiledBuffer", cr2w, this);
-				}
-				return _compiledBuffer;
-			}
-			set
-			{
-				if (_compiledBuffer == value)
-				{
-					return;
-				}
-				_compiledBuffer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _compiledBuffer);
+			set => SetProperty(ref _compiledBuffer, value);
 		}
 
 		public entSimpleColliderComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

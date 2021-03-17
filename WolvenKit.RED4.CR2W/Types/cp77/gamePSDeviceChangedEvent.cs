@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("persistentID")] 
 		public gamePersistentID PersistentID
 		{
-			get
-			{
-				if (_persistentID == null)
-				{
-					_persistentID = (gamePersistentID) CR2WTypeManager.Create("gamePersistentID", "persistentID", cr2w, this);
-				}
-				return _persistentID;
-			}
-			set
-			{
-				if (_persistentID == value)
-				{
-					return;
-				}
-				_persistentID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _persistentID);
+			set => SetProperty(ref _persistentID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("className")] 
 		public CName ClassName
 		{
-			get
-			{
-				if (_className == null)
-				{
-					_className = (CName) CR2WTypeManager.Create("CName", "className", cr2w, this);
-				}
-				return _className;
-			}
-			set
-			{
-				if (_className == value)
-				{
-					return;
-				}
-				_className = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _className);
+			set => SetProperty(ref _className, value);
 		}
 
 		public gamePSDeviceChangedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("condition")] 
 		public CHandle<questIBaseCondition> Condition
 		{
-			get
-			{
-				if (_condition == null)
-				{
-					_condition = (CHandle<questIBaseCondition>) CR2WTypeManager.Create("handle:questIBaseCondition", "condition", cr2w, this);
-				}
-				return _condition;
-			}
-			set
-			{
-				if (_condition == value)
-				{
-					return;
-				}
-				_condition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _condition);
+			set => SetProperty(ref _condition, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("socketId")] 
 		public CUInt32 SocketId
 		{
-			get
-			{
-				if (_socketId == null)
-				{
-					_socketId = (CUInt32) CR2WTypeManager.Create("Uint32", "socketId", cr2w, this);
-				}
-				return _socketId;
-			}
-			set
-			{
-				if (_socketId == value)
-				{
-					return;
-				}
-				_socketId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _socketId);
+			set => SetProperty(ref _socketId, value);
 		}
 
 		public questConditionItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

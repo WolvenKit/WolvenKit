@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("forceSecuritySystemIntoStrictQuestControl")] 
 		public CBool ForceSecuritySystemIntoStrictQuestControl
 		{
-			get
-			{
-				if (_forceSecuritySystemIntoStrictQuestControl == null)
-				{
-					_forceSecuritySystemIntoStrictQuestControl = (CBool) CR2WTypeManager.Create("Bool", "forceSecuritySystemIntoStrictQuestControl", cr2w, this);
-				}
-				return _forceSecuritySystemIntoStrictQuestControl;
-			}
-			set
-			{
-				if (_forceSecuritySystemIntoStrictQuestControl == value)
-				{
-					return;
-				}
-				_forceSecuritySystemIntoStrictQuestControl = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceSecuritySystemIntoStrictQuestControl);
+			set => SetProperty(ref _forceSecuritySystemIntoStrictQuestControl, value);
 		}
 
 		public SuppressSecuritySystemStateChange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

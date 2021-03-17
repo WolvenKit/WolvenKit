@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hackingCheckSlot")] 
 		public CHandle<HackingSkillCheck> HackingCheckSlot
 		{
-			get
-			{
-				if (_hackingCheckSlot == null)
-				{
-					_hackingCheckSlot = (CHandle<HackingSkillCheck>) CR2WTypeManager.Create("handle:HackingSkillCheck", "hackingCheckSlot", cr2w, this);
-				}
-				return _hackingCheckSlot;
-			}
-			set
-			{
-				if (_hackingCheckSlot == value)
-				{
-					return;
-				}
-				_hackingCheckSlot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hackingCheckSlot);
+			set => SetProperty(ref _hackingCheckSlot, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("engineeringCheckSlot")] 
 		public CHandle<EngineeringSkillCheck> EngineeringCheckSlot
 		{
-			get
-			{
-				if (_engineeringCheckSlot == null)
-				{
-					_engineeringCheckSlot = (CHandle<EngineeringSkillCheck>) CR2WTypeManager.Create("handle:EngineeringSkillCheck", "engineeringCheckSlot", cr2w, this);
-				}
-				return _engineeringCheckSlot;
-			}
-			set
-			{
-				if (_engineeringCheckSlot == value)
-				{
-					return;
-				}
-				_engineeringCheckSlot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _engineeringCheckSlot);
+			set => SetProperty(ref _engineeringCheckSlot, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("demolitionCheckSlot")] 
 		public CHandle<DemolitionSkillCheck> DemolitionCheckSlot
 		{
-			get
-			{
-				if (_demolitionCheckSlot == null)
-				{
-					_demolitionCheckSlot = (CHandle<DemolitionSkillCheck>) CR2WTypeManager.Create("handle:DemolitionSkillCheck", "demolitionCheckSlot", cr2w, this);
-				}
-				return _demolitionCheckSlot;
-			}
-			set
-			{
-				if (_demolitionCheckSlot == value)
-				{
-					return;
-				}
-				_demolitionCheckSlot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _demolitionCheckSlot);
+			set => SetProperty(ref _demolitionCheckSlot, value);
 		}
 
 		public BaseSkillCheckContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

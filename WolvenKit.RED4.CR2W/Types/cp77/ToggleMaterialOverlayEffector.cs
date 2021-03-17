@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("effectPath")] 
 		public CString EffectPath
 		{
-			get
-			{
-				if (_effectPath == null)
-				{
-					_effectPath = (CString) CR2WTypeManager.Create("String", "effectPath", cr2w, this);
-				}
-				return _effectPath;
-			}
-			set
-			{
-				if (_effectPath == value)
-				{
-					return;
-				}
-				_effectPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectPath);
+			set => SetProperty(ref _effectPath, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("effectTag")] 
 		public CName EffectTag
 		{
-			get
-			{
-				if (_effectTag == null)
-				{
-					_effectTag = (CName) CR2WTypeManager.Create("CName", "effectTag", cr2w, this);
-				}
-				return _effectTag;
-			}
-			set
-			{
-				if (_effectTag == value)
-				{
-					return;
-				}
-				_effectTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectTag);
+			set => SetProperty(ref _effectTag, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("effectInstance")] 
 		public CHandle<gameEffectInstance> EffectInstance
 		{
-			get
-			{
-				if (_effectInstance == null)
-				{
-					_effectInstance = (CHandle<gameEffectInstance>) CR2WTypeManager.Create("handle:gameEffectInstance", "effectInstance", cr2w, this);
-				}
-				return _effectInstance;
-			}
-			set
-			{
-				if (_effectInstance == value)
-				{
-					return;
-				}
-				_effectInstance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectInstance);
+			set => SetProperty(ref _effectInstance, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		public ToggleMaterialOverlayEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

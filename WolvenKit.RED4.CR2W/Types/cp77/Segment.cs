@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("origin")] 
 		public Vector4 Origin
 		{
-			get
-			{
-				if (_origin == null)
-				{
-					_origin = (Vector4) CR2WTypeManager.Create("Vector4", "origin", cr2w, this);
-				}
-				return _origin;
-			}
-			set
-			{
-				if (_origin == value)
-				{
-					return;
-				}
-				_origin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _origin);
+			set => SetProperty(ref _origin, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("direction")] 
 		public Vector4 Direction
 		{
-			get
-			{
-				if (_direction == null)
-				{
-					_direction = (Vector4) CR2WTypeManager.Create("Vector4", "direction", cr2w, this);
-				}
-				return _direction;
-			}
-			set
-			{
-				if (_direction == value)
-				{
-					return;
-				}
-				_direction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _direction);
+			set => SetProperty(ref _direction, value);
 		}
 
 		public Segment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

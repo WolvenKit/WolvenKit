@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("data")] 
 		public DataBuffer Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (DataBuffer) CR2WTypeManager.Create("DataBuffer", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("metadata")] 
 		public DataBuffer Metadata
 		{
-			get
-			{
-				if (_metadata == null)
-				{
-					_metadata = (DataBuffer) CR2WTypeManager.Create("DataBuffer", "metadata", cr2w, this);
-				}
-				return _metadata;
-			}
-			set
-			{
-				if (_metadata == value)
-				{
-					return;
-				}
-				_metadata = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metadata);
+			set => SetProperty(ref _metadata, value);
 		}
 
 		public SMeshTopology(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actionTweak")] 
 		public TweakDBID ActionTweak
 		{
-			get
-			{
-				if (_actionTweak == null)
-				{
-					_actionTweak = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "actionTweak", cr2w, this);
-				}
-				return _actionTweak;
-			}
-			set
-			{
-				if (_actionTweak == value)
-				{
-					return;
-				}
-				_actionTweak = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionTweak);
+			set => SetProperty(ref _actionTweak, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("actionPenetration")] 
 		public CFloat ActionPenetration
 		{
-			get
-			{
-				if (_actionPenetration == null)
-				{
-					_actionPenetration = (CFloat) CR2WTypeManager.Create("Float", "actionPenetration", cr2w, this);
-				}
-				return _actionPenetration;
-			}
-			set
-			{
-				if (_actionPenetration == value)
-				{
-					return;
-				}
-				_actionPenetration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionPenetration);
+			set => SetProperty(ref _actionPenetration, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("quality")] 
 		public CInt32 Quality
 		{
-			get
-			{
-				if (_quality == null)
-				{
-					_quality = (CInt32) CR2WTypeManager.Create("Int32", "quality", cr2w, this);
-				}
-				return _quality;
-			}
-			set
-			{
-				if (_quality == value)
-				{
-					return;
-				}
-				_quality = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quality);
+			set => SetProperty(ref _quality, value);
 		}
 
 		public PlayerQuickhackData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

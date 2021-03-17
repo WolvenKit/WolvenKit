@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("controllersSetupName")] 
 		public CName ControllersSetupName
 		{
-			get
-			{
-				if (_controllersSetupName == null)
-				{
-					_controllersSetupName = (CName) CR2WTypeManager.Create("CName", "controllersSetupName", cr2w, this);
-				}
-				return _controllersSetupName;
-			}
-			set
-			{
-				if (_controllersSetupName == value)
-				{
-					return;
-				}
-				_controllersSetupName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _controllersSetupName);
+			set => SetProperty(ref _controllersSetupName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useStart")] 
 		public CBool UseStart
 		{
-			get
-			{
-				if (_useStart == null)
-				{
-					_useStart = (CBool) CR2WTypeManager.Create("Bool", "useStart", cr2w, this);
-				}
-				return _useStart;
-			}
-			set
-			{
-				if (_useStart == value)
-				{
-					return;
-				}
-				_useStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useStart);
+			set => SetProperty(ref _useStart, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("useStop")] 
 		public CBool UseStop
 		{
-			get
-			{
-				if (_useStop == null)
-				{
-					_useStop = (CBool) CR2WTypeManager.Create("Bool", "useStop", cr2w, this);
-				}
-				return _useStop;
-			}
-			set
-			{
-				if (_useStop == value)
-				{
-					return;
-				}
-				_useStop = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useStop);
+			set => SetProperty(ref _useStop, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("blendTime")] 
 		public CFloat BlendTime
 		{
-			get
-			{
-				if (_blendTime == null)
-				{
-					_blendTime = (CFloat) CR2WTypeManager.Create("Float", "blendTime", cr2w, this);
-				}
-				return _blendTime;
-			}
-			set
-			{
-				if (_blendTime == value)
-				{
-					return;
-				}
-				_blendTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendTime);
+			set => SetProperty(ref _blendTime, value);
 		}
 
 		public animCurvePathBakerUserInput(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

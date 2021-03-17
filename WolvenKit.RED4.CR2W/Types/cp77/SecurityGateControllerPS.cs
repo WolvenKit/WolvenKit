@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("securityGateDetectionProperties")] 
 		public SecurityGateDetectionProperties SecurityGateDetectionProperties
 		{
-			get
-			{
-				if (_securityGateDetectionProperties == null)
-				{
-					_securityGateDetectionProperties = (SecurityGateDetectionProperties) CR2WTypeManager.Create("SecurityGateDetectionProperties", "securityGateDetectionProperties", cr2w, this);
-				}
-				return _securityGateDetectionProperties;
-			}
-			set
-			{
-				if (_securityGateDetectionProperties == value)
-				{
-					return;
-				}
-				_securityGateDetectionProperties = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securityGateDetectionProperties);
+			set => SetProperty(ref _securityGateDetectionProperties, value);
 		}
 
 		[Ordinal(105)] 
 		[RED("securityGateResponseProperties")] 
 		public SecurityGateResponseProperties SecurityGateResponseProperties
 		{
-			get
-			{
-				if (_securityGateResponseProperties == null)
-				{
-					_securityGateResponseProperties = (SecurityGateResponseProperties) CR2WTypeManager.Create("SecurityGateResponseProperties", "securityGateResponseProperties", cr2w, this);
-				}
-				return _securityGateResponseProperties;
-			}
-			set
-			{
-				if (_securityGateResponseProperties == value)
-				{
-					return;
-				}
-				_securityGateResponseProperties = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securityGateResponseProperties);
+			set => SetProperty(ref _securityGateResponseProperties, value);
 		}
 
 		[Ordinal(106)] 
 		[RED("securityGateStatus")] 
 		public CEnum<ESecurityGateStatus> SecurityGateStatus
 		{
-			get
-			{
-				if (_securityGateStatus == null)
-				{
-					_securityGateStatus = (CEnum<ESecurityGateStatus>) CR2WTypeManager.Create("ESecurityGateStatus", "securityGateStatus", cr2w, this);
-				}
-				return _securityGateStatus;
-			}
-			set
-			{
-				if (_securityGateStatus == value)
-				{
-					return;
-				}
-				_securityGateStatus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securityGateStatus);
+			set => SetProperty(ref _securityGateStatus, value);
 		}
 
 		[Ordinal(107)] 
 		[RED("trespassersDataList")] 
 		public CArray<TrespasserEntry> TrespassersDataList
 		{
-			get
-			{
-				if (_trespassersDataList == null)
-				{
-					_trespassersDataList = (CArray<TrespasserEntry>) CR2WTypeManager.Create("array:TrespasserEntry", "trespassersDataList", cr2w, this);
-				}
-				return _trespassersDataList;
-			}
-			set
-			{
-				if (_trespassersDataList == value)
-				{
-					return;
-				}
-				_trespassersDataList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trespassersDataList);
+			set => SetProperty(ref _trespassersDataList, value);
 		}
 
 		public SecurityGateControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

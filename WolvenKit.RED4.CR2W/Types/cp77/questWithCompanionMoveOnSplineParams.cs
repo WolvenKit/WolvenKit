@@ -31,437 +31,152 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("movementType")] 
 		public AIMovementTypeSpec MovementType
 		{
-			get
-			{
-				if (_movementType == null)
-				{
-					_movementType = (AIMovementTypeSpec) CR2WTypeManager.Create("AIMovementTypeSpec", "movementType", cr2w, this);
-				}
-				return _movementType;
-			}
-			set
-			{
-				if (_movementType == value)
-				{
-					return;
-				}
-				_movementType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movementType);
+			set => SetProperty(ref _movementType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("facingTargetRef")] 
 		public CHandle<questUniversalRef> FacingTargetRef
 		{
-			get
-			{
-				if (_facingTargetRef == null)
-				{
-					_facingTargetRef = (CHandle<questUniversalRef>) CR2WTypeManager.Create("handle:questUniversalRef", "facingTargetRef", cr2w, this);
-				}
-				return _facingTargetRef;
-			}
-			set
-			{
-				if (_facingTargetRef == value)
-				{
-					return;
-				}
-				_facingTargetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _facingTargetRef);
+			set => SetProperty(ref _facingTargetRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("rotateEntityTowardsFacingTarget")] 
 		public CBool RotateEntityTowardsFacingTarget
 		{
-			get
-			{
-				if (_rotateEntityTowardsFacingTarget == null)
-				{
-					_rotateEntityTowardsFacingTarget = (CBool) CR2WTypeManager.Create("Bool", "rotateEntityTowardsFacingTarget", cr2w, this);
-				}
-				return _rotateEntityTowardsFacingTarget;
-			}
-			set
-			{
-				if (_rotateEntityTowardsFacingTarget == value)
-				{
-					return;
-				}
-				_rotateEntityTowardsFacingTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotateEntityTowardsFacingTarget);
+			set => SetProperty(ref _rotateEntityTowardsFacingTarget, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("snapToTerrain")] 
 		public CBool SnapToTerrain
 		{
-			get
-			{
-				if (_snapToTerrain == null)
-				{
-					_snapToTerrain = (CBool) CR2WTypeManager.Create("Bool", "snapToTerrain", cr2w, this);
-				}
-				return _snapToTerrain;
-			}
-			set
-			{
-				if (_snapToTerrain == value)
-				{
-					return;
-				}
-				_snapToTerrain = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _snapToTerrain);
+			set => SetProperty(ref _snapToTerrain, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("shootingTargetRef")] 
 		public CHandle<questUniversalRef> ShootingTargetRef
 		{
-			get
-			{
-				if (_shootingTargetRef == null)
-				{
-					_shootingTargetRef = (CHandle<questUniversalRef>) CR2WTypeManager.Create("handle:questUniversalRef", "shootingTargetRef", cr2w, this);
-				}
-				return _shootingTargetRef;
-			}
-			set
-			{
-				if (_shootingTargetRef == value)
-				{
-					return;
-				}
-				_shootingTargetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shootingTargetRef);
+			set => SetProperty(ref _shootingTargetRef, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("companionRef")] 
 		public CHandle<questUniversalRef> CompanionRef
 		{
-			get
-			{
-				if (_companionRef == null)
-				{
-					_companionRef = (CHandle<questUniversalRef>) CR2WTypeManager.Create("handle:questUniversalRef", "companionRef", cr2w, this);
-				}
-				return _companionRef;
-			}
-			set
-			{
-				if (_companionRef == value)
-				{
-					return;
-				}
-				_companionRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _companionRef);
+			set => SetProperty(ref _companionRef, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("companionDistancePreset")] 
 		public CEnum<gamedataCompanionDistancePreset> CompanionDistancePreset
 		{
-			get
-			{
-				if (_companionDistancePreset == null)
-				{
-					_companionDistancePreset = (CEnum<gamedataCompanionDistancePreset>) CR2WTypeManager.Create("gamedataCompanionDistancePreset", "companionDistancePreset", cr2w, this);
-				}
-				return _companionDistancePreset;
-			}
-			set
-			{
-				if (_companionDistancePreset == value)
-				{
-					return;
-				}
-				_companionDistancePreset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _companionDistancePreset);
+			set => SetProperty(ref _companionDistancePreset, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("companionPosition")] 
 		public CEnum<questCompanionPositions> CompanionPosition
 		{
-			get
-			{
-				if (_companionPosition == null)
-				{
-					_companionPosition = (CEnum<questCompanionPositions>) CR2WTypeManager.Create("questCompanionPositions", "companionPosition", cr2w, this);
-				}
-				return _companionPosition;
-			}
-			set
-			{
-				if (_companionPosition == value)
-				{
-					return;
-				}
-				_companionPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _companionPosition);
+			set => SetProperty(ref _companionPosition, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("catchUpWithCompanion")] 
 		public CBool CatchUpWithCompanion
 		{
-			get
-			{
-				if (_catchUpWithCompanion == null)
-				{
-					_catchUpWithCompanion = (CBool) CR2WTypeManager.Create("Bool", "catchUpWithCompanion", cr2w, this);
-				}
-				return _catchUpWithCompanion;
-			}
-			set
-			{
-				if (_catchUpWithCompanion == value)
-				{
-					return;
-				}
-				_catchUpWithCompanion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _catchUpWithCompanion);
+			set => SetProperty(ref _catchUpWithCompanion, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("teleportToCompanion")] 
 		public CBool TeleportToCompanion
 		{
-			get
-			{
-				if (_teleportToCompanion == null)
-				{
-					_teleportToCompanion = (CBool) CR2WTypeManager.Create("Bool", "teleportToCompanion", cr2w, this);
-				}
-				return _teleportToCompanion;
-			}
-			set
-			{
-				if (_teleportToCompanion == value)
-				{
-					return;
-				}
-				_teleportToCompanion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _teleportToCompanion);
+			set => SetProperty(ref _teleportToCompanion, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("useMatchForSpeedForPlayer")] 
 		public CBool UseMatchForSpeedForPlayer
 		{
-			get
-			{
-				if (_useMatchForSpeedForPlayer == null)
-				{
-					_useMatchForSpeedForPlayer = (CBool) CR2WTypeManager.Create("Bool", "useMatchForSpeedForPlayer", cr2w, this);
-				}
-				return _useMatchForSpeedForPlayer;
-			}
-			set
-			{
-				if (_useMatchForSpeedForPlayer == value)
-				{
-					return;
-				}
-				_useMatchForSpeedForPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useMatchForSpeedForPlayer);
+			set => SetProperty(ref _useMatchForSpeedForPlayer, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("ignoreNavigation")] 
 		public CBool IgnoreNavigation
 		{
-			get
-			{
-				if (_ignoreNavigation == null)
-				{
-					_ignoreNavigation = (CBool) CR2WTypeManager.Create("Bool", "ignoreNavigation", cr2w, this);
-				}
-				return _ignoreNavigation;
-			}
-			set
-			{
-				if (_ignoreNavigation == value)
-				{
-					return;
-				}
-				_ignoreNavigation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ignoreNavigation);
+			set => SetProperty(ref _ignoreNavigation, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("ignoreLineOfSightCheck")] 
 		public CBool IgnoreLineOfSightCheck
 		{
-			get
-			{
-				if (_ignoreLineOfSightCheck == null)
-				{
-					_ignoreLineOfSightCheck = (CBool) CR2WTypeManager.Create("Bool", "ignoreLineOfSightCheck", cr2w, this);
-				}
-				return _ignoreLineOfSightCheck;
-			}
-			set
-			{
-				if (_ignoreLineOfSightCheck == value)
-				{
-					return;
-				}
-				_ignoreLineOfSightCheck = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ignoreLineOfSightCheck);
+			set => SetProperty(ref _ignoreLineOfSightCheck, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("useOffMeshLinkReservation")] 
 		public CBool UseOffMeshLinkReservation
 		{
-			get
-			{
-				if (_useOffMeshLinkReservation == null)
-				{
-					_useOffMeshLinkReservation = (CBool) CR2WTypeManager.Create("Bool", "useOffMeshLinkReservation", cr2w, this);
-				}
-				return _useOffMeshLinkReservation;
-			}
-			set
-			{
-				if (_useOffMeshLinkReservation == value)
-				{
-					return;
-				}
-				_useOffMeshLinkReservation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useOffMeshLinkReservation);
+			set => SetProperty(ref _useOffMeshLinkReservation, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("lookAtTargetRef")] 
 		public CHandle<questUniversalRef> LookAtTargetRef
 		{
-			get
-			{
-				if (_lookAtTargetRef == null)
-				{
-					_lookAtTargetRef = (CHandle<questUniversalRef>) CR2WTypeManager.Create("handle:questUniversalRef", "lookAtTargetRef", cr2w, this);
-				}
-				return _lookAtTargetRef;
-			}
-			set
-			{
-				if (_lookAtTargetRef == value)
-				{
-					return;
-				}
-				_lookAtTargetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lookAtTargetRef);
+			set => SetProperty(ref _lookAtTargetRef, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("minSearchAngle")] 
 		public CFloat MinSearchAngle
 		{
-			get
-			{
-				if (_minSearchAngle == null)
-				{
-					_minSearchAngle = (CFloat) CR2WTypeManager.Create("Float", "minSearchAngle", cr2w, this);
-				}
-				return _minSearchAngle;
-			}
-			set
-			{
-				if (_minSearchAngle == value)
-				{
-					return;
-				}
-				_minSearchAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minSearchAngle);
+			set => SetProperty(ref _minSearchAngle, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("maxSearchAngle")] 
 		public CFloat MaxSearchAngle
 		{
-			get
-			{
-				if (_maxSearchAngle == null)
-				{
-					_maxSearchAngle = (CFloat) CR2WTypeManager.Create("Float", "maxSearchAngle", cr2w, this);
-				}
-				return _maxSearchAngle;
-			}
-			set
-			{
-				if (_maxSearchAngle == value)
-				{
-					return;
-				}
-				_maxSearchAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxSearchAngle);
+			set => SetProperty(ref _maxSearchAngle, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("interruptCapability")] 
 		public CEnum<scnInterruptCapability> InterruptCapability
 		{
-			get
-			{
-				if (_interruptCapability == null)
-				{
-					_interruptCapability = (CEnum<scnInterruptCapability>) CR2WTypeManager.Create("scnInterruptCapability", "interruptCapability", cr2w, this);
-				}
-				return _interruptCapability;
-			}
-			set
-			{
-				if (_interruptCapability == value)
-				{
-					return;
-				}
-				_interruptCapability = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interruptCapability);
+			set => SetProperty(ref _interruptCapability, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("maxCompanionDistanceOnSpline")] 
 		public CFloat MaxCompanionDistanceOnSpline
 		{
-			get
-			{
-				if (_maxCompanionDistanceOnSpline == null)
-				{
-					_maxCompanionDistanceOnSpline = (CFloat) CR2WTypeManager.Create("Float", "maxCompanionDistanceOnSpline", cr2w, this);
-				}
-				return _maxCompanionDistanceOnSpline;
-			}
-			set
-			{
-				if (_maxCompanionDistanceOnSpline == value)
-				{
-					return;
-				}
-				_maxCompanionDistanceOnSpline = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxCompanionDistanceOnSpline);
+			set => SetProperty(ref _maxCompanionDistanceOnSpline, value);
 		}
 
 		public questWithCompanionMoveOnSplineParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("areaEffectsData")] 
 		public CArray<SAreaEffectData> AreaEffectsData
 		{
-			get
-			{
-				if (_areaEffectsData == null)
-				{
-					_areaEffectsData = (CArray<SAreaEffectData>) CR2WTypeManager.Create("array:SAreaEffectData", "areaEffectsData", cr2w, this);
-				}
-				return _areaEffectsData;
-			}
-			set
-			{
-				if (_areaEffectsData == value)
-				{
-					return;
-				}
-				_areaEffectsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaEffectsData);
+			set => SetProperty(ref _areaEffectsData, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("areaEffectsInFocusMode")] 
 		public CArray<SAreaEffectTargetData> AreaEffectsInFocusMode
 		{
-			get
-			{
-				if (_areaEffectsInFocusMode == null)
-				{
-					_areaEffectsInFocusMode = (CArray<SAreaEffectTargetData>) CR2WTypeManager.Create("array:SAreaEffectTargetData", "areaEffectsInFocusMode", cr2w, this);
-				}
-				return _areaEffectsInFocusMode;
-			}
-			set
-			{
-				if (_areaEffectsInFocusMode == value)
-				{
-					return;
-				}
-				_areaEffectsInFocusMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaEffectsInFocusMode);
+			set => SetProperty(ref _areaEffectsInFocusMode, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("areaEffectData")] 
 		public CArray<CHandle<AreaEffectData>> AreaEffectData
 		{
-			get
-			{
-				if (_areaEffectData == null)
-				{
-					_areaEffectData = (CArray<CHandle<AreaEffectData>>) CR2WTypeManager.Create("array:handle:AreaEffectData", "areaEffectData", cr2w, this);
-				}
-				return _areaEffectData;
-			}
-			set
-			{
-				if (_areaEffectData == value)
-				{
-					return;
-				}
-				_areaEffectData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaEffectData);
+			set => SetProperty(ref _areaEffectData, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("investigationSlotOffsetMultiplier")] 
 		public CFloat InvestigationSlotOffsetMultiplier
 		{
-			get
-			{
-				if (_investigationSlotOffsetMultiplier == null)
-				{
-					_investigationSlotOffsetMultiplier = (CFloat) CR2WTypeManager.Create("Float", "investigationSlotOffsetMultiplier", cr2w, this);
-				}
-				return _investigationSlotOffsetMultiplier;
-			}
-			set
-			{
-				if (_investigationSlotOffsetMultiplier == value)
-				{
-					return;
-				}
-				_investigationSlotOffsetMultiplier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _investigationSlotOffsetMultiplier);
+			set => SetProperty(ref _investigationSlotOffsetMultiplier, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("areaEffectInFocusMode")] 
 		public CArray<CHandle<AreaEffectTargetData>> AreaEffectInFocusMode
 		{
-			get
-			{
-				if (_areaEffectInFocusMode == null)
-				{
-					_areaEffectInFocusMode = (CArray<CHandle<AreaEffectTargetData>>) CR2WTypeManager.Create("array:handle:AreaEffectTargetData", "areaEffectInFocusMode", cr2w, this);
-				}
-				return _areaEffectInFocusMode;
-			}
-			set
-			{
-				if (_areaEffectInFocusMode == value)
-				{
-					return;
-				}
-				_areaEffectInFocusMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaEffectInFocusMode);
+			set => SetProperty(ref _areaEffectInFocusMode, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("DEBUG_copiedDataFromEntity")] 
 		public CBool DEBUG_copiedDataFromEntity
 		{
-			get
-			{
-				if (_dEBUG_copiedDataFromEntity == null)
-				{
-					_dEBUG_copiedDataFromEntity = (CBool) CR2WTypeManager.Create("Bool", "DEBUG_copiedDataFromEntity", cr2w, this);
-				}
-				return _dEBUG_copiedDataFromEntity;
-			}
-			set
-			{
-				if (_dEBUG_copiedDataFromEntity == value)
-				{
-					return;
-				}
-				_dEBUG_copiedDataFromEntity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dEBUG_copiedDataFromEntity);
+			set => SetProperty(ref _dEBUG_copiedDataFromEntity, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("DEBUG_copiedDataFromFXStruct")] 
 		public CBool DEBUG_copiedDataFromFXStruct
 		{
-			get
-			{
-				if (_dEBUG_copiedDataFromFXStruct == null)
-				{
-					_dEBUG_copiedDataFromFXStruct = (CBool) CR2WTypeManager.Create("Bool", "DEBUG_copiedDataFromFXStruct", cr2w, this);
-				}
-				return _dEBUG_copiedDataFromFXStruct;
-			}
-			set
-			{
-				if (_dEBUG_copiedDataFromFXStruct == value)
-				{
-					return;
-				}
-				_dEBUG_copiedDataFromFXStruct = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dEBUG_copiedDataFromFXStruct);
+			set => SetProperty(ref _dEBUG_copiedDataFromFXStruct, value);
 		}
 
 		public FxResourceMapperComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

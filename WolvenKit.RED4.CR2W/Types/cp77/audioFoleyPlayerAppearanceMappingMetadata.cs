@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fallbackMetadata")] 
 		public CName FallbackMetadata
 		{
-			get
-			{
-				if (_fallbackMetadata == null)
-				{
-					_fallbackMetadata = (CName) CR2WTypeManager.Create("CName", "fallbackMetadata", cr2w, this);
-				}
-				return _fallbackMetadata;
-			}
-			set
-			{
-				if (_fallbackMetadata == value)
-				{
-					return;
-				}
-				_fallbackMetadata = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fallbackMetadata);
+			set => SetProperty(ref _fallbackMetadata, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("jacketSettings")] 
 		public CArray<audioAppearanceToPlayerMetadata> JacketSettings
 		{
-			get
-			{
-				if (_jacketSettings == null)
-				{
-					_jacketSettings = (CArray<audioAppearanceToPlayerMetadata>) CR2WTypeManager.Create("array:audioAppearanceToPlayerMetadata", "jacketSettings", cr2w, this);
-				}
-				return _jacketSettings;
-			}
-			set
-			{
-				if (_jacketSettings == value)
-				{
-					return;
-				}
-				_jacketSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _jacketSettings);
+			set => SetProperty(ref _jacketSettings, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("topSettings")] 
 		public CArray<audioAppearanceToPlayerMetadata> TopSettings
 		{
-			get
-			{
-				if (_topSettings == null)
-				{
-					_topSettings = (CArray<audioAppearanceToPlayerMetadata>) CR2WTypeManager.Create("array:audioAppearanceToPlayerMetadata", "topSettings", cr2w, this);
-				}
-				return _topSettings;
-			}
-			set
-			{
-				if (_topSettings == value)
-				{
-					return;
-				}
-				_topSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _topSettings);
+			set => SetProperty(ref _topSettings, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("bottomSettings")] 
 		public CArray<audioAppearanceToPlayerMetadata> BottomSettings
 		{
-			get
-			{
-				if (_bottomSettings == null)
-				{
-					_bottomSettings = (CArray<audioAppearanceToPlayerMetadata>) CR2WTypeManager.Create("array:audioAppearanceToPlayerMetadata", "bottomSettings", cr2w, this);
-				}
-				return _bottomSettings;
-			}
-			set
-			{
-				if (_bottomSettings == value)
-				{
-					return;
-				}
-				_bottomSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bottomSettings);
+			set => SetProperty(ref _bottomSettings, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("jewelrySettings")] 
 		public CArray<audioAppearanceToPlayerMetadata> JewelrySettings
 		{
-			get
-			{
-				if (_jewelrySettings == null)
-				{
-					_jewelrySettings = (CArray<audioAppearanceToPlayerMetadata>) CR2WTypeManager.Create("array:audioAppearanceToPlayerMetadata", "jewelrySettings", cr2w, this);
-				}
-				return _jewelrySettings;
-			}
-			set
-			{
-				if (_jewelrySettings == value)
-				{
-					return;
-				}
-				_jewelrySettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _jewelrySettings);
+			set => SetProperty(ref _jewelrySettings, value);
 		}
 
 		public audioFoleyPlayerAppearanceMappingMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

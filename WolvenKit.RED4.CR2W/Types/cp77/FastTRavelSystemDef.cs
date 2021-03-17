@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("DestinationPoint")] 
 		public gamebbScriptID_Variant DestinationPoint
 		{
-			get
-			{
-				if (_destinationPoint == null)
-				{
-					_destinationPoint = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "DestinationPoint", cr2w, this);
-				}
-				return _destinationPoint;
-			}
-			set
-			{
-				if (_destinationPoint == value)
-				{
-					return;
-				}
-				_destinationPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _destinationPoint);
+			set => SetProperty(ref _destinationPoint, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("StartingPoint")] 
 		public gamebbScriptID_Variant StartingPoint
 		{
-			get
-			{
-				if (_startingPoint == null)
-				{
-					_startingPoint = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "StartingPoint", cr2w, this);
-				}
-				return _startingPoint;
-			}
-			set
-			{
-				if (_startingPoint == value)
-				{
-					return;
-				}
-				_startingPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startingPoint);
+			set => SetProperty(ref _startingPoint, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("FastTravelLoadingScreenFinished")] 
 		public gamebbScriptID_Bool FastTravelLoadingScreenFinished
 		{
-			get
-			{
-				if (_fastTravelLoadingScreenFinished == null)
-				{
-					_fastTravelLoadingScreenFinished = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "FastTravelLoadingScreenFinished", cr2w, this);
-				}
-				return _fastTravelLoadingScreenFinished;
-			}
-			set
-			{
-				if (_fastTravelLoadingScreenFinished == value)
-				{
-					return;
-				}
-				_fastTravelLoadingScreenFinished = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fastTravelLoadingScreenFinished);
+			set => SetProperty(ref _fastTravelLoadingScreenFinished, value);
 		}
 
 		public FastTRavelSystemDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

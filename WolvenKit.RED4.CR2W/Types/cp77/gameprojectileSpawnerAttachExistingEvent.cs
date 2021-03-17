@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("projectile")] 
 		public wCHandle<gameObject> Projectile
 		{
-			get
-			{
-				if (_projectile == null)
-				{
-					_projectile = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "projectile", cr2w, this);
-				}
-				return _projectile;
-			}
-			set
-			{
-				if (_projectile == value)
-				{
-					return;
-				}
-				_projectile = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectile);
+			set => SetProperty(ref _projectile, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		public gameprojectileSpawnerAttachExistingEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

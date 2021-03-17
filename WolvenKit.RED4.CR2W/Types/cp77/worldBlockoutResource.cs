@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("blockoutData")] 
 		public CHandle<worldBlockoutData> BlockoutData
 		{
-			get
-			{
-				if (_blockoutData == null)
-				{
-					_blockoutData = (CHandle<worldBlockoutData>) CR2WTypeManager.Create("handle:worldBlockoutData", "blockoutData", cr2w, this);
-				}
-				return _blockoutData;
-			}
-			set
-			{
-				if (_blockoutData == value)
-				{
-					return;
-				}
-				_blockoutData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blockoutData);
+			set => SetProperty(ref _blockoutData, value);
 		}
 
 		public worldBlockoutResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

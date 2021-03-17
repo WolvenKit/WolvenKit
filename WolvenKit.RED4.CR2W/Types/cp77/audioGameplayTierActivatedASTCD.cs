@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gameplayTier")] 
 		public CEnum<audioGameplayTier> GameplayTier
 		{
-			get
-			{
-				if (_gameplayTier == null)
-				{
-					_gameplayTier = (CEnum<audioGameplayTier>) CR2WTypeManager.Create("audioGameplayTier", "gameplayTier", cr2w, this);
-				}
-				return _gameplayTier;
-			}
-			set
-			{
-				if (_gameplayTier == value)
-				{
-					return;
-				}
-				_gameplayTier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameplayTier);
+			set => SetProperty(ref _gameplayTier, value);
 		}
 
 		public audioGameplayTierActivatedASTCD(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

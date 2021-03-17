@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tree")] 
 		public CHandle<AIbehaviorParameterizedBehavior> Tree
 		{
-			get
-			{
-				if (_tree == null)
-				{
-					_tree = (CHandle<AIbehaviorParameterizedBehavior>) CR2WTypeManager.Create("handle:AIbehaviorParameterizedBehavior", "tree", cr2w, this);
-				}
-				return _tree;
-			}
-			set
-			{
-				if (_tree == value)
-				{
-					return;
-				}
-				_tree = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tree);
+			set => SetProperty(ref _tree, value);
 		}
 
 		public AIbehaviorSubtreeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

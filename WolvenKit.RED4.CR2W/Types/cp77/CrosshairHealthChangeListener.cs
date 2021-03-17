@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("parentCrosshair")] 
 		public CHandle<gameuiCrosshairBaseGameController> ParentCrosshair
 		{
-			get
-			{
-				if (_parentCrosshair == null)
-				{
-					_parentCrosshair = (CHandle<gameuiCrosshairBaseGameController>) CR2WTypeManager.Create("handle:gameuiCrosshairBaseGameController", "parentCrosshair", cr2w, this);
-				}
-				return _parentCrosshair;
-			}
-			set
-			{
-				if (_parentCrosshair == value)
-				{
-					return;
-				}
-				_parentCrosshair = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentCrosshair);
+			set => SetProperty(ref _parentCrosshair, value);
 		}
 
 		public CrosshairHealthChangeListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

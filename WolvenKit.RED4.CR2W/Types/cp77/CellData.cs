@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("position")] 
 		public Vector2 Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (Vector2) CR2WTypeManager.Create("Vector2", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("element")] 
 		public ElementData Element
 		{
-			get
-			{
-				if (_element == null)
-				{
-					_element = (ElementData) CR2WTypeManager.Create("ElementData", "element", cr2w, this);
-				}
-				return _element;
-			}
-			set
-			{
-				if (_element == value)
-				{
-					return;
-				}
-				_element = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _element);
+			set => SetProperty(ref _element, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("properties")] 
 		public SpecialProperties Properties
 		{
-			get
-			{
-				if (_properties == null)
-				{
-					_properties = (SpecialProperties) CR2WTypeManager.Create("SpecialProperties", "properties", cr2w, this);
-				}
-				return _properties;
-			}
-			set
-			{
-				if (_properties == value)
-				{
-					return;
-				}
-				_properties = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _properties);
+			set => SetProperty(ref _properties, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("assignedCell")] 
 		public wCHandle<NetworkMinigameGridCellController> AssignedCell
 		{
-			get
-			{
-				if (_assignedCell == null)
-				{
-					_assignedCell = (wCHandle<NetworkMinigameGridCellController>) CR2WTypeManager.Create("whandle:NetworkMinigameGridCellController", "assignedCell", cr2w, this);
-				}
-				return _assignedCell;
-			}
-			set
-			{
-				if (_assignedCell == value)
-				{
-					return;
-				}
-				_assignedCell = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _assignedCell);
+			set => SetProperty(ref _assignedCell, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("consumed")] 
 		public CBool Consumed
 		{
-			get
-			{
-				if (_consumed == null)
-				{
-					_consumed = (CBool) CR2WTypeManager.Create("Bool", "consumed", cr2w, this);
-				}
-				return _consumed;
-			}
-			set
-			{
-				if (_consumed == value)
-				{
-					return;
-				}
-				_consumed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _consumed);
+			set => SetProperty(ref _consumed, value);
 		}
 
 		public CellData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

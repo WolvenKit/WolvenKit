@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animationNames")] 
 		public CArray<CName> AnimationNames
 		{
-			get
-			{
-				if (_animationNames == null)
-				{
-					_animationNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "animationNames", cr2w, this);
-				}
-				return _animationNames;
-			}
-			set
-			{
-				if (_animationNames == value)
-				{
-					return;
-				}
-				_animationNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationNames);
+			set => SetProperty(ref _animationNames, value);
 		}
 
 		public scnAnimSetAnimNames(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

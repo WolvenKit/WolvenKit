@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("collisionAction")] 
 		public CEnum<gamedataProjectileOnCollisionAction> CollisionAction
 		{
-			get
-			{
-				if (_collisionAction == null)
-				{
-					_collisionAction = (CEnum<gamedataProjectileOnCollisionAction>) CR2WTypeManager.Create("gamedataProjectileOnCollisionAction", "collisionAction", cr2w, this);
-				}
-				return _collisionAction;
-			}
-			set
-			{
-				if (_collisionAction == value)
-				{
-					return;
-				}
-				_collisionAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collisionAction);
+			set => SetProperty(ref _collisionAction, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("projectileStopped")] 
 		public CBool ProjectileStopped
 		{
-			get
-			{
-				if (_projectileStopped == null)
-				{
-					_projectileStopped = (CBool) CR2WTypeManager.Create("Bool", "projectileStopped", cr2w, this);
-				}
-				return _projectileStopped;
-			}
-			set
-			{
-				if (_projectileStopped == value)
-				{
-					return;
-				}
-				_projectileStopped = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectileStopped);
+			set => SetProperty(ref _projectileStopped, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("maxBounceCount")] 
 		public CInt32 MaxBounceCount
 		{
-			get
-			{
-				if (_maxBounceCount == null)
-				{
-					_maxBounceCount = (CInt32) CR2WTypeManager.Create("Int32", "maxBounceCount", cr2w, this);
-				}
-				return _maxBounceCount;
-			}
-			set
-			{
-				if (_maxBounceCount == value)
-				{
-					return;
-				}
-				_maxBounceCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxBounceCount);
+			set => SetProperty(ref _maxBounceCount, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("projectileBounced")] 
 		public CBool ProjectileBounced
 		{
-			get
-			{
-				if (_projectileBounced == null)
-				{
-					_projectileBounced = (CBool) CR2WTypeManager.Create("Bool", "projectileBounced", cr2w, this);
-				}
-				return _projectileBounced;
-			}
-			set
-			{
-				if (_projectileBounced == value)
-				{
-					return;
-				}
-				_projectileBounced = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectileBounced);
+			set => SetProperty(ref _projectileBounced, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("projectileStopAndStick")] 
 		public CBool ProjectileStopAndStick
 		{
-			get
-			{
-				if (_projectileStopAndStick == null)
-				{
-					_projectileStopAndStick = (CBool) CR2WTypeManager.Create("Bool", "projectileStopAndStick", cr2w, this);
-				}
-				return _projectileStopAndStick;
-			}
-			set
-			{
-				if (_projectileStopAndStick == value)
-				{
-					return;
-				}
-				_projectileStopAndStick = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectileStopAndStick);
+			set => SetProperty(ref _projectileStopAndStick, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("projectilePierced")] 
 		public CBool ProjectilePierced
 		{
-			get
-			{
-				if (_projectilePierced == null)
-				{
-					_projectilePierced = (CBool) CR2WTypeManager.Create("Bool", "projectilePierced", cr2w, this);
-				}
-				return _projectilePierced;
-			}
-			set
-			{
-				if (_projectilePierced == value)
-				{
-					return;
-				}
-				_projectilePierced = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectilePierced);
+			set => SetProperty(ref _projectilePierced, value);
 		}
 
 		public ProjectileLauncherRoundCollisionEvaluator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

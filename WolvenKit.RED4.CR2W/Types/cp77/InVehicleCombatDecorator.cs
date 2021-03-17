@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetToChase")] 
 		public wCHandle<gameObject> TargetToChase
 		{
-			get
-			{
-				if (_targetToChase == null)
-				{
-					_targetToChase = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "targetToChase", cr2w, this);
-				}
-				return _targetToChase;
-			}
-			set
-			{
-				if (_targetToChase == value)
-				{
-					return;
-				}
-				_targetToChase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetToChase);
+			set => SetProperty(ref _targetToChase, value);
 		}
 
 		public InVehicleCombatDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

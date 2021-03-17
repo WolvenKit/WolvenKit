@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("onOff")] 
 		public CBool OnOff
 		{
-			get
-			{
-				if (_onOff == null)
-				{
-					_onOff = (CBool) CR2WTypeManager.Create("Bool", "onOff", cr2w, this);
-				}
-				return _onOff;
-			}
-			set
-			{
-				if (_onOff == value)
-				{
-					return;
-				}
-				_onOff = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onOff);
+			set => SetProperty(ref _onOff, value);
 		}
 
 		public cpAnimFeature_Stairs(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

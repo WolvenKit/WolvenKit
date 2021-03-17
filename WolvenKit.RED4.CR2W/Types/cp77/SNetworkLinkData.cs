@@ -31,437 +31,152 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("beam")] 
 		public CHandle<gameFxInstance> Beam
 		{
-			get
-			{
-				if (_beam == null)
-				{
-					_beam = (CHandle<gameFxInstance>) CR2WTypeManager.Create("handle:gameFxInstance", "beam", cr2w, this);
-				}
-				return _beam;
-			}
-			set
-			{
-				if (_beam == value)
-				{
-					return;
-				}
-				_beam = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _beam);
+			set => SetProperty(ref _beam, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("fxResource")] 
 		public gameFxResource FxResource
 		{
-			get
-			{
-				if (_fxResource == null)
-				{
-					_fxResource = (gameFxResource) CR2WTypeManager.Create("gameFxResource", "fxResource", cr2w, this);
-				}
-				return _fxResource;
-			}
-			set
-			{
-				if (_fxResource == value)
-				{
-					return;
-				}
-				_fxResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fxResource);
+			set => SetProperty(ref _fxResource, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("slaveID")] 
 		public entEntityID SlaveID
 		{
-			get
-			{
-				if (_slaveID == null)
-				{
-					_slaveID = (entEntityID) CR2WTypeManager.Create("entEntityID", "slaveID", cr2w, this);
-				}
-				return _slaveID;
-			}
-			set
-			{
-				if (_slaveID == value)
-				{
-					return;
-				}
-				_slaveID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slaveID);
+			set => SetProperty(ref _slaveID, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("masterID")] 
 		public entEntityID MasterID
 		{
-			get
-			{
-				if (_masterID == null)
-				{
-					_masterID = (entEntityID) CR2WTypeManager.Create("entEntityID", "masterID", cr2w, this);
-				}
-				return _masterID;
-			}
-			set
-			{
-				if (_masterID == value)
-				{
-					return;
-				}
-				_masterID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _masterID);
+			set => SetProperty(ref _masterID, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("slavePos")] 
 		public Vector4 SlavePos
 		{
-			get
-			{
-				if (_slavePos == null)
-				{
-					_slavePos = (Vector4) CR2WTypeManager.Create("Vector4", "slavePos", cr2w, this);
-				}
-				return _slavePos;
-			}
-			set
-			{
-				if (_slavePos == value)
-				{
-					return;
-				}
-				_slavePos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slavePos);
+			set => SetProperty(ref _slavePos, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("masterPos")] 
 		public Vector4 MasterPos
 		{
-			get
-			{
-				if (_masterPos == null)
-				{
-					_masterPos = (Vector4) CR2WTypeManager.Create("Vector4", "masterPos", cr2w, this);
-				}
-				return _masterPos;
-			}
-			set
-			{
-				if (_masterPos == value)
-				{
-					return;
-				}
-				_masterPos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _masterPos);
+			set => SetProperty(ref _masterPos, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("drawLink")] 
 		public CBool DrawLink
 		{
-			get
-			{
-				if (_drawLink == null)
-				{
-					_drawLink = (CBool) CR2WTypeManager.Create("Bool", "drawLink", cr2w, this);
-				}
-				return _drawLink;
-			}
-			set
-			{
-				if (_drawLink == value)
-				{
-					return;
-				}
-				_drawLink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _drawLink);
+			set => SetProperty(ref _drawLink, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isDynamic")] 
 		public CBool IsDynamic
 		{
-			get
-			{
-				if (_isDynamic == null)
-				{
-					_isDynamic = (CBool) CR2WTypeManager.Create("Bool", "isDynamic", cr2w, this);
-				}
-				return _isDynamic;
-			}
-			set
-			{
-				if (_isDynamic == value)
-				{
-					return;
-				}
-				_isDynamic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDynamic);
+			set => SetProperty(ref _isDynamic, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("revealMaster")] 
 		public CBool RevealMaster
 		{
-			get
-			{
-				if (_revealMaster == null)
-				{
-					_revealMaster = (CBool) CR2WTypeManager.Create("Bool", "revealMaster", cr2w, this);
-				}
-				return _revealMaster;
-			}
-			set
-			{
-				if (_revealMaster == value)
-				{
-					return;
-				}
-				_revealMaster = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revealMaster);
+			set => SetProperty(ref _revealMaster, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("revealSlave")] 
 		public CBool RevealSlave
 		{
-			get
-			{
-				if (_revealSlave == null)
-				{
-					_revealSlave = (CBool) CR2WTypeManager.Create("Bool", "revealSlave", cr2w, this);
-				}
-				return _revealSlave;
-			}
-			set
-			{
-				if (_revealSlave == value)
-				{
-					return;
-				}
-				_revealSlave = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revealSlave);
+			set => SetProperty(ref _revealSlave, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("permanent")] 
 		public CBool Permanent
 		{
-			get
-			{
-				if (_permanent == null)
-				{
-					_permanent = (CBool) CR2WTypeManager.Create("Bool", "permanent", cr2w, this);
-				}
-				return _permanent;
-			}
-			set
-			{
-				if (_permanent == value)
-				{
-					return;
-				}
-				_permanent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _permanent);
+			set => SetProperty(ref _permanent, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("isPing")] 
 		public CBool IsPing
 		{
-			get
-			{
-				if (_isPing == null)
-				{
-					_isPing = (CBool) CR2WTypeManager.Create("Bool", "isPing", cr2w, this);
-				}
-				return _isPing;
-			}
-			set
-			{
-				if (_isPing == value)
-				{
-					return;
-				}
-				_isPing = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPing);
+			set => SetProperty(ref _isPing, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("isNetrunner")] 
 		public CBool IsNetrunner
 		{
-			get
-			{
-				if (_isNetrunner == null)
-				{
-					_isNetrunner = (CBool) CR2WTypeManager.Create("Bool", "isNetrunner", cr2w, this);
-				}
-				return _isNetrunner;
-			}
-			set
-			{
-				if (_isNetrunner == value)
-				{
-					return;
-				}
-				_isNetrunner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isNetrunner);
+			set => SetProperty(ref _isNetrunner, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("linkType")] 
 		public CEnum<ELinkType> LinkType
 		{
-			get
-			{
-				if (_linkType == null)
-				{
-					_linkType = (CEnum<ELinkType>) CR2WTypeManager.Create("ELinkType", "linkType", cr2w, this);
-				}
-				return _linkType;
-			}
-			set
-			{
-				if (_linkType == value)
-				{
-					return;
-				}
-				_linkType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linkType);
+			set => SetProperty(ref _linkType, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("priority")] 
 		public CEnum<EPriority> Priority
 		{
-			get
-			{
-				if (_priority == null)
-				{
-					_priority = (CEnum<EPriority>) CR2WTypeManager.Create("EPriority", "priority", cr2w, this);
-				}
-				return _priority;
-			}
-			set
-			{
-				if (_priority == value)
-				{
-					return;
-				}
-				_priority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _priority);
+			set => SetProperty(ref _priority, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("lifetime")] 
 		public CFloat Lifetime
 		{
-			get
-			{
-				if (_lifetime == null)
-				{
-					_lifetime = (CFloat) CR2WTypeManager.Create("Float", "lifetime", cr2w, this);
-				}
-				return _lifetime;
-			}
-			set
-			{
-				if (_lifetime == value)
-				{
-					return;
-				}
-				_lifetime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lifetime);
+			set => SetProperty(ref _lifetime, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("delayID")] 
 		public gameDelayID DelayID
 		{
-			get
-			{
-				if (_delayID == null)
-				{
-					_delayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "delayID", cr2w, this);
-				}
-				return _delayID;
-			}
-			set
-			{
-				if (_delayID == value)
-				{
-					return;
-				}
-				_delayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delayID);
+			set => SetProperty(ref _delayID, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("weakLink")] 
 		public CBool WeakLink
 		{
-			get
-			{
-				if (_weakLink == null)
-				{
-					_weakLink = (CBool) CR2WTypeManager.Create("Bool", "weakLink", cr2w, this);
-				}
-				return _weakLink;
-			}
-			set
-			{
-				if (_weakLink == value)
-				{
-					return;
-				}
-				_weakLink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weakLink);
+			set => SetProperty(ref _weakLink, value);
 		}
 
 		public SNetworkLinkData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

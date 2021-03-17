@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("menus")] 
 		public CArray<CName> Menus
 		{
-			get
-			{
-				if (_menus == null)
-				{
-					_menus = (CArray<CName>) CR2WTypeManager.Create("array:CName", "menus", cr2w, this);
-				}
-				return _menus;
-			}
-			set
-			{
-				if (_menus == value)
-				{
-					return;
-				}
-				_menus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menus);
+			set => SetProperty(ref _menus, value);
 		}
 
 		public inkClippedMenuScenarioData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

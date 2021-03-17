@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("owner")] 
 		public wCHandle<AnimationSystemForcedVisibilityManager> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<AnimationSystemForcedVisibilityManager>) CR2WTypeManager.Create("whandle:AnimationSystemForcedVisibilityManager", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entityID")] 
 		public entEntityID EntityID
 		{
-			get
-			{
-				if (_entityID == null)
-				{
-					_entityID = (entEntityID) CR2WTypeManager.Create("entEntityID", "entityID", cr2w, this);
-				}
-				return _entityID;
-			}
-			set
-			{
-				if (_entityID == value)
-				{
-					return;
-				}
-				_entityID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityID);
+			set => SetProperty(ref _entityID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("forcedVisibilityInAnimSystemRequests")] 
 		public CArray<CHandle<ForcedVisibilityInAnimSystemData>> ForcedVisibilityInAnimSystemRequests
 		{
-			get
-			{
-				if (_forcedVisibilityInAnimSystemRequests == null)
-				{
-					_forcedVisibilityInAnimSystemRequests = (CArray<CHandle<ForcedVisibilityInAnimSystemData>>) CR2WTypeManager.Create("array:handle:ForcedVisibilityInAnimSystemData", "forcedVisibilityInAnimSystemRequests", cr2w, this);
-				}
-				return _forcedVisibilityInAnimSystemRequests;
-			}
-			set
-			{
-				if (_forcedVisibilityInAnimSystemRequests == value)
-				{
-					return;
-				}
-				_forcedVisibilityInAnimSystemRequests = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forcedVisibilityInAnimSystemRequests);
+			set => SetProperty(ref _forcedVisibilityInAnimSystemRequests, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("delayedForcedVisibilityInAnimSystemRequests")] 
 		public CArray<CHandle<ForcedVisibilityInAnimSystemData>> DelayedForcedVisibilityInAnimSystemRequests
 		{
-			get
-			{
-				if (_delayedForcedVisibilityInAnimSystemRequests == null)
-				{
-					_delayedForcedVisibilityInAnimSystemRequests = (CArray<CHandle<ForcedVisibilityInAnimSystemData>>) CR2WTypeManager.Create("array:handle:ForcedVisibilityInAnimSystemData", "delayedForcedVisibilityInAnimSystemRequests", cr2w, this);
-				}
-				return _delayedForcedVisibilityInAnimSystemRequests;
-			}
-			set
-			{
-				if (_delayedForcedVisibilityInAnimSystemRequests == value)
-				{
-					return;
-				}
-				_delayedForcedVisibilityInAnimSystemRequests = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delayedForcedVisibilityInAnimSystemRequests);
+			set => SetProperty(ref _delayedForcedVisibilityInAnimSystemRequests, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("hasVisibilityForcedInAnimSystem")] 
 		public CBool HasVisibilityForcedInAnimSystem
 		{
-			get
-			{
-				if (_hasVisibilityForcedInAnimSystem == null)
-				{
-					_hasVisibilityForcedInAnimSystem = (CBool) CR2WTypeManager.Create("Bool", "hasVisibilityForcedInAnimSystem", cr2w, this);
-				}
-				return _hasVisibilityForcedInAnimSystem;
-			}
-			set
-			{
-				if (_hasVisibilityForcedInAnimSystem == value)
-				{
-					return;
-				}
-				_hasVisibilityForcedInAnimSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasVisibilityForcedInAnimSystem);
+			set => SetProperty(ref _hasVisibilityForcedInAnimSystem, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("hasVisibilityForcedOnlyInFrustumInAnimSystem")] 
 		public CBool HasVisibilityForcedOnlyInFrustumInAnimSystem
 		{
-			get
-			{
-				if (_hasVisibilityForcedOnlyInFrustumInAnimSystem == null)
-				{
-					_hasVisibilityForcedOnlyInFrustumInAnimSystem = (CBool) CR2WTypeManager.Create("Bool", "hasVisibilityForcedOnlyInFrustumInAnimSystem", cr2w, this);
-				}
-				return _hasVisibilityForcedOnlyInFrustumInAnimSystem;
-			}
-			set
-			{
-				if (_hasVisibilityForcedOnlyInFrustumInAnimSystem == value)
-				{
-					return;
-				}
-				_hasVisibilityForcedOnlyInFrustumInAnimSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasVisibilityForcedOnlyInFrustumInAnimSystem);
+			set => SetProperty(ref _hasVisibilityForcedOnlyInFrustumInAnimSystem, value);
 		}
 
 		public AnimationSystemForcedVisibilityEntityData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

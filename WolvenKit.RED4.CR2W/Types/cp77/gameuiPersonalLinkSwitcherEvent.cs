@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isAdvanced")] 
 		public CBool IsAdvanced
 		{
-			get
-			{
-				if (_isAdvanced == null)
-				{
-					_isAdvanced = (CBool) CR2WTypeManager.Create("Bool", "isAdvanced", cr2w, this);
-				}
-				return _isAdvanced;
-			}
-			set
-			{
-				if (_isAdvanced == value)
-				{
-					return;
-				}
-				_isAdvanced = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isAdvanced);
+			set => SetProperty(ref _isAdvanced, value);
 		}
 
 		public gameuiPersonalLinkSwitcherEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

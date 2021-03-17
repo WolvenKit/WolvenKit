@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Title")] 
 		public CString Title
 		{
-			get
-			{
-				if (_title == null)
-				{
-					_title = (CString) CR2WTypeManager.Create("String", "Title", cr2w, this);
-				}
-				return _title;
-			}
-			set
-			{
-				if (_title == value)
-				{
-					return;
-				}
-				_title = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _title);
+			set => SetProperty(ref _title, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("Description")] 
 		public CString Description
 		{
-			get
-			{
-				if (_description == null)
-				{
-					_description = (CString) CR2WTypeManager.Create("String", "Description", cr2w, this);
-				}
-				return _description;
-			}
-			set
-			{
-				if (_description == value)
-				{
-					return;
-				}
-				_description = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _description);
+			set => SetProperty(ref _description, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("TitleLocalizationPackage")] 
 		public CHandle<gameUILocalizationDataPackage> TitleLocalizationPackage
 		{
-			get
-			{
-				if (_titleLocalizationPackage == null)
-				{
-					_titleLocalizationPackage = (CHandle<gameUILocalizationDataPackage>) CR2WTypeManager.Create("handle:gameUILocalizationDataPackage", "TitleLocalizationPackage", cr2w, this);
-				}
-				return _titleLocalizationPackage;
-			}
-			set
-			{
-				if (_titleLocalizationPackage == value)
-				{
-					return;
-				}
-				_titleLocalizationPackage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _titleLocalizationPackage);
+			set => SetProperty(ref _titleLocalizationPackage, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("DescriptionLocalizationPackage")] 
 		public CHandle<gameUILocalizationDataPackage> DescriptionLocalizationPackage
 		{
-			get
-			{
-				if (_descriptionLocalizationPackage == null)
-				{
-					_descriptionLocalizationPackage = (CHandle<gameUILocalizationDataPackage>) CR2WTypeManager.Create("handle:gameUILocalizationDataPackage", "DescriptionLocalizationPackage", cr2w, this);
-				}
-				return _descriptionLocalizationPackage;
-			}
-			set
-			{
-				if (_descriptionLocalizationPackage == value)
-				{
-					return;
-				}
-				_descriptionLocalizationPackage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _descriptionLocalizationPackage);
+			set => SetProperty(ref _descriptionLocalizationPackage, value);
 		}
 
 		public MessageTooltipData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

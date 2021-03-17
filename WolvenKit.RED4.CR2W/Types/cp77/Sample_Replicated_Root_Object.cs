@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bool")] 
 		public CBool Bool
 		{
-			get
-			{
-				if (_bool == null)
-				{
-					_bool = (CBool) CR2WTypeManager.Create("Bool", "bool", cr2w, this);
-				}
-				return _bool;
-			}
-			set
-			{
-				if (_bool == value)
-				{
-					return;
-				}
-				_bool = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bool);
+			set => SetProperty(ref _bool, value);
 		}
 
 		public Sample_Replicated_Root_Object(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("pendingSubtitles")] 
 		public CArray<scnDialogLineData> PendingSubtitles
 		{
-			get
-			{
-				if (_pendingSubtitles == null)
-				{
-					_pendingSubtitles = (CArray<scnDialogLineData>) CR2WTypeManager.Create("array:scnDialogLineData", "pendingSubtitles", cr2w, this);
-				}
-				return _pendingSubtitles;
-			}
-			set
-			{
-				if (_pendingSubtitles == value)
-				{
-					return;
-				}
-				_pendingSubtitles = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pendingSubtitles);
+			set => SetProperty(ref _pendingSubtitles, value);
 		}
 
 		public gamePendingSubtitles(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hasGenericInteraction")] 
 		public CBool HasGenericInteraction
 		{
-			get
-			{
-				if (_hasGenericInteraction == null)
-				{
-					_hasGenericInteraction = (CBool) CR2WTypeManager.Create("Bool", "hasGenericInteraction", cr2w, this);
-				}
-				return _hasGenericInteraction;
-			}
-			set
-			{
-				if (_hasGenericInteraction == value)
-				{
-					return;
-				}
-				_hasGenericInteraction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasGenericInteraction);
+			set => SetProperty(ref _hasGenericInteraction, value);
 		}
 
 		public WeakFenceSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

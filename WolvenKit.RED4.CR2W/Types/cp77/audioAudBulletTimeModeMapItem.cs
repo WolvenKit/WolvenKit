@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enterEvent")] 
 		public CName EnterEvent
 		{
-			get
-			{
-				if (_enterEvent == null)
-				{
-					_enterEvent = (CName) CR2WTypeManager.Create("CName", "enterEvent", cr2w, this);
-				}
-				return _enterEvent;
-			}
-			set
-			{
-				if (_enterEvent == value)
-				{
-					return;
-				}
-				_enterEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enterEvent);
+			set => SetProperty(ref _enterEvent, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("exitEvent")] 
 		public CName ExitEvent
 		{
-			get
-			{
-				if (_exitEvent == null)
-				{
-					_exitEvent = (CName) CR2WTypeManager.Create("CName", "exitEvent", cr2w, this);
-				}
-				return _exitEvent;
-			}
-			set
-			{
-				if (_exitEvent == value)
-				{
-					return;
-				}
-				_exitEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitEvent);
+			set => SetProperty(ref _exitEvent, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("timeModeRTPC")] 
 		public CName TimeModeRTPC
 		{
-			get
-			{
-				if (_timeModeRTPC == null)
-				{
-					_timeModeRTPC = (CName) CR2WTypeManager.Create("CName", "timeModeRTPC", cr2w, this);
-				}
-				return _timeModeRTPC;
-			}
-			set
-			{
-				if (_timeModeRTPC == value)
-				{
-					return;
-				}
-				_timeModeRTPC = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeModeRTPC);
+			set => SetProperty(ref _timeModeRTPC, value);
 		}
 
 		public audioAudBulletTimeModeMapItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

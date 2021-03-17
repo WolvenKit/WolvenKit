@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("reason")] 
 		public CName Reason
 		{
-			get
-			{
-				if (_reason == null)
-				{
-					_reason = (CName) CR2WTypeManager.Create("CName", "reason", cr2w, this);
-				}
-				return _reason;
-			}
-			set
-			{
-				if (_reason == value)
-				{
-					return;
-				}
-				_reason = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reason);
+			set => SetProperty(ref _reason, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("operation")] 
 		public CHandle<questTimeDilation_Operation> Operation
 		{
-			get
-			{
-				if (_operation == null)
-				{
-					_operation = (CHandle<questTimeDilation_Operation>) CR2WTypeManager.Create("handle:questTimeDilation_Operation", "operation", cr2w, this);
-				}
-				return _operation;
-			}
-			set
-			{
-				if (_operation == value)
-				{
-					return;
-				}
-				_operation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _operation);
+			set => SetProperty(ref _operation, value);
 		}
 
 		public questTimeDilation_World(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

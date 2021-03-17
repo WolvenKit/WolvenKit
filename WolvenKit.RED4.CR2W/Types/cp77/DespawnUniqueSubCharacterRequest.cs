@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("subCharacterID")] 
 		public TweakDBID SubCharacterID
 		{
-			get
-			{
-				if (_subCharacterID == null)
-				{
-					_subCharacterID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "subCharacterID", cr2w, this);
-				}
-				return _subCharacterID;
-			}
-			set
-			{
-				if (_subCharacterID == value)
-				{
-					return;
-				}
-				_subCharacterID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subCharacterID);
+			set => SetProperty(ref _subCharacterID, value);
 		}
 
 		public DespawnUniqueSubCharacterRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

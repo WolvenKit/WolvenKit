@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("openSpeakerScreen")] 
 		public CBool OpenSpeakerScreen
 		{
-			get
-			{
-				if (_openSpeakerScreen == null)
-				{
-					_openSpeakerScreen = (CBool) CR2WTypeManager.Create("Bool", "openSpeakerScreen", cr2w, this);
-				}
-				return _openSpeakerScreen;
-			}
-			set
-			{
-				if (_openSpeakerScreen == value)
-				{
-					return;
-				}
-				_openSpeakerScreen = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _openSpeakerScreen);
+			set => SetProperty(ref _openSpeakerScreen, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("speakerName")] 
 		public CString SpeakerName
 		{
-			get
-			{
-				if (_speakerName == null)
-				{
-					_speakerName = (CString) CR2WTypeManager.Create("String", "speakerName", cr2w, this);
-				}
-				return _speakerName;
-			}
-			set
-			{
-				if (_speakerName == value)
-				{
-					return;
-				}
-				_speakerName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speakerName);
+			set => SetProperty(ref _speakerName, value);
 		}
 
 		public questFinalBoardsOpenSpeakerScreen_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statName")] 
 		public inkTextWidgetReference StatName
 		{
-			get
-			{
-				if (_statName == null)
-				{
-					_statName = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "statName", cr2w, this);
-				}
-				return _statName;
-			}
-			set
-			{
-				if (_statName == value)
-				{
-					return;
-				}
-				_statName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statName);
+			set => SetProperty(ref _statName, value);
 		}
 
 		public ItemRandomizedStatsController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

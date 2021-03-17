@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tag")] 
 		public CBool Tag
 		{
-			get
-			{
-				if (_tag == null)
-				{
-					_tag = (CBool) CR2WTypeManager.Create("Bool", "tag", cr2w, this);
-				}
-				return _tag;
-			}
-			set
-			{
-				if (_tag == value)
-				{
-					return;
-				}
-				_tag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tag);
+			set => SetProperty(ref _tag, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("linkedCluekData")] 
 		public LinkedFocusClueData LinkedCluekData
 		{
-			get
-			{
-				if (_linkedCluekData == null)
-				{
-					_linkedCluekData = (LinkedFocusClueData) CR2WTypeManager.Create("LinkedFocusClueData", "linkedCluekData", cr2w, this);
-				}
-				return _linkedCluekData;
-			}
-			set
-			{
-				if (_linkedCluekData == value)
-				{
-					return;
-				}
-				_linkedCluekData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linkedCluekData);
+			set => SetProperty(ref _linkedCluekData, value);
 		}
 
 		public TagLinkedCluekRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

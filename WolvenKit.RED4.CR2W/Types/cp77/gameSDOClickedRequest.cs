@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fullPath")] 
 		public CName FullPath
 		{
-			get
-			{
-				if (_fullPath == null)
-				{
-					_fullPath = (CName) CR2WTypeManager.Create("CName", "fullPath", cr2w, this);
-				}
-				return _fullPath;
-			}
-			set
-			{
-				if (_fullPath == value)
-				{
-					return;
-				}
-				_fullPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fullPath);
+			set => SetProperty(ref _fullPath, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("key")] 
 		public CName Key
 		{
-			get
-			{
-				if (_key == null)
-				{
-					_key = (CName) CR2WTypeManager.Create("CName", "key", cr2w, this);
-				}
-				return _key;
-			}
-			set
-			{
-				if (_key == value)
-				{
-					return;
-				}
-				_key = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _key);
+			set => SetProperty(ref _key, value);
 		}
 
 		public gameSDOClickedRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

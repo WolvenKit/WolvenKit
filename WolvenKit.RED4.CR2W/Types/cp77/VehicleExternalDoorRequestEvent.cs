@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get
-			{
-				if (_slotName == null)
-				{
-					_slotName = (CName) CR2WTypeManager.Create("CName", "slotName", cr2w, this);
-				}
-				return _slotName;
-			}
-			set
-			{
-				if (_slotName == value)
-				{
-					return;
-				}
-				_slotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotName);
+			set => SetProperty(ref _slotName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("autoClose")] 
 		public CBool AutoClose
 		{
-			get
-			{
-				if (_autoClose == null)
-				{
-					_autoClose = (CBool) CR2WTypeManager.Create("Bool", "autoClose", cr2w, this);
-				}
-				return _autoClose;
-			}
-			set
-			{
-				if (_autoClose == value)
-				{
-					return;
-				}
-				_autoClose = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _autoClose);
+			set => SetProperty(ref _autoClose, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("autoCloseTime")] 
 		public CFloat AutoCloseTime
 		{
-			get
-			{
-				if (_autoCloseTime == null)
-				{
-					_autoCloseTime = (CFloat) CR2WTypeManager.Create("Float", "autoCloseTime", cr2w, this);
-				}
-				return _autoCloseTime;
-			}
-			set
-			{
-				if (_autoCloseTime == value)
-				{
-					return;
-				}
-				_autoCloseTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _autoCloseTime);
+			set => SetProperty(ref _autoCloseTime, value);
 		}
 
 		public VehicleExternalDoorRequestEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

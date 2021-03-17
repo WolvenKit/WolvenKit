@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("scavengableBySpiderbot")] 
 		public CBool ScavengableBySpiderbot
 		{
-			get
-			{
-				if (_scavengableBySpiderbot == null)
-				{
-					_scavengableBySpiderbot = (CBool) CR2WTypeManager.Create("Bool", "scavengableBySpiderbot", cr2w, this);
-				}
-				return _scavengableBySpiderbot;
-			}
-			set
-			{
-				if (_scavengableBySpiderbot == value)
-				{
-					return;
-				}
-				_scavengableBySpiderbot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scavengableBySpiderbot);
+			set => SetProperty(ref _scavengableBySpiderbot, value);
 		}
 
 		public SpiderbotScavengeOptions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

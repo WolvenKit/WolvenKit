@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rig")] 
 		public raRef<animRig> Rig
 		{
-			get
-			{
-				if (_rig == null)
-				{
-					_rig = (raRef<animRig>) CR2WTypeManager.Create("raRef:animRig", "rig", cr2w, this);
-				}
-				return _rig;
-			}
-			set
-			{
-				if (_rig == value)
-				{
-					return;
-				}
-				_rig = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rig);
+			set => SetProperty(ref _rig, value);
 		}
 
 		public workBodytypeCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

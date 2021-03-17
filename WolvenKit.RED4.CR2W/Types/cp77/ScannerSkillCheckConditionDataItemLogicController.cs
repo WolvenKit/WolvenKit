@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ConditionDataDescriptionName")] 
 		public CName ConditionDataDescriptionName
 		{
-			get
-			{
-				if (_conditionDataDescriptionName == null)
-				{
-					_conditionDataDescriptionName = (CName) CR2WTypeManager.Create("CName", "ConditionDataDescriptionName", cr2w, this);
-				}
-				return _conditionDataDescriptionName;
-			}
-			set
-			{
-				if (_conditionDataDescriptionName == value)
-				{
-					return;
-				}
-				_conditionDataDescriptionName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _conditionDataDescriptionName);
+			set => SetProperty(ref _conditionDataDescriptionName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ParentConditionTextPath")] 
 		public inkWidgetPath ParentConditionTextPath
 		{
-			get
-			{
-				if (_parentConditionTextPath == null)
-				{
-					_parentConditionTextPath = (inkWidgetPath) CR2WTypeManager.Create("inkWidgetPath", "ParentConditionTextPath", cr2w, this);
-				}
-				return _parentConditionTextPath;
-			}
-			set
-			{
-				if (_parentConditionTextPath == value)
-				{
-					return;
-				}
-				_parentConditionTextPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentConditionTextPath);
+			set => SetProperty(ref _parentConditionTextPath, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("OwnConditionTextPath")] 
 		public inkWidgetPath OwnConditionTextPath
 		{
-			get
-			{
-				if (_ownConditionTextPath == null)
-				{
-					_ownConditionTextPath = (inkWidgetPath) CR2WTypeManager.Create("inkWidgetPath", "OwnConditionTextPath", cr2w, this);
-				}
-				return _ownConditionTextPath;
-			}
-			set
-			{
-				if (_ownConditionTextPath == value)
-				{
-					return;
-				}
-				_ownConditionTextPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownConditionTextPath);
+			set => SetProperty(ref _ownConditionTextPath, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("ConditionDescriptionListPath")] 
 		public inkWidgetPath ConditionDescriptionListPath
 		{
-			get
-			{
-				if (_conditionDescriptionListPath == null)
-				{
-					_conditionDescriptionListPath = (inkWidgetPath) CR2WTypeManager.Create("inkWidgetPath", "ConditionDescriptionListPath", cr2w, this);
-				}
-				return _conditionDescriptionListPath;
-			}
-			set
-			{
-				if (_conditionDescriptionListPath == value)
-				{
-					return;
-				}
-				_conditionDescriptionListPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _conditionDescriptionListPath);
+			set => SetProperty(ref _conditionDescriptionListPath, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ConditionDescriptions")] 
 		public CArray<wCHandle<inkWidget>> ConditionDescriptions
 		{
-			get
-			{
-				if (_conditionDescriptions == null)
-				{
-					_conditionDescriptions = (CArray<wCHandle<inkWidget>>) CR2WTypeManager.Create("array:whandle:inkWidget", "ConditionDescriptions", cr2w, this);
-				}
-				return _conditionDescriptions;
-			}
-			set
-			{
-				if (_conditionDescriptions == value)
-				{
-					return;
-				}
-				_conditionDescriptions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _conditionDescriptions);
+			set => SetProperty(ref _conditionDescriptions, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("ParentConditionText")] 
 		public wCHandle<inkTextWidget> ParentConditionText
 		{
-			get
-			{
-				if (_parentConditionText == null)
-				{
-					_parentConditionText = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "ParentConditionText", cr2w, this);
-				}
-				return _parentConditionText;
-			}
-			set
-			{
-				if (_parentConditionText == value)
-				{
-					return;
-				}
-				_parentConditionText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentConditionText);
+			set => SetProperty(ref _parentConditionText, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("OwnConditionText")] 
 		public wCHandle<inkTextWidget> OwnConditionText
 		{
-			get
-			{
-				if (_ownConditionText == null)
-				{
-					_ownConditionText = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "OwnConditionText", cr2w, this);
-				}
-				return _ownConditionText;
-			}
-			set
-			{
-				if (_ownConditionText == value)
-				{
-					return;
-				}
-				_ownConditionText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownConditionText);
+			set => SetProperty(ref _ownConditionText, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("ConditionDescriptionList")] 
 		public wCHandle<inkCompoundWidget> ConditionDescriptionList
 		{
-			get
-			{
-				if (_conditionDescriptionList == null)
-				{
-					_conditionDescriptionList = (wCHandle<inkCompoundWidget>) CR2WTypeManager.Create("whandle:inkCompoundWidget", "ConditionDescriptionList", cr2w, this);
-				}
-				return _conditionDescriptionList;
-			}
-			set
-			{
-				if (_conditionDescriptionList == value)
-				{
-					return;
-				}
-				_conditionDescriptionList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _conditionDescriptionList);
+			set => SetProperty(ref _conditionDescriptionList, value);
 		}
 
 		public ScannerSkillCheckConditionDataItemLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

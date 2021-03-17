@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inputNode")] 
 		public animPoseLink InputNode
 		{
-			get
-			{
-				if (_inputNode == null)
-				{
-					_inputNode = (animPoseLink) CR2WTypeManager.Create("animPoseLink", "inputNode", cr2w, this);
-				}
-				return _inputNode;
-			}
-			set
-			{
-				if (_inputNode == value)
-				{
-					return;
-				}
-				_inputNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputNode);
+			set => SetProperty(ref _inputNode, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("targetPosition")] 
 		public animVectorLink TargetPosition
 		{
-			get
-			{
-				if (_targetPosition == null)
-				{
-					_targetPosition = (animVectorLink) CR2WTypeManager.Create("animVectorLink", "targetPosition", cr2w, this);
-				}
-				return _targetPosition;
-			}
-			set
-			{
-				if (_targetPosition == value)
-				{
-					return;
-				}
-				_targetPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetPosition);
+			set => SetProperty(ref _targetPosition, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("targetDirection")] 
 		public animVectorLink TargetDirection
 		{
-			get
-			{
-				if (_targetDirection == null)
-				{
-					_targetDirection = (animVectorLink) CR2WTypeManager.Create("animVectorLink", "targetDirection", cr2w, this);
-				}
-				return _targetDirection;
-			}
-			set
-			{
-				if (_targetDirection == value)
-				{
-					return;
-				}
-				_targetDirection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetDirection);
+			set => SetProperty(ref _targetDirection, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("totalTimeToAdjust")] 
 		public animFloatLink TotalTimeToAdjust
 		{
-			get
-			{
-				if (_totalTimeToAdjust == null)
-				{
-					_totalTimeToAdjust = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "totalTimeToAdjust", cr2w, this);
-				}
-				return _totalTimeToAdjust;
-			}
-			set
-			{
-				if (_totalTimeToAdjust == value)
-				{
-					return;
-				}
-				_totalTimeToAdjust = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _totalTimeToAdjust);
+			set => SetProperty(ref _totalTimeToAdjust, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("forwardVector")] 
 		public Vector4 ForwardVector
 		{
-			get
-			{
-				if (_forwardVector == null)
-				{
-					_forwardVector = (Vector4) CR2WTypeManager.Create("Vector4", "forwardVector", cr2w, this);
-				}
-				return _forwardVector;
-			}
-			set
-			{
-				if (_forwardVector == value)
-				{
-					return;
-				}
-				_forwardVector = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forwardVector);
+			set => SetProperty(ref _forwardVector, value);
 		}
 
 		public animAnimNode_MotionAdjuster(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

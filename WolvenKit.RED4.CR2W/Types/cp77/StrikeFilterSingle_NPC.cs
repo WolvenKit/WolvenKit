@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("onlyAlive")] 
 		public CBool OnlyAlive
 		{
-			get
-			{
-				if (_onlyAlive == null)
-				{
-					_onlyAlive = (CBool) CR2WTypeManager.Create("Bool", "onlyAlive", cr2w, this);
-				}
-				return _onlyAlive;
-			}
-			set
-			{
-				if (_onlyAlive == value)
-				{
-					return;
-				}
-				_onlyAlive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onlyAlive);
+			set => SetProperty(ref _onlyAlive, value);
 		}
 
 		public StrikeFilterSingle_NPC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

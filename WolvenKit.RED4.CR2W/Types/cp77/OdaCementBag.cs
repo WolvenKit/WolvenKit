@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("onCooldown")] 
 		public CBool OnCooldown
 		{
-			get
-			{
-				if (_onCooldown == null)
-				{
-					_onCooldown = (CBool) CR2WTypeManager.Create("Bool", "onCooldown", cr2w, this);
-				}
-				return _onCooldown;
-			}
-			set
-			{
-				if (_onCooldown == value)
-				{
-					return;
-				}
-				_onCooldown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onCooldown);
+			set => SetProperty(ref _onCooldown, value);
 		}
 
 		public OdaCementBag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

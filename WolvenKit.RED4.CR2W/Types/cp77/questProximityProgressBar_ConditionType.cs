@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("action")] 
 		public CEnum<questProximityProgressBarAction> Action
 		{
-			get
-			{
-				if (_action == null)
-				{
-					_action = (CEnum<questProximityProgressBarAction>) CR2WTypeManager.Create("questProximityProgressBarAction", "action", cr2w, this);
-				}
-				return _action;
-			}
-			set
-			{
-				if (_action == value)
-				{
-					return;
-				}
-				_action = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
 		}
 
 		public questProximityProgressBar_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

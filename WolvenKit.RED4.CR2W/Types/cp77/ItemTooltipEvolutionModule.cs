@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weaponEvolutionIcon")] 
 		public inkImageWidgetReference WeaponEvolutionIcon
 		{
-			get
-			{
-				if (_weaponEvolutionIcon == null)
-				{
-					_weaponEvolutionIcon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "weaponEvolutionIcon", cr2w, this);
-				}
-				return _weaponEvolutionIcon;
-			}
-			set
-			{
-				if (_weaponEvolutionIcon == value)
-				{
-					return;
-				}
-				_weaponEvolutionIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponEvolutionIcon);
+			set => SetProperty(ref _weaponEvolutionIcon, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("weaponEvolutionName")] 
 		public inkTextWidgetReference WeaponEvolutionName
 		{
-			get
-			{
-				if (_weaponEvolutionName == null)
-				{
-					_weaponEvolutionName = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "weaponEvolutionName", cr2w, this);
-				}
-				return _weaponEvolutionName;
-			}
-			set
-			{
-				if (_weaponEvolutionName == value)
-				{
-					return;
-				}
-				_weaponEvolutionName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponEvolutionName);
+			set => SetProperty(ref _weaponEvolutionName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("weaponEvolutionDescription")] 
 		public inkTextWidgetReference WeaponEvolutionDescription
 		{
-			get
-			{
-				if (_weaponEvolutionDescription == null)
-				{
-					_weaponEvolutionDescription = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "weaponEvolutionDescription", cr2w, this);
-				}
-				return _weaponEvolutionDescription;
-			}
-			set
-			{
-				if (_weaponEvolutionDescription == value)
-				{
-					return;
-				}
-				_weaponEvolutionDescription = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponEvolutionDescription);
+			set => SetProperty(ref _weaponEvolutionDescription, value);
 		}
 
 		public ItemTooltipEvolutionModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

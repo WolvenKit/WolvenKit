@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("MaxValue")] 
 		public CInt32 MaxValue
 		{
-			get
-			{
-				if (_maxValue == null)
-				{
-					_maxValue = (CInt32) CR2WTypeManager.Create("Int32", "MaxValue", cr2w, this);
-				}
-				return _maxValue;
-			}
-			set
-			{
-				if (_maxValue == value)
-				{
-					return;
-				}
-				_maxValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxValue);
+			set => SetProperty(ref _maxValue, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("MinValue")] 
 		public CInt32 MinValue
 		{
-			get
-			{
-				if (_minValue == null)
-				{
-					_minValue = (CInt32) CR2WTypeManager.Create("Int32", "MinValue", cr2w, this);
-				}
-				return _minValue;
-			}
-			set
-			{
-				if (_minValue == value)
-				{
-					return;
-				}
-				_minValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minValue);
+			set => SetProperty(ref _minValue, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ArgumentName")] 
 		public CName ArgumentName
 		{
-			get
-			{
-				if (_argumentName == null)
-				{
-					_argumentName = (CName) CR2WTypeManager.Create("CName", "ArgumentName", cr2w, this);
-				}
-				return _argumentName;
-			}
-			set
-			{
-				if (_argumentName == value)
-				{
-					return;
-				}
-				_argumentName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _argumentName);
+			set => SetProperty(ref _argumentName, value);
 		}
 
 		public SetRandomIntArgument(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

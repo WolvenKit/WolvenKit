@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Mesh")] 
 		public raRef<CMesh> Mesh
 		{
-			get
-			{
-				if (_mesh == null)
-				{
-					_mesh = (raRef<CMesh>) CR2WTypeManager.Create("raRef:CMesh", "Mesh", cr2w, this);
-				}
-				return _mesh;
-			}
-			set
-			{
-				if (_mesh == value)
-				{
-					return;
-				}
-				_mesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mesh);
+			set => SetProperty(ref _mesh, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("MeshAppearance")] 
 		public CName MeshAppearance
 		{
-			get
-			{
-				if (_meshAppearance == null)
-				{
-					_meshAppearance = (CName) CR2WTypeManager.Create("CName", "MeshAppearance", cr2w, this);
-				}
-				return _meshAppearance;
-			}
-			set
-			{
-				if (_meshAppearance == value)
-				{
-					return;
-				}
-				_meshAppearance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshAppearance);
+			set => SetProperty(ref _meshAppearance, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("Position")] 
 		public Vector3 Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (Vector3) CR2WTypeManager.Create("Vector3", "Position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("Rotation")] 
 		public Quaternion Rotation
 		{
-			get
-			{
-				if (_rotation == null)
-				{
-					_rotation = (Quaternion) CR2WTypeManager.Create("Quaternion", "Rotation", cr2w, this);
-				}
-				return _rotation;
-			}
-			set
-			{
-				if (_rotation == value)
-				{
-					return;
-				}
-				_rotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotation);
+			set => SetProperty(ref _rotation, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("Scale")] 
 		public CFloat Scale
 		{
-			get
-			{
-				if (_scale == null)
-				{
-					_scale = (CFloat) CR2WTypeManager.Create("Float", "Scale", cr2w, this);
-				}
-				return _scale;
-			}
-			set
-			{
-				if (_scale == value)
-				{
-					return;
-				}
-				_scale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scale);
+			set => SetProperty(ref _scale, value);
 		}
 
 		public worldFoliageRawItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

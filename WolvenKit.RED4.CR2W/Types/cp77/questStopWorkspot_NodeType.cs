@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("allowCurrAnimToFinish")] 
 		public CBool AllowCurrAnimToFinish
 		{
-			get
-			{
-				if (_allowCurrAnimToFinish == null)
-				{
-					_allowCurrAnimToFinish = (CBool) CR2WTypeManager.Create("Bool", "allowCurrAnimToFinish", cr2w, this);
-				}
-				return _allowCurrAnimToFinish;
-			}
-			set
-			{
-				if (_allowCurrAnimToFinish == value)
-				{
-					return;
-				}
-				_allowCurrAnimToFinish = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _allowCurrAnimToFinish);
+			set => SetProperty(ref _allowCurrAnimToFinish, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("exitAnim")] 
 		public CName ExitAnim
 		{
-			get
-			{
-				if (_exitAnim == null)
-				{
-					_exitAnim = (CName) CR2WTypeManager.Create("CName", "exitAnim", cr2w, this);
-				}
-				return _exitAnim;
-			}
-			set
-			{
-				if (_exitAnim == value)
-				{
-					return;
-				}
-				_exitAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitAnim);
+			set => SetProperty(ref _exitAnim, value);
 		}
 
 		public questStopWorkspot_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

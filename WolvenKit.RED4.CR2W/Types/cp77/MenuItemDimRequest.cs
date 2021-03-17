@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dim")] 
 		public CBool Dim
 		{
-			get
-			{
-				if (_dim == null)
-				{
-					_dim = (CBool) CR2WTypeManager.Create("Bool", "dim", cr2w, this);
-				}
-				return _dim;
-			}
-			set
-			{
-				if (_dim == value)
-				{
-					return;
-				}
-				_dim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dim);
+			set => SetProperty(ref _dim, value);
 		}
 
 		public MenuItemDimRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

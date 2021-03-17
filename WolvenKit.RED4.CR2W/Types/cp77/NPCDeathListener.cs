@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("npc")] 
 		public wCHandle<NPCPuppet> Npc
 		{
-			get
-			{
-				if (_npc == null)
-				{
-					_npc = (wCHandle<NPCPuppet>) CR2WTypeManager.Create("whandle:NPCPuppet", "npc", cr2w, this);
-				}
-				return _npc;
-			}
-			set
-			{
-				if (_npc == value)
-				{
-					return;
-				}
-				_npc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _npc);
+			set => SetProperty(ref _npc, value);
 		}
 
 		public NPCDeathListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("subTitle")] 
 		public LocalizationString SubTitle
 		{
-			get
-			{
-				if (_subTitle == null)
-				{
-					_subTitle = (LocalizationString) CR2WTypeManager.Create("LocalizationString", "subTitle", cr2w, this);
-				}
-				return _subTitle;
-			}
-			set
-			{
-				if (_subTitle == value)
-				{
-					return;
-				}
-				_subTitle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subTitle);
+			set => SetProperty(ref _subTitle, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("textContent")] 
 		public LocalizationString TextContent
 		{
-			get
-			{
-				if (_textContent == null)
-				{
-					_textContent = (LocalizationString) CR2WTypeManager.Create("LocalizationString", "textContent", cr2w, this);
-				}
-				return _textContent;
-			}
-			set
-			{
-				if (_textContent == value)
-				{
-					return;
-				}
-				_textContent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textContent);
+			set => SetProperty(ref _textContent, value);
 		}
 
 		public gameJournalCodexDescription_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("key")] 
 		public CName Key
 		{
-			get
-			{
-				if (_key == null)
-				{
-					_key = (CName) CR2WTypeManager.Create("CName", "key", cr2w, this);
-				}
-				return _key;
-			}
-			set
-			{
-				if (_key == value)
-				{
-					return;
-				}
-				_key = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _key);
+			set => SetProperty(ref _key, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entityTemplate")] 
 		public raRef<entEntityTemplate> EntityTemplate
 		{
-			get
-			{
-				if (_entityTemplate == null)
-				{
-					_entityTemplate = (raRef<entEntityTemplate>) CR2WTypeManager.Create("raRef:entEntityTemplate", "entityTemplate", cr2w, this);
-				}
-				return _entityTemplate;
-			}
-			set
-			{
-				if (_entityTemplate == value)
-				{
-					return;
-				}
-				_entityTemplate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityTemplate);
+			set => SetProperty(ref _entityTemplate, value);
 		}
 
 		public gameNetrunnerPrototypeStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

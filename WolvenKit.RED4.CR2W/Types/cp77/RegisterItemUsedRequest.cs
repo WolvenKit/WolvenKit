@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemUsed")] 
 		public gameItemID ItemUsed
 		{
-			get
-			{
-				if (_itemUsed == null)
-				{
-					_itemUsed = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemUsed", cr2w, this);
-				}
-				return _itemUsed;
-			}
-			set
-			{
-				if (_itemUsed == value)
-				{
-					return;
-				}
-				_itemUsed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemUsed);
+			set => SetProperty(ref _itemUsed, value);
 		}
 
 		public RegisterItemUsedRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

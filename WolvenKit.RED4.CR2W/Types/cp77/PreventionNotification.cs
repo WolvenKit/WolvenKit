@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bounty_data")] 
 		public CHandle<PreventionBountyViewData> Bounty_data
 		{
-			get
-			{
-				if (_bounty_data == null)
-				{
-					_bounty_data = (CHandle<PreventionBountyViewData>) CR2WTypeManager.Create("handle:PreventionBountyViewData", "bounty_data", cr2w, this);
-				}
-				return _bounty_data;
-			}
-			set
-			{
-				if (_bounty_data == value)
-				{
-					return;
-				}
-				_bounty_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bounty_data);
+			set => SetProperty(ref _bounty_data, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("bountyTitleText")] 
 		public inkTextWidgetReference BountyTitleText
 		{
-			get
-			{
-				if (_bountyTitleText == null)
-				{
-					_bountyTitleText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "bountyTitleText", cr2w, this);
-				}
-				return _bountyTitleText;
-			}
-			set
-			{
-				if (_bountyTitleText == value)
-				{
-					return;
-				}
-				_bountyTitleText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bountyTitleText);
+			set => SetProperty(ref _bountyTitleText, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("bountyAmountText")] 
 		public inkTextWidgetReference BountyAmountText
 		{
-			get
-			{
-				if (_bountyAmountText == null)
-				{
-					_bountyAmountText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "bountyAmountText", cr2w, this);
-				}
-				return _bountyAmountText;
-			}
-			set
-			{
-				if (_bountyAmountText == value)
-				{
-					return;
-				}
-				_bountyAmountText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bountyAmountText);
+			set => SetProperty(ref _bountyAmountText, value);
 		}
 
 		public PreventionNotification(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

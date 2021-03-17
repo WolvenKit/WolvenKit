@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("soloMode")] 
 		public CBool SoloMode
 		{
-			get
-			{
-				if (_soloMode == null)
-				{
-					_soloMode = (CBool) CR2WTypeManager.Create("Bool", "soloMode", cr2w, this);
-				}
-				return _soloMode;
-			}
-			set
-			{
-				if (_soloMode == value)
-				{
-					return;
-				}
-				_soloMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soloMode);
+			set => SetProperty(ref _soloMode, value);
 		}
 
 		public AIFlatheadSetSoloModeCommandParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

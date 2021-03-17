@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mountEventData")] 
 		public CHandle<AIArgumentMapping> MountEventData
 		{
-			get
-			{
-				if (_mountEventData == null)
-				{
-					_mountEventData = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "mountEventData", cr2w, this);
-				}
-				return _mountEventData;
-			}
-			set
-			{
-				if (_mountEventData == value)
-				{
-					return;
-				}
-				_mountEventData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mountEventData);
+			set => SetProperty(ref _mountEventData, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("outWorkspotData")] 
 		public CHandle<AIArgumentMapping> OutWorkspotData
 		{
-			get
-			{
-				if (_outWorkspotData == null)
-				{
-					_outWorkspotData = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outWorkspotData", cr2w, this);
-				}
-				return _outWorkspotData;
-			}
-			set
-			{
-				if (_outWorkspotData == value)
-				{
-					return;
-				}
-				_outWorkspotData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outWorkspotData);
+			set => SetProperty(ref _outWorkspotData, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("outIsInstant")] 
 		public CHandle<AIArgumentMapping> OutIsInstant
 		{
-			get
-			{
-				if (_outIsInstant == null)
-				{
-					_outIsInstant = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outIsInstant", cr2w, this);
-				}
-				return _outIsInstant;
-			}
-			set
-			{
-				if (_outIsInstant == value)
-				{
-					return;
-				}
-				_outIsInstant = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outIsInstant);
+			set => SetProperty(ref _outIsInstant, value);
 		}
 
 		public AIbehaviorExtractMountDataTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

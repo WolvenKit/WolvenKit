@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ikTargetsControllers")] 
 		public CArray<animTEMP_IKTargetsControllerBodyType> IkTargetsControllers
 		{
-			get
-			{
-				if (_ikTargetsControllers == null)
-				{
-					_ikTargetsControllers = (CArray<animTEMP_IKTargetsControllerBodyType>) CR2WTypeManager.Create("array:animTEMP_IKTargetsControllerBodyType", "ikTargetsControllers", cr2w, this);
-				}
-				return _ikTargetsControllers;
-			}
-			set
-			{
-				if (_ikTargetsControllers == value)
-				{
-					return;
-				}
-				_ikTargetsControllers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ikTargetsControllers);
+			set => SetProperty(ref _ikTargetsControllers, value);
 		}
 
 		public animAnimNode_HumanIk(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

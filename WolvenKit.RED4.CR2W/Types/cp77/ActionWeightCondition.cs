@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("selectedActionIndex")] 
 		public CHandle<AIArgumentMapping> SelectedActionIndex
 		{
-			get
-			{
-				if (_selectedActionIndex == null)
-				{
-					_selectedActionIndex = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "selectedActionIndex", cr2w, this);
-				}
-				return _selectedActionIndex;
-			}
-			set
-			{
-				if (_selectedActionIndex == value)
-				{
-					return;
-				}
-				_selectedActionIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectedActionIndex);
+			set => SetProperty(ref _selectedActionIndex, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("thisIndex")] 
 		public CInt32 ThisIndex
 		{
-			get
-			{
-				if (_thisIndex == null)
-				{
-					_thisIndex = (CInt32) CR2WTypeManager.Create("Int32", "thisIndex", cr2w, this);
-				}
-				return _thisIndex;
-			}
-			set
-			{
-				if (_thisIndex == value)
-				{
-					return;
-				}
-				_thisIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _thisIndex);
+			set => SetProperty(ref _thisIndex, value);
 		}
 
 		public ActionWeightCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

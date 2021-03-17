@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("outWorkspotData")] 
 		public CHandle<AIArgumentMapping> OutWorkspotData
 		{
-			get
-			{
-				if (_outWorkspotData == null)
-				{
-					_outWorkspotData = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outWorkspotData", cr2w, this);
-				}
-				return _outWorkspotData;
-			}
-			set
-			{
-				if (_outWorkspotData == value)
-				{
-					return;
-				}
-				_outWorkspotData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outWorkspotData);
+			set => SetProperty(ref _outWorkspotData, value);
 		}
 
 		public AIbehaviorExtractVehicleSlotWorkspotTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

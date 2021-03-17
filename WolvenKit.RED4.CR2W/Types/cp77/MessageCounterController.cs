@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("messageCounter")] 
 		public inkTextWidgetReference MessageCounter
 		{
-			get
-			{
-				if (_messageCounter == null)
-				{
-					_messageCounter = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "messageCounter", cr2w, this);
-				}
-				return _messageCounter;
-			}
-			set
-			{
-				if (_messageCounter == value)
-				{
-					return;
-				}
-				_messageCounter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _messageCounter);
+			set => SetProperty(ref _messageCounter, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("rootWidget")] 
 		public wCHandle<inkWidget> RootWidget
 		{
-			get
-			{
-				if (_rootWidget == null)
-				{
-					_rootWidget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "rootWidget", cr2w, this);
-				}
-				return _rootWidget;
-			}
-			set
-			{
-				if (_rootWidget == value)
-				{
-					return;
-				}
-				_rootWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rootWidget);
+			set => SetProperty(ref _rootWidget, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("CallInformationBBID")] 
 		public CUInt32 CallInformationBBID
 		{
-			get
-			{
-				if (_callInformationBBID == null)
-				{
-					_callInformationBBID = (CUInt32) CR2WTypeManager.Create("Uint32", "CallInformationBBID", cr2w, this);
-				}
-				return _callInformationBBID;
-			}
-			set
-			{
-				if (_callInformationBBID == value)
-				{
-					return;
-				}
-				_callInformationBBID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callInformationBBID);
+			set => SetProperty(ref _callInformationBBID, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("journalManager")] 
 		public wCHandle<gameJournalManager> JournalManager
 		{
-			get
-			{
-				if (_journalManager == null)
-				{
-					_journalManager = (wCHandle<gameJournalManager>) CR2WTypeManager.Create("whandle:gameJournalManager", "journalManager", cr2w, this);
-				}
-				return _journalManager;
-			}
-			set
-			{
-				if (_journalManager == value)
-				{
-					return;
-				}
-				_journalManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _journalManager);
+			set => SetProperty(ref _journalManager, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("Owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "Owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		public MessageCounterController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("state")] 
 		public CInt32 State
 		{
-			get
-			{
-				if (_state == null)
-				{
-					_state = (CInt32) CR2WTypeManager.Create("Int32", "state", cr2w, this);
-				}
-				return _state;
-			}
-			set
-			{
-				if (_state == value)
-				{
-					return;
-				}
-				_state = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("variation")] 
 		public CInt32 Variation
 		{
-			get
-			{
-				if (_variation == null)
-				{
-					_variation = (CInt32) CR2WTypeManager.Create("Int32", "variation", cr2w, this);
-				}
-				return _variation;
-			}
-			set
-			{
-				if (_variation == value)
-				{
-					return;
-				}
-				_variation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _variation);
+			set => SetProperty(ref _variation, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("direction")] 
 		public CInt32 Direction
 		{
-			get
-			{
-				if (_direction == null)
-				{
-					_direction = (CInt32) CR2WTypeManager.Create("Int32", "direction", cr2w, this);
-				}
-				return _direction;
-			}
-			set
-			{
-				if (_direction == value)
-				{
-					return;
-				}
-				_direction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _direction);
+			set => SetProperty(ref _direction, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("impactDirection")] 
 		public CInt32 ImpactDirection
 		{
-			get
-			{
-				if (_impactDirection == null)
-				{
-					_impactDirection = (CInt32) CR2WTypeManager.Create("Int32", "impactDirection", cr2w, this);
-				}
-				return _impactDirection;
-			}
-			set
-			{
-				if (_impactDirection == value)
-				{
-					return;
-				}
-				_impactDirection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _impactDirection);
+			set => SetProperty(ref _impactDirection, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("knockdown")] 
 		public CBool Knockdown
 		{
-			get
-			{
-				if (_knockdown == null)
-				{
-					_knockdown = (CBool) CR2WTypeManager.Create("Bool", "knockdown", cr2w, this);
-				}
-				return _knockdown;
-			}
-			set
-			{
-				if (_knockdown == value)
-				{
-					return;
-				}
-				_knockdown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _knockdown);
+			set => SetProperty(ref _knockdown, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("stunned")] 
 		public CBool Stunned
 		{
-			get
-			{
-				if (_stunned == null)
-				{
-					_stunned = (CBool) CR2WTypeManager.Create("Bool", "stunned", cr2w, this);
-				}
-				return _stunned;
-			}
-			set
-			{
-				if (_stunned == value)
-				{
-					return;
-				}
-				_stunned = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stunned);
+			set => SetProperty(ref _stunned, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("playImpact")] 
 		public CBool PlayImpact
 		{
-			get
-			{
-				if (_playImpact == null)
-				{
-					_playImpact = (CBool) CR2WTypeManager.Create("Bool", "playImpact", cr2w, this);
-				}
-				return _playImpact;
-			}
-			set
-			{
-				if (_playImpact == value)
-				{
-					return;
-				}
-				_playImpact = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playImpact);
+			set => SetProperty(ref _playImpact, value);
 		}
 
 		public AnimFeature_StatusEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

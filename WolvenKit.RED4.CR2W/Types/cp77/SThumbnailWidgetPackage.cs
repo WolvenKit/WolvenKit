@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("thumbnailAction")] 
 		public CHandle<ThumbnailUI> ThumbnailAction
 		{
-			get
-			{
-				if (_thumbnailAction == null)
-				{
-					_thumbnailAction = (CHandle<ThumbnailUI>) CR2WTypeManager.Create("handle:ThumbnailUI", "thumbnailAction", cr2w, this);
-				}
-				return _thumbnailAction;
-			}
-			set
-			{
-				if (_thumbnailAction == value)
-				{
-					return;
-				}
-				_thumbnailAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _thumbnailAction);
+			set => SetProperty(ref _thumbnailAction, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("deviceStatus")] 
 		public CString DeviceStatus
 		{
-			get
-			{
-				if (_deviceStatus == null)
-				{
-					_deviceStatus = (CString) CR2WTypeManager.Create("String", "deviceStatus", cr2w, this);
-				}
-				return _deviceStatus;
-			}
-			set
-			{
-				if (_deviceStatus == value)
-				{
-					return;
-				}
-				_deviceStatus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deviceStatus);
+			set => SetProperty(ref _deviceStatus, value);
 		}
 
 		public SThumbnailWidgetPackage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

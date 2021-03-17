@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectiveData")] 
 		public CHandle<GemplayObjectiveData> ObjectiveData
 		{
-			get
-			{
-				if (_objectiveData == null)
-				{
-					_objectiveData = (CHandle<GemplayObjectiveData>) CR2WTypeManager.Create("handle:GemplayObjectiveData", "objectiveData", cr2w, this);
-				}
-				return _objectiveData;
-			}
-			set
-			{
-				if (_objectiveData == value)
-				{
-					return;
-				}
-				_objectiveData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectiveData);
+			set => SetProperty(ref _objectiveData, value);
 		}
 
 		public RegisterGameplayObjectiveRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

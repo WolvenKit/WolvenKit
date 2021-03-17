@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("radioStationName")] 
 		public CName RadioStationName
 		{
-			get
-			{
-				if (_radioStationName == null)
-				{
-					_radioStationName = (CName) CR2WTypeManager.Create("CName", "radioStationName", cr2w, this);
-				}
-				return _radioStationName;
-			}
-			set
-			{
-				if (_radioStationName == value)
-				{
-					return;
-				}
-				_radioStationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radioStationName);
+			set => SetProperty(ref _radioStationName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("radioSongName")] 
 		public CName RadioSongName
 		{
-			get
-			{
-				if (_radioSongName == null)
-				{
-					_radioSongName = (CName) CR2WTypeManager.Create("CName", "radioSongName", cr2w, this);
-				}
-				return _radioSongName;
-			}
-			set
-			{
-				if (_radioSongName == value)
-				{
-					return;
-				}
-				_radioSongName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radioSongName);
+			set => SetProperty(ref _radioSongName, value);
 		}
 
 		public audioRadioStationSongEventStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

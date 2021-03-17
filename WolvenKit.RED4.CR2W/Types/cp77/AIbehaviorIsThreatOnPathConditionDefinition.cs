@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("threatObject")] 
 		public CHandle<AIArgumentMapping> ThreatObject
 		{
-			get
-			{
-				if (_threatObject == null)
-				{
-					_threatObject = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "threatObject", cr2w, this);
-				}
-				return _threatObject;
-			}
-			set
-			{
-				if (_threatObject == value)
-				{
-					return;
-				}
-				_threatObject = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _threatObject);
+			set => SetProperty(ref _threatObject, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("threatRadius")] 
 		public CHandle<AIArgumentMapping> ThreatRadius
 		{
-			get
-			{
-				if (_threatRadius == null)
-				{
-					_threatRadius = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "threatRadius", cr2w, this);
-				}
-				return _threatRadius;
-			}
-			set
-			{
-				if (_threatRadius == value)
-				{
-					return;
-				}
-				_threatRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _threatRadius);
+			set => SetProperty(ref _threatRadius, value);
 		}
 
 		public AIbehaviorIsThreatOnPathConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("outlineType")] 
 		public CEnum<EOutlineType> OutlineType
 		{
-			get
-			{
-				if (_outlineType == null)
-				{
-					_outlineType = (CEnum<EOutlineType>) CR2WTypeManager.Create("EOutlineType", "outlineType", cr2w, this);
-				}
-				return _outlineType;
-			}
-			set
-			{
-				if (_outlineType == value)
-				{
-					return;
-				}
-				_outlineType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outlineType);
+			set => SetProperty(ref _outlineType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("outlineStrength")] 
 		public CFloat OutlineStrength
 		{
-			get
-			{
-				if (_outlineStrength == null)
-				{
-					_outlineStrength = (CFloat) CR2WTypeManager.Create("Float", "outlineStrength", cr2w, this);
-				}
-				return _outlineStrength;
-			}
-			set
-			{
-				if (_outlineStrength == value)
-				{
-					return;
-				}
-				_outlineStrength = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outlineStrength);
+			set => SetProperty(ref _outlineStrength, value);
 		}
 
 		public OutlineData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

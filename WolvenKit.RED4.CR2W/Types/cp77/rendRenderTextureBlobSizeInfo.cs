@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("width")] 
 		public CUInt16 Width
 		{
-			get
-			{
-				if (_width == null)
-				{
-					_width = (CUInt16) CR2WTypeManager.Create("Uint16", "width", cr2w, this);
-				}
-				return _width;
-			}
-			set
-			{
-				if (_width == value)
-				{
-					return;
-				}
-				_width = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _width);
+			set => SetProperty(ref _width, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("height")] 
 		public CUInt16 Height
 		{
-			get
-			{
-				if (_height == null)
-				{
-					_height = (CUInt16) CR2WTypeManager.Create("Uint16", "height", cr2w, this);
-				}
-				return _height;
-			}
-			set
-			{
-				if (_height == value)
-				{
-					return;
-				}
-				_height = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _height);
+			set => SetProperty(ref _height, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("depth")] 
 		public CUInt16 Depth
 		{
-			get
-			{
-				if (_depth == null)
-				{
-					_depth = (CUInt16) CR2WTypeManager.Create("Uint16", "depth", cr2w, this);
-				}
-				return _depth;
-			}
-			set
-			{
-				if (_depth == value)
-				{
-					return;
-				}
-				_depth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _depth);
+			set => SetProperty(ref _depth, value);
 		}
 
 		public rendRenderTextureBlobSizeInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

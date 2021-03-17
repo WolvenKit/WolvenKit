@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entriesResource")] 
 		public rRef<inkHudEntriesResource> EntriesResource
 		{
-			get
-			{
-				if (_entriesResource == null)
-				{
-					_entriesResource = (rRef<inkHudEntriesResource>) CR2WTypeManager.Create("rRef:inkHudEntriesResource", "entriesResource", cr2w, this);
-				}
-				return _entriesResource;
-			}
-			set
-			{
-				if (_entriesResource == value)
-				{
-					return;
-				}
-				_entriesResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entriesResource);
+			set => SetProperty(ref _entriesResource, value);
 		}
 
 		public inkRequestNewHudEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

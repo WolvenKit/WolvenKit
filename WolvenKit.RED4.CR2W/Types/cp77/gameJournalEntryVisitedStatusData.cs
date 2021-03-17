@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entryPath")] 
 		public CHandle<gameJournalPath> EntryPath
 		{
-			get
-			{
-				if (_entryPath == null)
-				{
-					_entryPath = (CHandle<gameJournalPath>) CR2WTypeManager.Create("handle:gameJournalPath", "entryPath", cr2w, this);
-				}
-				return _entryPath;
-			}
-			set
-			{
-				if (_entryPath == value)
-				{
-					return;
-				}
-				_entryPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryPath);
+			set => SetProperty(ref _entryPath, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entryType")] 
 		public CName EntryType
 		{
-			get
-			{
-				if (_entryType == null)
-				{
-					_entryType = (CName) CR2WTypeManager.Create("CName", "entryType", cr2w, this);
-				}
-				return _entryType;
-			}
-			set
-			{
-				if (_entryType == value)
-				{
-					return;
-				}
-				_entryType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryType);
+			set => SetProperty(ref _entryType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isVisited")] 
 		public CBool IsVisited
 		{
-			get
-			{
-				if (_isVisited == null)
-				{
-					_isVisited = (CBool) CR2WTypeManager.Create("Bool", "isVisited", cr2w, this);
-				}
-				return _isVisited;
-			}
-			set
-			{
-				if (_isVisited == value)
-				{
-					return;
-				}
-				_isVisited = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isVisited);
+			set => SetProperty(ref _isVisited, value);
 		}
 
 		public gameJournalEntryVisitedStatusData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("executor")] 
 		public wCHandle<gameObject> Executor
 		{
-			get
-			{
-				if (_executor == null)
-				{
-					_executor = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "executor", cr2w, this);
-				}
-				return _executor;
-			}
-			set
-			{
-				if (_executor == value)
-				{
-					return;
-				}
-				_executor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _executor);
+			set => SetProperty(ref _executor, value);
 		}
 
 		public SendSpiderbotToPerformActionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

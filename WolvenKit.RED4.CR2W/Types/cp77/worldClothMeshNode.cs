@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("affectedByWind")] 
 		public CBool AffectedByWind
 		{
-			get
-			{
-				if (_affectedByWind == null)
-				{
-					_affectedByWind = (CBool) CR2WTypeManager.Create("Bool", "affectedByWind", cr2w, this);
-				}
-				return _affectedByWind;
-			}
-			set
-			{
-				if (_affectedByWind == value)
-				{
-					return;
-				}
-				_affectedByWind = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _affectedByWind);
+			set => SetProperty(ref _affectedByWind, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("collisionMask")] 
 		public CEnum<physicsEClothCollisionMaskEnum> CollisionMask
 		{
-			get
-			{
-				if (_collisionMask == null)
-				{
-					_collisionMask = (CEnum<physicsEClothCollisionMaskEnum>) CR2WTypeManager.Create("physicsEClothCollisionMaskEnum", "collisionMask", cr2w, this);
-				}
-				return _collisionMask;
-			}
-			set
-			{
-				if (_collisionMask == value)
-				{
-					return;
-				}
-				_collisionMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collisionMask);
+			set => SetProperty(ref _collisionMask, value);
 		}
 
 		public worldClothMeshNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

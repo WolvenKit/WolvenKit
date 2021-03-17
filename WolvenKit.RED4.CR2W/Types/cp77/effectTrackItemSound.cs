@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("eventName")] 
 		public CName EventName
 		{
-			get
-			{
-				if (_eventName == null)
-				{
-					_eventName = (CName) CR2WTypeManager.Create("CName", "eventName", cr2w, this);
-				}
-				return _eventName;
-			}
-			set
-			{
-				if (_eventName == value)
-				{
-					return;
-				}
-				_eventName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventName);
+			set => SetProperty(ref _eventName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("switches")] 
 		public CArray<audioAudSwitch> Switches
 		{
-			get
-			{
-				if (_switches == null)
-				{
-					_switches = (CArray<audioAudSwitch>) CR2WTypeManager.Create("array:audioAudSwitch", "switches", cr2w, this);
-				}
-				return _switches;
-			}
-			set
-			{
-				if (_switches == value)
-				{
-					return;
-				}
-				_switches = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _switches);
+			set => SetProperty(ref _switches, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("params")] 
 		public CArray<audioAudParameter> Params
 		{
-			get
-			{
-				if (_params == null)
-				{
-					_params = (CArray<audioAudParameter>) CR2WTypeManager.Create("array:audioAudParameter", "params", cr2w, this);
-				}
-				return _params;
-			}
-			set
-			{
-				if (_params == value)
-				{
-					return;
-				}
-				_params = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("positionName")] 
 		public CName PositionName
 		{
-			get
-			{
-				if (_positionName == null)
-				{
-					_positionName = (CName) CR2WTypeManager.Create("CName", "positionName", cr2w, this);
-				}
-				return _positionName;
-			}
-			set
-			{
-				if (_positionName == value)
-				{
-					return;
-				}
-				_positionName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _positionName);
+			set => SetProperty(ref _positionName, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("emitterMetadataName")] 
 		public CName EmitterMetadataName
 		{
-			get
-			{
-				if (_emitterMetadataName == null)
-				{
-					_emitterMetadataName = (CName) CR2WTypeManager.Create("CName", "emitterMetadataName", cr2w, this);
-				}
-				return _emitterMetadataName;
-			}
-			set
-			{
-				if (_emitterMetadataName == value)
-				{
-					return;
-				}
-				_emitterMetadataName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _emitterMetadataName);
+			set => SetProperty(ref _emitterMetadataName, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("rtpcName")] 
 		public CName RtpcName
 		{
-			get
-			{
-				if (_rtpcName == null)
-				{
-					_rtpcName = (CName) CR2WTypeManager.Create("CName", "rtpcName", cr2w, this);
-				}
-				return _rtpcName;
-			}
-			set
-			{
-				if (_rtpcName == value)
-				{
-					return;
-				}
-				_rtpcName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rtpcName);
+			set => SetProperty(ref _rtpcName, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("rtpcValue")] 
 		public CHandle<IEvaluatorFloat> RtpcValue
 		{
-			get
-			{
-				if (_rtpcValue == null)
-				{
-					_rtpcValue = (CHandle<IEvaluatorFloat>) CR2WTypeManager.Create("handle:IEvaluatorFloat", "rtpcValue", cr2w, this);
-				}
-				return _rtpcValue;
-			}
-			set
-			{
-				if (_rtpcValue == value)
-				{
-					return;
-				}
-				_rtpcValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rtpcValue);
+			set => SetProperty(ref _rtpcValue, value);
 		}
 
 		public effectTrackItemSound(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("deathInstigator")] 
 		public wCHandle<gameObject> DeathInstigator
 		{
-			get
-			{
-				if (_deathInstigator == null)
-				{
-					_deathInstigator = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "deathInstigator", cr2w, this);
-				}
-				return _deathInstigator;
-			}
-			set
-			{
-				if (_deathInstigator == value)
-				{
-					return;
-				}
-				_deathInstigator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deathInstigator);
+			set => SetProperty(ref _deathInstigator, value);
 		}
 
 		public ProcessVendettaAchievementEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

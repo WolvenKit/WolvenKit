@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("AimForced")] 
 		public gamebbScriptID_Bool AimForced
 		{
-			get
-			{
-				if (_aimForced == null)
-				{
-					_aimForced = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "AimForced", cr2w, this);
-				}
-				return _aimForced;
-			}
-			set
-			{
-				if (_aimForced == value)
-				{
-					return;
-				}
-				_aimForced = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aimForced);
+			set => SetProperty(ref _aimForced, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("SafeForced")] 
 		public gamebbScriptID_Bool SafeForced
 		{
-			get
-			{
-				if (_safeForced == null)
-				{
-					_safeForced = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "SafeForced", cr2w, this);
-				}
-				return _safeForced;
-			}
-			set
-			{
-				if (_safeForced == value)
-				{
-					return;
-				}
-				_safeForced = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _safeForced);
+			set => SetProperty(ref _safeForced, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("WeaponLoweringSpeedOverride")] 
 		public gamebbScriptID_Float WeaponLoweringSpeedOverride
 		{
-			get
-			{
-				if (_weaponLoweringSpeedOverride == null)
-				{
-					_weaponLoweringSpeedOverride = (gamebbScriptID_Float) CR2WTypeManager.Create("gamebbScriptID_Float", "WeaponLoweringSpeedOverride", cr2w, this);
-				}
-				return _weaponLoweringSpeedOverride;
-			}
-			set
-			{
-				if (_weaponLoweringSpeedOverride == value)
-				{
-					return;
-				}
-				_weaponLoweringSpeedOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponLoweringSpeedOverride);
+			set => SetProperty(ref _weaponLoweringSpeedOverride, value);
 		}
 
 		public SceneGameplayOverridesDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

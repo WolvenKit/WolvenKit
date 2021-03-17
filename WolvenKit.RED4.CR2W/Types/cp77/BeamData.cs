@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("startDirection")] 
 		public Vector4 StartDirection
 		{
-			get
-			{
-				if (_startDirection == null)
-				{
-					_startDirection = (Vector4) CR2WTypeManager.Create("Vector4", "startDirection", cr2w, this);
-				}
-				return _startDirection;
-			}
-			set
-			{
-				if (_startDirection == value)
-				{
-					return;
-				}
-				_startDirection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startDirection);
+			set => SetProperty(ref _startDirection, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("endDirection")] 
 		public Vector4 EndDirection
 		{
-			get
-			{
-				if (_endDirection == null)
-				{
-					_endDirection = (Vector4) CR2WTypeManager.Create("Vector4", "endDirection", cr2w, this);
-				}
-				return _endDirection;
-			}
-			set
-			{
-				if (_endDirection == value)
-				{
-					return;
-				}
-				_endDirection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endDirection);
+			set => SetProperty(ref _endDirection, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("effect")] 
 		public CHandle<gameEffectInstance> Effect
 		{
-			get
-			{
-				if (_effect == null)
-				{
-					_effect = (CHandle<gameEffectInstance>) CR2WTypeManager.Create("handle:gameEffectInstance", "effect", cr2w, this);
-				}
-				return _effect;
-			}
-			set
-			{
-				if (_effect == value)
-				{
-					return;
-				}
-				_effect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effect);
+			set => SetProperty(ref _effect, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("target")] 
 		public wCHandle<gameObject> Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		public BeamData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

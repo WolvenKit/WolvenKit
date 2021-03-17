@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stacks")] 
 		public CFloat Stacks
 		{
-			get
-			{
-				if (_stacks == null)
-				{
-					_stacks = (CFloat) CR2WTypeManager.Create("Float", "stacks", cr2w, this);
-				}
-				return _stacks;
-			}
-			set
-			{
-				if (_stacks == value)
-				{
-					return;
-				}
-				_stacks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stacks);
+			set => SetProperty(ref _stacks, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("id")] 
 		public TweakDBID Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		public SHitStatusEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("widget")] 
 		public wCHandle<inkWidget> Widget
 		{
-			get
-			{
-				if (_widget == null)
-				{
-					_widget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "widget", cr2w, this);
-				}
-				return _widget;
-			}
-			set
-			{
-				if (_widget == value)
-				{
-					return;
-				}
-				_widget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widget);
+			set => SetProperty(ref _widget, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("perkIndex")] 
 		public CInt32 PerkIndex
 		{
-			get
-			{
-				if (_perkIndex == null)
-				{
-					_perkIndex = (CInt32) CR2WTypeManager.Create("Int32", "perkIndex", cr2w, this);
-				}
-				return _perkIndex;
-			}
-			set
-			{
-				if (_perkIndex == value)
-				{
-					return;
-				}
-				_perkIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perkIndex);
+			set => SetProperty(ref _perkIndex, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("perkData")] 
 		public CHandle<BasePerkDisplayData> PerkData
 		{
-			get
-			{
-				if (_perkData == null)
-				{
-					_perkData = (CHandle<BasePerkDisplayData>) CR2WTypeManager.Create("handle:BasePerkDisplayData", "perkData", cr2w, this);
-				}
-				return _perkData;
-			}
-			set
-			{
-				if (_perkData == value)
-				{
-					return;
-				}
-				_perkData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perkData);
+			set => SetProperty(ref _perkData, value);
 		}
 
 		public PerkHoverOverEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

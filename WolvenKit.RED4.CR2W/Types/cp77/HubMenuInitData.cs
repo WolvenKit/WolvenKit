@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("menuName")] 
 		public CName MenuName
 		{
-			get
-			{
-				if (_menuName == null)
-				{
-					_menuName = (CName) CR2WTypeManager.Create("CName", "menuName", cr2w, this);
-				}
-				return _menuName;
-			}
-			set
-			{
-				if (_menuName == value)
-				{
-					return;
-				}
-				_menuName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuName);
+			set => SetProperty(ref _menuName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("submenuName")] 
 		public CName SubmenuName
 		{
-			get
-			{
-				if (_submenuName == null)
-				{
-					_submenuName = (CName) CR2WTypeManager.Create("CName", "submenuName", cr2w, this);
-				}
-				return _submenuName;
-			}
-			set
-			{
-				if (_submenuName == value)
-				{
-					return;
-				}
-				_submenuName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _submenuName);
+			set => SetProperty(ref _submenuName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("userData")] 
 		public CHandle<IScriptable> UserData
 		{
-			get
-			{
-				if (_userData == null)
-				{
-					_userData = (CHandle<IScriptable>) CR2WTypeManager.Create("handle:IScriptable", "userData", cr2w, this);
-				}
-				return _userData;
-			}
-			set
-			{
-				if (_userData == value)
-				{
-					return;
-				}
-				_userData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _userData);
+			set => SetProperty(ref _userData, value);
 		}
 
 		public HubMenuInitData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

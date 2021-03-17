@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("steps")] 
 		public CArray<AIBackgroundCombatStep> Steps
 		{
-			get
-			{
-				if (_steps == null)
-				{
-					_steps = (CArray<AIBackgroundCombatStep>) CR2WTypeManager.Create("array:AIBackgroundCombatStep", "steps", cr2w, this);
-				}
-				return _steps;
-			}
-			set
-			{
-				if (_steps == value)
-				{
-					return;
-				}
-				_steps = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _steps);
+			set => SetProperty(ref _steps, value);
 		}
 
 		public AIBackgroundCombatCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

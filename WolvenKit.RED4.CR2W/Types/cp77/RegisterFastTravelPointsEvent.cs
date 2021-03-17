@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fastTravelNodes")] 
 		public CArray<CHandle<gameFastTravelPointData>> FastTravelNodes
 		{
-			get
-			{
-				if (_fastTravelNodes == null)
-				{
-					_fastTravelNodes = (CArray<CHandle<gameFastTravelPointData>>) CR2WTypeManager.Create("array:handle:gameFastTravelPointData", "fastTravelNodes", cr2w, this);
-				}
-				return _fastTravelNodes;
-			}
-			set
-			{
-				if (_fastTravelNodes == value)
-				{
-					return;
-				}
-				_fastTravelNodes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fastTravelNodes);
+			set => SetProperty(ref _fastTravelNodes, value);
 		}
 
 		public RegisterFastTravelPointsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

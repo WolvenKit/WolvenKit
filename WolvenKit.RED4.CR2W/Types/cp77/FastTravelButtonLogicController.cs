@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("districtName")] 
 		public inkTextWidgetReference DistrictName
 		{
-			get
-			{
-				if (_districtName == null)
-				{
-					_districtName = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "districtName", cr2w, this);
-				}
-				return _districtName;
-			}
-			set
-			{
-				if (_districtName == value)
-				{
-					return;
-				}
-				_districtName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _districtName);
+			set => SetProperty(ref _districtName, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("locationName")] 
 		public inkTextWidgetReference LocationName
 		{
-			get
-			{
-				if (_locationName == null)
-				{
-					_locationName = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "locationName", cr2w, this);
-				}
-				return _locationName;
-			}
-			set
-			{
-				if (_locationName == value)
-				{
-					return;
-				}
-				_locationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _locationName);
+			set => SetProperty(ref _locationName, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("soundData")] 
 		public SSoundData SoundData
 		{
-			get
-			{
-				if (_soundData == null)
-				{
-					_soundData = (SSoundData) CR2WTypeManager.Create("SSoundData", "soundData", cr2w, this);
-				}
-				return _soundData;
-			}
-			set
-			{
-				if (_soundData == value)
-				{
-					return;
-				}
-				_soundData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soundData);
+			set => SetProperty(ref _soundData, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("isInitialized")] 
 		public CBool IsInitialized
 		{
-			get
-			{
-				if (_isInitialized == null)
-				{
-					_isInitialized = (CBool) CR2WTypeManager.Create("Bool", "isInitialized", cr2w, this);
-				}
-				return _isInitialized;
-			}
-			set
-			{
-				if (_isInitialized == value)
-				{
-					return;
-				}
-				_isInitialized = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInitialized);
+			set => SetProperty(ref _isInitialized, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("fastTravelPointData")] 
 		public wCHandle<gameFastTravelPointData> FastTravelPointData
 		{
-			get
-			{
-				if (_fastTravelPointData == null)
-				{
-					_fastTravelPointData = (wCHandle<gameFastTravelPointData>) CR2WTypeManager.Create("whandle:gameFastTravelPointData", "fastTravelPointData", cr2w, this);
-				}
-				return _fastTravelPointData;
-			}
-			set
-			{
-				if (_fastTravelPointData == value)
-				{
-					return;
-				}
-				_fastTravelPointData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fastTravelPointData);
+			set => SetProperty(ref _fastTravelPointData, value);
 		}
 
 		public FastTravelButtonLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

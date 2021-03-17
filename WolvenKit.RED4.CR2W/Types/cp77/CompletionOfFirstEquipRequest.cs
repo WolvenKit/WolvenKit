@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weaponID")] 
 		public TweakDBID WeaponID
 		{
-			get
-			{
-				if (_weaponID == null)
-				{
-					_weaponID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "weaponID", cr2w, this);
-				}
-				return _weaponID;
-			}
-			set
-			{
-				if (_weaponID == value)
-				{
-					return;
-				}
-				_weaponID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponID);
+			set => SetProperty(ref _weaponID, value);
 		}
 
 		public CompletionOfFirstEquipRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

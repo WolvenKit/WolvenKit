@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mappings")] 
 		public CArray<inkLanguageFontMapping> Mappings
 		{
-			get
-			{
-				if (_mappings == null)
-				{
-					_mappings = (CArray<inkLanguageFontMapping>) CR2WTypeManager.Create("array:inkLanguageFontMapping", "mappings", cr2w, this);
-				}
-				return _mappings;
-			}
-			set
-			{
-				if (_mappings == value)
-				{
-					return;
-				}
-				_mappings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mappings);
+			set => SetProperty(ref _mappings, value);
 		}
 
 		public inkLanguageFontMapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("shouldDraw")] 
 		public CBool ShouldDraw
 		{
-			get
-			{
-				if (_shouldDraw == null)
-				{
-					_shouldDraw = (CBool) CR2WTypeManager.Create("Bool", "shouldDraw", cr2w, this);
-				}
-				return _shouldDraw;
-			}
-			set
-			{
-				if (_shouldDraw == value)
-				{
-					return;
-				}
-				_shouldDraw = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldDraw);
+			set => SetProperty(ref _shouldDraw, value);
 		}
 
 		public RevealDevicesGridOnEntityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

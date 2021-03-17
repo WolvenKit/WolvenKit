@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("caller")] 
 		public wCHandle<entEntity> Caller
 		{
-			get
-			{
-				if (_caller == null)
-				{
-					_caller = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "caller", cr2w, this);
-				}
-				return _caller;
-			}
-			set
-			{
-				if (_caller == value)
-				{
-					return;
-				}
-				_caller = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _caller);
+			set => SetProperty(ref _caller, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("crimePosition")] 
 		public Vector4 CrimePosition
 		{
-			get
-			{
-				if (_crimePosition == null)
-				{
-					_crimePosition = (Vector4) CR2WTypeManager.Create("Vector4", "crimePosition", cr2w, this);
-				}
-				return _crimePosition;
-			}
-			set
-			{
-				if (_crimePosition == value)
-				{
-					return;
-				}
-				_crimePosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _crimePosition);
+			set => SetProperty(ref _crimePosition, value);
 		}
 
 		public RegisterPoliceCaller(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

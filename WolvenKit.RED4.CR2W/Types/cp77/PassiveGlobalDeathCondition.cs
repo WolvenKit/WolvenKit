@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("onDeathCbId")] 
 		public CUInt32 OnDeathCbId
 		{
-			get
-			{
-				if (_onDeathCbId == null)
-				{
-					_onDeathCbId = (CUInt32) CR2WTypeManager.Create("Uint32", "onDeathCbId", cr2w, this);
-				}
-				return _onDeathCbId;
-			}
-			set
-			{
-				if (_onDeathCbId == value)
-				{
-					return;
-				}
-				_onDeathCbId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onDeathCbId);
+			set => SetProperty(ref _onDeathCbId, value);
 		}
 
 		public PassiveGlobalDeathCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Mode")] 
 		public CEnum<CraftingMode> Mode
 		{
-			get
-			{
-				if (_mode == null)
-				{
-					_mode = (CEnum<CraftingMode>) CR2WTypeManager.Create("CraftingMode", "Mode", cr2w, this);
-				}
-				return _mode;
-			}
-			set
-			{
-				if (_mode == value)
-				{
-					return;
-				}
-				_mode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mode);
+			set => SetProperty(ref _mode, value);
 		}
 
 		public CraftingUserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

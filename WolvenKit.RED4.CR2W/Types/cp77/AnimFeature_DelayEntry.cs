@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("thresholdPassed")] 
 		public CBool ThresholdPassed
 		{
-			get
-			{
-				if (_thresholdPassed == null)
-				{
-					_thresholdPassed = (CBool) CR2WTypeManager.Create("Bool", "thresholdPassed", cr2w, this);
-				}
-				return _thresholdPassed;
-			}
-			set
-			{
-				if (_thresholdPassed == value)
-				{
-					return;
-				}
-				_thresholdPassed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _thresholdPassed);
+			set => SetProperty(ref _thresholdPassed, value);
 		}
 
 		public AnimFeature_DelayEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

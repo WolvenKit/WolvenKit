@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sourceRig")] 
 		public rRef<animRig> SourceRig
 		{
-			get
-			{
-				if (_sourceRig == null)
-				{
-					_sourceRig = (rRef<animRig>) CR2WTypeManager.Create("rRef:animRig", "sourceRig", cr2w, this);
-				}
-				return _sourceRig;
-			}
-			set
-			{
-				if (_sourceRig == value)
-				{
-					return;
-				}
-				_sourceRig = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sourceRig);
+			set => SetProperty(ref _sourceRig, value);
 		}
 
 		public animRigRetarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

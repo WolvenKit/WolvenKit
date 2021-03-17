@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("state")] 
 		public CEnum<EUploadProgramState> State
 		{
-			get
-			{
-				if (_state == null)
-				{
-					_state = (CEnum<EUploadProgramState>) CR2WTypeManager.Create("EUploadProgramState", "state", cr2w, this);
-				}
-				return _state;
-			}
-			set
-			{
-				if (_state == value)
-				{
-					return;
-				}
-				_state = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("progressBarType")] 
 		public CEnum<EProgressBarType> ProgressBarType
 		{
-			get
-			{
-				if (_progressBarType == null)
-				{
-					_progressBarType = (CEnum<EProgressBarType>) CR2WTypeManager.Create("EProgressBarType", "progressBarType", cr2w, this);
-				}
-				return _progressBarType;
-			}
-			set
-			{
-				if (_progressBarType == value)
-				{
-					return;
-				}
-				_progressBarType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _progressBarType);
+			set => SetProperty(ref _progressBarType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("progressBarContext")] 
 		public CEnum<EProgressBarContext> ProgressBarContext
 		{
-			get
-			{
-				if (_progressBarContext == null)
-				{
-					_progressBarContext = (CEnum<EProgressBarContext>) CR2WTypeManager.Create("EProgressBarContext", "progressBarContext", cr2w, this);
-				}
-				return _progressBarContext;
-			}
-			set
-			{
-				if (_progressBarContext == value)
-				{
-					return;
-				}
-				_progressBarContext = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _progressBarContext);
+			set => SetProperty(ref _progressBarContext, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("iconRecord")] 
 		public wCHandle<gamedataChoiceCaptionIconPart_Record> IconRecord
 		{
-			get
-			{
-				if (_iconRecord == null)
-				{
-					_iconRecord = (wCHandle<gamedataChoiceCaptionIconPart_Record>) CR2WTypeManager.Create("whandle:gamedataChoiceCaptionIconPart_Record", "iconRecord", cr2w, this);
-				}
-				return _iconRecord;
-			}
-			set
-			{
-				if (_iconRecord == value)
-				{
-					return;
-				}
-				_iconRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _iconRecord);
+			set => SetProperty(ref _iconRecord, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("action")] 
 		public CHandle<ScriptableDeviceAction> Action
 		{
-			get
-			{
-				if (_action == null)
-				{
-					_action = (CHandle<ScriptableDeviceAction>) CR2WTypeManager.Create("handle:ScriptableDeviceAction", "action", cr2w, this);
-				}
-				return _action;
-			}
-			set
-			{
-				if (_action == value)
-				{
-					return;
-				}
-				_action = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get
-			{
-				if (_slotName == null)
-				{
-					_slotName = (CName) CR2WTypeManager.Create("CName", "slotName", cr2w, this);
-				}
-				return _slotName;
-			}
-			set
-			{
-				if (_slotName == value)
-				{
-					return;
-				}
-				_slotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotName);
+			set => SetProperty(ref _slotName, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("statPoolType")] 
 		public CEnum<gamedataStatPoolType> StatPoolType
 		{
-			get
-			{
-				if (_statPoolType == null)
-				{
-					_statPoolType = (CEnum<gamedataStatPoolType>) CR2WTypeManager.Create("gamedataStatPoolType", "statPoolType", cr2w, this);
-				}
-				return _statPoolType;
-			}
-			set
-			{
-				if (_statPoolType == value)
-				{
-					return;
-				}
-				_statPoolType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statPoolType);
+			set => SetProperty(ref _statPoolType, value);
 		}
 
 		public UploadProgramProgressEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

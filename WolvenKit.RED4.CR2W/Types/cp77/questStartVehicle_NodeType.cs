@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get
-			{
-				if (_vehicleRef == null)
-				{
-					_vehicleRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "vehicleRef", cr2w, this);
-				}
-				return _vehicleRef;
-			}
-			set
-			{
-				if (_vehicleRef == value)
-				{
-					return;
-				}
-				_vehicleRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleRef);
+			set => SetProperty(ref _vehicleRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("blendTime")] 
 		public CFloat BlendTime
 		{
-			get
-			{
-				if (_blendTime == null)
-				{
-					_blendTime = (CFloat) CR2WTypeManager.Create("Float", "blendTime", cr2w, this);
-				}
-				return _blendTime;
-			}
-			set
-			{
-				if (_blendTime == value)
-				{
-					return;
-				}
-				_blendTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendTime);
+			set => SetProperty(ref _blendTime, value);
 		}
 
 		public questStartVehicle_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

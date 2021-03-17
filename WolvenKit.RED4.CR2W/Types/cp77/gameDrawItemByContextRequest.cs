@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemEquipContext")] 
 		public CEnum<gameItemEquipContexts> ItemEquipContext
 		{
-			get
-			{
-				if (_itemEquipContext == null)
-				{
-					_itemEquipContext = (CEnum<gameItemEquipContexts>) CR2WTypeManager.Create("gameItemEquipContexts", "itemEquipContext", cr2w, this);
-				}
-				return _itemEquipContext;
-			}
-			set
-			{
-				if (_itemEquipContext == value)
-				{
-					return;
-				}
-				_itemEquipContext = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemEquipContext);
+			set => SetProperty(ref _itemEquipContext, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("equipAnimationType")] 
 		public CEnum<gameEquipAnimationType> EquipAnimationType
 		{
-			get
-			{
-				if (_equipAnimationType == null)
-				{
-					_equipAnimationType = (CEnum<gameEquipAnimationType>) CR2WTypeManager.Create("gameEquipAnimationType", "equipAnimationType", cr2w, this);
-				}
-				return _equipAnimationType;
-			}
-			set
-			{
-				if (_equipAnimationType == value)
-				{
-					return;
-				}
-				_equipAnimationType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipAnimationType);
+			set => SetProperty(ref _equipAnimationType, value);
 		}
 
 		public gameDrawItemByContextRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

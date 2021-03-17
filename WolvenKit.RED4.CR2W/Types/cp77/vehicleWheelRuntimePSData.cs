@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("previousTouchedMaterial")] 
 		public CName PreviousTouchedMaterial
 		{
-			get
-			{
-				if (_previousTouchedMaterial == null)
-				{
-					_previousTouchedMaterial = (CName) CR2WTypeManager.Create("CName", "previousTouchedMaterial", cr2w, this);
-				}
-				return _previousTouchedMaterial;
-			}
-			set
-			{
-				if (_previousTouchedMaterial == value)
-				{
-					return;
-				}
-				_previousTouchedMaterial = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousTouchedMaterial);
+			set => SetProperty(ref _previousTouchedMaterial, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("previousVisualDisplacement")] 
 		public CFloat PreviousVisualDisplacement
 		{
-			get
-			{
-				if (_previousVisualDisplacement == null)
-				{
-					_previousVisualDisplacement = (CFloat) CR2WTypeManager.Create("Float", "previousVisualDisplacement", cr2w, this);
-				}
-				return _previousVisualDisplacement;
-			}
-			set
-			{
-				if (_previousVisualDisplacement == value)
-				{
-					return;
-				}
-				_previousVisualDisplacement = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousVisualDisplacement);
+			set => SetProperty(ref _previousVisualDisplacement, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("previousLogicalSpringCompression")] 
 		public CFloat PreviousLogicalSpringCompression
 		{
-			get
-			{
-				if (_previousLogicalSpringCompression == null)
-				{
-					_previousLogicalSpringCompression = (CFloat) CR2WTypeManager.Create("Float", "previousLogicalSpringCompression", cr2w, this);
-				}
-				return _previousLogicalSpringCompression;
-			}
-			set
-			{
-				if (_previousLogicalSpringCompression == value)
-				{
-					return;
-				}
-				_previousLogicalSpringCompression = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousLogicalSpringCompression);
+			set => SetProperty(ref _previousLogicalSpringCompression, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("previousSwaybarDisplacement")] 
 		public CFloat PreviousSwaybarDisplacement
 		{
-			get
-			{
-				if (_previousSwaybarDisplacement == null)
-				{
-					_previousSwaybarDisplacement = (CFloat) CR2WTypeManager.Create("Float", "previousSwaybarDisplacement", cr2w, this);
-				}
-				return _previousSwaybarDisplacement;
-			}
-			set
-			{
-				if (_previousSwaybarDisplacement == value)
-				{
-					return;
-				}
-				_previousSwaybarDisplacement = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousSwaybarDisplacement);
+			set => SetProperty(ref _previousSwaybarDisplacement, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("previousDampedSpringForce")] 
 		public CFloat PreviousDampedSpringForce
 		{
-			get
-			{
-				if (_previousDampedSpringForce == null)
-				{
-					_previousDampedSpringForce = (CFloat) CR2WTypeManager.Create("Float", "previousDampedSpringForce", cr2w, this);
-				}
-				return _previousDampedSpringForce;
-			}
-			set
-			{
-				if (_previousDampedSpringForce == value)
-				{
-					return;
-				}
-				_previousDampedSpringForce = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousDampedSpringForce);
+			set => SetProperty(ref _previousDampedSpringForce, value);
 		}
 
 		public vehicleWheelRuntimePSData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

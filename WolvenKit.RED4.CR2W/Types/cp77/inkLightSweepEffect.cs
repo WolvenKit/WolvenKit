@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("positionX")] 
 		public CFloat PositionX
 		{
-			get
-			{
-				if (_positionX == null)
-				{
-					_positionX = (CFloat) CR2WTypeManager.Create("Float", "positionX", cr2w, this);
-				}
-				return _positionX;
-			}
-			set
-			{
-				if (_positionX == value)
-				{
-					return;
-				}
-				_positionX = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _positionX);
+			set => SetProperty(ref _positionX, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("positionY")] 
 		public CFloat PositionY
 		{
-			get
-			{
-				if (_positionY == null)
-				{
-					_positionY = (CFloat) CR2WTypeManager.Create("Float", "positionY", cr2w, this);
-				}
-				return _positionY;
-			}
-			set
-			{
-				if (_positionY == value)
-				{
-					return;
-				}
-				_positionY = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _positionY);
+			set => SetProperty(ref _positionY, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("angle")] 
 		public CFloat Angle
 		{
-			get
-			{
-				if (_angle == null)
-				{
-					_angle = (CFloat) CR2WTypeManager.Create("Float", "angle", cr2w, this);
-				}
-				return _angle;
-			}
-			set
-			{
-				if (_angle == value)
-				{
-					return;
-				}
-				_angle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _angle);
+			set => SetProperty(ref _angle, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("width")] 
 		public CFloat Width
 		{
-			get
-			{
-				if (_width == null)
-				{
-					_width = (CFloat) CR2WTypeManager.Create("Float", "width", cr2w, this);
-				}
-				return _width;
-			}
-			set
-			{
-				if (_width == value)
-				{
-					return;
-				}
-				_width = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _width);
+			set => SetProperty(ref _width, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("intensity")] 
 		public CFloat Intensity
 		{
-			get
-			{
-				if (_intensity == null)
-				{
-					_intensity = (CFloat) CR2WTypeManager.Create("Float", "intensity", cr2w, this);
-				}
-				return _intensity;
-			}
-			set
-			{
-				if (_intensity == value)
-				{
-					return;
-				}
-				_intensity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _intensity);
+			set => SetProperty(ref _intensity, value);
 		}
 
 		public inkLightSweepEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

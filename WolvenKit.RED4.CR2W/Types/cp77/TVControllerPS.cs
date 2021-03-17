@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tvSetup")] 
 		public TVSetup TvSetup
 		{
-			get
-			{
-				if (_tvSetup == null)
-				{
-					_tvSetup = (TVSetup) CR2WTypeManager.Create("TVSetup", "tvSetup", cr2w, this);
-				}
-				return _tvSetup;
-			}
-			set
-			{
-				if (_tvSetup == value)
-				{
-					return;
-				}
-				_tvSetup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tvSetup);
+			set => SetProperty(ref _tvSetup, value);
 		}
 
 		[Ordinal(109)] 
 		[RED("defaultGlitchVideoPath")] 
 		public redResourceReferenceScriptToken DefaultGlitchVideoPath
 		{
-			get
-			{
-				if (_defaultGlitchVideoPath == null)
-				{
-					_defaultGlitchVideoPath = (redResourceReferenceScriptToken) CR2WTypeManager.Create("redResourceReferenceScriptToken", "defaultGlitchVideoPath", cr2w, this);
-				}
-				return _defaultGlitchVideoPath;
-			}
-			set
-			{
-				if (_defaultGlitchVideoPath == value)
-				{
-					return;
-				}
-				_defaultGlitchVideoPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultGlitchVideoPath);
+			set => SetProperty(ref _defaultGlitchVideoPath, value);
 		}
 
 		[Ordinal(110)] 
 		[RED("broadcastGlitchVideoPath")] 
 		public redResourceReferenceScriptToken BroadcastGlitchVideoPath
 		{
-			get
-			{
-				if (_broadcastGlitchVideoPath == null)
-				{
-					_broadcastGlitchVideoPath = (redResourceReferenceScriptToken) CR2WTypeManager.Create("redResourceReferenceScriptToken", "broadcastGlitchVideoPath", cr2w, this);
-				}
-				return _broadcastGlitchVideoPath;
-			}
-			set
-			{
-				if (_broadcastGlitchVideoPath == value)
-				{
-					return;
-				}
-				_broadcastGlitchVideoPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _broadcastGlitchVideoPath);
+			set => SetProperty(ref _broadcastGlitchVideoPath, value);
 		}
 
 		[Ordinal(111)] 
 		[RED("globalTVInitialized")] 
 		public CBool GlobalTVInitialized
 		{
-			get
-			{
-				if (_globalTVInitialized == null)
-				{
-					_globalTVInitialized = (CBool) CR2WTypeManager.Create("Bool", "globalTVInitialized", cr2w, this);
-				}
-				return _globalTVInitialized;
-			}
-			set
-			{
-				if (_globalTVInitialized == value)
-				{
-					return;
-				}
-				_globalTVInitialized = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _globalTVInitialized);
+			set => SetProperty(ref _globalTVInitialized, value);
 		}
 
 		[Ordinal(112)] 
 		[RED("backupCustomChannels")] 
 		public CArray<STvChannel> BackupCustomChannels
 		{
-			get
-			{
-				if (_backupCustomChannels == null)
-				{
-					_backupCustomChannels = (CArray<STvChannel>) CR2WTypeManager.Create("array:STvChannel", "backupCustomChannels", cr2w, this);
-				}
-				return _backupCustomChannels;
-			}
-			set
-			{
-				if (_backupCustomChannels == value)
-				{
-					return;
-				}
-				_backupCustomChannels = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backupCustomChannels);
+			set => SetProperty(ref _backupCustomChannels, value);
 		}
 
 		public TVControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

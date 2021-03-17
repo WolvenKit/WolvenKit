@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("listener")] 
 		public CHandle<questObjectInspectListener> Listener
 		{
-			get
-			{
-				if (_listener == null)
-				{
-					_listener = (CHandle<questObjectInspectListener>) CR2WTypeManager.Create("handle:questObjectInspectListener", "listener", cr2w, this);
-				}
-				return _listener;
-			}
-			set
-			{
-				if (_listener == value)
-				{
-					return;
-				}
-				_listener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _listener);
+			set => SetProperty(ref _listener, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("register")] 
 		public CBool Register
 		{
-			get
-			{
-				if (_register == null)
-				{
-					_register = (CBool) CR2WTypeManager.Create("Bool", "register", cr2w, this);
-				}
-				return _register;
-			}
-			set
-			{
-				if (_register == value)
-				{
-					return;
-				}
-				_register = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _register);
+			set => SetProperty(ref _register, value);
 		}
 
 		public questInspectListenerEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

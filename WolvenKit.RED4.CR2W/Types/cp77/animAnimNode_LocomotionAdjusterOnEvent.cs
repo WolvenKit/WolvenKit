@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("locomotionFeatureName")] 
 		public CName LocomotionFeatureName
 		{
-			get
-			{
-				if (_locomotionFeatureName == null)
-				{
-					_locomotionFeatureName = (CName) CR2WTypeManager.Create("CName", "locomotionFeatureName", cr2w, this);
-				}
-				return _locomotionFeatureName;
-			}
-			set
-			{
-				if (_locomotionFeatureName == value)
-				{
-					return;
-				}
-				_locomotionFeatureName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _locomotionFeatureName);
+			set => SetProperty(ref _locomotionFeatureName, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("targetAnimationName")] 
 		public CName TargetAnimationName
 		{
-			get
-			{
-				if (_targetAnimationName == null)
-				{
-					_targetAnimationName = (CName) CR2WTypeManager.Create("CName", "targetAnimationName", cr2w, this);
-				}
-				return _targetAnimationName;
-			}
-			set
-			{
-				if (_targetAnimationName == value)
-				{
-					return;
-				}
-				_targetAnimationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetAnimationName);
+			set => SetProperty(ref _targetAnimationName, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("startAdjustmentAfterAnimEvent")] 
 		public CName StartAdjustmentAfterAnimEvent
 		{
-			get
-			{
-				if (_startAdjustmentAfterAnimEvent == null)
-				{
-					_startAdjustmentAfterAnimEvent = (CName) CR2WTypeManager.Create("CName", "startAdjustmentAfterAnimEvent", cr2w, this);
-				}
-				return _startAdjustmentAfterAnimEvent;
-			}
-			set
-			{
-				if (_startAdjustmentAfterAnimEvent == value)
-				{
-					return;
-				}
-				_startAdjustmentAfterAnimEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startAdjustmentAfterAnimEvent);
+			set => SetProperty(ref _startAdjustmentAfterAnimEvent, value);
 		}
 
 		public animAnimNode_LocomotionAdjusterOnEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

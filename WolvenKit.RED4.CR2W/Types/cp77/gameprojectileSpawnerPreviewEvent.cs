@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("previewActive")] 
 		public CBool PreviewActive
 		{
-			get
-			{
-				if (_previewActive == null)
-				{
-					_previewActive = (CBool) CR2WTypeManager.Create("Bool", "previewActive", cr2w, this);
-				}
-				return _previewActive;
-			}
-			set
-			{
-				if (_previewActive == value)
-				{
-					return;
-				}
-				_previewActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previewActive);
+			set => SetProperty(ref _previewActive, value);
 		}
 
 		public gameprojectileSpawnerPreviewEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

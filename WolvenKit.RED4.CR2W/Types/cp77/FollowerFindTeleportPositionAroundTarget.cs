@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("target")] 
 		public CHandle<AIArgumentMapping> Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("outPositionArgument")] 
 		public CHandle<AIArgumentMapping> OutPositionArgument
 		{
-			get
-			{
-				if (_outPositionArgument == null)
-				{
-					_outPositionArgument = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outPositionArgument", cr2w, this);
-				}
-				return _outPositionArgument;
-			}
-			set
-			{
-				if (_outPositionArgument == value)
-				{
-					return;
-				}
-				_outPositionArgument = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outPositionArgument);
+			set => SetProperty(ref _outPositionArgument, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lastResultTimestamp")] 
 		public CFloat LastResultTimestamp
 		{
-			get
-			{
-				if (_lastResultTimestamp == null)
-				{
-					_lastResultTimestamp = (CFloat) CR2WTypeManager.Create("Float", "lastResultTimestamp", cr2w, this);
-				}
-				return _lastResultTimestamp;
-			}
-			set
-			{
-				if (_lastResultTimestamp == value)
-				{
-					return;
-				}
-				_lastResultTimestamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastResultTimestamp);
+			set => SetProperty(ref _lastResultTimestamp, value);
 		}
 
 		public FollowerFindTeleportPositionAroundTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

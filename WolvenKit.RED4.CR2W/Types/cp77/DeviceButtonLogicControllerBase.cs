@@ -28,368 +28,128 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetWidgetRef")] 
 		public inkWidgetReference TargetWidgetRef
 		{
-			get
-			{
-				if (_targetWidgetRef == null)
-				{
-					_targetWidgetRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "targetWidgetRef", cr2w, this);
-				}
-				return _targetWidgetRef;
-			}
-			set
-			{
-				if (_targetWidgetRef == value)
-				{
-					return;
-				}
-				_targetWidgetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetWidgetRef);
+			set => SetProperty(ref _targetWidgetRef, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("displayNameWidget")] 
 		public inkTextWidgetReference DisplayNameWidget
 		{
-			get
-			{
-				if (_displayNameWidget == null)
-				{
-					_displayNameWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "displayNameWidget", cr2w, this);
-				}
-				return _displayNameWidget;
-			}
-			set
-			{
-				if (_displayNameWidget == value)
-				{
-					return;
-				}
-				_displayNameWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _displayNameWidget);
+			set => SetProperty(ref _displayNameWidget, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("iconWidget")] 
 		public inkImageWidgetReference IconWidget
 		{
-			get
-			{
-				if (_iconWidget == null)
-				{
-					_iconWidget = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "iconWidget", cr2w, this);
-				}
-				return _iconWidget;
-			}
-			set
-			{
-				if (_iconWidget == value)
-				{
-					return;
-				}
-				_iconWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _iconWidget);
+			set => SetProperty(ref _iconWidget, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("toggleSwitchWidget")] 
 		public inkImageWidgetReference ToggleSwitchWidget
 		{
-			get
-			{
-				if (_toggleSwitchWidget == null)
-				{
-					_toggleSwitchWidget = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "toggleSwitchWidget", cr2w, this);
-				}
-				return _toggleSwitchWidget;
-			}
-			set
-			{
-				if (_toggleSwitchWidget == value)
-				{
-					return;
-				}
-				_toggleSwitchWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toggleSwitchWidget);
+			set => SetProperty(ref _toggleSwitchWidget, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("sizeProviderWidget")] 
 		public inkWidgetReference SizeProviderWidget
 		{
-			get
-			{
-				if (_sizeProviderWidget == null)
-				{
-					_sizeProviderWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "sizeProviderWidget", cr2w, this);
-				}
-				return _sizeProviderWidget;
-			}
-			set
-			{
-				if (_sizeProviderWidget == value)
-				{
-					return;
-				}
-				_sizeProviderWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sizeProviderWidget);
+			set => SetProperty(ref _sizeProviderWidget, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("selectionMarkerWidget")] 
 		public inkWidgetReference SelectionMarkerWidget
 		{
-			get
-			{
-				if (_selectionMarkerWidget == null)
-				{
-					_selectionMarkerWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "selectionMarkerWidget", cr2w, this);
-				}
-				return _selectionMarkerWidget;
-			}
-			set
-			{
-				if (_selectionMarkerWidget == value)
-				{
-					return;
-				}
-				_selectionMarkerWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectionMarkerWidget);
+			set => SetProperty(ref _selectionMarkerWidget, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("onReleaseAnimations")] 
 		public CHandle<WidgetAnimationManager> OnReleaseAnimations
 		{
-			get
-			{
-				if (_onReleaseAnimations == null)
-				{
-					_onReleaseAnimations = (CHandle<WidgetAnimationManager>) CR2WTypeManager.Create("handle:WidgetAnimationManager", "onReleaseAnimations", cr2w, this);
-				}
-				return _onReleaseAnimations;
-			}
-			set
-			{
-				if (_onReleaseAnimations == value)
-				{
-					return;
-				}
-				_onReleaseAnimations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onReleaseAnimations);
+			set => SetProperty(ref _onReleaseAnimations, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("onPressAnimations")] 
 		public CHandle<WidgetAnimationManager> OnPressAnimations
 		{
-			get
-			{
-				if (_onPressAnimations == null)
-				{
-					_onPressAnimations = (CHandle<WidgetAnimationManager>) CR2WTypeManager.Create("handle:WidgetAnimationManager", "onPressAnimations", cr2w, this);
-				}
-				return _onPressAnimations;
-			}
-			set
-			{
-				if (_onPressAnimations == value)
-				{
-					return;
-				}
-				_onPressAnimations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onPressAnimations);
+			set => SetProperty(ref _onPressAnimations, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("onHoverOverAnimations")] 
 		public CHandle<WidgetAnimationManager> OnHoverOverAnimations
 		{
-			get
-			{
-				if (_onHoverOverAnimations == null)
-				{
-					_onHoverOverAnimations = (CHandle<WidgetAnimationManager>) CR2WTypeManager.Create("handle:WidgetAnimationManager", "onHoverOverAnimations", cr2w, this);
-				}
-				return _onHoverOverAnimations;
-			}
-			set
-			{
-				if (_onHoverOverAnimations == value)
-				{
-					return;
-				}
-				_onHoverOverAnimations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onHoverOverAnimations);
+			set => SetProperty(ref _onHoverOverAnimations, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("onHoverOutAnimations")] 
 		public CHandle<WidgetAnimationManager> OnHoverOutAnimations
 		{
-			get
-			{
-				if (_onHoverOutAnimations == null)
-				{
-					_onHoverOutAnimations = (CHandle<WidgetAnimationManager>) CR2WTypeManager.Create("handle:WidgetAnimationManager", "onHoverOutAnimations", cr2w, this);
-				}
-				return _onHoverOutAnimations;
-			}
-			set
-			{
-				if (_onHoverOutAnimations == value)
-				{
-					return;
-				}
-				_onHoverOutAnimations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onHoverOutAnimations);
+			set => SetProperty(ref _onHoverOutAnimations, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("defaultStyle")] 
 		public redResourceReferenceScriptToken DefaultStyle
 		{
-			get
-			{
-				if (_defaultStyle == null)
-				{
-					_defaultStyle = (redResourceReferenceScriptToken) CR2WTypeManager.Create("redResourceReferenceScriptToken", "defaultStyle", cr2w, this);
-				}
-				return _defaultStyle;
-			}
-			set
-			{
-				if (_defaultStyle == value)
-				{
-					return;
-				}
-				_defaultStyle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultStyle);
+			set => SetProperty(ref _defaultStyle, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("selectionStyle")] 
 		public redResourceReferenceScriptToken SelectionStyle
 		{
-			get
-			{
-				if (_selectionStyle == null)
-				{
-					_selectionStyle = (redResourceReferenceScriptToken) CR2WTypeManager.Create("redResourceReferenceScriptToken", "selectionStyle", cr2w, this);
-				}
-				return _selectionStyle;
-			}
-			set
-			{
-				if (_selectionStyle == value)
-				{
-					return;
-				}
-				_selectionStyle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectionStyle);
+			set => SetProperty(ref _selectionStyle, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("soundData")] 
 		public SSoundData SoundData
 		{
-			get
-			{
-				if (_soundData == null)
-				{
-					_soundData = (SSoundData) CR2WTypeManager.Create("SSoundData", "soundData", cr2w, this);
-				}
-				return _soundData;
-			}
-			set
-			{
-				if (_soundData == value)
-				{
-					return;
-				}
-				_soundData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soundData);
+			set => SetProperty(ref _soundData, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("isInitialized")] 
 		public CBool IsInitialized
 		{
-			get
-			{
-				if (_isInitialized == null)
-				{
-					_isInitialized = (CBool) CR2WTypeManager.Create("Bool", "isInitialized", cr2w, this);
-				}
-				return _isInitialized;
-			}
-			set
-			{
-				if (_isInitialized == value)
-				{
-					return;
-				}
-				_isInitialized = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInitialized);
+			set => SetProperty(ref _isInitialized, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("targetWidget")] 
 		public wCHandle<inkWidget> TargetWidget
 		{
-			get
-			{
-				if (_targetWidget == null)
-				{
-					_targetWidget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "targetWidget", cr2w, this);
-				}
-				return _targetWidget;
-			}
-			set
-			{
-				if (_targetWidget == value)
-				{
-					return;
-				}
-				_targetWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetWidget);
+			set => SetProperty(ref _targetWidget, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("isSelected")] 
 		public CBool IsSelected
 		{
-			get
-			{
-				if (_isSelected == null)
-				{
-					_isSelected = (CBool) CR2WTypeManager.Create("Bool", "isSelected", cr2w, this);
-				}
-				return _isSelected;
-			}
-			set
-			{
-				if (_isSelected == value)
-				{
-					return;
-				}
-				_isSelected = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isSelected);
+			set => SetProperty(ref _isSelected, value);
 		}
 
 		public DeviceButtonLogicControllerBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

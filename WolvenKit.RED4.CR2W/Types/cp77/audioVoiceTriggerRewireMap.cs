@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("includes")] 
 		public CArray<CName> Includes
 		{
-			get
-			{
-				if (_includes == null)
-				{
-					_includes = (CArray<CName>) CR2WTypeManager.Create("array:CName", "includes", cr2w, this);
-				}
-				return _includes;
-			}
-			set
-			{
-				if (_includes == value)
-				{
-					return;
-				}
-				_includes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _includes);
+			set => SetProperty(ref _includes, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("items")] 
 		public CArray<audioVoiceTriggerRewireMapItem> Items
 		{
-			get
-			{
-				if (_items == null)
-				{
-					_items = (CArray<audioVoiceTriggerRewireMapItem>) CR2WTypeManager.Create("array:audioVoiceTriggerRewireMapItem", "items", cr2w, this);
-				}
-				return _items;
-			}
-			set
-			{
-				if (_items == value)
-				{
-					return;
-				}
-				_items = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _items);
+			set => SetProperty(ref _items, value);
 		}
 
 		public audioVoiceTriggerRewireMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

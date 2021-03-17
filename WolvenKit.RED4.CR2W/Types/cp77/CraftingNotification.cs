@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("introAnimation")] 
 		public CHandle<inkanimProxy> IntroAnimation
 		{
-			get
-			{
-				if (_introAnimation == null)
-				{
-					_introAnimation = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "introAnimation", cr2w, this);
-				}
-				return _introAnimation;
-			}
-			set
-			{
-				if (_introAnimation == value)
-				{
-					return;
-				}
-				_introAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _introAnimation);
+			set => SetProperty(ref _introAnimation, value);
 		}
 
 		public CraftingNotification(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

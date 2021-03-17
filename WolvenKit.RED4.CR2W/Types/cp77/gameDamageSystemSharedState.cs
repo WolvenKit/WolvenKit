@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hitHistory")] 
 		public CArray<CHandle<gamedamageServerHitData>> HitHistory
 		{
-			get
-			{
-				if (_hitHistory == null)
-				{
-					_hitHistory = (CArray<CHandle<gamedamageServerHitData>>) CR2WTypeManager.Create("array:handle:gamedamageServerHitData", "hitHistory", cr2w, this);
-				}
-				return _hitHistory;
-			}
-			set
-			{
-				if (_hitHistory == value)
-				{
-					return;
-				}
-				_hitHistory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitHistory);
+			set => SetProperty(ref _hitHistory, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("killHistory")] 
 		public CArray<CHandle<gamedamageServerKillData>> KillHistory
 		{
-			get
-			{
-				if (_killHistory == null)
-				{
-					_killHistory = (CArray<CHandle<gamedamageServerKillData>>) CR2WTypeManager.Create("array:handle:gamedamageServerKillData", "killHistory", cr2w, this);
-				}
-				return _killHistory;
-			}
-			set
-			{
-				if (_killHistory == value)
-				{
-					return;
-				}
-				_killHistory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _killHistory);
+			set => SetProperty(ref _killHistory, value);
 		}
 
 		public gameDamageSystemSharedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bones")] 
 		public CArray<animOverrideBlendBoneInfo> Bones
 		{
-			get
-			{
-				if (_bones == null)
-				{
-					_bones = (CArray<animOverrideBlendBoneInfo>) CR2WTypeManager.Create("array:animOverrideBlendBoneInfo", "bones", cr2w, this);
-				}
-				return _bones;
-			}
-			set
-			{
-				if (_bones == value)
-				{
-					return;
-				}
-				_bones = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bones);
+			set => SetProperty(ref _bones, value);
 		}
 
 		public animPoseBlendMethod_BoneBranch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

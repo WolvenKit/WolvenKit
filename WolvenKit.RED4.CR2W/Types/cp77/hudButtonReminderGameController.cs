@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Button1")] 
 		public inkCompoundWidgetReference Button1
 		{
-			get
-			{
-				if (_button1 == null)
-				{
-					_button1 = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "Button1", cr2w, this);
-				}
-				return _button1;
-			}
-			set
-			{
-				if (_button1 == value)
-				{
-					return;
-				}
-				_button1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _button1);
+			set => SetProperty(ref _button1, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("Button2")] 
 		public inkCompoundWidgetReference Button2
 		{
-			get
-			{
-				if (_button2 == null)
-				{
-					_button2 = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "Button2", cr2w, this);
-				}
-				return _button2;
-			}
-			set
-			{
-				if (_button2 == value)
-				{
-					return;
-				}
-				_button2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _button2);
+			set => SetProperty(ref _button2, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("Button3")] 
 		public inkCompoundWidgetReference Button3
 		{
-			get
-			{
-				if (_button3 == null)
-				{
-					_button3 = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "Button3", cr2w, this);
-				}
-				return _button3;
-			}
-			set
-			{
-				if (_button3 == value)
-				{
-					return;
-				}
-				_button3 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _button3);
+			set => SetProperty(ref _button3, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("uiHudButtonHelpBB")] 
 		public CHandle<gameIBlackboard> UiHudButtonHelpBB
 		{
-			get
-			{
-				if (_uiHudButtonHelpBB == null)
-				{
-					_uiHudButtonHelpBB = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "uiHudButtonHelpBB", cr2w, this);
-				}
-				return _uiHudButtonHelpBB;
-			}
-			set
-			{
-				if (_uiHudButtonHelpBB == value)
-				{
-					return;
-				}
-				_uiHudButtonHelpBB = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uiHudButtonHelpBB);
+			set => SetProperty(ref _uiHudButtonHelpBB, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("interactingWithDeviceBBID")] 
 		public CUInt32 InteractingWithDeviceBBID
 		{
-			get
-			{
-				if (_interactingWithDeviceBBID == null)
-				{
-					_interactingWithDeviceBBID = (CUInt32) CR2WTypeManager.Create("Uint32", "interactingWithDeviceBBID", cr2w, this);
-				}
-				return _interactingWithDeviceBBID;
-			}
-			set
-			{
-				if (_interactingWithDeviceBBID == value)
-				{
-					return;
-				}
-				_interactingWithDeviceBBID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interactingWithDeviceBBID);
+			set => SetProperty(ref _interactingWithDeviceBBID, value);
 		}
 
 		public hudButtonReminderGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

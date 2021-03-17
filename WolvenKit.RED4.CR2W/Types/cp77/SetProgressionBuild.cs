@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("buildType")] 
 		public CEnum<gamedataBuildType> BuildType
 		{
-			get
-			{
-				if (_buildType == null)
-				{
-					_buildType = (CEnum<gamedataBuildType>) CR2WTypeManager.Create("gamedataBuildType", "buildType", cr2w, this);
-				}
-				return _buildType;
-			}
-			set
-			{
-				if (_buildType == value)
-				{
-					return;
-				}
-				_buildType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buildType);
+			set => SetProperty(ref _buildType, value);
 		}
 
 		public SetProgressionBuild(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("On")] 
 		public CBool On
 		{
-			get
-			{
-				if (_on == null)
-				{
-					_on = (CBool) CR2WTypeManager.Create("Bool", "On", cr2w, this);
-				}
-				return _on;
-			}
-			set
-			{
-				if (_on == value)
-				{
-					return;
-				}
-				_on = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _on);
+			set => SetProperty(ref _on, value);
 		}
 
 		public VRoomFeed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

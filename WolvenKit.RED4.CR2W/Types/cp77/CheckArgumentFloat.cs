@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("customVar")] 
 		public CFloat CustomVar
 		{
-			get
-			{
-				if (_customVar == null)
-				{
-					_customVar = (CFloat) CR2WTypeManager.Create("Float", "customVar", cr2w, this);
-				}
-				return _customVar;
-			}
-			set
-			{
-				if (_customVar == value)
-				{
-					return;
-				}
-				_customVar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customVar);
+			set => SetProperty(ref _customVar, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("comparator")] 
 		public CEnum<ECompareOp> Comparator
 		{
-			get
-			{
-				if (_comparator == null)
-				{
-					_comparator = (CEnum<ECompareOp>) CR2WTypeManager.Create("ECompareOp", "comparator", cr2w, this);
-				}
-				return _comparator;
-			}
-			set
-			{
-				if (_comparator == value)
-				{
-					return;
-				}
-				_comparator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comparator);
+			set => SetProperty(ref _comparator, value);
 		}
 
 		public CheckArgumentFloat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("voiceTagName")] 
 		public CName VoiceTagName
 		{
-			get
-			{
-				if (_voiceTagName == null)
-				{
-					_voiceTagName = (CName) CR2WTypeManager.Create("CName", "voiceTagName", cr2w, this);
-				}
-				return _voiceTagName;
-			}
-			set
-			{
-				if (_voiceTagName == value)
-				{
-					return;
-				}
-				_voiceTagName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _voiceTagName);
+			set => SetProperty(ref _voiceTagName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("forceInjection")] 
 		public CBool ForceInjection
 		{
-			get
-			{
-				if (_forceInjection == null)
-				{
-					_forceInjection = (CBool) CR2WTypeManager.Create("Bool", "forceInjection", cr2w, this);
-				}
-				return _forceInjection;
-			}
-			set
-			{
-				if (_forceInjection == value)
-				{
-					return;
-				}
-				_forceInjection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceInjection);
+			set => SetProperty(ref _forceInjection, value);
 		}
 
 		public entInjectVoiceTagEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

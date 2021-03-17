@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("snapFeatureData")] 
 		public CArray<CHandle<meshMeshImportedSnapPoint>> SnapFeatureData
 		{
-			get
-			{
-				if (_snapFeatureData == null)
-				{
-					_snapFeatureData = (CArray<CHandle<meshMeshImportedSnapPoint>>) CR2WTypeManager.Create("array:handle:meshMeshImportedSnapPoint", "snapFeatureData", cr2w, this);
-				}
-				return _snapFeatureData;
-			}
-			set
-			{
-				if (_snapFeatureData == value)
-				{
-					return;
-				}
-				_snapFeatureData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _snapFeatureData);
+			set => SetProperty(ref _snapFeatureData, value);
 		}
 
 		public meshMeshParamImportedSnapPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

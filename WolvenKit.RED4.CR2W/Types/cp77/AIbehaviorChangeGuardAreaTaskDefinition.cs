@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("guardAreaNodeRef")] 
 		public CHandle<AIArgumentMapping> GuardAreaNodeRef
 		{
-			get
-			{
-				if (_guardAreaNodeRef == null)
-				{
-					_guardAreaNodeRef = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "guardAreaNodeRef", cr2w, this);
-				}
-				return _guardAreaNodeRef;
-			}
-			set
-			{
-				if (_guardAreaNodeRef == value)
-				{
-					return;
-				}
-				_guardAreaNodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _guardAreaNodeRef);
+			set => SetProperty(ref _guardAreaNodeRef, value);
 		}
 
 		public AIbehaviorChangeGuardAreaTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

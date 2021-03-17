@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("poseName")] 
 		public CName PoseName
 		{
-			get
-			{
-				if (_poseName == null)
-				{
-					_poseName = (CName) CR2WTypeManager.Create("CName", "poseName", cr2w, this);
-				}
-				return _poseName;
-			}
-			set
-			{
-				if (_poseName == value)
-				{
-					return;
-				}
-				_poseName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _poseName);
+			set => SetProperty(ref _poseName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("id")] 
 		public CInt16 Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CInt16) CR2WTypeManager.Create("Int16", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get
-			{
-				if (_weight == null)
-				{
-					_weight = (CFloat) CR2WTypeManager.Create("Float", "weight", cr2w, this);
-				}
-				return _weight;
-			}
-			set
-			{
-				if (_weight == value)
-				{
-					return;
-				}
-				_weight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weight);
+			set => SetProperty(ref _weight, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("type")] 
 		public CUInt8 Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CUInt8) CR2WTypeManager.Create("Uint8", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("side")] 
 		public CUInt8 Side
 		{
-			get
-			{
-				if (_side == null)
-				{
-					_side = (CUInt8) CR2WTypeManager.Create("Uint8", "side", cr2w, this);
-				}
-				return _side;
-			}
-			set
-			{
-				if (_side == value)
-				{
-					return;
-				}
-				_side = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _side);
+			set => SetProperty(ref _side, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isCachable")] 
 		public CBool IsCachable
 		{
-			get
-			{
-				if (_isCachable == null)
-				{
-					_isCachable = (CBool) CR2WTypeManager.Create("Bool", "isCachable", cr2w, this);
-				}
-				return _isCachable;
-			}
-			set
-			{
-				if (_isCachable == value)
-				{
-					return;
-				}
-				_isCachable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isCachable);
+			set => SetProperty(ref _isCachable, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("initAnimationPoseMid")] 
 		public CFloat InitAnimationPoseMid
 		{
-			get
-			{
-				if (_initAnimationPoseMid == null)
-				{
-					_initAnimationPoseMid = (CFloat) CR2WTypeManager.Create("Float", "initAnimationPoseMid", cr2w, this);
-				}
-				return _initAnimationPoseMid;
-			}
-			set
-			{
-				if (_initAnimationPoseMid == value)
-				{
-					return;
-				}
-				_initAnimationPoseMid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initAnimationPoseMid);
+			set => SetProperty(ref _initAnimationPoseMid, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("initAnimationPoseMin")] 
 		public CFloat InitAnimationPoseMin
 		{
-			get
-			{
-				if (_initAnimationPoseMin == null)
-				{
-					_initAnimationPoseMin = (CFloat) CR2WTypeManager.Create("Float", "initAnimationPoseMin", cr2w, this);
-				}
-				return _initAnimationPoseMin;
-			}
-			set
-			{
-				if (_initAnimationPoseMin == value)
-				{
-					return;
-				}
-				_initAnimationPoseMin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initAnimationPoseMin);
+			set => SetProperty(ref _initAnimationPoseMin, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("initAnimationPoseMax")] 
 		public CFloat InitAnimationPoseMax
 		{
-			get
-			{
-				if (_initAnimationPoseMax == null)
-				{
-					_initAnimationPoseMax = (CFloat) CR2WTypeManager.Create("Float", "initAnimationPoseMax", cr2w, this);
-				}
-				return _initAnimationPoseMax;
-			}
-			set
-			{
-				if (_initAnimationPoseMax == value)
-				{
-					return;
-				}
-				_initAnimationPoseMax = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initAnimationPoseMax);
+			set => SetProperty(ref _initAnimationPoseMax, value);
 		}
 
 		public animImportFacialInitialPoseEntryDesc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

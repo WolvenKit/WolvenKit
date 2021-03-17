@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("pitch")] 
 		public CFloat Pitch
 		{
-			get
-			{
-				if (_pitch == null)
-				{
-					_pitch = (CFloat) CR2WTypeManager.Create("Float", "pitch", cr2w, this);
-				}
-				return _pitch;
-			}
-			set
-			{
-				if (_pitch == value)
-				{
-					return;
-				}
-				_pitch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pitch);
+			set => SetProperty(ref _pitch, value);
 		}
 
 		public gameResetFppCameraEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

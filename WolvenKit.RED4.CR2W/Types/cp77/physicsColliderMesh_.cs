@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("faceMaterials")] 
 		public CArray<CName> FaceMaterials
 		{
-			get
-			{
-				if (_faceMaterials == null)
-				{
-					_faceMaterials = (CArray<CName>) CR2WTypeManager.Create("array:CName", "faceMaterials", cr2w, this);
-				}
-				return _faceMaterials;
-			}
-			set
-			{
-				if (_faceMaterials == value)
-				{
-					return;
-				}
-				_faceMaterials = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _faceMaterials);
+			set => SetProperty(ref _faceMaterials, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("compiledGeometryBuffer")] 
 		public DataBuffer CompiledGeometryBuffer
 		{
-			get
-			{
-				if (_compiledGeometryBuffer == null)
-				{
-					_compiledGeometryBuffer = (DataBuffer) CR2WTypeManager.Create("DataBuffer", "compiledGeometryBuffer", cr2w, this);
-				}
-				return _compiledGeometryBuffer;
-			}
-			set
-			{
-				if (_compiledGeometryBuffer == value)
-				{
-					return;
-				}
-				_compiledGeometryBuffer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _compiledGeometryBuffer);
+			set => SetProperty(ref _compiledGeometryBuffer, value);
 		}
 
 		public physicsColliderMesh_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

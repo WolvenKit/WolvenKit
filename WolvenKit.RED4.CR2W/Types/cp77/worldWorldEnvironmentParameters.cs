@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("globalLightingTrajectory")] 
 		public GlobalLightingTrajectory GlobalLightingTrajectory
 		{
-			get
-			{
-				if (_globalLightingTrajectory == null)
-				{
-					_globalLightingTrajectory = (GlobalLightingTrajectory) CR2WTypeManager.Create("GlobalLightingTrajectory", "globalLightingTrajectory", cr2w, this);
-				}
-				return _globalLightingTrajectory;
-			}
-			set
-			{
-				if (_globalLightingTrajectory == value)
-				{
-					return;
-				}
-				_globalLightingTrajectory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _globalLightingTrajectory);
+			set => SetProperty(ref _globalLightingTrajectory, value);
 		}
 
 		public worldWorldEnvironmentParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

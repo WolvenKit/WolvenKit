@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("IsPlayerCloseToBoundary")] 
 		public gamebbScriptID_Bool IsPlayerCloseToBoundary
 		{
-			get
-			{
-				if (_isPlayerCloseToBoundary == null)
-				{
-					_isPlayerCloseToBoundary = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "IsPlayerCloseToBoundary", cr2w, this);
-				}
-				return _isPlayerCloseToBoundary;
-			}
-			set
-			{
-				if (_isPlayerCloseToBoundary == value)
-				{
-					return;
-				}
-				_isPlayerCloseToBoundary = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayerCloseToBoundary);
+			set => SetProperty(ref _isPlayerCloseToBoundary, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("IsPlayerGoingDeeper")] 
 		public gamebbScriptID_Bool IsPlayerGoingDeeper
 		{
-			get
-			{
-				if (_isPlayerGoingDeeper == null)
-				{
-					_isPlayerGoingDeeper = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "IsPlayerGoingDeeper", cr2w, this);
-				}
-				return _isPlayerGoingDeeper;
-			}
-			set
-			{
-				if (_isPlayerGoingDeeper == value)
-				{
-					return;
-				}
-				_isPlayerGoingDeeper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayerGoingDeeper);
+			set => SetProperty(ref _isPlayerGoingDeeper, value);
 		}
 
 		public UIWorldBoundariesDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

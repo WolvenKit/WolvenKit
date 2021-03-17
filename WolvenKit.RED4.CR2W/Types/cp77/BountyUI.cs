@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("issuedBy")] 
 		public CString IssuedBy
 		{
-			get
-			{
-				if (_issuedBy == null)
-				{
-					_issuedBy = (CString) CR2WTypeManager.Create("String", "issuedBy", cr2w, this);
-				}
-				return _issuedBy;
-			}
-			set
-			{
-				if (_issuedBy == value)
-				{
-					return;
-				}
-				_issuedBy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _issuedBy);
+			set => SetProperty(ref _issuedBy, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("moneyReward")] 
 		public CInt32 MoneyReward
 		{
-			get
-			{
-				if (_moneyReward == null)
-				{
-					_moneyReward = (CInt32) CR2WTypeManager.Create("Int32", "moneyReward", cr2w, this);
-				}
-				return _moneyReward;
-			}
-			set
-			{
-				if (_moneyReward == value)
-				{
-					return;
-				}
-				_moneyReward = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _moneyReward);
+			set => SetProperty(ref _moneyReward, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("streetCredReward")] 
 		public CInt32 StreetCredReward
 		{
-			get
-			{
-				if (_streetCredReward == null)
-				{
-					_streetCredReward = (CInt32) CR2WTypeManager.Create("Int32", "streetCredReward", cr2w, this);
-				}
-				return _streetCredReward;
-			}
-			set
-			{
-				if (_streetCredReward == value)
-				{
-					return;
-				}
-				_streetCredReward = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _streetCredReward);
+			set => SetProperty(ref _streetCredReward, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("transgressions")] 
 		public CArray<CString> Transgressions
 		{
-			get
-			{
-				if (_transgressions == null)
-				{
-					_transgressions = (CArray<CString>) CR2WTypeManager.Create("array:String", "transgressions", cr2w, this);
-				}
-				return _transgressions;
-			}
-			set
-			{
-				if (_transgressions == value)
-				{
-					return;
-				}
-				_transgressions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transgressions);
+			set => SetProperty(ref _transgressions, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("hasAccess")] 
 		public CBool HasAccess
 		{
-			get
-			{
-				if (_hasAccess == null)
-				{
-					_hasAccess = (CBool) CR2WTypeManager.Create("Bool", "hasAccess", cr2w, this);
-				}
-				return _hasAccess;
-			}
-			set
-			{
-				if (_hasAccess == value)
-				{
-					return;
-				}
-				_hasAccess = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasAccess);
+			set => SetProperty(ref _hasAccess, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("level")] 
 		public CInt32 Level
 		{
-			get
-			{
-				if (_level == null)
-				{
-					_level = (CInt32) CR2WTypeManager.Create("Int32", "level", cr2w, this);
-				}
-				return _level;
-			}
-			set
-			{
-				if (_level == value)
-				{
-					return;
-				}
-				_level = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _level);
+			set => SetProperty(ref _level, value);
 		}
 
 		public BountyUI(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

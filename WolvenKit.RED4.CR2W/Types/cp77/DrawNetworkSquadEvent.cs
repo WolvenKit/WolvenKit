@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("shouldDraw")] 
 		public CBool ShouldDraw
 		{
-			get
-			{
-				if (_shouldDraw == null)
-				{
-					_shouldDraw = (CBool) CR2WTypeManager.Create("Bool", "shouldDraw", cr2w, this);
-				}
-				return _shouldDraw;
-			}
-			set
-			{
-				if (_shouldDraw == value)
-				{
-					return;
-				}
-				_shouldDraw = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldDraw);
+			set => SetProperty(ref _shouldDraw, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("memberID")] 
 		public gamePersistentID MemberID
 		{
-			get
-			{
-				if (_memberID == null)
-				{
-					_memberID = (gamePersistentID) CR2WTypeManager.Create("gamePersistentID", "memberID", cr2w, this);
-				}
-				return _memberID;
-			}
-			set
-			{
-				if (_memberID == value)
-				{
-					return;
-				}
-				_memberID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _memberID);
+			set => SetProperty(ref _memberID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("fxResource")] 
 		public gameFxResource FxResource
 		{
-			get
-			{
-				if (_fxResource == null)
-				{
-					_fxResource = (gameFxResource) CR2WTypeManager.Create("gameFxResource", "fxResource", cr2w, this);
-				}
-				return _fxResource;
-			}
-			set
-			{
-				if (_fxResource == value)
-				{
-					return;
-				}
-				_fxResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fxResource);
+			set => SetProperty(ref _fxResource, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isPing")] 
 		public CBool IsPing
 		{
-			get
-			{
-				if (_isPing == null)
-				{
-					_isPing = (CBool) CR2WTypeManager.Create("Bool", "isPing", cr2w, this);
-				}
-				return _isPing;
-			}
-			set
-			{
-				if (_isPing == value)
-				{
-					return;
-				}
-				_isPing = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPing);
+			set => SetProperty(ref _isPing, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("revealMaster")] 
 		public CBool RevealMaster
 		{
-			get
-			{
-				if (_revealMaster == null)
-				{
-					_revealMaster = (CBool) CR2WTypeManager.Create("Bool", "revealMaster", cr2w, this);
-				}
-				return _revealMaster;
-			}
-			set
-			{
-				if (_revealMaster == value)
-				{
-					return;
-				}
-				_revealMaster = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revealMaster);
+			set => SetProperty(ref _revealMaster, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("revealSlave")] 
 		public CBool RevealSlave
 		{
-			get
-			{
-				if (_revealSlave == null)
-				{
-					_revealSlave = (CBool) CR2WTypeManager.Create("Bool", "revealSlave", cr2w, this);
-				}
-				return _revealSlave;
-			}
-			set
-			{
-				if (_revealSlave == value)
-				{
-					return;
-				}
-				_revealSlave = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revealSlave);
+			set => SetProperty(ref _revealSlave, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("memberOnly")] 
 		public CBool MemberOnly
 		{
-			get
-			{
-				if (_memberOnly == null)
-				{
-					_memberOnly = (CBool) CR2WTypeManager.Create("Bool", "memberOnly", cr2w, this);
-				}
-				return _memberOnly;
-			}
-			set
-			{
-				if (_memberOnly == value)
-				{
-					return;
-				}
-				_memberOnly = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _memberOnly);
+			set => SetProperty(ref _memberOnly, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		public DrawNetworkSquadEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

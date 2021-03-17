@@ -24,276 +24,96 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gridContainer")] 
 		public inkUniformGridWidgetReference GridContainer
 		{
-			get
-			{
-				if (_gridContainer == null)
-				{
-					_gridContainer = (inkUniformGridWidgetReference) CR2WTypeManager.Create("inkUniformGridWidgetReference", "gridContainer", cr2w, this);
-				}
-				return _gridContainer;
-			}
-			set
-			{
-				if (_gridContainer == value)
-				{
-					return;
-				}
-				_gridContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gridContainer);
+			set => SetProperty(ref _gridContainer, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
-			get
-			{
-				if (_label == null)
-				{
-					_label = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "label", cr2w, this);
-				}
-				return _label;
-			}
-			set
-			{
-				if (_label == value)
-				{
-					return;
-				}
-				_label = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _label);
+			set => SetProperty(ref _label, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("sublabel")] 
 		public inkTextWidgetReference Sublabel
 		{
-			get
-			{
-				if (_sublabel == null)
-				{
-					_sublabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "sublabel", cr2w, this);
-				}
-				return _sublabel;
-			}
-			set
-			{
-				if (_sublabel == value)
-				{
-					return;
-				}
-				_sublabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sublabel);
+			set => SetProperty(ref _sublabel, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("number")] 
 		public inkTextWidgetReference Number
 		{
-			get
-			{
-				if (_number == null)
-				{
-					_number = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "number", cr2w, this);
-				}
-				return _number;
-			}
-			set
-			{
-				if (_number == value)
-				{
-					return;
-				}
-				_number = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _number);
+			set => SetProperty(ref _number, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("numberPanel")] 
 		public inkWidgetReference NumberPanel
 		{
-			get
-			{
-				if (_numberPanel == null)
-				{
-					_numberPanel = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "numberPanel", cr2w, this);
-				}
-				return _numberPanel;
-			}
-			set
-			{
-				if (_numberPanel == value)
-				{
-					return;
-				}
-				_numberPanel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numberPanel);
+			set => SetProperty(ref _numberPanel, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("gridWidth")] 
 		public CInt32 GridWidth
 		{
-			get
-			{
-				if (_gridWidth == null)
-				{
-					_gridWidth = (CInt32) CR2WTypeManager.Create("Int32", "gridWidth", cr2w, this);
-				}
-				return _gridWidth;
-			}
-			set
-			{
-				if (_gridWidth == value)
-				{
-					return;
-				}
-				_gridWidth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gridWidth);
+			set => SetProperty(ref _gridWidth, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("selectedSlotIndex")] 
 		public CInt32 SelectedSlotIndex
 		{
-			get
-			{
-				if (_selectedSlotIndex == null)
-				{
-					_selectedSlotIndex = (CInt32) CR2WTypeManager.Create("Int32", "selectedSlotIndex", cr2w, this);
-				}
-				return _selectedSlotIndex;
-			}
-			set
-			{
-				if (_selectedSlotIndex == value)
-				{
-					return;
-				}
-				_selectedSlotIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectedSlotIndex);
+			set => SetProperty(ref _selectedSlotIndex, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("toEquipeSlotIndex")] 
 		public CInt32 ToEquipeSlotIndex
 		{
-			get
-			{
-				if (_toEquipeSlotIndex == null)
-				{
-					_toEquipeSlotIndex = (CInt32) CR2WTypeManager.Create("Int32", "toEquipeSlotIndex", cr2w, this);
-				}
-				return _toEquipeSlotIndex;
-			}
-			set
-			{
-				if (_toEquipeSlotIndex == value)
-				{
-					return;
-				}
-				_toEquipeSlotIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toEquipeSlotIndex);
+			set => SetProperty(ref _toEquipeSlotIndex, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("equipArea")] 
 		public CEnum<gamedataEquipmentArea> EquipArea
 		{
-			get
-			{
-				if (_equipArea == null)
-				{
-					_equipArea = (CEnum<gamedataEquipmentArea>) CR2WTypeManager.Create("gamedataEquipmentArea", "equipArea", cr2w, this);
-				}
-				return _equipArea;
-			}
-			set
-			{
-				if (_equipArea == value)
-				{
-					return;
-				}
-				_equipArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipArea);
+			set => SetProperty(ref _equipArea, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("parentObject")] 
 		public CHandle<IScriptable> ParentObject
 		{
-			get
-			{
-				if (_parentObject == null)
-				{
-					_parentObject = (CHandle<IScriptable>) CR2WTypeManager.Create("handle:IScriptable", "parentObject", cr2w, this);
-				}
-				return _parentObject;
-			}
-			set
-			{
-				if (_parentObject == value)
-				{
-					return;
-				}
-				_parentObject = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentObject);
+			set => SetProperty(ref _parentObject, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("onRealeaseCallbackName")] 
 		public CName OnRealeaseCallbackName
 		{
-			get
-			{
-				if (_onRealeaseCallbackName == null)
-				{
-					_onRealeaseCallbackName = (CName) CR2WTypeManager.Create("CName", "onRealeaseCallbackName", cr2w, this);
-				}
-				return _onRealeaseCallbackName;
-			}
-			set
-			{
-				if (_onRealeaseCallbackName == value)
-				{
-					return;
-				}
-				_onRealeaseCallbackName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onRealeaseCallbackName);
+			set => SetProperty(ref _onRealeaseCallbackName, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("gridData")] 
 		public CArray<CHandle<InventoryItemDisplayController>> GridData
 		{
-			get
-			{
-				if (_gridData == null)
-				{
-					_gridData = (CArray<CHandle<InventoryItemDisplayController>>) CR2WTypeManager.Create("array:handle:InventoryItemDisplayController", "gridData", cr2w, this);
-				}
-				return _gridData;
-			}
-			set
-			{
-				if (_gridData == value)
-				{
-					return;
-				}
-				_gridData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gridData);
+			set => SetProperty(ref _gridData, value);
 		}
 
 		public CyberwareInventoryMiniGrid(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

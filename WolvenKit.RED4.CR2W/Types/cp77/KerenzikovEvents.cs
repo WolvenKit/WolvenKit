@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("allowMovementModifier")] 
 		public CHandle<gameStatModifierData> AllowMovementModifier
 		{
-			get
-			{
-				if (_allowMovementModifier == null)
-				{
-					_allowMovementModifier = (CHandle<gameStatModifierData>) CR2WTypeManager.Create("handle:gameStatModifierData", "allowMovementModifier", cr2w, this);
-				}
-				return _allowMovementModifier;
-			}
-			set
-			{
-				if (_allowMovementModifier == value)
-				{
-					return;
-				}
-				_allowMovementModifier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _allowMovementModifier);
+			set => SetProperty(ref _allowMovementModifier, value);
 		}
 
 		public KerenzikovEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

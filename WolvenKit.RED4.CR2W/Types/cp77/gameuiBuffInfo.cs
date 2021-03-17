@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("buffID")] 
 		public TweakDBID BuffID
 		{
-			get
-			{
-				if (_buffID == null)
-				{
-					_buffID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "buffID", cr2w, this);
-				}
-				return _buffID;
-			}
-			set
-			{
-				if (_buffID == value)
-				{
-					return;
-				}
-				_buffID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buffID);
+			set => SetProperty(ref _buffID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timeRemaining")] 
 		public CFloat TimeRemaining
 		{
-			get
-			{
-				if (_timeRemaining == null)
-				{
-					_timeRemaining = (CFloat) CR2WTypeManager.Create("Float", "timeRemaining", cr2w, this);
-				}
-				return _timeRemaining;
-			}
-			set
-			{
-				if (_timeRemaining == value)
-				{
-					return;
-				}
-				_timeRemaining = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeRemaining);
+			set => SetProperty(ref _timeRemaining, value);
 		}
 
 		public gameuiBuffInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

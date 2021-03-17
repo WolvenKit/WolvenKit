@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("saveInventory")] 
 		public CBool SaveInventory
 		{
-			get
-			{
-				if (_saveInventory == null)
-				{
-					_saveInventory = (CBool) CR2WTypeManager.Create("Bool", "saveInventory", cr2w, this);
-				}
-				return _saveInventory;
-			}
-			set
-			{
-				if (_saveInventory == value)
-				{
-					return;
-				}
-				_saveInventory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _saveInventory);
+			set => SetProperty(ref _saveInventory, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("inventoryTag")] 
 		public CEnum<gameSharedInventoryTag> InventoryTag
 		{
-			get
-			{
-				if (_inventoryTag == null)
-				{
-					_inventoryTag = (CEnum<gameSharedInventoryTag>) CR2WTypeManager.Create("gameSharedInventoryTag", "inventoryTag", cr2w, this);
-				}
-				return _inventoryTag;
-			}
-			set
-			{
-				if (_inventoryTag == value)
-				{
-					return;
-				}
-				_inventoryTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryTag);
+			set => SetProperty(ref _inventoryTag, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("noInitialization")] 
 		public CBool NoInitialization
 		{
-			get
-			{
-				if (_noInitialization == null)
-				{
-					_noInitialization = (CBool) CR2WTypeManager.Create("Bool", "noInitialization", cr2w, this);
-				}
-				return _noInitialization;
-			}
-			set
-			{
-				if (_noInitialization == value)
-				{
-					return;
-				}
-				_noInitialization = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _noInitialization);
+			set => SetProperty(ref _noInitialization, value);
 		}
 
 		public gameInventory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

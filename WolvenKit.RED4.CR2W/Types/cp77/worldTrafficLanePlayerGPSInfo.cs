@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("subGraphId")] 
 		public CUInt16 SubGraphId
 		{
-			get
-			{
-				if (_subGraphId == null)
-				{
-					_subGraphId = (CUInt16) CR2WTypeManager.Create("Uint16", "subGraphId", cr2w, this);
-				}
-				return _subGraphId;
-			}
-			set
-			{
-				if (_subGraphId == value)
-				{
-					return;
-				}
-				_subGraphId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subGraphId);
+			set => SetProperty(ref _subGraphId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("stronglyConnectedComponentId")] 
 		public CUInt16 StronglyConnectedComponentId
 		{
-			get
-			{
-				if (_stronglyConnectedComponentId == null)
-				{
-					_stronglyConnectedComponentId = (CUInt16) CR2WTypeManager.Create("Uint16", "stronglyConnectedComponentId", cr2w, this);
-				}
-				return _stronglyConnectedComponentId;
-			}
-			set
-			{
-				if (_stronglyConnectedComponentId == value)
-				{
-					return;
-				}
-				_stronglyConnectedComponentId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stronglyConnectedComponentId);
+			set => SetProperty(ref _stronglyConnectedComponentId, value);
 		}
 
 		public worldTrafficLanePlayerGPSInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

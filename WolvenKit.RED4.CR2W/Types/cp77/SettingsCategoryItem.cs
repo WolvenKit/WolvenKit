@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("labelHighlight")] 
 		public inkTextWidgetReference LabelHighlight
 		{
-			get
-			{
-				if (_labelHighlight == null)
-				{
-					_labelHighlight = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "labelHighlight", cr2w, this);
-				}
-				return _labelHighlight;
-			}
-			set
-			{
-				if (_labelHighlight == value)
-				{
-					return;
-				}
-				_labelHighlight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _labelHighlight);
+			set => SetProperty(ref _labelHighlight, value);
 		}
 
 		public SettingsCategoryItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

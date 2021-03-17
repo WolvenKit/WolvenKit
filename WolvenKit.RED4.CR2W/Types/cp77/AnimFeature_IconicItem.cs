@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isScanning")] 
 		public CBool IsScanning
 		{
-			get
-			{
-				if (_isScanning == null)
-				{
-					_isScanning = (CBool) CR2WTypeManager.Create("Bool", "isScanning", cr2w, this);
-				}
-				return _isScanning;
-			}
-			set
-			{
-				if (_isScanning == value)
-				{
-					return;
-				}
-				_isScanning = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isScanning);
+			set => SetProperty(ref _isScanning, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isFreeDrilling")] 
 		public CBool IsFreeDrilling
 		{
-			get
-			{
-				if (_isFreeDrilling == null)
-				{
-					_isFreeDrilling = (CBool) CR2WTypeManager.Create("Bool", "isFreeDrilling", cr2w, this);
-				}
-				return _isFreeDrilling;
-			}
-			set
-			{
-				if (_isFreeDrilling == value)
-				{
-					return;
-				}
-				_isFreeDrilling = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isFreeDrilling);
+			set => SetProperty(ref _isFreeDrilling, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isActiveDrilling")] 
 		public CBool IsActiveDrilling
 		{
-			get
-			{
-				if (_isActiveDrilling == null)
-				{
-					_isActiveDrilling = (CBool) CR2WTypeManager.Create("Bool", "isActiveDrilling", cr2w, this);
-				}
-				return _isActiveDrilling;
-			}
-			set
-			{
-				if (_isActiveDrilling == value)
-				{
-					return;
-				}
-				_isActiveDrilling = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActiveDrilling);
+			set => SetProperty(ref _isActiveDrilling, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isScanToInteraction")] 
 		public CBool IsScanToInteraction
 		{
-			get
-			{
-				if (_isScanToInteraction == null)
-				{
-					_isScanToInteraction = (CBool) CR2WTypeManager.Create("Bool", "isScanToInteraction", cr2w, this);
-				}
-				return _isScanToInteraction;
-			}
-			set
-			{
-				if (_isScanToInteraction == value)
-				{
-					return;
-				}
-				_isScanToInteraction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isScanToInteraction);
+			set => SetProperty(ref _isScanToInteraction, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isItemEquipped")] 
 		public CBool IsItemEquipped
 		{
-			get
-			{
-				if (_isItemEquipped == null)
-				{
-					_isItemEquipped = (CBool) CR2WTypeManager.Create("Bool", "isItemEquipped", cr2w, this);
-				}
-				return _isItemEquipped;
-			}
-			set
-			{
-				if (_isItemEquipped == value)
-				{
-					return;
-				}
-				_isItemEquipped = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isItemEquipped);
+			set => SetProperty(ref _isItemEquipped, value);
 		}
 
 		public AnimFeature_IconicItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

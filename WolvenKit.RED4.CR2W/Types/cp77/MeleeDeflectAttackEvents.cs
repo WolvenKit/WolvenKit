@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slowMoSet")] 
 		public CBool SlowMoSet
 		{
-			get
-			{
-				if (_slowMoSet == null)
-				{
-					_slowMoSet = (CBool) CR2WTypeManager.Create("Bool", "slowMoSet", cr2w, this);
-				}
-				return _slowMoSet;
-			}
-			set
-			{
-				if (_slowMoSet == value)
-				{
-					return;
-				}
-				_slowMoSet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slowMoSet);
+			set => SetProperty(ref _slowMoSet, value);
 		}
 
 		public MeleeDeflectAttackEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("background")] 
 		public inkWidgetReference Background
 		{
-			get
-			{
-				if (_background == null)
-				{
-					_background = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "background", cr2w, this);
-				}
-				return _background;
-			}
-			set
-			{
-				if (_background == value)
-				{
-					return;
-				}
-				_background = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _background);
+			set => SetProperty(ref _background, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
-			get
-			{
-				if (_icon == null)
-				{
-					_icon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "icon", cr2w, this);
-				}
-				return _icon;
-			}
-			set
-			{
-				if (_icon == value)
-				{
-					return;
-				}
-				_icon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _icon);
+			set => SetProperty(ref _icon, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isTriggered")] 
 		public CBool IsTriggered
 		{
-			get
-			{
-				if (_isTriggered == null)
-				{
-					_isTriggered = (CBool) CR2WTypeManager.Create("Bool", "isTriggered", cr2w, this);
-				}
-				return _isTriggered;
-			}
-			set
-			{
-				if (_isTriggered == value)
-				{
-					return;
-				}
-				_isTriggered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isTriggered);
+			set => SetProperty(ref _isTriggered, value);
 		}
 
 		public characterCreationBodyMorphOptionColorPickerButton(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

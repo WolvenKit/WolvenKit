@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("activatedDeviceNPCSetup")] 
 		public ActivatedDeviceNPCSetup ActivatedDeviceNPCSetup
 		{
-			get
-			{
-				if (_activatedDeviceNPCSetup == null)
-				{
-					_activatedDeviceNPCSetup = (ActivatedDeviceNPCSetup) CR2WTypeManager.Create("ActivatedDeviceNPCSetup", "activatedDeviceNPCSetup", cr2w, this);
-				}
-				return _activatedDeviceNPCSetup;
-			}
-			set
-			{
-				if (_activatedDeviceNPCSetup == value)
-				{
-					return;
-				}
-				_activatedDeviceNPCSetup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activatedDeviceNPCSetup);
+			set => SetProperty(ref _activatedDeviceNPCSetup, value);
 		}
 
 		public ActivatedDeviceNPCControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

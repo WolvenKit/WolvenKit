@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lootTableTDBIDs")] 
 		public CArray<TweakDBID> LootTableTDBIDs
 		{
-			get
-			{
-				if (_lootTableTDBIDs == null)
-				{
-					_lootTableTDBIDs = (CArray<TweakDBID>) CR2WTypeManager.Create("array:TweakDBID", "lootTableTDBIDs", cr2w, this);
-				}
-				return _lootTableTDBIDs;
-			}
-			set
-			{
-				if (_lootTableTDBIDs == value)
-				{
-					return;
-				}
-				_lootTableTDBIDs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lootTableTDBIDs);
+			set => SetProperty(ref _lootTableTDBIDs, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ignoreParentPrefabs")] 
 		public CBool IgnoreParentPrefabs
 		{
-			get
-			{
-				if (_ignoreParentPrefabs == null)
-				{
-					_ignoreParentPrefabs = (CBool) CR2WTypeManager.Create("Bool", "ignoreParentPrefabs", cr2w, this);
-				}
-				return _ignoreParentPrefabs;
-			}
-			set
-			{
-				if (_ignoreParentPrefabs == value)
-				{
-					return;
-				}
-				_ignoreParentPrefabs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ignoreParentPrefabs);
+			set => SetProperty(ref _ignoreParentPrefabs, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("contentAssignment")] 
 		public TweakDBID ContentAssignment
 		{
-			get
-			{
-				if (_contentAssignment == null)
-				{
-					_contentAssignment = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "contentAssignment", cr2w, this);
-				}
-				return _contentAssignment;
-			}
-			set
-			{
-				if (_contentAssignment == value)
-				{
-					return;
-				}
-				_contentAssignment = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contentAssignment);
+			set => SetProperty(ref _contentAssignment, value);
 		}
 
 		public gameLootPrefabMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

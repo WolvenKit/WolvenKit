@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("link")] 
 		public animFloatLink Link
 		{
-			get
-			{
-				if (_link == null)
-				{
-					_link = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "link", cr2w, this);
-				}
-				return _link;
-			}
-			set
-			{
-				if (_link == value)
-				{
-					return;
-				}
-				_link = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _link);
+			set => SetProperty(ref _link, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("expressionVarId")] 
 		public CUInt16 ExpressionVarId
 		{
-			get
-			{
-				if (_expressionVarId == null)
-				{
-					_expressionVarId = (CUInt16) CR2WTypeManager.Create("Uint16", "expressionVarId", cr2w, this);
-				}
-				return _expressionVarId;
-			}
-			set
-			{
-				if (_expressionVarId == value)
-				{
-					return;
-				}
-				_expressionVarId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _expressionVarId);
+			set => SetProperty(ref _expressionVarId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("inputFloatTrack")] 
 		public animNamedTrackIndex InputFloatTrack
 		{
-			get
-			{
-				if (_inputFloatTrack == null)
-				{
-					_inputFloatTrack = (animNamedTrackIndex) CR2WTypeManager.Create("animNamedTrackIndex", "inputFloatTrack", cr2w, this);
-				}
-				return _inputFloatTrack;
-			}
-			set
-			{
-				if (_inputFloatTrack == value)
-				{
-					return;
-				}
-				_inputFloatTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputFloatTrack);
+			set => SetProperty(ref _inputFloatTrack, value);
 		}
 
 		public animAnimMathExpressionFloatSocket(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

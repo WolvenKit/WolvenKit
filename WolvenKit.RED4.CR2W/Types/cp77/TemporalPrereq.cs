@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("totalDuration")] 
 		public CFloat TotalDuration
 		{
-			get
-			{
-				if (_totalDuration == null)
-				{
-					_totalDuration = (CFloat) CR2WTypeManager.Create("Float", "totalDuration", cr2w, this);
-				}
-				return _totalDuration;
-			}
-			set
-			{
-				if (_totalDuration == value)
-				{
-					return;
-				}
-				_totalDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _totalDuration);
+			set => SetProperty(ref _totalDuration, value);
 		}
 
 		public TemporalPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

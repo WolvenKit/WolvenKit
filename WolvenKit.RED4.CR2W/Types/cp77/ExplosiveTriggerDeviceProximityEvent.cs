@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("instigator")] 
 		public entEntityID Instigator
 		{
-			get
-			{
-				if (_instigator == null)
-				{
-					_instigator = (entEntityID) CR2WTypeManager.Create("entEntityID", "instigator", cr2w, this);
-				}
-				return _instigator;
-			}
-			set
-			{
-				if (_instigator == value)
-				{
-					return;
-				}
-				_instigator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instigator);
+			set => SetProperty(ref _instigator, value);
 		}
 
 		public ExplosiveTriggerDeviceProximityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

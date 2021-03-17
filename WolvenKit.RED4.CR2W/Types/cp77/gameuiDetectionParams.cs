@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("detectionProgress")] 
 		public CFloat DetectionProgress
 		{
-			get
-			{
-				if (_detectionProgress == null)
-				{
-					_detectionProgress = (CFloat) CR2WTypeManager.Create("Float", "detectionProgress", cr2w, this);
-				}
-				return _detectionProgress;
-			}
-			set
-			{
-				if (_detectionProgress == value)
-				{
-					return;
-				}
-				_detectionProgress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _detectionProgress);
+			set => SetProperty(ref _detectionProgress, value);
 		}
 
 		public gameuiDetectionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

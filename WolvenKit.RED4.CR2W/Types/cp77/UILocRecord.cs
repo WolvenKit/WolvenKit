@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tag")] 
 		public CName Tag
 		{
-			get
-			{
-				if (_tag == null)
-				{
-					_tag = (CName) CR2WTypeManager.Create("CName", "tag", cr2w, this);
-				}
-				return _tag;
-			}
-			set
-			{
-				if (_tag == value)
-				{
-					return;
-				}
-				_tag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tag);
+			set => SetProperty(ref _tag, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("value")] 
 		public CString Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CString) CR2WTypeManager.Create("String", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		public UILocRecord(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

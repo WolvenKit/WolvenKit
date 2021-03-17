@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("videoPath")] 
 		public CString VideoPath
 		{
-			get
-			{
-				if (_videoPath == null)
-				{
-					_videoPath = (CString) CR2WTypeManager.Create("String", "videoPath", cr2w, this);
-				}
-				return _videoPath;
-			}
-			set
-			{
-				if (_videoPath == value)
-				{
-					return;
-				}
-				_videoPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _videoPath);
+			set => SetProperty(ref _videoPath, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("action")] 
 		public CEnum<gameBinkVideoAction> Action
 		{
-			get
-			{
-				if (_action == null)
-				{
-					_action = (CEnum<gameBinkVideoAction>) CR2WTypeManager.Create("gameBinkVideoAction", "action", cr2w, this);
-				}
-				return _action;
-			}
-			set
-			{
-				if (_action == value)
-				{
-					return;
-				}
-				_action = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
 		}
 
 		public gameBinkVideoEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

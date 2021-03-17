@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("wrappingWidgetCount")] 
 		public CUInt32 WrappingWidgetCount
 		{
-			get
-			{
-				if (_wrappingWidgetCount == null)
-				{
-					_wrappingWidgetCount = (CUInt32) CR2WTypeManager.Create("Uint32", "wrappingWidgetCount", cr2w, this);
-				}
-				return _wrappingWidgetCount;
-			}
-			set
-			{
-				if (_wrappingWidgetCount == value)
-				{
-					return;
-				}
-				_wrappingWidgetCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wrappingWidgetCount);
+			set => SetProperty(ref _wrappingWidgetCount, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("orientation")] 
 		public CEnum<inkEOrientation> Orientation
 		{
-			get
-			{
-				if (_orientation == null)
-				{
-					_orientation = (CEnum<inkEOrientation>) CR2WTypeManager.Create("inkEOrientation", "orientation", cr2w, this);
-				}
-				return _orientation;
-			}
-			set
-			{
-				if (_orientation == value)
-				{
-					return;
-				}
-				_orientation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _orientation);
+			set => SetProperty(ref _orientation, value);
 		}
 
 		public inkUniformGridWidget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

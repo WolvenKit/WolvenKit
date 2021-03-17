@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("realValue")] 
 		public wCHandle<userSettingsVarListName> RealValue
 		{
-			get
-			{
-				if (_realValue == null)
-				{
-					_realValue = (wCHandle<userSettingsVarListName>) CR2WTypeManager.Create("whandle:userSettingsVarListName", "realValue", cr2w, this);
-				}
-				return _realValue;
-			}
-			set
-			{
-				if (_realValue == value)
-				{
-					return;
-				}
-				_realValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _realValue);
+			set => SetProperty(ref _realValue, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("currentIndex")] 
 		public CInt32 CurrentIndex
 		{
-			get
-			{
-				if (_currentIndex == null)
-				{
-					_currentIndex = (CInt32) CR2WTypeManager.Create("Int32", "currentIndex", cr2w, this);
-				}
-				return _currentIndex;
-			}
-			set
-			{
-				if (_currentIndex == value)
-				{
-					return;
-				}
-				_currentIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentIndex);
+			set => SetProperty(ref _currentIndex, value);
 		}
 
 		public SettingsSelectorControllerListName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

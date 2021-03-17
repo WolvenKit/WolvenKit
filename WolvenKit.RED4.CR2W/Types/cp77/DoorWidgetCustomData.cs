@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("passcode")] 
 		public CInt32 Passcode
 		{
-			get
-			{
-				if (_passcode == null)
-				{
-					_passcode = (CInt32) CR2WTypeManager.Create("Int32", "passcode", cr2w, this);
-				}
-				return _passcode;
-			}
-			set
-			{
-				if (_passcode == value)
-				{
-					return;
-				}
-				_passcode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _passcode);
+			set => SetProperty(ref _passcode, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("card")] 
 		public CName Card
 		{
-			get
-			{
-				if (_card == null)
-				{
-					_card = (CName) CR2WTypeManager.Create("CName", "card", cr2w, this);
-				}
-				return _card;
-			}
-			set
-			{
-				if (_card == value)
-				{
-					return;
-				}
-				_card = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _card);
+			set => SetProperty(ref _card, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isPasswordKnown")] 
 		public CBool IsPasswordKnown
 		{
-			get
-			{
-				if (_isPasswordKnown == null)
-				{
-					_isPasswordKnown = (CBool) CR2WTypeManager.Create("Bool", "isPasswordKnown", cr2w, this);
-				}
-				return _isPasswordKnown;
-			}
-			set
-			{
-				if (_isPasswordKnown == value)
-				{
-					return;
-				}
-				_isPasswordKnown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPasswordKnown);
+			set => SetProperty(ref _isPasswordKnown, value);
 		}
 
 		public DoorWidgetCustomData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

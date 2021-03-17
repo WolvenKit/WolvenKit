@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("workspotTree")] 
 		public CHandle<workWorkspotTree> WorkspotTree
 		{
-			get
-			{
-				if (_workspotTree == null)
-				{
-					_workspotTree = (CHandle<workWorkspotTree>) CR2WTypeManager.Create("handle:workWorkspotTree", "workspotTree", cr2w, this);
-				}
-				return _workspotTree;
-			}
-			set
-			{
-				if (_workspotTree == value)
-				{
-					return;
-				}
-				_workspotTree = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotTree);
+			set => SetProperty(ref _workspotTree, value);
 		}
 
 		public scnWorkspotData_EmbeddedWorkspotTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

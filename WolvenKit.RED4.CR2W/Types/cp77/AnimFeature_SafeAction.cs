@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("triggerHeld")] 
 		public CBool TriggerHeld
 		{
-			get
-			{
-				if (_triggerHeld == null)
-				{
-					_triggerHeld = (CBool) CR2WTypeManager.Create("Bool", "triggerHeld", cr2w, this);
-				}
-				return _triggerHeld;
-			}
-			set
-			{
-				if (_triggerHeld == value)
-				{
-					return;
-				}
-				_triggerHeld = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerHeld);
+			set => SetProperty(ref _triggerHeld, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("inCover")] 
 		public CBool InCover
 		{
-			get
-			{
-				if (_inCover == null)
-				{
-					_inCover = (CBool) CR2WTypeManager.Create("Bool", "inCover", cr2w, this);
-				}
-				return _inCover;
-			}
-			set
-			{
-				if (_inCover == value)
-				{
-					return;
-				}
-				_inCover = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inCover);
+			set => SetProperty(ref _inCover, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("safeActionDuration")] 
 		public CFloat SafeActionDuration
 		{
-			get
-			{
-				if (_safeActionDuration == null)
-				{
-					_safeActionDuration = (CFloat) CR2WTypeManager.Create("Float", "safeActionDuration", cr2w, this);
-				}
-				return _safeActionDuration;
-			}
-			set
-			{
-				if (_safeActionDuration == value)
-				{
-					return;
-				}
-				_safeActionDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _safeActionDuration);
+			set => SetProperty(ref _safeActionDuration, value);
 		}
 
 		public AnimFeature_SafeAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

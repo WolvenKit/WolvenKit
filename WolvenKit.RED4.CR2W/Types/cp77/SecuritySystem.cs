@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("savedOutputCache")] 
 		public CArray<OutputValidationDataStruct> SavedOutputCache
 		{
-			get
-			{
-				if (_savedOutputCache == null)
-				{
-					_savedOutputCache = (CArray<OutputValidationDataStruct>) CR2WTypeManager.Create("array:OutputValidationDataStruct", "savedOutputCache", cr2w, this);
-				}
-				return _savedOutputCache;
-			}
-			set
-			{
-				if (_savedOutputCache == value)
-				{
-					return;
-				}
-				_savedOutputCache = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _savedOutputCache);
+			set => SetProperty(ref _savedOutputCache, value);
 		}
 
 		public SecuritySystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

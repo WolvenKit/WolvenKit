@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("metaPoseTrajectoryLs")] 
 		public animTransformIndex MetaPoseTrajectoryLs
 		{
-			get
-			{
-				if (_metaPoseTrajectoryLs == null)
-				{
-					_metaPoseTrajectoryLs = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "metaPoseTrajectoryLs", cr2w, this);
-				}
-				return _metaPoseTrajectoryLs;
-			}
-			set
-			{
-				if (_metaPoseTrajectoryLs == value)
-				{
-					return;
-				}
-				_metaPoseTrajectoryLs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metaPoseTrajectoryLs);
+			set => SetProperty(ref _metaPoseTrajectoryLs, value);
 		}
 
 		public animAnimNode_TrajectoryFromMetaPose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lightAttenuationClamp")] 
 		public CFloat LightAttenuationClamp
 		{
-			get
-			{
-				if (_lightAttenuationClamp == null)
-				{
-					_lightAttenuationClamp = (CFloat) CR2WTypeManager.Create("Float", "lightAttenuationClamp", cr2w, this);
-				}
-				return _lightAttenuationClamp;
-			}
-			set
-			{
-				if (_lightAttenuationClamp == value)
-				{
-					return;
-				}
-				_lightAttenuationClamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lightAttenuationClamp);
+			set => SetProperty(ref _lightAttenuationClamp, value);
 		}
 
 		public WorldLightingConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

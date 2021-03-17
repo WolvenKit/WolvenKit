@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bodyPart")] 
 		public CEnum<EHitReactionZone> BodyPart
 		{
-			get
-			{
-				if (_bodyPart == null)
-				{
-					_bodyPart = (CEnum<EHitReactionZone>) CR2WTypeManager.Create("EHitReactionZone", "bodyPart", cr2w, this);
-				}
-				return _bodyPart;
-			}
-			set
-			{
-				if (_bodyPart == value)
-				{
-					return;
-				}
-				_bodyPart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyPart);
+			set => SetProperty(ref _bodyPart, value);
 		}
 
 		public DismembermentInstigated(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

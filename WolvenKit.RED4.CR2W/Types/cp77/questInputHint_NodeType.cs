@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("show")] 
 		public CBool Show
 		{
-			get
-			{
-				if (_show == null)
-				{
-					_show = (CBool) CR2WTypeManager.Create("Bool", "show", cr2w, this);
-				}
-				return _show;
-			}
-			set
-			{
-				if (_show == value)
-				{
-					return;
-				}
-				_show = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _show);
+			set => SetProperty(ref _show, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("action")] 
 		public CName Action
 		{
-			get
-			{
-				if (_action == null)
-				{
-					_action = (CName) CR2WTypeManager.Create("CName", "action", cr2w, this);
-				}
-				return _action;
-			}
-			set
-			{
-				if (_action == value)
-				{
-					return;
-				}
-				_action = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("groupId")] 
 		public CName GroupId
 		{
-			get
-			{
-				if (_groupId == null)
-				{
-					_groupId = (CName) CR2WTypeManager.Create("CName", "groupId", cr2w, this);
-				}
-				return _groupId;
-			}
-			set
-			{
-				if (_groupId == value)
-				{
-					return;
-				}
-				_groupId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _groupId);
+			set => SetProperty(ref _groupId, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("localizedLabel")] 
 		public CString LocalizedLabel
 		{
-			get
-			{
-				if (_localizedLabel == null)
-				{
-					_localizedLabel = (CString) CR2WTypeManager.Create("String", "localizedLabel", cr2w, this);
-				}
-				return _localizedLabel;
-			}
-			set
-			{
-				if (_localizedLabel == value)
-				{
-					return;
-				}
-				_localizedLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localizedLabel);
+			set => SetProperty(ref _localizedLabel, value);
 		}
 
 		public questInputHint_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

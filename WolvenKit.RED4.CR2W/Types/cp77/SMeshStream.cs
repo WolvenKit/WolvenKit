@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("data")] 
 		public serializationDeferredDataBuffer Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (serializationDeferredDataBuffer) CR2WTypeManager.Create("serializationDeferredDataBuffer", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("type")] 
 		public CEnum<EMeshStreamType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<EMeshStreamType>) CR2WTypeManager.Create("EMeshStreamType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		public SMeshStream(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

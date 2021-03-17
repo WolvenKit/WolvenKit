@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("className")] 
 		public CName ClassName
 		{
-			get
-			{
-				if (_className == null)
-				{
-					_className = (CName) CR2WTypeManager.Create("CName", "className", cr2w, this);
-				}
-				return _className;
-			}
-			set
-			{
-				if (_className == value)
-				{
-					return;
-				}
-				_className = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _className);
+			set => SetProperty(ref _className, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("count")] 
 		public CInt32 Count
 		{
-			get
-			{
-				if (_count == null)
-				{
-					_count = (CInt32) CR2WTypeManager.Create("Int32", "count", cr2w, this);
-				}
-				return _count;
-			}
-			set
-			{
-				if (_count == value)
-				{
-					return;
-				}
-				_count = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _count);
+			set => SetProperty(ref _count, value);
 		}
 
 		public DEBUG_actorsClassNamesCount(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

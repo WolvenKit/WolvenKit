@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("payAmount")] 
 		public CUInt32 PayAmount
 		{
-			get
-			{
-				if (_payAmount == null)
-				{
-					_payAmount = (CUInt32) CR2WTypeManager.Create("Uint32", "payAmount", cr2w, this);
-				}
-				return _payAmount;
-			}
-			set
-			{
-				if (_payAmount == value)
-				{
-					return;
-				}
-				_payAmount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _payAmount);
+			set => SetProperty(ref _payAmount, value);
 		}
 
 		public PaymentFixedAmount_ScriptConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

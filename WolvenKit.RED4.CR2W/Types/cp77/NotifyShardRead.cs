@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entry")] 
 		public CHandle<gameJournalOnscreen> Entry
 		{
-			get
-			{
-				if (_entry == null)
-				{
-					_entry = (CHandle<gameJournalOnscreen>) CR2WTypeManager.Create("handle:gameJournalOnscreen", "entry", cr2w, this);
-				}
-				return _entry;
-			}
-			set
-			{
-				if (_entry == value)
-				{
-					return;
-				}
-				_entry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entry);
+			set => SetProperty(ref _entry, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("title")] 
 		public CString Title
 		{
-			get
-			{
-				if (_title == null)
-				{
-					_title = (CString) CR2WTypeManager.Create("String", "title", cr2w, this);
-				}
-				return _title;
-			}
-			set
-			{
-				if (_title == value)
-				{
-					return;
-				}
-				_title = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _title);
+			set => SetProperty(ref _title, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("text")] 
 		public CString Text
 		{
-			get
-			{
-				if (_text == null)
-				{
-					_text = (CString) CR2WTypeManager.Create("String", "text", cr2w, this);
-				}
-				return _text;
-			}
-			set
-			{
-				if (_text == value)
-				{
-					return;
-				}
-				_text = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _text);
+			set => SetProperty(ref _text, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isCrypted")] 
 		public CBool IsCrypted
 		{
-			get
-			{
-				if (_isCrypted == null)
-				{
-					_isCrypted = (CBool) CR2WTypeManager.Create("Bool", "isCrypted", cr2w, this);
-				}
-				return _isCrypted;
-			}
-			set
-			{
-				if (_isCrypted == value)
-				{
-					return;
-				}
-				_isCrypted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isCrypted);
+			set => SetProperty(ref _isCrypted, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		public NotifyShardRead(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("follower")] 
 		public CHandle<AIArgumentMapping> Follower
 		{
-			get
-			{
-				if (_follower == null)
-				{
-					_follower = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "follower", cr2w, this);
-				}
-				return _follower;
-			}
-			set
-			{
-				if (_follower == value)
-				{
-					return;
-				}
-				_follower = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _follower);
+			set => SetProperty(ref _follower, value);
 		}
 
 		public AIbehaviorJoinFollowerSquadWithTargetDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

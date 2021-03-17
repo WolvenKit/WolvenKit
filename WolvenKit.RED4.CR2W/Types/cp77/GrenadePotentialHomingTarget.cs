@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entity")] 
 		public wCHandle<ScriptedPuppet> Entity
 		{
-			get
-			{
-				if (_entity == null)
-				{
-					_entity = (wCHandle<ScriptedPuppet>) CR2WTypeManager.Create("whandle:ScriptedPuppet", "entity", cr2w, this);
-				}
-				return _entity;
-			}
-			set
-			{
-				if (_entity == value)
-				{
-					return;
-				}
-				_entity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entity);
+			set => SetProperty(ref _entity, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("targetSlot")] 
 		public CName TargetSlot
 		{
-			get
-			{
-				if (_targetSlot == null)
-				{
-					_targetSlot = (CName) CR2WTypeManager.Create("CName", "targetSlot", cr2w, this);
-				}
-				return _targetSlot;
-			}
-			set
-			{
-				if (_targetSlot == value)
-				{
-					return;
-				}
-				_targetSlot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetSlot);
+			set => SetProperty(ref _targetSlot, value);
 		}
 
 		public GrenadePotentialHomingTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

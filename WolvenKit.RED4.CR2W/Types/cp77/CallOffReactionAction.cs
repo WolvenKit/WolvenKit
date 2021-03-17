@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("squadActionName")] 
 		public CEnum<EAISquadAction> SquadActionName
 		{
-			get
-			{
-				if (_squadActionName == null)
-				{
-					_squadActionName = (CEnum<EAISquadAction>) CR2WTypeManager.Create("EAISquadAction", "squadActionName", cr2w, this);
-				}
-				return _squadActionName;
-			}
-			set
-			{
-				if (_squadActionName == value)
-				{
-					return;
-				}
-				_squadActionName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _squadActionName);
+			set => SetProperty(ref _squadActionName, value);
 		}
 
 		public CallOffReactionAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

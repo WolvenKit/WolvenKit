@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attitude")] 
 		public CEnum<EAIAttitude> Attitude
 		{
-			get
-			{
-				if (_attitude == null)
-				{
-					_attitude = (CEnum<EAIAttitude>) CR2WTypeManager.Create("EAIAttitude", "attitude", cr2w, this);
-				}
-				return _attitude;
-			}
-			set
-			{
-				if (_attitude == value)
-				{
-					return;
-				}
-				_attitude = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attitude);
+			set => SetProperty(ref _attitude, value);
 		}
 
 		public gameAttitudePrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

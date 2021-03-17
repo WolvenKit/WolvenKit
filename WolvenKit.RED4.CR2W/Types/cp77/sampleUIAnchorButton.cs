@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("anchorLocation")] 
 		public CEnum<inkEAnchor> AnchorLocation
 		{
-			get
-			{
-				if (_anchorLocation == null)
-				{
-					_anchorLocation = (CEnum<inkEAnchor>) CR2WTypeManager.Create("inkEAnchor", "anchorLocation", cr2w, this);
-				}
-				return _anchorLocation;
-			}
-			set
-			{
-				if (_anchorLocation == value)
-				{
-					return;
-				}
-				_anchorLocation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _anchorLocation);
+			set => SetProperty(ref _anchorLocation, value);
 		}
 
 		public sampleUIAnchorButton(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CUInt16 Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CUInt16) CR2WTypeManager.Create("Uint16", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ordinal")] 
 		public CUInt16 Ordinal
 		{
-			get
-			{
-				if (_ordinal == null)
-				{
-					_ordinal = (CUInt16) CR2WTypeManager.Create("Uint16", "ordinal", cr2w, this);
-				}
-				return _ordinal;
-			}
-			set
-			{
-				if (_ordinal == value)
-				{
-					return;
-				}
-				_ordinal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ordinal);
+			set => SetProperty(ref _ordinal, value);
 		}
 
 		public scnInputSocketStamp(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

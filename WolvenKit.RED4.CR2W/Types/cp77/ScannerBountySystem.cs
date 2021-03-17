@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bounty")] 
 		public BountyUI Bounty
 		{
-			get
-			{
-				if (_bounty == null)
-				{
-					_bounty = (BountyUI) CR2WTypeManager.Create("BountyUI", "bounty", cr2w, this);
-				}
-				return _bounty;
-			}
-			set
-			{
-				if (_bounty == value)
-				{
-					return;
-				}
-				_bounty = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bounty);
+			set => SetProperty(ref _bounty, value);
 		}
 
 		public ScannerBountySystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vfxToStop")] 
 		public CName VfxToStop
 		{
-			get
-			{
-				if (_vfxToStop == null)
-				{
-					_vfxToStop = (CName) CR2WTypeManager.Create("CName", "vfxToStop", cr2w, this);
-				}
-				return _vfxToStop;
-			}
-			set
-			{
-				if (_vfxToStop == value)
-				{
-					return;
-				}
-				_vfxToStop = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vfxToStop);
+			set => SetProperty(ref _vfxToStop, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("vfxToStart")] 
 		public CName VfxToStart
 		{
-			get
-			{
-				if (_vfxToStart == null)
-				{
-					_vfxToStart = (CName) CR2WTypeManager.Create("CName", "vfxToStart", cr2w, this);
-				}
-				return _vfxToStart;
-			}
-			set
-			{
-				if (_vfxToStart == value)
-				{
-					return;
-				}
-				_vfxToStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vfxToStart);
+			set => SetProperty(ref _vfxToStart, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		public StopAndPlayVFXEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

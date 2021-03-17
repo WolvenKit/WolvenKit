@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("chargeModeAim")] 
 		public CHandle<gameweaponAnimFeature_AimPlayer> ChargeModeAim
 		{
-			get
-			{
-				if (_chargeModeAim == null)
-				{
-					_chargeModeAim = (CHandle<gameweaponAnimFeature_AimPlayer>) CR2WTypeManager.Create("handle:gameweaponAnimFeature_AimPlayer", "chargeModeAim", cr2w, this);
-				}
-				return _chargeModeAim;
-			}
-			set
-			{
-				if (_chargeModeAim == value)
-				{
-					return;
-				}
-				_chargeModeAim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeModeAim);
+			set => SetProperty(ref _chargeModeAim, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("leftHandObject")] 
 		public wCHandle<gameweaponObject> LeftHandObject
 		{
-			get
-			{
-				if (_leftHandObject == null)
-				{
-					_leftHandObject = (wCHandle<gameweaponObject>) CR2WTypeManager.Create("whandle:gameweaponObject", "leftHandObject", cr2w, this);
-				}
-				return _leftHandObject;
-			}
-			set
-			{
-				if (_leftHandObject == value)
-				{
-					return;
-				}
-				_leftHandObject = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _leftHandObject);
+			set => SetProperty(ref _leftHandObject, value);
 		}
 
 		public LeftHandCyberwareChargeEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

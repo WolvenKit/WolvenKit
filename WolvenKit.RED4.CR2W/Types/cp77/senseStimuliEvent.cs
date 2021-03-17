@@ -25,299 +25,104 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sourceObject")] 
 		public wCHandle<gameObject> SourceObject
 		{
-			get
-			{
-				if (_sourceObject == null)
-				{
-					_sourceObject = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "sourceObject", cr2w, this);
-				}
-				return _sourceObject;
-			}
-			set
-			{
-				if (_sourceObject == value)
-				{
-					return;
-				}
-				_sourceObject = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sourceObject);
+			set => SetProperty(ref _sourceObject, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("sourcePosition")] 
 		public Vector4 SourcePosition
 		{
-			get
-			{
-				if (_sourcePosition == null)
-				{
-					_sourcePosition = (Vector4) CR2WTypeManager.Create("Vector4", "sourcePosition", cr2w, this);
-				}
-				return _sourcePosition;
-			}
-			set
-			{
-				if (_sourcePosition == value)
-				{
-					return;
-				}
-				_sourcePosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sourcePosition);
+			set => SetProperty(ref _sourcePosition, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get
-			{
-				if (_radius == null)
-				{
-					_radius = (CFloat) CR2WTypeManager.Create("Float", "radius", cr2w, this);
-				}
-				return _radius;
-			}
-			set
-			{
-				if (_radius == value)
-				{
-					return;
-				}
-				_radius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radius);
+			set => SetProperty(ref _radius, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("detection")] 
 		public CFloat Detection
 		{
-			get
-			{
-				if (_detection == null)
-				{
-					_detection = (CFloat) CR2WTypeManager.Create("Float", "detection", cr2w, this);
-				}
-				return _detection;
-			}
-			set
-			{
-				if (_detection == value)
-				{
-					return;
-				}
-				_detection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _detection);
+			set => SetProperty(ref _detection, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("data")] 
 		public CHandle<senseStimuliData> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CHandle<senseStimuliData>) CR2WTypeManager.Create("handle:senseStimuliData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("id")] 
 		public CUInt32 Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CUInt32) CR2WTypeManager.Create("Uint32", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("stimType")] 
 		public CEnum<gamedataStimType> StimType
 		{
-			get
-			{
-				if (_stimType == null)
-				{
-					_stimType = (CEnum<gamedataStimType>) CR2WTypeManager.Create("gamedataStimType", "stimType", cr2w, this);
-				}
-				return _stimType;
-			}
-			set
-			{
-				if (_stimType == value)
-				{
-					return;
-				}
-				_stimType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stimType);
+			set => SetProperty(ref _stimType, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("stimTags")] 
 		public CArray<CName> StimTags
 		{
-			get
-			{
-				if (_stimTags == null)
-				{
-					_stimTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "stimTags", cr2w, this);
-				}
-				return _stimTags;
-			}
-			set
-			{
-				if (_stimTags == value)
-				{
-					return;
-				}
-				_stimTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stimTags);
+			set => SetProperty(ref _stimTags, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("movePositions")] 
 		public CArray<Vector4> MovePositions
 		{
-			get
-			{
-				if (_movePositions == null)
-				{
-					_movePositions = (CArray<Vector4>) CR2WTypeManager.Create("array:Vector4", "movePositions", cr2w, this);
-				}
-				return _movePositions;
-			}
-			set
-			{
-				if (_movePositions == value)
-				{
-					return;
-				}
-				_movePositions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movePositions);
+			set => SetProperty(ref _movePositions, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("stimPriority")] 
 		public CEnum<gamedataStimPriority> StimPriority
 		{
-			get
-			{
-				if (_stimPriority == null)
-				{
-					_stimPriority = (CEnum<gamedataStimPriority>) CR2WTypeManager.Create("gamedataStimPriority", "stimPriority", cr2w, this);
-				}
-				return _stimPriority;
-			}
-			set
-			{
-				if (_stimPriority == value)
-				{
-					return;
-				}
-				_stimPriority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stimPriority);
+			set => SetProperty(ref _stimPriority, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("stimPropagation")] 
 		public CEnum<gamedataStimPropagation> StimPropagation
 		{
-			get
-			{
-				if (_stimPropagation == null)
-				{
-					_stimPropagation = (CEnum<gamedataStimPropagation>) CR2WTypeManager.Create("gamedataStimPropagation", "stimPropagation", cr2w, this);
-				}
-				return _stimPropagation;
-			}
-			set
-			{
-				if (_stimPropagation == value)
-				{
-					return;
-				}
-				_stimPropagation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stimPropagation);
+			set => SetProperty(ref _stimPropagation, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("stimCategory")] 
 		public CName StimCategory
 		{
-			get
-			{
-				if (_stimCategory == null)
-				{
-					_stimCategory = (CName) CR2WTypeManager.Create("CName", "stimCategory", cr2w, this);
-				}
-				return _stimCategory;
-			}
-			set
-			{
-				if (_stimCategory == value)
-				{
-					return;
-				}
-				_stimCategory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stimCategory);
+			set => SetProperty(ref _stimCategory, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("stimInvestigateData")] 
 		public stimInvestigateData StimInvestigateData
 		{
-			get
-			{
-				if (_stimInvestigateData == null)
-				{
-					_stimInvestigateData = (stimInvestigateData) CR2WTypeManager.Create("stimInvestigateData", "stimInvestigateData", cr2w, this);
-				}
-				return _stimInvestigateData;
-			}
-			set
-			{
-				if (_stimInvestigateData == value)
-				{
-					return;
-				}
-				_stimInvestigateData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stimInvestigateData);
+			set => SetProperty(ref _stimInvestigateData, value);
 		}
 
 		public senseStimuliEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("valueProvider")] 
 		public CHandle<questIInt32ValueProvider> ValueProvider
 		{
-			get
-			{
-				if (_valueProvider == null)
-				{
-					_valueProvider = (CHandle<questIInt32ValueProvider>) CR2WTypeManager.Create("handle:questIInt32ValueProvider", "valueProvider", cr2w, this);
-				}
-				return _valueProvider;
-			}
-			set
-			{
-				if (_valueProvider == value)
-				{
-					return;
-				}
-				_valueProvider = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _valueProvider);
+			set => SetProperty(ref _valueProvider, value);
 		}
 
 		public questInt32ValueWrapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

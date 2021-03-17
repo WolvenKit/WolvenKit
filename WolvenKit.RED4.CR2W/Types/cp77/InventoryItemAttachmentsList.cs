@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("libraryItemName")] 
 		public CName LibraryItemName
 		{
-			get
-			{
-				if (_libraryItemName == null)
-				{
-					_libraryItemName = (CName) CR2WTypeManager.Create("CName", "libraryItemName", cr2w, this);
-				}
-				return _libraryItemName;
-			}
-			set
-			{
-				if (_libraryItemName == value)
-				{
-					return;
-				}
-				_libraryItemName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _libraryItemName);
+			set => SetProperty(ref _libraryItemName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("container")] 
 		public inkCompoundWidgetReference Container
 		{
-			get
-			{
-				if (_container == null)
-				{
-					_container = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "container", cr2w, this);
-				}
-				return _container;
-			}
-			set
-			{
-				if (_container == value)
-				{
-					return;
-				}
-				_container = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _container);
+			set => SetProperty(ref _container, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("itemsList")] 
 		public CArray<wCHandle<inkWidget>> ItemsList
 		{
-			get
-			{
-				if (_itemsList == null)
-				{
-					_itemsList = (CArray<wCHandle<inkWidget>>) CR2WTypeManager.Create("array:whandle:inkWidget", "itemsList", cr2w, this);
-				}
-				return _itemsList;
-			}
-			set
-			{
-				if (_itemsList == value)
-				{
-					return;
-				}
-				_itemsList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemsList);
+			set => SetProperty(ref _itemsList, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("data")] 
 		public CArray<CName> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CArray<CName>) CR2WTypeManager.Create("array:CName", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		public InventoryItemAttachmentsList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

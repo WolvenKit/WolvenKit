@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("censorFlag")] 
 		public CEnum<CensorshipFlags> CensorFlag
 		{
-			get
-			{
-				if (_censorFlag == null)
-				{
-					_censorFlag = (CEnum<CensorshipFlags>) CR2WTypeManager.Create("CensorshipFlags", "censorFlag", cr2w, this);
-				}
-				return _censorFlag;
-			}
-			set
-			{
-				if (_censorFlag == value)
-				{
-					return;
-				}
-				_censorFlag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _censorFlag);
+			set => SetProperty(ref _censorFlag, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("censorFlagAction")] 
 		public CEnum<gameuiCharacterCustomizationActionType> CensorFlagAction
 		{
-			get
-			{
-				if (_censorFlagAction == null)
-				{
-					_censorFlagAction = (CEnum<gameuiCharacterCustomizationActionType>) CR2WTypeManager.Create("gameuiCharacterCustomizationActionType", "censorFlagAction", cr2w, this);
-				}
-				return _censorFlagAction;
-			}
-			set
-			{
-				if (_censorFlagAction == value)
-				{
-					return;
-				}
-				_censorFlagAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _censorFlagAction);
+			set => SetProperty(ref _censorFlagAction, value);
 		}
 
 		public gameuiCensorshipInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

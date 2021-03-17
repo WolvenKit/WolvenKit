@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("element")] 
 		public TweakDBID Element
 		{
-			get
-			{
-				if (_element == null)
-				{
-					_element = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "element", cr2w, this);
-				}
-				return _element;
-			}
-			set
-			{
-				if (_element == value)
-				{
-					return;
-				}
-				_element = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _element);
+			set => SetProperty(ref _element, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("condition")] 
 		public CEnum<gamedataUICondition> Condition
 		{
-			get
-			{
-				if (_condition == null)
-				{
-					_condition = (CEnum<gamedataUICondition>) CR2WTypeManager.Create("gamedataUICondition", "condition", cr2w, this);
-				}
-				return _condition;
-			}
-			set
-			{
-				if (_condition == value)
-				{
-					return;
-				}
-				_condition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _condition);
+			set => SetProperty(ref _condition, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("value")] 
 		public CBool Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CBool) CR2WTypeManager.Create("Bool", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		public questUIElement_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tierID")] 
 		public TweakDBID TierID
 		{
-			get
-			{
-				if (_tierID == null)
-				{
-					_tierID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "tierID", cr2w, this);
-				}
-				return _tierID;
-			}
-			set
-			{
-				if (_tierID == value)
-				{
-					return;
-				}
-				_tierID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tierID);
+			set => SetProperty(ref _tierID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("comparisonType")] 
 		public CEnum<EComparisonType> ComparisonType
 		{
-			get
-			{
-				if (_comparisonType == null)
-				{
-					_comparisonType = (CEnum<EComparisonType>) CR2WTypeManager.Create("EComparisonType", "comparisonType", cr2w, this);
-				}
-				return _comparisonType;
-			}
-			set
-			{
-				if (_comparisonType == value)
-				{
-					return;
-				}
-				_comparisonType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comparisonType);
+			set => SetProperty(ref _comparisonType, value);
 		}
 
 		public questStreetCredTier_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

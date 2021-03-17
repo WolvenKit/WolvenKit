@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("outThreatArgument")] 
 		public CHandle<AIArgumentMapping> OutThreatArgument
 		{
-			get
-			{
-				if (_outThreatArgument == null)
-				{
-					_outThreatArgument = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outThreatArgument", cr2w, this);
-				}
-				return _outThreatArgument;
-			}
-			set
-			{
-				if (_outThreatArgument == value)
-				{
-					return;
-				}
-				_outThreatArgument = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outThreatArgument);
+			set => SetProperty(ref _outThreatArgument, value);
 		}
 
 		public GetRandomThreat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

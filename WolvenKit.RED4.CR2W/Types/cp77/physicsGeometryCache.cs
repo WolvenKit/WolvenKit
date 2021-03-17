@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bufferTableSectors")] 
 		public CArray<serializationDeferredDataBuffer> BufferTableSectors
 		{
-			get
-			{
-				if (_bufferTableSectors == null)
-				{
-					_bufferTableSectors = (CArray<serializationDeferredDataBuffer>) CR2WTypeManager.Create("array:serializationDeferredDataBuffer", "bufferTableSectors", cr2w, this);
-				}
-				return _bufferTableSectors;
-			}
-			set
-			{
-				if (_bufferTableSectors == value)
-				{
-					return;
-				}
-				_bufferTableSectors = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bufferTableSectors);
+			set => SetProperty(ref _bufferTableSectors, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("sectorEntries")] 
 		public CArray<physicsSectorEntry> SectorEntries
 		{
-			get
-			{
-				if (_sectorEntries == null)
-				{
-					_sectorEntries = (CArray<physicsSectorEntry>) CR2WTypeManager.Create("array:physicsSectorEntry", "sectorEntries", cr2w, this);
-				}
-				return _sectorEntries;
-			}
-			set
-			{
-				if (_sectorEntries == value)
-				{
-					return;
-				}
-				_sectorEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sectorEntries);
+			set => SetProperty(ref _sectorEntries, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("sectorGeometries")] 
 		public CArray<physicsGeometryKey> SectorGeometries
 		{
-			get
-			{
-				if (_sectorGeometries == null)
-				{
-					_sectorGeometries = (CArray<physicsGeometryKey>) CR2WTypeManager.Create("array:physicsGeometryKey", "sectorGeometries", cr2w, this);
-				}
-				return _sectorGeometries;
-			}
-			set
-			{
-				if (_sectorGeometries == value)
-				{
-					return;
-				}
-				_sectorGeometries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sectorGeometries);
+			set => SetProperty(ref _sectorGeometries, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("sectorCacheEntries")] 
 		public CArray<physicsSectorCacheEntry> SectorCacheEntries
 		{
-			get
-			{
-				if (_sectorCacheEntries == null)
-				{
-					_sectorCacheEntries = (CArray<physicsSectorCacheEntry>) CR2WTypeManager.Create("array:physicsSectorCacheEntry", "sectorCacheEntries", cr2w, this);
-				}
-				return _sectorCacheEntries;
-			}
-			set
-			{
-				if (_sectorCacheEntries == value)
-				{
-					return;
-				}
-				_sectorCacheEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sectorCacheEntries);
+			set => SetProperty(ref _sectorCacheEntries, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("alwaysLoadedSector")] 
 		public physicsSectorEntry AlwaysLoadedSector
 		{
-			get
-			{
-				if (_alwaysLoadedSector == null)
-				{
-					_alwaysLoadedSector = (physicsSectorEntry) CR2WTypeManager.Create("physicsSectorEntry", "alwaysLoadedSector", cr2w, this);
-				}
-				return _alwaysLoadedSector;
-			}
-			set
-			{
-				if (_alwaysLoadedSector == value)
-				{
-					return;
-				}
-				_alwaysLoadedSector = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alwaysLoadedSector);
+			set => SetProperty(ref _alwaysLoadedSector, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("alwaysLoadedSectorDDB")] 
 		public serializationDeferredDataBuffer AlwaysLoadedSectorDDB
 		{
-			get
-			{
-				if (_alwaysLoadedSectorDDB == null)
-				{
-					_alwaysLoadedSectorDDB = (serializationDeferredDataBuffer) CR2WTypeManager.Create("serializationDeferredDataBuffer", "alwaysLoadedSectorDDB", cr2w, this);
-				}
-				return _alwaysLoadedSectorDDB;
-			}
-			set
-			{
-				if (_alwaysLoadedSectorDDB == value)
-				{
-					return;
-				}
-				_alwaysLoadedSectorDDB = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alwaysLoadedSectorDDB);
+			set => SetProperty(ref _alwaysLoadedSectorDDB, value);
 		}
 
 		public physicsGeometryCache(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

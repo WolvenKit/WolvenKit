@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("closestDecalDetectionRadius")] 
 		public CFloat ClosestDecalDetectionRadius
 		{
-			get
-			{
-				if (_closestDecalDetectionRadius == null)
-				{
-					_closestDecalDetectionRadius = (CFloat) CR2WTypeManager.Create("Float", "closestDecalDetectionRadius", cr2w, this);
-				}
-				return _closestDecalDetectionRadius;
-			}
-			set
-			{
-				if (_closestDecalDetectionRadius == value)
-				{
-					return;
-				}
-				_closestDecalDetectionRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _closestDecalDetectionRadius);
+			set => SetProperty(ref _closestDecalDetectionRadius, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entries")] 
 		public CArray<audioFootstepDecalMaterialEntry> Entries
 		{
-			get
-			{
-				if (_entries == null)
-				{
-					_entries = (CArray<audioFootstepDecalMaterialEntry>) CR2WTypeManager.Create("array:audioFootstepDecalMaterialEntry", "entries", cr2w, this);
-				}
-				return _entries;
-			}
-			set
-			{
-				if (_entries == value)
-				{
-					return;
-				}
-				_entries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
 		}
 
 		public audioFootstepDecalMaterialsMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

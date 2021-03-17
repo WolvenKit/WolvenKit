@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("destinationPoint")] 
 		public CHandle<AIArgumentMapping> DestinationPoint
 		{
-			get
-			{
-				if (_destinationPoint == null)
-				{
-					_destinationPoint = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "destinationPoint", cr2w, this);
-				}
-				return _destinationPoint;
-			}
-			set
-			{
-				if (_destinationPoint == value)
-				{
-					return;
-				}
-				_destinationPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _destinationPoint);
+			set => SetProperty(ref _destinationPoint, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("doNavTest")] 
 		public CHandle<AIArgumentMapping> DoNavTest
 		{
-			get
-			{
-				if (_doNavTest == null)
-				{
-					_doNavTest = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "doNavTest", cr2w, this);
-				}
-				return _doNavTest;
-			}
-			set
-			{
-				if (_doNavTest == value)
-				{
-					return;
-				}
-				_doNavTest = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _doNavTest);
+			set => SetProperty(ref _doNavTest, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("rotation")] 
 		public CHandle<AIArgumentMapping> Rotation
 		{
-			get
-			{
-				if (_rotation == null)
-				{
-					_rotation = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "rotation", cr2w, this);
-				}
-				return _rotation;
-			}
-			set
-			{
-				if (_rotation == value)
-				{
-					return;
-				}
-				_rotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotation);
+			set => SetProperty(ref _rotation, value);
 		}
 
 		public AIbehaviorActionTeleportTreeNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

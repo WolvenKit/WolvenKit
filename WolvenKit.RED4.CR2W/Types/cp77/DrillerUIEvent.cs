@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actionChosen")] 
 		public gameinteractionsChoice ActionChosen
 		{
-			get
-			{
-				if (_actionChosen == null)
-				{
-					_actionChosen = (gameinteractionsChoice) CR2WTypeManager.Create("gameinteractionsChoice", "actionChosen", cr2w, this);
-				}
-				return _actionChosen;
-			}
-			set
-			{
-				if (_actionChosen == value)
-				{
-					return;
-				}
-				_actionChosen = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionChosen);
+			set => SetProperty(ref _actionChosen, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("activator")] 
 		public wCHandle<gameObject> Activator
 		{
-			get
-			{
-				if (_activator == null)
-				{
-					_activator = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "activator", cr2w, this);
-				}
-				return _activator;
-			}
-			set
-			{
-				if (_activator == value)
-				{
-					return;
-				}
-				_activator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activator);
+			set => SetProperty(ref _activator, value);
 		}
 
 		public DrillerUIEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

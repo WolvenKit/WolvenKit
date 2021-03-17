@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("interaction")] 
 		public CHandle<gameinteractionsComponent> Interaction
 		{
-			get
-			{
-				if (_interaction == null)
-				{
-					_interaction = (CHandle<gameinteractionsComponent>) CR2WTypeManager.Create("handle:gameinteractionsComponent", "interaction", cr2w, this);
-				}
-				return _interaction;
-			}
-			set
-			{
-				if (_interaction == value)
-				{
-					return;
-				}
-				_interaction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interaction);
+			set => SetProperty(ref _interaction, value);
 		}
 
 		public InspectionObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

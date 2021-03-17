@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lootID")] 
 		public TweakDBID LootID
 		{
-			get
-			{
-				if (_lootID == null)
-				{
-					_lootID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "lootID", cr2w, this);
-				}
-				return _lootID;
-			}
-			set
-			{
-				if (_lootID == value)
-				{
-					return;
-				}
-				_lootID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lootID);
+			set => SetProperty(ref _lootID, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("isInIconForcedVisibilityRange")] 
 		public CBool IsInIconForcedVisibilityRange
 		{
-			get
-			{
-				if (_isInIconForcedVisibilityRange == null)
-				{
-					_isInIconForcedVisibilityRange = (CBool) CR2WTypeManager.Create("Bool", "isInIconForcedVisibilityRange", cr2w, this);
-				}
-				return _isInIconForcedVisibilityRange;
-			}
-			set
-			{
-				if (_isInIconForcedVisibilityRange == value)
-				{
-					return;
-				}
-				_isInIconForcedVisibilityRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInIconForcedVisibilityRange);
+			set => SetProperty(ref _isInIconForcedVisibilityRange, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("activeQualityRangeInteraction")] 
 		public CName ActiveQualityRangeInteraction
 		{
-			get
-			{
-				if (_activeQualityRangeInteraction == null)
-				{
-					_activeQualityRangeInteraction = (CName) CR2WTypeManager.Create("CName", "activeQualityRangeInteraction", cr2w, this);
-				}
-				return _activeQualityRangeInteraction;
-			}
-			set
-			{
-				if (_activeQualityRangeInteraction == value)
-				{
-					return;
-				}
-				_activeQualityRangeInteraction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeQualityRangeInteraction);
+			set => SetProperty(ref _activeQualityRangeInteraction, value);
 		}
 
 		public gameLootObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

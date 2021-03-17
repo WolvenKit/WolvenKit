@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("style")] 
 		public CEnum<questCustomStyle> Style
 		{
-			get
-			{
-				if (_style == null)
-				{
-					_style = (CEnum<questCustomStyle>) CR2WTypeManager.Create("questCustomStyle", "style", cr2w, this);
-				}
-				return _style;
-			}
-			set
-			{
-				if (_style == value)
-				{
-					return;
-				}
-				_style = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _style);
+			set => SetProperty(ref _style, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		public questSetCustomStyle_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

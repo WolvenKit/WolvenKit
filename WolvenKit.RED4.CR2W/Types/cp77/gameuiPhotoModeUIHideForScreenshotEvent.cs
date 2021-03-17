@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hide")] 
 		public CBool Hide
 		{
-			get
-			{
-				if (_hide == null)
-				{
-					_hide = (CBool) CR2WTypeManager.Create("Bool", "hide", cr2w, this);
-				}
-				return _hide;
-			}
-			set
-			{
-				if (_hide == value)
-				{
-					return;
-				}
-				_hide = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hide);
+			set => SetProperty(ref _hide, value);
 		}
 
 		public gameuiPhotoModeUIHideForScreenshotEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

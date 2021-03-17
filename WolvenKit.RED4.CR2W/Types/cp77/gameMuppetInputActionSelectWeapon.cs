@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("wantedWeapon")] 
 		public gameItemID WantedWeapon
 		{
-			get
-			{
-				if (_wantedWeapon == null)
-				{
-					_wantedWeapon = (gameItemID) CR2WTypeManager.Create("gameItemID", "wantedWeapon", cr2w, this);
-				}
-				return _wantedWeapon;
-			}
-			set
-			{
-				if (_wantedWeapon == value)
-				{
-					return;
-				}
-				_wantedWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wantedWeapon);
+			set => SetProperty(ref _wantedWeapon, value);
 		}
 
 		public gameMuppetInputActionSelectWeapon(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

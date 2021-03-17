@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("allow")] 
 		public CBool Allow
 		{
-			get
-			{
-				if (_allow == null)
-				{
-					_allow = (CBool) CR2WTypeManager.Create("Bool", "allow", cr2w, this);
-				}
-				return _allow;
-			}
-			set
-			{
-				if (_allow == value)
-				{
-					return;
-				}
-				_allow = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _allow);
+			set => SetProperty(ref _allow, value);
 		}
 
 		public entAllowVehicleCollisionRagdollInSceneEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

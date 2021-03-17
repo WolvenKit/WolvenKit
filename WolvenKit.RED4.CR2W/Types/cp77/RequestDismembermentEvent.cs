@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bodyPart")] 
 		public CEnum<gameDismBodyPart> BodyPart
 		{
-			get
-			{
-				if (_bodyPart == null)
-				{
-					_bodyPart = (CEnum<gameDismBodyPart>) CR2WTypeManager.Create("gameDismBodyPart", "bodyPart", cr2w, this);
-				}
-				return _bodyPart;
-			}
-			set
-			{
-				if (_bodyPart == value)
-				{
-					return;
-				}
-				_bodyPart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyPart);
+			set => SetProperty(ref _bodyPart, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("dismembermentType")] 
 		public CEnum<gameDismWoundType> DismembermentType
 		{
-			get
-			{
-				if (_dismembermentType == null)
-				{
-					_dismembermentType = (CEnum<gameDismWoundType>) CR2WTypeManager.Create("gameDismWoundType", "dismembermentType", cr2w, this);
-				}
-				return _dismembermentType;
-			}
-			set
-			{
-				if (_dismembermentType == value)
-				{
-					return;
-				}
-				_dismembermentType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dismembermentType);
+			set => SetProperty(ref _dismembermentType, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("hitPosition")] 
 		public Vector4 HitPosition
 		{
-			get
-			{
-				if (_hitPosition == null)
-				{
-					_hitPosition = (Vector4) CR2WTypeManager.Create("Vector4", "hitPosition", cr2w, this);
-				}
-				return _hitPosition;
-			}
-			set
-			{
-				if (_hitPosition == value)
-				{
-					return;
-				}
-				_hitPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitPosition);
+			set => SetProperty(ref _hitPosition, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isCritical")] 
 		public CBool IsCritical
 		{
-			get
-			{
-				if (_isCritical == null)
-				{
-					_isCritical = (CBool) CR2WTypeManager.Create("Bool", "isCritical", cr2w, this);
-				}
-				return _isCritical;
-			}
-			set
-			{
-				if (_isCritical == value)
-				{
-					return;
-				}
-				_isCritical = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isCritical);
+			set => SetProperty(ref _isCritical, value);
 		}
 
 		public RequestDismembermentEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

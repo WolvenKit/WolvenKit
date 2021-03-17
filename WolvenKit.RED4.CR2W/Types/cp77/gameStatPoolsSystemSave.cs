@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mapping")] 
 		public CArray<gameStatsObjectID> Mapping
 		{
-			get
-			{
-				if (_mapping == null)
-				{
-					_mapping = (CArray<gameStatsObjectID>) CR2WTypeManager.Create("array:gameStatsObjectID", "mapping", cr2w, this);
-				}
-				return _mapping;
-			}
-			set
-			{
-				if (_mapping == value)
-				{
-					return;
-				}
-				_mapping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mapping);
+			set => SetProperty(ref _mapping, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("statPools")] 
 		public CArray<gameStatPoolData> StatPools
 		{
-			get
-			{
-				if (_statPools == null)
-				{
-					_statPools = (CArray<gameStatPoolData>) CR2WTypeManager.Create("array:gameStatPoolData", "statPools", cr2w, this);
-				}
-				return _statPools;
-			}
-			set
-			{
-				if (_statPools == value)
-				{
-					return;
-				}
-				_statPools = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statPools);
+			set => SetProperty(ref _statPools, value);
 		}
 
 		public gameStatPoolsSystemSave(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

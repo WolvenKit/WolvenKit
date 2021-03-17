@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("genderMask")] 
 		public scnGenderMask GenderMask
 		{
-			get
-			{
-				if (_genderMask == null)
-				{
-					_genderMask = (scnGenderMask) CR2WTypeManager.Create("scnGenderMask", "genderMask", cr2w, this);
-				}
-				return _genderMask;
-			}
-			set
-			{
-				if (_genderMask == value)
-				{
-					return;
-				}
-				_genderMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _genderMask);
+			set => SetProperty(ref _genderMask, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("transitionBlendInTrajectorySpaceAngles")] 
 		public CArray<EulerAngles> TransitionBlendInTrajectorySpaceAngles
 		{
-			get
-			{
-				if (_transitionBlendInTrajectorySpaceAngles == null)
-				{
-					_transitionBlendInTrajectorySpaceAngles = (CArray<EulerAngles>) CR2WTypeManager.Create("array:EulerAngles", "transitionBlendInTrajectorySpaceAngles", cr2w, this);
-				}
-				return _transitionBlendInTrajectorySpaceAngles;
-			}
-			set
-			{
-				if (_transitionBlendInTrajectorySpaceAngles == value)
-				{
-					return;
-				}
-				_transitionBlendInTrajectorySpaceAngles = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transitionBlendInTrajectorySpaceAngles);
+			set => SetProperty(ref _transitionBlendInTrajectorySpaceAngles, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("transitionBlendInCameraSpace")] 
 		public CArray<CFloat> TransitionBlendInCameraSpace
 		{
-			get
-			{
-				if (_transitionBlendInCameraSpace == null)
-				{
-					_transitionBlendInCameraSpace = (CArray<CFloat>) CR2WTypeManager.Create("array:Float", "transitionBlendInCameraSpace", cr2w, this);
-				}
-				return _transitionBlendInCameraSpace;
-			}
-			set
-			{
-				if (_transitionBlendInCameraSpace == value)
-				{
-					return;
-				}
-				_transitionBlendInCameraSpace = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transitionBlendInCameraSpace);
+			set => SetProperty(ref _transitionBlendInCameraSpace, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("transitionEndInputAngles")] 
 		public CArray<EulerAngles> TransitionEndInputAngles
 		{
-			get
-			{
-				if (_transitionEndInputAngles == null)
-				{
-					_transitionEndInputAngles = (CArray<EulerAngles>) CR2WTypeManager.Create("array:EulerAngles", "transitionEndInputAngles", cr2w, this);
-				}
-				return _transitionEndInputAngles;
-			}
-			set
-			{
-				if (_transitionEndInputAngles == value)
-				{
-					return;
-				}
-				_transitionEndInputAngles = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transitionEndInputAngles);
+			set => SetProperty(ref _transitionEndInputAngles, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("idleCameraLs")] 
 		public EulerAngles IdleCameraLs
 		{
-			get
-			{
-				if (_idleCameraLs == null)
-				{
-					_idleCameraLs = (EulerAngles) CR2WTypeManager.Create("EulerAngles", "idleCameraLs", cr2w, this);
-				}
-				return _idleCameraLs;
-			}
-			set
-			{
-				if (_idleCameraLs == value)
-				{
-					return;
-				}
-				_idleCameraLs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _idleCameraLs);
+			set => SetProperty(ref _idleCameraLs, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("idleControlCameraMs")] 
 		public EulerAngles IdleControlCameraMs
 		{
-			get
-			{
-				if (_idleControlCameraMs == null)
-				{
-					_idleControlCameraMs = (EulerAngles) CR2WTypeManager.Create("EulerAngles", "idleControlCameraMs", cr2w, this);
-				}
-				return _idleControlCameraMs;
-			}
-			set
-			{
-				if (_idleControlCameraMs == value)
-				{
-					return;
-				}
-				_idleControlCameraMs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _idleControlCameraMs);
+			set => SetProperty(ref _idleControlCameraMs, value);
 		}
 
 		public scnfppGenderSpecificParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

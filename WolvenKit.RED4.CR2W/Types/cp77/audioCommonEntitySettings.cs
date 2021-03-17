@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("onAttachEvent")] 
 		public CName OnAttachEvent
 		{
-			get
-			{
-				if (_onAttachEvent == null)
-				{
-					_onAttachEvent = (CName) CR2WTypeManager.Create("CName", "onAttachEvent", cr2w, this);
-				}
-				return _onAttachEvent;
-			}
-			set
-			{
-				if (_onAttachEvent == value)
-				{
-					return;
-				}
-				_onAttachEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onAttachEvent);
+			set => SetProperty(ref _onAttachEvent, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("onDetachEvent")] 
 		public CName OnDetachEvent
 		{
-			get
-			{
-				if (_onDetachEvent == null)
-				{
-					_onDetachEvent = (CName) CR2WTypeManager.Create("CName", "onDetachEvent", cr2w, this);
-				}
-				return _onDetachEvent;
-			}
-			set
-			{
-				if (_onDetachEvent == value)
-				{
-					return;
-				}
-				_onDetachEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onDetachEvent);
+			set => SetProperty(ref _onDetachEvent, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("stopAllSoundsOnDetach")] 
 		public CBool StopAllSoundsOnDetach
 		{
-			get
-			{
-				if (_stopAllSoundsOnDetach == null)
-				{
-					_stopAllSoundsOnDetach = (CBool) CR2WTypeManager.Create("Bool", "stopAllSoundsOnDetach", cr2w, this);
-				}
-				return _stopAllSoundsOnDetach;
-			}
-			set
-			{
-				if (_stopAllSoundsOnDetach == value)
-				{
-					return;
-				}
-				_stopAllSoundsOnDetach = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stopAllSoundsOnDetach);
+			set => SetProperty(ref _stopAllSoundsOnDetach, value);
 		}
 
 		public audioCommonEntitySettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

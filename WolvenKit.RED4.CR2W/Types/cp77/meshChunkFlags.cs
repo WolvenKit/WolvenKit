@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("renderInScene")] 
 		public CBool RenderInScene
 		{
-			get
-			{
-				if (_renderInScene == null)
-				{
-					_renderInScene = (CBool) CR2WTypeManager.Create("Bool", "renderInScene", cr2w, this);
-				}
-				return _renderInScene;
-			}
-			set
-			{
-				if (_renderInScene == value)
-				{
-					return;
-				}
-				_renderInScene = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _renderInScene);
+			set => SetProperty(ref _renderInScene, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("renderInShadows")] 
 		public CBool RenderInShadows
 		{
-			get
-			{
-				if (_renderInShadows == null)
-				{
-					_renderInShadows = (CBool) CR2WTypeManager.Create("Bool", "renderInShadows", cr2w, this);
-				}
-				return _renderInShadows;
-			}
-			set
-			{
-				if (_renderInShadows == value)
-				{
-					return;
-				}
-				_renderInShadows = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _renderInShadows);
+			set => SetProperty(ref _renderInShadows, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isTwoSided")] 
 		public CBool IsTwoSided
 		{
-			get
-			{
-				if (_isTwoSided == null)
-				{
-					_isTwoSided = (CBool) CR2WTypeManager.Create("Bool", "isTwoSided", cr2w, this);
-				}
-				return _isTwoSided;
-			}
-			set
-			{
-				if (_isTwoSided == value)
-				{
-					return;
-				}
-				_isTwoSided = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isTwoSided);
+			set => SetProperty(ref _isTwoSided, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isRayTracedEmissive")] 
 		public CBool IsRayTracedEmissive
 		{
-			get
-			{
-				if (_isRayTracedEmissive == null)
-				{
-					_isRayTracedEmissive = (CBool) CR2WTypeManager.Create("Bool", "isRayTracedEmissive", cr2w, this);
-				}
-				return _isRayTracedEmissive;
-			}
-			set
-			{
-				if (_isRayTracedEmissive == value)
-				{
-					return;
-				}
-				_isRayTracedEmissive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isRayTracedEmissive);
+			set => SetProperty(ref _isRayTracedEmissive, value);
 		}
 
 		public meshChunkFlags(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

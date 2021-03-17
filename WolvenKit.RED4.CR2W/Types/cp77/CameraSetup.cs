@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("canStreamVideo")] 
 		public CBool CanStreamVideo
 		{
-			get
-			{
-				if (_canStreamVideo == null)
-				{
-					_canStreamVideo = (CBool) CR2WTypeManager.Create("Bool", "canStreamVideo", cr2w, this);
-				}
-				return _canStreamVideo;
-			}
-			set
-			{
-				if (_canStreamVideo == value)
-				{
-					return;
-				}
-				_canStreamVideo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _canStreamVideo);
+			set => SetProperty(ref _canStreamVideo, value);
 		}
 
 		public CameraSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

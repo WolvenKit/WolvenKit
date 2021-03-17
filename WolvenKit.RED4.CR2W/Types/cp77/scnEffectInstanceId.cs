@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("effectId")] 
 		public scnEffectId EffectId
 		{
-			get
-			{
-				if (_effectId == null)
-				{
-					_effectId = (scnEffectId) CR2WTypeManager.Create("scnEffectId", "effectId", cr2w, this);
-				}
-				return _effectId;
-			}
-			set
-			{
-				if (_effectId == value)
-				{
-					return;
-				}
-				_effectId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectId);
+			set => SetProperty(ref _effectId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("id")] 
 		public CUInt32 Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CUInt32) CR2WTypeManager.Create("Uint32", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		public scnEffectInstanceId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

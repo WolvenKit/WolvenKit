@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("globalNodeRef")] 
 		public worldGlobalNodeRef GlobalNodeRef
 		{
-			get
-			{
-				if (_globalNodeRef == null)
-				{
-					_globalNodeRef = (worldGlobalNodeRef) CR2WTypeManager.Create("worldGlobalNodeRef", "globalNodeRef", cr2w, this);
-				}
-				return _globalNodeRef;
-			}
-			set
-			{
-				if (_globalNodeRef == value)
-				{
-					return;
-				}
-				_globalNodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _globalNodeRef);
+			set => SetProperty(ref _globalNodeRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("visible")] 
 		public CBool Visible
 		{
-			get
-			{
-				if (_visible == null)
-				{
-					_visible = (CBool) CR2WTypeManager.Create("Bool", "visible", cr2w, this);
-				}
-				return _visible;
-			}
-			set
-			{
-				if (_visible == value)
-				{
-					return;
-				}
-				_visible = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visible);
+			set => SetProperty(ref _visible, value);
 		}
 
 		public questNodeVisibilityMapArrayElement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

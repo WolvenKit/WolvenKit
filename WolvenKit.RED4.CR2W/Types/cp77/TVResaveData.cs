@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mediaResaveData")] 
 		public MediaResaveData MediaResaveData
 		{
-			get
-			{
-				if (_mediaResaveData == null)
-				{
-					_mediaResaveData = (MediaResaveData) CR2WTypeManager.Create("MediaResaveData", "mediaResaveData", cr2w, this);
-				}
-				return _mediaResaveData;
-			}
-			set
-			{
-				if (_mediaResaveData == value)
-				{
-					return;
-				}
-				_mediaResaveData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mediaResaveData);
+			set => SetProperty(ref _mediaResaveData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("channels")] 
 		public CArray<STvChannel> Channels
 		{
-			get
-			{
-				if (_channels == null)
-				{
-					_channels = (CArray<STvChannel>) CR2WTypeManager.Create("array:STvChannel", "channels", cr2w, this);
-				}
-				return _channels;
-			}
-			set
-			{
-				if (_channels == value)
-				{
-					return;
-				}
-				_channels = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _channels);
+			set => SetProperty(ref _channels, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("securedText")] 
 		public CName SecuredText
 		{
-			get
-			{
-				if (_securedText == null)
-				{
-					_securedText = (CName) CR2WTypeManager.Create("CName", "securedText", cr2w, this);
-				}
-				return _securedText;
-			}
-			set
-			{
-				if (_securedText == value)
-				{
-					return;
-				}
-				_securedText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securedText);
+			set => SetProperty(ref _securedText, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("muteInterface")] 
 		public CBool MuteInterface
 		{
-			get
-			{
-				if (_muteInterface == null)
-				{
-					_muteInterface = (CBool) CR2WTypeManager.Create("Bool", "muteInterface", cr2w, this);
-				}
-				return _muteInterface;
-			}
-			set
-			{
-				if (_muteInterface == value)
-				{
-					return;
-				}
-				_muteInterface = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _muteInterface);
+			set => SetProperty(ref _muteInterface, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("useWhiteNoiseFX")] 
 		public CBool UseWhiteNoiseFX
 		{
-			get
-			{
-				if (_useWhiteNoiseFX == null)
-				{
-					_useWhiteNoiseFX = (CBool) CR2WTypeManager.Create("Bool", "useWhiteNoiseFX", cr2w, this);
-				}
-				return _useWhiteNoiseFX;
-			}
-			set
-			{
-				if (_useWhiteNoiseFX == value)
-				{
-					return;
-				}
-				_useWhiteNoiseFX = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useWhiteNoiseFX);
+			set => SetProperty(ref _useWhiteNoiseFX, value);
 		}
 
 		public TVResaveData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

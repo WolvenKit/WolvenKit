@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("resetMemory")] 
 		public CBool ResetMemory
 		{
-			get
-			{
-				if (_resetMemory == null)
-				{
-					_resetMemory = (CBool) CR2WTypeManager.Create("Bool", "resetMemory", cr2w, this);
-				}
-				return _resetMemory;
-			}
-			set
-			{
-				if (_resetMemory == value)
-				{
-					return;
-				}
-				_resetMemory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetMemory);
+			set => SetProperty(ref _resetMemory, value);
 		}
 
 		public AutocraftDeactivateRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

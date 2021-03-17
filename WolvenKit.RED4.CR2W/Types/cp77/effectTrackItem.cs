@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timeBegin")] 
 		public CFloat TimeBegin
 		{
-			get
-			{
-				if (_timeBegin == null)
-				{
-					_timeBegin = (CFloat) CR2WTypeManager.Create("Float", "timeBegin", cr2w, this);
-				}
-				return _timeBegin;
-			}
-			set
-			{
-				if (_timeBegin == value)
-				{
-					return;
-				}
-				_timeBegin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeBegin);
+			set => SetProperty(ref _timeBegin, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timeDuration")] 
 		public CFloat TimeDuration
 		{
-			get
-			{
-				if (_timeDuration == null)
-				{
-					_timeDuration = (CFloat) CR2WTypeManager.Create("Float", "timeDuration", cr2w, this);
-				}
-				return _timeDuration;
-			}
-			set
-			{
-				if (_timeDuration == value)
-				{
-					return;
-				}
-				_timeDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeDuration);
+			set => SetProperty(ref _timeDuration, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ruid")] 
 		public CRUID Ruid
 		{
-			get
-			{
-				if (_ruid == null)
-				{
-					_ruid = (CRUID) CR2WTypeManager.Create("CRUID", "ruid", cr2w, this);
-				}
-				return _ruid;
-			}
-			set
-			{
-				if (_ruid == value)
-				{
-					return;
-				}
-				_ruid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ruid);
+			set => SetProperty(ref _ruid, value);
 		}
 
 		public effectTrackItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

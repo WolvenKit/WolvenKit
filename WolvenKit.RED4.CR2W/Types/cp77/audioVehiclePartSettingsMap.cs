@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("minAcousticsIsolationFactorValue")] 
 		public CFloat MinAcousticsIsolationFactorValue
 		{
-			get
-			{
-				if (_minAcousticsIsolationFactorValue == null)
-				{
-					_minAcousticsIsolationFactorValue = (CFloat) CR2WTypeManager.Create("Float", "minAcousticsIsolationFactorValue", cr2w, this);
-				}
-				return _minAcousticsIsolationFactorValue;
-			}
-			set
-			{
-				if (_minAcousticsIsolationFactorValue == value)
-				{
-					return;
-				}
-				_minAcousticsIsolationFactorValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minAcousticsIsolationFactorValue);
+			set => SetProperty(ref _minAcousticsIsolationFactorValue, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("partSettings")] 
 		public CArray<audioVehiclePartSettingsMapItem> PartSettings
 		{
-			get
-			{
-				if (_partSettings == null)
-				{
-					_partSettings = (CArray<audioVehiclePartSettingsMapItem>) CR2WTypeManager.Create("array:audioVehiclePartSettingsMapItem", "partSettings", cr2w, this);
-				}
-				return _partSettings;
-			}
-			set
-			{
-				if (_partSettings == value)
-				{
-					return;
-				}
-				_partSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _partSettings);
+			set => SetProperty(ref _partSettings, value);
 		}
 
 		public audioVehiclePartSettingsMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

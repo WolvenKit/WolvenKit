@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("requester")] 
 		public wCHandle<gameObject> Requester
 		{
-			get
-			{
-				if (_requester == null)
-				{
-					_requester = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "requester", cr2w, this);
-				}
-				return _requester;
-			}
-			set
-			{
-				if (_requester == value)
-				{
-					return;
-				}
-				_requester = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requester);
+			set => SetProperty(ref _requester, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("target")] 
 		public wCHandle<gameObject> Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("targetPositionProvider")] 
 		public CHandle<entIPositionProvider> TargetPositionProvider
 		{
-			get
-			{
-				if (_targetPositionProvider == null)
-				{
-					_targetPositionProvider = (CHandle<entIPositionProvider>) CR2WTypeManager.Create("handle:entIPositionProvider", "targetPositionProvider", cr2w, this);
-				}
-				return _targetPositionProvider;
-			}
-			set
-			{
-				if (_targetPositionProvider == value)
-				{
-					return;
-				}
-				_targetPositionProvider = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetPositionProvider);
+			set => SetProperty(ref _targetPositionProvider, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("minRadius")] 
 		public CFloat MinRadius
 		{
-			get
-			{
-				if (_minRadius == null)
-				{
-					_minRadius = (CFloat) CR2WTypeManager.Create("Float", "minRadius", cr2w, this);
-				}
-				return _minRadius;
-			}
-			set
-			{
-				if (_minRadius == value)
-				{
-					return;
-				}
-				_minRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minRadius);
+			set => SetProperty(ref _minRadius, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("maxRadius")] 
 		public CFloat MaxRadius
 		{
-			get
-			{
-				if (_maxRadius == null)
-				{
-					_maxRadius = (CFloat) CR2WTypeManager.Create("Float", "maxRadius", cr2w, this);
-				}
-				return _maxRadius;
-			}
-			set
-			{
-				if (_maxRadius == value)
-				{
-					return;
-				}
-				_maxRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxRadius);
+			set => SetProperty(ref _maxRadius, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("friendlyAvoidanceRadius")] 
 		public CFloat FriendlyAvoidanceRadius
 		{
-			get
-			{
-				if (_friendlyAvoidanceRadius == null)
-				{
-					_friendlyAvoidanceRadius = (CFloat) CR2WTypeManager.Create("Float", "friendlyAvoidanceRadius", cr2w, this);
-				}
-				return _friendlyAvoidanceRadius;
-			}
-			set
-			{
-				if (_friendlyAvoidanceRadius == value)
-				{
-					return;
-				}
-				_friendlyAvoidanceRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _friendlyAvoidanceRadius);
+			set => SetProperty(ref _friendlyAvoidanceRadius, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("throwAngleDegrees")] 
 		public CFloat ThrowAngleDegrees
 		{
-			get
-			{
-				if (_throwAngleDegrees == null)
-				{
-					_throwAngleDegrees = (CFloat) CR2WTypeManager.Create("Float", "throwAngleDegrees", cr2w, this);
-				}
-				return _throwAngleDegrees;
-			}
-			set
-			{
-				if (_throwAngleDegrees == value)
-				{
-					return;
-				}
-				_throwAngleDegrees = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _throwAngleDegrees);
+			set => SetProperty(ref _throwAngleDegrees, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("gravitySimulation")] 
 		public CFloat GravitySimulation
 		{
-			get
-			{
-				if (_gravitySimulation == null)
-				{
-					_gravitySimulation = (CFloat) CR2WTypeManager.Create("Float", "gravitySimulation", cr2w, this);
-				}
-				return _gravitySimulation;
-			}
-			set
-			{
-				if (_gravitySimulation == value)
-				{
-					return;
-				}
-				_gravitySimulation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gravitySimulation);
+			set => SetProperty(ref _gravitySimulation, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("minTargetAngleDegrees")] 
 		public CFloat MinTargetAngleDegrees
 		{
-			get
-			{
-				if (_minTargetAngleDegrees == null)
-				{
-					_minTargetAngleDegrees = (CFloat) CR2WTypeManager.Create("Float", "minTargetAngleDegrees", cr2w, this);
-				}
-				return _minTargetAngleDegrees;
-			}
-			set
-			{
-				if (_minTargetAngleDegrees == value)
-				{
-					return;
-				}
-				_minTargetAngleDegrees = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minTargetAngleDegrees);
+			set => SetProperty(ref _minTargetAngleDegrees, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("maxTargetAngleDegrees")] 
 		public CFloat MaxTargetAngleDegrees
 		{
-			get
-			{
-				if (_maxTargetAngleDegrees == null)
-				{
-					_maxTargetAngleDegrees = (CFloat) CR2WTypeManager.Create("Float", "maxTargetAngleDegrees", cr2w, this);
-				}
-				return _maxTargetAngleDegrees;
-			}
-			set
-			{
-				if (_maxTargetAngleDegrees == value)
-				{
-					return;
-				}
-				_maxTargetAngleDegrees = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxTargetAngleDegrees);
+			set => SetProperty(ref _maxTargetAngleDegrees, value);
 		}
 
 		public gameGrenadeThrowQueryParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemHandlingFeatureName")] 
 		public CName ItemHandlingFeatureName
 		{
-			get
-			{
-				if (_itemHandlingFeatureName == null)
-				{
-					_itemHandlingFeatureName = (CName) CR2WTypeManager.Create("CName", "itemHandlingFeatureName", cr2w, this);
-				}
-				return _itemHandlingFeatureName;
-			}
-			set
-			{
-				if (_itemHandlingFeatureName == value)
-				{
-					return;
-				}
-				_itemHandlingFeatureName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemHandlingFeatureName);
+			set => SetProperty(ref _itemHandlingFeatureName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("attachmentSlot")] 
 		public CString AttachmentSlot
 		{
-			get
-			{
-				if (_attachmentSlot == null)
-				{
-					_attachmentSlot = (CString) CR2WTypeManager.Create("String", "attachmentSlot", cr2w, this);
-				}
-				return _attachmentSlot;
-			}
-			set
-			{
-				if (_attachmentSlot == value)
-				{
-					return;
-				}
-				_attachmentSlot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attachmentSlot);
+			set => SetProperty(ref _attachmentSlot, value);
 		}
 
 		public InstanceDataMappedToReferenceName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

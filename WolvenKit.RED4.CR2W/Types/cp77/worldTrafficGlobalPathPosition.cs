@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("worldPosition")] 
 		public Vector3 WorldPosition
 		{
-			get
-			{
-				if (_worldPosition == null)
-				{
-					_worldPosition = (Vector3) CR2WTypeManager.Create("Vector3", "worldPosition", cr2w, this);
-				}
-				return _worldPosition;
-			}
-			set
-			{
-				if (_worldPosition == value)
-				{
-					return;
-				}
-				_worldPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _worldPosition);
+			set => SetProperty(ref _worldPosition, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("pathIdx")] 
 		public CUInt32 PathIdx
 		{
-			get
-			{
-				if (_pathIdx == null)
-				{
-					_pathIdx = (CUInt32) CR2WTypeManager.Create("Uint32", "pathIdx", cr2w, this);
-				}
-				return _pathIdx;
-			}
-			set
-			{
-				if (_pathIdx == value)
-				{
-					return;
-				}
-				_pathIdx = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pathIdx);
+			set => SetProperty(ref _pathIdx, value);
 		}
 
 		public worldTrafficGlobalPathPosition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

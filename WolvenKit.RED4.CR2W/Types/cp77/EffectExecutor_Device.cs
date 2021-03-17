@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("maxDelay")] 
 		public CFloat MaxDelay
 		{
-			get
-			{
-				if (_maxDelay == null)
-				{
-					_maxDelay = (CFloat) CR2WTypeManager.Create("Float", "maxDelay", cr2w, this);
-				}
-				return _maxDelay;
-			}
-			set
-			{
-				if (_maxDelay == value)
-				{
-					return;
-				}
-				_maxDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxDelay);
+			set => SetProperty(ref _maxDelay, value);
 		}
 
 		public EffectExecutor_Device(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

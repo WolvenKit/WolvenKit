@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("baseMesh")] 
 		public raRef<CMesh> BaseMesh
 		{
-			get
-			{
-				if (_baseMesh == null)
-				{
-					_baseMesh = (raRef<CMesh>) CR2WTypeManager.Create("raRef:CMesh", "baseMesh", cr2w, this);
-				}
-				return _baseMesh;
-			}
-			set
-			{
-				if (_baseMesh == value)
-				{
-					return;
-				}
-				_baseMesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _baseMesh);
+			set => SetProperty(ref _baseMesh, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("destructibleMesh")] 
 		public raRef<CMesh> DestructibleMesh
 		{
-			get
-			{
-				if (_destructibleMesh == null)
-				{
-					_destructibleMesh = (raRef<CMesh>) CR2WTypeManager.Create("raRef:CMesh", "destructibleMesh", cr2w, this);
-				}
-				return _destructibleMesh;
-			}
-			set
-			{
-				if (_destructibleMesh == value)
-				{
-					return;
-				}
-				_destructibleMesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _destructibleMesh);
+			set => SetProperty(ref _destructibleMesh, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("meshAppearance")] 
 		public CName MeshAppearance
 		{
-			get
-			{
-				if (_meshAppearance == null)
-				{
-					_meshAppearance = (CName) CR2WTypeManager.Create("CName", "meshAppearance", cr2w, this);
-				}
-				return _meshAppearance;
-			}
-			set
-			{
-				if (_meshAppearance == value)
-				{
-					return;
-				}
-				_meshAppearance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshAppearance);
+			set => SetProperty(ref _meshAppearance, value);
 		}
 
 		public worldFoliageDestructionMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

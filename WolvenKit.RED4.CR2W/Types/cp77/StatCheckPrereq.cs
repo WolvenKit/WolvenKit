@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statToCheck")] 
 		public CEnum<gamedataStatType> StatToCheck
 		{
-			get
-			{
-				if (_statToCheck == null)
-				{
-					_statToCheck = (CEnum<gamedataStatType>) CR2WTypeManager.Create("gamedataStatType", "statToCheck", cr2w, this);
-				}
-				return _statToCheck;
-			}
-			set
-			{
-				if (_statToCheck == value)
-				{
-					return;
-				}
-				_statToCheck = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statToCheck);
+			set => SetProperty(ref _statToCheck, value);
 		}
 
 		public StatCheckPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

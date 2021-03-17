@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemTemplate")] 
 		public inkWidgetLibraryReference ItemTemplate
 		{
-			get
-			{
-				if (_itemTemplate == null)
-				{
-					_itemTemplate = (inkWidgetLibraryReference) CR2WTypeManager.Create("inkWidgetLibraryReference", "itemTemplate", cr2w, this);
-				}
-				return _itemTemplate;
-			}
-			set
-			{
-				if (_itemTemplate == value)
-				{
-					return;
-				}
-				_itemTemplate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemTemplate);
+			set => SetProperty(ref _itemTemplate, value);
 		}
 
 		public inkVirtualUniformListController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("DPAD_UP")] 
 		public TweakDBID DPAD_UP
 		{
-			get
-			{
-				if (_dPAD_UP == null)
-				{
-					_dPAD_UP = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "DPAD_UP", cr2w, this);
-				}
-				return _dPAD_UP;
-			}
-			set
-			{
-				if (_dPAD_UP == value)
-				{
-					return;
-				}
-				_dPAD_UP = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dPAD_UP);
+			set => SetProperty(ref _dPAD_UP, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("RB")] 
 		public TweakDBID RB
 		{
-			get
-			{
-				if (_rB == null)
-				{
-					_rB = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "RB", cr2w, this);
-				}
-				return _rB;
-			}
-			set
-			{
-				if (_rB == value)
-				{
-					return;
-				}
-				_rB = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rB);
+			set => SetProperty(ref _rB, value);
 		}
 
 		public KeyBindings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

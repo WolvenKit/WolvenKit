@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isInverted")] 
 		public CBool IsInverted
 		{
-			get
-			{
-				if (_isInverted == null)
-				{
-					_isInverted = (CBool) CR2WTypeManager.Create("Bool", "isInverted", cr2w, this);
-				}
-				return _isInverted;
-			}
-			set
-			{
-				if (_isInverted == value)
-				{
-					return;
-				}
-				_isInverted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInverted);
+			set => SetProperty(ref _isInverted, value);
 		}
 
 		public AIbehaviorConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

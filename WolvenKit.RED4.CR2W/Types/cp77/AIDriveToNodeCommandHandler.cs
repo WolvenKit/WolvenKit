@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("outUseKinematic")] 
 		public CHandle<AIArgumentMapping> OutUseKinematic
 		{
-			get
-			{
-				if (_outUseKinematic == null)
-				{
-					_outUseKinematic = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outUseKinematic", cr2w, this);
-				}
-				return _outUseKinematic;
-			}
-			set
-			{
-				if (_outUseKinematic == value)
-				{
-					return;
-				}
-				_outUseKinematic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outUseKinematic);
+			set => SetProperty(ref _outUseKinematic, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("outNeedDriver")] 
 		public CHandle<AIArgumentMapping> OutNeedDriver
 		{
-			get
-			{
-				if (_outNeedDriver == null)
-				{
-					_outNeedDriver = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outNeedDriver", cr2w, this);
-				}
-				return _outNeedDriver;
-			}
-			set
-			{
-				if (_outNeedDriver == value)
-				{
-					return;
-				}
-				_outNeedDriver = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outNeedDriver);
+			set => SetProperty(ref _outNeedDriver, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("outNodeRef")] 
 		public CHandle<AIArgumentMapping> OutNodeRef
 		{
-			get
-			{
-				if (_outNodeRef == null)
-				{
-					_outNodeRef = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outNodeRef", cr2w, this);
-				}
-				return _outNodeRef;
-			}
-			set
-			{
-				if (_outNodeRef == value)
-				{
-					return;
-				}
-				_outNodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outNodeRef);
+			set => SetProperty(ref _outNodeRef, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("outSecureTimeOut")] 
 		public CHandle<AIArgumentMapping> OutSecureTimeOut
 		{
-			get
-			{
-				if (_outSecureTimeOut == null)
-				{
-					_outSecureTimeOut = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outSecureTimeOut", cr2w, this);
-				}
-				return _outSecureTimeOut;
-			}
-			set
-			{
-				if (_outSecureTimeOut == value)
-				{
-					return;
-				}
-				_outSecureTimeOut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outSecureTimeOut);
+			set => SetProperty(ref _outSecureTimeOut, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("outIsPlayer")] 
 		public CHandle<AIArgumentMapping> OutIsPlayer
 		{
-			get
-			{
-				if (_outIsPlayer == null)
-				{
-					_outIsPlayer = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outIsPlayer", cr2w, this);
-				}
-				return _outIsPlayer;
-			}
-			set
-			{
-				if (_outIsPlayer == value)
-				{
-					return;
-				}
-				_outIsPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outIsPlayer);
+			set => SetProperty(ref _outIsPlayer, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("outUseTraffic")] 
 		public CHandle<AIArgumentMapping> OutUseTraffic
 		{
-			get
-			{
-				if (_outUseTraffic == null)
-				{
-					_outUseTraffic = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outUseTraffic", cr2w, this);
-				}
-				return _outUseTraffic;
-			}
-			set
-			{
-				if (_outUseTraffic == value)
-				{
-					return;
-				}
-				_outUseTraffic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outUseTraffic);
+			set => SetProperty(ref _outUseTraffic, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("forceGreenLights")] 
 		public CHandle<AIArgumentMapping> ForceGreenLights
 		{
-			get
-			{
-				if (_forceGreenLights == null)
-				{
-					_forceGreenLights = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "forceGreenLights", cr2w, this);
-				}
-				return _forceGreenLights;
-			}
-			set
-			{
-				if (_forceGreenLights == value)
-				{
-					return;
-				}
-				_forceGreenLights = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceGreenLights);
+			set => SetProperty(ref _forceGreenLights, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("portals")] 
 		public CHandle<AIArgumentMapping> Portals
 		{
-			get
-			{
-				if (_portals == null)
-				{
-					_portals = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "portals", cr2w, this);
-				}
-				return _portals;
-			}
-			set
-			{
-				if (_portals == value)
-				{
-					return;
-				}
-				_portals = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _portals);
+			set => SetProperty(ref _portals, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("outTrafficTryNeighborsForStart")] 
 		public CHandle<AIArgumentMapping> OutTrafficTryNeighborsForStart
 		{
-			get
-			{
-				if (_outTrafficTryNeighborsForStart == null)
-				{
-					_outTrafficTryNeighborsForStart = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outTrafficTryNeighborsForStart", cr2w, this);
-				}
-				return _outTrafficTryNeighborsForStart;
-			}
-			set
-			{
-				if (_outTrafficTryNeighborsForStart == value)
-				{
-					return;
-				}
-				_outTrafficTryNeighborsForStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outTrafficTryNeighborsForStart);
+			set => SetProperty(ref _outTrafficTryNeighborsForStart, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("outTrafficTryNeighborsForEnd")] 
 		public CHandle<AIArgumentMapping> OutTrafficTryNeighborsForEnd
 		{
-			get
-			{
-				if (_outTrafficTryNeighborsForEnd == null)
-				{
-					_outTrafficTryNeighborsForEnd = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outTrafficTryNeighborsForEnd", cr2w, this);
-				}
-				return _outTrafficTryNeighborsForEnd;
-			}
-			set
-			{
-				if (_outTrafficTryNeighborsForEnd == value)
-				{
-					return;
-				}
-				_outTrafficTryNeighborsForEnd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outTrafficTryNeighborsForEnd);
+			set => SetProperty(ref _outTrafficTryNeighborsForEnd, value);
 		}
 
 		public AIDriveToNodeCommandHandler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

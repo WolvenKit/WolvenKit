@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("controller")] 
 		public InventoryItemData Controller
 		{
-			get
-			{
-				if (_controller == null)
-				{
-					_controller = (InventoryItemData) CR2WTypeManager.Create("InventoryItemData", "controller", cr2w, this);
-				}
-				return _controller;
-			}
-			set
-			{
-				if (_controller == value)
-				{
-					return;
-				}
-				_controller = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _controller);
+			set => SetProperty(ref _controller, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("target")] 
 		public wCHandle<inkWidget> Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		public EventInventorySlotSelectDelayedInventoryEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

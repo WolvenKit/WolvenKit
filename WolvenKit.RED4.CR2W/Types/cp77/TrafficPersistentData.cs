@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("invertTrafficEvents")] 
 		public CBool InvertTrafficEvents
 		{
-			get
-			{
-				if (_invertTrafficEvents == null)
-				{
-					_invertTrafficEvents = (CBool) CR2WTypeManager.Create("Bool", "invertTrafficEvents", cr2w, this);
-				}
-				return _invertTrafficEvents;
-			}
-			set
-			{
-				if (_invertTrafficEvents == value)
-				{
-					return;
-				}
-				_invertTrafficEvents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _invertTrafficEvents);
+			set => SetProperty(ref _invertTrafficEvents, value);
 		}
 
 		public TrafficPersistentData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("action")] 
 		public CEnum<questGameplayRestrictionAction> Action
 		{
-			get
-			{
-				if (_action == null)
-				{
-					_action = (CEnum<questGameplayRestrictionAction>) CR2WTypeManager.Create("questGameplayRestrictionAction", "action", cr2w, this);
-				}
-				return _action;
-			}
-			set
-			{
-				if (_action == value)
-				{
-					return;
-				}
-				_action = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("source")] 
 		public CName Source
 		{
-			get
-			{
-				if (_source == null)
-				{
-					_source = (CName) CR2WTypeManager.Create("CName", "source", cr2w, this);
-				}
-				return _source;
-			}
-			set
-			{
-				if (_source == value)
-				{
-					return;
-				}
-				_source = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("restrictionIDs")] 
 		public CArray<TweakDBID> RestrictionIDs
 		{
-			get
-			{
-				if (_restrictionIDs == null)
-				{
-					_restrictionIDs = (CArray<TweakDBID>) CR2WTypeManager.Create("array:TweakDBID", "restrictionIDs", cr2w, this);
-				}
-				return _restrictionIDs;
-			}
-			set
-			{
-				if (_restrictionIDs == value)
-				{
-					return;
-				}
-				_restrictionIDs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _restrictionIDs);
+			set => SetProperty(ref _restrictionIDs, value);
 		}
 
 		public questGameplayRestrictions_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicleState")] 
 		public CString VehicleState
 		{
-			get
-			{
-				if (_vehicleState == null)
-				{
-					_vehicleState = (CString) CR2WTypeManager.Create("String", "vehicleState", cr2w, this);
-				}
-				return _vehicleState;
-			}
-			set
-			{
-				if (_vehicleState == value)
-				{
-					return;
-				}
-				_vehicleState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleState);
+			set => SetProperty(ref _vehicleState, value);
 		}
 
 		public ScannerVehicleState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

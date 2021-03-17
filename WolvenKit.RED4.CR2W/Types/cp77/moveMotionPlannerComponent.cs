@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("snapToGround")] 
 		public CBool SnapToGround
 		{
-			get
-			{
-				if (_snapToGround == null)
-				{
-					_snapToGround = (CBool) CR2WTypeManager.Create("Bool", "snapToGround", cr2w, this);
-				}
-				return _snapToGround;
-			}
-			set
-			{
-				if (_snapToGround == value)
-				{
-					return;
-				}
-				_snapToGround = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _snapToGround);
+			set => SetProperty(ref _snapToGround, value);
 		}
 
 		public moveMotionPlannerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

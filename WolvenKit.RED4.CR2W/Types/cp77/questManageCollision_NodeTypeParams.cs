@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectRef")] 
 		public NodeRef ObjectRef
 		{
-			get
-			{
-				if (_objectRef == null)
-				{
-					_objectRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "objectRef", cr2w, this);
-				}
-				return _objectRef;
-			}
-			set
-			{
-				if (_objectRef == value)
-				{
-					return;
-				}
-				_objectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("enableCollision")] 
 		public CBool EnableCollision
 		{
-			get
-			{
-				if (_enableCollision == null)
-				{
-					_enableCollision = (CBool) CR2WTypeManager.Create("Bool", "enableCollision", cr2w, this);
-				}
-				return _enableCollision;
-			}
-			set
-			{
-				if (_enableCollision == value)
-				{
-					return;
-				}
-				_enableCollision = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableCollision);
+			set => SetProperty(ref _enableCollision, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("enableQueries")] 
 		public CBool EnableQueries
 		{
-			get
-			{
-				if (_enableQueries == null)
-				{
-					_enableQueries = (CBool) CR2WTypeManager.Create("Bool", "enableQueries", cr2w, this);
-				}
-				return _enableQueries;
-			}
-			set
-			{
-				if (_enableQueries == value)
-				{
-					return;
-				}
-				_enableQueries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableQueries);
+			set => SetProperty(ref _enableQueries, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("components")] 
 		public CArray<CName> Components
 		{
-			get
-			{
-				if (_components == null)
-				{
-					_components = (CArray<CName>) CR2WTypeManager.Create("array:CName", "components", cr2w, this);
-				}
-				return _components;
-			}
-			set
-			{
-				if (_components == value)
-				{
-					return;
-				}
-				_components = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _components);
+			set => SetProperty(ref _components, value);
 		}
 
 		public questManageCollision_NodeTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

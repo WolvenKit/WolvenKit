@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("min")] 
 		public Vector4 Min
 		{
-			get
-			{
-				if (_min == null)
-				{
-					_min = (Vector4) CR2WTypeManager.Create("Vector4", "min", cr2w, this);
-				}
-				return _min;
-			}
-			set
-			{
-				if (_min == value)
-				{
-					return;
-				}
-				_min = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _min);
+			set => SetProperty(ref _min, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("max")] 
 		public Vector4 Max
 		{
-			get
-			{
-				if (_max == null)
-				{
-					_max = (Vector4) CR2WTypeManager.Create("Vector4", "max", cr2w, this);
-				}
-				return _max;
-			}
-			set
-			{
-				if (_max == value)
-				{
-					return;
-				}
-				_max = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _max);
+			set => SetProperty(ref _max, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("lockX")] 
 		public CBool LockX
 		{
-			get
-			{
-				if (_lockX == null)
-				{
-					_lockX = (CBool) CR2WTypeManager.Create("Bool", "lockX", cr2w, this);
-				}
-				return _lockX;
-			}
-			set
-			{
-				if (_lockX == value)
-				{
-					return;
-				}
-				_lockX = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lockX);
+			set => SetProperty(ref _lockX, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("lockY")] 
 		public CBool LockY
 		{
-			get
-			{
-				if (_lockY == null)
-				{
-					_lockY = (CBool) CR2WTypeManager.Create("Bool", "lockY", cr2w, this);
-				}
-				return _lockY;
-			}
-			set
-			{
-				if (_lockY == value)
-				{
-					return;
-				}
-				_lockY = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lockY);
+			set => SetProperty(ref _lockY, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("lockZ")] 
 		public CBool LockZ
 		{
-			get
-			{
-				if (_lockZ == null)
-				{
-					_lockZ = (CBool) CR2WTypeManager.Create("Bool", "lockZ", cr2w, this);
-				}
-				return _lockZ;
-			}
-			set
-			{
-				if (_lockZ == value)
-				{
-					return;
-				}
-				_lockZ = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lockZ);
+			set => SetProperty(ref _lockZ, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("lockW")] 
 		public CBool LockW
 		{
-			get
-			{
-				if (_lockW == null)
-				{
-					_lockW = (CBool) CR2WTypeManager.Create("Bool", "lockW", cr2w, this);
-				}
-				return _lockW;
-			}
-			set
-			{
-				if (_lockW == value)
-				{
-					return;
-				}
-				_lockW = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lockW);
+			set => SetProperty(ref _lockW, value);
 		}
 
 		public CEvaluatorVectorRandomUniform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

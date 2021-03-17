@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("customAnimations")] 
 		public CHandle<WidgetAnimationManager> CustomAnimations
 		{
-			get
-			{
-				if (_customAnimations == null)
-				{
-					_customAnimations = (CHandle<WidgetAnimationManager>) CR2WTypeManager.Create("handle:WidgetAnimationManager", "customAnimations", cr2w, this);
-				}
-				return _customAnimations;
-			}
-			set
-			{
-				if (_customAnimations == value)
-				{
-					return;
-				}
-				_customAnimations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customAnimations);
+			set => SetProperty(ref _customAnimations, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("onSpawnAnimations")] 
 		public CArray<CName> OnSpawnAnimations
 		{
-			get
-			{
-				if (_onSpawnAnimations == null)
-				{
-					_onSpawnAnimations = (CArray<CName>) CR2WTypeManager.Create("array:CName", "onSpawnAnimations", cr2w, this);
-				}
-				return _onSpawnAnimations;
-			}
-			set
-			{
-				if (_onSpawnAnimations == value)
-				{
-					return;
-				}
-				_onSpawnAnimations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onSpawnAnimations);
+			set => SetProperty(ref _onSpawnAnimations, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("defaultLibraryItemName")] 
 		public CName DefaultLibraryItemName
 		{
-			get
-			{
-				if (_defaultLibraryItemName == null)
-				{
-					_defaultLibraryItemName = (CName) CR2WTypeManager.Create("CName", "defaultLibraryItemName", cr2w, this);
-				}
-				return _defaultLibraryItemName;
-			}
-			set
-			{
-				if (_defaultLibraryItemName == value)
-				{
-					return;
-				}
-				_defaultLibraryItemName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultLibraryItemName);
+			set => SetProperty(ref _defaultLibraryItemName, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("defaultLibraryItemAnchor")] 
 		public CEnum<inkEAnchor> DefaultLibraryItemAnchor
 		{
-			get
-			{
-				if (_defaultLibraryItemAnchor == null)
-				{
-					_defaultLibraryItemAnchor = (CEnum<inkEAnchor>) CR2WTypeManager.Create("inkEAnchor", "defaultLibraryItemAnchor", cr2w, this);
-				}
-				return _defaultLibraryItemAnchor;
-			}
-			set
-			{
-				if (_defaultLibraryItemAnchor == value)
-				{
-					return;
-				}
-				_defaultLibraryItemAnchor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultLibraryItemAnchor);
+			set => SetProperty(ref _defaultLibraryItemAnchor, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("spawnedLibrararyItem")] 
 		public wCHandle<inkWidget> SpawnedLibrararyItem
 		{
-			get
-			{
-				if (_spawnedLibrararyItem == null)
-				{
-					_spawnedLibrararyItem = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "spawnedLibrararyItem", cr2w, this);
-				}
-				return _spawnedLibrararyItem;
-			}
-			set
-			{
-				if (_spawnedLibrararyItem == value)
-				{
-					return;
-				}
-				_spawnedLibrararyItem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnedLibrararyItem);
+			set => SetProperty(ref _spawnedLibrararyItem, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("curentLibraryItemName")] 
 		public CName CurentLibraryItemName
 		{
-			get
-			{
-				if (_curentLibraryItemName == null)
-				{
-					_curentLibraryItemName = (CName) CR2WTypeManager.Create("CName", "curentLibraryItemName", cr2w, this);
-				}
-				return _curentLibraryItemName;
-			}
-			set
-			{
-				if (_curentLibraryItemName == value)
-				{
-					return;
-				}
-				_curentLibraryItemName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _curentLibraryItemName);
+			set => SetProperty(ref _curentLibraryItemName, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("currentLibraryItemAnchor")] 
 		public CEnum<inkEAnchor> CurrentLibraryItemAnchor
 		{
-			get
-			{
-				if (_currentLibraryItemAnchor == null)
-				{
-					_currentLibraryItemAnchor = (CEnum<inkEAnchor>) CR2WTypeManager.Create("inkEAnchor", "currentLibraryItemAnchor", cr2w, this);
-				}
-				return _currentLibraryItemAnchor;
-			}
-			set
-			{
-				if (_currentLibraryItemAnchor == value)
-				{
-					return;
-				}
-				_currentLibraryItemAnchor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentLibraryItemAnchor);
+			set => SetProperty(ref _currentLibraryItemAnchor, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("root")] 
 		public wCHandle<inkCompoundWidget> Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (wCHandle<inkCompoundWidget>) CR2WTypeManager.Create("whandle:inkCompoundWidget", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("isInitialized")] 
 		public CBool IsInitialized
 		{
-			get
-			{
-				if (_isInitialized == null)
-				{
-					_isInitialized = (CBool) CR2WTypeManager.Create("Bool", "isInitialized", cr2w, this);
-				}
-				return _isInitialized;
-			}
-			set
-			{
-				if (_isInitialized == value)
-				{
-					return;
-				}
-				_isInitialized = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInitialized);
+			set => SetProperty(ref _isInitialized, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("ownerID")] 
 		public entEntityID OwnerID
 		{
-			get
-			{
-				if (_ownerID == null)
-				{
-					_ownerID = (entEntityID) CR2WTypeManager.Create("entEntityID", "ownerID", cr2w, this);
-				}
-				return _ownerID;
-			}
-			set
-			{
-				if (_ownerID == value)
-				{
-					return;
-				}
-				_ownerID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerID);
+			set => SetProperty(ref _ownerID, value);
 		}
 
 		public CustomAnimationsGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

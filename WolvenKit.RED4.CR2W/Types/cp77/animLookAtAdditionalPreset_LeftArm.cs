@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isAiming")] 
 		public CBool IsAiming
 		{
-			get
-			{
-				if (_isAiming == null)
-				{
-					_isAiming = (CBool) CR2WTypeManager.Create("Bool", "isAiming", cr2w, this);
-				}
-				return _isAiming;
-			}
-			set
-			{
-				if (_isAiming == value)
-				{
-					return;
-				}
-				_isAiming = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isAiming);
+			set => SetProperty(ref _isAiming, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("softLimitAngle")] 
 		public CFloat SoftLimitAngle
 		{
-			get
-			{
-				if (_softLimitAngle == null)
-				{
-					_softLimitAngle = (CFloat) CR2WTypeManager.Create("Float", "softLimitAngle", cr2w, this);
-				}
-				return _softLimitAngle;
-			}
-			set
-			{
-				if (_softLimitAngle == value)
-				{
-					return;
-				}
-				_softLimitAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _softLimitAngle);
+			set => SetProperty(ref _softLimitAngle, value);
 		}
 
 		public animLookAtAdditionalPreset_LeftArm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

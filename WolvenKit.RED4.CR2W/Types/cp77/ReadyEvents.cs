@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timeStamp")] 
 		public CFloat TimeStamp
 		{
-			get
-			{
-				if (_timeStamp == null)
-				{
-					_timeStamp = (CFloat) CR2WTypeManager.Create("Float", "timeStamp", cr2w, this);
-				}
-				return _timeStamp;
-			}
-			set
-			{
-				if (_timeStamp == value)
-				{
-					return;
-				}
-				_timeStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeStamp);
+			set => SetProperty(ref _timeStamp, value);
 		}
 
 		public ReadyEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

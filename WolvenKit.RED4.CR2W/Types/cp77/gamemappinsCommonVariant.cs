@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mappinType")] 
 		public TweakDBID MappinType
 		{
-			get
-			{
-				if (_mappinType == null)
-				{
-					_mappinType = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "mappinType", cr2w, this);
-				}
-				return _mappinType;
-			}
-			set
-			{
-				if (_mappinType == value)
-				{
-					return;
-				}
-				_mappinType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mappinType);
+			set => SetProperty(ref _mappinType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("variant")] 
 		public CEnum<gamedataMappinVariant> Variant
 		{
-			get
-			{
-				if (_variant == null)
-				{
-					_variant = (CEnum<gamedataMappinVariant>) CR2WTypeManager.Create("gamedataMappinVariant", "variant", cr2w, this);
-				}
-				return _variant;
-			}
-			set
-			{
-				if (_variant == value)
-				{
-					return;
-				}
-				_variant = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _variant);
+			set => SetProperty(ref _variant, value);
 		}
 
 		public gamemappinsCommonVariant(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

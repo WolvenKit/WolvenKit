@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("direction")] 
 		public CHandle<IEvaluatorVector> Direction
 		{
-			get
-			{
-				if (_direction == null)
-				{
-					_direction = (CHandle<IEvaluatorVector>) CR2WTypeManager.Create("handle:IEvaluatorVector", "direction", cr2w, this);
-				}
-				return _direction;
-			}
-			set
-			{
-				if (_direction == value)
-				{
-					return;
-				}
-				_direction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _direction);
+			set => SetProperty(ref _direction, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("scale")] 
 		public CHandle<IEvaluatorFloat> Scale
 		{
-			get
-			{
-				if (_scale == null)
-				{
-					_scale = (CHandle<IEvaluatorFloat>) CR2WTypeManager.Create("handle:IEvaluatorFloat", "scale", cr2w, this);
-				}
-				return _scale;
-			}
-			set
-			{
-				if (_scale == value)
-				{
-					return;
-				}
-				_scale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scale);
+			set => SetProperty(ref _scale, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("worldSpace")] 
 		public CBool WorldSpace
 		{
-			get
-			{
-				if (_worldSpace == null)
-				{
-					_worldSpace = (CBool) CR2WTypeManager.Create("Bool", "worldSpace", cr2w, this);
-				}
-				return _worldSpace;
-			}
-			set
-			{
-				if (_worldSpace == value)
-				{
-					return;
-				}
-				_worldSpace = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _worldSpace);
+			set => SetProperty(ref _worldSpace, value);
 		}
 
 		public CParticleModificatorAcceleration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

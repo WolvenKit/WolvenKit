@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("progressFloatTrack")] 
 		public animNamedTrackIndex ProgressFloatTrack
 		{
-			get
-			{
-				if (_progressFloatTrack == null)
-				{
-					_progressFloatTrack = (animNamedTrackIndex) CR2WTypeManager.Create("animNamedTrackIndex", "progressFloatTrack", cr2w, this);
-				}
-				return _progressFloatTrack;
-			}
-			set
-			{
-				if (_progressFloatTrack == value)
-				{
-					return;
-				}
-				_progressFloatTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _progressFloatTrack);
+			set => SetProperty(ref _progressFloatTrack, value);
 		}
 
 		[Ordinal(35)] 
 		[RED("timeFloatTrack")] 
 		public animNamedTrackIndex TimeFloatTrack
 		{
-			get
-			{
-				if (_timeFloatTrack == null)
-				{
-					_timeFloatTrack = (animNamedTrackIndex) CR2WTypeManager.Create("animNamedTrackIndex", "timeFloatTrack", cr2w, this);
-				}
-				return _timeFloatTrack;
-			}
-			set
-			{
-				if (_timeFloatTrack == value)
-				{
-					return;
-				}
-				_timeFloatTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeFloatTrack);
+			set => SetProperty(ref _timeFloatTrack, value);
 		}
 
 		[Ordinal(36)] 
 		[RED("frameFloatTrack")] 
 		public animNamedTrackIndex FrameFloatTrack
 		{
-			get
-			{
-				if (_frameFloatTrack == null)
-				{
-					_frameFloatTrack = (animNamedTrackIndex) CR2WTypeManager.Create("animNamedTrackIndex", "frameFloatTrack", cr2w, this);
-				}
-				return _frameFloatTrack;
-			}
-			set
-			{
-				if (_frameFloatTrack == value)
-				{
-					return;
-				}
-				_frameFloatTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frameFloatTrack);
+			set => SetProperty(ref _frameFloatTrack, value);
 		}
 
 		[Ordinal(37)] 
 		[RED("inputWithTracks")] 
 		public animPoseLink InputWithTracks
 		{
-			get
-			{
-				if (_inputWithTracks == null)
-				{
-					_inputWithTracks = (animPoseLink) CR2WTypeManager.Create("animPoseLink", "inputWithTracks", cr2w, this);
-				}
-				return _inputWithTracks;
-			}
-			set
-			{
-				if (_inputWithTracks == value)
-				{
-					return;
-				}
-				_inputWithTracks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputWithTracks);
+			set => SetProperty(ref _inputWithTracks, value);
 		}
 
 		public animAnimNode_SkFrameAnimByTrack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

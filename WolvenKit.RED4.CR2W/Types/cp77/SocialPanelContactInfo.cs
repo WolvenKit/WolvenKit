@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Hash")] 
 		public CInt32 Hash
 		{
-			get
-			{
-				if (_hash == null)
-				{
-					_hash = (CInt32) CR2WTypeManager.Create("Int32", "Hash", cr2w, this);
-				}
-				return _hash;
-			}
-			set
-			{
-				if (_hash == value)
-				{
-					return;
-				}
-				_hash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hash);
+			set => SetProperty(ref _hash, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("Contact")] 
 		public wCHandle<gameJournalContact> Contact
 		{
-			get
-			{
-				if (_contact == null)
-				{
-					_contact = (wCHandle<gameJournalContact>) CR2WTypeManager.Create("whandle:gameJournalContact", "Contact", cr2w, this);
-				}
-				return _contact;
-			}
-			set
-			{
-				if (_contact == value)
-				{
-					return;
-				}
-				_contact = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contact);
+			set => SetProperty(ref _contact, value);
 		}
 
 		public SocialPanelContactInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

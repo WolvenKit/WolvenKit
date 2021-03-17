@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("SavingComplete")] 
 		public gsmSavingRequesResult SavingComplete
 		{
-			get
-			{
-				if (_savingComplete == null)
-				{
-					_savingComplete = (gsmSavingRequesResult) CR2WTypeManager.Create("gsmSavingRequesResult", "SavingComplete", cr2w, this);
-				}
-				return _savingComplete;
-			}
-			set
-			{
-				if (_savingComplete == value)
-				{
-					return;
-				}
-				_savingComplete = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _savingComplete);
+			set => SetProperty(ref _savingComplete, value);
 		}
 
 		public gsmBaseRequestsHandler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tweakDBChoiceName")] 
 		public CString TweakDBChoiceName
 		{
-			get
-			{
-				if (_tweakDBChoiceName == null)
-				{
-					_tweakDBChoiceName = (CString) CR2WTypeManager.Create("String", "tweakDBChoiceName", cr2w, this);
-				}
-				return _tweakDBChoiceName;
-			}
-			set
-			{
-				if (_tweakDBChoiceName == value)
-				{
-					return;
-				}
-				_tweakDBChoiceName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tweakDBChoiceName);
+			set => SetProperty(ref _tweakDBChoiceName, value);
 		}
 
 		public ActivateDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

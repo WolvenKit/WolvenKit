@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("parentsToSkip")] 
 		public CUInt32 ParentsToSkip
 		{
-			get
-			{
-				if (_parentsToSkip == null)
-				{
-					_parentsToSkip = (CUInt32) CR2WTypeManager.Create("Uint32", "parentsToSkip", cr2w, this);
-				}
-				return _parentsToSkip;
-			}
-			set
-			{
-				if (_parentsToSkip == value)
-				{
-					return;
-				}
-				_parentsToSkip = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentsToSkip);
+			set => SetProperty(ref _parentsToSkip, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("elements")] 
 		public CArray<worldRelativeNodePathElement> Elements
 		{
-			get
-			{
-				if (_elements == null)
-				{
-					_elements = (CArray<worldRelativeNodePathElement>) CR2WTypeManager.Create("array:worldRelativeNodePathElement", "elements", cr2w, this);
-				}
-				return _elements;
-			}
-			set
-			{
-				if (_elements == value)
-				{
-					return;
-				}
-				_elements = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _elements);
+			set => SetProperty(ref _elements, value);
 		}
 
 		public worldRelativeNodePath(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

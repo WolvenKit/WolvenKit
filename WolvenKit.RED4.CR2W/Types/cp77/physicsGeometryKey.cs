@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("pe")] 
 		public CUInt8 Pe
 		{
-			get
-			{
-				if (_pe == null)
-				{
-					_pe = (CUInt8) CR2WTypeManager.Create("Uint8", "pe", cr2w, this);
-				}
-				return _pe;
-			}
-			set
-			{
-				if (_pe == value)
-				{
-					return;
-				}
-				_pe = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pe);
+			set => SetProperty(ref _pe, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ta", 12)] 
 		public CArrayFixedSize<CUInt8> Ta
 		{
-			get
-			{
-				if (_ta == null)
-				{
-					_ta = (CArrayFixedSize<CUInt8>) CR2WTypeManager.Create("[12]Uint8", "ta", cr2w, this);
-				}
-				return _ta;
-			}
-			set
-			{
-				if (_ta == value)
-				{
-					return;
-				}
-				_ta = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ta);
+			set => SetProperty(ref _ta, value);
 		}
 
 		public physicsGeometryKey(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

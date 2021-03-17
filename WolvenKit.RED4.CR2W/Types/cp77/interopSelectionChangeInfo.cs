@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("selected")] 
 		public CArray<CUInt64> Selected
 		{
-			get
-			{
-				if (_selected == null)
-				{
-					_selected = (CArray<CUInt64>) CR2WTypeManager.Create("array:Uint64", "selected", cr2w, this);
-				}
-				return _selected;
-			}
-			set
-			{
-				if (_selected == value)
-				{
-					return;
-				}
-				_selected = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selected);
+			set => SetProperty(ref _selected, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("deselected")] 
 		public CArray<CUInt64> Deselected
 		{
-			get
-			{
-				if (_deselected == null)
-				{
-					_deselected = (CArray<CUInt64>) CR2WTypeManager.Create("array:Uint64", "deselected", cr2w, this);
-				}
-				return _deselected;
-			}
-			set
-			{
-				if (_deselected == value)
-				{
-					return;
-				}
-				_deselected = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deselected);
+			set => SetProperty(ref _deselected, value);
 		}
 
 		public interopSelectionChangeInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

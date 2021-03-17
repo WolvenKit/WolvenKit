@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("logicControllerRef")] 
 		public inkWidgetReference LogicControllerRef
 		{
-			get
-			{
-				if (_logicControllerRef == null)
-				{
-					_logicControllerRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "logicControllerRef", cr2w, this);
-				}
-				return _logicControllerRef;
-			}
-			set
-			{
-				if (_logicControllerRef == value)
-				{
-					return;
-				}
-				_logicControllerRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _logicControllerRef);
+			set => SetProperty(ref _logicControllerRef, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("journalManager")] 
 		public wCHandle<gameJournalManager> JournalManager
 		{
-			get
-			{
-				if (_journalManager == null)
-				{
-					_journalManager = (wCHandle<gameJournalManager>) CR2WTypeManager.Create("whandle:gameJournalManager", "journalManager", cr2w, this);
-				}
-				return _journalManager;
-			}
-			set
-			{
-				if (_journalManager == value)
-				{
-					return;
-				}
-				_journalManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _journalManager);
+			set => SetProperty(ref _journalManager, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("bbOpenerEventID")] 
 		public CUInt32 BbOpenerEventID
 		{
-			get
-			{
-				if (_bbOpenerEventID == null)
-				{
-					_bbOpenerEventID = (CUInt32) CR2WTypeManager.Create("Uint32", "bbOpenerEventID", cr2w, this);
-				}
-				return _bbOpenerEventID;
-			}
-			set
-			{
-				if (_bbOpenerEventID == value)
-				{
-					return;
-				}
-				_bbOpenerEventID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbOpenerEventID);
+			set => SetProperty(ref _bbOpenerEventID, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("bbSizeEventID")] 
 		public CUInt32 BbSizeEventID
 		{
-			get
-			{
-				if (_bbSizeEventID == null)
-				{
-					_bbSizeEventID = (CUInt32) CR2WTypeManager.Create("Uint32", "bbSizeEventID", cr2w, this);
-				}
-				return _bbSizeEventID;
-			}
-			set
-			{
-				if (_bbSizeEventID == value)
-				{
-					return;
-				}
-				_bbSizeEventID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbSizeEventID);
+			set => SetProperty(ref _bbSizeEventID, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("bbAlignmentEventID")] 
 		public CUInt32 BbAlignmentEventID
 		{
-			get
-			{
-				if (_bbAlignmentEventID == null)
-				{
-					_bbAlignmentEventID = (CUInt32) CR2WTypeManager.Create("Uint32", "bbAlignmentEventID", cr2w, this);
-				}
-				return _bbAlignmentEventID;
-			}
-			set
-			{
-				if (_bbAlignmentEventID == value)
-				{
-					return;
-				}
-				_bbAlignmentEventID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbAlignmentEventID);
+			set => SetProperty(ref _bbAlignmentEventID, value);
 		}
 
 		public BriefingScreen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

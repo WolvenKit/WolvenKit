@@ -39,621 +39,216 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("QuestDetailsRef")] 
 		public inkWidgetReference QuestDetailsRef
 		{
-			get
-			{
-				if (_questDetailsRef == null)
-				{
-					_questDetailsRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "QuestDetailsRef", cr2w, this);
-				}
-				return _questDetailsRef;
-			}
-			set
-			{
-				if (_questDetailsRef == value)
-				{
-					return;
-				}
-				_questDetailsRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questDetailsRef);
+			set => SetProperty(ref _questDetailsRef, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("QuestDetailsHeader")] 
 		public inkWidgetReference QuestDetailsHeader
 		{
-			get
-			{
-				if (_questDetailsHeader == null)
-				{
-					_questDetailsHeader = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "QuestDetailsHeader", cr2w, this);
-				}
-				return _questDetailsHeader;
-			}
-			set
-			{
-				if (_questDetailsHeader == value)
-				{
-					return;
-				}
-				_questDetailsHeader = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questDetailsHeader);
+			set => SetProperty(ref _questDetailsHeader, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("OptinalObjectivesGroupRef")] 
 		public inkWidgetReference OptinalObjectivesGroupRef
 		{
-			get
-			{
-				if (_optinalObjectivesGroupRef == null)
-				{
-					_optinalObjectivesGroupRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "OptinalObjectivesGroupRef", cr2w, this);
-				}
-				return _optinalObjectivesGroupRef;
-			}
-			set
-			{
-				if (_optinalObjectivesGroupRef == value)
-				{
-					return;
-				}
-				_optinalObjectivesGroupRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _optinalObjectivesGroupRef);
+			set => SetProperty(ref _optinalObjectivesGroupRef, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("CompletedObjectivesGroupRef")] 
 		public inkWidgetReference CompletedObjectivesGroupRef
 		{
-			get
-			{
-				if (_completedObjectivesGroupRef == null)
-				{
-					_completedObjectivesGroupRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "CompletedObjectivesGroupRef", cr2w, this);
-				}
-				return _completedObjectivesGroupRef;
-			}
-			set
-			{
-				if (_completedObjectivesGroupRef == value)
-				{
-					return;
-				}
-				_completedObjectivesGroupRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _completedObjectivesGroupRef);
+			set => SetProperty(ref _completedObjectivesGroupRef, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("QuestListRef")] 
 		public inkCompoundWidgetReference QuestListRef
 		{
-			get
-			{
-				if (_questListRef == null)
-				{
-					_questListRef = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "QuestListRef", cr2w, this);
-				}
-				return _questListRef;
-			}
-			set
-			{
-				if (_questListRef == value)
-				{
-					return;
-				}
-				_questListRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questListRef);
+			set => SetProperty(ref _questListRef, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("ObjectivesListRef")] 
 		public inkCompoundWidgetReference ObjectivesListRef
 		{
-			get
-			{
-				if (_objectivesListRef == null)
-				{
-					_objectivesListRef = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "ObjectivesListRef", cr2w, this);
-				}
-				return _objectivesListRef;
-			}
-			set
-			{
-				if (_objectivesListRef == value)
-				{
-					return;
-				}
-				_objectivesListRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectivesListRef);
+			set => SetProperty(ref _objectivesListRef, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("OptinalObjectivesListRef")] 
 		public inkCompoundWidgetReference OptinalObjectivesListRef
 		{
-			get
-			{
-				if (_optinalObjectivesListRef == null)
-				{
-					_optinalObjectivesListRef = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "OptinalObjectivesListRef", cr2w, this);
-				}
-				return _optinalObjectivesListRef;
-			}
-			set
-			{
-				if (_optinalObjectivesListRef == value)
-				{
-					return;
-				}
-				_optinalObjectivesListRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _optinalObjectivesListRef);
+			set => SetProperty(ref _optinalObjectivesListRef, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("CompletedObjectivesListRef")] 
 		public inkCompoundWidgetReference CompletedObjectivesListRef
 		{
-			get
-			{
-				if (_completedObjectivesListRef == null)
-				{
-					_completedObjectivesListRef = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "CompletedObjectivesListRef", cr2w, this);
-				}
-				return _completedObjectivesListRef;
-			}
-			set
-			{
-				if (_completedObjectivesListRef == value)
-				{
-					return;
-				}
-				_completedObjectivesListRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _completedObjectivesListRef);
+			set => SetProperty(ref _completedObjectivesListRef, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("QuestTitleRef")] 
 		public inkTextWidgetReference QuestTitleRef
 		{
-			get
-			{
-				if (_questTitleRef == null)
-				{
-					_questTitleRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "QuestTitleRef", cr2w, this);
-				}
-				return _questTitleRef;
-			}
-			set
-			{
-				if (_questTitleRef == value)
-				{
-					return;
-				}
-				_questTitleRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questTitleRef);
+			set => SetProperty(ref _questTitleRef, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("QuestDescriptionRef")] 
 		public inkTextWidgetReference QuestDescriptionRef
 		{
-			get
-			{
-				if (_questDescriptionRef == null)
-				{
-					_questDescriptionRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "QuestDescriptionRef", cr2w, this);
-				}
-				return _questDescriptionRef;
-			}
-			set
-			{
-				if (_questDescriptionRef == value)
-				{
-					return;
-				}
-				_questDescriptionRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questDescriptionRef);
+			set => SetProperty(ref _questDescriptionRef, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("recommendedLevel")] 
 		public inkTextWidgetReference RecommendedLevel
 		{
-			get
-			{
-				if (_recommendedLevel == null)
-				{
-					_recommendedLevel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "recommendedLevel", cr2w, this);
-				}
-				return _recommendedLevel;
-			}
-			set
-			{
-				if (_recommendedLevel == value)
-				{
-					return;
-				}
-				_recommendedLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recommendedLevel);
+			set => SetProperty(ref _recommendedLevel, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("rewardsList")] 
 		public inkCompoundWidgetReference RewardsList
 		{
-			get
-			{
-				if (_rewardsList == null)
-				{
-					_rewardsList = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "rewardsList", cr2w, this);
-				}
-				return _rewardsList;
-			}
-			set
-			{
-				if (_rewardsList == value)
-				{
-					return;
-				}
-				_rewardsList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rewardsList);
+			set => SetProperty(ref _rewardsList, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("codexLinksList")] 
 		public inkCompoundWidgetReference CodexLinksList
 		{
-			get
-			{
-				if (_codexLinksList == null)
-				{
-					_codexLinksList = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "codexLinksList", cr2w, this);
-				}
-				return _codexLinksList;
-			}
-			set
-			{
-				if (_codexLinksList == value)
-				{
-					return;
-				}
-				_codexLinksList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _codexLinksList);
+			set => SetProperty(ref _codexLinksList, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("CodexEntryParent")] 
 		public inkCompoundWidgetReference CodexEntryParent
 		{
-			get
-			{
-				if (_codexEntryParent == null)
-				{
-					_codexEntryParent = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "CodexEntryParent", cr2w, this);
-				}
-				return _codexEntryParent;
-			}
-			set
-			{
-				if (_codexEntryParent == value)
-				{
-					return;
-				}
-				_codexEntryParent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _codexEntryParent);
+			set => SetProperty(ref _codexEntryParent, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("CodexButtonRef")] 
 		public inkCompoundWidgetReference CodexButtonRef
 		{
-			get
-			{
-				if (_codexButtonRef == null)
-				{
-					_codexButtonRef = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "CodexButtonRef", cr2w, this);
-				}
-				return _codexButtonRef;
-			}
-			set
-			{
-				if (_codexButtonRef == value)
-				{
-					return;
-				}
-				_codexButtonRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _codexButtonRef);
+			set => SetProperty(ref _codexButtonRef, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("buttonHintsManagerRef")] 
 		public inkWidgetReference ButtonHintsManagerRef
 		{
-			get
-			{
-				if (_buttonHintsManagerRef == null)
-				{
-					_buttonHintsManagerRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "buttonHintsManagerRef", cr2w, this);
-				}
-				return _buttonHintsManagerRef;
-			}
-			set
-			{
-				if (_buttonHintsManagerRef == value)
-				{
-					return;
-				}
-				_buttonHintsManagerRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonHintsManagerRef);
+			set => SetProperty(ref _buttonHintsManagerRef, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("codexLibraryPath")] 
 		public redResourceReferenceScriptToken CodexLibraryPath
 		{
-			get
-			{
-				if (_codexLibraryPath == null)
-				{
-					_codexLibraryPath = (redResourceReferenceScriptToken) CR2WTypeManager.Create("redResourceReferenceScriptToken", "codexLibraryPath", cr2w, this);
-				}
-				return _codexLibraryPath;
-			}
-			set
-			{
-				if (_codexLibraryPath == value)
-				{
-					return;
-				}
-				_codexLibraryPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _codexLibraryPath);
+			set => SetProperty(ref _codexLibraryPath, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("ObjectiveViewName")] 
 		public CName ObjectiveViewName
 		{
-			get
-			{
-				if (_objectiveViewName == null)
-				{
-					_objectiveViewName = (CName) CR2WTypeManager.Create("CName", "ObjectiveViewName", cr2w, this);
-				}
-				return _objectiveViewName;
-			}
-			set
-			{
-				if (_objectiveViewName == value)
-				{
-					return;
-				}
-				_objectiveViewName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectiveViewName);
+			set => SetProperty(ref _objectiveViewName, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("QuestGroupName")] 
 		public CName QuestGroupName
 		{
-			get
-			{
-				if (_questGroupName == null)
-				{
-					_questGroupName = (CName) CR2WTypeManager.Create("CName", "QuestGroupName", cr2w, this);
-				}
-				return _questGroupName;
-			}
-			set
-			{
-				if (_questGroupName == value)
-				{
-					return;
-				}
-				_questGroupName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questGroupName);
+			set => SetProperty(ref _questGroupName, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("JournalWrapper")] 
 		public CHandle<JournalWrapper> JournalWrapper
 		{
-			get
-			{
-				if (_journalWrapper == null)
-				{
-					_journalWrapper = (CHandle<JournalWrapper>) CR2WTypeManager.Create("handle:JournalWrapper", "JournalWrapper", cr2w, this);
-				}
-				return _journalWrapper;
-			}
-			set
-			{
-				if (_journalWrapper == value)
-				{
-					return;
-				}
-				_journalWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _journalWrapper);
+			set => SetProperty(ref _journalWrapper, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("CurrentQuestData")] 
 		public CHandle<QuestDataWrapper> CurrentQuestData
 		{
-			get
-			{
-				if (_currentQuestData == null)
-				{
-					_currentQuestData = (CHandle<QuestDataWrapper>) CR2WTypeManager.Create("handle:QuestDataWrapper", "CurrentQuestData", cr2w, this);
-				}
-				return _currentQuestData;
-			}
-			set
-			{
-				if (_currentQuestData == value)
-				{
-					return;
-				}
-				_currentQuestData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentQuestData);
+			set => SetProperty(ref _currentQuestData, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("ObjectiveItems")] 
 		public CArray<wCHandle<ObjectiveController>> ObjectiveItems
 		{
-			get
-			{
-				if (_objectiveItems == null)
-				{
-					_objectiveItems = (CArray<wCHandle<ObjectiveController>>) CR2WTypeManager.Create("array:whandle:ObjectiveController", "ObjectiveItems", cr2w, this);
-				}
-				return _objectiveItems;
-			}
-			set
-			{
-				if (_objectiveItems == value)
-				{
-					return;
-				}
-				_objectiveItems = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectiveItems);
+			set => SetProperty(ref _objectiveItems, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("QuestLists")] 
 		public CArray<wCHandle<QuestListController>> QuestLists
 		{
-			get
-			{
-				if (_questLists == null)
-				{
-					_questLists = (CArray<wCHandle<QuestListController>>) CR2WTypeManager.Create("array:whandle:QuestListController", "QuestLists", cr2w, this);
-				}
-				return _questLists;
-			}
-			set
-			{
-				if (_questLists == value)
-				{
-					return;
-				}
-				_questLists = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questLists);
+			set => SetProperty(ref _questLists, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("CodexLinksListController")] 
 		public wCHandle<inkListController> CodexLinksListController
 		{
-			get
-			{
-				if (_codexLinksListController == null)
-				{
-					_codexLinksListController = (wCHandle<inkListController>) CR2WTypeManager.Create("whandle:inkListController", "CodexLinksListController", cr2w, this);
-				}
-				return _codexLinksListController;
-			}
-			set
-			{
-				if (_codexLinksListController == value)
-				{
-					return;
-				}
-				_codexLinksListController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _codexLinksListController);
+			set => SetProperty(ref _codexLinksListController, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("codexButton")] 
 		public wCHandle<inkButtonController> CodexButton
 		{
-			get
-			{
-				if (_codexButton == null)
-				{
-					_codexButton = (wCHandle<inkButtonController>) CR2WTypeManager.Create("whandle:inkButtonController", "codexButton", cr2w, this);
-				}
-				return _codexButton;
-			}
-			set
-			{
-				if (_codexButton == value)
-				{
-					return;
-				}
-				_codexButton = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _codexButton);
+			set => SetProperty(ref _codexButton, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("menuEventDispatcher")] 
 		public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
-			get
-			{
-				if (_menuEventDispatcher == null)
-				{
-					_menuEventDispatcher = (wCHandle<inkMenuEventDispatcher>) CR2WTypeManager.Create("whandle:inkMenuEventDispatcher", "menuEventDispatcher", cr2w, this);
-				}
-				return _menuEventDispatcher;
-			}
-			set
-			{
-				if (_menuEventDispatcher == value)
-				{
-					return;
-				}
-				_menuEventDispatcher = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuEventDispatcher);
+			set => SetProperty(ref _menuEventDispatcher, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("buttonHintsController")] 
 		public wCHandle<ButtonHints> ButtonHintsController
 		{
-			get
-			{
-				if (_buttonHintsController == null)
-				{
-					_buttonHintsController = (wCHandle<ButtonHints>) CR2WTypeManager.Create("whandle:ButtonHints", "buttonHintsController", cr2w, this);
-				}
-				return _buttonHintsController;
-			}
-			set
-			{
-				if (_buttonHintsController == value)
-				{
-					return;
-				}
-				_buttonHintsController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonHintsController);
+			set => SetProperty(ref _buttonHintsController, value);
 		}
 
 		public questLogV2GameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

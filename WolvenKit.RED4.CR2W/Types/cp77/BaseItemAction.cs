@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemData")] 
 		public wCHandle<gameItemData> ItemData
 		{
-			get
-			{
-				if (_itemData == null)
-				{
-					_itemData = (wCHandle<gameItemData>) CR2WTypeManager.Create("whandle:gameItemData", "itemData", cr2w, this);
-				}
-				return _itemData;
-			}
-			set
-			{
-				if (_itemData == value)
-				{
-					return;
-				}
-				_itemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemData);
+			set => SetProperty(ref _itemData, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("removeAfterUse")] 
 		public CBool RemoveAfterUse
 		{
-			get
-			{
-				if (_removeAfterUse == null)
-				{
-					_removeAfterUse = (CBool) CR2WTypeManager.Create("Bool", "removeAfterUse", cr2w, this);
-				}
-				return _removeAfterUse;
-			}
-			set
-			{
-				if (_removeAfterUse == value)
-				{
-					return;
-				}
-				_removeAfterUse = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _removeAfterUse);
+			set => SetProperty(ref _removeAfterUse, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("quantity")] 
 		public CInt32 Quantity
 		{
-			get
-			{
-				if (_quantity == null)
-				{
-					_quantity = (CInt32) CR2WTypeManager.Create("Int32", "quantity", cr2w, this);
-				}
-				return _quantity;
-			}
-			set
-			{
-				if (_quantity == value)
-				{
-					return;
-				}
-				_quantity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quantity);
+			set => SetProperty(ref _quantity, value);
 		}
 
 		public BaseItemAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

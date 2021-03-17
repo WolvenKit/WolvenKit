@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("channelName")] 
 		public CName ChannelName
 		{
-			get
-			{
-				if (_channelName == null)
-				{
-					_channelName = (CName) CR2WTypeManager.Create("CName", "channelName", cr2w, this);
-				}
-				return _channelName;
-			}
-			set
-			{
-				if (_channelName == value)
-				{
-					return;
-				}
-				_channelName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _channelName);
+			set => SetProperty(ref _channelName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("localizedName")] 
 		public CString LocalizedName
 		{
-			get
-			{
-				if (_localizedName == null)
-				{
-					_localizedName = (CString) CR2WTypeManager.Create("String", "localizedName", cr2w, this);
-				}
-				return _localizedName;
-			}
-			set
-			{
-				if (_localizedName == value)
-				{
-					return;
-				}
-				_localizedName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localizedName);
+			set => SetProperty(ref _localizedName, value);
 		}
 
 		public TvChannelSpawnData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

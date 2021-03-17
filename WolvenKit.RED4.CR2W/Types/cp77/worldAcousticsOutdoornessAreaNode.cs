@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("outdoor")] 
 		public CFloat Outdoor
 		{
-			get
-			{
-				if (_outdoor == null)
-				{
-					_outdoor = (CFloat) CR2WTypeManager.Create("Float", "outdoor", cr2w, this);
-				}
-				return _outdoor;
-			}
-			set
-			{
-				if (_outdoor == value)
-				{
-					return;
-				}
-				_outdoor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outdoor);
+			set => SetProperty(ref _outdoor, value);
 		}
 
 		public worldAcousticsOutdoornessAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("playInitAnimation")] 
 		public CBool PlayInitAnimation
 		{
-			get
-			{
-				if (_playInitAnimation == null)
-				{
-					_playInitAnimation = (CBool) CR2WTypeManager.Create("Bool", "playInitAnimation", cr2w, this);
-				}
-				return _playInitAnimation;
-			}
-			set
-			{
-				if (_playInitAnimation == value)
-				{
-					return;
-				}
-				_playInitAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playInitAnimation);
+			set => SetProperty(ref _playInitAnimation, value);
 		}
 
 		public DeathMenuUserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("revealPlayerSettings")] 
 		public RevealPlayerSettings RevealPlayerSettings
 		{
-			get
-			{
-				if (_revealPlayerSettings == null)
-				{
-					_revealPlayerSettings = (RevealPlayerSettings) CR2WTypeManager.Create("RevealPlayerSettings", "revealPlayerSettings", cr2w, this);
-				}
-				return _revealPlayerSettings;
-			}
-			set
-			{
-				if (_revealPlayerSettings == value)
-				{
-					return;
-				}
-				_revealPlayerSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revealPlayerSettings);
+			set => SetProperty(ref _revealPlayerSettings, value);
 		}
 
 		public QuestCombatActionAreaNotification(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

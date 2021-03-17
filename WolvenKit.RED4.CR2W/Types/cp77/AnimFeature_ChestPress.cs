@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lifting")] 
 		public CBool Lifting
 		{
-			get
-			{
-				if (_lifting == null)
-				{
-					_lifting = (CBool) CR2WTypeManager.Create("Bool", "lifting", cr2w, this);
-				}
-				return _lifting;
-			}
-			set
-			{
-				if (_lifting == value)
-				{
-					return;
-				}
-				_lifting = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lifting);
+			set => SetProperty(ref _lifting, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("kill")] 
 		public CBool Kill
 		{
-			get
-			{
-				if (_kill == null)
-				{
-					_kill = (CBool) CR2WTypeManager.Create("Bool", "kill", cr2w, this);
-				}
-				return _kill;
-			}
-			set
-			{
-				if (_kill == value)
-				{
-					return;
-				}
-				_kill = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _kill);
+			set => SetProperty(ref _kill, value);
 		}
 
 		public AnimFeature_ChestPress(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

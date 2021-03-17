@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("scanSuccessful")] 
 		public CBool ScanSuccessful
 		{
-			get
-			{
-				if (_scanSuccessful == null)
-				{
-					_scanSuccessful = (CBool) CR2WTypeManager.Create("Bool", "scanSuccessful", cr2w, this);
-				}
-				return _scanSuccessful;
-			}
-			set
-			{
-				if (_scanSuccessful == value)
-				{
-					return;
-				}
-				_scanSuccessful = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scanSuccessful);
+			set => SetProperty(ref _scanSuccessful, value);
 		}
 
 		public SecurityGateResponse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

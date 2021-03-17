@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("langCode")] 
 		public CName LangCode
 		{
-			get
-			{
-				if (_langCode == null)
-				{
-					_langCode = (CName) CR2WTypeManager.Create("CName", "langCode", cr2w, this);
-				}
-				return _langCode;
-			}
-			set
-			{
-				if (_langCode == value)
-				{
-					return;
-				}
-				_langCode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _langCode);
+			set => SetProperty(ref _langCode, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("onscreensPath")] 
 		public raRef<JsonResource> OnscreensPath
 		{
-			get
-			{
-				if (_onscreensPath == null)
-				{
-					_onscreensPath = (raRef<JsonResource>) CR2WTypeManager.Create("raRef:JsonResource", "onscreensPath", cr2w, this);
-				}
-				return _onscreensPath;
-			}
-			set
-			{
-				if (_onscreensPath == value)
-				{
-					return;
-				}
-				_onscreensPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onscreensPath);
+			set => SetProperty(ref _onscreensPath, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("subtitlePath")] 
 		public raRef<JsonResource> SubtitlePath
 		{
-			get
-			{
-				if (_subtitlePath == null)
-				{
-					_subtitlePath = (raRef<JsonResource>) CR2WTypeManager.Create("raRef:JsonResource", "subtitlePath", cr2w, this);
-				}
-				return _subtitlePath;
-			}
-			set
-			{
-				if (_subtitlePath == value)
-				{
-					return;
-				}
-				_subtitlePath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subtitlePath);
+			set => SetProperty(ref _subtitlePath, value);
 		}
 
 		public localizationPersistenceLocDataMapEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

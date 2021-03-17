@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hours")] 
 		public CInt32 Hours
 		{
-			get
-			{
-				if (_hours == null)
-				{
-					_hours = (CInt32) CR2WTypeManager.Create("Int32", "hours", cr2w, this);
-				}
-				return _hours;
-			}
-			set
-			{
-				if (_hours == value)
-				{
-					return;
-				}
-				_hours = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hours);
+			set => SetProperty(ref _hours, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("minutes")] 
 		public CInt32 Minutes
 		{
-			get
-			{
-				if (_minutes == null)
-				{
-					_minutes = (CInt32) CR2WTypeManager.Create("Int32", "minutes", cr2w, this);
-				}
-				return _minutes;
-			}
-			set
-			{
-				if (_minutes == value)
-				{
-					return;
-				}
-				_minutes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minutes);
+			set => SetProperty(ref _minutes, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("seconds")] 
 		public CInt32 Seconds
 		{
-			get
-			{
-				if (_seconds == null)
-				{
-					_seconds = (CInt32) CR2WTypeManager.Create("Int32", "seconds", cr2w, this);
-				}
-				return _seconds;
-			}
-			set
-			{
-				if (_seconds == value)
-				{
-					return;
-				}
-				_seconds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _seconds);
+			set => SetProperty(ref _seconds, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("source")] 
 		public CName Source
 		{
-			get
-			{
-				if (_source == null)
-				{
-					_source = (CName) CR2WTypeManager.Create("CName", "source", cr2w, this);
-				}
-				return _source;
-			}
-			set
-			{
-				if (_source == value)
-				{
-					return;
-				}
-				_source = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
 		}
 
 		public questSetTime_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

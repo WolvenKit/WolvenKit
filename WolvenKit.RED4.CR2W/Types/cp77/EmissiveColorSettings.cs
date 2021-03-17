@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tint")] 
 		public curveData<HDRColor> Tint
 		{
-			get
-			{
-				if (_tint == null)
-				{
-					_tint = (curveData<HDRColor>) CR2WTypeManager.Create("curveData:HDRColor", "tint", cr2w, this);
-				}
-				return _tint;
-			}
-			set
-			{
-				if (_tint == value)
-				{
-					return;
-				}
-				_tint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tint);
+			set => SetProperty(ref _tint, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("saturation")] 
 		public curveData<CFloat> Saturation
 		{
-			get
-			{
-				if (_saturation == null)
-				{
-					_saturation = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "saturation", cr2w, this);
-				}
-				return _saturation;
-			}
-			set
-			{
-				if (_saturation == value)
-				{
-					return;
-				}
-				_saturation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _saturation);
+			set => SetProperty(ref _saturation, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("brigtness")] 
 		public curveData<CFloat> Brigtness
 		{
-			get
-			{
-				if (_brigtness == null)
-				{
-					_brigtness = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "brigtness", cr2w, this);
-				}
-				return _brigtness;
-			}
-			set
-			{
-				if (_brigtness == value)
-				{
-					return;
-				}
-				_brigtness = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _brigtness);
+			set => SetProperty(ref _brigtness, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("exposure")] 
 		public curveData<Vector2> Exposure
 		{
-			get
-			{
-				if (_exposure == null)
-				{
-					_exposure = (curveData<Vector2>) CR2WTypeManager.Create("curveData:Vector2", "exposure", cr2w, this);
-				}
-				return _exposure;
-			}
-			set
-			{
-				if (_exposure == value)
-				{
-					return;
-				}
-				_exposure = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exposure);
+			set => SetProperty(ref _exposure, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("cameraLuminance")] 
 		public curveData<Vector2> CameraLuminance
 		{
-			get
-			{
-				if (_cameraLuminance == null)
-				{
-					_cameraLuminance = (curveData<Vector2>) CR2WTypeManager.Create("curveData:Vector2", "cameraLuminance", cr2w, this);
-				}
-				return _cameraLuminance;
-			}
-			set
-			{
-				if (_cameraLuminance == value)
-				{
-					return;
-				}
-				_cameraLuminance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameraLuminance);
+			set => SetProperty(ref _cameraLuminance, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("evBlend")] 
 		public curveData<CFloat> EvBlend
 		{
-			get
-			{
-				if (_evBlend == null)
-				{
-					_evBlend = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "evBlend", cr2w, this);
-				}
-				return _evBlend;
-			}
-			set
-			{
-				if (_evBlend == value)
-				{
-					return;
-				}
-				_evBlend = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _evBlend);
+			set => SetProperty(ref _evBlend, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("exposureIBL")] 
 		public curveData<CFloat> ExposureIBL
 		{
-			get
-			{
-				if (_exposureIBL == null)
-				{
-					_exposureIBL = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "exposureIBL", cr2w, this);
-				}
-				return _exposureIBL;
-			}
-			set
-			{
-				if (_exposureIBL == value)
-				{
-					return;
-				}
-				_exposureIBL = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exposureIBL);
+			set => SetProperty(ref _exposureIBL, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("luminanceIBL")] 
 		public curveData<CFloat> LuminanceIBL
 		{
-			get
-			{
-				if (_luminanceIBL == null)
-				{
-					_luminanceIBL = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "luminanceIBL", cr2w, this);
-				}
-				return _luminanceIBL;
-			}
-			set
-			{
-				if (_luminanceIBL == value)
-				{
-					return;
-				}
-				_luminanceIBL = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _luminanceIBL);
+			set => SetProperty(ref _luminanceIBL, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("curveRampIBL")] 
 		public CFloat CurveRampIBL
 		{
-			get
-			{
-				if (_curveRampIBL == null)
-				{
-					_curveRampIBL = (CFloat) CR2WTypeManager.Create("Float", "curveRampIBL", cr2w, this);
-				}
-				return _curveRampIBL;
-			}
-			set
-			{
-				if (_curveRampIBL == value)
-				{
-					return;
-				}
-				_curveRampIBL = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _curveRampIBL);
+			set => SetProperty(ref _curveRampIBL, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("exposureScale")] 
 		public curveData<CFloat> ExposureScale
 		{
-			get
-			{
-				if (_exposureScale == null)
-				{
-					_exposureScale = (curveData<CFloat>) CR2WTypeManager.Create("curveData:Float", "exposureScale", cr2w, this);
-				}
-				return _exposureScale;
-			}
-			set
-			{
-				if (_exposureScale == value)
-				{
-					return;
-				}
-				_exposureScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exposureScale);
+			set => SetProperty(ref _exposureScale, value);
 		}
 
 		public EmissiveColorSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

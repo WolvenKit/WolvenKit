@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("minigameState")] 
 		public CEnum<gameuiHackingMinigameState> MinigameState
 		{
-			get
-			{
-				if (_minigameState == null)
-				{
-					_minigameState = (CEnum<gameuiHackingMinigameState>) CR2WTypeManager.Create("gameuiHackingMinigameState", "minigameState", cr2w, this);
-				}
-				return _minigameState;
-			}
-			set
-			{
-				if (_minigameState == value)
-				{
-					return;
-				}
-				_minigameState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minigameState);
+			set => SetProperty(ref _minigameState, value);
 		}
 
 		public gameuiAccessPointMiniGameStatus(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

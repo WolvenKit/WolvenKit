@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("data")] 
 		public raRef<worldStreamingSector> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (raRef<worldStreamingSector>) CR2WTypeManager.Create("raRef:worldStreamingSector", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("streamingBox")] 
 		public Box StreamingBox
 		{
-			get
-			{
-				if (_streamingBox == null)
-				{
-					_streamingBox = (Box) CR2WTypeManager.Create("Box", "streamingBox", cr2w, this);
-				}
-				return _streamingBox;
-			}
-			set
-			{
-				if (_streamingBox == value)
-				{
-					return;
-				}
-				_streamingBox = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _streamingBox);
+			set => SetProperty(ref _streamingBox, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("questPrefabNodeRef")] 
 		public NodeRef QuestPrefabNodeRef
 		{
-			get
-			{
-				if (_questPrefabNodeRef == null)
-				{
-					_questPrefabNodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "questPrefabNodeRef", cr2w, this);
-				}
-				return _questPrefabNodeRef;
-			}
-			set
-			{
-				if (_questPrefabNodeRef == value)
-				{
-					return;
-				}
-				_questPrefabNodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questPrefabNodeRef);
+			set => SetProperty(ref _questPrefabNodeRef, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("numNodeRanges")] 
 		public CUInt32 NumNodeRanges
 		{
-			get
-			{
-				if (_numNodeRanges == null)
-				{
-					_numNodeRanges = (CUInt32) CR2WTypeManager.Create("Uint32", "numNodeRanges", cr2w, this);
-				}
-				return _numNodeRanges;
-			}
-			set
-			{
-				if (_numNodeRanges == value)
-				{
-					return;
-				}
-				_numNodeRanges = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numNodeRanges);
+			set => SetProperty(ref _numNodeRanges, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("variants")] 
 		public CArray<worldStreamingSectorVariant> Variants
 		{
-			get
-			{
-				if (_variants == null)
-				{
-					_variants = (CArray<worldStreamingSectorVariant>) CR2WTypeManager.Create("array:worldStreamingSectorVariant", "variants", cr2w, this);
-				}
-				return _variants;
-			}
-			set
-			{
-				if (_variants == value)
-				{
-					return;
-				}
-				_variants = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _variants);
+			set => SetProperty(ref _variants, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("sectorIndex")] 
 		public CUInt32 SectorIndex
 		{
-			get
-			{
-				if (_sectorIndex == null)
-				{
-					_sectorIndex = (CUInt32) CR2WTypeManager.Create("Uint32", "sectorIndex", cr2w, this);
-				}
-				return _sectorIndex;
-			}
-			set
-			{
-				if (_sectorIndex == value)
-				{
-					return;
-				}
-				_sectorIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sectorIndex);
+			set => SetProperty(ref _sectorIndex, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("level")] 
 		public CUInt32 Level
 		{
-			get
-			{
-				if (_level == null)
-				{
-					_level = (CUInt32) CR2WTypeManager.Create("Uint32", "level", cr2w, this);
-				}
-				return _level;
-			}
-			set
-			{
-				if (_level == value)
-				{
-					return;
-				}
-				_level = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _level);
+			set => SetProperty(ref _level, value);
 		}
 
 		public worldStreamingSectorDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

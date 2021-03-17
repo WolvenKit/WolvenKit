@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("parentAttachementData")] 
 		public EntityAttachementData ParentAttachementData
 		{
-			get
-			{
-				if (_parentAttachementData == null)
-				{
-					_parentAttachementData = (EntityAttachementData) CR2WTypeManager.Create("EntityAttachementData", "parentAttachementData", cr2w, this);
-				}
-				return _parentAttachementData;
-			}
-			set
-			{
-				if (_parentAttachementData == value)
-				{
-					return;
-				}
-				_parentAttachementData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentAttachementData);
+			set => SetProperty(ref _parentAttachementData, value);
 		}
 
 		public EntityAttachementComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("linearVelocity")] 
 		public Vector4 LinearVelocity
 		{
-			get
-			{
-				if (_linearVelocity == null)
-				{
-					_linearVelocity = (Vector4) CR2WTypeManager.Create("Vector4", "linearVelocity", cr2w, this);
-				}
-				return _linearVelocity;
-			}
-			set
-			{
-				if (_linearVelocity == value)
-				{
-					return;
-				}
-				_linearVelocity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linearVelocity);
+			set => SetProperty(ref _linearVelocity, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("angularVelocity")] 
 		public Vector4 AngularVelocity
 		{
-			get
-			{
-				if (_angularVelocity == null)
-				{
-					_angularVelocity = (Vector4) CR2WTypeManager.Create("Vector4", "angularVelocity", cr2w, this);
-				}
-				return _angularVelocity;
-			}
-			set
-			{
-				if (_angularVelocity == value)
-				{
-					return;
-				}
-				_angularVelocity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _angularVelocity);
+			set => SetProperty(ref _angularVelocity, value);
 		}
 
 		public physicsPhysicsJointDriveVelocity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

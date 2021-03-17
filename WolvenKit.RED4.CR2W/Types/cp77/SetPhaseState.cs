@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("phaseStateValue")] 
 		public CEnum<ENPCPhaseState> PhaseStateValue
 		{
-			get
-			{
-				if (_phaseStateValue == null)
-				{
-					_phaseStateValue = (CEnum<ENPCPhaseState>) CR2WTypeManager.Create("ENPCPhaseState", "phaseStateValue", cr2w, this);
-				}
-				return _phaseStateValue;
-			}
-			set
-			{
-				if (_phaseStateValue == value)
-				{
-					return;
-				}
-				_phaseStateValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _phaseStateValue);
+			set => SetProperty(ref _phaseStateValue, value);
 		}
 
 		public SetPhaseState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

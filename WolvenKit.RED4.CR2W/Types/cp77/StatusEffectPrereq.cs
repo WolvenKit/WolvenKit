@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statusEffectRecordID")] 
 		public TweakDBID StatusEffectRecordID
 		{
-			get
-			{
-				if (_statusEffectRecordID == null)
-				{
-					_statusEffectRecordID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "statusEffectRecordID", cr2w, this);
-				}
-				return _statusEffectRecordID;
-			}
-			set
-			{
-				if (_statusEffectRecordID == value)
-				{
-					return;
-				}
-				_statusEffectRecordID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statusEffectRecordID);
+			set => SetProperty(ref _statusEffectRecordID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("tag")] 
 		public CName Tag
 		{
-			get
-			{
-				if (_tag == null)
-				{
-					_tag = (CName) CR2WTypeManager.Create("CName", "tag", cr2w, this);
-				}
-				return _tag;
-			}
-			set
-			{
-				if (_tag == value)
-				{
-					return;
-				}
-				_tag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tag);
+			set => SetProperty(ref _tag, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("checkType")] 
 		public CString CheckType
 		{
-			get
-			{
-				if (_checkType == null)
-				{
-					_checkType = (CString) CR2WTypeManager.Create("String", "checkType", cr2w, this);
-				}
-				return _checkType;
-			}
-			set
-			{
-				if (_checkType == value)
-				{
-					return;
-				}
-				_checkType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _checkType);
+			set => SetProperty(ref _checkType, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("invert")] 
 		public CBool Invert
 		{
-			get
-			{
-				if (_invert == null)
-				{
-					_invert = (CBool) CR2WTypeManager.Create("Bool", "invert", cr2w, this);
-				}
-				return _invert;
-			}
-			set
-			{
-				if (_invert == value)
-				{
-					return;
-				}
-				_invert = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _invert);
+			set => SetProperty(ref _invert, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("fireAndForget")] 
 		public CBool FireAndForget
 		{
-			get
-			{
-				if (_fireAndForget == null)
-				{
-					_fireAndForget = (CBool) CR2WTypeManager.Create("Bool", "fireAndForget", cr2w, this);
-				}
-				return _fireAndForget;
-			}
-			set
-			{
-				if (_fireAndForget == value)
-				{
-					return;
-				}
-				_fireAndForget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fireAndForget);
+			set => SetProperty(ref _fireAndForget, value);
 		}
 
 		public StatusEffectPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

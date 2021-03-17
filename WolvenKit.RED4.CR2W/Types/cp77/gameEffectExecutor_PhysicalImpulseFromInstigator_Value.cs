@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("magnitude")] 
 		public CFloat Magnitude
 		{
-			get
-			{
-				if (_magnitude == null)
-				{
-					_magnitude = (CFloat) CR2WTypeManager.Create("Float", "magnitude", cr2w, this);
-				}
-				return _magnitude;
-			}
-			set
-			{
-				if (_magnitude == value)
-				{
-					return;
-				}
-				_magnitude = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _magnitude);
+			set => SetProperty(ref _magnitude, value);
 		}
 
 		public gameEffectExecutor_PhysicalImpulseFromInstigator_Value(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

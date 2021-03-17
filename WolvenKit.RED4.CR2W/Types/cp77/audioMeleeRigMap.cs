@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mapItems")] 
 		public CArray<audioMeleeRigMapItem> MapItems
 		{
-			get
-			{
-				if (_mapItems == null)
-				{
-					_mapItems = (CArray<audioMeleeRigMapItem>) CR2WTypeManager.Create("array:audioMeleeRigMapItem", "mapItems", cr2w, this);
-				}
-				return _mapItems;
-			}
-			set
-			{
-				if (_mapItems == value)
-				{
-					return;
-				}
-				_mapItems = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mapItems);
+			set => SetProperty(ref _mapItems, value);
 		}
 
 		public audioMeleeRigMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

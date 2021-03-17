@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("listenerID")] 
 		public CUInt32 ListenerID
 		{
-			get
-			{
-				if (_listenerID == null)
-				{
-					_listenerID = (CUInt32) CR2WTypeManager.Create("Uint32", "listenerID", cr2w, this);
-				}
-				return _listenerID;
-			}
-			set
-			{
-				if (_listenerID == value)
-				{
-					return;
-				}
-				_listenerID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _listenerID);
+			set => SetProperty(ref _listenerID, value);
 		}
 
 		public FactValuePrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

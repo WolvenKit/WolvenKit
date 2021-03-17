@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("conversationGroups")] 
 		public CArray<rRef<scnInterestingConversationsResource>> ConversationGroups
 		{
-			get
-			{
-				if (_conversationGroups == null)
-				{
-					_conversationGroups = (CArray<rRef<scnInterestingConversationsResource>>) CR2WTypeManager.Create("array:rRef:scnInterestingConversationsResource", "conversationGroups", cr2w, this);
-				}
-				return _conversationGroups;
-			}
-			set
-			{
-				if (_conversationGroups == value)
-				{
-					return;
-				}
-				_conversationGroups = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _conversationGroups);
+			set => SetProperty(ref _conversationGroups, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("conversationResources")] 
 		public CArray<CHandle<worldConversationGroupData>> ConversationResources
 		{
-			get
-			{
-				if (_conversationResources == null)
-				{
-					_conversationResources = (CArray<CHandle<worldConversationGroupData>>) CR2WTypeManager.Create("array:handle:worldConversationGroupData", "conversationResources", cr2w, this);
-				}
-				return _conversationResources;
-			}
-			set
-			{
-				if (_conversationResources == value)
-				{
-					return;
-				}
-				_conversationResources = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _conversationResources);
+			set => SetProperty(ref _conversationResources, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("conversations")] 
 		public CArray<CHandle<worldConversationData>> Conversations
 		{
-			get
-			{
-				if (_conversations == null)
-				{
-					_conversations = (CArray<CHandle<worldConversationData>>) CR2WTypeManager.Create("array:handle:worldConversationData", "conversations", cr2w, this);
-				}
-				return _conversations;
-			}
-			set
-			{
-				if (_conversations == value)
-				{
-					return;
-				}
-				_conversations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _conversations);
+			set => SetProperty(ref _conversations, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("workspots")] 
 		public CArray<NodeRef> Workspots
 		{
-			get
-			{
-				if (_workspots == null)
-				{
-					_workspots = (CArray<NodeRef>) CR2WTypeManager.Create("array:NodeRef", "workspots", cr2w, this);
-				}
-				return _workspots;
-			}
-			set
-			{
-				if (_workspots == value)
-				{
-					return;
-				}
-				_workspots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspots);
+			set => SetProperty(ref _workspots, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("savingStrategy")] 
 		public CEnum<audioConversationSavingStrategy> SavingStrategy
 		{
-			get
-			{
-				if (_savingStrategy == null)
-				{
-					_savingStrategy = (CEnum<audioConversationSavingStrategy>) CR2WTypeManager.Create("audioConversationSavingStrategy", "savingStrategy", cr2w, this);
-				}
-				return _savingStrategy;
-			}
-			set
-			{
-				if (_savingStrategy == value)
-				{
-					return;
-				}
-				_savingStrategy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _savingStrategy);
+			set => SetProperty(ref _savingStrategy, value);
 		}
 
 		public worldInterestingConversationsAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

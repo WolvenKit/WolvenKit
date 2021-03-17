@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("action")] 
 		public CEnum<gameEffectAction_KillFXAction> Action
 		{
-			get
-			{
-				if (_action == null)
-				{
-					_action = (CEnum<gameEffectAction_KillFXAction>) CR2WTypeManager.Create("gameEffectAction_KillFXAction", "action", cr2w, this);
-				}
-				return _action;
-			}
-			set
-			{
-				if (_action == value)
-				{
-					return;
-				}
-				_action = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("effectTag")] 
 		public CName EffectTag
 		{
-			get
-			{
-				if (_effectTag == null)
-				{
-					_effectTag = (CName) CR2WTypeManager.Create("CName", "effectTag", cr2w, this);
-				}
-				return _effectTag;
-			}
-			set
-			{
-				if (_effectTag == value)
-				{
-					return;
-				}
-				_effectTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectTag);
+			set => SetProperty(ref _effectTag, value);
 		}
 
 		public gameEffectAction_KillFX(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

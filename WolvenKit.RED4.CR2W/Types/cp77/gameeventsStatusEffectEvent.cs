@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("staticData")] 
 		public CHandle<gamedataStatusEffect_Record> StaticData
 		{
-			get
-			{
-				if (_staticData == null)
-				{
-					_staticData = (CHandle<gamedataStatusEffect_Record>) CR2WTypeManager.Create("handle:gamedataStatusEffect_Record", "staticData", cr2w, this);
-				}
-				return _staticData;
-			}
-			set
-			{
-				if (_staticData == value)
-				{
-					return;
-				}
-				_staticData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _staticData);
+			set => SetProperty(ref _staticData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("stackCount")] 
 		public CUInt32 StackCount
 		{
-			get
-			{
-				if (_stackCount == null)
-				{
-					_stackCount = (CUInt32) CR2WTypeManager.Create("Uint32", "stackCount", cr2w, this);
-				}
-				return _stackCount;
-			}
-			set
-			{
-				if (_stackCount == value)
-				{
-					return;
-				}
-				_stackCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stackCount);
+			set => SetProperty(ref _stackCount, value);
 		}
 
 		public gameeventsStatusEffectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

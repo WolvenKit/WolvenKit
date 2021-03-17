@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("phasesData")] 
 		public CArray<communityCommunityEntryPhaseSpotsData> PhasesData
 		{
-			get
-			{
-				if (_phasesData == null)
-				{
-					_phasesData = (CArray<communityCommunityEntryPhaseSpotsData>) CR2WTypeManager.Create("array:communityCommunityEntryPhaseSpotsData", "phasesData", cr2w, this);
-				}
-				return _phasesData;
-			}
-			set
-			{
-				if (_phasesData == value)
-				{
-					return;
-				}
-				_phasesData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _phasesData);
+			set => SetProperty(ref _phasesData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entryName")] 
 		public CName EntryName
 		{
-			get
-			{
-				if (_entryName == null)
-				{
-					_entryName = (CName) CR2WTypeManager.Create("CName", "entryName", cr2w, this);
-				}
-				return _entryName;
-			}
-			set
-			{
-				if (_entryName == value)
-				{
-					return;
-				}
-				_entryName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryName);
+			set => SetProperty(ref _entryName, value);
 		}
 
 		public communityCommunityEntrySpotsData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

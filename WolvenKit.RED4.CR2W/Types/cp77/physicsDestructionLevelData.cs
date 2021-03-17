@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
-			get
-			{
-				if (_filterData == null)
-				{
-					_filterData = (CHandle<physicsFilterData>) CR2WTypeManager.Create("handle:physicsFilterData", "filterData", cr2w, this);
-				}
-				return _filterData;
-			}
-			set
-			{
-				if (_filterData == value)
-				{
-					return;
-				}
-				_filterData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filterData);
+			set => SetProperty(ref _filterData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("fracturingEffect")] 
 		public raRef<worldEffect> FracturingEffect
 		{
-			get
-			{
-				if (_fracturingEffect == null)
-				{
-					_fracturingEffect = (raRef<worldEffect>) CR2WTypeManager.Create("raRef:worldEffect", "fracturingEffect", cr2w, this);
-				}
-				return _fracturingEffect;
-			}
-			set
-			{
-				if (_fracturingEffect == value)
-				{
-					return;
-				}
-				_fracturingEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fracturingEffect);
+			set => SetProperty(ref _fracturingEffect, value);
 		}
 
 		public physicsDestructionLevelData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

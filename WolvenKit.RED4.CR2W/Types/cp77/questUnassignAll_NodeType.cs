@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get
-			{
-				if (_vehicleRef == null)
-				{
-					_vehicleRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "vehicleRef", cr2w, this);
-				}
-				return _vehicleRef;
-			}
-			set
-			{
-				if (_vehicleRef == value)
-				{
-					return;
-				}
-				_vehicleRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleRef);
+			set => SetProperty(ref _vehicleRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isInstant")] 
 		public CBool IsInstant
 		{
-			get
-			{
-				if (_isInstant == null)
-				{
-					_isInstant = (CBool) CR2WTypeManager.Create("Bool", "isInstant", cr2w, this);
-				}
-				return _isInstant;
-			}
-			set
-			{
-				if (_isInstant == value)
-				{
-					return;
-				}
-				_isInstant = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInstant);
+			set => SetProperty(ref _isInstant, value);
 		}
 
 		public questUnassignAll_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

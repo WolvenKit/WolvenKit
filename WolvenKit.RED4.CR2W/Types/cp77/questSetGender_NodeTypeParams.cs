@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get
-			{
-				if (_puppetRef == null)
-				{
-					_puppetRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "puppetRef", cr2w, this);
-				}
-				return _puppetRef;
-			}
-			set
-			{
-				if (_puppetRef == value)
-				{
-					return;
-				}
-				_puppetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppetRef);
+			set => SetProperty(ref _puppetRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get
-			{
-				if (_isPlayer == null)
-				{
-					_isPlayer = (CBool) CR2WTypeManager.Create("Bool", "isPlayer", cr2w, this);
-				}
-				return _isPlayer;
-			}
-			set
-			{
-				if (_isPlayer == value)
-				{
-					return;
-				}
-				_isPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("gender")] 
 		public CName Gender
 		{
-			get
-			{
-				if (_gender == null)
-				{
-					_gender = (CName) CR2WTypeManager.Create("CName", "gender", cr2w, this);
-				}
-				return _gender;
-			}
-			set
-			{
-				if (_gender == value)
-				{
-					return;
-				}
-				_gender = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gender);
+			set => SetProperty(ref _gender, value);
 		}
 
 		public questSetGender_NodeTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

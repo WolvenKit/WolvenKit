@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotDataArray")] 
 		public CArray<gameEntitySpawnerSlotData> SlotDataArray
 		{
-			get
-			{
-				if (_slotDataArray == null)
-				{
-					_slotDataArray = (CArray<gameEntitySpawnerSlotData>) CR2WTypeManager.Create("array:gameEntitySpawnerSlotData", "slotDataArray", cr2w, this);
-				}
-				return _slotDataArray;
-			}
-			set
-			{
-				if (_slotDataArray == value)
-				{
-					return;
-				}
-				_slotDataArray = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotDataArray);
+			set => SetProperty(ref _slotDataArray, value);
 		}
 
 		public gameEntitySpawnerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

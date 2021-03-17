@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stringId")] 
 		public CRUID StringId
 		{
-			get
-			{
-				if (_stringId == null)
-				{
-					_stringId = (CRUID) CR2WTypeManager.Create("CRUID", "stringId", cr2w, this);
-				}
-				return _stringId;
-			}
-			set
-			{
-				if (_stringId == value)
-				{
-					return;
-				}
-				_stringId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stringId);
+			set => SetProperty(ref _stringId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("femaleVariant")] 
 		public CString FemaleVariant
 		{
-			get
-			{
-				if (_femaleVariant == null)
-				{
-					_femaleVariant = (CString) CR2WTypeManager.Create("String", "femaleVariant", cr2w, this);
-				}
-				return _femaleVariant;
-			}
-			set
-			{
-				if (_femaleVariant == value)
-				{
-					return;
-				}
-				_femaleVariant = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _femaleVariant);
+			set => SetProperty(ref _femaleVariant, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("maleVariant")] 
 		public CString MaleVariant
 		{
-			get
-			{
-				if (_maleVariant == null)
-				{
-					_maleVariant = (CString) CR2WTypeManager.Create("String", "maleVariant", cr2w, this);
-				}
-				return _maleVariant;
-			}
-			set
-			{
-				if (_maleVariant == value)
-				{
-					return;
-				}
-				_maleVariant = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maleVariant);
+			set => SetProperty(ref _maleVariant, value);
 		}
 
 		public localizationPersistenceSubtitleEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

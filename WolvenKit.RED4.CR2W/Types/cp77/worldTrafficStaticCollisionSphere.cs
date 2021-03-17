@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("worldPos")] 
 		public Vector3 WorldPos
 		{
-			get
-			{
-				if (_worldPos == null)
-				{
-					_worldPos = (Vector3) CR2WTypeManager.Create("Vector3", "worldPos", cr2w, this);
-				}
-				return _worldPos;
-			}
-			set
-			{
-				if (_worldPos == value)
-				{
-					return;
-				}
-				_worldPos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _worldPos);
+			set => SetProperty(ref _worldPos, value);
 		}
 
 		public worldTrafficStaticCollisionSphere(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

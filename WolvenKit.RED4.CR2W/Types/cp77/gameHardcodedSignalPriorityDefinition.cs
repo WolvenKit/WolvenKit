@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("signals")] 
 		public CArray<CName> Signals
 		{
-			get
-			{
-				if (_signals == null)
-				{
-					_signals = (CArray<CName>) CR2WTypeManager.Create("array:CName", "signals", cr2w, this);
-				}
-				return _signals;
-			}
-			set
-			{
-				if (_signals == value)
-				{
-					return;
-				}
-				_signals = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _signals);
+			set => SetProperty(ref _signals, value);
 		}
 
 		public gameHardcodedSignalPriorityDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

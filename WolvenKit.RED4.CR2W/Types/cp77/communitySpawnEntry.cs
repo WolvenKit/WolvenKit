@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entryName")] 
 		public CName EntryName
 		{
-			get
-			{
-				if (_entryName == null)
-				{
-					_entryName = (CName) CR2WTypeManager.Create("CName", "entryName", cr2w, this);
-				}
-				return _entryName;
-			}
-			set
-			{
-				if (_entryName == value)
-				{
-					return;
-				}
-				_entryName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryName);
+			set => SetProperty(ref _entryName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("characterRecordId")] 
 		public TweakDBID CharacterRecordId
 		{
-			get
-			{
-				if (_characterRecordId == null)
-				{
-					_characterRecordId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "characterRecordId", cr2w, this);
-				}
-				return _characterRecordId;
-			}
-			set
-			{
-				if (_characterRecordId == value)
-				{
-					return;
-				}
-				_characterRecordId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _characterRecordId);
+			set => SetProperty(ref _characterRecordId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("phases")] 
 		public CArray<CHandle<communitySpawnPhase>> Phases
 		{
-			get
-			{
-				if (_phases == null)
-				{
-					_phases = (CArray<CHandle<communitySpawnPhase>>) CR2WTypeManager.Create("array:handle:communitySpawnPhase", "phases", cr2w, this);
-				}
-				return _phases;
-			}
-			set
-			{
-				if (_phases == value)
-				{
-					return;
-				}
-				_phases = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _phases);
+			set => SetProperty(ref _phases, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("spawnInView")] 
 		public CEnum<gameSpawnInViewState> SpawnInView
 		{
-			get
-			{
-				if (_spawnInView == null)
-				{
-					_spawnInView = (CEnum<gameSpawnInViewState>) CR2WTypeManager.Create("gameSpawnInViewState", "spawnInView", cr2w, this);
-				}
-				return _spawnInView;
-			}
-			set
-			{
-				if (_spawnInView == value)
-				{
-					return;
-				}
-				_spawnInView = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnInView);
+			set => SetProperty(ref _spawnInView, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("initializers")] 
 		public CArray<CHandle<communitySpawnInitializer>> Initializers
 		{
-			get
-			{
-				if (_initializers == null)
-				{
-					_initializers = (CArray<CHandle<communitySpawnInitializer>>) CR2WTypeManager.Create("array:handle:communitySpawnInitializer", "initializers", cr2w, this);
-				}
-				return _initializers;
-			}
-			set
-			{
-				if (_initializers == value)
-				{
-					return;
-				}
-				_initializers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initializers);
+			set => SetProperty(ref _initializers, value);
 		}
 
 		public communitySpawnEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

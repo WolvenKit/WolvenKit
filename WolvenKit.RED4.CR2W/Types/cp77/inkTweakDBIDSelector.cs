@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("baseTweakID")] 
 		public TweakDBID BaseTweakID
 		{
-			get
-			{
-				if (_baseTweakID == null)
-				{
-					_baseTweakID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "baseTweakID", cr2w, this);
-				}
-				return _baseTweakID;
-			}
-			set
-			{
-				if (_baseTweakID == value)
-				{
-					return;
-				}
-				_baseTweakID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _baseTweakID);
+			set => SetProperty(ref _baseTweakID, value);
 		}
 
 		public inkTweakDBIDSelector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

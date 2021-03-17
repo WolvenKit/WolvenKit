@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("trafficDataPackages")] 
 		public CArray<gameCrowdTrafficDataPackage> TrafficDataPackages
 		{
-			get
-			{
-				if (_trafficDataPackages == null)
-				{
-					_trafficDataPackages = (CArray<gameCrowdTrafficDataPackage>) CR2WTypeManager.Create("array:gameCrowdTrafficDataPackage", "trafficDataPackages", cr2w, this);
-				}
-				return _trafficDataPackages;
-			}
-			set
-			{
-				if (_trafficDataPackages == value)
-				{
-					return;
-				}
-				_trafficDataPackages = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trafficDataPackages);
+			set => SetProperty(ref _trafficDataPackages, value);
 		}
 
 		public gameCompiledCrowdData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

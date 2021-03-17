@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("spawnPointTag")] 
 		public CName SpawnPointTag
 		{
-			get
-			{
-				if (_spawnPointTag == null)
-				{
-					_spawnPointTag = (CName) CR2WTypeManager.Create("CName", "spawnPointTag", cr2w, this);
-				}
-				return _spawnPointTag;
-			}
-			set
-			{
-				if (_spawnPointTag == value)
-				{
-					return;
-				}
-				_spawnPointTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnPointTag);
+			set => SetProperty(ref _spawnPointTag, value);
 		}
 
 		public questSetMultiplayerHeistSpawnPointTag_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

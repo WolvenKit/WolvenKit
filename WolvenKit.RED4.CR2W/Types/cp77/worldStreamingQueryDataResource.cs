@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("roadDatas")] 
 		public CArray<worldStreamingQueryRoadData> RoadDatas
 		{
-			get
-			{
-				if (_roadDatas == null)
-				{
-					_roadDatas = (CArray<worldStreamingQueryRoadData>) CR2WTypeManager.Create("array:worldStreamingQueryRoadData", "roadDatas", cr2w, this);
-				}
-				return _roadDatas;
-			}
-			set
-			{
-				if (_roadDatas == value)
-				{
-					return;
-				}
-				_roadDatas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _roadDatas);
+			set => SetProperty(ref _roadDatas, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("connectedRoadDataIndices")] 
 		public CArray<CUInt16> ConnectedRoadDataIndices
 		{
-			get
-			{
-				if (_connectedRoadDataIndices == null)
-				{
-					_connectedRoadDataIndices = (CArray<CUInt16>) CR2WTypeManager.Create("array:Uint16", "connectedRoadDataIndices", cr2w, this);
-				}
-				return _connectedRoadDataIndices;
-			}
-			set
-			{
-				if (_connectedRoadDataIndices == value)
-				{
-					return;
-				}
-				_connectedRoadDataIndices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _connectedRoadDataIndices);
+			set => SetProperty(ref _connectedRoadDataIndices, value);
 		}
 
 		public worldStreamingQueryDataResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

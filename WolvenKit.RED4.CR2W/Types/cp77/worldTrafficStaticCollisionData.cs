@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("laneCollisions")] 
 		public CArray<worldStaticLaneCollisions> LaneCollisions
 		{
-			get
-			{
-				if (_laneCollisions == null)
-				{
-					_laneCollisions = (CArray<worldStaticLaneCollisions>) CR2WTypeManager.Create("array:worldStaticLaneCollisions", "laneCollisions", cr2w, this);
-				}
-				return _laneCollisions;
-			}
-			set
-			{
-				if (_laneCollisions == value)
-				{
-					return;
-				}
-				_laneCollisions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _laneCollisions);
+			set => SetProperty(ref _laneCollisions, value);
 		}
 
 		public worldTrafficStaticCollisionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

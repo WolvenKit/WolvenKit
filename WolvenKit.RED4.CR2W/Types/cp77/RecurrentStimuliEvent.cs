@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("requestID")] 
 		public StimRequestID RequestID
 		{
-			get
-			{
-				if (_requestID == null)
-				{
-					_requestID = (StimRequestID) CR2WTypeManager.Create("StimRequestID", "requestID", cr2w, this);
-				}
-				return _requestID;
-			}
-			set
-			{
-				if (_requestID == value)
-				{
-					return;
-				}
-				_requestID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requestID);
+			set => SetProperty(ref _requestID, value);
 		}
 
 		public RecurrentStimuliEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("workspotData")] 
 		public CHandle<gameSetupWorkspotActionEvent> WorkspotData
 		{
-			get
-			{
-				if (_workspotData == null)
-				{
-					_workspotData = (CHandle<gameSetupWorkspotActionEvent>) CR2WTypeManager.Create("handle:gameSetupWorkspotActionEvent", "workspotData", cr2w, this);
-				}
-				return _workspotData;
-			}
-			set
-			{
-				if (_workspotData == value)
-				{
-					return;
-				}
-				_workspotData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotData);
+			set => SetProperty(ref _workspotData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("returnPosition")] 
 		public CHandle<worldTrafficGlobalPathPosition> ReturnPosition
 		{
-			get
-			{
-				if (_returnPosition == null)
-				{
-					_returnPosition = (CHandle<worldTrafficGlobalPathPosition>) CR2WTypeManager.Create("handle:worldTrafficGlobalPathPosition", "returnPosition", cr2w, this);
-				}
-				return _returnPosition;
-			}
-			set
-			{
-				if (_returnPosition == value)
-				{
-					return;
-				}
-				_returnPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _returnPosition);
+			set => SetProperty(ref _returnPosition, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("workspotExitTangent")] 
 		public Vector3 WorkspotExitTangent
 		{
-			get
-			{
-				if (_workspotExitTangent == null)
-				{
-					_workspotExitTangent = (Vector3) CR2WTypeManager.Create("Vector3", "workspotExitTangent", cr2w, this);
-				}
-				return _workspotExitTangent;
-			}
-			set
-			{
-				if (_workspotExitTangent == value)
-				{
-					return;
-				}
-				_workspotExitTangent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotExitTangent);
+			set => SetProperty(ref _workspotExitTangent, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("trafficLaneReturnTangent")] 
 		public Vector3 TrafficLaneReturnTangent
 		{
-			get
-			{
-				if (_trafficLaneReturnTangent == null)
-				{
-					_trafficLaneReturnTangent = (Vector3) CR2WTypeManager.Create("Vector3", "trafficLaneReturnTangent", cr2w, this);
-				}
-				return _trafficLaneReturnTangent;
-			}
-			set
-			{
-				if (_trafficLaneReturnTangent == value)
-				{
-					return;
-				}
-				_trafficLaneReturnTangent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trafficLaneReturnTangent);
+			set => SetProperty(ref _trafficLaneReturnTangent, value);
 		}
 
 		public gameTrafficWorkspotTransitionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

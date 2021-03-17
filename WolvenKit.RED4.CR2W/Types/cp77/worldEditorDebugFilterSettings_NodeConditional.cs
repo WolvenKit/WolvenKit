@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isDiscarded")] 
 		public CBool IsDiscarded
 		{
-			get
-			{
-				if (_isDiscarded == null)
-				{
-					_isDiscarded = (CBool) CR2WTypeManager.Create("Bool", "isDiscarded", cr2w, this);
-				}
-				return _isDiscarded;
-			}
-			set
-			{
-				if (_isDiscarded == value)
-				{
-					return;
-				}
-				_isDiscarded = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDiscarded);
+			set => SetProperty(ref _isDiscarded, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isProxyDependencyModeAutoSet")] 
 		public CBool IsProxyDependencyModeAutoSet
 		{
-			get
-			{
-				if (_isProxyDependencyModeAutoSet == null)
-				{
-					_isProxyDependencyModeAutoSet = (CBool) CR2WTypeManager.Create("Bool", "isProxyDependencyModeAutoSet", cr2w, this);
-				}
-				return _isProxyDependencyModeAutoSet;
-			}
-			set
-			{
-				if (_isProxyDependencyModeAutoSet == value)
-				{
-					return;
-				}
-				_isProxyDependencyModeAutoSet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isProxyDependencyModeAutoSet);
+			set => SetProperty(ref _isProxyDependencyModeAutoSet, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isProxyDependencyModeDiscardedSet")] 
 		public CBool IsProxyDependencyModeDiscardedSet
 		{
-			get
-			{
-				if (_isProxyDependencyModeDiscardedSet == null)
-				{
-					_isProxyDependencyModeDiscardedSet = (CBool) CR2WTypeManager.Create("Bool", "isProxyDependencyModeDiscardedSet", cr2w, this);
-				}
-				return _isProxyDependencyModeDiscardedSet;
-			}
-			set
-			{
-				if (_isProxyDependencyModeDiscardedSet == value)
-				{
-					return;
-				}
-				_isProxyDependencyModeDiscardedSet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isProxyDependencyModeDiscardedSet);
+			set => SetProperty(ref _isProxyDependencyModeDiscardedSet, value);
 		}
 
 		public worldEditorDebugFilterSettings_NodeConditional(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

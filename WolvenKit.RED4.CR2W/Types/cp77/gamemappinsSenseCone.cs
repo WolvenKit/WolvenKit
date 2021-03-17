@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("length")] 
 		public CFloat Length
 		{
-			get
-			{
-				if (_length == null)
-				{
-					_length = (CFloat) CR2WTypeManager.Create("Float", "length", cr2w, this);
-				}
-				return _length;
-			}
-			set
-			{
-				if (_length == value)
-				{
-					return;
-				}
-				_length = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _length);
+			set => SetProperty(ref _length, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("width")] 
 		public CFloat Width
 		{
-			get
-			{
-				if (_width == null)
-				{
-					_width = (CFloat) CR2WTypeManager.Create("Float", "width", cr2w, this);
-				}
-				return _width;
-			}
-			set
-			{
-				if (_width == value)
-				{
-					return;
-				}
-				_width = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _width);
+			set => SetProperty(ref _width, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("angleDegrees")] 
 		public CFloat AngleDegrees
 		{
-			get
-			{
-				if (_angleDegrees == null)
-				{
-					_angleDegrees = (CFloat) CR2WTypeManager.Create("Float", "angleDegrees", cr2w, this);
-				}
-				return _angleDegrees;
-			}
-			set
-			{
-				if (_angleDegrees == value)
-				{
-					return;
-				}
-				_angleDegrees = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _angleDegrees);
+			set => SetProperty(ref _angleDegrees, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("position1")] 
 		public Vector4 Position1
 		{
-			get
-			{
-				if (_position1 == null)
-				{
-					_position1 = (Vector4) CR2WTypeManager.Create("Vector4", "position1", cr2w, this);
-				}
-				return _position1;
-			}
-			set
-			{
-				if (_position1 == value)
-				{
-					return;
-				}
-				_position1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position1);
+			set => SetProperty(ref _position1, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("position2")] 
 		public Vector4 Position2
 		{
-			get
-			{
-				if (_position2 == null)
-				{
-					_position2 = (Vector4) CR2WTypeManager.Create("Vector4", "position2", cr2w, this);
-				}
-				return _position2;
-			}
-			set
-			{
-				if (_position2 == value)
-				{
-					return;
-				}
-				_position2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position2);
+			set => SetProperty(ref _position2, value);
 		}
 
 		public gamemappinsSenseCone(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

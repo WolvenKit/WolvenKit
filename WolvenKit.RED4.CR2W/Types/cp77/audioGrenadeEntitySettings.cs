@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("explosionSound")] 
 		public CName ExplosionSound
 		{
-			get
-			{
-				if (_explosionSound == null)
-				{
-					_explosionSound = (CName) CR2WTypeManager.Create("CName", "explosionSound", cr2w, this);
-				}
-				return _explosionSound;
-			}
-			set
-			{
-				if (_explosionSound == value)
-				{
-					return;
-				}
-				_explosionSound = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _explosionSound);
+			set => SetProperty(ref _explosionSound, value);
 		}
 
 		public audioGrenadeEntitySettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

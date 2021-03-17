@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("direction")] 
 		public CEnum<vehicleExitDirection> Direction
 		{
-			get
-			{
-				if (_direction == null)
-				{
-					_direction = (CEnum<vehicleExitDirection>) CR2WTypeManager.Create("vehicleExitDirection", "direction", cr2w, this);
-				}
-				return _direction;
-			}
-			set
-			{
-				if (_direction == value)
-				{
-					return;
-				}
-				_direction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _direction);
+			set => SetProperty(ref _direction, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("position")] 
 		public WorldPosition Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (WorldPosition) CR2WTypeManager.Create("WorldPosition", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		public vehicleUnmountPosition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

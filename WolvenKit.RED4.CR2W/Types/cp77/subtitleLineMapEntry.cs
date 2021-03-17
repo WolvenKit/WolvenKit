@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("id")] 
 		public CRUID Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CRUID) CR2WTypeManager.Create("CRUID", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("widget")] 
 		public wCHandle<inkWidget> Widget
 		{
-			get
-			{
-				if (_widget == null)
-				{
-					_widget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "widget", cr2w, this);
-				}
-				return _widget;
-			}
-			set
-			{
-				if (_widget == value)
-				{
-					return;
-				}
-				_widget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widget);
+			set => SetProperty(ref _widget, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		public subtitleLineMapEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

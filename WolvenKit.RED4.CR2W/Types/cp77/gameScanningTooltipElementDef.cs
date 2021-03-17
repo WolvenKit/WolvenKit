@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("recordID")] 
 		public TweakDBID RecordID
 		{
-			get
-			{
-				if (_recordID == null)
-				{
-					_recordID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "recordID", cr2w, this);
-				}
-				return _recordID;
-			}
-			set
-			{
-				if (_recordID == value)
-				{
-					return;
-				}
-				_recordID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recordID);
+			set => SetProperty(ref _recordID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timePct")] 
 		public CFloat TimePct
 		{
-			get
-			{
-				if (_timePct == null)
-				{
-					_timePct = (CFloat) CR2WTypeManager.Create("Float", "timePct", cr2w, this);
-				}
-				return _timePct;
-			}
-			set
-			{
-				if (_timePct == value)
-				{
-					return;
-				}
-				_timePct = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timePct);
+			set => SetProperty(ref _timePct, value);
 		}
 
 		public gameScanningTooltipElementDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

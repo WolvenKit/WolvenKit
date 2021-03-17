@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("yawLeftLimit")] 
 		public CFloat YawLeftLimit
 		{
-			get
-			{
-				if (_yawLeftLimit == null)
-				{
-					_yawLeftLimit = (CFloat) CR2WTypeManager.Create("Float", "yawLeftLimit", cr2w, this);
-				}
-				return _yawLeftLimit;
-			}
-			set
-			{
-				if (_yawLeftLimit == value)
-				{
-					return;
-				}
-				_yawLeftLimit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _yawLeftLimit);
+			set => SetProperty(ref _yawLeftLimit, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("yawRightLimit")] 
 		public CFloat YawRightLimit
 		{
-			get
-			{
-				if (_yawRightLimit == null)
-				{
-					_yawRightLimit = (CFloat) CR2WTypeManager.Create("Float", "yawRightLimit", cr2w, this);
-				}
-				return _yawRightLimit;
-			}
-			set
-			{
-				if (_yawRightLimit == value)
-				{
-					return;
-				}
-				_yawRightLimit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _yawRightLimit);
+			set => SetProperty(ref _yawRightLimit, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("pitchTopLimit")] 
 		public CFloat PitchTopLimit
 		{
-			get
-			{
-				if (_pitchTopLimit == null)
-				{
-					_pitchTopLimit = (CFloat) CR2WTypeManager.Create("Float", "pitchTopLimit", cr2w, this);
-				}
-				return _pitchTopLimit;
-			}
-			set
-			{
-				if (_pitchTopLimit == value)
-				{
-					return;
-				}
-				_pitchTopLimit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pitchTopLimit);
+			set => SetProperty(ref _pitchTopLimit, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("pitchBottomLimit")] 
 		public CFloat PitchBottomLimit
 		{
-			get
-			{
-				if (_pitchBottomLimit == null)
-				{
-					_pitchBottomLimit = (CFloat) CR2WTypeManager.Create("Float", "pitchBottomLimit", cr2w, this);
-				}
-				return _pitchBottomLimit;
-			}
-			set
-			{
-				if (_pitchBottomLimit == value)
-				{
-					return;
-				}
-				_pitchBottomLimit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pitchBottomLimit);
+			set => SetProperty(ref _pitchBottomLimit, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("pitchSpeedMultiplier")] 
 		public CFloat PitchSpeedMultiplier
 		{
-			get
-			{
-				if (_pitchSpeedMultiplier == null)
-				{
-					_pitchSpeedMultiplier = (CFloat) CR2WTypeManager.Create("Float", "pitchSpeedMultiplier", cr2w, this);
-				}
-				return _pitchSpeedMultiplier;
-			}
-			set
-			{
-				if (_pitchSpeedMultiplier == value)
-				{
-					return;
-				}
-				_pitchSpeedMultiplier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pitchSpeedMultiplier);
+			set => SetProperty(ref _pitchSpeedMultiplier, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("yawSpeedMultiplier")] 
 		public CFloat YawSpeedMultiplier
 		{
-			get
-			{
-				if (_yawSpeedMultiplier == null)
-				{
-					_yawSpeedMultiplier = (CFloat) CR2WTypeManager.Create("Float", "yawSpeedMultiplier", cr2w, this);
-				}
-				return _yawSpeedMultiplier;
-			}
-			set
-			{
-				if (_yawSpeedMultiplier == value)
-				{
-					return;
-				}
-				_yawSpeedMultiplier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _yawSpeedMultiplier);
+			set => SetProperty(ref _yawSpeedMultiplier, value);
 		}
 
 		public gameTier3CameraSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

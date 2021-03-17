@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weakPointName")] 
 		public CName WeakPointName
 		{
-			get
-			{
-				if (_weakPointName == null)
-				{
-					_weakPointName = (CName) CR2WTypeManager.Create("CName", "weakPointName", cr2w, this);
-				}
-				return _weakPointName;
-			}
-			set
-			{
-				if (_weakPointName == value)
-				{
-					return;
-				}
-				_weakPointName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weakPointName);
+			set => SetProperty(ref _weakPointName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("loc_name_key")] 
 		public CString Loc_name_key
 		{
-			get
-			{
-				if (_loc_name_key == null)
-				{
-					_loc_name_key = (CString) CR2WTypeManager.Create("String", "loc_name_key", cr2w, this);
-				}
-				return _loc_name_key;
-			}
-			set
-			{
-				if (_loc_name_key == value)
-				{
-					return;
-				}
-				_loc_name_key = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _loc_name_key);
+			set => SetProperty(ref _loc_name_key, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("loc_desc_key")] 
 		public CString Loc_desc_key
 		{
-			get
-			{
-				if (_loc_desc_key == null)
-				{
-					_loc_desc_key = (CString) CR2WTypeManager.Create("String", "loc_desc_key", cr2w, this);
-				}
-				return _loc_desc_key;
-			}
-			set
-			{
-				if (_loc_desc_key == value)
-				{
-					return;
-				}
-				_loc_desc_key = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _loc_desc_key);
+			set => SetProperty(ref _loc_desc_key, value);
 		}
 
 		public SWeakPoints(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

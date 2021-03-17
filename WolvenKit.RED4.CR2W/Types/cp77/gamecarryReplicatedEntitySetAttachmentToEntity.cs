@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entity")] 
 		public wCHandle<entEntity> Entity
 		{
-			get
-			{
-				if (_entity == null)
-				{
-					_entity = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "entity", cr2w, this);
-				}
-				return _entity;
-			}
-			set
-			{
-				if (_entity == value)
-				{
-					return;
-				}
-				_entity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entity);
+			set => SetProperty(ref _entity, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("slot")] 
 		public CName Slot
 		{
-			get
-			{
-				if (_slot == null)
-				{
-					_slot = (CName) CR2WTypeManager.Create("CName", "slot", cr2w, this);
-				}
-				return _slot;
-			}
-			set
-			{
-				if (_slot == value)
-				{
-					return;
-				}
-				_slot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slot);
+			set => SetProperty(ref _slot, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("localTransform")] 
 		public Transform LocalTransform
 		{
-			get
-			{
-				if (_localTransform == null)
-				{
-					_localTransform = (Transform) CR2WTypeManager.Create("Transform", "localTransform", cr2w, this);
-				}
-				return _localTransform;
-			}
-			set
-			{
-				if (_localTransform == value)
-				{
-					return;
-				}
-				_localTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localTransform);
+			set => SetProperty(ref _localTransform, value);
 		}
 
 		public gamecarryReplicatedEntitySetAttachmentToEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

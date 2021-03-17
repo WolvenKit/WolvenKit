@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("floatTrack")] 
 		public animNamedTrackIndex FloatTrack
 		{
-			get
-			{
-				if (_floatTrack == null)
-				{
-					_floatTrack = (animNamedTrackIndex) CR2WTypeManager.Create("animNamedTrackIndex", "floatTrack", cr2w, this);
-				}
-				return _floatTrack;
-			}
-			set
-			{
-				if (_floatTrack == value)
-				{
-					return;
-				}
-				_floatTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _floatTrack);
+			set => SetProperty(ref _floatTrack, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("showOnlyWhenPositive")] 
 		public CBool ShowOnlyWhenPositive
 		{
-			get
-			{
-				if (_showOnlyWhenPositive == null)
-				{
-					_showOnlyWhenPositive = (CBool) CR2WTypeManager.Create("Bool", "showOnlyWhenPositive", cr2w, this);
-				}
-				return _showOnlyWhenPositive;
-			}
-			set
-			{
-				if (_showOnlyWhenPositive == value)
-				{
-					return;
-				}
-				_showOnlyWhenPositive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showOnlyWhenPositive);
+			set => SetProperty(ref _showOnlyWhenPositive, value);
 		}
 
 		public animPoseInfoLoggerEntry_FloatTrack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

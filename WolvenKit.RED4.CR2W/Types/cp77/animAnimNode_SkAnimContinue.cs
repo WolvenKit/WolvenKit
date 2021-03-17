@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Input")] 
 		public animPoseLink Input
 		{
-			get
-			{
-				if (_input == null)
-				{
-					_input = (animPoseLink) CR2WTypeManager.Create("animPoseLink", "Input", cr2w, this);
-				}
-				return _input;
-			}
-			set
-			{
-				if (_input == value)
-				{
-					return;
-				}
-				_input = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _input);
+			set => SetProperty(ref _input, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("popSafeCutTag")] 
 		public CName PopSafeCutTag
 		{
-			get
-			{
-				if (_popSafeCutTag == null)
-				{
-					_popSafeCutTag = (CName) CR2WTypeManager.Create("CName", "popSafeCutTag", cr2w, this);
-				}
-				return _popSafeCutTag;
-			}
-			set
-			{
-				if (_popSafeCutTag == value)
-				{
-					return;
-				}
-				_popSafeCutTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _popSafeCutTag);
+			set => SetProperty(ref _popSafeCutTag, value);
 		}
 
 		public animAnimNode_SkAnimContinue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

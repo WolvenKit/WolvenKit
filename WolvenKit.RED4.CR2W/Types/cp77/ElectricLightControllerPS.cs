@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isConnectedToCLS")] 
 		public CBool IsConnectedToCLS
 		{
-			get
-			{
-				if (_isConnectedToCLS == null)
-				{
-					_isConnectedToCLS = (CBool) CR2WTypeManager.Create("Bool", "isConnectedToCLS", cr2w, this);
-				}
-				return _isConnectedToCLS;
-			}
-			set
-			{
-				if (_isConnectedToCLS == value)
-				{
-					return;
-				}
-				_isConnectedToCLS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isConnectedToCLS);
+			set => SetProperty(ref _isConnectedToCLS, value);
 		}
 
 		[Ordinal(104)] 
 		[RED("wasCLSInitTriggered")] 
 		public CBool WasCLSInitTriggered
 		{
-			get
-			{
-				if (_wasCLSInitTriggered == null)
-				{
-					_wasCLSInitTriggered = (CBool) CR2WTypeManager.Create("Bool", "wasCLSInitTriggered", cr2w, this);
-				}
-				return _wasCLSInitTriggered;
-			}
-			set
-			{
-				if (_wasCLSInitTriggered == value)
-				{
-					return;
-				}
-				_wasCLSInitTriggered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasCLSInitTriggered);
+			set => SetProperty(ref _wasCLSInitTriggered, value);
 		}
 
 		public ElectricLightControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

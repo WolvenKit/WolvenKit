@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("doorStaturTextWidget")] 
 		public wCHandle<inkTextWidget> DoorStaturTextWidget
 		{
-			get
-			{
-				if (_doorStaturTextWidget == null)
-				{
-					_doorStaturTextWidget = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "doorStaturTextWidget", cr2w, this);
-				}
-				return _doorStaturTextWidget;
-			}
-			set
-			{
-				if (_doorStaturTextWidget == value)
-				{
-					return;
-				}
-				_doorStaturTextWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _doorStaturTextWidget);
+			set => SetProperty(ref _doorStaturTextWidget, value);
 		}
 
 		public DoorInkGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

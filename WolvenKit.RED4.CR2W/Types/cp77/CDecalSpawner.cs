@@ -42,690 +42,240 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("materialStatic")] 
 		public rRef<IMaterial> MaterialStatic
 		{
-			get
-			{
-				if (_materialStatic == null)
-				{
-					_materialStatic = (rRef<IMaterial>) CR2WTypeManager.Create("rRef:IMaterial", "materialStatic", cr2w, this);
-				}
-				return _materialStatic;
-			}
-			set
-			{
-				if (_materialStatic == value)
-				{
-					return;
-				}
-				_materialStatic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _materialStatic);
+			set => SetProperty(ref _materialStatic, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("materialSkinned")] 
 		public rRef<IMaterial> MaterialSkinned
 		{
-			get
-			{
-				if (_materialSkinned == null)
-				{
-					_materialSkinned = (rRef<IMaterial>) CR2WTypeManager.Create("rRef:IMaterial", "materialSkinned", cr2w, this);
-				}
-				return _materialSkinned;
-			}
-			set
-			{
-				if (_materialSkinned == value)
-				{
-					return;
-				}
-				_materialSkinned = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _materialSkinned);
+			set => SetProperty(ref _materialSkinned, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("specularColor")] 
 		public CColor SpecularColor
 		{
-			get
-			{
-				if (_specularColor == null)
-				{
-					_specularColor = (CColor) CR2WTypeManager.Create("Color", "specularColor", cr2w, this);
-				}
-				return _specularColor;
-			}
-			set
-			{
-				if (_specularColor == value)
-				{
-					return;
-				}
-				_specularColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _specularColor);
+			set => SetProperty(ref _specularColor, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("specularScale")] 
 		public CFloat SpecularScale
 		{
-			get
-			{
-				if (_specularScale == null)
-				{
-					_specularScale = (CFloat) CR2WTypeManager.Create("Float", "specularScale", cr2w, this);
-				}
-				return _specularScale;
-			}
-			set
-			{
-				if (_specularScale == value)
-				{
-					return;
-				}
-				_specularScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _specularScale);
+			set => SetProperty(ref _specularScale, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("specularBase")] 
 		public CFloat SpecularBase
 		{
-			get
-			{
-				if (_specularBase == null)
-				{
-					_specularBase = (CFloat) CR2WTypeManager.Create("Float", "specularBase", cr2w, this);
-				}
-				return _specularBase;
-			}
-			set
-			{
-				if (_specularBase == value)
-				{
-					return;
-				}
-				_specularBase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _specularBase);
+			set => SetProperty(ref _specularBase, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("roughnessScale")] 
 		public CFloat RoughnessScale
 		{
-			get
-			{
-				if (_roughnessScale == null)
-				{
-					_roughnessScale = (CFloat) CR2WTypeManager.Create("Float", "roughnessScale", cr2w, this);
-				}
-				return _roughnessScale;
-			}
-			set
-			{
-				if (_roughnessScale == value)
-				{
-					return;
-				}
-				_roughnessScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _roughnessScale);
+			set => SetProperty(ref _roughnessScale, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("normalThreshold")] 
 		public CFloat NormalThreshold
 		{
-			get
-			{
-				if (_normalThreshold == null)
-				{
-					_normalThreshold = (CFloat) CR2WTypeManager.Create("Float", "normalThreshold", cr2w, this);
-				}
-				return _normalThreshold;
-			}
-			set
-			{
-				if (_normalThreshold == value)
-				{
-					return;
-				}
-				_normalThreshold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _normalThreshold);
+			set => SetProperty(ref _normalThreshold, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("additiveNormals")] 
 		public CBool AdditiveNormals
 		{
-			get
-			{
-				if (_additiveNormals == null)
-				{
-					_additiveNormals = (CBool) CR2WTypeManager.Create("Bool", "additiveNormals", cr2w, this);
-				}
-				return _additiveNormals;
-			}
-			set
-			{
-				if (_additiveNormals == value)
-				{
-					return;
-				}
-				_additiveNormals = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additiveNormals);
+			set => SetProperty(ref _additiveNormals, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("diffuseRandomColor0")] 
 		public CColor DiffuseRandomColor0
 		{
-			get
-			{
-				if (_diffuseRandomColor0 == null)
-				{
-					_diffuseRandomColor0 = (CColor) CR2WTypeManager.Create("Color", "diffuseRandomColor0", cr2w, this);
-				}
-				return _diffuseRandomColor0;
-			}
-			set
-			{
-				if (_diffuseRandomColor0 == value)
-				{
-					return;
-				}
-				_diffuseRandomColor0 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _diffuseRandomColor0);
+			set => SetProperty(ref _diffuseRandomColor0, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("diffuseRandomColor1")] 
 		public CColor DiffuseRandomColor1
 		{
-			get
-			{
-				if (_diffuseRandomColor1 == null)
-				{
-					_diffuseRandomColor1 = (CColor) CR2WTypeManager.Create("Color", "diffuseRandomColor1", cr2w, this);
-				}
-				return _diffuseRandomColor1;
-			}
-			set
-			{
-				if (_diffuseRandomColor1 == value)
-				{
-					return;
-				}
-				_diffuseRandomColor1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _diffuseRandomColor1);
+			set => SetProperty(ref _diffuseRandomColor1, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("subUVType")] 
 		public CEnum<ERenderDynamicDecalAtlas> SubUVType
 		{
-			get
-			{
-				if (_subUVType == null)
-				{
-					_subUVType = (CEnum<ERenderDynamicDecalAtlas>) CR2WTypeManager.Create("ERenderDynamicDecalAtlas", "subUVType", cr2w, this);
-				}
-				return _subUVType;
-			}
-			set
-			{
-				if (_subUVType == value)
-				{
-					return;
-				}
-				_subUVType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subUVType);
+			set => SetProperty(ref _subUVType, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("specularity")] 
 		public CFloat Specularity
 		{
-			get
-			{
-				if (_specularity == null)
-				{
-					_specularity = (CFloat) CR2WTypeManager.Create("Float", "specularity", cr2w, this);
-				}
-				return _specularity;
-			}
-			set
-			{
-				if (_specularity == value)
-				{
-					return;
-				}
-				_specularity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _specularity);
+			set => SetProperty(ref _specularity, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("farZ")] 
 		public CFloat FarZ
 		{
-			get
-			{
-				if (_farZ == null)
-				{
-					_farZ = (CFloat) CR2WTypeManager.Create("Float", "farZ", cr2w, this);
-				}
-				return _farZ;
-			}
-			set
-			{
-				if (_farZ == value)
-				{
-					return;
-				}
-				_farZ = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _farZ);
+			set => SetProperty(ref _farZ, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("nearZ")] 
 		public CFloat NearZ
 		{
-			get
-			{
-				if (_nearZ == null)
-				{
-					_nearZ = (CFloat) CR2WTypeManager.Create("Float", "nearZ", cr2w, this);
-				}
-				return _nearZ;
-			}
-			set
-			{
-				if (_nearZ == value)
-				{
-					return;
-				}
-				_nearZ = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nearZ);
+			set => SetProperty(ref _nearZ, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("size")] 
 		public CHandle<IEvaluatorFloat> Size
 		{
-			get
-			{
-				if (_size == null)
-				{
-					_size = (CHandle<IEvaluatorFloat>) CR2WTypeManager.Create("handle:IEvaluatorFloat", "size", cr2w, this);
-				}
-				return _size;
-			}
-			set
-			{
-				if (_size == value)
-				{
-					return;
-				}
-				_size = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _size);
+			set => SetProperty(ref _size, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("depthFadePower")] 
 		public CFloat DepthFadePower
 		{
-			get
-			{
-				if (_depthFadePower == null)
-				{
-					_depthFadePower = (CFloat) CR2WTypeManager.Create("Float", "depthFadePower", cr2w, this);
-				}
-				return _depthFadePower;
-			}
-			set
-			{
-				if (_depthFadePower == value)
-				{
-					return;
-				}
-				_depthFadePower = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _depthFadePower);
+			set => SetProperty(ref _depthFadePower, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("normalFadeBias")] 
 		public CFloat NormalFadeBias
 		{
-			get
-			{
-				if (_normalFadeBias == null)
-				{
-					_normalFadeBias = (CFloat) CR2WTypeManager.Create("Float", "normalFadeBias", cr2w, this);
-				}
-				return _normalFadeBias;
-			}
-			set
-			{
-				if (_normalFadeBias == value)
-				{
-					return;
-				}
-				_normalFadeBias = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _normalFadeBias);
+			set => SetProperty(ref _normalFadeBias, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("normalFadeScale")] 
 		public CFloat NormalFadeScale
 		{
-			get
-			{
-				if (_normalFadeScale == null)
-				{
-					_normalFadeScale = (CFloat) CR2WTypeManager.Create("Float", "normalFadeScale", cr2w, this);
-				}
-				return _normalFadeScale;
-			}
-			set
-			{
-				if (_normalFadeScale == value)
-				{
-					return;
-				}
-				_normalFadeScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _normalFadeScale);
+			set => SetProperty(ref _normalFadeScale, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("doubleSided")] 
 		public CBool DoubleSided
 		{
-			get
-			{
-				if (_doubleSided == null)
-				{
-					_doubleSided = (CBool) CR2WTypeManager.Create("Bool", "doubleSided", cr2w, this);
-				}
-				return _doubleSided;
-			}
-			set
-			{
-				if (_doubleSided == value)
-				{
-					return;
-				}
-				_doubleSided = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _doubleSided);
+			set => SetProperty(ref _doubleSided, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("projectionMode")] 
 		public CEnum<ERenderDynamicDecalProjection> ProjectionMode
 		{
-			get
-			{
-				if (_projectionMode == null)
-				{
-					_projectionMode = (CEnum<ERenderDynamicDecalProjection>) CR2WTypeManager.Create("ERenderDynamicDecalProjection", "projectionMode", cr2w, this);
-				}
-				return _projectionMode;
-			}
-			set
-			{
-				if (_projectionMode == value)
-				{
-					return;
-				}
-				_projectionMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectionMode);
+			set => SetProperty(ref _projectionMode, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("decalLifetime")] 
 		public CHandle<IEvaluatorFloat> DecalLifetime
 		{
-			get
-			{
-				if (_decalLifetime == null)
-				{
-					_decalLifetime = (CHandle<IEvaluatorFloat>) CR2WTypeManager.Create("handle:IEvaluatorFloat", "decalLifetime", cr2w, this);
-				}
-				return _decalLifetime;
-			}
-			set
-			{
-				if (_decalLifetime == value)
-				{
-					return;
-				}
-				_decalLifetime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _decalLifetime);
+			set => SetProperty(ref _decalLifetime, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("decalFadeTime")] 
 		public CFloat DecalFadeTime
 		{
-			get
-			{
-				if (_decalFadeTime == null)
-				{
-					_decalFadeTime = (CFloat) CR2WTypeManager.Create("Float", "decalFadeTime", cr2w, this);
-				}
-				return _decalFadeTime;
-			}
-			set
-			{
-				if (_decalFadeTime == value)
-				{
-					return;
-				}
-				_decalFadeTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _decalFadeTime);
+			set => SetProperty(ref _decalFadeTime, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("decalFadeInTime")] 
 		public CFloat DecalFadeInTime
 		{
-			get
-			{
-				if (_decalFadeInTime == null)
-				{
-					_decalFadeInTime = (CFloat) CR2WTypeManager.Create("Float", "decalFadeInTime", cr2w, this);
-				}
-				return _decalFadeInTime;
-			}
-			set
-			{
-				if (_decalFadeInTime == value)
-				{
-					return;
-				}
-				_decalFadeInTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _decalFadeInTime);
+			set => SetProperty(ref _decalFadeInTime, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("projectOnStatic")] 
 		public CBool ProjectOnStatic
 		{
-			get
-			{
-				if (_projectOnStatic == null)
-				{
-					_projectOnStatic = (CBool) CR2WTypeManager.Create("Bool", "projectOnStatic", cr2w, this);
-				}
-				return _projectOnStatic;
-			}
-			set
-			{
-				if (_projectOnStatic == value)
-				{
-					return;
-				}
-				_projectOnStatic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectOnStatic);
+			set => SetProperty(ref _projectOnStatic, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("projectOnSkinned")] 
 		public CBool ProjectOnSkinned
 		{
-			get
-			{
-				if (_projectOnSkinned == null)
-				{
-					_projectOnSkinned = (CBool) CR2WTypeManager.Create("Bool", "projectOnSkinned", cr2w, this);
-				}
-				return _projectOnSkinned;
-			}
-			set
-			{
-				if (_projectOnSkinned == value)
-				{
-					return;
-				}
-				_projectOnSkinned = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectOnSkinned);
+			set => SetProperty(ref _projectOnSkinned, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("startScale")] 
 		public CFloat StartScale
 		{
-			get
-			{
-				if (_startScale == null)
-				{
-					_startScale = (CFloat) CR2WTypeManager.Create("Float", "startScale", cr2w, this);
-				}
-				return _startScale;
-			}
-			set
-			{
-				if (_startScale == value)
-				{
-					return;
-				}
-				_startScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startScale);
+			set => SetProperty(ref _startScale, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("scaleTime")] 
 		public CFloat ScaleTime
 		{
-			get
-			{
-				if (_scaleTime == null)
-				{
-					_scaleTime = (CFloat) CR2WTypeManager.Create("Float", "scaleTime", cr2w, this);
-				}
-				return _scaleTime;
-			}
-			set
-			{
-				if (_scaleTime == value)
-				{
-					return;
-				}
-				_scaleTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scaleTime);
+			set => SetProperty(ref _scaleTime, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("useVerticalProjection")] 
 		public CBool UseVerticalProjection
 		{
-			get
-			{
-				if (_useVerticalProjection == null)
-				{
-					_useVerticalProjection = (CBool) CR2WTypeManager.Create("Bool", "useVerticalProjection", cr2w, this);
-				}
-				return _useVerticalProjection;
-			}
-			set
-			{
-				if (_useVerticalProjection == value)
-				{
-					return;
-				}
-				_useVerticalProjection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useVerticalProjection);
+			set => SetProperty(ref _useVerticalProjection, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("spawnPriority")] 
 		public CEnum<EDynamicDecalSpawnPriority> SpawnPriority
 		{
-			get
-			{
-				if (_spawnPriority == null)
-				{
-					_spawnPriority = (CEnum<EDynamicDecalSpawnPriority>) CR2WTypeManager.Create("EDynamicDecalSpawnPriority", "spawnPriority", cr2w, this);
-				}
-				return _spawnPriority;
-			}
-			set
-			{
-				if (_spawnPriority == value)
-				{
-					return;
-				}
-				_spawnPriority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnPriority);
+			set => SetProperty(ref _spawnPriority, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("autoHideDistance")] 
 		public CFloat AutoHideDistance
 		{
-			get
-			{
-				if (_autoHideDistance == null)
-				{
-					_autoHideDistance = (CFloat) CR2WTypeManager.Create("Float", "autoHideDistance", cr2w, this);
-				}
-				return _autoHideDistance;
-			}
-			set
-			{
-				if (_autoHideDistance == value)
-				{
-					return;
-				}
-				_autoHideDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _autoHideDistance);
+			set => SetProperty(ref _autoHideDistance, value);
 		}
 
 		public CDecalSpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

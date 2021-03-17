@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("minimized")] 
 		public CBool Minimized
 		{
-			get
-			{
-				if (_minimized == null)
-				{
-					_minimized = (CBool) CR2WTypeManager.Create("Bool", "minimized", cr2w, this);
-				}
-				return _minimized;
-			}
-			set
-			{
-				if (_minimized == value)
-				{
-					return;
-				}
-				_minimized = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minimized);
+			set => SetProperty(ref _minimized, value);
 		}
 
 		public questMinimizeCallRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

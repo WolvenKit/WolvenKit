@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ragdollInstigator")] 
 		public wCHandle<gameObject> RagdollInstigator
 		{
-			get
-			{
-				if (_ragdollInstigator == null)
-				{
-					_ragdollInstigator = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "ragdollInstigator", cr2w, this);
-				}
-				return _ragdollInstigator;
-			}
-			set
-			{
-				if (_ragdollInstigator == value)
-				{
-					return;
-				}
-				_ragdollInstigator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ragdollInstigator);
+			set => SetProperty(ref _ragdollInstigator, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("closestNavmeshPoint")] 
 		public Vector4 ClosestNavmeshPoint
 		{
-			get
-			{
-				if (_closestNavmeshPoint == null)
-				{
-					_closestNavmeshPoint = (Vector4) CR2WTypeManager.Create("Vector4", "closestNavmeshPoint", cr2w, this);
-				}
-				return _closestNavmeshPoint;
-			}
-			set
-			{
-				if (_closestNavmeshPoint == value)
-				{
-					return;
-				}
-				_closestNavmeshPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _closestNavmeshPoint);
+			set => SetProperty(ref _closestNavmeshPoint, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ragdollOutOfNavmesh")] 
 		public CBool RagdollOutOfNavmesh
 		{
-			get
-			{
-				if (_ragdollOutOfNavmesh == null)
-				{
-					_ragdollOutOfNavmesh = (CBool) CR2WTypeManager.Create("Bool", "ragdollOutOfNavmesh", cr2w, this);
-				}
-				return _ragdollOutOfNavmesh;
-			}
-			set
-			{
-				if (_ragdollOutOfNavmesh == value)
-				{
-					return;
-				}
-				_ragdollOutOfNavmesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ragdollOutOfNavmesh);
+			set => SetProperty(ref _ragdollOutOfNavmesh, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isUnderwater")] 
 		public CBool IsUnderwater
 		{
-			get
-			{
-				if (_isUnderwater == null)
-				{
-					_isUnderwater = (CBool) CR2WTypeManager.Create("Bool", "isUnderwater", cr2w, this);
-				}
-				return _isUnderwater;
-			}
-			set
-			{
-				if (_isUnderwater == value)
-				{
-					return;
-				}
-				_isUnderwater = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isUnderwater);
+			set => SetProperty(ref _isUnderwater, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("poseAllowsRecovery")] 
 		public CBool PoseAllowsRecovery
 		{
-			get
-			{
-				if (_poseAllowsRecovery == null)
-				{
-					_poseAllowsRecovery = (CBool) CR2WTypeManager.Create("Bool", "poseAllowsRecovery", cr2w, this);
-				}
-				return _poseAllowsRecovery;
-			}
-			set
-			{
-				if (_poseAllowsRecovery == value)
-				{
-					return;
-				}
-				_poseAllowsRecovery = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _poseAllowsRecovery);
+			set => SetProperty(ref _poseAllowsRecovery, value);
 		}
 
 		public AIRagdollDelegate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

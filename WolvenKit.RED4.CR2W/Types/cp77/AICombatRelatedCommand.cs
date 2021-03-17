@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("immediately")] 
 		public CBool Immediately
 		{
-			get
-			{
-				if (_immediately == null)
-				{
-					_immediately = (CBool) CR2WTypeManager.Create("Bool", "immediately", cr2w, this);
-				}
-				return _immediately;
-			}
-			set
-			{
-				if (_immediately == value)
-				{
-					return;
-				}
-				_immediately = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _immediately);
+			set => SetProperty(ref _immediately, value);
 		}
 
 		public AICombatRelatedCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

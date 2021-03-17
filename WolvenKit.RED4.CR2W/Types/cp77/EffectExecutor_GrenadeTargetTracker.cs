@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("potentialTargetSlots")] 
 		public CArray<CName> PotentialTargetSlots
 		{
-			get
-			{
-				if (_potentialTargetSlots == null)
-				{
-					_potentialTargetSlots = (CArray<CName>) CR2WTypeManager.Create("array:CName", "potentialTargetSlots", cr2w, this);
-				}
-				return _potentialTargetSlots;
-			}
-			set
-			{
-				if (_potentialTargetSlots == value)
-				{
-					return;
-				}
-				_potentialTargetSlots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _potentialTargetSlots);
+			set => SetProperty(ref _potentialTargetSlots, value);
 		}
 
 		public EffectExecutor_GrenadeTargetTracker(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

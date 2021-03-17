@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("muzzleOffset")] 
 		public Vector4 MuzzleOffset
 		{
-			get
-			{
-				if (_muzzleOffset == null)
-				{
-					_muzzleOffset = (Vector4) CR2WTypeManager.Create("Vector4", "muzzleOffset", cr2w, this);
-				}
-				return _muzzleOffset;
-			}
-			set
-			{
-				if (_muzzleOffset == value)
-				{
-					return;
-				}
-				_muzzleOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _muzzleOffset);
+			set => SetProperty(ref _muzzleOffset, value);
 		}
 
 		public AnimFeature_MuzzleData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

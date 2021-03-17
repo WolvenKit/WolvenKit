@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attackRecord")] 
 		public CHandle<gamedataAttack_Record> AttackRecord
 		{
-			get
-			{
-				if (_attackRecord == null)
-				{
-					_attackRecord = (CHandle<gamedataAttack_Record>) CR2WTypeManager.Create("handle:gamedataAttack_Record", "attackRecord", cr2w, this);
-				}
-				return _attackRecord;
-			}
-			set
-			{
-				if (_attackRecord == value)
-				{
-					return;
-				}
-				_attackRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackRecord);
+			set => SetProperty(ref _attackRecord, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("range")] 
 		public CFloat Range
 		{
-			get
-			{
-				if (_range == null)
-				{
-					_range = (CFloat) CR2WTypeManager.Create("Float", "range", cr2w, this);
-				}
-				return _range;
-			}
-			set
-			{
-				if (_range == value)
-				{
-					return;
-				}
-				_range = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _range);
+			set => SetProperty(ref _range, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("index")] 
 		public CInt32 Index
 		{
-			get
-			{
-				if (_index == null)
-				{
-					_index = (CInt32) CR2WTypeManager.Create("Int32", "index", cr2w, this);
-				}
-				return _index;
-			}
-			set
-			{
-				if (_index == value)
-				{
-					return;
-				}
-				_index = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _index);
+			set => SetProperty(ref _index, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("playSlotAnimation")] 
 		public CBool PlaySlotAnimation
 		{
-			get
-			{
-				if (_playSlotAnimation == null)
-				{
-					_playSlotAnimation = (CBool) CR2WTypeManager.Create("Bool", "playSlotAnimation", cr2w, this);
-				}
-				return _playSlotAnimation;
-			}
-			set
-			{
-				if (_playSlotAnimation == value)
-				{
-					return;
-				}
-				_playSlotAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playSlotAnimation);
+			set => SetProperty(ref _playSlotAnimation, value);
 		}
 
 		public SpawnLaserAttackEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

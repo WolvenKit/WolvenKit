@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("scene")] 
 		public CBool Scene
 		{
-			get
-			{
-				if (_scene == null)
-				{
-					_scene = (CBool) CR2WTypeManager.Create("Bool", "scene", cr2w, this);
-				}
-				return _scene;
-			}
-			set
-			{
-				if (_scene == value)
-				{
-					return;
-				}
-				_scene = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scene);
+			set => SetProperty(ref _scene, value);
 		}
 
 		public vehicleCameraSceneEnableEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

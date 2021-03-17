@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("movementDirection")] 
 		public Vector4 MovementDirection
 		{
-			get
-			{
-				if (_movementDirection == null)
-				{
-					_movementDirection = (Vector4) CR2WTypeManager.Create("Vector4", "movementDirection", cr2w, this);
-				}
-				return _movementDirection;
-			}
-			set
-			{
-				if (_movementDirection == value)
-				{
-					return;
-				}
-				_movementDirection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movementDirection);
+			set => SetProperty(ref _movementDirection, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("speed")] 
 		public CFloat Speed
 		{
-			get
-			{
-				if (_speed == null)
-				{
-					_speed = (CFloat) CR2WTypeManager.Create("Float", "speed", cr2w, this);
-				}
-				return _speed;
-			}
-			set
-			{
-				if (_speed == value)
-				{
-					return;
-				}
-				_speed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speed);
+			set => SetProperty(ref _speed, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("desiredSpeed")] 
 		public CFloat DesiredSpeed
 		{
-			get
-			{
-				if (_desiredSpeed == null)
-				{
-					_desiredSpeed = (CFloat) CR2WTypeManager.Create("Float", "desiredSpeed", cr2w, this);
-				}
-				return _desiredSpeed;
-			}
-			set
-			{
-				if (_desiredSpeed == value)
-				{
-					return;
-				}
-				_desiredSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _desiredSpeed);
+			set => SetProperty(ref _desiredSpeed, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("stabilizedSpeed")] 
 		public CFloat StabilizedSpeed
 		{
-			get
-			{
-				if (_stabilizedSpeed == null)
-				{
-					_stabilizedSpeed = (CFloat) CR2WTypeManager.Create("Float", "stabilizedSpeed", cr2w, this);
-				}
-				return _stabilizedSpeed;
-			}
-			set
-			{
-				if (_stabilizedSpeed == value)
-				{
-					return;
-				}
-				_stabilizedSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stabilizedSpeed);
+			set => SetProperty(ref _stabilizedSpeed, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("acceleration")] 
 		public CFloat Acceleration
 		{
-			get
-			{
-				if (_acceleration == null)
-				{
-					_acceleration = (CFloat) CR2WTypeManager.Create("Float", "acceleration", cr2w, this);
-				}
-				return _acceleration;
-			}
-			set
-			{
-				if (_acceleration == value)
-				{
-					return;
-				}
-				_acceleration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _acceleration);
+			set => SetProperty(ref _acceleration, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("timeToChangeLocomotion")] 
 		public CFloat TimeToChangeLocomotion
 		{
-			get
-			{
-				if (_timeToChangeLocomotion == null)
-				{
-					_timeToChangeLocomotion = (CFloat) CR2WTypeManager.Create("Float", "timeToChangeLocomotion", cr2w, this);
-				}
-				return _timeToChangeLocomotion;
-			}
-			set
-			{
-				if (_timeToChangeLocomotion == value)
-				{
-					return;
-				}
-				_timeToChangeLocomotion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeToChangeLocomotion);
+			set => SetProperty(ref _timeToChangeLocomotion, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("strafeYaw")] 
 		public CFloat StrafeYaw
 		{
-			get
-			{
-				if (_strafeYaw == null)
-				{
-					_strafeYaw = (CFloat) CR2WTypeManager.Create("Float", "strafeYaw", cr2w, this);
-				}
-				return _strafeYaw;
-			}
-			set
-			{
-				if (_strafeYaw == value)
-				{
-					return;
-				}
-				_strafeYaw = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _strafeYaw);
+			set => SetProperty(ref _strafeYaw, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("yawSpeed")] 
 		public CFloat YawSpeed
 		{
-			get
-			{
-				if (_yawSpeed == null)
-				{
-					_yawSpeed = (CFloat) CR2WTypeManager.Create("Float", "yawSpeed", cr2w, this);
-				}
-				return _yawSpeed;
-			}
-			set
-			{
-				if (_yawSpeed == value)
-				{
-					return;
-				}
-				_yawSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _yawSpeed);
+			set => SetProperty(ref _yawSpeed, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("locomotionState")] 
 		public CInt32 LocomotionState
 		{
-			get
-			{
-				if (_locomotionState == null)
-				{
-					_locomotionState = (CInt32) CR2WTypeManager.Create("Int32", "locomotionState", cr2w, this);
-				}
-				return _locomotionState;
-			}
-			set
-			{
-				if (_locomotionState == value)
-				{
-					return;
-				}
-				_locomotionState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _locomotionState);
+			set => SetProperty(ref _locomotionState, value);
 		}
 
 		public animAnimFeature_Movement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

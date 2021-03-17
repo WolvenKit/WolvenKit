@@ -25,299 +25,104 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetColorChange")] 
 		public inkWidgetReference TargetColorChange
 		{
-			get
-			{
-				if (_targetColorChange == null)
-				{
-					_targetColorChange = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "targetColorChange", cr2w, this);
-				}
-				return _targetColorChange;
-			}
-			set
-			{
-				if (_targetColorChange == value)
-				{
-					return;
-				}
-				_targetColorChange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetColorChange);
+			set => SetProperty(ref _targetColorChange, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("chargeBar")] 
 		public wCHandle<inkCanvasWidget> ChargeBar
 		{
-			get
-			{
-				if (_chargeBar == null)
-				{
-					_chargeBar = (wCHandle<inkCanvasWidget>) CR2WTypeManager.Create("whandle:inkCanvasWidget", "chargeBar", cr2w, this);
-				}
-				return _chargeBar;
-			}
-			set
-			{
-				if (_chargeBar == value)
-				{
-					return;
-				}
-				_chargeBar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeBar);
+			set => SetProperty(ref _chargeBar, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("chargeBarFG")] 
 		public wCHandle<inkRectangleWidget> ChargeBarFG
 		{
-			get
-			{
-				if (_chargeBarFG == null)
-				{
-					_chargeBarFG = (wCHandle<inkRectangleWidget>) CR2WTypeManager.Create("whandle:inkRectangleWidget", "chargeBarFG", cr2w, this);
-				}
-				return _chargeBarFG;
-			}
-			set
-			{
-				if (_chargeBarFG == value)
-				{
-					return;
-				}
-				_chargeBarFG = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeBarFG);
+			set => SetProperty(ref _chargeBarFG, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("chargeBarMonoTop")] 
 		public wCHandle<inkImageWidget> ChargeBarMonoTop
 		{
-			get
-			{
-				if (_chargeBarMonoTop == null)
-				{
-					_chargeBarMonoTop = (wCHandle<inkImageWidget>) CR2WTypeManager.Create("whandle:inkImageWidget", "chargeBarMonoTop", cr2w, this);
-				}
-				return _chargeBarMonoTop;
-			}
-			set
-			{
-				if (_chargeBarMonoTop == value)
-				{
-					return;
-				}
-				_chargeBarMonoTop = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeBarMonoTop);
+			set => SetProperty(ref _chargeBarMonoTop, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("chargeBarMonoBottom")] 
 		public wCHandle<inkImageWidget> ChargeBarMonoBottom
 		{
-			get
-			{
-				if (_chargeBarMonoBottom == null)
-				{
-					_chargeBarMonoBottom = (wCHandle<inkImageWidget>) CR2WTypeManager.Create("whandle:inkImageWidget", "chargeBarMonoBottom", cr2w, this);
-				}
-				return _chargeBarMonoBottom;
-			}
-			set
-			{
-				if (_chargeBarMonoBottom == value)
-				{
-					return;
-				}
-				_chargeBarMonoBottom = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeBarMonoBottom);
+			set => SetProperty(ref _chargeBarMonoBottom, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("chargeBarMask")] 
 		public wCHandle<inkMaskWidget> ChargeBarMask
 		{
-			get
-			{
-				if (_chargeBarMask == null)
-				{
-					_chargeBarMask = (wCHandle<inkMaskWidget>) CR2WTypeManager.Create("whandle:inkMaskWidget", "chargeBarMask", cr2w, this);
-				}
-				return _chargeBarMask;
-			}
-			set
-			{
-				if (_chargeBarMask == value)
-				{
-					return;
-				}
-				_chargeBarMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeBarMask);
+			set => SetProperty(ref _chargeBarMask, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("chargeValueL")] 
 		public wCHandle<inkTextWidget> ChargeValueL
 		{
-			get
-			{
-				if (_chargeValueL == null)
-				{
-					_chargeValueL = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "chargeValueL", cr2w, this);
-				}
-				return _chargeValueL;
-			}
-			set
-			{
-				if (_chargeValueL == value)
-				{
-					return;
-				}
-				_chargeValueL = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeValueL);
+			set => SetProperty(ref _chargeValueL, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("chargeValueR")] 
 		public wCHandle<inkTextWidget> ChargeValueR
 		{
-			get
-			{
-				if (_chargeValueR == null)
-				{
-					_chargeValueR = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "chargeValueR", cr2w, this);
-				}
-				return _chargeValueR;
-			}
-			set
-			{
-				if (_chargeValueR == value)
-				{
-					return;
-				}
-				_chargeValueR = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeValueR);
+			set => SetProperty(ref _chargeValueR, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("bbcharge")] 
 		public CUInt32 Bbcharge
 		{
-			get
-			{
-				if (_bbcharge == null)
-				{
-					_bbcharge = (CUInt32) CR2WTypeManager.Create("Uint32", "bbcharge", cr2w, this);
-				}
-				return _bbcharge;
-			}
-			set
-			{
-				if (_bbcharge == value)
-				{
-					return;
-				}
-				_bbcharge = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbcharge);
+			set => SetProperty(ref _bbcharge, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("weaponlocalBB")] 
 		public CHandle<gameIBlackboard> WeaponlocalBB
 		{
-			get
-			{
-				if (_weaponlocalBB == null)
-				{
-					_weaponlocalBB = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "weaponlocalBB", cr2w, this);
-				}
-				return _weaponlocalBB;
-			}
-			set
-			{
-				if (_weaponlocalBB == value)
-				{
-					return;
-				}
-				_weaponlocalBB = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponlocalBB);
+			set => SetProperty(ref _weaponlocalBB, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("meleeResourcePoolListener")] 
 		public CHandle<MeleeResourcePoolListener> MeleeResourcePoolListener
 		{
-			get
-			{
-				if (_meleeResourcePoolListener == null)
-				{
-					_meleeResourcePoolListener = (CHandle<MeleeResourcePoolListener>) CR2WTypeManager.Create("handle:MeleeResourcePoolListener", "meleeResourcePoolListener", cr2w, this);
-				}
-				return _meleeResourcePoolListener;
-			}
-			set
-			{
-				if (_meleeResourcePoolListener == value)
-				{
-					return;
-				}
-				_meleeResourcePoolListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meleeResourcePoolListener);
+			set => SetProperty(ref _meleeResourcePoolListener, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("weaponID")] 
 		public entEntityID WeaponID
 		{
-			get
-			{
-				if (_weaponID == null)
-				{
-					_weaponID = (entEntityID) CR2WTypeManager.Create("entEntityID", "weaponID", cr2w, this);
-				}
-				return _weaponID;
-			}
-			set
-			{
-				if (_weaponID == value)
-				{
-					return;
-				}
-				_weaponID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponID);
+			set => SetProperty(ref _weaponID, value);
 		}
 
 		[Ordinal(32)] 
 		[RED("displayChargeBar")] 
 		public CBool DisplayChargeBar
 		{
-			get
-			{
-				if (_displayChargeBar == null)
-				{
-					_displayChargeBar = (CBool) CR2WTypeManager.Create("Bool", "displayChargeBar", cr2w, this);
-				}
-				return _displayChargeBar;
-			}
-			set
-			{
-				if (_displayChargeBar == value)
-				{
-					return;
-				}
-				_displayChargeBar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _displayChargeBar);
+			set => SetProperty(ref _displayChargeBar, value);
 		}
 
 		public CrosshairGameController_Melee(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

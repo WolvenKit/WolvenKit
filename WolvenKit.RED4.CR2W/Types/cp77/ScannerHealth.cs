@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("currentHealth")] 
 		public CInt32 CurrentHealth
 		{
-			get
-			{
-				if (_currentHealth == null)
-				{
-					_currentHealth = (CInt32) CR2WTypeManager.Create("Int32", "currentHealth", cr2w, this);
-				}
-				return _currentHealth;
-			}
-			set
-			{
-				if (_currentHealth == value)
-				{
-					return;
-				}
-				_currentHealth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentHealth);
+			set => SetProperty(ref _currentHealth, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("totalHealth")] 
 		public CInt32 TotalHealth
 		{
-			get
-			{
-				if (_totalHealth == null)
-				{
-					_totalHealth = (CInt32) CR2WTypeManager.Create("Int32", "totalHealth", cr2w, this);
-				}
-				return _totalHealth;
-			}
-			set
-			{
-				if (_totalHealth == value)
-				{
-					return;
-				}
-				_totalHealth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _totalHealth);
+			set => SetProperty(ref _totalHealth, value);
 		}
 
 		public ScannerHealth(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

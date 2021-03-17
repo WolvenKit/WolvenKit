@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isChoiceHubActive")] 
 		public CBool IsChoiceHubActive
 		{
-			get
-			{
-				if (_isChoiceHubActive == null)
-				{
-					_isChoiceHubActive = (CBool) CR2WTypeManager.Create("Bool", "isChoiceHubActive", cr2w, this);
-				}
-				return _isChoiceHubActive;
-			}
-			set
-			{
-				if (_isChoiceHubActive == value)
-				{
-					return;
-				}
-				_isChoiceHubActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isChoiceHubActive);
+			set => SetProperty(ref _isChoiceHubActive, value);
 		}
 
 		public DialogueChoiceHubPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

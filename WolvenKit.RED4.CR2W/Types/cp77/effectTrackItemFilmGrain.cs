@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("override")] 
 		public CBool Override
 		{
-			get
-			{
-				if (_override == null)
-				{
-					_override = (CBool) CR2WTypeManager.Create("Bool", "override", cr2w, this);
-				}
-				return _override;
-			}
-			set
-			{
-				if (_override == value)
-				{
-					return;
-				}
-				_override = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _override);
+			set => SetProperty(ref _override, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("luminanceBias")] 
 		public effectEffectParameterEvaluatorFloat LuminanceBias
 		{
-			get
-			{
-				if (_luminanceBias == null)
-				{
-					_luminanceBias = (effectEffectParameterEvaluatorFloat) CR2WTypeManager.Create("effectEffectParameterEvaluatorFloat", "luminanceBias", cr2w, this);
-				}
-				return _luminanceBias;
-			}
-			set
-			{
-				if (_luminanceBias == value)
-				{
-					return;
-				}
-				_luminanceBias = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _luminanceBias);
+			set => SetProperty(ref _luminanceBias, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("strength")] 
 		public effectEffectParameterEvaluatorVector Strength
 		{
-			get
-			{
-				if (_strength == null)
-				{
-					_strength = (effectEffectParameterEvaluatorVector) CR2WTypeManager.Create("effectEffectParameterEvaluatorVector", "strength", cr2w, this);
-				}
-				return _strength;
-			}
-			set
-			{
-				if (_strength == value)
-				{
-					return;
-				}
-				_strength = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _strength);
+			set => SetProperty(ref _strength, value);
 		}
 
 		public effectTrackItemFilmGrain(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

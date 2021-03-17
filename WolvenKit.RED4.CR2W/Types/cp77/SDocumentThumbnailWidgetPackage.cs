@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("folderName")] 
 		public CString FolderName
 		{
-			get
-			{
-				if (_folderName == null)
-				{
-					_folderName = (CString) CR2WTypeManager.Create("String", "folderName", cr2w, this);
-				}
-				return _folderName;
-			}
-			set
-			{
-				if (_folderName == value)
-				{
-					return;
-				}
-				_folderName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _folderName);
+			set => SetProperty(ref _folderName, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("documentAdress")] 
 		public SDocumentAdress DocumentAdress
 		{
-			get
-			{
-				if (_documentAdress == null)
-				{
-					_documentAdress = (SDocumentAdress) CR2WTypeManager.Create("SDocumentAdress", "documentAdress", cr2w, this);
-				}
-				return _documentAdress;
-			}
-			set
-			{
-				if (_documentAdress == value)
-				{
-					return;
-				}
-				_documentAdress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _documentAdress);
+			set => SetProperty(ref _documentAdress, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("documentType")] 
 		public CEnum<EDocumentType> DocumentType
 		{
-			get
-			{
-				if (_documentType == null)
-				{
-					_documentType = (CEnum<EDocumentType>) CR2WTypeManager.Create("EDocumentType", "documentType", cr2w, this);
-				}
-				return _documentType;
-			}
-			set
-			{
-				if (_documentType == value)
-				{
-					return;
-				}
-				_documentType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _documentType);
+			set => SetProperty(ref _documentType, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("questInfo")] 
 		public gamedeviceQuestInfo QuestInfo
 		{
-			get
-			{
-				if (_questInfo == null)
-				{
-					_questInfo = (gamedeviceQuestInfo) CR2WTypeManager.Create("gamedeviceQuestInfo", "questInfo", cr2w, this);
-				}
-				return _questInfo;
-			}
-			set
-			{
-				if (_questInfo == value)
-				{
-					return;
-				}
-				_questInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questInfo);
+			set => SetProperty(ref _questInfo, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("wasRead")] 
 		public CBool WasRead
 		{
-			get
-			{
-				if (_wasRead == null)
-				{
-					_wasRead = (CBool) CR2WTypeManager.Create("Bool", "wasRead", cr2w, this);
-				}
-				return _wasRead;
-			}
-			set
-			{
-				if (_wasRead == value)
-				{
-					return;
-				}
-				_wasRead = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasRead);
+			set => SetProperty(ref _wasRead, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("isOpened")] 
 		public CBool IsOpened
 		{
-			get
-			{
-				if (_isOpened == null)
-				{
-					_isOpened = (CBool) CR2WTypeManager.Create("Bool", "isOpened", cr2w, this);
-				}
-				return _isOpened;
-			}
-			set
-			{
-				if (_isOpened == value)
-				{
-					return;
-				}
-				_isOpened = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isOpened);
+			set => SetProperty(ref _isOpened, value);
 		}
 
 		public SDocumentThumbnailWidgetPackage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

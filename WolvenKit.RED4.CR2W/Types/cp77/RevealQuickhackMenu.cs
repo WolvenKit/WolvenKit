@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("shouldOpenWheel")] 
 		public CBool ShouldOpenWheel
 		{
-			get
-			{
-				if (_shouldOpenWheel == null)
-				{
-					_shouldOpenWheel = (CBool) CR2WTypeManager.Create("Bool", "shouldOpenWheel", cr2w, this);
-				}
-				return _shouldOpenWheel;
-			}
-			set
-			{
-				if (_shouldOpenWheel == value)
-				{
-					return;
-				}
-				_shouldOpenWheel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldOpenWheel);
+			set => SetProperty(ref _shouldOpenWheel, value);
 		}
 
 		public RevealQuickhackMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

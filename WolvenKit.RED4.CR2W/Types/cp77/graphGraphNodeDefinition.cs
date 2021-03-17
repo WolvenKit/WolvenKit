@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sockets")] 
 		public CArray<CHandle<graphGraphSocketDefinition>> Sockets
 		{
-			get
-			{
-				if (_sockets == null)
-				{
-					_sockets = (CArray<CHandle<graphGraphSocketDefinition>>) CR2WTypeManager.Create("array:handle:graphGraphSocketDefinition", "sockets", cr2w, this);
-				}
-				return _sockets;
-			}
-			set
-			{
-				if (_sockets == value)
-				{
-					return;
-				}
-				_sockets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sockets);
+			set => SetProperty(ref _sockets, value);
 		}
 
 		public graphGraphNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

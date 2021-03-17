@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("translation")] 
 		public Vector3 Translation
 		{
-			get
-			{
-				if (_translation == null)
-				{
-					_translation = (Vector3) CR2WTypeManager.Create("Vector3", "translation", cr2w, this);
-				}
-				return _translation;
-			}
-			set
-			{
-				if (_translation == value)
-				{
-					return;
-				}
-				_translation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _translation);
+			set => SetProperty(ref _translation, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rotation")] 
 		public EulerAngles Rotation
 		{
-			get
-			{
-				if (_rotation == null)
-				{
-					_rotation = (EulerAngles) CR2WTypeManager.Create("EulerAngles", "rotation", cr2w, this);
-				}
-				return _rotation;
-			}
-			set
-			{
-				if (_rotation == value)
-				{
-					return;
-				}
-				_rotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotation);
+			set => SetProperty(ref _rotation, value);
 		}
 
 		public interopTransformInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

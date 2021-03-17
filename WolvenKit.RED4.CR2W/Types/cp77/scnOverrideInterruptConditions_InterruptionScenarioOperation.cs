@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("interruptConditions")] 
 		public CArray<CHandle<scnIInterruptCondition>> InterruptConditions
 		{
-			get
-			{
-				if (_interruptConditions == null)
-				{
-					_interruptConditions = (CArray<CHandle<scnIInterruptCondition>>) CR2WTypeManager.Create("array:handle:scnIInterruptCondition", "interruptConditions", cr2w, this);
-				}
-				return _interruptConditions;
-			}
-			set
-			{
-				if (_interruptConditions == value)
-				{
-					return;
-				}
-				_interruptConditions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interruptConditions);
+			set => SetProperty(ref _interruptConditions, value);
 		}
 
 		public scnOverrideInterruptConditions_InterruptionScenarioOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

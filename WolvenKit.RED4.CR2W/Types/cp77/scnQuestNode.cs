@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("questNode")] 
 		public CHandle<questNodeDefinition> QuestNode
 		{
-			get
-			{
-				if (_questNode == null)
-				{
-					_questNode = (CHandle<questNodeDefinition>) CR2WTypeManager.Create("handle:questNodeDefinition", "questNode", cr2w, this);
-				}
-				return _questNode;
-			}
-			set
-			{
-				if (_questNode == value)
-				{
-					return;
-				}
-				_questNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questNode);
+			set => SetProperty(ref _questNode, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isockMappings")] 
 		public CArray<CName> IsockMappings
 		{
-			get
-			{
-				if (_isockMappings == null)
-				{
-					_isockMappings = (CArray<CName>) CR2WTypeManager.Create("array:CName", "isockMappings", cr2w, this);
-				}
-				return _isockMappings;
-			}
-			set
-			{
-				if (_isockMappings == value)
-				{
-					return;
-				}
-				_isockMappings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isockMappings);
+			set => SetProperty(ref _isockMappings, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("osockMappings")] 
 		public CArray<CName> OsockMappings
 		{
-			get
-			{
-				if (_osockMappings == null)
-				{
-					_osockMappings = (CArray<CName>) CR2WTypeManager.Create("array:CName", "osockMappings", cr2w, this);
-				}
-				return _osockMappings;
-			}
-			set
-			{
-				if (_osockMappings == value)
-				{
-					return;
-				}
-				_osockMappings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _osockMappings);
+			set => SetProperty(ref _osockMappings, value);
 		}
 
 		public scnQuestNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

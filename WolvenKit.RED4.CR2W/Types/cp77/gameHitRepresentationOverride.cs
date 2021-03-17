@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("represenationOverride")] 
 		public gameHitShapeContainer RepresenationOverride
 		{
-			get
-			{
-				if (_represenationOverride == null)
-				{
-					_represenationOverride = (gameHitShapeContainer) CR2WTypeManager.Create("gameHitShapeContainer", "represenationOverride", cr2w, this);
-				}
-				return _represenationOverride;
-			}
-			set
-			{
-				if (_represenationOverride == value)
-				{
-					return;
-				}
-				_represenationOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _represenationOverride);
+			set => SetProperty(ref _represenationOverride, value);
 		}
 
 		public gameHitRepresentationOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

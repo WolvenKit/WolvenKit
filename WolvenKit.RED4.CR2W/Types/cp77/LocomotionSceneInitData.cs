@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("previousLocomotionState")] 
 		public CInt32 PreviousLocomotionState
 		{
-			get
-			{
-				if (_previousLocomotionState == null)
-				{
-					_previousLocomotionState = (CInt32) CR2WTypeManager.Create("Int32", "previousLocomotionState", cr2w, this);
-				}
-				return _previousLocomotionState;
-			}
-			set
-			{
-				if (_previousLocomotionState == value)
-				{
-					return;
-				}
-				_previousLocomotionState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousLocomotionState);
+			set => SetProperty(ref _previousLocomotionState, value);
 		}
 
 		public LocomotionSceneInitData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

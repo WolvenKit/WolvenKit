@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("briefingPath")] 
 		public CHandle<gameJournalPath> BriefingPath
 		{
-			get
-			{
-				if (_briefingPath == null)
-				{
-					_briefingPath = (CHandle<gameJournalPath>) CR2WTypeManager.Create("handle:gameJournalPath", "briefingPath", cr2w, this);
-				}
-				return _briefingPath;
-			}
-			set
-			{
-				if (_briefingPath == value)
-				{
-					return;
-				}
-				_briefingPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _briefingPath);
+			set => SetProperty(ref _briefingPath, value);
 		}
 
 		public questOpenBriefing_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

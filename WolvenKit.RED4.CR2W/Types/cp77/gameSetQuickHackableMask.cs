@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isQuickHackable")] 
 		public CBool IsQuickHackable
 		{
-			get
-			{
-				if (_isQuickHackable == null)
-				{
-					_isQuickHackable = (CBool) CR2WTypeManager.Create("Bool", "isQuickHackable", cr2w, this);
-				}
-				return _isQuickHackable;
-			}
-			set
-			{
-				if (_isQuickHackable == value)
-				{
-					return;
-				}
-				_isQuickHackable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isQuickHackable);
+			set => SetProperty(ref _isQuickHackable, value);
 		}
 
 		public gameSetQuickHackableMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

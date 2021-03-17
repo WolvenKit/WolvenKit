@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("transforms")] 
 		public CArray<Transform> Transforms
 		{
-			get
-			{
-				if (_transforms == null)
-				{
-					_transforms = (CArray<Transform>) CR2WTypeManager.Create("array:Transform", "transforms", cr2w, this);
-				}
-				return _transforms;
-			}
-			set
-			{
-				if (_transforms == value)
-				{
-					return;
-				}
-				_transforms = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transforms);
+			set => SetProperty(ref _transforms, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isSleeping")] 
 		public CBool IsSleeping
 		{
-			get
-			{
-				if (_isSleeping == null)
-				{
-					_isSleeping = (CBool) CR2WTypeManager.Create("Bool", "isSleeping", cr2w, this);
-				}
-				return _isSleeping;
-			}
-			set
-			{
-				if (_isSleeping == value)
-				{
-					return;
-				}
-				_isSleeping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isSleeping);
+			set => SetProperty(ref _isSleeping, value);
 		}
 
 		public entRagdollComponentReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

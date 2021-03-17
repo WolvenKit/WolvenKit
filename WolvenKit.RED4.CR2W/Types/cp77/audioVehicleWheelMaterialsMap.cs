@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicleWheelMaterials")] 
 		public CArray<audioVehicleWheelMaterialsMapItem> VehicleWheelMaterials
 		{
-			get
-			{
-				if (_vehicleWheelMaterials == null)
-				{
-					_vehicleWheelMaterials = (CArray<audioVehicleWheelMaterialsMapItem>) CR2WTypeManager.Create("array:audioVehicleWheelMaterialsMapItem", "vehicleWheelMaterials", cr2w, this);
-				}
-				return _vehicleWheelMaterials;
-			}
-			set
-			{
-				if (_vehicleWheelMaterials == value)
-				{
-					return;
-				}
-				_vehicleWheelMaterials = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleWheelMaterials);
+			set => SetProperty(ref _vehicleWheelMaterials, value);
 		}
 
 		public audioVehicleWheelMaterialsMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

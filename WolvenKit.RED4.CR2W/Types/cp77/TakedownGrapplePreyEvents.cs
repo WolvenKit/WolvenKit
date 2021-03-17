@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isGrappleReactionVOPlayed")] 
 		public CBool IsGrappleReactionVOPlayed
 		{
-			get
-			{
-				if (_isGrappleReactionVOPlayed == null)
-				{
-					_isGrappleReactionVOPlayed = (CBool) CR2WTypeManager.Create("Bool", "isGrappleReactionVOPlayed", cr2w, this);
-				}
-				return _isGrappleReactionVOPlayed;
-			}
-			set
-			{
-				if (_isGrappleReactionVOPlayed == value)
-				{
-					return;
-				}
-				_isGrappleReactionVOPlayed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isGrappleReactionVOPlayed);
+			set => SetProperty(ref _isGrappleReactionVOPlayed, value);
 		}
 
 		public TakedownGrapplePreyEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

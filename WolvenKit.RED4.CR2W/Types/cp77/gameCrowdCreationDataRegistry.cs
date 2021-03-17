@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("creationData")] 
 		public CArray<gameCrowdCreationData> CreationData
 		{
-			get
-			{
-				if (_creationData == null)
-				{
-					_creationData = (CArray<gameCrowdCreationData>) CR2WTypeManager.Create("array:gameCrowdCreationData", "creationData", cr2w, this);
-				}
-				return _creationData;
-			}
-			set
-			{
-				if (_creationData == value)
-				{
-					return;
-				}
-				_creationData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _creationData);
+			set => SetProperty(ref _creationData, value);
 		}
 
 		public gameCrowdCreationDataRegistry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

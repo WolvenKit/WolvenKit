@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cid")] 
 		public CInt32 Cid
 		{
-			get
-			{
-				if (_cid == null)
-				{
-					_cid = (CInt32) CR2WTypeManager.Create("Int32", "cid", cr2w, this);
-				}
-				return _cid;
-			}
-			set
-			{
-				if (_cid == value)
-				{
-					return;
-				}
-				_cid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cid);
+			set => SetProperty(ref _cid, value);
 		}
 
 		public RemoveCooldownRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

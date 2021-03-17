@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("callPhase")] 
 		public CEnum<questPhoneCallPhase> CallPhase
 		{
-			get
-			{
-				if (_callPhase == null)
-				{
-					_callPhase = (CEnum<questPhoneCallPhase>) CR2WTypeManager.Create("questPhoneCallPhase", "callPhase", cr2w, this);
-				}
-				return _callPhase;
-			}
-			set
-			{
-				if (_callPhase == value)
-				{
-					return;
-				}
-				_callPhase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callPhase);
+			set => SetProperty(ref _callPhase, value);
 		}
 
 		public questPhoneCallPhase_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

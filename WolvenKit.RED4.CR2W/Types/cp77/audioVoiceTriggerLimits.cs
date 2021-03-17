@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("probability")] 
 		public CFloat Probability
 		{
-			get
-			{
-				if (_probability == null)
-				{
-					_probability = (CFloat) CR2WTypeManager.Create("Float", "probability", cr2w, this);
-				}
-				return _probability;
-			}
-			set
-			{
-				if (_probability == value)
-				{
-					return;
-				}
-				_probability = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _probability);
+			set => SetProperty(ref _probability, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("singleNpcMinRepeatTime")] 
 		public CFloat SingleNpcMinRepeatTime
 		{
-			get
-			{
-				if (_singleNpcMinRepeatTime == null)
-				{
-					_singleNpcMinRepeatTime = (CFloat) CR2WTypeManager.Create("Float", "singleNpcMinRepeatTime", cr2w, this);
-				}
-				return _singleNpcMinRepeatTime;
-			}
-			set
-			{
-				if (_singleNpcMinRepeatTime == value)
-				{
-					return;
-				}
-				_singleNpcMinRepeatTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _singleNpcMinRepeatTime);
+			set => SetProperty(ref _singleNpcMinRepeatTime, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("allNpcsMinRepeatTime")] 
 		public CFloat AllNpcsMinRepeatTime
 		{
-			get
-			{
-				if (_allNpcsMinRepeatTime == null)
-				{
-					_allNpcsMinRepeatTime = (CFloat) CR2WTypeManager.Create("Float", "allNpcsMinRepeatTime", cr2w, this);
-				}
-				return _allNpcsMinRepeatTime;
-			}
-			set
-			{
-				if (_allNpcsMinRepeatTime == value)
-				{
-					return;
-				}
-				_allNpcsMinRepeatTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _allNpcsMinRepeatTime);
+			set => SetProperty(ref _allNpcsMinRepeatTime, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("allNpcsSharingVoicesetMinRepeatTime")] 
 		public CFloat AllNpcsSharingVoicesetMinRepeatTime
 		{
-			get
-			{
-				if (_allNpcsSharingVoicesetMinRepeatTime == null)
-				{
-					_allNpcsSharingVoicesetMinRepeatTime = (CFloat) CR2WTypeManager.Create("Float", "allNpcsSharingVoicesetMinRepeatTime", cr2w, this);
-				}
-				return _allNpcsSharingVoicesetMinRepeatTime;
-			}
-			set
-			{
-				if (_allNpcsSharingVoicesetMinRepeatTime == value)
-				{
-					return;
-				}
-				_allNpcsSharingVoicesetMinRepeatTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _allNpcsSharingVoicesetMinRepeatTime);
+			set => SetProperty(ref _allNpcsSharingVoicesetMinRepeatTime, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("combatVolume")] 
 		public CFloat CombatVolume
 		{
-			get
-			{
-				if (_combatVolume == null)
-				{
-					_combatVolume = (CFloat) CR2WTypeManager.Create("Float", "combatVolume", cr2w, this);
-				}
-				return _combatVolume;
-			}
-			set
-			{
-				if (_combatVolume == value)
-				{
-					return;
-				}
-				_combatVolume = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _combatVolume);
+			set => SetProperty(ref _combatVolume, value);
 		}
 
 		public audioVoiceTriggerLimits(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

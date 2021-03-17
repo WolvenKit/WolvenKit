@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isVisible")] 
 		public CBool IsVisible
 		{
-			get
-			{
-				if (_isVisible == null)
-				{
-					_isVisible = (CBool) CR2WTypeManager.Create("Bool", "isVisible", cr2w, this);
-				}
-				return _isVisible;
-			}
-			set
-			{
-				if (_isVisible == value)
-				{
-					return;
-				}
-				_isVisible = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isVisible);
+			set => SetProperty(ref _isVisible, value);
 		}
 
 		public inkanimSetVisibilityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

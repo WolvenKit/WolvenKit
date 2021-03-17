@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("moveType")] 
 		public CEnum<moveMovementType> MoveType
 		{
-			get
-			{
-				if (_moveType == null)
-				{
-					_moveType = (CEnum<moveMovementType>) CR2WTypeManager.Create("moveMovementType", "moveType", cr2w, this);
-				}
-				return _moveType;
-			}
-			set
-			{
-				if (_moveType == value)
-				{
-					return;
-				}
-				_moveType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _moveType);
+			set => SetProperty(ref _moveType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tolerance")] 
 		public CFloat Tolerance
 		{
-			get
-			{
-				if (_tolerance == null)
-				{
-					_tolerance = (CFloat) CR2WTypeManager.Create("Float", "tolerance", cr2w, this);
-				}
-				return _tolerance;
-			}
-			set
-			{
-				if (_tolerance == value)
-				{
-					return;
-				}
-				_tolerance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tolerance);
+			set => SetProperty(ref _tolerance, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("target")] 
 		public CName Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (CName) CR2WTypeManager.Create("CName", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("keepDistance")] 
 		public CBool KeepDistance
 		{
-			get
-			{
-				if (_keepDistance == null)
-				{
-					_keepDistance = (CBool) CR2WTypeManager.Create("Bool", "keepDistance", cr2w, this);
-				}
-				return _keepDistance;
-			}
-			set
-			{
-				if (_keepDistance == value)
-				{
-					return;
-				}
-				_keepDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _keepDistance);
+			set => SetProperty(ref _keepDistance, value);
 		}
 
 		public AICTreeNodeActionDynamicMoveToDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

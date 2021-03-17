@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("result")] 
 		public CEnum<sharedCommandResult> Result
 		{
-			get
-			{
-				if (_result == null)
-				{
-					_result = (CEnum<sharedCommandResult>) CR2WTypeManager.Create("sharedCommandResult", "result", cr2w, this);
-				}
-				return _result;
-			}
-			set
-			{
-				if (_result == value)
-				{
-					return;
-				}
-				_result = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _result);
+			set => SetProperty(ref _result, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("modifiedFiles")] 
 		public CArray<CString> ModifiedFiles
 		{
-			get
-			{
-				if (_modifiedFiles == null)
-				{
-					_modifiedFiles = (CArray<CString>) CR2WTypeManager.Create("array:String", "modifiedFiles", cr2w, this);
-				}
-				return _modifiedFiles;
-			}
-			set
-			{
-				if (_modifiedFiles == value)
-				{
-					return;
-				}
-				_modifiedFiles = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _modifiedFiles);
+			set => SetProperty(ref _modifiedFiles, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("message")] 
 		public CString Message
 		{
-			get
-			{
-				if (_message == null)
-				{
-					_message = (CString) CR2WTypeManager.Create("String", "message", cr2w, this);
-				}
-				return _message;
-			}
-			set
-			{
-				if (_message == value)
-				{
-					return;
-				}
-				_message = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _message);
+			set => SetProperty(ref _message, value);
 		}
 
 		public sharedResourceCommandOutcome(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

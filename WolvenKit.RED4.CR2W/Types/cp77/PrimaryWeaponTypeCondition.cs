@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weaponType")] 
 		public CEnum<WorkspotWeaponConditionEnum> WeaponType
 		{
-			get
-			{
-				if (_weaponType == null)
-				{
-					_weaponType = (CEnum<WorkspotWeaponConditionEnum>) CR2WTypeManager.Create("WorkspotWeaponConditionEnum", "weaponType", cr2w, this);
-				}
-				return _weaponType;
-			}
-			set
-			{
-				if (_weaponType == value)
-				{
-					return;
-				}
-				_weaponType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponType);
+			set => SetProperty(ref _weaponType, value);
 		}
 
 		public PrimaryWeaponTypeCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

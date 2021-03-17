@@ -39,621 +39,216 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("currentWeapon")] 
 		public gameItemID CurrentWeapon
 		{
-			get
-			{
-				if (_currentWeapon == null)
-				{
-					_currentWeapon = (gameItemID) CR2WTypeManager.Create("gameItemID", "currentWeapon", cr2w, this);
-				}
-				return _currentWeapon;
-			}
-			set
-			{
-				if (_currentWeapon == value)
-				{
-					return;
-				}
-				_currentWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentWeapon);
+			set => SetProperty(ref _currentWeapon, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("wantedWeapon")] 
 		public gameItemID WantedWeapon
 		{
-			get
-			{
-				if (_wantedWeapon == null)
-				{
-					_wantedWeapon = (gameItemID) CR2WTypeManager.Create("gameItemID", "wantedWeapon", cr2w, this);
-				}
-				return _wantedWeapon;
-			}
-			set
-			{
-				if (_wantedWeapon == value)
-				{
-					return;
-				}
-				_wantedWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wantedWeapon);
+			set => SetProperty(ref _wantedWeapon, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("inProgressWeapon")] 
 		public gameItemID InProgressWeapon
 		{
-			get
-			{
-				if (_inProgressWeapon == null)
-				{
-					_inProgressWeapon = (gameItemID) CR2WTypeManager.Create("gameItemID", "inProgressWeapon", cr2w, this);
-				}
-				return _inProgressWeapon;
-			}
-			set
-			{
-				if (_inProgressWeapon == value)
-				{
-					return;
-				}
-				_inProgressWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inProgressWeapon);
+			set => SetProperty(ref _inProgressWeapon, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("logicWantedWeapon")] 
 		public gameItemID LogicWantedWeapon
 		{
-			get
-			{
-				if (_logicWantedWeapon == null)
-				{
-					_logicWantedWeapon = (gameItemID) CR2WTypeManager.Create("gameItemID", "logicWantedWeapon", cr2w, this);
-				}
-				return _logicWantedWeapon;
-			}
-			set
-			{
-				if (_logicWantedWeapon == value)
-				{
-					return;
-				}
-				_logicWantedWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _logicWantedWeapon);
+			set => SetProperty(ref _logicWantedWeapon, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("equippingTransitionTime")] 
 		public CFloat EquippingTransitionTime
 		{
-			get
-			{
-				if (_equippingTransitionTime == null)
-				{
-					_equippingTransitionTime = (CFloat) CR2WTypeManager.Create("Float", "equippingTransitionTime", cr2w, this);
-				}
-				return _equippingTransitionTime;
-			}
-			set
-			{
-				if (_equippingTransitionTime == value)
-				{
-					return;
-				}
-				_equippingTransitionTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equippingTransitionTime);
+			set => SetProperty(ref _equippingTransitionTime, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("remainingShotTime")] 
 		public CFloat RemainingShotTime
 		{
-			get
-			{
-				if (_remainingShotTime == null)
-				{
-					_remainingShotTime = (CFloat) CR2WTypeManager.Create("Float", "remainingShotTime", cr2w, this);
-				}
-				return _remainingShotTime;
-			}
-			set
-			{
-				if (_remainingShotTime == value)
-				{
-					return;
-				}
-				_remainingShotTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _remainingShotTime);
+			set => SetProperty(ref _remainingShotTime, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("timeTillNextShootSeconds")] 
 		public CFloat TimeTillNextShootSeconds
 		{
-			get
-			{
-				if (_timeTillNextShootSeconds == null)
-				{
-					_timeTillNextShootSeconds = (CFloat) CR2WTypeManager.Create("Float", "timeTillNextShootSeconds", cr2w, this);
-				}
-				return _timeTillNextShootSeconds;
-			}
-			set
-			{
-				if (_timeTillNextShootSeconds == value)
-				{
-					return;
-				}
-				_timeTillNextShootSeconds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeTillNextShootSeconds);
+			set => SetProperty(ref _timeTillNextShootSeconds, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isAimingDownSight")] 
 		public CBool IsAimingDownSight
 		{
-			get
-			{
-				if (_isAimingDownSight == null)
-				{
-					_isAimingDownSight = (CBool) CR2WTypeManager.Create("Bool", "isAimingDownSight", cr2w, this);
-				}
-				return _isAimingDownSight;
-			}
-			set
-			{
-				if (_isAimingDownSight == value)
-				{
-					return;
-				}
-				_isAimingDownSight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isAimingDownSight);
+			set => SetProperty(ref _isAimingDownSight, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("currentWeaponAmmo")] 
 		public CInt32 CurrentWeaponAmmo
 		{
-			get
-			{
-				if (_currentWeaponAmmo == null)
-				{
-					_currentWeaponAmmo = (CInt32) CR2WTypeManager.Create("Int32", "currentWeaponAmmo", cr2w, this);
-				}
-				return _currentWeaponAmmo;
-			}
-			set
-			{
-				if (_currentWeaponAmmo == value)
-				{
-					return;
-				}
-				_currentWeaponAmmo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentWeaponAmmo);
+			set => SetProperty(ref _currentWeaponAmmo, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("currentWeaponAmmoCapacity")] 
 		public CInt32 CurrentWeaponAmmoCapacity
 		{
-			get
-			{
-				if (_currentWeaponAmmoCapacity == null)
-				{
-					_currentWeaponAmmoCapacity = (CInt32) CR2WTypeManager.Create("Int32", "currentWeaponAmmoCapacity", cr2w, this);
-				}
-				return _currentWeaponAmmoCapacity;
-			}
-			set
-			{
-				if (_currentWeaponAmmoCapacity == value)
-				{
-					return;
-				}
-				_currentWeaponAmmoCapacity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentWeaponAmmoCapacity);
+			set => SetProperty(ref _currentWeaponAmmoCapacity, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("isShooting")] 
 		public CBool IsShooting
 		{
-			get
-			{
-				if (_isShooting == null)
-				{
-					_isShooting = (CBool) CR2WTypeManager.Create("Bool", "isShooting", cr2w, this);
-				}
-				return _isShooting;
-			}
-			set
-			{
-				if (_isShooting == value)
-				{
-					return;
-				}
-				_isShooting = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isShooting);
+			set => SetProperty(ref _isShooting, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("weaponZoomLevel")] 
 		public CFloat WeaponZoomLevel
 		{
-			get
-			{
-				if (_weaponZoomLevel == null)
-				{
-					_weaponZoomLevel = (CFloat) CR2WTypeManager.Create("Float", "weaponZoomLevel", cr2w, this);
-				}
-				return _weaponZoomLevel;
-			}
-			set
-			{
-				if (_weaponZoomLevel == value)
-				{
-					return;
-				}
-				_weaponZoomLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponZoomLevel);
+			set => SetProperty(ref _weaponZoomLevel, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("weaponAimFOV")] 
 		public CFloat WeaponAimFOV
 		{
-			get
-			{
-				if (_weaponAimFOV == null)
-				{
-					_weaponAimFOV = (CFloat) CR2WTypeManager.Create("Float", "weaponAimFOV", cr2w, this);
-				}
-				return _weaponAimFOV;
-			}
-			set
-			{
-				if (_weaponAimFOV == value)
-				{
-					return;
-				}
-				_weaponAimFOV = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponAimFOV);
+			set => SetProperty(ref _weaponAimFOV, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("remainingReloadTime")] 
 		public CFloat RemainingReloadTime
 		{
-			get
-			{
-				if (_remainingReloadTime == null)
-				{
-					_remainingReloadTime = (CFloat) CR2WTypeManager.Create("Float", "remainingReloadTime", cr2w, this);
-				}
-				return _remainingReloadTime;
-			}
-			set
-			{
-				if (_remainingReloadTime == value)
-				{
-					return;
-				}
-				_remainingReloadTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _remainingReloadTime);
+			set => SetProperty(ref _remainingReloadTime, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("remainingReloadCooldownTime")] 
 		public CFloat RemainingReloadCooldownTime
 		{
-			get
-			{
-				if (_remainingReloadCooldownTime == null)
-				{
-					_remainingReloadCooldownTime = (CFloat) CR2WTypeManager.Create("Float", "remainingReloadCooldownTime", cr2w, this);
-				}
-				return _remainingReloadCooldownTime;
-			}
-			set
-			{
-				if (_remainingReloadCooldownTime == value)
-				{
-					return;
-				}
-				_remainingReloadCooldownTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _remainingReloadCooldownTime);
+			set => SetProperty(ref _remainingReloadCooldownTime, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("shotsMade")] 
 		public CUInt32 ShotsMade
 		{
-			get
-			{
-				if (_shotsMade == null)
-				{
-					_shotsMade = (CUInt32) CR2WTypeManager.Create("Uint32", "shotsMade", cr2w, this);
-				}
-				return _shotsMade;
-			}
-			set
-			{
-				if (_shotsMade == value)
-				{
-					return;
-				}
-				_shotsMade = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shotsMade);
+			set => SetProperty(ref _shotsMade, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("isMeleeAttackInProgress")] 
 		public CBool IsMeleeAttackInProgress
 		{
-			get
-			{
-				if (_isMeleeAttackInProgress == null)
-				{
-					_isMeleeAttackInProgress = (CBool) CR2WTypeManager.Create("Bool", "isMeleeAttackInProgress", cr2w, this);
-				}
-				return _isMeleeAttackInProgress;
-			}
-			set
-			{
-				if (_isMeleeAttackInProgress == value)
-				{
-					return;
-				}
-				_isMeleeAttackInProgress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isMeleeAttackInProgress);
+			set => SetProperty(ref _isMeleeAttackInProgress, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("meleeAttacksMade")] 
 		public CUInt32 MeleeAttacksMade
 		{
-			get
-			{
-				if (_meleeAttacksMade == null)
-				{
-					_meleeAttacksMade = (CUInt32) CR2WTypeManager.Create("Uint32", "meleeAttacksMade", cr2w, this);
-				}
-				return _meleeAttacksMade;
-			}
-			set
-			{
-				if (_meleeAttacksMade == value)
-				{
-					return;
-				}
-				_meleeAttacksMade = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meleeAttacksMade);
+			set => SetProperty(ref _meleeAttacksMade, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("meleeAttackIndex")] 
 		public CInt32 MeleeAttackIndex
 		{
-			get
-			{
-				if (_meleeAttackIndex == null)
-				{
-					_meleeAttackIndex = (CInt32) CR2WTypeManager.Create("Int32", "meleeAttackIndex", cr2w, this);
-				}
-				return _meleeAttackIndex;
-			}
-			set
-			{
-				if (_meleeAttackIndex == value)
-				{
-					return;
-				}
-				_meleeAttackIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meleeAttackIndex);
+			set => SetProperty(ref _meleeAttackIndex, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("remainingMeleeAttackDuration")] 
 		public CFloat RemainingMeleeAttackDuration
 		{
-			get
-			{
-				if (_remainingMeleeAttackDuration == null)
-				{
-					_remainingMeleeAttackDuration = (CFloat) CR2WTypeManager.Create("Float", "remainingMeleeAttackDuration", cr2w, this);
-				}
-				return _remainingMeleeAttackDuration;
-			}
-			set
-			{
-				if (_remainingMeleeAttackDuration == value)
-				{
-					return;
-				}
-				_remainingMeleeAttackDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _remainingMeleeAttackDuration);
+			set => SetProperty(ref _remainingMeleeAttackDuration, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("selectedConsumable")] 
 		public gameItemID SelectedConsumable
 		{
-			get
-			{
-				if (_selectedConsumable == null)
-				{
-					_selectedConsumable = (gameItemID) CR2WTypeManager.Create("gameItemID", "selectedConsumable", cr2w, this);
-				}
-				return _selectedConsumable;
-			}
-			set
-			{
-				if (_selectedConsumable == value)
-				{
-					return;
-				}
-				_selectedConsumable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectedConsumable);
+			set => SetProperty(ref _selectedConsumable, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("consumableInUse")] 
 		public CBool ConsumableInUse
 		{
-			get
-			{
-				if (_consumableInUse == null)
-				{
-					_consumableInUse = (CBool) CR2WTypeManager.Create("Bool", "consumableInUse", cr2w, this);
-				}
-				return _consumableInUse;
-			}
-			set
-			{
-				if (_consumableInUse == value)
-				{
-					return;
-				}
-				_consumableInUse = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _consumableInUse);
+			set => SetProperty(ref _consumableInUse, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("consumableEffectApplied")] 
 		public CBool ConsumableEffectApplied
 		{
-			get
-			{
-				if (_consumableEffectApplied == null)
-				{
-					_consumableEffectApplied = (CBool) CR2WTypeManager.Create("Bool", "consumableEffectApplied", cr2w, this);
-				}
-				return _consumableEffectApplied;
-			}
-			set
-			{
-				if (_consumableEffectApplied == value)
-				{
-					return;
-				}
-				_consumableEffectApplied = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _consumableEffectApplied);
+			set => SetProperty(ref _consumableEffectApplied, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("consumableUseTimeStartup")] 
 		public CFloat ConsumableUseTimeStartup
 		{
-			get
-			{
-				if (_consumableUseTimeStartup == null)
-				{
-					_consumableUseTimeStartup = (CFloat) CR2WTypeManager.Create("Float", "consumableUseTimeStartup", cr2w, this);
-				}
-				return _consumableUseTimeStartup;
-			}
-			set
-			{
-				if (_consumableUseTimeStartup == value)
-				{
-					return;
-				}
-				_consumableUseTimeStartup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _consumableUseTimeStartup);
+			set => SetProperty(ref _consumableUseTimeStartup, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("consumableUseTimeRecovery")] 
 		public CFloat ConsumableUseTimeRecovery
 		{
-			get
-			{
-				if (_consumableUseTimeRecovery == null)
-				{
-					_consumableUseTimeRecovery = (CFloat) CR2WTypeManager.Create("Float", "consumableUseTimeRecovery", cr2w, this);
-				}
-				return _consumableUseTimeRecovery;
-			}
-			set
-			{
-				if (_consumableUseTimeRecovery == value)
-				{
-					return;
-				}
-				_consumableUseTimeRecovery = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _consumableUseTimeRecovery);
+			set => SetProperty(ref _consumableUseTimeRecovery, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("remainingQuickMeleeTime")] 
 		public CFloat RemainingQuickMeleeTime
 		{
-			get
-			{
-				if (_remainingQuickMeleeTime == null)
-				{
-					_remainingQuickMeleeTime = (CFloat) CR2WTypeManager.Create("Float", "remainingQuickMeleeTime", cr2w, this);
-				}
-				return _remainingQuickMeleeTime;
-			}
-			set
-			{
-				if (_remainingQuickMeleeTime == value)
-				{
-					return;
-				}
-				_remainingQuickMeleeTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _remainingQuickMeleeTime);
+			set => SetProperty(ref _remainingQuickMeleeTime, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("remainingQuickMeleeCooldownTime")] 
 		public CFloat RemainingQuickMeleeCooldownTime
 		{
-			get
-			{
-				if (_remainingQuickMeleeCooldownTime == null)
-				{
-					_remainingQuickMeleeCooldownTime = (CFloat) CR2WTypeManager.Create("Float", "remainingQuickMeleeCooldownTime", cr2w, this);
-				}
-				return _remainingQuickMeleeCooldownTime;
-			}
-			set
-			{
-				if (_remainingQuickMeleeCooldownTime == value)
-				{
-					return;
-				}
-				_remainingQuickMeleeCooldownTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _remainingQuickMeleeCooldownTime);
+			set => SetProperty(ref _remainingQuickMeleeCooldownTime, value);
 		}
 
 		public gameMuppetUpperBodyState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

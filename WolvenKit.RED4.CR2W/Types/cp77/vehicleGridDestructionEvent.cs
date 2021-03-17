@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("state", 16)] 
 		public CArrayFixedSize<CFloat> State
 		{
-			get
-			{
-				if (_state == null)
-				{
-					_state = (CArrayFixedSize<CFloat>) CR2WTypeManager.Create("[16]Float", "state", cr2w, this);
-				}
-				return _state;
-			}
-			set
-			{
-				if (_state == value)
-				{
-					return;
-				}
-				_state = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rawChange", 16)] 
 		public CArrayFixedSize<CFloat> RawChange
 		{
-			get
-			{
-				if (_rawChange == null)
-				{
-					_rawChange = (CArrayFixedSize<CFloat>) CR2WTypeManager.Create("[16]Float", "rawChange", cr2w, this);
-				}
-				return _rawChange;
-			}
-			set
-			{
-				if (_rawChange == value)
-				{
-					return;
-				}
-				_rawChange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rawChange);
+			set => SetProperty(ref _rawChange, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("desiredChange", 16)] 
 		public CArrayFixedSize<CFloat> DesiredChange
 		{
-			get
-			{
-				if (_desiredChange == null)
-				{
-					_desiredChange = (CArrayFixedSize<CFloat>) CR2WTypeManager.Create("[16]Float", "desiredChange", cr2w, this);
-				}
-				return _desiredChange;
-			}
-			set
-			{
-				if (_desiredChange == value)
-				{
-					return;
-				}
-				_desiredChange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _desiredChange);
+			set => SetProperty(ref _desiredChange, value);
 		}
 
 		public vehicleGridDestructionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

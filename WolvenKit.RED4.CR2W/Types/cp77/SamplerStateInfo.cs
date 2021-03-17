@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("filteringMin")] 
 		public CEnum<ETextureFilteringMin> FilteringMin
 		{
-			get
-			{
-				if (_filteringMin == null)
-				{
-					_filteringMin = (CEnum<ETextureFilteringMin>) CR2WTypeManager.Create("ETextureFilteringMin", "filteringMin", cr2w, this);
-				}
-				return _filteringMin;
-			}
-			set
-			{
-				if (_filteringMin == value)
-				{
-					return;
-				}
-				_filteringMin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filteringMin);
+			set => SetProperty(ref _filteringMin, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("filteringMag")] 
 		public CEnum<ETextureFilteringMag> FilteringMag
 		{
-			get
-			{
-				if (_filteringMag == null)
-				{
-					_filteringMag = (CEnum<ETextureFilteringMag>) CR2WTypeManager.Create("ETextureFilteringMag", "filteringMag", cr2w, this);
-				}
-				return _filteringMag;
-			}
-			set
-			{
-				if (_filteringMag == value)
-				{
-					return;
-				}
-				_filteringMag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filteringMag);
+			set => SetProperty(ref _filteringMag, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("filteringMip")] 
 		public CEnum<ETextureFilteringMip> FilteringMip
 		{
-			get
-			{
-				if (_filteringMip == null)
-				{
-					_filteringMip = (CEnum<ETextureFilteringMip>) CR2WTypeManager.Create("ETextureFilteringMip", "filteringMip", cr2w, this);
-				}
-				return _filteringMip;
-			}
-			set
-			{
-				if (_filteringMip == value)
-				{
-					return;
-				}
-				_filteringMip = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filteringMip);
+			set => SetProperty(ref _filteringMip, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("addressU")] 
 		public CEnum<ETextureAddressing> AddressU
 		{
-			get
-			{
-				if (_addressU == null)
-				{
-					_addressU = (CEnum<ETextureAddressing>) CR2WTypeManager.Create("ETextureAddressing", "addressU", cr2w, this);
-				}
-				return _addressU;
-			}
-			set
-			{
-				if (_addressU == value)
-				{
-					return;
-				}
-				_addressU = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addressU);
+			set => SetProperty(ref _addressU, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("addressV")] 
 		public CEnum<ETextureAddressing> AddressV
 		{
-			get
-			{
-				if (_addressV == null)
-				{
-					_addressV = (CEnum<ETextureAddressing>) CR2WTypeManager.Create("ETextureAddressing", "addressV", cr2w, this);
-				}
-				return _addressV;
-			}
-			set
-			{
-				if (_addressV == value)
-				{
-					return;
-				}
-				_addressV = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addressV);
+			set => SetProperty(ref _addressV, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("addressW")] 
 		public CEnum<ETextureAddressing> AddressW
 		{
-			get
-			{
-				if (_addressW == null)
-				{
-					_addressW = (CEnum<ETextureAddressing>) CR2WTypeManager.Create("ETextureAddressing", "addressW", cr2w, this);
-				}
-				return _addressW;
-			}
-			set
-			{
-				if (_addressW == value)
-				{
-					return;
-				}
-				_addressW = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addressW);
+			set => SetProperty(ref _addressW, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("comparisonFunc")] 
 		public CEnum<ETextureComparisonFunction> ComparisonFunc
 		{
-			get
-			{
-				if (_comparisonFunc == null)
-				{
-					_comparisonFunc = (CEnum<ETextureComparisonFunction>) CR2WTypeManager.Create("ETextureComparisonFunction", "comparisonFunc", cr2w, this);
-				}
-				return _comparisonFunc;
-			}
-			set
-			{
-				if (_comparisonFunc == value)
-				{
-					return;
-				}
-				_comparisonFunc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comparisonFunc);
+			set => SetProperty(ref _comparisonFunc, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("register")] 
 		public CUInt8 Register
 		{
-			get
-			{
-				if (_register == null)
-				{
-					_register = (CUInt8) CR2WTypeManager.Create("Uint8", "register", cr2w, this);
-				}
-				return _register;
-			}
-			set
-			{
-				if (_register == value)
-				{
-					return;
-				}
-				_register = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _register);
+			set => SetProperty(ref _register, value);
 		}
 
 		public SamplerStateInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

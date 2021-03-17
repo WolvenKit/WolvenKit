@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("eventTextWidgetPath")] 
 		public CName EventTextWidgetPath
 		{
-			get
-			{
-				if (_eventTextWidgetPath == null)
-				{
-					_eventTextWidgetPath = (CName) CR2WTypeManager.Create("CName", "eventTextWidgetPath", cr2w, this);
-				}
-				return _eventTextWidgetPath;
-			}
-			set
-			{
-				if (_eventTextWidgetPath == value)
-				{
-					return;
-				}
-				_eventTextWidgetPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventTextWidgetPath);
+			set => SetProperty(ref _eventTextWidgetPath, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("eventVerticalPanelPath")] 
 		public CName EventVerticalPanelPath
 		{
-			get
-			{
-				if (_eventVerticalPanelPath == null)
-				{
-					_eventVerticalPanelPath = (CName) CR2WTypeManager.Create("CName", "eventVerticalPanelPath", cr2w, this);
-				}
-				return _eventVerticalPanelPath;
-			}
-			set
-			{
-				if (_eventVerticalPanelPath == value)
-				{
-					return;
-				}
-				_eventVerticalPanelPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventVerticalPanelPath);
+			set => SetProperty(ref _eventVerticalPanelPath, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("callbackTextWidgetPath")] 
 		public CName CallbackTextWidgetPath
 		{
-			get
-			{
-				if (_callbackTextWidgetPath == null)
-				{
-					_callbackTextWidgetPath = (CName) CR2WTypeManager.Create("CName", "callbackTextWidgetPath", cr2w, this);
-				}
-				return _callbackTextWidgetPath;
-			}
-			set
-			{
-				if (_callbackTextWidgetPath == value)
-				{
-					return;
-				}
-				_callbackTextWidgetPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callbackTextWidgetPath);
+			set => SetProperty(ref _callbackTextWidgetPath, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("callbackVerticalPanelPath")] 
 		public CName CallbackVerticalPanelPath
 		{
-			get
-			{
-				if (_callbackVerticalPanelPath == null)
-				{
-					_callbackVerticalPanelPath = (CName) CR2WTypeManager.Create("CName", "callbackVerticalPanelPath", cr2w, this);
-				}
-				return _callbackVerticalPanelPath;
-			}
-			set
-			{
-				if (_callbackVerticalPanelPath == value)
-				{
-					return;
-				}
-				_callbackVerticalPanelPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callbackVerticalPanelPath);
+			set => SetProperty(ref _callbackVerticalPanelPath, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("customCallbackName")] 
 		public CName CustomCallbackName
 		{
-			get
-			{
-				if (_customCallbackName == null)
-				{
-					_customCallbackName = (CName) CR2WTypeManager.Create("CName", "customCallbackName", cr2w, this);
-				}
-				return _customCallbackName;
-			}
-			set
-			{
-				if (_customCallbackName == value)
-				{
-					return;
-				}
-				_customCallbackName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customCallbackName);
+			set => SetProperty(ref _customCallbackName, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("textWidget")] 
 		public wCHandle<inkTextWidget> TextWidget
 		{
-			get
-			{
-				if (_textWidget == null)
-				{
-					_textWidget = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "textWidget", cr2w, this);
-				}
-				return _textWidget;
-			}
-			set
-			{
-				if (_textWidget == value)
-				{
-					return;
-				}
-				_textWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textWidget);
+			set => SetProperty(ref _textWidget, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("verticalPanelWidget")] 
 		public wCHandle<inkVerticalPanelWidget> VerticalPanelWidget
 		{
-			get
-			{
-				if (_verticalPanelWidget == null)
-				{
-					_verticalPanelWidget = (wCHandle<inkVerticalPanelWidget>) CR2WTypeManager.Create("whandle:inkVerticalPanelWidget", "verticalPanelWidget", cr2w, this);
-				}
-				return _verticalPanelWidget;
-			}
-			set
-			{
-				if (_verticalPanelWidget == value)
-				{
-					return;
-				}
-				_verticalPanelWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _verticalPanelWidget);
+			set => SetProperty(ref _verticalPanelWidget, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get
-			{
-				if (_isEnabled == null)
-				{
-					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
-				}
-				return _isEnabled;
-			}
-			set
-			{
-				if (_isEnabled == value)
-				{
-					return;
-				}
-				_isEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
 		}
 
 		public sampleUIEventTestLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

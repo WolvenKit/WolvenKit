@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("color")] 
 		public CColor Color
 		{
-			get
-			{
-				if (_color == null)
-				{
-					_color = (CColor) CR2WTypeManager.Create("Color", "color", cr2w, this);
-				}
-				return _color;
-			}
-			set
-			{
-				if (_color == value)
-				{
-					return;
-				}
-				_color = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _color);
+			set => SetProperty(ref _color, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("shape")] 
 		public CHandle<GeometryShape> Shape
 		{
-			get
-			{
-				if (_shape == null)
-				{
-					_shape = (CHandle<GeometryShape>) CR2WTypeManager.Create("handle:GeometryShape", "shape", cr2w, this);
-				}
-				return _shape;
-			}
-			set
-			{
-				if (_shape == value)
-				{
-					return;
-				}
-				_shape = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shape);
+			set => SetProperty(ref _shape, value);
 		}
 
 		public worldGeometryShapeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

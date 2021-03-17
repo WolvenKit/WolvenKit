@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("wasOpened")] 
 		public CBool WasOpened
 		{
-			get
-			{
-				if (_wasOpened == null)
-				{
-					_wasOpened = (CBool) CR2WTypeManager.Create("Bool", "wasOpened", cr2w, this);
-				}
-				return _wasOpened;
-			}
-			set
-			{
-				if (_wasOpened == value)
-				{
-					return;
-				}
-				_wasOpened = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasOpened);
+			set => SetProperty(ref _wasOpened, value);
 		}
 
 		[Ordinal(53)] 
 		[RED("shardMesh")] 
 		public CHandle<entMeshComponent> ShardMesh
 		{
-			get
-			{
-				if (_shardMesh == null)
-				{
-					_shardMesh = (CHandle<entMeshComponent>) CR2WTypeManager.Create("handle:entMeshComponent", "shardMesh", cr2w, this);
-				}
-				return _shardMesh;
-			}
-			set
-			{
-				if (_shardMesh == value)
-				{
-					return;
-				}
-				_shardMesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shardMesh);
+			set => SetProperty(ref _shardMesh, value);
 		}
 
 		public ShardCaseContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

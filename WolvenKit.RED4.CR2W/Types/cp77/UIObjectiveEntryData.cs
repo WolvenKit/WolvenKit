@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CString Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CString) CR2WTypeManager.Create("String", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("counter")] 
 		public CString Counter
 		{
-			get
-			{
-				if (_counter == null)
-				{
-					_counter = (CString) CR2WTypeManager.Create("String", "counter", cr2w, this);
-				}
-				return _counter;
-			}
-			set
-			{
-				if (_counter == value)
-				{
-					return;
-				}
-				_counter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _counter);
+			set => SetProperty(ref _counter, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CEnum<UIObjectiveEntryType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<UIObjectiveEntryType>) CR2WTypeManager.Create("UIObjectiveEntryType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("state")] 
 		public CEnum<gameJournalEntryState> State
 		{
-			get
-			{
-				if (_state == null)
-				{
-					_state = (CEnum<gameJournalEntryState>) CR2WTypeManager.Create("gameJournalEntryState", "state", cr2w, this);
-				}
-				return _state;
-			}
-			set
-			{
-				if (_state == value)
-				{
-					return;
-				}
-				_state = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isTracked")] 
 		public CBool IsTracked
 		{
-			get
-			{
-				if (_isTracked == null)
-				{
-					_isTracked = (CBool) CR2WTypeManager.Create("Bool", "isTracked", cr2w, this);
-				}
-				return _isTracked;
-			}
-			set
-			{
-				if (_isTracked == value)
-				{
-					return;
-				}
-				_isTracked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isTracked);
+			set => SetProperty(ref _isTracked, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isOptional")] 
 		public CBool IsOptional
 		{
-			get
-			{
-				if (_isOptional == null)
-				{
-					_isOptional = (CBool) CR2WTypeManager.Create("Bool", "isOptional", cr2w, this);
-				}
-				return _isOptional;
-			}
-			set
-			{
-				if (_isOptional == value)
-				{
-					return;
-				}
-				_isOptional = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isOptional);
+			set => SetProperty(ref _isOptional, value);
 		}
 
 		public UIObjectiveEntryData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

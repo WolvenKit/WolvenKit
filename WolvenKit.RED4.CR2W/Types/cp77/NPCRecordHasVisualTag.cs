@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("visualTag")] 
 		public CName VisualTag
 		{
-			get
-			{
-				if (_visualTag == null)
-				{
-					_visualTag = (CName) CR2WTypeManager.Create("CName", "visualTag", cr2w, this);
-				}
-				return _visualTag;
-			}
-			set
-			{
-				if (_visualTag == value)
-				{
-					return;
-				}
-				_visualTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualTag);
+			set => SetProperty(ref _visualTag, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hasTag")] 
 		public CBool HasTag
 		{
-			get
-			{
-				if (_hasTag == null)
-				{
-					_hasTag = (CBool) CR2WTypeManager.Create("Bool", "hasTag", cr2w, this);
-				}
-				return _hasTag;
-			}
-			set
-			{
-				if (_hasTag == value)
-				{
-					return;
-				}
-				_hasTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasTag);
+			set => SetProperty(ref _hasTag, value);
 		}
 
 		public NPCRecordHasVisualTag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

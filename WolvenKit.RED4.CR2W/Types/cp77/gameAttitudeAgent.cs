@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("baseAttitudeGroup")] 
 		public CName BaseAttitudeGroup
 		{
-			get
-			{
-				if (_baseAttitudeGroup == null)
-				{
-					_baseAttitudeGroup = (CName) CR2WTypeManager.Create("CName", "baseAttitudeGroup", cr2w, this);
-				}
-				return _baseAttitudeGroup;
-			}
-			set
-			{
-				if (_baseAttitudeGroup == value)
-				{
-					return;
-				}
-				_baseAttitudeGroup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _baseAttitudeGroup);
+			set => SetProperty(ref _baseAttitudeGroup, value);
 		}
 
 		public gameAttitudeAgent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

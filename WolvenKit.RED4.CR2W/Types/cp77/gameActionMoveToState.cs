@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetPos")] 
 		public Vector3 TargetPos
 		{
-			get
-			{
-				if (_targetPos == null)
-				{
-					_targetPos = (Vector3) CR2WTypeManager.Create("Vector3", "targetPos", cr2w, this);
-				}
-				return _targetPos;
-			}
-			set
-			{
-				if (_targetPos == value)
-				{
-					return;
-				}
-				_targetPos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetPos);
+			set => SetProperty(ref _targetPos, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("toleranceRadius")] 
 		public CFloat ToleranceRadius
 		{
-			get
-			{
-				if (_toleranceRadius == null)
-				{
-					_toleranceRadius = (CFloat) CR2WTypeManager.Create("Float", "toleranceRadius", cr2w, this);
-				}
-				return _toleranceRadius;
-			}
-			set
-			{
-				if (_toleranceRadius == value)
-				{
-					return;
-				}
-				_toleranceRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toleranceRadius);
+			set => SetProperty(ref _toleranceRadius, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("rotateEntity")] 
 		public CBool RotateEntity
 		{
-			get
-			{
-				if (_rotateEntity == null)
-				{
-					_rotateEntity = (CBool) CR2WTypeManager.Create("Bool", "rotateEntity", cr2w, this);
-				}
-				return _rotateEntity;
-			}
-			set
-			{
-				if (_rotateEntity == value)
-				{
-					return;
-				}
-				_rotateEntity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotateEntity);
+			set => SetProperty(ref _rotateEntity, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("moveStyle")] 
 		public CUInt32 MoveStyle
 		{
-			get
-			{
-				if (_moveStyle == null)
-				{
-					_moveStyle = (CUInt32) CR2WTypeManager.Create("Uint32", "moveStyle", cr2w, this);
-				}
-				return _moveStyle;
-			}
-			set
-			{
-				if (_moveStyle == value)
-				{
-					return;
-				}
-				_moveStyle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _moveStyle);
+			set => SetProperty(ref _moveStyle, value);
 		}
 
 		public gameActionMoveToState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

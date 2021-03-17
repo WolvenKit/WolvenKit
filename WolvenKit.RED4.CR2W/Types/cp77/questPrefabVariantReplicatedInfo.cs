@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("variantNameKey")] 
 		public CName VariantNameKey
 		{
-			get
-			{
-				if (_variantNameKey == null)
-				{
-					_variantNameKey = (CName) CR2WTypeManager.Create("CName", "variantNameKey", cr2w, this);
-				}
-				return _variantNameKey;
-			}
-			set
-			{
-				if (_variantNameKey == value)
-				{
-					return;
-				}
-				_variantNameKey = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _variantNameKey);
+			set => SetProperty(ref _variantNameKey, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("show")] 
 		public CBool Show
 		{
-			get
-			{
-				if (_show == null)
-				{
-					_show = (CBool) CR2WTypeManager.Create("Bool", "show", cr2w, this);
-				}
-				return _show;
-			}
-			set
-			{
-				if (_show == value)
-				{
-					return;
-				}
-				_show = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _show);
+			set => SetProperty(ref _show, value);
 		}
 
 		public questPrefabVariantReplicatedInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

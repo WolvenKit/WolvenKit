@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cachedStatus")] 
 		public CEnum<EPersonalLinkConnectionStatus> CachedStatus
 		{
-			get
-			{
-				if (_cachedStatus == null)
-				{
-					_cachedStatus = (CEnum<EPersonalLinkConnectionStatus>) CR2WTypeManager.Create("EPersonalLinkConnectionStatus", "cachedStatus", cr2w, this);
-				}
-				return _cachedStatus;
-			}
-			set
-			{
-				if (_cachedStatus == value)
-				{
-					return;
-				}
-				_cachedStatus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cachedStatus);
+			set => SetProperty(ref _cachedStatus, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("shouldSkipMiniGame")] 
 		public CBool ShouldSkipMiniGame
 		{
-			get
-			{
-				if (_shouldSkipMiniGame == null)
-				{
-					_shouldSkipMiniGame = (CBool) CR2WTypeManager.Create("Bool", "shouldSkipMiniGame", cr2w, this);
-				}
-				return _shouldSkipMiniGame;
-			}
-			set
-			{
-				if (_shouldSkipMiniGame == value)
-				{
-					return;
-				}
-				_shouldSkipMiniGame = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldSkipMiniGame);
+			set => SetProperty(ref _shouldSkipMiniGame, value);
 		}
 
 		public TogglePersonalLink(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

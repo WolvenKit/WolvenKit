@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("shouldHighlight")] 
 		public CBool ShouldHighlight
 		{
-			get
-			{
-				if (_shouldHighlight == null)
-				{
-					_shouldHighlight = (CBool) CR2WTypeManager.Create("Bool", "shouldHighlight", cr2w, this);
-				}
-				return _shouldHighlight;
-			}
-			set
-			{
-				if (_shouldHighlight == value)
-				{
-					return;
-				}
-				_shouldHighlight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldHighlight);
+			set => SetProperty(ref _shouldHighlight, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isTriggeredByMasterDevice")] 
 		public CBool IsTriggeredByMasterDevice
 		{
-			get
-			{
-				if (_isTriggeredByMasterDevice == null)
-				{
-					_isTriggeredByMasterDevice = (CBool) CR2WTypeManager.Create("Bool", "isTriggeredByMasterDevice", cr2w, this);
-				}
-				return _isTriggeredByMasterDevice;
-			}
-			set
-			{
-				if (_isTriggeredByMasterDevice == value)
-				{
-					return;
-				}
-				_isTriggeredByMasterDevice = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isTriggeredByMasterDevice);
+			set => SetProperty(ref _isTriggeredByMasterDevice, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("highlightTargets")] 
 		public CArray<NodeRef> HighlightTargets
 		{
-			get
-			{
-				if (_highlightTargets == null)
-				{
-					_highlightTargets = (CArray<NodeRef>) CR2WTypeManager.Create("array:NodeRef", "highlightTargets", cr2w, this);
-				}
-				return _highlightTargets;
-			}
-			set
-			{
-				if (_highlightTargets == value)
-				{
-					return;
-				}
-				_highlightTargets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highlightTargets);
+			set => SetProperty(ref _highlightTargets, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("requestingDevice")] 
 		public entEntityID RequestingDevice
 		{
-			get
-			{
-				if (_requestingDevice == null)
-				{
-					_requestingDevice = (entEntityID) CR2WTypeManager.Create("entEntityID", "requestingDevice", cr2w, this);
-				}
-				return _requestingDevice;
-			}
-			set
-			{
-				if (_requestingDevice == value)
-				{
-					return;
-				}
-				_requestingDevice = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requestingDevice);
+			set => SetProperty(ref _requestingDevice, value);
 		}
 
 		public HighlightConnectionsRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

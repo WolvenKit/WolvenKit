@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("flag")] 
 		public CEnum<hitFlag> Flag
 		{
-			get
-			{
-				if (_flag == null)
-				{
-					_flag = (CEnum<hitFlag>) CR2WTypeManager.Create("hitFlag", "flag", cr2w, this);
-				}
-				return _flag;
-			}
-			set
-			{
-				if (_flag == value)
-				{
-					return;
-				}
-				_flag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flag);
+			set => SetProperty(ref _flag, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("source")] 
 		public CName Source
 		{
-			get
-			{
-				if (_source == null)
-				{
-					_source = (CName) CR2WTypeManager.Create("CName", "source", cr2w, this);
-				}
-				return _source;
-			}
-			set
-			{
-				if (_source == value)
-				{
-					return;
-				}
-				_source = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
 		}
 
 		public SHitFlag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

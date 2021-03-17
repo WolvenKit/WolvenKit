@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ifCondition")] 
 		public LibTreeDefBool IfCondition
 		{
-			get
-			{
-				if (_ifCondition == null)
-				{
-					_ifCondition = (LibTreeDefBool) CR2WTypeManager.Create("LibTreeDefBool", "ifCondition", cr2w, this);
-				}
-				return _ifCondition;
-			}
-			set
-			{
-				if (_ifCondition == value)
-				{
-					return;
-				}
-				_ifCondition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ifCondition);
+			set => SetProperty(ref _ifCondition, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ifBranch")] 
 		public CHandle<LibTreeINodeDefinition> IfBranch
 		{
-			get
-			{
-				if (_ifBranch == null)
-				{
-					_ifBranch = (CHandle<LibTreeINodeDefinition>) CR2WTypeManager.Create("handle:LibTreeINodeDefinition", "ifBranch", cr2w, this);
-				}
-				return _ifBranch;
-			}
-			set
-			{
-				if (_ifBranch == value)
-				{
-					return;
-				}
-				_ifBranch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ifBranch);
+			set => SetProperty(ref _ifBranch, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("elseBranch")] 
 		public CHandle<LibTreeINodeDefinition> ElseBranch
 		{
-			get
-			{
-				if (_elseBranch == null)
-				{
-					_elseBranch = (CHandle<LibTreeINodeDefinition>) CR2WTypeManager.Create("handle:LibTreeINodeDefinition", "elseBranch", cr2w, this);
-				}
-				return _elseBranch;
-			}
-			set
-			{
-				if (_elseBranch == value)
-				{
-					return;
-				}
-				_elseBranch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _elseBranch);
+			set => SetProperty(ref _elseBranch, value);
 		}
 
 		public LibTreeCMetanodeIfDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

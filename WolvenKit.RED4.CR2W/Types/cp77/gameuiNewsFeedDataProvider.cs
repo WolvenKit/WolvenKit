@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("newsTitleTweak")] 
 		public TweakDBID NewsTitleTweak
 		{
-			get
-			{
-				if (_newsTitleTweak == null)
-				{
-					_newsTitleTweak = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "newsTitleTweak", cr2w, this);
-				}
-				return _newsTitleTweak;
-			}
-			set
-			{
-				if (_newsTitleTweak == value)
-				{
-					return;
-				}
-				_newsTitleTweak = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newsTitleTweak);
+			set => SetProperty(ref _newsTitleTweak, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("randomNewsFeedPack")] 
 		public TweakDBID RandomNewsFeedPack
 		{
-			get
-			{
-				if (_randomNewsFeedPack == null)
-				{
-					_randomNewsFeedPack = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "randomNewsFeedPack", cr2w, this);
-				}
-				return _randomNewsFeedPack;
-			}
-			set
-			{
-				if (_randomNewsFeedPack == value)
-				{
-					return;
-				}
-				_randomNewsFeedPack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _randomNewsFeedPack);
+			set => SetProperty(ref _randomNewsFeedPack, value);
 		}
 
 		public gameuiNewsFeedDataProvider(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

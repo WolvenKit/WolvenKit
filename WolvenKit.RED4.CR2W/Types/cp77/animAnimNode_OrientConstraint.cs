@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("areSourceChannelsResaved")] 
 		public CBool AreSourceChannelsResaved
 		{
-			get
-			{
-				if (_areSourceChannelsResaved == null)
-				{
-					_areSourceChannelsResaved = (CBool) CR2WTypeManager.Create("Bool", "areSourceChannelsResaved", cr2w, this);
-				}
-				return _areSourceChannelsResaved;
-			}
-			set
-			{
-				if (_areSourceChannelsResaved == value)
-				{
-					return;
-				}
-				_areSourceChannelsResaved = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areSourceChannelsResaved);
+			set => SetProperty(ref _areSourceChannelsResaved, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("inputTransforms")] 
 		public CArray<CHandle<animAnimNodeSourceChannel_WeightedQuat>> InputTransforms
 		{
-			get
-			{
-				if (_inputTransforms == null)
-				{
-					_inputTransforms = (CArray<CHandle<animAnimNodeSourceChannel_WeightedQuat>>) CR2WTypeManager.Create("array:handle:animAnimNodeSourceChannel_WeightedQuat", "inputTransforms", cr2w, this);
-				}
-				return _inputTransforms;
-			}
-			set
-			{
-				if (_inputTransforms == value)
-				{
-					return;
-				}
-				_inputTransforms = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputTransforms);
+			set => SetProperty(ref _inputTransforms, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("preprocessedWeights")] 
 		public CArray<CFloat> PreprocessedWeights
 		{
-			get
-			{
-				if (_preprocessedWeights == null)
-				{
-					_preprocessedWeights = (CArray<CFloat>) CR2WTypeManager.Create("array:Float", "preprocessedWeights", cr2w, this);
-				}
-				return _preprocessedWeights;
-			}
-			set
-			{
-				if (_preprocessedWeights == value)
-				{
-					return;
-				}
-				_preprocessedWeights = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _preprocessedWeights);
+			set => SetProperty(ref _preprocessedWeights, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("inputWeightedTransforms")] 
 		public CArray<animAnimNode_OrientConstraint_WeightedTransform> InputWeightedTransforms
 		{
-			get
-			{
-				if (_inputWeightedTransforms == null)
-				{
-					_inputWeightedTransforms = (CArray<animAnimNode_OrientConstraint_WeightedTransform>) CR2WTypeManager.Create("array:animAnimNode_OrientConstraint_WeightedTransform", "inputWeightedTransforms", cr2w, this);
-				}
-				return _inputWeightedTransforms;
-			}
-			set
-			{
-				if (_inputWeightedTransforms == value)
-				{
-					return;
-				}
-				_inputWeightedTransforms = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputWeightedTransforms);
+			set => SetProperty(ref _inputWeightedTransforms, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("transformIndex")] 
 		public animTransformIndex TransformIndex
 		{
-			get
-			{
-				if (_transformIndex == null)
-				{
-					_transformIndex = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "transformIndex", cr2w, this);
-				}
-				return _transformIndex;
-			}
-			set
-			{
-				if (_transformIndex == value)
-				{
-					return;
-				}
-				_transformIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transformIndex);
+			set => SetProperty(ref _transformIndex, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("weightMode")] 
 		public CEnum<animConstraintWeightMode> WeightMode
 		{
-			get
-			{
-				if (_weightMode == null)
-				{
-					_weightMode = (CEnum<animConstraintWeightMode>) CR2WTypeManager.Create("animConstraintWeightMode", "weightMode", cr2w, this);
-				}
-				return _weightMode;
-			}
-			set
-			{
-				if (_weightMode == value)
-				{
-					return;
-				}
-				_weightMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightMode);
+			set => SetProperty(ref _weightMode, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get
-			{
-				if (_weight == null)
-				{
-					_weight = (CFloat) CR2WTypeManager.Create("Float", "weight", cr2w, this);
-				}
-				return _weight;
-			}
-			set
-			{
-				if (_weight == value)
-				{
-					return;
-				}
-				_weight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weight);
+			set => SetProperty(ref _weight, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("weightFloatTrack")] 
 		public animNamedTrackIndex WeightFloatTrack
 		{
-			get
-			{
-				if (_weightFloatTrack == null)
-				{
-					_weightFloatTrack = (animNamedTrackIndex) CR2WTypeManager.Create("animNamedTrackIndex", "weightFloatTrack", cr2w, this);
-				}
-				return _weightFloatTrack;
-			}
-			set
-			{
-				if (_weightFloatTrack == value)
-				{
-					return;
-				}
-				_weightFloatTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightFloatTrack);
+			set => SetProperty(ref _weightFloatTrack, value);
 		}
 
 		public animAnimNode_OrientConstraint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

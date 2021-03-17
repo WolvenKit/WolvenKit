@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("position")] 
 		public animSAnimationBufferBitwiseCompressedData Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (animSAnimationBufferBitwiseCompressedData) CR2WTypeManager.Create("animSAnimationBufferBitwiseCompressedData", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("orientation")] 
 		public animSAnimationBufferBitwiseCompressedData Orientation
 		{
-			get
-			{
-				if (_orientation == null)
-				{
-					_orientation = (animSAnimationBufferBitwiseCompressedData) CR2WTypeManager.Create("animSAnimationBufferBitwiseCompressedData", "orientation", cr2w, this);
-				}
-				return _orientation;
-			}
-			set
-			{
-				if (_orientation == value)
-				{
-					return;
-				}
-				_orientation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _orientation);
+			set => SetProperty(ref _orientation, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("scale")] 
 		public animSAnimationBufferBitwiseCompressedData Scale
 		{
-			get
-			{
-				if (_scale == null)
-				{
-					_scale = (animSAnimationBufferBitwiseCompressedData) CR2WTypeManager.Create("animSAnimationBufferBitwiseCompressedData", "scale", cr2w, this);
-				}
-				return _scale;
-			}
-			set
-			{
-				if (_scale == value)
-				{
-					return;
-				}
-				_scale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scale);
+			set => SetProperty(ref _scale, value);
 		}
 
 		public animSAnimationBufferBitwiseCompressedBoneTrack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

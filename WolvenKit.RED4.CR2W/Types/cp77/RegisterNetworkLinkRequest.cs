@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("linksData")] 
 		public CArray<SNetworkLinkData> LinksData
 		{
-			get
-			{
-				if (_linksData == null)
-				{
-					_linksData = (CArray<SNetworkLinkData>) CR2WTypeManager.Create("array:SNetworkLinkData", "linksData", cr2w, this);
-				}
-				return _linksData;
-			}
-			set
-			{
-				if (_linksData == value)
-				{
-					return;
-				}
-				_linksData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linksData);
+			set => SetProperty(ref _linksData, value);
 		}
 
 		public RegisterNetworkLinkRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

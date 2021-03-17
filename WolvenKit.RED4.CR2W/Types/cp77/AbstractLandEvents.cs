@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("blockLandingStimBroadcasting")] 
 		public CBool BlockLandingStimBroadcasting
 		{
-			get
-			{
-				if (_blockLandingStimBroadcasting == null)
-				{
-					_blockLandingStimBroadcasting = (CBool) CR2WTypeManager.Create("Bool", "blockLandingStimBroadcasting", cr2w, this);
-				}
-				return _blockLandingStimBroadcasting;
-			}
-			set
-			{
-				if (_blockLandingStimBroadcasting == value)
-				{
-					return;
-				}
-				_blockLandingStimBroadcasting = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blockLandingStimBroadcasting);
+			set => SetProperty(ref _blockLandingStimBroadcasting, value);
 		}
 
 		public AbstractLandEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

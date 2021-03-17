@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("compositionResource")] 
 		public rRef<inkFullscreenCompositionResource> CompositionResource
 		{
-			get
-			{
-				if (_compositionResource == null)
-				{
-					_compositionResource = (rRef<inkFullscreenCompositionResource>) CR2WTypeManager.Create("rRef:inkFullscreenCompositionResource", "compositionResource", cr2w, this);
-				}
-				return _compositionResource;
-			}
-			set
-			{
-				if (_compositionResource == value)
-				{
-					return;
-				}
-				_compositionResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _compositionResource);
+			set => SetProperty(ref _compositionResource, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("permanentTextureAtlases")] 
 		public CArray<raRef<inkTextureAtlas>> PermanentTextureAtlases
 		{
-			get
-			{
-				if (_permanentTextureAtlases == null)
-				{
-					_permanentTextureAtlases = (CArray<raRef<inkTextureAtlas>>) CR2WTypeManager.Create("array:raRef:inkTextureAtlas", "permanentTextureAtlases", cr2w, this);
-				}
-				return _permanentTextureAtlases;
-			}
-			set
-			{
-				if (_permanentTextureAtlases == value)
-				{
-					return;
-				}
-				_permanentTextureAtlases = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _permanentTextureAtlases);
+			set => SetProperty(ref _permanentTextureAtlases, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("permanentTextureAtlasesPC")] 
 		public CArray<raRef<inkTextureAtlas>> PermanentTextureAtlasesPC
 		{
-			get
-			{
-				if (_permanentTextureAtlasesPC == null)
-				{
-					_permanentTextureAtlasesPC = (CArray<raRef<inkTextureAtlas>>) CR2WTypeManager.Create("array:raRef:inkTextureAtlas", "permanentTextureAtlasesPC", cr2w, this);
-				}
-				return _permanentTextureAtlasesPC;
-			}
-			set
-			{
-				if (_permanentTextureAtlasesPC == value)
-				{
-					return;
-				}
-				_permanentTextureAtlasesPC = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _permanentTextureAtlasesPC);
+			set => SetProperty(ref _permanentTextureAtlasesPC, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("permanentTextureAtlasesDurango")] 
 		public CArray<raRef<inkTextureAtlas>> PermanentTextureAtlasesDurango
 		{
-			get
-			{
-				if (_permanentTextureAtlasesDurango == null)
-				{
-					_permanentTextureAtlasesDurango = (CArray<raRef<inkTextureAtlas>>) CR2WTypeManager.Create("array:raRef:inkTextureAtlas", "permanentTextureAtlasesDurango", cr2w, this);
-				}
-				return _permanentTextureAtlasesDurango;
-			}
-			set
-			{
-				if (_permanentTextureAtlasesDurango == value)
-				{
-					return;
-				}
-				_permanentTextureAtlasesDurango = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _permanentTextureAtlasesDurango);
+			set => SetProperty(ref _permanentTextureAtlasesDurango, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("permanentTextureAtlasesOrbis")] 
 		public CArray<raRef<inkTextureAtlas>> PermanentTextureAtlasesOrbis
 		{
-			get
-			{
-				if (_permanentTextureAtlasesOrbis == null)
-				{
-					_permanentTextureAtlasesOrbis = (CArray<raRef<inkTextureAtlas>>) CR2WTypeManager.Create("array:raRef:inkTextureAtlas", "permanentTextureAtlasesOrbis", cr2w, this);
-				}
-				return _permanentTextureAtlasesOrbis;
-			}
-			set
-			{
-				if (_permanentTextureAtlasesOrbis == value)
-				{
-					return;
-				}
-				_permanentTextureAtlasesOrbis = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _permanentTextureAtlasesOrbis);
+			set => SetProperty(ref _permanentTextureAtlasesOrbis, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("themes")] 
 		public CArray<inkStyleThemeDescriptor> Themes
 		{
-			get
-			{
-				if (_themes == null)
-				{
-					_themes = (CArray<inkStyleThemeDescriptor>) CR2WTypeManager.Create("array:inkStyleThemeDescriptor", "themes", cr2w, this);
-				}
-				return _themes;
-			}
-			set
-			{
-				if (_themes == value)
-				{
-					return;
-				}
-				_themes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _themes);
+			set => SetProperty(ref _themes, value);
 		}
 
 		public inkGameSettingsResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

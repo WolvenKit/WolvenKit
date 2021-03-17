@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isFinalBoards")] 
 		public CBool IsFinalBoards
 		{
-			get
-			{
-				if (_isFinalBoards == null)
-				{
-					_isFinalBoards = (CBool) CR2WTypeManager.Create("Bool", "isFinalBoards", cr2w, this);
-				}
-				return _isFinalBoards;
-			}
-			set
-			{
-				if (_isFinalBoards == value)
-				{
-					return;
-				}
-				_isFinalBoards = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isFinalBoards);
+			set => SetProperty(ref _isFinalBoards, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("showRewardPrompt")] 
 		public CBool ShowRewardPrompt
 		{
-			get
-			{
-				if (_showRewardPrompt == null)
-				{
-					_showRewardPrompt = (CBool) CR2WTypeManager.Create("Bool", "showRewardPrompt", cr2w, this);
-				}
-				return _showRewardPrompt;
-			}
-			set
-			{
-				if (_showRewardPrompt == value)
-				{
-					return;
-				}
-				_showRewardPrompt = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showRewardPrompt);
+			set => SetProperty(ref _showRewardPrompt, value);
 		}
 
 		public CreditsData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

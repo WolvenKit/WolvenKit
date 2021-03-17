@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("startState")] 
 		public CName StartState
 		{
-			get
-			{
-				if (_startState == null)
-				{
-					_startState = (CName) CR2WTypeManager.Create("CName", "startState", cr2w, this);
-				}
-				return _startState;
-			}
-			set
-			{
-				if (_startState == value)
-				{
-					return;
-				}
-				_startState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startState);
+			set => SetProperty(ref _startState, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("endState")] 
 		public CName EndState
 		{
-			get
-			{
-				if (_endState == null)
-				{
-					_endState = (CName) CR2WTypeManager.Create("CName", "endState", cr2w, this);
-				}
-				return _endState;
-			}
-			set
-			{
-				if (_endState == value)
-				{
-					return;
-				}
-				_endState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endState);
+			set => SetProperty(ref _endState, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("animationName")] 
 		public CName AnimationName
 		{
-			get
-			{
-				if (_animationName == null)
-				{
-					_animationName = (CName) CR2WTypeManager.Create("CName", "animationName", cr2w, this);
-				}
-				return _animationName;
-			}
-			set
-			{
-				if (_animationName == value)
-				{
-					return;
-				}
-				_animationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationName);
+			set => SetProperty(ref _animationName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("playbackOptions")] 
 		public inkanimPlaybackOptions PlaybackOptions
 		{
-			get
-			{
-				if (_playbackOptions == null)
-				{
-					_playbackOptions = (inkanimPlaybackOptions) CR2WTypeManager.Create("inkanimPlaybackOptions", "playbackOptions", cr2w, this);
-				}
-				return _playbackOptions;
-			}
-			set
-			{
-				if (_playbackOptions == value)
-				{
-					return;
-				}
-				_playbackOptions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playbackOptions);
+			set => SetProperty(ref _playbackOptions, value);
 		}
 
 		public inkWidgetStateAnimatedTransition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

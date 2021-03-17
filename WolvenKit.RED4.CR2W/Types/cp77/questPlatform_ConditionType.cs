@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("platform")] 
 		public CEnum<questPlatform> Platform
 		{
-			get
-			{
-				if (_platform == null)
-				{
-					_platform = (CEnum<questPlatform>) CR2WTypeManager.Create("questPlatform", "platform", cr2w, this);
-				}
-				return _platform;
-			}
-			set
-			{
-				if (_platform == value)
-				{
-					return;
-				}
-				_platform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _platform);
+			set => SetProperty(ref _platform, value);
 		}
 
 		public questPlatform_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

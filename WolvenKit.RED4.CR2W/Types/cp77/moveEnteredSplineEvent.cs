@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("useDoors")] 
 		public CBool UseDoors
 		{
-			get
-			{
-				if (_useDoors == null)
-				{
-					_useDoors = (CBool) CR2WTypeManager.Create("Bool", "useDoors", cr2w, this);
-				}
-				return _useDoors;
-			}
-			set
-			{
-				if (_useDoors == value)
-				{
-					return;
-				}
-				_useDoors = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useDoors);
+			set => SetProperty(ref _useDoors, value);
 		}
 
 		public moveEnteredSplineEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

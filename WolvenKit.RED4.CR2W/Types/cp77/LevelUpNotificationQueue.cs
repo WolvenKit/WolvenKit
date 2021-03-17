@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("levelUpBlackboard")] 
 		public CHandle<gameIBlackboard> LevelUpBlackboard
 		{
-			get
-			{
-				if (_levelUpBlackboard == null)
-				{
-					_levelUpBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "levelUpBlackboard", cr2w, this);
-				}
-				return _levelUpBlackboard;
-			}
-			set
-			{
-				if (_levelUpBlackboard == value)
-				{
-					return;
-				}
-				_levelUpBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelUpBlackboard);
+			set => SetProperty(ref _levelUpBlackboard, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("playerLevelUpListener")] 
 		public CUInt32 PlayerLevelUpListener
 		{
-			get
-			{
-				if (_playerLevelUpListener == null)
-				{
-					_playerLevelUpListener = (CUInt32) CR2WTypeManager.Create("Uint32", "playerLevelUpListener", cr2w, this);
-				}
-				return _playerLevelUpListener;
-			}
-			set
-			{
-				if (_playerLevelUpListener == value)
-				{
-					return;
-				}
-				_playerLevelUpListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerLevelUpListener);
+			set => SetProperty(ref _playerLevelUpListener, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("playerObject")] 
 		public wCHandle<gameObject> PlayerObject
 		{
-			get
-			{
-				if (_playerObject == null)
-				{
-					_playerObject = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "playerObject", cr2w, this);
-				}
-				return _playerObject;
-			}
-			set
-			{
-				if (_playerObject == value)
-				{
-					return;
-				}
-				_playerObject = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerObject);
+			set => SetProperty(ref _playerObject, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("combatModePSM")] 
 		public CEnum<gamePSMCombat> CombatModePSM
 		{
-			get
-			{
-				if (_combatModePSM == null)
-				{
-					_combatModePSM = (CEnum<gamePSMCombat>) CR2WTypeManager.Create("gamePSMCombat", "combatModePSM", cr2w, this);
-				}
-				return _combatModePSM;
-			}
-			set
-			{
-				if (_combatModePSM == value)
-				{
-					return;
-				}
-				_combatModePSM = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _combatModePSM);
+			set => SetProperty(ref _combatModePSM, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("combatModeListener")] 
 		public CUInt32 CombatModeListener
 		{
-			get
-			{
-				if (_combatModeListener == null)
-				{
-					_combatModeListener = (CUInt32) CR2WTypeManager.Create("Uint32", "combatModeListener", cr2w, this);
-				}
-				return _combatModeListener;
-			}
-			set
-			{
-				if (_combatModeListener == value)
-				{
-					return;
-				}
-				_combatModeListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _combatModeListener);
+			set => SetProperty(ref _combatModeListener, value);
 		}
 
 		public LevelUpNotificationQueue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

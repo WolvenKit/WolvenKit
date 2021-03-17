@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("turret")] 
 		public wCHandle<gameObject> Turret
 		{
-			get
-			{
-				if (_turret == null)
-				{
-					_turret = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "turret", cr2w, this);
-				}
-				return _turret;
-			}
-			set
-			{
-				if (_turret == value)
-				{
-					return;
-				}
-				_turret = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _turret);
+			set => SetProperty(ref _turret, value);
 		}
 
 		public TurretInitData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

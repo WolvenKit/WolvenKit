@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("signal")] 
 		public AIInterruptionSignal Signal
 		{
-			get
-			{
-				if (_signal == null)
-				{
-					_signal = (AIInterruptionSignal) CR2WTypeManager.Create("AIInterruptionSignal", "signal", cr2w, this);
-				}
-				return _signal;
-			}
-			set
-			{
-				if (_signal == value)
-				{
-					return;
-				}
-				_signal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _signal);
+			set => SetProperty(ref _signal, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("supportLessImportantSignals")] 
 		public CBool SupportLessImportantSignals
 		{
-			get
-			{
-				if (_supportLessImportantSignals == null)
-				{
-					_supportLessImportantSignals = (CBool) CR2WTypeManager.Create("Bool", "supportLessImportantSignals", cr2w, this);
-				}
-				return _supportLessImportantSignals;
-			}
-			set
-			{
-				if (_supportLessImportantSignals == value)
-				{
-					return;
-				}
-				_supportLessImportantSignals = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _supportLessImportantSignals);
+			set => SetProperty(ref _supportLessImportantSignals, value);
 		}
 
 		public AIInterruptionHandlerDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

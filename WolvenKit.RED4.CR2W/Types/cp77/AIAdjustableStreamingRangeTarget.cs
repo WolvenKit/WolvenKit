@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("minStreamingDistance")] 
 		public CFloat MinStreamingDistance
 		{
-			get
-			{
-				if (_minStreamingDistance == null)
-				{
-					_minStreamingDistance = (CFloat) CR2WTypeManager.Create("Float", "minStreamingDistance", cr2w, this);
-				}
-				return _minStreamingDistance;
-			}
-			set
-			{
-				if (_minStreamingDistance == value)
-				{
-					return;
-				}
-				_minStreamingDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minStreamingDistance);
+			set => SetProperty(ref _minStreamingDistance, value);
 		}
 
 		public AIAdjustableStreamingRangeTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

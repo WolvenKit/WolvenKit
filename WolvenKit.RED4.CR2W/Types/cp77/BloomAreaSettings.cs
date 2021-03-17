@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("luminanceThresholdMin")] 
 		public CFloat LuminanceThresholdMin
 		{
-			get
-			{
-				if (_luminanceThresholdMin == null)
-				{
-					_luminanceThresholdMin = (CFloat) CR2WTypeManager.Create("Float", "luminanceThresholdMin", cr2w, this);
-				}
-				return _luminanceThresholdMin;
-			}
-			set
-			{
-				if (_luminanceThresholdMin == value)
-				{
-					return;
-				}
-				_luminanceThresholdMin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _luminanceThresholdMin);
+			set => SetProperty(ref _luminanceThresholdMin, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("luminanceThresholdMax")] 
 		public CFloat LuminanceThresholdMax
 		{
-			get
-			{
-				if (_luminanceThresholdMax == null)
-				{
-					_luminanceThresholdMax = (CFloat) CR2WTypeManager.Create("Float", "luminanceThresholdMax", cr2w, this);
-				}
-				return _luminanceThresholdMax;
-			}
-			set
-			{
-				if (_luminanceThresholdMax == value)
-				{
-					return;
-				}
-				_luminanceThresholdMax = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _luminanceThresholdMax);
+			set => SetProperty(ref _luminanceThresholdMax, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("sceneColorScale")] 
 		public CFloat SceneColorScale
 		{
-			get
-			{
-				if (_sceneColorScale == null)
-				{
-					_sceneColorScale = (CFloat) CR2WTypeManager.Create("Float", "sceneColorScale", cr2w, this);
-				}
-				return _sceneColorScale;
-			}
-			set
-			{
-				if (_sceneColorScale == value)
-				{
-					return;
-				}
-				_sceneColorScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneColorScale);
+			set => SetProperty(ref _sceneColorScale, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("bloomColorScale")] 
 		public CFloat BloomColorScale
 		{
-			get
-			{
-				if (_bloomColorScale == null)
-				{
-					_bloomColorScale = (CFloat) CR2WTypeManager.Create("Float", "bloomColorScale", cr2w, this);
-				}
-				return _bloomColorScale;
-			}
-			set
-			{
-				if (_bloomColorScale == value)
-				{
-					return;
-				}
-				_bloomColorScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bloomColorScale);
+			set => SetProperty(ref _bloomColorScale, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("numDownsamplePasses")] 
 		public CUInt8 NumDownsamplePasses
 		{
-			get
-			{
-				if (_numDownsamplePasses == null)
-				{
-					_numDownsamplePasses = (CUInt8) CR2WTypeManager.Create("Uint8", "numDownsamplePasses", cr2w, this);
-				}
-				return _numDownsamplePasses;
-			}
-			set
-			{
-				if (_numDownsamplePasses == value)
-				{
-					return;
-				}
-				_numDownsamplePasses = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numDownsamplePasses);
+			set => SetProperty(ref _numDownsamplePasses, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("shaftsAreaSettings")] 
 		public ShaftsAreaSettings ShaftsAreaSettings
 		{
-			get
-			{
-				if (_shaftsAreaSettings == null)
-				{
-					_shaftsAreaSettings = (ShaftsAreaSettings) CR2WTypeManager.Create("ShaftsAreaSettings", "shaftsAreaSettings", cr2w, this);
-				}
-				return _shaftsAreaSettings;
-			}
-			set
-			{
-				if (_shaftsAreaSettings == value)
-				{
-					return;
-				}
-				_shaftsAreaSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shaftsAreaSettings);
+			set => SetProperty(ref _shaftsAreaSettings, value);
 		}
 
 		public BloomAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

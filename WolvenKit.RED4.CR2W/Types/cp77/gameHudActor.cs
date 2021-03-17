@@ -25,299 +25,104 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entityID")] 
 		public entEntityID EntityID
 		{
-			get
-			{
-				if (_entityID == null)
-				{
-					_entityID = (entEntityID) CR2WTypeManager.Create("entEntityID", "entityID", cr2w, this);
-				}
-				return _entityID;
-			}
-			set
-			{
-				if (_entityID == value)
-				{
-					return;
-				}
-				_entityID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityID);
+			set => SetProperty(ref _entityID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("type")] 
 		public CEnum<HUDActorType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<HUDActorType>) CR2WTypeManager.Create("HUDActorType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("status")] 
 		public CEnum<HUDActorStatus> Status
 		{
-			get
-			{
-				if (_status == null)
-				{
-					_status = (CEnum<HUDActorStatus>) CR2WTypeManager.Create("HUDActorStatus", "status", cr2w, this);
-				}
-				return _status;
-			}
-			set
-			{
-				if (_status == value)
-				{
-					return;
-				}
-				_status = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _status);
+			set => SetProperty(ref _status, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("visibility")] 
 		public CEnum<ActorVisibilityStatus> Visibility
 		{
-			get
-			{
-				if (_visibility == null)
-				{
-					_visibility = (CEnum<ActorVisibilityStatus>) CR2WTypeManager.Create("ActorVisibilityStatus", "visibility", cr2w, this);
-				}
-				return _visibility;
-			}
-			set
-			{
-				if (_visibility == value)
-				{
-					return;
-				}
-				_visibility = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visibility);
+			set => SetProperty(ref _visibility, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("activeModules")] 
 		public CArray<wCHandle<HUDModule>> ActiveModules
 		{
-			get
-			{
-				if (_activeModules == null)
-				{
-					_activeModules = (CArray<wCHandle<HUDModule>>) CR2WTypeManager.Create("array:whandle:HUDModule", "activeModules", cr2w, this);
-				}
-				return _activeModules;
-			}
-			set
-			{
-				if (_activeModules == value)
-				{
-					return;
-				}
-				_activeModules = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeModules);
+			set => SetProperty(ref _activeModules, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isRevealed")] 
 		public CBool IsRevealed
 		{
-			get
-			{
-				if (_isRevealed == null)
-				{
-					_isRevealed = (CBool) CR2WTypeManager.Create("Bool", "isRevealed", cr2w, this);
-				}
-				return _isRevealed;
-			}
-			set
-			{
-				if (_isRevealed == value)
-				{
-					return;
-				}
-				_isRevealed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isRevealed);
+			set => SetProperty(ref _isRevealed, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isTagged")] 
 		public CBool IsTagged
 		{
-			get
-			{
-				if (_isTagged == null)
-				{
-					_isTagged = (CBool) CR2WTypeManager.Create("Bool", "isTagged", cr2w, this);
-				}
-				return _isTagged;
-			}
-			set
-			{
-				if (_isTagged == value)
-				{
-					return;
-				}
-				_isTagged = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isTagged);
+			set => SetProperty(ref _isTagged, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("clueData")] 
 		public HUDClueData ClueData
 		{
-			get
-			{
-				if (_clueData == null)
-				{
-					_clueData = (HUDClueData) CR2WTypeManager.Create("HUDClueData", "clueData", cr2w, this);
-				}
-				return _clueData;
-			}
-			set
-			{
-				if (_clueData == value)
-				{
-					return;
-				}
-				_clueData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clueData);
+			set => SetProperty(ref _clueData, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isRemotelyAccessed")] 
 		public CBool IsRemotelyAccessed
 		{
-			get
-			{
-				if (_isRemotelyAccessed == null)
-				{
-					_isRemotelyAccessed = (CBool) CR2WTypeManager.Create("Bool", "isRemotelyAccessed", cr2w, this);
-				}
-				return _isRemotelyAccessed;
-			}
-			set
-			{
-				if (_isRemotelyAccessed == value)
-				{
-					return;
-				}
-				_isRemotelyAccessed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isRemotelyAccessed);
+			set => SetProperty(ref _isRemotelyAccessed, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("canOpenScannerInfo")] 
 		public CBool CanOpenScannerInfo
 		{
-			get
-			{
-				if (_canOpenScannerInfo == null)
-				{
-					_canOpenScannerInfo = (CBool) CR2WTypeManager.Create("Bool", "canOpenScannerInfo", cr2w, this);
-				}
-				return _canOpenScannerInfo;
-			}
-			set
-			{
-				if (_canOpenScannerInfo == value)
-				{
-					return;
-				}
-				_canOpenScannerInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _canOpenScannerInfo);
+			set => SetProperty(ref _canOpenScannerInfo, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("isInIconForcedVisibilityRange")] 
 		public CBool IsInIconForcedVisibilityRange
 		{
-			get
-			{
-				if (_isInIconForcedVisibilityRange == null)
-				{
-					_isInIconForcedVisibilityRange = (CBool) CR2WTypeManager.Create("Bool", "isInIconForcedVisibilityRange", cr2w, this);
-				}
-				return _isInIconForcedVisibilityRange;
-			}
-			set
-			{
-				if (_isInIconForcedVisibilityRange == value)
-				{
-					return;
-				}
-				_isInIconForcedVisibilityRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInIconForcedVisibilityRange);
+			set => SetProperty(ref _isInIconForcedVisibilityRange, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("isIconForcedVisibleThroughWalls")] 
 		public CBool IsIconForcedVisibleThroughWalls
 		{
-			get
-			{
-				if (_isIconForcedVisibleThroughWalls == null)
-				{
-					_isIconForcedVisibleThroughWalls = (CBool) CR2WTypeManager.Create("Bool", "isIconForcedVisibleThroughWalls", cr2w, this);
-				}
-				return _isIconForcedVisibleThroughWalls;
-			}
-			set
-			{
-				if (_isIconForcedVisibleThroughWalls == value)
-				{
-					return;
-				}
-				_isIconForcedVisibleThroughWalls = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isIconForcedVisibleThroughWalls);
+			set => SetProperty(ref _isIconForcedVisibleThroughWalls, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("shouldRefreshQHack")] 
 		public CBool ShouldRefreshQHack
 		{
-			get
-			{
-				if (_shouldRefreshQHack == null)
-				{
-					_shouldRefreshQHack = (CBool) CR2WTypeManager.Create("Bool", "shouldRefreshQHack", cr2w, this);
-				}
-				return _shouldRefreshQHack;
-			}
-			set
-			{
-				if (_shouldRefreshQHack == value)
-				{
-					return;
-				}
-				_shouldRefreshQHack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldRefreshQHack);
+			set => SetProperty(ref _shouldRefreshQHack, value);
 		}
 
 		public gameHudActor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

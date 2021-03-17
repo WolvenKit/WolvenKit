@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("numMainPoses")] 
 		public CUInt16 NumMainPoses
 		{
-			get
-			{
-				if (_numMainPoses == null)
-				{
-					_numMainPoses = (CUInt16) CR2WTypeManager.Create("Uint16", "numMainPoses", cr2w, this);
-				}
-				return _numMainPoses;
-			}
-			set
-			{
-				if (_numMainPoses == value)
-				{
-					return;
-				}
-				_numMainPoses = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numMainPoses);
+			set => SetProperty(ref _numMainPoses, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("numCorrectivePoses")] 
 		public CUInt16 NumCorrectivePoses
 		{
-			get
-			{
-				if (_numCorrectivePoses == null)
-				{
-					_numCorrectivePoses = (CUInt16) CR2WTypeManager.Create("Uint16", "numCorrectivePoses", cr2w, this);
-				}
-				return _numCorrectivePoses;
-			}
-			set
-			{
-				if (_numCorrectivePoses == value)
-				{
-					return;
-				}
-				_numCorrectivePoses = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numCorrectivePoses);
+			set => SetProperty(ref _numCorrectivePoses, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("numMainTransforms")] 
 		public CUInt32 NumMainTransforms
 		{
-			get
-			{
-				if (_numMainTransforms == null)
-				{
-					_numMainTransforms = (CUInt32) CR2WTypeManager.Create("Uint32", "numMainTransforms", cr2w, this);
-				}
-				return _numMainTransforms;
-			}
-			set
-			{
-				if (_numMainTransforms == value)
-				{
-					return;
-				}
-				_numMainTransforms = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numMainTransforms);
+			set => SetProperty(ref _numMainTransforms, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("numMainScales")] 
 		public CUInt32 NumMainScales
 		{
-			get
-			{
-				if (_numMainScales == null)
-				{
-					_numMainScales = (CUInt32) CR2WTypeManager.Create("Uint32", "numMainScales", cr2w, this);
-				}
-				return _numMainScales;
-			}
-			set
-			{
-				if (_numMainScales == value)
-				{
-					return;
-				}
-				_numMainScales = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numMainScales);
+			set => SetProperty(ref _numMainScales, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("numCorrectiveTransforms")] 
 		public CUInt32 NumCorrectiveTransforms
 		{
-			get
-			{
-				if (_numCorrectiveTransforms == null)
-				{
-					_numCorrectiveTransforms = (CUInt32) CR2WTypeManager.Create("Uint32", "numCorrectiveTransforms", cr2w, this);
-				}
-				return _numCorrectiveTransforms;
-			}
-			set
-			{
-				if (_numCorrectiveTransforms == value)
-				{
-					return;
-				}
-				_numCorrectiveTransforms = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numCorrectiveTransforms);
+			set => SetProperty(ref _numCorrectiveTransforms, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("numCorrectiveScales")] 
 		public CUInt32 NumCorrectiveScales
 		{
-			get
-			{
-				if (_numCorrectiveScales == null)
-				{
-					_numCorrectiveScales = (CUInt32) CR2WTypeManager.Create("Uint32", "numCorrectiveScales", cr2w, this);
-				}
-				return _numCorrectiveScales;
-			}
-			set
-			{
-				if (_numCorrectiveScales == value)
-				{
-					return;
-				}
-				_numCorrectiveScales = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numCorrectiveScales);
+			set => SetProperty(ref _numCorrectiveScales, value);
 		}
 
 		public animFacialSetup_OneSermoPoseBufferInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

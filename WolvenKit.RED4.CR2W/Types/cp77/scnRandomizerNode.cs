@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mode")] 
 		public CEnum<scnRandomizerMode> Mode
 		{
-			get
-			{
-				if (_mode == null)
-				{
-					_mode = (CEnum<scnRandomizerMode>) CR2WTypeManager.Create("scnRandomizerMode", "mode", cr2w, this);
-				}
-				return _mode;
-			}
-			set
-			{
-				if (_mode == value)
-				{
-					return;
-				}
-				_mode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mode);
+			set => SetProperty(ref _mode, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("numOutSockets")] 
 		public CUInt32 NumOutSockets
 		{
-			get
-			{
-				if (_numOutSockets == null)
-				{
-					_numOutSockets = (CUInt32) CR2WTypeManager.Create("Uint32", "numOutSockets", cr2w, this);
-				}
-				return _numOutSockets;
-			}
-			set
-			{
-				if (_numOutSockets == value)
-				{
-					return;
-				}
-				_numOutSockets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numOutSockets);
+			set => SetProperty(ref _numOutSockets, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("weights", 32)] 
 		public CArrayFixedSize<CUInt8> Weights
 		{
-			get
-			{
-				if (_weights == null)
-				{
-					_weights = (CArrayFixedSize<CUInt8>) CR2WTypeManager.Create("[32]Uint8", "weights", cr2w, this);
-				}
-				return _weights;
-			}
-			set
-			{
-				if (_weights == value)
-				{
-					return;
-				}
-				_weights = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weights);
+			set => SetProperty(ref _weights, value);
 		}
 
 		public scnRandomizerNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

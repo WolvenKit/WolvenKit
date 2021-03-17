@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("defaultUI")] 
 		public wCHandle<inkCanvasWidget> DefaultUI
 		{
-			get
-			{
-				if (_defaultUI == null)
-				{
-					_defaultUI = (wCHandle<inkCanvasWidget>) CR2WTypeManager.Create("whandle:inkCanvasWidget", "defaultUI", cr2w, this);
-				}
-				return _defaultUI;
-			}
-			set
-			{
-				if (_defaultUI == value)
-				{
-					return;
-				}
-				_defaultUI = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultUI);
+			set => SetProperty(ref _defaultUI, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("mainDisplayWidget")] 
 		public wCHandle<inkVideoWidget> MainDisplayWidget
 		{
-			get
-			{
-				if (_mainDisplayWidget == null)
-				{
-					_mainDisplayWidget = (wCHandle<inkVideoWidget>) CR2WTypeManager.Create("whandle:inkVideoWidget", "mainDisplayWidget", cr2w, this);
-				}
-				return _mainDisplayWidget;
-			}
-			set
-			{
-				if (_mainDisplayWidget == value)
-				{
-					return;
-				}
-				_mainDisplayWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mainDisplayWidget);
+			set => SetProperty(ref _mainDisplayWidget, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("messegeWidget")] 
 		public wCHandle<inkTextWidget> MessegeWidget
 		{
-			get
-			{
-				if (_messegeWidget == null)
-				{
-					_messegeWidget = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "messegeWidget", cr2w, this);
-				}
-				return _messegeWidget;
-			}
-			set
-			{
-				if (_messegeWidget == value)
-				{
-					return;
-				}
-				_messegeWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _messegeWidget);
+			set => SetProperty(ref _messegeWidget, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("backgroundWidget")] 
 		public wCHandle<inkLeafWidget> BackgroundWidget
 		{
-			get
-			{
-				if (_backgroundWidget == null)
-				{
-					_backgroundWidget = (wCHandle<inkLeafWidget>) CR2WTypeManager.Create("whandle:inkLeafWidget", "backgroundWidget", cr2w, this);
-				}
-				return _backgroundWidget;
-			}
-			set
-			{
-				if (_backgroundWidget == value)
-				{
-					return;
-				}
-				_backgroundWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backgroundWidget);
+			set => SetProperty(ref _backgroundWidget, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("messegeRecord")] 
 		public wCHandle<gamedataScreenMessageData_Record> MessegeRecord
 		{
-			get
-			{
-				if (_messegeRecord == null)
-				{
-					_messegeRecord = (wCHandle<gamedataScreenMessageData_Record>) CR2WTypeManager.Create("whandle:gamedataScreenMessageData_Record", "messegeRecord", cr2w, this);
-				}
-				return _messegeRecord;
-			}
-			set
-			{
-				if (_messegeRecord == value)
-				{
-					return;
-				}
-				_messegeRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _messegeRecord);
+			set => SetProperty(ref _messegeRecord, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("replaceTextWithCustomNumber")] 
 		public CBool ReplaceTextWithCustomNumber
 		{
-			get
-			{
-				if (_replaceTextWithCustomNumber == null)
-				{
-					_replaceTextWithCustomNumber = (CBool) CR2WTypeManager.Create("Bool", "replaceTextWithCustomNumber", cr2w, this);
-				}
-				return _replaceTextWithCustomNumber;
-			}
-			set
-			{
-				if (_replaceTextWithCustomNumber == value)
-				{
-					return;
-				}
-				_replaceTextWithCustomNumber = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _replaceTextWithCustomNumber);
+			set => SetProperty(ref _replaceTextWithCustomNumber, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("customNumber")] 
 		public CInt32 CustomNumber
 		{
-			get
-			{
-				if (_customNumber == null)
-				{
-					_customNumber = (CInt32) CR2WTypeManager.Create("Int32", "customNumber", cr2w, this);
-				}
-				return _customNumber;
-			}
-			set
-			{
-				if (_customNumber == value)
-				{
-					return;
-				}
-				_customNumber = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customNumber);
+			set => SetProperty(ref _customNumber, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("onGlitchingStateChangedListener")] 
 		public CUInt32 OnGlitchingStateChangedListener
 		{
-			get
-			{
-				if (_onGlitchingStateChangedListener == null)
-				{
-					_onGlitchingStateChangedListener = (CUInt32) CR2WTypeManager.Create("Uint32", "onGlitchingStateChangedListener", cr2w, this);
-				}
-				return _onGlitchingStateChangedListener;
-			}
-			set
-			{
-				if (_onGlitchingStateChangedListener == value)
-				{
-					return;
-				}
-				_onGlitchingStateChangedListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onGlitchingStateChangedListener);
+			set => SetProperty(ref _onGlitchingStateChangedListener, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("onMessegeChangedListener")] 
 		public CUInt32 OnMessegeChangedListener
 		{
-			get
-			{
-				if (_onMessegeChangedListener == null)
-				{
-					_onMessegeChangedListener = (CUInt32) CR2WTypeManager.Create("Uint32", "onMessegeChangedListener", cr2w, this);
-				}
-				return _onMessegeChangedListener;
-			}
-			set
-			{
-				if (_onMessegeChangedListener == value)
-				{
-					return;
-				}
-				_onMessegeChangedListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onMessegeChangedListener);
+			set => SetProperty(ref _onMessegeChangedListener, value);
 		}
 
 		public LcdScreenInkGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

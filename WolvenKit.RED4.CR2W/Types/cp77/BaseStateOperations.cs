@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stateActionsOverrides")] 
 		public SGenericDeviceActionsData StateActionsOverrides
 		{
-			get
-			{
-				if (_stateActionsOverrides == null)
-				{
-					_stateActionsOverrides = (SGenericDeviceActionsData) CR2WTypeManager.Create("SGenericDeviceActionsData", "stateActionsOverrides", cr2w, this);
-				}
-				return _stateActionsOverrides;
-			}
-			set
-			{
-				if (_stateActionsOverrides == value)
-				{
-					return;
-				}
-				_stateActionsOverrides = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stateActionsOverrides);
+			set => SetProperty(ref _stateActionsOverrides, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("baseStateOperations")] 
 		public CArray<SBaseStateOperationData> BaseStateOperations_
 		{
-			get
-			{
-				if (_baseStateOperations == null)
-				{
-					_baseStateOperations = (CArray<SBaseStateOperationData>) CR2WTypeManager.Create("array:SBaseStateOperationData", "baseStateOperations", cr2w, this);
-				}
-				return _baseStateOperations;
-			}
-			set
-			{
-				if (_baseStateOperations == value)
-				{
-					return;
-				}
-				_baseStateOperations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _baseStateOperations);
+			set => SetProperty(ref _baseStateOperations, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("wasStateCached")] 
 		public CBool WasStateCached
 		{
-			get
-			{
-				if (_wasStateCached == null)
-				{
-					_wasStateCached = (CBool) CR2WTypeManager.Create("Bool", "wasStateCached", cr2w, this);
-				}
-				return _wasStateCached;
-			}
-			set
-			{
-				if (_wasStateCached == value)
-				{
-					return;
-				}
-				_wasStateCached = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasStateCached);
+			set => SetProperty(ref _wasStateCached, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("cachedState")] 
 		public CEnum<EDeviceStatus> CachedState
 		{
-			get
-			{
-				if (_cachedState == null)
-				{
-					_cachedState = (CEnum<EDeviceStatus>) CR2WTypeManager.Create("EDeviceStatus", "cachedState", cr2w, this);
-				}
-				return _cachedState;
-			}
-			set
-			{
-				if (_cachedState == value)
-				{
-					return;
-				}
-				_cachedState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cachedState);
+			set => SetProperty(ref _cachedState, value);
 		}
 
 		public BaseStateOperations(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

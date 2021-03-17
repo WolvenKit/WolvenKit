@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get
-			{
-				if (_objectRef == null)
-				{
-					_objectRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "objectRef", cr2w, this);
-				}
-				return _objectRef;
-			}
-			set
-			{
-				if (_objectRef == value)
-				{
-					return;
-				}
-				_objectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("eventType")] 
 		public CEnum<questObjectScanEventType> EventType
 		{
-			get
-			{
-				if (_eventType == null)
-				{
-					_eventType = (CEnum<questObjectScanEventType>) CR2WTypeManager.Create("questObjectScanEventType", "eventType", cr2w, this);
-				}
-				return _eventType;
-			}
-			set
-			{
-				if (_eventType == value)
-				{
-					return;
-				}
-				_eventType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventType);
+			set => SetProperty(ref _eventType, value);
 		}
 
 		public questScan_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

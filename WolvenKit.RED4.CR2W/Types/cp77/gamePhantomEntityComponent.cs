@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("params")] 
 		public gamePhantomEntityParameters Params
 		{
-			get
-			{
-				if (_params == null)
-				{
-					_params = (gamePhantomEntityParameters) CR2WTypeManager.Create("gamePhantomEntityParameters", "params", cr2w, this);
-				}
-				return _params;
-			}
-			set
-			{
-				if (_params == value)
-				{
-					return;
-				}
-				_params = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("effectBinding")] 
 		public CHandle<gameEffectComponentBinding> EffectBinding
 		{
-			get
-			{
-				if (_effectBinding == null)
-				{
-					_effectBinding = (CHandle<gameEffectComponentBinding>) CR2WTypeManager.Create("handle:gameEffectComponentBinding", "effectBinding", cr2w, this);
-				}
-				return _effectBinding;
-			}
-			set
-			{
-				if (_effectBinding == value)
-				{
-					return;
-				}
-				_effectBinding = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectBinding);
+			set => SetProperty(ref _effectBinding, value);
 		}
 
 		public gamePhantomEntityComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("metaQuestId")] 
 		public CEnum<gamedataMetaQuest> MetaQuestId
 		{
-			get
-			{
-				if (_metaQuestId == null)
-				{
-					_metaQuestId = (CEnum<gamedataMetaQuest>) CR2WTypeManager.Create("gamedataMetaQuest", "metaQuestId", cr2w, this);
-				}
-				return _metaQuestId;
-			}
-			set
-			{
-				if (_metaQuestId == value)
-				{
-					return;
-				}
-				_metaQuestId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metaQuestId);
+			set => SetProperty(ref _metaQuestId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("percent")] 
 		public CUInt32 Percent
 		{
-			get
-			{
-				if (_percent == null)
-				{
-					_percent = (CUInt32) CR2WTypeManager.Create("Uint32", "percent", cr2w, this);
-				}
-				return _percent;
-			}
-			set
-			{
-				if (_percent == value)
-				{
-					return;
-				}
-				_percent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _percent);
+			set => SetProperty(ref _percent, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("text")] 
 		public LocalizationString Text
 		{
-			get
-			{
-				if (_text == null)
-				{
-					_text = (LocalizationString) CR2WTypeManager.Create("LocalizationString", "text", cr2w, this);
-				}
-				return _text;
-			}
-			set
-			{
-				if (_text == value)
-				{
-					return;
-				}
-				_text = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _text);
+			set => SetProperty(ref _text, value);
 		}
 
 		public questSetMetaQuestProgress_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

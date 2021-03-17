@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("meshTargetBinding")] 
 		public CHandle<gameBinkMeshTargetBinding> MeshTargetBinding
 		{
-			get
-			{
-				if (_meshTargetBinding == null)
-				{
-					_meshTargetBinding = (CHandle<gameBinkMeshTargetBinding>) CR2WTypeManager.Create("handle:gameBinkMeshTargetBinding", "meshTargetBinding", cr2w, this);
-				}
-				return _meshTargetBinding;
-			}
-			set
-			{
-				if (_meshTargetBinding == value)
-				{
-					return;
-				}
-				_meshTargetBinding = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshTargetBinding);
+			set => SetProperty(ref _meshTargetBinding, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("videoPlayerName")] 
 		public CName VideoPlayerName
 		{
-			get
-			{
-				if (_videoPlayerName == null)
-				{
-					_videoPlayerName = (CName) CR2WTypeManager.Create("CName", "videoPlayerName", cr2w, this);
-				}
-				return _videoPlayerName;
-			}
-			set
-			{
-				if (_videoPlayerName == value)
-				{
-					return;
-				}
-				_videoPlayerName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _videoPlayerName);
+			set => SetProperty(ref _videoPlayerName, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("binkResource")] 
 		public raRef<Bink> BinkResource
 		{
-			get
-			{
-				if (_binkResource == null)
-				{
-					_binkResource = (raRef<Bink>) CR2WTypeManager.Create("raRef:Bink", "binkResource", cr2w, this);
-				}
-				return _binkResource;
-			}
-			set
-			{
-				if (_binkResource == value)
-				{
-					return;
-				}
-				_binkResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _binkResource);
+			set => SetProperty(ref _binkResource, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("audioEvent")] 
 		public CName AudioEvent
 		{
-			get
-			{
-				if (_audioEvent == null)
-				{
-					_audioEvent = (CName) CR2WTypeManager.Create("CName", "audioEvent", cr2w, this);
-				}
-				return _audioEvent;
-			}
-			set
-			{
-				if (_audioEvent == value)
-				{
-					return;
-				}
-				_audioEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioEvent);
+			set => SetProperty(ref _audioEvent, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("loopVideo")] 
 		public CBool LoopVideo
 		{
-			get
-			{
-				if (_loopVideo == null)
-				{
-					_loopVideo = (CBool) CR2WTypeManager.Create("Bool", "loopVideo", cr2w, this);
-				}
-				return _loopVideo;
-			}
-			set
-			{
-				if (_loopVideo == value)
-				{
-					return;
-				}
-				_loopVideo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _loopVideo);
+			set => SetProperty(ref _loopVideo, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("forceVideoFrameRate")] 
 		public CBool ForceVideoFrameRate
 		{
-			get
-			{
-				if (_forceVideoFrameRate == null)
-				{
-					_forceVideoFrameRate = (CBool) CR2WTypeManager.Create("Bool", "forceVideoFrameRate", cr2w, this);
-				}
-				return _forceVideoFrameRate;
-			}
-			set
-			{
-				if (_forceVideoFrameRate == value)
-				{
-					return;
-				}
-				_forceVideoFrameRate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceVideoFrameRate);
+			set => SetProperty(ref _forceVideoFrameRate, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get
-			{
-				if (_isEnabled == null)
-				{
-					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
-				}
-				return _isEnabled;
-			}
-			set
-			{
-				if (_isEnabled == value)
-				{
-					return;
-				}
-				_isEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
 		}
 
 		public gameBinkComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

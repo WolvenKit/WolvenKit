@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("paused")] 
 		public CBool Paused
 		{
-			get
-			{
-				if (_paused == null)
-				{
-					_paused = (CBool) CR2WTypeManager.Create("Bool", "paused", cr2w, this);
-				}
-				return _paused;
-			}
-			set
-			{
-				if (_paused == value)
-				{
-					return;
-				}
-				_paused = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _paused);
+			set => SetProperty(ref _paused, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("gameTime")] 
 		public GameTime GameTime
 		{
-			get
-			{
-				if (_gameTime == null)
-				{
-					_gameTime = (GameTime) CR2WTypeManager.Create("GameTime", "gameTime", cr2w, this);
-				}
-				return _gameTime;
-			}
-			set
-			{
-				if (_gameTime == value)
-				{
-					return;
-				}
-				_gameTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameTime);
+			set => SetProperty(ref _gameTime, value);
 		}
 
 		public gameTimeSystemReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

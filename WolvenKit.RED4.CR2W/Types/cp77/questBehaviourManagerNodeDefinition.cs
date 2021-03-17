@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("puppet")] 
 		public gameEntityReference Puppet
 		{
-			get
-			{
-				if (_puppet == null)
-				{
-					_puppet = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "puppet", cr2w, this);
-				}
-				return _puppet;
-			}
-			set
-			{
-				if (_puppet == value)
-				{
-					return;
-				}
-				_puppet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppet);
+			set => SetProperty(ref _puppet, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("type")] 
 		public CHandle<workIWorkspotQuestAction> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CHandle<workIWorkspotQuestAction>) CR2WTypeManager.Create("handle:workIWorkspotQuestAction", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("newType")] 
 		public CHandle<questIBehaviourManager_NodeType> NewType
 		{
-			get
-			{
-				if (_newType == null)
-				{
-					_newType = (CHandle<questIBehaviourManager_NodeType>) CR2WTypeManager.Create("handle:questIBehaviourManager_NodeType", "newType", cr2w, this);
-				}
-				return _newType;
-			}
-			set
-			{
-				if (_newType == value)
-				{
-					return;
-				}
-				_newType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newType);
+			set => SetProperty(ref _newType, value);
 		}
 
 		public questBehaviourManagerNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("physicalDestructionComponentName")] 
 		public CName PhysicalDestructionComponentName
 		{
-			get
-			{
-				if (_physicalDestructionComponentName == null)
-				{
-					_physicalDestructionComponentName = (CName) CR2WTypeManager.Create("CName", "physicalDestructionComponentName", cr2w, this);
-				}
-				return _physicalDestructionComponentName;
-			}
-			set
-			{
-				if (_physicalDestructionComponentName == value)
-				{
-					return;
-				}
-				_physicalDestructionComponentName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _physicalDestructionComponentName);
+			set => SetProperty(ref _physicalDestructionComponentName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("thresholdLevels")] 
 		public CArray<CFloat> ThresholdLevels
 		{
-			get
-			{
-				if (_thresholdLevels == null)
-				{
-					_thresholdLevels = (CArray<CFloat>) CR2WTypeManager.Create("array:Float", "thresholdLevels", cr2w, this);
-				}
-				return _thresholdLevels;
-			}
-			set
-			{
-				if (_thresholdLevels == value)
-				{
-					return;
-				}
-				_thresholdLevels = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _thresholdLevels);
+			set => SetProperty(ref _thresholdLevels, value);
 		}
 
 		public gamePhysicalDestructionListenerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -41,667 +41,232 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("leftBracket")] 
 		public wCHandle<inkImageWidget> LeftBracket
 		{
-			get
-			{
-				if (_leftBracket == null)
-				{
-					_leftBracket = (wCHandle<inkImageWidget>) CR2WTypeManager.Create("whandle:inkImageWidget", "leftBracket", cr2w, this);
-				}
-				return _leftBracket;
-			}
-			set
-			{
-				if (_leftBracket == value)
-				{
-					return;
-				}
-				_leftBracket = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _leftBracket);
+			set => SetProperty(ref _leftBracket, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("rightBracket")] 
 		public wCHandle<inkImageWidget> RightBracket
 		{
-			get
-			{
-				if (_rightBracket == null)
-				{
-					_rightBracket = (wCHandle<inkImageWidget>) CR2WTypeManager.Create("whandle:inkImageWidget", "rightBracket", cr2w, this);
-				}
-				return _rightBracket;
-			}
-			set
-			{
-				if (_rightBracket == value)
-				{
-					return;
-				}
-				_rightBracket = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rightBracket);
+			set => SetProperty(ref _rightBracket, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("hori")] 
 		public wCHandle<inkWidget> Hori
 		{
-			get
-			{
-				if (_hori == null)
-				{
-					_hori = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "hori", cr2w, this);
-				}
-				return _hori;
-			}
-			set
-			{
-				if (_hori == value)
-				{
-					return;
-				}
-				_hori = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hori);
+			set => SetProperty(ref _hori, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("chargeBar")] 
 		public wCHandle<inkWidget> ChargeBar
 		{
-			get
-			{
-				if (_chargeBar == null)
-				{
-					_chargeBar = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "chargeBar", cr2w, this);
-				}
-				return _chargeBar;
-			}
-			set
-			{
-				if (_chargeBar == value)
-				{
-					return;
-				}
-				_chargeBar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeBar);
+			set => SetProperty(ref _chargeBar, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("ammoLeft")] 
 		public wCHandle<inkWidget> AmmoLeft
 		{
-			get
-			{
-				if (_ammoLeft == null)
-				{
-					_ammoLeft = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "ammoLeft", cr2w, this);
-				}
-				return _ammoLeft;
-			}
-			set
-			{
-				if (_ammoLeft == value)
-				{
-					return;
-				}
-				_ammoLeft = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ammoLeft);
+			set => SetProperty(ref _ammoLeft, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("ammoRight")] 
 		public wCHandle<inkWidget> AmmoRight
 		{
-			get
-			{
-				if (_ammoRight == null)
-				{
-					_ammoRight = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "ammoRight", cr2w, this);
-				}
-				return _ammoRight;
-			}
-			set
-			{
-				if (_ammoRight == value)
-				{
-					return;
-				}
-				_ammoRight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ammoRight);
+			set => SetProperty(ref _ammoRight, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("ammoLeftFill")] 
 		public wCHandle<inkWidget> AmmoLeftFill
 		{
-			get
-			{
-				if (_ammoLeftFill == null)
-				{
-					_ammoLeftFill = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "ammoLeftFill", cr2w, this);
-				}
-				return _ammoLeftFill;
-			}
-			set
-			{
-				if (_ammoLeftFill == value)
-				{
-					return;
-				}
-				_ammoLeftFill = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ammoLeftFill);
+			set => SetProperty(ref _ammoLeftFill, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("ammoRightFill")] 
 		public wCHandle<inkWidget> AmmoRightFill
 		{
-			get
-			{
-				if (_ammoRightFill == null)
-				{
-					_ammoRightFill = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "ammoRightFill", cr2w, this);
-				}
-				return _ammoRightFill;
-			}
-			set
-			{
-				if (_ammoRightFill == value)
-				{
-					return;
-				}
-				_ammoRightFill = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ammoRightFill);
+			set => SetProperty(ref _ammoRightFill, value);
 		}
 
 		[Ordinal(32)] 
 		[RED("chargeBoth")] 
 		public wCHandle<inkWidget> ChargeBoth
 		{
-			get
-			{
-				if (_chargeBoth == null)
-				{
-					_chargeBoth = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "chargeBoth", cr2w, this);
-				}
-				return _chargeBoth;
-			}
-			set
-			{
-				if (_chargeBoth == value)
-				{
-					return;
-				}
-				_chargeBoth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeBoth);
+			set => SetProperty(ref _chargeBoth, value);
 		}
 
 		[Ordinal(33)] 
 		[RED("chargeLeftBar")] 
 		public wCHandle<inkRectangleWidget> ChargeLeftBar
 		{
-			get
-			{
-				if (_chargeLeftBar == null)
-				{
-					_chargeLeftBar = (wCHandle<inkRectangleWidget>) CR2WTypeManager.Create("whandle:inkRectangleWidget", "chargeLeftBar", cr2w, this);
-				}
-				return _chargeLeftBar;
-			}
-			set
-			{
-				if (_chargeLeftBar == value)
-				{
-					return;
-				}
-				_chargeLeftBar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeLeftBar);
+			set => SetProperty(ref _chargeLeftBar, value);
 		}
 
 		[Ordinal(34)] 
 		[RED("chargeRightBar")] 
 		public wCHandle<inkRectangleWidget> ChargeRightBar
 		{
-			get
-			{
-				if (_chargeRightBar == null)
-				{
-					_chargeRightBar = (wCHandle<inkRectangleWidget>) CR2WTypeManager.Create("whandle:inkRectangleWidget", "chargeRightBar", cr2w, this);
-				}
-				return _chargeRightBar;
-			}
-			set
-			{
-				if (_chargeRightBar == value)
-				{
-					return;
-				}
-				_chargeRightBar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeRightBar);
+			set => SetProperty(ref _chargeRightBar, value);
 		}
 
 		[Ordinal(35)] 
 		[RED("centerPart")] 
 		public wCHandle<inkImageWidget> CenterPart
 		{
-			get
-			{
-				if (_centerPart == null)
-				{
-					_centerPart = (wCHandle<inkImageWidget>) CR2WTypeManager.Create("whandle:inkImageWidget", "centerPart", cr2w, this);
-				}
-				return _centerPart;
-			}
-			set
-			{
-				if (_centerPart == value)
-				{
-					return;
-				}
-				_centerPart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _centerPart);
+			set => SetProperty(ref _centerPart, value);
 		}
 
 		[Ordinal(36)] 
 		[RED("fluffCanvas")] 
 		public wCHandle<inkWidget> FluffCanvas
 		{
-			get
-			{
-				if (_fluffCanvas == null)
-				{
-					_fluffCanvas = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "fluffCanvas", cr2w, this);
-				}
-				return _fluffCanvas;
-			}
-			set
-			{
-				if (_fluffCanvas == value)
-				{
-					return;
-				}
-				_fluffCanvas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fluffCanvas);
+			set => SetProperty(ref _fluffCanvas, value);
 		}
 
 		[Ordinal(37)] 
 		[RED("chargeAnimationProxy")] 
 		public CHandle<inkanimProxy> ChargeAnimationProxy
 		{
-			get
-			{
-				if (_chargeAnimationProxy == null)
-				{
-					_chargeAnimationProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "chargeAnimationProxy", cr2w, this);
-				}
-				return _chargeAnimationProxy;
-			}
-			set
-			{
-				if (_chargeAnimationProxy == value)
-				{
-					return;
-				}
-				_chargeAnimationProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chargeAnimationProxy);
+			set => SetProperty(ref _chargeAnimationProxy, value);
 		}
 
 		[Ordinal(38)] 
 		[RED("bufferedSpread")] 
 		public Vector2 BufferedSpread
 		{
-			get
-			{
-				if (_bufferedSpread == null)
-				{
-					_bufferedSpread = (Vector2) CR2WTypeManager.Create("Vector2", "bufferedSpread", cr2w, this);
-				}
-				return _bufferedSpread;
-			}
-			set
-			{
-				if (_bufferedSpread == value)
-				{
-					return;
-				}
-				_bufferedSpread = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bufferedSpread);
+			set => SetProperty(ref _bufferedSpread, value);
 		}
 
 		[Ordinal(39)] 
 		[RED("weaponlocalBB")] 
 		public CHandle<gameIBlackboard> WeaponlocalBB
 		{
-			get
-			{
-				if (_weaponlocalBB == null)
-				{
-					_weaponlocalBB = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "weaponlocalBB", cr2w, this);
-				}
-				return _weaponlocalBB;
-			}
-			set
-			{
-				if (_weaponlocalBB == value)
-				{
-					return;
-				}
-				_weaponlocalBB = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponlocalBB);
+			set => SetProperty(ref _weaponlocalBB, value);
 		}
 
 		[Ordinal(40)] 
 		[RED("bbcharge")] 
 		public CUInt32 Bbcharge
 		{
-			get
-			{
-				if (_bbcharge == null)
-				{
-					_bbcharge = (CUInt32) CR2WTypeManager.Create("Uint32", "bbcharge", cr2w, this);
-				}
-				return _bbcharge;
-			}
-			set
-			{
-				if (_bbcharge == value)
-				{
-					return;
-				}
-				_bbcharge = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbcharge);
+			set => SetProperty(ref _bbcharge, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("bbmagazineAmmoCount")] 
 		public CUInt32 BbmagazineAmmoCount
 		{
-			get
-			{
-				if (_bbmagazineAmmoCount == null)
-				{
-					_bbmagazineAmmoCount = (CUInt32) CR2WTypeManager.Create("Uint32", "bbmagazineAmmoCount", cr2w, this);
-				}
-				return _bbmagazineAmmoCount;
-			}
-			set
-			{
-				if (_bbmagazineAmmoCount == value)
-				{
-					return;
-				}
-				_bbmagazineAmmoCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbmagazineAmmoCount);
+			set => SetProperty(ref _bbmagazineAmmoCount, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("bbcurrentFireMode")] 
 		public CUInt32 BbcurrentFireMode
 		{
-			get
-			{
-				if (_bbcurrentFireMode == null)
-				{
-					_bbcurrentFireMode = (CUInt32) CR2WTypeManager.Create("Uint32", "bbcurrentFireMode", cr2w, this);
-				}
-				return _bbcurrentFireMode;
-			}
-			set
-			{
-				if (_bbcurrentFireMode == value)
-				{
-					return;
-				}
-				_bbcurrentFireMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbcurrentFireMode);
+			set => SetProperty(ref _bbcurrentFireMode, value);
 		}
 
 		[Ordinal(43)] 
 		[RED("currentAmmo")] 
 		public CInt32 CurrentAmmo
 		{
-			get
-			{
-				if (_currentAmmo == null)
-				{
-					_currentAmmo = (CInt32) CR2WTypeManager.Create("Int32", "currentAmmo", cr2w, this);
-				}
-				return _currentAmmo;
-			}
-			set
-			{
-				if (_currentAmmo == value)
-				{
-					return;
-				}
-				_currentAmmo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentAmmo);
+			set => SetProperty(ref _currentAmmo, value);
 		}
 
 		[Ordinal(44)] 
 		[RED("currentMaxAmmo")] 
 		public CInt32 CurrentMaxAmmo
 		{
-			get
-			{
-				if (_currentMaxAmmo == null)
-				{
-					_currentMaxAmmo = (CInt32) CR2WTypeManager.Create("Int32", "currentMaxAmmo", cr2w, this);
-				}
-				return _currentMaxAmmo;
-			}
-			set
-			{
-				if (_currentMaxAmmo == value)
-				{
-					return;
-				}
-				_currentMaxAmmo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentMaxAmmo);
+			set => SetProperty(ref _currentMaxAmmo, value);
 		}
 
 		[Ordinal(45)] 
 		[RED("maxSupportedAmmo")] 
 		public CInt32 MaxSupportedAmmo
 		{
-			get
-			{
-				if (_maxSupportedAmmo == null)
-				{
-					_maxSupportedAmmo = (CInt32) CR2WTypeManager.Create("Int32", "maxSupportedAmmo", cr2w, this);
-				}
-				return _maxSupportedAmmo;
-			}
-			set
-			{
-				if (_maxSupportedAmmo == value)
-				{
-					return;
-				}
-				_maxSupportedAmmo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxSupportedAmmo);
+			set => SetProperty(ref _maxSupportedAmmo, value);
 		}
 
 		[Ordinal(46)] 
 		[RED("currentFireMode")] 
 		public CEnum<gamedataTriggerMode> CurrentFireMode
 		{
-			get
-			{
-				if (_currentFireMode == null)
-				{
-					_currentFireMode = (CEnum<gamedataTriggerMode>) CR2WTypeManager.Create("gamedataTriggerMode", "currentFireMode", cr2w, this);
-				}
-				return _currentFireMode;
-			}
-			set
-			{
-				if (_currentFireMode == value)
-				{
-					return;
-				}
-				_currentFireMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentFireMode);
+			set => SetProperty(ref _currentFireMode, value);
 		}
 
 		[Ordinal(47)] 
 		[RED("bbNPCStatsInfo")] 
 		public CUInt32 BbNPCStatsInfo
 		{
-			get
-			{
-				if (_bbNPCStatsInfo == null)
-				{
-					_bbNPCStatsInfo = (CUInt32) CR2WTypeManager.Create("Uint32", "bbNPCStatsInfo", cr2w, this);
-				}
-				return _bbNPCStatsInfo;
-			}
-			set
-			{
-				if (_bbNPCStatsInfo == value)
-				{
-					return;
-				}
-				_bbNPCStatsInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbNPCStatsInfo);
+			set => SetProperty(ref _bbNPCStatsInfo, value);
 		}
 
 		[Ordinal(48)] 
 		[RED("horizontalMinSpread")] 
 		public CFloat HorizontalMinSpread
 		{
-			get
-			{
-				if (_horizontalMinSpread == null)
-				{
-					_horizontalMinSpread = (CFloat) CR2WTypeManager.Create("Float", "horizontalMinSpread", cr2w, this);
-				}
-				return _horizontalMinSpread;
-			}
-			set
-			{
-				if (_horizontalMinSpread == value)
-				{
-					return;
-				}
-				_horizontalMinSpread = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _horizontalMinSpread);
+			set => SetProperty(ref _horizontalMinSpread, value);
 		}
 
 		[Ordinal(49)] 
 		[RED("verticalMinSpread")] 
 		public CFloat VerticalMinSpread
 		{
-			get
-			{
-				if (_verticalMinSpread == null)
-				{
-					_verticalMinSpread = (CFloat) CR2WTypeManager.Create("Float", "verticalMinSpread", cr2w, this);
-				}
-				return _verticalMinSpread;
-			}
-			set
-			{
-				if (_verticalMinSpread == value)
-				{
-					return;
-				}
-				_verticalMinSpread = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _verticalMinSpread);
+			set => SetProperty(ref _verticalMinSpread, value);
 		}
 
 		[Ordinal(50)] 
 		[RED("gameplaySpreadMultiplier")] 
 		public CFloat GameplaySpreadMultiplier
 		{
-			get
-			{
-				if (_gameplaySpreadMultiplier == null)
-				{
-					_gameplaySpreadMultiplier = (CFloat) CR2WTypeManager.Create("Float", "gameplaySpreadMultiplier", cr2w, this);
-				}
-				return _gameplaySpreadMultiplier;
-			}
-			set
-			{
-				if (_gameplaySpreadMultiplier == value)
-				{
-					return;
-				}
-				_gameplaySpreadMultiplier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameplaySpreadMultiplier);
+			set => SetProperty(ref _gameplaySpreadMultiplier, value);
 		}
 
 		[Ordinal(51)] 
 		[RED("charge")] 
 		public CFloat Charge
 		{
-			get
-			{
-				if (_charge == null)
-				{
-					_charge = (CFloat) CR2WTypeManager.Create("Float", "charge", cr2w, this);
-				}
-				return _charge;
-			}
-			set
-			{
-				if (_charge == value)
-				{
-					return;
-				}
-				_charge = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _charge);
+			set => SetProperty(ref _charge, value);
 		}
 
 		[Ordinal(52)] 
 		[RED("spread")] 
 		public CFloat Spread
 		{
-			get
-			{
-				if (_spread == null)
-				{
-					_spread = (CFloat) CR2WTypeManager.Create("Float", "spread", cr2w, this);
-				}
-				return _spread;
-			}
-			set
-			{
-				if (_spread == value)
-				{
-					return;
-				}
-				_spread = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spread);
+			set => SetProperty(ref _spread, value);
 		}
 
 		public CrosshairGameController_Tech_Hex(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

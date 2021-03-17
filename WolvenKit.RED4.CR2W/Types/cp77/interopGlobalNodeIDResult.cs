@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("errorMessage")] 
 		public CString ErrorMessage
 		{
-			get
-			{
-				if (_errorMessage == null)
-				{
-					_errorMessage = (CString) CR2WTypeManager.Create("String", "errorMessage", cr2w, this);
-				}
-				return _errorMessage;
-			}
-			set
-			{
-				if (_errorMessage == value)
-				{
-					return;
-				}
-				_errorMessage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _errorMessage);
+			set => SetProperty(ref _errorMessage, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("result")] 
 		public CString Result
 		{
-			get
-			{
-				if (_result == null)
-				{
-					_result = (CString) CR2WTypeManager.Create("String", "result", cr2w, this);
-				}
-				return _result;
-			}
-			set
-			{
-				if (_result == value)
-				{
-					return;
-				}
-				_result = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _result);
+			set => SetProperty(ref _result, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isValid")] 
 		public CBool IsValid
 		{
-			get
-			{
-				if (_isValid == null)
-				{
-					_isValid = (CBool) CR2WTypeManager.Create("Bool", "isValid", cr2w, this);
-				}
-				return _isValid;
-			}
-			set
-			{
-				if (_isValid == value)
-				{
-					return;
-				}
-				_isValid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isValid);
+			set => SetProperty(ref _isValid, value);
 		}
 
 		public interopGlobalNodeIDResult(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

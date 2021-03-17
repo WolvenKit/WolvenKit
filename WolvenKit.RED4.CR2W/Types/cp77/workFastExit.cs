@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animName")] 
 		public CName AnimName
 		{
-			get
-			{
-				if (_animName == null)
-				{
-					_animName = (CName) CR2WTypeManager.Create("CName", "animName", cr2w, this);
-				}
-				return _animName;
-			}
-			set
-			{
-				if (_animName == value)
-				{
-					return;
-				}
-				_animName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animName);
+			set => SetProperty(ref _animName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("forcedBlendIn")] 
 		public CFloat ForcedBlendIn
 		{
-			get
-			{
-				if (_forcedBlendIn == null)
-				{
-					_forcedBlendIn = (CFloat) CR2WTypeManager.Create("Float", "forcedBlendIn", cr2w, this);
-				}
-				return _forcedBlendIn;
-			}
-			set
-			{
-				if (_forcedBlendIn == value)
-				{
-					return;
-				}
-				_forcedBlendIn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forcedBlendIn);
+			set => SetProperty(ref _forcedBlendIn, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("movementType")] 
 		public CEnum<moveMovementType> MovementType
 		{
-			get
-			{
-				if (_movementType == null)
-				{
-					_movementType = (CEnum<moveMovementType>) CR2WTypeManager.Create("moveMovementType", "movementType", cr2w, this);
-				}
-				return _movementType;
-			}
-			set
-			{
-				if (_movementType == value)
-				{
-					return;
-				}
-				_movementType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movementType);
+			set => SetProperty(ref _movementType, value);
 		}
 
 		public workFastExit(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statPoolType")] 
 		public CEnum<gamedataStatPoolType> StatPoolType
 		{
-			get
-			{
-				if (_statPoolType == null)
-				{
-					_statPoolType = (CEnum<gamedataStatPoolType>) CR2WTypeManager.Create("gamedataStatPoolType", "statPoolType", cr2w, this);
-				}
-				return _statPoolType;
-			}
-			set
-			{
-				if (_statPoolType == value)
-				{
-					return;
-				}
-				_statPoolType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statPoolType);
+			set => SetProperty(ref _statPoolType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("valueToRestore")] 
 		public CFloat ValueToRestore
 		{
-			get
-			{
-				if (_valueToRestore == null)
-				{
-					_valueToRestore = (CFloat) CR2WTypeManager.Create("Float", "valueToRestore", cr2w, this);
-				}
-				return _valueToRestore;
-			}
-			set
-			{
-				if (_valueToRestore == value)
-				{
-					return;
-				}
-				_valueToRestore = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _valueToRestore);
+			set => SetProperty(ref _valueToRestore, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("percentage")] 
 		public CBool Percentage
 		{
-			get
-			{
-				if (_percentage == null)
-				{
-					_percentage = (CBool) CR2WTypeManager.Create("Bool", "percentage", cr2w, this);
-				}
-				return _percentage;
-			}
-			set
-			{
-				if (_percentage == value)
-				{
-					return;
-				}
-				_percentage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _percentage);
+			set => SetProperty(ref _percentage, value);
 		}
 
 		public RestoreStatPoolEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -29,391 +29,136 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("titleText")] 
 		public inkTextWidgetReference TitleText
 		{
-			get
-			{
-				if (_titleText == null)
-				{
-					_titleText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "titleText", cr2w, this);
-				}
-				return _titleText;
-			}
-			set
-			{
-				if (_titleText == value)
-				{
-					return;
-				}
-				_titleText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _titleText);
+			set => SetProperty(ref _titleText, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("buttonHintsRoot")] 
 		public inkWidgetReference ButtonHintsRoot
 		{
-			get
-			{
-				if (_buttonHintsRoot == null)
-				{
-					_buttonHintsRoot = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "buttonHintsRoot", cr2w, this);
-				}
-				return _buttonHintsRoot;
-			}
-			set
-			{
-				if (_buttonHintsRoot == value)
-				{
-					return;
-				}
-				_buttonHintsRoot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonHintsRoot);
+			set => SetProperty(ref _buttonHintsRoot, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("rairtyBar")] 
 		public inkWidgetReference RairtyBar
 		{
-			get
-			{
-				if (_rairtyBar == null)
-				{
-					_rairtyBar = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "rairtyBar", cr2w, this);
-				}
-				return _rairtyBar;
-			}
-			set
-			{
-				if (_rairtyBar == value)
-				{
-					return;
-				}
-				_rairtyBar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rairtyBar);
+			set => SetProperty(ref _rairtyBar, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("root")] 
 		public inkWidgetReference Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("background")] 
 		public inkWidgetReference Background
 		{
-			get
-			{
-				if (_background == null)
-				{
-					_background = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "background", cr2w, this);
-				}
-				return _background;
-			}
-			set
-			{
-				if (_background == value)
-				{
-					return;
-				}
-				_background = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _background);
+			set => SetProperty(ref _background, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("weaponSlotsContainer")] 
 		public inkCompoundWidgetReference WeaponSlotsContainer
 		{
-			get
-			{
-				if (_weaponSlotsContainer == null)
-				{
-					_weaponSlotsContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "weaponSlotsContainer", cr2w, this);
-				}
-				return _weaponSlotsContainer;
-			}
-			set
-			{
-				if (_weaponSlotsContainer == value)
-				{
-					return;
-				}
-				_weaponSlotsContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponSlotsContainer);
+			set => SetProperty(ref _weaponSlotsContainer, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("tooltipsManagerRef")] 
 		public inkWidgetReference TooltipsManagerRef
 		{
-			get
-			{
-				if (_tooltipsManagerRef == null)
-				{
-					_tooltipsManagerRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "tooltipsManagerRef", cr2w, this);
-				}
-				return _tooltipsManagerRef;
-			}
-			set
-			{
-				if (_tooltipsManagerRef == value)
-				{
-					return;
-				}
-				_tooltipsManagerRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsManagerRef);
+			set => SetProperty(ref _tooltipsManagerRef, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("buttonHintsController")] 
 		public wCHandle<ButtonHints> ButtonHintsController
 		{
-			get
-			{
-				if (_buttonHintsController == null)
-				{
-					_buttonHintsController = (wCHandle<ButtonHints>) CR2WTypeManager.Create("whandle:ButtonHints", "buttonHintsController", cr2w, this);
-				}
-				return _buttonHintsController;
-			}
-			set
-			{
-				if (_buttonHintsController == value)
-				{
-					return;
-				}
-				_buttonHintsController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonHintsController);
+			set => SetProperty(ref _buttonHintsController, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("gameData")] 
 		public CHandle<gameItemData> GameData
 		{
-			get
-			{
-				if (_gameData == null)
-				{
-					_gameData = (CHandle<gameItemData>) CR2WTypeManager.Create("handle:gameItemData", "gameData", cr2w, this);
-				}
-				return _gameData;
-			}
-			set
-			{
-				if (_gameData == value)
-				{
-					return;
-				}
-				_gameData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameData);
+			set => SetProperty(ref _gameData, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("buttonOk")] 
 		public inkWidgetReference ButtonOk
 		{
-			get
-			{
-				if (_buttonOk == null)
-				{
-					_buttonOk = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "buttonOk", cr2w, this);
-				}
-				return _buttonOk;
-			}
-			set
-			{
-				if (_buttonOk == value)
-				{
-					return;
-				}
-				_buttonOk = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonOk);
+			set => SetProperty(ref _buttonOk, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("buttonCancel")] 
 		public inkWidgetReference ButtonCancel
 		{
-			get
-			{
-				if (_buttonCancel == null)
-				{
-					_buttonCancel = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "buttonCancel", cr2w, this);
-				}
-				return _buttonCancel;
-			}
-			set
-			{
-				if (_buttonCancel == value)
-				{
-					return;
-				}
-				_buttonCancel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonCancel);
+			set => SetProperty(ref _buttonCancel, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("data")] 
 		public CHandle<BackpackEquipSlotChooserData> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CHandle<BackpackEquipSlotChooserData>) CR2WTypeManager.Create("handle:BackpackEquipSlotChooserData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("selectedSlotIndex")] 
 		public CInt32 SelectedSlotIndex
 		{
-			get
-			{
-				if (_selectedSlotIndex == null)
-				{
-					_selectedSlotIndex = (CInt32) CR2WTypeManager.Create("Int32", "selectedSlotIndex", cr2w, this);
-				}
-				return _selectedSlotIndex;
-			}
-			set
-			{
-				if (_selectedSlotIndex == value)
-				{
-					return;
-				}
-				_selectedSlotIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectedSlotIndex);
+			set => SetProperty(ref _selectedSlotIndex, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("tooltipsManager")] 
 		public wCHandle<gameuiTooltipsManager> TooltipsManager
 		{
-			get
-			{
-				if (_tooltipsManager == null)
-				{
-					_tooltipsManager = (wCHandle<gameuiTooltipsManager>) CR2WTypeManager.Create("whandle:gameuiTooltipsManager", "tooltipsManager", cr2w, this);
-				}
-				return _tooltipsManager;
-			}
-			set
-			{
-				if (_tooltipsManager == value)
-				{
-					return;
-				}
-				_tooltipsManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsManager);
+			set => SetProperty(ref _tooltipsManager, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("comparisonResolver")] 
 		public CHandle<ItemPreferredComparisonResolver> ComparisonResolver
 		{
-			get
-			{
-				if (_comparisonResolver == null)
-				{
-					_comparisonResolver = (CHandle<ItemPreferredComparisonResolver>) CR2WTypeManager.Create("handle:ItemPreferredComparisonResolver", "comparisonResolver", cr2w, this);
-				}
-				return _comparisonResolver;
-			}
-			set
-			{
-				if (_comparisonResolver == value)
-				{
-					return;
-				}
-				_comparisonResolver = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comparisonResolver);
+			set => SetProperty(ref _comparisonResolver, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("libraryPath")] 
 		public inkWidgetLibraryReference LibraryPath
 		{
-			get
-			{
-				if (_libraryPath == null)
-				{
-					_libraryPath = (inkWidgetLibraryReference) CR2WTypeManager.Create("inkWidgetLibraryReference", "libraryPath", cr2w, this);
-				}
-				return _libraryPath;
-			}
-			set
-			{
-				if (_libraryPath == value)
-				{
-					return;
-				}
-				_libraryPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _libraryPath);
+			set => SetProperty(ref _libraryPath, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("closeData")] 
 		public CHandle<BackpackEquipSlotChooserCloseData> CloseData
 		{
-			get
-			{
-				if (_closeData == null)
-				{
-					_closeData = (CHandle<BackpackEquipSlotChooserCloseData>) CR2WTypeManager.Create("handle:BackpackEquipSlotChooserCloseData", "closeData", cr2w, this);
-				}
-				return _closeData;
-			}
-			set
-			{
-				if (_closeData == value)
-				{
-					return;
-				}
-				_closeData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _closeData);
+			set => SetProperty(ref _closeData, value);
 		}
 
 		public BackpackEquipSlotChooserPopup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

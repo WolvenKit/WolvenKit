@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stateToCheck")] 
 		public CEnum<EstatusEffectsState> StateToCheck
 		{
-			get
-			{
-				if (_stateToCheck == null)
-				{
-					_stateToCheck = (CEnum<EstatusEffectsState>) CR2WTypeManager.Create("EstatusEffectsState", "stateToCheck", cr2w, this);
-				}
-				return _stateToCheck;
-			}
-			set
-			{
-				if (_stateToCheck == value)
-				{
-					return;
-				}
-				_stateToCheck = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stateToCheck);
+			set => SetProperty(ref _stateToCheck, value);
 		}
 
 		public CheckWoundedStatusEffectState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

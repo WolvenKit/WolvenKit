@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("priority")] 
 		public CUInt32 Priority
 		{
-			get
-			{
-				if (_priority == null)
-				{
-					_priority = (CUInt32) CR2WTypeManager.Create("Uint32", "priority", cr2w, this);
-				}
-				return _priority;
-			}
-			set
-			{
-				if (_priority == value)
-				{
-					return;
-				}
-				_priority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _priority);
+			set => SetProperty(ref _priority, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("group")] 
 		public CEnum<rendGIGroup> Group
 		{
-			get
-			{
-				if (_group == null)
-				{
-					_group = (CEnum<rendGIGroup>) CR2WTypeManager.Create("rendGIGroup", "group", cr2w, this);
-				}
-				return _group;
-			}
-			set
-			{
-				if (_group == value)
-				{
-					return;
-				}
-				_group = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _group);
+			set => SetProperty(ref _group, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("interior")] 
 		public CBool Interior
 		{
-			get
-			{
-				if (_interior == null)
-				{
-					_interior = (CBool) CR2WTypeManager.Create("Bool", "interior", cr2w, this);
-				}
-				return _interior;
-			}
-			set
-			{
-				if (_interior == value)
-				{
-					return;
-				}
-				_interior = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interior);
+			set => SetProperty(ref _interior, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("runtime")] 
 		public CBool Runtime
 		{
-			get
-			{
-				if (_runtime == null)
-				{
-					_runtime = (CBool) CR2WTypeManager.Create("Bool", "runtime", cr2w, this);
-				}
-				return _runtime;
-			}
-			set
-			{
-				if (_runtime == value)
-				{
-					return;
-				}
-				_runtime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _runtime);
+			set => SetProperty(ref _runtime, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("updated")] 
 		public CBool Updated
 		{
-			get
-			{
-				if (_updated == null)
-				{
-					_updated = (CBool) CR2WTypeManager.Create("Bool", "updated", cr2w, this);
-				}
-				return _updated;
-			}
-			set
-			{
-				if (_updated == value)
-				{
-					return;
-				}
-				_updated = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _updated);
+			set => SetProperty(ref _updated, value);
 		}
 
 		public worldGIShapeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

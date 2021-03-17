@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("reset")] 
 		public CBool Reset
 		{
-			get
-			{
-				if (_reset == null)
-				{
-					_reset = (CBool) CR2WTypeManager.Create("Bool", "reset", cr2w, this);
-				}
-				return _reset;
-			}
-			set
-			{
-				if (_reset == value)
-				{
-					return;
-				}
-				_reset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reset);
+			set => SetProperty(ref _reset, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("weatherID")] 
 		public TweakDBID WeatherID
 		{
-			get
-			{
-				if (_weatherID == null)
-				{
-					_weatherID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "weatherID", cr2w, this);
-				}
-				return _weatherID;
-			}
-			set
-			{
-				if (_weatherID == value)
-				{
-					return;
-				}
-				_weatherID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weatherID);
+			set => SetProperty(ref _weatherID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("blendTime")] 
 		public CFloat BlendTime
 		{
-			get
-			{
-				if (_blendTime == null)
-				{
-					_blendTime = (CFloat) CR2WTypeManager.Create("Float", "blendTime", cr2w, this);
-				}
-				return _blendTime;
-			}
-			set
-			{
-				if (_blendTime == value)
-				{
-					return;
-				}
-				_blendTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendTime);
+			set => SetProperty(ref _blendTime, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("priority")] 
 		public CUInt32 Priority
 		{
-			get
-			{
-				if (_priority == null)
-				{
-					_priority = (CUInt32) CR2WTypeManager.Create("Uint32", "priority", cr2w, this);
-				}
-				return _priority;
-			}
-			set
-			{
-				if (_priority == value)
-				{
-					return;
-				}
-				_priority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _priority);
+			set => SetProperty(ref _priority, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("source")] 
 		public CName Source
 		{
-			get
-			{
-				if (_source == null)
-				{
-					_source = (CName) CR2WTypeManager.Create("CName", "source", cr2w, this);
-				}
-				return _source;
-			}
-			set
-			{
-				if (_source == value)
-				{
-					return;
-				}
-				_source = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
 		}
 
 		public questPlayEnv_SetWeather(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

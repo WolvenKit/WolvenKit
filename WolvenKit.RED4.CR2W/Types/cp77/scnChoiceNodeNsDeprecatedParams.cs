@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actorId")] 
 		public scnActorId ActorId
 		{
-			get
-			{
-				if (_actorId == null)
-				{
-					_actorId = (scnActorId) CR2WTypeManager.Create("scnActorId", "actorId", cr2w, this);
-				}
-				return _actorId;
-			}
-			set
-			{
-				if (_actorId == value)
-				{
-					return;
-				}
-				_actorId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actorId);
+			set => SetProperty(ref _actorId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("propId")] 
 		public scnPropId PropId
 		{
-			get
-			{
-				if (_propId == null)
-				{
-					_propId = (scnPropId) CR2WTypeManager.Create("scnPropId", "propId", cr2w, this);
-				}
-				return _propId;
-			}
-			set
-			{
-				if (_propId == value)
-				{
-					return;
-				}
-				_propId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _propId);
+			set => SetProperty(ref _propId, value);
 		}
 
 		public scnChoiceNodeNsDeprecatedParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ratioSum")] 
 		public CFloat RatioSum
 		{
-			get
-			{
-				if (_ratioSum == null)
-				{
-					_ratioSum = (CFloat) CR2WTypeManager.Create("Float", "ratioSum", cr2w, this);
-				}
-				return _ratioSum;
-			}
-			set
-			{
-				if (_ratioSum == value)
-				{
-					return;
-				}
-				_ratioSum = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ratioSum);
+			set => SetProperty(ref _ratioSum, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("reachSum")] 
 		public CFloat ReachSum
 		{
-			get
-			{
-				if (_reachSum == null)
-				{
-					_reachSum = (CFloat) CR2WTypeManager.Create("Float", "reachSum", cr2w, this);
-				}
-				return _reachSum;
-			}
-			set
-			{
-				if (_reachSum == value)
-				{
-					return;
-				}
-				_reachSum = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reachSum);
+			set => SetProperty(ref _reachSum, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("area")] 
 		public CFloat Area
 		{
-			get
-			{
-				if (_area == null)
-				{
-					_area = (CFloat) CR2WTypeManager.Create("Float", "area", cr2w, this);
-				}
-				return _area;
-			}
-			set
-			{
-				if (_area == value)
-				{
-					return;
-				}
-				_area = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _area);
+			set => SetProperty(ref _area, value);
 		}
 
 		public AICombatSquadTacticRatio(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

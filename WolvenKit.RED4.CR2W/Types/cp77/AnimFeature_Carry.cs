@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("state")] 
 		public CInt32 State
 		{
-			get
-			{
-				if (_state == null)
-				{
-					_state = (CInt32) CR2WTypeManager.Create("Int32", "state", cr2w, this);
-				}
-				return _state;
-			}
-			set
-			{
-				if (_state == value)
-				{
-					return;
-				}
-				_state = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("pickupAnimation")] 
 		public CInt32 PickupAnimation
 		{
-			get
-			{
-				if (_pickupAnimation == null)
-				{
-					_pickupAnimation = (CInt32) CR2WTypeManager.Create("Int32", "pickupAnimation", cr2w, this);
-				}
-				return _pickupAnimation;
-			}
-			set
-			{
-				if (_pickupAnimation == value)
-				{
-					return;
-				}
-				_pickupAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pickupAnimation);
+			set => SetProperty(ref _pickupAnimation, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("useBothHands")] 
 		public CBool UseBothHands
 		{
-			get
-			{
-				if (_useBothHands == null)
-				{
-					_useBothHands = (CBool) CR2WTypeManager.Create("Bool", "useBothHands", cr2w, this);
-				}
-				return _useBothHands;
-			}
-			set
-			{
-				if (_useBothHands == value)
-				{
-					return;
-				}
-				_useBothHands = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useBothHands);
+			set => SetProperty(ref _useBothHands, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("instant")] 
 		public CBool Instant
 		{
-			get
-			{
-				if (_instant == null)
-				{
-					_instant = (CBool) CR2WTypeManager.Create("Bool", "instant", cr2w, this);
-				}
-				return _instant;
-			}
-			set
-			{
-				if (_instant == value)
-				{
-					return;
-				}
-				_instant = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instant);
+			set => SetProperty(ref _instant, value);
 		}
 
 		public AnimFeature_Carry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

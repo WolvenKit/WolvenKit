@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("chunkCapVertices")] 
 		public CArray<CArray<CUInt32>> ChunkCapVertices
 		{
-			get
-			{
-				if (_chunkCapVertices == null)
-				{
-					_chunkCapVertices = (CArray<CArray<CUInt32>>) CR2WTypeManager.Create("array:array:Uint32", "chunkCapVertices", cr2w, this);
-				}
-				return _chunkCapVertices;
-			}
-			set
-			{
-				if (_chunkCapVertices == value)
-				{
-					return;
-				}
-				_chunkCapVertices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chunkCapVertices);
+			set => SetProperty(ref _chunkCapVertices, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("customMorph")] 
 		public CBool CustomMorph
 		{
-			get
-			{
-				if (_customMorph == null)
-				{
-					_customMorph = (CBool) CR2WTypeManager.Create("Bool", "customMorph", cr2w, this);
-				}
-				return _customMorph;
-			}
-			set
-			{
-				if (_customMorph == value)
-				{
-					return;
-				}
-				_customMorph = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customMorph);
+			set => SetProperty(ref _customMorph, value);
 		}
 
 		public meshMeshParamGarmentSupport(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

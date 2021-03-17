@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("texture")] 
 		public raRef<CBitmapTexture> Texture
 		{
-			get
-			{
-				if (_texture == null)
-				{
-					_texture = (raRef<CBitmapTexture>) CR2WTypeManager.Create("raRef:CBitmapTexture", "texture", cr2w, this);
-				}
-				return _texture;
-			}
-			set
-			{
-				if (_texture == value)
-				{
-					return;
-				}
-				_texture = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _texture);
+			set => SetProperty(ref _texture, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("parts")] 
 		public CArray<inkTextureAtlasMapper> Parts
 		{
-			get
-			{
-				if (_parts == null)
-				{
-					_parts = (CArray<inkTextureAtlasMapper>) CR2WTypeManager.Create("array:inkTextureAtlasMapper", "parts", cr2w, this);
-				}
-				return _parts;
-			}
-			set
-			{
-				if (_parts == value)
-				{
-					return;
-				}
-				_parts = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parts);
+			set => SetProperty(ref _parts, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("slices")] 
 		public CArray<inkTextureAtlasSlice> Slices
 		{
-			get
-			{
-				if (_slices == null)
-				{
-					_slices = (CArray<inkTextureAtlasSlice>) CR2WTypeManager.Create("array:inkTextureAtlasSlice", "slices", cr2w, this);
-				}
-				return _slices;
-			}
-			set
-			{
-				if (_slices == value)
-				{
-					return;
-				}
-				_slices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slices);
+			set => SetProperty(ref _slices, value);
 		}
 
 		public inkTextureSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

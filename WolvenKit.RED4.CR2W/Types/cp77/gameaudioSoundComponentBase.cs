@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("audioName")] 
 		public CName AudioName
 		{
-			get
-			{
-				if (_audioName == null)
-				{
-					_audioName = (CName) CR2WTypeManager.Create("CName", "audioName", cr2w, this);
-				}
-				return _audioName;
-			}
-			set
-			{
-				if (_audioName == value)
-				{
-					return;
-				}
-				_audioName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioName);
+			set => SetProperty(ref _audioName, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("applyObstruction")] 
 		public CBool ApplyObstruction
 		{
-			get
-			{
-				if (_applyObstruction == null)
-				{
-					_applyObstruction = (CBool) CR2WTypeManager.Create("Bool", "applyObstruction", cr2w, this);
-				}
-				return _applyObstruction;
-			}
-			set
-			{
-				if (_applyObstruction == value)
-				{
-					return;
-				}
-				_applyObstruction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _applyObstruction);
+			set => SetProperty(ref _applyObstruction, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("applyAcousticOcclusion")] 
 		public CBool ApplyAcousticOcclusion
 		{
-			get
-			{
-				if (_applyAcousticOcclusion == null)
-				{
-					_applyAcousticOcclusion = (CBool) CR2WTypeManager.Create("Bool", "applyAcousticOcclusion", cr2w, this);
-				}
-				return _applyAcousticOcclusion;
-			}
-			set
-			{
-				if (_applyAcousticOcclusion == value)
-				{
-					return;
-				}
-				_applyAcousticOcclusion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _applyAcousticOcclusion);
+			set => SetProperty(ref _applyAcousticOcclusion, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("applyAcousticRepositioning")] 
 		public CBool ApplyAcousticRepositioning
 		{
-			get
-			{
-				if (_applyAcousticRepositioning == null)
-				{
-					_applyAcousticRepositioning = (CBool) CR2WTypeManager.Create("Bool", "applyAcousticRepositioning", cr2w, this);
-				}
-				return _applyAcousticRepositioning;
-			}
-			set
-			{
-				if (_applyAcousticRepositioning == value)
-				{
-					return;
-				}
-				_applyAcousticRepositioning = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _applyAcousticRepositioning);
+			set => SetProperty(ref _applyAcousticRepositioning, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("obstructionChangeTime")] 
 		public CFloat ObstructionChangeTime
 		{
-			get
-			{
-				if (_obstructionChangeTime == null)
-				{
-					_obstructionChangeTime = (CFloat) CR2WTypeManager.Create("Float", "obstructionChangeTime", cr2w, this);
-				}
-				return _obstructionChangeTime;
-			}
-			set
-			{
-				if (_obstructionChangeTime == value)
-				{
-					return;
-				}
-				_obstructionChangeTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _obstructionChangeTime);
+			set => SetProperty(ref _obstructionChangeTime, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("maxPlayDistance")] 
 		public CFloat MaxPlayDistance
 		{
-			get
-			{
-				if (_maxPlayDistance == null)
-				{
-					_maxPlayDistance = (CFloat) CR2WTypeManager.Create("Float", "maxPlayDistance", cr2w, this);
-				}
-				return _maxPlayDistance;
-			}
-			set
-			{
-				if (_maxPlayDistance == value)
-				{
-					return;
-				}
-				_maxPlayDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxPlayDistance);
+			set => SetProperty(ref _maxPlayDistance, value);
 		}
 
 		public gameaudioSoundComponentBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

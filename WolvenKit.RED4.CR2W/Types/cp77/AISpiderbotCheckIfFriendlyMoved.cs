@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("maxAllowedDelta")] 
 		public CHandle<AIArgumentMapping> MaxAllowedDelta
 		{
-			get
-			{
-				if (_maxAllowedDelta == null)
-				{
-					_maxAllowedDelta = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "maxAllowedDelta", cr2w, this);
-				}
-				return _maxAllowedDelta;
-			}
-			set
-			{
-				if (_maxAllowedDelta == value)
-				{
-					return;
-				}
-				_maxAllowedDelta = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxAllowedDelta);
+			set => SetProperty(ref _maxAllowedDelta, value);
 		}
 
 		public AISpiderbotCheckIfFriendlyMoved(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

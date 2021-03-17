@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mapping")] 
 		public CHandle<AIArgumentMapping> Mapping
 		{
-			get
-			{
-				if (_mapping == null)
-				{
-					_mapping = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "mapping", cr2w, this);
-				}
-				return _mapping;
-			}
-			set
-			{
-				if (_mapping == value)
-				{
-					return;
-				}
-				_mapping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mapping);
+			set => SetProperty(ref _mapping, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("update")] 
 		public CBool Update
 		{
-			get
-			{
-				if (_update == null)
-				{
-					_update = (CBool) CR2WTypeManager.Create("Bool", "update", cr2w, this);
-				}
-				return _update;
-			}
-			set
-			{
-				if (_update == value)
-				{
-					return;
-				}
-				_update = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _update);
+			set => SetProperty(ref _update, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("updatePeriod")] 
 		public CFloat UpdatePeriod
 		{
-			get
-			{
-				if (_updatePeriod == null)
-				{
-					_updatePeriod = (CFloat) CR2WTypeManager.Create("Float", "updatePeriod", cr2w, this);
-				}
-				return _updatePeriod;
-			}
-			set
-			{
-				if (_updatePeriod == value)
-				{
-					return;
-				}
-				_updatePeriod = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _updatePeriod);
+			set => SetProperty(ref _updatePeriod, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("behaviorCallbackNames")] 
 		public CArray<CName> BehaviorCallbackNames
 		{
-			get
-			{
-				if (_behaviorCallbackNames == null)
-				{
-					_behaviorCallbackNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "behaviorCallbackNames", cr2w, this);
-				}
-				return _behaviorCallbackNames;
-			}
-			set
-			{
-				if (_behaviorCallbackNames == value)
-				{
-					return;
-				}
-				_behaviorCallbackNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _behaviorCallbackNames);
+			set => SetProperty(ref _behaviorCallbackNames, value);
 		}
 
 		public AIbehaviorMappingExpressionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

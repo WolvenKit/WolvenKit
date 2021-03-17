@@ -25,299 +25,104 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Buffer")] 
 		public DataBuffer Buffer
 		{
-			get
-			{
-				if (_buffer == null)
-				{
-					_buffer = (DataBuffer) CR2WTypeManager.Create("DataBuffer", "Buffer", cr2w, this);
-				}
-				return _buffer;
-			}
-			set
-			{
-				if (_buffer == value)
-				{
-					return;
-				}
-				_buffer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buffer);
+			set => SetProperty(ref _buffer, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("QuantizationScale")] 
 		public Vector2 QuantizationScale
 		{
-			get
-			{
-				if (_quantizationScale == null)
-				{
-					_quantizationScale = (Vector2) CR2WTypeManager.Create("Vector2", "QuantizationScale", cr2w, this);
-				}
-				return _quantizationScale;
-			}
-			set
-			{
-				if (_quantizationScale == value)
-				{
-					return;
-				}
-				_quantizationScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quantizationScale);
+			set => SetProperty(ref _quantizationScale, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("QuantizationBias")] 
 		public Vector2 QuantizationBias
 		{
-			get
-			{
-				if (_quantizationBias == null)
-				{
-					_quantizationBias = (Vector2) CR2WTypeManager.Create("Vector2", "QuantizationBias", cr2w, this);
-				}
-				return _quantizationBias;
-			}
-			set
-			{
-				if (_quantizationBias == value)
-				{
-					return;
-				}
-				_quantizationBias = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quantizationBias);
+			set => SetProperty(ref _quantizationBias, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("BoxQuantizationScale")] 
 		public Vector3 BoxQuantizationScale
 		{
-			get
-			{
-				if (_boxQuantizationScale == null)
-				{
-					_boxQuantizationScale = (Vector3) CR2WTypeManager.Create("Vector3", "BoxQuantizationScale", cr2w, this);
-				}
-				return _boxQuantizationScale;
-			}
-			set
-			{
-				if (_boxQuantizationScale == value)
-				{
-					return;
-				}
-				_boxQuantizationScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _boxQuantizationScale);
+			set => SetProperty(ref _boxQuantizationScale, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("BoxQuantizationBias")] 
 		public Vector3 BoxQuantizationBias
 		{
-			get
-			{
-				if (_boxQuantizationBias == null)
-				{
-					_boxQuantizationBias = (Vector3) CR2WTypeManager.Create("Vector3", "BoxQuantizationBias", cr2w, this);
-				}
-				return _boxQuantizationBias;
-			}
-			set
-			{
-				if (_boxQuantizationBias == value)
-				{
-					return;
-				}
-				_boxQuantizationBias = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _boxQuantizationBias);
+			set => SetProperty(ref _boxQuantizationBias, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("NumPoints")] 
 		public CUInt32 NumPoints
 		{
-			get
-			{
-				if (_numPoints == null)
-				{
-					_numPoints = (CUInt32) CR2WTypeManager.Create("Uint32", "NumPoints", cr2w, this);
-				}
-				return _numPoints;
-			}
-			set
-			{
-				if (_numPoints == value)
-				{
-					return;
-				}
-				_numPoints = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numPoints);
+			set => SetProperty(ref _numPoints, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("NumBorderPoints")] 
 		public CUInt32 NumBorderPoints
 		{
-			get
-			{
-				if (_numBorderPoints == null)
-				{
-					_numBorderPoints = (CUInt32) CR2WTypeManager.Create("Uint32", "NumBorderPoints", cr2w, this);
-				}
-				return _numBorderPoints;
-			}
-			set
-			{
-				if (_numBorderPoints == value)
-				{
-					return;
-				}
-				_numBorderPoints = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numBorderPoints);
+			set => SetProperty(ref _numBorderPoints, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("NumFillPoints")] 
 		public CUInt32 NumFillPoints
 		{
-			get
-			{
-				if (_numFillPoints == null)
-				{
-					_numFillPoints = (CUInt32) CR2WTypeManager.Create("Uint32", "NumFillPoints", cr2w, this);
-				}
-				return _numFillPoints;
-			}
-			set
-			{
-				if (_numFillPoints == value)
-				{
-					return;
-				}
-				_numFillPoints = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numFillPoints);
+			set => SetProperty(ref _numFillPoints, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("NumShapes")] 
 		public CUInt32 NumShapes
 		{
-			get
-			{
-				if (_numShapes == null)
-				{
-					_numShapes = (CUInt32) CR2WTypeManager.Create("Uint32", "NumShapes", cr2w, this);
-				}
-				return _numShapes;
-			}
-			set
-			{
-				if (_numShapes == value)
-				{
-					return;
-				}
-				_numShapes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numShapes);
+			set => SetProperty(ref _numShapes, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("NumSpatialBuckets")] 
 		public CUInt32 NumSpatialBuckets
 		{
-			get
-			{
-				if (_numSpatialBuckets == null)
-				{
-					_numSpatialBuckets = (CUInt32) CR2WTypeManager.Create("Uint32", "NumSpatialBuckets", cr2w, this);
-				}
-				return _numSpatialBuckets;
-			}
-			set
-			{
-				if (_numSpatialBuckets == value)
-				{
-					return;
-				}
-				_numSpatialBuckets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numSpatialBuckets);
+			set => SetProperty(ref _numSpatialBuckets, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("NumUniqueGeometry")] 
 		public CUInt32 NumUniqueGeometry
 		{
-			get
-			{
-				if (_numUniqueGeometry == null)
-				{
-					_numUniqueGeometry = (CUInt32) CR2WTypeManager.Create("Uint32", "NumUniqueGeometry", cr2w, this);
-				}
-				return _numUniqueGeometry;
-			}
-			set
-			{
-				if (_numUniqueGeometry == value)
-				{
-					return;
-				}
-				_numUniqueGeometry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numUniqueGeometry);
+			set => SetProperty(ref _numUniqueGeometry, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("NumOwners")] 
 		public CUInt32 NumOwners
 		{
-			get
-			{
-				if (_numOwners == null)
-				{
-					_numOwners = (CUInt32) CR2WTypeManager.Create("Uint32", "NumOwners", cr2w, this);
-				}
-				return _numOwners;
-			}
-			set
-			{
-				if (_numOwners == value)
-				{
-					return;
-				}
-				_numOwners = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numOwners);
+			set => SetProperty(ref _numOwners, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("Version")] 
 		public CUInt32 Version
 		{
-			get
-			{
-				if (_version == null)
-				{
-					_version = (CUInt32) CR2WTypeManager.Create("Uint32", "Version", cr2w, this);
-				}
-				return _version;
-			}
-			set
-			{
-				if (_version == value)
-				{
-					return;
-				}
-				_version = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _version);
+			set => SetProperty(ref _version, value);
 		}
 
 		public minimapEncodedShapes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

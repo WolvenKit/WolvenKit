@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isVisibleInGame")] 
 		public CBool IsVisibleInGame
 		{
-			get
-			{
-				if (_isVisibleInGame == null)
-				{
-					_isVisibleInGame = (CBool) CR2WTypeManager.Create("Bool", "isVisibleInGame", cr2w, this);
-				}
-				return _isVisibleInGame;
-			}
-			set
-			{
-				if (_isVisibleInGame == value)
-				{
-					return;
-				}
-				_isVisibleInGame = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isVisibleInGame);
+			set => SetProperty(ref _isVisibleInGame, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isHostOnly")] 
 		public CBool IsHostOnly
 		{
-			get
-			{
-				if (_isHostOnly == null)
-				{
-					_isHostOnly = (CBool) CR2WTypeManager.Create("Bool", "isHostOnly", cr2w, this);
-				}
-				return _isHostOnly;
-			}
-			set
-			{
-				if (_isHostOnly == value)
-				{
-					return;
-				}
-				_isHostOnly = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isHostOnly);
+			set => SetProperty(ref _isHostOnly, value);
 		}
 
 		public worldNode_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

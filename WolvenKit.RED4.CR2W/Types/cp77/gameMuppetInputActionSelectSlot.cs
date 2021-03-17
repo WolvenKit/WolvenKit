@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetSlot")] 
 		public CInt32 TargetSlot
 		{
-			get
-			{
-				if (_targetSlot == null)
-				{
-					_targetSlot = (CInt32) CR2WTypeManager.Create("Int32", "targetSlot", cr2w, this);
-				}
-				return _targetSlot;
-			}
-			set
-			{
-				if (_targetSlot == value)
-				{
-					return;
-				}
-				_targetSlot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetSlot);
+			set => SetProperty(ref _targetSlot, value);
 		}
 
 		public gameMuppetInputActionSelectSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("owner")] 
 		public wCHandle<NPCPuppet> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<NPCPuppet>) CR2WTypeManager.Create("whandle:NPCPuppet", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("royceComponent")] 
 		public CHandle<RoyceComponent> RoyceComponent
 		{
-			get
-			{
-				if (_royceComponent == null)
-				{
-					_royceComponent = (CHandle<RoyceComponent>) CR2WTypeManager.Create("handle:RoyceComponent", "royceComponent", cr2w, this);
-				}
-				return _royceComponent;
-			}
-			set
-			{
-				if (_royceComponent == value)
-				{
-					return;
-				}
-				_royceComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _royceComponent);
+			set => SetProperty(ref _royceComponent, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("weakspots")] 
 		public CArray<wCHandle<gameWeakspotObject>> Weakspots
 		{
-			get
-			{
-				if (_weakspots == null)
-				{
-					_weakspots = (CArray<wCHandle<gameWeakspotObject>>) CR2WTypeManager.Create("array:whandle:gameWeakspotObject", "weakspots", cr2w, this);
-				}
-				return _weakspots;
-			}
-			set
-			{
-				if (_weakspots == value)
-				{
-					return;
-				}
-				_weakspots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weakspots);
+			set => SetProperty(ref _weakspots, value);
 		}
 
 		public RoyceHealthChangeListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

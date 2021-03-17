@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("LabelText")] 
 		public inkTextWidgetReference LabelText
 		{
-			get
-			{
-				if (_labelText == null)
-				{
-					_labelText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "LabelText", cr2w, this);
-				}
-				return _labelText;
-			}
-			set
-			{
-				if (_labelText == value)
-				{
-					return;
-				}
-				_labelText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _labelText);
+			set => SetProperty(ref _labelText, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ModifiedFlag")] 
 		public inkTextWidgetReference ModifiedFlag
 		{
-			get
-			{
-				if (_modifiedFlag == null)
-				{
-					_modifiedFlag = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "ModifiedFlag", cr2w, this);
-				}
-				return _modifiedFlag;
-			}
-			set
-			{
-				if (_modifiedFlag == value)
-				{
-					return;
-				}
-				_modifiedFlag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _modifiedFlag);
+			set => SetProperty(ref _modifiedFlag, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("Raycaster")] 
 		public inkWidgetReference Raycaster
 		{
-			get
-			{
-				if (_raycaster == null)
-				{
-					_raycaster = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "Raycaster", cr2w, this);
-				}
-				return _raycaster;
-			}
-			set
-			{
-				if (_raycaster == value)
-				{
-					return;
-				}
-				_raycaster = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _raycaster);
+			set => SetProperty(ref _raycaster, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("optionSwitchHint")] 
 		public inkWidgetReference OptionSwitchHint
 		{
-			get
-			{
-				if (_optionSwitchHint == null)
-				{
-					_optionSwitchHint = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "optionSwitchHint", cr2w, this);
-				}
-				return _optionSwitchHint;
-			}
-			set
-			{
-				if (_optionSwitchHint == value)
-				{
-					return;
-				}
-				_optionSwitchHint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _optionSwitchHint);
+			set => SetProperty(ref _optionSwitchHint, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("hoverGeneralHighlight")] 
 		public inkWidgetReference HoverGeneralHighlight
 		{
-			get
-			{
-				if (_hoverGeneralHighlight == null)
-				{
-					_hoverGeneralHighlight = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "hoverGeneralHighlight", cr2w, this);
-				}
-				return _hoverGeneralHighlight;
-			}
-			set
-			{
-				if (_hoverGeneralHighlight == value)
-				{
-					return;
-				}
-				_hoverGeneralHighlight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hoverGeneralHighlight);
+			set => SetProperty(ref _hoverGeneralHighlight, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("container")] 
 		public inkWidgetReference Container
 		{
-			get
-			{
-				if (_container == null)
-				{
-					_container = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "container", cr2w, this);
-				}
-				return _container;
-			}
-			set
-			{
-				if (_container == value)
-				{
-					return;
-				}
-				_container = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _container);
+			set => SetProperty(ref _container, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("SettingsEntry")] 
 		public wCHandle<userSettingsVar> SettingsEntry
 		{
-			get
-			{
-				if (_settingsEntry == null)
-				{
-					_settingsEntry = (wCHandle<userSettingsVar>) CR2WTypeManager.Create("whandle:userSettingsVar", "SettingsEntry", cr2w, this);
-				}
-				return _settingsEntry;
-			}
-			set
-			{
-				if (_settingsEntry == value)
-				{
-					return;
-				}
-				_settingsEntry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _settingsEntry);
+			set => SetProperty(ref _settingsEntry, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("hoveredChildren")] 
 		public CArray<wCHandle<inkWidget>> HoveredChildren
 		{
-			get
-			{
-				if (_hoveredChildren == null)
-				{
-					_hoveredChildren = (CArray<wCHandle<inkWidget>>) CR2WTypeManager.Create("array:whandle:inkWidget", "hoveredChildren", cr2w, this);
-				}
-				return _hoveredChildren;
-			}
-			set
-			{
-				if (_hoveredChildren == value)
-				{
-					return;
-				}
-				_hoveredChildren = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hoveredChildren);
+			set => SetProperty(ref _hoveredChildren, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("IsPreGame")] 
 		public CBool IsPreGame
 		{
-			get
-			{
-				if (_isPreGame == null)
-				{
-					_isPreGame = (CBool) CR2WTypeManager.Create("Bool", "IsPreGame", cr2w, this);
-				}
-				return _isPreGame;
-			}
-			set
-			{
-				if (_isPreGame == value)
-				{
-					return;
-				}
-				_isPreGame = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPreGame);
+			set => SetProperty(ref _isPreGame, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("varGroupPath")] 
 		public CName VarGroupPath
 		{
-			get
-			{
-				if (_varGroupPath == null)
-				{
-					_varGroupPath = (CName) CR2WTypeManager.Create("CName", "varGroupPath", cr2w, this);
-				}
-				return _varGroupPath;
-			}
-			set
-			{
-				if (_varGroupPath == value)
-				{
-					return;
-				}
-				_varGroupPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _varGroupPath);
+			set => SetProperty(ref _varGroupPath, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("varName")] 
 		public CName VarName
 		{
-			get
-			{
-				if (_varName == null)
-				{
-					_varName = (CName) CR2WTypeManager.Create("CName", "varName", cr2w, this);
-				}
-				return _varName;
-			}
-			set
-			{
-				if (_varName == value)
-				{
-					return;
-				}
-				_varName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _varName);
+			set => SetProperty(ref _varName, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("additionalText")] 
 		public CName AdditionalText
 		{
-			get
-			{
-				if (_additionalText == null)
-				{
-					_additionalText = (CName) CR2WTypeManager.Create("CName", "additionalText", cr2w, this);
-				}
-				return _additionalText;
-			}
-			set
-			{
-				if (_additionalText == value)
-				{
-					return;
-				}
-				_additionalText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additionalText);
+			set => SetProperty(ref _additionalText, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("hoverInAnim")] 
 		public CHandle<inkanimProxy> HoverInAnim
 		{
-			get
-			{
-				if (_hoverInAnim == null)
-				{
-					_hoverInAnim = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "hoverInAnim", cr2w, this);
-				}
-				return _hoverInAnim;
-			}
-			set
-			{
-				if (_hoverInAnim == value)
-				{
-					return;
-				}
-				_hoverInAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hoverInAnim);
+			set => SetProperty(ref _hoverInAnim, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("hoverOutAnim")] 
 		public CHandle<inkanimProxy> HoverOutAnim
 		{
-			get
-			{
-				if (_hoverOutAnim == null)
-				{
-					_hoverOutAnim = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "hoverOutAnim", cr2w, this);
-				}
-				return _hoverOutAnim;
-			}
-			set
-			{
-				if (_hoverOutAnim == value)
-				{
-					return;
-				}
-				_hoverOutAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hoverOutAnim);
+			set => SetProperty(ref _hoverOutAnim, value);
 		}
 
 		public inkSettingsSelectorController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

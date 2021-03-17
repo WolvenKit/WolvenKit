@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tiling")] 
 		public CArray<CFloat> Tiling
 		{
-			get
-			{
-				if (_tiling == null)
-				{
-					_tiling = (CArray<CFloat>) CR2WTypeManager.Create("array:Float", "tiling", cr2w, this);
-				}
-				return _tiling;
-			}
-			set
-			{
-				if (_tiling == value)
-				{
-					return;
-				}
-				_tiling = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tiling);
+			set => SetProperty(ref _tiling, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("physicalMaterial")] 
 		public CArray<CName> PhysicalMaterial
 		{
-			get
-			{
-				if (_physicalMaterial == null)
-				{
-					_physicalMaterial = (CArray<CName>) CR2WTypeManager.Create("array:CName", "physicalMaterial", cr2w, this);
-				}
-				return _physicalMaterial;
-			}
-			set
-			{
-				if (_physicalMaterial == value)
-				{
-					return;
-				}
-				_physicalMaterial = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _physicalMaterial);
+			set => SetProperty(ref _physicalMaterial, value);
 		}
 
 		public CTerrainSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

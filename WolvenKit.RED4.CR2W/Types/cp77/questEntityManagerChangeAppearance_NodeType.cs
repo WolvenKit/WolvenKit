@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entityRef")] 
 		public gameEntityReference EntityRef
 		{
-			get
-			{
-				if (_entityRef == null)
-				{
-					_entityRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "entityRef", cr2w, this);
-				}
-				return _entityRef;
-			}
-			set
-			{
-				if (_entityRef == value)
-				{
-					return;
-				}
-				_entityRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityRef);
+			set => SetProperty(ref _entityRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("prefetchOnly")] 
 		public CBool PrefetchOnly
 		{
-			get
-			{
-				if (_prefetchOnly == null)
-				{
-					_prefetchOnly = (CBool) CR2WTypeManager.Create("Bool", "prefetchOnly", cr2w, this);
-				}
-				return _prefetchOnly;
-			}
-			set
-			{
-				if (_prefetchOnly == value)
-				{
-					return;
-				}
-				_prefetchOnly = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prefetchOnly);
+			set => SetProperty(ref _prefetchOnly, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("appearanceName")] 
 		public CName AppearanceName
 		{
-			get
-			{
-				if (_appearanceName == null)
-				{
-					_appearanceName = (CName) CR2WTypeManager.Create("CName", "appearanceName", cr2w, this);
-				}
-				return _appearanceName;
-			}
-			set
-			{
-				if (_appearanceName == value)
-				{
-					return;
-				}
-				_appearanceName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _appearanceName);
+			set => SetProperty(ref _appearanceName, value);
 		}
 
 		public questEntityManagerChangeAppearance_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

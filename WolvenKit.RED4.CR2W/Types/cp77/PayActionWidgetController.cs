@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("priceContainer")] 
 		public inkWidgetReference PriceContainer
 		{
-			get
-			{
-				if (_priceContainer == null)
-				{
-					_priceContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "priceContainer", cr2w, this);
-				}
-				return _priceContainer;
-			}
-			set
-			{
-				if (_priceContainer == value)
-				{
-					return;
-				}
-				_priceContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _priceContainer);
+			set => SetProperty(ref _priceContainer, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("moneyStatusContainer")] 
 		public inkWidgetReference MoneyStatusContainer
 		{
-			get
-			{
-				if (_moneyStatusContainer == null)
-				{
-					_moneyStatusContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "moneyStatusContainer", cr2w, this);
-				}
-				return _moneyStatusContainer;
-			}
-			set
-			{
-				if (_moneyStatusContainer == value)
-				{
-					return;
-				}
-				_moneyStatusContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _moneyStatusContainer);
+			set => SetProperty(ref _moneyStatusContainer, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("processingStatusContainer")] 
 		public inkWidgetReference ProcessingStatusContainer
 		{
-			get
-			{
-				if (_processingStatusContainer == null)
-				{
-					_processingStatusContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "processingStatusContainer", cr2w, this);
-				}
-				return _processingStatusContainer;
-			}
-			set
-			{
-				if (_processingStatusContainer == value)
-				{
-					return;
-				}
-				_processingStatusContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _processingStatusContainer);
+			set => SetProperty(ref _processingStatusContainer, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("moneyStatusAnimName")] 
 		public CName MoneyStatusAnimName
 		{
-			get
-			{
-				if (_moneyStatusAnimName == null)
-				{
-					_moneyStatusAnimName = (CName) CR2WTypeManager.Create("CName", "moneyStatusAnimName", cr2w, this);
-				}
-				return _moneyStatusAnimName;
-			}
-			set
-			{
-				if (_moneyStatusAnimName == value)
-				{
-					return;
-				}
-				_moneyStatusAnimName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _moneyStatusAnimName);
+			set => SetProperty(ref _moneyStatusAnimName, value);
 		}
 
 		[Ordinal(32)] 
 		[RED("processingAnimName")] 
 		public CName ProcessingAnimName
 		{
-			get
-			{
-				if (_processingAnimName == null)
-				{
-					_processingAnimName = (CName) CR2WTypeManager.Create("CName", "processingAnimName", cr2w, this);
-				}
-				return _processingAnimName;
-			}
-			set
-			{
-				if (_processingAnimName == value)
-				{
-					return;
-				}
-				_processingAnimName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _processingAnimName);
+			set => SetProperty(ref _processingAnimName, value);
 		}
 
 		[Ordinal(33)] 
 		[RED("isProcessingPayment")] 
 		public CBool IsProcessingPayment
 		{
-			get
-			{
-				if (_isProcessingPayment == null)
-				{
-					_isProcessingPayment = (CBool) CR2WTypeManager.Create("Bool", "isProcessingPayment", cr2w, this);
-				}
-				return _isProcessingPayment;
-			}
-			set
-			{
-				if (_isProcessingPayment == value)
-				{
-					return;
-				}
-				_isProcessingPayment = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isProcessingPayment);
+			set => SetProperty(ref _isProcessingPayment, value);
 		}
 
 		public PayActionWidgetController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

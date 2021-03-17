@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("initialStation")] 
 		public CInt32 InitialStation
 		{
-			get
-			{
-				if (_initialStation == null)
-				{
-					_initialStation = (CInt32) CR2WTypeManager.Create("Int32", "initialStation", cr2w, this);
-				}
-				return _initialStation;
-			}
-			set
-			{
-				if (_initialStation == value)
-				{
-					return;
-				}
-				_initialStation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialStation);
+			set => SetProperty(ref _initialStation, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("amountOfStations")] 
 		public CInt32 AmountOfStations
 		{
-			get
-			{
-				if (_amountOfStations == null)
-				{
-					_amountOfStations = (CInt32) CR2WTypeManager.Create("Int32", "amountOfStations", cr2w, this);
-				}
-				return _amountOfStations;
-			}
-			set
-			{
-				if (_amountOfStations == value)
-				{
-					return;
-				}
-				_amountOfStations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _amountOfStations);
+			set => SetProperty(ref _amountOfStations, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("activeChannelName")] 
 		public CString ActiveChannelName
 		{
-			get
-			{
-				if (_activeChannelName == null)
-				{
-					_activeChannelName = (CString) CR2WTypeManager.Create("String", "activeChannelName", cr2w, this);
-				}
-				return _activeChannelName;
-			}
-			set
-			{
-				if (_activeChannelName == value)
-				{
-					return;
-				}
-				_activeChannelName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeChannelName);
+			set => SetProperty(ref _activeChannelName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isInteractive")] 
 		public CBool IsInteractive
 		{
-			get
-			{
-				if (_isInteractive == null)
-				{
-					_isInteractive = (CBool) CR2WTypeManager.Create("Bool", "isInteractive", cr2w, this);
-				}
-				return _isInteractive;
-			}
-			set
-			{
-				if (_isInteractive == value)
-				{
-					return;
-				}
-				_isInteractive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInteractive);
+			set => SetProperty(ref _isInteractive, value);
 		}
 
 		public MediaDeviceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

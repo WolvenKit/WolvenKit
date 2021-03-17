@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("triggerData")] 
 		public CHandle<TriggerVolumeOperationTriggerData> TriggerData
 		{
-			get
-			{
-				if (_triggerData == null)
-				{
-					_triggerData = (CHandle<TriggerVolumeOperationTriggerData>) CR2WTypeManager.Create("handle:TriggerVolumeOperationTriggerData", "triggerData", cr2w, this);
-				}
-				return _triggerData;
-			}
-			set
-			{
-				if (_triggerData == value)
-				{
-					return;
-				}
-				_triggerData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerData);
+			set => SetProperty(ref _triggerData, value);
 		}
 
 		public TriggerVolumeOperationsTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("GarageState")] 
 		public gamebbScriptID_Uint32 GarageState
 		{
-			get
-			{
-				if (_garageState == null)
-				{
-					_garageState = (gamebbScriptID_Uint32) CR2WTypeManager.Create("gamebbScriptID_Uint32", "GarageState", cr2w, this);
-				}
-				return _garageState;
-			}
-			set
-			{
-				if (_garageState == value)
-				{
-					return;
-				}
-				_garageState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _garageState);
+			set => SetProperty(ref _garageState, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("UnlockedVehiclesCount")] 
 		public gamebbScriptID_Uint32 UnlockedVehiclesCount
 		{
-			get
-			{
-				if (_unlockedVehiclesCount == null)
-				{
-					_unlockedVehiclesCount = (gamebbScriptID_Uint32) CR2WTypeManager.Create("gamebbScriptID_Uint32", "UnlockedVehiclesCount", cr2w, this);
-				}
-				return _unlockedVehiclesCount;
-			}
-			set
-			{
-				if (_unlockedVehiclesCount == value)
-				{
-					return;
-				}
-				_unlockedVehiclesCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unlockedVehiclesCount);
+			set => SetProperty(ref _unlockedVehiclesCount, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("SummonState")] 
 		public gamebbScriptID_Uint32 SummonState
 		{
-			get
-			{
-				if (_summonState == null)
-				{
-					_summonState = (gamebbScriptID_Uint32) CR2WTypeManager.Create("gamebbScriptID_Uint32", "SummonState", cr2w, this);
-				}
-				return _summonState;
-			}
-			set
-			{
-				if (_summonState == value)
-				{
-					return;
-				}
-				_summonState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _summonState);
+			set => SetProperty(ref _summonState, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("SummonedVehicleEntityID")] 
 		public gamebbScriptID_EntityID SummonedVehicleEntityID
 		{
-			get
-			{
-				if (_summonedVehicleEntityID == null)
-				{
-					_summonedVehicleEntityID = (gamebbScriptID_EntityID) CR2WTypeManager.Create("gamebbScriptID_EntityID", "SummonedVehicleEntityID", cr2w, this);
-				}
-				return _summonedVehicleEntityID;
-			}
-			set
-			{
-				if (_summonedVehicleEntityID == value)
-				{
-					return;
-				}
-				_summonedVehicleEntityID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _summonedVehicleEntityID);
+			set => SetProperty(ref _summonedVehicleEntityID, value);
 		}
 
 		public VehicleSummonDataDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

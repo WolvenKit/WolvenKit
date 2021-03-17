@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("emissionRate")] 
 		public CFloat EmissionRate
 		{
-			get
-			{
-				if (_emissionRate == null)
-				{
-					_emissionRate = (CFloat) CR2WTypeManager.Create("Float", "emissionRate", cr2w, this);
-				}
-				return _emissionRate;
-			}
-			set
-			{
-				if (_emissionRate == value)
-				{
-					return;
-				}
-				_emissionRate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _emissionRate);
+			set => SetProperty(ref _emissionRate, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("particleSystem")] 
 		public raRef<CParticleSystem> ParticleSystem
 		{
-			get
-			{
-				if (_particleSystem == null)
-				{
-					_particleSystem = (raRef<CParticleSystem>) CR2WTypeManager.Create("raRef:CParticleSystem", "particleSystem", cr2w, this);
-				}
-				return _particleSystem;
-			}
-			set
-			{
-				if (_particleSystem == value)
-				{
-					return;
-				}
-				_particleSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _particleSystem);
+			set => SetProperty(ref _particleSystem, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("forcedAutoHideDistance")] 
 		public CFloat ForcedAutoHideDistance
 		{
-			get
-			{
-				if (_forcedAutoHideDistance == null)
-				{
-					_forcedAutoHideDistance = (CFloat) CR2WTypeManager.Create("Float", "forcedAutoHideDistance", cr2w, this);
-				}
-				return _forcedAutoHideDistance;
-			}
-			set
-			{
-				if (_forcedAutoHideDistance == value)
-				{
-					return;
-				}
-				_forcedAutoHideDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forcedAutoHideDistance);
+			set => SetProperty(ref _forcedAutoHideDistance, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("forcedAutoHideRange")] 
 		public CFloat ForcedAutoHideRange
 		{
-			get
-			{
-				if (_forcedAutoHideRange == null)
-				{
-					_forcedAutoHideRange = (CFloat) CR2WTypeManager.Create("Float", "forcedAutoHideRange", cr2w, this);
-				}
-				return _forcedAutoHideRange;
-			}
-			set
-			{
-				if (_forcedAutoHideRange == value)
-				{
-					return;
-				}
-				_forcedAutoHideRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forcedAutoHideRange);
+			set => SetProperty(ref _forcedAutoHideRange, value);
 		}
 
 		public worldStaticParticleNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

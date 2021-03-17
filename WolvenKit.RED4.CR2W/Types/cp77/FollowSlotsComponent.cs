@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("followSlots")] 
 		public CArray<CHandle<FollowSlot>> FollowSlots
 		{
-			get
-			{
-				if (_followSlots == null)
-				{
-					_followSlots = (CArray<CHandle<FollowSlot>>) CR2WTypeManager.Create("array:handle:FollowSlot", "followSlots", cr2w, this);
-				}
-				return _followSlots;
-			}
-			set
-			{
-				if (_followSlots == value)
-				{
-					return;
-				}
-				_followSlots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _followSlots);
+			set => SetProperty(ref _followSlots, value);
 		}
 
 		public FollowSlotsComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

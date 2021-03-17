@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("appearanceResource")] 
 		public raRef<appearanceAppearanceResource> AppearanceResource
 		{
-			get
-			{
-				if (_appearanceResource == null)
-				{
-					_appearanceResource = (raRef<appearanceAppearanceResource>) CR2WTypeManager.Create("raRef:appearanceAppearanceResource", "appearanceResource", cr2w, this);
-				}
-				return _appearanceResource;
-			}
-			set
-			{
-				if (_appearanceResource == value)
-				{
-					return;
-				}
-				_appearanceResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _appearanceResource);
+			set => SetProperty(ref _appearanceResource, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("appearanceName")] 
 		public CName AppearanceName
 		{
-			get
-			{
-				if (_appearanceName == null)
-				{
-					_appearanceName = (CName) CR2WTypeManager.Create("CName", "appearanceName", cr2w, this);
-				}
-				return _appearanceName;
-			}
-			set
-			{
-				if (_appearanceName == value)
-				{
-					return;
-				}
-				_appearanceName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _appearanceName);
+			set => SetProperty(ref _appearanceName, value);
 		}
 
 		public entTemplateAppearance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

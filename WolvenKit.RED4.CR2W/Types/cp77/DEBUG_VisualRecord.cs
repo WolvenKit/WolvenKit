@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("layerIDs")] 
 		public CArray<CUInt32> LayerIDs
 		{
-			get
-			{
-				if (_layerIDs == null)
-				{
-					_layerIDs = (CArray<CUInt32>) CR2WTypeManager.Create("array:Uint32", "layerIDs", cr2w, this);
-				}
-				return _layerIDs;
-			}
-			set
-			{
-				if (_layerIDs == value)
-				{
-					return;
-				}
-				_layerIDs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _layerIDs);
+			set => SetProperty(ref _layerIDs, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("puppet")] 
 		public wCHandle<ScriptedPuppet> Puppet
 		{
-			get
-			{
-				if (_puppet == null)
-				{
-					_puppet = (wCHandle<ScriptedPuppet>) CR2WTypeManager.Create("whandle:ScriptedPuppet", "puppet", cr2w, this);
-				}
-				return _puppet;
-			}
-			set
-			{
-				if (_puppet == value)
-				{
-					return;
-				}
-				_puppet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppet);
+			set => SetProperty(ref _puppet, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("infiniteDuration")] 
 		public CBool InfiniteDuration
 		{
-			get
-			{
-				if (_infiniteDuration == null)
-				{
-					_infiniteDuration = (CBool) CR2WTypeManager.Create("Bool", "infiniteDuration", cr2w, this);
-				}
-				return _infiniteDuration;
-			}
-			set
-			{
-				if (_infiniteDuration == value)
-				{
-					return;
-				}
-				_infiniteDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _infiniteDuration);
+			set => SetProperty(ref _infiniteDuration, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("showDuration")] 
 		public CFloat ShowDuration
 		{
-			get
-			{
-				if (_showDuration == null)
-				{
-					_showDuration = (CFloat) CR2WTypeManager.Create("Float", "showDuration", cr2w, this);
-				}
-				return _showDuration;
-			}
-			set
-			{
-				if (_showDuration == value)
-				{
-					return;
-				}
-				_showDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showDuration);
+			set => SetProperty(ref _showDuration, value);
 		}
 
 		public DEBUG_VisualRecord(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

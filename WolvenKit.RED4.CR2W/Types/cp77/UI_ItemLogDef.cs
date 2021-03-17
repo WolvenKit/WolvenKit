@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ItemLogItem")] 
 		public gamebbScriptID_Variant ItemLogItem
 		{
-			get
-			{
-				if (_itemLogItem == null)
-				{
-					_itemLogItem = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ItemLogItem", cr2w, this);
-				}
-				return _itemLogItem;
-			}
-			set
-			{
-				if (_itemLogItem == value)
-				{
-					return;
-				}
-				_itemLogItem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemLogItem);
+			set => SetProperty(ref _itemLogItem, value);
 		}
 
 		public UI_ItemLogDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("appearanceName")] 
 		public CName AppearanceName
 		{
-			get
-			{
-				if (_appearanceName == null)
-				{
-					_appearanceName = (CName) CR2WTypeManager.Create("CName", "appearanceName", cr2w, this);
-				}
-				return _appearanceName;
-			}
-			set
-			{
-				if (_appearanceName == value)
-				{
-					return;
-				}
-				_appearanceName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _appearanceName);
+			set => SetProperty(ref _appearanceName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("visualTags")] 
 		public redTagList VisualTags
 		{
-			get
-			{
-				if (_visualTags == null)
-				{
-					_visualTags = (redTagList) CR2WTypeManager.Create("redTagList", "visualTags", cr2w, this);
-				}
-				return _visualTags;
-			}
-			set
-			{
-				if (_visualTags == value)
-				{
-					return;
-				}
-				_visualTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualTags);
+			set => SetProperty(ref _visualTags, value);
 		}
 
 		public gameAppearanceNameVisualTagsPreset_AppearanceTags(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

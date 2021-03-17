@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("workspotsMap")] 
 		public CArray<CHandle<WorkspotMapData>> WorkspotsMap
 		{
-			get
-			{
-				if (_workspotsMap == null)
-				{
-					_workspotsMap = (CArray<CHandle<WorkspotMapData>>) CR2WTypeManager.Create("array:handle:WorkspotMapData", "workspotsMap", cr2w, this);
-				}
-				return _workspotsMap;
-			}
-			set
-			{
-				if (_workspotsMap == value)
-				{
-					return;
-				}
-				_workspotsMap = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotsMap);
+			set => SetProperty(ref _workspotsMap, value);
 		}
 
 		public WorkspotMapperComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

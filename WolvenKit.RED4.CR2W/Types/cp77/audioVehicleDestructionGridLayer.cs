@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("backLeft")] 
 		public audioVehicleDestructionGridCell BackLeft
 		{
-			get
-			{
-				if (_backLeft == null)
-				{
-					_backLeft = (audioVehicleDestructionGridCell) CR2WTypeManager.Create("audioVehicleDestructionGridCell", "backLeft", cr2w, this);
-				}
-				return _backLeft;
-			}
-			set
-			{
-				if (_backLeft == value)
-				{
-					return;
-				}
-				_backLeft = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backLeft);
+			set => SetProperty(ref _backLeft, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("backRight")] 
 		public audioVehicleDestructionGridCell BackRight
 		{
-			get
-			{
-				if (_backRight == null)
-				{
-					_backRight = (audioVehicleDestructionGridCell) CR2WTypeManager.Create("audioVehicleDestructionGridCell", "backRight", cr2w, this);
-				}
-				return _backRight;
-			}
-			set
-			{
-				if (_backRight == value)
-				{
-					return;
-				}
-				_backRight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backRight);
+			set => SetProperty(ref _backRight, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("centerBackLeft")] 
 		public audioVehicleDestructionGridCell CenterBackLeft
 		{
-			get
-			{
-				if (_centerBackLeft == null)
-				{
-					_centerBackLeft = (audioVehicleDestructionGridCell) CR2WTypeManager.Create("audioVehicleDestructionGridCell", "centerBackLeft", cr2w, this);
-				}
-				return _centerBackLeft;
-			}
-			set
-			{
-				if (_centerBackLeft == value)
-				{
-					return;
-				}
-				_centerBackLeft = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _centerBackLeft);
+			set => SetProperty(ref _centerBackLeft, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("centerBackRight")] 
 		public audioVehicleDestructionGridCell CenterBackRight
 		{
-			get
-			{
-				if (_centerBackRight == null)
-				{
-					_centerBackRight = (audioVehicleDestructionGridCell) CR2WTypeManager.Create("audioVehicleDestructionGridCell", "centerBackRight", cr2w, this);
-				}
-				return _centerBackRight;
-			}
-			set
-			{
-				if (_centerBackRight == value)
-				{
-					return;
-				}
-				_centerBackRight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _centerBackRight);
+			set => SetProperty(ref _centerBackRight, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("centerForwardLeft")] 
 		public audioVehicleDestructionGridCell CenterForwardLeft
 		{
-			get
-			{
-				if (_centerForwardLeft == null)
-				{
-					_centerForwardLeft = (audioVehicleDestructionGridCell) CR2WTypeManager.Create("audioVehicleDestructionGridCell", "centerForwardLeft", cr2w, this);
-				}
-				return _centerForwardLeft;
-			}
-			set
-			{
-				if (_centerForwardLeft == value)
-				{
-					return;
-				}
-				_centerForwardLeft = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _centerForwardLeft);
+			set => SetProperty(ref _centerForwardLeft, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("centerForwardRight")] 
 		public audioVehicleDestructionGridCell CenterForwardRight
 		{
-			get
-			{
-				if (_centerForwardRight == null)
-				{
-					_centerForwardRight = (audioVehicleDestructionGridCell) CR2WTypeManager.Create("audioVehicleDestructionGridCell", "centerForwardRight", cr2w, this);
-				}
-				return _centerForwardRight;
-			}
-			set
-			{
-				if (_centerForwardRight == value)
-				{
-					return;
-				}
-				_centerForwardRight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _centerForwardRight);
+			set => SetProperty(ref _centerForwardRight, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("frontLeft")] 
 		public audioVehicleDestructionGridCell FrontLeft
 		{
-			get
-			{
-				if (_frontLeft == null)
-				{
-					_frontLeft = (audioVehicleDestructionGridCell) CR2WTypeManager.Create("audioVehicleDestructionGridCell", "frontLeft", cr2w, this);
-				}
-				return _frontLeft;
-			}
-			set
-			{
-				if (_frontLeft == value)
-				{
-					return;
-				}
-				_frontLeft = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frontLeft);
+			set => SetProperty(ref _frontLeft, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("frontRight")] 
 		public audioVehicleDestructionGridCell FrontRight
 		{
-			get
-			{
-				if (_frontRight == null)
-				{
-					_frontRight = (audioVehicleDestructionGridCell) CR2WTypeManager.Create("audioVehicleDestructionGridCell", "frontRight", cr2w, this);
-				}
-				return _frontRight;
-			}
-			set
-			{
-				if (_frontRight == value)
-				{
-					return;
-				}
-				_frontRight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frontRight);
+			set => SetProperty(ref _frontRight, value);
 		}
 
 		public audioVehicleDestructionGridLayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

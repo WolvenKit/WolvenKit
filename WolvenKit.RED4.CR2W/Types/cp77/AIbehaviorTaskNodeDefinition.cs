@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("task")] 
 		public CHandle<AIbehaviorTaskDefinition> Task
 		{
-			get
-			{
-				if (_task == null)
-				{
-					_task = (CHandle<AIbehaviorTaskDefinition>) CR2WTypeManager.Create("handle:AIbehaviorTaskDefinition", "task", cr2w, this);
-				}
-				return _task;
-			}
-			set
-			{
-				if (_task == value)
-				{
-					return;
-				}
-				_task = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _task);
+			set => SetProperty(ref _task, value);
 		}
 
 		public AIbehaviorTaskNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("prereqOwner")] 
 		public CHandle<gamePrereqState> PrereqOwner
 		{
-			get
-			{
-				if (_prereqOwner == null)
-				{
-					_prereqOwner = (CHandle<gamePrereqState>) CR2WTypeManager.Create("handle:gamePrereqState", "prereqOwner", cr2w, this);
-				}
-				return _prereqOwner;
-			}
-			set
-			{
-				if (_prereqOwner == value)
-				{
-					return;
-				}
-				_prereqOwner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prereqOwner);
+			set => SetProperty(ref _prereqOwner, value);
 		}
 
 		public PuppetListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

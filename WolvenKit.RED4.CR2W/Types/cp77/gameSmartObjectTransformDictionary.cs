@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("transforms")] 
 		public CArray<gameSmartObjectTransformDictionaryTransformEntry> Transforms
 		{
-			get
-			{
-				if (_transforms == null)
-				{
-					_transforms = (CArray<gameSmartObjectTransformDictionaryTransformEntry>) CR2WTypeManager.Create("array:gameSmartObjectTransformDictionaryTransformEntry", "transforms", cr2w, this);
-				}
-				return _transforms;
-			}
-			set
-			{
-				if (_transforms == value)
-				{
-					return;
-				}
-				_transforms = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transforms);
+			set => SetProperty(ref _transforms, value);
 		}
 
 		public gameSmartObjectTransformDictionary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("label")] 
 		public CString Label
 		{
-			get
-			{
-				if (_label == null)
-				{
-					_label = (CString) CR2WTypeManager.Create("String", "label", cr2w, this);
-				}
-				return _label;
-			}
-			set
-			{
-				if (_label == value)
-				{
-					return;
-				}
-				_label = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _label);
+			set => SetProperty(ref _label, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("desc")] 
 		public CString Desc
 		{
-			get
-			{
-				if (_desc == null)
-				{
-					_desc = (CString) CR2WTypeManager.Create("String", "desc", cr2w, this);
-				}
-				return _desc;
-			}
-			set
-			{
-				if (_desc == value)
-				{
-					return;
-				}
-				_desc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _desc);
+			set => SetProperty(ref _desc, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("value")] 
 		public CInt32 Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CInt32) CR2WTypeManager.Create("Int32", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("attribute")] 
 		public CEnum<gamedataStatType> Attribute
 		{
-			get
-			{
-				if (_attribute == null)
-				{
-					_attribute = (CEnum<gamedataStatType>) CR2WTypeManager.Create("gamedataStatType", "attribute", cr2w, this);
-				}
-				return _attribute;
-			}
-			set
-			{
-				if (_attribute == value)
-				{
-					return;
-				}
-				_attribute = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attribute);
+			set => SetProperty(ref _attribute, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("icon")] 
 		public CName Icon
 		{
-			get
-			{
-				if (_icon == null)
-				{
-					_icon = (CName) CR2WTypeManager.Create("CName", "icon", cr2w, this);
-				}
-				return _icon;
-			}
-			set
-			{
-				if (_icon == value)
-				{
-					return;
-				}
-				_icon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _icon);
+			set => SetProperty(ref _icon, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("maxValue")] 
 		public CInt32 MaxValue
 		{
-			get
-			{
-				if (_maxValue == null)
-				{
-					_maxValue = (CInt32) CR2WTypeManager.Create("Int32", "maxValue", cr2w, this);
-				}
-				return _maxValue;
-			}
-			set
-			{
-				if (_maxValue == value)
-				{
-					return;
-				}
-				_maxValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxValue);
+			set => SetProperty(ref _maxValue, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("minValue")] 
 		public CInt32 MinValue
 		{
-			get
-			{
-				if (_minValue == null)
-				{
-					_minValue = (CInt32) CR2WTypeManager.Create("Int32", "minValue", cr2w, this);
-				}
-				return _minValue;
-			}
-			set
-			{
-				if (_minValue == value)
-				{
-					return;
-				}
-				_minValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minValue);
+			set => SetProperty(ref _minValue, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("maxed")] 
 		public CBool Maxed
 		{
-			get
-			{
-				if (_maxed == null)
-				{
-					_maxed = (CBool) CR2WTypeManager.Create("Bool", "maxed", cr2w, this);
-				}
-				return _maxed;
-			}
-			set
-			{
-				if (_maxed == value)
-				{
-					return;
-				}
-				_maxed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxed);
+			set => SetProperty(ref _maxed, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("atMinimum")] 
 		public CBool AtMinimum
 		{
-			get
-			{
-				if (_atMinimum == null)
-				{
-					_atMinimum = (CBool) CR2WTypeManager.Create("Bool", "atMinimum", cr2w, this);
-				}
-				return _atMinimum;
-			}
-			set
-			{
-				if (_atMinimum == value)
-				{
-					return;
-				}
-				_atMinimum = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _atMinimum);
+			set => SetProperty(ref _atMinimum, value);
 		}
 
 		public CharacterCreationAttributeData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

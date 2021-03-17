@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("customCameraTarget")] 
 		public CEnum<ECustomCameraTarget> CustomCameraTarget
 		{
-			get
-			{
-				if (_customCameraTarget == null)
-				{
-					_customCameraTarget = (CEnum<ECustomCameraTarget>) CR2WTypeManager.Create("ECustomCameraTarget", "customCameraTarget", cr2w, this);
-				}
-				return _customCameraTarget;
-			}
-			set
-			{
-				if (_customCameraTarget == value)
-				{
-					return;
-				}
-				_customCameraTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customCameraTarget);
+			set => SetProperty(ref _customCameraTarget, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("renderSceneLayerMask")] 
 		public CEnum<RenderSceneLayerMask> RenderSceneLayerMask
 		{
-			get
-			{
-				if (_renderSceneLayerMask == null)
-				{
-					_renderSceneLayerMask = (CEnum<RenderSceneLayerMask>) CR2WTypeManager.Create("RenderSceneLayerMask", "renderSceneLayerMask", cr2w, this);
-				}
-				return _renderSceneLayerMask;
-			}
-			set
-			{
-				if (_renderSceneLayerMask == value)
-				{
-					return;
-				}
-				_renderSceneLayerMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _renderSceneLayerMask);
+			set => SetProperty(ref _renderSceneLayerMask, value);
 		}
 
 		public entEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

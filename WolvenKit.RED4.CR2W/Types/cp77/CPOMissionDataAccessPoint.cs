@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hasDataToDownload")] 
 		public CBool HasDataToDownload
 		{
-			get
-			{
-				if (_hasDataToDownload == null)
-				{
-					_hasDataToDownload = (CBool) CR2WTypeManager.Create("Bool", "hasDataToDownload", cr2w, this);
-				}
-				return _hasDataToDownload;
-			}
-			set
-			{
-				if (_hasDataToDownload == value)
-				{
-					return;
-				}
-				_hasDataToDownload = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasDataToDownload);
+			set => SetProperty(ref _hasDataToDownload, value);
 		}
 
 		[Ordinal(46)] 
 		[RED("damagesPresetName")] 
 		public CName DamagesPresetName
 		{
-			get
-			{
-				if (_damagesPresetName == null)
-				{
-					_damagesPresetName = (CName) CR2WTypeManager.Create("CName", "damagesPresetName", cr2w, this);
-				}
-				return _damagesPresetName;
-			}
-			set
-			{
-				if (_damagesPresetName == value)
-				{
-					return;
-				}
-				_damagesPresetName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damagesPresetName);
+			set => SetProperty(ref _damagesPresetName, value);
 		}
 
 		[Ordinal(47)] 
 		[RED("factsOnDownload")] 
 		public CArray<SFactToChange> FactsOnDownload
 		{
-			get
-			{
-				if (_factsOnDownload == null)
-				{
-					_factsOnDownload = (CArray<SFactToChange>) CR2WTypeManager.Create("array:SFactToChange", "factsOnDownload", cr2w, this);
-				}
-				return _factsOnDownload;
-			}
-			set
-			{
-				if (_factsOnDownload == value)
-				{
-					return;
-				}
-				_factsOnDownload = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factsOnDownload);
+			set => SetProperty(ref _factsOnDownload, value);
 		}
 
 		[Ordinal(48)] 
 		[RED("factsOnUpload")] 
 		public CArray<SFactToChange> FactsOnUpload
 		{
-			get
-			{
-				if (_factsOnUpload == null)
-				{
-					_factsOnUpload = (CArray<SFactToChange>) CR2WTypeManager.Create("array:SFactToChange", "factsOnUpload", cr2w, this);
-				}
-				return _factsOnUpload;
-			}
-			set
-			{
-				if (_factsOnUpload == value)
-				{
-					return;
-				}
-				_factsOnUpload = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factsOnUpload);
+			set => SetProperty(ref _factsOnUpload, value);
 		}
 
 		[Ordinal(49)] 
 		[RED("ownerDecidesOnTransfer")] 
 		public CBool OwnerDecidesOnTransfer
 		{
-			get
-			{
-				if (_ownerDecidesOnTransfer == null)
-				{
-					_ownerDecidesOnTransfer = (CBool) CR2WTypeManager.Create("Bool", "ownerDecidesOnTransfer", cr2w, this);
-				}
-				return _ownerDecidesOnTransfer;
-			}
-			set
-			{
-				if (_ownerDecidesOnTransfer == value)
-				{
-					return;
-				}
-				_ownerDecidesOnTransfer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerDecidesOnTransfer);
+			set => SetProperty(ref _ownerDecidesOnTransfer, value);
 		}
 
 		public CPOMissionDataAccessPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

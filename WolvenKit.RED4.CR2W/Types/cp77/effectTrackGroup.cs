@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tracks")] 
 		public CArray<CHandle<effectTrackBase>> Tracks
 		{
-			get
-			{
-				if (_tracks == null)
-				{
-					_tracks = (CArray<CHandle<effectTrackBase>>) CR2WTypeManager.Create("array:handle:effectTrackBase", "tracks", cr2w, this);
-				}
-				return _tracks;
-			}
-			set
-			{
-				if (_tracks == value)
-				{
-					return;
-				}
-				_tracks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tracks);
+			set => SetProperty(ref _tracks, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("componentName")] 
 		public CName ComponentName
 		{
-			get
-			{
-				if (_componentName == null)
-				{
-					_componentName = (CName) CR2WTypeManager.Create("CName", "componentName", cr2w, this);
-				}
-				return _componentName;
-			}
-			set
-			{
-				if (_componentName == value)
-				{
-					return;
-				}
-				_componentName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _componentName);
+			set => SetProperty(ref _componentName, value);
 		}
 
 		public effectTrackGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

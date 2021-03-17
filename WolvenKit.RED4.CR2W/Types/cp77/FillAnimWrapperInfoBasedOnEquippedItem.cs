@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemType")] 
 		public CName ItemType
 		{
-			get
-			{
-				if (_itemType == null)
-				{
-					_itemType = (CName) CR2WTypeManager.Create("CName", "itemType", cr2w, this);
-				}
-				return _itemType;
-			}
-			set
-			{
-				if (_itemType == value)
-				{
-					return;
-				}
-				_itemType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemType);
+			set => SetProperty(ref _itemType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("itemName")] 
 		public CName ItemName
 		{
-			get
-			{
-				if (_itemName == null)
-				{
-					_itemName = (CName) CR2WTypeManager.Create("CName", "itemName", cr2w, this);
-				}
-				return _itemName;
-			}
-			set
-			{
-				if (_itemName == value)
-				{
-					return;
-				}
-				_itemName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemName);
+			set => SetProperty(ref _itemName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("clearWrapperInfo")] 
 		public CBool ClearWrapperInfo
 		{
-			get
-			{
-				if (_clearWrapperInfo == null)
-				{
-					_clearWrapperInfo = (CBool) CR2WTypeManager.Create("Bool", "clearWrapperInfo", cr2w, this);
-				}
-				return _clearWrapperInfo;
-			}
-			set
-			{
-				if (_clearWrapperInfo == value)
-				{
-					return;
-				}
-				_clearWrapperInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clearWrapperInfo);
+			set => SetProperty(ref _clearWrapperInfo, value);
 		}
 
 		public FillAnimWrapperInfoBasedOnEquippedItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("includes")] 
 		public CArray<CName> Includes
 		{
-			get
-			{
-				if (_includes == null)
-				{
-					_includes = (CArray<CName>) CR2WTypeManager.Create("array:CName", "includes", cr2w, this);
-				}
-				return _includes;
-			}
-			set
-			{
-				if (_includes == value)
-				{
-					return;
-				}
-				_includes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _includes);
+			set => SetProperty(ref _includes, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("contexts")] 
 		public CArray<audioVoiceContextMapItem> Contexts
 		{
-			get
-			{
-				if (_contexts == null)
-				{
-					_contexts = (CArray<audioVoiceContextMapItem>) CR2WTypeManager.Create("array:audioVoiceContextMapItem", "contexts", cr2w, this);
-				}
-				return _contexts;
-			}
-			set
-			{
-				if (_contexts == value)
-				{
-					return;
-				}
-				_contexts = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contexts);
+			set => SetProperty(ref _contexts, value);
 		}
 
 		public audioVoiceContextMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

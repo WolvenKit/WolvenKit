@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("context")] 
 		public CEnum<UIGameContext> Context
 		{
-			get
-			{
-				if (_context == null)
-				{
-					_context = (CEnum<UIGameContext>) CR2WTypeManager.Create("UIGameContext", "context", cr2w, this);
-				}
-				return _context;
-			}
-			set
-			{
-				if (_context == value)
-				{
-					return;
-				}
-				_context = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _context);
+			set => SetProperty(ref _context, value);
 		}
 
 		public gameuiRequestPopContextEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

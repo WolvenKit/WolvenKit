@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("autoWrappingEnabled")] 
 		public CBool AutoWrappingEnabled
 		{
-			get
-			{
-				if (_autoWrappingEnabled == null)
-				{
-					_autoWrappingEnabled = (CBool) CR2WTypeManager.Create("Bool", "autoWrappingEnabled", cr2w, this);
-				}
-				return _autoWrappingEnabled;
-			}
-			set
-			{
-				if (_autoWrappingEnabled == value)
-				{
-					return;
-				}
-				_autoWrappingEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _autoWrappingEnabled);
+			set => SetProperty(ref _autoWrappingEnabled, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("wrappingAtPosition")] 
 		public CFloat WrappingAtPosition
 		{
-			get
-			{
-				if (_wrappingAtPosition == null)
-				{
-					_wrappingAtPosition = (CFloat) CR2WTypeManager.Create("Float", "wrappingAtPosition", cr2w, this);
-				}
-				return _wrappingAtPosition;
-			}
-			set
-			{
-				if (_wrappingAtPosition == value)
-				{
-					return;
-				}
-				_wrappingAtPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wrappingAtPosition);
+			set => SetProperty(ref _wrappingAtPosition, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("wrappingPolicy")] 
 		public CEnum<textWrappingPolicy> WrappingPolicy
 		{
-			get
-			{
-				if (_wrappingPolicy == null)
-				{
-					_wrappingPolicy = (CEnum<textWrappingPolicy>) CR2WTypeManager.Create("textWrappingPolicy", "wrappingPolicy", cr2w, this);
-				}
-				return _wrappingPolicy;
-			}
-			set
-			{
-				if (_wrappingPolicy == value)
-				{
-					return;
-				}
-				_wrappingPolicy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wrappingPolicy);
+			set => SetProperty(ref _wrappingPolicy, value);
 		}
 
 		public textWrappingInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ai")] 
 		public CHandle<LibTreeINodeDefinition> Ai
 		{
-			get
-			{
-				if (_ai == null)
-				{
-					_ai = (CHandle<LibTreeINodeDefinition>) CR2WTypeManager.Create("handle:LibTreeINodeDefinition", "ai", cr2w, this);
-				}
-				return _ai;
-			}
-			set
-			{
-				if (_ai == value)
-				{
-					return;
-				}
-				_ai = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ai);
+			set => SetProperty(ref _ai, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("parallelActivation")] 
 		public CBool ParallelActivation
 		{
-			get
-			{
-				if (_parallelActivation == null)
-				{
-					_parallelActivation = (CBool) CR2WTypeManager.Create("Bool", "parallelActivation", cr2w, this);
-				}
-				return _parallelActivation;
-			}
-			set
-			{
-				if (_parallelActivation == value)
-				{
-					return;
-				}
-				_parallelActivation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parallelActivation);
+			set => SetProperty(ref _parallelActivation, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("parallelExecution")] 
 		public CBool ParallelExecution
 		{
-			get
-			{
-				if (_parallelExecution == null)
-				{
-					_parallelExecution = (CBool) CR2WTypeManager.Create("Bool", "parallelExecution", cr2w, this);
-				}
-				return _parallelExecution;
-			}
-			set
-			{
-				if (_parallelExecution == value)
-				{
-					return;
-				}
-				_parallelExecution = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parallelExecution);
+			set => SetProperty(ref _parallelExecution, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("blockInterruption")] 
 		public CBool BlockInterruption
 		{
-			get
-			{
-				if (_blockInterruption == null)
-				{
-					_blockInterruption = (CBool) CR2WTypeManager.Create("Bool", "blockInterruption", cr2w, this);
-				}
-				return _blockInterruption;
-			}
-			set
-			{
-				if (_blockInterruption == value)
-				{
-					return;
-				}
-				_blockInterruption = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blockInterruption);
+			set => SetProperty(ref _blockInterruption, value);
 		}
 
 		public AIInterruptionHandlerBehaviorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

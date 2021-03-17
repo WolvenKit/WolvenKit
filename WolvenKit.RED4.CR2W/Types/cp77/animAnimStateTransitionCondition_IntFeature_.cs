@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("compareValue")] 
 		public CInt32 CompareValue
 		{
-			get
-			{
-				if (_compareValue == null)
-				{
-					_compareValue = (CInt32) CR2WTypeManager.Create("Int32", "compareValue", cr2w, this);
-				}
-				return _compareValue;
-			}
-			set
-			{
-				if (_compareValue == value)
-				{
-					return;
-				}
-				_compareValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _compareValue);
+			set => SetProperty(ref _compareValue, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("featureName")] 
 		public CName FeatureName
 		{
-			get
-			{
-				if (_featureName == null)
-				{
-					_featureName = (CName) CR2WTypeManager.Create("CName", "featureName", cr2w, this);
-				}
-				return _featureName;
-			}
-			set
-			{
-				if (_featureName == value)
-				{
-					return;
-				}
-				_featureName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _featureName);
+			set => SetProperty(ref _featureName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("featurePropertyName")] 
 		public CName FeaturePropertyName
 		{
-			get
-			{
-				if (_featurePropertyName == null)
-				{
-					_featurePropertyName = (CName) CR2WTypeManager.Create("CName", "featurePropertyName", cr2w, this);
-				}
-				return _featurePropertyName;
-			}
-			set
-			{
-				if (_featurePropertyName == value)
-				{
-					return;
-				}
-				_featurePropertyName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _featurePropertyName);
+			set => SetProperty(ref _featurePropertyName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("compareFunc")] 
 		public CEnum<animCompareFunc> CompareFunc
 		{
-			get
-			{
-				if (_compareFunc == null)
-				{
-					_compareFunc = (CEnum<animCompareFunc>) CR2WTypeManager.Create("animCompareFunc", "compareFunc", cr2w, this);
-				}
-				return _compareFunc;
-			}
-			set
-			{
-				if (_compareFunc == value)
-				{
-					return;
-				}
-				_compareFunc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _compareFunc);
+			set => SetProperty(ref _compareFunc, value);
 		}
 
 		public animAnimStateTransitionCondition_IntFeature_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

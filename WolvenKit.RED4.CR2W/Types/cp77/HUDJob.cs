@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actor")] 
 		public wCHandle<gameHudActor> Actor
 		{
-			get
-			{
-				if (_actor == null)
-				{
-					_actor = (wCHandle<gameHudActor>) CR2WTypeManager.Create("whandle:gameHudActor", "actor", cr2w, this);
-				}
-				return _actor;
-			}
-			set
-			{
-				if (_actor == value)
-				{
-					return;
-				}
-				_actor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actor);
+			set => SetProperty(ref _actor, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("instruction")] 
 		public CHandle<HUDInstruction> Instruction
 		{
-			get
-			{
-				if (_instruction == null)
-				{
-					_instruction = (CHandle<HUDInstruction>) CR2WTypeManager.Create("handle:HUDInstruction", "instruction", cr2w, this);
-				}
-				return _instruction;
-			}
-			set
-			{
-				if (_instruction == value)
-				{
-					return;
-				}
-				_instruction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instruction);
+			set => SetProperty(ref _instruction, value);
 		}
 
 		public HUDJob(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

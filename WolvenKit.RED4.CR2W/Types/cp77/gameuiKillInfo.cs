@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("killerEntity")] 
 		public wCHandle<gameObject> KillerEntity
 		{
-			get
-			{
-				if (_killerEntity == null)
-				{
-					_killerEntity = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "killerEntity", cr2w, this);
-				}
-				return _killerEntity;
-			}
-			set
-			{
-				if (_killerEntity == value)
-				{
-					return;
-				}
-				_killerEntity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _killerEntity);
+			set => SetProperty(ref _killerEntity, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("victimEntity")] 
 		public wCHandle<gameObject> VictimEntity
 		{
-			get
-			{
-				if (_victimEntity == null)
-				{
-					_victimEntity = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "victimEntity", cr2w, this);
-				}
-				return _victimEntity;
-			}
-			set
-			{
-				if (_victimEntity == value)
-				{
-					return;
-				}
-				_victimEntity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _victimEntity);
+			set => SetProperty(ref _victimEntity, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("killType")] 
 		public CEnum<gameKillType> KillType
 		{
-			get
-			{
-				if (_killType == null)
-				{
-					_killType = (CEnum<gameKillType>) CR2WTypeManager.Create("gameKillType", "killType", cr2w, this);
-				}
-				return _killType;
-			}
-			set
-			{
-				if (_killType == value)
-				{
-					return;
-				}
-				_killType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _killType);
+			set => SetProperty(ref _killType, value);
 		}
 
 		public gameuiKillInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

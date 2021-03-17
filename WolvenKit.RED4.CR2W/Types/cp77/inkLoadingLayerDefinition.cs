@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("splashLoadingScreenResource")] 
 		public raRef<inkWidgetLibraryResource> SplashLoadingScreenResource
 		{
-			get
-			{
-				if (_splashLoadingScreenResource == null)
-				{
-					_splashLoadingScreenResource = (raRef<inkWidgetLibraryResource>) CR2WTypeManager.Create("raRef:inkWidgetLibraryResource", "splashLoadingScreenResource", cr2w, this);
-				}
-				return _splashLoadingScreenResource;
-			}
-			set
-			{
-				if (_splashLoadingScreenResource == value)
-				{
-					return;
-				}
-				_splashLoadingScreenResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _splashLoadingScreenResource);
+			set => SetProperty(ref _splashLoadingScreenResource, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("initialLoadingScreenResource")] 
 		public raRef<inkWidgetLibraryResource> InitialLoadingScreenResource
 		{
-			get
-			{
-				if (_initialLoadingScreenResource == null)
-				{
-					_initialLoadingScreenResource = (raRef<inkWidgetLibraryResource>) CR2WTypeManager.Create("raRef:inkWidgetLibraryResource", "initialLoadingScreenResource", cr2w, this);
-				}
-				return _initialLoadingScreenResource;
-			}
-			set
-			{
-				if (_initialLoadingScreenResource == value)
-				{
-					return;
-				}
-				_initialLoadingScreenResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialLoadingScreenResource);
+			set => SetProperty(ref _initialLoadingScreenResource, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("fastTravelLoadingScreenResource")] 
 		public raRef<inkWidgetLibraryResource> FastTravelLoadingScreenResource
 		{
-			get
-			{
-				if (_fastTravelLoadingScreenResource == null)
-				{
-					_fastTravelLoadingScreenResource = (raRef<inkWidgetLibraryResource>) CR2WTypeManager.Create("raRef:inkWidgetLibraryResource", "fastTravelLoadingScreenResource", cr2w, this);
-				}
-				return _fastTravelLoadingScreenResource;
-			}
-			set
-			{
-				if (_fastTravelLoadingScreenResource == value)
-				{
-					return;
-				}
-				_fastTravelLoadingScreenResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fastTravelLoadingScreenResource);
+			set => SetProperty(ref _fastTravelLoadingScreenResource, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("fallbackLoadingScreenResource")] 
 		public raRef<inkWidgetLibraryResource> FallbackLoadingScreenResource
 		{
-			get
-			{
-				if (_fallbackLoadingScreenResource == null)
-				{
-					_fallbackLoadingScreenResource = (raRef<inkWidgetLibraryResource>) CR2WTypeManager.Create("raRef:inkWidgetLibraryResource", "fallbackLoadingScreenResource", cr2w, this);
-				}
-				return _fallbackLoadingScreenResource;
-			}
-			set
-			{
-				if (_fallbackLoadingScreenResource == value)
-				{
-					return;
-				}
-				_fallbackLoadingScreenResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fallbackLoadingScreenResource);
+			set => SetProperty(ref _fallbackLoadingScreenResource, value);
 		}
 
 		public inkLoadingLayerDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

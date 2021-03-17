@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("type")] 
 		public CEnum<questTriggerConditionType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<questTriggerConditionType>) CR2WTypeManager.Create("questTriggerConditionType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("triggerAreaRef")] 
 		public NodeRef TriggerAreaRef
 		{
-			get
-			{
-				if (_triggerAreaRef == null)
-				{
-					_triggerAreaRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "triggerAreaRef", cr2w, this);
-				}
-				return _triggerAreaRef;
-			}
-			set
-			{
-				if (_triggerAreaRef == value)
-				{
-					return;
-				}
-				_triggerAreaRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerAreaRef);
+			set => SetProperty(ref _triggerAreaRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("activatorRef")] 
 		public gameEntityReference ActivatorRef
 		{
-			get
-			{
-				if (_activatorRef == null)
-				{
-					_activatorRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "activatorRef", cr2w, this);
-				}
-				return _activatorRef;
-			}
-			set
-			{
-				if (_activatorRef == value)
-				{
-					return;
-				}
-				_activatorRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activatorRef);
+			set => SetProperty(ref _activatorRef, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isPlayerActivator")] 
 		public CBool IsPlayerActivator
 		{
-			get
-			{
-				if (_isPlayerActivator == null)
-				{
-					_isPlayerActivator = (CBool) CR2WTypeManager.Create("Bool", "isPlayerActivator", cr2w, this);
-				}
-				return _isPlayerActivator;
-			}
-			set
-			{
-				if (_isPlayerActivator == value)
-				{
-					return;
-				}
-				_isPlayerActivator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayerActivator);
+			set => SetProperty(ref _isPlayerActivator, value);
 		}
 
 		public questTriggerCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

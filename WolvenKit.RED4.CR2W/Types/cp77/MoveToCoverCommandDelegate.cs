@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inCommand")] 
 		public CHandle<AIArgumentMapping> InCommand
 		{
-			get
-			{
-				if (_inCommand == null)
-				{
-					_inCommand = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "inCommand", cr2w, this);
-				}
-				return _inCommand;
-			}
-			set
-			{
-				if (_inCommand == value)
-				{
-					return;
-				}
-				_inCommand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inCommand);
+			set => SetProperty(ref _inCommand, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("releaseSignalOnCoverEnter")] 
 		public CBool ReleaseSignalOnCoverEnter
 		{
-			get
-			{
-				if (_releaseSignalOnCoverEnter == null)
-				{
-					_releaseSignalOnCoverEnter = (CBool) CR2WTypeManager.Create("Bool", "releaseSignalOnCoverEnter", cr2w, this);
-				}
-				return _releaseSignalOnCoverEnter;
-			}
-			set
-			{
-				if (_releaseSignalOnCoverEnter == value)
-				{
-					return;
-				}
-				_releaseSignalOnCoverEnter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _releaseSignalOnCoverEnter);
+			set => SetProperty(ref _releaseSignalOnCoverEnter, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("useSpecialAction")] 
 		public CBool UseSpecialAction
 		{
-			get
-			{
-				if (_useSpecialAction == null)
-				{
-					_useSpecialAction = (CBool) CR2WTypeManager.Create("Bool", "useSpecialAction", cr2w, this);
-				}
-				return _useSpecialAction;
-			}
-			set
-			{
-				if (_useSpecialAction == value)
-				{
-					return;
-				}
-				_useSpecialAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useSpecialAction);
+			set => SetProperty(ref _useSpecialAction, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("useHigh")] 
 		public CBool UseHigh
 		{
-			get
-			{
-				if (_useHigh == null)
-				{
-					_useHigh = (CBool) CR2WTypeManager.Create("Bool", "useHigh", cr2w, this);
-				}
-				return _useHigh;
-			}
-			set
-			{
-				if (_useHigh == value)
-				{
-					return;
-				}
-				_useHigh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useHigh);
+			set => SetProperty(ref _useHigh, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("useLeft")] 
 		public CBool UseLeft
 		{
-			get
-			{
-				if (_useLeft == null)
-				{
-					_useLeft = (CBool) CR2WTypeManager.Create("Bool", "useLeft", cr2w, this);
-				}
-				return _useLeft;
-			}
-			set
-			{
-				if (_useLeft == value)
-				{
-					return;
-				}
-				_useLeft = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useLeft);
+			set => SetProperty(ref _useLeft, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("useRight")] 
 		public CBool UseRight
 		{
-			get
-			{
-				if (_useRight == null)
-				{
-					_useRight = (CBool) CR2WTypeManager.Create("Bool", "useRight", cr2w, this);
-				}
-				return _useRight;
-			}
-			set
-			{
-				if (_useRight == value)
-				{
-					return;
-				}
-				_useRight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useRight);
+			set => SetProperty(ref _useRight, value);
 		}
 
 		public MoveToCoverCommandDelegate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

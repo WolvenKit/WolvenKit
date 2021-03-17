@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bonds")] 
 		public CArray<meshDestructionBond> Bonds
 		{
-			get
-			{
-				if (_bonds == null)
-				{
-					_bonds = (CArray<meshDestructionBond>) CR2WTypeManager.Create("array:meshDestructionBond", "bonds", cr2w, this);
-				}
-				return _bonds;
-			}
-			set
-			{
-				if (_bonds == value)
-				{
-					return;
-				}
-				_bonds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bonds);
+			set => SetProperty(ref _bonds, value);
 		}
 
 		public meshMeshParamDestructionBonds(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("numberOfSquadMembers")] 
 		public CInt32 NumberOfSquadMembers
 		{
-			get
-			{
-				if (_numberOfSquadMembers == null)
-				{
-					_numberOfSquadMembers = (CInt32) CR2WTypeManager.Create("Int32", "numberOfSquadMembers", cr2w, this);
-				}
-				return _numberOfSquadMembers;
-			}
-			set
-			{
-				if (_numberOfSquadMembers == value)
-				{
-					return;
-				}
-				_numberOfSquadMembers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numberOfSquadMembers);
+			set => SetProperty(ref _numberOfSquadMembers, value);
 		}
 
 		public ScannerSquadInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

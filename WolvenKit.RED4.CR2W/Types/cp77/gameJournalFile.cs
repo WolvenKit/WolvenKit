@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("title")] 
 		public LocalizationString Title
 		{
-			get
-			{
-				if (_title == null)
-				{
-					_title = (LocalizationString) CR2WTypeManager.Create("LocalizationString", "title", cr2w, this);
-				}
-				return _title;
-			}
-			set
-			{
-				if (_title == value)
-				{
-					return;
-				}
-				_title = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _title);
+			set => SetProperty(ref _title, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("content")] 
 		public LocalizationString Content
 		{
-			get
-			{
-				if (_content == null)
-				{
-					_content = (LocalizationString) CR2WTypeManager.Create("LocalizationString", "content", cr2w, this);
-				}
-				return _content;
-			}
-			set
-			{
-				if (_content == value)
-				{
-					return;
-				}
-				_content = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _content);
+			set => SetProperty(ref _content, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("videoResource")] 
 		public raRef<Bink> VideoResource
 		{
-			get
-			{
-				if (_videoResource == null)
-				{
-					_videoResource = (raRef<Bink>) CR2WTypeManager.Create("raRef:Bink", "videoResource", cr2w, this);
-				}
-				return _videoResource;
-			}
-			set
-			{
-				if (_videoResource == value)
-				{
-					return;
-				}
-				_videoResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _videoResource);
+			set => SetProperty(ref _videoResource, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("PictureFilename(legacy)")] 
 		public CString PictureFilename_legacy_
 		{
-			get
-			{
-				if (_pictureFilename_legacy_ == null)
-				{
-					_pictureFilename_legacy_ = (CString) CR2WTypeManager.Create("String", "PictureFilename(legacy)", cr2w, this);
-				}
-				return _pictureFilename_legacy_;
-			}
-			set
-			{
-				if (_pictureFilename_legacy_ == value)
-				{
-					return;
-				}
-				_pictureFilename_legacy_ = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pictureFilename_legacy_);
+			set => SetProperty(ref _pictureFilename_legacy_, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("pictureTweak")] 
 		public TweakDBID PictureTweak
 		{
-			get
-			{
-				if (_pictureTweak == null)
-				{
-					_pictureTweak = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "pictureTweak", cr2w, this);
-				}
-				return _pictureTweak;
-			}
-			set
-			{
-				if (_pictureTweak == value)
-				{
-					return;
-				}
-				_pictureTweak = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pictureTweak);
+			set => SetProperty(ref _pictureTweak, value);
 		}
 
 		public gameJournalFile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

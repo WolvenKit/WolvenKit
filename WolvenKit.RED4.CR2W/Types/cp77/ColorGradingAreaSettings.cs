@@ -29,391 +29,136 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("contrast")] 
 		public CFloat Contrast
 		{
-			get
-			{
-				if (_contrast == null)
-				{
-					_contrast = (CFloat) CR2WTypeManager.Create("Float", "contrast", cr2w, this);
-				}
-				return _contrast;
-			}
-			set
-			{
-				if (_contrast == value)
-				{
-					return;
-				}
-				_contrast = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contrast);
+			set => SetProperty(ref _contrast, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("contrastPivot")] 
 		public CFloat ContrastPivot
 		{
-			get
-			{
-				if (_contrastPivot == null)
-				{
-					_contrastPivot = (CFloat) CR2WTypeManager.Create("Float", "contrastPivot", cr2w, this);
-				}
-				return _contrastPivot;
-			}
-			set
-			{
-				if (_contrastPivot == value)
-				{
-					return;
-				}
-				_contrastPivot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contrastPivot);
+			set => SetProperty(ref _contrastPivot, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("saturation")] 
 		public CFloat Saturation
 		{
-			get
-			{
-				if (_saturation == null)
-				{
-					_saturation = (CFloat) CR2WTypeManager.Create("Float", "saturation", cr2w, this);
-				}
-				return _saturation;
-			}
-			set
-			{
-				if (_saturation == value)
-				{
-					return;
-				}
-				_saturation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _saturation);
+			set => SetProperty(ref _saturation, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("hue")] 
 		public CFloat Hue
 		{
-			get
-			{
-				if (_hue == null)
-				{
-					_hue = (CFloat) CR2WTypeManager.Create("Float", "hue", cr2w, this);
-				}
-				return _hue;
-			}
-			set
-			{
-				if (_hue == value)
-				{
-					return;
-				}
-				_hue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hue);
+			set => SetProperty(ref _hue, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("brightness")] 
 		public CFloat Brightness
 		{
-			get
-			{
-				if (_brightness == null)
-				{
-					_brightness = (CFloat) CR2WTypeManager.Create("Float", "brightness", cr2w, this);
-				}
-				return _brightness;
-			}
-			set
-			{
-				if (_brightness == value)
-				{
-					return;
-				}
-				_brightness = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _brightness);
+			set => SetProperty(ref _brightness, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("lift")] 
 		public ColorBalance Lift
 		{
-			get
-			{
-				if (_lift == null)
-				{
-					_lift = (ColorBalance) CR2WTypeManager.Create("ColorBalance", "lift", cr2w, this);
-				}
-				return _lift;
-			}
-			set
-			{
-				if (_lift == value)
-				{
-					return;
-				}
-				_lift = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lift);
+			set => SetProperty(ref _lift, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("gammaValue")] 
 		public ColorBalance GammaValue
 		{
-			get
-			{
-				if (_gammaValue == null)
-				{
-					_gammaValue = (ColorBalance) CR2WTypeManager.Create("ColorBalance", "gammaValue", cr2w, this);
-				}
-				return _gammaValue;
-			}
-			set
-			{
-				if (_gammaValue == value)
-				{
-					return;
-				}
-				_gammaValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gammaValue);
+			set => SetProperty(ref _gammaValue, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("gain")] 
 		public ColorBalance Gain
 		{
-			get
-			{
-				if (_gain == null)
-				{
-					_gain = (ColorBalance) CR2WTypeManager.Create("ColorBalance", "gain", cr2w, this);
-				}
-				return _gain;
-			}
-			set
-			{
-				if (_gain == value)
-				{
-					return;
-				}
-				_gain = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gain);
+			set => SetProperty(ref _gain, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("offset")] 
 		public ColorBalance Offset
 		{
-			get
-			{
-				if (_offset == null)
-				{
-					_offset = (ColorBalance) CR2WTypeManager.Create("ColorBalance", "offset", cr2w, this);
-				}
-				return _offset;
-			}
-			set
-			{
-				if (_offset == value)
-				{
-					return;
-				}
-				_offset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offset);
+			set => SetProperty(ref _offset, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("lowRange")] 
 		public CFloat LowRange
 		{
-			get
-			{
-				if (_lowRange == null)
-				{
-					_lowRange = (CFloat) CR2WTypeManager.Create("Float", "lowRange", cr2w, this);
-				}
-				return _lowRange;
-			}
-			set
-			{
-				if (_lowRange == value)
-				{
-					return;
-				}
-				_lowRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lowRange);
+			set => SetProperty(ref _lowRange, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("shadowOffset")] 
 		public ColorBalance ShadowOffset
 		{
-			get
-			{
-				if (_shadowOffset == null)
-				{
-					_shadowOffset = (ColorBalance) CR2WTypeManager.Create("ColorBalance", "shadowOffset", cr2w, this);
-				}
-				return _shadowOffset;
-			}
-			set
-			{
-				if (_shadowOffset == value)
-				{
-					return;
-				}
-				_shadowOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shadowOffset);
+			set => SetProperty(ref _shadowOffset, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("midtoneOffset")] 
 		public ColorBalance MidtoneOffset
 		{
-			get
-			{
-				if (_midtoneOffset == null)
-				{
-					_midtoneOffset = (ColorBalance) CR2WTypeManager.Create("ColorBalance", "midtoneOffset", cr2w, this);
-				}
-				return _midtoneOffset;
-			}
-			set
-			{
-				if (_midtoneOffset == value)
-				{
-					return;
-				}
-				_midtoneOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _midtoneOffset);
+			set => SetProperty(ref _midtoneOffset, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("highRange")] 
 		public CFloat HighRange
 		{
-			get
-			{
-				if (_highRange == null)
-				{
-					_highRange = (CFloat) CR2WTypeManager.Create("Float", "highRange", cr2w, this);
-				}
-				return _highRange;
-			}
-			set
-			{
-				if (_highRange == value)
-				{
-					return;
-				}
-				_highRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highRange);
+			set => SetProperty(ref _highRange, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("highlightOffset")] 
 		public ColorBalance HighlightOffset
 		{
-			get
-			{
-				if (_highlightOffset == null)
-				{
-					_highlightOffset = (ColorBalance) CR2WTypeManager.Create("ColorBalance", "highlightOffset", cr2w, this);
-				}
-				return _highlightOffset;
-			}
-			set
-			{
-				if (_highlightOffset == value)
-				{
-					return;
-				}
-				_highlightOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highlightOffset);
+			set => SetProperty(ref _highlightOffset, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("ldrLut")] 
 		public ColorGradingLutParams LdrLut
 		{
-			get
-			{
-				if (_ldrLut == null)
-				{
-					_ldrLut = (ColorGradingLutParams) CR2WTypeManager.Create("ColorGradingLutParams", "ldrLut", cr2w, this);
-				}
-				return _ldrLut;
-			}
-			set
-			{
-				if (_ldrLut == value)
-				{
-					return;
-				}
-				_ldrLut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ldrLut);
+			set => SetProperty(ref _ldrLut, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("hdrLut")] 
 		public ColorGradingLutParams HdrLut
 		{
-			get
-			{
-				if (_hdrLut == null)
-				{
-					_hdrLut = (ColorGradingLutParams) CR2WTypeManager.Create("ColorGradingLutParams", "hdrLut", cr2w, this);
-				}
-				return _hdrLut;
-			}
-			set
-			{
-				if (_hdrLut == value)
-				{
-					return;
-				}
-				_hdrLut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hdrLut);
+			set => SetProperty(ref _hdrLut, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("forceHdrLut")] 
 		public CBool ForceHdrLut
 		{
-			get
-			{
-				if (_forceHdrLut == null)
-				{
-					_forceHdrLut = (CBool) CR2WTypeManager.Create("Bool", "forceHdrLut", cr2w, this);
-				}
-				return _forceHdrLut;
-			}
-			set
-			{
-				if (_forceHdrLut == value)
-				{
-					return;
-				}
-				_forceHdrLut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceHdrLut);
+			set => SetProperty(ref _forceHdrLut, value);
 		}
 
 		public ColorGradingAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

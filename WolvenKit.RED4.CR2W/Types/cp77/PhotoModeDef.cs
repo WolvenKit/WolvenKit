@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("IsActive")] 
 		public gamebbScriptID_Bool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "IsActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("PlayerHealthState")] 
 		public gamebbScriptID_Uint32 PlayerHealthState
 		{
-			get
-			{
-				if (_playerHealthState == null)
-				{
-					_playerHealthState = (gamebbScriptID_Uint32) CR2WTypeManager.Create("gamebbScriptID_Uint32", "PlayerHealthState", cr2w, this);
-				}
-				return _playerHealthState;
-			}
-			set
-			{
-				if (_playerHealthState == value)
-				{
-					return;
-				}
-				_playerHealthState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerHealthState);
+			set => SetProperty(ref _playerHealthState, value);
 		}
 
 		public PhotoModeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

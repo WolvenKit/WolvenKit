@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stylePath1")] 
 		public redResourceReferenceScriptToken StylePath1
 		{
-			get
-			{
-				if (_stylePath1 == null)
-				{
-					_stylePath1 = (redResourceReferenceScriptToken) CR2WTypeManager.Create("redResourceReferenceScriptToken", "stylePath1", cr2w, this);
-				}
-				return _stylePath1;
-			}
-			set
-			{
-				if (_stylePath1 == value)
-				{
-					return;
-				}
-				_stylePath1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stylePath1);
+			set => SetProperty(ref _stylePath1, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("stylePath2")] 
 		public redResourceReferenceScriptToken StylePath2
 		{
-			get
-			{
-				if (_stylePath2 == null)
-				{
-					_stylePath2 = (redResourceReferenceScriptToken) CR2WTypeManager.Create("redResourceReferenceScriptToken", "stylePath2", cr2w, this);
-				}
-				return _stylePath2;
-			}
-			set
-			{
-				if (_stylePath2 == value)
-				{
-					return;
-				}
-				_stylePath2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stylePath2);
+			set => SetProperty(ref _stylePath2, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("content")] 
 		public inkWidgetReference Content
 		{
-			get
-			{
-				if (_content == null)
-				{
-					_content = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "content", cr2w, this);
-				}
-				return _content;
-			}
-			set
-			{
-				if (_content == value)
-				{
-					return;
-				}
-				_content = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _content);
+			set => SetProperty(ref _content, value);
 		}
 
 		public sampleStyleManagerGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

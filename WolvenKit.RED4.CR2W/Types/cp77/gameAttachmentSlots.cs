@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animParams")] 
 		public CArray<gameAnimParamSlotsOption> AnimParams
 		{
-			get
-			{
-				if (_animParams == null)
-				{
-					_animParams = (CArray<gameAnimParamSlotsOption>) CR2WTypeManager.Create("array:gameAnimParamSlotsOption", "animParams", cr2w, this);
-				}
-				return _animParams;
-			}
-			set
-			{
-				if (_animParams == value)
-				{
-					return;
-				}
-				_animParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animParams);
+			set => SetProperty(ref _animParams, value);
 		}
 
 		public gameAttachmentSlots(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

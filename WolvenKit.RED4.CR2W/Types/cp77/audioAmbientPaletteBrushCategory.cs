@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("brushes")] 
 		public CHandle<audioAmbientPaletteBrushDictionary> Brushes
 		{
-			get
-			{
-				if (_brushes == null)
-				{
-					_brushes = (CHandle<audioAmbientPaletteBrushDictionary>) CR2WTypeManager.Create("handle:audioAmbientPaletteBrushDictionary", "brushes", cr2w, this);
-				}
-				return _brushes;
-			}
-			set
-			{
-				if (_brushes == value)
-				{
-					return;
-				}
-				_brushes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _brushes);
+			set => SetProperty(ref _brushes, value);
 		}
 
 		public audioAmbientPaletteBrushCategory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

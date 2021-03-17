@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("maxVisibleParts")] 
 		public CUInt8 MaxVisibleParts
 		{
-			get
-			{
-				if (_maxVisibleParts == null)
-				{
-					_maxVisibleParts = (CUInt8) CR2WTypeManager.Create("Uint8", "maxVisibleParts", cr2w, this);
-				}
-				return _maxVisibleParts;
-			}
-			set
-			{
-				if (_maxVisibleParts == value)
-				{
-					return;
-				}
-				_maxVisibleParts = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxVisibleParts);
+			set => SetProperty(ref _maxVisibleParts, value);
 		}
 
 		public gameuiDamageIndicatorGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

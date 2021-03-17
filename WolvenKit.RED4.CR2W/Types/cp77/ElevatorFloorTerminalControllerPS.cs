@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("elevatorFloorSetup")] 
 		public ElevatorFloorSetup ElevatorFloorSetup
 		{
-			get
-			{
-				if (_elevatorFloorSetup == null)
-				{
-					_elevatorFloorSetup = (ElevatorFloorSetup) CR2WTypeManager.Create("ElevatorFloorSetup", "elevatorFloorSetup", cr2w, this);
-				}
-				return _elevatorFloorSetup;
-			}
-			set
-			{
-				if (_elevatorFloorSetup == value)
-				{
-					return;
-				}
-				_elevatorFloorSetup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _elevatorFloorSetup);
+			set => SetProperty(ref _elevatorFloorSetup, value);
 		}
 
 		[Ordinal(114)] 
 		[RED("hasDirectInteration")] 
 		public CBool HasDirectInteration
 		{
-			get
-			{
-				if (_hasDirectInteration == null)
-				{
-					_hasDirectInteration = (CBool) CR2WTypeManager.Create("Bool", "hasDirectInteration", cr2w, this);
-				}
-				return _hasDirectInteration;
-			}
-			set
-			{
-				if (_hasDirectInteration == value)
-				{
-					return;
-				}
-				_hasDirectInteration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasDirectInteration);
+			set => SetProperty(ref _hasDirectInteration, value);
 		}
 
 		[Ordinal(115)] 
 		[RED("isElevatorAtThisFloor")] 
 		public CBool IsElevatorAtThisFloor
 		{
-			get
-			{
-				if (_isElevatorAtThisFloor == null)
-				{
-					_isElevatorAtThisFloor = (CBool) CR2WTypeManager.Create("Bool", "isElevatorAtThisFloor", cr2w, this);
-				}
-				return _isElevatorAtThisFloor;
-			}
-			set
-			{
-				if (_isElevatorAtThisFloor == value)
-				{
-					return;
-				}
-				_isElevatorAtThisFloor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isElevatorAtThisFloor);
+			set => SetProperty(ref _isElevatorAtThisFloor, value);
 		}
 
 		public ElevatorFloorTerminalControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

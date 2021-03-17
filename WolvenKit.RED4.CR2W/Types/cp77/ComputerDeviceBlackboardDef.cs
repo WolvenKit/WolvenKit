@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("MailThumbnailWidgetsData")] 
 		public gamebbScriptID_Variant MailThumbnailWidgetsData
 		{
-			get
-			{
-				if (_mailThumbnailWidgetsData == null)
-				{
-					_mailThumbnailWidgetsData = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "MailThumbnailWidgetsData", cr2w, this);
-				}
-				return _mailThumbnailWidgetsData;
-			}
-			set
-			{
-				if (_mailThumbnailWidgetsData == value)
-				{
-					return;
-				}
-				_mailThumbnailWidgetsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mailThumbnailWidgetsData);
+			set => SetProperty(ref _mailThumbnailWidgetsData, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("FileThumbnailWidgetsData")] 
 		public gamebbScriptID_Variant FileThumbnailWidgetsData
 		{
-			get
-			{
-				if (_fileThumbnailWidgetsData == null)
-				{
-					_fileThumbnailWidgetsData = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "FileThumbnailWidgetsData", cr2w, this);
-				}
-				return _fileThumbnailWidgetsData;
-			}
-			set
-			{
-				if (_fileThumbnailWidgetsData == value)
-				{
-					return;
-				}
-				_fileThumbnailWidgetsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fileThumbnailWidgetsData);
+			set => SetProperty(ref _fileThumbnailWidgetsData, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("MailWidgetsData")] 
 		public gamebbScriptID_Variant MailWidgetsData
 		{
-			get
-			{
-				if (_mailWidgetsData == null)
-				{
-					_mailWidgetsData = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "MailWidgetsData", cr2w, this);
-				}
-				return _mailWidgetsData;
-			}
-			set
-			{
-				if (_mailWidgetsData == value)
-				{
-					return;
-				}
-				_mailWidgetsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mailWidgetsData);
+			set => SetProperty(ref _mailWidgetsData, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("FileWidgetsData")] 
 		public gamebbScriptID_Variant FileWidgetsData
 		{
-			get
-			{
-				if (_fileWidgetsData == null)
-				{
-					_fileWidgetsData = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "FileWidgetsData", cr2w, this);
-				}
-				return _fileWidgetsData;
-			}
-			set
-			{
-				if (_fileWidgetsData == value)
-				{
-					return;
-				}
-				_fileWidgetsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fileWidgetsData);
+			set => SetProperty(ref _fileWidgetsData, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("MenuButtonWidgetsData")] 
 		public gamebbScriptID_Variant MenuButtonWidgetsData
 		{
-			get
-			{
-				if (_menuButtonWidgetsData == null)
-				{
-					_menuButtonWidgetsData = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "MenuButtonWidgetsData", cr2w, this);
-				}
-				return _menuButtonWidgetsData;
-			}
-			set
-			{
-				if (_menuButtonWidgetsData == value)
-				{
-					return;
-				}
-				_menuButtonWidgetsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuButtonWidgetsData);
+			set => SetProperty(ref _menuButtonWidgetsData, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("MainMenuButtonWidgetsData")] 
 		public gamebbScriptID_Variant MainMenuButtonWidgetsData
 		{
-			get
-			{
-				if (_mainMenuButtonWidgetsData == null)
-				{
-					_mainMenuButtonWidgetsData = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "MainMenuButtonWidgetsData", cr2w, this);
-				}
-				return _mainMenuButtonWidgetsData;
-			}
-			set
-			{
-				if (_mainMenuButtonWidgetsData == value)
-				{
-					return;
-				}
-				_mainMenuButtonWidgetsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mainMenuButtonWidgetsData);
+			set => SetProperty(ref _mainMenuButtonWidgetsData, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("BannerWidgetsData")] 
 		public gamebbScriptID_Variant BannerWidgetsData
 		{
-			get
-			{
-				if (_bannerWidgetsData == null)
-				{
-					_bannerWidgetsData = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "BannerWidgetsData", cr2w, this);
-				}
-				return _bannerWidgetsData;
-			}
-			set
-			{
-				if (_bannerWidgetsData == value)
-				{
-					return;
-				}
-				_bannerWidgetsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bannerWidgetsData);
+			set => SetProperty(ref _bannerWidgetsData, value);
 		}
 
 		public ComputerDeviceBlackboardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

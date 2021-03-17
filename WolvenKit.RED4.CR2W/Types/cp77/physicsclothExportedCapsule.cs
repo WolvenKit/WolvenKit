@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("p0")] 
 		public Vector3 P0
 		{
-			get
-			{
-				if (_p0 == null)
-				{
-					_p0 = (Vector3) CR2WTypeManager.Create("Vector3", "p0", cr2w, this);
-				}
-				return _p0;
-			}
-			set
-			{
-				if (_p0 == value)
-				{
-					return;
-				}
-				_p0 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _p0);
+			set => SetProperty(ref _p0, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("p1")] 
 		public Vector3 P1
 		{
-			get
-			{
-				if (_p1 == null)
-				{
-					_p1 = (Vector3) CR2WTypeManager.Create("Vector3", "p1", cr2w, this);
-				}
-				return _p1;
-			}
-			set
-			{
-				if (_p1 == value)
-				{
-					return;
-				}
-				_p1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _p1);
+			set => SetProperty(ref _p1, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("r0")] 
 		public CFloat R0
 		{
-			get
-			{
-				if (_r0 == null)
-				{
-					_r0 = (CFloat) CR2WTypeManager.Create("Float", "r0", cr2w, this);
-				}
-				return _r0;
-			}
-			set
-			{
-				if (_r0 == value)
-				{
-					return;
-				}
-				_r0 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _r0);
+			set => SetProperty(ref _r0, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("r1")] 
 		public CFloat R1
 		{
-			get
-			{
-				if (_r1 == null)
-				{
-					_r1 = (CFloat) CR2WTypeManager.Create("Float", "r1", cr2w, this);
-				}
-				return _r1;
-			}
-			set
-			{
-				if (_r1 == value)
-				{
-					return;
-				}
-				_r1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _r1);
+			set => SetProperty(ref _r1, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("boneName")] 
 		public CName BoneName
 		{
-			get
-			{
-				if (_boneName == null)
-				{
-					_boneName = (CName) CR2WTypeManager.Create("CName", "boneName", cr2w, this);
-				}
-				return _boneName;
-			}
-			set
-			{
-				if (_boneName == value)
-				{
-					return;
-				}
-				_boneName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _boneName);
+			set => SetProperty(ref _boneName, value);
 		}
 
 		public physicsclothExportedCapsule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

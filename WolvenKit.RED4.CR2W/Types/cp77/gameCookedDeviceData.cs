@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("className")] 
 		public CName ClassName
 		{
-			get
-			{
-				if (_className == null)
-				{
-					_className = (CName) CR2WTypeManager.Create("CName", "className", cr2w, this);
-				}
-				return _className;
-			}
-			set
-			{
-				if (_className == value)
-				{
-					return;
-				}
-				_className = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _className);
+			set => SetProperty(ref _className, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("parents")] 
 		public CArray<CUInt64> Parents
 		{
-			get
-			{
-				if (_parents == null)
-				{
-					_parents = (CArray<CUInt64>) CR2WTypeManager.Create("array:Uint64", "parents", cr2w, this);
-				}
-				return _parents;
-			}
-			set
-			{
-				if (_parents == value)
-				{
-					return;
-				}
-				_parents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parents);
+			set => SetProperty(ref _parents, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("children")] 
 		public CArray<CUInt64> Children
 		{
-			get
-			{
-				if (_children == null)
-				{
-					_children = (CArray<CUInt64>) CR2WTypeManager.Create("array:Uint64", "children", cr2w, this);
-				}
-				return _children;
-			}
-			set
-			{
-				if (_children == value)
-				{
-					return;
-				}
-				_children = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _children);
+			set => SetProperty(ref _children, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("nodePosition")] 
 		public Vector3 NodePosition
 		{
-			get
-			{
-				if (_nodePosition == null)
-				{
-					_nodePosition = (Vector3) CR2WTypeManager.Create("Vector3", "nodePosition", cr2w, this);
-				}
-				return _nodePosition;
-			}
-			set
-			{
-				if (_nodePosition == value)
-				{
-					return;
-				}
-				_nodePosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodePosition);
+			set => SetProperty(ref _nodePosition, value);
 		}
 
 		public gameCookedDeviceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

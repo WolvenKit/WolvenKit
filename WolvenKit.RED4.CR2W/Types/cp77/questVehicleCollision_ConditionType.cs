@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("magnitude")] 
 		public CEnum<questImpulseMagnitude> Magnitude
 		{
-			get
-			{
-				if (_magnitude == null)
-				{
-					_magnitude = (CEnum<questImpulseMagnitude>) CR2WTypeManager.Create("questImpulseMagnitude", "magnitude", cr2w, this);
-				}
-				return _magnitude;
-			}
-			set
-			{
-				if (_magnitude == value)
-				{
-					return;
-				}
-				_magnitude = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _magnitude);
+			set => SetProperty(ref _magnitude, value);
 		}
 
 		public questVehicleCollision_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

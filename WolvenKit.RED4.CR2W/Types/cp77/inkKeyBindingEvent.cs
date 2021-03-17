@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("keyName")] 
 		public CName KeyName
 		{
-			get
-			{
-				if (_keyName == null)
-				{
-					_keyName = (CName) CR2WTypeManager.Create("CName", "keyName", cr2w, this);
-				}
-				return _keyName;
-			}
-			set
-			{
-				if (_keyName == value)
-				{
-					return;
-				}
-				_keyName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _keyName);
+			set => SetProperty(ref _keyName, value);
 		}
 
 		public inkKeyBindingEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

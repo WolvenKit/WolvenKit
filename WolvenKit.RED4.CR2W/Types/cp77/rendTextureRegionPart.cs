@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("innerRegion")] 
 		public Vector4 InnerRegion
 		{
-			get
-			{
-				if (_innerRegion == null)
-				{
-					_innerRegion = (Vector4) CR2WTypeManager.Create("Vector4", "innerRegion", cr2w, this);
-				}
-				return _innerRegion;
-			}
-			set
-			{
-				if (_innerRegion == value)
-				{
-					return;
-				}
-				_innerRegion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _innerRegion);
+			set => SetProperty(ref _innerRegion, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("outerRegion")] 
 		public Vector4 OuterRegion
 		{
-			get
-			{
-				if (_outerRegion == null)
-				{
-					_outerRegion = (Vector4) CR2WTypeManager.Create("Vector4", "outerRegion", cr2w, this);
-				}
-				return _outerRegion;
-			}
-			set
-			{
-				if (_outerRegion == value)
-				{
-					return;
-				}
-				_outerRegion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outerRegion);
+			set => SetProperty(ref _outerRegion, value);
 		}
 
 		public rendTextureRegionPart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

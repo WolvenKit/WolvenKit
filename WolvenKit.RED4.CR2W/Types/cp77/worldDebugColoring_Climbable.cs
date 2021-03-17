@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("climbableColour")] 
 		public CColor ClimbableColour
 		{
-			get
-			{
-				if (_climbableColour == null)
-				{
-					_climbableColour = (CColor) CR2WTypeManager.Create("Color", "climbableColour", cr2w, this);
-				}
-				return _climbableColour;
-			}
-			set
-			{
-				if (_climbableColour == value)
-				{
-					return;
-				}
-				_climbableColour = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _climbableColour);
+			set => SetProperty(ref _climbableColour, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("notClimbableColour")] 
 		public CColor NotClimbableColour
 		{
-			get
-			{
-				if (_notClimbableColour == null)
-				{
-					_notClimbableColour = (CColor) CR2WTypeManager.Create("Color", "notClimbableColour", cr2w, this);
-				}
-				return _notClimbableColour;
-			}
-			set
-			{
-				if (_notClimbableColour == value)
-				{
-					return;
-				}
-				_notClimbableColour = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _notClimbableColour);
+			set => SetProperty(ref _notClimbableColour, value);
 		}
 
 		public worldDebugColoring_Climbable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

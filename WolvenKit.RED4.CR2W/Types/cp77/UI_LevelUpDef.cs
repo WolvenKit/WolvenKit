@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("level")] 
 		public gamebbScriptID_Variant Level
 		{
-			get
-			{
-				if (_level == null)
-				{
-					_level = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "level", cr2w, this);
-				}
-				return _level;
-			}
-			set
-			{
-				if (_level == value)
-				{
-					return;
-				}
-				_level = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _level);
+			set => SetProperty(ref _level, value);
 		}
 
 		public UI_LevelUpDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

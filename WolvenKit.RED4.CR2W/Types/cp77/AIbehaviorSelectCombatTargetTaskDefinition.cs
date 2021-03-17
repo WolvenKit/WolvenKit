@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("target")] 
 		public CHandle<AIArgumentMapping> Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("targetClosest")] 
 		public CBool TargetClosest
 		{
-			get
-			{
-				if (_targetClosest == null)
-				{
-					_targetClosest = (CBool) CR2WTypeManager.Create("Bool", "targetClosest", cr2w, this);
-				}
-				return _targetClosest;
-			}
-			set
-			{
-				if (_targetClosest == value)
-				{
-					return;
-				}
-				_targetClosest = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetClosest);
+			set => SetProperty(ref _targetClosest, value);
 		}
 
 		public AIbehaviorSelectCombatTargetTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

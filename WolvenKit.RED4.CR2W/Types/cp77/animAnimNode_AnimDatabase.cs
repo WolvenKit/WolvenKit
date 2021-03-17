@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animDataBase")] 
 		public animAnimDatabaseCollectionEntry AnimDataBase
 		{
-			get
-			{
-				if (_animDataBase == null)
-				{
-					_animDataBase = (animAnimDatabaseCollectionEntry) CR2WTypeManager.Create("animAnimDatabaseCollectionEntry", "animDataBase", cr2w, this);
-				}
-				return _animDataBase;
-			}
-			set
-			{
-				if (_animDataBase == value)
-				{
-					return;
-				}
-				_animDataBase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animDataBase);
+			set => SetProperty(ref _animDataBase, value);
 		}
 
 		[Ordinal(33)] 
 		[RED("inputLinks")] 
 		public CArray<animIntLink> InputLinks
 		{
-			get
-			{
-				if (_inputLinks == null)
-				{
-					_inputLinks = (CArray<animIntLink>) CR2WTypeManager.Create("array:animIntLink", "inputLinks", cr2w, this);
-				}
-				return _inputLinks;
-			}
-			set
-			{
-				if (_inputLinks == value)
-				{
-					return;
-				}
-				_inputLinks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputLinks);
+			set => SetProperty(ref _inputLinks, value);
 		}
 
 		public animAnimNode_AnimDatabase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

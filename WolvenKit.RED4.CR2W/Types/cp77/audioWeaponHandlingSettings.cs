@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("equipEvent")] 
 		public CName EquipEvent
 		{
-			get
-			{
-				if (_equipEvent == null)
-				{
-					_equipEvent = (CName) CR2WTypeManager.Create("CName", "equipEvent", cr2w, this);
-				}
-				return _equipEvent;
-			}
-			set
-			{
-				if (_equipEvent == value)
-				{
-					return;
-				}
-				_equipEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipEvent);
+			set => SetProperty(ref _equipEvent, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("unequipStartedEvent")] 
 		public CName UnequipStartedEvent
 		{
-			get
-			{
-				if (_unequipStartedEvent == null)
-				{
-					_unequipStartedEvent = (CName) CR2WTypeManager.Create("CName", "unequipStartedEvent", cr2w, this);
-				}
-				return _unequipStartedEvent;
-			}
-			set
-			{
-				if (_unequipStartedEvent == value)
-				{
-					return;
-				}
-				_unequipStartedEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unequipStartedEvent);
+			set => SetProperty(ref _unequipStartedEvent, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("unequippedEvent")] 
 		public CName UnequippedEvent
 		{
-			get
-			{
-				if (_unequippedEvent == null)
-				{
-					_unequippedEvent = (CName) CR2WTypeManager.Create("CName", "unequippedEvent", cr2w, this);
-				}
-				return _unequippedEvent;
-			}
-			set
-			{
-				if (_unequippedEvent == value)
-				{
-					return;
-				}
-				_unequippedEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unequippedEvent);
+			set => SetProperty(ref _unequippedEvent, value);
 		}
 
 		public audioWeaponHandlingSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

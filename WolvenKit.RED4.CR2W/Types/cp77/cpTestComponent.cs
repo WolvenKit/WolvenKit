@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("whatever")] 
 		public CFloat Whatever
 		{
-			get
-			{
-				if (_whatever == null)
-				{
-					_whatever = (CFloat) CR2WTypeManager.Create("Float", "whatever", cr2w, this);
-				}
-				return _whatever;
-			}
-			set
-			{
-				if (_whatever == value)
-				{
-					return;
-				}
-				_whatever = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _whatever);
+			set => SetProperty(ref _whatever, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("whateverIE")] 
 		public CFloat WhateverIE
 		{
-			get
-			{
-				if (_whateverIE == null)
-				{
-					_whateverIE = (CFloat) CR2WTypeManager.Create("Float", "whateverIE", cr2w, this);
-				}
-				return _whateverIE;
-			}
-			set
-			{
-				if (_whateverIE == value)
-				{
-					return;
-				}
-				_whateverIE = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _whateverIE);
+			set => SetProperty(ref _whateverIE, value);
 		}
 
 		public cpTestComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

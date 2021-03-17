@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("offset")] 
 		public Vector3 Offset
 		{
-			get
-			{
-				if (_offset == null)
-				{
-					_offset = (Vector3) CR2WTypeManager.Create("Vector3", "offset", cr2w, this);
-				}
-				return _offset;
-			}
-			set
-			{
-				if (_offset == value)
-				{
-					return;
-				}
-				_offset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offset);
+			set => SetProperty(ref _offset, value);
 		}
 
 		public senseVisibleObjectSecondaryPositionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

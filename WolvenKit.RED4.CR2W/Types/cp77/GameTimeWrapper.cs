@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gameTime")] 
 		public GameTime GameTime
 		{
-			get
-			{
-				if (_gameTime == null)
-				{
-					_gameTime = (GameTime) CR2WTypeManager.Create("GameTime", "gameTime", cr2w, this);
-				}
-				return _gameTime;
-			}
-			set
-			{
-				if (_gameTime == value)
-				{
-					return;
-				}
-				_gameTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameTime);
+			set => SetProperty(ref _gameTime, value);
 		}
 
 		public GameTimeWrapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

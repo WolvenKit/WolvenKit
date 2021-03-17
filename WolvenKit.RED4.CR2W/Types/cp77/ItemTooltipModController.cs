@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dotIndicator")] 
 		public inkWidgetReference DotIndicator
 		{
-			get
-			{
-				if (_dotIndicator == null)
-				{
-					_dotIndicator = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "dotIndicator", cr2w, this);
-				}
-				return _dotIndicator;
-			}
-			set
-			{
-				if (_dotIndicator == value)
-				{
-					return;
-				}
-				_dotIndicator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dotIndicator);
+			set => SetProperty(ref _dotIndicator, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("modAbilitiesContainer")] 
 		public inkCompoundWidgetReference ModAbilitiesContainer
 		{
-			get
-			{
-				if (_modAbilitiesContainer == null)
-				{
-					_modAbilitiesContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "modAbilitiesContainer", cr2w, this);
-				}
-				return _modAbilitiesContainer;
-			}
-			set
-			{
-				if (_modAbilitiesContainer == value)
-				{
-					return;
-				}
-				_modAbilitiesContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _modAbilitiesContainer);
+			set => SetProperty(ref _modAbilitiesContainer, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("partIndicatorController")] 
 		public CHandle<InventoryItemPartDisplay> PartIndicatorController
 		{
-			get
-			{
-				if (_partIndicatorController == null)
-				{
-					_partIndicatorController = (CHandle<InventoryItemPartDisplay>) CR2WTypeManager.Create("handle:InventoryItemPartDisplay", "partIndicatorController", cr2w, this);
-				}
-				return _partIndicatorController;
-			}
-			set
-			{
-				if (_partIndicatorController == value)
-				{
-					return;
-				}
-				_partIndicatorController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _partIndicatorController);
+			set => SetProperty(ref _partIndicatorController, value);
 		}
 
 		public ItemTooltipModController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

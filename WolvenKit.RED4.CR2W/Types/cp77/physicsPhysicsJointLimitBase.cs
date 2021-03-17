@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("restitution")] 
 		public CFloat Restitution
 		{
-			get
-			{
-				if (_restitution == null)
-				{
-					_restitution = (CFloat) CR2WTypeManager.Create("Float", "restitution", cr2w, this);
-				}
-				return _restitution;
-			}
-			set
-			{
-				if (_restitution == value)
-				{
-					return;
-				}
-				_restitution = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _restitution);
+			set => SetProperty(ref _restitution, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("bounceThreshold")] 
 		public CFloat BounceThreshold
 		{
-			get
-			{
-				if (_bounceThreshold == null)
-				{
-					_bounceThreshold = (CFloat) CR2WTypeManager.Create("Float", "bounceThreshold", cr2w, this);
-				}
-				return _bounceThreshold;
-			}
-			set
-			{
-				if (_bounceThreshold == value)
-				{
-					return;
-				}
-				_bounceThreshold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bounceThreshold);
+			set => SetProperty(ref _bounceThreshold, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("stiffness")] 
 		public CFloat Stiffness
 		{
-			get
-			{
-				if (_stiffness == null)
-				{
-					_stiffness = (CFloat) CR2WTypeManager.Create("Float", "stiffness", cr2w, this);
-				}
-				return _stiffness;
-			}
-			set
-			{
-				if (_stiffness == value)
-				{
-					return;
-				}
-				_stiffness = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stiffness);
+			set => SetProperty(ref _stiffness, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("damping")] 
 		public CFloat Damping
 		{
-			get
-			{
-				if (_damping == null)
-				{
-					_damping = (CFloat) CR2WTypeManager.Create("Float", "damping", cr2w, this);
-				}
-				return _damping;
-			}
-			set
-			{
-				if (_damping == value)
-				{
-					return;
-				}
-				_damping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damping);
+			set => SetProperty(ref _damping, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("contactDistance")] 
 		public CFloat ContactDistance
 		{
-			get
-			{
-				if (_contactDistance == null)
-				{
-					_contactDistance = (CFloat) CR2WTypeManager.Create("Float", "contactDistance", cr2w, this);
-				}
-				return _contactDistance;
-			}
-			set
-			{
-				if (_contactDistance == value)
-				{
-					return;
-				}
-				_contactDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contactDistance);
+			set => SetProperty(ref _contactDistance, value);
 		}
 
 		public physicsPhysicsJointLimitBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

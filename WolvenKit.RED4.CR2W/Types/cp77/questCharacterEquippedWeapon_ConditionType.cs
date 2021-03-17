@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("anyWeaponEquipped")] 
 		public CBool AnyWeaponEquipped
 		{
-			get
-			{
-				if (_anyWeaponEquipped == null)
-				{
-					_anyWeaponEquipped = (CBool) CR2WTypeManager.Create("Bool", "anyWeaponEquipped", cr2w, this);
-				}
-				return _anyWeaponEquipped;
-			}
-			set
-			{
-				if (_anyWeaponEquipped == value)
-				{
-					return;
-				}
-				_anyWeaponEquipped = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _anyWeaponEquipped);
+			set => SetProperty(ref _anyWeaponEquipped, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("weaponID")] 
 		public CString WeaponID
 		{
-			get
-			{
-				if (_weaponID == null)
-				{
-					_weaponID = (CString) CR2WTypeManager.Create("String", "weaponID", cr2w, this);
-				}
-				return _weaponID;
-			}
-			set
-			{
-				if (_weaponID == value)
-				{
-					return;
-				}
-				_weaponID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponID);
+			set => SetProperty(ref _weaponID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("weaponTag")] 
 		public CName WeaponTag
 		{
-			get
-			{
-				if (_weaponTag == null)
-				{
-					_weaponTag = (CName) CR2WTypeManager.Create("CName", "weaponTag", cr2w, this);
-				}
-				return _weaponTag;
-			}
-			set
-			{
-				if (_weaponTag == value)
-				{
-					return;
-				}
-				_weaponTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponTag);
+			set => SetProperty(ref _weaponTag, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("inverted")] 
 		public CBool Inverted
 		{
-			get
-			{
-				if (_inverted == null)
-				{
-					_inverted = (CBool) CR2WTypeManager.Create("Bool", "inverted", cr2w, this);
-				}
-				return _inverted;
-			}
-			set
-			{
-				if (_inverted == value)
-				{
-					return;
-				}
-				_inverted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inverted);
+			set => SetProperty(ref _inverted, value);
 		}
 
 		public questCharacterEquippedWeapon_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

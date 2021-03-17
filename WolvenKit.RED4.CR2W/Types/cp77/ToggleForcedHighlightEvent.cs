@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sourceName")] 
 		public CName SourceName
 		{
-			get
-			{
-				if (_sourceName == null)
-				{
-					_sourceName = (CName) CR2WTypeManager.Create("CName", "sourceName", cr2w, this);
-				}
-				return _sourceName;
-			}
-			set
-			{
-				if (_sourceName == value)
-				{
-					return;
-				}
-				_sourceName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sourceName);
+			set => SetProperty(ref _sourceName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("highlightData")] 
 		public CHandle<HighlightEditableData> HighlightData
 		{
-			get
-			{
-				if (_highlightData == null)
-				{
-					_highlightData = (CHandle<HighlightEditableData>) CR2WTypeManager.Create("handle:HighlightEditableData", "highlightData", cr2w, this);
-				}
-				return _highlightData;
-			}
-			set
-			{
-				if (_highlightData == value)
-				{
-					return;
-				}
-				_highlightData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highlightData);
+			set => SetProperty(ref _highlightData, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("operation")] 
 		public CEnum<EToggleOperationType> Operation
 		{
-			get
-			{
-				if (_operation == null)
-				{
-					_operation = (CEnum<EToggleOperationType>) CR2WTypeManager.Create("EToggleOperationType", "operation", cr2w, this);
-				}
-				return _operation;
-			}
-			set
-			{
-				if (_operation == value)
-				{
-					return;
-				}
-				_operation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _operation);
+			set => SetProperty(ref _operation, value);
 		}
 
 		public ToggleForcedHighlightEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

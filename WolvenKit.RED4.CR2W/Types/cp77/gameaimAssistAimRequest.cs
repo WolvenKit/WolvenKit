@@ -32,460 +32,160 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("adjustPitch")] 
 		public CBool AdjustPitch
 		{
-			get
-			{
-				if (_adjustPitch == null)
-				{
-					_adjustPitch = (CBool) CR2WTypeManager.Create("Bool", "adjustPitch", cr2w, this);
-				}
-				return _adjustPitch;
-			}
-			set
-			{
-				if (_adjustPitch == value)
-				{
-					return;
-				}
-				_adjustPitch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _adjustPitch);
+			set => SetProperty(ref _adjustPitch, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("adjustYaw")] 
 		public CBool AdjustYaw
 		{
-			get
-			{
-				if (_adjustYaw == null)
-				{
-					_adjustYaw = (CBool) CR2WTypeManager.Create("Bool", "adjustYaw", cr2w, this);
-				}
-				return _adjustYaw;
-			}
-			set
-			{
-				if (_adjustYaw == value)
-				{
-					return;
-				}
-				_adjustYaw = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _adjustYaw);
+			set => SetProperty(ref _adjustYaw, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("endOnTargetReached")] 
 		public CBool EndOnTargetReached
 		{
-			get
-			{
-				if (_endOnTargetReached == null)
-				{
-					_endOnTargetReached = (CBool) CR2WTypeManager.Create("Bool", "endOnTargetReached", cr2w, this);
-				}
-				return _endOnTargetReached;
-			}
-			set
-			{
-				if (_endOnTargetReached == value)
-				{
-					return;
-				}
-				_endOnTargetReached = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endOnTargetReached);
+			set => SetProperty(ref _endOnTargetReached, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("endOnCameraInputApplied")] 
 		public CBool EndOnCameraInputApplied
 		{
-			get
-			{
-				if (_endOnCameraInputApplied == null)
-				{
-					_endOnCameraInputApplied = (CBool) CR2WTypeManager.Create("Bool", "endOnCameraInputApplied", cr2w, this);
-				}
-				return _endOnCameraInputApplied;
-			}
-			set
-			{
-				if (_endOnCameraInputApplied == value)
-				{
-					return;
-				}
-				_endOnCameraInputApplied = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endOnCameraInputApplied);
+			set => SetProperty(ref _endOnCameraInputApplied, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("endOnTimeExceeded")] 
 		public CBool EndOnTimeExceeded
 		{
-			get
-			{
-				if (_endOnTimeExceeded == null)
-				{
-					_endOnTimeExceeded = (CBool) CR2WTypeManager.Create("Bool", "endOnTimeExceeded", cr2w, this);
-				}
-				return _endOnTimeExceeded;
-			}
-			set
-			{
-				if (_endOnTimeExceeded == value)
-				{
-					return;
-				}
-				_endOnTimeExceeded = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endOnTimeExceeded);
+			set => SetProperty(ref _endOnTimeExceeded, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("endOnAimingStopped")] 
 		public CBool EndOnAimingStopped
 		{
-			get
-			{
-				if (_endOnAimingStopped == null)
-				{
-					_endOnAimingStopped = (CBool) CR2WTypeManager.Create("Bool", "endOnAimingStopped", cr2w, this);
-				}
-				return _endOnAimingStopped;
-			}
-			set
-			{
-				if (_endOnAimingStopped == value)
-				{
-					return;
-				}
-				_endOnAimingStopped = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endOnAimingStopped);
+			set => SetProperty(ref _endOnAimingStopped, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("cameraInputMagToBreak")] 
 		public CFloat CameraInputMagToBreak
 		{
-			get
-			{
-				if (_cameraInputMagToBreak == null)
-				{
-					_cameraInputMagToBreak = (CFloat) CR2WTypeManager.Create("Float", "cameraInputMagToBreak", cr2w, this);
-				}
-				return _cameraInputMagToBreak;
-			}
-			set
-			{
-				if (_cameraInputMagToBreak == value)
-				{
-					return;
-				}
-				_cameraInputMagToBreak = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameraInputMagToBreak);
+			set => SetProperty(ref _cameraInputMagToBreak, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("precision")] 
 		public CFloat Precision
 		{
-			get
-			{
-				if (_precision == null)
-				{
-					_precision = (CFloat) CR2WTypeManager.Create("Float", "precision", cr2w, this);
-				}
-				return _precision;
-			}
-			set
-			{
-				if (_precision == value)
-				{
-					return;
-				}
-				_precision = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _precision);
+			set => SetProperty(ref _precision, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("maxDuration")] 
 		public CFloat MaxDuration
 		{
-			get
-			{
-				if (_maxDuration == null)
-				{
-					_maxDuration = (CFloat) CR2WTypeManager.Create("Float", "maxDuration", cr2w, this);
-				}
-				return _maxDuration;
-			}
-			set
-			{
-				if (_maxDuration == value)
-				{
-					return;
-				}
-				_maxDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxDuration);
+			set => SetProperty(ref _maxDuration, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("easeIn")] 
 		public CBool EaseIn
 		{
-			get
-			{
-				if (_easeIn == null)
-				{
-					_easeIn = (CBool) CR2WTypeManager.Create("Bool", "easeIn", cr2w, this);
-				}
-				return _easeIn;
-			}
-			set
-			{
-				if (_easeIn == value)
-				{
-					return;
-				}
-				_easeIn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _easeIn);
+			set => SetProperty(ref _easeIn, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("easeOut")] 
 		public CBool EaseOut
 		{
-			get
-			{
-				if (_easeOut == null)
-				{
-					_easeOut = (CBool) CR2WTypeManager.Create("Bool", "easeOut", cr2w, this);
-				}
-				return _easeOut;
-			}
-			set
-			{
-				if (_easeOut == value)
-				{
-					return;
-				}
-				_easeOut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _easeOut);
+			set => SetProperty(ref _easeOut, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("checkRange")] 
 		public CBool CheckRange
 		{
-			get
-			{
-				if (_checkRange == null)
-				{
-					_checkRange = (CBool) CR2WTypeManager.Create("Bool", "checkRange", cr2w, this);
-				}
-				return _checkRange;
-			}
-			set
-			{
-				if (_checkRange == value)
-				{
-					return;
-				}
-				_checkRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _checkRange);
+			set => SetProperty(ref _checkRange, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("lookAtTarget")] 
 		public Vector4 LookAtTarget
 		{
-			get
-			{
-				if (_lookAtTarget == null)
-				{
-					_lookAtTarget = (Vector4) CR2WTypeManager.Create("Vector4", "lookAtTarget", cr2w, this);
-				}
-				return _lookAtTarget;
-			}
-			set
-			{
-				if (_lookAtTarget == value)
-				{
-					return;
-				}
-				_lookAtTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lookAtTarget);
+			set => SetProperty(ref _lookAtTarget, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("processAsInput")] 
 		public CBool ProcessAsInput
 		{
-			get
-			{
-				if (_processAsInput == null)
-				{
-					_processAsInput = (CBool) CR2WTypeManager.Create("Bool", "processAsInput", cr2w, this);
-				}
-				return _processAsInput;
-			}
-			set
-			{
-				if (_processAsInput == value)
-				{
-					return;
-				}
-				_processAsInput = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _processAsInput);
+			set => SetProperty(ref _processAsInput, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("bodyPartsTracking")] 
 		public CBool BodyPartsTracking
 		{
-			get
-			{
-				if (_bodyPartsTracking == null)
-				{
-					_bodyPartsTracking = (CBool) CR2WTypeManager.Create("Bool", "bodyPartsTracking", cr2w, this);
-				}
-				return _bodyPartsTracking;
-			}
-			set
-			{
-				if (_bodyPartsTracking == value)
-				{
-					return;
-				}
-				_bodyPartsTracking = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyPartsTracking);
+			set => SetProperty(ref _bodyPartsTracking, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("bptMaxDot")] 
 		public CFloat BptMaxDot
 		{
-			get
-			{
-				if (_bptMaxDot == null)
-				{
-					_bptMaxDot = (CFloat) CR2WTypeManager.Create("Float", "bptMaxDot", cr2w, this);
-				}
-				return _bptMaxDot;
-			}
-			set
-			{
-				if (_bptMaxDot == value)
-				{
-					return;
-				}
-				_bptMaxDot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bptMaxDot);
+			set => SetProperty(ref _bptMaxDot, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("bptMaxSwitches")] 
 		public CFloat BptMaxSwitches
 		{
-			get
-			{
-				if (_bptMaxSwitches == null)
-				{
-					_bptMaxSwitches = (CFloat) CR2WTypeManager.Create("Float", "bptMaxSwitches", cr2w, this);
-				}
-				return _bptMaxSwitches;
-			}
-			set
-			{
-				if (_bptMaxSwitches == value)
-				{
-					return;
-				}
-				_bptMaxSwitches = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bptMaxSwitches);
+			set => SetProperty(ref _bptMaxSwitches, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("bptMinInputMag")] 
 		public CFloat BptMinInputMag
 		{
-			get
-			{
-				if (_bptMinInputMag == null)
-				{
-					_bptMinInputMag = (CFloat) CR2WTypeManager.Create("Float", "bptMinInputMag", cr2w, this);
-				}
-				return _bptMinInputMag;
-			}
-			set
-			{
-				if (_bptMinInputMag == value)
-				{
-					return;
-				}
-				_bptMinInputMag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bptMinInputMag);
+			set => SetProperty(ref _bptMinInputMag, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("bptMinResetInputMag")] 
 		public CFloat BptMinResetInputMag
 		{
-			get
-			{
-				if (_bptMinResetInputMag == null)
-				{
-					_bptMinResetInputMag = (CFloat) CR2WTypeManager.Create("Float", "bptMinResetInputMag", cr2w, this);
-				}
-				return _bptMinResetInputMag;
-			}
-			set
-			{
-				if (_bptMinResetInputMag == value)
-				{
-					return;
-				}
-				_bptMinResetInputMag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bptMinResetInputMag);
+			set => SetProperty(ref _bptMinResetInputMag, value);
 		}
 
 		public gameaimAssistAimRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

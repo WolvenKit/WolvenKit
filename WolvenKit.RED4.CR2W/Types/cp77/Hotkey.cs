@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hotkey")] 
 		public CEnum<gameEHotkey> Hotkey_
 		{
-			get
-			{
-				if (_hotkey == null)
-				{
-					_hotkey = (CEnum<gameEHotkey>) CR2WTypeManager.Create("gameEHotkey", "hotkey", cr2w, this);
-				}
-				return _hotkey;
-			}
-			set
-			{
-				if (_hotkey == value)
-				{
-					return;
-				}
-				_hotkey = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hotkey);
+			set => SetProperty(ref _hotkey, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("scope")] 
 		public CArray<CEnum<gamedataItemType>> Scope
 		{
-			get
-			{
-				if (_scope == null)
-				{
-					_scope = (CArray<CEnum<gamedataItemType>>) CR2WTypeManager.Create("array:gamedataItemType", "scope", cr2w, this);
-				}
-				return _scope;
-			}
-			set
-			{
-				if (_scope == value)
-				{
-					return;
-				}
-				_scope = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scope);
+			set => SetProperty(ref _scope, value);
 		}
 
 		public Hotkey(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

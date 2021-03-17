@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("externalItemData")] 
 		public wCHandle<gameItemData> ExternalItemData
 		{
-			get
-			{
-				if (_externalItemData == null)
-				{
-					_externalItemData = (wCHandle<gameItemData>) CR2WTypeManager.Create("whandle:gameItemData", "externalItemData", cr2w, this);
-				}
-				return _externalItemData;
-			}
-			set
-			{
-				if (_externalItemData == value)
-				{
-					return;
-				}
-				_externalItemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _externalItemData);
+			set => SetProperty(ref _externalItemData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemRecord")] 
 		public wCHandle<gamedataItem_Record> ItemRecord
 		{
-			get
-			{
-				if (_itemRecord == null)
-				{
-					_itemRecord = (wCHandle<gamedataItem_Record>) CR2WTypeManager.Create("whandle:gamedataItem_Record", "itemRecord", cr2w, this);
-				}
-				return _itemRecord;
-			}
-			set
-			{
-				if (_itemRecord == value)
-				{
-					return;
-				}
-				_itemRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemRecord);
+			set => SetProperty(ref _itemRecord, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("comparisionItemData")] 
 		public wCHandle<gameItemData> ComparisionItemData
 		{
-			get
-			{
-				if (_comparisionItemData == null)
-				{
-					_comparisionItemData = (wCHandle<gameItemData>) CR2WTypeManager.Create("whandle:gameItemData", "comparisionItemData", cr2w, this);
-				}
-				return _comparisionItemData;
-			}
-			set
-			{
-				if (_comparisionItemData == value)
-				{
-					return;
-				}
-				_comparisionItemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comparisionItemData);
+			set => SetProperty(ref _comparisionItemData, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("lootingData")] 
 		public CHandle<MinimalLootingListItemData> LootingData
 		{
-			get
-			{
-				if (_lootingData == null)
-				{
-					_lootingData = (CHandle<MinimalLootingListItemData>) CR2WTypeManager.Create("handle:MinimalLootingListItemData", "lootingData", cr2w, this);
-				}
-				return _lootingData;
-			}
-			set
-			{
-				if (_lootingData == value)
-				{
-					return;
-				}
-				_lootingData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lootingData);
+			set => SetProperty(ref _lootingData, value);
 		}
 
 		public TooltipLootingCachedData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

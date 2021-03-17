@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("language")] 
 		public audioLanguage Language
 		{
-			get
-			{
-				if (_language == null)
-				{
-					_language = (audioLanguage) CR2WTypeManager.Create("audioLanguage", "language", cr2w, this);
-				}
-				return _language;
-			}
-			set
-			{
-				if (_language == value)
-				{
-					return;
-				}
-				_language = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _language);
+			set => SetProperty(ref _language, value);
 		}
 
 		public audioLanguageMapItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

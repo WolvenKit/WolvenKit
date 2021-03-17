@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lookAtEvent")] 
 		public CHandle<entLookAtAddEvent> LookAtEvent
 		{
-			get
-			{
-				if (_lookAtEvent == null)
-				{
-					_lookAtEvent = (CHandle<entLookAtAddEvent>) CR2WTypeManager.Create("handle:entLookAtAddEvent", "lookAtEvent", cr2w, this);
-				}
-				return _lookAtEvent;
-			}
-			set
-			{
-				if (_lookAtEvent == value)
-				{
-					return;
-				}
-				_lookAtEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lookAtEvent);
+			set => SetProperty(ref _lookAtEvent, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("activationTimeStamp")] 
 		public CFloat ActivationTimeStamp
 		{
-			get
-			{
-				if (_activationTimeStamp == null)
-				{
-					_activationTimeStamp = (CFloat) CR2WTypeManager.Create("Float", "activationTimeStamp", cr2w, this);
-				}
-				return _activationTimeStamp;
-			}
-			set
-			{
-				if (_activationTimeStamp == value)
-				{
-					return;
-				}
-				_activationTimeStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activationTimeStamp);
+			set => SetProperty(ref _activationTimeStamp, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lookatTarget")] 
 		public wCHandle<entEntity> LookatTarget
 		{
-			get
-			{
-				if (_lookatTarget == null)
-				{
-					_lookatTarget = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "lookatTarget", cr2w, this);
-				}
-				return _lookatTarget;
-			}
-			set
-			{
-				if (_lookatTarget == value)
-				{
-					return;
-				}
-				_lookatTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lookatTarget);
+			set => SetProperty(ref _lookatTarget, value);
 		}
 
 		public AIGenericAdvancedLookatTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -68,1288 +68,448 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("aiController")] 
 		public CHandle<AIHumanComponent> AiController
 		{
-			get
-			{
-				if (_aiController == null)
-				{
-					_aiController = (CHandle<AIHumanComponent>) CR2WTypeManager.Create("handle:AIHumanComponent", "aiController", cr2w, this);
-				}
-				return _aiController;
-			}
-			set
-			{
-				if (_aiController == value)
-				{
-					return;
-				}
-				_aiController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aiController);
+			set => SetProperty(ref _aiController, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("movePolicies")] 
 		public CHandle<movePoliciesComponent> MovePolicies
 		{
-			get
-			{
-				if (_movePolicies == null)
-				{
-					_movePolicies = (CHandle<movePoliciesComponent>) CR2WTypeManager.Create("handle:movePoliciesComponent", "movePolicies", cr2w, this);
-				}
-				return _movePolicies;
-			}
-			set
-			{
-				if (_movePolicies == value)
-				{
-					return;
-				}
-				_movePolicies = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movePolicies);
+			set => SetProperty(ref _movePolicies, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("aiStateHandlerComponent")] 
 		public CHandle<AIPhaseStateEventHandlerComponent> AiStateHandlerComponent
 		{
-			get
-			{
-				if (_aiStateHandlerComponent == null)
-				{
-					_aiStateHandlerComponent = (CHandle<AIPhaseStateEventHandlerComponent>) CR2WTypeManager.Create("handle:AIPhaseStateEventHandlerComponent", "aiStateHandlerComponent", cr2w, this);
-				}
-				return _aiStateHandlerComponent;
-			}
-			set
-			{
-				if (_aiStateHandlerComponent == value)
-				{
-					return;
-				}
-				_aiStateHandlerComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aiStateHandlerComponent);
+			set => SetProperty(ref _aiStateHandlerComponent, value);
 		}
 
 		[Ordinal(43)] 
 		[RED("hitReactionComponent")] 
 		public CHandle<HitReactionComponent> HitReactionComponent
 		{
-			get
-			{
-				if (_hitReactionComponent == null)
-				{
-					_hitReactionComponent = (CHandle<HitReactionComponent>) CR2WTypeManager.Create("handle:HitReactionComponent", "hitReactionComponent", cr2w, this);
-				}
-				return _hitReactionComponent;
-			}
-			set
-			{
-				if (_hitReactionComponent == value)
-				{
-					return;
-				}
-				_hitReactionComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitReactionComponent);
+			set => SetProperty(ref _hitReactionComponent, value);
 		}
 
 		[Ordinal(44)] 
 		[RED("signalHandlerComponent")] 
 		public CHandle<AISignalHandlerComponent> SignalHandlerComponent
 		{
-			get
-			{
-				if (_signalHandlerComponent == null)
-				{
-					_signalHandlerComponent = (CHandle<AISignalHandlerComponent>) CR2WTypeManager.Create("handle:AISignalHandlerComponent", "signalHandlerComponent", cr2w, this);
-				}
-				return _signalHandlerComponent;
-			}
-			set
-			{
-				if (_signalHandlerComponent == value)
-				{
-					return;
-				}
-				_signalHandlerComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _signalHandlerComponent);
+			set => SetProperty(ref _signalHandlerComponent, value);
 		}
 
 		[Ordinal(45)] 
 		[RED("reactionComponent")] 
 		public CHandle<ReactionManagerComponent> ReactionComponent
 		{
-			get
-			{
-				if (_reactionComponent == null)
-				{
-					_reactionComponent = (CHandle<ReactionManagerComponent>) CR2WTypeManager.Create("handle:ReactionManagerComponent", "reactionComponent", cr2w, this);
-				}
-				return _reactionComponent;
-			}
-			set
-			{
-				if (_reactionComponent == value)
-				{
-					return;
-				}
-				_reactionComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reactionComponent);
+			set => SetProperty(ref _reactionComponent, value);
 		}
 
 		[Ordinal(46)] 
 		[RED("dismembermentComponent")] 
 		public CHandle<gameDismembermentComponent> DismembermentComponent
 		{
-			get
-			{
-				if (_dismembermentComponent == null)
-				{
-					_dismembermentComponent = (CHandle<gameDismembermentComponent>) CR2WTypeManager.Create("handle:gameDismembermentComponent", "dismembermentComponent", cr2w, this);
-				}
-				return _dismembermentComponent;
-			}
-			set
-			{
-				if (_dismembermentComponent == value)
-				{
-					return;
-				}
-				_dismembermentComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dismembermentComponent);
+			set => SetProperty(ref _dismembermentComponent, value);
 		}
 
 		[Ordinal(47)] 
 		[RED("hitRepresantation")] 
 		public CHandle<entSlotComponent> HitRepresantation
 		{
-			get
-			{
-				if (_hitRepresantation == null)
-				{
-					_hitRepresantation = (CHandle<entSlotComponent>) CR2WTypeManager.Create("handle:entSlotComponent", "hitRepresantation", cr2w, this);
-				}
-				return _hitRepresantation;
-			}
-			set
-			{
-				if (_hitRepresantation == value)
-				{
-					return;
-				}
-				_hitRepresantation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitRepresantation);
+			set => SetProperty(ref _hitRepresantation, value);
 		}
 
 		[Ordinal(48)] 
 		[RED("interactionComponent")] 
 		public CHandle<gameinteractionsComponent> InteractionComponent
 		{
-			get
-			{
-				if (_interactionComponent == null)
-				{
-					_interactionComponent = (CHandle<gameinteractionsComponent>) CR2WTypeManager.Create("handle:gameinteractionsComponent", "interactionComponent", cr2w, this);
-				}
-				return _interactionComponent;
-			}
-			set
-			{
-				if (_interactionComponent == value)
-				{
-					return;
-				}
-				_interactionComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interactionComponent);
+			set => SetProperty(ref _interactionComponent, value);
 		}
 
 		[Ordinal(49)] 
 		[RED("slotComponent")] 
 		public CHandle<entSlotComponent> SlotComponent
 		{
-			get
-			{
-				if (_slotComponent == null)
-				{
-					_slotComponent = (CHandle<entSlotComponent>) CR2WTypeManager.Create("handle:entSlotComponent", "slotComponent", cr2w, this);
-				}
-				return _slotComponent;
-			}
-			set
-			{
-				if (_slotComponent == value)
-				{
-					return;
-				}
-				_slotComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotComponent);
+			set => SetProperty(ref _slotComponent, value);
 		}
 
 		[Ordinal(50)] 
 		[RED("sensesComponent")] 
 		public CHandle<senseComponent> SensesComponent
 		{
-			get
-			{
-				if (_sensesComponent == null)
-				{
-					_sensesComponent = (CHandle<senseComponent>) CR2WTypeManager.Create("handle:senseComponent", "sensesComponent", cr2w, this);
-				}
-				return _sensesComponent;
-			}
-			set
-			{
-				if (_sensesComponent == value)
-				{
-					return;
-				}
-				_sensesComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sensesComponent);
+			set => SetProperty(ref _sensesComponent, value);
 		}
 
 		[Ordinal(51)] 
 		[RED("visibleObjectComponent")] 
 		public CHandle<senseVisibleObjectComponent> VisibleObjectComponent
 		{
-			get
-			{
-				if (_visibleObjectComponent == null)
-				{
-					_visibleObjectComponent = (CHandle<senseVisibleObjectComponent>) CR2WTypeManager.Create("handle:senseVisibleObjectComponent", "visibleObjectComponent", cr2w, this);
-				}
-				return _visibleObjectComponent;
-			}
-			set
-			{
-				if (_visibleObjectComponent == value)
-				{
-					return;
-				}
-				_visibleObjectComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visibleObjectComponent);
+			set => SetProperty(ref _visibleObjectComponent, value);
 		}
 
 		[Ordinal(52)] 
 		[RED("sensorObjectComponent")] 
 		public CHandle<senseSensorObjectComponent> SensorObjectComponent
 		{
-			get
-			{
-				if (_sensorObjectComponent == null)
-				{
-					_sensorObjectComponent = (CHandle<senseSensorObjectComponent>) CR2WTypeManager.Create("handle:senseSensorObjectComponent", "sensorObjectComponent", cr2w, this);
-				}
-				return _sensorObjectComponent;
-			}
-			set
-			{
-				if (_sensorObjectComponent == value)
-				{
-					return;
-				}
-				_sensorObjectComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sensorObjectComponent);
+			set => SetProperty(ref _sensorObjectComponent, value);
 		}
 
 		[Ordinal(53)] 
 		[RED("targetTrackerComponent")] 
 		public CHandle<AITargetTrackerComponent> TargetTrackerComponent
 		{
-			get
-			{
-				if (_targetTrackerComponent == null)
-				{
-					_targetTrackerComponent = (CHandle<AITargetTrackerComponent>) CR2WTypeManager.Create("handle:AITargetTrackerComponent", "targetTrackerComponent", cr2w, this);
-				}
-				return _targetTrackerComponent;
-			}
-			set
-			{
-				if (_targetTrackerComponent == value)
-				{
-					return;
-				}
-				_targetTrackerComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetTrackerComponent);
+			set => SetProperty(ref _targetTrackerComponent, value);
 		}
 
 		[Ordinal(54)] 
 		[RED("targetingComponentsArray")] 
 		public CArray<CHandle<gameTargetingComponent>> TargetingComponentsArray
 		{
-			get
-			{
-				if (_targetingComponentsArray == null)
-				{
-					_targetingComponentsArray = (CArray<CHandle<gameTargetingComponent>>) CR2WTypeManager.Create("array:handle:gameTargetingComponent", "targetingComponentsArray", cr2w, this);
-				}
-				return _targetingComponentsArray;
-			}
-			set
-			{
-				if (_targetingComponentsArray == value)
-				{
-					return;
-				}
-				_targetingComponentsArray = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetingComponentsArray);
+			set => SetProperty(ref _targetingComponentsArray, value);
 		}
 
 		[Ordinal(55)] 
 		[RED("statesComponent")] 
 		public CHandle<NPCStatesComponent> StatesComponent
 		{
-			get
-			{
-				if (_statesComponent == null)
-				{
-					_statesComponent = (CHandle<NPCStatesComponent>) CR2WTypeManager.Create("handle:NPCStatesComponent", "statesComponent", cr2w, this);
-				}
-				return _statesComponent;
-			}
-			set
-			{
-				if (_statesComponent == value)
-				{
-					return;
-				}
-				_statesComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statesComponent);
+			set => SetProperty(ref _statesComponent, value);
 		}
 
 		[Ordinal(56)] 
 		[RED("fxResourceMapper")] 
 		public CHandle<FxResourceMapperComponent> FxResourceMapper
 		{
-			get
-			{
-				if (_fxResourceMapper == null)
-				{
-					_fxResourceMapper = (CHandle<FxResourceMapperComponent>) CR2WTypeManager.Create("handle:FxResourceMapperComponent", "fxResourceMapper", cr2w, this);
-				}
-				return _fxResourceMapper;
-			}
-			set
-			{
-				if (_fxResourceMapper == value)
-				{
-					return;
-				}
-				_fxResourceMapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fxResourceMapper);
+			set => SetProperty(ref _fxResourceMapper, value);
 		}
 
 		[Ordinal(57)] 
 		[RED("linkedStatusEffect")] 
 		public LinkedStatusEffect LinkedStatusEffect
 		{
-			get
-			{
-				if (_linkedStatusEffect == null)
-				{
-					_linkedStatusEffect = (LinkedStatusEffect) CR2WTypeManager.Create("LinkedStatusEffect", "linkedStatusEffect", cr2w, this);
-				}
-				return _linkedStatusEffect;
-			}
-			set
-			{
-				if (_linkedStatusEffect == value)
-				{
-					return;
-				}
-				_linkedStatusEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linkedStatusEffect);
+			set => SetProperty(ref _linkedStatusEffect, value);
 		}
 
 		[Ordinal(58)] 
 		[RED("resourceLibraryComponent")] 
 		public CHandle<ResourceLibraryComponent> ResourceLibraryComponent
 		{
-			get
-			{
-				if (_resourceLibraryComponent == null)
-				{
-					_resourceLibraryComponent = (CHandle<ResourceLibraryComponent>) CR2WTypeManager.Create("handle:ResourceLibraryComponent", "resourceLibraryComponent", cr2w, this);
-				}
-				return _resourceLibraryComponent;
-			}
-			set
-			{
-				if (_resourceLibraryComponent == value)
-				{
-					return;
-				}
-				_resourceLibraryComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resourceLibraryComponent);
+			set => SetProperty(ref _resourceLibraryComponent, value);
 		}
 
 		[Ordinal(59)] 
 		[RED("crowdMemberComponent")] 
 		public CHandle<CrowdMemberBaseComponent> CrowdMemberComponent
 		{
-			get
-			{
-				if (_crowdMemberComponent == null)
-				{
-					_crowdMemberComponent = (CHandle<CrowdMemberBaseComponent>) CR2WTypeManager.Create("handle:CrowdMemberBaseComponent", "crowdMemberComponent", cr2w, this);
-				}
-				return _crowdMemberComponent;
-			}
-			set
-			{
-				if (_crowdMemberComponent == value)
-				{
-					return;
-				}
-				_crowdMemberComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _crowdMemberComponent);
+			set => SetProperty(ref _crowdMemberComponent, value);
 		}
 
 		[Ordinal(60)] 
 		[RED("inventoryComponent")] 
 		public CHandle<gameInventory> InventoryComponent
 		{
-			get
-			{
-				if (_inventoryComponent == null)
-				{
-					_inventoryComponent = (CHandle<gameInventory>) CR2WTypeManager.Create("handle:gameInventory", "inventoryComponent", cr2w, this);
-				}
-				return _inventoryComponent;
-			}
-			set
-			{
-				if (_inventoryComponent == value)
-				{
-					return;
-				}
-				_inventoryComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryComponent);
+			set => SetProperty(ref _inventoryComponent, value);
 		}
 
 		[Ordinal(61)] 
 		[RED("objectSelectionComponent")] 
 		public CHandle<AIObjectSelectionComponent> ObjectSelectionComponent
 		{
-			get
-			{
-				if (_objectSelectionComponent == null)
-				{
-					_objectSelectionComponent = (CHandle<AIObjectSelectionComponent>) CR2WTypeManager.Create("handle:AIObjectSelectionComponent", "objectSelectionComponent", cr2w, this);
-				}
-				return _objectSelectionComponent;
-			}
-			set
-			{
-				if (_objectSelectionComponent == value)
-				{
-					return;
-				}
-				_objectSelectionComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectSelectionComponent);
+			set => SetProperty(ref _objectSelectionComponent, value);
 		}
 
 		[Ordinal(62)] 
 		[RED("transformHistoryComponent")] 
 		public CHandle<entTransformHistoryComponent> TransformHistoryComponent
 		{
-			get
-			{
-				if (_transformHistoryComponent == null)
-				{
-					_transformHistoryComponent = (CHandle<entTransformHistoryComponent>) CR2WTypeManager.Create("handle:entTransformHistoryComponent", "transformHistoryComponent", cr2w, this);
-				}
-				return _transformHistoryComponent;
-			}
-			set
-			{
-				if (_transformHistoryComponent == value)
-				{
-					return;
-				}
-				_transformHistoryComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transformHistoryComponent);
+			set => SetProperty(ref _transformHistoryComponent, value);
 		}
 
 		[Ordinal(63)] 
 		[RED("animationControllerComponent")] 
 		public CHandle<entAnimationControllerComponent> AnimationControllerComponent
 		{
-			get
-			{
-				if (_animationControllerComponent == null)
-				{
-					_animationControllerComponent = (CHandle<entAnimationControllerComponent>) CR2WTypeManager.Create("handle:entAnimationControllerComponent", "animationControllerComponent", cr2w, this);
-				}
-				return _animationControllerComponent;
-			}
-			set
-			{
-				if (_animationControllerComponent == value)
-				{
-					return;
-				}
-				_animationControllerComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationControllerComponent);
+			set => SetProperty(ref _animationControllerComponent, value);
 		}
 
 		[Ordinal(64)] 
 		[RED("bumpComponent")] 
 		public CHandle<gameinfluenceBumpComponent> BumpComponent
 		{
-			get
-			{
-				if (_bumpComponent == null)
-				{
-					_bumpComponent = (CHandle<gameinfluenceBumpComponent>) CR2WTypeManager.Create("handle:gameinfluenceBumpComponent", "bumpComponent", cr2w, this);
-				}
-				return _bumpComponent;
-			}
-			set
-			{
-				if (_bumpComponent == value)
-				{
-					return;
-				}
-				_bumpComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bumpComponent);
+			set => SetProperty(ref _bumpComponent, value);
 		}
 
 		[Ordinal(65)] 
 		[RED("isCrowd")] 
 		public CBool IsCrowd
 		{
-			get
-			{
-				if (_isCrowd == null)
-				{
-					_isCrowd = (CBool) CR2WTypeManager.Create("Bool", "isCrowd", cr2w, this);
-				}
-				return _isCrowd;
-			}
-			set
-			{
-				if (_isCrowd == value)
-				{
-					return;
-				}
-				_isCrowd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isCrowd);
+			set => SetProperty(ref _isCrowd, value);
 		}
 
 		[Ordinal(66)] 
 		[RED("isIconic")] 
 		public CBool IsIconic
 		{
-			get
-			{
-				if (_isIconic == null)
-				{
-					_isIconic = (CBool) CR2WTypeManager.Create("Bool", "isIconic", cr2w, this);
-				}
-				return _isIconic;
-			}
-			set
-			{
-				if (_isIconic == value)
-				{
-					return;
-				}
-				_isIconic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isIconic);
+			set => SetProperty(ref _isIconic, value);
 		}
 
 		[Ordinal(67)] 
 		[RED("combatHUDManager")] 
 		public CHandle<CombatHUDManager> CombatHUDManager
 		{
-			get
-			{
-				if (_combatHUDManager == null)
-				{
-					_combatHUDManager = (CHandle<CombatHUDManager>) CR2WTypeManager.Create("handle:CombatHUDManager", "combatHUDManager", cr2w, this);
-				}
-				return _combatHUDManager;
-			}
-			set
-			{
-				if (_combatHUDManager == value)
-				{
-					return;
-				}
-				_combatHUDManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _combatHUDManager);
+			set => SetProperty(ref _combatHUDManager, value);
 		}
 
 		[Ordinal(68)] 
 		[RED("exposePosition")] 
 		public CBool ExposePosition
 		{
-			get
-			{
-				if (_exposePosition == null)
-				{
-					_exposePosition = (CBool) CR2WTypeManager.Create("Bool", "exposePosition", cr2w, this);
-				}
-				return _exposePosition;
-			}
-			set
-			{
-				if (_exposePosition == value)
-				{
-					return;
-				}
-				_exposePosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exposePosition);
+			set => SetProperty(ref _exposePosition, value);
 		}
 
 		[Ordinal(69)] 
 		[RED("puppetStateBlackboard")] 
 		public CHandle<gameIBlackboard> PuppetStateBlackboard
 		{
-			get
-			{
-				if (_puppetStateBlackboard == null)
-				{
-					_puppetStateBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "puppetStateBlackboard", cr2w, this);
-				}
-				return _puppetStateBlackboard;
-			}
-			set
-			{
-				if (_puppetStateBlackboard == value)
-				{
-					return;
-				}
-				_puppetStateBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppetStateBlackboard);
+			set => SetProperty(ref _puppetStateBlackboard, value);
 		}
 
 		[Ordinal(70)] 
 		[RED("customBlackboard")] 
 		public CHandle<gameIBlackboard> CustomBlackboard
 		{
-			get
-			{
-				if (_customBlackboard == null)
-				{
-					_customBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "customBlackboard", cr2w, this);
-				}
-				return _customBlackboard;
-			}
-			set
-			{
-				if (_customBlackboard == value)
-				{
-					return;
-				}
-				_customBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customBlackboard);
+			set => SetProperty(ref _customBlackboard, value);
 		}
 
 		[Ordinal(71)] 
 		[RED("securityAreaCallbackID")] 
 		public CUInt32 SecurityAreaCallbackID
 		{
-			get
-			{
-				if (_securityAreaCallbackID == null)
-				{
-					_securityAreaCallbackID = (CUInt32) CR2WTypeManager.Create("Uint32", "securityAreaCallbackID", cr2w, this);
-				}
-				return _securityAreaCallbackID;
-			}
-			set
-			{
-				if (_securityAreaCallbackID == value)
-				{
-					return;
-				}
-				_securityAreaCallbackID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securityAreaCallbackID);
+			set => SetProperty(ref _securityAreaCallbackID, value);
 		}
 
 		[Ordinal(72)] 
 		[RED("customAIComponents")] 
 		public CArray<CHandle<AICustomComponents>> CustomAIComponents
 		{
-			get
-			{
-				if (_customAIComponents == null)
-				{
-					_customAIComponents = (CArray<CHandle<AICustomComponents>>) CR2WTypeManager.Create("array:handle:AICustomComponents", "customAIComponents", cr2w, this);
-				}
-				return _customAIComponents;
-			}
-			set
-			{
-				if (_customAIComponents == value)
-				{
-					return;
-				}
-				_customAIComponents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customAIComponents);
+			set => SetProperty(ref _customAIComponents, value);
 		}
 
 		[Ordinal(73)] 
 		[RED("listeners")] 
 		public CArray<CHandle<PuppetListener>> Listeners
 		{
-			get
-			{
-				if (_listeners == null)
-				{
-					_listeners = (CArray<CHandle<PuppetListener>>) CR2WTypeManager.Create("array:handle:PuppetListener", "listeners", cr2w, this);
-				}
-				return _listeners;
-			}
-			set
-			{
-				if (_listeners == value)
-				{
-					return;
-				}
-				_listeners = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _listeners);
+			set => SetProperty(ref _listeners, value);
 		}
 
 		[Ordinal(74)] 
 		[RED("securitySupportListener")] 
 		public CHandle<SecuritySupportListener> SecuritySupportListener
 		{
-			get
-			{
-				if (_securitySupportListener == null)
-				{
-					_securitySupportListener = (CHandle<SecuritySupportListener>) CR2WTypeManager.Create("handle:SecuritySupportListener", "securitySupportListener", cr2w, this);
-				}
-				return _securitySupportListener;
-			}
-			set
-			{
-				if (_securitySupportListener == value)
-				{
-					return;
-				}
-				_securitySupportListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securitySupportListener);
+			set => SetProperty(ref _securitySupportListener, value);
 		}
 
 		[Ordinal(75)] 
 		[RED("shouldBeRevealedStorage")] 
 		public CHandle<RevealRequestsStorage> ShouldBeRevealedStorage
 		{
-			get
-			{
-				if (_shouldBeRevealedStorage == null)
-				{
-					_shouldBeRevealedStorage = (CHandle<RevealRequestsStorage>) CR2WTypeManager.Create("handle:RevealRequestsStorage", "shouldBeRevealedStorage", cr2w, this);
-				}
-				return _shouldBeRevealedStorage;
-			}
-			set
-			{
-				if (_shouldBeRevealedStorage == value)
-				{
-					return;
-				}
-				_shouldBeRevealedStorage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldBeRevealedStorage);
+			set => SetProperty(ref _shouldBeRevealedStorage, value);
 		}
 
 		[Ordinal(76)] 
 		[RED("inputProcessed")] 
 		public CBool InputProcessed
 		{
-			get
-			{
-				if (_inputProcessed == null)
-				{
-					_inputProcessed = (CBool) CR2WTypeManager.Create("Bool", "inputProcessed", cr2w, this);
-				}
-				return _inputProcessed;
-			}
-			set
-			{
-				if (_inputProcessed == value)
-				{
-					return;
-				}
-				_inputProcessed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputProcessed);
+			set => SetProperty(ref _inputProcessed, value);
 		}
 
 		[Ordinal(77)] 
 		[RED("targetedBlackBoard")] 
 		public CHandle<gameIBlackboard> TargetedBlackBoard
 		{
-			get
-			{
-				if (_targetedBlackBoard == null)
-				{
-					_targetedBlackBoard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "targetedBlackBoard", cr2w, this);
-				}
-				return _targetedBlackBoard;
-			}
-			set
-			{
-				if (_targetedBlackBoard == value)
-				{
-					return;
-				}
-				_targetedBlackBoard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetedBlackBoard);
+			set => SetProperty(ref _targetedBlackBoard, value);
 		}
 
 		[Ordinal(78)] 
 		[RED("shouldSpawnBloodPuddle")] 
 		public CBool ShouldSpawnBloodPuddle
 		{
-			get
-			{
-				if (_shouldSpawnBloodPuddle == null)
-				{
-					_shouldSpawnBloodPuddle = (CBool) CR2WTypeManager.Create("Bool", "shouldSpawnBloodPuddle", cr2w, this);
-				}
-				return _shouldSpawnBloodPuddle;
-			}
-			set
-			{
-				if (_shouldSpawnBloodPuddle == value)
-				{
-					return;
-				}
-				_shouldSpawnBloodPuddle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldSpawnBloodPuddle);
+			set => SetProperty(ref _shouldSpawnBloodPuddle, value);
 		}
 
 		[Ordinal(79)] 
 		[RED("bloodPuddleSpawned")] 
 		public CBool BloodPuddleSpawned
 		{
-			get
-			{
-				if (_bloodPuddleSpawned == null)
-				{
-					_bloodPuddleSpawned = (CBool) CR2WTypeManager.Create("Bool", "bloodPuddleSpawned", cr2w, this);
-				}
-				return _bloodPuddleSpawned;
-			}
-			set
-			{
-				if (_bloodPuddleSpawned == value)
-				{
-					return;
-				}
-				_bloodPuddleSpawned = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bloodPuddleSpawned);
+			set => SetProperty(ref _bloodPuddleSpawned, value);
 		}
 
 		[Ordinal(80)] 
 		[RED("skipDeathAnimation")] 
 		public CBool SkipDeathAnimation
 		{
-			get
-			{
-				if (_skipDeathAnimation == null)
-				{
-					_skipDeathAnimation = (CBool) CR2WTypeManager.Create("Bool", "skipDeathAnimation", cr2w, this);
-				}
-				return _skipDeathAnimation;
-			}
-			set
-			{
-				if (_skipDeathAnimation == value)
-				{
-					return;
-				}
-				_skipDeathAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skipDeathAnimation);
+			set => SetProperty(ref _skipDeathAnimation, value);
 		}
 
 		[Ordinal(81)] 
 		[RED("hitHistory")] 
 		public CHandle<HitHistory> HitHistory
 		{
-			get
-			{
-				if (_hitHistory == null)
-				{
-					_hitHistory = (CHandle<HitHistory>) CR2WTypeManager.Create("handle:HitHistory", "hitHistory", cr2w, this);
-				}
-				return _hitHistory;
-			}
-			set
-			{
-				if (_hitHistory == value)
-				{
-					return;
-				}
-				_hitHistory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitHistory);
+			set => SetProperty(ref _hitHistory, value);
 		}
 
 		[Ordinal(82)] 
 		[RED("currentWorkspotTags")] 
 		public CArray<CName> CurrentWorkspotTags
 		{
-			get
-			{
-				if (_currentWorkspotTags == null)
-				{
-					_currentWorkspotTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "currentWorkspotTags", cr2w, this);
-				}
-				return _currentWorkspotTags;
-			}
-			set
-			{
-				if (_currentWorkspotTags == value)
-				{
-					return;
-				}
-				_currentWorkspotTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentWorkspotTags);
+			set => SetProperty(ref _currentWorkspotTags, value);
 		}
 
 		[Ordinal(83)] 
 		[RED("lootQuality")] 
 		public CEnum<gamedataQuality> LootQuality
 		{
-			get
-			{
-				if (_lootQuality == null)
-				{
-					_lootQuality = (CEnum<gamedataQuality>) CR2WTypeManager.Create("gamedataQuality", "lootQuality", cr2w, this);
-				}
-				return _lootQuality;
-			}
-			set
-			{
-				if (_lootQuality == value)
-				{
-					return;
-				}
-				_lootQuality = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lootQuality);
+			set => SetProperty(ref _lootQuality, value);
 		}
 
 		[Ordinal(84)] 
 		[RED("hasQuestItems")] 
 		public CBool HasQuestItems
 		{
-			get
-			{
-				if (_hasQuestItems == null)
-				{
-					_hasQuestItems = (CBool) CR2WTypeManager.Create("Bool", "hasQuestItems", cr2w, this);
-				}
-				return _hasQuestItems;
-			}
-			set
-			{
-				if (_hasQuestItems == value)
-				{
-					return;
-				}
-				_hasQuestItems = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasQuestItems);
+			set => SetProperty(ref _hasQuestItems, value);
 		}
 
 		[Ordinal(85)] 
 		[RED("activeQualityRangeInteraction")] 
 		public CName ActiveQualityRangeInteraction
 		{
-			get
-			{
-				if (_activeQualityRangeInteraction == null)
-				{
-					_activeQualityRangeInteraction = (CName) CR2WTypeManager.Create("CName", "activeQualityRangeInteraction", cr2w, this);
-				}
-				return _activeQualityRangeInteraction;
-			}
-			set
-			{
-				if (_activeQualityRangeInteraction == value)
-				{
-					return;
-				}
-				_activeQualityRangeInteraction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeQualityRangeInteraction);
+			set => SetProperty(ref _activeQualityRangeInteraction, value);
 		}
 
 		[Ordinal(86)] 
 		[RED("weakspotComponent")] 
 		public CHandle<gameWeakspotComponent> WeakspotComponent
 		{
-			get
-			{
-				if (_weakspotComponent == null)
-				{
-					_weakspotComponent = (CHandle<gameWeakspotComponent>) CR2WTypeManager.Create("handle:gameWeakspotComponent", "weakspotComponent", cr2w, this);
-				}
-				return _weakspotComponent;
-			}
-			set
-			{
-				if (_weakspotComponent == value)
-				{
-					return;
-				}
-				_weakspotComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weakspotComponent);
+			set => SetProperty(ref _weakspotComponent, value);
 		}
 
 		[Ordinal(87)] 
 		[RED("highlightData")] 
 		public CHandle<FocusForcedHighlightData> HighlightData
 		{
-			get
-			{
-				if (_highlightData == null)
-				{
-					_highlightData = (CHandle<FocusForcedHighlightData>) CR2WTypeManager.Create("handle:FocusForcedHighlightData", "highlightData", cr2w, this);
-				}
-				return _highlightData;
-			}
-			set
-			{
-				if (_highlightData == value)
-				{
-					return;
-				}
-				_highlightData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highlightData);
+			set => SetProperty(ref _highlightData, value);
 		}
 
 		[Ordinal(88)] 
 		[RED("killer")] 
 		public wCHandle<entEntity> Killer
 		{
-			get
-			{
-				if (_killer == null)
-				{
-					_killer = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "killer", cr2w, this);
-				}
-				return _killer;
-			}
-			set
-			{
-				if (_killer == value)
-				{
-					return;
-				}
-				_killer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _killer);
+			set => SetProperty(ref _killer, value);
 		}
 
 		[Ordinal(89)] 
 		[RED("objectActionsCallbackCtrl")] 
 		public CHandle<gameObjectActionsCallbackController> ObjectActionsCallbackCtrl
 		{
-			get
-			{
-				if (_objectActionsCallbackCtrl == null)
-				{
-					_objectActionsCallbackCtrl = (CHandle<gameObjectActionsCallbackController>) CR2WTypeManager.Create("handle:gameObjectActionsCallbackController", "objectActionsCallbackCtrl", cr2w, this);
-				}
-				return _objectActionsCallbackCtrl;
-			}
-			set
-			{
-				if (_objectActionsCallbackCtrl == value)
-				{
-					return;
-				}
-				_objectActionsCallbackCtrl = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectActionsCallbackCtrl);
+			set => SetProperty(ref _objectActionsCallbackCtrl, value);
 		}
 
 		[Ordinal(90)] 
 		[RED("isActiveCached")] 
 		public AIUtilsCachedBoolValue IsActiveCached
 		{
-			get
-			{
-				if (_isActiveCached == null)
-				{
-					_isActiveCached = (AIUtilsCachedBoolValue) CR2WTypeManager.Create("AIUtilsCachedBoolValue", "isActiveCached", cr2w, this);
-				}
-				return _isActiveCached;
-			}
-			set
-			{
-				if (_isActiveCached == value)
-				{
-					return;
-				}
-				_isActiveCached = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActiveCached);
+			set => SetProperty(ref _isActiveCached, value);
 		}
 
 		[Ordinal(91)] 
 		[RED("isCyberpsycho")] 
 		public CBool IsCyberpsycho
 		{
-			get
-			{
-				if (_isCyberpsycho == null)
-				{
-					_isCyberpsycho = (CBool) CR2WTypeManager.Create("Bool", "isCyberpsycho", cr2w, this);
-				}
-				return _isCyberpsycho;
-			}
-			set
-			{
-				if (_isCyberpsycho == value)
-				{
-					return;
-				}
-				_isCyberpsycho = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isCyberpsycho);
+			set => SetProperty(ref _isCyberpsycho, value);
 		}
 
 		[Ordinal(92)] 
 		[RED("isCivilian")] 
 		public CBool IsCivilian
 		{
-			get
-			{
-				if (_isCivilian == null)
-				{
-					_isCivilian = (CBool) CR2WTypeManager.Create("Bool", "isCivilian", cr2w, this);
-				}
-				return _isCivilian;
-			}
-			set
-			{
-				if (_isCivilian == value)
-				{
-					return;
-				}
-				_isCivilian = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isCivilian);
+			set => SetProperty(ref _isCivilian, value);
 		}
 
 		[Ordinal(93)] 
 		[RED("isPolice")] 
 		public CBool IsPolice
 		{
-			get
-			{
-				if (_isPolice == null)
-				{
-					_isPolice = (CBool) CR2WTypeManager.Create("Bool", "isPolice", cr2w, this);
-				}
-				return _isPolice;
-			}
-			set
-			{
-				if (_isPolice == value)
-				{
-					return;
-				}
-				_isPolice = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPolice);
+			set => SetProperty(ref _isPolice, value);
 		}
 
 		[Ordinal(94)] 
 		[RED("isGanger")] 
 		public CBool IsGanger
 		{
-			get
-			{
-				if (_isGanger == null)
-				{
-					_isGanger = (CBool) CR2WTypeManager.Create("Bool", "isGanger", cr2w, this);
-				}
-				return _isGanger;
-			}
-			set
-			{
-				if (_isGanger == value)
-				{
-					return;
-				}
-				_isGanger = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isGanger);
+			set => SetProperty(ref _isGanger, value);
 		}
 
 		[Ordinal(95)] 
 		[RED("attemptedShards")] 
 		public CArray<gameItemID> AttemptedShards
 		{
-			get
-			{
-				if (_attemptedShards == null)
-				{
-					_attemptedShards = (CArray<gameItemID>) CR2WTypeManager.Create("array:gameItemID", "attemptedShards", cr2w, this);
-				}
-				return _attemptedShards;
-			}
-			set
-			{
-				if (_attemptedShards == value)
-				{
-					return;
-				}
-				_attemptedShards = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attemptedShards);
+			set => SetProperty(ref _attemptedShards, value);
 		}
 
 		public ScriptedPuppet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

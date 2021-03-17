@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("followerRole")] 
 		public CHandle<AIFollowerRole> FollowerRole
 		{
-			get
-			{
-				if (_followerRole == null)
-				{
-					_followerRole = (CHandle<AIFollowerRole>) CR2WTypeManager.Create("handle:AIFollowerRole", "followerRole", cr2w, this);
-				}
-				return _followerRole;
-			}
-			set
-			{
-				if (_followerRole == value)
-				{
-					return;
-				}
-				_followerRole = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _followerRole);
+			set => SetProperty(ref _followerRole, value);
 		}
 
 		public FriendlyTargetWeaponChangeCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

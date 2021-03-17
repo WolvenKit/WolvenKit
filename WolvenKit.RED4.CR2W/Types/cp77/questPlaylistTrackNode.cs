@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("playlistEvents")] 
 		public CArray<audioPlaylistTrackEventStruct> PlaylistEvents
 		{
-			get
-			{
-				if (_playlistEvents == null)
-				{
-					_playlistEvents = (CArray<audioPlaylistTrackEventStruct>) CR2WTypeManager.Create("array:audioPlaylistTrackEventStruct", "playlistEvents", cr2w, this);
-				}
-				return _playlistEvents;
-			}
-			set
-			{
-				if (_playlistEvents == value)
-				{
-					return;
-				}
-				_playlistEvents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playlistEvents);
+			set => SetProperty(ref _playlistEvents, value);
 		}
 
 		public questPlaylistTrackNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

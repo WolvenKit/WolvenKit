@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("equipmentArea")] 
 		public CEnum<gamedataEquipmentArea> EquipmentArea
 		{
-			get
-			{
-				if (_equipmentArea == null)
-				{
-					_equipmentArea = (CEnum<gamedataEquipmentArea>) CR2WTypeManager.Create("gamedataEquipmentArea", "equipmentArea", cr2w, this);
-				}
-				return _equipmentArea;
-			}
-			set
-			{
-				if (_equipmentArea == value)
-				{
-					return;
-				}
-				_equipmentArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipmentArea);
+			set => SetProperty(ref _equipmentArea, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("index")] 
 		public CInt32 Index
 		{
-			get
-			{
-				if (_index == null)
-				{
-					_index = (CInt32) CR2WTypeManager.Create("Int32", "index", cr2w, this);
-				}
-				return _index;
-			}
-			set
-			{
-				if (_index == value)
-				{
-					return;
-				}
-				_index = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _index);
+			set => SetProperty(ref _index, value);
 		}
 
 		public WeaponRadialSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

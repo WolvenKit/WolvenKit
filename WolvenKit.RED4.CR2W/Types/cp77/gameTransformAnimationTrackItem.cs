@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("impl")] 
 		public CHandle<gameTransformAnimationTrackItemImpl> Impl
 		{
-			get
-			{
-				if (_impl == null)
-				{
-					_impl = (CHandle<gameTransformAnimationTrackItemImpl>) CR2WTypeManager.Create("handle:gameTransformAnimationTrackItemImpl", "impl", cr2w, this);
-				}
-				return _impl;
-			}
-			set
-			{
-				if (_impl == value)
-				{
-					return;
-				}
-				_impl = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _impl);
+			set => SetProperty(ref _impl, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("startTime")] 
 		public CFloat StartTime
 		{
-			get
-			{
-				if (_startTime == null)
-				{
-					_startTime = (CFloat) CR2WTypeManager.Create("Float", "startTime", cr2w, this);
-				}
-				return _startTime;
-			}
-			set
-			{
-				if (_startTime == value)
-				{
-					return;
-				}
-				_startTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startTime);
+			set => SetProperty(ref _startTime, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		public gameTransformAnimationTrackItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

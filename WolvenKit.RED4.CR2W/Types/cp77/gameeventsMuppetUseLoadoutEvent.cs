@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("adout")] 
 		public CHandle<gamedataCPOLoadoutBase_Record> Adout
 		{
-			get
-			{
-				if (_adout == null)
-				{
-					_adout = (CHandle<gamedataCPOLoadoutBase_Record>) CR2WTypeManager.Create("handle:gamedataCPOLoadoutBase_Record", "adout", cr2w, this);
-				}
-				return _adout;
-			}
-			set
-			{
-				if (_adout == value)
-				{
-					return;
-				}
-				_adout = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _adout);
+			set => SetProperty(ref _adout, value);
 		}
 
 		public gameeventsMuppetUseLoadoutEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

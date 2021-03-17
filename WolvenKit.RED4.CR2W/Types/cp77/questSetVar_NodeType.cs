@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("factName")] 
 		public CString FactName
 		{
-			get
-			{
-				if (_factName == null)
-				{
-					_factName = (CString) CR2WTypeManager.Create("String", "factName", cr2w, this);
-				}
-				return _factName;
-			}
-			set
-			{
-				if (_factName == value)
-				{
-					return;
-				}
-				_factName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factName);
+			set => SetProperty(ref _factName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("value")] 
 		public CInt32 Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CInt32) CR2WTypeManager.Create("Int32", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("setExactValue")] 
 		public CBool SetExactValue
 		{
-			get
-			{
-				if (_setExactValue == null)
-				{
-					_setExactValue = (CBool) CR2WTypeManager.Create("Bool", "setExactValue", cr2w, this);
-				}
-				return _setExactValue;
-			}
-			set
-			{
-				if (_setExactValue == value)
-				{
-					return;
-				}
-				_setExactValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setExactValue);
+			set => SetProperty(ref _setExactValue, value);
 		}
 
 		public questSetVar_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

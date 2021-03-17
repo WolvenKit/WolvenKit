@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("perkArea")] 
 		public CEnum<gamedataPerkArea> PerkArea
 		{
-			get
-			{
-				if (_perkArea == null)
-				{
-					_perkArea = (CEnum<gamedataPerkArea>) CR2WTypeManager.Create("gamedataPerkArea", "perkArea", cr2w, this);
-				}
-				return _perkArea;
-			}
-			set
-			{
-				if (_perkArea == value)
-				{
-					return;
-				}
-				_perkArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perkArea);
+			set => SetProperty(ref _perkArea, value);
 		}
 
 		public LockPerkArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

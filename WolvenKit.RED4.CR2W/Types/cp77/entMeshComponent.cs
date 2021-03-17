@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mesh")] 
 		public raRef<CMesh> Mesh
 		{
-			get
-			{
-				if (_mesh == null)
-				{
-					_mesh = (raRef<CMesh>) CR2WTypeManager.Create("raRef:CMesh", "mesh", cr2w, this);
-				}
-				return _mesh;
-			}
-			set
-			{
-				if (_mesh == value)
-				{
-					return;
-				}
-				_mesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mesh);
+			set => SetProperty(ref _mesh, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("meshAppearance")] 
 		public CName MeshAppearance
 		{
-			get
-			{
-				if (_meshAppearance == null)
-				{
-					_meshAppearance = (CName) CR2WTypeManager.Create("CName", "meshAppearance", cr2w, this);
-				}
-				return _meshAppearance;
-			}
-			set
-			{
-				if (_meshAppearance == value)
-				{
-					return;
-				}
-				_meshAppearance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshAppearance);
+			set => SetProperty(ref _meshAppearance, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("castShadows")] 
 		public CBool CastShadows
 		{
-			get
-			{
-				if (_castShadows == null)
-				{
-					_castShadows = (CBool) CR2WTypeManager.Create("Bool", "castShadows", cr2w, this);
-				}
-				return _castShadows;
-			}
-			set
-			{
-				if (_castShadows == value)
-				{
-					return;
-				}
-				_castShadows = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _castShadows);
+			set => SetProperty(ref _castShadows, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("castLocalShadows")] 
 		public CBool CastLocalShadows
 		{
-			get
-			{
-				if (_castLocalShadows == null)
-				{
-					_castLocalShadows = (CBool) CR2WTypeManager.Create("Bool", "castLocalShadows", cr2w, this);
-				}
-				return _castLocalShadows;
-			}
-			set
-			{
-				if (_castLocalShadows == value)
-				{
-					return;
-				}
-				_castLocalShadows = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _castLocalShadows);
+			set => SetProperty(ref _castLocalShadows, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("motionBlurScale")] 
 		public CFloat MotionBlurScale
 		{
-			get
-			{
-				if (_motionBlurScale == null)
-				{
-					_motionBlurScale = (CFloat) CR2WTypeManager.Create("Float", "motionBlurScale", cr2w, this);
-				}
-				return _motionBlurScale;
-			}
-			set
-			{
-				if (_motionBlurScale == value)
-				{
-					return;
-				}
-				_motionBlurScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _motionBlurScale);
+			set => SetProperty(ref _motionBlurScale, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("visualScale")] 
 		public Vector3 VisualScale
 		{
-			get
-			{
-				if (_visualScale == null)
-				{
-					_visualScale = (Vector3) CR2WTypeManager.Create("Vector3", "visualScale", cr2w, this);
-				}
-				return _visualScale;
-			}
-			set
-			{
-				if (_visualScale == value)
-				{
-					return;
-				}
-				_visualScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualScale);
+			set => SetProperty(ref _visualScale, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("renderingPlane")] 
 		public CEnum<ERenderingPlane> RenderingPlane
 		{
-			get
-			{
-				if (_renderingPlane == null)
-				{
-					_renderingPlane = (CEnum<ERenderingPlane>) CR2WTypeManager.Create("ERenderingPlane", "renderingPlane", cr2w, this);
-				}
-				return _renderingPlane;
-			}
-			set
-			{
-				if (_renderingPlane == value)
-				{
-					return;
-				}
-				_renderingPlane = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _renderingPlane);
+			set => SetProperty(ref _renderingPlane, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("objectTypeID")] 
 		public CEnum<ERenderObjectType> ObjectTypeID
 		{
-			get
-			{
-				if (_objectTypeID == null)
-				{
-					_objectTypeID = (CEnum<ERenderObjectType>) CR2WTypeManager.Create("ERenderObjectType", "objectTypeID", cr2w, this);
-				}
-				return _objectTypeID;
-			}
-			set
-			{
-				if (_objectTypeID == value)
-				{
-					return;
-				}
-				_objectTypeID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectTypeID);
+			set => SetProperty(ref _objectTypeID, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("numInstances")] 
 		public CUInt32 NumInstances
 		{
-			get
-			{
-				if (_numInstances == null)
-				{
-					_numInstances = (CUInt32) CR2WTypeManager.Create("Uint32", "numInstances", cr2w, this);
-				}
-				return _numInstances;
-			}
-			set
-			{
-				if (_numInstances == value)
-				{
-					return;
-				}
-				_numInstances = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numInstances);
+			set => SetProperty(ref _numInstances, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("chunkMask")] 
 		public CUInt64 ChunkMask
 		{
-			get
-			{
-				if (_chunkMask == null)
-				{
-					_chunkMask = (CUInt64) CR2WTypeManager.Create("Uint64", "chunkMask", cr2w, this);
-				}
-				return _chunkMask;
-			}
-			set
-			{
-				if (_chunkMask == value)
-				{
-					return;
-				}
-				_chunkMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chunkMask);
+			set => SetProperty(ref _chunkMask, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get
-			{
-				if (_isEnabled == null)
-				{
-					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
-				}
-				return _isEnabled;
-			}
-			set
-			{
-				if (_isEnabled == value)
-				{
-					return;
-				}
-				_isEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("LODMode")] 
 		public CEnum<entMeshComponentLODMode> LODMode
 		{
-			get
-			{
-				if (_lODMode == null)
-				{
-					_lODMode = (CEnum<entMeshComponentLODMode>) CR2WTypeManager.Create("entMeshComponentLODMode", "LODMode", cr2w, this);
-				}
-				return _lODMode;
-			}
-			set
-			{
-				if (_lODMode == value)
-				{
-					return;
-				}
-				_lODMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lODMode);
+			set => SetProperty(ref _lODMode, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("overrideMeshNavigationImpact")] 
 		public CBool OverrideMeshNavigationImpact
 		{
-			get
-			{
-				if (_overrideMeshNavigationImpact == null)
-				{
-					_overrideMeshNavigationImpact = (CBool) CR2WTypeManager.Create("Bool", "overrideMeshNavigationImpact", cr2w, this);
-				}
-				return _overrideMeshNavigationImpact;
-			}
-			set
-			{
-				if (_overrideMeshNavigationImpact == value)
-				{
-					return;
-				}
-				_overrideMeshNavigationImpact = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideMeshNavigationImpact);
+			set => SetProperty(ref _overrideMeshNavigationImpact, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("navigationImpact")] 
 		public NavGenNavigationSetting NavigationImpact
 		{
-			get
-			{
-				if (_navigationImpact == null)
-				{
-					_navigationImpact = (NavGenNavigationSetting) CR2WTypeManager.Create("NavGenNavigationSetting", "navigationImpact", cr2w, this);
-				}
-				return _navigationImpact;
-			}
-			set
-			{
-				if (_navigationImpact == value)
-				{
-					return;
-				}
-				_navigationImpact = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _navigationImpact);
+			set => SetProperty(ref _navigationImpact, value);
 		}
 
 		public entMeshComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

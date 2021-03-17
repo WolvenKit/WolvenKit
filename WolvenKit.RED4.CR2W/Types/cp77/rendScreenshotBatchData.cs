@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("batchPositionsPath")] 
 		public AbsolutePathSerializable BatchPositionsPath
 		{
-			get
-			{
-				if (_batchPositionsPath == null)
-				{
-					_batchPositionsPath = (AbsolutePathSerializable) CR2WTypeManager.Create("AbsolutePathSerializable", "batchPositionsPath", cr2w, this);
-				}
-				return _batchPositionsPath;
-			}
-			set
-			{
-				if (_batchPositionsPath == value)
-				{
-					return;
-				}
-				_batchPositionsPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _batchPositionsPath);
+			set => SetProperty(ref _batchPositionsPath, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("delayTime")] 
 		public CFloat DelayTime
 		{
-			get
-			{
-				if (_delayTime == null)
-				{
-					_delayTime = (CFloat) CR2WTypeManager.Create("Float", "delayTime", cr2w, this);
-				}
-				return _delayTime;
-			}
-			set
-			{
-				if (_delayTime == value)
-				{
-					return;
-				}
-				_delayTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delayTime);
+			set => SetProperty(ref _delayTime, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("numberOfCoordinatesToDump")] 
 		public CUInt32 NumberOfCoordinatesToDump
 		{
-			get
-			{
-				if (_numberOfCoordinatesToDump == null)
-				{
-					_numberOfCoordinatesToDump = (CUInt32) CR2WTypeManager.Create("Uint32", "numberOfCoordinatesToDump", cr2w, this);
-				}
-				return _numberOfCoordinatesToDump;
-			}
-			set
-			{
-				if (_numberOfCoordinatesToDump == value)
-				{
-					return;
-				}
-				_numberOfCoordinatesToDump = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numberOfCoordinatesToDump);
+			set => SetProperty(ref _numberOfCoordinatesToDump, value);
 		}
 
 		public rendScreenshotBatchData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

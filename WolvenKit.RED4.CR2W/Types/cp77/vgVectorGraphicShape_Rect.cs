@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mensions")] 
 		public Vector2 Mensions
 		{
-			get
-			{
-				if (_mensions == null)
-				{
-					_mensions = (Vector2) CR2WTypeManager.Create("Vector2", "mensions", cr2w, this);
-				}
-				return _mensions;
-			}
-			set
-			{
-				if (_mensions == value)
-				{
-					return;
-				}
-				_mensions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mensions);
+			set => SetProperty(ref _mensions, value);
 		}
 
 		public vgVectorGraphicShape_Rect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

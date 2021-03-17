@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("NameRef")] 
 		public inkTextWidgetReference NameRef
 		{
-			get
-			{
-				if (_nameRef == null)
-				{
-					_nameRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "NameRef", cr2w, this);
-				}
-				return _nameRef;
-			}
-			set
-			{
-				if (_nameRef == value)
-				{
-					return;
-				}
-				_nameRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nameRef);
+			set => SetProperty(ref _nameRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("PassedStateName")] 
 		public CName PassedStateName
 		{
-			get
-			{
-				if (_passedStateName == null)
-				{
-					_passedStateName = (CName) CR2WTypeManager.Create("CName", "PassedStateName", cr2w, this);
-				}
-				return _passedStateName;
-			}
-			set
-			{
-				if (_passedStateName == value)
-				{
-					return;
-				}
-				_passedStateName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _passedStateName);
+			set => SetProperty(ref _passedStateName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("FailedStateName")] 
 		public CName FailedStateName
 		{
-			get
-			{
-				if (_failedStateName == null)
-				{
-					_failedStateName = (CName) CR2WTypeManager.Create("CName", "FailedStateName", cr2w, this);
-				}
-				return _failedStateName;
-			}
-			set
-			{
-				if (_failedStateName == value)
-				{
-					return;
-				}
-				_failedStateName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _failedStateName);
+			set => SetProperty(ref _failedStateName, value);
 		}
 
 		public ScannerSkillCheckConditionDescriptionLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gameEffectRef _effect;
 		private CFloat _countTime;
 		private CFloat _startVelocity;
-		private CFloat _lifetime;
+		private CFloat _lifetime_496;
 		private CFloat _bendTimeRatio;
 		private CFloat _bendFactor;
 		private CBool _useParabolicPhase;
@@ -55,989 +55,344 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("meshComponent")] 
 		public CHandle<entIComponent> MeshComponent
 		{
-			get
-			{
-				if (_meshComponent == null)
-				{
-					_meshComponent = (CHandle<entIComponent>) CR2WTypeManager.Create("handle:entIComponent", "meshComponent", cr2w, this);
-				}
-				return _meshComponent;
-			}
-			set
-			{
-				if (_meshComponent == value)
-				{
-					return;
-				}
-				_meshComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshComponent);
+			set => SetProperty(ref _meshComponent, value);
 		}
 
 		[Ordinal(52)] 
 		[RED("effect")] 
 		public gameEffectRef Effect
 		{
-			get
-			{
-				if (_effect == null)
-				{
-					_effect = (gameEffectRef) CR2WTypeManager.Create("gameEffectRef", "effect", cr2w, this);
-				}
-				return _effect;
-			}
-			set
-			{
-				if (_effect == value)
-				{
-					return;
-				}
-				_effect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effect);
+			set => SetProperty(ref _effect, value);
 		}
 
 		[Ordinal(53)] 
 		[RED("countTime")] 
 		public CFloat CountTime
 		{
-			get
-			{
-				if (_countTime == null)
-				{
-					_countTime = (CFloat) CR2WTypeManager.Create("Float", "countTime", cr2w, this);
-				}
-				return _countTime;
-			}
-			set
-			{
-				if (_countTime == value)
-				{
-					return;
-				}
-				_countTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _countTime);
+			set => SetProperty(ref _countTime, value);
 		}
 
 		[Ordinal(54)] 
 		[RED("startVelocity")] 
 		public CFloat StartVelocity
 		{
-			get
-			{
-				if (_startVelocity == null)
-				{
-					_startVelocity = (CFloat) CR2WTypeManager.Create("Float", "startVelocity", cr2w, this);
-				}
-				return _startVelocity;
-			}
-			set
-			{
-				if (_startVelocity == value)
-				{
-					return;
-				}
-				_startVelocity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startVelocity);
+			set => SetProperty(ref _startVelocity, value);
 		}
 
 		[Ordinal(55)] 
 		[RED("lifetime")] 
 		public CFloat Lifetime_496
 		{
-			get
-			{
-				if (_lifetime == null)
-				{
-					_lifetime = (CFloat) CR2WTypeManager.Create("Float", "lifetime", cr2w, this);
-				}
-				return _lifetime;
-			}
-			set
-			{
-				if (_lifetime == value)
-				{
-					return;
-				}
-				_lifetime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lifetime_496);
+			set => SetProperty(ref _lifetime_496, value);
 		}
 
 		[Ordinal(56)] 
 		[RED("bendTimeRatio")] 
 		public CFloat BendTimeRatio
 		{
-			get
-			{
-				if (_bendTimeRatio == null)
-				{
-					_bendTimeRatio = (CFloat) CR2WTypeManager.Create("Float", "bendTimeRatio", cr2w, this);
-				}
-				return _bendTimeRatio;
-			}
-			set
-			{
-				if (_bendTimeRatio == value)
-				{
-					return;
-				}
-				_bendTimeRatio = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bendTimeRatio);
+			set => SetProperty(ref _bendTimeRatio, value);
 		}
 
 		[Ordinal(57)] 
 		[RED("bendFactor")] 
 		public CFloat BendFactor
 		{
-			get
-			{
-				if (_bendFactor == null)
-				{
-					_bendFactor = (CFloat) CR2WTypeManager.Create("Float", "bendFactor", cr2w, this);
-				}
-				return _bendFactor;
-			}
-			set
-			{
-				if (_bendFactor == value)
-				{
-					return;
-				}
-				_bendFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bendFactor);
+			set => SetProperty(ref _bendFactor, value);
 		}
 
 		[Ordinal(58)] 
 		[RED("useParabolicPhase")] 
 		public CBool UseParabolicPhase
 		{
-			get
-			{
-				if (_useParabolicPhase == null)
-				{
-					_useParabolicPhase = (CBool) CR2WTypeManager.Create("Bool", "useParabolicPhase", cr2w, this);
-				}
-				return _useParabolicPhase;
-			}
-			set
-			{
-				if (_useParabolicPhase == value)
-				{
-					return;
-				}
-				_useParabolicPhase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useParabolicPhase);
+			set => SetProperty(ref _useParabolicPhase, value);
 		}
 
 		[Ordinal(59)] 
 		[RED("parabolicVelocityMin")] 
 		public CFloat ParabolicVelocityMin
 		{
-			get
-			{
-				if (_parabolicVelocityMin == null)
-				{
-					_parabolicVelocityMin = (CFloat) CR2WTypeManager.Create("Float", "parabolicVelocityMin", cr2w, this);
-				}
-				return _parabolicVelocityMin;
-			}
-			set
-			{
-				if (_parabolicVelocityMin == value)
-				{
-					return;
-				}
-				_parabolicVelocityMin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parabolicVelocityMin);
+			set => SetProperty(ref _parabolicVelocityMin, value);
 		}
 
 		[Ordinal(60)] 
 		[RED("parabolicVelocityMax")] 
 		public CFloat ParabolicVelocityMax
 		{
-			get
-			{
-				if (_parabolicVelocityMax == null)
-				{
-					_parabolicVelocityMax = (CFloat) CR2WTypeManager.Create("Float", "parabolicVelocityMax", cr2w, this);
-				}
-				return _parabolicVelocityMax;
-			}
-			set
-			{
-				if (_parabolicVelocityMax == value)
-				{
-					return;
-				}
-				_parabolicVelocityMax = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parabolicVelocityMax);
+			set => SetProperty(ref _parabolicVelocityMax, value);
 		}
 
 		[Ordinal(61)] 
 		[RED("parabolicDuration")] 
 		public CFloat ParabolicDuration
 		{
-			get
-			{
-				if (_parabolicDuration == null)
-				{
-					_parabolicDuration = (CFloat) CR2WTypeManager.Create("Float", "parabolicDuration", cr2w, this);
-				}
-				return _parabolicDuration;
-			}
-			set
-			{
-				if (_parabolicDuration == value)
-				{
-					return;
-				}
-				_parabolicDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parabolicDuration);
+			set => SetProperty(ref _parabolicDuration, value);
 		}
 
 		[Ordinal(62)] 
 		[RED("parabolicGravity")] 
 		public Vector4 ParabolicGravity
 		{
-			get
-			{
-				if (_parabolicGravity == null)
-				{
-					_parabolicGravity = (Vector4) CR2WTypeManager.Create("Vector4", "parabolicGravity", cr2w, this);
-				}
-				return _parabolicGravity;
-			}
-			set
-			{
-				if (_parabolicGravity == value)
-				{
-					return;
-				}
-				_parabolicGravity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parabolicGravity);
+			set => SetProperty(ref _parabolicGravity, value);
 		}
 
 		[Ordinal(63)] 
 		[RED("spiralParams")] 
 		public CHandle<gameprojectileSpiralParams> SpiralParams
 		{
-			get
-			{
-				if (_spiralParams == null)
-				{
-					_spiralParams = (CHandle<gameprojectileSpiralParams>) CR2WTypeManager.Create("handle:gameprojectileSpiralParams", "spiralParams", cr2w, this);
-				}
-				return _spiralParams;
-			}
-			set
-			{
-				if (_spiralParams == value)
-				{
-					return;
-				}
-				_spiralParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spiralParams);
+			set => SetProperty(ref _spiralParams, value);
 		}
 
 		[Ordinal(64)] 
 		[RED("useSpiralParams")] 
 		public CBool UseSpiralParams
 		{
-			get
-			{
-				if (_useSpiralParams == null)
-				{
-					_useSpiralParams = (CBool) CR2WTypeManager.Create("Bool", "useSpiralParams", cr2w, this);
-				}
-				return _useSpiralParams;
-			}
-			set
-			{
-				if (_useSpiralParams == value)
-				{
-					return;
-				}
-				_useSpiralParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useSpiralParams);
+			set => SetProperty(ref _useSpiralParams, value);
 		}
 
 		[Ordinal(65)] 
 		[RED("alive")] 
 		public CBool Alive
 		{
-			get
-			{
-				if (_alive == null)
-				{
-					_alive = (CBool) CR2WTypeManager.Create("Bool", "alive", cr2w, this);
-				}
-				return _alive;
-			}
-			set
-			{
-				if (_alive == value)
-				{
-					return;
-				}
-				_alive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alive);
+			set => SetProperty(ref _alive, value);
 		}
 
 		[Ordinal(66)] 
 		[RED("hit")] 
 		public CBool Hit
 		{
-			get
-			{
-				if (_hit == null)
-				{
-					_hit = (CBool) CR2WTypeManager.Create("Bool", "hit", cr2w, this);
-				}
-				return _hit;
-			}
-			set
-			{
-				if (_hit == value)
-				{
-					return;
-				}
-				_hit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hit);
+			set => SetProperty(ref _hit, value);
 		}
 
 		[Ordinal(67)] 
 		[RED("trailName")] 
 		public CName TrailName
 		{
-			get
-			{
-				if (_trailName == null)
-				{
-					_trailName = (CName) CR2WTypeManager.Create("CName", "trailName", cr2w, this);
-				}
-				return _trailName;
-			}
-			set
-			{
-				if (_trailName == value)
-				{
-					return;
-				}
-				_trailName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trailName);
+			set => SetProperty(ref _trailName, value);
 		}
 
 		[Ordinal(68)] 
 		[RED("statsSystem")] 
 		public CHandle<gameStatsSystem> StatsSystem
 		{
-			get
-			{
-				if (_statsSystem == null)
-				{
-					_statsSystem = (CHandle<gameStatsSystem>) CR2WTypeManager.Create("handle:gameStatsSystem", "statsSystem", cr2w, this);
-				}
-				return _statsSystem;
-			}
-			set
-			{
-				if (_statsSystem == value)
-				{
-					return;
-				}
-				_statsSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statsSystem);
+			set => SetProperty(ref _statsSystem, value);
 		}
 
 		[Ordinal(69)] 
 		[RED("weaponID")] 
 		public entEntityID WeaponID
 		{
-			get
-			{
-				if (_weaponID == null)
-				{
-					_weaponID = (entEntityID) CR2WTypeManager.Create("entEntityID", "weaponID", cr2w, this);
-				}
-				return _weaponID;
-			}
-			set
-			{
-				if (_weaponID == value)
-				{
-					return;
-				}
-				_weaponID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponID);
+			set => SetProperty(ref _weaponID, value);
 		}
 
 		[Ordinal(70)] 
 		[RED("parabolicPhaseParams")] 
 		public CHandle<gameprojectileParabolicTrajectoryParams> ParabolicPhaseParams
 		{
-			get
-			{
-				if (_parabolicPhaseParams == null)
-				{
-					_parabolicPhaseParams = (CHandle<gameprojectileParabolicTrajectoryParams>) CR2WTypeManager.Create("handle:gameprojectileParabolicTrajectoryParams", "parabolicPhaseParams", cr2w, this);
-				}
-				return _parabolicPhaseParams;
-			}
-			set
-			{
-				if (_parabolicPhaseParams == value)
-				{
-					return;
-				}
-				_parabolicPhaseParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parabolicPhaseParams);
+			set => SetProperty(ref _parabolicPhaseParams, value);
 		}
 
 		[Ordinal(71)] 
 		[RED("followPhaseParams")] 
 		public CHandle<gameprojectileFollowCurveTrajectoryParams> FollowPhaseParams
 		{
-			get
-			{
-				if (_followPhaseParams == null)
-				{
-					_followPhaseParams = (CHandle<gameprojectileFollowCurveTrajectoryParams>) CR2WTypeManager.Create("handle:gameprojectileFollowCurveTrajectoryParams", "followPhaseParams", cr2w, this);
-				}
-				return _followPhaseParams;
-			}
-			set
-			{
-				if (_followPhaseParams == value)
-				{
-					return;
-				}
-				_followPhaseParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _followPhaseParams);
+			set => SetProperty(ref _followPhaseParams, value);
 		}
 
 		[Ordinal(72)] 
 		[RED("linearPhaseParams")] 
 		public CHandle<gameprojectileLinearTrajectoryParams> LinearPhaseParams
 		{
-			get
-			{
-				if (_linearPhaseParams == null)
-				{
-					_linearPhaseParams = (CHandle<gameprojectileLinearTrajectoryParams>) CR2WTypeManager.Create("handle:gameprojectileLinearTrajectoryParams", "linearPhaseParams", cr2w, this);
-				}
-				return _linearPhaseParams;
-			}
-			set
-			{
-				if (_linearPhaseParams == value)
-				{
-					return;
-				}
-				_linearPhaseParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linearPhaseParams);
+			set => SetProperty(ref _linearPhaseParams, value);
 		}
 
 		[Ordinal(73)] 
 		[RED("targeted")] 
 		public CBool Targeted
 		{
-			get
-			{
-				if (_targeted == null)
-				{
-					_targeted = (CBool) CR2WTypeManager.Create("Bool", "targeted", cr2w, this);
-				}
-				return _targeted;
-			}
-			set
-			{
-				if (_targeted == value)
-				{
-					return;
-				}
-				_targeted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targeted);
+			set => SetProperty(ref _targeted, value);
 		}
 
 		[Ordinal(74)] 
 		[RED("trailStarted")] 
 		public CBool TrailStarted
 		{
-			get
-			{
-				if (_trailStarted == null)
-				{
-					_trailStarted = (CBool) CR2WTypeManager.Create("Bool", "trailStarted", cr2w, this);
-				}
-				return _trailStarted;
-			}
-			set
-			{
-				if (_trailStarted == value)
-				{
-					return;
-				}
-				_trailStarted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trailStarted);
+			set => SetProperty(ref _trailStarted, value);
 		}
 
 		[Ordinal(75)] 
 		[RED("phase")] 
 		public CEnum<ESmartBulletPhase> Phase
 		{
-			get
-			{
-				if (_phase == null)
-				{
-					_phase = (CEnum<ESmartBulletPhase>) CR2WTypeManager.Create("ESmartBulletPhase", "phase", cr2w, this);
-				}
-				return _phase;
-			}
-			set
-			{
-				if (_phase == value)
-				{
-					return;
-				}
-				_phase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _phase);
+			set => SetProperty(ref _phase, value);
 		}
 
 		[Ordinal(76)] 
 		[RED("timeInPhase")] 
 		public CFloat TimeInPhase
 		{
-			get
-			{
-				if (_timeInPhase == null)
-				{
-					_timeInPhase = (CFloat) CR2WTypeManager.Create("Float", "timeInPhase", cr2w, this);
-				}
-				return _timeInPhase;
-			}
-			set
-			{
-				if (_timeInPhase == value)
-				{
-					return;
-				}
-				_timeInPhase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeInPhase);
+			set => SetProperty(ref _timeInPhase, value);
 		}
 
 		[Ordinal(77)] 
 		[RED("randStartVelocity")] 
 		public CFloat RandStartVelocity
 		{
-			get
-			{
-				if (_randStartVelocity == null)
-				{
-					_randStartVelocity = (CFloat) CR2WTypeManager.Create("Float", "randStartVelocity", cr2w, this);
-				}
-				return _randStartVelocity;
-			}
-			set
-			{
-				if (_randStartVelocity == value)
-				{
-					return;
-				}
-				_randStartVelocity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _randStartVelocity);
+			set => SetProperty(ref _randStartVelocity, value);
 		}
 
 		[Ordinal(78)] 
 		[RED("smartGunMissDelay")] 
 		public CFloat SmartGunMissDelay
 		{
-			get
-			{
-				if (_smartGunMissDelay == null)
-				{
-					_smartGunMissDelay = (CFloat) CR2WTypeManager.Create("Float", "smartGunMissDelay", cr2w, this);
-				}
-				return _smartGunMissDelay;
-			}
-			set
-			{
-				if (_smartGunMissDelay == value)
-				{
-					return;
-				}
-				_smartGunMissDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _smartGunMissDelay);
+			set => SetProperty(ref _smartGunMissDelay, value);
 		}
 
 		[Ordinal(79)] 
 		[RED("smartGunHitProbability")] 
 		public CFloat SmartGunHitProbability
 		{
-			get
-			{
-				if (_smartGunHitProbability == null)
-				{
-					_smartGunHitProbability = (CFloat) CR2WTypeManager.Create("Float", "smartGunHitProbability", cr2w, this);
-				}
-				return _smartGunHitProbability;
-			}
-			set
-			{
-				if (_smartGunHitProbability == value)
-				{
-					return;
-				}
-				_smartGunHitProbability = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _smartGunHitProbability);
+			set => SetProperty(ref _smartGunHitProbability, value);
 		}
 
 		[Ordinal(80)] 
 		[RED("smartGunMissRadius")] 
 		public CFloat SmartGunMissRadius
 		{
-			get
-			{
-				if (_smartGunMissRadius == null)
-				{
-					_smartGunMissRadius = (CFloat) CR2WTypeManager.Create("Float", "smartGunMissRadius", cr2w, this);
-				}
-				return _smartGunMissRadius;
-			}
-			set
-			{
-				if (_smartGunMissRadius == value)
-				{
-					return;
-				}
-				_smartGunMissRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _smartGunMissRadius);
+			set => SetProperty(ref _smartGunMissRadius, value);
 		}
 
 		[Ordinal(81)] 
 		[RED("randomWeaponMissChance")] 
 		public CFloat RandomWeaponMissChance
 		{
-			get
-			{
-				if (_randomWeaponMissChance == null)
-				{
-					_randomWeaponMissChance = (CFloat) CR2WTypeManager.Create("Float", "randomWeaponMissChance", cr2w, this);
-				}
-				return _randomWeaponMissChance;
-			}
-			set
-			{
-				if (_randomWeaponMissChance == value)
-				{
-					return;
-				}
-				_randomWeaponMissChance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _randomWeaponMissChance);
+			set => SetProperty(ref _randomWeaponMissChance, value);
 		}
 
 		[Ordinal(82)] 
 		[RED("randomTargetMissChance")] 
 		public CFloat RandomTargetMissChance
 		{
-			get
-			{
-				if (_randomTargetMissChance == null)
-				{
-					_randomTargetMissChance = (CFloat) CR2WTypeManager.Create("Float", "randomTargetMissChance", cr2w, this);
-				}
-				return _randomTargetMissChance;
-			}
-			set
-			{
-				if (_randomTargetMissChance == value)
-				{
-					return;
-				}
-				_randomTargetMissChance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _randomTargetMissChance);
+			set => SetProperty(ref _randomTargetMissChance, value);
 		}
 
 		[Ordinal(83)] 
 		[RED("readyToMiss")] 
 		public CBool ReadyToMiss
 		{
-			get
-			{
-				if (_readyToMiss == null)
-				{
-					_readyToMiss = (CBool) CR2WTypeManager.Create("Bool", "readyToMiss", cr2w, this);
-				}
-				return _readyToMiss;
-			}
-			set
-			{
-				if (_readyToMiss == value)
-				{
-					return;
-				}
-				_readyToMiss = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _readyToMiss);
+			set => SetProperty(ref _readyToMiss, value);
 		}
 
 		[Ordinal(84)] 
 		[RED("stopAndDropOnTargetingDisruption")] 
 		public CBool StopAndDropOnTargetingDisruption
 		{
-			get
-			{
-				if (_stopAndDropOnTargetingDisruption == null)
-				{
-					_stopAndDropOnTargetingDisruption = (CBool) CR2WTypeManager.Create("Bool", "stopAndDropOnTargetingDisruption", cr2w, this);
-				}
-				return _stopAndDropOnTargetingDisruption;
-			}
-			set
-			{
-				if (_stopAndDropOnTargetingDisruption == value)
-				{
-					return;
-				}
-				_stopAndDropOnTargetingDisruption = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stopAndDropOnTargetingDisruption);
+			set => SetProperty(ref _stopAndDropOnTargetingDisruption, value);
 		}
 
 		[Ordinal(85)] 
 		[RED("shouldStopAndDrop")] 
 		public CBool ShouldStopAndDrop
 		{
-			get
-			{
-				if (_shouldStopAndDrop == null)
-				{
-					_shouldStopAndDrop = (CBool) CR2WTypeManager.Create("Bool", "shouldStopAndDrop", cr2w, this);
-				}
-				return _shouldStopAndDrop;
-			}
-			set
-			{
-				if (_shouldStopAndDrop == value)
-				{
-					return;
-				}
-				_shouldStopAndDrop = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldStopAndDrop);
+			set => SetProperty(ref _shouldStopAndDrop, value);
 		}
 
 		[Ordinal(86)] 
 		[RED("targetID")] 
 		public entEntityID TargetID
 		{
-			get
-			{
-				if (_targetID == null)
-				{
-					_targetID = (entEntityID) CR2WTypeManager.Create("entEntityID", "targetID", cr2w, this);
-				}
-				return _targetID;
-			}
-			set
-			{
-				if (_targetID == value)
-				{
-					return;
-				}
-				_targetID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetID);
+			set => SetProperty(ref _targetID, value);
 		}
 
 		[Ordinal(87)] 
 		[RED("ignoredTargetID")] 
 		public entEntityID IgnoredTargetID
 		{
-			get
-			{
-				if (_ignoredTargetID == null)
-				{
-					_ignoredTargetID = (entEntityID) CR2WTypeManager.Create("entEntityID", "ignoredTargetID", cr2w, this);
-				}
-				return _ignoredTargetID;
-			}
-			set
-			{
-				if (_ignoredTargetID == value)
-				{
-					return;
-				}
-				_ignoredTargetID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ignoredTargetID);
+			set => SetProperty(ref _ignoredTargetID, value);
 		}
 
 		[Ordinal(88)] 
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		[Ordinal(89)] 
 		[RED("weapon")] 
 		public wCHandle<gameObject> Weapon
 		{
-			get
-			{
-				if (_weapon == null)
-				{
-					_weapon = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "weapon", cr2w, this);
-				}
-				return _weapon;
-			}
-			set
-			{
-				if (_weapon == value)
-				{
-					return;
-				}
-				_weapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weapon);
+			set => SetProperty(ref _weapon, value);
 		}
 
 		[Ordinal(90)] 
 		[RED("startPosition")] 
 		public Vector4 StartPosition
 		{
-			get
-			{
-				if (_startPosition == null)
-				{
-					_startPosition = (Vector4) CR2WTypeManager.Create("Vector4", "startPosition", cr2w, this);
-				}
-				return _startPosition;
-			}
-			set
-			{
-				if (_startPosition == value)
-				{
-					return;
-				}
-				_startPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startPosition);
+			set => SetProperty(ref _startPosition, value);
 		}
 
 		[Ordinal(91)] 
 		[RED("hasExploded")] 
 		public CBool HasExploded
 		{
-			get
-			{
-				if (_hasExploded == null)
-				{
-					_hasExploded = (CBool) CR2WTypeManager.Create("Bool", "hasExploded", cr2w, this);
-				}
-				return _hasExploded;
-			}
-			set
-			{
-				if (_hasExploded == value)
-				{
-					return;
-				}
-				_hasExploded = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasExploded);
+			set => SetProperty(ref _hasExploded, value);
 		}
 
 		[Ordinal(92)] 
 		[RED("attack")] 
 		public CHandle<gameIAttack> Attack
 		{
-			get
-			{
-				if (_attack == null)
-				{
-					_attack = (CHandle<gameIAttack>) CR2WTypeManager.Create("handle:gameIAttack", "attack", cr2w, this);
-				}
-				return _attack;
-			}
-			set
-			{
-				if (_attack == value)
-				{
-					return;
-				}
-				_attack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attack);
+			set => SetProperty(ref _attack, value);
 		}
 
 		[Ordinal(93)] 
 		[RED("BulletCollisionEvaluator")] 
 		public CHandle<BulletCollisionEvaluator> BulletCollisionEvaluator
 		{
-			get
-			{
-				if (_bulletCollisionEvaluator == null)
-				{
-					_bulletCollisionEvaluator = (CHandle<BulletCollisionEvaluator>) CR2WTypeManager.Create("handle:BulletCollisionEvaluator", "BulletCollisionEvaluator", cr2w, this);
-				}
-				return _bulletCollisionEvaluator;
-			}
-			set
-			{
-				if (_bulletCollisionEvaluator == value)
-				{
-					return;
-				}
-				_bulletCollisionEvaluator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bulletCollisionEvaluator);
+			set => SetProperty(ref _bulletCollisionEvaluator, value);
 		}
 
 		public sampleSmartBullet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

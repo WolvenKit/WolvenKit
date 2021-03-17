@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("color")] 
 		public CColor Color
 		{
-			get
-			{
-				if (_color == null)
-				{
-					_color = (CColor) CR2WTypeManager.Create("Color", "color", cr2w, this);
-				}
-				return _color;
-			}
-			set
-			{
-				if (_color == value)
-				{
-					return;
-				}
-				_color = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _color);
+			set => SetProperty(ref _color, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("outline")] 
 		public CHandle<AreaShapeOutline> Outline
 		{
-			get
-			{
-				if (_outline == null)
-				{
-					_outline = (CHandle<AreaShapeOutline>) CR2WTypeManager.Create("handle:AreaShapeOutline", "outline", cr2w, this);
-				}
-				return _outline;
-			}
-			set
-			{
-				if (_outline == value)
-				{
-					return;
-				}
-				_outline = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outline);
+			set => SetProperty(ref _outline, value);
 		}
 
 		public worldAreaShapeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("flags")] 
 		public CEnum<worldEDeniedAreaFlags> Flags
 		{
-			get
-			{
-				if (_flags == null)
-				{
-					_flags = (CEnum<worldEDeniedAreaFlags>) CR2WTypeManager.Create("worldEDeniedAreaFlags", "flags", cr2w, this);
-				}
-				return _flags;
-			}
-			set
-			{
-				if (_flags == value)
-				{
-					return;
-				}
-				_flags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flags);
+			set => SetProperty(ref _flags, value);
 		}
 
 		public worldNavigationDeniedAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

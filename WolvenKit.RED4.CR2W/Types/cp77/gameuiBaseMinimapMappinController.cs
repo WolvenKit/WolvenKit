@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("iconOrientation")] 
 		public CEnum<gameuiEIconOrientation> IconOrientation
 		{
-			get
-			{
-				if (_iconOrientation == null)
-				{
-					_iconOrientation = (CEnum<gameuiEIconOrientation>) CR2WTypeManager.Create("gameuiEIconOrientation", "iconOrientation", cr2w, this);
-				}
-				return _iconOrientation;
-			}
-			set
-			{
-				if (_iconOrientation == value)
-				{
-					return;
-				}
-				_iconOrientation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _iconOrientation);
+			set => SetProperty(ref _iconOrientation, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("fixedOrientationWidget")] 
 		public inkWidgetReference FixedOrientationWidget
 		{
-			get
-			{
-				if (_fixedOrientationWidget == null)
-				{
-					_fixedOrientationWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "fixedOrientationWidget", cr2w, this);
-				}
-				return _fixedOrientationWidget;
-			}
-			set
-			{
-				if (_fixedOrientationWidget == value)
-				{
-					return;
-				}
-				_fixedOrientationWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fixedOrientationWidget);
+			set => SetProperty(ref _fixedOrientationWidget, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("clampArrowWidget")] 
 		public inkWidgetReference ClampArrowWidget
 		{
-			get
-			{
-				if (_clampArrowWidget == null)
-				{
-					_clampArrowWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "clampArrowWidget", cr2w, this);
-				}
-				return _clampArrowWidget;
-			}
-			set
-			{
-				if (_clampArrowWidget == value)
-				{
-					return;
-				}
-				_clampArrowWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clampArrowWidget);
+			set => SetProperty(ref _clampArrowWidget, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("mappin")] 
 		public wCHandle<gamemappinsIMappin> Mappin
 		{
-			get
-			{
-				if (_mappin == null)
-				{
-					_mappin = (wCHandle<gamemappinsIMappin>) CR2WTypeManager.Create("whandle:gamemappinsIMappin", "mappin", cr2w, this);
-				}
-				return _mappin;
-			}
-			set
-			{
-				if (_mappin == value)
-				{
-					return;
-				}
-				_mappin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mappin);
+			set => SetProperty(ref _mappin, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("root")] 
 		public wCHandle<inkWidget> Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("aboveWidget")] 
 		public wCHandle<inkWidget> AboveWidget
 		{
-			get
-			{
-				if (_aboveWidget == null)
-				{
-					_aboveWidget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "aboveWidget", cr2w, this);
-				}
-				return _aboveWidget;
-			}
-			set
-			{
-				if (_aboveWidget == value)
-				{
-					return;
-				}
-				_aboveWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aboveWidget);
+			set => SetProperty(ref _aboveWidget, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("belowWidget")] 
 		public wCHandle<inkWidget> BelowWidget
 		{
-			get
-			{
-				if (_belowWidget == null)
-				{
-					_belowWidget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "belowWidget", cr2w, this);
-				}
-				return _belowWidget;
-			}
-			set
-			{
-				if (_belowWidget == value)
-				{
-					return;
-				}
-				_belowWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _belowWidget);
+			set => SetProperty(ref _belowWidget, value);
 		}
 
 		public gameuiBaseMinimapMappinController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

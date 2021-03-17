@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entry")] 
 		public wCHandle<gameJournalCodexEntry> Entry
 		{
-			get
-			{
-				if (_entry == null)
-				{
-					_entry = (wCHandle<gameJournalCodexEntry>) CR2WTypeManager.Create("whandle:gameJournalCodexEntry", "entry", cr2w, this);
-				}
-				return _entry;
-			}
-			set
-			{
-				if (_entry == value)
-				{
-					return;
-				}
-				_entry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entry);
+			set => SetProperty(ref _entry, value);
 		}
 
 		public OnOpenCodexAtEntryEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

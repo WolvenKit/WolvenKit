@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("params")] 
 		public CArray<questDropItemFromSlot_NodeTypeParams> Params
 		{
-			get
-			{
-				if (_params == null)
-				{
-					_params = (CArray<questDropItemFromSlot_NodeTypeParams>) CR2WTypeManager.Create("array:questDropItemFromSlot_NodeTypeParams", "params", cr2w, this);
-				}
-				return _params;
-			}
-			set
-			{
-				if (_params == value)
-				{
-					return;
-				}
-				_params = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
 		}
 
 		public questDropItemFromSlot_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

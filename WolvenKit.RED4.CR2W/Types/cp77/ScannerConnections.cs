@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("deviceConnections")] 
 		public CArray<DeviceConnectionScannerData> DeviceConnections
 		{
-			get
-			{
-				if (_deviceConnections == null)
-				{
-					_deviceConnections = (CArray<DeviceConnectionScannerData>) CR2WTypeManager.Create("array:DeviceConnectionScannerData", "deviceConnections", cr2w, this);
-				}
-				return _deviceConnections;
-			}
-			set
-			{
-				if (_deviceConnections == value)
-				{
-					return;
-				}
-				_deviceConnections = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deviceConnections);
+			set => SetProperty(ref _deviceConnections, value);
 		}
 
 		public ScannerConnections(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

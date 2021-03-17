@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("districts")] 
 		public CArray<gameuiDistrictTriggerData> Districts
 		{
-			get
-			{
-				if (_districts == null)
-				{
-					_districts = (CArray<gameuiDistrictTriggerData>) CR2WTypeManager.Create("array:gameuiDistrictTriggerData", "districts", cr2w, this);
-				}
-				return _districts;
-			}
-			set
-			{
-				if (_districts == value)
-				{
-					return;
-				}
-				_districts = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _districts);
+			set => SetProperty(ref _districts, value);
 		}
 
 		public gameuiWorldMapGameObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

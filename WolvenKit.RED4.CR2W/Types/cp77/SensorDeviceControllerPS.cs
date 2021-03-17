@@ -37,575 +37,200 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isRecognizableBySenses")] 
 		public CBool IsRecognizableBySenses
 		{
-			get
-			{
-				if (_isRecognizableBySenses == null)
-				{
-					_isRecognizableBySenses = (CBool) CR2WTypeManager.Create("Bool", "isRecognizableBySenses", cr2w, this);
-				}
-				return _isRecognizableBySenses;
-			}
-			set
-			{
-				if (_isRecognizableBySenses == value)
-				{
-					return;
-				}
-				_isRecognizableBySenses = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isRecognizableBySenses);
+			set => SetProperty(ref _isRecognizableBySenses, value);
 		}
 
 		[Ordinal(120)] 
 		[RED("targetingBehaviour")] 
 		public TargetingBehaviour TargetingBehaviour
 		{
-			get
-			{
-				if (_targetingBehaviour == null)
-				{
-					_targetingBehaviour = (TargetingBehaviour) CR2WTypeManager.Create("TargetingBehaviour", "targetingBehaviour", cr2w, this);
-				}
-				return _targetingBehaviour;
-			}
-			set
-			{
-				if (_targetingBehaviour == value)
-				{
-					return;
-				}
-				_targetingBehaviour = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetingBehaviour);
+			set => SetProperty(ref _targetingBehaviour, value);
 		}
 
 		[Ordinal(121)] 
 		[RED("detectionParameters")] 
 		public DetectionParameters DetectionParameters
 		{
-			get
-			{
-				if (_detectionParameters == null)
-				{
-					_detectionParameters = (DetectionParameters) CR2WTypeManager.Create("DetectionParameters", "detectionParameters", cr2w, this);
-				}
-				return _detectionParameters;
-			}
-			set
-			{
-				if (_detectionParameters == value)
-				{
-					return;
-				}
-				_detectionParameters = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _detectionParameters);
+			set => SetProperty(ref _detectionParameters, value);
 		}
 
 		[Ordinal(122)] 
 		[RED("lookAtPresetVert")] 
 		public TweakDBID LookAtPresetVert
 		{
-			get
-			{
-				if (_lookAtPresetVert == null)
-				{
-					_lookAtPresetVert = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "lookAtPresetVert", cr2w, this);
-				}
-				return _lookAtPresetVert;
-			}
-			set
-			{
-				if (_lookAtPresetVert == value)
-				{
-					return;
-				}
-				_lookAtPresetVert = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lookAtPresetVert);
+			set => SetProperty(ref _lookAtPresetVert, value);
 		}
 
 		[Ordinal(123)] 
 		[RED("lookAtPresetHor")] 
 		public TweakDBID LookAtPresetHor
 		{
-			get
-			{
-				if (_lookAtPresetHor == null)
-				{
-					_lookAtPresetHor = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "lookAtPresetHor", cr2w, this);
-				}
-				return _lookAtPresetHor;
-			}
-			set
-			{
-				if (_lookAtPresetHor == value)
-				{
-					return;
-				}
-				_lookAtPresetHor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lookAtPresetHor);
+			set => SetProperty(ref _lookAtPresetHor, value);
 		}
 
 		[Ordinal(124)] 
 		[RED("scanGameEffectRef")] 
 		public gameEffectRef ScanGameEffectRef
 		{
-			get
-			{
-				if (_scanGameEffectRef == null)
-				{
-					_scanGameEffectRef = (gameEffectRef) CR2WTypeManager.Create("gameEffectRef", "scanGameEffectRef", cr2w, this);
-				}
-				return _scanGameEffectRef;
-			}
-			set
-			{
-				if (_scanGameEffectRef == value)
-				{
-					return;
-				}
-				_scanGameEffectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scanGameEffectRef);
+			set => SetProperty(ref _scanGameEffectRef, value);
 		}
 
 		[Ordinal(125)] 
 		[RED("visionConeEffectRef")] 
 		public gameEffectRef VisionConeEffectRef
 		{
-			get
-			{
-				if (_visionConeEffectRef == null)
-				{
-					_visionConeEffectRef = (gameEffectRef) CR2WTypeManager.Create("gameEffectRef", "visionConeEffectRef", cr2w, this);
-				}
-				return _visionConeEffectRef;
-			}
-			set
-			{
-				if (_visionConeEffectRef == value)
-				{
-					return;
-				}
-				_visionConeEffectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visionConeEffectRef);
+			set => SetProperty(ref _visionConeEffectRef, value);
 		}
 
 		[Ordinal(126)] 
 		[RED("visionConeFriendlyEffectRef")] 
 		public gameEffectRef VisionConeFriendlyEffectRef
 		{
-			get
-			{
-				if (_visionConeFriendlyEffectRef == null)
-				{
-					_visionConeFriendlyEffectRef = (gameEffectRef) CR2WTypeManager.Create("gameEffectRef", "visionConeFriendlyEffectRef", cr2w, this);
-				}
-				return _visionConeFriendlyEffectRef;
-			}
-			set
-			{
-				if (_visionConeFriendlyEffectRef == value)
-				{
-					return;
-				}
-				_visionConeFriendlyEffectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visionConeFriendlyEffectRef);
+			set => SetProperty(ref _visionConeFriendlyEffectRef, value);
 		}
 
 		[Ordinal(127)] 
 		[RED("idleActiveRef")] 
 		public gameEffectRef IdleActiveRef
 		{
-			get
-			{
-				if (_idleActiveRef == null)
-				{
-					_idleActiveRef = (gameEffectRef) CR2WTypeManager.Create("gameEffectRef", "idleActiveRef", cr2w, this);
-				}
-				return _idleActiveRef;
-			}
-			set
-			{
-				if (_idleActiveRef == value)
-				{
-					return;
-				}
-				_idleActiveRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _idleActiveRef);
+			set => SetProperty(ref _idleActiveRef, value);
 		}
 
 		[Ordinal(128)] 
 		[RED("idleFriendlyRef")] 
 		public gameEffectRef IdleFriendlyRef
 		{
-			get
-			{
-				if (_idleFriendlyRef == null)
-				{
-					_idleFriendlyRef = (gameEffectRef) CR2WTypeManager.Create("gameEffectRef", "idleFriendlyRef", cr2w, this);
-				}
-				return _idleFriendlyRef;
-			}
-			set
-			{
-				if (_idleFriendlyRef == value)
-				{
-					return;
-				}
-				_idleFriendlyRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _idleFriendlyRef);
+			set => SetProperty(ref _idleFriendlyRef, value);
 		}
 
 		[Ordinal(129)] 
 		[RED("canTagEnemies")] 
 		public CBool CanTagEnemies
 		{
-			get
-			{
-				if (_canTagEnemies == null)
-				{
-					_canTagEnemies = (CBool) CR2WTypeManager.Create("Bool", "canTagEnemies", cr2w, this);
-				}
-				return _canTagEnemies;
-			}
-			set
-			{
-				if (_canTagEnemies == value)
-				{
-					return;
-				}
-				_canTagEnemies = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _canTagEnemies);
+			set => SetProperty(ref _canTagEnemies, value);
 		}
 
 		[Ordinal(130)] 
 		[RED("tagLockFromSystem")] 
 		public CBool TagLockFromSystem
 		{
-			get
-			{
-				if (_tagLockFromSystem == null)
-				{
-					_tagLockFromSystem = (CBool) CR2WTypeManager.Create("Bool", "tagLockFromSystem", cr2w, this);
-				}
-				return _tagLockFromSystem;
-			}
-			set
-			{
-				if (_tagLockFromSystem == value)
-				{
-					return;
-				}
-				_tagLockFromSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tagLockFromSystem);
+			set => SetProperty(ref _tagLockFromSystem, value);
 		}
 
 		[Ordinal(131)] 
 		[RED("netrunnerID")] 
 		public entEntityID NetrunnerID
 		{
-			get
-			{
-				if (_netrunnerID == null)
-				{
-					_netrunnerID = (entEntityID) CR2WTypeManager.Create("entEntityID", "netrunnerID", cr2w, this);
-				}
-				return _netrunnerID;
-			}
-			set
-			{
-				if (_netrunnerID == value)
-				{
-					return;
-				}
-				_netrunnerID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _netrunnerID);
+			set => SetProperty(ref _netrunnerID, value);
 		}
 
 		[Ordinal(132)] 
 		[RED("netrunnerProxyID")] 
 		public entEntityID NetrunnerProxyID
 		{
-			get
-			{
-				if (_netrunnerProxyID == null)
-				{
-					_netrunnerProxyID = (entEntityID) CR2WTypeManager.Create("entEntityID", "netrunnerProxyID", cr2w, this);
-				}
-				return _netrunnerProxyID;
-			}
-			set
-			{
-				if (_netrunnerProxyID == value)
-				{
-					return;
-				}
-				_netrunnerProxyID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _netrunnerProxyID);
+			set => SetProperty(ref _netrunnerProxyID, value);
 		}
 
 		[Ordinal(133)] 
 		[RED("netrunnerTargetID")] 
 		public entEntityID NetrunnerTargetID
 		{
-			get
-			{
-				if (_netrunnerTargetID == null)
-				{
-					_netrunnerTargetID = (entEntityID) CR2WTypeManager.Create("entEntityID", "netrunnerTargetID", cr2w, this);
-				}
-				return _netrunnerTargetID;
-			}
-			set
-			{
-				if (_netrunnerTargetID == value)
-				{
-					return;
-				}
-				_netrunnerTargetID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _netrunnerTargetID);
+			set => SetProperty(ref _netrunnerTargetID, value);
 		}
 
 		[Ordinal(134)] 
 		[RED("linkedStatusEffect")] 
 		public LinkedStatusEffect LinkedStatusEffect
 		{
-			get
-			{
-				if (_linkedStatusEffect == null)
-				{
-					_linkedStatusEffect = (LinkedStatusEffect) CR2WTypeManager.Create("LinkedStatusEffect", "linkedStatusEffect", cr2w, this);
-				}
-				return _linkedStatusEffect;
-			}
-			set
-			{
-				if (_linkedStatusEffect == value)
-				{
-					return;
-				}
-				_linkedStatusEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linkedStatusEffect);
+			set => SetProperty(ref _linkedStatusEffect, value);
 		}
 
 		[Ordinal(135)] 
 		[RED("questForcedTargetID")] 
 		public entEntityID QuestForcedTargetID
 		{
-			get
-			{
-				if (_questForcedTargetID == null)
-				{
-					_questForcedTargetID = (entEntityID) CR2WTypeManager.Create("entEntityID", "questForcedTargetID", cr2w, this);
-				}
-				return _questForcedTargetID;
-			}
-			set
-			{
-				if (_questForcedTargetID == value)
-				{
-					return;
-				}
-				_questForcedTargetID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questForcedTargetID);
+			set => SetProperty(ref _questForcedTargetID, value);
 		}
 
 		[Ordinal(136)] 
 		[RED("isInFollowMode")] 
 		public CBool IsInFollowMode
 		{
-			get
-			{
-				if (_isInFollowMode == null)
-				{
-					_isInFollowMode = (CBool) CR2WTypeManager.Create("Bool", "isInFollowMode", cr2w, this);
-				}
-				return _isInFollowMode;
-			}
-			set
-			{
-				if (_isInFollowMode == value)
-				{
-					return;
-				}
-				_isInFollowMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInFollowMode);
+			set => SetProperty(ref _isInFollowMode, value);
 		}
 
 		[Ordinal(137)] 
 		[RED("isAttitudeChanged")] 
 		public CBool IsAttitudeChanged
 		{
-			get
-			{
-				if (_isAttitudeChanged == null)
-				{
-					_isAttitudeChanged = (CBool) CR2WTypeManager.Create("Bool", "isAttitudeChanged", cr2w, this);
-				}
-				return _isAttitudeChanged;
-			}
-			set
-			{
-				if (_isAttitudeChanged == value)
-				{
-					return;
-				}
-				_isAttitudeChanged = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isAttitudeChanged);
+			set => SetProperty(ref _isAttitudeChanged, value);
 		}
 
 		[Ordinal(138)] 
 		[RED("isInTagKillMode")] 
 		public CBool IsInTagKillMode
 		{
-			get
-			{
-				if (_isInTagKillMode == null)
-				{
-					_isInTagKillMode = (CBool) CR2WTypeManager.Create("Bool", "isInTagKillMode", cr2w, this);
-				}
-				return _isInTagKillMode;
-			}
-			set
-			{
-				if (_isInTagKillMode == value)
-				{
-					return;
-				}
-				_isInTagKillMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInTagKillMode);
+			set => SetProperty(ref _isInTagKillMode, value);
 		}
 
 		[Ordinal(139)] 
 		[RED("isIdleForced")] 
 		public CBool IsIdleForced
 		{
-			get
-			{
-				if (_isIdleForced == null)
-				{
-					_isIdleForced = (CBool) CR2WTypeManager.Create("Bool", "isIdleForced", cr2w, this);
-				}
-				return _isIdleForced;
-			}
-			set
-			{
-				if (_isIdleForced == value)
-				{
-					return;
-				}
-				_isIdleForced = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isIdleForced);
+			set => SetProperty(ref _isIdleForced, value);
 		}
 
 		[Ordinal(140)] 
 		[RED("questTargetToSpot")] 
 		public entEntityID QuestTargetToSpot
 		{
-			get
-			{
-				if (_questTargetToSpot == null)
-				{
-					_questTargetToSpot = (entEntityID) CR2WTypeManager.Create("entEntityID", "questTargetToSpot", cr2w, this);
-				}
-				return _questTargetToSpot;
-			}
-			set
-			{
-				if (_questTargetToSpot == value)
-				{
-					return;
-				}
-				_questTargetToSpot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questTargetToSpot);
+			set => SetProperty(ref _questTargetToSpot, value);
 		}
 
 		[Ordinal(141)] 
 		[RED("questTargetSpotted")] 
 		public CBool QuestTargetSpotted
 		{
-			get
-			{
-				if (_questTargetSpotted == null)
-				{
-					_questTargetSpotted = (CBool) CR2WTypeManager.Create("Bool", "questTargetSpotted", cr2w, this);
-				}
-				return _questTargetSpotted;
-			}
-			set
-			{
-				if (_questTargetSpotted == value)
-				{
-					return;
-				}
-				_questTargetSpotted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questTargetSpotted);
+			set => SetProperty(ref _questTargetSpotted, value);
 		}
 
 		[Ordinal(142)] 
 		[RED("isAnyTargetIsLocked")] 
 		public CBool IsAnyTargetIsLocked
 		{
-			get
-			{
-				if (_isAnyTargetIsLocked == null)
-				{
-					_isAnyTargetIsLocked = (CBool) CR2WTypeManager.Create("Bool", "isAnyTargetIsLocked", cr2w, this);
-				}
-				return _isAnyTargetIsLocked;
-			}
-			set
-			{
-				if (_isAnyTargetIsLocked == value)
-				{
-					return;
-				}
-				_isAnyTargetIsLocked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isAnyTargetIsLocked);
+			set => SetProperty(ref _isAnyTargetIsLocked, value);
 		}
 
 		[Ordinal(143)] 
 		[RED("isPartOfPrevention")] 
 		public CBool IsPartOfPrevention
 		{
-			get
-			{
-				if (_isPartOfPrevention == null)
-				{
-					_isPartOfPrevention = (CBool) CR2WTypeManager.Create("Bool", "isPartOfPrevention", cr2w, this);
-				}
-				return _isPartOfPrevention;
-			}
-			set
-			{
-				if (_isPartOfPrevention == value)
-				{
-					return;
-				}
-				_isPartOfPrevention = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPartOfPrevention);
+			set => SetProperty(ref _isPartOfPrevention, value);
 		}
 
 		public SensorDeviceControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

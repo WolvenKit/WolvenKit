@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("customQuestNotificationData")] 
 		public questCustomQuestNotificationData CustomQuestNotificationData
 		{
-			get
-			{
-				if (_customQuestNotificationData == null)
-				{
-					_customQuestNotificationData = (questCustomQuestNotificationData) CR2WTypeManager.Create("questCustomQuestNotificationData", "customQuestNotificationData", cr2w, this);
-				}
-				return _customQuestNotificationData;
-			}
-			set
-			{
-				if (_customQuestNotificationData == value)
-				{
-					return;
-				}
-				_customQuestNotificationData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customQuestNotificationData);
+			set => SetProperty(ref _customQuestNotificationData, value);
 		}
 
 		public questShowCustomQuestNotification_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

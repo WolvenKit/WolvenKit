@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("eventDispatcher")] 
 		public wCHandle<worlduiIWidgetGameController> EventDispatcher
 		{
-			get
-			{
-				if (_eventDispatcher == null)
-				{
-					_eventDispatcher = (wCHandle<worlduiIWidgetGameController>) CR2WTypeManager.Create("whandle:worlduiIWidgetGameController", "eventDispatcher", cr2w, this);
-				}
-				return _eventDispatcher;
-			}
-			set
-			{
-				if (_eventDispatcher == value)
-				{
-					return;
-				}
-				_eventDispatcher = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventDispatcher);
+			set => SetProperty(ref _eventDispatcher, value);
 		}
 
 		public OpenWorldMapNotificationAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

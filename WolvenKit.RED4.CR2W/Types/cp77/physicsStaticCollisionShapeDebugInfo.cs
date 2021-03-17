@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sourceMeshPathHash")] 
 		public CUInt64 SourceMeshPathHash
 		{
-			get
-			{
-				if (_sourceMeshPathHash == null)
-				{
-					_sourceMeshPathHash = (CUInt64) CR2WTypeManager.Create("Uint64", "sourceMeshPathHash", cr2w, this);
-				}
-				return _sourceMeshPathHash;
-			}
-			set
-			{
-				if (_sourceMeshPathHash == value)
-				{
-					return;
-				}
-				_sourceMeshPathHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sourceMeshPathHash);
+			set => SetProperty(ref _sourceMeshPathHash, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("prefabPathHash")] 
 		public CUInt64 PrefabPathHash
 		{
-			get
-			{
-				if (_prefabPathHash == null)
-				{
-					_prefabPathHash = (CUInt64) CR2WTypeManager.Create("Uint64", "prefabPathHash", cr2w, this);
-				}
-				return _prefabPathHash;
-			}
-			set
-			{
-				if (_prefabPathHash == value)
-				{
-					return;
-				}
-				_prefabPathHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prefabPathHash);
+			set => SetProperty(ref _prefabPathHash, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("nodeNameHash")] 
 		public CUInt64 NodeNameHash
 		{
-			get
-			{
-				if (_nodeNameHash == null)
-				{
-					_nodeNameHash = (CUInt64) CR2WTypeManager.Create("Uint64", "nodeNameHash", cr2w, this);
-				}
-				return _nodeNameHash;
-			}
-			set
-			{
-				if (_nodeNameHash == value)
-				{
-					return;
-				}
-				_nodeNameHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeNameHash);
+			set => SetProperty(ref _nodeNameHash, value);
 		}
 
 		public physicsStaticCollisionShapeDebugInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

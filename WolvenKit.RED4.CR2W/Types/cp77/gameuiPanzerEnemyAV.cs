@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("speed")] 
 		public CFloat Speed
 		{
-			get
-			{
-				if (_speed == null)
-				{
-					_speed = (CFloat) CR2WTypeManager.Create("Float", "speed", cr2w, this);
-				}
-				return _speed;
-			}
-			set
-			{
-				if (_speed == value)
-				{
-					return;
-				}
-				_speed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speed);
+			set => SetProperty(ref _speed, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("shotsAmount")] 
 		public CUInt32 ShotsAmount
 		{
-			get
-			{
-				if (_shotsAmount == null)
-				{
-					_shotsAmount = (CUInt32) CR2WTypeManager.Create("Uint32", "shotsAmount", cr2w, this);
-				}
-				return _shotsAmount;
-			}
-			set
-			{
-				if (_shotsAmount == value)
-				{
-					return;
-				}
-				_shotsAmount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shotsAmount);
+			set => SetProperty(ref _shotsAmount, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("longShotInterval")] 
 		public CFloat LongShotInterval
 		{
-			get
-			{
-				if (_longShotInterval == null)
-				{
-					_longShotInterval = (CFloat) CR2WTypeManager.Create("Float", "longShotInterval", cr2w, this);
-				}
-				return _longShotInterval;
-			}
-			set
-			{
-				if (_longShotInterval == value)
-				{
-					return;
-				}
-				_longShotInterval = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _longShotInterval);
+			set => SetProperty(ref _longShotInterval, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("shortShotInterval")] 
 		public CFloat ShortShotInterval
 		{
-			get
-			{
-				if (_shortShotInterval == null)
-				{
-					_shortShotInterval = (CFloat) CR2WTypeManager.Create("Float", "shortShotInterval", cr2w, this);
-				}
-				return _shortShotInterval;
-			}
-			set
-			{
-				if (_shortShotInterval == value)
-				{
-					return;
-				}
-				_shortShotInterval = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shortShotInterval);
+			set => SetProperty(ref _shortShotInterval, value);
 		}
 
 		public gameuiPanzerEnemyAV(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

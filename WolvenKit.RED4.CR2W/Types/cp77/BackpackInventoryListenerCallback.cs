@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("backpackInstance")] 
 		public wCHandle<gameuiBackpackMainGameController> BackpackInstance
 		{
-			get
-			{
-				if (_backpackInstance == null)
-				{
-					_backpackInstance = (wCHandle<gameuiBackpackMainGameController>) CR2WTypeManager.Create("whandle:gameuiBackpackMainGameController", "backpackInstance", cr2w, this);
-				}
-				return _backpackInstance;
-			}
-			set
-			{
-				if (_backpackInstance == value)
-				{
-					return;
-				}
-				_backpackInstance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backpackInstance);
+			set => SetProperty(ref _backpackInstance, value);
 		}
 
 		public BackpackInventoryListenerCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

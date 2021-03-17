@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("override")] 
 		public CBool Override
 		{
-			get
-			{
-				if (_override == null)
-				{
-					_override = (CBool) CR2WTypeManager.Create("Bool", "override", cr2w, this);
-				}
-				return _override;
-			}
-			set
-			{
-				if (_override == value)
-				{
-					return;
-				}
-				_override = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _override);
+			set => SetProperty(ref _override, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("chromaticAberrationOffset")] 
 		public effectEffectParameterEvaluatorFloat ChromaticAberrationOffset
 		{
-			get
-			{
-				if (_chromaticAberrationOffset == null)
-				{
-					_chromaticAberrationOffset = (effectEffectParameterEvaluatorFloat) CR2WTypeManager.Create("effectEffectParameterEvaluatorFloat", "chromaticAberrationOffset", cr2w, this);
-				}
-				return _chromaticAberrationOffset;
-			}
-			set
-			{
-				if (_chromaticAberrationOffset == value)
-				{
-					return;
-				}
-				_chromaticAberrationOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chromaticAberrationOffset);
+			set => SetProperty(ref _chromaticAberrationOffset, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("chromaticAberrationExp")] 
 		public effectEffectParameterEvaluatorFloat ChromaticAberrationExp
 		{
-			get
-			{
-				if (_chromaticAberrationExp == null)
-				{
-					_chromaticAberrationExp = (effectEffectParameterEvaluatorFloat) CR2WTypeManager.Create("effectEffectParameterEvaluatorFloat", "chromaticAberrationExp", cr2w, this);
-				}
-				return _chromaticAberrationExp;
-			}
-			set
-			{
-				if (_chromaticAberrationExp == value)
-				{
-					return;
-				}
-				_chromaticAberrationExp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chromaticAberrationExp);
+			set => SetProperty(ref _chromaticAberrationExp, value);
 		}
 
 		public effectTrackItemChromaticAberration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

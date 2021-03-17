@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("forceLimit")] 
 		public CFloat ForceLimit
 		{
-			get
-			{
-				if (_forceLimit == null)
-				{
-					_forceLimit = (CFloat) CR2WTypeManager.Create("Float", "forceLimit", cr2w, this);
-				}
-				return _forceLimit;
-			}
-			set
-			{
-				if (_forceLimit == value)
-				{
-					return;
-				}
-				_forceLimit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceLimit);
+			set => SetProperty(ref _forceLimit, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isAcceleration")] 
 		public CBool IsAcceleration
 		{
-			get
-			{
-				if (_isAcceleration == null)
-				{
-					_isAcceleration = (CBool) CR2WTypeManager.Create("Bool", "isAcceleration", cr2w, this);
-				}
-				return _isAcceleration;
-			}
-			set
-			{
-				if (_isAcceleration == value)
-				{
-					return;
-				}
-				_isAcceleration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isAcceleration);
+			set => SetProperty(ref _isAcceleration, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("stiffness")] 
 		public CFloat Stiffness
 		{
-			get
-			{
-				if (_stiffness == null)
-				{
-					_stiffness = (CFloat) CR2WTypeManager.Create("Float", "stiffness", cr2w, this);
-				}
-				return _stiffness;
-			}
-			set
-			{
-				if (_stiffness == value)
-				{
-					return;
-				}
-				_stiffness = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stiffness);
+			set => SetProperty(ref _stiffness, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("damping")] 
 		public CFloat Damping
 		{
-			get
-			{
-				if (_damping == null)
-				{
-					_damping = (CFloat) CR2WTypeManager.Create("Float", "damping", cr2w, this);
-				}
-				return _damping;
-			}
-			set
-			{
-				if (_damping == value)
-				{
-					return;
-				}
-				_damping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damping);
+			set => SetProperty(ref _damping, value);
 		}
 
 		public physicsPhysicsJointDrive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

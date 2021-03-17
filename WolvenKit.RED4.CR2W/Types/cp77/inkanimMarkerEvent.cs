@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("markerName")] 
 		public CName MarkerName
 		{
-			get
-			{
-				if (_markerName == null)
-				{
-					_markerName = (CName) CR2WTypeManager.Create("CName", "markerName", cr2w, this);
-				}
-				return _markerName;
-			}
-			set
-			{
-				if (_markerName == value)
-				{
-					return;
-				}
-				_markerName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _markerName);
+			set => SetProperty(ref _markerName, value);
 		}
 
 		public inkanimMarkerEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

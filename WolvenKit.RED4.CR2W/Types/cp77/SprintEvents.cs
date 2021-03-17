@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("previousStimTimeStamp")] 
 		public CFloat PreviousStimTimeStamp
 		{
-			get
-			{
-				if (_previousStimTimeStamp == null)
-				{
-					_previousStimTimeStamp = (CFloat) CR2WTypeManager.Create("Float", "previousStimTimeStamp", cr2w, this);
-				}
-				return _previousStimTimeStamp;
-			}
-			set
-			{
-				if (_previousStimTimeStamp == value)
-				{
-					return;
-				}
-				_previousStimTimeStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousStimTimeStamp);
+			set => SetProperty(ref _previousStimTimeStamp, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("reloadModifier")] 
 		public CHandle<gameStatModifierData> ReloadModifier
 		{
-			get
-			{
-				if (_reloadModifier == null)
-				{
-					_reloadModifier = (CHandle<gameStatModifierData>) CR2WTypeManager.Create("handle:gameStatModifierData", "reloadModifier", cr2w, this);
-				}
-				return _reloadModifier;
-			}
-			set
-			{
-				if (_reloadModifier == value)
-				{
-					return;
-				}
-				_reloadModifier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reloadModifier);
+			set => SetProperty(ref _reloadModifier, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isInSecondSprint")] 
 		public CBool IsInSecondSprint
 		{
-			get
-			{
-				if (_isInSecondSprint == null)
-				{
-					_isInSecondSprint = (CBool) CR2WTypeManager.Create("Bool", "isInSecondSprint", cr2w, this);
-				}
-				return _isInSecondSprint;
-			}
-			set
-			{
-				if (_isInSecondSprint == value)
-				{
-					return;
-				}
-				_isInSecondSprint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInSecondSprint);
+			set => SetProperty(ref _isInSecondSprint, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("sprintModifier")] 
 		public CHandle<gameStatModifierData> SprintModifier
 		{
-			get
-			{
-				if (_sprintModifier == null)
-				{
-					_sprintModifier = (CHandle<gameStatModifierData>) CR2WTypeManager.Create("handle:gameStatModifierData", "sprintModifier", cr2w, this);
-				}
-				return _sprintModifier;
-			}
-			set
-			{
-				if (_sprintModifier == value)
-				{
-					return;
-				}
-				_sprintModifier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sprintModifier);
+			set => SetProperty(ref _sprintModifier, value);
 		}
 
 		public SprintEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

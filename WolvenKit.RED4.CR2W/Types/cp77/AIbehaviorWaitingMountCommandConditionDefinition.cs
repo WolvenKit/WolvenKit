@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("requestArgument")] 
 		public CHandle<AIArgumentMapping> RequestArgument
 		{
-			get
-			{
-				if (_requestArgument == null)
-				{
-					_requestArgument = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "requestArgument", cr2w, this);
-				}
-				return _requestArgument;
-			}
-			set
-			{
-				if (_requestArgument == value)
-				{
-					return;
-				}
-				_requestArgument = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requestArgument);
+			set => SetProperty(ref _requestArgument, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("callbackName")] 
 		public CName CallbackName
 		{
-			get
-			{
-				if (_callbackName == null)
-				{
-					_callbackName = (CName) CR2WTypeManager.Create("CName", "callbackName", cr2w, this);
-				}
-				return _callbackName;
-			}
-			set
-			{
-				if (_callbackName == value)
-				{
-					return;
-				}
-				_callbackName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callbackName);
+			set => SetProperty(ref _callbackName, value);
 		}
 
 		public AIbehaviorWaitingMountCommandConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

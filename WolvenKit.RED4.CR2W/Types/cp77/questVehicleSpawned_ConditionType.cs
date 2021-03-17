@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicleType")] 
 		public CEnum<questSpawnedVehicleType> VehicleType
 		{
-			get
-			{
-				if (_vehicleType == null)
-				{
-					_vehicleType = (CEnum<questSpawnedVehicleType>) CR2WTypeManager.Create("questSpawnedVehicleType", "vehicleType", cr2w, this);
-				}
-				return _vehicleType;
-			}
-			set
-			{
-				if (_vehicleType == value)
-				{
-					return;
-				}
-				_vehicleType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleType);
+			set => SetProperty(ref _vehicleType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get
-			{
-				if (_vehicleRef == null)
-				{
-					_vehicleRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "vehicleRef", cr2w, this);
-				}
-				return _vehicleRef;
-			}
-			set
-			{
-				if (_vehicleRef == value)
-				{
-					return;
-				}
-				_vehicleRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleRef);
+			set => SetProperty(ref _vehicleRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("count")] 
 		public CUInt32 Count
 		{
-			get
-			{
-				if (_count == null)
-				{
-					_count = (CUInt32) CR2WTypeManager.Create("Uint32", "count", cr2w, this);
-				}
-				return _count;
-			}
-			set
-			{
-				if (_count == value)
-				{
-					return;
-				}
-				_count = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _count);
+			set => SetProperty(ref _count, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("comparisonType")] 
 		public CEnum<EComparisonType> ComparisonType
 		{
-			get
-			{
-				if (_comparisonType == null)
-				{
-					_comparisonType = (CEnum<EComparisonType>) CR2WTypeManager.Create("EComparisonType", "comparisonType", cr2w, this);
-				}
-				return _comparisonType;
-			}
-			set
-			{
-				if (_comparisonType == value)
-				{
-					return;
-				}
-				_comparisonType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comparisonType);
+			set => SetProperty(ref _comparisonType, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("vehicleName")] 
 		public CString VehicleName
 		{
-			get
-			{
-				if (_vehicleName == null)
-				{
-					_vehicleName = (CString) CR2WTypeManager.Create("String", "vehicleName", cr2w, this);
-				}
-				return _vehicleName;
-			}
-			set
-			{
-				if (_vehicleName == value)
-				{
-					return;
-				}
-				_vehicleName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleName);
+			set => SetProperty(ref _vehicleName, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("vehicleGlobalName")] 
 		public CName VehicleGlobalName
 		{
-			get
-			{
-				if (_vehicleGlobalName == null)
-				{
-					_vehicleGlobalName = (CName) CR2WTypeManager.Create("CName", "vehicleGlobalName", cr2w, this);
-				}
-				return _vehicleGlobalName;
-			}
-			set
-			{
-				if (_vehicleGlobalName == value)
-				{
-					return;
-				}
-				_vehicleGlobalName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleGlobalName);
+			set => SetProperty(ref _vehicleGlobalName, value);
 		}
 
 		public questVehicleSpawned_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("reason")] 
 		public CName Reason
 		{
-			get
-			{
-				if (_reason == null)
-				{
-					_reason = (CName) CR2WTypeManager.Create("CName", "reason", cr2w, this);
-				}
-				return _reason;
-			}
-			set
-			{
-				if (_reason == value)
-				{
-					return;
-				}
-				_reason = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reason);
+			set => SetProperty(ref _reason, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timeDilation")] 
 		public CFloat TimeDilation
 		{
-			get
-			{
-				if (_timeDilation == null)
-				{
-					_timeDilation = (CFloat) CR2WTypeManager.Create("Float", "timeDilation", cr2w, this);
-				}
-				return _timeDilation;
-			}
-			set
-			{
-				if (_timeDilation == value)
-				{
-					return;
-				}
-				_timeDilation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeDilation);
+			set => SetProperty(ref _timeDilation, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("playerTimeDilation")] 
 		public CFloat PlayerTimeDilation
 		{
-			get
-			{
-				if (_playerTimeDilation == null)
-				{
-					_playerTimeDilation = (CFloat) CR2WTypeManager.Create("Float", "playerTimeDilation", cr2w, this);
-				}
-				return _playerTimeDilation;
-			}
-			set
-			{
-				if (_playerTimeDilation == value)
-				{
-					return;
-				}
-				_playerTimeDilation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerTimeDilation);
+			set => SetProperty(ref _playerTimeDilation, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("easeInCurve")] 
 		public CName EaseInCurve
 		{
-			get
-			{
-				if (_easeInCurve == null)
-				{
-					_easeInCurve = (CName) CR2WTypeManager.Create("CName", "easeInCurve", cr2w, this);
-				}
-				return _easeInCurve;
-			}
-			set
-			{
-				if (_easeInCurve == value)
-				{
-					return;
-				}
-				_easeInCurve = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _easeInCurve);
+			set => SetProperty(ref _easeInCurve, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("easeOutCurve")] 
 		public CName EaseOutCurve
 		{
-			get
-			{
-				if (_easeOutCurve == null)
-				{
-					_easeOutCurve = (CName) CR2WTypeManager.Create("CName", "easeOutCurve", cr2w, this);
-				}
-				return _easeOutCurve;
-			}
-			set
-			{
-				if (_easeOutCurve == value)
-				{
-					return;
-				}
-				_easeOutCurve = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _easeOutCurve);
+			set => SetProperty(ref _easeOutCurve, value);
 		}
 
 		public TimeDilationParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

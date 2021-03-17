@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ironsightAngleWithScope")] 
 		public CFloat IronsightAngleWithScope
 		{
-			get
-			{
-				if (_ironsightAngleWithScope == null)
-				{
-					_ironsightAngleWithScope = (CFloat) CR2WTypeManager.Create("Float", "ironsightAngleWithScope", cr2w, this);
-				}
-				return _ironsightAngleWithScope;
-			}
-			set
-			{
-				if (_ironsightAngleWithScope == value)
-				{
-					return;
-				}
-				_ironsightAngleWithScope = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ironsightAngleWithScope);
+			set => SetProperty(ref _ironsightAngleWithScope, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hasScope")] 
 		public CBool HasScope
 		{
-			get
-			{
-				if (_hasScope == null)
-				{
-					_hasScope = (CBool) CR2WTypeManager.Create("Bool", "hasScope", cr2w, this);
-				}
-				return _hasScope;
-			}
-			set
-			{
-				if (_hasScope == value)
-				{
-					return;
-				}
-				_hasScope = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasScope);
+			set => SetProperty(ref _hasScope, value);
 		}
 
 		public AnimFeature_WeaponScopeData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

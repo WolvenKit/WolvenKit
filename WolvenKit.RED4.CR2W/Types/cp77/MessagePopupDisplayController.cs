@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("title")] 
 		public inkTextWidgetReference Title
 		{
-			get
-			{
-				if (_title == null)
-				{
-					_title = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "title", cr2w, this);
-				}
-				return _title;
-			}
-			set
-			{
-				if (_title == value)
-				{
-					return;
-				}
-				_title = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _title);
+			set => SetProperty(ref _title, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("message")] 
 		public inkTextWidgetReference Message
 		{
-			get
-			{
-				if (_message == null)
-				{
-					_message = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "message", cr2w, this);
-				}
-				return _message;
-			}
-			set
-			{
-				if (_message == value)
-				{
-					return;
-				}
-				_message = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _message);
+			set => SetProperty(ref _message, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("image")] 
 		public inkImageWidgetReference Image
 		{
-			get
-			{
-				if (_image == null)
-				{
-					_image = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "image", cr2w, this);
-				}
-				return _image;
-			}
-			set
-			{
-				if (_image == value)
-				{
-					return;
-				}
-				_image = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _image);
+			set => SetProperty(ref _image, value);
 		}
 
 		public MessagePopupDisplayController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

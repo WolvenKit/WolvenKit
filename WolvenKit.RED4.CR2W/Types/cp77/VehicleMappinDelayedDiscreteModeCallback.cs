@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicleMappinComponent")] 
 		public wCHandle<VehicleMappinComponent> VehicleMappinComponent
 		{
-			get
-			{
-				if (_vehicleMappinComponent == null)
-				{
-					_vehicleMappinComponent = (wCHandle<VehicleMappinComponent>) CR2WTypeManager.Create("whandle:VehicleMappinComponent", "vehicleMappinComponent", cr2w, this);
-				}
-				return _vehicleMappinComponent;
-			}
-			set
-			{
-				if (_vehicleMappinComponent == value)
-				{
-					return;
-				}
-				_vehicleMappinComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleMappinComponent);
+			set => SetProperty(ref _vehicleMappinComponent, value);
 		}
 
 		public VehicleMappinDelayedDiscreteModeCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

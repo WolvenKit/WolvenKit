@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("chance")] 
 		public CFloat Chance
 		{
-			get
-			{
-				if (_chance == null)
-				{
-					_chance = (CFloat) CR2WTypeManager.Create("Float", "chance", cr2w, this);
-				}
-				return _chance;
-			}
-			set
-			{
-				if (_chance == value)
-				{
-					return;
-				}
-				_chance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chance);
+			set => SetProperty(ref _chance, value);
 		}
 
 		public AIbehaviorRandomConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

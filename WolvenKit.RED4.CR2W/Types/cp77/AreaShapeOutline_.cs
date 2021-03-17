@@ -5,7 +5,7 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class AreaShapeOutline : ISerializable
+	public class AreaShapeOutline_ : ISerializable
 	{
 		private CArray<Vector3> _points;
 		private CFloat _height;
@@ -14,14 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("points")] 
 		public CArray<Vector3> Points
 		{
-			get
-			{
-				if (_points == null)
-				{
-					_points = (CArray<Vector3>) CR2WTypeManager.Create("array:Vector3", "points", cr2w, this);
-				}
-				return _points;
-			}
+			get => _points ??= Create<CArray<Vector3>>();
 			set
 			{
 				if (_points == value)
@@ -29,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 					return;
 				}
 				_points = value;
-				PropertySet(this);
+				PropertySet();
 			}
 		}
 
@@ -37,14 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("height")] 
 		public CFloat Height
 		{
-			get
-			{
-				if (_height == null)
-				{
-					_height = (CFloat) CR2WTypeManager.Create("Float", "height", cr2w, this);
-				}
-				return _height;
-			}
+			get => _height ??= Create<CFloat>();
 			set
 			{
 				if (_height == value)
@@ -52,10 +38,10 @@ namespace WolvenKit.RED4.CR2W.Types
 					return;
 				}
 				_height = value;
-				PropertySet(this);
+				PropertySet();
 			}
 		}
 
-		public AreaShapeOutline(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AreaShapeOutline_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

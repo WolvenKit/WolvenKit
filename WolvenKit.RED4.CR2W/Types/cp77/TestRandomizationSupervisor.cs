@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("firstWasGenerated")] 
 		public CBool FirstWasGenerated
 		{
-			get
-			{
-				if (_firstWasGenerated == null)
-				{
-					_firstWasGenerated = (CBool) CR2WTypeManager.Create("Bool", "firstWasGenerated", cr2w, this);
-				}
-				return _firstWasGenerated;
-			}
-			set
-			{
-				if (_firstWasGenerated == value)
-				{
-					return;
-				}
-				_firstWasGenerated = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _firstWasGenerated);
+			set => SetProperty(ref _firstWasGenerated, value);
 		}
 
 		public TestRandomizationSupervisor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

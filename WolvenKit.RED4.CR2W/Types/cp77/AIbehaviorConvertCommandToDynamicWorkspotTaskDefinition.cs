@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("command")] 
 		public CHandle<AIArgumentMapping> Command
 		{
-			get
-			{
-				if (_command == null)
-				{
-					_command = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "command", cr2w, this);
-				}
-				return _command;
-			}
-			set
-			{
-				if (_command == value)
-				{
-					return;
-				}
-				_command = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _command);
+			set => SetProperty(ref _command, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("outWorkspotData")] 
 		public CHandle<AIArgumentMapping> OutWorkspotData
 		{
-			get
-			{
-				if (_outWorkspotData == null)
-				{
-					_outWorkspotData = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outWorkspotData", cr2w, this);
-				}
-				return _outWorkspotData;
-			}
-			set
-			{
-				if (_outWorkspotData == value)
-				{
-					return;
-				}
-				_outWorkspotData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outWorkspotData);
+			set => SetProperty(ref _outWorkspotData, value);
 		}
 
 		public AIbehaviorConvertCommandToDynamicWorkspotTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

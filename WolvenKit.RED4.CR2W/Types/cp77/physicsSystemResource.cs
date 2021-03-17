@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bodies")] 
 		public CArray<CHandle<physicsSystemBody>> Bodies
 		{
-			get
-			{
-				if (_bodies == null)
-				{
-					_bodies = (CArray<CHandle<physicsSystemBody>>) CR2WTypeManager.Create("array:handle:physicsSystemBody", "bodies", cr2w, this);
-				}
-				return _bodies;
-			}
-			set
-			{
-				if (_bodies == value)
-				{
-					return;
-				}
-				_bodies = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodies);
+			set => SetProperty(ref _bodies, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("joints")] 
 		public CArray<CHandle<physicsSystemJoint>> Joints
 		{
-			get
-			{
-				if (_joints == null)
-				{
-					_joints = (CArray<CHandle<physicsSystemJoint>>) CR2WTypeManager.Create("array:handle:physicsSystemJoint", "joints", cr2w, this);
-				}
-				return _joints;
-			}
-			set
-			{
-				if (_joints == value)
-				{
-					return;
-				}
-				_joints = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _joints);
+			set => SetProperty(ref _joints, value);
 		}
 
 		public physicsSystemResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

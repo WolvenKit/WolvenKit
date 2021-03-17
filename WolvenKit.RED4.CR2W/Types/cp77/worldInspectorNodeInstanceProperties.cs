@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("setupInfo")] 
 		public worldCompiledNodeInstanceSetupInfo SetupInfo
 		{
-			get
-			{
-				if (_setupInfo == null)
-				{
-					_setupInfo = (worldCompiledNodeInstanceSetupInfo) CR2WTypeManager.Create("worldCompiledNodeInstanceSetupInfo", "setupInfo", cr2w, this);
-				}
-				return _setupInfo;
-			}
-			set
-			{
-				if (_setupInfo == value)
-				{
-					return;
-				}
-				_setupInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setupInfo);
+			set => SetProperty(ref _setupInfo, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("meshNode")] 
 		public CHandle<worldMeshNode> MeshNode
 		{
-			get
-			{
-				if (_meshNode == null)
-				{
-					_meshNode = (CHandle<worldMeshNode>) CR2WTypeManager.Create("handle:worldMeshNode", "meshNode", cr2w, this);
-				}
-				return _meshNode;
-			}
-			set
-			{
-				if (_meshNode == value)
-				{
-					return;
-				}
-				_meshNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshNode);
+			set => SetProperty(ref _meshNode, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("instancedMeshNode")] 
 		public CHandle<worldInstancedMeshNode> InstancedMeshNode
 		{
-			get
-			{
-				if (_instancedMeshNode == null)
-				{
-					_instancedMeshNode = (CHandle<worldInstancedMeshNode>) CR2WTypeManager.Create("handle:worldInstancedMeshNode", "instancedMeshNode", cr2w, this);
-				}
-				return _instancedMeshNode;
-			}
-			set
-			{
-				if (_instancedMeshNode == value)
-				{
-					return;
-				}
-				_instancedMeshNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instancedMeshNode);
+			set => SetProperty(ref _instancedMeshNode, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("lastObserverDistanceToStreamingPoint")] 
 		public CFloat LastObserverDistanceToStreamingPoint
 		{
-			get
-			{
-				if (_lastObserverDistanceToStreamingPoint == null)
-				{
-					_lastObserverDistanceToStreamingPoint = (CFloat) CR2WTypeManager.Create("Float", "lastObserverDistanceToStreamingPoint", cr2w, this);
-				}
-				return _lastObserverDistanceToStreamingPoint;
-			}
-			set
-			{
-				if (_lastObserverDistanceToStreamingPoint == value)
-				{
-					return;
-				}
-				_lastObserverDistanceToStreamingPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastObserverDistanceToStreamingPoint);
+			set => SetProperty(ref _lastObserverDistanceToStreamingPoint, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("lastObserverDistanceToSecondaryReferencePoint")] 
 		public CFloat LastObserverDistanceToSecondaryReferencePoint
 		{
-			get
-			{
-				if (_lastObserverDistanceToSecondaryReferencePoint == null)
-				{
-					_lastObserverDistanceToSecondaryReferencePoint = (CFloat) CR2WTypeManager.Create("Float", "lastObserverDistanceToSecondaryReferencePoint", cr2w, this);
-				}
-				return _lastObserverDistanceToSecondaryReferencePoint;
-			}
-			set
-			{
-				if (_lastObserverDistanceToSecondaryReferencePoint == value)
-				{
-					return;
-				}
-				_lastObserverDistanceToSecondaryReferencePoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastObserverDistanceToSecondaryReferencePoint);
+			set => SetProperty(ref _lastObserverDistanceToSecondaryReferencePoint, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("renderProxyAddressForDebug")] 
 		public CUInt64 RenderProxyAddressForDebug
 		{
-			get
-			{
-				if (_renderProxyAddressForDebug == null)
-				{
-					_renderProxyAddressForDebug = (CUInt64) CR2WTypeManager.Create("Uint64", "renderProxyAddressForDebug", cr2w, this);
-				}
-				return _renderProxyAddressForDebug;
-			}
-			set
-			{
-				if (_renderProxyAddressForDebug == value)
-				{
-					return;
-				}
-				_renderProxyAddressForDebug = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _renderProxyAddressForDebug);
+			set => SetProperty(ref _renderProxyAddressForDebug, value);
 		}
 
 		public worldInspectorNodeInstanceProperties(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("folderID")] 
 		public CInt32 FolderID
 		{
-			get
-			{
-				if (_folderID == null)
-				{
-					_folderID = (CInt32) CR2WTypeManager.Create("Int32", "folderID", cr2w, this);
-				}
-				return _folderID;
-			}
-			set
-			{
-				if (_folderID == value)
-				{
-					return;
-				}
-				_folderID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _folderID);
+			set => SetProperty(ref _folderID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("documentID")] 
 		public CInt32 DocumentID
 		{
-			get
-			{
-				if (_documentID == null)
-				{
-					_documentID = (CInt32) CR2WTypeManager.Create("Int32", "documentID", cr2w, this);
-				}
-				return _documentID;
-			}
-			set
-			{
-				if (_documentID == value)
-				{
-					return;
-				}
-				_documentID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _documentID);
+			set => SetProperty(ref _documentID, value);
 		}
 
 		public SDocumentAdress(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

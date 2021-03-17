@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("onDetachEvent")] 
 		public CName OnDetachEvent
 		{
-			get
-			{
-				if (_onDetachEvent == null)
-				{
-					_onDetachEvent = (CName) CR2WTypeManager.Create("CName", "onDetachEvent", cr2w, this);
-				}
-				return _onDetachEvent;
-			}
-			set
-			{
-				if (_onDetachEvent == value)
-				{
-					return;
-				}
-				_onDetachEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onDetachEvent);
+			set => SetProperty(ref _onDetachEvent, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("onDetachAcousticsIsolationFactorReduction")] 
 		public CFloat OnDetachAcousticsIsolationFactorReduction
 		{
-			get
-			{
-				if (_onDetachAcousticsIsolationFactorReduction == null)
-				{
-					_onDetachAcousticsIsolationFactorReduction = (CFloat) CR2WTypeManager.Create("Float", "onDetachAcousticsIsolationFactorReduction", cr2w, this);
-				}
-				return _onDetachAcousticsIsolationFactorReduction;
-			}
-			set
-			{
-				if (_onDetachAcousticsIsolationFactorReduction == value)
-				{
-					return;
-				}
-				_onDetachAcousticsIsolationFactorReduction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onDetachAcousticsIsolationFactorReduction);
+			set => SetProperty(ref _onDetachAcousticsIsolationFactorReduction, value);
 		}
 
 		public audioVehiclePartSettingsMapItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

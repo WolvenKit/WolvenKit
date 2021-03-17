@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("setup")] 
 		public rRef<Multilayer_Setup> Setup
 		{
-			get
-			{
-				if (_setup == null)
-				{
-					_setup = (rRef<Multilayer_Setup>) CR2WTypeManager.Create("rRef:Multilayer_Setup", "setup", cr2w, this);
-				}
-				return _setup;
-			}
-			set
-			{
-				if (_setup == value)
-				{
-					return;
-				}
-				_setup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setup);
+			set => SetProperty(ref _setup, value);
 		}
 
 		public CMaterialParameterMultilayerSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

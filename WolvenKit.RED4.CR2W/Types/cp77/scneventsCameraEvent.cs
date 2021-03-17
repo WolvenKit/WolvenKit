@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cameraRef")] 
 		public NodeRef CameraRef
 		{
-			get
-			{
-				if (_cameraRef == null)
-				{
-					_cameraRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "cameraRef", cr2w, this);
-				}
-				return _cameraRef;
-			}
-			set
-			{
-				if (_cameraRef == value)
-				{
-					return;
-				}
-				_cameraRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameraRef);
+			set => SetProperty(ref _cameraRef, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isBlendIn")] 
 		public CBool IsBlendIn
 		{
-			get
-			{
-				if (_isBlendIn == null)
-				{
-					_isBlendIn = (CBool) CR2WTypeManager.Create("Bool", "isBlendIn", cr2w, this);
-				}
-				return _isBlendIn;
-			}
-			set
-			{
-				if (_isBlendIn == value)
-				{
-					return;
-				}
-				_isBlendIn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isBlendIn);
+			set => SetProperty(ref _isBlendIn, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("blendTime")] 
 		public CFloat BlendTime
 		{
-			get
-			{
-				if (_blendTime == null)
-				{
-					_blendTime = (CFloat) CR2WTypeManager.Create("Float", "blendTime", cr2w, this);
-				}
-				return _blendTime;
-			}
-			set
-			{
-				if (_blendTime == value)
-				{
-					return;
-				}
-				_blendTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendTime);
+			set => SetProperty(ref _blendTime, value);
 		}
 
 		public scneventsCameraEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

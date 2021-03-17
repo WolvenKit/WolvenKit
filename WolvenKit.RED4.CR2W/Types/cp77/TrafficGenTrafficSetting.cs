@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("meshImpact")] 
 		public CEnum<TrafficGenMeshImpact> MeshImpact
 		{
-			get
-			{
-				if (_meshImpact == null)
-				{
-					_meshImpact = (CEnum<TrafficGenMeshImpact>) CR2WTypeManager.Create("TrafficGenMeshImpact", "meshImpact", cr2w, this);
-				}
-				return _meshImpact;
-			}
-			set
-			{
-				if (_meshImpact == value)
-				{
-					return;
-				}
-				_meshImpact = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshImpact);
+			set => SetProperty(ref _meshImpact, value);
 		}
 
 		public TrafficGenTrafficSetting(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

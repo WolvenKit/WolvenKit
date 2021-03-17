@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weaponLoweringSpeedOverride")] 
 		public CFloat WeaponLoweringSpeedOverride
 		{
-			get
-			{
-				if (_weaponLoweringSpeedOverride == null)
-				{
-					_weaponLoweringSpeedOverride = (CFloat) CR2WTypeManager.Create("Float", "weaponLoweringSpeedOverride", cr2w, this);
-				}
-				return _weaponLoweringSpeedOverride;
-			}
-			set
-			{
-				if (_weaponLoweringSpeedOverride == value)
-				{
-					return;
-				}
-				_weaponLoweringSpeedOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponLoweringSpeedOverride);
+			set => SetProperty(ref _weaponLoweringSpeedOverride, value);
 		}
 
 		public SceneForceWeaponSafe(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

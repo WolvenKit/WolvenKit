@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("netrunnerID")] 
 		public entEntityID NetrunnerID
 		{
-			get
-			{
-				if (_netrunnerID == null)
-				{
-					_netrunnerID = (entEntityID) CR2WTypeManager.Create("entEntityID", "netrunnerID", cr2w, this);
-				}
-				return _netrunnerID;
-			}
-			set
-			{
-				if (_netrunnerID == value)
-				{
-					return;
-				}
-				_netrunnerID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _netrunnerID);
+			set => SetProperty(ref _netrunnerID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("targetID")] 
 		public entEntityID TargetID
 		{
-			get
-			{
-				if (_targetID == null)
-				{
-					_targetID = (entEntityID) CR2WTypeManager.Create("entEntityID", "targetID", cr2w, this);
-				}
-				return _targetID;
-			}
-			set
-			{
-				if (_targetID == value)
-				{
-					return;
-				}
-				_targetID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetID);
+			set => SetProperty(ref _targetID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("objectRecord")] 
 		public wCHandle<gamedataObjectAction_Record> ObjectRecord
 		{
-			get
-			{
-				if (_objectRecord == null)
-				{
-					_objectRecord = (wCHandle<gamedataObjectAction_Record>) CR2WTypeManager.Create("whandle:gamedataObjectAction_Record", "objectRecord", cr2w, this);
-				}
-				return _objectRecord;
-			}
-			set
-			{
-				if (_objectRecord == value)
-				{
-					return;
-				}
-				_objectRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRecord);
+			set => SetProperty(ref _objectRecord, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("showDirectionalIndicator")] 
 		public CBool ShowDirectionalIndicator
 		{
-			get
-			{
-				if (_showDirectionalIndicator == null)
-				{
-					_showDirectionalIndicator = (CBool) CR2WTypeManager.Create("Bool", "showDirectionalIndicator", cr2w, this);
-				}
-				return _showDirectionalIndicator;
-			}
-			set
-			{
-				if (_showDirectionalIndicator == value)
-				{
-					return;
-				}
-				_showDirectionalIndicator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showDirectionalIndicator);
+			set => SetProperty(ref _showDirectionalIndicator, value);
 		}
 
 		public HackPlayerEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

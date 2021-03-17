@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("FOV")] 
 		public CFloat FOV
 		{
-			get
-			{
-				if (_fOV == null)
-				{
-					_fOV = (CFloat) CR2WTypeManager.Create("Float", "FOV", cr2w, this);
-				}
-				return _fOV;
-			}
-			set
-			{
-				if (_fOV == value)
-				{
-					return;
-				}
-				_fOV = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fOV);
+			set => SetProperty(ref _fOV, value);
 		}
 
 		public questSetFOV_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("override")] 
 		public CBool Override
 		{
-			get
-			{
-				if (_override == null)
-				{
-					_override = (CBool) CR2WTypeManager.Create("Bool", "override", cr2w, this);
-				}
-				return _override;
-			}
-			set
-			{
-				if (_override == value)
-				{
-					return;
-				}
-				_override = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _override);
+			set => SetProperty(ref _override, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("intensity")] 
 		public effectEffectParameterEvaluatorFloat Intensity
 		{
-			get
-			{
-				if (_intensity == null)
-				{
-					_intensity = (effectEffectParameterEvaluatorFloat) CR2WTypeManager.Create("effectEffectParameterEvaluatorFloat", "intensity", cr2w, this);
-				}
-				return _intensity;
-			}
-			set
-			{
-				if (_intensity == value)
-				{
-					return;
-				}
-				_intensity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _intensity);
+			set => SetProperty(ref _intensity, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("useGlitch")] 
 		public CBool UseGlitch
 		{
-			get
-			{
-				if (_useGlitch == null)
-				{
-					_useGlitch = (CBool) CR2WTypeManager.Create("Bool", "useGlitch", cr2w, this);
-				}
-				return _useGlitch;
-			}
-			set
-			{
-				if (_useGlitch == value)
-				{
-					return;
-				}
-				_useGlitch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useGlitch);
+			set => SetProperty(ref _useGlitch, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("glitchColor")] 
 		public effectEffectParameterEvaluatorVector GlitchColor
 		{
-			get
-			{
-				if (_glitchColor == null)
-				{
-					_glitchColor = (effectEffectParameterEvaluatorVector) CR2WTypeManager.Create("effectEffectParameterEvaluatorVector", "glitchColor", cr2w, this);
-				}
-				return _glitchColor;
-			}
-			set
-			{
-				if (_glitchColor == value)
-				{
-					return;
-				}
-				_glitchColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _glitchColor);
+			set => SetProperty(ref _glitchColor, value);
 		}
 
 		public effectTrackItemDataMosh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

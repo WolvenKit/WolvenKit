@@ -38,598 +38,208 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("levelValue")] 
 		public inkTextWidgetReference LevelValue
 		{
-			get
-			{
-				if (_levelValue == null)
-				{
-					_levelValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "levelValue", cr2w, this);
-				}
-				return _levelValue;
-			}
-			set
-			{
-				if (_levelValue == value)
-				{
-					return;
-				}
-				_levelValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelValue);
+			set => SetProperty(ref _levelValue, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("streetCredLabel")] 
 		public inkTextWidgetReference StreetCredLabel
 		{
-			get
-			{
-				if (_streetCredLabel == null)
-				{
-					_streetCredLabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "streetCredLabel", cr2w, this);
-				}
-				return _streetCredLabel;
-			}
-			set
-			{
-				if (_streetCredLabel == value)
-				{
-					return;
-				}
-				_streetCredLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _streetCredLabel);
+			set => SetProperty(ref _streetCredLabel, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("currencyValue")] 
 		public inkTextWidgetReference CurrencyValue
 		{
-			get
-			{
-				if (_currencyValue == null)
-				{
-					_currencyValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "currencyValue", cr2w, this);
-				}
-				return _currencyValue;
-			}
-			set
-			{
-				if (_currencyValue == value)
-				{
-					return;
-				}
-				_currencyValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currencyValue);
+			set => SetProperty(ref _currencyValue, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("weightValue")] 
 		public inkTextWidgetReference WeightValue
 		{
-			get
-			{
-				if (_weightValue == null)
-				{
-					_weightValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "weightValue", cr2w, this);
-				}
-				return _weightValue;
-			}
-			set
-			{
-				if (_weightValue == value)
-				{
-					return;
-				}
-				_weightValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightValue);
+			set => SetProperty(ref _weightValue, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("subMenuLabel")] 
 		public inkTextWidgetReference SubMenuLabel
 		{
-			get
-			{
-				if (_subMenuLabel == null)
-				{
-					_subMenuLabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "subMenuLabel", cr2w, this);
-				}
-				return _subMenuLabel;
-			}
-			set
-			{
-				if (_subMenuLabel == value)
-				{
-					return;
-				}
-				_subMenuLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subMenuLabel);
+			set => SetProperty(ref _subMenuLabel, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("centralLine")] 
 		public inkWidgetReference CentralLine
 		{
-			get
-			{
-				if (_centralLine == null)
-				{
-					_centralLine = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "centralLine", cr2w, this);
-				}
-				return _centralLine;
-			}
-			set
-			{
-				if (_centralLine == value)
-				{
-					return;
-				}
-				_centralLine = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _centralLine);
+			set => SetProperty(ref _centralLine, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("levelBarProgress")] 
 		public inkWidgetReference LevelBarProgress
 		{
-			get
-			{
-				if (_levelBarProgress == null)
-				{
-					_levelBarProgress = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "levelBarProgress", cr2w, this);
-				}
-				return _levelBarProgress;
-			}
-			set
-			{
-				if (_levelBarProgress == value)
-				{
-					return;
-				}
-				_levelBarProgress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelBarProgress);
+			set => SetProperty(ref _levelBarProgress, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("levelBarSpacer")] 
 		public inkWidgetReference LevelBarSpacer
 		{
-			get
-			{
-				if (_levelBarSpacer == null)
-				{
-					_levelBarSpacer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "levelBarSpacer", cr2w, this);
-				}
-				return _levelBarSpacer;
-			}
-			set
-			{
-				if (_levelBarSpacer == value)
-				{
-					return;
-				}
-				_levelBarSpacer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelBarSpacer);
+			set => SetProperty(ref _levelBarSpacer, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("streetCredBarProgress")] 
 		public inkWidgetReference StreetCredBarProgress
 		{
-			get
-			{
-				if (_streetCredBarProgress == null)
-				{
-					_streetCredBarProgress = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "streetCredBarProgress", cr2w, this);
-				}
-				return _streetCredBarProgress;
-			}
-			set
-			{
-				if (_streetCredBarProgress == value)
-				{
-					return;
-				}
-				_streetCredBarProgress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _streetCredBarProgress);
+			set => SetProperty(ref _streetCredBarProgress, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("streetCredBarSpacer")] 
 		public inkWidgetReference StreetCredBarSpacer
 		{
-			get
-			{
-				if (_streetCredBarSpacer == null)
-				{
-					_streetCredBarSpacer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "streetCredBarSpacer", cr2w, this);
-				}
-				return _streetCredBarSpacer;
-			}
-			set
-			{
-				if (_streetCredBarSpacer == value)
-				{
-					return;
-				}
-				_streetCredBarSpacer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _streetCredBarSpacer);
+			set => SetProperty(ref _streetCredBarSpacer, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("menuselectorWidget")] 
 		public inkWidgetReference MenuselectorWidget
 		{
-			get
-			{
-				if (_menuselectorWidget == null)
-				{
-					_menuselectorWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "menuselectorWidget", cr2w, this);
-				}
-				return _menuselectorWidget;
-			}
-			set
-			{
-				if (_menuselectorWidget == value)
-				{
-					return;
-				}
-				_menuselectorWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuselectorWidget);
+			set => SetProperty(ref _menuselectorWidget, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("subMenuselectorWidget")] 
 		public inkWidgetReference SubMenuselectorWidget
 		{
-			get
-			{
-				if (_subMenuselectorWidget == null)
-				{
-					_subMenuselectorWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "subMenuselectorWidget", cr2w, this);
-				}
-				return _subMenuselectorWidget;
-			}
-			set
-			{
-				if (_subMenuselectorWidget == value)
-				{
-					return;
-				}
-				_subMenuselectorWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subMenuselectorWidget);
+			set => SetProperty(ref _subMenuselectorWidget, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("topPanel")] 
 		public inkWidgetReference TopPanel
 		{
-			get
-			{
-				if (_topPanel == null)
-				{
-					_topPanel = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "topPanel", cr2w, this);
-				}
-				return _topPanel;
-			}
-			set
-			{
-				if (_topPanel == value)
-				{
-					return;
-				}
-				_topPanel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _topPanel);
+			set => SetProperty(ref _topPanel, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("leftHolder")] 
 		public inkWidgetReference LeftHolder
 		{
-			get
-			{
-				if (_leftHolder == null)
-				{
-					_leftHolder = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "leftHolder", cr2w, this);
-				}
-				return _leftHolder;
-			}
-			set
-			{
-				if (_leftHolder == value)
-				{
-					return;
-				}
-				_leftHolder = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _leftHolder);
+			set => SetProperty(ref _leftHolder, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("rightHolder")] 
 		public inkWidgetReference RightHolder
 		{
-			get
-			{
-				if (_rightHolder == null)
-				{
-					_rightHolder = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "rightHolder", cr2w, this);
-				}
-				return _rightHolder;
-			}
-			set
-			{
-				if (_rightHolder == value)
-				{
-					return;
-				}
-				_rightHolder = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rightHolder);
+			set => SetProperty(ref _rightHolder, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("lineBarsContainer")] 
 		public inkCompoundWidgetReference LineBarsContainer
 		{
-			get
-			{
-				if (_lineBarsContainer == null)
-				{
-					_lineBarsContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "lineBarsContainer", cr2w, this);
-				}
-				return _lineBarsContainer;
-			}
-			set
-			{
-				if (_lineBarsContainer == value)
-				{
-					return;
-				}
-				_lineBarsContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lineBarsContainer);
+			set => SetProperty(ref _lineBarsContainer, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("lineWidget")] 
 		public inkCompoundWidgetReference LineWidget
 		{
-			get
-			{
-				if (_lineWidget == null)
-				{
-					_lineWidget = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "lineWidget", cr2w, this);
-				}
-				return _lineWidget;
-			}
-			set
-			{
-				if (_lineWidget == value)
-				{
-					return;
-				}
-				_lineWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lineWidget);
+			set => SetProperty(ref _lineWidget, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("menusList")] 
 		public CArray<MenuData> MenusList
 		{
-			get
-			{
-				if (_menusList == null)
-				{
-					_menusList = (CArray<MenuData>) CR2WTypeManager.Create("array:MenuData", "menusList", cr2w, this);
-				}
-				return _menusList;
-			}
-			set
-			{
-				if (_menusList == value)
-				{
-					return;
-				}
-				_menusList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menusList);
+			set => SetProperty(ref _menusList, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("menuSelectorCtrl")] 
 		public wCHandle<hubSelectorSingleCarouselController> MenuSelectorCtrl
 		{
-			get
-			{
-				if (_menuSelectorCtrl == null)
-				{
-					_menuSelectorCtrl = (wCHandle<hubSelectorSingleCarouselController>) CR2WTypeManager.Create("whandle:hubSelectorSingleCarouselController", "menuSelectorCtrl", cr2w, this);
-				}
-				return _menuSelectorCtrl;
-			}
-			set
-			{
-				if (_menuSelectorCtrl == value)
-				{
-					return;
-				}
-				_menuSelectorCtrl = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuSelectorCtrl);
+			set => SetProperty(ref _menuSelectorCtrl, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("subMenuActive")] 
 		public CBool SubMenuActive
 		{
-			get
-			{
-				if (_subMenuActive == null)
-				{
-					_subMenuActive = (CBool) CR2WTypeManager.Create("Bool", "subMenuActive", cr2w, this);
-				}
-				return _subMenuActive;
-			}
-			set
-			{
-				if (_subMenuActive == value)
-				{
-					return;
-				}
-				_subMenuActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subMenuActive);
+			set => SetProperty(ref _subMenuActive, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("previousLineBar")] 
 		public wCHandle<inkWidget> PreviousLineBar
 		{
-			get
-			{
-				if (_previousLineBar == null)
-				{
-					_previousLineBar = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "previousLineBar", cr2w, this);
-				}
-				return _previousLineBar;
-			}
-			set
-			{
-				if (_previousLineBar == value)
-				{
-					return;
-				}
-				_previousLineBar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousLineBar);
+			set => SetProperty(ref _previousLineBar, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("IsSetActive")] 
 		public CBool IsSetActive
 		{
-			get
-			{
-				if (_isSetActive == null)
-				{
-					_isSetActive = (CBool) CR2WTypeManager.Create("Bool", "IsSetActive", cr2w, this);
-				}
-				return _isSetActive;
-			}
-			set
-			{
-				if (_isSetActive == value)
-				{
-					return;
-				}
-				_isSetActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isSetActive);
+			set => SetProperty(ref _isSetActive, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("selectorMode")] 
 		public CBool SelectorMode
 		{
-			get
-			{
-				if (_selectorMode == null)
-				{
-					_selectorMode = (CBool) CR2WTypeManager.Create("Bool", "selectorMode", cr2w, this);
-				}
-				return _selectorMode;
-			}
-			set
-			{
-				if (_selectorMode == value)
-				{
-					return;
-				}
-				_selectorMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectorMode);
+			set => SetProperty(ref _selectorMode, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("menusData")] 
 		public CHandle<MenuDataBuilder> MenusData
 		{
-			get
-			{
-				if (_menusData == null)
-				{
-					_menusData = (CHandle<MenuDataBuilder>) CR2WTypeManager.Create("handle:MenuDataBuilder", "menusData", cr2w, this);
-				}
-				return _menusData;
-			}
-			set
-			{
-				if (_menusData == value)
-				{
-					return;
-				}
-				_menusData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menusData);
+			set => SetProperty(ref _menusData, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("curMenuData")] 
 		public MenuData CurMenuData
 		{
-			get
-			{
-				if (_curMenuData == null)
-				{
-					_curMenuData = (MenuData) CR2WTypeManager.Create("MenuData", "curMenuData", cr2w, this);
-				}
-				return _curMenuData;
-			}
-			set
-			{
-				if (_curMenuData == value)
-				{
-					return;
-				}
-				_curMenuData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _curMenuData);
+			set => SetProperty(ref _curMenuData, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("curSubMenuData")] 
 		public MenuData CurSubMenuData
 		{
-			get
-			{
-				if (_curSubMenuData == null)
-				{
-					_curSubMenuData = (MenuData) CR2WTypeManager.Create("MenuData", "curSubMenuData", cr2w, this);
-				}
-				return _curSubMenuData;
-			}
-			set
-			{
-				if (_curSubMenuData == value)
-				{
-					return;
-				}
-				_curSubMenuData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _curSubMenuData);
+			set => SetProperty(ref _curSubMenuData, value);
 		}
 
 		public SubMenuPanelLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

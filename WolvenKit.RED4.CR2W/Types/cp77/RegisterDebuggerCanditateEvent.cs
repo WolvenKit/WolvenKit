@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("device")] 
 		public wCHandle<Device> Device
 		{
-			get
-			{
-				if (_device == null)
-				{
-					_device = (wCHandle<Device>) CR2WTypeManager.Create("whandle:Device", "device", cr2w, this);
-				}
-				return _device;
-			}
-			set
-			{
-				if (_device == value)
-				{
-					return;
-				}
-				_device = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _device);
+			set => SetProperty(ref _device, value);
 		}
 
 		public RegisterDebuggerCanditateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

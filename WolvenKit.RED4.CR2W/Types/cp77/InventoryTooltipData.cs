@@ -58,1058 +58,368 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isEquipped")] 
 		public CBool IsEquipped
 		{
-			get
-			{
-				if (_isEquipped == null)
-				{
-					_isEquipped = (CBool) CR2WTypeManager.Create("Bool", "isEquipped", cr2w, this);
-				}
-				return _isEquipped;
-			}
-			set
-			{
-				if (_isEquipped == value)
-				{
-					return;
-				}
-				_isEquipped = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEquipped);
+			set => SetProperty(ref _isEquipped, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isLocked")] 
 		public CBool IsLocked
 		{
-			get
-			{
-				if (_isLocked == null)
-				{
-					_isLocked = (CBool) CR2WTypeManager.Create("Bool", "isLocked", cr2w, this);
-				}
-				return _isLocked;
-			}
-			set
-			{
-				if (_isLocked == value)
-				{
-					return;
-				}
-				_isLocked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isLocked);
+			set => SetProperty(ref _isLocked, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isVendorItem")] 
 		public CBool IsVendorItem
 		{
-			get
-			{
-				if (_isVendorItem == null)
-				{
-					_isVendorItem = (CBool) CR2WTypeManager.Create("Bool", "isVendorItem", cr2w, this);
-				}
-				return _isVendorItem;
-			}
-			set
-			{
-				if (_isVendorItem == value)
-				{
-					return;
-				}
-				_isVendorItem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isVendorItem);
+			set => SetProperty(ref _isVendorItem, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isCraftable")] 
 		public CBool IsCraftable
 		{
-			get
-			{
-				if (_isCraftable == null)
-				{
-					_isCraftable = (CBool) CR2WTypeManager.Create("Bool", "isCraftable", cr2w, this);
-				}
-				return _isCraftable;
-			}
-			set
-			{
-				if (_isCraftable == value)
-				{
-					return;
-				}
-				_isCraftable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isCraftable);
+			set => SetProperty(ref _isCraftable, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("qualityStateName")] 
 		public CName QualityStateName
 		{
-			get
-			{
-				if (_qualityStateName == null)
-				{
-					_qualityStateName = (CName) CR2WTypeManager.Create("CName", "qualityStateName", cr2w, this);
-				}
-				return _qualityStateName;
-			}
-			set
-			{
-				if (_qualityStateName == value)
-				{
-					return;
-				}
-				_qualityStateName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _qualityStateName);
+			set => SetProperty(ref _qualityStateName, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("description")] 
 		public CString Description
 		{
-			get
-			{
-				if (_description == null)
-				{
-					_description = (CString) CR2WTypeManager.Create("String", "description", cr2w, this);
-				}
-				return _description;
-			}
-			set
-			{
-				if (_description == value)
-				{
-					return;
-				}
-				_description = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _description);
+			set => SetProperty(ref _description, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("additionalDescription")] 
 		public CString AdditionalDescription
 		{
-			get
-			{
-				if (_additionalDescription == null)
-				{
-					_additionalDescription = (CString) CR2WTypeManager.Create("String", "additionalDescription", cr2w, this);
-				}
-				return _additionalDescription;
-			}
-			set
-			{
-				if (_additionalDescription == value)
-				{
-					return;
-				}
-				_additionalDescription = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additionalDescription);
+			set => SetProperty(ref _additionalDescription, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("category")] 
 		public CString Category
 		{
-			get
-			{
-				if (_category == null)
-				{
-					_category = (CString) CR2WTypeManager.Create("String", "category", cr2w, this);
-				}
-				return _category;
-			}
-			set
-			{
-				if (_category == value)
-				{
-					return;
-				}
-				_category = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _category);
+			set => SetProperty(ref _category, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("quality")] 
 		public CString Quality
 		{
-			get
-			{
-				if (_quality == null)
-				{
-					_quality = (CString) CR2WTypeManager.Create("String", "quality", cr2w, this);
-				}
-				return _quality;
-			}
-			set
-			{
-				if (_quality == value)
-				{
-					return;
-				}
-				_quality = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quality);
+			set => SetProperty(ref _quality, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("itemName")] 
 		public CString ItemName
 		{
-			get
-			{
-				if (_itemName == null)
-				{
-					_itemName = (CString) CR2WTypeManager.Create("String", "itemName", cr2w, this);
-				}
-				return _itemName;
-			}
-			set
-			{
-				if (_itemName == value)
-				{
-					return;
-				}
-				_itemName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemName);
+			set => SetProperty(ref _itemName, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("price")] 
 		public CFloat Price
 		{
-			get
-			{
-				if (_price == null)
-				{
-					_price = (CFloat) CR2WTypeManager.Create("Float", "price", cr2w, this);
-				}
-				return _price;
-			}
-			set
-			{
-				if (_price == value)
-				{
-					return;
-				}
-				_price = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _price);
+			set => SetProperty(ref _price, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("buyPrice")] 
 		public CFloat BuyPrice
 		{
-			get
-			{
-				if (_buyPrice == null)
-				{
-					_buyPrice = (CFloat) CR2WTypeManager.Create("Float", "buyPrice", cr2w, this);
-				}
-				return _buyPrice;
-			}
-			set
-			{
-				if (_buyPrice == value)
-				{
-					return;
-				}
-				_buyPrice = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buyPrice);
+			set => SetProperty(ref _buyPrice, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("unlockProgress")] 
 		public CFloat UnlockProgress
 		{
-			get
-			{
-				if (_unlockProgress == null)
-				{
-					_unlockProgress = (CFloat) CR2WTypeManager.Create("Float", "unlockProgress", cr2w, this);
-				}
-				return _unlockProgress;
-			}
-			set
-			{
-				if (_unlockProgress == value)
-				{
-					return;
-				}
-				_unlockProgress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unlockProgress);
+			set => SetProperty(ref _unlockProgress, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("primaryStats")] 
 		public CArray<InventoryTooltipData_StatData> PrimaryStats
 		{
-			get
-			{
-				if (_primaryStats == null)
-				{
-					_primaryStats = (CArray<InventoryTooltipData_StatData>) CR2WTypeManager.Create("array:InventoryTooltipData_StatData", "primaryStats", cr2w, this);
-				}
-				return _primaryStats;
-			}
-			set
-			{
-				if (_primaryStats == value)
-				{
-					return;
-				}
-				_primaryStats = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _primaryStats);
+			set => SetProperty(ref _primaryStats, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("comparedStats")] 
 		public CArray<InventoryTooltipData_StatData> ComparedStats
 		{
-			get
-			{
-				if (_comparedStats == null)
-				{
-					_comparedStats = (CArray<InventoryTooltipData_StatData>) CR2WTypeManager.Create("array:InventoryTooltipData_StatData", "comparedStats", cr2w, this);
-				}
-				return _comparedStats;
-			}
-			set
-			{
-				if (_comparedStats == value)
-				{
-					return;
-				}
-				_comparedStats = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comparedStats);
+			set => SetProperty(ref _comparedStats, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("additionalStats")] 
 		public CArray<InventoryTooltipData_StatData> AdditionalStats
 		{
-			get
-			{
-				if (_additionalStats == null)
-				{
-					_additionalStats = (CArray<InventoryTooltipData_StatData>) CR2WTypeManager.Create("array:InventoryTooltipData_StatData", "additionalStats", cr2w, this);
-				}
-				return _additionalStats;
-			}
-			set
-			{
-				if (_additionalStats == value)
-				{
-					return;
-				}
-				_additionalStats = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additionalStats);
+			set => SetProperty(ref _additionalStats, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("randomDamageTypes")] 
 		public CArray<InventoryTooltipData_StatData> RandomDamageTypes
 		{
-			get
-			{
-				if (_randomDamageTypes == null)
-				{
-					_randomDamageTypes = (CArray<InventoryTooltipData_StatData>) CR2WTypeManager.Create("array:InventoryTooltipData_StatData", "randomDamageTypes", cr2w, this);
-				}
-				return _randomDamageTypes;
-			}
-			set
-			{
-				if (_randomDamageTypes == value)
-				{
-					return;
-				}
-				_randomDamageTypes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _randomDamageTypes);
+			set => SetProperty(ref _randomDamageTypes, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("recipeAdditionalStats")] 
 		public CArray<InventoryTooltipData_StatData> RecipeAdditionalStats
 		{
-			get
-			{
-				if (_recipeAdditionalStats == null)
-				{
-					_recipeAdditionalStats = (CArray<InventoryTooltipData_StatData>) CR2WTypeManager.Create("array:InventoryTooltipData_StatData", "recipeAdditionalStats", cr2w, this);
-				}
-				return _recipeAdditionalStats;
-			}
-			set
-			{
-				if (_recipeAdditionalStats == value)
-				{
-					return;
-				}
-				_recipeAdditionalStats = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recipeAdditionalStats);
+			set => SetProperty(ref _recipeAdditionalStats, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("damageType")] 
 		public CEnum<gamedataDamageType> DamageType
 		{
-			get
-			{
-				if (_damageType == null)
-				{
-					_damageType = (CEnum<gamedataDamageType>) CR2WTypeManager.Create("gamedataDamageType", "damageType", cr2w, this);
-				}
-				return _damageType;
-			}
-			set
-			{
-				if (_damageType == value)
-				{
-					return;
-				}
-				_damageType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damageType);
+			set => SetProperty(ref _damageType, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("isBroken")] 
 		public CBool IsBroken
 		{
-			get
-			{
-				if (_isBroken == null)
-				{
-					_isBroken = (CBool) CR2WTypeManager.Create("Bool", "isBroken", cr2w, this);
-				}
-				return _isBroken;
-			}
-			set
-			{
-				if (_isBroken == value)
-				{
-					return;
-				}
-				_isBroken = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isBroken);
+			set => SetProperty(ref _isBroken, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("levelRequired")] 
 		public CInt32 LevelRequired
 		{
-			get
-			{
-				if (_levelRequired == null)
-				{
-					_levelRequired = (CInt32) CR2WTypeManager.Create("Int32", "levelRequired", cr2w, this);
-				}
-				return _levelRequired;
-			}
-			set
-			{
-				if (_levelRequired == value)
-				{
-					return;
-				}
-				_levelRequired = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelRequired);
+			set => SetProperty(ref _levelRequired, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("attachments")] 
 		public CArray<CName> Attachments
 		{
-			get
-			{
-				if (_attachments == null)
-				{
-					_attachments = (CArray<CName>) CR2WTypeManager.Create("array:CName", "attachments", cr2w, this);
-				}
-				return _attachments;
-			}
-			set
-			{
-				if (_attachments == value)
-				{
-					return;
-				}
-				_attachments = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attachments);
+			set => SetProperty(ref _attachments, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("specialAbilities")] 
 		public CArray<gameInventoryItemAbility> SpecialAbilities
 		{
-			get
-			{
-				if (_specialAbilities == null)
-				{
-					_specialAbilities = (CArray<gameInventoryItemAbility>) CR2WTypeManager.Create("array:gameInventoryItemAbility", "specialAbilities", cr2w, this);
-				}
-				return _specialAbilities;
-			}
-			set
-			{
-				if (_specialAbilities == value)
-				{
-					return;
-				}
-				_specialAbilities = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _specialAbilities);
+			set => SetProperty(ref _specialAbilities, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("equipArea")] 
 		public CEnum<gamedataEquipmentArea> EquipArea
 		{
-			get
-			{
-				if (_equipArea == null)
-				{
-					_equipArea = (CEnum<gamedataEquipmentArea>) CR2WTypeManager.Create("gamedataEquipmentArea", "equipArea", cr2w, this);
-				}
-				return _equipArea;
-			}
-			set
-			{
-				if (_equipArea == value)
-				{
-					return;
-				}
-				_equipArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipArea);
+			set => SetProperty(ref _equipArea, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("showCyclingDots")] 
 		public CBool ShowCyclingDots
 		{
-			get
-			{
-				if (_showCyclingDots == null)
-				{
-					_showCyclingDots = (CBool) CR2WTypeManager.Create("Bool", "showCyclingDots", cr2w, this);
-				}
-				return _showCyclingDots;
-			}
-			set
-			{
-				if (_showCyclingDots == value)
-				{
-					return;
-				}
-				_showCyclingDots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showCyclingDots);
+			set => SetProperty(ref _showCyclingDots, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("numberOfCyclingDots")] 
 		public CInt32 NumberOfCyclingDots
 		{
-			get
-			{
-				if (_numberOfCyclingDots == null)
-				{
-					_numberOfCyclingDots = (CInt32) CR2WTypeManager.Create("Int32", "numberOfCyclingDots", cr2w, this);
-				}
-				return _numberOfCyclingDots;
-			}
-			set
-			{
-				if (_numberOfCyclingDots == value)
-				{
-					return;
-				}
-				_numberOfCyclingDots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numberOfCyclingDots);
+			set => SetProperty(ref _numberOfCyclingDots, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("selectedCyclingDot")] 
 		public CInt32 SelectedCyclingDot
 		{
-			get
-			{
-				if (_selectedCyclingDot == null)
-				{
-					_selectedCyclingDot = (CInt32) CR2WTypeManager.Create("Int32", "selectedCyclingDot", cr2w, this);
-				}
-				return _selectedCyclingDot;
-			}
-			set
-			{
-				if (_selectedCyclingDot == value)
-				{
-					return;
-				}
-				_selectedCyclingDot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectedCyclingDot);
+			set => SetProperty(ref _selectedCyclingDot, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("comparedQuality")] 
 		public CEnum<gamedataQuality> ComparedQuality
 		{
-			get
-			{
-				if (_comparedQuality == null)
-				{
-					_comparedQuality = (CEnum<gamedataQuality>) CR2WTypeManager.Create("gamedataQuality", "comparedQuality", cr2w, this);
-				}
-				return _comparedQuality;
-			}
-			set
-			{
-				if (_comparedQuality == value)
-				{
-					return;
-				}
-				_comparedQuality = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comparedQuality);
+			set => SetProperty(ref _comparedQuality, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("showIcon")] 
 		public CBool ShowIcon
 		{
-			get
-			{
-				if (_showIcon == null)
-				{
-					_showIcon = (CBool) CR2WTypeManager.Create("Bool", "showIcon", cr2w, this);
-				}
-				return _showIcon;
-			}
-			set
-			{
-				if (_showIcon == value)
-				{
-					return;
-				}
-				_showIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showIcon);
+			set => SetProperty(ref _showIcon, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("randomizedStatQuantity")] 
 		public CInt32 RandomizedStatQuantity
 		{
-			get
-			{
-				if (_randomizedStatQuantity == null)
-				{
-					_randomizedStatQuantity = (CInt32) CR2WTypeManager.Create("Int32", "randomizedStatQuantity", cr2w, this);
-				}
-				return _randomizedStatQuantity;
-			}
-			set
-			{
-				if (_randomizedStatQuantity == value)
-				{
-					return;
-				}
-				_randomizedStatQuantity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _randomizedStatQuantity);
+			set => SetProperty(ref _randomizedStatQuantity, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("itemType")] 
 		public CEnum<gamedataItemType> ItemType
 		{
-			get
-			{
-				if (_itemType == null)
-				{
-					_itemType = (CEnum<gamedataItemType>) CR2WTypeManager.Create("gamedataItemType", "itemType", cr2w, this);
-				}
-				return _itemType;
-			}
-			set
-			{
-				if (_itemType == value)
-				{
-					return;
-				}
-				_itemType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemType);
+			set => SetProperty(ref _itemType, value);
 		}
 
 		[Ordinal(32)] 
 		[RED("HasPlayerSmartGunLink")] 
 		public CBool HasPlayerSmartGunLink
 		{
-			get
-			{
-				if (_hasPlayerSmartGunLink == null)
-				{
-					_hasPlayerSmartGunLink = (CBool) CR2WTypeManager.Create("Bool", "HasPlayerSmartGunLink", cr2w, this);
-				}
-				return _hasPlayerSmartGunLink;
-			}
-			set
-			{
-				if (_hasPlayerSmartGunLink == value)
-				{
-					return;
-				}
-				_hasPlayerSmartGunLink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasPlayerSmartGunLink);
+			set => SetProperty(ref _hasPlayerSmartGunLink, value);
 		}
 
 		[Ordinal(33)] 
 		[RED("PlayerLevel")] 
 		public CInt32 PlayerLevel
 		{
-			get
-			{
-				if (_playerLevel == null)
-				{
-					_playerLevel = (CInt32) CR2WTypeManager.Create("Int32", "PlayerLevel", cr2w, this);
-				}
-				return _playerLevel;
-			}
-			set
-			{
-				if (_playerLevel == value)
-				{
-					return;
-				}
-				_playerLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerLevel);
+			set => SetProperty(ref _playerLevel, value);
 		}
 
 		[Ordinal(34)] 
 		[RED("PlayerStrenght")] 
 		public CInt32 PlayerStrenght
 		{
-			get
-			{
-				if (_playerStrenght == null)
-				{
-					_playerStrenght = (CInt32) CR2WTypeManager.Create("Int32", "PlayerStrenght", cr2w, this);
-				}
-				return _playerStrenght;
-			}
-			set
-			{
-				if (_playerStrenght == value)
-				{
-					return;
-				}
-				_playerStrenght = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerStrenght);
+			set => SetProperty(ref _playerStrenght, value);
 		}
 
 		[Ordinal(35)] 
 		[RED("PlayerReflexes")] 
 		public CInt32 PlayerReflexes
 		{
-			get
-			{
-				if (_playerReflexes == null)
-				{
-					_playerReflexes = (CInt32) CR2WTypeManager.Create("Int32", "PlayerReflexes", cr2w, this);
-				}
-				return _playerReflexes;
-			}
-			set
-			{
-				if (_playerReflexes == value)
-				{
-					return;
-				}
-				_playerReflexes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerReflexes);
+			set => SetProperty(ref _playerReflexes, value);
 		}
 
 		[Ordinal(36)] 
 		[RED("PlayerStreetCred")] 
 		public CInt32 PlayerStreetCred
 		{
-			get
-			{
-				if (_playerStreetCred == null)
-				{
-					_playerStreetCred = (CInt32) CR2WTypeManager.Create("Int32", "PlayerStreetCred", cr2w, this);
-				}
-				return _playerStreetCred;
-			}
-			set
-			{
-				if (_playerStreetCred == value)
-				{
-					return;
-				}
-				_playerStreetCred = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerStreetCred);
+			set => SetProperty(ref _playerStreetCred, value);
 		}
 
 		[Ordinal(37)] 
 		[RED("itemAttachments")] 
 		public CArray<InventoryItemAttachments> ItemAttachments
 		{
-			get
-			{
-				if (_itemAttachments == null)
-				{
-					_itemAttachments = (CArray<InventoryItemAttachments>) CR2WTypeManager.Create("array:InventoryItemAttachments", "itemAttachments", cr2w, this);
-				}
-				return _itemAttachments;
-			}
-			set
-			{
-				if (_itemAttachments == value)
-				{
-					return;
-				}
-				_itemAttachments = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemAttachments);
+			set => SetProperty(ref _itemAttachments, value);
 		}
 
 		[Ordinal(38)] 
 		[RED("inventoryItemData")] 
 		public InventoryItemData InventoryItemData
 		{
-			get
-			{
-				if (_inventoryItemData == null)
-				{
-					_inventoryItemData = (InventoryItemData) CR2WTypeManager.Create("InventoryItemData", "inventoryItemData", cr2w, this);
-				}
-				return _inventoryItemData;
-			}
-			set
-			{
-				if (_inventoryItemData == value)
-				{
-					return;
-				}
-				_inventoryItemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryItemData);
+			set => SetProperty(ref _inventoryItemData, value);
 		}
 
 		[Ordinal(39)] 
 		[RED("overrideRarity")] 
 		public CBool OverrideRarity
 		{
-			get
-			{
-				if (_overrideRarity == null)
-				{
-					_overrideRarity = (CBool) CR2WTypeManager.Create("Bool", "overrideRarity", cr2w, this);
-				}
-				return _overrideRarity;
-			}
-			set
-			{
-				if (_overrideRarity == value)
-				{
-					return;
-				}
-				_overrideRarity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideRarity);
+			set => SetProperty(ref _overrideRarity, value);
 		}
 
 		[Ordinal(40)] 
 		[RED("quickhackData")] 
 		public InventoryTooltipData_QuickhackData QuickhackData
 		{
-			get
-			{
-				if (_quickhackData == null)
-				{
-					_quickhackData = (InventoryTooltipData_QuickhackData) CR2WTypeManager.Create("InventoryTooltipData_QuickhackData", "quickhackData", cr2w, this);
-				}
-				return _quickhackData;
-			}
-			set
-			{
-				if (_quickhackData == value)
-				{
-					return;
-				}
-				_quickhackData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quickhackData);
+			set => SetProperty(ref _quickhackData, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("grenadeData")] 
 		public CHandle<InventoryTooltiData_GrenadeData> GrenadeData
 		{
-			get
-			{
-				if (_grenadeData == null)
-				{
-					_grenadeData = (CHandle<InventoryTooltiData_GrenadeData>) CR2WTypeManager.Create("handle:InventoryTooltiData_GrenadeData", "grenadeData", cr2w, this);
-				}
-				return _grenadeData;
-			}
-			set
-			{
-				if (_grenadeData == value)
-				{
-					return;
-				}
-				_grenadeData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grenadeData);
+			set => SetProperty(ref _grenadeData, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("displayContext")] 
 		public CEnum<InventoryTooltipDisplayContext> DisplayContext
 		{
-			get
-			{
-				if (_displayContext == null)
-				{
-					_displayContext = (CEnum<InventoryTooltipDisplayContext>) CR2WTypeManager.Create("InventoryTooltipDisplayContext", "displayContext", cr2w, this);
-				}
-				return _displayContext;
-			}
-			set
-			{
-				if (_displayContext == value)
-				{
-					return;
-				}
-				_displayContext = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _displayContext);
+			set => SetProperty(ref _displayContext, value);
 		}
 
 		[Ordinal(43)] 
 		[RED("parentItemData")] 
 		public wCHandle<gameItemData> ParentItemData
 		{
-			get
-			{
-				if (_parentItemData == null)
-				{
-					_parentItemData = (wCHandle<gameItemData>) CR2WTypeManager.Create("whandle:gameItemData", "parentItemData", cr2w, this);
-				}
-				return _parentItemData;
-			}
-			set
-			{
-				if (_parentItemData == value)
-				{
-					return;
-				}
-				_parentItemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentItemData);
+			set => SetProperty(ref _parentItemData, value);
 		}
 
 		[Ordinal(44)] 
 		[RED("slotID")] 
 		public TweakDBID SlotID
 		{
-			get
-			{
-				if (_slotID == null)
-				{
-					_slotID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "slotID", cr2w, this);
-				}
-				return _slotID;
-			}
-			set
-			{
-				if (_slotID == value)
-				{
-					return;
-				}
-				_slotID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
 		}
 
 		[Ordinal(45)] 
 		[RED("DEBUG_iconErrorInfo")] 
 		public CHandle<DEBUG_IconErrorInfo> DEBUG_iconErrorInfo
 		{
-			get
-			{
-				if (_dEBUG_iconErrorInfo == null)
-				{
-					_dEBUG_iconErrorInfo = (CHandle<DEBUG_IconErrorInfo>) CR2WTypeManager.Create("handle:DEBUG_IconErrorInfo", "DEBUG_iconErrorInfo", cr2w, this);
-				}
-				return _dEBUG_iconErrorInfo;
-			}
-			set
-			{
-				if (_dEBUG_iconErrorInfo == value)
-				{
-					return;
-				}
-				_dEBUG_iconErrorInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dEBUG_iconErrorInfo);
+			set => SetProperty(ref _dEBUG_iconErrorInfo, value);
 		}
 
 		public InventoryTooltipData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

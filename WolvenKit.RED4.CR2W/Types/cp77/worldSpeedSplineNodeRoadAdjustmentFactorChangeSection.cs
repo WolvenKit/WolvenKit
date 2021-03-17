@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("pos")] 
 		public CFloat Pos
 		{
-			get
-			{
-				if (_pos == null)
-				{
-					_pos = (CFloat) CR2WTypeManager.Create("Float", "pos", cr2w, this);
-				}
-				return _pos;
-			}
-			set
-			{
-				if (_pos == value)
-				{
-					return;
-				}
-				_pos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pos);
+			set => SetProperty(ref _pos, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("targetFactor")] 
 		public CFloat TargetFactor
 		{
-			get
-			{
-				if (_targetFactor == null)
-				{
-					_targetFactor = (CFloat) CR2WTypeManager.Create("Float", "targetFactor", cr2w, this);
-				}
-				return _targetFactor;
-			}
-			set
-			{
-				if (_targetFactor == value)
-				{
-					return;
-				}
-				_targetFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetFactor);
+			set => SetProperty(ref _targetFactor, value);
 		}
 
 		public worldSpeedSplineNodeRoadAdjustmentFactorChangeSection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

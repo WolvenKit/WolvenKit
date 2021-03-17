@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("setName")] 
 		public CString SetName
 		{
-			get
-			{
-				if (_setName == null)
-				{
-					_setName = (CString) CR2WTypeManager.Create("String", "setName", cr2w, this);
-				}
-				return _setName;
-			}
-			set
-			{
-				if (_setName == value)
-				{
-					return;
-				}
-				_setName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setName);
+			set => SetProperty(ref _setName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("setType")] 
 		public CEnum<gameEquipmentSetType> SetType
 		{
-			get
-			{
-				if (_setType == null)
-				{
-					_setType = (CEnum<gameEquipmentSetType>) CR2WTypeManager.Create("gameEquipmentSetType", "setType", cr2w, this);
-				}
-				return _setType;
-			}
-			set
-			{
-				if (_setType == value)
-				{
-					return;
-				}
-				_setType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setType);
+			set => SetProperty(ref _setType, value);
 		}
 
 		public SaveEquipmentSetRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

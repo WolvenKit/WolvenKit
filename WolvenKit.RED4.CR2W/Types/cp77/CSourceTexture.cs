@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("width")] 
 		public CUInt32 Width
 		{
-			get
-			{
-				if (_width == null)
-				{
-					_width = (CUInt32) CR2WTypeManager.Create("Uint32", "width", cr2w, this);
-				}
-				return _width;
-			}
-			set
-			{
-				if (_width == value)
-				{
-					return;
-				}
-				_width = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _width);
+			set => SetProperty(ref _width, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("height")] 
 		public CUInt32 Height
 		{
-			get
-			{
-				if (_height == null)
-				{
-					_height = (CUInt32) CR2WTypeManager.Create("Uint32", "height", cr2w, this);
-				}
-				return _height;
-			}
-			set
-			{
-				if (_height == value)
-				{
-					return;
-				}
-				_height = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _height);
+			set => SetProperty(ref _height, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("depth")] 
 		public CUInt32 Depth
 		{
-			get
-			{
-				if (_depth == null)
-				{
-					_depth = (CUInt32) CR2WTypeManager.Create("Uint32", "depth", cr2w, this);
-				}
-				return _depth;
-			}
-			set
-			{
-				if (_depth == value)
-				{
-					return;
-				}
-				_depth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _depth);
+			set => SetProperty(ref _depth, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("pitch")] 
 		public CUInt32 Pitch
 		{
-			get
-			{
-				if (_pitch == null)
-				{
-					_pitch = (CUInt32) CR2WTypeManager.Create("Uint32", "pitch", cr2w, this);
-				}
-				return _pitch;
-			}
-			set
-			{
-				if (_pitch == value)
-				{
-					return;
-				}
-				_pitch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pitch);
+			set => SetProperty(ref _pitch, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("format")] 
 		public CEnum<ETextureRawFormat> Format
 		{
-			get
-			{
-				if (_format == null)
-				{
-					_format = (CEnum<ETextureRawFormat>) CR2WTypeManager.Create("ETextureRawFormat", "format", cr2w, this);
-				}
-				return _format;
-			}
-			set
-			{
-				if (_format == value)
-				{
-					return;
-				}
-				_format = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _format);
+			set => SetProperty(ref _format, value);
 		}
 
 		public CSourceTexture(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

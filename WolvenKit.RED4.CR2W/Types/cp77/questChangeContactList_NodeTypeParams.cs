@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("contact")] 
 		public CHandle<gameJournalPath> Contact
 		{
-			get
-			{
-				if (_contact == null)
-				{
-					_contact = (CHandle<gameJournalPath>) CR2WTypeManager.Create("handle:gameJournalPath", "contact", cr2w, this);
-				}
-				return _contact;
-			}
-			set
-			{
-				if (_contact == value)
-				{
-					return;
-				}
-				_contact = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contact);
+			set => SetProperty(ref _contact, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("addContact")] 
 		public CBool AddContact
 		{
-			get
-			{
-				if (_addContact == null)
-				{
-					_addContact = (CBool) CR2WTypeManager.Create("Bool", "addContact", cr2w, this);
-				}
-				return _addContact;
-			}
-			set
-			{
-				if (_addContact == value)
-				{
-					return;
-				}
-				_addContact = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addContact);
+			set => SetProperty(ref _addContact, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("sendNotification")] 
 		public CBool SendNotification
 		{
-			get
-			{
-				if (_sendNotification == null)
-				{
-					_sendNotification = (CBool) CR2WTypeManager.Create("Bool", "sendNotification", cr2w, this);
-				}
-				return _sendNotification;
-			}
-			set
-			{
-				if (_sendNotification == value)
-				{
-					return;
-				}
-				_sendNotification = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sendNotification);
+			set => SetProperty(ref _sendNotification, value);
 		}
 
 		public questChangeContactList_NodeTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

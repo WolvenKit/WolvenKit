@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("effectsApplied")] 
 		public CBool EffectsApplied
 		{
-			get
-			{
-				if (_effectsApplied == null)
-				{
-					_effectsApplied = (CBool) CR2WTypeManager.Create("Bool", "effectsApplied", cr2w, this);
-				}
-				return _effectsApplied;
-			}
-			set
-			{
-				if (_effectsApplied == value)
-				{
-					return;
-				}
-				_effectsApplied = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectsApplied);
+			set => SetProperty(ref _effectsApplied, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("modelRemoved")] 
 		public CBool ModelRemoved
 		{
-			get
-			{
-				if (_modelRemoved == null)
-				{
-					_modelRemoved = (CBool) CR2WTypeManager.Create("Bool", "modelRemoved", cr2w, this);
-				}
-				return _modelRemoved;
-			}
-			set
-			{
-				if (_modelRemoved == value)
-				{
-					return;
-				}
-				_modelRemoved = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _modelRemoved);
+			set => SetProperty(ref _modelRemoved, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("activeConsumable")] 
 		public gameItemID ActiveConsumable
 		{
-			get
-			{
-				if (_activeConsumable == null)
-				{
-					_activeConsumable = (gameItemID) CR2WTypeManager.Create("gameItemID", "activeConsumable", cr2w, this);
-				}
-				return _activeConsumable;
-			}
-			set
-			{
-				if (_activeConsumable == value)
-				{
-					return;
-				}
-				_activeConsumable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeConsumable);
+			set => SetProperty(ref _activeConsumable, value);
 		}
 
 		public ConsumableUseEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

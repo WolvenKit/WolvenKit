@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("transitionCondition")] 
 		public CHandle<gamestateMachineFunctor> TransitionCondition
 		{
-			get
-			{
-				if (_transitionCondition == null)
-				{
-					_transitionCondition = (CHandle<gamestateMachineFunctor>) CR2WTypeManager.Create("handle:gamestateMachineFunctor", "transitionCondition", cr2w, this);
-				}
-				return _transitionCondition;
-			}
-			set
-			{
-				if (_transitionCondition == value)
-				{
-					return;
-				}
-				_transitionCondition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transitionCondition);
+			set => SetProperty(ref _transitionCondition, value);
 		}
 
 		public gamestateMachineTransition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

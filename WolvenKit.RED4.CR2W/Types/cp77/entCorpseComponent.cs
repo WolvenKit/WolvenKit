@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
-			get
-			{
-				if (_filterData == null)
-				{
-					_filterData = (CHandle<physicsFilterData>) CR2WTypeManager.Create("handle:physicsFilterData", "filterData", cr2w, this);
-				}
-				return _filterData;
-			}
-			set
-			{
-				if (_filterData == value)
-				{
-					return;
-				}
-				_filterData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filterData);
+			set => SetProperty(ref _filterData, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("material")] 
 		public CName Material
 		{
-			get
-			{
-				if (_material == null)
-				{
-					_material = (CName) CR2WTypeManager.Create("CName", "material", cr2w, this);
-				}
-				return _material;
-			}
-			set
-			{
-				if (_material == value)
-				{
-					return;
-				}
-				_material = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _material);
+			set => SetProperty(ref _material, value);
 		}
 
 		public entCorpseComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

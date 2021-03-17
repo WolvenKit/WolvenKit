@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetTransform")] 
 		public animTransformIndex TargetTransform
 		{
-			get
-			{
-				if (_targetTransform == null)
-				{
-					_targetTransform = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "targetTransform", cr2w, this);
-				}
-				return _targetTransform;
-			}
-			set
-			{
-				if (_targetTransform == value)
-				{
-					return;
-				}
-				_targetTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetTransform);
+			set => SetProperty(ref _targetTransform, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("upTransform")] 
 		public animTransformIndex UpTransform
 		{
-			get
-			{
-				if (_upTransform == null)
-				{
-					_upTransform = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "upTransform", cr2w, this);
-				}
-				return _upTransform;
-			}
-			set
-			{
-				if (_upTransform == value)
-				{
-					return;
-				}
-				_upTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _upTransform);
+			set => SetProperty(ref _upTransform, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("transformIndex")] 
 		public animTransformIndex TransformIndex
 		{
-			get
-			{
-				if (_transformIndex == null)
-				{
-					_transformIndex = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "transformIndex", cr2w, this);
-				}
-				return _transformIndex;
-			}
-			set
-			{
-				if (_transformIndex == value)
-				{
-					return;
-				}
-				_transformIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transformIndex);
+			set => SetProperty(ref _transformIndex, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("forwardAxisLS")] 
 		public Vector3 ForwardAxisLS
 		{
-			get
-			{
-				if (_forwardAxisLS == null)
-				{
-					_forwardAxisLS = (Vector3) CR2WTypeManager.Create("Vector3", "forwardAxisLS", cr2w, this);
-				}
-				return _forwardAxisLS;
-			}
-			set
-			{
-				if (_forwardAxisLS == value)
-				{
-					return;
-				}
-				_forwardAxisLS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forwardAxisLS);
+			set => SetProperty(ref _forwardAxisLS, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("upAxisLS")] 
 		public Vector3 UpAxisLS
 		{
-			get
-			{
-				if (_upAxisLS == null)
-				{
-					_upAxisLS = (Vector3) CR2WTypeManager.Create("Vector3", "upAxisLS", cr2w, this);
-				}
-				return _upAxisLS;
-			}
-			set
-			{
-				if (_upAxisLS == value)
-				{
-					return;
-				}
-				_upAxisLS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _upAxisLS);
+			set => SetProperty(ref _upAxisLS, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("weightMode")] 
 		public CEnum<animConstraintWeightMode> WeightMode
 		{
-			get
-			{
-				if (_weightMode == null)
-				{
-					_weightMode = (CEnum<animConstraintWeightMode>) CR2WTypeManager.Create("animConstraintWeightMode", "weightMode", cr2w, this);
-				}
-				return _weightMode;
-			}
-			set
-			{
-				if (_weightMode == value)
-				{
-					return;
-				}
-				_weightMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightMode);
+			set => SetProperty(ref _weightMode, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get
-			{
-				if (_weight == null)
-				{
-					_weight = (CFloat) CR2WTypeManager.Create("Float", "weight", cr2w, this);
-				}
-				return _weight;
-			}
-			set
-			{
-				if (_weight == value)
-				{
-					return;
-				}
-				_weight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weight);
+			set => SetProperty(ref _weight, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("weightFloatTrack")] 
 		public animNamedTrackIndex WeightFloatTrack
 		{
-			get
-			{
-				if (_weightFloatTrack == null)
-				{
-					_weightFloatTrack = (animNamedTrackIndex) CR2WTypeManager.Create("animNamedTrackIndex", "weightFloatTrack", cr2w, this);
-				}
-				return _weightFloatTrack;
-			}
-			set
-			{
-				if (_weightFloatTrack == value)
-				{
-					return;
-				}
-				_weightFloatTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightFloatTrack);
+			set => SetProperty(ref _weightFloatTrack, value);
 		}
 
 		public animAnimNode_AimConstraint_ObjectUp(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entity")] 
 		public wCHandle<ScriptedPuppet> Entity
 		{
-			get
-			{
-				if (_entity == null)
-				{
-					_entity = (wCHandle<ScriptedPuppet>) CR2WTypeManager.Create("whandle:ScriptedPuppet", "entity", cr2w, this);
-				}
-				return _entity;
-			}
-			set
-			{
-				if (_entity == value)
-				{
-					return;
-				}
-				_entity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entity);
+			set => SetProperty(ref _entity, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hits")] 
 		public CInt32 Hits
 		{
-			get
-			{
-				if (_hits == null)
-				{
-					_hits = (CInt32) CR2WTypeManager.Create("Int32", "hits", cr2w, this);
-				}
-				return _hits;
-			}
-			set
-			{
-				if (_hits == value)
-				{
-					return;
-				}
-				_hits = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hits);
+			set => SetProperty(ref _hits, value);
 		}
 
 		public CuttingGrenadePotentialTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

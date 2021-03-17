@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("holdDirection")] 
 		public CEnum<EDPadSlot> HoldDirection
 		{
-			get
-			{
-				if (_holdDirection == null)
-				{
-					_holdDirection = (CEnum<EDPadSlot>) CR2WTypeManager.Create("EDPadSlot", "holdDirection", cr2w, this);
-				}
-				return _holdDirection;
-			}
-			set
-			{
-				if (_holdDirection == value)
-				{
-					return;
-				}
-				_holdDirection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _holdDirection);
+			set => SetProperty(ref _holdDirection, value);
 		}
 
 		public QuickSlotsHoldEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

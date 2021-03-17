@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("visibilityFlag")] 
 		public CEnum<inkFinalConfigurationVisibility> VisibilityFlag
 		{
-			get
-			{
-				if (_visibilityFlag == null)
-				{
-					_visibilityFlag = (CEnum<inkFinalConfigurationVisibility>) CR2WTypeManager.Create("inkFinalConfigurationVisibility", "visibilityFlag", cr2w, this);
-				}
-				return _visibilityFlag;
-			}
-			set
-			{
-				if (_visibilityFlag == value)
-				{
-					return;
-				}
-				_visibilityFlag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visibilityFlag);
+			set => SetProperty(ref _visibilityFlag, value);
 		}
 
 		public inkFinalConfigurationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

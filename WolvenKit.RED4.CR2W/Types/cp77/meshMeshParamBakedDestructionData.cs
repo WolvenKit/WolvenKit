@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("regionData")] 
 		public CArray<meshRegionData> RegionData
 		{
-			get
-			{
-				if (_regionData == null)
-				{
-					_regionData = (CArray<meshRegionData>) CR2WTypeManager.Create("array:meshRegionData", "regionData", cr2w, this);
-				}
-				return _regionData;
-			}
-			set
-			{
-				if (_regionData == value)
-				{
-					return;
-				}
-				_regionData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _regionData);
+			set => SetProperty(ref _regionData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("indices")] 
 		public CArray<DataBuffer> Indices
 		{
-			get
-			{
-				if (_indices == null)
-				{
-					_indices = (CArray<DataBuffer>) CR2WTypeManager.Create("array:DataBuffer", "indices", cr2w, this);
-				}
-				return _indices;
-			}
-			set
-			{
-				if (_indices == value)
-				{
-					return;
-				}
-				_indices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _indices);
+			set => SetProperty(ref _indices, value);
 		}
 
 		public meshMeshParamBakedDestructionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

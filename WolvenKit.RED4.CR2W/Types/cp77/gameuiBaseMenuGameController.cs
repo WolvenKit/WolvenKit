@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("puppetSceneInfos")] 
 		public CArray<gameuiBaseMenuGameControllerPuppetSceneInfo> PuppetSceneInfos
 		{
-			get
-			{
-				if (_puppetSceneInfos == null)
-				{
-					_puppetSceneInfos = (CArray<gameuiBaseMenuGameControllerPuppetSceneInfo>) CR2WTypeManager.Create("array:gameuiBaseMenuGameControllerPuppetSceneInfo", "puppetSceneInfos", cr2w, this);
-				}
-				return _puppetSceneInfos;
-			}
-			set
-			{
-				if (_puppetSceneInfos == value)
-				{
-					return;
-				}
-				_puppetSceneInfos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppetSceneInfos);
+			set => SetProperty(ref _puppetSceneInfos, value);
 		}
 
 		public gameuiBaseMenuGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

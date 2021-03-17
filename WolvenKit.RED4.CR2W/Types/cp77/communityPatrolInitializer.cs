@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("patrolRole")] 
 		public CHandle<AIPatrolRole> PatrolRole
 		{
-			get
-			{
-				if (_patrolRole == null)
-				{
-					_patrolRole = (CHandle<AIPatrolRole>) CR2WTypeManager.Create("handle:AIPatrolRole", "patrolRole", cr2w, this);
-				}
-				return _patrolRole;
-			}
-			set
-			{
-				if (_patrolRole == value)
-				{
-					return;
-				}
-				_patrolRole = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _patrolRole);
+			set => SetProperty(ref _patrolRole, value);
 		}
 
 		public communityPatrolInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

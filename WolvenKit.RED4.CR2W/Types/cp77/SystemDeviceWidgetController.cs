@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slavesConnectedCount")] 
 		public inkTextWidgetReference SlavesConnectedCount
 		{
-			get
-			{
-				if (_slavesConnectedCount == null)
-				{
-					_slavesConnectedCount = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "slavesConnectedCount", cr2w, this);
-				}
-				return _slavesConnectedCount;
-			}
-			set
-			{
-				if (_slavesConnectedCount == value)
-				{
-					return;
-				}
-				_slavesConnectedCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slavesConnectedCount);
+			set => SetProperty(ref _slavesConnectedCount, value);
 		}
 
 		public SystemDeviceWidgetController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("requestSource")] 
 		public entEntityID RequestSource
 		{
-			get
-			{
-				if (_requestSource == null)
-				{
-					_requestSource = (entEntityID) CR2WTypeManager.Create("entEntityID", "requestSource", cr2w, this);
-				}
-				return _requestSource;
-			}
-			set
-			{
-				if (_requestSource == value)
-				{
-					return;
-				}
-				_requestSource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requestSource);
+			set => SetProperty(ref _requestSource, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("originalEvent")] 
 		public CHandle<ToggleTakeOverControl> OriginalEvent
 		{
-			get
-			{
-				if (_originalEvent == null)
-				{
-					_originalEvent = (CHandle<ToggleTakeOverControl>) CR2WTypeManager.Create("handle:ToggleTakeOverControl", "originalEvent", cr2w, this);
-				}
-				return _originalEvent;
-			}
-			set
-			{
-				if (_originalEvent == value)
-				{
-					return;
-				}
-				_originalEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _originalEvent);
+			set => SetProperty(ref _originalEvent, value);
 		}
 
 		public RequestTakeControl(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

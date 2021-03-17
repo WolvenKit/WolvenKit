@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("suppressHeadAnimation")] 
 		public CFloat SuppressHeadAnimation
 		{
-			get
-			{
-				if (_suppressHeadAnimation == null)
-				{
-					_suppressHeadAnimation = (CFloat) CR2WTypeManager.Create("Float", "suppressHeadAnimation", cr2w, this);
-				}
-				return _suppressHeadAnimation;
-			}
-			set
-			{
-				if (_suppressHeadAnimation == value)
-				{
-					return;
-				}
-				_suppressHeadAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _suppressHeadAnimation);
+			set => SetProperty(ref _suppressHeadAnimation, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("headMobility")] 
 		public CFloat HeadMobility
 		{
-			get
-			{
-				if (_headMobility == null)
-				{
-					_headMobility = (CFloat) CR2WTypeManager.Create("Float", "headMobility", cr2w, this);
-				}
-				return _headMobility;
-			}
-			set
-			{
-				if (_headMobility == value)
-				{
-					return;
-				}
-				_headMobility = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _headMobility);
+			set => SetProperty(ref _headMobility, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("softLimitAngle")] 
 		public CFloat SoftLimitAngle
 		{
-			get
-			{
-				if (_softLimitAngle == null)
-				{
-					_softLimitAngle = (CFloat) CR2WTypeManager.Create("Float", "softLimitAngle", cr2w, this);
-				}
-				return _softLimitAngle;
-			}
-			set
-			{
-				if (_softLimitAngle == value)
-				{
-					return;
-				}
-				_softLimitAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _softLimitAngle);
+			set => SetProperty(ref _softLimitAngle, value);
 		}
 
 		public animLookAtPreset_EyesHead(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

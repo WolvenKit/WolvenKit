@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("unlockedPrograms")] 
 		public CArray<ProgramData> UnlockedPrograms
 		{
-			get
-			{
-				if (_unlockedPrograms == null)
-				{
-					_unlockedPrograms = (CArray<ProgramData>) CR2WTypeManager.Create("array:ProgramData", "unlockedPrograms", cr2w, this);
-				}
-				return _unlockedPrograms;
-			}
-			set
-			{
-				if (_unlockedPrograms == value)
-				{
-					return;
-				}
-				_unlockedPrograms = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unlockedPrograms);
+			set => SetProperty(ref _unlockedPrograms, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("outcome")] 
 		public CEnum<OutcomeMessage> Outcome
 		{
-			get
-			{
-				if (_outcome == null)
-				{
-					_outcome = (CEnum<OutcomeMessage>) CR2WTypeManager.Create("OutcomeMessage", "outcome", cr2w, this);
-				}
-				return _outcome;
-			}
-			set
-			{
-				if (_outcome == value)
-				{
-					return;
-				}
-				_outcome = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outcome);
+			set => SetProperty(ref _outcome, value);
 		}
 
 		public EndScreenData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

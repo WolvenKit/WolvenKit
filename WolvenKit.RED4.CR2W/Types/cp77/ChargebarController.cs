@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("foreground")] 
 		public inkWidgetReference Foreground
 		{
-			get
-			{
-				if (_foreground == null)
-				{
-					_foreground = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "foreground", cr2w, this);
-				}
-				return _foreground;
-			}
-			set
-			{
-				if (_foreground == value)
-				{
-					return;
-				}
-				_foreground = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _foreground);
+			set => SetProperty(ref _foreground, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("midground")] 
 		public inkWidgetReference Midground
 		{
-			get
-			{
-				if (_midground == null)
-				{
-					_midground = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "midground", cr2w, this);
-				}
-				return _midground;
-			}
-			set
-			{
-				if (_midground == value)
-				{
-					return;
-				}
-				_midground = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _midground);
+			set => SetProperty(ref _midground, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("background")] 
 		public inkWidgetReference Background
 		{
-			get
-			{
-				if (_background == null)
-				{
-					_background = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "background", cr2w, this);
-				}
-				return _background;
-			}
-			set
-			{
-				if (_background == value)
-				{
-					return;
-				}
-				_background = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _background);
+			set => SetProperty(ref _background, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("maxChargeAnimationName")] 
 		public CName MaxChargeAnimationName
 		{
-			get
-			{
-				if (_maxChargeAnimationName == null)
-				{
-					_maxChargeAnimationName = (CName) CR2WTypeManager.Create("CName", "maxChargeAnimationName", cr2w, this);
-				}
-				return _maxChargeAnimationName;
-			}
-			set
-			{
-				if (_maxChargeAnimationName == value)
-				{
-					return;
-				}
-				_maxChargeAnimationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxChargeAnimationName);
+			set => SetProperty(ref _maxChargeAnimationName, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("animationMaxCharge")] 
 		public CHandle<inkanimProxy> AnimationMaxCharge
 		{
-			get
-			{
-				if (_animationMaxCharge == null)
-				{
-					_animationMaxCharge = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animationMaxCharge", cr2w, this);
-				}
-				return _animationMaxCharge;
-			}
-			set
-			{
-				if (_animationMaxCharge == value)
-				{
-					return;
-				}
-				_animationMaxCharge = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationMaxCharge);
+			set => SetProperty(ref _animationMaxCharge, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("statsSystem")] 
 		public CHandle<gameStatsSystem> StatsSystem
 		{
-			get
-			{
-				if (_statsSystem == null)
-				{
-					_statsSystem = (CHandle<gameStatsSystem>) CR2WTypeManager.Create("handle:gameStatsSystem", "statsSystem", cr2w, this);
-				}
-				return _statsSystem;
-			}
-			set
-			{
-				if (_statsSystem == value)
-				{
-					return;
-				}
-				_statsSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statsSystem);
+			set => SetProperty(ref _statsSystem, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("canFullyCharge")] 
 		public CBool CanFullyCharge
 		{
-			get
-			{
-				if (_canFullyCharge == null)
-				{
-					_canFullyCharge = (CBool) CR2WTypeManager.Create("Bool", "canFullyCharge", cr2w, this);
-				}
-				return _canFullyCharge;
-			}
-			set
-			{
-				if (_canFullyCharge == value)
-				{
-					return;
-				}
-				_canFullyCharge = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _canFullyCharge);
+			set => SetProperty(ref _canFullyCharge, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("canOvercharge")] 
 		public CBool CanOvercharge
 		{
-			get
-			{
-				if (_canOvercharge == null)
-				{
-					_canOvercharge = (CBool) CR2WTypeManager.Create("Bool", "canOvercharge", cr2w, this);
-				}
-				return _canOvercharge;
-			}
-			set
-			{
-				if (_canOvercharge == value)
-				{
-					return;
-				}
-				_canOvercharge = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _canOvercharge);
+			set => SetProperty(ref _canOvercharge, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("listenerFullCharge")] 
 		public CHandle<ChargebarStatsListener> ListenerFullCharge
 		{
-			get
-			{
-				if (_listenerFullCharge == null)
-				{
-					_listenerFullCharge = (CHandle<ChargebarStatsListener>) CR2WTypeManager.Create("handle:ChargebarStatsListener", "listenerFullCharge", cr2w, this);
-				}
-				return _listenerFullCharge;
-			}
-			set
-			{
-				if (_listenerFullCharge == value)
-				{
-					return;
-				}
-				_listenerFullCharge = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _listenerFullCharge);
+			set => SetProperty(ref _listenerFullCharge, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("listenerOvercharge")] 
 		public CHandle<ChargebarStatsListener> ListenerOvercharge
 		{
-			get
-			{
-				if (_listenerOvercharge == null)
-				{
-					_listenerOvercharge = (CHandle<ChargebarStatsListener>) CR2WTypeManager.Create("handle:ChargebarStatsListener", "listenerOvercharge", cr2w, this);
-				}
-				return _listenerOvercharge;
-			}
-			set
-			{
-				if (_listenerOvercharge == value)
-				{
-					return;
-				}
-				_listenerOvercharge = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _listenerOvercharge);
+			set => SetProperty(ref _listenerOvercharge, value);
 		}
 
 		public ChargebarController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("primaryKey")] 
 		public CUInt64 PrimaryKey
 		{
-			get
-			{
-				if (_primaryKey == null)
-				{
-					_primaryKey = (CUInt64) CR2WTypeManager.Create("Uint64", "primaryKey", cr2w, this);
-				}
-				return _primaryKey;
-			}
-			set
-			{
-				if (_primaryKey == value)
-				{
-					return;
-				}
-				_primaryKey = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _primaryKey);
+			set => SetProperty(ref _primaryKey, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("secondaryKey")] 
 		public CString SecondaryKey
 		{
-			get
-			{
-				if (_secondaryKey == null)
-				{
-					_secondaryKey = (CString) CR2WTypeManager.Create("String", "secondaryKey", cr2w, this);
-				}
-				return _secondaryKey;
-			}
-			set
-			{
-				if (_secondaryKey == value)
-				{
-					return;
-				}
-				_secondaryKey = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _secondaryKey);
+			set => SetProperty(ref _secondaryKey, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("femaleVariant")] 
 		public CString FemaleVariant
 		{
-			get
-			{
-				if (_femaleVariant == null)
-				{
-					_femaleVariant = (CString) CR2WTypeManager.Create("String", "femaleVariant", cr2w, this);
-				}
-				return _femaleVariant;
-			}
-			set
-			{
-				if (_femaleVariant == value)
-				{
-					return;
-				}
-				_femaleVariant = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _femaleVariant);
+			set => SetProperty(ref _femaleVariant, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("maleVariant")] 
 		public CString MaleVariant
 		{
-			get
-			{
-				if (_maleVariant == null)
-				{
-					_maleVariant = (CString) CR2WTypeManager.Create("String", "maleVariant", cr2w, this);
-				}
-				return _maleVariant;
-			}
-			set
-			{
-				if (_maleVariant == value)
-				{
-					return;
-				}
-				_maleVariant = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maleVariant);
+			set => SetProperty(ref _maleVariant, value);
 		}
 
 		public localizationPersistenceOnScreenEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

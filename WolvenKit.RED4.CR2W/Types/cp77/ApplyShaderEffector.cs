@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("overrideMaterialName")] 
 		public CName OverrideMaterialName
 		{
-			get
-			{
-				if (_overrideMaterialName == null)
-				{
-					_overrideMaterialName = (CName) CR2WTypeManager.Create("CName", "overrideMaterialName", cr2w, this);
-				}
-				return _overrideMaterialName;
-			}
-			set
-			{
-				if (_overrideMaterialName == value)
-				{
-					return;
-				}
-				_overrideMaterialName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideMaterialName);
+			set => SetProperty(ref _overrideMaterialName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("overrideMaterialTag")] 
 		public CName OverrideMaterialTag
 		{
-			get
-			{
-				if (_overrideMaterialTag == null)
-				{
-					_overrideMaterialTag = (CName) CR2WTypeManager.Create("CName", "overrideMaterialTag", cr2w, this);
-				}
-				return _overrideMaterialTag;
-			}
-			set
-			{
-				if (_overrideMaterialTag == value)
-				{
-					return;
-				}
-				_overrideMaterialTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideMaterialTag);
+			set => SetProperty(ref _overrideMaterialTag, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("applyToOwner")] 
 		public CBool ApplyToOwner
 		{
-			get
-			{
-				if (_applyToOwner == null)
-				{
-					_applyToOwner = (CBool) CR2WTypeManager.Create("Bool", "applyToOwner", cr2w, this);
-				}
-				return _applyToOwner;
-			}
-			set
-			{
-				if (_applyToOwner == value)
-				{
-					return;
-				}
-				_applyToOwner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _applyToOwner);
+			set => SetProperty(ref _applyToOwner, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("applyToWeapon")] 
 		public CBool ApplyToWeapon
 		{
-			get
-			{
-				if (_applyToWeapon == null)
-				{
-					_applyToWeapon = (CBool) CR2WTypeManager.Create("Bool", "applyToWeapon", cr2w, this);
-				}
-				return _applyToWeapon;
-			}
-			set
-			{
-				if (_applyToWeapon == value)
-				{
-					return;
-				}
-				_applyToWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _applyToWeapon);
+			set => SetProperty(ref _applyToWeapon, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ownerWeapons")] 
 		public CArray<wCHandle<gameItemObject>> OwnerWeapons
 		{
-			get
-			{
-				if (_ownerWeapons == null)
-				{
-					_ownerWeapons = (CArray<wCHandle<gameItemObject>>) CR2WTypeManager.Create("array:whandle:gameItemObject", "ownerWeapons", cr2w, this);
-				}
-				return _ownerWeapons;
-			}
-			set
-			{
-				if (_ownerWeapons == value)
-				{
-					return;
-				}
-				_ownerWeapons = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerWeapons);
+			set => SetProperty(ref _ownerWeapons, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get
-			{
-				if (_isEnabled == null)
-				{
-					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
-				}
-				return _isEnabled;
-			}
-			set
-			{
-				if (_isEnabled == value)
-				{
-					return;
-				}
-				_isEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
 		}
 
 		public ApplyShaderEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

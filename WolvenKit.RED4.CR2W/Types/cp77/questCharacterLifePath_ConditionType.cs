@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lifePathID")] 
 		public TweakDBID LifePathID
 		{
-			get
-			{
-				if (_lifePathID == null)
-				{
-					_lifePathID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "lifePathID", cr2w, this);
-				}
-				return _lifePathID;
-			}
-			set
-			{
-				if (_lifePathID == value)
-				{
-					return;
-				}
-				_lifePathID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lifePathID);
+			set => SetProperty(ref _lifePathID, value);
 		}
 
 		public questCharacterLifePath_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

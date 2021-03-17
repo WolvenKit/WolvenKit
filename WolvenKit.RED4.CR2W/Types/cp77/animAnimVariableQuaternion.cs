@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("roll")] 
 		public CFloat Roll
 		{
-			get
-			{
-				if (_roll == null)
-				{
-					_roll = (CFloat) CR2WTypeManager.Create("Float", "roll", cr2w, this);
-				}
-				return _roll;
-			}
-			set
-			{
-				if (_roll == value)
-				{
-					return;
-				}
-				_roll = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _roll);
+			set => SetProperty(ref _roll, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("pitch")] 
 		public CFloat Pitch
 		{
-			get
-			{
-				if (_pitch == null)
-				{
-					_pitch = (CFloat) CR2WTypeManager.Create("Float", "pitch", cr2w, this);
-				}
-				return _pitch;
-			}
-			set
-			{
-				if (_pitch == value)
-				{
-					return;
-				}
-				_pitch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pitch);
+			set => SetProperty(ref _pitch, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("yaw")] 
 		public CFloat Yaw
 		{
-			get
-			{
-				if (_yaw == null)
-				{
-					_yaw = (CFloat) CR2WTypeManager.Create("Float", "yaw", cr2w, this);
-				}
-				return _yaw;
-			}
-			set
-			{
-				if (_yaw == value)
-				{
-					return;
-				}
-				_yaw = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _yaw);
+			set => SetProperty(ref _yaw, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("default")] 
 		public Quaternion Default
 		{
-			get
-			{
-				if (_default == null)
-				{
-					_default = (Quaternion) CR2WTypeManager.Create("Quaternion", "default", cr2w, this);
-				}
-				return _default;
-			}
-			set
-			{
-				if (_default == value)
-				{
-					return;
-				}
-				_default = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _default);
+			set => SetProperty(ref _default, value);
 		}
 
 		public animAnimVariableQuaternion(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("morphNames")] 
 		public CArray<gameuiIndexedMorphName> MorphNames
 		{
-			get
-			{
-				if (_morphNames == null)
-				{
-					_morphNames = (CArray<gameuiIndexedMorphName>) CR2WTypeManager.Create("array:gameuiIndexedMorphName", "morphNames", cr2w, this);
-				}
-				return _morphNames;
-			}
-			set
-			{
-				if (_morphNames == value)
-				{
-					return;
-				}
-				_morphNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _morphNames);
+			set => SetProperty(ref _morphNames, value);
 		}
 
 		public gameuiMorphInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("journalPath")] 
 		public CHandle<gameJournalPath> JournalPath
 		{
-			get
-			{
-				if (_journalPath == null)
-				{
-					_journalPath = (CHandle<gameJournalPath>) CR2WTypeManager.Create("handle:gameJournalPath", "journalPath", cr2w, this);
-				}
-				return _journalPath;
-			}
-			set
-			{
-				if (_journalPath == value)
-				{
-					return;
-				}
-				_journalPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _journalPath);
+			set => SetProperty(ref _journalPath, value);
 		}
 
 		public questJournalNotification_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

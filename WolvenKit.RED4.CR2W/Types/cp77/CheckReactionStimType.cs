@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stimToCompare")] 
 		public CEnum<gamedataStimType> StimToCompare
 		{
-			get
-			{
-				if (_stimToCompare == null)
-				{
-					_stimToCompare = (CEnum<gamedataStimType>) CR2WTypeManager.Create("gamedataStimType", "stimToCompare", cr2w, this);
-				}
-				return _stimToCompare;
-			}
-			set
-			{
-				if (_stimToCompare == value)
-				{
-					return;
-				}
-				_stimToCompare = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stimToCompare);
+			set => SetProperty(ref _stimToCompare, value);
 		}
 
 		public CheckReactionStimType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("glitchingStart")] 
 		public CName GlitchingStart
 		{
-			get
-			{
-				if (_glitchingStart == null)
-				{
-					_glitchingStart = (CName) CR2WTypeManager.Create("CName", "glitchingStart", cr2w, this);
-				}
-				return _glitchingStart;
-			}
-			set
-			{
-				if (_glitchingStart == value)
-				{
-					return;
-				}
-				_glitchingStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _glitchingStart);
+			set => SetProperty(ref _glitchingStart, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("glitchingStop")] 
 		public CName GlitchingStop
 		{
-			get
-			{
-				if (_glitchingStop == null)
-				{
-					_glitchingStop = (CName) CR2WTypeManager.Create("CName", "glitchingStop", cr2w, this);
-				}
-				return _glitchingStop;
-			}
-			set
-			{
-				if (_glitchingStop == value)
-				{
-					return;
-				}
-				_glitchingStop = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _glitchingStop);
+			set => SetProperty(ref _glitchingStop, value);
 		}
 
 		public VendingMachineSFX(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

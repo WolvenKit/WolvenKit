@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("type")] 
 		public CEnum<inkanimInterpolationType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<inkanimInterpolationType>) CR2WTypeManager.Create("inkanimInterpolationType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("mode")] 
 		public CEnum<inkanimInterpolationMode> Mode
 		{
-			get
-			{
-				if (_mode == null)
-				{
-					_mode = (CEnum<inkanimInterpolationMode>) CR2WTypeManager.Create("inkanimInterpolationMode", "mode", cr2w, this);
-				}
-				return _mode;
-			}
-			set
-			{
-				if (_mode == value)
-				{
-					return;
-				}
-				_mode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mode);
+			set => SetProperty(ref _mode, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isAdditive")] 
 		public CBool IsAdditive
 		{
-			get
-			{
-				if (_isAdditive == null)
-				{
-					_isAdditive = (CBool) CR2WTypeManager.Create("Bool", "isAdditive", cr2w, this);
-				}
-				return _isAdditive;
-			}
-			set
-			{
-				if (_isAdditive == value)
-				{
-					return;
-				}
-				_isAdditive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isAdditive);
+			set => SetProperty(ref _isAdditive, value);
 		}
 
 		public AnimationsConstructor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("id")] 
 		public CUInt32 Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CUInt32) CR2WTypeManager.Create("Uint32", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("title")] 
 		public CString Title
 		{
-			get
-			{
-				if (_title == null)
-				{
-					_title = (CString) CR2WTypeManager.Create("String", "title", cr2w, this);
-				}
-				return _title;
-			}
-			set
-			{
-				if (_title == value)
-				{
-					return;
-				}
-				_title = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _title);
+			set => SetProperty(ref _title, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("uniqueName")] 
 		public CName UniqueName
 		{
-			get
-			{
-				if (_uniqueName == null)
-				{
-					_uniqueName = (CName) CR2WTypeManager.Create("CName", "uniqueName", cr2w, this);
-				}
-				return _uniqueName;
-			}
-			set
-			{
-				if (_uniqueName == value)
-				{
-					return;
-				}
-				_uniqueName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uniqueName);
+			set => SetProperty(ref _uniqueName, value);
 		}
 
 		public redTaskNameMessage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

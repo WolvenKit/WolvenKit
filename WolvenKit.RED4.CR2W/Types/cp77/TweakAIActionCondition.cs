@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("record")] 
 		public TweakDBID Record
 		{
-			get
-			{
-				if (_record == null)
-				{
-					_record = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "record", cr2w, this);
-				}
-				return _record;
-			}
-			set
-			{
-				if (_record == value)
-				{
-					return;
-				}
-				_record = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _record);
+			set => SetProperty(ref _record, value);
 		}
 
 		public TweakAIActionCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

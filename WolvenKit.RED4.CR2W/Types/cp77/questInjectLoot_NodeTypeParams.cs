@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectRef")] 
 		public CHandle<questUniversalRef> ObjectRef
 		{
-			get
-			{
-				if (_objectRef == null)
-				{
-					_objectRef = (CHandle<questUniversalRef>) CR2WTypeManager.Create("handle:questUniversalRef", "objectRef", cr2w, this);
-				}
-				return _objectRef;
-			}
-			set
-			{
-				if (_objectRef == value)
-				{
-					return;
-				}
-				_objectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("operations")] 
 		public CArray<questInjectLoot_NodeTypeParams_OperationData> Operations
 		{
-			get
-			{
-				if (_operations == null)
-				{
-					_operations = (CArray<questInjectLoot_NodeTypeParams_OperationData>) CR2WTypeManager.Create("array:questInjectLoot_NodeTypeParams_OperationData", "operations", cr2w, this);
-				}
-				return _operations;
-			}
-			set
-			{
-				if (_operations == value)
-				{
-					return;
-				}
-				_operations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _operations);
+			set => SetProperty(ref _operations, value);
 		}
 
 		public questInjectLoot_NodeTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

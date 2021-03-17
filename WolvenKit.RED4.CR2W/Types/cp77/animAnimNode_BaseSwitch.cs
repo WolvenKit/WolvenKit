@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("blendTime")] 
 		public CFloat BlendTime
 		{
-			get
-			{
-				if (_blendTime == null)
-				{
-					_blendTime = (CFloat) CR2WTypeManager.Create("Float", "blendTime", cr2w, this);
-				}
-				return _blendTime;
-			}
-			set
-			{
-				if (_blendTime == value)
-				{
-					return;
-				}
-				_blendTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendTime);
+			set => SetProperty(ref _blendTime, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("timeWarpingEnabled")] 
 		public CBool TimeWarpingEnabled
 		{
-			get
-			{
-				if (_timeWarpingEnabled == null)
-				{
-					_timeWarpingEnabled = (CBool) CR2WTypeManager.Create("Bool", "timeWarpingEnabled", cr2w, this);
-				}
-				return _timeWarpingEnabled;
-			}
-			set
-			{
-				if (_timeWarpingEnabled == value)
-				{
-					return;
-				}
-				_timeWarpingEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeWarpingEnabled);
+			set => SetProperty(ref _timeWarpingEnabled, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("syncMethod")] 
 		public CHandle<animISyncMethod> SyncMethod
 		{
-			get
-			{
-				if (_syncMethod == null)
-				{
-					_syncMethod = (CHandle<animISyncMethod>) CR2WTypeManager.Create("handle:animISyncMethod", "syncMethod", cr2w, this);
-				}
-				return _syncMethod;
-			}
-			set
-			{
-				if (_syncMethod == value)
-				{
-					return;
-				}
-				_syncMethod = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _syncMethod);
+			set => SetProperty(ref _syncMethod, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("inputNodes")] 
 		public CArray<animPoseLink> InputNodes
 		{
-			get
-			{
-				if (_inputNodes == null)
-				{
-					_inputNodes = (CArray<animPoseLink>) CR2WTypeManager.Create("array:animPoseLink", "inputNodes", cr2w, this);
-				}
-				return _inputNodes;
-			}
-			set
-			{
-				if (_inputNodes == value)
-				{
-					return;
-				}
-				_inputNodes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputNodes);
+			set => SetProperty(ref _inputNodes, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("canRequestInertialization")] 
 		public CBool CanRequestInertialization
 		{
-			get
-			{
-				if (_canRequestInertialization == null)
-				{
-					_canRequestInertialization = (CBool) CR2WTypeManager.Create("Bool", "canRequestInertialization", cr2w, this);
-				}
-				return _canRequestInertialization;
-			}
-			set
-			{
-				if (_canRequestInertialization == value)
-				{
-					return;
-				}
-				_canRequestInertialization = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _canRequestInertialization);
+			set => SetProperty(ref _canRequestInertialization, value);
 		}
 
 		public animAnimNode_BaseSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

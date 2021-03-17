@@ -23,253 +23,88 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("scopeRootContainer")] 
 		public inkCompoundWidgetReference ScopeRootContainer
 		{
-			get
-			{
-				if (_scopeRootContainer == null)
-				{
-					_scopeRootContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "scopeRootContainer", cr2w, this);
-				}
-				return _scopeRootContainer;
-			}
-			set
-			{
-				if (_scopeRootContainer == value)
-				{
-					return;
-				}
-				_scopeRootContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scopeRootContainer);
+			set => SetProperty(ref _scopeRootContainer, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("magazineRootContainer")] 
 		public inkCompoundWidgetReference MagazineRootContainer
 		{
-			get
-			{
-				if (_magazineRootContainer == null)
-				{
-					_magazineRootContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "magazineRootContainer", cr2w, this);
-				}
-				return _magazineRootContainer;
-			}
-			set
-			{
-				if (_magazineRootContainer == value)
-				{
-					return;
-				}
-				_magazineRootContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _magazineRootContainer);
+			set => SetProperty(ref _magazineRootContainer, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("silencerRootContainer")] 
 		public inkCompoundWidgetReference SilencerRootContainer
 		{
-			get
-			{
-				if (_silencerRootContainer == null)
-				{
-					_silencerRootContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "silencerRootContainer", cr2w, this);
-				}
-				return _silencerRootContainer;
-			}
-			set
-			{
-				if (_silencerRootContainer == value)
-				{
-					return;
-				}
-				_silencerRootContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _silencerRootContainer);
+			set => SetProperty(ref _silencerRootContainer, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("scopeContainer")] 
 		public inkCompoundWidgetReference ScopeContainer
 		{
-			get
-			{
-				if (_scopeContainer == null)
-				{
-					_scopeContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "scopeContainer", cr2w, this);
-				}
-				return _scopeContainer;
-			}
-			set
-			{
-				if (_scopeContainer == value)
-				{
-					return;
-				}
-				_scopeContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scopeContainer);
+			set => SetProperty(ref _scopeContainer, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("magazineContainer")] 
 		public inkCompoundWidgetReference MagazineContainer
 		{
-			get
-			{
-				if (_magazineContainer == null)
-				{
-					_magazineContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "magazineContainer", cr2w, this);
-				}
-				return _magazineContainer;
-			}
-			set
-			{
-				if (_magazineContainer == value)
-				{
-					return;
-				}
-				_magazineContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _magazineContainer);
+			set => SetProperty(ref _magazineContainer, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("silencerContainer")] 
 		public inkCompoundWidgetReference SilencerContainer
 		{
-			get
-			{
-				if (_silencerContainer == null)
-				{
-					_silencerContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "silencerContainer", cr2w, this);
-				}
-				return _silencerContainer;
-			}
-			set
-			{
-				if (_silencerContainer == value)
-				{
-					return;
-				}
-				_silencerContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _silencerContainer);
+			set => SetProperty(ref _silencerContainer, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("attachmentsLabel")] 
 		public inkTextWidgetReference AttachmentsLabel
 		{
-			get
-			{
-				if (_attachmentsLabel == null)
-				{
-					_attachmentsLabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "attachmentsLabel", cr2w, this);
-				}
-				return _attachmentsLabel;
-			}
-			set
-			{
-				if (_attachmentsLabel == value)
-				{
-					return;
-				}
-				_attachmentsLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attachmentsLabel);
+			set => SetProperty(ref _attachmentsLabel, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("attachmentsContainer")] 
 		public inkWidgetReference AttachmentsContainer
 		{
-			get
-			{
-				if (_attachmentsContainer == null)
-				{
-					_attachmentsContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "attachmentsContainer", cr2w, this);
-				}
-				return _attachmentsContainer;
-			}
-			set
-			{
-				if (_attachmentsContainer == value)
-				{
-					return;
-				}
-				_attachmentsContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attachmentsContainer);
+			set => SetProperty(ref _attachmentsContainer, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("softwareModsLabel")] 
 		public inkTextWidgetReference SoftwareModsLabel
 		{
-			get
-			{
-				if (_softwareModsLabel == null)
-				{
-					_softwareModsLabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "softwareModsLabel", cr2w, this);
-				}
-				return _softwareModsLabel;
-			}
-			set
-			{
-				if (_softwareModsLabel == value)
-				{
-					return;
-				}
-				_softwareModsLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _softwareModsLabel);
+			set => SetProperty(ref _softwareModsLabel, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("softwareModsPush")] 
 		public inkWidgetReference SoftwareModsPush
 		{
-			get
-			{
-				if (_softwareModsPush == null)
-				{
-					_softwareModsPush = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "softwareModsPush", cr2w, this);
-				}
-				return _softwareModsPush;
-			}
-			set
-			{
-				if (_softwareModsPush == value)
-				{
-					return;
-				}
-				_softwareModsPush = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _softwareModsPush);
+			set => SetProperty(ref _softwareModsPush, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("softwareModsContainer")] 
 		public inkWidgetReference SoftwareModsContainer
 		{
-			get
-			{
-				if (_softwareModsContainer == null)
-				{
-					_softwareModsContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "softwareModsContainer", cr2w, this);
-				}
-				return _softwareModsContainer;
-			}
-			set
-			{
-				if (_softwareModsContainer == value)
-				{
-					return;
-				}
-				_softwareModsContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _softwareModsContainer);
+			set => SetProperty(ref _softwareModsContainer, value);
 		}
 
 		public InventoryWeaponItemChooser(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

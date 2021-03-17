@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("backpackActiveSorting")] 
 		public CInt32 BackpackActiveSorting
 		{
-			get
-			{
-				if (_backpackActiveSorting == null)
-				{
-					_backpackActiveSorting = (CInt32) CR2WTypeManager.Create("Int32", "backpackActiveSorting", cr2w, this);
-				}
-				return _backpackActiveSorting;
-			}
-			set
-			{
-				if (_backpackActiveSorting == value)
-				{
-					return;
-				}
-				_backpackActiveSorting = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backpackActiveSorting);
+			set => SetProperty(ref _backpackActiveSorting, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("backpackActiveFilter")] 
 		public CInt32 BackpackActiveFilter
 		{
-			get
-			{
-				if (_backpackActiveFilter == null)
-				{
-					_backpackActiveFilter = (CInt32) CR2WTypeManager.Create("Int32", "backpackActiveFilter", cr2w, this);
-				}
-				return _backpackActiveFilter;
-			}
-			set
-			{
-				if (_backpackActiveFilter == value)
-				{
-					return;
-				}
-				_backpackActiveFilter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backpackActiveFilter);
+			set => SetProperty(ref _backpackActiveFilter, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isBackpackActiveFilterSaved")] 
 		public CBool IsBackpackActiveFilterSaved
 		{
-			get
-			{
-				if (_isBackpackActiveFilterSaved == null)
-				{
-					_isBackpackActiveFilterSaved = (CBool) CR2WTypeManager.Create("Bool", "isBackpackActiveFilterSaved", cr2w, this);
-				}
-				return _isBackpackActiveFilterSaved;
-			}
-			set
-			{
-				if (_isBackpackActiveFilterSaved == value)
-				{
-					return;
-				}
-				_isBackpackActiveFilterSaved = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isBackpackActiveFilterSaved);
+			set => SetProperty(ref _isBackpackActiveFilterSaved, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("vendorPanelPlayerActiveSorting")] 
 		public CInt32 VendorPanelPlayerActiveSorting
 		{
-			get
-			{
-				if (_vendorPanelPlayerActiveSorting == null)
-				{
-					_vendorPanelPlayerActiveSorting = (CInt32) CR2WTypeManager.Create("Int32", "vendorPanelPlayerActiveSorting", cr2w, this);
-				}
-				return _vendorPanelPlayerActiveSorting;
-			}
-			set
-			{
-				if (_vendorPanelPlayerActiveSorting == value)
-				{
-					return;
-				}
-				_vendorPanelPlayerActiveSorting = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vendorPanelPlayerActiveSorting);
+			set => SetProperty(ref _vendorPanelPlayerActiveSorting, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("vendorPanelVendorActiveSorting")] 
 		public CInt32 VendorPanelVendorActiveSorting
 		{
-			get
-			{
-				if (_vendorPanelVendorActiveSorting == null)
-				{
-					_vendorPanelVendorActiveSorting = (CInt32) CR2WTypeManager.Create("Int32", "vendorPanelVendorActiveSorting", cr2w, this);
-				}
-				return _vendorPanelVendorActiveSorting;
-			}
-			set
-			{
-				if (_vendorPanelVendorActiveSorting == value)
-				{
-					return;
-				}
-				_vendorPanelVendorActiveSorting = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vendorPanelVendorActiveSorting);
+			set => SetProperty(ref _vendorPanelVendorActiveSorting, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("newItems")] 
 		public CArray<gameItemID> NewItems
 		{
-			get
-			{
-				if (_newItems == null)
-				{
-					_newItems = (CArray<gameItemID>) CR2WTypeManager.Create("array:gameItemID", "newItems", cr2w, this);
-				}
-				return _newItems;
-			}
-			set
-			{
-				if (_newItems == value)
-				{
-					return;
-				}
-				_newItems = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newItems);
+			set => SetProperty(ref _newItems, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("attachedPlayer")] 
 		public wCHandle<PlayerPuppet> AttachedPlayer
 		{
-			get
-			{
-				if (_attachedPlayer == null)
-				{
-					_attachedPlayer = (wCHandle<PlayerPuppet>) CR2WTypeManager.Create("whandle:PlayerPuppet", "attachedPlayer", cr2w, this);
-				}
-				return _attachedPlayer;
-			}
-			set
-			{
-				if (_attachedPlayer == value)
-				{
-					return;
-				}
-				_attachedPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attachedPlayer);
+			set => SetProperty(ref _attachedPlayer, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("inventoryListenerCallback")] 
 		public CHandle<UIScriptableInventoryListenerCallback> InventoryListenerCallback
 		{
-			get
-			{
-				if (_inventoryListenerCallback == null)
-				{
-					_inventoryListenerCallback = (CHandle<UIScriptableInventoryListenerCallback>) CR2WTypeManager.Create("handle:UIScriptableInventoryListenerCallback", "inventoryListenerCallback", cr2w, this);
-				}
-				return _inventoryListenerCallback;
-			}
-			set
-			{
-				if (_inventoryListenerCallback == value)
-				{
-					return;
-				}
-				_inventoryListenerCallback = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryListenerCallback);
+			set => SetProperty(ref _inventoryListenerCallback, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("inventoryListener")] 
 		public CHandle<gameInventoryScriptListener> InventoryListener
 		{
-			get
-			{
-				if (_inventoryListener == null)
-				{
-					_inventoryListener = (CHandle<gameInventoryScriptListener>) CR2WTypeManager.Create("handle:gameInventoryScriptListener", "inventoryListener", cr2w, this);
-				}
-				return _inventoryListener;
-			}
-			set
-			{
-				if (_inventoryListener == value)
-				{
-					return;
-				}
-				_inventoryListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryListener);
+			set => SetProperty(ref _inventoryListener, value);
 		}
 
 		public UIScriptableSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

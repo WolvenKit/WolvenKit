@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("x")] 
 		public FixedPoint X
 		{
-			get
-			{
-				if (_x == null)
-				{
-					_x = (FixedPoint) CR2WTypeManager.Create("FixedPoint", "x", cr2w, this);
-				}
-				return _x;
-			}
-			set
-			{
-				if (_x == value)
-				{
-					return;
-				}
-				_x = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _x);
+			set => SetProperty(ref _x, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("y")] 
 		public FixedPoint Y
 		{
-			get
-			{
-				if (_y == null)
-				{
-					_y = (FixedPoint) CR2WTypeManager.Create("FixedPoint", "y", cr2w, this);
-				}
-				return _y;
-			}
-			set
-			{
-				if (_y == value)
-				{
-					return;
-				}
-				_y = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _y);
+			set => SetProperty(ref _y, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("z")] 
 		public FixedPoint Z
 		{
-			get
-			{
-				if (_z == null)
-				{
-					_z = (FixedPoint) CR2WTypeManager.Create("FixedPoint", "z", cr2w, this);
-				}
-				return _z;
-			}
-			set
-			{
-				if (_z == value)
-				{
-					return;
-				}
-				_z = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _z);
+			set => SetProperty(ref _z, value);
 		}
 
 		public WorldPosition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

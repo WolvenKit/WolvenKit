@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stims")] 
 		public CArray<SStimOperationData> Stims
 		{
-			get
-			{
-				if (_stims == null)
-				{
-					_stims = (CArray<SStimOperationData>) CR2WTypeManager.Create("array:SStimOperationData", "stims", cr2w, this);
-				}
-				return _stims;
-			}
-			set
-			{
-				if (_stims == value)
-				{
-					return;
-				}
-				_stims = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stims);
+			set => SetProperty(ref _stims, value);
 		}
 
 		public StimDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

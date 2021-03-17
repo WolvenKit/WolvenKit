@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemNames")] 
 		public CArray<CName> ItemNames
 		{
-			get
-			{
-				if (_itemNames == null)
-				{
-					_itemNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "itemNames", cr2w, this);
-				}
-				return _itemNames;
-			}
-			set
-			{
-				if (_itemNames == value)
-				{
-					return;
-				}
-				_itemNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemNames);
+			set => SetProperty(ref _itemNames, value);
 		}
 
 		public audioFootwearType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

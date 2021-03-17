@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("archetypeResources")] 
 		public CArray<AIArchetypeSetEntry> ArchetypeResources
 		{
-			get
-			{
-				if (_archetypeResources == null)
-				{
-					_archetypeResources = (CArray<AIArchetypeSetEntry>) CR2WTypeManager.Create("array:AIArchetypeSetEntry", "archetypeResources", cr2w, this);
-				}
-				return _archetypeResources;
-			}
-			set
-			{
-				if (_archetypeResources == value)
-				{
-					return;
-				}
-				_archetypeResources = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _archetypeResources);
+			set => SetProperty(ref _archetypeResources, value);
 		}
 
 		public AIArchetypeSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

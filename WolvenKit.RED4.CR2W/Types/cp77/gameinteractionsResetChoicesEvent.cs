@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("layer")] 
 		public CName Layer
 		{
-			get
-			{
-				if (_layer == null)
-				{
-					_layer = (CName) CR2WTypeManager.Create("CName", "layer", cr2w, this);
-				}
-				return _layer;
-			}
-			set
-			{
-				if (_layer == value)
-				{
-					return;
-				}
-				_layer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _layer);
+			set => SetProperty(ref _layer, value);
 		}
 
 		public gameinteractionsResetChoicesEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("value")] 
 		public CHandle<animAnimFeature> Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CHandle<animAnimFeature>) CR2WTypeManager.Create("handle:animAnimFeature", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("invokeCallback")] 
 		public CBool InvokeCallback
 		{
-			get
-			{
-				if (_invokeCallback == null)
-				{
-					_invokeCallback = (CBool) CR2WTypeManager.Create("Bool", "invokeCallback", cr2w, this);
-				}
-				return _invokeCallback;
-			}
-			set
-			{
-				if (_invokeCallback == value)
-				{
-					return;
-				}
-				_invokeCallback = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _invokeCallback);
+			set => SetProperty(ref _invokeCallback, value);
 		}
 
 		public entReplicatedAnimFeature(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

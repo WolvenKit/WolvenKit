@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("externalComponentName")] 
 		public CName ExternalComponentName
 		{
-			get
-			{
-				if (_externalComponentName == null)
-				{
-					_externalComponentName = (CName) CR2WTypeManager.Create("CName", "externalComponentName", cr2w, this);
-				}
-				return _externalComponentName;
-			}
-			set
-			{
-				if (_externalComponentName == value)
-				{
-					return;
-				}
-				_externalComponentName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _externalComponentName);
+			set => SetProperty(ref _externalComponentName, value);
 		}
 
 		public entExternalComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

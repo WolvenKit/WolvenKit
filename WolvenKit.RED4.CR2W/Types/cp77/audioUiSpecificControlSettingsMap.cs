@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("specificControlSettingsMatrix")] 
 		public CArray<audioUiSpecificControlSettingsMapItem> SpecificControlSettingsMatrix
 		{
-			get
-			{
-				if (_specificControlSettingsMatrix == null)
-				{
-					_specificControlSettingsMatrix = (CArray<audioUiSpecificControlSettingsMapItem>) CR2WTypeManager.Create("array:audioUiSpecificControlSettingsMapItem", "specificControlSettingsMatrix", cr2w, this);
-				}
-				return _specificControlSettingsMatrix;
-			}
-			set
-			{
-				if (_specificControlSettingsMatrix == value)
-				{
-					return;
-				}
-				_specificControlSettingsMatrix = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _specificControlSettingsMatrix);
+			set => SetProperty(ref _specificControlSettingsMatrix, value);
 		}
 
 		public audioUiSpecificControlSettingsMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

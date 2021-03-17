@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("activeVehicleType")] 
 		public CEnum<gamedataVehicleType> ActiveVehicleType
 		{
-			get
-			{
-				if (_activeVehicleType == null)
-				{
-					_activeVehicleType = (CEnum<gamedataVehicleType>) CR2WTypeManager.Create("gamedataVehicleType", "activeVehicleType", cr2w, this);
-				}
-				return _activeVehicleType;
-			}
-			set
-			{
-				if (_activeVehicleType == value)
-				{
-					return;
-				}
-				_activeVehicleType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeVehicleType);
+			set => SetProperty(ref _activeVehicleType, value);
 		}
 
 		public QuickSlotsManagerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

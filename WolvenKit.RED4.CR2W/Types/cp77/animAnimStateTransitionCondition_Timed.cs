@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timeToFireTransition")] 
 		public CFloat TimeToFireTransition
 		{
-			get
-			{
-				if (_timeToFireTransition == null)
-				{
-					_timeToFireTransition = (CFloat) CR2WTypeManager.Create("Float", "timeToFireTransition", cr2w, this);
-				}
-				return _timeToFireTransition;
-			}
-			set
-			{
-				if (_timeToFireTransition == value)
-				{
-					return;
-				}
-				_timeToFireTransition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeToFireTransition);
+			set => SetProperty(ref _timeToFireTransition, value);
 		}
 
 		public animAnimStateTransitionCondition_Timed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

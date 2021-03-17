@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entityName")] 
 		public CString EntityName
 		{
-			get
-			{
-				if (_entityName == null)
-				{
-					_entityName = (CString) CR2WTypeManager.Create("String", "entityName", cr2w, this);
-				}
-				return _entityName;
-			}
-			set
-			{
-				if (_entityName == value)
-				{
-					return;
-				}
-				_entityName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityName);
+			set => SetProperty(ref _entityName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("quickHackName")] 
 		public CString QuickHackName
 		{
-			get
-			{
-				if (_quickHackName == null)
-				{
-					_quickHackName = (CString) CR2WTypeManager.Create("String", "quickHackName", cr2w, this);
-				}
-				return _quickHackName;
-			}
-			set
-			{
-				if (_quickHackName == value)
-				{
-					return;
-				}
-				_quickHackName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quickHackName);
+			set => SetProperty(ref _quickHackName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("quickHackDesc")] 
 		public CString QuickHackDesc
 		{
-			get
-			{
-				if (_quickHackDesc == null)
-				{
-					_quickHackDesc = (CString) CR2WTypeManager.Create("String", "quickHackDesc", cr2w, this);
-				}
-				return _quickHackDesc;
-			}
-			set
-			{
-				if (_quickHackDesc == value)
-				{
-					return;
-				}
-				_quickHackDesc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quickHackDesc);
+			set => SetProperty(ref _quickHackDesc, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("questEntries")] 
 		public CArray<scannerQuestEntry> QuestEntries
 		{
-			get
-			{
-				if (_questEntries == null)
-				{
-					_questEntries = (CArray<scannerQuestEntry>) CR2WTypeManager.Create("array:scannerQuestEntry", "questEntries", cr2w, this);
-				}
-				return _questEntries;
-			}
-			set
-			{
-				if (_questEntries == value)
-				{
-					return;
-				}
-				_questEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questEntries);
+			set => SetProperty(ref _questEntries, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("empty")] 
 		public CBool Empty
 		{
-			get
-			{
-				if (_empty == null)
-				{
-					_empty = (CBool) CR2WTypeManager.Create("Bool", "empty", cr2w, this);
-				}
-				return _empty;
-			}
-			set
-			{
-				if (_empty == value)
-				{
-					return;
-				}
-				_empty = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _empty);
+			set => SetProperty(ref _empty, value);
 		}
 
 		public scannerDataStructure(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

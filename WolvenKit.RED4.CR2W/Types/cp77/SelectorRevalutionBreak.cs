@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("reevaluationDuration")] 
 		public CFloat ReevaluationDuration
 		{
-			get
-			{
-				if (_reevaluationDuration == null)
-				{
-					_reevaluationDuration = (CFloat) CR2WTypeManager.Create("Float", "reevaluationDuration", cr2w, this);
-				}
-				return _reevaluationDuration;
-			}
-			set
-			{
-				if (_reevaluationDuration == value)
-				{
-					return;
-				}
-				_reevaluationDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reevaluationDuration);
+			set => SetProperty(ref _reevaluationDuration, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("activationTimeStamp")] 
 		public CFloat ActivationTimeStamp
 		{
-			get
-			{
-				if (_activationTimeStamp == null)
-				{
-					_activationTimeStamp = (CFloat) CR2WTypeManager.Create("Float", "activationTimeStamp", cr2w, this);
-				}
-				return _activationTimeStamp;
-			}
-			set
-			{
-				if (_activationTimeStamp == value)
-				{
-					return;
-				}
-				_activationTimeStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activationTimeStamp);
+			set => SetProperty(ref _activationTimeStamp, value);
 		}
 
 		public SelectorRevalutionBreak(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

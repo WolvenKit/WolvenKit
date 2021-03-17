@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("activityLogHide")] 
 		public gamebbScriptID_Bool ActivityLogHide
 		{
-			get
-			{
-				if (_activityLogHide == null)
-				{
-					_activityLogHide = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "activityLogHide", cr2w, this);
-				}
-				return _activityLogHide;
-			}
-			set
-			{
-				if (_activityLogHide == value)
-				{
-					return;
-				}
-				_activityLogHide = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activityLogHide);
+			set => SetProperty(ref _activityLogHide, value);
 		}
 
 		public UI_ActivityLogDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

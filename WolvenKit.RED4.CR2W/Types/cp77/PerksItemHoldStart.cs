@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("widget")] 
 		public wCHandle<inkWidget> Widget
 		{
-			get
-			{
-				if (_widget == null)
-				{
-					_widget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "widget", cr2w, this);
-				}
-				return _widget;
-			}
-			set
-			{
-				if (_widget == value)
-				{
-					return;
-				}
-				_widget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widget);
+			set => SetProperty(ref _widget, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("actionName")] 
 		public CHandle<inkActionName> ActionName
 		{
-			get
-			{
-				if (_actionName == null)
-				{
-					_actionName = (CHandle<inkActionName>) CR2WTypeManager.Create("handle:inkActionName", "actionName", cr2w, this);
-				}
-				return _actionName;
-			}
-			set
-			{
-				if (_actionName == value)
-				{
-					return;
-				}
-				_actionName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionName);
+			set => SetProperty(ref _actionName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("perkData")] 
 		public CHandle<BasePerkDisplayData> PerkData
 		{
-			get
-			{
-				if (_perkData == null)
-				{
-					_perkData = (CHandle<BasePerkDisplayData>) CR2WTypeManager.Create("handle:BasePerkDisplayData", "perkData", cr2w, this);
-				}
-				return _perkData;
-			}
-			set
-			{
-				if (_perkData == value)
-				{
-					return;
-				}
-				_perkData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perkData);
+			set => SetProperty(ref _perkData, value);
 		}
 
 		public PerksItemHoldStart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

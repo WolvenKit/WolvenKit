@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("effects")] 
 		public CArray<gameEffectDefinition> Effects
 		{
-			get
-			{
-				if (_effects == null)
-				{
-					_effects = (CArray<gameEffectDefinition>) CR2WTypeManager.Create("array:gameEffectDefinition", "effects", cr2w, this);
-				}
-				return _effects;
-			}
-			set
-			{
-				if (_effects == value)
-				{
-					return;
-				}
-				_effects = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effects);
+			set => SetProperty(ref _effects, value);
 		}
 
 		public gameEffectSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

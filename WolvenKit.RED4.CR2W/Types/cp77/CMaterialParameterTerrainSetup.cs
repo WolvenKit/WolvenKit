@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("setup")] 
 		public rRef<CTerrainSetup> Setup
 		{
-			get
-			{
-				if (_setup == null)
-				{
-					_setup = (rRef<CTerrainSetup>) CR2WTypeManager.Create("rRef:CTerrainSetup", "setup", cr2w, this);
-				}
-				return _setup;
-			}
-			set
-			{
-				if (_setup == value)
-				{
-					return;
-				}
-				_setup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setup);
+			set => SetProperty(ref _setup, value);
 		}
 
 		public CMaterialParameterTerrainSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("canBeDisassembled")] 
 		public CBool CanBeDisassembled
 		{
-			get
-			{
-				if (_canBeDisassembled == null)
-				{
-					_canBeDisassembled = (CBool) CR2WTypeManager.Create("Bool", "canBeDisassembled", cr2w, this);
-				}
-				return _canBeDisassembled;
-			}
-			set
-			{
-				if (_canBeDisassembled == value)
-				{
-					return;
-				}
-				_canBeDisassembled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _canBeDisassembled);
+			set => SetProperty(ref _canBeDisassembled, value);
 		}
 
 		public DisassembleOptions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

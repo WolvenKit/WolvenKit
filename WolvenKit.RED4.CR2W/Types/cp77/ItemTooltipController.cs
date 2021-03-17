@@ -98,1978 +98,688 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemNameText")] 
 		public inkTextWidgetReference ItemNameText
 		{
-			get
-			{
-				if (_itemNameText == null)
-				{
-					_itemNameText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "itemNameText", cr2w, this);
-				}
-				return _itemNameText;
-			}
-			set
-			{
-				if (_itemNameText == value)
-				{
-					return;
-				}
-				_itemNameText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemNameText);
+			set => SetProperty(ref _itemNameText, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("itemRarityText")] 
 		public inkTextWidgetReference ItemRarityText
 		{
-			get
-			{
-				if (_itemRarityText == null)
-				{
-					_itemRarityText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "itemRarityText", cr2w, this);
-				}
-				return _itemRarityText;
-			}
-			set
-			{
-				if (_itemRarityText == value)
-				{
-					return;
-				}
-				_itemRarityText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemRarityText);
+			set => SetProperty(ref _itemRarityText, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("progressBar")] 
 		public inkWidgetReference ProgressBar
 		{
-			get
-			{
-				if (_progressBar == null)
-				{
-					_progressBar = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "progressBar", cr2w, this);
-				}
-				return _progressBar;
-			}
-			set
-			{
-				if (_progressBar == value)
-				{
-					return;
-				}
-				_progressBar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _progressBar);
+			set => SetProperty(ref _progressBar, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("recipeStatsTitle")] 
 		public inkTextWidgetReference RecipeStatsTitle
 		{
-			get
-			{
-				if (_recipeStatsTitle == null)
-				{
-					_recipeStatsTitle = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "recipeStatsTitle", cr2w, this);
-				}
-				return _recipeStatsTitle;
-			}
-			set
-			{
-				if (_recipeStatsTitle == value)
-				{
-					return;
-				}
-				_recipeStatsTitle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recipeStatsTitle);
+			set => SetProperty(ref _recipeStatsTitle, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("categoriesWrapper")] 
 		public inkCompoundWidgetReference CategoriesWrapper
 		{
-			get
-			{
-				if (_categoriesWrapper == null)
-				{
-					_categoriesWrapper = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "categoriesWrapper", cr2w, this);
-				}
-				return _categoriesWrapper;
-			}
-			set
-			{
-				if (_categoriesWrapper == value)
-				{
-					return;
-				}
-				_categoriesWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _categoriesWrapper);
+			set => SetProperty(ref _categoriesWrapper, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("backgroundContainer")] 
 		public inkCompoundWidgetReference BackgroundContainer
 		{
-			get
-			{
-				if (_backgroundContainer == null)
-				{
-					_backgroundContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "backgroundContainer", cr2w, this);
-				}
-				return _backgroundContainer;
-			}
-			set
-			{
-				if (_backgroundContainer == value)
-				{
-					return;
-				}
-				_backgroundContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backgroundContainer);
+			set => SetProperty(ref _backgroundContainer, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("topContainer")] 
 		public inkCompoundWidgetReference TopContainer
 		{
-			get
-			{
-				if (_topContainer == null)
-				{
-					_topContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "topContainer", cr2w, this);
-				}
-				return _topContainer;
-			}
-			set
-			{
-				if (_topContainer == value)
-				{
-					return;
-				}
-				_topContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _topContainer);
+			set => SetProperty(ref _topContainer, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("headerContainer")] 
 		public inkCompoundWidgetReference HeaderContainer
 		{
-			get
-			{
-				if (_headerContainer == null)
-				{
-					_headerContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "headerContainer", cr2w, this);
-				}
-				return _headerContainer;
-			}
-			set
-			{
-				if (_headerContainer == value)
-				{
-					return;
-				}
-				_headerContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _headerContainer);
+			set => SetProperty(ref _headerContainer, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("headerWeaponContainer")] 
 		public inkCompoundWidgetReference HeaderWeaponContainer
 		{
-			get
-			{
-				if (_headerWeaponContainer == null)
-				{
-					_headerWeaponContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "headerWeaponContainer", cr2w, this);
-				}
-				return _headerWeaponContainer;
-			}
-			set
-			{
-				if (_headerWeaponContainer == value)
-				{
-					return;
-				}
-				_headerWeaponContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _headerWeaponContainer);
+			set => SetProperty(ref _headerWeaponContainer, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("headerItemContainer")] 
 		public inkCompoundWidgetReference HeaderItemContainer
 		{
-			get
-			{
-				if (_headerItemContainer == null)
-				{
-					_headerItemContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "headerItemContainer", cr2w, this);
-				}
-				return _headerItemContainer;
-			}
-			set
-			{
-				if (_headerItemContainer == value)
-				{
-					return;
-				}
-				_headerItemContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _headerItemContainer);
+			set => SetProperty(ref _headerItemContainer, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("headerGrenadeContainer")] 
 		public inkCompoundWidgetReference HeaderGrenadeContainer
 		{
-			get
-			{
-				if (_headerGrenadeContainer == null)
-				{
-					_headerGrenadeContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "headerGrenadeContainer", cr2w, this);
-				}
-				return _headerGrenadeContainer;
-			}
-			set
-			{
-				if (_headerGrenadeContainer == value)
-				{
-					return;
-				}
-				_headerGrenadeContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _headerGrenadeContainer);
+			set => SetProperty(ref _headerGrenadeContainer, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("headerArmorContainer")] 
 		public inkCompoundWidgetReference HeaderArmorContainer
 		{
-			get
-			{
-				if (_headerArmorContainer == null)
-				{
-					_headerArmorContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "headerArmorContainer", cr2w, this);
-				}
-				return _headerArmorContainer;
-			}
-			set
-			{
-				if (_headerArmorContainer == value)
-				{
-					return;
-				}
-				_headerArmorContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _headerArmorContainer);
+			set => SetProperty(ref _headerArmorContainer, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("primmaryStatsContainer")] 
 		public inkCompoundWidgetReference PrimmaryStatsContainer
 		{
-			get
-			{
-				if (_primmaryStatsContainer == null)
-				{
-					_primmaryStatsContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "primmaryStatsContainer", cr2w, this);
-				}
-				return _primmaryStatsContainer;
-			}
-			set
-			{
-				if (_primmaryStatsContainer == value)
-				{
-					return;
-				}
-				_primmaryStatsContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _primmaryStatsContainer);
+			set => SetProperty(ref _primmaryStatsContainer, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("secondaryStatsContainer")] 
 		public inkCompoundWidgetReference SecondaryStatsContainer
 		{
-			get
-			{
-				if (_secondaryStatsContainer == null)
-				{
-					_secondaryStatsContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "secondaryStatsContainer", cr2w, this);
-				}
-				return _secondaryStatsContainer;
-			}
-			set
-			{
-				if (_secondaryStatsContainer == value)
-				{
-					return;
-				}
-				_secondaryStatsContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _secondaryStatsContainer);
+			set => SetProperty(ref _secondaryStatsContainer, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("recipeStatsContainer")] 
 		public inkCompoundWidgetReference RecipeStatsContainer
 		{
-			get
-			{
-				if (_recipeStatsContainer == null)
-				{
-					_recipeStatsContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "recipeStatsContainer", cr2w, this);
-				}
-				return _recipeStatsContainer;
-			}
-			set
-			{
-				if (_recipeStatsContainer == value)
-				{
-					return;
-				}
-				_recipeStatsContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recipeStatsContainer);
+			set => SetProperty(ref _recipeStatsContainer, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("recipeDamageTypesContainer")] 
 		public inkCompoundWidgetReference RecipeDamageTypesContainer
 		{
-			get
-			{
-				if (_recipeDamageTypesContainer == null)
-				{
-					_recipeDamageTypesContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "recipeDamageTypesContainer", cr2w, this);
-				}
-				return _recipeDamageTypesContainer;
-			}
-			set
-			{
-				if (_recipeDamageTypesContainer == value)
-				{
-					return;
-				}
-				_recipeDamageTypesContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recipeDamageTypesContainer);
+			set => SetProperty(ref _recipeDamageTypesContainer, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("modsContainer")] 
 		public inkCompoundWidgetReference ModsContainer
 		{
-			get
-			{
-				if (_modsContainer == null)
-				{
-					_modsContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "modsContainer", cr2w, this);
-				}
-				return _modsContainer;
-			}
-			set
-			{
-				if (_modsContainer == value)
-				{
-					return;
-				}
-				_modsContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _modsContainer);
+			set => SetProperty(ref _modsContainer, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("dedicatedModsContainer")] 
 		public inkCompoundWidgetReference DedicatedModsContainer
 		{
-			get
-			{
-				if (_dedicatedModsContainer == null)
-				{
-					_dedicatedModsContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "dedicatedModsContainer", cr2w, this);
-				}
-				return _dedicatedModsContainer;
-			}
-			set
-			{
-				if (_dedicatedModsContainer == value)
-				{
-					return;
-				}
-				_dedicatedModsContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dedicatedModsContainer);
+			set => SetProperty(ref _dedicatedModsContainer, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("descriptionContainer")] 
 		public inkCompoundWidgetReference DescriptionContainer
 		{
-			get
-			{
-				if (_descriptionContainer == null)
-				{
-					_descriptionContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "descriptionContainer", cr2w, this);
-				}
-				return _descriptionContainer;
-			}
-			set
-			{
-				if (_descriptionContainer == value)
-				{
-					return;
-				}
-				_descriptionContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _descriptionContainer);
+			set => SetProperty(ref _descriptionContainer, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("craftedItemContainer")] 
 		public inkCompoundWidgetReference CraftedItemContainer
 		{
-			get
-			{
-				if (_craftedItemContainer == null)
-				{
-					_craftedItemContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "craftedItemContainer", cr2w, this);
-				}
-				return _craftedItemContainer;
-			}
-			set
-			{
-				if (_craftedItemContainer == value)
-				{
-					return;
-				}
-				_craftedItemContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _craftedItemContainer);
+			set => SetProperty(ref _craftedItemContainer, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("bottomContainer")] 
 		public inkCompoundWidgetReference BottomContainer
 		{
-			get
-			{
-				if (_bottomContainer == null)
-				{
-					_bottomContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "bottomContainer", cr2w, this);
-				}
-				return _bottomContainer;
-			}
-			set
-			{
-				if (_bottomContainer == value)
-				{
-					return;
-				}
-				_bottomContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bottomContainer);
+			set => SetProperty(ref _bottomContainer, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("primmaryStatsList")] 
 		public inkCompoundWidgetReference PrimmaryStatsList
 		{
-			get
-			{
-				if (_primmaryStatsList == null)
-				{
-					_primmaryStatsList = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "primmaryStatsList", cr2w, this);
-				}
-				return _primmaryStatsList;
-			}
-			set
-			{
-				if (_primmaryStatsList == value)
-				{
-					return;
-				}
-				_primmaryStatsList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _primmaryStatsList);
+			set => SetProperty(ref _primmaryStatsList, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("secondaryStatsList")] 
 		public inkCompoundWidgetReference SecondaryStatsList
 		{
-			get
-			{
-				if (_secondaryStatsList == null)
-				{
-					_secondaryStatsList = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "secondaryStatsList", cr2w, this);
-				}
-				return _secondaryStatsList;
-			}
-			set
-			{
-				if (_secondaryStatsList == value)
-				{
-					return;
-				}
-				_secondaryStatsList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _secondaryStatsList);
+			set => SetProperty(ref _secondaryStatsList, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("recipeStatsTypesList")] 
 		public inkCompoundWidgetReference RecipeStatsTypesList
 		{
-			get
-			{
-				if (_recipeStatsTypesList == null)
-				{
-					_recipeStatsTypesList = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "recipeStatsTypesList", cr2w, this);
-				}
-				return _recipeStatsTypesList;
-			}
-			set
-			{
-				if (_recipeStatsTypesList == value)
-				{
-					return;
-				}
-				_recipeStatsTypesList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recipeStatsTypesList);
+			set => SetProperty(ref _recipeStatsTypesList, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("recipeDamageTypesList")] 
 		public inkCompoundWidgetReference RecipeDamageTypesList
 		{
-			get
-			{
-				if (_recipeDamageTypesList == null)
-				{
-					_recipeDamageTypesList = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "recipeDamageTypesList", cr2w, this);
-				}
-				return _recipeDamageTypesList;
-			}
-			set
-			{
-				if (_recipeDamageTypesList == value)
-				{
-					return;
-				}
-				_recipeDamageTypesList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recipeDamageTypesList);
+			set => SetProperty(ref _recipeDamageTypesList, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("modsList")] 
 		public inkCompoundWidgetReference ModsList
 		{
-			get
-			{
-				if (_modsList == null)
-				{
-					_modsList = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "modsList", cr2w, this);
-				}
-				return _modsList;
-			}
-			set
-			{
-				if (_modsList == value)
-				{
-					return;
-				}
-				_modsList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _modsList);
+			set => SetProperty(ref _modsList, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("dedicatedModsList")] 
 		public inkCompoundWidgetReference DedicatedModsList
 		{
-			get
-			{
-				if (_dedicatedModsList == null)
-				{
-					_dedicatedModsList = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "dedicatedModsList", cr2w, this);
-				}
-				return _dedicatedModsList;
-			}
-			set
-			{
-				if (_dedicatedModsList == value)
-				{
-					return;
-				}
-				_dedicatedModsList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dedicatedModsList);
+			set => SetProperty(ref _dedicatedModsList, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("requiredLevelContainer")] 
 		public inkCompoundWidgetReference RequiredLevelContainer
 		{
-			get
-			{
-				if (_requiredLevelContainer == null)
-				{
-					_requiredLevelContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "requiredLevelContainer", cr2w, this);
-				}
-				return _requiredLevelContainer;
-			}
-			set
-			{
-				if (_requiredLevelContainer == value)
-				{
-					return;
-				}
-				_requiredLevelContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requiredLevelContainer);
+			set => SetProperty(ref _requiredLevelContainer, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("priceContainer")] 
 		public inkCompoundWidgetReference PriceContainer
 		{
-			get
-			{
-				if (_priceContainer == null)
-				{
-					_priceContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "priceContainer", cr2w, this);
-				}
-				return _priceContainer;
-			}
-			set
-			{
-				if (_priceContainer == value)
-				{
-					return;
-				}
-				_priceContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _priceContainer);
+			set => SetProperty(ref _priceContainer, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("descriptionText")] 
 		public inkTextWidgetReference DescriptionText
 		{
-			get
-			{
-				if (_descriptionText == null)
-				{
-					_descriptionText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "descriptionText", cr2w, this);
-				}
-				return _descriptionText;
-			}
-			set
-			{
-				if (_descriptionText == value)
-				{
-					return;
-				}
-				_descriptionText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _descriptionText);
+			set => SetProperty(ref _descriptionText, value);
 		}
 
 		[Ordinal(32)] 
 		[RED("requireLevelText")] 
 		public inkTextWidgetReference RequireLevelText
 		{
-			get
-			{
-				if (_requireLevelText == null)
-				{
-					_requireLevelText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "requireLevelText", cr2w, this);
-				}
-				return _requireLevelText;
-			}
-			set
-			{
-				if (_requireLevelText == value)
-				{
-					return;
-				}
-				_requireLevelText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requireLevelText);
+			set => SetProperty(ref _requireLevelText, value);
 		}
 
 		[Ordinal(33)] 
 		[RED("priceText")] 
 		public inkTextWidgetReference PriceText
 		{
-			get
-			{
-				if (_priceText == null)
-				{
-					_priceText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "priceText", cr2w, this);
-				}
-				return _priceText;
-			}
-			set
-			{
-				if (_priceText == value)
-				{
-					return;
-				}
-				_priceText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _priceText);
+			set => SetProperty(ref _priceText, value);
 		}
 
 		[Ordinal(34)] 
 		[RED("dpsWrapper")] 
 		public inkWidgetReference DpsWrapper
 		{
-			get
-			{
-				if (_dpsWrapper == null)
-				{
-					_dpsWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "dpsWrapper", cr2w, this);
-				}
-				return _dpsWrapper;
-			}
-			set
-			{
-				if (_dpsWrapper == value)
-				{
-					return;
-				}
-				_dpsWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dpsWrapper);
+			set => SetProperty(ref _dpsWrapper, value);
 		}
 
 		[Ordinal(35)] 
 		[RED("dpsArrow")] 
 		public inkImageWidgetReference DpsArrow
 		{
-			get
-			{
-				if (_dpsArrow == null)
-				{
-					_dpsArrow = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "dpsArrow", cr2w, this);
-				}
-				return _dpsArrow;
-			}
-			set
-			{
-				if (_dpsArrow == value)
-				{
-					return;
-				}
-				_dpsArrow = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dpsArrow);
+			set => SetProperty(ref _dpsArrow, value);
 		}
 
 		[Ordinal(36)] 
 		[RED("dpsText")] 
 		public inkTextWidgetReference DpsText
 		{
-			get
-			{
-				if (_dpsText == null)
-				{
-					_dpsText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "dpsText", cr2w, this);
-				}
-				return _dpsText;
-			}
-			set
-			{
-				if (_dpsText == value)
-				{
-					return;
-				}
-				_dpsText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dpsText);
+			set => SetProperty(ref _dpsText, value);
 		}
 
 		[Ordinal(37)] 
 		[RED("nonLethalText")] 
 		public inkTextWidgetReference NonLethalText
 		{
-			get
-			{
-				if (_nonLethalText == null)
-				{
-					_nonLethalText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "nonLethalText", cr2w, this);
-				}
-				return _nonLethalText;
-			}
-			set
-			{
-				if (_nonLethalText == value)
-				{
-					return;
-				}
-				_nonLethalText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nonLethalText);
+			set => SetProperty(ref _nonLethalText, value);
 		}
 
 		[Ordinal(38)] 
 		[RED("damagePerHitValue")] 
 		public inkTextWidgetReference DamagePerHitValue
 		{
-			get
-			{
-				if (_damagePerHitValue == null)
-				{
-					_damagePerHitValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "damagePerHitValue", cr2w, this);
-				}
-				return _damagePerHitValue;
-			}
-			set
-			{
-				if (_damagePerHitValue == value)
-				{
-					return;
-				}
-				_damagePerHitValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damagePerHitValue);
+			set => SetProperty(ref _damagePerHitValue, value);
 		}
 
 		[Ordinal(39)] 
 		[RED("attacksPerSecondValue")] 
 		public inkTextWidgetReference AttacksPerSecondValue
 		{
-			get
-			{
-				if (_attacksPerSecondValue == null)
-				{
-					_attacksPerSecondValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "attacksPerSecondValue", cr2w, this);
-				}
-				return _attacksPerSecondValue;
-			}
-			set
-			{
-				if (_attacksPerSecondValue == value)
-				{
-					return;
-				}
-				_attacksPerSecondValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attacksPerSecondValue);
+			set => SetProperty(ref _attacksPerSecondValue, value);
 		}
 
 		[Ordinal(40)] 
 		[RED("silencerPartWrapper")] 
 		public inkWidgetReference SilencerPartWrapper
 		{
-			get
-			{
-				if (_silencerPartWrapper == null)
-				{
-					_silencerPartWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "silencerPartWrapper", cr2w, this);
-				}
-				return _silencerPartWrapper;
-			}
-			set
-			{
-				if (_silencerPartWrapper == value)
-				{
-					return;
-				}
-				_silencerPartWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _silencerPartWrapper);
+			set => SetProperty(ref _silencerPartWrapper, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("scopePartWrapper")] 
 		public inkWidgetReference ScopePartWrapper
 		{
-			get
-			{
-				if (_scopePartWrapper == null)
-				{
-					_scopePartWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "scopePartWrapper", cr2w, this);
-				}
-				return _scopePartWrapper;
-			}
-			set
-			{
-				if (_scopePartWrapper == value)
-				{
-					return;
-				}
-				_scopePartWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scopePartWrapper);
+			set => SetProperty(ref _scopePartWrapper, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("craftedItemIcon")] 
 		public inkWidgetReference CraftedItemIcon
 		{
-			get
-			{
-				if (_craftedItemIcon == null)
-				{
-					_craftedItemIcon = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "craftedItemIcon", cr2w, this);
-				}
-				return _craftedItemIcon;
-			}
-			set
-			{
-				if (_craftedItemIcon == value)
-				{
-					return;
-				}
-				_craftedItemIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _craftedItemIcon);
+			set => SetProperty(ref _craftedItemIcon, value);
 		}
 
 		[Ordinal(43)] 
 		[RED("grenadeDamageTypeWrapper")] 
 		public inkWidgetReference GrenadeDamageTypeWrapper
 		{
-			get
-			{
-				if (_grenadeDamageTypeWrapper == null)
-				{
-					_grenadeDamageTypeWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "grenadeDamageTypeWrapper", cr2w, this);
-				}
-				return _grenadeDamageTypeWrapper;
-			}
-			set
-			{
-				if (_grenadeDamageTypeWrapper == value)
-				{
-					return;
-				}
-				_grenadeDamageTypeWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grenadeDamageTypeWrapper);
+			set => SetProperty(ref _grenadeDamageTypeWrapper, value);
 		}
 
 		[Ordinal(44)] 
 		[RED("grenadeDamageTypeIcon")] 
 		public inkImageWidgetReference GrenadeDamageTypeIcon
 		{
-			get
-			{
-				if (_grenadeDamageTypeIcon == null)
-				{
-					_grenadeDamageTypeIcon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "grenadeDamageTypeIcon", cr2w, this);
-				}
-				return _grenadeDamageTypeIcon;
-			}
-			set
-			{
-				if (_grenadeDamageTypeIcon == value)
-				{
-					return;
-				}
-				_grenadeDamageTypeIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grenadeDamageTypeIcon);
+			set => SetProperty(ref _grenadeDamageTypeIcon, value);
 		}
 
 		[Ordinal(45)] 
 		[RED("grenadeRangeValue")] 
 		public inkTextWidgetReference GrenadeRangeValue
 		{
-			get
-			{
-				if (_grenadeRangeValue == null)
-				{
-					_grenadeRangeValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "grenadeRangeValue", cr2w, this);
-				}
-				return _grenadeRangeValue;
-			}
-			set
-			{
-				if (_grenadeRangeValue == value)
-				{
-					return;
-				}
-				_grenadeRangeValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grenadeRangeValue);
+			set => SetProperty(ref _grenadeRangeValue, value);
 		}
 
 		[Ordinal(46)] 
 		[RED("grenadeRangeText")] 
 		public inkTextWidgetReference GrenadeRangeText
 		{
-			get
-			{
-				if (_grenadeRangeText == null)
-				{
-					_grenadeRangeText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "grenadeRangeText", cr2w, this);
-				}
-				return _grenadeRangeText;
-			}
-			set
-			{
-				if (_grenadeRangeText == value)
-				{
-					return;
-				}
-				_grenadeRangeText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grenadeRangeText);
+			set => SetProperty(ref _grenadeRangeText, value);
 		}
 
 		[Ordinal(47)] 
 		[RED("grenadeDeliveryLabel")] 
 		public inkTextWidgetReference GrenadeDeliveryLabel
 		{
-			get
-			{
-				if (_grenadeDeliveryLabel == null)
-				{
-					_grenadeDeliveryLabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "grenadeDeliveryLabel", cr2w, this);
-				}
-				return _grenadeDeliveryLabel;
-			}
-			set
-			{
-				if (_grenadeDeliveryLabel == value)
-				{
-					return;
-				}
-				_grenadeDeliveryLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grenadeDeliveryLabel);
+			set => SetProperty(ref _grenadeDeliveryLabel, value);
 		}
 
 		[Ordinal(48)] 
 		[RED("grenadeDeliveryIcon")] 
 		public inkImageWidgetReference GrenadeDeliveryIcon
 		{
-			get
-			{
-				if (_grenadeDeliveryIcon == null)
-				{
-					_grenadeDeliveryIcon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "grenadeDeliveryIcon", cr2w, this);
-				}
-				return _grenadeDeliveryIcon;
-			}
-			set
-			{
-				if (_grenadeDeliveryIcon == value)
-				{
-					return;
-				}
-				_grenadeDeliveryIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grenadeDeliveryIcon);
+			set => SetProperty(ref _grenadeDeliveryIcon, value);
 		}
 
 		[Ordinal(49)] 
 		[RED("grenadeDamageStatWrapper")] 
 		public inkWidgetReference GrenadeDamageStatWrapper
 		{
-			get
-			{
-				if (_grenadeDamageStatWrapper == null)
-				{
-					_grenadeDamageStatWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "grenadeDamageStatWrapper", cr2w, this);
-				}
-				return _grenadeDamageStatWrapper;
-			}
-			set
-			{
-				if (_grenadeDamageStatWrapper == value)
-				{
-					return;
-				}
-				_grenadeDamageStatWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grenadeDamageStatWrapper);
+			set => SetProperty(ref _grenadeDamageStatWrapper, value);
 		}
 
 		[Ordinal(50)] 
 		[RED("grenadeDamageStatLabel")] 
 		public inkTextWidgetReference GrenadeDamageStatLabel
 		{
-			get
-			{
-				if (_grenadeDamageStatLabel == null)
-				{
-					_grenadeDamageStatLabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "grenadeDamageStatLabel", cr2w, this);
-				}
-				return _grenadeDamageStatLabel;
-			}
-			set
-			{
-				if (_grenadeDamageStatLabel == value)
-				{
-					return;
-				}
-				_grenadeDamageStatLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grenadeDamageStatLabel);
+			set => SetProperty(ref _grenadeDamageStatLabel, value);
 		}
 
 		[Ordinal(51)] 
 		[RED("grenadeDamageStatValue")] 
 		public inkTextWidgetReference GrenadeDamageStatValue
 		{
-			get
-			{
-				if (_grenadeDamageStatValue == null)
-				{
-					_grenadeDamageStatValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "grenadeDamageStatValue", cr2w, this);
-				}
-				return _grenadeDamageStatValue;
-			}
-			set
-			{
-				if (_grenadeDamageStatValue == value)
-				{
-					return;
-				}
-				_grenadeDamageStatValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grenadeDamageStatValue);
+			set => SetProperty(ref _grenadeDamageStatValue, value);
 		}
 
 		[Ordinal(52)] 
 		[RED("armorStatArrow")] 
 		public inkImageWidgetReference ArmorStatArrow
 		{
-			get
-			{
-				if (_armorStatArrow == null)
-				{
-					_armorStatArrow = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "armorStatArrow", cr2w, this);
-				}
-				return _armorStatArrow;
-			}
-			set
-			{
-				if (_armorStatArrow == value)
-				{
-					return;
-				}
-				_armorStatArrow = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _armorStatArrow);
+			set => SetProperty(ref _armorStatArrow, value);
 		}
 
 		[Ordinal(53)] 
 		[RED("armorStatLabel")] 
 		public inkTextWidgetReference ArmorStatLabel
 		{
-			get
-			{
-				if (_armorStatLabel == null)
-				{
-					_armorStatLabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "armorStatLabel", cr2w, this);
-				}
-				return _armorStatLabel;
-			}
-			set
-			{
-				if (_armorStatLabel == value)
-				{
-					return;
-				}
-				_armorStatLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _armorStatLabel);
+			set => SetProperty(ref _armorStatLabel, value);
 		}
 
 		[Ordinal(54)] 
 		[RED("quickhackStatWrapper")] 
 		public inkWidgetReference QuickhackStatWrapper
 		{
-			get
-			{
-				if (_quickhackStatWrapper == null)
-				{
-					_quickhackStatWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "quickhackStatWrapper", cr2w, this);
-				}
-				return _quickhackStatWrapper;
-			}
-			set
-			{
-				if (_quickhackStatWrapper == value)
-				{
-					return;
-				}
-				_quickhackStatWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quickhackStatWrapper);
+			set => SetProperty(ref _quickhackStatWrapper, value);
 		}
 
 		[Ordinal(55)] 
 		[RED("quickhackCostValue")] 
 		public inkTextWidgetReference QuickhackCostValue
 		{
-			get
-			{
-				if (_quickhackCostValue == null)
-				{
-					_quickhackCostValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "quickhackCostValue", cr2w, this);
-				}
-				return _quickhackCostValue;
-			}
-			set
-			{
-				if (_quickhackCostValue == value)
-				{
-					return;
-				}
-				_quickhackCostValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quickhackCostValue);
+			set => SetProperty(ref _quickhackCostValue, value);
 		}
 
 		[Ordinal(56)] 
 		[RED("quickhackDuration")] 
 		public inkTextWidgetReference QuickhackDuration
 		{
-			get
-			{
-				if (_quickhackDuration == null)
-				{
-					_quickhackDuration = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "quickhackDuration", cr2w, this);
-				}
-				return _quickhackDuration;
-			}
-			set
-			{
-				if (_quickhackDuration == value)
-				{
-					return;
-				}
-				_quickhackDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quickhackDuration);
+			set => SetProperty(ref _quickhackDuration, value);
 		}
 
 		[Ordinal(57)] 
 		[RED("quickhackCooldown")] 
 		public inkTextWidgetReference QuickhackCooldown
 		{
-			get
-			{
-				if (_quickhackCooldown == null)
-				{
-					_quickhackCooldown = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "quickhackCooldown", cr2w, this);
-				}
-				return _quickhackCooldown;
-			}
-			set
-			{
-				if (_quickhackCooldown == value)
-				{
-					return;
-				}
-				_quickhackCooldown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quickhackCooldown);
+			set => SetProperty(ref _quickhackCooldown, value);
 		}
 
 		[Ordinal(58)] 
 		[RED("quickhackUpload")] 
 		public inkTextWidgetReference QuickhackUpload
 		{
-			get
-			{
-				if (_quickhackUpload == null)
-				{
-					_quickhackUpload = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "quickhackUpload", cr2w, this);
-				}
-				return _quickhackUpload;
-			}
-			set
-			{
-				if (_quickhackUpload == value)
-				{
-					return;
-				}
-				_quickhackUpload = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quickhackUpload);
+			set => SetProperty(ref _quickhackUpload, value);
 		}
 
 		[Ordinal(59)] 
 		[RED("damageTypeWrapper")] 
 		public inkWidgetReference DamageTypeWrapper
 		{
-			get
-			{
-				if (_damageTypeWrapper == null)
-				{
-					_damageTypeWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "damageTypeWrapper", cr2w, this);
-				}
-				return _damageTypeWrapper;
-			}
-			set
-			{
-				if (_damageTypeWrapper == value)
-				{
-					return;
-				}
-				_damageTypeWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damageTypeWrapper);
+			set => SetProperty(ref _damageTypeWrapper, value);
 		}
 
 		[Ordinal(60)] 
 		[RED("damageTypeIcon")] 
 		public inkImageWidgetReference DamageTypeIcon
 		{
-			get
-			{
-				if (_damageTypeIcon == null)
-				{
-					_damageTypeIcon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "damageTypeIcon", cr2w, this);
-				}
-				return _damageTypeIcon;
-			}
-			set
-			{
-				if (_damageTypeIcon == value)
-				{
-					return;
-				}
-				_damageTypeIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damageTypeIcon);
+			set => SetProperty(ref _damageTypeIcon, value);
 		}
 
 		[Ordinal(61)] 
 		[RED("equipedWrapper")] 
 		public inkWidgetReference EquipedWrapper
 		{
-			get
-			{
-				if (_equipedWrapper == null)
-				{
-					_equipedWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "equipedWrapper", cr2w, this);
-				}
-				return _equipedWrapper;
-			}
-			set
-			{
-				if (_equipedWrapper == value)
-				{
-					return;
-				}
-				_equipedWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipedWrapper);
+			set => SetProperty(ref _equipedWrapper, value);
 		}
 
 		[Ordinal(62)] 
 		[RED("itemTypeText")] 
 		public inkTextWidgetReference ItemTypeText
 		{
-			get
-			{
-				if (_itemTypeText == null)
-				{
-					_itemTypeText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "itemTypeText", cr2w, this);
-				}
-				return _itemTypeText;
-			}
-			set
-			{
-				if (_itemTypeText == value)
-				{
-					return;
-				}
-				_itemTypeText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemTypeText);
+			set => SetProperty(ref _itemTypeText, value);
 		}
 
 		[Ordinal(63)] 
 		[RED("itemPreviewWrapper")] 
 		public inkWidgetReference ItemPreviewWrapper
 		{
-			get
-			{
-				if (_itemPreviewWrapper == null)
-				{
-					_itemPreviewWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "itemPreviewWrapper", cr2w, this);
-				}
-				return _itemPreviewWrapper;
-			}
-			set
-			{
-				if (_itemPreviewWrapper == value)
-				{
-					return;
-				}
-				_itemPreviewWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemPreviewWrapper);
+			set => SetProperty(ref _itemPreviewWrapper, value);
 		}
 
 		[Ordinal(64)] 
 		[RED("itemPreviewIcon")] 
 		public inkImageWidgetReference ItemPreviewIcon
 		{
-			get
-			{
-				if (_itemPreviewIcon == null)
-				{
-					_itemPreviewIcon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "itemPreviewIcon", cr2w, this);
-				}
-				return _itemPreviewIcon;
-			}
-			set
-			{
-				if (_itemPreviewIcon == value)
-				{
-					return;
-				}
-				_itemPreviewIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemPreviewIcon);
+			set => SetProperty(ref _itemPreviewIcon, value);
 		}
 
 		[Ordinal(65)] 
 		[RED("itemPreviewIconicLines")] 
 		public inkWidgetReference ItemPreviewIconicLines
 		{
-			get
-			{
-				if (_itemPreviewIconicLines == null)
-				{
-					_itemPreviewIconicLines = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "itemPreviewIconicLines", cr2w, this);
-				}
-				return _itemPreviewIconicLines;
-			}
-			set
-			{
-				if (_itemPreviewIconicLines == value)
-				{
-					return;
-				}
-				_itemPreviewIconicLines = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemPreviewIconicLines);
+			set => SetProperty(ref _itemPreviewIconicLines, value);
 		}
 
 		[Ordinal(66)] 
 		[RED("itemWeightWrapper")] 
 		public inkWidgetReference ItemWeightWrapper
 		{
-			get
-			{
-				if (_itemWeightWrapper == null)
-				{
-					_itemWeightWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "itemWeightWrapper", cr2w, this);
-				}
-				return _itemWeightWrapper;
-			}
-			set
-			{
-				if (_itemWeightWrapper == value)
-				{
-					return;
-				}
-				_itemWeightWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemWeightWrapper);
+			set => SetProperty(ref _itemWeightWrapper, value);
 		}
 
 		[Ordinal(67)] 
 		[RED("itemWeightText")] 
 		public inkTextWidgetReference ItemWeightText
 		{
-			get
-			{
-				if (_itemWeightText == null)
-				{
-					_itemWeightText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "itemWeightText", cr2w, this);
-				}
-				return _itemWeightText;
-			}
-			set
-			{
-				if (_itemWeightText == value)
-				{
-					return;
-				}
-				_itemWeightText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemWeightText);
+			set => SetProperty(ref _itemWeightText, value);
 		}
 
 		[Ordinal(68)] 
 		[RED("itemAmmoWrapper")] 
 		public inkWidgetReference ItemAmmoWrapper
 		{
-			get
-			{
-				if (_itemAmmoWrapper == null)
-				{
-					_itemAmmoWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "itemAmmoWrapper", cr2w, this);
-				}
-				return _itemAmmoWrapper;
-			}
-			set
-			{
-				if (_itemAmmoWrapper == value)
-				{
-					return;
-				}
-				_itemAmmoWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemAmmoWrapper);
+			set => SetProperty(ref _itemAmmoWrapper, value);
 		}
 
 		[Ordinal(69)] 
 		[RED("itemAmmoText")] 
 		public inkTextWidgetReference ItemAmmoText
 		{
-			get
-			{
-				if (_itemAmmoText == null)
-				{
-					_itemAmmoText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "itemAmmoText", cr2w, this);
-				}
-				return _itemAmmoText;
-			}
-			set
-			{
-				if (_itemAmmoText == value)
-				{
-					return;
-				}
-				_itemAmmoText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemAmmoText);
+			set => SetProperty(ref _itemAmmoText, value);
 		}
 
 		[Ordinal(70)] 
 		[RED("itemRequirements")] 
 		public inkWidgetReference ItemRequirements
 		{
-			get
-			{
-				if (_itemRequirements == null)
-				{
-					_itemRequirements = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "itemRequirements", cr2w, this);
-				}
-				return _itemRequirements;
-			}
-			set
-			{
-				if (_itemRequirements == value)
-				{
-					return;
-				}
-				_itemRequirements = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemRequirements);
+			set => SetProperty(ref _itemRequirements, value);
 		}
 
 		[Ordinal(71)] 
 		[RED("itemLevelRequirements")] 
 		public inkWidgetReference ItemLevelRequirements
 		{
-			get
-			{
-				if (_itemLevelRequirements == null)
-				{
-					_itemLevelRequirements = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "itemLevelRequirements", cr2w, this);
-				}
-				return _itemLevelRequirements;
-			}
-			set
-			{
-				if (_itemLevelRequirements == value)
-				{
-					return;
-				}
-				_itemLevelRequirements = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemLevelRequirements);
+			set => SetProperty(ref _itemLevelRequirements, value);
 		}
 
 		[Ordinal(72)] 
 		[RED("itemStrenghtRequirements")] 
 		public inkWidgetReference ItemStrenghtRequirements
 		{
-			get
-			{
-				if (_itemStrenghtRequirements == null)
-				{
-					_itemStrenghtRequirements = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "itemStrenghtRequirements", cr2w, this);
-				}
-				return _itemStrenghtRequirements;
-			}
-			set
-			{
-				if (_itemStrenghtRequirements == value)
-				{
-					return;
-				}
-				_itemStrenghtRequirements = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemStrenghtRequirements);
+			set => SetProperty(ref _itemStrenghtRequirements, value);
 		}
 
 		[Ordinal(73)] 
 		[RED("itemAttributeRequirements")] 
 		public inkWidgetReference ItemAttributeRequirements
 		{
-			get
-			{
-				if (_itemAttributeRequirements == null)
-				{
-					_itemAttributeRequirements = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "itemAttributeRequirements", cr2w, this);
-				}
-				return _itemAttributeRequirements;
-			}
-			set
-			{
-				if (_itemAttributeRequirements == value)
-				{
-					return;
-				}
-				_itemAttributeRequirements = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemAttributeRequirements);
+			set => SetProperty(ref _itemAttributeRequirements, value);
 		}
 
 		[Ordinal(74)] 
 		[RED("itemSmartGunLinkRequirements")] 
 		public inkWidgetReference ItemSmartGunLinkRequirements
 		{
-			get
-			{
-				if (_itemSmartGunLinkRequirements == null)
-				{
-					_itemSmartGunLinkRequirements = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "itemSmartGunLinkRequirements", cr2w, this);
-				}
-				return _itemSmartGunLinkRequirements;
-			}
-			set
-			{
-				if (_itemSmartGunLinkRequirements == value)
-				{
-					return;
-				}
-				_itemSmartGunLinkRequirements = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemSmartGunLinkRequirements);
+			set => SetProperty(ref _itemSmartGunLinkRequirements, value);
 		}
 
 		[Ordinal(75)] 
 		[RED("itemLevelRequirementsValue")] 
 		public inkTextWidgetReference ItemLevelRequirementsValue
 		{
-			get
-			{
-				if (_itemLevelRequirementsValue == null)
-				{
-					_itemLevelRequirementsValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "itemLevelRequirementsValue", cr2w, this);
-				}
-				return _itemLevelRequirementsValue;
-			}
-			set
-			{
-				if (_itemLevelRequirementsValue == value)
-				{
-					return;
-				}
-				_itemLevelRequirementsValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemLevelRequirementsValue);
+			set => SetProperty(ref _itemLevelRequirementsValue, value);
 		}
 
 		[Ordinal(76)] 
 		[RED("itemStrenghtRequirementsValue")] 
 		public inkTextWidgetReference ItemStrenghtRequirementsValue
 		{
-			get
-			{
-				if (_itemStrenghtRequirementsValue == null)
-				{
-					_itemStrenghtRequirementsValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "itemStrenghtRequirementsValue", cr2w, this);
-				}
-				return _itemStrenghtRequirementsValue;
-			}
-			set
-			{
-				if (_itemStrenghtRequirementsValue == value)
-				{
-					return;
-				}
-				_itemStrenghtRequirementsValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemStrenghtRequirementsValue);
+			set => SetProperty(ref _itemStrenghtRequirementsValue, value);
 		}
 
 		[Ordinal(77)] 
 		[RED("itemAttributeRequirementsText")] 
 		public inkTextWidgetReference ItemAttributeRequirementsText
 		{
-			get
-			{
-				if (_itemAttributeRequirementsText == null)
-				{
-					_itemAttributeRequirementsText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "itemAttributeRequirementsText", cr2w, this);
-				}
-				return _itemAttributeRequirementsText;
-			}
-			set
-			{
-				if (_itemAttributeRequirementsText == value)
-				{
-					return;
-				}
-				_itemAttributeRequirementsText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemAttributeRequirementsText);
+			set => SetProperty(ref _itemAttributeRequirementsText, value);
 		}
 
 		[Ordinal(78)] 
 		[RED("weaponEvolutionWrapper")] 
 		public inkWidgetReference WeaponEvolutionWrapper
 		{
-			get
-			{
-				if (_weaponEvolutionWrapper == null)
-				{
-					_weaponEvolutionWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "weaponEvolutionWrapper", cr2w, this);
-				}
-				return _weaponEvolutionWrapper;
-			}
-			set
-			{
-				if (_weaponEvolutionWrapper == value)
-				{
-					return;
-				}
-				_weaponEvolutionWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponEvolutionWrapper);
+			set => SetProperty(ref _weaponEvolutionWrapper, value);
 		}
 
 		[Ordinal(79)] 
 		[RED("weaponEvolutionIcon")] 
 		public inkImageWidgetReference WeaponEvolutionIcon
 		{
-			get
-			{
-				if (_weaponEvolutionIcon == null)
-				{
-					_weaponEvolutionIcon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "weaponEvolutionIcon", cr2w, this);
-				}
-				return _weaponEvolutionIcon;
-			}
-			set
-			{
-				if (_weaponEvolutionIcon == value)
-				{
-					return;
-				}
-				_weaponEvolutionIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponEvolutionIcon);
+			set => SetProperty(ref _weaponEvolutionIcon, value);
 		}
 
 		[Ordinal(80)] 
 		[RED("weaponEvolutionName")] 
 		public inkTextWidgetReference WeaponEvolutionName
 		{
-			get
-			{
-				if (_weaponEvolutionName == null)
-				{
-					_weaponEvolutionName = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "weaponEvolutionName", cr2w, this);
-				}
-				return _weaponEvolutionName;
-			}
-			set
-			{
-				if (_weaponEvolutionName == value)
-				{
-					return;
-				}
-				_weaponEvolutionName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponEvolutionName);
+			set => SetProperty(ref _weaponEvolutionName, value);
 		}
 
 		[Ordinal(81)] 
 		[RED("weaponEvolutionDescription")] 
 		public inkTextWidgetReference WeaponEvolutionDescription
 		{
-			get
-			{
-				if (_weaponEvolutionDescription == null)
-				{
-					_weaponEvolutionDescription = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "weaponEvolutionDescription", cr2w, this);
-				}
-				return _weaponEvolutionDescription;
-			}
-			set
-			{
-				if (_weaponEvolutionDescription == value)
-				{
-					return;
-				}
-				_weaponEvolutionDescription = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponEvolutionDescription);
+			set => SetProperty(ref _weaponEvolutionDescription, value);
 		}
 
 		[Ordinal(82)] 
 		[RED("DEBUG_iconErrorWrapper")] 
 		public inkWidgetReference DEBUG_iconErrorWrapper
 		{
-			get
-			{
-				if (_dEBUG_iconErrorWrapper == null)
-				{
-					_dEBUG_iconErrorWrapper = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "DEBUG_iconErrorWrapper", cr2w, this);
-				}
-				return _dEBUG_iconErrorWrapper;
-			}
-			set
-			{
-				if (_dEBUG_iconErrorWrapper == value)
-				{
-					return;
-				}
-				_dEBUG_iconErrorWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dEBUG_iconErrorWrapper);
+			set => SetProperty(ref _dEBUG_iconErrorWrapper, value);
 		}
 
 		[Ordinal(83)] 
 		[RED("DEBUG_iconErrorText")] 
 		public inkTextWidgetReference DEBUG_iconErrorText
 		{
-			get
-			{
-				if (_dEBUG_iconErrorText == null)
-				{
-					_dEBUG_iconErrorText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "DEBUG_iconErrorText", cr2w, this);
-				}
-				return _dEBUG_iconErrorText;
-			}
-			set
-			{
-				if (_dEBUG_iconErrorText == value)
-				{
-					return;
-				}
-				_dEBUG_iconErrorText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dEBUG_iconErrorText);
+			set => SetProperty(ref _dEBUG_iconErrorText, value);
 		}
 
 		[Ordinal(84)] 
 		[RED("DEBUG_showAdditionalInfo")] 
 		public CBool DEBUG_showAdditionalInfo
 		{
-			get
-			{
-				if (_dEBUG_showAdditionalInfo == null)
-				{
-					_dEBUG_showAdditionalInfo = (CBool) CR2WTypeManager.Create("Bool", "DEBUG_showAdditionalInfo", cr2w, this);
-				}
-				return _dEBUG_showAdditionalInfo;
-			}
-			set
-			{
-				if (_dEBUG_showAdditionalInfo == value)
-				{
-					return;
-				}
-				_dEBUG_showAdditionalInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dEBUG_showAdditionalInfo);
+			set => SetProperty(ref _dEBUG_showAdditionalInfo, value);
 		}
 
 		[Ordinal(85)] 
 		[RED("data")] 
 		public CHandle<InventoryTooltipData> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CHandle<InventoryTooltipData>) CR2WTypeManager.Create("handle:InventoryTooltipData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(86)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get
-			{
-				if (_animProxy == null)
-				{
-					_animProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animProxy", cr2w, this);
-				}
-				return _animProxy;
-			}
-			set
-			{
-				if (_animProxy == value)
-				{
-					return;
-				}
-				_animProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animProxy);
+			set => SetProperty(ref _animProxy, value);
 		}
 
 		[Ordinal(87)] 
 		[RED("playAnimation")] 
 		public CBool PlayAnimation
 		{
-			get
-			{
-				if (_playAnimation == null)
-				{
-					_playAnimation = (CBool) CR2WTypeManager.Create("Bool", "playAnimation", cr2w, this);
-				}
-				return _playAnimation;
-			}
-			set
-			{
-				if (_playAnimation == value)
-				{
-					return;
-				}
-				_playAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playAnimation);
+			set => SetProperty(ref _playAnimation, value);
 		}
 
 		public ItemTooltipController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

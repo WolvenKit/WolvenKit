@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("workspotSystem")] 
 		public CHandle<gameWorkspotGameSystem> WorkspotSystem
 		{
-			get
-			{
-				if (_workspotSystem == null)
-				{
-					_workspotSystem = (CHandle<gameWorkspotGameSystem>) CR2WTypeManager.Create("handle:gameWorkspotGameSystem", "workspotSystem", cr2w, this);
-				}
-				return _workspotSystem;
-			}
-			set
-			{
-				if (_workspotSystem == value)
-				{
-					return;
-				}
-				_workspotSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotSystem);
+			set => SetProperty(ref _workspotSystem, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("enabledSceneMode")] 
 		public CBool EnabledSceneMode
 		{
-			get
-			{
-				if (_enabledSceneMode == null)
-				{
-					_enabledSceneMode = (CBool) CR2WTypeManager.Create("Bool", "enabledSceneMode", cr2w, this);
-				}
-				return _enabledSceneMode;
-			}
-			set
-			{
-				if (_enabledSceneMode == value)
-				{
-					return;
-				}
-				_enabledSceneMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enabledSceneMode);
+			set => SetProperty(ref _enabledSceneMode, value);
 		}
 
 		public SwitchSeatsEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

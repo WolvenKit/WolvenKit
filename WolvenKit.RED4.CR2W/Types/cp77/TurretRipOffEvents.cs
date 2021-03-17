@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stateMachineInitData")] 
 		public wCHandle<TurretInitData> StateMachineInitData
 		{
-			get
-			{
-				if (_stateMachineInitData == null)
-				{
-					_stateMachineInitData = (wCHandle<TurretInitData>) CR2WTypeManager.Create("whandle:TurretInitData", "stateMachineInitData", cr2w, this);
-				}
-				return _stateMachineInitData;
-			}
-			set
-			{
-				if (_stateMachineInitData == value)
-				{
-					return;
-				}
-				_stateMachineInitData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stateMachineInitData);
+			set => SetProperty(ref _stateMachineInitData, value);
 		}
 
 		public TurretRipOffEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

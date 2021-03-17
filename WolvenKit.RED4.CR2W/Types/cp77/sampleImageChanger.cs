@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("imagePath")] 
 		public CName ImagePath
 		{
-			get
-			{
-				if (_imagePath == null)
-				{
-					_imagePath = (CName) CR2WTypeManager.Create("CName", "imagePath", cr2w, this);
-				}
-				return _imagePath;
-			}
-			set
-			{
-				if (_imagePath == value)
-				{
-					return;
-				}
-				_imagePath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _imagePath);
+			set => SetProperty(ref _imagePath, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("imageName_1")] 
 		public CName ImageName_1
 		{
-			get
-			{
-				if (_imageName_1 == null)
-				{
-					_imageName_1 = (CName) CR2WTypeManager.Create("CName", "imageName_1", cr2w, this);
-				}
-				return _imageName_1;
-			}
-			set
-			{
-				if (_imageName_1 == value)
-				{
-					return;
-				}
-				_imageName_1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _imageName_1);
+			set => SetProperty(ref _imageName_1, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("imageName_2")] 
 		public CName ImageName_2
 		{
-			get
-			{
-				if (_imageName_2 == null)
-				{
-					_imageName_2 = (CName) CR2WTypeManager.Create("CName", "imageName_2", cr2w, this);
-				}
-				return _imageName_2;
-			}
-			set
-			{
-				if (_imageName_2 == value)
-				{
-					return;
-				}
-				_imageName_2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _imageName_2);
+			set => SetProperty(ref _imageName_2, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("imageWidget")] 
 		public wCHandle<inkImageWidget> ImageWidget
 		{
-			get
-			{
-				if (_imageWidget == null)
-				{
-					_imageWidget = (wCHandle<inkImageWidget>) CR2WTypeManager.Create("whandle:inkImageWidget", "imageWidget", cr2w, this);
-				}
-				return _imageWidget;
-			}
-			set
-			{
-				if (_imageWidget == value)
-				{
-					return;
-				}
-				_imageWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _imageWidget);
+			set => SetProperty(ref _imageWidget, value);
 		}
 
 		public sampleImageChanger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isInWater")] 
 		public CBool IsInWater
 		{
-			get
-			{
-				if (_isInWater == null)
-				{
-					_isInWater = (CBool) CR2WTypeManager.Create("Bool", "isInWater", cr2w, this);
-				}
-				return _isInWater;
-			}
-			set
-			{
-				if (_isInWater == value)
-				{
-					return;
-				}
-				_isInWater = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInWater);
+			set => SetProperty(ref _isInWater, value);
 		}
 
 		public vehicleWaterEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

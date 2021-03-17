@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("damages")] 
 		public CArray<SDamageOperationData> Damages
 		{
-			get
-			{
-				if (_damages == null)
-				{
-					_damages = (CArray<SDamageOperationData>) CR2WTypeManager.Create("array:SDamageOperationData", "damages", cr2w, this);
-				}
-				return _damages;
-			}
-			set
-			{
-				if (_damages == value)
-				{
-					return;
-				}
-				_damages = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damages);
+			set => SetProperty(ref _damages, value);
 		}
 
 		public ApplyDamageDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

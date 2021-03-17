@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bValue")] 
 		public CBool BValue
 		{
-			get
-			{
-				if (_bValue == null)
-				{
-					_bValue = (CBool) CR2WTypeManager.Create("Bool", "bValue", cr2w, this);
-				}
-				return _bValue;
-			}
-			set
-			{
-				if (_bValue == value)
-				{
-					return;
-				}
-				_bValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bValue);
+			set => SetProperty(ref _bValue, value);
 		}
 
 		public UsingCoverPSMPrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

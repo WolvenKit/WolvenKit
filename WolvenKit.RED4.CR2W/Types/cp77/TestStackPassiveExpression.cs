@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("SomeNameProperty")] 
 		public CName SomeNameProperty
 		{
-			get
-			{
-				if (_someNameProperty == null)
-				{
-					_someNameProperty = (CName) CR2WTypeManager.Create("CName", "SomeNameProperty", cr2w, this);
-				}
-				return _someNameProperty;
-			}
-			set
-			{
-				if (_someNameProperty == value)
-				{
-					return;
-				}
-				_someNameProperty = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _someNameProperty);
+			set => SetProperty(ref _someNameProperty, value);
 		}
 
 		public TestStackPassiveExpression(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

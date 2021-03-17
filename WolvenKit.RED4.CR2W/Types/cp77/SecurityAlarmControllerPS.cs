@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("securityAlarmSetup")] 
 		public SecurityAlarmSetup SecurityAlarmSetup
 		{
-			get
-			{
-				if (_securityAlarmSetup == null)
-				{
-					_securityAlarmSetup = (SecurityAlarmSetup) CR2WTypeManager.Create("SecurityAlarmSetup", "securityAlarmSetup", cr2w, this);
-				}
-				return _securityAlarmSetup;
-			}
-			set
-			{
-				if (_securityAlarmSetup == value)
-				{
-					return;
-				}
-				_securityAlarmSetup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securityAlarmSetup);
+			set => SetProperty(ref _securityAlarmSetup, value);
 		}
 
 		[Ordinal(105)] 
 		[RED("securityAlarmState")] 
 		public CEnum<ESecuritySystemState> SecurityAlarmState
 		{
-			get
-			{
-				if (_securityAlarmState == null)
-				{
-					_securityAlarmState = (CEnum<ESecuritySystemState>) CR2WTypeManager.Create("ESecuritySystemState", "securityAlarmState", cr2w, this);
-				}
-				return _securityAlarmState;
-			}
-			set
-			{
-				if (_securityAlarmState == value)
-				{
-					return;
-				}
-				_securityAlarmState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securityAlarmState);
+			set => SetProperty(ref _securityAlarmState, value);
 		}
 
 		public SecurityAlarmControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

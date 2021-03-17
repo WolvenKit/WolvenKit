@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("playerSafePass")] 
 		public CBool PlayerSafePass
 		{
-			get
-			{
-				if (_playerSafePass == null)
-				{
-					_playerSafePass = (CBool) CR2WTypeManager.Create("Bool", "playerSafePass", cr2w, this);
-				}
-				return _playerSafePass;
-			}
-			set
-			{
-				if (_playerSafePass == value)
-				{
-					return;
-				}
-				_playerSafePass = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerSafePass);
+			set => SetProperty(ref _playerSafePass, value);
 		}
 
 		[Ordinal(120)] 
 		[RED("triggerExploded")] 
 		public CBool TriggerExploded
 		{
-			get
-			{
-				if (_triggerExploded == null)
-				{
-					_triggerExploded = (CBool) CR2WTypeManager.Create("Bool", "triggerExploded", cr2w, this);
-				}
-				return _triggerExploded;
-			}
-			set
-			{
-				if (_triggerExploded == value)
-				{
-					return;
-				}
-				_triggerExploded = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerExploded);
+			set => SetProperty(ref _triggerExploded, value);
 		}
 
 		public ExplosiveTriggerDeviceControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

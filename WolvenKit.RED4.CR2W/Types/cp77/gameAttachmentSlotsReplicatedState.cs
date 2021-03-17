@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stateVersion")] 
 		public CUInt32 StateVersion
 		{
-			get
-			{
-				if (_stateVersion == null)
-				{
-					_stateVersion = (CUInt32) CR2WTypeManager.Create("Uint32", "stateVersion", cr2w, this);
-				}
-				return _stateVersion;
-			}
-			set
-			{
-				if (_stateVersion == value)
-				{
-					return;
-				}
-				_stateVersion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stateVersion);
+			set => SetProperty(ref _stateVersion, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("slots")] 
 		public CArray<gameAttachmentSlotReplicatedState> Slots
 		{
-			get
-			{
-				if (_slots == null)
-				{
-					_slots = (CArray<gameAttachmentSlotReplicatedState>) CR2WTypeManager.Create("array:gameAttachmentSlotReplicatedState", "slots", cr2w, this);
-				}
-				return _slots;
-			}
-			set
-			{
-				if (_slots == value)
-				{
-					return;
-				}
-				_slots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slots);
+			set => SetProperty(ref _slots, value);
 		}
 
 		public gameAttachmentSlotsReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

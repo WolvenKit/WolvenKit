@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("comparator")] 
 		public CEnum<ECompareOp> Comparator
 		{
-			get
-			{
-				if (_comparator == null)
-				{
-					_comparator = (CEnum<ECompareOp>) CR2WTypeManager.Create("ECompareOp", "comparator", cr2w, this);
-				}
-				return _comparator;
-			}
-			set
-			{
-				if (_comparator == value)
-				{
-					return;
-				}
-				_comparator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comparator);
+			set => SetProperty(ref _comparator, value);
 		}
 
 		public CompareArgumentsFloats(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

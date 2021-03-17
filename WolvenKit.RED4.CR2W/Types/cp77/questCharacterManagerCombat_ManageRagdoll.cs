@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get
-			{
-				if (_puppetRef == null)
-				{
-					_puppetRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "puppetRef", cr2w, this);
-				}
-				return _puppetRef;
-			}
-			set
-			{
-				if (_puppetRef == value)
-				{
-					return;
-				}
-				_puppetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppetRef);
+			set => SetProperty(ref _puppetRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("enableRagdoll")] 
 		public CBool EnableRagdoll
 		{
-			get
-			{
-				if (_enableRagdoll == null)
-				{
-					_enableRagdoll = (CBool) CR2WTypeManager.Create("Bool", "enableRagdoll", cr2w, this);
-				}
-				return _enableRagdoll;
-			}
-			set
-			{
-				if (_enableRagdoll == value)
-				{
-					return;
-				}
-				_enableRagdoll = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableRagdoll);
+			set => SetProperty(ref _enableRagdoll, value);
 		}
 
 		public questCharacterManagerCombat_ManageRagdoll(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

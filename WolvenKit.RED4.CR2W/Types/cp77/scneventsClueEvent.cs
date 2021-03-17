@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("clueEntity")] 
 		public gameEntityReference ClueEntity
 		{
-			get
-			{
-				if (_clueEntity == null)
-				{
-					_clueEntity = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "clueEntity", cr2w, this);
-				}
-				return _clueEntity;
-			}
-			set
-			{
-				if (_clueEntity == value)
-				{
-					return;
-				}
-				_clueEntity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clueEntity);
+			set => SetProperty(ref _clueEntity, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("markedOnTimeline")] 
 		public CBool MarkedOnTimeline
 		{
-			get
-			{
-				if (_markedOnTimeline == null)
-				{
-					_markedOnTimeline = (CBool) CR2WTypeManager.Create("Bool", "markedOnTimeline", cr2w, this);
-				}
-				return _markedOnTimeline;
-			}
-			set
-			{
-				if (_markedOnTimeline == value)
-				{
-					return;
-				}
-				_markedOnTimeline = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _markedOnTimeline);
+			set => SetProperty(ref _markedOnTimeline, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("clueName")] 
 		public CName ClueName
 		{
-			get
-			{
-				if (_clueName == null)
-				{
-					_clueName = (CName) CR2WTypeManager.Create("CName", "clueName", cr2w, this);
-				}
-				return _clueName;
-			}
-			set
-			{
-				if (_clueName == value)
-				{
-					return;
-				}
-				_clueName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clueName);
+			set => SetProperty(ref _clueName, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("layer")] 
 		public CEnum<gameuiEBraindanceLayer> Layer
 		{
-			get
-			{
-				if (_layer == null)
-				{
-					_layer = (CEnum<gameuiEBraindanceLayer>) CR2WTypeManager.Create("gameuiEBraindanceLayer", "layer", cr2w, this);
-				}
-				return _layer;
-			}
-			set
-			{
-				if (_layer == value)
-				{
-					return;
-				}
-				_layer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _layer);
+			set => SetProperty(ref _layer, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("overrideFact")] 
 		public CBool OverrideFact
 		{
-			get
-			{
-				if (_overrideFact == null)
-				{
-					_overrideFact = (CBool) CR2WTypeManager.Create("Bool", "overrideFact", cr2w, this);
-				}
-				return _overrideFact;
-			}
-			set
-			{
-				if (_overrideFact == value)
-				{
-					return;
-				}
-				_overrideFact = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideFact);
+			set => SetProperty(ref _overrideFact, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("factName")] 
 		public CName FactName
 		{
-			get
-			{
-				if (_factName == null)
-				{
-					_factName = (CName) CR2WTypeManager.Create("CName", "factName", cr2w, this);
-				}
-				return _factName;
-			}
-			set
-			{
-				if (_factName == value)
-				{
-					return;
-				}
-				_factName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factName);
+			set => SetProperty(ref _factName, value);
 		}
 
 		public scneventsClueEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

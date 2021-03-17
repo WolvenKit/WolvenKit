@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isGPUBased")] 
 		public CBool IsGPUBased
 		{
-			get
-			{
-				if (_isGPUBased == null)
-				{
-					_isGPUBased = (CBool) CR2WTypeManager.Create("Bool", "isGPUBased", cr2w, this);
-				}
-				return _isGPUBased;
-			}
-			set
-			{
-				if (_isGPUBased == value)
-				{
-					return;
-				}
-				_isGPUBased = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isGPUBased);
+			set => SetProperty(ref _isGPUBased, value);
 		}
 
 		public CParticleDrawerBillboard(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

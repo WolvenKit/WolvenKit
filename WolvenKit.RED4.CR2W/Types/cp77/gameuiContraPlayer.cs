@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mass")] 
 		public CFloat Mass
 		{
-			get
-			{
-				if (_mass == null)
-				{
-					_mass = (CFloat) CR2WTypeManager.Create("Float", "mass", cr2w, this);
-				}
-				return _mass;
-			}
-			set
-			{
-				if (_mass == value)
-				{
-					return;
-				}
-				_mass = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mass);
+			set => SetProperty(ref _mass, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("jumpForce")] 
 		public CFloat JumpForce
 		{
-			get
-			{
-				if (_jumpForce == null)
-				{
-					_jumpForce = (CFloat) CR2WTypeManager.Create("Float", "jumpForce", cr2w, this);
-				}
-				return _jumpForce;
-			}
-			set
-			{
-				if (_jumpForce == value)
-				{
-					return;
-				}
-				_jumpForce = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _jumpForce);
+			set => SetProperty(ref _jumpForce, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("movementSpeed")] 
 		public CFloat MovementSpeed
 		{
-			get
-			{
-				if (_movementSpeed == null)
-				{
-					_movementSpeed = (CFloat) CR2WTypeManager.Create("Float", "movementSpeed", cr2w, this);
-				}
-				return _movementSpeed;
-			}
-			set
-			{
-				if (_movementSpeed == value)
-				{
-					return;
-				}
-				_movementSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movementSpeed);
+			set => SetProperty(ref _movementSpeed, value);
 		}
 
 		public gameuiContraPlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("projectileReleased")] 
 		public CBool ProjectileReleased
 		{
-			get
-			{
-				if (_projectileReleased == null)
-				{
-					_projectileReleased = (CBool) CR2WTypeManager.Create("Bool", "projectileReleased", cr2w, this);
-				}
-				return _projectileReleased;
-			}
-			set
-			{
-				if (_projectileReleased == value)
-				{
-					return;
-				}
-				_projectileReleased = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projectileReleased);
+			set => SetProperty(ref _projectileReleased, value);
 		}
 
 		public LeftHandCyberwareActionAbstractEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

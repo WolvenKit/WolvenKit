@@ -23,253 +23,88 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fastHeavy")] 
 		public audioMeleeSound FastHeavy
 		{
-			get
-			{
-				if (_fastHeavy == null)
-				{
-					_fastHeavy = (audioMeleeSound) CR2WTypeManager.Create("audioMeleeSound", "fastHeavy", cr2w, this);
-				}
-				return _fastHeavy;
-			}
-			set
-			{
-				if (_fastHeavy == value)
-				{
-					return;
-				}
-				_fastHeavy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fastHeavy);
+			set => SetProperty(ref _fastHeavy, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("fastMedium")] 
 		public audioMeleeSound FastMedium
 		{
-			get
-			{
-				if (_fastMedium == null)
-				{
-					_fastMedium = (audioMeleeSound) CR2WTypeManager.Create("audioMeleeSound", "fastMedium", cr2w, this);
-				}
-				return _fastMedium;
-			}
-			set
-			{
-				if (_fastMedium == value)
-				{
-					return;
-				}
-				_fastMedium = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fastMedium);
+			set => SetProperty(ref _fastMedium, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("fastLight")] 
 		public audioMeleeSound FastLight
 		{
-			get
-			{
-				if (_fastLight == null)
-				{
-					_fastLight = (audioMeleeSound) CR2WTypeManager.Create("audioMeleeSound", "fastLight", cr2w, this);
-				}
-				return _fastLight;
-			}
-			set
-			{
-				if (_fastLight == value)
-				{
-					return;
-				}
-				_fastLight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fastLight);
+			set => SetProperty(ref _fastLight, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("normalHeavy")] 
 		public audioMeleeSound NormalHeavy
 		{
-			get
-			{
-				if (_normalHeavy == null)
-				{
-					_normalHeavy = (audioMeleeSound) CR2WTypeManager.Create("audioMeleeSound", "normalHeavy", cr2w, this);
-				}
-				return _normalHeavy;
-			}
-			set
-			{
-				if (_normalHeavy == value)
-				{
-					return;
-				}
-				_normalHeavy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _normalHeavy);
+			set => SetProperty(ref _normalHeavy, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("normalMedium")] 
 		public audioMeleeSound NormalMedium
 		{
-			get
-			{
-				if (_normalMedium == null)
-				{
-					_normalMedium = (audioMeleeSound) CR2WTypeManager.Create("audioMeleeSound", "normalMedium", cr2w, this);
-				}
-				return _normalMedium;
-			}
-			set
-			{
-				if (_normalMedium == value)
-				{
-					return;
-				}
-				_normalMedium = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _normalMedium);
+			set => SetProperty(ref _normalMedium, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("normalLight")] 
 		public audioMeleeSound NormalLight
 		{
-			get
-			{
-				if (_normalLight == null)
-				{
-					_normalLight = (audioMeleeSound) CR2WTypeManager.Create("audioMeleeSound", "normalLight", cr2w, this);
-				}
-				return _normalLight;
-			}
-			set
-			{
-				if (_normalLight == value)
-				{
-					return;
-				}
-				_normalLight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _normalLight);
+			set => SetProperty(ref _normalLight, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("slowHeavy")] 
 		public audioMeleeSound SlowHeavy
 		{
-			get
-			{
-				if (_slowHeavy == null)
-				{
-					_slowHeavy = (audioMeleeSound) CR2WTypeManager.Create("audioMeleeSound", "slowHeavy", cr2w, this);
-				}
-				return _slowHeavy;
-			}
-			set
-			{
-				if (_slowHeavy == value)
-				{
-					return;
-				}
-				_slowHeavy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slowHeavy);
+			set => SetProperty(ref _slowHeavy, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("slowMedium")] 
 		public audioMeleeSound SlowMedium
 		{
-			get
-			{
-				if (_slowMedium == null)
-				{
-					_slowMedium = (audioMeleeSound) CR2WTypeManager.Create("audioMeleeSound", "slowMedium", cr2w, this);
-				}
-				return _slowMedium;
-			}
-			set
-			{
-				if (_slowMedium == value)
-				{
-					return;
-				}
-				_slowMedium = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slowMedium);
+			set => SetProperty(ref _slowMedium, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("slowLight")] 
 		public audioMeleeSound SlowLight
 		{
-			get
-			{
-				if (_slowLight == null)
-				{
-					_slowLight = (audioMeleeSound) CR2WTypeManager.Create("audioMeleeSound", "slowLight", cr2w, this);
-				}
-				return _slowLight;
-			}
-			set
-			{
-				if (_slowLight == value)
-				{
-					return;
-				}
-				_slowLight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slowLight);
+			set => SetProperty(ref _slowLight, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("walk")] 
 		public audioMeleeSound Walk
 		{
-			get
-			{
-				if (_walk == null)
-				{
-					_walk = (audioMeleeSound) CR2WTypeManager.Create("audioMeleeSound", "walk", cr2w, this);
-				}
-				return _walk;
-			}
-			set
-			{
-				if (_walk == value)
-				{
-					return;
-				}
-				_walk = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _walk);
+			set => SetProperty(ref _walk, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("run")] 
 		public audioMeleeSound Run
 		{
-			get
-			{
-				if (_run == null)
-				{
-					_run = (audioMeleeSound) CR2WTypeManager.Create("audioMeleeSound", "run", cr2w, this);
-				}
-				return _run;
-			}
-			set
-			{
-				if (_run == value)
-				{
-					return;
-				}
-				_run = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _run);
+			set => SetProperty(ref _run, value);
 		}
 
 		public audioFoleyNPCMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

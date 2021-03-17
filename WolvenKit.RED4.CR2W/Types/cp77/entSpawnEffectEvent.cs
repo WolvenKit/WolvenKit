@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("blackboard")] 
 		public CHandle<worldEffectBlackboard> Blackboard
 		{
-			get
-			{
-				if (_blackboard == null)
-				{
-					_blackboard = (CHandle<worldEffectBlackboard>) CR2WTypeManager.Create("handle:worldEffectBlackboard", "blackboard", cr2w, this);
-				}
-				return _blackboard;
-			}
-			set
-			{
-				if (_blackboard == value)
-				{
-					return;
-				}
-				_blackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboard);
+			set => SetProperty(ref _blackboard, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("effectName")] 
 		public CName EffectName
 		{
-			get
-			{
-				if (_effectName == null)
-				{
-					_effectName = (CName) CR2WTypeManager.Create("CName", "effectName", cr2w, this);
-				}
-				return _effectName;
-			}
-			set
-			{
-				if (_effectName == value)
-				{
-					return;
-				}
-				_effectName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectName);
+			set => SetProperty(ref _effectName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("idForRandomizedEffect")] 
 		public CRUID IdForRandomizedEffect
 		{
-			get
-			{
-				if (_idForRandomizedEffect == null)
-				{
-					_idForRandomizedEffect = (CRUID) CR2WTypeManager.Create("CRUID", "idForRandomizedEffect", cr2w, this);
-				}
-				return _idForRandomizedEffect;
-			}
-			set
-			{
-				if (_idForRandomizedEffect == value)
-				{
-					return;
-				}
-				_idForRandomizedEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _idForRandomizedEffect);
+			set => SetProperty(ref _idForRandomizedEffect, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("effectInstanceName")] 
 		public CName EffectInstanceName
 		{
-			get
-			{
-				if (_effectInstanceName == null)
-				{
-					_effectInstanceName = (CName) CR2WTypeManager.Create("CName", "effectInstanceName", cr2w, this);
-				}
-				return _effectInstanceName;
-			}
-			set
-			{
-				if (_effectInstanceName == value)
-				{
-					return;
-				}
-				_effectInstanceName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectInstanceName);
+			set => SetProperty(ref _effectInstanceName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("persistOnDetach")] 
 		public CBool PersistOnDetach
 		{
-			get
-			{
-				if (_persistOnDetach == null)
-				{
-					_persistOnDetach = (CBool) CR2WTypeManager.Create("Bool", "persistOnDetach", cr2w, this);
-				}
-				return _persistOnDetach;
-			}
-			set
-			{
-				if (_persistOnDetach == value)
-				{
-					return;
-				}
-				_persistOnDetach = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _persistOnDetach);
+			set => SetProperty(ref _persistOnDetach, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("breakAllLoops")] 
 		public CBool BreakAllLoops
 		{
-			get
-			{
-				if (_breakAllLoops == null)
-				{
-					_breakAllLoops = (CBool) CR2WTypeManager.Create("Bool", "breakAllLoops", cr2w, this);
-				}
-				return _breakAllLoops;
-			}
-			set
-			{
-				if (_breakAllLoops == value)
-				{
-					return;
-				}
-				_breakAllLoops = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _breakAllLoops);
+			set => SetProperty(ref _breakAllLoops, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("breakAllOnDestroy")] 
 		public CBool BreakAllOnDestroy
 		{
-			get
-			{
-				if (_breakAllOnDestroy == null)
-				{
-					_breakAllOnDestroy = (CBool) CR2WTypeManager.Create("Bool", "breakAllOnDestroy", cr2w, this);
-				}
-				return _breakAllOnDestroy;
-			}
-			set
-			{
-				if (_breakAllOnDestroy == value)
-				{
-					return;
-				}
-				_breakAllOnDestroy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _breakAllOnDestroy);
+			set => SetProperty(ref _breakAllOnDestroy, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("e3hackDeferCount")] 
 		public CUInt32 E3hackDeferCount
 		{
-			get
-			{
-				if (_e3hackDeferCount == null)
-				{
-					_e3hackDeferCount = (CUInt32) CR2WTypeManager.Create("Uint32", "e3hackDeferCount", cr2w, this);
-				}
-				return _e3hackDeferCount;
-			}
-			set
-			{
-				if (_e3hackDeferCount == value)
-				{
-					return;
-				}
-				_e3hackDeferCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _e3hackDeferCount);
+			set => SetProperty(ref _e3hackDeferCount, value);
 		}
 
 		public entSpawnEffectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

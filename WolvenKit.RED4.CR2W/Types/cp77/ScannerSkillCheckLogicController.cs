@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ScannerSkillCheckItemName")] 
 		public CName ScannerSkillCheckItemName
 		{
-			get
-			{
-				if (_scannerSkillCheckItemName == null)
-				{
-					_scannerSkillCheckItemName = (CName) CR2WTypeManager.Create("CName", "ScannerSkillCheckItemName", cr2w, this);
-				}
-				return _scannerSkillCheckItemName;
-			}
-			set
-			{
-				if (_scannerSkillCheckItemName == value)
-				{
-					return;
-				}
-				_scannerSkillCheckItemName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerSkillCheckItemName);
+			set => SetProperty(ref _scannerSkillCheckItemName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("SkillCheckObjects")] 
 		public CArray<wCHandle<inkWidget>> SkillCheckObjects
 		{
-			get
-			{
-				if (_skillCheckObjects == null)
-				{
-					_skillCheckObjects = (CArray<wCHandle<inkWidget>>) CR2WTypeManager.Create("array:whandle:inkWidget", "SkillCheckObjects", cr2w, this);
-				}
-				return _skillCheckObjects;
-			}
-			set
-			{
-				if (_skillCheckObjects == value)
-				{
-					return;
-				}
-				_skillCheckObjects = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skillCheckObjects);
+			set => SetProperty(ref _skillCheckObjects, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("Root")] 
 		public wCHandle<inkCompoundWidget> Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (wCHandle<inkCompoundWidget>) CR2WTypeManager.Create("whandle:inkCompoundWidget", "Root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		public ScannerSkillCheckLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("taggedObjectsList")] 
 		public gamebbScriptID_Variant TaggedObjectsList
 		{
-			get
-			{
-				if (_taggedObjectsList == null)
-				{
-					_taggedObjectsList = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "taggedObjectsList", cr2w, this);
-				}
-				return _taggedObjectsList;
-			}
-			set
-			{
-				if (_taggedObjectsList == value)
-				{
-					return;
-				}
-				_taggedObjectsList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _taggedObjectsList);
+			set => SetProperty(ref _taggedObjectsList, value);
 		}
 
 		public TaggedObjectsListDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

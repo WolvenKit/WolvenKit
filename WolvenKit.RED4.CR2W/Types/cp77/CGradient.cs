@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gradientEntries")] 
 		public CArray<rendGradientEntry> GradientEntries
 		{
-			get
-			{
-				if (_gradientEntries == null)
-				{
-					_gradientEntries = (CArray<rendGradientEntry>) CR2WTypeManager.Create("array:rendGradientEntry", "gradientEntries", cr2w, this);
-				}
-				return _gradientEntries;
-			}
-			set
-			{
-				if (_gradientEntries == value)
-				{
-					return;
-				}
-				_gradientEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gradientEntries);
+			set => SetProperty(ref _gradientEntries, value);
 		}
 
 		public CGradient(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

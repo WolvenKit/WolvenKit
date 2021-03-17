@@ -33,483 +33,168 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("defaultCrosshair")] 
 		public TweakDBID DefaultCrosshair
 		{
-			get
-			{
-				if (_defaultCrosshair == null)
-				{
-					_defaultCrosshair = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "defaultCrosshair", cr2w, this);
-				}
-				return _defaultCrosshair;
-			}
-			set
-			{
-				if (_defaultCrosshair == value)
-				{
-					return;
-				}
-				_defaultCrosshair = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultCrosshair);
+			set => SetProperty(ref _defaultCrosshair, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("sprintWidget")] 
 		public inkWidgetReference SprintWidget
 		{
-			get
-			{
-				if (_sprintWidget == null)
-				{
-					_sprintWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "sprintWidget", cr2w, this);
-				}
-				return _sprintWidget;
-			}
-			set
-			{
-				if (_sprintWidget == value)
-				{
-					return;
-				}
-				_sprintWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sprintWidget);
+			set => SetProperty(ref _sprintWidget, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("bbUIData")] 
 		public CHandle<gameIBlackboard> BbUIData
 		{
-			get
-			{
-				if (_bbUIData == null)
-				{
-					_bbUIData = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "bbUIData", cr2w, this);
-				}
-				return _bbUIData;
-			}
-			set
-			{
-				if (_bbUIData == value)
-				{
-					return;
-				}
-				_bbUIData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbUIData);
+			set => SetProperty(ref _bbUIData, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("bbWeaponInfo")] 
 		public wCHandle<gameIBlackboard> BbWeaponInfo
 		{
-			get
-			{
-				if (_bbWeaponInfo == null)
-				{
-					_bbWeaponInfo = (wCHandle<gameIBlackboard>) CR2WTypeManager.Create("whandle:gameIBlackboard", "bbWeaponInfo", cr2w, this);
-				}
-				return _bbWeaponInfo;
-			}
-			set
-			{
-				if (_bbWeaponInfo == value)
-				{
-					return;
-				}
-				_bbWeaponInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbWeaponInfo);
+			set => SetProperty(ref _bbWeaponInfo, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("bbPlayerTierEventId")] 
 		public CUInt32 BbPlayerTierEventId
 		{
-			get
-			{
-				if (_bbPlayerTierEventId == null)
-				{
-					_bbPlayerTierEventId = (CUInt32) CR2WTypeManager.Create("Uint32", "bbPlayerTierEventId", cr2w, this);
-				}
-				return _bbPlayerTierEventId;
-			}
-			set
-			{
-				if (_bbPlayerTierEventId == value)
-				{
-					return;
-				}
-				_bbPlayerTierEventId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbPlayerTierEventId);
+			set => SetProperty(ref _bbPlayerTierEventId, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("bbWeaponEventId")] 
 		public CUInt32 BbWeaponEventId
 		{
-			get
-			{
-				if (_bbWeaponEventId == null)
-				{
-					_bbWeaponEventId = (CUInt32) CR2WTypeManager.Create("Uint32", "bbWeaponEventId", cr2w, this);
-				}
-				return _bbWeaponEventId;
-			}
-			set
-			{
-				if (_bbWeaponEventId == value)
-				{
-					return;
-				}
-				_bbWeaponEventId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbWeaponEventId);
+			set => SetProperty(ref _bbWeaponEventId, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("interactionBlackboardId")] 
 		public CUInt32 InteractionBlackboardId
 		{
-			get
-			{
-				if (_interactionBlackboardId == null)
-				{
-					_interactionBlackboardId = (CUInt32) CR2WTypeManager.Create("Uint32", "interactionBlackboardId", cr2w, this);
-				}
-				return _interactionBlackboardId;
-			}
-			set
-			{
-				if (_interactionBlackboardId == value)
-				{
-					return;
-				}
-				_interactionBlackboardId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interactionBlackboardId);
+			set => SetProperty(ref _interactionBlackboardId, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("crosshairStateBlackboardId")] 
 		public CUInt32 CrosshairStateBlackboardId
 		{
-			get
-			{
-				if (_crosshairStateBlackboardId == null)
-				{
-					_crosshairStateBlackboardId = (CUInt32) CR2WTypeManager.Create("Uint32", "crosshairStateBlackboardId", cr2w, this);
-				}
-				return _crosshairStateBlackboardId;
-			}
-			set
-			{
-				if (_crosshairStateBlackboardId == value)
-				{
-					return;
-				}
-				_crosshairStateBlackboardId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _crosshairStateBlackboardId);
+			set => SetProperty(ref _crosshairStateBlackboardId, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("isMountedBlackboardId")] 
 		public CUInt32 IsMountedBlackboardId
 		{
-			get
-			{
-				if (_isMountedBlackboardId == null)
-				{
-					_isMountedBlackboardId = (CUInt32) CR2WTypeManager.Create("Uint32", "isMountedBlackboardId", cr2w, this);
-				}
-				return _isMountedBlackboardId;
-			}
-			set
-			{
-				if (_isMountedBlackboardId == value)
-				{
-					return;
-				}
-				_isMountedBlackboardId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isMountedBlackboardId);
+			set => SetProperty(ref _isMountedBlackboardId, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("rootWidget")] 
 		public wCHandle<inkCanvasWidget> RootWidget
 		{
-			get
-			{
-				if (_rootWidget == null)
-				{
-					_rootWidget = (wCHandle<inkCanvasWidget>) CR2WTypeManager.Create("whandle:inkCanvasWidget", "rootWidget", cr2w, this);
-				}
-				return _rootWidget;
-			}
-			set
-			{
-				if (_rootWidget == value)
-				{
-					return;
-				}
-				_rootWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rootWidget);
+			set => SetProperty(ref _rootWidget, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("fadeOutAnimation")] 
 		public CHandle<inkanimDefinition> FadeOutAnimation
 		{
-			get
-			{
-				if (_fadeOutAnimation == null)
-				{
-					_fadeOutAnimation = (CHandle<inkanimDefinition>) CR2WTypeManager.Create("handle:inkanimDefinition", "fadeOutAnimation", cr2w, this);
-				}
-				return _fadeOutAnimation;
-			}
-			set
-			{
-				if (_fadeOutAnimation == value)
-				{
-					return;
-				}
-				_fadeOutAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fadeOutAnimation);
+			set => SetProperty(ref _fadeOutAnimation, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("fadeInAnimation")] 
 		public CHandle<inkanimDefinition> FadeInAnimation
 		{
-			get
-			{
-				if (_fadeInAnimation == null)
-				{
-					_fadeInAnimation = (CHandle<inkanimDefinition>) CR2WTypeManager.Create("handle:inkanimDefinition", "fadeInAnimation", cr2w, this);
-				}
-				return _fadeInAnimation;
-			}
-			set
-			{
-				if (_fadeInAnimation == value)
-				{
-					return;
-				}
-				_fadeInAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fadeInAnimation);
+			set => SetProperty(ref _fadeInAnimation, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("sceneTier")] 
 		public CEnum<GameplayTier> SceneTier
 		{
-			get
-			{
-				if (_sceneTier == null)
-				{
-					_sceneTier = (CEnum<GameplayTier>) CR2WTypeManager.Create("GameplayTier", "sceneTier", cr2w, this);
-				}
-				return _sceneTier;
-			}
-			set
-			{
-				if (_sceneTier == value)
-				{
-					return;
-				}
-				_sceneTier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneTier);
+			set => SetProperty(ref _sceneTier, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("isUnarmed")] 
 		public CBool IsUnarmed
 		{
-			get
-			{
-				if (_isUnarmed == null)
-				{
-					_isUnarmed = (CBool) CR2WTypeManager.Create("Bool", "isUnarmed", cr2w, this);
-				}
-				return _isUnarmed;
-			}
-			set
-			{
-				if (_isUnarmed == value)
-				{
-					return;
-				}
-				_isUnarmed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isUnarmed);
+			set => SetProperty(ref _isUnarmed, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("isMounted")] 
 		public CBool IsMounted
 		{
-			get
-			{
-				if (_isMounted == null)
-				{
-					_isMounted = (CBool) CR2WTypeManager.Create("Bool", "isMounted", cr2w, this);
-				}
-				return _isMounted;
-			}
-			set
-			{
-				if (_isMounted == value)
-				{
-					return;
-				}
-				_isMounted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isMounted);
+			set => SetProperty(ref _isMounted, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("fadeOutValue")] 
 		public CFloat FadeOutValue
 		{
-			get
-			{
-				if (_fadeOutValue == null)
-				{
-					_fadeOutValue = (CFloat) CR2WTypeManager.Create("Float", "fadeOutValue", cr2w, this);
-				}
-				return _fadeOutValue;
-			}
-			set
-			{
-				if (_fadeOutValue == value)
-				{
-					return;
-				}
-				_fadeOutValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fadeOutValue);
+			set => SetProperty(ref _fadeOutValue, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("wasLastInteractionWithDevice")] 
 		public CBool WasLastInteractionWithDevice
 		{
-			get
-			{
-				if (_wasLastInteractionWithDevice == null)
-				{
-					_wasLastInteractionWithDevice = (CBool) CR2WTypeManager.Create("Bool", "wasLastInteractionWithDevice", cr2w, this);
-				}
-				return _wasLastInteractionWithDevice;
-			}
-			set
-			{
-				if (_wasLastInteractionWithDevice == value)
-				{
-					return;
-				}
-				_wasLastInteractionWithDevice = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasLastInteractionWithDevice);
+			set => SetProperty(ref _wasLastInteractionWithDevice, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("CombatStateBlackboardId")] 
 		public CUInt32 CombatStateBlackboardId
 		{
-			get
-			{
-				if (_combatStateBlackboardId == null)
-				{
-					_combatStateBlackboardId = (CUInt32) CR2WTypeManager.Create("Uint32", "CombatStateBlackboardId", cr2w, this);
-				}
-				return _combatStateBlackboardId;
-			}
-			set
-			{
-				if (_combatStateBlackboardId == value)
-				{
-					return;
-				}
-				_combatStateBlackboardId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _combatStateBlackboardId);
+			set => SetProperty(ref _combatStateBlackboardId, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("hiddenAnimProxy")] 
 		public CHandle<inkanimProxy> HiddenAnimProxy
 		{
-			get
-			{
-				if (_hiddenAnimProxy == null)
-				{
-					_hiddenAnimProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "hiddenAnimProxy", cr2w, this);
-				}
-				return _hiddenAnimProxy;
-			}
-			set
-			{
-				if (_hiddenAnimProxy == value)
-				{
-					return;
-				}
-				_hiddenAnimProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hiddenAnimProxy);
+			set => SetProperty(ref _hiddenAnimProxy, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("Player")] 
 		public wCHandle<PlayerPuppet> Player
 		{
-			get
-			{
-				if (_player == null)
-				{
-					_player = (wCHandle<PlayerPuppet>) CR2WTypeManager.Create("whandle:PlayerPuppet", "Player", cr2w, this);
-				}
-				return _player;
-			}
-			set
-			{
-				if (_player == value)
-				{
-					return;
-				}
-				_player = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _player);
+			set => SetProperty(ref _player, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("HiddenTextCanvas")] 
 		public inkWidgetReference HiddenTextCanvas
 		{
-			get
-			{
-				if (_hiddenTextCanvas == null)
-				{
-					_hiddenTextCanvas = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "HiddenTextCanvas", cr2w, this);
-				}
-				return _hiddenTextCanvas;
-			}
-			set
-			{
-				if (_hiddenTextCanvas == value)
-				{
-					return;
-				}
-				_hiddenTextCanvas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hiddenTextCanvas);
+			set => SetProperty(ref _hiddenTextCanvas, value);
 		}
 
 		public gameuiCrosshairContainerController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemNameText")] 
 		public inkTextWidgetReference ItemNameText
 		{
-			get
-			{
-				if (_itemNameText == null)
-				{
-					_itemNameText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "itemNameText", cr2w, this);
-				}
-				return _itemNameText;
-			}
-			set
-			{
-				if (_itemNameText == value)
-				{
-					return;
-				}
-				_itemNameText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemNameText);
+			set => SetProperty(ref _itemNameText, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("itemRarityText")] 
 		public inkTextWidgetReference ItemRarityText
 		{
-			get
-			{
-				if (_itemRarityText == null)
-				{
-					_itemRarityText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "itemRarityText", cr2w, this);
-				}
-				return _itemRarityText;
-			}
-			set
-			{
-				if (_itemRarityText == value)
-				{
-					return;
-				}
-				_itemRarityText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemRarityText);
+			set => SetProperty(ref _itemRarityText, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("itemTypeText")] 
 		public inkTextWidgetReference ItemTypeText
 		{
-			get
-			{
-				if (_itemTypeText == null)
-				{
-					_itemTypeText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "itemTypeText", cr2w, this);
-				}
-				return _itemTypeText;
-			}
-			set
-			{
-				if (_itemTypeText == value)
-				{
-					return;
-				}
-				_itemTypeText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemTypeText);
+			set => SetProperty(ref _itemTypeText, value);
 		}
 
 		public ItemTooltipHeaderController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

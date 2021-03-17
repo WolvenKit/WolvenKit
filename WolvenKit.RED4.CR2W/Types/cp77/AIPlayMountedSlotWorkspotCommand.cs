@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mountData")] 
 		public gameMountDescriptor MountData
 		{
-			get
-			{
-				if (_mountData == null)
-				{
-					_mountData = (gameMountDescriptor) CR2WTypeManager.Create("gameMountDescriptor", "mountData", cr2w, this);
-				}
-				return _mountData;
-			}
-			set
-			{
-				if (_mountData == value)
-				{
-					return;
-				}
-				_mountData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mountData);
+			set => SetProperty(ref _mountData, value);
 		}
 
 		public AIPlayMountedSlotWorkspotCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

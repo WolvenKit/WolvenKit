@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("connectedDevices")] 
 		public CInt32 ConnectedDevices
 		{
-			get
-			{
-				if (_connectedDevices == null)
-				{
-					_connectedDevices = (CInt32) CR2WTypeManager.Create("Int32", "connectedDevices", cr2w, this);
-				}
-				return _connectedDevices;
-			}
-			set
-			{
-				if (_connectedDevices == value)
-				{
-					return;
-				}
-				_connectedDevices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _connectedDevices);
+			set => SetProperty(ref _connectedDevices, value);
 		}
 
 		public TerminalSystemCustomData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entityRef")] 
 		public gameEntityReference EntityRef
 		{
-			get
-			{
-				if (_entityRef == null)
-				{
-					_entityRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "entityRef", cr2w, this);
-				}
-				return _entityRef;
-			}
-			set
-			{
-				if (_entityRef == value)
-				{
-					return;
-				}
-				_entityRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityRef);
+			set => SetProperty(ref _entityRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("appearance")] 
 		public CName Appearance
 		{
-			get
-			{
-				if (_appearance == null)
-				{
-					_appearance = (CName) CR2WTypeManager.Create("CName", "appearance", cr2w, this);
-				}
-				return _appearance;
-			}
-			set
-			{
-				if (_appearance == value)
-				{
-					return;
-				}
-				_appearance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _appearance);
+			set => SetProperty(ref _appearance, value);
 		}
 
 		public questEntityAppearance_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

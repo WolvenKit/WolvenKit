@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("behaviorDefinition")] 
 		public CHandle<AIbehaviorParameterizedBehavior> BehaviorDefinition
 		{
-			get
-			{
-				if (_behaviorDefinition == null)
-				{
-					_behaviorDefinition = (CHandle<AIbehaviorParameterizedBehavior>) CR2WTypeManager.Create("handle:AIbehaviorParameterizedBehavior", "behaviorDefinition", cr2w, this);
-				}
-				return _behaviorDefinition;
-			}
-			set
-			{
-				if (_behaviorDefinition == value)
-				{
-					return;
-				}
-				_behaviorDefinition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _behaviorDefinition);
+			set => SetProperty(ref _behaviorDefinition, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("movementParameters", 5)] 
 		public CStatic<moveMovementParameters> MovementParameters
 		{
-			get
-			{
-				if (_movementParameters == null)
-				{
-					_movementParameters = (CStatic<moveMovementParameters>) CR2WTypeManager.Create("static:5,moveMovementParameters", "movementParameters", cr2w, this);
-				}
-				return _movementParameters;
-			}
-			set
-			{
-				if (_movementParameters == value)
-				{
-					return;
-				}
-				_movementParameters = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movementParameters);
+			set => SetProperty(ref _movementParameters, value);
 		}
 
 		public AIArchetype(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

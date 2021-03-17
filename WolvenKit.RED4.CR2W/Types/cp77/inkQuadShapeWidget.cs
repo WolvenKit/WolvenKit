@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("textureAtlas")] 
 		public raRef<inkTextureAtlas> TextureAtlas
 		{
-			get
-			{
-				if (_textureAtlas == null)
-				{
-					_textureAtlas = (raRef<inkTextureAtlas>) CR2WTypeManager.Create("raRef:inkTextureAtlas", "textureAtlas", cr2w, this);
-				}
-				return _textureAtlas;
-			}
-			set
-			{
-				if (_textureAtlas == value)
-				{
-					return;
-				}
-				_textureAtlas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textureAtlas);
+			set => SetProperty(ref _textureAtlas, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("texturePart")] 
 		public CName TexturePart
 		{
-			get
-			{
-				if (_texturePart == null)
-				{
-					_texturePart = (CName) CR2WTypeManager.Create("CName", "texturePart", cr2w, this);
-				}
-				return _texturePart;
-			}
-			set
-			{
-				if (_texturePart == value)
-				{
-					return;
-				}
-				_texturePart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _texturePart);
+			set => SetProperty(ref _texturePart, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("vertexList")] 
 		public CArray<Vector2> VertexList
 		{
-			get
-			{
-				if (_vertexList == null)
-				{
-					_vertexList = (CArray<Vector2>) CR2WTypeManager.Create("array:Vector2", "vertexList", cr2w, this);
-				}
-				return _vertexList;
-			}
-			set
-			{
-				if (_vertexList == value)
-				{
-					return;
-				}
-				_vertexList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vertexList);
+			set => SetProperty(ref _vertexList, value);
 		}
 
 		public inkQuadShapeWidget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

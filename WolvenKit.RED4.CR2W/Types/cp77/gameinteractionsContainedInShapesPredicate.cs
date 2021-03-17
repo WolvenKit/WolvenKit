@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("useCameraPosition")] 
 		public CBool UseCameraPosition
 		{
-			get
-			{
-				if (_useCameraPosition == null)
-				{
-					_useCameraPosition = (CBool) CR2WTypeManager.Create("Bool", "useCameraPosition", cr2w, this);
-				}
-				return _useCameraPosition;
-			}
-			set
-			{
-				if (_useCameraPosition == value)
-				{
-					return;
-				}
-				_useCameraPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useCameraPosition);
+			set => SetProperty(ref _useCameraPosition, value);
 		}
 
 		public gameinteractionsContainedInShapesPredicate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

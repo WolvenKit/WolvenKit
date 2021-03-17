@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("state")] 
 		public gameMuppetState State
 		{
-			get
-			{
-				if (_state == null)
-				{
-					_state = (gameMuppetState) CR2WTypeManager.Create("gameMuppetState", "state", cr2w, this);
-				}
-				return _state;
-			}
-			set
-			{
-				if (_state == value)
-				{
-					return;
-				}
-				_state = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("initialOrientation")] 
 		public EulerAngles InitialOrientation
 		{
-			get
-			{
-				if (_initialOrientation == null)
-				{
-					_initialOrientation = (EulerAngles) CR2WTypeManager.Create("EulerAngles", "initialOrientation", cr2w, this);
-				}
-				return _initialOrientation;
-			}
-			set
-			{
-				if (_initialOrientation == value)
-				{
-					return;
-				}
-				_initialOrientation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialOrientation);
+			set => SetProperty(ref _initialOrientation, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("initialLocation")] 
 		public Vector3 InitialLocation
 		{
-			get
-			{
-				if (_initialLocation == null)
-				{
-					_initialLocation = (Vector3) CR2WTypeManager.Create("Vector3", "initialLocation", cr2w, this);
-				}
-				return _initialLocation;
-			}
-			set
-			{
-				if (_initialLocation == value)
-				{
-					return;
-				}
-				_initialLocation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialLocation);
+			set => SetProperty(ref _initialLocation, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("health")] 
 		public CFloat Health
 		{
-			get
-			{
-				if (_health == null)
-				{
-					_health = (CFloat) CR2WTypeManager.Create("Float", "health", cr2w, this);
-				}
-				return _health;
-			}
-			set
-			{
-				if (_health == value)
-				{
-					return;
-				}
-				_health = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _health);
+			set => SetProperty(ref _health, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("armor")] 
 		public CFloat Armor
 		{
-			get
-			{
-				if (_armor == null)
-				{
-					_armor = (CFloat) CR2WTypeManager.Create("Float", "armor", cr2w, this);
-				}
-				return _armor;
-			}
-			set
-			{
-				if (_armor == value)
-				{
-					return;
-				}
-				_armor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _armor);
+			set => SetProperty(ref _armor, value);
 		}
 
 		public gameMuppetReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

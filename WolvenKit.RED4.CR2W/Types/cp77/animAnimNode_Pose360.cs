@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("angle")] 
 		public animFloatLink Angle
 		{
-			get
-			{
-				if (_angle == null)
-				{
-					_angle = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "angle", cr2w, this);
-				}
-				return _angle;
-			}
-			set
-			{
-				if (_angle == value)
-				{
-					return;
-				}
-				_angle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _angle);
+			set => SetProperty(ref _angle, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("animation")] 
 		public CName Animation
 		{
-			get
-			{
-				if (_animation == null)
-				{
-					_animation = (CName) CR2WTypeManager.Create("CName", "animation", cr2w, this);
-				}
-				return _animation;
-			}
-			set
-			{
-				if (_animation == value)
-				{
-					return;
-				}
-				_animation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animation);
+			set => SetProperty(ref _animation, value);
 		}
 
 		public animAnimNode_Pose360(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

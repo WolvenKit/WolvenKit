@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("eventOverrides")] 
 		public CHandle<audioGenericNameEventDictionary> EventOverrides
 		{
-			get
-			{
-				if (_eventOverrides == null)
-				{
-					_eventOverrides = (CHandle<audioGenericNameEventDictionary>) CR2WTypeManager.Create("handle:audioGenericNameEventDictionary", "eventOverrides", cr2w, this);
-				}
-				return _eventOverrides;
-			}
-			set
-			{
-				if (_eventOverrides == value)
-				{
-					return;
-				}
-				_eventOverrides = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventOverrides);
+			set => SetProperty(ref _eventOverrides, value);
 		}
 
 		public audioGenericNameEventMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

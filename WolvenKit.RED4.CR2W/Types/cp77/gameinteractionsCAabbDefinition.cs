@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("min")] 
 		public Vector4 Min
 		{
-			get
-			{
-				if (_min == null)
-				{
-					_min = (Vector4) CR2WTypeManager.Create("Vector4", "min", cr2w, this);
-				}
-				return _min;
-			}
-			set
-			{
-				if (_min == value)
-				{
-					return;
-				}
-				_min = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _min);
+			set => SetProperty(ref _min, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("max")] 
 		public Vector4 Max
 		{
-			get
-			{
-				if (_max == null)
-				{
-					_max = (Vector4) CR2WTypeManager.Create("Vector4", "max", cr2w, this);
-				}
-				return _max;
-			}
-			set
-			{
-				if (_max == value)
-				{
-					return;
-				}
-				_max = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _max);
+			set => SetProperty(ref _max, value);
 		}
 
 		public gameinteractionsCAabbDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

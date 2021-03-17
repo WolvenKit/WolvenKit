@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entrypoint")] 
 		public CName Entrypoint
 		{
-			get
-			{
-				if (_entrypoint == null)
-				{
-					_entrypoint = (CName) CR2WTypeManager.Create("CName", "entrypoint", cr2w, this);
-				}
-				return _entrypoint;
-			}
-			set
-			{
-				if (_entrypoint == value)
-				{
-					return;
-				}
-				_entrypoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entrypoint);
+			set => SetProperty(ref _entrypoint, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("syncNodesVisited")] 
 		public CArray<scnSyncNodeSignal> SyncNodesVisited
 		{
-			get
-			{
-				if (_syncNodesVisited == null)
-				{
-					_syncNodesVisited = (CArray<scnSyncNodeSignal>) CR2WTypeManager.Create("array:scnSyncNodeSignal", "syncNodesVisited", cr2w, this);
-				}
-				return _syncNodesVisited;
-			}
-			set
-			{
-				if (_syncNodesVisited == value)
-				{
-					return;
-				}
-				_syncNodesVisited = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _syncNodesVisited);
+			set => SetProperty(ref _syncNodesVisited, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("instanceHash")] 
 		public CUInt64 InstanceHash
 		{
-			get
-			{
-				if (_instanceHash == null)
-				{
-					_instanceHash = (CUInt64) CR2WTypeManager.Create("Uint64", "instanceHash", cr2w, this);
-				}
-				return _instanceHash;
-			}
-			set
-			{
-				if (_instanceHash == value)
-				{
-					return;
-				}
-				_instanceHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instanceHash);
+			set => SetProperty(ref _instanceHash, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("finishedOnServer")] 
 		public CBool FinishedOnServer
 		{
-			get
-			{
-				if (_finishedOnServer == null)
-				{
-					_finishedOnServer = (CBool) CR2WTypeManager.Create("Bool", "finishedOnServer", cr2w, this);
-				}
-				return _finishedOnServer;
-			}
-			set
-			{
-				if (_finishedOnServer == value)
-				{
-					return;
-				}
-				_finishedOnServer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _finishedOnServer);
+			set => SetProperty(ref _finishedOnServer, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("finishedOnClient")] 
 		public CBool FinishedOnClient
 		{
-			get
-			{
-				if (_finishedOnClient == null)
-				{
-					_finishedOnClient = (CBool) CR2WTypeManager.Create("Bool", "finishedOnClient", cr2w, this);
-				}
-				return _finishedOnClient;
-			}
-			set
-			{
-				if (_finishedOnClient == value)
-				{
-					return;
-				}
-				_finishedOnClient = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _finishedOnClient);
+			set => SetProperty(ref _finishedOnClient, value);
 		}
 
 		public scnSceneSharedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

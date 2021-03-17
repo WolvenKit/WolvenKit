@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("foregroundContainer")] 
 		public inkWidgetReference ForegroundContainer
 		{
-			get
-			{
-				if (_foregroundContainer == null)
-				{
-					_foregroundContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "foregroundContainer", cr2w, this);
-				}
-				return _foregroundContainer;
-			}
-			set
-			{
-				if (_foregroundContainer == value)
-				{
-					return;
-				}
-				_foregroundContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _foregroundContainer);
+			set => SetProperty(ref _foregroundContainer, value);
 		}
 
 		public HubExperienceBarController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

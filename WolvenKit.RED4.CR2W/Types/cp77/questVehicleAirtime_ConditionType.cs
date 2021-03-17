@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("seconds")] 
 		public CFloat Seconds
 		{
-			get
-			{
-				if (_seconds == null)
-				{
-					_seconds = (CFloat) CR2WTypeManager.Create("Float", "seconds", cr2w, this);
-				}
-				return _seconds;
-			}
-			set
-			{
-				if (_seconds == value)
-				{
-					return;
-				}
-				_seconds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _seconds);
+			set => SetProperty(ref _seconds, value);
 		}
 
 		public questVehicleAirtime_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

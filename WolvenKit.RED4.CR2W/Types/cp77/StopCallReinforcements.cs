@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("puppet")] 
 		public wCHandle<ScriptedPuppet> Puppet
 		{
-			get
-			{
-				if (_puppet == null)
-				{
-					_puppet = (wCHandle<ScriptedPuppet>) CR2WTypeManager.Create("whandle:ScriptedPuppet", "puppet", cr2w, this);
-				}
-				return _puppet;
-			}
-			set
-			{
-				if (_puppet == value)
-				{
-					return;
-				}
-				_puppet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppet);
+			set => SetProperty(ref _puppet, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("pauseResumePhoneCallEvent")] 
 		public CHandle<PauseResumePhoneCallEvent> PauseResumePhoneCallEvent
 		{
-			get
-			{
-				if (_pauseResumePhoneCallEvent == null)
-				{
-					_pauseResumePhoneCallEvent = (CHandle<PauseResumePhoneCallEvent>) CR2WTypeManager.Create("handle:PauseResumePhoneCallEvent", "pauseResumePhoneCallEvent", cr2w, this);
-				}
-				return _pauseResumePhoneCallEvent;
-			}
-			set
-			{
-				if (_pauseResumePhoneCallEvent == value)
-				{
-					return;
-				}
-				_pauseResumePhoneCallEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pauseResumePhoneCallEvent);
+			set => SetProperty(ref _pauseResumePhoneCallEvent, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("statPoolType")] 
 		public CEnum<gamedataStatPoolType> StatPoolType
 		{
-			get
-			{
-				if (_statPoolType == null)
-				{
-					_statPoolType = (CEnum<gamedataStatPoolType>) CR2WTypeManager.Create("gamedataStatPoolType", "statPoolType", cr2w, this);
-				}
-				return _statPoolType;
-			}
-			set
-			{
-				if (_statPoolType == value)
-				{
-					return;
-				}
-				_statPoolType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statPoolType);
+			set => SetProperty(ref _statPoolType, value);
 		}
 
 		public StopCallReinforcements(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

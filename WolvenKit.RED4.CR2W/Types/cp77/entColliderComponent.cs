@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("colliders")] 
 		public CArray<CHandle<physicsICollider>> Colliders
 		{
-			get
-			{
-				if (_colliders == null)
-				{
-					_colliders = (CArray<CHandle<physicsICollider>>) CR2WTypeManager.Create("array:handle:physicsICollider", "colliders", cr2w, this);
-				}
-				return _colliders;
-			}
-			set
-			{
-				if (_colliders == value)
-				{
-					return;
-				}
-				_colliders = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _colliders);
+			set => SetProperty(ref _colliders, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("shapes")] 
 		public CArray<CHandle<entColliderComponentShape>> Shapes
 		{
-			get
-			{
-				if (_shapes == null)
-				{
-					_shapes = (CArray<CHandle<entColliderComponentShape>>) CR2WTypeManager.Create("array:handle:entColliderComponentShape", "shapes", cr2w, this);
-				}
-				return _shapes;
-			}
-			set
-			{
-				if (_shapes == value)
-				{
-					return;
-				}
-				_shapes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shapes);
+			set => SetProperty(ref _shapes, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("simulationType")] 
 		public CEnum<physicsSimulationType> SimulationType
 		{
-			get
-			{
-				if (_simulationType == null)
-				{
-					_simulationType = (CEnum<physicsSimulationType>) CR2WTypeManager.Create("physicsSimulationType", "simulationType", cr2w, this);
-				}
-				return _simulationType;
-			}
-			set
-			{
-				if (_simulationType == value)
-				{
-					return;
-				}
-				_simulationType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _simulationType);
+			set => SetProperty(ref _simulationType, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("startInactive")] 
 		public CBool StartInactive
 		{
-			get
-			{
-				if (_startInactive == null)
-				{
-					_startInactive = (CBool) CR2WTypeManager.Create("Bool", "startInactive", cr2w, this);
-				}
-				return _startInactive;
-			}
-			set
-			{
-				if (_startInactive == value)
-				{
-					return;
-				}
-				_startInactive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startInactive);
+			set => SetProperty(ref _startInactive, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("useCCD")] 
 		public CBool UseCCD
 		{
-			get
-			{
-				if (_useCCD == null)
-				{
-					_useCCD = (CBool) CR2WTypeManager.Create("Bool", "useCCD", cr2w, this);
-				}
-				return _useCCD;
-			}
-			set
-			{
-				if (_useCCD == value)
-				{
-					return;
-				}
-				_useCCD = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useCCD);
+			set => SetProperty(ref _useCCD, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("sendOnStoppedMovingEvents")] 
 		public CBool SendOnStoppedMovingEvents
 		{
-			get
-			{
-				if (_sendOnStoppedMovingEvents == null)
-				{
-					_sendOnStoppedMovingEvents = (CBool) CR2WTypeManager.Create("Bool", "sendOnStoppedMovingEvents", cr2w, this);
-				}
-				return _sendOnStoppedMovingEvents;
-			}
-			set
-			{
-				if (_sendOnStoppedMovingEvents == value)
-				{
-					return;
-				}
-				_sendOnStoppedMovingEvents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sendOnStoppedMovingEvents);
+			set => SetProperty(ref _sendOnStoppedMovingEvents, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("massOverride")] 
 		public CFloat MassOverride
 		{
-			get
-			{
-				if (_massOverride == null)
-				{
-					_massOverride = (CFloat) CR2WTypeManager.Create("Float", "massOverride", cr2w, this);
-				}
-				return _massOverride;
-			}
-			set
-			{
-				if (_massOverride == value)
-				{
-					return;
-				}
-				_massOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _massOverride);
+			set => SetProperty(ref _massOverride, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("volume")] 
 		public CFloat Volume
 		{
-			get
-			{
-				if (_volume == null)
-				{
-					_volume = (CFloat) CR2WTypeManager.Create("Float", "volume", cr2w, this);
-				}
-				return _volume;
-			}
-			set
-			{
-				if (_volume == value)
-				{
-					return;
-				}
-				_volume = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _volume);
+			set => SetProperty(ref _volume, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("mass")] 
 		public CFloat Mass
 		{
-			get
-			{
-				if (_mass == null)
-				{
-					_mass = (CFloat) CR2WTypeManager.Create("Float", "mass", cr2w, this);
-				}
-				return _mass;
-			}
-			set
-			{
-				if (_mass == value)
-				{
-					return;
-				}
-				_mass = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mass);
+			set => SetProperty(ref _mass, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("inertia")] 
 		public Vector3 Inertia
 		{
-			get
-			{
-				if (_inertia == null)
-				{
-					_inertia = (Vector3) CR2WTypeManager.Create("Vector3", "inertia", cr2w, this);
-				}
-				return _inertia;
-			}
-			set
-			{
-				if (_inertia == value)
-				{
-					return;
-				}
-				_inertia = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inertia);
+			set => SetProperty(ref _inertia, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("comOffset")] 
 		public Transform ComOffset
 		{
-			get
-			{
-				if (_comOffset == null)
-				{
-					_comOffset = (Transform) CR2WTypeManager.Create("Transform", "comOffset", cr2w, this);
-				}
-				return _comOffset;
-			}
-			set
-			{
-				if (_comOffset == value)
-				{
-					return;
-				}
-				_comOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comOffset);
+			set => SetProperty(ref _comOffset, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
-			get
-			{
-				if (_filterData == null)
-				{
-					_filterData = (CHandle<physicsFilterData>) CR2WTypeManager.Create("handle:physicsFilterData", "filterData", cr2w, this);
-				}
-				return _filterData;
-			}
-			set
-			{
-				if (_filterData == value)
-				{
-					return;
-				}
-				_filterData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filterData);
+			set => SetProperty(ref _filterData, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get
-			{
-				if (_isEnabled == null)
-				{
-					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
-				}
-				return _isEnabled;
-			}
-			set
-			{
-				if (_isEnabled == value)
-				{
-					return;
-				}
-				_isEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("dynamicTrafficSetting")] 
 		public TrafficGenDynamicTrafficSetting DynamicTrafficSetting
 		{
-			get
-			{
-				if (_dynamicTrafficSetting == null)
-				{
-					_dynamicTrafficSetting = (TrafficGenDynamicTrafficSetting) CR2WTypeManager.Create("TrafficGenDynamicTrafficSetting", "dynamicTrafficSetting", cr2w, this);
-				}
-				return _dynamicTrafficSetting;
-			}
-			set
-			{
-				if (_dynamicTrafficSetting == value)
-				{
-					return;
-				}
-				_dynamicTrafficSetting = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dynamicTrafficSetting);
+			set => SetProperty(ref _dynamicTrafficSetting, value);
 		}
 
 		public entColliderComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

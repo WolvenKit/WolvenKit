@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("glitch")] 
 		public CBool Glitch
 		{
-			get
-			{
-				if (_glitch == null)
-				{
-					_glitch = (CBool) CR2WTypeManager.Create("Bool", "glitch", cr2w, this);
-				}
-				return _glitch;
-			}
-			set
-			{
-				if (_glitch == value)
-				{
-					return;
-				}
-				_glitch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _glitch);
+			set => SetProperty(ref _glitch, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("panamVehicleStartup")] 
 		public CBool PanamVehicleStartup
 		{
-			get
-			{
-				if (_panamVehicleStartup == null)
-				{
-					_panamVehicleStartup = (CBool) CR2WTypeManager.Create("Bool", "panamVehicleStartup", cr2w, this);
-				}
-				return _panamVehicleStartup;
-			}
-			set
-			{
-				if (_panamVehicleStartup == value)
-				{
-					return;
-				}
-				_panamVehicleStartup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _panamVehicleStartup);
+			set => SetProperty(ref _panamVehicleStartup, value);
 		}
 
 		public ForwardVehicleQuestUIEffectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

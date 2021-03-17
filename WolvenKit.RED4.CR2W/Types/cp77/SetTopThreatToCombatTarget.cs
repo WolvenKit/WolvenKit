@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("refreshTimer")] 
 		public CFloat RefreshTimer
 		{
-			get
-			{
-				if (_refreshTimer == null)
-				{
-					_refreshTimer = (CFloat) CR2WTypeManager.Create("Float", "refreshTimer", cr2w, this);
-				}
-				return _refreshTimer;
-			}
-			set
-			{
-				if (_refreshTimer == value)
-				{
-					return;
-				}
-				_refreshTimer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _refreshTimer);
+			set => SetProperty(ref _refreshTimer, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("previousChecktime")] 
 		public CFloat PreviousChecktime
 		{
-			get
-			{
-				if (_previousChecktime == null)
-				{
-					_previousChecktime = (CFloat) CR2WTypeManager.Create("Float", "previousChecktime", cr2w, this);
-				}
-				return _previousChecktime;
-			}
-			set
-			{
-				if (_previousChecktime == value)
-				{
-					return;
-				}
-				_previousChecktime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousChecktime);
+			set => SetProperty(ref _previousChecktime, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("targetTrackerComponent")] 
 		public CHandle<TargetTrackingExtension> TargetTrackerComponent
 		{
-			get
-			{
-				if (_targetTrackerComponent == null)
-				{
-					_targetTrackerComponent = (CHandle<TargetTrackingExtension>) CR2WTypeManager.Create("handle:TargetTrackingExtension", "targetTrackerComponent", cr2w, this);
-				}
-				return _targetTrackerComponent;
-			}
-			set
-			{
-				if (_targetTrackerComponent == value)
-				{
-					return;
-				}
-				_targetTrackerComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetTrackerComponent);
+			set => SetProperty(ref _targetTrackerComponent, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("movePoliciesComponent")] 
 		public CHandle<movePoliciesComponent> MovePoliciesComponent
 		{
-			get
-			{
-				if (_movePoliciesComponent == null)
-				{
-					_movePoliciesComponent = (CHandle<movePoliciesComponent>) CR2WTypeManager.Create("handle:movePoliciesComponent", "movePoliciesComponent", cr2w, this);
-				}
-				return _movePoliciesComponent;
-			}
-			set
-			{
-				if (_movePoliciesComponent == value)
-				{
-					return;
-				}
-				_movePoliciesComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movePoliciesComponent);
+			set => SetProperty(ref _movePoliciesComponent, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("targetChangeTime")] 
 		public CFloat TargetChangeTime
 		{
-			get
-			{
-				if (_targetChangeTime == null)
-				{
-					_targetChangeTime = (CFloat) CR2WTypeManager.Create("Float", "targetChangeTime", cr2w, this);
-				}
-				return _targetChangeTime;
-			}
-			set
-			{
-				if (_targetChangeTime == value)
-				{
-					return;
-				}
-				_targetChangeTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetChangeTime);
+			set => SetProperty(ref _targetChangeTime, value);
 		}
 
 		public SetTopThreatToCombatTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

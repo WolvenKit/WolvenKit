@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("poolName")] 
 		public CString PoolName
 		{
-			get
-			{
-				if (_poolName == null)
-				{
-					_poolName = (CString) CR2WTypeManager.Create("String", "poolName", cr2w, this);
-				}
-				return _poolName;
-			}
-			set
-			{
-				if (_poolName == value)
-				{
-					return;
-				}
-				_poolName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _poolName);
+			set => SetProperty(ref _poolName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("budget")] 
 		public CInt64 Budget
 		{
-			get
-			{
-				if (_budget == null)
-				{
-					_budget = (CInt64) CR2WTypeManager.Create("Int64", "budget", cr2w, this);
-				}
-				return _budget;
-			}
-			set
-			{
-				if (_budget == value)
-				{
-					return;
-				}
-				_budget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _budget);
+			set => SetProperty(ref _budget, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("childrenBudget")] 
 		public CInt64 ChildrenBudget
 		{
-			get
-			{
-				if (_childrenBudget == null)
-				{
-					_childrenBudget = (CInt64) CR2WTypeManager.Create("Int64", "childrenBudget", cr2w, this);
-				}
-				return _childrenBudget;
-			}
-			set
-			{
-				if (_childrenBudget == value)
-				{
-					return;
-				}
-				_childrenBudget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _childrenBudget);
+			set => SetProperty(ref _childrenBudget, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("children")] 
 		public CArray<CString> Children
 		{
-			get
-			{
-				if (_children == null)
-				{
-					_children = (CArray<CString>) CR2WTypeManager.Create("array:String", "children", cr2w, this);
-				}
-				return _children;
-			}
-			set
-			{
-				if (_children == value)
-				{
-					return;
-				}
-				_children = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _children);
+			set => SetProperty(ref _children, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("parent")] 
 		public CString Parent
 		{
-			get
-			{
-				if (_parent == null)
-				{
-					_parent = (CString) CR2WTypeManager.Create("String", "parent", cr2w, this);
-				}
-				return _parent;
-			}
-			set
-			{
-				if (_parent == value)
-				{
-					return;
-				}
-				_parent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parent);
+			set => SetProperty(ref _parent, value);
 		}
 
 		public FunctionalTestsDataMemoryPoolStaticData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

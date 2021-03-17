@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("metadataName")] 
 		public CName MetadataName
 		{
-			get
-			{
-				if (_metadataName == null)
-				{
-					_metadataName = (CName) CR2WTypeManager.Create("CName", "metadataName", cr2w, this);
-				}
-				return _metadataName;
-			}
-			set
-			{
-				if (_metadataName == value)
-				{
-					return;
-				}
-				_metadataName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metadataName);
+			set => SetProperty(ref _metadataName, value);
 		}
 
 		public gameaudioBreathingSubSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

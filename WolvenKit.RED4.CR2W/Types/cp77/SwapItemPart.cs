@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("obj")] 
 		public wCHandle<gameObject> Obj
 		{
-			get
-			{
-				if (_obj == null)
-				{
-					_obj = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "obj", cr2w, this);
-				}
-				return _obj;
-			}
-			set
-			{
-				if (_obj == value)
-				{
-					return;
-				}
-				_obj = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _obj);
+			set => SetProperty(ref _obj, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("baseItem")] 
 		public gameItemID BaseItem
 		{
-			get
-			{
-				if (_baseItem == null)
-				{
-					_baseItem = (gameItemID) CR2WTypeManager.Create("gameItemID", "baseItem", cr2w, this);
-				}
-				return _baseItem;
-			}
-			set
-			{
-				if (_baseItem == value)
-				{
-					return;
-				}
-				_baseItem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _baseItem);
+			set => SetProperty(ref _baseItem, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("partToInstall")] 
 		public gameItemID PartToInstall
 		{
-			get
-			{
-				if (_partToInstall == null)
-				{
-					_partToInstall = (gameItemID) CR2WTypeManager.Create("gameItemID", "partToInstall", cr2w, this);
-				}
-				return _partToInstall;
-			}
-			set
-			{
-				if (_partToInstall == value)
-				{
-					return;
-				}
-				_partToInstall = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _partToInstall);
+			set => SetProperty(ref _partToInstall, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("slotID")] 
 		public TweakDBID SlotID
 		{
-			get
-			{
-				if (_slotID == null)
-				{
-					_slotID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "slotID", cr2w, this);
-				}
-				return _slotID;
-			}
-			set
-			{
-				if (_slotID == value)
-				{
-					return;
-				}
-				_slotID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
 		}
 
 		public SwapItemPart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

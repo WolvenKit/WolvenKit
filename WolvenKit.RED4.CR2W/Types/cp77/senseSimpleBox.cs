@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("box")] 
 		public Box Box
 		{
-			get
-			{
-				if (_box == null)
-				{
-					_box = (Box) CR2WTypeManager.Create("Box", "box", cr2w, this);
-				}
-				return _box;
-			}
-			set
-			{
-				if (_box == value)
-				{
-					return;
-				}
-				_box = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _box);
+			set => SetProperty(ref _box, value);
 		}
 
 		public senseSimpleBox(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("initialWakeState")] 
 		public CEnum<ESensorDeviceWakeState> InitialWakeState
 		{
-			get
-			{
-				if (_initialWakeState == null)
-				{
-					_initialWakeState = (CEnum<ESensorDeviceWakeState>) CR2WTypeManager.Create("ESensorDeviceWakeState", "initialWakeState", cr2w, this);
-				}
-				return _initialWakeState;
-			}
-			set
-			{
-				if (_initialWakeState == value)
-				{
-					return;
-				}
-				_initialWakeState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialWakeState);
+			set => SetProperty(ref _initialWakeState, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("canRotate")] 
 		public CBool CanRotate
 		{
-			get
-			{
-				if (_canRotate == null)
-				{
-					_canRotate = (CBool) CR2WTypeManager.Create("Bool", "canRotate", cr2w, this);
-				}
-				return _canRotate;
-			}
-			set
-			{
-				if (_canRotate == value)
-				{
-					return;
-				}
-				_canRotate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _canRotate);
+			set => SetProperty(ref _canRotate, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lostTargetLookAtTime")] 
 		public CFloat LostTargetLookAtTime
 		{
-			get
-			{
-				if (_lostTargetLookAtTime == null)
-				{
-					_lostTargetLookAtTime = (CFloat) CR2WTypeManager.Create("Float", "lostTargetLookAtTime", cr2w, this);
-				}
-				return _lostTargetLookAtTime;
-			}
-			set
-			{
-				if (_lostTargetLookAtTime == value)
-				{
-					return;
-				}
-				_lostTargetLookAtTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lostTargetLookAtTime);
+			set => SetProperty(ref _lostTargetLookAtTime, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("lostTargetSearchTime")] 
 		public CFloat LostTargetSearchTime
 		{
-			get
-			{
-				if (_lostTargetSearchTime == null)
-				{
-					_lostTargetSearchTime = (CFloat) CR2WTypeManager.Create("Float", "lostTargetSearchTime", cr2w, this);
-				}
-				return _lostTargetSearchTime;
-			}
-			set
-			{
-				if (_lostTargetSearchTime == value)
-				{
-					return;
-				}
-				_lostTargetSearchTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lostTargetSearchTime);
+			set => SetProperty(ref _lostTargetSearchTime, value);
 		}
 
 		public TargetingBehaviour(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

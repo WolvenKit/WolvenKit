@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hitRepresantation")] 
 		public CHandle<entSlotComponent> HitRepresantation
 		{
-			get
-			{
-				if (_hitRepresantation == null)
-				{
-					_hitRepresantation = (CHandle<entSlotComponent>) CR2WTypeManager.Create("handle:entSlotComponent", "hitRepresantation", cr2w, this);
-				}
-				return _hitRepresantation;
-			}
-			set
-			{
-				if (_hitRepresantation == value)
-				{
-					return;
-				}
-				_hitRepresantation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitRepresantation);
+			set => SetProperty(ref _hitRepresantation, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("slotComponent")] 
 		public CHandle<entSlotComponent> SlotComponent
 		{
-			get
-			{
-				if (_slotComponent == null)
-				{
-					_slotComponent = (CHandle<entSlotComponent>) CR2WTypeManager.Create("handle:entSlotComponent", "slotComponent", cr2w, this);
-				}
-				return _slotComponent;
-			}
-			set
-			{
-				if (_slotComponent == value)
-				{
-					return;
-				}
-				_slotComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotComponent);
+			set => SetProperty(ref _slotComponent, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("highDamageThreshold")] 
 		public CFloat HighDamageThreshold
 		{
-			get
-			{
-				if (_highDamageThreshold == null)
-				{
-					_highDamageThreshold = (CFloat) CR2WTypeManager.Create("Float", "highDamageThreshold", cr2w, this);
-				}
-				return _highDamageThreshold;
-			}
-			set
-			{
-				if (_highDamageThreshold == value)
-				{
-					return;
-				}
-				_highDamageThreshold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highDamageThreshold);
+			set => SetProperty(ref _highDamageThreshold, value);
 		}
 
 		[Ordinal(43)] 
 		[RED("medDamageThreshold")] 
 		public CFloat MedDamageThreshold
 		{
-			get
-			{
-				if (_medDamageThreshold == null)
-				{
-					_medDamageThreshold = (CFloat) CR2WTypeManager.Create("Float", "medDamageThreshold", cr2w, this);
-				}
-				return _medDamageThreshold;
-			}
-			set
-			{
-				if (_medDamageThreshold == value)
-				{
-					return;
-				}
-				_medDamageThreshold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _medDamageThreshold);
+			set => SetProperty(ref _medDamageThreshold, value);
 		}
 
 		[Ordinal(44)] 
 		[RED("lowDamageThreshold")] 
 		public CFloat LowDamageThreshold
 		{
-			get
-			{
-				if (_lowDamageThreshold == null)
-				{
-					_lowDamageThreshold = (CFloat) CR2WTypeManager.Create("Float", "lowDamageThreshold", cr2w, this);
-				}
-				return _lowDamageThreshold;
-			}
-			set
-			{
-				if (_lowDamageThreshold == value)
-				{
-					return;
-				}
-				_lowDamageThreshold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lowDamageThreshold);
+			set => SetProperty(ref _lowDamageThreshold, value);
 		}
 
 		[Ordinal(45)] 
 		[RED("effectTimeStamp")] 
 		public CFloat EffectTimeStamp
 		{
-			get
-			{
-				if (_effectTimeStamp == null)
-				{
-					_effectTimeStamp = (CFloat) CR2WTypeManager.Create("Float", "effectTimeStamp", cr2w, this);
-				}
-				return _effectTimeStamp;
-			}
-			set
-			{
-				if (_effectTimeStamp == value)
-				{
-					return;
-				}
-				_effectTimeStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectTimeStamp);
+			set => SetProperty(ref _effectTimeStamp, value);
 		}
 
 		public gameMuppet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

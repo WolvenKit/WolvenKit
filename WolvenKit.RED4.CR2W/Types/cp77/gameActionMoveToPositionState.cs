@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("target")] 
 		public Vector3 Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (Vector3) CR2WTypeManager.Create("Vector3", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("useSpotReservation")] 
 		public CBool UseSpotReservation
 		{
-			get
-			{
-				if (_useSpotReservation == null)
-				{
-					_useSpotReservation = (CBool) CR2WTypeManager.Create("Bool", "useSpotReservation", cr2w, this);
-				}
-				return _useSpotReservation;
-			}
-			set
-			{
-				if (_useSpotReservation == value)
-				{
-					return;
-				}
-				_useSpotReservation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useSpotReservation);
+			set => SetProperty(ref _useSpotReservation, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("usePathfinding")] 
 		public CBool UsePathfinding
 		{
-			get
-			{
-				if (_usePathfinding == null)
-				{
-					_usePathfinding = (CBool) CR2WTypeManager.Create("Bool", "usePathfinding", cr2w, this);
-				}
-				return _usePathfinding;
-			}
-			set
-			{
-				if (_usePathfinding == value)
-				{
-					return;
-				}
-				_usePathfinding = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _usePathfinding);
+			set => SetProperty(ref _usePathfinding, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("useStart")] 
 		public CBool UseStart
 		{
-			get
-			{
-				if (_useStart == null)
-				{
-					_useStart = (CBool) CR2WTypeManager.Create("Bool", "useStart", cr2w, this);
-				}
-				return _useStart;
-			}
-			set
-			{
-				if (_useStart == value)
-				{
-					return;
-				}
-				_useStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useStart);
+			set => SetProperty(ref _useStart, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("useStop")] 
 		public CBool UseStop
 		{
-			get
-			{
-				if (_useStop == null)
-				{
-					_useStop = (CBool) CR2WTypeManager.Create("Bool", "useStop", cr2w, this);
-				}
-				return _useStop;
-			}
-			set
-			{
-				if (_useStop == value)
-				{
-					return;
-				}
-				_useStop = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useStop);
+			set => SetProperty(ref _useStop, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("movementType")] 
 		public CEnum<moveMovementType> MovementType
 		{
-			get
-			{
-				if (_movementType == null)
-				{
-					_movementType = (CEnum<moveMovementType>) CR2WTypeManager.Create("moveMovementType", "movementType", cr2w, this);
-				}
-				return _movementType;
-			}
-			set
-			{
-				if (_movementType == value)
-				{
-					return;
-				}
-				_movementType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movementType);
+			set => SetProperty(ref _movementType, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("strafingTarget")] 
 		public wCHandle<gameObject> StrafingTarget
 		{
-			get
-			{
-				if (_strafingTarget == null)
-				{
-					_strafingTarget = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "strafingTarget", cr2w, this);
-				}
-				return _strafingTarget;
-			}
-			set
-			{
-				if (_strafingTarget == value)
-				{
-					return;
-				}
-				_strafingTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _strafingTarget);
+			set => SetProperty(ref _strafingTarget, value);
 		}
 
 		public gameActionMoveToPositionState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

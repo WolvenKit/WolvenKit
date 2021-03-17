@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("scaleMultipliers")] 
 		public CArray<Vector4> ScaleMultipliers
 		{
-			get
-			{
-				if (_scaleMultipliers == null)
-				{
-					_scaleMultipliers = (CArray<Vector4>) CR2WTypeManager.Create("array:Vector4", "scaleMultipliers", cr2w, this);
-				}
-				return _scaleMultipliers;
-			}
-			set
-			{
-				if (_scaleMultipliers == value)
-				{
-					return;
-				}
-				_scaleMultipliers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scaleMultipliers);
+			set => SetProperty(ref _scaleMultipliers, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("shapeNames")] 
 		public CArray<CName> ShapeNames
 		{
-			get
-			{
-				if (_shapeNames == null)
-				{
-					_shapeNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "shapeNames", cr2w, this);
-				}
-				return _shapeNames;
-			}
-			set
-			{
-				if (_shapeNames == value)
-				{
-					return;
-				}
-				_shapeNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shapeNames);
+			set => SetProperty(ref _shapeNames, value);
 		}
 
 		public gamehitRepresentationEventsSetMultipleScaleMultipliers_MultipleShapes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

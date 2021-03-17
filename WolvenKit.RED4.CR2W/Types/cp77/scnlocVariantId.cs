@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ruid")] 
 		public CRUID Ruid
 		{
-			get
-			{
-				if (_ruid == null)
-				{
-					_ruid = (CRUID) CR2WTypeManager.Create("CRUID", "ruid", cr2w, this);
-				}
-				return _ruid;
-			}
-			set
-			{
-				if (_ruid == value)
-				{
-					return;
-				}
-				_ruid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ruid);
+			set => SetProperty(ref _ruid, value);
 		}
 
 		public scnlocVariantId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

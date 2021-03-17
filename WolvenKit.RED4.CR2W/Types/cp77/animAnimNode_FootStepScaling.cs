@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hipsIndex")] 
 		public animTransformIndex HipsIndex
 		{
-			get
-			{
-				if (_hipsIndex == null)
-				{
-					_hipsIndex = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "hipsIndex", cr2w, this);
-				}
-				return _hipsIndex;
-			}
-			set
-			{
-				if (_hipsIndex == value)
-				{
-					return;
-				}
-				_hipsIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hipsIndex);
+			set => SetProperty(ref _hipsIndex, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("leftFootIKIndex")] 
 		public animTransformIndex LeftFootIKIndex
 		{
-			get
-			{
-				if (_leftFootIKIndex == null)
-				{
-					_leftFootIKIndex = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "leftFootIKIndex", cr2w, this);
-				}
-				return _leftFootIKIndex;
-			}
-			set
-			{
-				if (_leftFootIKIndex == value)
-				{
-					return;
-				}
-				_leftFootIKIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _leftFootIKIndex);
+			set => SetProperty(ref _leftFootIKIndex, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("rightFootIKIndex")] 
 		public animTransformIndex RightFootIKIndex
 		{
-			get
-			{
-				if (_rightFootIKIndex == null)
-				{
-					_rightFootIKIndex = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "rightFootIKIndex", cr2w, this);
-				}
-				return _rightFootIKIndex;
-			}
-			set
-			{
-				if (_rightFootIKIndex == value)
-				{
-					return;
-				}
-				_rightFootIKIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rightFootIKIndex);
+			set => SetProperty(ref _rightFootIKIndex, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("inputSpeed")] 
 		public animFloatLink InputSpeed
 		{
-			get
-			{
-				if (_inputSpeed == null)
-				{
-					_inputSpeed = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "inputSpeed", cr2w, this);
-				}
-				return _inputSpeed;
-			}
-			set
-			{
-				if (_inputSpeed == value)
-				{
-					return;
-				}
-				_inputSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputSpeed);
+			set => SetProperty(ref _inputSpeed, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("weight")] 
 		public animFloatLink Weight
 		{
-			get
-			{
-				if (_weight == null)
-				{
-					_weight = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "weight", cr2w, this);
-				}
-				return _weight;
-			}
-			set
-			{
-				if (_weight == value)
-				{
-					return;
-				}
-				_weight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weight);
+			set => SetProperty(ref _weight, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("Params")] 
 		public animfssBodyOfflineParams Params
 		{
-			get
-			{
-				if (_params == null)
-				{
-					_params = (animfssBodyOfflineParams) CR2WTypeManager.Create("animfssBodyOfflineParams", "Params", cr2w, this);
-				}
-				return _params;
-			}
-			set
-			{
-				if (_params == value)
-				{
-					return;
-				}
-				_params = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
 		}
 
 		public animAnimNode_FootStepScaling(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("providedAuthorizationLevel")] 
 		public CEnum<ESecurityAccessLevel> ProvidedAuthorizationLevel
 		{
-			get
-			{
-				if (_providedAuthorizationLevel == null)
-				{
-					_providedAuthorizationLevel = (CEnum<ESecurityAccessLevel>) CR2WTypeManager.Create("ESecurityAccessLevel", "providedAuthorizationLevel", cr2w, this);
-				}
-				return _providedAuthorizationLevel;
-			}
-			set
-			{
-				if (_providedAuthorizationLevel == value)
-				{
-					return;
-				}
-				_providedAuthorizationLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _providedAuthorizationLevel);
+			set => SetProperty(ref _providedAuthorizationLevel, value);
 		}
 
 		public CoderControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

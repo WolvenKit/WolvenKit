@@ -27,345 +27,120 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stopType")] 
 		public CInt32 StopType
 		{
-			get
-			{
-				if (_stopType == null)
-				{
-					_stopType = (CInt32) CR2WTypeManager.Create("Int32", "stopType", cr2w, this);
-				}
-				return _stopType;
-			}
-			set
-			{
-				if (_stopType == value)
-				{
-					return;
-				}
-				_stopType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stopType);
+			set => SetProperty(ref _stopType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("speedType")] 
 		public CInt32 SpeedType
 		{
-			get
-			{
-				if (_speedType == null)
-				{
-					_speedType = (CInt32) CR2WTypeManager.Create("Int32", "speedType", cr2w, this);
-				}
-				return _speedType;
-			}
-			set
-			{
-				if (_speedType == value)
-				{
-					return;
-				}
-				_speedType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speedType);
+			set => SetProperty(ref _speedType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("speedOverrideType")] 
 		public CInt32 SpeedOverrideType
 		{
-			get
-			{
-				if (_speedOverrideType == null)
-				{
-					_speedOverrideType = (CInt32) CR2WTypeManager.Create("Int32", "speedOverrideType", cr2w, this);
-				}
-				return _speedOverrideType;
-			}
-			set
-			{
-				if (_speedOverrideType == value)
-				{
-					return;
-				}
-				_speedOverrideType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speedOverrideType);
+			set => SetProperty(ref _speedOverrideType, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("bumpDirection")] 
 		public CInt32 BumpDirection
 		{
-			get
-			{
-				if (_bumpDirection == null)
-				{
-					_bumpDirection = (CInt32) CR2WTypeManager.Create("Int32", "bumpDirection", cr2w, this);
-				}
-				return _bumpDirection;
-			}
-			set
-			{
-				if (_bumpDirection == value)
-				{
-					return;
-				}
-				_bumpDirection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bumpDirection);
+			set => SetProperty(ref _bumpDirection, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("threatSource")] 
 		public CInt32 ThreatSource
 		{
-			get
-			{
-				if (_threatSource == null)
-				{
-					_threatSource = (CInt32) CR2WTypeManager.Create("Int32", "threatSource", cr2w, this);
-				}
-				return _threatSource;
-			}
-			set
-			{
-				if (_threatSource == value)
-				{
-					return;
-				}
-				_threatSource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _threatSource);
+			set => SetProperty(ref _threatSource, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("locomotionState")] 
 		public CInt32 LocomotionState
 		{
-			get
-			{
-				if (_locomotionState == null)
-				{
-					_locomotionState = (CInt32) CR2WTypeManager.Create("Int32", "locomotionState", cr2w, this);
-				}
-				return _locomotionState;
-			}
-			set
-			{
-				if (_locomotionState == value)
-				{
-					return;
-				}
-				_locomotionState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _locomotionState);
+			set => SetProperty(ref _locomotionState, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("bumpSourceLocation")] 
 		public CInt32 BumpSourceLocation
 		{
-			get
-			{
-				if (_bumpSourceLocation == null)
-				{
-					_bumpSourceLocation = (CInt32) CR2WTypeManager.Create("Int32", "bumpSourceLocation", cr2w, this);
-				}
-				return _bumpSourceLocation;
-			}
-			set
-			{
-				if (_bumpSourceLocation == value)
-				{
-					return;
-				}
-				_bumpSourceLocation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bumpSourceLocation);
+			set => SetProperty(ref _bumpSourceLocation, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("lookAtAngle")] 
 		public CFloat LookAtAngle
 		{
-			get
-			{
-				if (_lookAtAngle == null)
-				{
-					_lookAtAngle = (CFloat) CR2WTypeManager.Create("Float", "lookAtAngle", cr2w, this);
-				}
-				return _lookAtAngle;
-			}
-			set
-			{
-				if (_lookAtAngle == value)
-				{
-					return;
-				}
-				_lookAtAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lookAtAngle);
+			set => SetProperty(ref _lookAtAngle, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("fearStage")] 
 		public CInt32 FearStage
 		{
-			get
-			{
-				if (_fearStage == null)
-				{
-					_fearStage = (CInt32) CR2WTypeManager.Create("Int32", "fearStage", cr2w, this);
-				}
-				return _fearStage;
-			}
-			set
-			{
-				if (_fearStage == value)
-				{
-					return;
-				}
-				_fearStage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fearStage);
+			set => SetProperty(ref _fearStage, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("startType")] 
 		public CInt32 StartType
 		{
-			get
-			{
-				if (_startType == null)
-				{
-					_startType = (CInt32) CR2WTypeManager.Create("Int32", "startType", cr2w, this);
-				}
-				return _startType;
-			}
-			set
-			{
-				if (_startType == value)
-				{
-					return;
-				}
-				_startType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startType);
+			set => SetProperty(ref _startType, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("startDirectionAngle")] 
 		public CFloat StartDirectionAngle
 		{
-			get
-			{
-				if (_startDirectionAngle == null)
-				{
-					_startDirectionAngle = (CFloat) CR2WTypeManager.Create("Float", "startDirectionAngle", cr2w, this);
-				}
-				return _startDirectionAngle;
-			}
-			set
-			{
-				if (_startDirectionAngle == value)
-				{
-					return;
-				}
-				_startDirectionAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startDirectionAngle);
+			set => SetProperty(ref _startDirectionAngle, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("animTime")] 
 		public CFloat AnimTime
 		{
-			get
-			{
-				if (_animTime == null)
-				{
-					_animTime = (CFloat) CR2WTypeManager.Create("Float", "animTime", cr2w, this);
-				}
-				return _animTime;
-			}
-			set
-			{
-				if (_animTime == value)
-				{
-					return;
-				}
-				_animTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animTime);
+			set => SetProperty(ref _animTime, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("isBlocked")] 
 		public CBool IsBlocked
 		{
-			get
-			{
-				if (_isBlocked == null)
-				{
-					_isBlocked = (CBool) CR2WTypeManager.Create("Bool", "isBlocked", cr2w, this);
-				}
-				return _isBlocked;
-			}
-			set
-			{
-				if (_isBlocked == value)
-				{
-					return;
-				}
-				_isBlocked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isBlocked);
+			set => SetProperty(ref _isBlocked, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("bumpType")] 
 		public CInt32 BumpType
 		{
-			get
-			{
-				if (_bumpType == null)
-				{
-					_bumpType = (CInt32) CR2WTypeManager.Create("Int32", "bumpType", cr2w, this);
-				}
-				return _bumpType;
-			}
-			set
-			{
-				if (_bumpType == value)
-				{
-					return;
-				}
-				_bumpType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bumpType);
+			set => SetProperty(ref _bumpType, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("fleeType")] 
 		public CInt32 FleeType
 		{
-			get
-			{
-				if (_fleeType == null)
-				{
-					_fleeType = (CInt32) CR2WTypeManager.Create("Int32", "fleeType", cr2w, this);
-				}
-				return _fleeType;
-			}
-			set
-			{
-				if (_fleeType == value)
-				{
-					return;
-				}
-				_fleeType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fleeType);
+			set => SetProperty(ref _fleeType, value);
 		}
 
 		public animAnimFeature_Crowd(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

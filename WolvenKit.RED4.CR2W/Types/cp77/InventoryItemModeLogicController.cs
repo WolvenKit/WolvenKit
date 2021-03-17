@@ -55,989 +55,344 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemCategoryList")] 
 		public inkCompoundWidgetReference ItemCategoryList
 		{
-			get
-			{
-				if (_itemCategoryList == null)
-				{
-					_itemCategoryList = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "itemCategoryList", cr2w, this);
-				}
-				return _itemCategoryList;
-			}
-			set
-			{
-				if (_itemCategoryList == value)
-				{
-					return;
-				}
-				_itemCategoryList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemCategoryList);
+			set => SetProperty(ref _itemCategoryList, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("itemCategoryHeader")] 
 		public inkTextWidgetReference ItemCategoryHeader
 		{
-			get
-			{
-				if (_itemCategoryHeader == null)
-				{
-					_itemCategoryHeader = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "itemCategoryHeader", cr2w, this);
-				}
-				return _itemCategoryHeader;
-			}
-			set
-			{
-				if (_itemCategoryHeader == value)
-				{
-					return;
-				}
-				_itemCategoryHeader = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemCategoryHeader);
+			set => SetProperty(ref _itemCategoryHeader, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("mainWrapper")] 
 		public inkCompoundWidgetReference MainWrapper
 		{
-			get
-			{
-				if (_mainWrapper == null)
-				{
-					_mainWrapper = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "mainWrapper", cr2w, this);
-				}
-				return _mainWrapper;
-			}
-			set
-			{
-				if (_mainWrapper == value)
-				{
-					return;
-				}
-				_mainWrapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mainWrapper);
+			set => SetProperty(ref _mainWrapper, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("emptyInventoryText")] 
 		public inkTextWidgetReference EmptyInventoryText
 		{
-			get
-			{
-				if (_emptyInventoryText == null)
-				{
-					_emptyInventoryText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "emptyInventoryText", cr2w, this);
-				}
-				return _emptyInventoryText;
-			}
-			set
-			{
-				if (_emptyInventoryText == value)
-				{
-					return;
-				}
-				_emptyInventoryText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _emptyInventoryText);
+			set => SetProperty(ref _emptyInventoryText, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("filterButtonsGrid")] 
 		public inkCompoundWidgetReference FilterButtonsGrid
 		{
-			get
-			{
-				if (_filterButtonsGrid == null)
-				{
-					_filterButtonsGrid = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "filterButtonsGrid", cr2w, this);
-				}
-				return _filterButtonsGrid;
-			}
-			set
-			{
-				if (_filterButtonsGrid == value)
-				{
-					return;
-				}
-				_filterButtonsGrid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filterButtonsGrid);
+			set => SetProperty(ref _filterButtonsGrid, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("itemGridContainer")] 
 		public inkWidgetReference ItemGridContainer
 		{
-			get
-			{
-				if (_itemGridContainer == null)
-				{
-					_itemGridContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "itemGridContainer", cr2w, this);
-				}
-				return _itemGridContainer;
-			}
-			set
-			{
-				if (_itemGridContainer == value)
-				{
-					return;
-				}
-				_itemGridContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemGridContainer);
+			set => SetProperty(ref _itemGridContainer, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("cyberwareGridContainer")] 
 		public inkWidgetReference CyberwareGridContainer
 		{
-			get
-			{
-				if (_cyberwareGridContainer == null)
-				{
-					_cyberwareGridContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "cyberwareGridContainer", cr2w, this);
-				}
-				return _cyberwareGridContainer;
-			}
-			set
-			{
-				if (_cyberwareGridContainer == value)
-				{
-					return;
-				}
-				_cyberwareGridContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cyberwareGridContainer);
+			set => SetProperty(ref _cyberwareGridContainer, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("itemGridScrollControllerWidget")] 
 		public inkWidgetReference ItemGridScrollControllerWidget
 		{
-			get
-			{
-				if (_itemGridScrollControllerWidget == null)
-				{
-					_itemGridScrollControllerWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "itemGridScrollControllerWidget", cr2w, this);
-				}
-				return _itemGridScrollControllerWidget;
-			}
-			set
-			{
-				if (_itemGridScrollControllerWidget == value)
-				{
-					return;
-				}
-				_itemGridScrollControllerWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemGridScrollControllerWidget);
+			set => SetProperty(ref _itemGridScrollControllerWidget, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("buttonHintsController")] 
 		public wCHandle<ButtonHints> ButtonHintsController
 		{
-			get
-			{
-				if (_buttonHintsController == null)
-				{
-					_buttonHintsController = (wCHandle<ButtonHints>) CR2WTypeManager.Create("whandle:ButtonHints", "buttonHintsController", cr2w, this);
-				}
-				return _buttonHintsController;
-			}
-			set
-			{
-				if (_buttonHintsController == value)
-				{
-					return;
-				}
-				_buttonHintsController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonHintsController);
+			set => SetProperty(ref _buttonHintsController, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("TooltipsManager")] 
 		public wCHandle<gameuiTooltipsManager> TooltipsManager
 		{
-			get
-			{
-				if (_tooltipsManager == null)
-				{
-					_tooltipsManager = (wCHandle<gameuiTooltipsManager>) CR2WTypeManager.Create("whandle:gameuiTooltipsManager", "TooltipsManager", cr2w, this);
-				}
-				return _tooltipsManager;
-			}
-			set
-			{
-				if (_tooltipsManager == value)
-				{
-					return;
-				}
-				_tooltipsManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsManager);
+			set => SetProperty(ref _tooltipsManager, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
-			get
-			{
-				if (_inventoryManager == null)
-				{
-					_inventoryManager = (CHandle<InventoryDataManagerV2>) CR2WTypeManager.Create("handle:InventoryDataManagerV2", "InventoryManager", cr2w, this);
-				}
-				return _inventoryManager;
-			}
-			set
-			{
-				if (_inventoryManager == value)
-				{
-					return;
-				}
-				_inventoryManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryManager);
+			set => SetProperty(ref _inventoryManager, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("player")] 
 		public wCHandle<PlayerPuppet> Player
 		{
-			get
-			{
-				if (_player == null)
-				{
-					_player = (wCHandle<PlayerPuppet>) CR2WTypeManager.Create("whandle:PlayerPuppet", "player", cr2w, this);
-				}
-				return _player;
-			}
-			set
-			{
-				if (_player == value)
-				{
-					return;
-				}
-				_player = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _player);
+			set => SetProperty(ref _player, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("equipmentSystem")] 
 		public wCHandle<EquipmentSystem> EquipmentSystem
 		{
-			get
-			{
-				if (_equipmentSystem == null)
-				{
-					_equipmentSystem = (wCHandle<EquipmentSystem>) CR2WTypeManager.Create("whandle:EquipmentSystem", "equipmentSystem", cr2w, this);
-				}
-				return _equipmentSystem;
-			}
-			set
-			{
-				if (_equipmentSystem == value)
-				{
-					return;
-				}
-				_equipmentSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipmentSystem);
+			set => SetProperty(ref _equipmentSystem, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("transactionSystem")] 
 		public wCHandle<gameTransactionSystem> TransactionSystem
 		{
-			get
-			{
-				if (_transactionSystem == null)
-				{
-					_transactionSystem = (wCHandle<gameTransactionSystem>) CR2WTypeManager.Create("whandle:gameTransactionSystem", "transactionSystem", cr2w, this);
-				}
-				return _transactionSystem;
-			}
-			set
-			{
-				if (_transactionSystem == value)
-				{
-					return;
-				}
-				_transactionSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transactionSystem);
+			set => SetProperty(ref _transactionSystem, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("uiScriptableSystem")] 
 		public wCHandle<UIScriptableSystem> UiScriptableSystem
 		{
-			get
-			{
-				if (_uiScriptableSystem == null)
-				{
-					_uiScriptableSystem = (wCHandle<UIScriptableSystem>) CR2WTypeManager.Create("whandle:UIScriptableSystem", "uiScriptableSystem", cr2w, this);
-				}
-				return _uiScriptableSystem;
-			}
-			set
-			{
-				if (_uiScriptableSystem == value)
-				{
-					return;
-				}
-				_uiScriptableSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uiScriptableSystem);
+			set => SetProperty(ref _uiScriptableSystem, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("itemChooser")] 
 		public CHandle<InventoryGenericItemChooser> ItemChooser
 		{
-			get
-			{
-				if (_itemChooser == null)
-				{
-					_itemChooser = (CHandle<InventoryGenericItemChooser>) CR2WTypeManager.Create("handle:InventoryGenericItemChooser", "itemChooser", cr2w, this);
-				}
-				return _itemChooser;
-			}
-			set
-			{
-				if (_itemChooser == value)
-				{
-					return;
-				}
-				_itemChooser = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemChooser);
+			set => SetProperty(ref _itemChooser, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("lastEquipmentAreas")] 
 		public CArray<CEnum<gamedataEquipmentArea>> LastEquipmentAreas
 		{
-			get
-			{
-				if (_lastEquipmentAreas == null)
-				{
-					_lastEquipmentAreas = (CArray<CEnum<gamedataEquipmentArea>>) CR2WTypeManager.Create("array:gamedataEquipmentArea", "lastEquipmentAreas", cr2w, this);
-				}
-				return _lastEquipmentAreas;
-			}
-			set
-			{
-				if (_lastEquipmentAreas == value)
-				{
-					return;
-				}
-				_lastEquipmentAreas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastEquipmentAreas);
+			set => SetProperty(ref _lastEquipmentAreas, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("currentHotkey")] 
 		public CEnum<gameEHotkey> CurrentHotkey
 		{
-			get
-			{
-				if (_currentHotkey == null)
-				{
-					_currentHotkey = (CEnum<gameEHotkey>) CR2WTypeManager.Create("gameEHotkey", "currentHotkey", cr2w, this);
-				}
-				return _currentHotkey;
-			}
-			set
-			{
-				if (_currentHotkey == value)
-				{
-					return;
-				}
-				_currentHotkey = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentHotkey);
+			set => SetProperty(ref _currentHotkey, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("inventoryController")] 
 		public wCHandle<gameuiInventoryGameController> InventoryController
 		{
-			get
-			{
-				if (_inventoryController == null)
-				{
-					_inventoryController = (wCHandle<gameuiInventoryGameController>) CR2WTypeManager.Create("whandle:gameuiInventoryGameController", "inventoryController", cr2w, this);
-				}
-				return _inventoryController;
-			}
-			set
-			{
-				if (_inventoryController == value)
-				{
-					return;
-				}
-				_inventoryController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inventoryController);
+			set => SetProperty(ref _inventoryController, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("itemsPositionProvider")] 
 		public CHandle<ItemPositionProvider> ItemsPositionProvider
 		{
-			get
-			{
-				if (_itemsPositionProvider == null)
-				{
-					_itemsPositionProvider = (CHandle<ItemPositionProvider>) CR2WTypeManager.Create("handle:ItemPositionProvider", "itemsPositionProvider", cr2w, this);
-				}
-				return _itemsPositionProvider;
-			}
-			set
-			{
-				if (_itemsPositionProvider == value)
-				{
-					return;
-				}
-				_itemsPositionProvider = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemsPositionProvider);
+			set => SetProperty(ref _itemsPositionProvider, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("equipmentBlackboard")] 
 		public wCHandle<gameIBlackboard> EquipmentBlackboard
 		{
-			get
-			{
-				if (_equipmentBlackboard == null)
-				{
-					_equipmentBlackboard = (wCHandle<gameIBlackboard>) CR2WTypeManager.Create("whandle:gameIBlackboard", "equipmentBlackboard", cr2w, this);
-				}
-				return _equipmentBlackboard;
-			}
-			set
-			{
-				if (_equipmentBlackboard == value)
-				{
-					return;
-				}
-				_equipmentBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipmentBlackboard);
+			set => SetProperty(ref _equipmentBlackboard, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("itemModsBlackboard")] 
 		public wCHandle<gameIBlackboard> ItemModsBlackboard
 		{
-			get
-			{
-				if (_itemModsBlackboard == null)
-				{
-					_itemModsBlackboard = (wCHandle<gameIBlackboard>) CR2WTypeManager.Create("whandle:gameIBlackboard", "itemModsBlackboard", cr2w, this);
-				}
-				return _itemModsBlackboard;
-			}
-			set
-			{
-				if (_itemModsBlackboard == value)
-				{
-					return;
-				}
-				_itemModsBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemModsBlackboard);
+			set => SetProperty(ref _itemModsBlackboard, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("equipmentBlackboardCallback")] 
 		public CUInt32 EquipmentBlackboardCallback
 		{
-			get
-			{
-				if (_equipmentBlackboardCallback == null)
-				{
-					_equipmentBlackboardCallback = (CUInt32) CR2WTypeManager.Create("Uint32", "equipmentBlackboardCallback", cr2w, this);
-				}
-				return _equipmentBlackboardCallback;
-			}
-			set
-			{
-				if (_equipmentBlackboardCallback == value)
-				{
-					return;
-				}
-				_equipmentBlackboardCallback = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipmentBlackboardCallback);
+			set => SetProperty(ref _equipmentBlackboardCallback, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("itemModsBlackboardCallback")] 
 		public CUInt32 ItemModsBlackboardCallback
 		{
-			get
-			{
-				if (_itemModsBlackboardCallback == null)
-				{
-					_itemModsBlackboardCallback = (CUInt32) CR2WTypeManager.Create("Uint32", "itemModsBlackboardCallback", cr2w, this);
-				}
-				return _itemModsBlackboardCallback;
-			}
-			set
-			{
-				if (_itemModsBlackboardCallback == value)
-				{
-					return;
-				}
-				_itemModsBlackboardCallback = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemModsBlackboardCallback);
+			set => SetProperty(ref _itemModsBlackboardCallback, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("itemGridClassifier")] 
 		public CHandle<ItemModeGridClassifier> ItemGridClassifier
 		{
-			get
-			{
-				if (_itemGridClassifier == null)
-				{
-					_itemGridClassifier = (CHandle<ItemModeGridClassifier>) CR2WTypeManager.Create("handle:ItemModeGridClassifier", "itemGridClassifier", cr2w, this);
-				}
-				return _itemGridClassifier;
-			}
-			set
-			{
-				if (_itemGridClassifier == value)
-				{
-					return;
-				}
-				_itemGridClassifier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemGridClassifier);
+			set => SetProperty(ref _itemGridClassifier, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("itemGridDataView")] 
 		public CHandle<ItemModeGridView> ItemGridDataView
 		{
-			get
-			{
-				if (_itemGridDataView == null)
-				{
-					_itemGridDataView = (CHandle<ItemModeGridView>) CR2WTypeManager.Create("handle:ItemModeGridView", "itemGridDataView", cr2w, this);
-				}
-				return _itemGridDataView;
-			}
-			set
-			{
-				if (_itemGridDataView == value)
-				{
-					return;
-				}
-				_itemGridDataView = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemGridDataView);
+			set => SetProperty(ref _itemGridDataView, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("itemGridDataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> ItemGridDataSource
 		{
-			get
-			{
-				if (_itemGridDataSource == null)
-				{
-					_itemGridDataSource = (CHandle<inkScriptableDataSourceWrapper>) CR2WTypeManager.Create("handle:inkScriptableDataSourceWrapper", "itemGridDataSource", cr2w, this);
-				}
-				return _itemGridDataSource;
-			}
-			set
-			{
-				if (_itemGridDataSource == value)
-				{
-					return;
-				}
-				_itemGridDataSource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemGridDataSource);
+			set => SetProperty(ref _itemGridDataSource, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("activeFilter")] 
 		public CHandle<BackpackFilterButtonController> ActiveFilter
 		{
-			get
-			{
-				if (_activeFilter == null)
-				{
-					_activeFilter = (CHandle<BackpackFilterButtonController>) CR2WTypeManager.Create("handle:BackpackFilterButtonController", "activeFilter", cr2w, this);
-				}
-				return _activeFilter;
-			}
-			set
-			{
-				if (_activeFilter == value)
-				{
-					return;
-				}
-				_activeFilter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeFilter);
+			set => SetProperty(ref _activeFilter, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("filterManager")] 
 		public CHandle<ItemCategoryFliterManager> FilterManager
 		{
-			get
-			{
-				if (_filterManager == null)
-				{
-					_filterManager = (CHandle<ItemCategoryFliterManager>) CR2WTypeManager.Create("handle:ItemCategoryFliterManager", "filterManager", cr2w, this);
-				}
-				return _filterManager;
-			}
-			set
-			{
-				if (_filterManager == value)
-				{
-					return;
-				}
-				_filterManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filterManager);
+			set => SetProperty(ref _filterManager, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("savedFilter")] 
 		public CEnum<ItemFilterCategory> SavedFilter
 		{
-			get
-			{
-				if (_savedFilter == null)
-				{
-					_savedFilter = (CEnum<ItemFilterCategory>) CR2WTypeManager.Create("ItemFilterCategory", "savedFilter", cr2w, this);
-				}
-				return _savedFilter;
-			}
-			set
-			{
-				if (_savedFilter == value)
-				{
-					return;
-				}
-				_savedFilter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _savedFilter);
+			set => SetProperty(ref _savedFilter, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("lastSelectedDisplay")] 
 		public CHandle<InventoryItemDisplayController> LastSelectedDisplay
 		{
-			get
-			{
-				if (_lastSelectedDisplay == null)
-				{
-					_lastSelectedDisplay = (CHandle<InventoryItemDisplayController>) CR2WTypeManager.Create("handle:InventoryItemDisplayController", "lastSelectedDisplay", cr2w, this);
-				}
-				return _lastSelectedDisplay;
-			}
-			set
-			{
-				if (_lastSelectedDisplay == value)
-				{
-					return;
-				}
-				_lastSelectedDisplay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastSelectedDisplay);
+			set => SetProperty(ref _lastSelectedDisplay, value);
 		}
 
 		[Ordinal(32)] 
 		[RED("itemModeInventoryListenerCallback")] 
 		public CHandle<ItemModeInventoryListenerCallback> ItemModeInventoryListenerCallback
 		{
-			get
-			{
-				if (_itemModeInventoryListenerCallback == null)
-				{
-					_itemModeInventoryListenerCallback = (CHandle<ItemModeInventoryListenerCallback>) CR2WTypeManager.Create("handle:ItemModeInventoryListenerCallback", "itemModeInventoryListenerCallback", cr2w, this);
-				}
-				return _itemModeInventoryListenerCallback;
-			}
-			set
-			{
-				if (_itemModeInventoryListenerCallback == value)
-				{
-					return;
-				}
-				_itemModeInventoryListenerCallback = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemModeInventoryListenerCallback);
+			set => SetProperty(ref _itemModeInventoryListenerCallback, value);
 		}
 
 		[Ordinal(33)] 
 		[RED("itemModeInventoryListener")] 
 		public CHandle<gameInventoryScriptListener> ItemModeInventoryListener
 		{
-			get
-			{
-				if (_itemModeInventoryListener == null)
-				{
-					_itemModeInventoryListener = (CHandle<gameInventoryScriptListener>) CR2WTypeManager.Create("handle:gameInventoryScriptListener", "itemModeInventoryListener", cr2w, this);
-				}
-				return _itemModeInventoryListener;
-			}
-			set
-			{
-				if (_itemModeInventoryListener == value)
-				{
-					return;
-				}
-				_itemModeInventoryListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemModeInventoryListener);
+			set => SetProperty(ref _itemModeInventoryListener, value);
 		}
 
 		[Ordinal(34)] 
 		[RED("itemModeInventoryListenerRegistered")] 
 		public CBool ItemModeInventoryListenerRegistered
 		{
-			get
-			{
-				if (_itemModeInventoryListenerRegistered == null)
-				{
-					_itemModeInventoryListenerRegistered = (CBool) CR2WTypeManager.Create("Bool", "itemModeInventoryListenerRegistered", cr2w, this);
-				}
-				return _itemModeInventoryListenerRegistered;
-			}
-			set
-			{
-				if (_itemModeInventoryListenerRegistered == value)
-				{
-					return;
-				}
-				_itemModeInventoryListenerRegistered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemModeInventoryListenerRegistered);
+			set => SetProperty(ref _itemModeInventoryListenerRegistered, value);
 		}
 
 		[Ordinal(35)] 
 		[RED("itemGridContainerController")] 
 		public CHandle<ItemModeGridContainer> ItemGridContainerController
 		{
-			get
-			{
-				if (_itemGridContainerController == null)
-				{
-					_itemGridContainerController = (CHandle<ItemModeGridContainer>) CR2WTypeManager.Create("handle:ItemModeGridContainer", "itemGridContainerController", cr2w, this);
-				}
-				return _itemGridContainerController;
-			}
-			set
-			{
-				if (_itemGridContainerController == value)
-				{
-					return;
-				}
-				_itemGridContainerController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemGridContainerController);
+			set => SetProperty(ref _itemGridContainerController, value);
 		}
 
 		[Ordinal(36)] 
 		[RED("cyberwareGridContainerController")] 
 		public CHandle<ItemModeGridContainer> CyberwareGridContainerController
 		{
-			get
-			{
-				if (_cyberwareGridContainerController == null)
-				{
-					_cyberwareGridContainerController = (CHandle<ItemModeGridContainer>) CR2WTypeManager.Create("handle:ItemModeGridContainer", "cyberwareGridContainerController", cr2w, this);
-				}
-				return _cyberwareGridContainerController;
-			}
-			set
-			{
-				if (_cyberwareGridContainerController == value)
-				{
-					return;
-				}
-				_cyberwareGridContainerController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cyberwareGridContainerController);
+			set => SetProperty(ref _cyberwareGridContainerController, value);
 		}
 
 		[Ordinal(37)] 
 		[RED("comparisonResolver")] 
 		public CHandle<ItemPreferredComparisonResolver> ComparisonResolver
 		{
-			get
-			{
-				if (_comparisonResolver == null)
-				{
-					_comparisonResolver = (CHandle<ItemPreferredComparisonResolver>) CR2WTypeManager.Create("handle:ItemPreferredComparisonResolver", "comparisonResolver", cr2w, this);
-				}
-				return _comparisonResolver;
-			}
-			set
-			{
-				if (_comparisonResolver == value)
-				{
-					return;
-				}
-				_comparisonResolver = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comparisonResolver);
+			set => SetProperty(ref _comparisonResolver, value);
 		}
 
 		[Ordinal(38)] 
 		[RED("isE3Demo")] 
 		public CBool IsE3Demo
 		{
-			get
-			{
-				if (_isE3Demo == null)
-				{
-					_isE3Demo = (CBool) CR2WTypeManager.Create("Bool", "isE3Demo", cr2w, this);
-				}
-				return _isE3Demo;
-			}
-			set
-			{
-				if (_isE3Demo == value)
-				{
-					return;
-				}
-				_isE3Demo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isE3Demo);
+			set => SetProperty(ref _isE3Demo, value);
 		}
 
 		[Ordinal(39)] 
 		[RED("isShown")] 
 		public CBool IsShown
 		{
-			get
-			{
-				if (_isShown == null)
-				{
-					_isShown = (CBool) CR2WTypeManager.Create("Bool", "isShown", cr2w, this);
-				}
-				return _isShown;
-			}
-			set
-			{
-				if (_isShown == value)
-				{
-					return;
-				}
-				_isShown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isShown);
+			set => SetProperty(ref _isShown, value);
 		}
 
 		[Ordinal(40)] 
 		[RED("itemDropQueue")] 
 		public CArray<gameItemModParams> ItemDropQueue
 		{
-			get
-			{
-				if (_itemDropQueue == null)
-				{
-					_itemDropQueue = (CArray<gameItemModParams>) CR2WTypeManager.Create("array:gameItemModParams", "itemDropQueue", cr2w, this);
-				}
-				return _itemDropQueue;
-			}
-			set
-			{
-				if (_itemDropQueue == value)
-				{
-					return;
-				}
-				_itemDropQueue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemDropQueue);
+			set => SetProperty(ref _itemDropQueue, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("replaceModNotification")] 
 		public CHandle<inkGameNotificationToken> ReplaceModNotification
 		{
-			get
-			{
-				if (_replaceModNotification == null)
-				{
-					_replaceModNotification = (CHandle<inkGameNotificationToken>) CR2WTypeManager.Create("handle:inkGameNotificationToken", "replaceModNotification", cr2w, this);
-				}
-				return _replaceModNotification;
-			}
-			set
-			{
-				if (_replaceModNotification == value)
-				{
-					return;
-				}
-				_replaceModNotification = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _replaceModNotification);
+			set => SetProperty(ref _replaceModNotification, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("installModData")] 
 		public CHandle<InstallModConfirmationData> InstallModData
 		{
-			get
-			{
-				if (_installModData == null)
-				{
-					_installModData = (CHandle<InstallModConfirmationData>) CR2WTypeManager.Create("handle:InstallModConfirmationData", "installModData", cr2w, this);
-				}
-				return _installModData;
-			}
-			set
-			{
-				if (_installModData == value)
-				{
-					return;
-				}
-				_installModData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _installModData);
+			set => SetProperty(ref _installModData, value);
 		}
 
 		[Ordinal(43)] 
 		[RED("HACK_lastItemDisplayEvent")] 
 		public CHandle<ItemDisplayClickEvent> HACK_lastItemDisplayEvent
 		{
-			get
-			{
-				if (_hACK_lastItemDisplayEvent == null)
-				{
-					_hACK_lastItemDisplayEvent = (CHandle<ItemDisplayClickEvent>) CR2WTypeManager.Create("handle:ItemDisplayClickEvent", "HACK_lastItemDisplayEvent", cr2w, this);
-				}
-				return _hACK_lastItemDisplayEvent;
-			}
-			set
-			{
-				if (_hACK_lastItemDisplayEvent == value)
-				{
-					return;
-				}
-				_hACK_lastItemDisplayEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hACK_lastItemDisplayEvent);
+			set => SetProperty(ref _hACK_lastItemDisplayEvent, value);
 		}
 
 		public InventoryItemModeLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

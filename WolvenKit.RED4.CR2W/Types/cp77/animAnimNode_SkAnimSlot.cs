@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("forFacialIdle")] 
 		public CBool ForFacialIdle
 		{
-			get
-			{
-				if (_forFacialIdle == null)
-				{
-					_forFacialIdle = (CBool) CR2WTypeManager.Create("Bool", "forFacialIdle", cr2w, this);
-				}
-				return _forFacialIdle;
-			}
-			set
-			{
-				if (_forFacialIdle == value)
-				{
-					return;
-				}
-				_forFacialIdle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forFacialIdle);
+			set => SetProperty(ref _forFacialIdle, value);
 		}
 
 		public animAnimNode_SkAnimSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("is_forward_offset")] 
 		public CFloat Is_forward_offset
 		{
-			get
-			{
-				if (_is_forward_offset == null)
-				{
-					_is_forward_offset = (CFloat) CR2WTypeManager.Create("Float", "is_forward_offset", cr2w, this);
-				}
-				return _is_forward_offset;
-			}
-			set
-			{
-				if (_is_forward_offset == value)
-				{
-					return;
-				}
-				_is_forward_offset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _is_forward_offset);
+			set => SetProperty(ref _is_forward_offset, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("upperbody_pitch_weight")] 
 		public CFloat Upperbody_pitch_weight
 		{
-			get
-			{
-				if (_upperbody_pitch_weight == null)
-				{
-					_upperbody_pitch_weight = (CFloat) CR2WTypeManager.Create("Float", "upperbody_pitch_weight", cr2w, this);
-				}
-				return _upperbody_pitch_weight;
-			}
-			set
-			{
-				if (_upperbody_pitch_weight == value)
-				{
-					return;
-				}
-				_upperbody_pitch_weight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _upperbody_pitch_weight);
+			set => SetProperty(ref _upperbody_pitch_weight, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("forward_offset_value")] 
 		public CFloat Forward_offset_value
 		{
-			get
-			{
-				if (_forward_offset_value == null)
-				{
-					_forward_offset_value = (CFloat) CR2WTypeManager.Create("Float", "forward_offset_value", cr2w, this);
-				}
-				return _forward_offset_value;
-			}
-			set
-			{
-				if (_forward_offset_value == value)
-				{
-					return;
-				}
-				_forward_offset_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forward_offset_value);
+			set => SetProperty(ref _forward_offset_value, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("upperbody_yaw_weight")] 
 		public CFloat Upperbody_yaw_weight
 		{
-			get
-			{
-				if (_upperbody_yaw_weight == null)
-				{
-					_upperbody_yaw_weight = (CFloat) CR2WTypeManager.Create("Float", "upperbody_yaw_weight", cr2w, this);
-				}
-				return _upperbody_yaw_weight;
-			}
-			set
-			{
-				if (_upperbody_yaw_weight == value)
-				{
-					return;
-				}
-				_upperbody_yaw_weight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _upperbody_yaw_weight);
+			set => SetProperty(ref _upperbody_yaw_weight, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("is_pitch_off")] 
 		public CFloat Is_pitch_off
 		{
-			get
-			{
-				if (_is_pitch_off == null)
-				{
-					_is_pitch_off = (CFloat) CR2WTypeManager.Create("Float", "is_pitch_off", cr2w, this);
-				}
-				return _is_pitch_off;
-			}
-			set
-			{
-				if (_is_pitch_off == value)
-				{
-					return;
-				}
-				_is_pitch_off = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _is_pitch_off);
+			set => SetProperty(ref _is_pitch_off, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("is_yaw_off")] 
 		public CFloat Is_yaw_off
 		{
-			get
-			{
-				if (_is_yaw_off == null)
-				{
-					_is_yaw_off = (CFloat) CR2WTypeManager.Create("Float", "is_yaw_off", cr2w, this);
-				}
-				return _is_yaw_off;
-			}
-			set
-			{
-				if (_is_yaw_off == value)
-				{
-					return;
-				}
-				_is_yaw_off = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _is_yaw_off);
+			set => SetProperty(ref _is_yaw_off, value);
 		}
 
 		public GameplayCameraData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

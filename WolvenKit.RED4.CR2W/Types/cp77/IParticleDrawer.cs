@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("pivotOffset")] 
 		public CFloat PivotOffset
 		{
-			get
-			{
-				if (_pivotOffset == null)
-				{
-					_pivotOffset = (CFloat) CR2WTypeManager.Create("Float", "pivotOffset", cr2w, this);
-				}
-				return _pivotOffset;
-			}
-			set
-			{
-				if (_pivotOffset == value)
-				{
-					return;
-				}
-				_pivotOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pivotOffset);
+			set => SetProperty(ref _pivotOffset, value);
 		}
 
 		public IParticleDrawer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

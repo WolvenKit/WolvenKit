@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("playerPossesion")] 
 		public CEnum<gamedataPlayerPossesion> PlayerPossesion
 		{
-			get
-			{
-				if (_playerPossesion == null)
-				{
-					_playerPossesion = (CEnum<gamedataPlayerPossesion>) CR2WTypeManager.Create("gamedataPlayerPossesion", "playerPossesion", cr2w, this);
-				}
-				return _playerPossesion;
-			}
-			set
-			{
-				if (_playerPossesion == value)
-				{
-					return;
-				}
-				_playerPossesion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerPossesion);
+			set => SetProperty(ref _playerPossesion, value);
 		}
 
 		public questSetPossesion_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

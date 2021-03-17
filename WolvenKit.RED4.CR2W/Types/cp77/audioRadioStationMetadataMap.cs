@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("radioStations")] 
 		public CArray<CName> RadioStations
 		{
-			get
-			{
-				if (_radioStations == null)
-				{
-					_radioStations = (CArray<CName>) CR2WTypeManager.Create("array:CName", "radioStations", cr2w, this);
-				}
-				return _radioStations;
-			}
-			set
-			{
-				if (_radioStations == value)
-				{
-					return;
-				}
-				_radioStations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radioStations);
+			set => SetProperty(ref _radioStations, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("switchStationEvent")] 
 		public CName SwitchStationEvent
 		{
-			get
-			{
-				if (_switchStationEvent == null)
-				{
-					_switchStationEvent = (CName) CR2WTypeManager.Create("CName", "switchStationEvent", cr2w, this);
-				}
-				return _switchStationEvent;
-			}
-			set
-			{
-				if (_switchStationEvent == value)
-				{
-					return;
-				}
-				_switchStationEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _switchStationEvent);
+			set => SetProperty(ref _switchStationEvent, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("turnOnRadioEvent")] 
 		public CName TurnOnRadioEvent
 		{
-			get
-			{
-				if (_turnOnRadioEvent == null)
-				{
-					_turnOnRadioEvent = (CName) CR2WTypeManager.Create("CName", "turnOnRadioEvent", cr2w, this);
-				}
-				return _turnOnRadioEvent;
-			}
-			set
-			{
-				if (_turnOnRadioEvent == value)
-				{
-					return;
-				}
-				_turnOnRadioEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _turnOnRadioEvent);
+			set => SetProperty(ref _turnOnRadioEvent, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("turnOffRadioEvent")] 
 		public CName TurnOffRadioEvent
 		{
-			get
-			{
-				if (_turnOffRadioEvent == null)
-				{
-					_turnOffRadioEvent = (CName) CR2WTypeManager.Create("CName", "turnOffRadioEvent", cr2w, this);
-				}
-				return _turnOffRadioEvent;
-			}
-			set
-			{
-				if (_turnOffRadioEvent == value)
-				{
-					return;
-				}
-				_turnOffRadioEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _turnOffRadioEvent);
+			set => SetProperty(ref _turnOffRadioEvent, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("defaultBackgroundJingle")] 
 		public audioRadioStationJingleMetadata DefaultBackgroundJingle
 		{
-			get
-			{
-				if (_defaultBackgroundJingle == null)
-				{
-					_defaultBackgroundJingle = (audioRadioStationJingleMetadata) CR2WTypeManager.Create("audioRadioStationJingleMetadata", "defaultBackgroundJingle", cr2w, this);
-				}
-				return _defaultBackgroundJingle;
-			}
-			set
-			{
-				if (_defaultBackgroundJingle == value)
-				{
-					return;
-				}
-				_defaultBackgroundJingle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultBackgroundJingle);
+			set => SetProperty(ref _defaultBackgroundJingle, value);
 		}
 
 		public audioRadioStationMetadataMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

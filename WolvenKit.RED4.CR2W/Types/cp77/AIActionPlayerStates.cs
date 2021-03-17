@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("locomotionStates")] 
 		public CArray<CEnum<gamePSMLocomotionStates>> LocomotionStates
 		{
-			get
-			{
-				if (_locomotionStates == null)
-				{
-					_locomotionStates = (CArray<CEnum<gamePSMLocomotionStates>>) CR2WTypeManager.Create("array:gamePSMLocomotionStates", "locomotionStates", cr2w, this);
-				}
-				return _locomotionStates;
-			}
-			set
-			{
-				if (_locomotionStates == value)
-				{
-					return;
-				}
-				_locomotionStates = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _locomotionStates);
+			set => SetProperty(ref _locomotionStates, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("upperBodyStates")] 
 		public CArray<CEnum<gamePSMUpperBodyStates>> UpperBodyStates
 		{
-			get
-			{
-				if (_upperBodyStates == null)
-				{
-					_upperBodyStates = (CArray<CEnum<gamePSMUpperBodyStates>>) CR2WTypeManager.Create("array:gamePSMUpperBodyStates", "upperBodyStates", cr2w, this);
-				}
-				return _upperBodyStates;
-			}
-			set
-			{
-				if (_upperBodyStates == value)
-				{
-					return;
-				}
-				_upperBodyStates = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _upperBodyStates);
+			set => SetProperty(ref _upperBodyStates, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("meleeStates")] 
 		public CArray<CEnum<gamePSMMelee>> MeleeStates
 		{
-			get
-			{
-				if (_meleeStates == null)
-				{
-					_meleeStates = (CArray<CEnum<gamePSMMelee>>) CR2WTypeManager.Create("array:gamePSMMelee", "meleeStates", cr2w, this);
-				}
-				return _meleeStates;
-			}
-			set
-			{
-				if (_meleeStates == value)
-				{
-					return;
-				}
-				_meleeStates = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meleeStates);
+			set => SetProperty(ref _meleeStates, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("zoneStates")] 
 		public CArray<CEnum<gamePSMZones>> ZoneStates
 		{
-			get
-			{
-				if (_zoneStates == null)
-				{
-					_zoneStates = (CArray<CEnum<gamePSMZones>>) CR2WTypeManager.Create("array:gamePSMZones", "zoneStates", cr2w, this);
-				}
-				return _zoneStates;
-			}
-			set
-			{
-				if (_zoneStates == value)
-				{
-					return;
-				}
-				_zoneStates = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _zoneStates);
+			set => SetProperty(ref _zoneStates, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("bodyCarryStates")] 
 		public CArray<CEnum<gamePSMBodyCarrying>> BodyCarryStates
 		{
-			get
-			{
-				if (_bodyCarryStates == null)
-				{
-					_bodyCarryStates = (CArray<CEnum<gamePSMBodyCarrying>>) CR2WTypeManager.Create("array:gamePSMBodyCarrying", "bodyCarryStates", cr2w, this);
-				}
-				return _bodyCarryStates;
-			}
-			set
-			{
-				if (_bodyCarryStates == value)
-				{
-					return;
-				}
-				_bodyCarryStates = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyCarryStates);
+			set => SetProperty(ref _bodyCarryStates, value);
 		}
 
 		public AIActionPlayerStates(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

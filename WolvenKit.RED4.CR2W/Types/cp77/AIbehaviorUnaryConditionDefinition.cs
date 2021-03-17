@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("child")] 
 		public CHandle<AIbehaviorConditionDefinition> Child
 		{
-			get
-			{
-				if (_child == null)
-				{
-					_child = (CHandle<AIbehaviorConditionDefinition>) CR2WTypeManager.Create("handle:AIbehaviorConditionDefinition", "child", cr2w, this);
-				}
-				return _child;
-			}
-			set
-			{
-				if (_child == value)
-				{
-					return;
-				}
-				_child = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _child);
+			set => SetProperty(ref _child, value);
 		}
 
 		public AIbehaviorUnaryConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

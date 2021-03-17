@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
-			get
-			{
-				if (_icon == null)
-				{
-					_icon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "icon", cr2w, this);
-				}
-				return _icon;
-			}
-			set
-			{
-				if (_icon == value)
-				{
-					return;
-				}
-				_icon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _icon);
+			set => SetProperty(ref _icon, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("iconicLines")] 
 		public inkImageWidgetReference IconicLines
 		{
-			get
-			{
-				if (_iconicLines == null)
-				{
-					_iconicLines = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "iconicLines", cr2w, this);
-				}
-				return _iconicLines;
-			}
-			set
-			{
-				if (_iconicLines == value)
-				{
-					return;
-				}
-				_iconicLines = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _iconicLines);
+			set => SetProperty(ref _iconicLines, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("iconsNameResolver")] 
 		public CHandle<gameuiIconsNameResolver> IconsNameResolver
 		{
-			get
-			{
-				if (_iconsNameResolver == null)
-				{
-					_iconsNameResolver = (CHandle<gameuiIconsNameResolver>) CR2WTypeManager.Create("handle:gameuiIconsNameResolver", "iconsNameResolver", cr2w, this);
-				}
-				return _iconsNameResolver;
-			}
-			set
-			{
-				if (_iconsNameResolver == value)
-				{
-					return;
-				}
-				_iconsNameResolver = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _iconsNameResolver);
+			set => SetProperty(ref _iconsNameResolver, value);
 		}
 
 		public ItemTooltipIconModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

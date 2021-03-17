@@ -35,529 +35,184 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Date")] 
 		public inkTextWidgetReference Date
 		{
-			get
-			{
-				if (_date == null)
-				{
-					_date = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "Date", cr2w, this);
-				}
-				return _date;
-			}
-			set
-			{
-				if (_date == value)
-				{
-					return;
-				}
-				_date = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _date);
+			set => SetProperty(ref _date, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("Timer")] 
 		public inkTextWidgetReference Timer
 		{
-			get
-			{
-				if (_timer == null)
-				{
-					_timer = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "Timer", cr2w, this);
-				}
-				return _timer;
-			}
-			set
-			{
-				if (_timer == value)
-				{
-					return;
-				}
-				_timer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timer);
+			set => SetProperty(ref _timer, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("CameraID")] 
 		public inkTextWidgetReference CameraID
 		{
-			get
-			{
-				if (_cameraID == null)
-				{
-					_cameraID = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "CameraID", cr2w, this);
-				}
-				return _cameraID;
-			}
-			set
-			{
-				if (_cameraID == value)
-				{
-					return;
-				}
-				_cameraID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameraID);
+			set => SetProperty(ref _cameraID, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("healthStatus")] 
 		public inkTextWidgetReference HealthStatus
 		{
-			get
-			{
-				if (_healthStatus == null)
-				{
-					_healthStatus = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "healthStatus", cr2w, this);
-				}
-				return _healthStatus;
-			}
-			set
-			{
-				if (_healthStatus == value)
-				{
-					return;
-				}
-				_healthStatus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _healthStatus);
+			set => SetProperty(ref _healthStatus, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("MessageText")] 
 		public inkTextWidgetReference MessageText
 		{
-			get
-			{
-				if (_messageText == null)
-				{
-					_messageText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "MessageText", cr2w, this);
-				}
-				return _messageText;
-			}
-			set
-			{
-				if (_messageText == value)
-				{
-					return;
-				}
-				_messageText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _messageText);
+			set => SetProperty(ref _messageText, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("pitchFluff")] 
 		public inkTextWidgetReference PitchFluff
 		{
-			get
-			{
-				if (_pitchFluff == null)
-				{
-					_pitchFluff = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "pitchFluff", cr2w, this);
-				}
-				return _pitchFluff;
-			}
-			set
-			{
-				if (_pitchFluff == value)
-				{
-					return;
-				}
-				_pitchFluff = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pitchFluff);
+			set => SetProperty(ref _pitchFluff, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("yawFluff")] 
 		public inkTextWidgetReference YawFluff
 		{
-			get
-			{
-				if (_yawFluff == null)
-				{
-					_yawFluff = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "yawFluff", cr2w, this);
-				}
-				return _yawFluff;
-			}
-			set
-			{
-				if (_yawFluff == value)
-				{
-					return;
-				}
-				_yawFluff = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _yawFluff);
+			set => SetProperty(ref _yawFluff, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("leftPart")] 
 		public inkWidgetReference LeftPart
 		{
-			get
-			{
-				if (_leftPart == null)
-				{
-					_leftPart = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "leftPart", cr2w, this);
-				}
-				return _leftPart;
-			}
-			set
-			{
-				if (_leftPart == value)
-				{
-					return;
-				}
-				_leftPart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _leftPart);
+			set => SetProperty(ref _leftPart, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("rightPart")] 
 		public inkWidgetReference RightPart
 		{
-			get
-			{
-				if (_rightPart == null)
-				{
-					_rightPart = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "rightPart", cr2w, this);
-				}
-				return _rightPart;
-			}
-			set
-			{
-				if (_rightPart == value)
-				{
-					return;
-				}
-				_rightPart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rightPart);
+			set => SetProperty(ref _rightPart, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("offsetLeft")] 
 		public CFloat OffsetLeft
 		{
-			get
-			{
-				if (_offsetLeft == null)
-				{
-					_offsetLeft = (CFloat) CR2WTypeManager.Create("Float", "offsetLeft", cr2w, this);
-				}
-				return _offsetLeft;
-			}
-			set
-			{
-				if (_offsetLeft == value)
-				{
-					return;
-				}
-				_offsetLeft = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offsetLeft);
+			set => SetProperty(ref _offsetLeft, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("offsetRight")] 
 		public CFloat OffsetRight
 		{
-			get
-			{
-				if (_offsetRight == null)
-				{
-					_offsetRight = (CFloat) CR2WTypeManager.Create("Float", "offsetRight", cr2w, this);
-				}
-				return _offsetRight;
-			}
-			set
-			{
-				if (_offsetRight == value)
-				{
-					return;
-				}
-				_offsetRight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offsetRight);
+			set => SetProperty(ref _offsetRight, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("currentTime")] 
 		public GameTime CurrentTime
 		{
-			get
-			{
-				if (_currentTime == null)
-				{
-					_currentTime = (GameTime) CR2WTypeManager.Create("GameTime", "currentTime", cr2w, this);
-				}
-				return _currentTime;
-			}
-			set
-			{
-				if (_currentTime == value)
-				{
-					return;
-				}
-				_currentTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentTime);
+			set => SetProperty(ref _currentTime, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("bbPlayerStats")] 
 		public CHandle<gameIBlackboard> BbPlayerStats
 		{
-			get
-			{
-				if (_bbPlayerStats == null)
-				{
-					_bbPlayerStats = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "bbPlayerStats", cr2w, this);
-				}
-				return _bbPlayerStats;
-			}
-			set
-			{
-				if (_bbPlayerStats == value)
-				{
-					return;
-				}
-				_bbPlayerStats = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbPlayerStats);
+			set => SetProperty(ref _bbPlayerStats, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("bbPlayerEventId")] 
 		public CUInt32 BbPlayerEventId
 		{
-			get
-			{
-				if (_bbPlayerEventId == null)
-				{
-					_bbPlayerEventId = (CUInt32) CR2WTypeManager.Create("Uint32", "bbPlayerEventId", cr2w, this);
-				}
-				return _bbPlayerEventId;
-			}
-			set
-			{
-				if (_bbPlayerEventId == value)
-				{
-					return;
-				}
-				_bbPlayerEventId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bbPlayerEventId);
+			set => SetProperty(ref _bbPlayerEventId, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("currentHealth")] 
 		public CInt32 CurrentHealth
 		{
-			get
-			{
-				if (_currentHealth == null)
-				{
-					_currentHealth = (CInt32) CR2WTypeManager.Create("Int32", "currentHealth", cr2w, this);
-				}
-				return _currentHealth;
-			}
-			set
-			{
-				if (_currentHealth == value)
-				{
-					return;
-				}
-				_currentHealth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentHealth);
+			set => SetProperty(ref _currentHealth, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("previousHealth")] 
 		public CInt32 PreviousHealth
 		{
-			get
-			{
-				if (_previousHealth == null)
-				{
-					_previousHealth = (CInt32) CR2WTypeManager.Create("Int32", "previousHealth", cr2w, this);
-				}
-				return _previousHealth;
-			}
-			set
-			{
-				if (_previousHealth == value)
-				{
-					return;
-				}
-				_previousHealth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousHealth);
+			set => SetProperty(ref _previousHealth, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("maximumHealth")] 
 		public CInt32 MaximumHealth
 		{
-			get
-			{
-				if (_maximumHealth == null)
-				{
-					_maximumHealth = (CInt32) CR2WTypeManager.Create("Int32", "maximumHealth", cr2w, this);
-				}
-				return _maximumHealth;
-			}
-			set
-			{
-				if (_maximumHealth == value)
-				{
-					return;
-				}
-				_maximumHealth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maximumHealth);
+			set => SetProperty(ref _maximumHealth, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("playerObject")] 
 		public wCHandle<gameObject> PlayerObject
 		{
-			get
-			{
-				if (_playerObject == null)
-				{
-					_playerObject = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "playerObject", cr2w, this);
-				}
-				return _playerObject;
-			}
-			set
-			{
-				if (_playerObject == value)
-				{
-					return;
-				}
-				_playerObject = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerObject);
+			set => SetProperty(ref _playerObject, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("playerPuppet")] 
 		public wCHandle<gameObject> PlayerPuppet
 		{
-			get
-			{
-				if (_playerPuppet == null)
-				{
-					_playerPuppet = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "playerPuppet", cr2w, this);
-				}
-				return _playerPuppet;
-			}
-			set
-			{
-				if (_playerPuppet == value)
-				{
-					return;
-				}
-				_playerPuppet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerPuppet);
+			set => SetProperty(ref _playerPuppet, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("optionIntro")] 
 		public inkanimPlaybackOptions OptionIntro
 		{
-			get
-			{
-				if (_optionIntro == null)
-				{
-					_optionIntro = (inkanimPlaybackOptions) CR2WTypeManager.Create("inkanimPlaybackOptions", "optionIntro", cr2w, this);
-				}
-				return _optionIntro;
-			}
-			set
-			{
-				if (_optionIntro == value)
-				{
-					return;
-				}
-				_optionIntro = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _optionIntro);
+			set => SetProperty(ref _optionIntro, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("optionMalfunction")] 
 		public inkanimPlaybackOptions OptionMalfunction
 		{
-			get
-			{
-				if (_optionMalfunction == null)
-				{
-					_optionMalfunction = (inkanimPlaybackOptions) CR2WTypeManager.Create("inkanimPlaybackOptions", "optionMalfunction", cr2w, this);
-				}
-				return _optionMalfunction;
-			}
-			set
-			{
-				if (_optionMalfunction == value)
-				{
-					return;
-				}
-				_optionMalfunction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _optionMalfunction);
+			set => SetProperty(ref _optionMalfunction, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
-			get
-			{
-				if (_gameInstance == null)
-				{
-					_gameInstance = (ScriptGameInstance) CR2WTypeManager.Create("ScriptGameInstance", "gameInstance", cr2w, this);
-				}
-				return _gameInstance;
-			}
-			set
-			{
-				if (_gameInstance == value)
-				{
-					return;
-				}
-				_gameInstance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameInstance);
+			set => SetProperty(ref _gameInstance, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
-			get
-			{
-				if (_animationProxy == null)
-				{
-					_animationProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animationProxy", cr2w, this);
-				}
-				return _animationProxy;
-			}
-			set
-			{
-				if (_animationProxy == value)
-				{
-					return;
-				}
-				_animationProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationProxy);
+			set => SetProperty(ref _animationProxy, value);
 		}
 
 		public hudTurretController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

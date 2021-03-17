@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("optionsListInitialized")] 
 		public CBool OptionsListInitialized
 		{
-			get
-			{
-				if (_optionsListInitialized == null)
-				{
-					_optionsListInitialized = (CBool) CR2WTypeManager.Create("Bool", "optionsListInitialized", cr2w, this);
-				}
-				return _optionsListInitialized;
-			}
-			set
-			{
-				if (_optionsListInitialized == value)
-				{
-					return;
-				}
-				_optionsListInitialized = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _optionsListInitialized);
+			set => SetProperty(ref _optionsListInitialized, value);
 		}
 
 		public MorphMenuUserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

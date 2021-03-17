@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isSpectator")] 
 		public CBool IsSpectator
 		{
-			get
-			{
-				if (_isSpectator == null)
-				{
-					_isSpectator = (CBool) CR2WTypeManager.Create("Bool", "isSpectator", cr2w, this);
-				}
-				return _isSpectator;
-			}
-			set
-			{
-				if (_isSpectator == value)
-				{
-					return;
-				}
-				_isSpectator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isSpectator);
+			set => SetProperty(ref _isSpectator, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("spawnPoint")] 
 		public Transform SpawnPoint
 		{
-			get
-			{
-				if (_spawnPoint == null)
-				{
-					_spawnPoint = (Transform) CR2WTypeManager.Create("Transform", "spawnPoint", cr2w, this);
-				}
-				return _spawnPoint;
-			}
-			set
-			{
-				if (_spawnPoint == value)
-				{
-					return;
-				}
-				_spawnPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnPoint);
+			set => SetProperty(ref _spawnPoint, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("recordId")] 
 		public TweakDBID RecordId
 		{
-			get
-			{
-				if (_recordId == null)
-				{
-					_recordId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "recordId", cr2w, this);
-				}
-				return _recordId;
-			}
-			set
-			{
-				if (_recordId == value)
-				{
-					return;
-				}
-				_recordId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recordId);
+			set => SetProperty(ref _recordId, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("gender")] 
 		public CName Gender
 		{
-			get
-			{
-				if (_gender == null)
-				{
-					_gender = (CName) CR2WTypeManager.Create("CName", "gender", cr2w, this);
-				}
-				return _gender;
-			}
-			set
-			{
-				if (_gender == value)
-				{
-					return;
-				}
-				_gender = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gender);
+			set => SetProperty(ref _gender, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("useSpecifiedStartPoint")] 
 		public CBool UseSpecifiedStartPoint
 		{
-			get
-			{
-				if (_useSpecifiedStartPoint == null)
-				{
-					_useSpecifiedStartPoint = (CBool) CR2WTypeManager.Create("Bool", "useSpecifiedStartPoint", cr2w, this);
-				}
-				return _useSpecifiedStartPoint;
-			}
-			set
-			{
-				if (_useSpecifiedStartPoint == value)
-				{
-					return;
-				}
-				_useSpecifiedStartPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useSpecifiedStartPoint);
+			set => SetProperty(ref _useSpecifiedStartPoint, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("spawnTags")] 
 		public redTagList SpawnTags
 		{
-			get
-			{
-				if (_spawnTags == null)
-				{
-					_spawnTags = (redTagList) CR2WTypeManager.Create("redTagList", "spawnTags", cr2w, this);
-				}
-				return _spawnTags;
-			}
-			set
-			{
-				if (_spawnTags == value)
-				{
-					return;
-				}
-				_spawnTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnTags);
+			set => SetProperty(ref _spawnTags, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("nickname")] 
 		public CString Nickname
 		{
-			get
-			{
-				if (_nickname == null)
-				{
-					_nickname = (CString) CR2WTypeManager.Create("String", "nickname", cr2w, this);
-				}
-				return _nickname;
-			}
-			set
-			{
-				if (_nickname == value)
-				{
-					return;
-				}
-				_nickname = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nickname);
+			set => SetProperty(ref _nickname, value);
 		}
 
 		public gamePlayerSpawnParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

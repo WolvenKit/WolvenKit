@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("root")] 
 		public wCHandle<inkWidget> Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("textWidget")] 
 		public inkTextWidgetReference TextWidget
 		{
-			get
-			{
-				if (_textWidget == null)
-				{
-					_textWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "textWidget", cr2w, this);
-				}
-				return _textWidget;
-			}
-			set
-			{
-				if (_textWidget == value)
-				{
-					return;
-				}
-				_textWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textWidget);
+			set => SetProperty(ref _textWidget, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("animProxyTimeout")] 
 		public CHandle<inkanimProxy> AnimProxyTimeout
 		{
-			get
-			{
-				if (_animProxyTimeout == null)
-				{
-					_animProxyTimeout = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animProxyTimeout", cr2w, this);
-				}
-				return _animProxyTimeout;
-			}
-			set
-			{
-				if (_animProxyTimeout == value)
-				{
-					return;
-				}
-				_animProxyTimeout = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animProxyTimeout);
+			set => SetProperty(ref _animProxyTimeout, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("animProxyFadeOut")] 
 		public CHandle<inkanimProxy> AnimProxyFadeOut
 		{
-			get
-			{
-				if (_animProxyFadeOut == null)
-				{
-					_animProxyFadeOut = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animProxyFadeOut", cr2w, this);
-				}
-				return _animProxyFadeOut;
-			}
-			set
-			{
-				if (_animProxyFadeOut == value)
-				{
-					return;
-				}
-				_animProxyFadeOut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animProxyFadeOut);
+			set => SetProperty(ref _animProxyFadeOut, value);
 		}
 
 		public LogEntryLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

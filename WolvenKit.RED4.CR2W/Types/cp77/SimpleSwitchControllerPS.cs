@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("switchAction")] 
 		public CEnum<ESwitchAction> SwitchAction
 		{
-			get
-			{
-				if (_switchAction == null)
-				{
-					_switchAction = (CEnum<ESwitchAction>) CR2WTypeManager.Create("ESwitchAction", "switchAction", cr2w, this);
-				}
-				return _switchAction;
-			}
-			set
-			{
-				if (_switchAction == value)
-				{
-					return;
-				}
-				_switchAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _switchAction);
+			set => SetProperty(ref _switchAction, value);
 		}
 
 		[Ordinal(105)] 
 		[RED("nameForON")] 
 		public TweakDBID NameForON
 		{
-			get
-			{
-				if (_nameForON == null)
-				{
-					_nameForON = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "nameForON", cr2w, this);
-				}
-				return _nameForON;
-			}
-			set
-			{
-				if (_nameForON == value)
-				{
-					return;
-				}
-				_nameForON = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nameForON);
+			set => SetProperty(ref _nameForON, value);
 		}
 
 		[Ordinal(106)] 
 		[RED("nameForOFF")] 
 		public TweakDBID NameForOFF
 		{
-			get
-			{
-				if (_nameForOFF == null)
-				{
-					_nameForOFF = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "nameForOFF", cr2w, this);
-				}
-				return _nameForOFF;
-			}
-			set
-			{
-				if (_nameForOFF == value)
-				{
-					return;
-				}
-				_nameForOFF = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nameForOFF);
+			set => SetProperty(ref _nameForOFF, value);
 		}
 
 		public SimpleSwitchControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

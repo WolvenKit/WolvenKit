@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dataId")] 
 		public scnSceneWorkspotDataId DataId
 		{
-			get
-			{
-				if (_dataId == null)
-				{
-					_dataId = (scnSceneWorkspotDataId) CR2WTypeManager.Create("scnSceneWorkspotDataId", "dataId", cr2w, this);
-				}
-				return _dataId;
-			}
-			set
-			{
-				if (_dataId == value)
-				{
-					return;
-				}
-				_dataId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dataId);
+			set => SetProperty(ref _dataId, value);
 		}
 
 		public scnWorkspotData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

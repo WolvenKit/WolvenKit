@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("speedIndicator")] 
 		public inkImageWidgetReference SpeedIndicator
 		{
-			get
-			{
-				if (_speedIndicator == null)
-				{
-					_speedIndicator = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "speedIndicator", cr2w, this);
-				}
-				return _speedIndicator;
-			}
-			set
-			{
-				if (_speedIndicator == value)
-				{
-					return;
-				}
-				_speedIndicator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speedIndicator);
+			set => SetProperty(ref _speedIndicator, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("mirroredSpeedIndicator")] 
 		public inkImageWidgetReference MirroredSpeedIndicator
 		{
-			get
-			{
-				if (_mirroredSpeedIndicator == null)
-				{
-					_mirroredSpeedIndicator = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "mirroredSpeedIndicator", cr2w, this);
-				}
-				return _mirroredSpeedIndicator;
-			}
-			set
-			{
-				if (_mirroredSpeedIndicator == value)
-				{
-					return;
-				}
-				_mirroredSpeedIndicator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mirroredSpeedIndicator);
+			set => SetProperty(ref _mirroredSpeedIndicator, value);
 		}
 
 		public SpeedIndicatorIconsManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

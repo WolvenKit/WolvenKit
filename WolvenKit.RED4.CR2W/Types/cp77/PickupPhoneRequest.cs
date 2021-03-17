@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("CallInformation")] 
 		public questPhoneCallInformation CallInformation
 		{
-			get
-			{
-				if (_callInformation == null)
-				{
-					_callInformation = (questPhoneCallInformation) CR2WTypeManager.Create("questPhoneCallInformation", "CallInformation", cr2w, this);
-				}
-				return _callInformation;
-			}
-			set
-			{
-				if (_callInformation == value)
-				{
-					return;
-				}
-				_callInformation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callInformation);
+			set => SetProperty(ref _callInformation, value);
 		}
 
 		public PickupPhoneRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

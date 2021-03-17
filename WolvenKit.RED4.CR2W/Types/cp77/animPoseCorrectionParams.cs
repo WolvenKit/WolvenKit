@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("poseCorrectionGroup")] 
 		public animPoseCorrectionGroup PoseCorrectionGroup
 		{
-			get
-			{
-				if (_poseCorrectionGroup == null)
-				{
-					_poseCorrectionGroup = (animPoseCorrectionGroup) CR2WTypeManager.Create("animPoseCorrectionGroup", "poseCorrectionGroup", cr2w, this);
-				}
-				return _poseCorrectionGroup;
-			}
-			set
-			{
-				if (_poseCorrectionGroup == value)
-				{
-					return;
-				}
-				_poseCorrectionGroup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _poseCorrectionGroup);
+			set => SetProperty(ref _poseCorrectionGroup, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("blendDuration")] 
 		public CFloat BlendDuration
 		{
-			get
-			{
-				if (_blendDuration == null)
-				{
-					_blendDuration = (CFloat) CR2WTypeManager.Create("Float", "blendDuration", cr2w, this);
-				}
-				return _blendDuration;
-			}
-			set
-			{
-				if (_blendDuration == value)
-				{
-					return;
-				}
-				_blendDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendDuration);
+			set => SetProperty(ref _blendDuration, value);
 		}
 
 		public animPoseCorrectionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

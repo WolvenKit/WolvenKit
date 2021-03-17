@@ -65,1219 +65,424 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("achievementsMask")] 
 		public CArray<CBool> AchievementsMask
 		{
-			get
-			{
-				if (_achievementsMask == null)
-				{
-					_achievementsMask = (CArray<CBool>) CR2WTypeManager.Create("array:Bool", "achievementsMask", cr2w, this);
-				}
-				return _achievementsMask;
-			}
-			set
-			{
-				if (_achievementsMask == value)
-				{
-					return;
-				}
-				_achievementsMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _achievementsMask);
+			set => SetProperty(ref _achievementsMask, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rangedAttacksMade")] 
 		public CInt32 RangedAttacksMade
 		{
-			get
-			{
-				if (_rangedAttacksMade == null)
-				{
-					_rangedAttacksMade = (CInt32) CR2WTypeManager.Create("Int32", "rangedAttacksMade", cr2w, this);
-				}
-				return _rangedAttacksMade;
-			}
-			set
-			{
-				if (_rangedAttacksMade == value)
-				{
-					return;
-				}
-				_rangedAttacksMade = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rangedAttacksMade);
+			set => SetProperty(ref _rangedAttacksMade, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("meleeAttacksMade")] 
 		public CInt32 MeleeAttacksMade
 		{
-			get
-			{
-				if (_meleeAttacksMade == null)
-				{
-					_meleeAttacksMade = (CInt32) CR2WTypeManager.Create("Int32", "meleeAttacksMade", cr2w, this);
-				}
-				return _meleeAttacksMade;
-			}
-			set
-			{
-				if (_meleeAttacksMade == value)
-				{
-					return;
-				}
-				_meleeAttacksMade = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meleeAttacksMade);
+			set => SetProperty(ref _meleeAttacksMade, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("meleeKills")] 
 		public CInt32 MeleeKills
 		{
-			get
-			{
-				if (_meleeKills == null)
-				{
-					_meleeKills = (CInt32) CR2WTypeManager.Create("Int32", "meleeKills", cr2w, this);
-				}
-				return _meleeKills;
-			}
-			set
-			{
-				if (_meleeKills == value)
-				{
-					return;
-				}
-				_meleeKills = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meleeKills);
+			set => SetProperty(ref _meleeKills, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("rangedKills")] 
 		public CInt32 RangedKills
 		{
-			get
-			{
-				if (_rangedKills == null)
-				{
-					_rangedKills = (CInt32) CR2WTypeManager.Create("Int32", "rangedKills", cr2w, this);
-				}
-				return _rangedKills;
-			}
-			set
-			{
-				if (_rangedKills == value)
-				{
-					return;
-				}
-				_rangedKills = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rangedKills);
+			set => SetProperty(ref _rangedKills, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("quickhacksMade")] 
 		public CInt32 QuickhacksMade
 		{
-			get
-			{
-				if (_quickhacksMade == null)
-				{
-					_quickhacksMade = (CInt32) CR2WTypeManager.Create("Int32", "quickhacksMade", cr2w, this);
-				}
-				return _quickhacksMade;
-			}
-			set
-			{
-				if (_quickhacksMade == value)
-				{
-					return;
-				}
-				_quickhacksMade = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quickhacksMade);
+			set => SetProperty(ref _quickhacksMade, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("distractionsMade")] 
 		public CInt32 DistractionsMade
 		{
-			get
-			{
-				if (_distractionsMade == null)
-				{
-					_distractionsMade = (CInt32) CR2WTypeManager.Create("Int32", "distractionsMade", cr2w, this);
-				}
-				return _distractionsMade;
-			}
-			set
-			{
-				if (_distractionsMade == value)
-				{
-					return;
-				}
-				_distractionsMade = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distractionsMade);
+			set => SetProperty(ref _distractionsMade, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("legendaryItemsCrafted")] 
 		public CInt32 LegendaryItemsCrafted
 		{
-			get
-			{
-				if (_legendaryItemsCrafted == null)
-				{
-					_legendaryItemsCrafted = (CInt32) CR2WTypeManager.Create("Int32", "legendaryItemsCrafted", cr2w, this);
-				}
-				return _legendaryItemsCrafted;
-			}
-			set
-			{
-				if (_legendaryItemsCrafted == value)
-				{
-					return;
-				}
-				_legendaryItemsCrafted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _legendaryItemsCrafted);
+			set => SetProperty(ref _legendaryItemsCrafted, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("npcMeleeLightAttackReceived")] 
 		public CInt32 NpcMeleeLightAttackReceived
 		{
-			get
-			{
-				if (_npcMeleeLightAttackReceived == null)
-				{
-					_npcMeleeLightAttackReceived = (CInt32) CR2WTypeManager.Create("Int32", "npcMeleeLightAttackReceived", cr2w, this);
-				}
-				return _npcMeleeLightAttackReceived;
-			}
-			set
-			{
-				if (_npcMeleeLightAttackReceived == value)
-				{
-					return;
-				}
-				_npcMeleeLightAttackReceived = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _npcMeleeLightAttackReceived);
+			set => SetProperty(ref _npcMeleeLightAttackReceived, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("npcMeleeStrongAttackReceived")] 
 		public CInt32 NpcMeleeStrongAttackReceived
 		{
-			get
-			{
-				if (_npcMeleeStrongAttackReceived == null)
-				{
-					_npcMeleeStrongAttackReceived = (CInt32) CR2WTypeManager.Create("Int32", "npcMeleeStrongAttackReceived", cr2w, this);
-				}
-				return _npcMeleeStrongAttackReceived;
-			}
-			set
-			{
-				if (_npcMeleeStrongAttackReceived == value)
-				{
-					return;
-				}
-				_npcMeleeStrongAttackReceived = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _npcMeleeStrongAttackReceived);
+			set => SetProperty(ref _npcMeleeStrongAttackReceived, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("npcMeleeBlockAttackReceived")] 
 		public CInt32 NpcMeleeBlockAttackReceived
 		{
-			get
-			{
-				if (_npcMeleeBlockAttackReceived == null)
-				{
-					_npcMeleeBlockAttackReceived = (CInt32) CR2WTypeManager.Create("Int32", "npcMeleeBlockAttackReceived", cr2w, this);
-				}
-				return _npcMeleeBlockAttackReceived;
-			}
-			set
-			{
-				if (_npcMeleeBlockAttackReceived == value)
-				{
-					return;
-				}
-				_npcMeleeBlockAttackReceived = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _npcMeleeBlockAttackReceived);
+			set => SetProperty(ref _npcMeleeBlockAttackReceived, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("npcMeleeBlockedAttacks")] 
 		public CInt32 NpcMeleeBlockedAttacks
 		{
-			get
-			{
-				if (_npcMeleeBlockedAttacks == null)
-				{
-					_npcMeleeBlockedAttacks = (CInt32) CR2WTypeManager.Create("Int32", "npcMeleeBlockedAttacks", cr2w, this);
-				}
-				return _npcMeleeBlockedAttacks;
-			}
-			set
-			{
-				if (_npcMeleeBlockedAttacks == value)
-				{
-					return;
-				}
-				_npcMeleeBlockedAttacks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _npcMeleeBlockedAttacks);
+			set => SetProperty(ref _npcMeleeBlockedAttacks, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("npcMeleeDeflectedAttacks")] 
 		public CInt32 NpcMeleeDeflectedAttacks
 		{
-			get
-			{
-				if (_npcMeleeDeflectedAttacks == null)
-				{
-					_npcMeleeDeflectedAttacks = (CInt32) CR2WTypeManager.Create("Int32", "npcMeleeDeflectedAttacks", cr2w, this);
-				}
-				return _npcMeleeDeflectedAttacks;
-			}
-			set
-			{
-				if (_npcMeleeDeflectedAttacks == value)
-				{
-					return;
-				}
-				_npcMeleeDeflectedAttacks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _npcMeleeDeflectedAttacks);
+			set => SetProperty(ref _npcMeleeDeflectedAttacks, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("downedEnemies")] 
 		public CInt32 DownedEnemies
 		{
-			get
-			{
-				if (_downedEnemies == null)
-				{
-					_downedEnemies = (CInt32) CR2WTypeManager.Create("Int32", "downedEnemies", cr2w, this);
-				}
-				return _downedEnemies;
-			}
-			set
-			{
-				if (_downedEnemies == value)
-				{
-					return;
-				}
-				_downedEnemies = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _downedEnemies);
+			set => SetProperty(ref _downedEnemies, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("killedEnemies")] 
 		public CInt32 KilledEnemies
 		{
-			get
-			{
-				if (_killedEnemies == null)
-				{
-					_killedEnemies = (CInt32) CR2WTypeManager.Create("Int32", "killedEnemies", cr2w, this);
-				}
-				return _killedEnemies;
-			}
-			set
-			{
-				if (_killedEnemies == value)
-				{
-					return;
-				}
-				_killedEnemies = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _killedEnemies);
+			set => SetProperty(ref _killedEnemies, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("defeatedEnemies")] 
 		public CInt32 DefeatedEnemies
 		{
-			get
-			{
-				if (_defeatedEnemies == null)
-				{
-					_defeatedEnemies = (CInt32) CR2WTypeManager.Create("Int32", "defeatedEnemies", cr2w, this);
-				}
-				return _defeatedEnemies;
-			}
-			set
-			{
-				if (_defeatedEnemies == value)
-				{
-					return;
-				}
-				_defeatedEnemies = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defeatedEnemies);
+			set => SetProperty(ref _defeatedEnemies, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("incapacitatedEnemies")] 
 		public CInt32 IncapacitatedEnemies
 		{
-			get
-			{
-				if (_incapacitatedEnemies == null)
-				{
-					_incapacitatedEnemies = (CInt32) CR2WTypeManager.Create("Int32", "incapacitatedEnemies", cr2w, this);
-				}
-				return _incapacitatedEnemies;
-			}
-			set
-			{
-				if (_incapacitatedEnemies == value)
-				{
-					return;
-				}
-				_incapacitatedEnemies = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _incapacitatedEnemies);
+			set => SetProperty(ref _incapacitatedEnemies, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("finishedEnemies")] 
 		public CInt32 FinishedEnemies
 		{
-			get
-			{
-				if (_finishedEnemies == null)
-				{
-					_finishedEnemies = (CInt32) CR2WTypeManager.Create("Int32", "finishedEnemies", cr2w, this);
-				}
-				return _finishedEnemies;
-			}
-			set
-			{
-				if (_finishedEnemies == value)
-				{
-					return;
-				}
-				_finishedEnemies = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _finishedEnemies);
+			set => SetProperty(ref _finishedEnemies, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("downedWithRanged")] 
 		public CInt32 DownedWithRanged
 		{
-			get
-			{
-				if (_downedWithRanged == null)
-				{
-					_downedWithRanged = (CInt32) CR2WTypeManager.Create("Int32", "downedWithRanged", cr2w, this);
-				}
-				return _downedWithRanged;
-			}
-			set
-			{
-				if (_downedWithRanged == value)
-				{
-					return;
-				}
-				_downedWithRanged = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _downedWithRanged);
+			set => SetProperty(ref _downedWithRanged, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("downedWithMelee")] 
 		public CInt32 DownedWithMelee
 		{
-			get
-			{
-				if (_downedWithMelee == null)
-				{
-					_downedWithMelee = (CInt32) CR2WTypeManager.Create("Int32", "downedWithMelee", cr2w, this);
-				}
-				return _downedWithMelee;
-			}
-			set
-			{
-				if (_downedWithMelee == value)
-				{
-					return;
-				}
-				_downedWithMelee = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _downedWithMelee);
+			set => SetProperty(ref _downedWithMelee, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("downedInTimeDilatation")] 
 		public CInt32 DownedInTimeDilatation
 		{
-			get
-			{
-				if (_downedInTimeDilatation == null)
-				{
-					_downedInTimeDilatation = (CInt32) CR2WTypeManager.Create("Int32", "downedInTimeDilatation", cr2w, this);
-				}
-				return _downedInTimeDilatation;
-			}
-			set
-			{
-				if (_downedInTimeDilatation == value)
-				{
-					return;
-				}
-				_downedInTimeDilatation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _downedInTimeDilatation);
+			set => SetProperty(ref _downedInTimeDilatation, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("rangedProgress")] 
 		public CInt32 RangedProgress
 		{
-			get
-			{
-				if (_rangedProgress == null)
-				{
-					_rangedProgress = (CInt32) CR2WTypeManager.Create("Int32", "rangedProgress", cr2w, this);
-				}
-				return _rangedProgress;
-			}
-			set
-			{
-				if (_rangedProgress == value)
-				{
-					return;
-				}
-				_rangedProgress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rangedProgress);
+			set => SetProperty(ref _rangedProgress, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("meleeProgress")] 
 		public CInt32 MeleeProgress
 		{
-			get
-			{
-				if (_meleeProgress == null)
-				{
-					_meleeProgress = (CInt32) CR2WTypeManager.Create("Int32", "meleeProgress", cr2w, this);
-				}
-				return _meleeProgress;
-			}
-			set
-			{
-				if (_meleeProgress == value)
-				{
-					return;
-				}
-				_meleeProgress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meleeProgress);
+			set => SetProperty(ref _meleeProgress, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("dilationProgress")] 
 		public CInt32 DilationProgress
 		{
-			get
-			{
-				if (_dilationProgress == null)
-				{
-					_dilationProgress = (CInt32) CR2WTypeManager.Create("Int32", "dilationProgress", cr2w, this);
-				}
-				return _dilationProgress;
-			}
-			set
-			{
-				if (_dilationProgress == value)
-				{
-					return;
-				}
-				_dilationProgress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dilationProgress);
+			set => SetProperty(ref _dilationProgress, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("failedShardDrops")] 
 		public CFloat FailedShardDrops
 		{
-			get
-			{
-				if (_failedShardDrops == null)
-				{
-					_failedShardDrops = (CFloat) CR2WTypeManager.Create("Float", "failedShardDrops", cr2w, this);
-				}
-				return _failedShardDrops;
-			}
-			set
-			{
-				if (_failedShardDrops == value)
-				{
-					return;
-				}
-				_failedShardDrops = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _failedShardDrops);
+			set => SetProperty(ref _failedShardDrops, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("bluelinesUseCount")] 
 		public CInt32 BluelinesUseCount
 		{
-			get
-			{
-				if (_bluelinesUseCount == null)
-				{
-					_bluelinesUseCount = (CInt32) CR2WTypeManager.Create("Int32", "bluelinesUseCount", cr2w, this);
-				}
-				return _bluelinesUseCount;
-			}
-			set
-			{
-				if (_bluelinesUseCount == value)
-				{
-					return;
-				}
-				_bluelinesUseCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bluelinesUseCount);
+			set => SetProperty(ref _bluelinesUseCount, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("twoHeadssourceID")] 
 		public entEntityID TwoHeadssourceID
 		{
-			get
-			{
-				if (_twoHeadssourceID == null)
-				{
-					_twoHeadssourceID = (entEntityID) CR2WTypeManager.Create("entEntityID", "twoHeadssourceID", cr2w, this);
-				}
-				return _twoHeadssourceID;
-			}
-			set
-			{
-				if (_twoHeadssourceID == value)
-				{
-					return;
-				}
-				_twoHeadssourceID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _twoHeadssourceID);
+			set => SetProperty(ref _twoHeadssourceID, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("twoHeadsValidTimestamp")] 
 		public CFloat TwoHeadsValidTimestamp
 		{
-			get
-			{
-				if (_twoHeadsValidTimestamp == null)
-				{
-					_twoHeadsValidTimestamp = (CFloat) CR2WTypeManager.Create("Float", "twoHeadsValidTimestamp", cr2w, this);
-				}
-				return _twoHeadsValidTimestamp;
-			}
-			set
-			{
-				if (_twoHeadsValidTimestamp == value)
-				{
-					return;
-				}
-				_twoHeadsValidTimestamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _twoHeadsValidTimestamp);
+			set => SetProperty(ref _twoHeadsValidTimestamp, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("lastKillTimestamp")] 
 		public CFloat LastKillTimestamp
 		{
-			get
-			{
-				if (_lastKillTimestamp == null)
-				{
-					_lastKillTimestamp = (CFloat) CR2WTypeManager.Create("Float", "lastKillTimestamp", cr2w, this);
-				}
-				return _lastKillTimestamp;
-			}
-			set
-			{
-				if (_lastKillTimestamp == value)
-				{
-					return;
-				}
-				_lastKillTimestamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastKillTimestamp);
+			set => SetProperty(ref _lastKillTimestamp, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("enemiesKilledInTimeInterval")] 
 		public CArray<wCHandle<gameObject>> EnemiesKilledInTimeInterval
 		{
-			get
-			{
-				if (_enemiesKilledInTimeInterval == null)
-				{
-					_enemiesKilledInTimeInterval = (CArray<wCHandle<gameObject>>) CR2WTypeManager.Create("array:whandle:gameObject", "enemiesKilledInTimeInterval", cr2w, this);
-				}
-				return _enemiesKilledInTimeInterval;
-			}
-			set
-			{
-				if (_enemiesKilledInTimeInterval == value)
-				{
-					return;
-				}
-				_enemiesKilledInTimeInterval = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enemiesKilledInTimeInterval);
+			set => SetProperty(ref _enemiesKilledInTimeInterval, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("timeInterval")] 
 		public CFloat TimeInterval
 		{
-			get
-			{
-				if (_timeInterval == null)
-				{
-					_timeInterval = (CFloat) CR2WTypeManager.Create("Float", "timeInterval", cr2w, this);
-				}
-				return _timeInterval;
-			}
-			set
-			{
-				if (_timeInterval == value)
-				{
-					return;
-				}
-				_timeInterval = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeInterval);
+			set => SetProperty(ref _timeInterval, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("numerOfKillsRequired")] 
 		public CInt32 NumerOfKillsRequired
 		{
-			get
-			{
-				if (_numerOfKillsRequired == null)
-				{
-					_numerOfKillsRequired = (CInt32) CR2WTypeManager.Create("Int32", "numerOfKillsRequired", cr2w, this);
-				}
-				return _numerOfKillsRequired;
-			}
-			set
-			{
-				if (_numerOfKillsRequired == value)
-				{
-					return;
-				}
-				_numerOfKillsRequired = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numerOfKillsRequired);
+			set => SetProperty(ref _numerOfKillsRequired, value);
 		}
 
 		[Ordinal(32)] 
 		[RED("gunKataInProgress")] 
 		public CBool GunKataInProgress
 		{
-			get
-			{
-				if (_gunKataInProgress == null)
-				{
-					_gunKataInProgress = (CBool) CR2WTypeManager.Create("Bool", "gunKataInProgress", cr2w, this);
-				}
-				return _gunKataInProgress;
-			}
-			set
-			{
-				if (_gunKataInProgress == value)
-				{
-					return;
-				}
-				_gunKataInProgress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gunKataInProgress);
+			set => SetProperty(ref _gunKataInProgress, value);
 		}
 
 		[Ordinal(33)] 
 		[RED("gunKataKilledEnemies")] 
 		public CInt32 GunKataKilledEnemies
 		{
-			get
-			{
-				if (_gunKataKilledEnemies == null)
-				{
-					_gunKataKilledEnemies = (CInt32) CR2WTypeManager.Create("Int32", "gunKataKilledEnemies", cr2w, this);
-				}
-				return _gunKataKilledEnemies;
-			}
-			set
-			{
-				if (_gunKataKilledEnemies == value)
-				{
-					return;
-				}
-				_gunKataKilledEnemies = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gunKataKilledEnemies);
+			set => SetProperty(ref _gunKataKilledEnemies, value);
 		}
 
 		[Ordinal(34)] 
 		[RED("gunKataValidTimestamp")] 
 		public CFloat GunKataValidTimestamp
 		{
-			get
-			{
-				if (_gunKataValidTimestamp == null)
-				{
-					_gunKataValidTimestamp = (CFloat) CR2WTypeManager.Create("Float", "gunKataValidTimestamp", cr2w, this);
-				}
-				return _gunKataValidTimestamp;
-			}
-			set
-			{
-				if (_gunKataValidTimestamp == value)
-				{
-					return;
-				}
-				_gunKataValidTimestamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gunKataValidTimestamp);
+			set => SetProperty(ref _gunKataValidTimestamp, value);
 		}
 
 		[Ordinal(35)] 
 		[RED("hardKneesInProgress")] 
 		public CBool HardKneesInProgress
 		{
-			get
-			{
-				if (_hardKneesInProgress == null)
-				{
-					_hardKneesInProgress = (CBool) CR2WTypeManager.Create("Bool", "hardKneesInProgress", cr2w, this);
-				}
-				return _hardKneesInProgress;
-			}
-			set
-			{
-				if (_hardKneesInProgress == value)
-				{
-					return;
-				}
-				_hardKneesInProgress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hardKneesInProgress);
+			set => SetProperty(ref _hardKneesInProgress, value);
 		}
 
 		[Ordinal(36)] 
 		[RED("hardKneesKilledEnemies")] 
 		public CInt32 HardKneesKilledEnemies
 		{
-			get
-			{
-				if (_hardKneesKilledEnemies == null)
-				{
-					_hardKneesKilledEnemies = (CInt32) CR2WTypeManager.Create("Int32", "hardKneesKilledEnemies", cr2w, this);
-				}
-				return _hardKneesKilledEnemies;
-			}
-			set
-			{
-				if (_hardKneesKilledEnemies == value)
-				{
-					return;
-				}
-				_hardKneesKilledEnemies = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hardKneesKilledEnemies);
+			set => SetProperty(ref _hardKneesKilledEnemies, value);
 		}
 
 		[Ordinal(37)] 
 		[RED("harKneesValidTimestamp")] 
 		public CFloat HarKneesValidTimestamp
 		{
-			get
-			{
-				if (_harKneesValidTimestamp == null)
-				{
-					_harKneesValidTimestamp = (CFloat) CR2WTypeManager.Create("Float", "harKneesValidTimestamp", cr2w, this);
-				}
-				return _harKneesValidTimestamp;
-			}
-			set
-			{
-				if (_harKneesValidTimestamp == value)
-				{
-					return;
-				}
-				_harKneesValidTimestamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _harKneesValidTimestamp);
+			set => SetProperty(ref _harKneesValidTimestamp, value);
 		}
 
 		[Ordinal(38)] 
 		[RED("resetKilledReqDelayID")] 
 		public gameDelayID ResetKilledReqDelayID
 		{
-			get
-			{
-				if (_resetKilledReqDelayID == null)
-				{
-					_resetKilledReqDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "resetKilledReqDelayID", cr2w, this);
-				}
-				return _resetKilledReqDelayID;
-			}
-			set
-			{
-				if (_resetKilledReqDelayID == value)
-				{
-					return;
-				}
-				_resetKilledReqDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetKilledReqDelayID);
+			set => SetProperty(ref _resetKilledReqDelayID, value);
 		}
 
 		[Ordinal(39)] 
 		[RED("resetFinishedReqDelayID")] 
 		public gameDelayID ResetFinishedReqDelayID
 		{
-			get
-			{
-				if (_resetFinishedReqDelayID == null)
-				{
-					_resetFinishedReqDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "resetFinishedReqDelayID", cr2w, this);
-				}
-				return _resetFinishedReqDelayID;
-			}
-			set
-			{
-				if (_resetFinishedReqDelayID == value)
-				{
-					return;
-				}
-				_resetFinishedReqDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetFinishedReqDelayID);
+			set => SetProperty(ref _resetFinishedReqDelayID, value);
 		}
 
 		[Ordinal(40)] 
 		[RED("resetDefeatedReqDelayID")] 
 		public gameDelayID ResetDefeatedReqDelayID
 		{
-			get
-			{
-				if (_resetDefeatedReqDelayID == null)
-				{
-					_resetDefeatedReqDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "resetDefeatedReqDelayID", cr2w, this);
-				}
-				return _resetDefeatedReqDelayID;
-			}
-			set
-			{
-				if (_resetDefeatedReqDelayID == value)
-				{
-					return;
-				}
-				_resetDefeatedReqDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetDefeatedReqDelayID);
+			set => SetProperty(ref _resetDefeatedReqDelayID, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("resetIncapacitatedReqDelayID")] 
 		public gameDelayID ResetIncapacitatedReqDelayID
 		{
-			get
-			{
-				if (_resetIncapacitatedReqDelayID == null)
-				{
-					_resetIncapacitatedReqDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "resetIncapacitatedReqDelayID", cr2w, this);
-				}
-				return _resetIncapacitatedReqDelayID;
-			}
-			set
-			{
-				if (_resetIncapacitatedReqDelayID == value)
-				{
-					return;
-				}
-				_resetIncapacitatedReqDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetIncapacitatedReqDelayID);
+			set => SetProperty(ref _resetIncapacitatedReqDelayID, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("resetDownedReqDelayID")] 
 		public gameDelayID ResetDownedReqDelayID
 		{
-			get
-			{
-				if (_resetDownedReqDelayID == null)
-				{
-					_resetDownedReqDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "resetDownedReqDelayID", cr2w, this);
-				}
-				return _resetDownedReqDelayID;
-			}
-			set
-			{
-				if (_resetDownedReqDelayID == value)
-				{
-					return;
-				}
-				_resetDownedReqDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetDownedReqDelayID);
+			set => SetProperty(ref _resetDownedReqDelayID, value);
 		}
 
 		[Ordinal(43)] 
 		[RED("resetMeleeAttackReqDelayID")] 
 		public gameDelayID ResetMeleeAttackReqDelayID
 		{
-			get
-			{
-				if (_resetMeleeAttackReqDelayID == null)
-				{
-					_resetMeleeAttackReqDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "resetMeleeAttackReqDelayID", cr2w, this);
-				}
-				return _resetMeleeAttackReqDelayID;
-			}
-			set
-			{
-				if (_resetMeleeAttackReqDelayID == value)
-				{
-					return;
-				}
-				_resetMeleeAttackReqDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetMeleeAttackReqDelayID);
+			set => SetProperty(ref _resetMeleeAttackReqDelayID, value);
 		}
 
 		[Ordinal(44)] 
 		[RED("resetRangedAttackReqDelayID")] 
 		public gameDelayID ResetRangedAttackReqDelayID
 		{
-			get
-			{
-				if (_resetRangedAttackReqDelayID == null)
-				{
-					_resetRangedAttackReqDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "resetRangedAttackReqDelayID", cr2w, this);
-				}
-				return _resetRangedAttackReqDelayID;
-			}
-			set
-			{
-				if (_resetRangedAttackReqDelayID == value)
-				{
-					return;
-				}
-				_resetRangedAttackReqDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetRangedAttackReqDelayID);
+			set => SetProperty(ref _resetRangedAttackReqDelayID, value);
 		}
 
 		[Ordinal(45)] 
 		[RED("resetAttackReqDelayID")] 
 		public gameDelayID ResetAttackReqDelayID
 		{
-			get
-			{
-				if (_resetAttackReqDelayID == null)
-				{
-					_resetAttackReqDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "resetAttackReqDelayID", cr2w, this);
-				}
-				return _resetAttackReqDelayID;
-			}
-			set
-			{
-				if (_resetAttackReqDelayID == value)
-				{
-					return;
-				}
-				_resetAttackReqDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetAttackReqDelayID);
+			set => SetProperty(ref _resetAttackReqDelayID, value);
 		}
 
 		[Ordinal(46)] 
 		[RED("resetNpcMeleeLightAttackReqDelayID")] 
 		public gameDelayID ResetNpcMeleeLightAttackReqDelayID
 		{
-			get
-			{
-				if (_resetNpcMeleeLightAttackReqDelayID == null)
-				{
-					_resetNpcMeleeLightAttackReqDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "resetNpcMeleeLightAttackReqDelayID", cr2w, this);
-				}
-				return _resetNpcMeleeLightAttackReqDelayID;
-			}
-			set
-			{
-				if (_resetNpcMeleeLightAttackReqDelayID == value)
-				{
-					return;
-				}
-				_resetNpcMeleeLightAttackReqDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetNpcMeleeLightAttackReqDelayID);
+			set => SetProperty(ref _resetNpcMeleeLightAttackReqDelayID, value);
 		}
 
 		[Ordinal(47)] 
 		[RED("resetNpcMeleeStrongAttackReqDelayID")] 
 		public gameDelayID ResetNpcMeleeStrongAttackReqDelayID
 		{
-			get
-			{
-				if (_resetNpcMeleeStrongAttackReqDelayID == null)
-				{
-					_resetNpcMeleeStrongAttackReqDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "resetNpcMeleeStrongAttackReqDelayID", cr2w, this);
-				}
-				return _resetNpcMeleeStrongAttackReqDelayID;
-			}
-			set
-			{
-				if (_resetNpcMeleeStrongAttackReqDelayID == value)
-				{
-					return;
-				}
-				_resetNpcMeleeStrongAttackReqDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetNpcMeleeStrongAttackReqDelayID);
+			set => SetProperty(ref _resetNpcMeleeStrongAttackReqDelayID, value);
 		}
 
 		[Ordinal(48)] 
 		[RED("resetNpcMeleeFinalAttackReqDelayID")] 
 		public gameDelayID ResetNpcMeleeFinalAttackReqDelayID
 		{
-			get
-			{
-				if (_resetNpcMeleeFinalAttackReqDelayID == null)
-				{
-					_resetNpcMeleeFinalAttackReqDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "resetNpcMeleeFinalAttackReqDelayID", cr2w, this);
-				}
-				return _resetNpcMeleeFinalAttackReqDelayID;
-			}
-			set
-			{
-				if (_resetNpcMeleeFinalAttackReqDelayID == value)
-				{
-					return;
-				}
-				_resetNpcMeleeFinalAttackReqDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetNpcMeleeFinalAttackReqDelayID);
+			set => SetProperty(ref _resetNpcMeleeFinalAttackReqDelayID, value);
 		}
 
 		[Ordinal(49)] 
 		[RED("resetNpcMeleeBlockAttackReqDelayID")] 
 		public gameDelayID ResetNpcMeleeBlockAttackReqDelayID
 		{
-			get
-			{
-				if (_resetNpcMeleeBlockAttackReqDelayID == null)
-				{
-					_resetNpcMeleeBlockAttackReqDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "resetNpcMeleeBlockAttackReqDelayID", cr2w, this);
-				}
-				return _resetNpcMeleeBlockAttackReqDelayID;
-			}
-			set
-			{
-				if (_resetNpcMeleeBlockAttackReqDelayID == value)
-				{
-					return;
-				}
-				_resetNpcMeleeBlockAttackReqDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetNpcMeleeBlockAttackReqDelayID);
+			set => SetProperty(ref _resetNpcMeleeBlockAttackReqDelayID, value);
 		}
 
 		[Ordinal(50)] 
 		[RED("resetNpcBlockedReqDelayID")] 
 		public gameDelayID ResetNpcBlockedReqDelayID
 		{
-			get
-			{
-				if (_resetNpcBlockedReqDelayID == null)
-				{
-					_resetNpcBlockedReqDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "resetNpcBlockedReqDelayID", cr2w, this);
-				}
-				return _resetNpcBlockedReqDelayID;
-			}
-			set
-			{
-				if (_resetNpcBlockedReqDelayID == value)
-				{
-					return;
-				}
-				_resetNpcBlockedReqDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetNpcBlockedReqDelayID);
+			set => SetProperty(ref _resetNpcBlockedReqDelayID, value);
 		}
 
 		[Ordinal(51)] 
 		[RED("resetNpcDeflectedReqDelayID")] 
 		public gameDelayID ResetNpcDeflectedReqDelayID
 		{
-			get
-			{
-				if (_resetNpcDeflectedReqDelayID == null)
-				{
-					_resetNpcDeflectedReqDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "resetNpcDeflectedReqDelayID", cr2w, this);
-				}
-				return _resetNpcDeflectedReqDelayID;
-			}
-			set
-			{
-				if (_resetNpcDeflectedReqDelayID == value)
-				{
-					return;
-				}
-				_resetNpcDeflectedReqDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetNpcDeflectedReqDelayID);
+			set => SetProperty(ref _resetNpcDeflectedReqDelayID, value);
 		}
 
 		[Ordinal(52)] 
 		[RED("resetNpcGuardbreakReqDelayID")] 
 		public gameDelayID ResetNpcGuardbreakReqDelayID
 		{
-			get
-			{
-				if (_resetNpcGuardbreakReqDelayID == null)
-				{
-					_resetNpcGuardbreakReqDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "resetNpcGuardbreakReqDelayID", cr2w, this);
-				}
-				return _resetNpcGuardbreakReqDelayID;
-			}
-			set
-			{
-				if (_resetNpcGuardbreakReqDelayID == value)
-				{
-					return;
-				}
-				_resetNpcGuardbreakReqDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetNpcGuardbreakReqDelayID);
+			set => SetProperty(ref _resetNpcGuardbreakReqDelayID, value);
 		}
 
 		public DataTrackingSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

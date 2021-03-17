@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("packages")] 
 		public CArray<CHandle<DropPointPackage>> Packages
 		{
-			get
-			{
-				if (_packages == null)
-				{
-					_packages = (CArray<CHandle<DropPointPackage>>) CR2WTypeManager.Create("array:handle:DropPointPackage", "packages", cr2w, this);
-				}
-				return _packages;
-			}
-			set
-			{
-				if (_packages == value)
-				{
-					return;
-				}
-				_packages = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _packages);
+			set => SetProperty(ref _packages, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("mappins")] 
 		public CArray<CHandle<DropPointMappinRegistrationData>> Mappins
 		{
-			get
-			{
-				if (_mappins == null)
-				{
-					_mappins = (CArray<CHandle<DropPointMappinRegistrationData>>) CR2WTypeManager.Create("array:handle:DropPointMappinRegistrationData", "mappins", cr2w, this);
-				}
-				return _mappins;
-			}
-			set
-			{
-				if (_mappins == value)
-				{
-					return;
-				}
-				_mappins = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mappins);
+			set => SetProperty(ref _mappins, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get
-			{
-				if (_isEnabled == null)
-				{
-					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
-				}
-				return _isEnabled;
-			}
-			set
-			{
-				if (_isEnabled == value)
-				{
-					return;
-				}
-				_isEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
 		}
 
 		public DropPointSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

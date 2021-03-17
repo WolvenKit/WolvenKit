@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("definition")] 
 		public gameinteractionsCHotSpotDefinition Definition
 		{
-			get
-			{
-				if (_definition == null)
-				{
-					_definition = (gameinteractionsCHotSpotDefinition) CR2WTypeManager.Create("gameinteractionsCHotSpotDefinition", "definition", cr2w, this);
-				}
-				return _definition;
-			}
-			set
-			{
-				if (_definition == value)
-				{
-					return;
-				}
-				_definition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _definition);
+			set => SetProperty(ref _definition, value);
 		}
 
 		public gameinteractionsInteractionDescriptorResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

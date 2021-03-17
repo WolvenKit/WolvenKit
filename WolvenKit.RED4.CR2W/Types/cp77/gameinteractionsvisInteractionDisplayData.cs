@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("putAction")] 
 		public CName PutAction
 		{
-			get
-			{
-				if (_putAction == null)
-				{
-					_putAction = (CName) CR2WTypeManager.Create("CName", "putAction", cr2w, this);
-				}
-				return _putAction;
-			}
-			set
-			{
-				if (_putAction == value)
-				{
-					return;
-				}
-				_putAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _putAction);
+			set => SetProperty(ref _putAction, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("wInputKey")] 
 		public CEnum<EInputKey> WInputKey
 		{
-			get
-			{
-				if (_wInputKey == null)
-				{
-					_wInputKey = (CEnum<EInputKey>) CR2WTypeManager.Create("EInputKey", "wInputKey", cr2w, this);
-				}
-				return _wInputKey;
-			}
-			set
-			{
-				if (_wInputKey == value)
-				{
-					return;
-				}
-				_wInputKey = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wInputKey);
+			set => SetProperty(ref _wInputKey, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("HoldAction")] 
 		public CBool HoldAction
 		{
-			get
-			{
-				if (_holdAction == null)
-				{
-					_holdAction = (CBool) CR2WTypeManager.Create("Bool", "HoldAction", cr2w, this);
-				}
-				return _holdAction;
-			}
-			set
-			{
-				if (_holdAction == value)
-				{
-					return;
-				}
-				_holdAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _holdAction);
+			set => SetProperty(ref _holdAction, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("calizedName")] 
 		public CString CalizedName
 		{
-			get
-			{
-				if (_calizedName == null)
-				{
-					_calizedName = (CString) CR2WTypeManager.Create("String", "calizedName", cr2w, this);
-				}
-				return _calizedName;
-			}
-			set
-			{
-				if (_calizedName == value)
-				{
-					return;
-				}
-				_calizedName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _calizedName);
+			set => SetProperty(ref _calizedName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("pe")] 
 		public gameinteractionsChoiceTypeWrapper Pe
 		{
-			get
-			{
-				if (_pe == null)
-				{
-					_pe = (gameinteractionsChoiceTypeWrapper) CR2WTypeManager.Create("gameinteractionsChoiceTypeWrapper", "pe", cr2w, this);
-				}
-				return _pe;
-			}
-			set
-			{
-				if (_pe == value)
-				{
-					return;
-				}
-				_pe = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pe);
+			set => SetProperty(ref _pe, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("oice")] 
 		public gameinteractionsChoice Oice
 		{
-			get
-			{
-				if (_oice == null)
-				{
-					_oice = (gameinteractionsChoice) CR2WTypeManager.Create("gameinteractionsChoice", "oice", cr2w, this);
-				}
-				return _oice;
-			}
-			set
-			{
-				if (_oice == value)
-				{
-					return;
-				}
-				_oice = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _oice);
+			set => SetProperty(ref _oice, value);
 		}
 
 		public gameinteractionsvisInteractionDisplayData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

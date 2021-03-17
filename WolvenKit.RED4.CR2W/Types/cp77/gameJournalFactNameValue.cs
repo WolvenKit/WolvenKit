@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("factName")] 
 		public CName FactName
 		{
-			get
-			{
-				if (_factName == null)
-				{
-					_factName = (CName) CR2WTypeManager.Create("CName", "factName", cr2w, this);
-				}
-				return _factName;
-			}
-			set
-			{
-				if (_factName == value)
-				{
-					return;
-				}
-				_factName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factName);
+			set => SetProperty(ref _factName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("factValue")] 
 		public CInt32 FactValue
 		{
-			get
-			{
-				if (_factValue == null)
-				{
-					_factValue = (CInt32) CR2WTypeManager.Create("Int32", "factValue", cr2w, this);
-				}
-				return _factValue;
-			}
-			set
-			{
-				if (_factValue == value)
-				{
-					return;
-				}
-				_factValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factValue);
+			set => SetProperty(ref _factValue, value);
 		}
 
 		public gameJournalFactNameValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

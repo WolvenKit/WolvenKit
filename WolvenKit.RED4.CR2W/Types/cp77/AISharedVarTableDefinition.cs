@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("table")] 
 		public CArray<AISharedVarDefinition> Table
 		{
-			get
-			{
-				if (_table == null)
-				{
-					_table = (CArray<AISharedVarDefinition>) CR2WTypeManager.Create("array:AISharedVarDefinition", "table", cr2w, this);
-				}
-				return _table;
-			}
-			set
-			{
-				if (_table == value)
-				{
-					return;
-				}
-				_table = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _table);
+			set => SetProperty(ref _table, value);
 		}
 
 		public AISharedVarTableDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

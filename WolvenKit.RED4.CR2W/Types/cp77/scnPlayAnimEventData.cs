@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("blendIn")] 
 		public CFloat BlendIn
 		{
-			get
-			{
-				if (_blendIn == null)
-				{
-					_blendIn = (CFloat) CR2WTypeManager.Create("Float", "blendIn", cr2w, this);
-				}
-				return _blendIn;
-			}
-			set
-			{
-				if (_blendIn == value)
-				{
-					return;
-				}
-				_blendIn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendIn);
+			set => SetProperty(ref _blendIn, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("blendOut")] 
 		public CFloat BlendOut
 		{
-			get
-			{
-				if (_blendOut == null)
-				{
-					_blendOut = (CFloat) CR2WTypeManager.Create("Float", "blendOut", cr2w, this);
-				}
-				return _blendOut;
-			}
-			set
-			{
-				if (_blendOut == value)
-				{
-					return;
-				}
-				_blendOut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendOut);
+			set => SetProperty(ref _blendOut, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("clipFront")] 
 		public CFloat ClipFront
 		{
-			get
-			{
-				if (_clipFront == null)
-				{
-					_clipFront = (CFloat) CR2WTypeManager.Create("Float", "clipFront", cr2w, this);
-				}
-				return _clipFront;
-			}
-			set
-			{
-				if (_clipFront == value)
-				{
-					return;
-				}
-				_clipFront = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clipFront);
+			set => SetProperty(ref _clipFront, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("stretch")] 
 		public CFloat Stretch
 		{
-			get
-			{
-				if (_stretch == null)
-				{
-					_stretch = (CFloat) CR2WTypeManager.Create("Float", "stretch", cr2w, this);
-				}
-				return _stretch;
-			}
-			set
-			{
-				if (_stretch == value)
-				{
-					return;
-				}
-				_stretch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stretch);
+			set => SetProperty(ref _stretch, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get
-			{
-				if (_weight == null)
-				{
-					_weight = (CFloat) CR2WTypeManager.Create("Float", "weight", cr2w, this);
-				}
-				return _weight;
-			}
-			set
-			{
-				if (_weight == value)
-				{
-					return;
-				}
-				_weight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weight);
+			set => SetProperty(ref _weight, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("bodyPartMask")] 
 		public CName BodyPartMask
 		{
-			get
-			{
-				if (_bodyPartMask == null)
-				{
-					_bodyPartMask = (CName) CR2WTypeManager.Create("CName", "bodyPartMask", cr2w, this);
-				}
-				return _bodyPartMask;
-			}
-			set
-			{
-				if (_bodyPartMask == value)
-				{
-					return;
-				}
-				_bodyPartMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyPartMask);
+			set => SetProperty(ref _bodyPartMask, value);
 		}
 
 		public scnPlayAnimEventData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

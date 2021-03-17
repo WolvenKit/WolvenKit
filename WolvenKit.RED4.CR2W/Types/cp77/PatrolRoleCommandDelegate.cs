@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("patrolWithWeapon")] 
 		public CBool PatrolWithWeapon
 		{
-			get
-			{
-				if (_patrolWithWeapon == null)
-				{
-					_patrolWithWeapon = (CBool) CR2WTypeManager.Create("Bool", "patrolWithWeapon", cr2w, this);
-				}
-				return _patrolWithWeapon;
-			}
-			set
-			{
-				if (_patrolWithWeapon == value)
-				{
-					return;
-				}
-				_patrolWithWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _patrolWithWeapon);
+			set => SetProperty(ref _patrolWithWeapon, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("forceAlerted")] 
 		public CBool ForceAlerted
 		{
-			get
-			{
-				if (_forceAlerted == null)
-				{
-					_forceAlerted = (CBool) CR2WTypeManager.Create("Bool", "forceAlerted", cr2w, this);
-				}
-				return _forceAlerted;
-			}
-			set
-			{
-				if (_forceAlerted == value)
-				{
-					return;
-				}
-				_forceAlerted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceAlerted);
+			set => SetProperty(ref _forceAlerted, value);
 		}
 
 		public PatrolRoleCommandDelegate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

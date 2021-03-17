@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("loopType")] 
 		public CEnum<gameMovingPlatformLoopType> LoopType
 		{
-			get
-			{
-				if (_loopType == null)
-				{
-					_loopType = (CEnum<gameMovingPlatformLoopType>) CR2WTypeManager.Create("gameMovingPlatformLoopType", "loopType", cr2w, this);
-				}
-				return _loopType;
-			}
-			set
-			{
-				if (_loopType == value)
-				{
-					return;
-				}
-				_loopType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _loopType);
+			set => SetProperty(ref _loopType, value);
 		}
 
 		public gameMovingPlatform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

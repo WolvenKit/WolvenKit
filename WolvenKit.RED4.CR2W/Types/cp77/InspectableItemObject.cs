@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inspectableClues")] 
 		public CArray<SInspectableClue> InspectableClues
 		{
-			get
-			{
-				if (_inspectableClues == null)
-				{
-					_inspectableClues = (CArray<SInspectableClue>) CR2WTypeManager.Create("array:SInspectableClue", "inspectableClues", cr2w, this);
-				}
-				return _inspectableClues;
-			}
-			set
-			{
-				if (_inspectableClues == value)
-				{
-					return;
-				}
-				_inspectableClues = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inspectableClues);
+			set => SetProperty(ref _inspectableClues, value);
 		}
 
 		public InspectableItemObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

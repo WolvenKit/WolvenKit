@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("first")] 
 		public CUInt64 First
 		{
-			get
-			{
-				if (_first == null)
-				{
-					_first = (CUInt64) CR2WTypeManager.Create("Uint64", "first", cr2w, this);
-				}
-				return _first;
-			}
-			set
-			{
-				if (_first == value)
-				{
-					return;
-				}
-				_first = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _first);
+			set => SetProperty(ref _first, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("second")] 
 		public CUInt64 Second
 		{
-			get
-			{
-				if (_second == null)
-				{
-					_second = (CUInt64) CR2WTypeManager.Create("Uint64", "second", cr2w, this);
-				}
-				return _second;
-			}
-			set
-			{
-				if (_second == value)
-				{
-					return;
-				}
-				_second = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _second);
+			set => SetProperty(ref _second, value);
 		}
 
 		public interopUint64Pair(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

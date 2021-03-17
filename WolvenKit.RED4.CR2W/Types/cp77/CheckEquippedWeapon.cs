@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotID")] 
 		public CHandle<AIArgumentMapping> SlotID
 		{
-			get
-			{
-				if (_slotID == null)
-				{
-					_slotID = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "slotID", cr2w, this);
-				}
-				return _slotID;
-			}
-			set
-			{
-				if (_slotID == value)
-				{
-					return;
-				}
-				_slotID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemID")] 
 		public CHandle<AIArgumentMapping> ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("slotIDName")] 
 		public TweakDBID SlotIDName
 		{
-			get
-			{
-				if (_slotIDName == null)
-				{
-					_slotIDName = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "slotIDName", cr2w, this);
-				}
-				return _slotIDName;
-			}
-			set
-			{
-				if (_slotIDName == value)
-				{
-					return;
-				}
-				_slotIDName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotIDName);
+			set => SetProperty(ref _slotIDName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("itemIDName")] 
 		public TweakDBID ItemIDName
 		{
-			get
-			{
-				if (_itemIDName == null)
-				{
-					_itemIDName = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "itemIDName", cr2w, this);
-				}
-				return _itemIDName;
-			}
-			set
-			{
-				if (_itemIDName == value)
-				{
-					return;
-				}
-				_itemIDName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemIDName);
+			set => SetProperty(ref _itemIDName, value);
 		}
 
 		public CheckEquippedWeapon(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

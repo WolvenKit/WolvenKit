@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("overlayLibrary")] 
 		public raRef<inkWidgetLibraryResource> OverlayLibrary
 		{
-			get
-			{
-				if (_overlayLibrary == null)
-				{
-					_overlayLibrary = (raRef<inkWidgetLibraryResource>) CR2WTypeManager.Create("raRef:inkWidgetLibraryResource", "overlayLibrary", cr2w, this);
-				}
-				return _overlayLibrary;
-			}
-			set
-			{
-				if (_overlayLibrary == value)
-				{
-					return;
-				}
-				_overlayLibrary = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overlayLibrary);
+			set => SetProperty(ref _overlayLibrary, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("libraryItemName")] 
 		public CName LibraryItemName
 		{
-			get
-			{
-				if (_libraryItemName == null)
-				{
-					_libraryItemName = (CName) CR2WTypeManager.Create("CName", "libraryItemName", cr2w, this);
-				}
-				return _libraryItemName;
-			}
-			set
-			{
-				if (_libraryItemName == value)
-				{
-					return;
-				}
-				_libraryItemName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _libraryItemName);
+			set => SetProperty(ref _libraryItemName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("visible")] 
 		public CBool Visible
 		{
-			get
-			{
-				if (_visible == null)
-				{
-					_visible = (CBool) CR2WTypeManager.Create("Bool", "visible", cr2w, this);
-				}
-				return _visible;
-			}
-			set
-			{
-				if (_visible == value)
-				{
-					return;
-				}
-				_visible = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visible);
+			set => SetProperty(ref _visible, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("pauseGame")] 
 		public CBool PauseGame
 		{
-			get
-			{
-				if (_pauseGame == null)
-				{
-					_pauseGame = (CBool) CR2WTypeManager.Create("Bool", "pauseGame", cr2w, this);
-				}
-				return _pauseGame;
-			}
-			set
-			{
-				if (_pauseGame == value)
-				{
-					return;
-				}
-				_pauseGame = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pauseGame);
+			set => SetProperty(ref _pauseGame, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("lockPlayerMovement")] 
 		public CBool LockPlayerMovement
 		{
-			get
-			{
-				if (_lockPlayerMovement == null)
-				{
-					_lockPlayerMovement = (CBool) CR2WTypeManager.Create("Bool", "lockPlayerMovement", cr2w, this);
-				}
-				return _lockPlayerMovement;
-			}
-			set
-			{
-				if (_lockPlayerMovement == value)
-				{
-					return;
-				}
-				_lockPlayerMovement = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lockPlayerMovement);
+			set => SetProperty(ref _lockPlayerMovement, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("hideOnInput")] 
 		public CBool HideOnInput
 		{
-			get
-			{
-				if (_hideOnInput == null)
-				{
-					_hideOnInput = (CBool) CR2WTypeManager.Create("Bool", "hideOnInput", cr2w, this);
-				}
-				return _hideOnInput;
-			}
-			set
-			{
-				if (_hideOnInput == value)
-				{
-					return;
-				}
-				_hideOnInput = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hideOnInput);
+			set => SetProperty(ref _hideOnInput, value);
 		}
 
 		public questShowOverlay_NodeSubType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isPreview")] 
 		public CBool IsPreview
 		{
-			get
-			{
-				if (_isPreview == null)
-				{
-					_isPreview = (CBool) CR2WTypeManager.Create("Bool", "isPreview", cr2w, this);
-				}
-				return _isPreview;
-			}
-			set
-			{
-				if (_isPreview == value)
-				{
-					return;
-				}
-				_isPreview = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPreview);
+			set => SetProperty(ref _isPreview, value);
 		}
 
 		public gameEffectObjectFilter_HitRepresentation_Raycast(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

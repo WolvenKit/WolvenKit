@@ -23,253 +23,88 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("events")] 
 		public CArray<audioAudEventStruct> Events
 		{
-			get
-			{
-				if (_events == null)
-				{
-					_events = (CArray<audioAudEventStruct>) CR2WTypeManager.Create("array:audioAudEventStruct", "events", cr2w, this);
-				}
-				return _events;
-			}
-			set
-			{
-				if (_events == value)
-				{
-					return;
-				}
-				_events = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _events);
+			set => SetProperty(ref _events, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("musicEvents")] 
 		public CArray<audioAudEventStruct> MusicEvents
 		{
-			get
-			{
-				if (_musicEvents == null)
-				{
-					_musicEvents = (CArray<audioAudEventStruct>) CR2WTypeManager.Create("array:audioAudEventStruct", "musicEvents", cr2w, this);
-				}
-				return _musicEvents;
-			}
-			set
-			{
-				if (_musicEvents == value)
-				{
-					return;
-				}
-				_musicEvents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _musicEvents);
+			set => SetProperty(ref _musicEvents, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("switches")] 
 		public CArray<audioAudSwitch> Switches
 		{
-			get
-			{
-				if (_switches == null)
-				{
-					_switches = (CArray<audioAudSwitch>) CR2WTypeManager.Create("array:audioAudSwitch", "switches", cr2w, this);
-				}
-				return _switches;
-			}
-			set
-			{
-				if (_switches == value)
-				{
-					return;
-				}
-				_switches = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _switches);
+			set => SetProperty(ref _switches, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("params")] 
 		public CArray<audioAudParameter> Params
 		{
-			get
-			{
-				if (_params == null)
-				{
-					_params = (CArray<audioAudParameter>) CR2WTypeManager.Create("array:audioAudParameter", "params", cr2w, this);
-				}
-				return _params;
-			}
-			set
-			{
-				if (_params == value)
-				{
-					return;
-				}
-				_params = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("dynamicParams")] 
 		public CArray<CName> DynamicParams
 		{
-			get
-			{
-				if (_dynamicParams == null)
-				{
-					_dynamicParams = (CArray<CName>) CR2WTypeManager.Create("array:CName", "dynamicParams", cr2w, this);
-				}
-				return _dynamicParams;
-			}
-			set
-			{
-				if (_dynamicParams == value)
-				{
-					return;
-				}
-				_dynamicParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dynamicParams);
+			set => SetProperty(ref _dynamicParams, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("event")] 
 		public audioAudEventStruct Event
 		{
-			get
-			{
-				if (_event == null)
-				{
-					_event = (audioAudEventStruct) CR2WTypeManager.Create("audioAudEventStruct", "event", cr2w, this);
-				}
-				return _event;
-			}
-			set
-			{
-				if (_event == value)
-				{
-					return;
-				}
-				_event = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _event);
+			set => SetProperty(ref _event, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("ambientUniqueName")] 
 		public CName AmbientUniqueName
 		{
-			get
-			{
-				if (_ambientUniqueName == null)
-				{
-					_ambientUniqueName = (CName) CR2WTypeManager.Create("CName", "ambientUniqueName", cr2w, this);
-				}
-				return _ambientUniqueName;
-			}
-			set
-			{
-				if (_ambientUniqueName == value)
-				{
-					return;
-				}
-				_ambientUniqueName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ambientUniqueName);
+			set => SetProperty(ref _ambientUniqueName, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("emitter")] 
 		public CName Emitter
 		{
-			get
-			{
-				if (_emitter == null)
-				{
-					_emitter = (CName) CR2WTypeManager.Create("CName", "emitter", cr2w, this);
-				}
-				return _emitter;
-			}
-			set
-			{
-				if (_emitter == value)
-				{
-					return;
-				}
-				_emitter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _emitter);
+			set => SetProperty(ref _emitter, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isMusic")] 
 		public CBool IsMusic
 		{
-			get
-			{
-				if (_isMusic == null)
-				{
-					_isMusic = (CBool) CR2WTypeManager.Create("Bool", "isMusic", cr2w, this);
-				}
-				return _isMusic;
-			}
-			set
-			{
-				if (_isMusic == value)
-				{
-					return;
-				}
-				_isMusic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isMusic);
+			set => SetProperty(ref _isMusic, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get
-			{
-				if (_objectRef == null)
-				{
-					_objectRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "objectRef", cr2w, this);
-				}
-				return _objectRef;
-			}
-			set
-			{
-				if (_objectRef == value)
-				{
-					return;
-				}
-				_objectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get
-			{
-				if (_isPlayer == null)
-				{
-					_isPlayer = (CBool) CR2WTypeManager.Create("Bool", "isPlayer", cr2w, this);
-				}
-				return _isPlayer;
-			}
-			set
-			{
-				if (_isPlayer == value)
-				{
-					return;
-				}
-				_isPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
 		}
 
 		public questAudioEventNodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

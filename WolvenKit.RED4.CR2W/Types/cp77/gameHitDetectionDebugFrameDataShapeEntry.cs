@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ansformWS")] 
 		public WorldTransform AnsformWS
 		{
-			get
-			{
-				if (_ansformWS == null)
-				{
-					_ansformWS = (WorldTransform) CR2WTypeManager.Create("WorldTransform", "ansformWS", cr2w, this);
-				}
-				return _ansformWS;
-			}
-			set
-			{
-				if (_ansformWS == value)
-				{
-					return;
-				}
-				_ansformWS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ansformWS);
+			set => SetProperty(ref _ansformWS, value);
 		}
 
 		public gameHitDetectionDebugFrameDataShapeEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

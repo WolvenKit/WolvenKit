@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("reprimandInstructions")] 
 		public CEnum<EReprimandInstructions> ReprimandInstructions
 		{
-			get
-			{
-				if (_reprimandInstructions == null)
-				{
-					_reprimandInstructions = (CEnum<EReprimandInstructions>) CR2WTypeManager.Create("EReprimandInstructions", "reprimandInstructions", cr2w, this);
-				}
-				return _reprimandInstructions;
-			}
-			set
-			{
-				if (_reprimandInstructions == value)
-				{
-					return;
-				}
-				_reprimandInstructions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reprimandInstructions);
+			set => SetProperty(ref _reprimandInstructions, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("target")] 
 		public entEntityID Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (entEntityID) CR2WTypeManager.Create("entEntityID", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("targetPos")] 
 		public Vector4 TargetPos
 		{
-			get
-			{
-				if (_targetPos == null)
-				{
-					_targetPos = (Vector4) CR2WTypeManager.Create("Vector4", "targetPos", cr2w, this);
-				}
-				return _targetPos;
-			}
-			set
-			{
-				if (_targetPos == value)
-				{
-					return;
-				}
-				_targetPos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetPos);
+			set => SetProperty(ref _targetPos, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("currentPerformer")] 
 		public wCHandle<gameObject> CurrentPerformer
 		{
-			get
-			{
-				if (_currentPerformer == null)
-				{
-					_currentPerformer = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "currentPerformer", cr2w, this);
-				}
-				return _currentPerformer;
-			}
-			set
-			{
-				if (_currentPerformer == value)
-				{
-					return;
-				}
-				_currentPerformer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentPerformer);
+			set => SetProperty(ref _currentPerformer, value);
 		}
 
 		public ReprimandUpdate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("voName")] 
 		public CName VoName
 		{
-			get
-			{
-				if (_voName == null)
-				{
-					_voName = (CName) CR2WTypeManager.Create("CName", "voName", cr2w, this);
-				}
-				return _voName;
-			}
-			set
-			{
-				if (_voName == value)
-				{
-					return;
-				}
-				_voName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _voName);
+			set => SetProperty(ref _voName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		public VoiceOverQuickHackFeedbackEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("X")] 
 		public CFloat X
 		{
-			get
-			{
-				if (_x == null)
-				{
-					_x = (CFloat) CR2WTypeManager.Create("Float", "X", cr2w, this);
-				}
-				return _x;
-			}
-			set
-			{
-				if (_x == value)
-				{
-					return;
-				}
-				_x = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _x);
+			set => SetProperty(ref _x, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("Y")] 
 		public CFloat Y
 		{
-			get
-			{
-				if (_y == null)
-				{
-					_y = (CFloat) CR2WTypeManager.Create("Float", "Y", cr2w, this);
-				}
-				return _y;
-			}
-			set
-			{
-				if (_y == value)
-				{
-					return;
-				}
-				_y = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _y);
+			set => SetProperty(ref _y, value);
 		}
 
 		public Vector2(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

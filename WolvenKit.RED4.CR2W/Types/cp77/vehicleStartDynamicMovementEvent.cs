@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetPosition")] 
 		public Vector3 TargetPosition
 		{
-			get
-			{
-				if (_targetPosition == null)
-				{
-					_targetPosition = (Vector3) CR2WTypeManager.Create("Vector3", "targetPosition", cr2w, this);
-				}
-				return _targetPosition;
-			}
-			set
-			{
-				if (_targetPosition == value)
-				{
-					return;
-				}
-				_targetPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetPosition);
+			set => SetProperty(ref _targetPosition, value);
 		}
 
 		public vehicleStartDynamicMovementEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("effector")] 
 		public TweakDBID Effector
 		{
-			get
-			{
-				if (_effector == null)
-				{
-					_effector = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "effector", cr2w, this);
-				}
-				return _effector;
-			}
-			set
-			{
-				if (_effector == value)
-				{
-					return;
-				}
-				_effector = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effector);
+			set => SetProperty(ref _effector, value);
 		}
 
 		public EffectExecutor_ApplyEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

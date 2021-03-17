@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ownerPuppet")] 
 		public wCHandle<PlayerPuppet> OwnerPuppet
 		{
-			get
-			{
-				if (_ownerPuppet == null)
-				{
-					_ownerPuppet = (wCHandle<PlayerPuppet>) CR2WTypeManager.Create("whandle:PlayerPuppet", "ownerPuppet", cr2w, this);
-				}
-				return _ownerPuppet;
-			}
-			set
-			{
-				if (_ownerPuppet == value)
-				{
-					return;
-				}
-				_ownerPuppet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerPuppet);
+			set => SetProperty(ref _ownerPuppet, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("healthEvent")] 
 		public CHandle<HealthUpdateEvent> HealthEvent
 		{
-			get
-			{
-				if (_healthEvent == null)
-				{
-					_healthEvent = (CHandle<HealthUpdateEvent>) CR2WTypeManager.Create("handle:HealthUpdateEvent", "healthEvent", cr2w, this);
-				}
-				return _healthEvent;
-			}
-			set
-			{
-				if (_healthEvent == value)
-				{
-					return;
-				}
-				_healthEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _healthEvent);
+			set => SetProperty(ref _healthEvent, value);
 		}
 
 		public HealthStatListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

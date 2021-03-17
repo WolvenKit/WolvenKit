@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("speedChangeSections")] 
 		public CArray<worldSpeedSplineNodeSpeedChangeSection> SpeedChangeSections
 		{
-			get
-			{
-				if (_speedChangeSections == null)
-				{
-					_speedChangeSections = (CArray<worldSpeedSplineNodeSpeedChangeSection>) CR2WTypeManager.Create("array:worldSpeedSplineNodeSpeedChangeSection", "speedChangeSections", cr2w, this);
-				}
-				return _speedChangeSections;
-			}
-			set
-			{
-				if (_speedChangeSections == value)
-				{
-					return;
-				}
-				_speedChangeSections = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speedChangeSections);
+			set => SetProperty(ref _speedChangeSections, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("useDeprecated")] 
 		public CBool UseDeprecated
 		{
-			get
-			{
-				if (_useDeprecated == null)
-				{
-					_useDeprecated = (CBool) CR2WTypeManager.Create("Bool", "useDeprecated", cr2w, this);
-				}
-				return _useDeprecated;
-			}
-			set
-			{
-				if (_useDeprecated == value)
-				{
-					return;
-				}
-				_useDeprecated = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useDeprecated);
+			set => SetProperty(ref _useDeprecated, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("deprecatedSpeedRestrictions")] 
 		public CArray<worldSpeedSplineNodeSpeedRestriction> DeprecatedSpeedRestrictions
 		{
-			get
-			{
-				if (_deprecatedSpeedRestrictions == null)
-				{
-					_deprecatedSpeedRestrictions = (CArray<worldSpeedSplineNodeSpeedRestriction>) CR2WTypeManager.Create("array:worldSpeedSplineNodeSpeedRestriction", "deprecatedSpeedRestrictions", cr2w, this);
-				}
-				return _deprecatedSpeedRestrictions;
-			}
-			set
-			{
-				if (_deprecatedSpeedRestrictions == value)
-				{
-					return;
-				}
-				_deprecatedSpeedRestrictions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deprecatedSpeedRestrictions);
+			set => SetProperty(ref _deprecatedSpeedRestrictions, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("deprecatedDefaultSpeed")] 
 		public CFloat DeprecatedDefaultSpeed
 		{
-			get
-			{
-				if (_deprecatedDefaultSpeed == null)
-				{
-					_deprecatedDefaultSpeed = (CFloat) CR2WTypeManager.Create("Float", "deprecatedDefaultSpeed", cr2w, this);
-				}
-				return _deprecatedDefaultSpeed;
-			}
-			set
-			{
-				if (_deprecatedDefaultSpeed == value)
-				{
-					return;
-				}
-				_deprecatedDefaultSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deprecatedDefaultSpeed);
+			set => SetProperty(ref _deprecatedDefaultSpeed, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("deprecatedDefaultAdjustTime")] 
 		public CFloat DeprecatedDefaultAdjustTime
 		{
-			get
-			{
-				if (_deprecatedDefaultAdjustTime == null)
-				{
-					_deprecatedDefaultAdjustTime = (CFloat) CR2WTypeManager.Create("Float", "deprecatedDefaultAdjustTime", cr2w, this);
-				}
-				return _deprecatedDefaultAdjustTime;
-			}
-			set
-			{
-				if (_deprecatedDefaultAdjustTime == value)
-				{
-					return;
-				}
-				_deprecatedDefaultAdjustTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deprecatedDefaultAdjustTime);
+			set => SetProperty(ref _deprecatedDefaultAdjustTime, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("orientationChangeSections")] 
 		public CArray<worldSpeedSplineNodeOrientationChangeSection> OrientationChangeSections
 		{
-			get
-			{
-				if (_orientationChangeSections == null)
-				{
-					_orientationChangeSections = (CArray<worldSpeedSplineNodeOrientationChangeSection>) CR2WTypeManager.Create("array:worldSpeedSplineNodeOrientationChangeSection", "orientationChangeSections", cr2w, this);
-				}
-				return _orientationChangeSections;
-			}
-			set
-			{
-				if (_orientationChangeSections == value)
-				{
-					return;
-				}
-				_orientationChangeSections = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _orientationChangeSections);
+			set => SetProperty(ref _orientationChangeSections, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("roadAdjustmentFactorChangeSections")] 
 		public CArray<worldSpeedSplineNodeRoadAdjustmentFactorChangeSection> RoadAdjustmentFactorChangeSections
 		{
-			get
-			{
-				if (_roadAdjustmentFactorChangeSections == null)
-				{
-					_roadAdjustmentFactorChangeSections = (CArray<worldSpeedSplineNodeRoadAdjustmentFactorChangeSection>) CR2WTypeManager.Create("array:worldSpeedSplineNodeRoadAdjustmentFactorChangeSection", "roadAdjustmentFactorChangeSections", cr2w, this);
-				}
-				return _roadAdjustmentFactorChangeSections;
-			}
-			set
-			{
-				if (_roadAdjustmentFactorChangeSections == value)
-				{
-					return;
-				}
-				_roadAdjustmentFactorChangeSections = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _roadAdjustmentFactorChangeSections);
+			set => SetProperty(ref _roadAdjustmentFactorChangeSections, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("ignoreTerrain")] 
 		public CBool IgnoreTerrain
 		{
-			get
-			{
-				if (_ignoreTerrain == null)
-				{
-					_ignoreTerrain = (CBool) CR2WTypeManager.Create("Bool", "ignoreTerrain", cr2w, this);
-				}
-				return _ignoreTerrain;
-			}
-			set
-			{
-				if (_ignoreTerrain == value)
-				{
-					return;
-				}
-				_ignoreTerrain = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ignoreTerrain);
+			set => SetProperty(ref _ignoreTerrain, value);
 		}
 
 		public worldSpeedSplineNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

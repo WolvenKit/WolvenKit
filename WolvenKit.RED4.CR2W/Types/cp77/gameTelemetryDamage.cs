@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attackType")] 
 		public CEnum<gamedataAttackType> AttackType
 		{
-			get
-			{
-				if (_attackType == null)
-				{
-					_attackType = (CEnum<gamedataAttackType>) CR2WTypeManager.Create("gamedataAttackType", "attackType", cr2w, this);
-				}
-				return _attackType;
-			}
-			set
-			{
-				if (_attackType == value)
-				{
-					return;
-				}
-				_attackType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackType);
+			set => SetProperty(ref _attackType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("damageAmount")] 
 		public CFloat DamageAmount
 		{
-			get
-			{
-				if (_damageAmount == null)
-				{
-					_damageAmount = (CFloat) CR2WTypeManager.Create("Float", "damageAmount", cr2w, this);
-				}
-				return _damageAmount;
-			}
-			set
-			{
-				if (_damageAmount == value)
-				{
-					return;
-				}
-				_damageAmount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damageAmount);
+			set => SetProperty(ref _damageAmount, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("weapon")] 
 		public gameTelemetryInventoryItem Weapon
 		{
-			get
-			{
-				if (_weapon == null)
-				{
-					_weapon = (gameTelemetryInventoryItem) CR2WTypeManager.Create("gameTelemetryInventoryItem", "weapon", cr2w, this);
-				}
-				return _weapon;
-			}
-			set
-			{
-				if (_weapon == value)
-				{
-					return;
-				}
-				_weapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weapon);
+			set => SetProperty(ref _weapon, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hitCount")] 
 		public CUInt32 HitCount
 		{
-			get
-			{
-				if (_hitCount == null)
-				{
-					_hitCount = (CUInt32) CR2WTypeManager.Create("Uint32", "hitCount", cr2w, this);
-				}
-				return _hitCount;
-			}
-			set
-			{
-				if (_hitCount == value)
-				{
-					return;
-				}
-				_hitCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitCount);
+			set => SetProperty(ref _hitCount, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("distance")] 
 		public CFloat Distance
 		{
-			get
-			{
-				if (_distance == null)
-				{
-					_distance = (CFloat) CR2WTypeManager.Create("Float", "distance", cr2w, this);
-				}
-				return _distance;
-			}
-			set
-			{
-				if (_distance == value)
-				{
-					return;
-				}
-				_distance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distance);
+			set => SetProperty(ref _distance, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("time")] 
 		public CFloat Time
 		{
-			get
-			{
-				if (_time == null)
-				{
-					_time = (CFloat) CR2WTypeManager.Create("Float", "time", cr2w, this);
-				}
-				return _time;
-			}
-			set
-			{
-				if (_time == value)
-				{
-					return;
-				}
-				_time = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _time);
+			set => SetProperty(ref _time, value);
 		}
 
 		public gameTelemetryDamage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

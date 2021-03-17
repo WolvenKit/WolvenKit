@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("requesters")] 
 		public CArray<gamePersistentID> Requesters
 		{
-			get
-			{
-				if (_requesters == null)
-				{
-					_requesters = (CArray<gamePersistentID>) CR2WTypeManager.Create("array:gamePersistentID", "requesters", cr2w, this);
-				}
-				return _requesters;
-			}
-			set
-			{
-				if (_requesters == value)
-				{
-					return;
-				}
-				_requesters = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requesters);
+			set => SetProperty(ref _requesters, value);
 		}
 
 		public RequestDeviceWidgetsUpdateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

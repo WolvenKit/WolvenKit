@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entityPosition")] 
 		public Vector3 EntityPosition
 		{
-			get
-			{
-				if (_entityPosition == null)
-				{
-					_entityPosition = (Vector3) CR2WTypeManager.Create("Vector3", "entityPosition", cr2w, this);
-				}
-				return _entityPosition;
-			}
-			set
-			{
-				if (_entityPosition == value)
-				{
-					return;
-				}
-				_entityPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityPosition);
+			set => SetProperty(ref _entityPosition, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entityOrientation")] 
 		public Quaternion EntityOrientation
 		{
-			get
-			{
-				if (_entityOrientation == null)
-				{
-					_entityOrientation = (Quaternion) CR2WTypeManager.Create("Quaternion", "entityOrientation", cr2w, this);
-				}
-				return _entityOrientation;
-			}
-			set
-			{
-				if (_entityOrientation == value)
-				{
-					return;
-				}
-				_entityOrientation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityOrientation);
+			set => SetProperty(ref _entityOrientation, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("customEntityRadius")] 
 		public CFloat CustomEntityRadius
 		{
-			get
-			{
-				if (_customEntityRadius == null)
-				{
-					_customEntityRadius = (CFloat) CR2WTypeManager.Create("Float", "customEntityRadius", cr2w, this);
-				}
-				return _customEntityRadius;
-			}
-			set
-			{
-				if (_customEntityRadius == value)
-				{
-					return;
-				}
-				_customEntityRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customEntityRadius);
+			set => SetProperty(ref _customEntityRadius, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("visualizerStyle")] 
 		public CEnum<scnChoiceNodeNsVisualizerStyle> VisualizerStyle
 		{
-			get
-			{
-				if (_visualizerStyle == null)
-				{
-					_visualizerStyle = (CEnum<scnChoiceNodeNsVisualizerStyle>) CR2WTypeManager.Create("scnChoiceNodeNsVisualizerStyle", "visualizerStyle", cr2w, this);
-				}
-				return _visualizerStyle;
-			}
-			set
-			{
-				if (_visualizerStyle == value)
-				{
-					return;
-				}
-				_visualizerStyle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualizerStyle);
+			set => SetProperty(ref _visualizerStyle, value);
 		}
 
 		public scnChoiceNodeNsAttachToWorldParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

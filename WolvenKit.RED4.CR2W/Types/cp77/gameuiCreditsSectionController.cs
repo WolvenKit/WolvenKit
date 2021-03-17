@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sectionName")] 
 		public inkTextWidgetReference SectionName
 		{
-			get
-			{
-				if (_sectionName == null)
-				{
-					_sectionName = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "sectionName", cr2w, this);
-				}
-				return _sectionName;
-			}
-			set
-			{
-				if (_sectionName == value)
-				{
-					return;
-				}
-				_sectionName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sectionName);
+			set => SetProperty(ref _sectionName, value);
 		}
 
 		public gameuiCreditsSectionController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

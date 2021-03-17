@@ -24,276 +24,96 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("minImpactVelocityThreshold")] 
 		public CFloat MinImpactVelocityThreshold
 		{
-			get
-			{
-				if (_minImpactVelocityThreshold == null)
-				{
-					_minImpactVelocityThreshold = (CFloat) CR2WTypeManager.Create("Float", "minImpactVelocityThreshold", cr2w, this);
-				}
-				return _minImpactVelocityThreshold;
-			}
-			set
-			{
-				if (_minImpactVelocityThreshold == value)
-				{
-					return;
-				}
-				_minImpactVelocityThreshold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minImpactVelocityThreshold);
+			set => SetProperty(ref _minImpactVelocityThreshold, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("minRumbleVelocityThreshold")] 
 		public CFloat MinRumbleVelocityThreshold
 		{
-			get
-			{
-				if (_minRumbleVelocityThreshold == null)
-				{
-					_minRumbleVelocityThreshold = (CFloat) CR2WTypeManager.Create("Float", "minRumbleVelocityThreshold", cr2w, this);
-				}
-				return _minRumbleVelocityThreshold;
-			}
-			set
-			{
-				if (_minRumbleVelocityThreshold == value)
-				{
-					return;
-				}
-				_minRumbleVelocityThreshold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minRumbleVelocityThreshold);
+			set => SetProperty(ref _minRumbleVelocityThreshold, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("rumbleCooldown")] 
 		public CFloat RumbleCooldown
 		{
-			get
-			{
-				if (_rumbleCooldown == null)
-				{
-					_rumbleCooldown = (CFloat) CR2WTypeManager.Create("Float", "rumbleCooldown", cr2w, this);
-				}
-				return _rumbleCooldown;
-			}
-			set
-			{
-				if (_rumbleCooldown == value)
-				{
-					return;
-				}
-				_rumbleCooldown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rumbleCooldown);
+			set => SetProperty(ref _rumbleCooldown, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("scrapingMinTangentialVelocityThreshold")] 
 		public CFloat ScrapingMinTangentialVelocityThreshold
 		{
-			get
-			{
-				if (_scrapingMinTangentialVelocityThreshold == null)
-				{
-					_scrapingMinTangentialVelocityThreshold = (CFloat) CR2WTypeManager.Create("Float", "scrapingMinTangentialVelocityThreshold", cr2w, this);
-				}
-				return _scrapingMinTangentialVelocityThreshold;
-			}
-			set
-			{
-				if (_scrapingMinTangentialVelocityThreshold == value)
-				{
-					return;
-				}
-				_scrapingMinTangentialVelocityThreshold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scrapingMinTangentialVelocityThreshold);
+			set => SetProperty(ref _scrapingMinTangentialVelocityThreshold, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("scrapingMaxCollisionCooldown")] 
 		public CFloat ScrapingMaxCollisionCooldown
 		{
-			get
-			{
-				if (_scrapingMaxCollisionCooldown == null)
-				{
-					_scrapingMaxCollisionCooldown = (CFloat) CR2WTypeManager.Create("Float", "scrapingMaxCollisionCooldown", cr2w, this);
-				}
-				return _scrapingMaxCollisionCooldown;
-			}
-			set
-			{
-				if (_scrapingMaxCollisionCooldown == value)
-				{
-					return;
-				}
-				_scrapingMaxCollisionCooldown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scrapingMaxCollisionCooldown);
+			set => SetProperty(ref _scrapingMaxCollisionCooldown, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("scrapingMinVehicleUpCollisionContactAngle")] 
 		public CFloat ScrapingMinVehicleUpCollisionContactAngle
 		{
-			get
-			{
-				if (_scrapingMinVehicleUpCollisionContactAngle == null)
-				{
-					_scrapingMinVehicleUpCollisionContactAngle = (CFloat) CR2WTypeManager.Create("Float", "scrapingMinVehicleUpCollisionContactAngle", cr2w, this);
-				}
-				return _scrapingMinVehicleUpCollisionContactAngle;
-			}
-			set
-			{
-				if (_scrapingMinVehicleUpCollisionContactAngle == value)
-				{
-					return;
-				}
-				_scrapingMinVehicleUpCollisionContactAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scrapingMinVehicleUpCollisionContactAngle);
+			set => SetProperty(ref _scrapingMinVehicleUpCollisionContactAngle, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("useScrapingMinVehicleUpCollisionContactAngle")] 
 		public CBool UseScrapingMinVehicleUpCollisionContactAngle
 		{
-			get
-			{
-				if (_useScrapingMinVehicleUpCollisionContactAngle == null)
-				{
-					_useScrapingMinVehicleUpCollisionContactAngle = (CBool) CR2WTypeManager.Create("Bool", "useScrapingMinVehicleUpCollisionContactAngle", cr2w, this);
-				}
-				return _useScrapingMinVehicleUpCollisionContactAngle;
-			}
-			set
-			{
-				if (_useScrapingMinVehicleUpCollisionContactAngle == value)
-				{
-					return;
-				}
-				_useScrapingMinVehicleUpCollisionContactAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useScrapingMinVehicleUpCollisionContactAngle);
+			set => SetProperty(ref _useScrapingMinVehicleUpCollisionContactAngle, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("explosionEvent")] 
 		public CName ExplosionEvent
 		{
-			get
-			{
-				if (_explosionEvent == null)
-				{
-					_explosionEvent = (CName) CR2WTypeManager.Create("CName", "explosionEvent", cr2w, this);
-				}
-				return _explosionEvent;
-			}
-			set
-			{
-				if (_explosionEvent == value)
-				{
-					return;
-				}
-				_explosionEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _explosionEvent);
+			set => SetProperty(ref _explosionEvent, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("bigFireEvent")] 
 		public CName BigFireEvent
 		{
-			get
-			{
-				if (_bigFireEvent == null)
-				{
-					_bigFireEvent = (CName) CR2WTypeManager.Create("CName", "bigFireEvent", cr2w, this);
-				}
-				return _bigFireEvent;
-			}
-			set
-			{
-				if (_bigFireEvent == value)
-				{
-					return;
-				}
-				_bigFireEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bigFireEvent);
+			set => SetProperty(ref _bigFireEvent, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("engineFireEvent")] 
 		public CName EngineFireEvent
 		{
-			get
-			{
-				if (_engineFireEvent == null)
-				{
-					_engineFireEvent = (CName) CR2WTypeManager.Create("CName", "engineFireEvent", cr2w, this);
-				}
-				return _engineFireEvent;
-			}
-			set
-			{
-				if (_engineFireEvent == value)
-				{
-					return;
-				}
-				_engineFireEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _engineFireEvent);
+			set => SetProperty(ref _engineFireEvent, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("coolerDamageEvent")] 
 		public CName CoolerDamageEvent
 		{
-			get
-			{
-				if (_coolerDamageEvent == null)
-				{
-					_coolerDamageEvent = (CName) CR2WTypeManager.Create("CName", "coolerDamageEvent", cr2w, this);
-				}
-				return _coolerDamageEvent;
-			}
-			set
-			{
-				if (_coolerDamageEvent == value)
-				{
-					return;
-				}
-				_coolerDamageEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _coolerDamageEvent);
+			set => SetProperty(ref _coolerDamageEvent, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("collisionSettings")] 
 		public CArray<audioVehicleCollisionMapItem> CollisionSettings
 		{
-			get
-			{
-				if (_collisionSettings == null)
-				{
-					_collisionSettings = (CArray<audioVehicleCollisionMapItem>) CR2WTypeManager.Create("array:audioVehicleCollisionMapItem", "collisionSettings", cr2w, this);
-				}
-				return _collisionSettings;
-			}
-			set
-			{
-				if (_collisionSettings == value)
-				{
-					return;
-				}
-				_collisionSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collisionSettings);
+			set => SetProperty(ref _collisionSettings, value);
 		}
 
 		public audioVehicleCollisionMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

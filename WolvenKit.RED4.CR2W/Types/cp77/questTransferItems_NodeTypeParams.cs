@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("giver")] 
 		public CHandle<questUniversalRef> Giver
 		{
-			get
-			{
-				if (_giver == null)
-				{
-					_giver = (CHandle<questUniversalRef>) CR2WTypeManager.Create("handle:questUniversalRef", "giver", cr2w, this);
-				}
-				return _giver;
-			}
-			set
-			{
-				if (_giver == value)
-				{
-					return;
-				}
-				_giver = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _giver);
+			set => SetProperty(ref _giver, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("receiver")] 
 		public CHandle<questUniversalRef> Receiver
 		{
-			get
-			{
-				if (_receiver == null)
-				{
-					_receiver = (CHandle<questUniversalRef>) CR2WTypeManager.Create("handle:questUniversalRef", "receiver", cr2w, this);
-				}
-				return _receiver;
-			}
-			set
-			{
-				if (_receiver == value)
-				{
-					return;
-				}
-				_receiver = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _receiver);
+			set => SetProperty(ref _receiver, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("transferAllOperation")] 
 		public CHandle<questTransferItems_NodeTypeParams_TransferAllOperationData> TransferAllOperation
 		{
-			get
-			{
-				if (_transferAllOperation == null)
-				{
-					_transferAllOperation = (CHandle<questTransferItems_NodeTypeParams_TransferAllOperationData>) CR2WTypeManager.Create("handle:questTransferItems_NodeTypeParams_TransferAllOperationData", "transferAllOperation", cr2w, this);
-				}
-				return _transferAllOperation;
-			}
-			set
-			{
-				if (_transferAllOperation == value)
-				{
-					return;
-				}
-				_transferAllOperation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transferAllOperation);
+			set => SetProperty(ref _transferAllOperation, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("itemOperations")] 
 		public CArray<questTransferItems_NodeTypeParams_OperationData> ItemOperations
 		{
-			get
-			{
-				if (_itemOperations == null)
-				{
-					_itemOperations = (CArray<questTransferItems_NodeTypeParams_OperationData>) CR2WTypeManager.Create("array:questTransferItems_NodeTypeParams_OperationData", "itemOperations", cr2w, this);
-				}
-				return _itemOperations;
-			}
-			set
-			{
-				if (_itemOperations == value)
-				{
-					return;
-				}
-				_itemOperations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemOperations);
+			set => SetProperty(ref _itemOperations, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("tagOperations")] 
 		public CArray<questTransferItems_NodeTypeParams_TagOperationData> TagOperations
 		{
-			get
-			{
-				if (_tagOperations == null)
-				{
-					_tagOperations = (CArray<questTransferItems_NodeTypeParams_TagOperationData>) CR2WTypeManager.Create("array:questTransferItems_NodeTypeParams_TagOperationData", "tagOperations", cr2w, this);
-				}
-				return _tagOperations;
-			}
-			set
-			{
-				if (_tagOperations == value)
-				{
-					return;
-				}
-				_tagOperations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tagOperations);
+			set => SetProperty(ref _tagOperations, value);
 		}
 
 		public questTransferItems_NodeTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

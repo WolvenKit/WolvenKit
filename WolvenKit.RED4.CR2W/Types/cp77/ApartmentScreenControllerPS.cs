@@ -25,299 +25,104 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("initialRentStatus")] 
 		public CEnum<ERentStatus> InitialRentStatus
 		{
-			get
-			{
-				if (_initialRentStatus == null)
-				{
-					_initialRentStatus = (CEnum<ERentStatus>) CR2WTypeManager.Create("ERentStatus", "initialRentStatus", cr2w, this);
-				}
-				return _initialRentStatus;
-			}
-			set
-			{
-				if (_initialRentStatus == value)
-				{
-					return;
-				}
-				_initialRentStatus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialRentStatus);
+			set => SetProperty(ref _initialRentStatus, value);
 		}
 
 		[Ordinal(108)] 
 		[RED("overdueMessageRecordID")] 
 		public TweakDBID OverdueMessageRecordID
 		{
-			get
-			{
-				if (_overdueMessageRecordID == null)
-				{
-					_overdueMessageRecordID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "overdueMessageRecordID", cr2w, this);
-				}
-				return _overdueMessageRecordID;
-			}
-			set
-			{
-				if (_overdueMessageRecordID == value)
-				{
-					return;
-				}
-				_overdueMessageRecordID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overdueMessageRecordID);
+			set => SetProperty(ref _overdueMessageRecordID, value);
 		}
 
 		[Ordinal(109)] 
 		[RED("paidMessageRecordID")] 
 		public TweakDBID PaidMessageRecordID
 		{
-			get
-			{
-				if (_paidMessageRecordID == null)
-				{
-					_paidMessageRecordID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "paidMessageRecordID", cr2w, this);
-				}
-				return _paidMessageRecordID;
-			}
-			set
-			{
-				if (_paidMessageRecordID == value)
-				{
-					return;
-				}
-				_paidMessageRecordID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _paidMessageRecordID);
+			set => SetProperty(ref _paidMessageRecordID, value);
 		}
 
 		[Ordinal(110)] 
 		[RED("evictionMessageRecordID")] 
 		public TweakDBID EvictionMessageRecordID
 		{
-			get
-			{
-				if (_evictionMessageRecordID == null)
-				{
-					_evictionMessageRecordID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "evictionMessageRecordID", cr2w, this);
-				}
-				return _evictionMessageRecordID;
-			}
-			set
-			{
-				if (_evictionMessageRecordID == value)
-				{
-					return;
-				}
-				_evictionMessageRecordID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _evictionMessageRecordID);
+			set => SetProperty(ref _evictionMessageRecordID, value);
 		}
 
 		[Ordinal(111)] 
 		[RED("paymentSchedule")] 
 		public CEnum<EPaymentSchedule> PaymentSchedule
 		{
-			get
-			{
-				if (_paymentSchedule == null)
-				{
-					_paymentSchedule = (CEnum<EPaymentSchedule>) CR2WTypeManager.Create("EPaymentSchedule", "paymentSchedule", cr2w, this);
-				}
-				return _paymentSchedule;
-			}
-			set
-			{
-				if (_paymentSchedule == value)
-				{
-					return;
-				}
-				_paymentSchedule = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _paymentSchedule);
+			set => SetProperty(ref _paymentSchedule, value);
 		}
 
 		[Ordinal(112)] 
 		[RED("randomizeInitialOverdue")] 
 		public CBool RandomizeInitialOverdue
 		{
-			get
-			{
-				if (_randomizeInitialOverdue == null)
-				{
-					_randomizeInitialOverdue = (CBool) CR2WTypeManager.Create("Bool", "randomizeInitialOverdue", cr2w, this);
-				}
-				return _randomizeInitialOverdue;
-			}
-			set
-			{
-				if (_randomizeInitialOverdue == value)
-				{
-					return;
-				}
-				_randomizeInitialOverdue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _randomizeInitialOverdue);
+			set => SetProperty(ref _randomizeInitialOverdue, value);
 		}
 
 		[Ordinal(113)] 
 		[RED("initialOverdue")] 
 		public CInt32 InitialOverdue
 		{
-			get
-			{
-				if (_initialOverdue == null)
-				{
-					_initialOverdue = (CInt32) CR2WTypeManager.Create("Int32", "initialOverdue", cr2w, this);
-				}
-				return _initialOverdue;
-			}
-			set
-			{
-				if (_initialOverdue == value)
-				{
-					return;
-				}
-				_initialOverdue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialOverdue);
+			set => SetProperty(ref _initialOverdue, value);
 		}
 
 		[Ordinal(114)] 
 		[RED("allowAutomaticRentStatusChange")] 
 		public CBool AllowAutomaticRentStatusChange
 		{
-			get
-			{
-				if (_allowAutomaticRentStatusChange == null)
-				{
-					_allowAutomaticRentStatusChange = (CBool) CR2WTypeManager.Create("Bool", "allowAutomaticRentStatusChange", cr2w, this);
-				}
-				return _allowAutomaticRentStatusChange;
-			}
-			set
-			{
-				if (_allowAutomaticRentStatusChange == value)
-				{
-					return;
-				}
-				_allowAutomaticRentStatusChange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _allowAutomaticRentStatusChange);
+			set => SetProperty(ref _allowAutomaticRentStatusChange, value);
 		}
 
 		[Ordinal(115)] 
 		[RED("maxDays")] 
 		public CInt32 MaxDays
 		{
-			get
-			{
-				if (_maxDays == null)
-				{
-					_maxDays = (CInt32) CR2WTypeManager.Create("Int32", "maxDays", cr2w, this);
-				}
-				return _maxDays;
-			}
-			set
-			{
-				if (_maxDays == value)
-				{
-					return;
-				}
-				_maxDays = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxDays);
+			set => SetProperty(ref _maxDays, value);
 		}
 
 		[Ordinal(116)] 
 		[RED("currentOverdue")] 
 		public CInt32 CurrentOverdue
 		{
-			get
-			{
-				if (_currentOverdue == null)
-				{
-					_currentOverdue = (CInt32) CR2WTypeManager.Create("Int32", "currentOverdue", cr2w, this);
-				}
-				return _currentOverdue;
-			}
-			set
-			{
-				if (_currentOverdue == value)
-				{
-					return;
-				}
-				_currentOverdue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentOverdue);
+			set => SetProperty(ref _currentOverdue, value);
 		}
 
 		[Ordinal(117)] 
 		[RED("isInitialRentStateSet")] 
 		public CBool IsInitialRentStateSet
 		{
-			get
-			{
-				if (_isInitialRentStateSet == null)
-				{
-					_isInitialRentStateSet = (CBool) CR2WTypeManager.Create("Bool", "isInitialRentStateSet", cr2w, this);
-				}
-				return _isInitialRentStateSet;
-			}
-			set
-			{
-				if (_isInitialRentStateSet == value)
-				{
-					return;
-				}
-				_isInitialRentStateSet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInitialRentStateSet);
+			set => SetProperty(ref _isInitialRentStateSet, value);
 		}
 
 		[Ordinal(118)] 
 		[RED("currentRentStatus")] 
 		public CEnum<ERentStatus> CurrentRentStatus
 		{
-			get
-			{
-				if (_currentRentStatus == null)
-				{
-					_currentRentStatus = (CEnum<ERentStatus>) CR2WTypeManager.Create("ERentStatus", "currentRentStatus", cr2w, this);
-				}
-				return _currentRentStatus;
-			}
-			set
-			{
-				if (_currentRentStatus == value)
-				{
-					return;
-				}
-				_currentRentStatus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentRentStatus);
+			set => SetProperty(ref _currentRentStatus, value);
 		}
 
 		[Ordinal(119)] 
 		[RED("lastStatusChangeDay")] 
 		public CInt32 LastStatusChangeDay
 		{
-			get
-			{
-				if (_lastStatusChangeDay == null)
-				{
-					_lastStatusChangeDay = (CInt32) CR2WTypeManager.Create("Int32", "lastStatusChangeDay", cr2w, this);
-				}
-				return _lastStatusChangeDay;
-			}
-			set
-			{
-				if (_lastStatusChangeDay == value)
-				{
-					return;
-				}
-				_lastStatusChangeDay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastStatusChangeDay);
+			set => SetProperty(ref _lastStatusChangeDay, value);
 		}
 
 		public ApartmentScreenControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

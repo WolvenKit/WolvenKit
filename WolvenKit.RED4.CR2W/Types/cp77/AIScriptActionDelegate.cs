@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actionPackageType")] 
 		public CEnum<AIactionParamsPackageTypes> ActionPackageType
 		{
-			get
-			{
-				if (_actionPackageType == null)
-				{
-					_actionPackageType = (CEnum<AIactionParamsPackageTypes>) CR2WTypeManager.Create("AIactionParamsPackageTypes", "actionPackageType", cr2w, this);
-				}
-				return _actionPackageType;
-			}
-			set
-			{
-				if (_actionPackageType == value)
-				{
-					return;
-				}
-				_actionPackageType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionPackageType);
+			set => SetProperty(ref _actionPackageType, value);
 		}
 
 		public AIScriptActionDelegate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

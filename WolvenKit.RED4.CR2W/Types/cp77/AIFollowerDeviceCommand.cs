@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("target")] 
 		public wCHandle<gameObject> Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("overrideMovementTarget")] 
 		public wCHandle<gameObject> OverrideMovementTarget
 		{
-			get
-			{
-				if (_overrideMovementTarget == null)
-				{
-					_overrideMovementTarget = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "overrideMovementTarget", cr2w, this);
-				}
-				return _overrideMovementTarget;
-			}
-			set
-			{
-				if (_overrideMovementTarget == value)
-				{
-					return;
-				}
-				_overrideMovementTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideMovementTarget);
+			set => SetProperty(ref _overrideMovementTarget, value);
 		}
 
 		public AIFollowerDeviceCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

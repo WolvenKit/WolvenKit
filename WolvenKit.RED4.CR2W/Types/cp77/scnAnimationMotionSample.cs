@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("time")] 
 		public CFloat Time
 		{
-			get
-			{
-				if (_time == null)
-				{
-					_time = (CFloat) CR2WTypeManager.Create("Float", "time", cr2w, this);
-				}
-				return _time;
-			}
-			set
-			{
-				if (_time == value)
-				{
-					return;
-				}
-				_time = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _time);
+			set => SetProperty(ref _time, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("transform")] 
 		public Transform Transform
 		{
-			get
-			{
-				if (_transform == null)
-				{
-					_transform = (Transform) CR2WTypeManager.Create("Transform", "transform", cr2w, this);
-				}
-				return _transform;
-			}
-			set
-			{
-				if (_transform == value)
-				{
-					return;
-				}
-				_transform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transform);
+			set => SetProperty(ref _transform, value);
 		}
 
 		public scnAnimationMotionSample(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

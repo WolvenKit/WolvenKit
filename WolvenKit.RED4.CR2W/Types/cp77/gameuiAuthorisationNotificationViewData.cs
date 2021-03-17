@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("authType")] 
 		public CEnum<gameuiAuthorisationNotificationType> AuthType
 		{
-			get
-			{
-				if (_authType == null)
-				{
-					_authType = (CEnum<gameuiAuthorisationNotificationType>) CR2WTypeManager.Create("gameuiAuthorisationNotificationType", "authType", cr2w, this);
-				}
-				return _authType;
-			}
-			set
-			{
-				if (_authType == value)
-				{
-					return;
-				}
-				_authType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _authType);
+			set => SetProperty(ref _authType, value);
 		}
 
 		public gameuiAuthorisationNotificationViewData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

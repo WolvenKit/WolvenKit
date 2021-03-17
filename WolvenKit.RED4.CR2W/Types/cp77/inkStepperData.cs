@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("label")] 
 		public CString Label
 		{
-			get
-			{
-				if (_label == null)
-				{
-					_label = (CString) CR2WTypeManager.Create("String", "label", cr2w, this);
-				}
-				return _label;
-			}
-			set
-			{
-				if (_label == value)
-				{
-					return;
-				}
-				_label = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _label);
+			set => SetProperty(ref _label, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("data")] 
 		public wCHandle<IScriptable> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (wCHandle<IScriptable>) CR2WTypeManager.Create("whandle:IScriptable", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		public inkStepperData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

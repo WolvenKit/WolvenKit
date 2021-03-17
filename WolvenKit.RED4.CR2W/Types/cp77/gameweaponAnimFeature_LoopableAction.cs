@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("loopDuration")] 
 		public CFloat LoopDuration
 		{
-			get
-			{
-				if (_loopDuration == null)
-				{
-					_loopDuration = (CFloat) CR2WTypeManager.Create("Float", "loopDuration", cr2w, this);
-				}
-				return _loopDuration;
-			}
-			set
-			{
-				if (_loopDuration == value)
-				{
-					return;
-				}
-				_loopDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _loopDuration);
+			set => SetProperty(ref _loopDuration, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("numLoops")] 
 		public CUInt8 NumLoops
 		{
-			get
-			{
-				if (_numLoops == null)
-				{
-					_numLoops = (CUInt8) CR2WTypeManager.Create("Uint8", "numLoops", cr2w, this);
-				}
-				return _numLoops;
-			}
-			set
-			{
-				if (_numLoops == value)
-				{
-					return;
-				}
-				_numLoops = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numLoops);
+			set => SetProperty(ref _numLoops, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		public gameweaponAnimFeature_LoopableAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

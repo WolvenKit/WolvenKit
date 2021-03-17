@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("events")] 
 		public CArray<audioMeleeEvent> Events
 		{
-			get
-			{
-				if (_events == null)
-				{
-					_events = (CArray<audioMeleeEvent>) CR2WTypeManager.Create("array:audioMeleeEvent", "events", cr2w, this);
-				}
-				return _events;
-			}
-			set
-			{
-				if (_events == value)
-				{
-					return;
-				}
-				_events = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _events);
+			set => SetProperty(ref _events, value);
 		}
 
 		public audioMeleeSound(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

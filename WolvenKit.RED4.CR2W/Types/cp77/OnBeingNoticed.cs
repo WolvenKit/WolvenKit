@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectThatNoticed")] 
 		public wCHandle<gameObject> ObjectThatNoticed
 		{
-			get
-			{
-				if (_objectThatNoticed == null)
-				{
-					_objectThatNoticed = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "objectThatNoticed", cr2w, this);
-				}
-				return _objectThatNoticed;
-			}
-			set
-			{
-				if (_objectThatNoticed == value)
-				{
-					return;
-				}
-				_objectThatNoticed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectThatNoticed);
+			set => SetProperty(ref _objectThatNoticed, value);
 		}
 
 		public OnBeingNoticed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

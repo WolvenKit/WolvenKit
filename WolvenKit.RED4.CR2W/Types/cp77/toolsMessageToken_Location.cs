@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("location")] 
 		public CHandle<toolsIMessageLocation> Location
 		{
-			get
-			{
-				if (_location == null)
-				{
-					_location = (CHandle<toolsIMessageLocation>) CR2WTypeManager.Create("handle:toolsIMessageLocation", "location", cr2w, this);
-				}
-				return _location;
-			}
-			set
-			{
-				if (_location == value)
-				{
-					return;
-				}
-				_location = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _location);
+			set => SetProperty(ref _location, value);
 		}
 
 		public toolsMessageToken_Location(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

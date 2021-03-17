@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("combatCommand")] 
 		public CBool CombatCommand
 		{
-			get
-			{
-				if (_combatCommand == null)
-				{
-					_combatCommand = (CBool) CR2WTypeManager.Create("Bool", "combatCommand", cr2w, this);
-				}
-				return _combatCommand;
-			}
-			set
-			{
-				if (_combatCommand == value)
-				{
-					return;
-				}
-				_combatCommand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _combatCommand);
+			set => SetProperty(ref _combatCommand, value);
 		}
 
 		public AIFollowerCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

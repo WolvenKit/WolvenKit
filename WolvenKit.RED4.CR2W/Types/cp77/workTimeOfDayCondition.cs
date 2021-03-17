@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("activeAfter")] 
 		public GameTime ActiveAfter
 		{
-			get
-			{
-				if (_activeAfter == null)
-				{
-					_activeAfter = (GameTime) CR2WTypeManager.Create("GameTime", "activeAfter", cr2w, this);
-				}
-				return _activeAfter;
-			}
-			set
-			{
-				if (_activeAfter == value)
-				{
-					return;
-				}
-				_activeAfter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeAfter);
+			set => SetProperty(ref _activeAfter, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("activeUntil")] 
 		public GameTime ActiveUntil
 		{
-			get
-			{
-				if (_activeUntil == null)
-				{
-					_activeUntil = (GameTime) CR2WTypeManager.Create("GameTime", "activeUntil", cr2w, this);
-				}
-				return _activeUntil;
-			}
-			set
-			{
-				if (_activeUntil == value)
-				{
-					return;
-				}
-				_activeUntil = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeUntil);
+			set => SetProperty(ref _activeUntil, value);
 		}
 
 		public workTimeOfDayCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

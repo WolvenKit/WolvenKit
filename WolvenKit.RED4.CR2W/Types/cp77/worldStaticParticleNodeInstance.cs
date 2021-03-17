@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("renderLayerMask")] 
 		public CEnum<RenderSceneLayerMask> RenderLayerMask
 		{
-			get
-			{
-				if (_renderLayerMask == null)
-				{
-					_renderLayerMask = (CEnum<RenderSceneLayerMask>) CR2WTypeManager.Create("RenderSceneLayerMask", "renderLayerMask", cr2w, this);
-				}
-				return _renderLayerMask;
-			}
-			set
-			{
-				if (_renderLayerMask == value)
-				{
-					return;
-				}
-				_renderLayerMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _renderLayerMask);
+			set => SetProperty(ref _renderLayerMask, value);
 		}
 
 		public worldStaticParticleNodeInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

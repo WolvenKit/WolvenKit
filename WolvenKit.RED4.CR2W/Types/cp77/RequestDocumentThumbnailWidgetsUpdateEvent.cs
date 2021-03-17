@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("documentType")] 
 		public CEnum<EDocumentType> DocumentType
 		{
-			get
-			{
-				if (_documentType == null)
-				{
-					_documentType = (CEnum<EDocumentType>) CR2WTypeManager.Create("EDocumentType", "documentType", cr2w, this);
-				}
-				return _documentType;
-			}
-			set
-			{
-				if (_documentType == value)
-				{
-					return;
-				}
-				_documentType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _documentType);
+			set => SetProperty(ref _documentType, value);
 		}
 
 		public RequestDocumentThumbnailWidgetsUpdateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

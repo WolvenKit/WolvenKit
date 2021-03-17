@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("requesterData")] 
 		public PSOwnerData RequesterData
 		{
-			get
-			{
-				if (_requesterData == null)
-				{
-					_requesterData = (PSOwnerData) CR2WTypeManager.Create("PSOwnerData", "requesterData", cr2w, this);
-				}
-				return _requesterData;
-			}
-			set
-			{
-				if (_requesterData == value)
-				{
-					return;
-				}
-				_requesterData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requesterData);
+			set => SetProperty(ref _requesterData, value);
 		}
 
 		public UnregisterTimetableRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

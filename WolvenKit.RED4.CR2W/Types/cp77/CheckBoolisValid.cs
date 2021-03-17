@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actionTweakIDMapping")] 
 		public CHandle<AIArgumentMapping> ActionTweakIDMapping
 		{
-			get
-			{
-				if (_actionTweakIDMapping == null)
-				{
-					_actionTweakIDMapping = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "actionTweakIDMapping", cr2w, this);
-				}
-				return _actionTweakIDMapping;
-			}
-			set
-			{
-				if (_actionTweakIDMapping == value)
-				{
-					return;
-				}
-				_actionTweakIDMapping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionTweakIDMapping);
+			set => SetProperty(ref _actionTweakIDMapping, value);
 		}
 
 		public CheckBoolisValid(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

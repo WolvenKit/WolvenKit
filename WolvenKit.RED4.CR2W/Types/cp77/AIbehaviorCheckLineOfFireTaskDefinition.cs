@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotName")] 
 		public CHandle<AIArgumentMapping> SlotName
 		{
-			get
-			{
-				if (_slotName == null)
-				{
-					_slotName = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "slotName", cr2w, this);
-				}
-				return _slotName;
-			}
-			set
-			{
-				if (_slotName == value)
-				{
-					return;
-				}
-				_slotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotName);
+			set => SetProperty(ref _slotName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("attachmentName")] 
 		public CHandle<AIArgumentMapping> AttachmentName
 		{
-			get
-			{
-				if (_attachmentName == null)
-				{
-					_attachmentName = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "attachmentName", cr2w, this);
-				}
-				return _attachmentName;
-			}
-			set
-			{
-				if (_attachmentName == value)
-				{
-					return;
-				}
-				_attachmentName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attachmentName);
+			set => SetProperty(ref _attachmentName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("spread")] 
 		public CHandle<AIArgumentMapping> Spread
 		{
-			get
-			{
-				if (_spread == null)
-				{
-					_spread = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "spread", cr2w, this);
-				}
-				return _spread;
-			}
-			set
-			{
-				if (_spread == value)
-				{
-					return;
-				}
-				_spread = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spread);
+			set => SetProperty(ref _spread, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("maxRange")] 
 		public CHandle<AIArgumentMapping> MaxRange
 		{
-			get
-			{
-				if (_maxRange == null)
-				{
-					_maxRange = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "maxRange", cr2w, this);
-				}
-				return _maxRange;
-			}
-			set
-			{
-				if (_maxRange == value)
-				{
-					return;
-				}
-				_maxRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxRange);
+			set => SetProperty(ref _maxRange, value);
 		}
 
 		public AIbehaviorCheckLineOfFireTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("briefingSize")] 
 		public CEnum<questJournalSizeEventType> BriefingSize
 		{
-			get
-			{
-				if (_briefingSize == null)
-				{
-					_briefingSize = (CEnum<questJournalSizeEventType>) CR2WTypeManager.Create("questJournalSizeEventType", "briefingSize", cr2w, this);
-				}
-				return _briefingSize;
-			}
-			set
-			{
-				if (_briefingSize == value)
-				{
-					return;
-				}
-				_briefingSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _briefingSize);
+			set => SetProperty(ref _briefingSize, value);
 		}
 
 		public questSetBriefingSize_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

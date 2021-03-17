@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("interactionTag")] 
 		public CName InteractionTag
 		{
-			get
-			{
-				if (_interactionTag == null)
-				{
-					_interactionTag = (CName) CR2WTypeManager.Create("CName", "interactionTag", cr2w, this);
-				}
-				return _interactionTag;
-			}
-			set
-			{
-				if (_interactionTag == value)
-				{
-					return;
-				}
-				_interactionTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interactionTag);
+			set => SetProperty(ref _interactionTag, value);
 		}
 
 		public gamePickupObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

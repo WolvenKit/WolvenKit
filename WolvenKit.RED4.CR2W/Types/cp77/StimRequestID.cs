@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ID")] 
 		public CUInt32 ID
 		{
-			get
-			{
-				if (_iD == null)
-				{
-					_iD = (CUInt32) CR2WTypeManager.Create("Uint32", "ID", cr2w, this);
-				}
-				return _iD;
-			}
-			set
-			{
-				if (_iD == value)
-				{
-					return;
-				}
-				_iD = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _iD);
+			set => SetProperty(ref _iD, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isValid")] 
 		public CBool IsValid
 		{
-			get
-			{
-				if (_isValid == null)
-				{
-					_isValid = (CBool) CR2WTypeManager.Create("Bool", "isValid", cr2w, this);
-				}
-				return _isValid;
-			}
-			set
-			{
-				if (_isValid == value)
-				{
-					return;
-				}
-				_isValid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isValid);
+			set => SetProperty(ref _isValid, value);
 		}
 
 		public StimRequestID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

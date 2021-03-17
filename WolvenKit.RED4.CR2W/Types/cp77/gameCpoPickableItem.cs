@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemIDToEquip")] 
 		public TweakDBID ItemIDToEquip
 		{
-			get
-			{
-				if (_itemIDToEquip == null)
-				{
-					_itemIDToEquip = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "itemIDToEquip", cr2w, this);
-				}
-				return _itemIDToEquip;
-			}
-			set
-			{
-				if (_itemIDToEquip == value)
-				{
-					return;
-				}
-				_itemIDToEquip = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemIDToEquip);
+			set => SetProperty(ref _itemIDToEquip, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("quickSlotID")] 
 		public CInt32 QuickSlotID
 		{
-			get
-			{
-				if (_quickSlotID == null)
-				{
-					_quickSlotID = (CInt32) CR2WTypeManager.Create("Int32", "quickSlotID", cr2w, this);
-				}
-				return _quickSlotID;
-			}
-			set
-			{
-				if (_quickSlotID == value)
-				{
-					return;
-				}
-				_quickSlotID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quickSlotID);
+			set => SetProperty(ref _quickSlotID, value);
 		}
 
 		public gameCpoPickableItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

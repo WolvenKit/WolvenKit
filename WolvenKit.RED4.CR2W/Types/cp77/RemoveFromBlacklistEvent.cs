@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entityIDToRemove")] 
 		public entEntityID EntityIDToRemove
 		{
-			get
-			{
-				if (_entityIDToRemove == null)
-				{
-					_entityIDToRemove = (entEntityID) CR2WTypeManager.Create("entEntityID", "entityIDToRemove", cr2w, this);
-				}
-				return _entityIDToRemove;
-			}
-			set
-			{
-				if (_entityIDToRemove == value)
-				{
-					return;
-				}
-				_entityIDToRemove = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityIDToRemove);
+			set => SetProperty(ref _entityIDToRemove, value);
 		}
 
 		public RemoveFromBlacklistEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

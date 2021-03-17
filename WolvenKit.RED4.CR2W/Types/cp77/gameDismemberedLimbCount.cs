@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fleshDismemberments")] 
 		public CUInt32 FleshDismemberments
 		{
-			get
-			{
-				if (_fleshDismemberments == null)
-				{
-					_fleshDismemberments = (CUInt32) CR2WTypeManager.Create("Uint32", "fleshDismemberments", cr2w, this);
-				}
-				return _fleshDismemberments;
-			}
-			set
-			{
-				if (_fleshDismemberments == value)
-				{
-					return;
-				}
-				_fleshDismemberments = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fleshDismemberments);
+			set => SetProperty(ref _fleshDismemberments, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("cyberDismemberments")] 
 		public CUInt32 CyberDismemberments
 		{
-			get
-			{
-				if (_cyberDismemberments == null)
-				{
-					_cyberDismemberments = (CUInt32) CR2WTypeManager.Create("Uint32", "cyberDismemberments", cr2w, this);
-				}
-				return _cyberDismemberments;
-			}
-			set
-			{
-				if (_cyberDismemberments == value)
-				{
-					return;
-				}
-				_cyberDismemberments = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cyberDismemberments);
+			set => SetProperty(ref _cyberDismemberments, value);
 		}
 
 		public gameDismemberedLimbCount(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

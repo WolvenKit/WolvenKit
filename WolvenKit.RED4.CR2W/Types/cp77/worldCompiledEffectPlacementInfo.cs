@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("placementTagIndex")] 
 		public CUInt8 PlacementTagIndex
 		{
-			get
-			{
-				if (_placementTagIndex == null)
-				{
-					_placementTagIndex = (CUInt8) CR2WTypeManager.Create("Uint8", "placementTagIndex", cr2w, this);
-				}
-				return _placementTagIndex;
-			}
-			set
-			{
-				if (_placementTagIndex == value)
-				{
-					return;
-				}
-				_placementTagIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _placementTagIndex);
+			set => SetProperty(ref _placementTagIndex, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("relativePositionIndex")] 
 		public CUInt8 RelativePositionIndex
 		{
-			get
-			{
-				if (_relativePositionIndex == null)
-				{
-					_relativePositionIndex = (CUInt8) CR2WTypeManager.Create("Uint8", "relativePositionIndex", cr2w, this);
-				}
-				return _relativePositionIndex;
-			}
-			set
-			{
-				if (_relativePositionIndex == value)
-				{
-					return;
-				}
-				_relativePositionIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _relativePositionIndex);
+			set => SetProperty(ref _relativePositionIndex, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("relativeRotationIndex")] 
 		public CUInt8 RelativeRotationIndex
 		{
-			get
-			{
-				if (_relativeRotationIndex == null)
-				{
-					_relativeRotationIndex = (CUInt8) CR2WTypeManager.Create("Uint8", "relativeRotationIndex", cr2w, this);
-				}
-				return _relativeRotationIndex;
-			}
-			set
-			{
-				if (_relativeRotationIndex == value)
-				{
-					return;
-				}
-				_relativeRotationIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _relativeRotationIndex);
+			set => SetProperty(ref _relativeRotationIndex, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("flags")] 
 		public CUInt8 Flags
 		{
-			get
-			{
-				if (_flags == null)
-				{
-					_flags = (CUInt8) CR2WTypeManager.Create("Uint8", "flags", cr2w, this);
-				}
-				return _flags;
-			}
-			set
-			{
-				if (_flags == value)
-				{
-					return;
-				}
-				_flags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flags);
+			set => SetProperty(ref _flags, value);
 		}
 
 		public worldCompiledEffectPlacementInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

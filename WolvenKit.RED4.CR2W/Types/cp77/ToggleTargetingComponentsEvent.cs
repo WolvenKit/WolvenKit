@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("toggle")] 
 		public CBool Toggle
 		{
-			get
-			{
-				if (_toggle == null)
-				{
-					_toggle = (CBool) CR2WTypeManager.Create("Bool", "toggle", cr2w, this);
-				}
-				return _toggle;
-			}
-			set
-			{
-				if (_toggle == value)
-				{
-					return;
-				}
-				_toggle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toggle);
+			set => SetProperty(ref _toggle, value);
 		}
 
 		public ToggleTargetingComponentsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("effectTypes")] 
 		public CArray<CString> EffectTypes
 		{
-			get
-			{
-				if (_effectTypes == null)
-				{
-					_effectTypes = (CArray<CString>) CR2WTypeManager.Create("array:String", "effectTypes", cr2w, this);
-				}
-				return _effectTypes;
-			}
-			set
-			{
-				if (_effectTypes == value)
-				{
-					return;
-				}
-				_effectTypes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectTypes);
+			set => SetProperty(ref _effectTypes, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("effectString")] 
 		public CArray<CString> EffectString
 		{
-			get
-			{
-				if (_effectString == null)
-				{
-					_effectString = (CArray<CString>) CR2WTypeManager.Create("array:String", "effectString", cr2w, this);
-				}
-				return _effectString;
-			}
-			set
-			{
-				if (_effectString == value)
-				{
-					return;
-				}
-				_effectString = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectString);
+			set => SetProperty(ref _effectString, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("effectTags")] 
 		public CArray<CName> EffectTags
 		{
-			get
-			{
-				if (_effectTags == null)
-				{
-					_effectTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "effectTags", cr2w, this);
-				}
-				return _effectTags;
-			}
-			set
-			{
-				if (_effectTags == value)
-				{
-					return;
-				}
-				_effectTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectTags);
+			set => SetProperty(ref _effectTags, value);
 		}
 
 		public RemoveStatusEffectsEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

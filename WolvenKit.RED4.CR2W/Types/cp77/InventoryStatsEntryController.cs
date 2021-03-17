@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("iconWidget")] 
 		public inkImageWidgetReference IconWidget
 		{
-			get
-			{
-				if (_iconWidget == null)
-				{
-					_iconWidget = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "iconWidget", cr2w, this);
-				}
-				return _iconWidget;
-			}
-			set
-			{
-				if (_iconWidget == value)
-				{
-					return;
-				}
-				_iconWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _iconWidget);
+			set => SetProperty(ref _iconWidget, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("labelWidget")] 
 		public inkTextWidgetReference LabelWidget
 		{
-			get
-			{
-				if (_labelWidget == null)
-				{
-					_labelWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "labelWidget", cr2w, this);
-				}
-				return _labelWidget;
-			}
-			set
-			{
-				if (_labelWidget == value)
-				{
-					return;
-				}
-				_labelWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _labelWidget);
+			set => SetProperty(ref _labelWidget, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("valueWidget")] 
 		public inkTextWidgetReference ValueWidget
 		{
-			get
-			{
-				if (_valueWidget == null)
-				{
-					_valueWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "valueWidget", cr2w, this);
-				}
-				return _valueWidget;
-			}
-			set
-			{
-				if (_valueWidget == value)
-				{
-					return;
-				}
-				_valueWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _valueWidget);
+			set => SetProperty(ref _valueWidget, value);
 		}
 
 		public InventoryStatsEntryController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

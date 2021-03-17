@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("prop1")] 
 		public CInt32 Prop1
 		{
-			get
-			{
-				if (_prop1 == null)
-				{
-					_prop1 = (CInt32) CR2WTypeManager.Create("Int32", "prop1", cr2w, this);
-				}
-				return _prop1;
-			}
-			set
-			{
-				if (_prop1 == value)
-				{
-					return;
-				}
-				_prop1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prop1);
+			set => SetProperty(ref _prop1, value);
 		}
 
 		public Ref_1_3_2_2_BaseStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

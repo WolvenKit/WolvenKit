@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("referencePoint")] 
 		public scnReferencePointId ReferencePoint
 		{
-			get
-			{
-				if (_referencePoint == null)
-				{
-					_referencePoint = (scnReferencePointId) CR2WTypeManager.Create("scnReferencePointId", "referencePoint", cr2w, this);
-				}
-				return _referencePoint;
-			}
-			set
-			{
-				if (_referencePoint == value)
-				{
-					return;
-				}
-				_referencePoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _referencePoint);
+			set => SetProperty(ref _referencePoint, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("constantWeight")] 
 		public CFloat ConstantWeight
 		{
-			get
-			{
-				if (_constantWeight == null)
-				{
-					_constantWeight = (CFloat) CR2WTypeManager.Create("Float", "constantWeight", cr2w, this);
-				}
-				return _constantWeight;
-			}
-			set
-			{
-				if (_constantWeight == value)
-				{
-					return;
-				}
-				_constantWeight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _constantWeight);
+			set => SetProperty(ref _constantWeight, value);
 		}
 
 		public scnChoiceNodeNsAdaptiveLookAtReferencePoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

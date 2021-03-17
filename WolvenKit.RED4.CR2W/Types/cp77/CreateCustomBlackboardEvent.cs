@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("blackboardDef")] 
 		public CHandle<CustomBlackboardDef> BlackboardDef
 		{
-			get
-			{
-				if (_blackboardDef == null)
-				{
-					_blackboardDef = (CHandle<CustomBlackboardDef>) CR2WTypeManager.Create("handle:CustomBlackboardDef", "blackboardDef", cr2w, this);
-				}
-				return _blackboardDef;
-			}
-			set
-			{
-				if (_blackboardDef == value)
-				{
-					return;
-				}
-				_blackboardDef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboardDef);
+			set => SetProperty(ref _blackboardDef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("blackboard")] 
 		public CHandle<gameIBlackboard> Blackboard
 		{
-			get
-			{
-				if (_blackboard == null)
-				{
-					_blackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "blackboard", cr2w, this);
-				}
-				return _blackboard;
-			}
-			set
-			{
-				if (_blackboard == value)
-				{
-					return;
-				}
-				_blackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboard);
+			set => SetProperty(ref _blackboard, value);
 		}
 
 		public CreateCustomBlackboardEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

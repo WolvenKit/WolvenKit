@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tree")] 
 		public LibTreeDefTree Tree
 		{
-			get
-			{
-				if (_tree == null)
-				{
-					_tree = (LibTreeDefTree) CR2WTypeManager.Create("LibTreeDefTree", "tree", cr2w, this);
-				}
-				return _tree;
-			}
-			set
-			{
-				if (_tree == value)
-				{
-					return;
-				}
-				_tree = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tree);
+			set => SetProperty(ref _tree, value);
 		}
 
 		public AICTreeNodeIncludedTreeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

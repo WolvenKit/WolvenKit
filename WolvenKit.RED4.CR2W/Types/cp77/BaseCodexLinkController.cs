@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("linkImage")] 
 		public inkImageWidgetReference LinkImage
 		{
-			get
-			{
-				if (_linkImage == null)
-				{
-					_linkImage = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "linkImage", cr2w, this);
-				}
-				return _linkImage;
-			}
-			set
-			{
-				if (_linkImage == value)
-				{
-					return;
-				}
-				_linkImage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linkImage);
+			set => SetProperty(ref _linkImage, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("linkLabel")] 
 		public inkTextWidgetReference LinkLabel
 		{
-			get
-			{
-				if (_linkLabel == null)
-				{
-					_linkLabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "linkLabel", cr2w, this);
-				}
-				return _linkLabel;
-			}
-			set
-			{
-				if (_linkLabel == value)
-				{
-					return;
-				}
-				_linkLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linkLabel);
+			set => SetProperty(ref _linkLabel, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get
-			{
-				if (_animProxy == null)
-				{
-					_animProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animProxy", cr2w, this);
-				}
-				return _animProxy;
-			}
-			set
-			{
-				if (_animProxy == value)
-				{
-					return;
-				}
-				_animProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animProxy);
+			set => SetProperty(ref _animProxy, value);
 		}
 
 		public BaseCodexLinkController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

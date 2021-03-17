@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rootWidget")] 
 		public rRef<inkWidgetLibraryResource> RootWidget
 		{
-			get
-			{
-				if (_rootWidget == null)
-				{
-					_rootWidget = (rRef<inkWidgetLibraryResource>) CR2WTypeManager.Create("rRef:inkWidgetLibraryResource", "rootWidget", cr2w, this);
-				}
-				return _rootWidget;
-			}
-			set
-			{
-				if (_rootWidget == value)
-				{
-					return;
-				}
-				_rootWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rootWidget);
+			set => SetProperty(ref _rootWidget, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("themeOverride")] 
 		public CName ThemeOverride
 		{
-			get
-			{
-				if (_themeOverride == null)
-				{
-					_themeOverride = (CName) CR2WTypeManager.Create("CName", "themeOverride", cr2w, this);
-				}
-				return _themeOverride;
-			}
-			set
-			{
-				if (_themeOverride == value)
-				{
-					return;
-				}
-				_themeOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _themeOverride);
+			set => SetProperty(ref _themeOverride, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("entries")] 
 		public CArray<inkHudWidgetSpawnEntry> Entries
 		{
-			get
-			{
-				if (_entries == null)
-				{
-					_entries = (CArray<inkHudWidgetSpawnEntry>) CR2WTypeManager.Create("array:inkHudWidgetSpawnEntry", "entries", cr2w, this);
-				}
-				return _entries;
-			}
-			set
-			{
-				if (_entries == value)
-				{
-					return;
-				}
-				_entries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
 		}
 
 		public inkHudEntriesResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

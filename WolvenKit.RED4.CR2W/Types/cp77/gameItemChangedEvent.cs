@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemData")] 
 		public CHandle<gameItemData> ItemData
 		{
-			get
-			{
-				if (_itemData == null)
-				{
-					_itemData = (CHandle<gameItemData>) CR2WTypeManager.Create("handle:gameItemData", "itemData", cr2w, this);
-				}
-				return _itemData;
-			}
-			set
-			{
-				if (_itemData == value)
-				{
-					return;
-				}
-				_itemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemData);
+			set => SetProperty(ref _itemData, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("difference")] 
 		public CInt32 Difference
 		{
-			get
-			{
-				if (_difference == null)
-				{
-					_difference = (CInt32) CR2WTypeManager.Create("Int32", "difference", cr2w, this);
-				}
-				return _difference;
-			}
-			set
-			{
-				if (_difference == value)
-				{
-					return;
-				}
-				_difference = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _difference);
+			set => SetProperty(ref _difference, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("currentQuantity")] 
 		public CInt32 CurrentQuantity
 		{
-			get
-			{
-				if (_currentQuantity == null)
-				{
-					_currentQuantity = (CInt32) CR2WTypeManager.Create("Int32", "currentQuantity", cr2w, this);
-				}
-				return _currentQuantity;
-			}
-			set
-			{
-				if (_currentQuantity == value)
-				{
-					return;
-				}
-				_currentQuantity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentQuantity);
+			set => SetProperty(ref _currentQuantity, value);
 		}
 
 		public gameItemChangedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

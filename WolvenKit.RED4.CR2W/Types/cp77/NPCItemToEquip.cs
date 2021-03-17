@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("slotID")] 
 		public TweakDBID SlotID
 		{
-			get
-			{
-				if (_slotID == null)
-				{
-					_slotID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "slotID", cr2w, this);
-				}
-				return _slotID;
-			}
-			set
-			{
-				if (_slotID == value)
-				{
-					return;
-				}
-				_slotID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("bodySlotID")] 
 		public TweakDBID BodySlotID
 		{
-			get
-			{
-				if (_bodySlotID == null)
-				{
-					_bodySlotID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "bodySlotID", cr2w, this);
-				}
-				return _bodySlotID;
-			}
-			set
-			{
-				if (_bodySlotID == value)
-				{
-					return;
-				}
-				_bodySlotID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodySlotID);
+			set => SetProperty(ref _bodySlotID, value);
 		}
 
 		public NPCItemToEquip(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("worldPosition")] 
 		public Vector4 WorldPosition
 		{
-			get
-			{
-				if (_worldPosition == null)
-				{
-					_worldPosition = (Vector4) CR2WTypeManager.Create("Vector4", "worldPosition", cr2w, this);
-				}
-				return _worldPosition;
-			}
-			set
-			{
-				if (_worldPosition == value)
-				{
-					return;
-				}
-				_worldPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _worldPosition);
+			set => SetProperty(ref _worldPosition, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("time")] 
 		public netTime Time
 		{
-			get
-			{
-				if (_time == null)
-				{
-					_time = (netTime) CR2WTypeManager.Create("netTime", "time", cr2w, this);
-				}
-				return _time;
-			}
-			set
-			{
-				if (_time == value)
-				{
-					return;
-				}
-				_time = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _time);
+			set => SetProperty(ref _time, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("pingType")] 
 		public CEnum<gamedataPingType> PingType
 		{
-			get
-			{
-				if (_pingType == null)
-				{
-					_pingType = (CEnum<gamedataPingType>) CR2WTypeManager.Create("gamedataPingType", "pingType", cr2w, this);
-				}
-				return _pingType;
-			}
-			set
-			{
-				if (_pingType == value)
-				{
-					return;
-				}
-				_pingType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pingType);
+			set => SetProperty(ref _pingType, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("hitObject")] 
 		public wCHandle<entEntity> HitObject
 		{
-			get
-			{
-				if (_hitObject == null)
-				{
-					_hitObject = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "hitObject", cr2w, this);
-				}
-				return _hitObject;
-			}
-			set
-			{
-				if (_hitObject == value)
-				{
-					return;
-				}
-				_hitObject = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitObject);
+			set => SetProperty(ref _hitObject, value);
 		}
 
 		public gamePingEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

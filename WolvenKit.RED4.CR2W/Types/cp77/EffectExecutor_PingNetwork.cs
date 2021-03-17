@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fxResource")] 
 		public gameFxResource FxResource
 		{
-			get
-			{
-				if (_fxResource == null)
-				{
-					_fxResource = (gameFxResource) CR2WTypeManager.Create("gameFxResource", "fxResource", cr2w, this);
-				}
-				return _fxResource;
-			}
-			set
-			{
-				if (_fxResource == value)
-				{
-					return;
-				}
-				_fxResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fxResource);
+			set => SetProperty(ref _fxResource, value);
 		}
 
 		public EffectExecutor_PingNetwork(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("uniqueSubCharacters")] 
 		public CArray<SSubCharacter> UniqueSubCharacters
 		{
-			get
-			{
-				if (_uniqueSubCharacters == null)
-				{
-					_uniqueSubCharacters = (CArray<SSubCharacter>) CR2WTypeManager.Create("array:SSubCharacter", "uniqueSubCharacters", cr2w, this);
-				}
-				return _uniqueSubCharacters;
-			}
-			set
-			{
-				if (_uniqueSubCharacters == value)
-				{
-					return;
-				}
-				_uniqueSubCharacters = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uniqueSubCharacters);
+			set => SetProperty(ref _uniqueSubCharacters, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("scriptSpawnedFlathead")] 
 		public CBool ScriptSpawnedFlathead
 		{
-			get
-			{
-				if (_scriptSpawnedFlathead == null)
-				{
-					_scriptSpawnedFlathead = (CBool) CR2WTypeManager.Create("Bool", "scriptSpawnedFlathead", cr2w, this);
-				}
-				return _scriptSpawnedFlathead;
-			}
-			set
-			{
-				if (_scriptSpawnedFlathead == value)
-				{
-					return;
-				}
-				_scriptSpawnedFlathead = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scriptSpawnedFlathead);
+			set => SetProperty(ref _scriptSpawnedFlathead, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isDespawningFlathead")] 
 		public CBool IsDespawningFlathead
 		{
-			get
-			{
-				if (_isDespawningFlathead == null)
-				{
-					_isDespawningFlathead = (CBool) CR2WTypeManager.Create("Bool", "isDespawningFlathead", cr2w, this);
-				}
-				return _isDespawningFlathead;
-			}
-			set
-			{
-				if (_isDespawningFlathead == value)
-				{
-					return;
-				}
-				_isDespawningFlathead = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDespawningFlathead);
+			set => SetProperty(ref _isDespawningFlathead, value);
 		}
 
 		public SubCharacterSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

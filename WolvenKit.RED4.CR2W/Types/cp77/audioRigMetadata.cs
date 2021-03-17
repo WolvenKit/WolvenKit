@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("positionBones")] 
 		public CArray<CName> PositionBones
 		{
-			get
-			{
-				if (_positionBones == null)
-				{
-					_positionBones = (CArray<CName>) CR2WTypeManager.Create("array:CName", "positionBones", cr2w, this);
-				}
-				return _positionBones;
-			}
-			set
-			{
-				if (_positionBones == value)
-				{
-					return;
-				}
-				_positionBones = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _positionBones);
+			set => SetProperty(ref _positionBones, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("defaultBone")] 
 		public CName DefaultBone
 		{
-			get
-			{
-				if (_defaultBone == null)
-				{
-					_defaultBone = (CName) CR2WTypeManager.Create("CName", "defaultBone", cr2w, this);
-				}
-				return _defaultBone;
-			}
-			set
-			{
-				if (_defaultBone == value)
-				{
-					return;
-				}
-				_defaultBone = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultBone);
+			set => SetProperty(ref _defaultBone, value);
 		}
 
 		public audioRigMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

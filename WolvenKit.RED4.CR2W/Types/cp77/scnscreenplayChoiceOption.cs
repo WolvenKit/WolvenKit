@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemId")] 
 		public scnscreenplayItemId ItemId
 		{
-			get
-			{
-				if (_itemId == null)
-				{
-					_itemId = (scnscreenplayItemId) CR2WTypeManager.Create("scnscreenplayItemId", "itemId", cr2w, this);
-				}
-				return _itemId;
-			}
-			set
-			{
-				if (_itemId == value)
-				{
-					return;
-				}
-				_itemId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemId);
+			set => SetProperty(ref _itemId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("usage")] 
 		public scnscreenplayOptionUsage Usage
 		{
-			get
-			{
-				if (_usage == null)
-				{
-					_usage = (scnscreenplayOptionUsage) CR2WTypeManager.Create("scnscreenplayOptionUsage", "usage", cr2w, this);
-				}
-				return _usage;
-			}
-			set
-			{
-				if (_usage == value)
-				{
-					return;
-				}
-				_usage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _usage);
+			set => SetProperty(ref _usage, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("locstringId")] 
 		public scnlocLocstringId LocstringId
 		{
-			get
-			{
-				if (_locstringId == null)
-				{
-					_locstringId = (scnlocLocstringId) CR2WTypeManager.Create("scnlocLocstringId", "locstringId", cr2w, this);
-				}
-				return _locstringId;
-			}
-			set
-			{
-				if (_locstringId == value)
-				{
-					return;
-				}
-				_locstringId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _locstringId);
+			set => SetProperty(ref _locstringId, value);
 		}
 
 		public scnscreenplayChoiceOption(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

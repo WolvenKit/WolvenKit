@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attribiuteLevel")] 
 		public inkTextWidgetReference AttribiuteLevel
 		{
-			get
-			{
-				if (_attribiuteLevel == null)
-				{
-					_attribiuteLevel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "attribiuteLevel", cr2w, this);
-				}
-				return _attribiuteLevel;
-			}
-			set
-			{
-				if (_attribiuteLevel == value)
-				{
-					return;
-				}
-				_attribiuteLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attribiuteLevel);
+			set => SetProperty(ref _attribiuteLevel, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("maxedOrMinimumLabelText")] 
 		public inkTextWidgetReference MaxedOrMinimumLabelText
 		{
-			get
-			{
-				if (_maxedOrMinimumLabelText == null)
-				{
-					_maxedOrMinimumLabelText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "maxedOrMinimumLabelText", cr2w, this);
-				}
-				return _maxedOrMinimumLabelText;
-			}
-			set
-			{
-				if (_maxedOrMinimumLabelText == value)
-				{
-					return;
-				}
-				_maxedOrMinimumLabelText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxedOrMinimumLabelText);
+			set => SetProperty(ref _maxedOrMinimumLabelText, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("maxedOrMinimumLabel")] 
 		public inkWidgetReference MaxedOrMinimumLabel
 		{
-			get
-			{
-				if (_maxedOrMinimumLabel == null)
-				{
-					_maxedOrMinimumLabel = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "maxedOrMinimumLabel", cr2w, this);
-				}
-				return _maxedOrMinimumLabel;
-			}
-			set
-			{
-				if (_maxedOrMinimumLabel == value)
-				{
-					return;
-				}
-				_maxedOrMinimumLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxedOrMinimumLabel);
+			set => SetProperty(ref _maxedOrMinimumLabel, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("attribiuteLevelLabel")] 
 		public inkWidgetReference AttribiuteLevelLabel
 		{
-			get
-			{
-				if (_attribiuteLevelLabel == null)
-				{
-					_attribiuteLevelLabel = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "attribiuteLevelLabel", cr2w, this);
-				}
-				return _attribiuteLevelLabel;
-			}
-			set
-			{
-				if (_attribiuteLevelLabel == value)
-				{
-					return;
-				}
-				_attribiuteLevelLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attribiuteLevelLabel);
+			set => SetProperty(ref _attribiuteLevelLabel, value);
 		}
 
 		public CharacterCreationTooltip(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

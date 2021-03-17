@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("componentsData")] 
 		public CArray<entGarmentParameterComponentData> ComponentsData
 		{
-			get
-			{
-				if (_componentsData == null)
-				{
-					_componentsData = (CArray<entGarmentParameterComponentData>) CR2WTypeManager.Create("array:entGarmentParameterComponentData", "componentsData", cr2w, this);
-				}
-				return _componentsData;
-			}
-			set
-			{
-				if (_componentsData == value)
-				{
-					return;
-				}
-				_componentsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _componentsData);
+			set => SetProperty(ref _componentsData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("collarArea")] 
 		public garmentCollarAreaParams CollarArea
 		{
-			get
-			{
-				if (_collarArea == null)
-				{
-					_collarArea = (garmentCollarAreaParams) CR2WTypeManager.Create("garmentCollarAreaParams", "collarArea", cr2w, this);
-				}
-				return _collarArea;
-			}
-			set
-			{
-				if (_collarArea == value)
-				{
-					return;
-				}
-				_collarArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collarArea);
+			set => SetProperty(ref _collarArea, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lastUpdateDateTime")] 
 		public CDateTime LastUpdateDateTime
 		{
-			get
-			{
-				if (_lastUpdateDateTime == null)
-				{
-					_lastUpdateDateTime = (CDateTime) CR2WTypeManager.Create("CDateTime", "lastUpdateDateTime", cr2w, this);
-				}
-				return _lastUpdateDateTime;
-			}
-			set
-			{
-				if (_lastUpdateDateTime == value)
-				{
-					return;
-				}
-				_lastUpdateDateTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastUpdateDateTime);
+			set => SetProperty(ref _lastUpdateDateTime, value);
 		}
 
 		public entGarmentParameter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetState")] 
 		public CName TargetState
 		{
-			get
-			{
-				if (_targetState == null)
-				{
-					_targetState = (CName) CR2WTypeManager.Create("CName", "targetState", cr2w, this);
-				}
-				return _targetState;
-			}
-			set
-			{
-				if (_targetState == value)
-				{
-					return;
-				}
-				_targetState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetState);
+			set => SetProperty(ref _targetState, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("interpolators")] 
 		public CArray<inkCompositionInterpolator> Interpolators
 		{
-			get
-			{
-				if (_interpolators == null)
-				{
-					_interpolators = (CArray<inkCompositionInterpolator>) CR2WTypeManager.Create("array:inkCompositionInterpolator", "interpolators", cr2w, this);
-				}
-				return _interpolators;
-			}
-			set
-			{
-				if (_interpolators == value)
-				{
-					return;
-				}
-				_interpolators = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interpolators);
+			set => SetProperty(ref _interpolators, value);
 		}
 
 		public inkCompositionTransition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

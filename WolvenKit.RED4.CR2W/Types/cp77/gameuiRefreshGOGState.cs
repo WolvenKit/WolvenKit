@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("status")] 
 		public CEnum<gameGOGRewardsSystemStatus> Status
 		{
-			get
-			{
-				if (_status == null)
-				{
-					_status = (CEnum<gameGOGRewardsSystemStatus>) CR2WTypeManager.Create("gameGOGRewardsSystemStatus", "status", cr2w, this);
-				}
-				return _status;
-			}
-			set
-			{
-				if (_status == value)
-				{
-					return;
-				}
-				_status = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _status);
+			set => SetProperty(ref _status, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("error")] 
 		public CEnum<gameGOGRewardsSystemErrors> Error
 		{
-			get
-			{
-				if (_error == null)
-				{
-					_error = (CEnum<gameGOGRewardsSystemErrors>) CR2WTypeManager.Create("gameGOGRewardsSystemErrors", "error", cr2w, this);
-				}
-				return _error;
-			}
-			set
-			{
-				if (_error == value)
-				{
-					return;
-				}
-				_error = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _error);
+			set => SetProperty(ref _error, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("registerURL")] 
 		public CString RegisterURL
 		{
-			get
-			{
-				if (_registerURL == null)
-				{
-					_registerURL = (CString) CR2WTypeManager.Create("String", "registerURL", cr2w, this);
-				}
-				return _registerURL;
-			}
-			set
-			{
-				if (_registerURL == value)
-				{
-					return;
-				}
-				_registerURL = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _registerURL);
+			set => SetProperty(ref _registerURL, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("qrCodePNGBlob")] 
 		public CArray<CUInt8> QrCodePNGBlob
 		{
-			get
-			{
-				if (_qrCodePNGBlob == null)
-				{
-					_qrCodePNGBlob = (CArray<CUInt8>) CR2WTypeManager.Create("array:Uint8", "qrCodePNGBlob", cr2w, this);
-				}
-				return _qrCodePNGBlob;
-			}
-			set
-			{
-				if (_qrCodePNGBlob == value)
-				{
-					return;
-				}
-				_qrCodePNGBlob = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _qrCodePNGBlob);
+			set => SetProperty(ref _qrCodePNGBlob, value);
 		}
 
 		public gameuiRefreshGOGState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("permanent")] 
 		public CBool Permanent
 		{
-			get
-			{
-				if (_permanent == null)
-				{
-					_permanent = (CBool) CR2WTypeManager.Create("Bool", "permanent", cr2w, this);
-				}
-				return _permanent;
-			}
-			set
-			{
-				if (_permanent == value)
-				{
-					return;
-				}
-				_permanent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _permanent);
+			set => SetProperty(ref _permanent, value);
 		}
 
 		public questCutControlNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

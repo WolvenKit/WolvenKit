@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("something")] 
 		public CInt32 Something
 		{
-			get
-			{
-				if (_something == null)
-				{
-					_something = (CInt32) CR2WTypeManager.Create("Int32", "something", cr2w, this);
-				}
-				return _something;
-			}
-			set
-			{
-				if (_something == value)
-				{
-					return;
-				}
-				_something = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _something);
+			set => SetProperty(ref _something, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("somethingNotInstanceEdiable")] 
 		public CBool SomethingNotInstanceEdiable
 		{
-			get
-			{
-				if (_somethingNotInstanceEdiable == null)
-				{
-					_somethingNotInstanceEdiable = (CBool) CR2WTypeManager.Create("Bool", "somethingNotInstanceEdiable", cr2w, this);
-				}
-				return _somethingNotInstanceEdiable;
-			}
-			set
-			{
-				if (_somethingNotInstanceEdiable == value)
-				{
-					return;
-				}
-				_somethingNotInstanceEdiable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _somethingNotInstanceEdiable);
+			set => SetProperty(ref _somethingNotInstanceEdiable, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("nameEditable")] 
 		public CName NameEditable
 		{
-			get
-			{
-				if (_nameEditable == null)
-				{
-					_nameEditable = (CName) CR2WTypeManager.Create("CName", "nameEditable", cr2w, this);
-				}
-				return _nameEditable;
-			}
-			set
-			{
-				if (_nameEditable == value)
-				{
-					return;
-				}
-				_nameEditable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nameEditable);
+			set => SetProperty(ref _nameEditable, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("nameInstanceEditable")] 
 		public CName NameInstanceEditable
 		{
-			get
-			{
-				if (_nameInstanceEditable == null)
-				{
-					_nameInstanceEditable = (CName) CR2WTypeManager.Create("CName", "nameInstanceEditable", cr2w, this);
-				}
-				return _nameInstanceEditable;
-			}
-			set
-			{
-				if (_nameInstanceEditable == value)
-				{
-					return;
-				}
-				_nameInstanceEditable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nameInstanceEditable);
+			set => SetProperty(ref _nameInstanceEditable, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("namePersistent")] 
 		public CName NamePersistent
 		{
-			get
-			{
-				if (_namePersistent == null)
-				{
-					_namePersistent = (CName) CR2WTypeManager.Create("CName", "namePersistent", cr2w, this);
-				}
-				return _namePersistent;
-			}
-			set
-			{
-				if (_namePersistent == value)
-				{
-					return;
-				}
-				_namePersistent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _namePersistent);
+			set => SetProperty(ref _namePersistent, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("namePersistentEdiable")] 
 		public CName NamePersistentEdiable
 		{
-			get
-			{
-				if (_namePersistentEdiable == null)
-				{
-					_namePersistentEdiable = (CName) CR2WTypeManager.Create("CName", "namePersistentEdiable", cr2w, this);
-				}
-				return _namePersistentEdiable;
-			}
-			set
-			{
-				if (_namePersistentEdiable == value)
-				{
-					return;
-				}
-				_namePersistentEdiable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _namePersistentEdiable);
+			set => SetProperty(ref _namePersistentEdiable, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("namePersistentInstanceEditable")] 
 		public CName NamePersistentInstanceEditable
 		{
-			get
-			{
-				if (_namePersistentInstanceEditable == null)
-				{
-					_namePersistentInstanceEditable = (CName) CR2WTypeManager.Create("CName", "namePersistentInstanceEditable", cr2w, this);
-				}
-				return _namePersistentInstanceEditable;
-			}
-			set
-			{
-				if (_namePersistentInstanceEditable == value)
-				{
-					return;
-				}
-				_namePersistentInstanceEditable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _namePersistentInstanceEditable);
+			set => SetProperty(ref _namePersistentInstanceEditable, value);
 		}
 
 		public cpTestComponentPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

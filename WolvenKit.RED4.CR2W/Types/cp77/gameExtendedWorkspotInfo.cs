@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entering")] 
 		public CBool Entering
 		{
-			get
-			{
-				if (_entering == null)
-				{
-					_entering = (CBool) CR2WTypeManager.Create("Bool", "entering", cr2w, this);
-				}
-				return _entering;
-			}
-			set
-			{
-				if (_entering == value)
-				{
-					return;
-				}
-				_entering = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entering);
+			set => SetProperty(ref _entering, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("exiting")] 
 		public CBool Exiting
 		{
-			get
-			{
-				if (_exiting == null)
-				{
-					_exiting = (CBool) CR2WTypeManager.Create("Bool", "exiting", cr2w, this);
-				}
-				return _exiting;
-			}
-			set
-			{
-				if (_exiting == value)
-				{
-					return;
-				}
-				_exiting = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exiting);
+			set => SetProperty(ref _exiting, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("playingSyncAnim")] 
 		public CBool PlayingSyncAnim
 		{
-			get
-			{
-				if (_playingSyncAnim == null)
-				{
-					_playingSyncAnim = (CBool) CR2WTypeManager.Create("Bool", "playingSyncAnim", cr2w, this);
-				}
-				return _playingSyncAnim;
-			}
-			set
-			{
-				if (_playingSyncAnim == value)
-				{
-					return;
-				}
-				_playingSyncAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playingSyncAnim);
+			set => SetProperty(ref _playingSyncAnim, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("inReaction")] 
 		public CBool InReaction
 		{
-			get
-			{
-				if (_inReaction == null)
-				{
-					_inReaction = (CBool) CR2WTypeManager.Create("Bool", "inReaction", cr2w, this);
-				}
-				return _inReaction;
-			}
-			set
-			{
-				if (_inReaction == value)
-				{
-					return;
-				}
-				_inReaction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inReaction);
+			set => SetProperty(ref _inReaction, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("inMotion")] 
 		public CBool InMotion
 		{
-			get
-			{
-				if (_inMotion == null)
-				{
-					_inMotion = (CBool) CR2WTypeManager.Create("Bool", "inMotion", cr2w, this);
-				}
-				return _inMotion;
-			}
-			set
-			{
-				if (_inMotion == value)
-				{
-					return;
-				}
-				_inMotion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inMotion);
+			set => SetProperty(ref _inMotion, value);
 		}
 
 		public gameExtendedWorkspotInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

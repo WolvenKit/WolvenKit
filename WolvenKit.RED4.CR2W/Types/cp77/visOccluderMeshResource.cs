@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("resourceVersion")] 
 		public CUInt32 ResourceVersion
 		{
-			get
-			{
-				if (_resourceVersion == null)
-				{
-					_resourceVersion = (CUInt32) CR2WTypeManager.Create("Uint32", "resourceVersion", cr2w, this);
-				}
-				return _resourceVersion;
-			}
-			set
-			{
-				if (_resourceVersion == value)
-				{
-					return;
-				}
-				_resourceVersion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resourceVersion);
+			set => SetProperty(ref _resourceVersion, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("vertices")] 
 		public DataBuffer Vertices
 		{
-			get
-			{
-				if (_vertices == null)
-				{
-					_vertices = (DataBuffer) CR2WTypeManager.Create("DataBuffer", "vertices", cr2w, this);
-				}
-				return _vertices;
-			}
-			set
-			{
-				if (_vertices == value)
-				{
-					return;
-				}
-				_vertices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vertices);
+			set => SetProperty(ref _vertices, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("indices")] 
 		public DataBuffer Indices
 		{
-			get
-			{
-				if (_indices == null)
-				{
-					_indices = (DataBuffer) CR2WTypeManager.Create("DataBuffer", "indices", cr2w, this);
-				}
-				return _indices;
-			}
-			set
-			{
-				if (_indices == value)
-				{
-					return;
-				}
-				_indices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _indices);
+			set => SetProperty(ref _indices, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("boundingBox")] 
 		public Box BoundingBox
 		{
-			get
-			{
-				if (_boundingBox == null)
-				{
-					_boundingBox = (Box) CR2WTypeManager.Create("Box", "boundingBox", cr2w, this);
-				}
-				return _boundingBox;
-			}
-			set
-			{
-				if (_boundingBox == value)
-				{
-					return;
-				}
-				_boundingBox = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _boundingBox);
+			set => SetProperty(ref _boundingBox, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("twoSided")] 
 		public CBool TwoSided
 		{
-			get
-			{
-				if (_twoSided == null)
-				{
-					_twoSided = (CBool) CR2WTypeManager.Create("Bool", "twoSided", cr2w, this);
-				}
-				return _twoSided;
-			}
-			set
-			{
-				if (_twoSided == value)
-				{
-					return;
-				}
-				_twoSided = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _twoSided);
+			set => SetProperty(ref _twoSided, value);
 		}
 
 		public visOccluderMeshResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

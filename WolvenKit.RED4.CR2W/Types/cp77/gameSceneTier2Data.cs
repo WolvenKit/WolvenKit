@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("walkType")] 
 		public CEnum<Tier2WalkType> WalkType
 		{
-			get
-			{
-				if (_walkType == null)
-				{
-					_walkType = (CEnum<Tier2WalkType>) CR2WTypeManager.Create("Tier2WalkType", "walkType", cr2w, this);
-				}
-				return _walkType;
-			}
-			set
-			{
-				if (_walkType == value)
-				{
-					return;
-				}
-				_walkType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _walkType);
+			set => SetProperty(ref _walkType, value);
 		}
 
 		public gameSceneTier2Data(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attributes")] 
 		public CArray<vgAttributeTypeValuePair> Attributes
 		{
-			get
-			{
-				if (_attributes == null)
-				{
-					_attributes = (CArray<vgAttributeTypeValuePair>) CR2WTypeManager.Create("array:vgAttributeTypeValuePair", "attributes", cr2w, this);
-				}
-				return _attributes;
-			}
-			set
-			{
-				if (_attributes == value)
-				{
-					return;
-				}
-				_attributes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributes);
+			set => SetProperty(ref _attributes, value);
 		}
 
 		public vgVectorGraphicStyle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

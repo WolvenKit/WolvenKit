@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actions")] 
 		public CArray<questSpawnManagerNodeActionEntry> Actions
 		{
-			get
-			{
-				if (_actions == null)
-				{
-					_actions = (CArray<questSpawnManagerNodeActionEntry>) CR2WTypeManager.Create("array:questSpawnManagerNodeActionEntry", "actions", cr2w, this);
-				}
-				return _actions;
-			}
-			set
-			{
-				if (_actions == value)
-				{
-					return;
-				}
-				_actions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actions);
+			set => SetProperty(ref _actions, value);
 		}
 
 		public questSpawnManagerNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

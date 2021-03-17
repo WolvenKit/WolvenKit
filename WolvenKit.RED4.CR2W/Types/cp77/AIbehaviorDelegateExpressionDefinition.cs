@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("delegateAttribute")] 
 		public AIbehaviorDelegateAttrRef DelegateAttribute
 		{
-			get
-			{
-				if (_delegateAttribute == null)
-				{
-					_delegateAttribute = (AIbehaviorDelegateAttrRef) CR2WTypeManager.Create("AIbehaviorDelegateAttrRef", "delegateAttribute", cr2w, this);
-				}
-				return _delegateAttribute;
-			}
-			set
-			{
-				if (_delegateAttribute == value)
-				{
-					return;
-				}
-				_delegateAttribute = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delegateAttribute);
+			set => SetProperty(ref _delegateAttribute, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("behaviorCallbackNames")] 
 		public CArray<CName> BehaviorCallbackNames
 		{
-			get
-			{
-				if (_behaviorCallbackNames == null)
-				{
-					_behaviorCallbackNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "behaviorCallbackNames", cr2w, this);
-				}
-				return _behaviorCallbackNames;
-			}
-			set
-			{
-				if (_behaviorCallbackNames == value)
-				{
-					return;
-				}
-				_behaviorCallbackNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _behaviorCallbackNames);
+			set => SetProperty(ref _behaviorCallbackNames, value);
 		}
 
 		public AIbehaviorDelegateExpressionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

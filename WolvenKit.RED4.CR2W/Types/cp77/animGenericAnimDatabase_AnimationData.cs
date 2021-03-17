@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animationName")] 
 		public CName AnimationName
 		{
-			get
-			{
-				if (_animationName == null)
-				{
-					_animationName = (CName) CR2WTypeManager.Create("CName", "animationName", cr2w, this);
-				}
-				return _animationName;
-			}
-			set
-			{
-				if (_animationName == value)
-				{
-					return;
-				}
-				_animationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationName);
+			set => SetProperty(ref _animationName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("fallbackAnimationName")] 
 		public CName FallbackAnimationName
 		{
-			get
-			{
-				if (_fallbackAnimationName == null)
-				{
-					_fallbackAnimationName = (CName) CR2WTypeManager.Create("CName", "fallbackAnimationName", cr2w, this);
-				}
-				return _fallbackAnimationName;
-			}
-			set
-			{
-				if (_fallbackAnimationName == value)
-				{
-					return;
-				}
-				_fallbackAnimationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fallbackAnimationName);
+			set => SetProperty(ref _fallbackAnimationName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("streamingContext")] 
 		public CName StreamingContext
 		{
-			get
-			{
-				if (_streamingContext == null)
-				{
-					_streamingContext = (CName) CR2WTypeManager.Create("CName", "streamingContext", cr2w, this);
-				}
-				return _streamingContext;
-			}
-			set
-			{
-				if (_streamingContext == value)
-				{
-					return;
-				}
-				_streamingContext = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _streamingContext);
+			set => SetProperty(ref _streamingContext, value);
 		}
 
 		public animGenericAnimDatabase_AnimationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

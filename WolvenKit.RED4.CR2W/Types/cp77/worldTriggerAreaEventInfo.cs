@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nodeInstance")] 
 		public CHandle<worldTriggerAreaNodeInstance> NodeInstance
 		{
-			get
-			{
-				if (_nodeInstance == null)
-				{
-					_nodeInstance = (CHandle<worldTriggerAreaNodeInstance>) CR2WTypeManager.Create("handle:worldTriggerAreaNodeInstance", "nodeInstance", cr2w, this);
-				}
-				return _nodeInstance;
-			}
-			set
-			{
-				if (_nodeInstance == value)
-				{
-					return;
-				}
-				_nodeInstance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeInstance);
+			set => SetProperty(ref _nodeInstance, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("eventWorldPosition")] 
 		public Vector3 EventWorldPosition
 		{
-			get
-			{
-				if (_eventWorldPosition == null)
-				{
-					_eventWorldPosition = (Vector3) CR2WTypeManager.Create("Vector3", "eventWorldPosition", cr2w, this);
-				}
-				return _eventWorldPosition;
-			}
-			set
-			{
-				if (_eventWorldPosition == value)
-				{
-					return;
-				}
-				_eventWorldPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventWorldPosition);
+			set => SetProperty(ref _eventWorldPosition, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("numActivatorsInArea")] 
 		public CUInt32 NumActivatorsInArea
 		{
-			get
-			{
-				if (_numActivatorsInArea == null)
-				{
-					_numActivatorsInArea = (CUInt32) CR2WTypeManager.Create("Uint32", "numActivatorsInArea", cr2w, this);
-				}
-				return _numActivatorsInArea;
-			}
-			set
-			{
-				if (_numActivatorsInArea == value)
-				{
-					return;
-				}
-				_numActivatorsInArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numActivatorsInArea);
+			set => SetProperty(ref _numActivatorsInArea, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("activatorID")] 
 		public CUInt32 ActivatorID
 		{
-			get
-			{
-				if (_activatorID == null)
-				{
-					_activatorID = (CUInt32) CR2WTypeManager.Create("Uint32", "activatorID", cr2w, this);
-				}
-				return _activatorID;
-			}
-			set
-			{
-				if (_activatorID == value)
-				{
-					return;
-				}
-				_activatorID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activatorID);
+			set => SetProperty(ref _activatorID, value);
 		}
 
 		public worldTriggerAreaEventInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

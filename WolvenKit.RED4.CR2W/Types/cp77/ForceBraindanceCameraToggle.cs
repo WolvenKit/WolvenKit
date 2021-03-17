@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("editorState")] 
 		public CBool EditorState
 		{
-			get
-			{
-				if (_editorState == null)
-				{
-					_editorState = (CBool) CR2WTypeManager.Create("Bool", "editorState", cr2w, this);
-				}
-				return _editorState;
-			}
-			set
-			{
-				if (_editorState == value)
-				{
-					return;
-				}
-				_editorState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _editorState);
+			set => SetProperty(ref _editorState, value);
 		}
 
 		public ForceBraindanceCameraToggle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

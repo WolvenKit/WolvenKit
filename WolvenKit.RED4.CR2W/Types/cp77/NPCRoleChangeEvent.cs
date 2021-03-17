@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("newRole")] 
 		public CHandle<AIRole> NewRole
 		{
-			get
-			{
-				if (_newRole == null)
-				{
-					_newRole = (CHandle<AIRole>) CR2WTypeManager.Create("handle:AIRole", "newRole", cr2w, this);
-				}
-				return _newRole;
-			}
-			set
-			{
-				if (_newRole == value)
-				{
-					return;
-				}
-				_newRole = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newRole);
+			set => SetProperty(ref _newRole, value);
 		}
 
 		public NPCRoleChangeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

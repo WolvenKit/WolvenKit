@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("npcPuppet")] 
 		public wCHandle<ScriptedPuppet> NpcPuppet
 		{
-			get
-			{
-				if (_npcPuppet == null)
-				{
-					_npcPuppet = (wCHandle<ScriptedPuppet>) CR2WTypeManager.Create("whandle:ScriptedPuppet", "npcPuppet", cr2w, this);
-				}
-				return _npcPuppet;
-			}
-			set
-			{
-				if (_npcPuppet == value)
-				{
-					return;
-				}
-				_npcPuppet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _npcPuppet);
+			set => SetProperty(ref _npcPuppet, value);
 		}
 
 		public UploadFromNPCToNPCListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

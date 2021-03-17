@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("moduleName")] 
 		public CName ModuleName
 		{
-			get
-			{
-				if (_moduleName == null)
-				{
-					_moduleName = (CName) CR2WTypeManager.Create("CName", "moduleName", cr2w, this);
-				}
-				return _moduleName;
-			}
-			set
-			{
-				if (_moduleName == value)
-				{
-					return;
-				}
-				_moduleName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _moduleName);
+			set => SetProperty(ref _moduleName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("meshComponentNames")] 
 		public CArray<CName> MeshComponentNames
 		{
-			get
-			{
-				if (_meshComponentNames == null)
-				{
-					_meshComponentNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "meshComponentNames", cr2w, this);
-				}
-				return _meshComponentNames;
-			}
-			set
-			{
-				if (_meshComponentNames == value)
-				{
-					return;
-				}
-				_meshComponentNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshComponentNames);
+			set => SetProperty(ref _meshComponentNames, value);
 		}
 
 		public gameForceVisionModuleQuestEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

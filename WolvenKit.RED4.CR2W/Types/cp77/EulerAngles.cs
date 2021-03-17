@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Pitch")] 
 		public CFloat Pitch
 		{
-			get
-			{
-				if (_pitch == null)
-				{
-					_pitch = (CFloat) CR2WTypeManager.Create("Float", "Pitch", cr2w, this);
-				}
-				return _pitch;
-			}
-			set
-			{
-				if (_pitch == value)
-				{
-					return;
-				}
-				_pitch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pitch);
+			set => SetProperty(ref _pitch, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("Yaw")] 
 		public CFloat Yaw
 		{
-			get
-			{
-				if (_yaw == null)
-				{
-					_yaw = (CFloat) CR2WTypeManager.Create("Float", "Yaw", cr2w, this);
-				}
-				return _yaw;
-			}
-			set
-			{
-				if (_yaw == value)
-				{
-					return;
-				}
-				_yaw = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _yaw);
+			set => SetProperty(ref _yaw, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("Roll")] 
 		public CFloat Roll
 		{
-			get
-			{
-				if (_roll == null)
-				{
-					_roll = (CFloat) CR2WTypeManager.Create("Float", "Roll", cr2w, this);
-				}
-				return _roll;
-			}
-			set
-			{
-				if (_roll == value)
-				{
-					return;
-				}
-				_roll = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _roll);
+			set => SetProperty(ref _roll, value);
 		}
 
 		public EulerAngles(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

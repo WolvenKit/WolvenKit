@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timeInterval")] 
 		public CFloat TimeInterval
 		{
-			get
-			{
-				if (_timeInterval == null)
-				{
-					_timeInterval = (CFloat) CR2WTypeManager.Create("Float", "timeInterval", cr2w, this);
-				}
-				return _timeInterval;
-			}
-			set
-			{
-				if (_timeInterval == value)
-				{
-					return;
-				}
-				_timeInterval = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeInterval);
+			set => SetProperty(ref _timeInterval, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("visionModeType")] 
 		public CEnum<questVisionModeType> VisionModeType
 		{
-			get
-			{
-				if (_visionModeType == null)
-				{
-					_visionModeType = (CEnum<questVisionModeType>) CR2WTypeManager.Create("questVisionModeType", "visionModeType", cr2w, this);
-				}
-				return _visionModeType;
-			}
-			set
-			{
-				if (_visionModeType == value)
-				{
-					return;
-				}
-				_visionModeType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visionModeType);
+			set => SetProperty(ref _visionModeType, value);
 		}
 
 		public questVisionMode_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

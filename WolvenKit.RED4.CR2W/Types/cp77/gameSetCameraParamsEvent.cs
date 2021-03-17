@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("paramsName")] 
 		public CName ParamsName
 		{
-			get
-			{
-				if (_paramsName == null)
-				{
-					_paramsName = (CName) CR2WTypeManager.Create("CName", "paramsName", cr2w, this);
-				}
-				return _paramsName;
-			}
-			set
-			{
-				if (_paramsName == value)
-				{
-					return;
-				}
-				_paramsName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _paramsName);
+			set => SetProperty(ref _paramsName, value);
 		}
 
 		public gameSetCameraParamsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("TimeToDepart")] 
 		public gamebbScriptID_Int32 TimeToDepart
 		{
-			get
-			{
-				if (_timeToDepart == null)
-				{
-					_timeToDepart = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "TimeToDepart", cr2w, this);
-				}
-				return _timeToDepart;
-			}
-			set
-			{
-				if (_timeToDepart == value)
-				{
-					return;
-				}
-				_timeToDepart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeToDepart);
+			set => SetProperty(ref _timeToDepart, value);
 		}
 
 		public NcartTimetableBlackboardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

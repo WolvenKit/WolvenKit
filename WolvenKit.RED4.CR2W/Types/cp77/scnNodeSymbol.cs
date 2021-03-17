@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nodeId")] 
 		public scnNodeId NodeId
 		{
-			get
-			{
-				if (_nodeId == null)
-				{
-					_nodeId = (scnNodeId) CR2WTypeManager.Create("scnNodeId", "nodeId", cr2w, this);
-				}
-				return _nodeId;
-			}
-			set
-			{
-				if (_nodeId == value)
-				{
-					return;
-				}
-				_nodeId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeId);
+			set => SetProperty(ref _nodeId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("editorNodeId")] 
 		public scnNodeId EditorNodeId
 		{
-			get
-			{
-				if (_editorNodeId == null)
-				{
-					_editorNodeId = (scnNodeId) CR2WTypeManager.Create("scnNodeId", "editorNodeId", cr2w, this);
-				}
-				return _editorNodeId;
-			}
-			set
-			{
-				if (_editorNodeId == value)
-				{
-					return;
-				}
-				_editorNodeId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _editorNodeId);
+			set => SetProperty(ref _editorNodeId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("editorEventId")] 
 		public CUInt64 EditorEventId
 		{
-			get
-			{
-				if (_editorEventId == null)
-				{
-					_editorEventId = (CUInt64) CR2WTypeManager.Create("Uint64", "editorEventId", cr2w, this);
-				}
-				return _editorEventId;
-			}
-			set
-			{
-				if (_editorEventId == value)
-				{
-					return;
-				}
-				_editorEventId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _editorEventId);
+			set => SetProperty(ref _editorEventId, value);
 		}
 
 		public scnNodeSymbol(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

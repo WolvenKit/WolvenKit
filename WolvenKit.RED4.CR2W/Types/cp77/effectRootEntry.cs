@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("relativePosition")] 
 		public Vector3 RelativePosition
 		{
-			get
-			{
-				if (_relativePosition == null)
-				{
-					_relativePosition = (Vector3) CR2WTypeManager.Create("Vector3", "relativePosition", cr2w, this);
-				}
-				return _relativePosition;
-			}
-			set
-			{
-				if (_relativePosition == value)
-				{
-					return;
-				}
-				_relativePosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _relativePosition);
+			set => SetProperty(ref _relativePosition, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("relativeRotation")] 
 		public Quaternion RelativeRotation
 		{
-			get
-			{
-				if (_relativeRotation == null)
-				{
-					_relativeRotation = (Quaternion) CR2WTypeManager.Create("Quaternion", "relativeRotation", cr2w, this);
-				}
-				return _relativeRotation;
-			}
-			set
-			{
-				if (_relativeRotation == value)
-				{
-					return;
-				}
-				_relativeRotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _relativeRotation);
+			set => SetProperty(ref _relativeRotation, value);
 		}
 
 		public effectRootEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

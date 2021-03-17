@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("source")] 
 		public CName Source
 		{
-			get
-			{
-				if (_source == null)
-				{
-					_source = (CName) CR2WTypeManager.Create("CName", "source", cr2w, this);
-				}
-				return _source;
-			}
-			set
-			{
-				if (_source == value)
-				{
-					return;
-				}
-				_source = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("targetHintContainer")] 
 		public CName TargetHintContainer
 		{
-			get
-			{
-				if (_targetHintContainer == null)
-				{
-					_targetHintContainer = (CName) CR2WTypeManager.Create("CName", "targetHintContainer", cr2w, this);
-				}
-				return _targetHintContainer;
-			}
-			set
-			{
-				if (_targetHintContainer == value)
-				{
-					return;
-				}
-				_targetHintContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetHintContainer);
+			set => SetProperty(ref _targetHintContainer, value);
 		}
 
 		public gameuiDeleteInputHintBySourceEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

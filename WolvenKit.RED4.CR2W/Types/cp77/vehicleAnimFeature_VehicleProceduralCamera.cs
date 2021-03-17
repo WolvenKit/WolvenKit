@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cameraTranslationVS")] 
 		public Vector4 CameraTranslationVS
 		{
-			get
-			{
-				if (_cameraTranslationVS == null)
-				{
-					_cameraTranslationVS = (Vector4) CR2WTypeManager.Create("Vector4", "cameraTranslationVS", cr2w, this);
-				}
-				return _cameraTranslationVS;
-			}
-			set
-			{
-				if (_cameraTranslationVS == value)
-				{
-					return;
-				}
-				_cameraTranslationVS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameraTranslationVS);
+			set => SetProperty(ref _cameraTranslationVS, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("cameraOrientationVS")] 
 		public Quaternion CameraOrientationVS
 		{
-			get
-			{
-				if (_cameraOrientationVS == null)
-				{
-					_cameraOrientationVS = (Quaternion) CR2WTypeManager.Create("Quaternion", "cameraOrientationVS", cr2w, this);
-				}
-				return _cameraOrientationVS;
-			}
-			set
-			{
-				if (_cameraOrientationVS == value)
-				{
-					return;
-				}
-				_cameraOrientationVS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameraOrientationVS);
+			set => SetProperty(ref _cameraOrientationVS, value);
 		}
 
 		public vehicleAnimFeature_VehicleProceduralCamera(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

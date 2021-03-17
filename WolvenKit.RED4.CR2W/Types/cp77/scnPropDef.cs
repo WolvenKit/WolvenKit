@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("propId")] 
 		public scnPropId PropId
 		{
-			get
-			{
-				if (_propId == null)
-				{
-					_propId = (scnPropId) CR2WTypeManager.Create("scnPropId", "propId", cr2w, this);
-				}
-				return _propId;
-			}
-			set
-			{
-				if (_propId == value)
-				{
-					return;
-				}
-				_propId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _propId);
+			set => SetProperty(ref _propId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("propName")] 
 		public CString PropName
 		{
-			get
-			{
-				if (_propName == null)
-				{
-					_propName = (CString) CR2WTypeManager.Create("String", "propName", cr2w, this);
-				}
-				return _propName;
-			}
-			set
-			{
-				if (_propName == value)
-				{
-					return;
-				}
-				_propName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _propName);
+			set => SetProperty(ref _propName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("specPropRecordId")] 
 		public TweakDBID SpecPropRecordId
 		{
-			get
-			{
-				if (_specPropRecordId == null)
-				{
-					_specPropRecordId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "specPropRecordId", cr2w, this);
-				}
-				return _specPropRecordId;
-			}
-			set
-			{
-				if (_specPropRecordId == value)
-				{
-					return;
-				}
-				_specPropRecordId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _specPropRecordId);
+			set => SetProperty(ref _specPropRecordId, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("animSets")] 
 		public CArray<scnRidAnimSetSRRefId> AnimSets
 		{
-			get
-			{
-				if (_animSets == null)
-				{
-					_animSets = (CArray<scnRidAnimSetSRRefId>) CR2WTypeManager.Create("array:scnRidAnimSetSRRefId", "animSets", cr2w, this);
-				}
-				return _animSets;
-			}
-			set
-			{
-				if (_animSets == value)
-				{
-					return;
-				}
-				_animSets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animSets);
+			set => SetProperty(ref _animSets, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("cinematicAnimSets")] 
 		public CArray<scnCinematicAnimSetSRRefId> CinematicAnimSets
 		{
-			get
-			{
-				if (_cinematicAnimSets == null)
-				{
-					_cinematicAnimSets = (CArray<scnCinematicAnimSetSRRefId>) CR2WTypeManager.Create("array:scnCinematicAnimSetSRRefId", "cinematicAnimSets", cr2w, this);
-				}
-				return _cinematicAnimSets;
-			}
-			set
-			{
-				if (_cinematicAnimSets == value)
-				{
-					return;
-				}
-				_cinematicAnimSets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cinematicAnimSets);
+			set => SetProperty(ref _cinematicAnimSets, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("dynamicAnimSets")] 
 		public CArray<scnDynamicAnimSetSRRefId> DynamicAnimSets
 		{
-			get
-			{
-				if (_dynamicAnimSets == null)
-				{
-					_dynamicAnimSets = (CArray<scnDynamicAnimSetSRRefId>) CR2WTypeManager.Create("array:scnDynamicAnimSetSRRefId", "dynamicAnimSets", cr2w, this);
-				}
-				return _dynamicAnimSets;
-			}
-			set
-			{
-				if (_dynamicAnimSets == value)
-				{
-					return;
-				}
-				_dynamicAnimSets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dynamicAnimSets);
+			set => SetProperty(ref _dynamicAnimSets, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("entityAcquisitionPlan")] 
 		public CEnum<scnEntityAcquisitionPlan> EntityAcquisitionPlan
 		{
-			get
-			{
-				if (_entityAcquisitionPlan == null)
-				{
-					_entityAcquisitionPlan = (CEnum<scnEntityAcquisitionPlan>) CR2WTypeManager.Create("scnEntityAcquisitionPlan", "entityAcquisitionPlan", cr2w, this);
-				}
-				return _entityAcquisitionPlan;
-			}
-			set
-			{
-				if (_entityAcquisitionPlan == value)
-				{
-					return;
-				}
-				_entityAcquisitionPlan = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityAcquisitionPlan);
+			set => SetProperty(ref _entityAcquisitionPlan, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("findEntityInEntityParams")] 
 		public scnFindEntityInEntityParams FindEntityInEntityParams
 		{
-			get
-			{
-				if (_findEntityInEntityParams == null)
-				{
-					_findEntityInEntityParams = (scnFindEntityInEntityParams) CR2WTypeManager.Create("scnFindEntityInEntityParams", "findEntityInEntityParams", cr2w, this);
-				}
-				return _findEntityInEntityParams;
-			}
-			set
-			{
-				if (_findEntityInEntityParams == value)
-				{
-					return;
-				}
-				_findEntityInEntityParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _findEntityInEntityParams);
+			set => SetProperty(ref _findEntityInEntityParams, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("spawnDespawnParams")] 
 		public scnSpawnDespawnEntityParams SpawnDespawnParams
 		{
-			get
-			{
-				if (_spawnDespawnParams == null)
-				{
-					_spawnDespawnParams = (scnSpawnDespawnEntityParams) CR2WTypeManager.Create("scnSpawnDespawnEntityParams", "spawnDespawnParams", cr2w, this);
-				}
-				return _spawnDespawnParams;
-			}
-			set
-			{
-				if (_spawnDespawnParams == value)
-				{
-					return;
-				}
-				_spawnDespawnParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnDespawnParams);
+			set => SetProperty(ref _spawnDespawnParams, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("spawnSetParams")] 
 		public scnSpawnSetParams SpawnSetParams
 		{
-			get
-			{
-				if (_spawnSetParams == null)
-				{
-					_spawnSetParams = (scnSpawnSetParams) CR2WTypeManager.Create("scnSpawnSetParams", "spawnSetParams", cr2w, this);
-				}
-				return _spawnSetParams;
-			}
-			set
-			{
-				if (_spawnSetParams == value)
-				{
-					return;
-				}
-				_spawnSetParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnSetParams);
+			set => SetProperty(ref _spawnSetParams, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("communityParams")] 
 		public scnCommunityParams CommunityParams
 		{
-			get
-			{
-				if (_communityParams == null)
-				{
-					_communityParams = (scnCommunityParams) CR2WTypeManager.Create("scnCommunityParams", "communityParams", cr2w, this);
-				}
-				return _communityParams;
-			}
-			set
-			{
-				if (_communityParams == value)
-				{
-					return;
-				}
-				_communityParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _communityParams);
+			set => SetProperty(ref _communityParams, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("spawnerParams")] 
 		public scnSpawnerParams SpawnerParams
 		{
-			get
-			{
-				if (_spawnerParams == null)
-				{
-					_spawnerParams = (scnSpawnerParams) CR2WTypeManager.Create("scnSpawnerParams", "spawnerParams", cr2w, this);
-				}
-				return _spawnerParams;
-			}
-			set
-			{
-				if (_spawnerParams == value)
-				{
-					return;
-				}
-				_spawnerParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnerParams);
+			set => SetProperty(ref _spawnerParams, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("findEntityInNodeParams")] 
 		public scnFindEntityInNodeParams FindEntityInNodeParams
 		{
-			get
-			{
-				if (_findEntityInNodeParams == null)
-				{
-					_findEntityInNodeParams = (scnFindEntityInNodeParams) CR2WTypeManager.Create("scnFindEntityInNodeParams", "findEntityInNodeParams", cr2w, this);
-				}
-				return _findEntityInNodeParams;
-			}
-			set
-			{
-				if (_findEntityInNodeParams == value)
-				{
-					return;
-				}
-				_findEntityInNodeParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _findEntityInNodeParams);
+			set => SetProperty(ref _findEntityInNodeParams, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("findEntityInWorldParams")] 
 		public scnFindEntityInWorldParams FindEntityInWorldParams
 		{
-			get
-			{
-				if (_findEntityInWorldParams == null)
-				{
-					_findEntityInWorldParams = (scnFindEntityInWorldParams) CR2WTypeManager.Create("scnFindEntityInWorldParams", "findEntityInWorldParams", cr2w, this);
-				}
-				return _findEntityInWorldParams;
-			}
-			set
-			{
-				if (_findEntityInWorldParams == value)
-				{
-					return;
-				}
-				_findEntityInWorldParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _findEntityInWorldParams);
+			set => SetProperty(ref _findEntityInWorldParams, value);
 		}
 
 		public scnPropDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

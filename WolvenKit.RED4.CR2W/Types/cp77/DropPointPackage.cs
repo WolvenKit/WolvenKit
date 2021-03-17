@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemID")] 
 		public TweakDBID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("status")] 
 		public CEnum<DropPointPackageStatus> Status
 		{
-			get
-			{
-				if (_status == null)
-				{
-					_status = (CEnum<DropPointPackageStatus>) CR2WTypeManager.Create("DropPointPackageStatus", "status", cr2w, this);
-				}
-				return _status;
-			}
-			set
-			{
-				if (_status == value)
-				{
-					return;
-				}
-				_status = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _status);
+			set => SetProperty(ref _status, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("predefinedDrop")] 
 		public gamePersistentID PredefinedDrop
 		{
-			get
-			{
-				if (_predefinedDrop == null)
-				{
-					_predefinedDrop = (gamePersistentID) CR2WTypeManager.Create("gamePersistentID", "predefinedDrop", cr2w, this);
-				}
-				return _predefinedDrop;
-			}
-			set
-			{
-				if (_predefinedDrop == value)
-				{
-					return;
-				}
-				_predefinedDrop = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _predefinedDrop);
+			set => SetProperty(ref _predefinedDrop, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("statusHistory")] 
 		public CArray<CEnum<DropPointPackageStatus>> StatusHistory
 		{
-			get
-			{
-				if (_statusHistory == null)
-				{
-					_statusHistory = (CArray<CEnum<DropPointPackageStatus>>) CR2WTypeManager.Create("array:DropPointPackageStatus", "statusHistory", cr2w, this);
-				}
-				return _statusHistory;
-			}
-			set
-			{
-				if (_statusHistory == value)
-				{
-					return;
-				}
-				_statusHistory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statusHistory);
+			set => SetProperty(ref _statusHistory, value);
 		}
 
 		public DropPointPackage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

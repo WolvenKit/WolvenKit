@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get
-			{
-				if (_nodeRef == null)
-				{
-					_nodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "nodeRef", cr2w, this);
-				}
-				return _nodeRef;
-			}
-			set
-			{
-				if (_nodeRef == value)
-				{
-					return;
-				}
-				_nodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeRef);
+			set => SetProperty(ref _nodeRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("laneNumber")] 
 		public CUInt16 LaneNumber
 		{
-			get
-			{
-				if (_laneNumber == null)
-				{
-					_laneNumber = (CUInt16) CR2WTypeManager.Create("Uint16", "laneNumber", cr2w, this);
-				}
-				return _laneNumber;
-			}
-			set
-			{
-				if (_laneNumber == value)
-				{
-					return;
-				}
-				_laneNumber = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _laneNumber);
+			set => SetProperty(ref _laneNumber, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isReversed")] 
 		public CBool IsReversed
 		{
-			get
-			{
-				if (_isReversed == null)
-				{
-					_isReversed = (CBool) CR2WTypeManager.Create("Bool", "isReversed", cr2w, this);
-				}
-				return _isReversed;
-			}
-			set
-			{
-				if (_isReversed == value)
-				{
-					return;
-				}
-				_isReversed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isReversed);
+			set => SetProperty(ref _isReversed, value);
 		}
 
 		public worldTrafficLaneRef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

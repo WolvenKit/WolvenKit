@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("backgroundFrameWidget")] 
 		public wCHandle<inkImageWidget> BackgroundFrameWidget
 		{
-			get
-			{
-				if (_backgroundFrameWidget == null)
-				{
-					_backgroundFrameWidget = (wCHandle<inkImageWidget>) CR2WTypeManager.Create("whandle:inkImageWidget", "backgroundFrameWidget", cr2w, this);
-				}
-				return _backgroundFrameWidget;
-			}
-			set
-			{
-				if (_backgroundFrameWidget == value)
-				{
-					return;
-				}
-				_backgroundFrameWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backgroundFrameWidget);
+			set => SetProperty(ref _backgroundFrameWidget, value);
 		}
 
 		public ApartmentScreenInkGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isShootable")] 
 		public CBool IsShootable
 		{
-			get
-			{
-				if (_isShootable == null)
-				{
-					_isShootable = (CBool) CR2WTypeManager.Create("Bool", "isShootable", cr2w, this);
-				}
-				return _isShootable;
-			}
-			set
-			{
-				if (_isShootable == value)
-				{
-					return;
-				}
-				_isShootable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isShootable);
+			set => SetProperty(ref _isShootable, value);
 		}
 
 		[Ordinal(109)] 
 		[RED("animationTime")] 
 		public CFloat AnimationTime
 		{
-			get
-			{
-				if (_animationTime == null)
-				{
-					_animationTime = (CFloat) CR2WTypeManager.Create("Float", "animationTime", cr2w, this);
-				}
-				return _animationTime;
-			}
-			set
-			{
-				if (_animationTime == value)
-				{
-					return;
-				}
-				_animationTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationTime);
+			set => SetProperty(ref _animationTime, value);
 		}
 
 		public SlidingLadderControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

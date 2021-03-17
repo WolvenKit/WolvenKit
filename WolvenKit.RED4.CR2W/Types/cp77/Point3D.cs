@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("x")] 
 		public CInt32 X
 		{
-			get
-			{
-				if (_x == null)
-				{
-					_x = (CInt32) CR2WTypeManager.Create("Int32", "x", cr2w, this);
-				}
-				return _x;
-			}
-			set
-			{
-				if (_x == value)
-				{
-					return;
-				}
-				_x = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _x);
+			set => SetProperty(ref _x, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("y")] 
 		public CInt32 Y
 		{
-			get
-			{
-				if (_y == null)
-				{
-					_y = (CInt32) CR2WTypeManager.Create("Int32", "y", cr2w, this);
-				}
-				return _y;
-			}
-			set
-			{
-				if (_y == value)
-				{
-					return;
-				}
-				_y = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _y);
+			set => SetProperty(ref _y, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("z")] 
 		public CInt32 Z
 		{
-			get
-			{
-				if (_z == null)
-				{
-					_z = (CInt32) CR2WTypeManager.Create("Int32", "z", cr2w, this);
-				}
-				return _z;
-			}
-			set
-			{
-				if (_z == value)
-				{
-					return;
-				}
-				_z = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _z);
+			set => SetProperty(ref _z, value);
 		}
 
 		public Point3D(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

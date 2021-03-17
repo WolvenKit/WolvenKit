@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vendorID")] 
 		public CString VendorID
 		{
-			get
-			{
-				if (_vendorID == null)
-				{
-					_vendorID = (CString) CR2WTypeManager.Create("String", "vendorID", cr2w, this);
-				}
-				return _vendorID;
-			}
-			set
-			{
-				if (_vendorID == value)
-				{
-					return;
-				}
-				_vendorID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vendorID);
+			set => SetProperty(ref _vendorID, value);
 		}
 
 		public DEBUG_VirtualShopkeeper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

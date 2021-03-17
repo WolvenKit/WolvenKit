@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ProcessingVideo")] 
 		public inkVideoWidgetReference ProcessingVideo
 		{
-			get
-			{
-				if (_processingVideo == null)
-				{
-					_processingVideo = (inkVideoWidgetReference) CR2WTypeManager.Create("inkVideoWidgetReference", "ProcessingVideo", cr2w, this);
-				}
-				return _processingVideo;
-			}
-			set
-			{
-				if (_processingVideo == value)
-				{
-					return;
-				}
-				_processingVideo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _processingVideo);
+			set => SetProperty(ref _processingVideo, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("PersonalAd")] 
 		public inkVideoWidgetReference PersonalAd
 		{
-			get
-			{
-				if (_personalAd == null)
-				{
-					_personalAd = (inkVideoWidgetReference) CR2WTypeManager.Create("inkVideoWidgetReference", "PersonalAd", cr2w, this);
-				}
-				return _personalAd;
-			}
-			set
-			{
-				if (_personalAd == value)
-				{
-					return;
-				}
-				_personalAd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _personalAd);
+			set => SetProperty(ref _personalAd, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("CommonAd")] 
 		public inkVideoWidgetReference CommonAd
 		{
-			get
-			{
-				if (_commonAd == null)
-				{
-					_commonAd = (inkVideoWidgetReference) CR2WTypeManager.Create("inkVideoWidgetReference", "CommonAd", cr2w, this);
-				}
-				return _commonAd;
-			}
-			set
-			{
-				if (_commonAd == value)
-				{
-					return;
-				}
-				_commonAd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _commonAd);
+			set => SetProperty(ref _commonAd, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("fadeDuration")] 
 		public CFloat FadeDuration
 		{
-			get
-			{
-				if (_fadeDuration == null)
-				{
-					_fadeDuration = (CFloat) CR2WTypeManager.Create("Float", "fadeDuration", cr2w, this);
-				}
-				return _fadeDuration;
-			}
-			set
-			{
-				if (_fadeDuration == value)
-				{
-					return;
-				}
-				_fadeDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fadeDuration);
+			set => SetProperty(ref _fadeDuration, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("animFade")] 
 		public CHandle<inkanimDefinition> AnimFade
 		{
-			get
-			{
-				if (_animFade == null)
-				{
-					_animFade = (CHandle<inkanimDefinition>) CR2WTypeManager.Create("handle:inkanimDefinition", "animFade", cr2w, this);
-				}
-				return _animFade;
-			}
-			set
-			{
-				if (_animFade == value)
-				{
-					return;
-				}
-				_animFade = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animFade);
+			set => SetProperty(ref _animFade, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("animOptions")] 
 		public inkanimPlaybackOptions AnimOptions
 		{
-			get
-			{
-				if (_animOptions == null)
-				{
-					_animOptions = (inkanimPlaybackOptions) CR2WTypeManager.Create("inkanimPlaybackOptions", "animOptions", cr2w, this);
-				}
-				return _animOptions;
-			}
-			set
-			{
-				if (_animOptions == value)
-				{
-					return;
-				}
-				_animOptions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animOptions);
+			set => SetProperty(ref _animOptions, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("showAd")] 
 		public CBool ShowAd
 		{
-			get
-			{
-				if (_showAd == null)
-				{
-					_showAd = (CBool) CR2WTypeManager.Create("Bool", "showAd", cr2w, this);
-				}
-				return _showAd;
-			}
-			set
-			{
-				if (_showAd == value)
-				{
-					return;
-				}
-				_showAd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showAd);
+			set => SetProperty(ref _showAd, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("onShowAdListener")] 
 		public CUInt32 OnShowAdListener
 		{
-			get
-			{
-				if (_onShowAdListener == null)
-				{
-					_onShowAdListener = (CUInt32) CR2WTypeManager.Create("Uint32", "onShowAdListener", cr2w, this);
-				}
-				return _onShowAdListener;
-			}
-			set
-			{
-				if (_onShowAdListener == value)
-				{
-					return;
-				}
-				_onShowAdListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onShowAdListener);
+			set => SetProperty(ref _onShowAdListener, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("onShowVendorListener")] 
 		public CUInt32 OnShowVendorListener
 		{
-			get
-			{
-				if (_onShowVendorListener == null)
-				{
-					_onShowVendorListener = (CUInt32) CR2WTypeManager.Create("Uint32", "onShowVendorListener", cr2w, this);
-				}
-				return _onShowVendorListener;
-			}
-			set
-			{
-				if (_onShowVendorListener == value)
-				{
-					return;
-				}
-				_onShowVendorListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onShowVendorListener);
+			set => SetProperty(ref _onShowVendorListener, value);
 		}
 
 		public InteractiveAdInkGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

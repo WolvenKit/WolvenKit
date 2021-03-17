@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("compatibleDeviceName")] 
 		public CName CompatibleDeviceName
 		{
-			get
-			{
-				if (_compatibleDeviceName == null)
-				{
-					_compatibleDeviceName = (CName) CR2WTypeManager.Create("CName", "compatibleDeviceName", cr2w, this);
-				}
-				return _compatibleDeviceName;
-			}
-			set
-			{
-				if (_compatibleDeviceName == value)
-				{
-					return;
-				}
-				_compatibleDeviceName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _compatibleDeviceName);
+			set => SetProperty(ref _compatibleDeviceName, value);
 		}
 
 		public CPOMissionPlayerVotedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

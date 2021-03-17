@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("condition")] 
 		public CHandle<questIBaseCondition> Condition
 		{
-			get
-			{
-				if (_condition == null)
-				{
-					_condition = (CHandle<questIBaseCondition>) CR2WTypeManager.Create("handle:questIBaseCondition", "condition", cr2w, this);
-				}
-				return _condition;
-			}
-			set
-			{
-				if (_condition == value)
-				{
-					return;
-				}
-				_condition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _condition);
+			set => SetProperty(ref _condition, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("conversations")] 
 		public CArray<CHandle<scnInterestingConversationData>> Conversations
 		{
-			get
-			{
-				if (_conversations == null)
-				{
-					_conversations = (CArray<CHandle<scnInterestingConversationData>>) CR2WTypeManager.Create("array:handle:scnInterestingConversationData", "conversations", cr2w, this);
-				}
-				return _conversations;
-			}
-			set
-			{
-				if (_conversations == value)
-				{
-					return;
-				}
-				_conversations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _conversations);
+			set => SetProperty(ref _conversations, value);
 		}
 
 		public scnInterestingConversationsGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

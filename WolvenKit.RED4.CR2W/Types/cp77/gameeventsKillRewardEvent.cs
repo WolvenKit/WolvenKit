@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("victim")] 
 		public wCHandle<gameObject> Victim
 		{
-			get
-			{
-				if (_victim == null)
-				{
-					_victim = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "victim", cr2w, this);
-				}
-				return _victim;
-			}
-			set
-			{
-				if (_victim == value)
-				{
-					return;
-				}
-				_victim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _victim);
+			set => SetProperty(ref _victim, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("killType")] 
 		public CEnum<gameKillType> KillType
 		{
-			get
-			{
-				if (_killType == null)
-				{
-					_killType = (CEnum<gameKillType>) CR2WTypeManager.Create("gameKillType", "killType", cr2w, this);
-				}
-				return _killType;
-			}
-			set
-			{
-				if (_killType == value)
-				{
-					return;
-				}
-				_killType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _killType);
+			set => SetProperty(ref _killType, value);
 		}
 
 		public gameeventsKillRewardEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animName")] 
 		public CName AnimName
 		{
-			get
-			{
-				if (_animName == null)
-				{
-					_animName = (CName) CR2WTypeManager.Create("CName", "animName", cr2w, this);
-				}
-				return _animName;
-			}
-			set
-			{
-				if (_animName == value)
-				{
-					return;
-				}
-				_animName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animName);
+			set => SetProperty(ref _animName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("skipTime")] 
 		public CFloat SkipTime
 		{
-			get
-			{
-				if (_skipTime == null)
-				{
-					_skipTime = (CFloat) CR2WTypeManager.Create("Float", "skipTime", cr2w, this);
-				}
-				return _skipTime;
-			}
-			set
-			{
-				if (_skipTime == value)
-				{
-					return;
-				}
-				_skipTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skipTime);
+			set => SetProperty(ref _skipTime, value);
 		}
 
 		public gameReplAnimTransformSkipRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("radioStationEvents")] 
 		public CArray<audioRadioStationSongEventStruct> RadioStationEvents
 		{
-			get
-			{
-				if (_radioStationEvents == null)
-				{
-					_radioStationEvents = (CArray<audioRadioStationSongEventStruct>) CR2WTypeManager.Create("array:audioRadioStationSongEventStruct", "radioStationEvents", cr2w, this);
-				}
-				return _radioStationEvents;
-			}
-			set
-			{
-				if (_radioStationEvents == value)
-				{
-					return;
-				}
-				_radioStationEvents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radioStationEvents);
+			set => SetProperty(ref _radioStationEvents, value);
 		}
 
 		public questRadioSongNodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

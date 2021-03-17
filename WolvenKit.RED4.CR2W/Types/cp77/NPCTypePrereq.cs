@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("allowedTypes")] 
 		public CArray<CEnum<gamedataNPCType>> AllowedTypes
 		{
-			get
-			{
-				if (_allowedTypes == null)
-				{
-					_allowedTypes = (CArray<CEnum<gamedataNPCType>>) CR2WTypeManager.Create("array:gamedataNPCType", "allowedTypes", cr2w, this);
-				}
-				return _allowedTypes;
-			}
-			set
-			{
-				if (_allowedTypes == value)
-				{
-					return;
-				}
-				_allowedTypes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _allowedTypes);
+			set => SetProperty(ref _allowedTypes, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("invert")] 
 		public CBool Invert
 		{
-			get
-			{
-				if (_invert == null)
-				{
-					_invert = (CBool) CR2WTypeManager.Create("Bool", "invert", cr2w, this);
-				}
-				return _invert;
-			}
-			set
-			{
-				if (_invert == value)
-				{
-					return;
-				}
-				_invert = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _invert);
+			set => SetProperty(ref _invert, value);
 		}
 
 		public NPCTypePrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

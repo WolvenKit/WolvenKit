@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("behaviour")] 
 		public CEnum<questESwitchBehaviourType> Behaviour
 		{
-			get
-			{
-				if (_behaviour == null)
-				{
-					_behaviour = (CEnum<questESwitchBehaviourType>) CR2WTypeManager.Create("questESwitchBehaviourType", "behaviour", cr2w, this);
-				}
-				return _behaviour;
-			}
-			set
-			{
-				if (_behaviour == value)
-				{
-					return;
-				}
-				_behaviour = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _behaviour);
+			set => SetProperty(ref _behaviour, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("conditions")] 
 		public CArray<questConditionItem> Conditions
 		{
-			get
-			{
-				if (_conditions == null)
-				{
-					_conditions = (CArray<questConditionItem>) CR2WTypeManager.Create("array:questConditionItem", "conditions", cr2w, this);
-				}
-				return _conditions;
-			}
-			set
-			{
-				if (_conditions == value)
-				{
-					return;
-				}
-				_conditions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _conditions);
+			set => SetProperty(ref _conditions, value);
 		}
 
 		public questSwitchNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

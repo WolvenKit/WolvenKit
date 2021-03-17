@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("BarkPlayed")] 
 		public gamebbScriptID_Bool BarkPlayed
 		{
-			get
-			{
-				if (_barkPlayed == null)
-				{
-					_barkPlayed = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "BarkPlayed", cr2w, this);
-				}
-				return _barkPlayed;
-			}
-			set
-			{
-				if (_barkPlayed == value)
-				{
-					return;
-				}
-				_barkPlayed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _barkPlayed);
+			set => SetProperty(ref _barkPlayed, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("LowHealthBarkPlayed")] 
 		public gamebbScriptID_Bool LowHealthBarkPlayed
 		{
-			get
-			{
-				if (_lowHealthBarkPlayed == null)
-				{
-					_lowHealthBarkPlayed = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "LowHealthBarkPlayed", cr2w, this);
-				}
-				return _lowHealthBarkPlayed;
-			}
-			set
-			{
-				if (_lowHealthBarkPlayed == value)
-				{
-					return;
-				}
-				_lowHealthBarkPlayed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lowHealthBarkPlayed);
+			set => SetProperty(ref _lowHealthBarkPlayed, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("BarkPlayedTimeStamp")] 
 		public gamebbScriptID_Float BarkPlayedTimeStamp
 		{
-			get
-			{
-				if (_barkPlayedTimeStamp == null)
-				{
-					_barkPlayedTimeStamp = (gamebbScriptID_Float) CR2WTypeManager.Create("gamebbScriptID_Float", "BarkPlayedTimeStamp", cr2w, this);
-				}
-				return _barkPlayedTimeStamp;
-			}
-			set
-			{
-				if (_barkPlayedTimeStamp == value)
-				{
-					return;
-				}
-				_barkPlayedTimeStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _barkPlayedTimeStamp);
+			set => SetProperty(ref _barkPlayedTimeStamp, value);
 		}
 
 		public AISquadBlackBoardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

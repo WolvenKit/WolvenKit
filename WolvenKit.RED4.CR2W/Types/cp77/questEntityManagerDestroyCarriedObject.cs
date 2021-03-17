@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attachmentRef")] 
 		public NodeRef AttachmentRef
 		{
-			get
-			{
-				if (_attachmentRef == null)
-				{
-					_attachmentRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "attachmentRef", cr2w, this);
-				}
-				return _attachmentRef;
-			}
-			set
-			{
-				if (_attachmentRef == value)
-				{
-					return;
-				}
-				_attachmentRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attachmentRef);
+			set => SetProperty(ref _attachmentRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get
-			{
-				if (_objectRef == null)
-				{
-					_objectRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "objectRef", cr2w, this);
-				}
-				return _objectRef;
-			}
-			set
-			{
-				if (_objectRef == value)
-				{
-					return;
-				}
-				_objectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get
-			{
-				if (_isPlayer == null)
-				{
-					_isPlayer = (CBool) CR2WTypeManager.Create("Bool", "isPlayer", cr2w, this);
-				}
-				return _isPlayer;
-			}
-			set
-			{
-				if (_isPlayer == value)
-				{
-					return;
-				}
-				_isPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
 		}
 
 		public questEntityManagerDestroyCarriedObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

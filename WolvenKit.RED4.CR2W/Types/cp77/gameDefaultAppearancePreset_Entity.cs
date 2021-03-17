@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entityPathHash")] 
 		public CUInt64 EntityPathHash
 		{
-			get
-			{
-				if (_entityPathHash == null)
-				{
-					_entityPathHash = (CUInt64) CR2WTypeManager.Create("Uint64", "entityPathHash", cr2w, this);
-				}
-				return _entityPathHash;
-			}
-			set
-			{
-				if (_entityPathHash == value)
-				{
-					return;
-				}
-				_entityPathHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityPathHash);
+			set => SetProperty(ref _entityPathHash, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("debugEntityPath")] 
 		public CName DebugEntityPath
 		{
-			get
-			{
-				if (_debugEntityPath == null)
-				{
-					_debugEntityPath = (CName) CR2WTypeManager.Create("CName", "debugEntityPath", cr2w, this);
-				}
-				return _debugEntityPath;
-			}
-			set
-			{
-				if (_debugEntityPath == value)
-				{
-					return;
-				}
-				_debugEntityPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _debugEntityPath);
+			set => SetProperty(ref _debugEntityPath, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("defaultAppearanceName")] 
 		public CName DefaultAppearanceName
 		{
-			get
-			{
-				if (_defaultAppearanceName == null)
-				{
-					_defaultAppearanceName = (CName) CR2WTypeManager.Create("CName", "defaultAppearanceName", cr2w, this);
-				}
-				return _defaultAppearanceName;
-			}
-			set
-			{
-				if (_defaultAppearanceName == value)
-				{
-					return;
-				}
-				_defaultAppearanceName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultAppearanceName);
+			set => SetProperty(ref _defaultAppearanceName, value);
 		}
 
 		public gameDefaultAppearancePreset_Entity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

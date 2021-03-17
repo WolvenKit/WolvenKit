@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("loopAnim")] 
 		public CHandle<inkanimProxy> LoopAnim
 		{
-			get
-			{
-				if (_loopAnim == null)
-				{
-					_loopAnim = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "loopAnim", cr2w, this);
-				}
-				return _loopAnim;
-			}
-			set
-			{
-				if (_loopAnim == value)
-				{
-					return;
-				}
-				_loopAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _loopAnim);
+			set => SetProperty(ref _loopAnim, value);
 		}
 
 		public gameuiTutorialBracketLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

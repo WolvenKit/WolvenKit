@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("msg")] 
 		public CHandle<gameJournalPath> Msg
 		{
-			get
-			{
-				if (_msg == null)
-				{
-					_msg = (CHandle<gameJournalPath>) CR2WTypeManager.Create("handle:gameJournalPath", "msg", cr2w, this);
-				}
-				return _msg;
-			}
-			set
-			{
-				if (_msg == value)
-				{
-					return;
-				}
-				_msg = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _msg);
+			set => SetProperty(ref _msg, value);
 		}
 
 		public questOpenMessage_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

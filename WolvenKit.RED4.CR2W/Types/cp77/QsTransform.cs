@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Translation")] 
 		public Vector4 Translation
 		{
-			get
-			{
-				if (_translation == null)
-				{
-					_translation = (Vector4) CR2WTypeManager.Create("Vector4", "Translation", cr2w, this);
-				}
-				return _translation;
-			}
-			set
-			{
-				if (_translation == value)
-				{
-					return;
-				}
-				_translation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _translation);
+			set => SetProperty(ref _translation, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("Rotation")] 
 		public Quaternion Rotation
 		{
-			get
-			{
-				if (_rotation == null)
-				{
-					_rotation = (Quaternion) CR2WTypeManager.Create("Quaternion", "Rotation", cr2w, this);
-				}
-				return _rotation;
-			}
-			set
-			{
-				if (_rotation == value)
-				{
-					return;
-				}
-				_rotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotation);
+			set => SetProperty(ref _rotation, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("Scale")] 
 		public Vector4 Scale
 		{
-			get
-			{
-				if (_scale == null)
-				{
-					_scale = (Vector4) CR2WTypeManager.Create("Vector4", "Scale", cr2w, this);
-				}
-				return _scale;
-			}
-			set
-			{
-				if (_scale == value)
-				{
-					return;
-				}
-				_scale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scale);
+			set => SetProperty(ref _scale, value);
 		}
 
 		public QsTransform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

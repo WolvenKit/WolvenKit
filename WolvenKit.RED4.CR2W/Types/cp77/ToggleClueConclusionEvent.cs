@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("toggleConclusion")] 
 		public CBool ToggleConclusion
 		{
-			get
-			{
-				if (_toggleConclusion == null)
-				{
-					_toggleConclusion = (CBool) CR2WTypeManager.Create("Bool", "toggleConclusion", cr2w, this);
-				}
-				return _toggleConclusion;
-			}
-			set
-			{
-				if (_toggleConclusion == value)
-				{
-					return;
-				}
-				_toggleConclusion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toggleConclusion);
+			set => SetProperty(ref _toggleConclusion, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("clueID")] 
 		public CInt32 ClueID
 		{
-			get
-			{
-				if (_clueID == null)
-				{
-					_clueID = (CInt32) CR2WTypeManager.Create("Int32", "clueID", cr2w, this);
-				}
-				return _clueID;
-			}
-			set
-			{
-				if (_clueID == value)
-				{
-					return;
-				}
-				_clueID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clueID);
+			set => SetProperty(ref _clueID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("updatePS")] 
 		public CBool UpdatePS
 		{
-			get
-			{
-				if (_updatePS == null)
-				{
-					_updatePS = (CBool) CR2WTypeManager.Create("Bool", "updatePS", cr2w, this);
-				}
-				return _updatePS;
-			}
-			set
-			{
-				if (_updatePS == value)
-				{
-					return;
-				}
-				_updatePS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _updatePS);
+			set => SetProperty(ref _updatePS, value);
 		}
 
 		public ToggleClueConclusionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

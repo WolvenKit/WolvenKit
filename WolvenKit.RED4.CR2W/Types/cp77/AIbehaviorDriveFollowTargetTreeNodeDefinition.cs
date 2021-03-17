@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("useKinematic")] 
 		public CHandle<AIArgumentMapping> UseKinematic
 		{
-			get
-			{
-				if (_useKinematic == null)
-				{
-					_useKinematic = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "useKinematic", cr2w, this);
-				}
-				return _useKinematic;
-			}
-			set
-			{
-				if (_useKinematic == value)
-				{
-					return;
-				}
-				_useKinematic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useKinematic);
+			set => SetProperty(ref _useKinematic, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("needDriver")] 
 		public CHandle<AIArgumentMapping> NeedDriver
 		{
-			get
-			{
-				if (_needDriver == null)
-				{
-					_needDriver = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "needDriver", cr2w, this);
-				}
-				return _needDriver;
-			}
-			set
-			{
-				if (_needDriver == value)
-				{
-					return;
-				}
-				_needDriver = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _needDriver);
+			set => SetProperty(ref _needDriver, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("target")] 
 		public CHandle<AIArgumentMapping> Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("secureTimeOut")] 
 		public CHandle<AIArgumentMapping> SecureTimeOut
 		{
-			get
-			{
-				if (_secureTimeOut == null)
-				{
-					_secureTimeOut = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "secureTimeOut", cr2w, this);
-				}
-				return _secureTimeOut;
-			}
-			set
-			{
-				if (_secureTimeOut == value)
-				{
-					return;
-				}
-				_secureTimeOut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _secureTimeOut);
+			set => SetProperty(ref _secureTimeOut, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("distanceMin")] 
 		public CHandle<AIArgumentMapping> DistanceMin
 		{
-			get
-			{
-				if (_distanceMin == null)
-				{
-					_distanceMin = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "distanceMin", cr2w, this);
-				}
-				return _distanceMin;
-			}
-			set
-			{
-				if (_distanceMin == value)
-				{
-					return;
-				}
-				_distanceMin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distanceMin);
+			set => SetProperty(ref _distanceMin, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("distanceMax")] 
 		public CHandle<AIArgumentMapping> DistanceMax
 		{
-			get
-			{
-				if (_distanceMax == null)
-				{
-					_distanceMax = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "distanceMax", cr2w, this);
-				}
-				return _distanceMax;
-			}
-			set
-			{
-				if (_distanceMax == value)
-				{
-					return;
-				}
-				_distanceMax = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distanceMax);
+			set => SetProperty(ref _distanceMax, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isPlayer")] 
 		public CHandle<AIArgumentMapping> IsPlayer
 		{
-			get
-			{
-				if (_isPlayer == null)
-				{
-					_isPlayer = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "isPlayer", cr2w, this);
-				}
-				return _isPlayer;
-			}
-			set
-			{
-				if (_isPlayer == value)
-				{
-					return;
-				}
-				_isPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("stopHasReachedTarget")] 
 		public CHandle<AIArgumentMapping> StopHasReachedTarget
 		{
-			get
-			{
-				if (_stopHasReachedTarget == null)
-				{
-					_stopHasReachedTarget = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "stopHasReachedTarget", cr2w, this);
-				}
-				return _stopHasReachedTarget;
-			}
-			set
-			{
-				if (_stopHasReachedTarget == value)
-				{
-					return;
-				}
-				_stopHasReachedTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stopHasReachedTarget);
+			set => SetProperty(ref _stopHasReachedTarget, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("useTraffic")] 
 		public CHandle<AIArgumentMapping> UseTraffic
 		{
-			get
-			{
-				if (_useTraffic == null)
-				{
-					_useTraffic = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "useTraffic", cr2w, this);
-				}
-				return _useTraffic;
-			}
-			set
-			{
-				if (_useTraffic == value)
-				{
-					return;
-				}
-				_useTraffic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useTraffic);
+			set => SetProperty(ref _useTraffic, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("allowStubMovement")] 
 		public CHandle<AIArgumentMapping> AllowStubMovement
 		{
-			get
-			{
-				if (_allowStubMovement == null)
-				{
-					_allowStubMovement = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "allowStubMovement", cr2w, this);
-				}
-				return _allowStubMovement;
-			}
-			set
-			{
-				if (_allowStubMovement == value)
-				{
-					return;
-				}
-				_allowStubMovement = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _allowStubMovement);
+			set => SetProperty(ref _allowStubMovement, value);
 		}
 
 		public AIbehaviorDriveFollowTargetTreeNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

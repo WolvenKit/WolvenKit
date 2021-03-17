@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("staminaChangeToggle")] 
 		public CBool StaminaChangeToggle
 		{
-			get
-			{
-				if (_staminaChangeToggle == null)
-				{
-					_staminaChangeToggle = (CBool) CR2WTypeManager.Create("Bool", "staminaChangeToggle", cr2w, this);
-				}
-				return _staminaChangeToggle;
-			}
-			set
-			{
-				if (_staminaChangeToggle == value)
-				{
-					return;
-				}
-				_staminaChangeToggle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _staminaChangeToggle);
+			set => SetProperty(ref _staminaChangeToggle, value);
 		}
 
 		public StaminaTransition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

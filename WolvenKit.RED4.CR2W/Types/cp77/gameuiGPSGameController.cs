@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gpsSettings")] 
 		public gamegpsSettings GpsSettings
 		{
-			get
-			{
-				if (_gpsSettings == null)
-				{
-					_gpsSettings = (gamegpsSettings) CR2WTypeManager.Create("gamegpsSettings", "gpsSettings", cr2w, this);
-				}
-				return _gpsSettings;
-			}
-			set
-			{
-				if (_gpsSettings == value)
-				{
-					return;
-				}
-				_gpsSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gpsSettings);
+			set => SetProperty(ref _gpsSettings, value);
 		}
 
 		public gameuiGPSGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

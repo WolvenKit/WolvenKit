@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("categories")] 
 		public wCHandle<inkSelectorController> Categories
 		{
-			get
-			{
-				if (_categories == null)
-				{
-					_categories = (wCHandle<inkSelectorController>) CR2WTypeManager.Create("whandle:inkSelectorController", "categories", cr2w, this);
-				}
-				return _categories;
-			}
-			set
-			{
-				if (_categories == value)
-				{
-					return;
-				}
-				_categories = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _categories);
+			set => SetProperty(ref _categories, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("gameDefinitions")] 
 		public wCHandle<inkSelectorController> GameDefinitions
 		{
-			get
-			{
-				if (_gameDefinitions == null)
-				{
-					_gameDefinitions = (wCHandle<inkSelectorController>) CR2WTypeManager.Create("whandle:inkSelectorController", "gameDefinitions", cr2w, this);
-				}
-				return _gameDefinitions;
-			}
-			set
-			{
-				if (_gameDefinitions == value)
-				{
-					return;
-				}
-				_gameDefinitions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameDefinitions);
+			set => SetProperty(ref _gameDefinitions, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("genders")] 
 		public wCHandle<inkSelectorController> Genders
 		{
-			get
-			{
-				if (_genders == null)
-				{
-					_genders = (wCHandle<inkSelectorController>) CR2WTypeManager.Create("whandle:inkSelectorController", "genders", cr2w, this);
-				}
-				return _genders;
-			}
-			set
-			{
-				if (_genders == value)
-				{
-					return;
-				}
-				_genders = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _genders);
+			set => SetProperty(ref _genders, value);
 		}
 
 		public NewGameMenuGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

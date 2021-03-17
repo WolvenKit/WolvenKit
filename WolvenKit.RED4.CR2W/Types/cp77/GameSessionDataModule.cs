@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("moduleType")] 
 		public CEnum<EGameSessionDataType> ModuleType
 		{
-			get
-			{
-				if (_moduleType == null)
-				{
-					_moduleType = (CEnum<EGameSessionDataType>) CR2WTypeManager.Create("EGameSessionDataType", "moduleType", cr2w, this);
-				}
-				return _moduleType;
-			}
-			set
-			{
-				if (_moduleType == value)
-				{
-					return;
-				}
-				_moduleType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _moduleType);
+			set => SetProperty(ref _moduleType, value);
 		}
 
 		public GameSessionDataModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

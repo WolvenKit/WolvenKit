@@ -209,7 +209,7 @@ namespace WolvenKit.RED4.CR2W.Types
         /// e.g. Color from CColor, or Uint64 from CUInt64
         /// Can be overwritten (e.g. in Array, Ptr and other generic types)
         /// </summary>
-        [Browsable(false)] public virtual string REDType => REDReflection.GetREDTypeString(this.GetType());
+        [Browsable(false)] public virtual string REDType => REDReflection.GetREDTypeString(GetType());
 
         /// <summary>
         /// AspectName in frmChunkProperties
@@ -223,7 +223,42 @@ namespace WolvenKit.RED4.CR2W.Types
 
         #region Methods
 
-        internal void PropertySet(CVariable cls, [CallerMemberName] string name = "")
+        internal T GetProperty<T>(ref T backingField, [CallerMemberName] string callerName = "") where T : class => backingField ??= Create<T>(callerName);
+
+        internal void SetProperty<T>(ref T backingField, T value, [CallerMemberName] string callerName = "") where T : class
+        {
+            if (backingField == value)
+            {
+                return;
+            }
+            backingField = value;
+            PropertySet(callerName);
+        }
+
+        internal T Create<T>(string varName = null, params int[] flags)
+        {
+            var result = (T)System.Activator.CreateInstance(typeof(T), cr2w, this, varName);
+
+            if (result is IArrayAccessor arr)
+            {
+                arr.Flags = flags.ToList();
+            }
+
+            return result;
+        }
+
+        internal T Create<T>([CallerMemberName] string callerName = "")
+        {
+            var attr = (REDAttribute)GetType().GetProperty(callerName).GetCustomAttribute(typeof(REDAttribute));
+            if (attr == null)
+            {
+                throw new Exception("REDAttribute not defined!");
+            }
+
+            return Create<T>(attr.Name, attr.Flags);
+        }
+
+        internal void PropertySet([CallerMemberName] string callerName = "")
         {
 
         }

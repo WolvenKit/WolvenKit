@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entries")] 
 		public CArray<animAdditionalFloatTrackEntry> Entries
 		{
-			get
-			{
-				if (_entries == null)
-				{
-					_entries = (CArray<animAdditionalFloatTrackEntry>) CR2WTypeManager.Create("array:animAdditionalFloatTrackEntry", "entries", cr2w, this);
-				}
-				return _entries;
-			}
-			set
-			{
-				if (_entries == value)
-				{
-					return;
-				}
-				_entries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("overwriteExistingValues")] 
 		public CBool OverwriteExistingValues
 		{
-			get
-			{
-				if (_overwriteExistingValues == null)
-				{
-					_overwriteExistingValues = (CBool) CR2WTypeManager.Create("Bool", "overwriteExistingValues", cr2w, this);
-				}
-				return _overwriteExistingValues;
-			}
-			set
-			{
-				if (_overwriteExistingValues == value)
-				{
-					return;
-				}
-				_overwriteExistingValues = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overwriteExistingValues);
+			set => SetProperty(ref _overwriteExistingValues, value);
 		}
 
 		public animAdditionalFloatTrackContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

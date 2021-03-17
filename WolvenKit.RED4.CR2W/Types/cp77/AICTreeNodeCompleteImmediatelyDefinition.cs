@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("completeWithSuccess")] 
 		public CBool CompleteWithSuccess
 		{
-			get
-			{
-				if (_completeWithSuccess == null)
-				{
-					_completeWithSuccess = (CBool) CR2WTypeManager.Create("Bool", "completeWithSuccess", cr2w, this);
-				}
-				return _completeWithSuccess;
-			}
-			set
-			{
-				if (_completeWithSuccess == value)
-				{
-					return;
-				}
-				_completeWithSuccess = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _completeWithSuccess);
+			set => SetProperty(ref _completeWithSuccess, value);
 		}
 
 		public AICTreeNodeCompleteImmediatelyDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

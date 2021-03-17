@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("clueIndex")] 
 		public CInt32 ClueIndex
 		{
-			get
-			{
-				if (_clueIndex == null)
-				{
-					_clueIndex = (CInt32) CR2WTypeManager.Create("Int32", "clueIndex", cr2w, this);
-				}
-				return _clueIndex;
-			}
-			set
-			{
-				if (_clueIndex == value)
-				{
-					return;
-				}
-				_clueIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clueIndex);
+			set => SetProperty(ref _clueIndex, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("requesterID")] 
 		public entEntityID RequesterID
 		{
-			get
-			{
-				if (_requesterID == null)
-				{
-					_requesterID = (entEntityID) CR2WTypeManager.Create("entEntityID", "requesterID", cr2w, this);
-				}
-				return _requesterID;
-			}
-			set
-			{
-				if (_requesterID == value)
-				{
-					return;
-				}
-				_requesterID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requesterID);
+			set => SetProperty(ref _requesterID, value);
 		}
 
 		public ClueScannedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

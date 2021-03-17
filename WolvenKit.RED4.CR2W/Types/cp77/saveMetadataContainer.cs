@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("metadata")] 
 		public saveMetadata Metadata
 		{
-			get
-			{
-				if (_metadata == null)
-				{
-					_metadata = (saveMetadata) CR2WTypeManager.Create("saveMetadata", "metadata", cr2w, this);
-				}
-				return _metadata;
-			}
-			set
-			{
-				if (_metadata == value)
-				{
-					return;
-				}
-				_metadata = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metadata);
+			set => SetProperty(ref _metadata, value);
 		}
 
 		public saveMetadataContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

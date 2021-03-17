@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ModifiedHotkey")] 
 		public gamebbScriptID_Variant ModifiedHotkey
 		{
-			get
-			{
-				if (_modifiedHotkey == null)
-				{
-					_modifiedHotkey = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ModifiedHotkey", cr2w, this);
-				}
-				return _modifiedHotkey;
-			}
-			set
-			{
-				if (_modifiedHotkey == value)
-				{
-					return;
-				}
-				_modifiedHotkey = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _modifiedHotkey);
+			set => SetProperty(ref _modifiedHotkey, value);
 		}
 
 		public UI_HotkeysDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

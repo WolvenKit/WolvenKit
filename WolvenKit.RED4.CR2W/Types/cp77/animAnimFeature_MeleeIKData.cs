@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isValid")] 
 		public CBool IsValid
 		{
-			get
-			{
-				if (_isValid == null)
-				{
-					_isValid = (CBool) CR2WTypeManager.Create("Bool", "isValid", cr2w, this);
-				}
-				return _isValid;
-			}
-			set
-			{
-				if (_isValid == value)
-				{
-					return;
-				}
-				_isValid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isValid);
+			set => SetProperty(ref _isValid, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("headPosition")] 
 		public Vector4 HeadPosition
 		{
-			get
-			{
-				if (_headPosition == null)
-				{
-					_headPosition = (Vector4) CR2WTypeManager.Create("Vector4", "headPosition", cr2w, this);
-				}
-				return _headPosition;
-			}
-			set
-			{
-				if (_headPosition == value)
-				{
-					return;
-				}
-				_headPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _headPosition);
+			set => SetProperty(ref _headPosition, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("chestPosition")] 
 		public Vector4 ChestPosition
 		{
-			get
-			{
-				if (_chestPosition == null)
-				{
-					_chestPosition = (Vector4) CR2WTypeManager.Create("Vector4", "chestPosition", cr2w, this);
-				}
-				return _chestPosition;
-			}
-			set
-			{
-				if (_chestPosition == value)
-				{
-					return;
-				}
-				_chestPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chestPosition);
+			set => SetProperty(ref _chestPosition, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ikOffset")] 
 		public Vector4 IkOffset
 		{
-			get
-			{
-				if (_ikOffset == null)
-				{
-					_ikOffset = (Vector4) CR2WTypeManager.Create("Vector4", "ikOffset", cr2w, this);
-				}
-				return _ikOffset;
-			}
-			set
-			{
-				if (_ikOffset == value)
-				{
-					return;
-				}
-				_ikOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ikOffset);
+			set => SetProperty(ref _ikOffset, value);
 		}
 
 		public animAnimFeature_MeleeIKData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

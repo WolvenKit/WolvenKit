@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("jukeboxSetup")] 
 		public JukeboxSetup JukeboxSetup
 		{
-			get
-			{
-				if (_jukeboxSetup == null)
-				{
-					_jukeboxSetup = (JukeboxSetup) CR2WTypeManager.Create("JukeboxSetup", "jukeboxSetup", cr2w, this);
-				}
-				return _jukeboxSetup;
-			}
-			set
-			{
-				if (_jukeboxSetup == value)
-				{
-					return;
-				}
-				_jukeboxSetup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _jukeboxSetup);
+			set => SetProperty(ref _jukeboxSetup, value);
 		}
 
 		[Ordinal(104)] 
 		[RED("stations")] 
 		public CArray<RadioStationsMap> Stations
 		{
-			get
-			{
-				if (_stations == null)
-				{
-					_stations = (CArray<RadioStationsMap>) CR2WTypeManager.Create("array:RadioStationsMap", "stations", cr2w, this);
-				}
-				return _stations;
-			}
-			set
-			{
-				if (_stations == value)
-				{
-					return;
-				}
-				_stations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stations);
+			set => SetProperty(ref _stations, value);
 		}
 
 		[Ordinal(105)] 
 		[RED("activeStation")] 
 		public CInt32 ActiveStation
 		{
-			get
-			{
-				if (_activeStation == null)
-				{
-					_activeStation = (CInt32) CR2WTypeManager.Create("Int32", "activeStation", cr2w, this);
-				}
-				return _activeStation;
-			}
-			set
-			{
-				if (_activeStation == value)
-				{
-					return;
-				}
-				_activeStation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeStation);
+			set => SetProperty(ref _activeStation, value);
 		}
 
 		[Ordinal(106)] 
 		[RED("isPlaying")] 
 		public CBool IsPlaying
 		{
-			get
-			{
-				if (_isPlaying == null)
-				{
-					_isPlaying = (CBool) CR2WTypeManager.Create("Bool", "isPlaying", cr2w, this);
-				}
-				return _isPlaying;
-			}
-			set
-			{
-				if (_isPlaying == value)
-				{
-					return;
-				}
-				_isPlaying = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlaying);
+			set => SetProperty(ref _isPlaying, value);
 		}
 
 		public JukeboxControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

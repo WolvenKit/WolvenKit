@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("wasRevealed")] 
 		public CBool WasRevealed
 		{
-			get
-			{
-				if (_wasRevealed == null)
-				{
-					_wasRevealed = (CBool) CR2WTypeManager.Create("Bool", "wasRevealed", cr2w, this);
-				}
-				return _wasRevealed;
-			}
-			set
-			{
-				if (_wasRevealed == value)
-				{
-					return;
-				}
-				_wasRevealed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasRevealed);
+			set => SetProperty(ref _wasRevealed, value);
 		}
 
 		public SetRevealedInNetwork(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

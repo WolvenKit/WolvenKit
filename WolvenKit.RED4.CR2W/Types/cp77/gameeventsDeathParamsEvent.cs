@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("noAnimation")] 
 		public CBool NoAnimation
 		{
-			get
-			{
-				if (_noAnimation == null)
-				{
-					_noAnimation = (CBool) CR2WTypeManager.Create("Bool", "noAnimation", cr2w, this);
-				}
-				return _noAnimation;
-			}
-			set
-			{
-				if (_noAnimation == value)
-				{
-					return;
-				}
-				_noAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _noAnimation);
+			set => SetProperty(ref _noAnimation, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("noRagdoll")] 
 		public CBool NoRagdoll
 		{
-			get
-			{
-				if (_noRagdoll == null)
-				{
-					_noRagdoll = (CBool) CR2WTypeManager.Create("Bool", "noRagdoll", cr2w, this);
-				}
-				return _noRagdoll;
-			}
-			set
-			{
-				if (_noRagdoll == value)
-				{
-					return;
-				}
-				_noRagdoll = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _noRagdoll);
+			set => SetProperty(ref _noRagdoll, value);
 		}
 
 		public gameeventsDeathParamsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("primaryText")] 
 		public CString PrimaryText
 		{
-			get
-			{
-				if (_primaryText == null)
-				{
-					_primaryText = (CString) CR2WTypeManager.Create("String", "primaryText", cr2w, this);
-				}
-				return _primaryText;
-			}
-			set
-			{
-				if (_primaryText == value)
-				{
-					return;
-				}
-				_primaryText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _primaryText);
+			set => SetProperty(ref _primaryText, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("secondaryText")] 
 		public CString SecondaryText
 		{
-			get
-			{
-				if (_secondaryText == null)
-				{
-					_secondaryText = (CString) CR2WTypeManager.Create("String", "secondaryText", cr2w, this);
-				}
-				return _secondaryText;
-			}
-			set
-			{
-				if (_secondaryText == value)
-				{
-					return;
-				}
-				_secondaryText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _secondaryText);
+			set => SetProperty(ref _secondaryText, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		public ShowUIWarningEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

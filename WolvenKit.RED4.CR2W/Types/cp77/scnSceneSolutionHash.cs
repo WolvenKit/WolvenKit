@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sceneSolutionHash")] 
 		public scnSceneSolutionHashHash SceneSolutionHash
 		{
-			get
-			{
-				if (_sceneSolutionHash == null)
-				{
-					_sceneSolutionHash = (scnSceneSolutionHashHash) CR2WTypeManager.Create("scnSceneSolutionHashHash", "sceneSolutionHash", cr2w, this);
-				}
-				return _sceneSolutionHash;
-			}
-			set
-			{
-				if (_sceneSolutionHash == value)
-				{
-					return;
-				}
-				_sceneSolutionHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneSolutionHash);
+			set => SetProperty(ref _sceneSolutionHash, value);
 		}
 
 		public scnSceneSolutionHash(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

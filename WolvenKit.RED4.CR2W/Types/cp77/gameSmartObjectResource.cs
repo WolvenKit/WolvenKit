@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entryPoints")] 
 		public CArray<gameSmartObjectGate> EntryPoints
 		{
-			get
-			{
-				if (_entryPoints == null)
-				{
-					_entryPoints = (CArray<gameSmartObjectGate>) CR2WTypeManager.Create("array:gameSmartObjectGate", "entryPoints", cr2w, this);
-				}
-				return _entryPoints;
-			}
-			set
-			{
-				if (_entryPoints == value)
-				{
-					return;
-				}
-				_entryPoints = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryPoints);
+			set => SetProperty(ref _entryPoints, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("exitPoints")] 
 		public CArray<gameSmartObjectGate> ExitPoints
 		{
-			get
-			{
-				if (_exitPoints == null)
-				{
-					_exitPoints = (CArray<gameSmartObjectGate>) CR2WTypeManager.Create("array:gameSmartObjectGate", "exitPoints", cr2w, this);
-				}
-				return _exitPoints;
-			}
-			set
-			{
-				if (_exitPoints == value)
-				{
-					return;
-				}
-				_exitPoints = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitPoints);
+			set => SetProperty(ref _exitPoints, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("bodyTypes")] 
 		public CArray<gameBodyTypeAnimationDefinition> BodyTypes
 		{
-			get
-			{
-				if (_bodyTypes == null)
-				{
-					_bodyTypes = (CArray<gameBodyTypeAnimationDefinition>) CR2WTypeManager.Create("array:gameBodyTypeAnimationDefinition", "bodyTypes", cr2w, this);
-				}
-				return _bodyTypes;
-			}
-			set
-			{
-				if (_bodyTypes == value)
-				{
-					return;
-				}
-				_bodyTypes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyTypes);
+			set => SetProperty(ref _bodyTypes, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("loopAnimations")] 
 		public CArray<gameSmartObjectGate> LoopAnimations
 		{
-			get
-			{
-				if (_loopAnimations == null)
-				{
-					_loopAnimations = (CArray<gameSmartObjectGate>) CR2WTypeManager.Create("array:gameSmartObjectGate", "loopAnimations", cr2w, this);
-				}
-				return _loopAnimations;
-			}
-			set
-			{
-				if (_loopAnimations == value)
-				{
-					return;
-				}
-				_loopAnimations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _loopAnimations);
+			set => SetProperty(ref _loopAnimations, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("type")] 
 		public CEnum<gameSmartObjectType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<gameSmartObjectType>) CR2WTypeManager.Create("gameSmartObjectType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		public gameSmartObjectResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

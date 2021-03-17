@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("value")] 
 		public CBool Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CBool) CR2WTypeManager.Create("Bool", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		public entAnimInputSetterUsesSleepMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

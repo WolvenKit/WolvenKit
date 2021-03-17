@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("floatValues")] 
 		public CArray<CFloat> FloatValues
 		{
-			get
-			{
-				if (_floatValues == null)
-				{
-					_floatValues = (CArray<CFloat>) CR2WTypeManager.Create("array:Float", "floatValues", cr2w, this);
-				}
-				return _floatValues;
-			}
-			set
-			{
-				if (_floatValues == value)
-				{
-					return;
-				}
-				_floatValues = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _floatValues);
+			set => SetProperty(ref _floatValues, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("intValues")] 
 		public CArray<CInt32> IntValues
 		{
-			get
-			{
-				if (_intValues == null)
-				{
-					_intValues = (CArray<CInt32>) CR2WTypeManager.Create("array:Int32", "intValues", cr2w, this);
-				}
-				return _intValues;
-			}
-			set
-			{
-				if (_intValues == value)
-				{
-					return;
-				}
-				_intValues = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _intValues);
+			set => SetProperty(ref _intValues, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("nameValues")] 
 		public CArray<CName> NameValues
 		{
-			get
-			{
-				if (_nameValues == null)
-				{
-					_nameValues = (CArray<CName>) CR2WTypeManager.Create("array:CName", "nameValues", cr2w, this);
-				}
-				return _nameValues;
-			}
-			set
-			{
-				if (_nameValues == value)
-				{
-					return;
-				}
-				_nameValues = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nameValues);
+			set => SetProperty(ref _nameValues, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("statValues")] 
 		public CArray<CFloat> StatValues
 		{
-			get
-			{
-				if (_statValues == null)
-				{
-					_statValues = (CArray<CFloat>) CR2WTypeManager.Create("array:Float", "statValues", cr2w, this);
-				}
-				return _statValues;
-			}
-			set
-			{
-				if (_statValues == value)
-				{
-					return;
-				}
-				_statValues = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statValues);
+			set => SetProperty(ref _statValues, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("statNames")] 
 		public CArray<CName> StatNames
 		{
-			get
-			{
-				if (_statNames == null)
-				{
-					_statNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "statNames", cr2w, this);
-				}
-				return _statNames;
-			}
-			set
-			{
-				if (_statNames == value)
-				{
-					return;
-				}
-				_statNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statNames);
+			set => SetProperty(ref _statNames, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("paramsCount")] 
 		public CInt32 ParamsCount
 		{
-			get
-			{
-				if (_paramsCount == null)
-				{
-					_paramsCount = (CInt32) CR2WTypeManager.Create("Int32", "paramsCount", cr2w, this);
-				}
-				return _paramsCount;
-			}
-			set
-			{
-				if (_paramsCount == value)
-				{
-					return;
-				}
-				_paramsCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _paramsCount);
+			set => SetProperty(ref _paramsCount, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("textParams")] 
 		public CHandle<textTextParameterSet> TextParams
 		{
-			get
-			{
-				if (_textParams == null)
-				{
-					_textParams = (CHandle<textTextParameterSet>) CR2WTypeManager.Create("handle:textTextParameterSet", "textParams", cr2w, this);
-				}
-				return _textParams;
-			}
-			set
-			{
-				if (_textParams == value)
-				{
-					return;
-				}
-				_textParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textParams);
+			set => SetProperty(ref _textParams, value);
 		}
 
 		public gameUILocalizationDataPackage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

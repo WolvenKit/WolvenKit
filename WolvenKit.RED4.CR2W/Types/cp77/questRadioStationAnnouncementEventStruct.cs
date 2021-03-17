@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("announcementScene")] 
 		public raRef<scnSceneResource> AnnouncementScene
 		{
-			get
-			{
-				if (_announcementScene == null)
-				{
-					_announcementScene = (raRef<scnSceneResource>) CR2WTypeManager.Create("raRef:scnSceneResource", "announcementScene", cr2w, this);
-				}
-				return _announcementScene;
-			}
-			set
-			{
-				if (_announcementScene == value)
-				{
-					return;
-				}
-				_announcementScene = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _announcementScene);
+			set => SetProperty(ref _announcementScene, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sceneInput")] 
 		public CName SceneInput
 		{
-			get
-			{
-				if (_sceneInput == null)
-				{
-					_sceneInput = (CName) CR2WTypeManager.Create("CName", "sceneInput", cr2w, this);
-				}
-				return _sceneInput;
-			}
-			set
-			{
-				if (_sceneInput == value)
-				{
-					return;
-				}
-				_sceneInput = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneInput);
+			set => SetProperty(ref _sceneInput, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("queueAnnouncement")] 
 		public CBool QueueAnnouncement
 		{
-			get
-			{
-				if (_queueAnnouncement == null)
-				{
-					_queueAnnouncement = (CBool) CR2WTypeManager.Create("Bool", "queueAnnouncement", cr2w, this);
-				}
-				return _queueAnnouncement;
-			}
-			set
-			{
-				if (_queueAnnouncement == value)
-				{
-					return;
-				}
-				_queueAnnouncement = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _queueAnnouncement);
+			set => SetProperty(ref _queueAnnouncement, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("radioStationName")] 
 		public CName RadioStationName
 		{
-			get
-			{
-				if (_radioStationName == null)
-				{
-					_radioStationName = (CName) CR2WTypeManager.Create("CName", "radioStationName", cr2w, this);
-				}
-				return _radioStationName;
-			}
-			set
-			{
-				if (_radioStationName == value)
-				{
-					return;
-				}
-				_radioStationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radioStationName);
+			set => SetProperty(ref _radioStationName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("blockSignal")] 
 		public CBool BlockSignal
 		{
-			get
-			{
-				if (_blockSignal == null)
-				{
-					_blockSignal = (CBool) CR2WTypeManager.Create("Bool", "blockSignal", cr2w, this);
-				}
-				return _blockSignal;
-			}
-			set
-			{
-				if (_blockSignal == value)
-				{
-					return;
-				}
-				_blockSignal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blockSignal);
+			set => SetProperty(ref _blockSignal, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("speaker")] 
 		public CEnum<audioRadioSpeakerType> Speaker
 		{
-			get
-			{
-				if (_speaker == null)
-				{
-					_speaker = (CEnum<audioRadioSpeakerType>) CR2WTypeManager.Create("audioRadioSpeakerType", "speaker", cr2w, this);
-				}
-				return _speaker;
-			}
-			set
-			{
-				if (_speaker == value)
-				{
-					return;
-				}
-				_speaker = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speaker);
+			set => SetProperty(ref _speaker, value);
 		}
 
 		public questRadioStationAnnouncementEventStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

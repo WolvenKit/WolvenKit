@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("subCharacterID")] 
 		public TweakDBID SubCharacterID
 		{
-			get
-			{
-				if (_subCharacterID == null)
-				{
-					_subCharacterID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "subCharacterID", cr2w, this);
-				}
-				return _subCharacterID;
-			}
-			set
-			{
-				if (_subCharacterID == value)
-				{
-					return;
-				}
-				_subCharacterID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subCharacterID);
+			set => SetProperty(ref _subCharacterID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("desiredDistance")] 
 		public CFloat DesiredDistance
 		{
-			get
-			{
-				if (_desiredDistance == null)
-				{
-					_desiredDistance = (CFloat) CR2WTypeManager.Create("Float", "desiredDistance", cr2w, this);
-				}
-				return _desiredDistance;
-			}
-			set
-			{
-				if (_desiredDistance == value)
-				{
-					return;
-				}
-				_desiredDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _desiredDistance);
+			set => SetProperty(ref _desiredDistance, value);
 		}
 
 		public SpawnUniqueSubCharacterRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

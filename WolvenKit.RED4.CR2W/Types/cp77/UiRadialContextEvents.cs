@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mouse")] 
 		public Vector4 Mouse
 		{
-			get
-			{
-				if (_mouse == null)
-				{
-					_mouse = (Vector4) CR2WTypeManager.Create("Vector4", "mouse", cr2w, this);
-				}
-				return _mouse;
-			}
-			set
-			{
-				if (_mouse == value)
-				{
-					return;
-				}
-				_mouse = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mouse);
+			set => SetProperty(ref _mouse, value);
 		}
 
 		public UiRadialContextEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

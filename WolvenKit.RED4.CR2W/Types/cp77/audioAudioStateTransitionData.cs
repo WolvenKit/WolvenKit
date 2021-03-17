@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetStateId")] 
 		public CUInt8 TargetStateId
 		{
-			get
-			{
-				if (_targetStateId == null)
-				{
-					_targetStateId = (CUInt8) CR2WTypeManager.Create("Uint8", "targetStateId", cr2w, this);
-				}
-				return _targetStateId;
-			}
-			set
-			{
-				if (_targetStateId == value)
-				{
-					return;
-				}
-				_targetStateId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetStateId);
+			set => SetProperty(ref _targetStateId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("allConditionsFulfilled")] 
 		public CBool AllConditionsFulfilled
 		{
-			get
-			{
-				if (_allConditionsFulfilled == null)
-				{
-					_allConditionsFulfilled = (CBool) CR2WTypeManager.Create("Bool", "allConditionsFulfilled", cr2w, this);
-				}
-				return _allConditionsFulfilled;
-			}
-			set
-			{
-				if (_allConditionsFulfilled == value)
-				{
-					return;
-				}
-				_allConditionsFulfilled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _allConditionsFulfilled);
+			set => SetProperty(ref _allConditionsFulfilled, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("transitionTime")] 
 		public CFloat TransitionTime
 		{
-			get
-			{
-				if (_transitionTime == null)
-				{
-					_transitionTime = (CFloat) CR2WTypeManager.Create("Float", "transitionTime", cr2w, this);
-				}
-				return _transitionTime;
-			}
-			set
-			{
-				if (_transitionTime == value)
-				{
-					return;
-				}
-				_transitionTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transitionTime);
+			set => SetProperty(ref _transitionTime, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("exitTime")] 
 		public CFloat ExitTime
 		{
-			get
-			{
-				if (_exitTime == null)
-				{
-					_exitTime = (CFloat) CR2WTypeManager.Create("Float", "exitTime", cr2w, this);
-				}
-				return _exitTime;
-			}
-			set
-			{
-				if (_exitTime == value)
-				{
-					return;
-				}
-				_exitTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitTime);
+			set => SetProperty(ref _exitTime, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("exitSignal")] 
 		public CName ExitSignal
 		{
-			get
-			{
-				if (_exitSignal == null)
-				{
-					_exitSignal = (CName) CR2WTypeManager.Create("CName", "exitSignal", cr2w, this);
-				}
-				return _exitSignal;
-			}
-			set
-			{
-				if (_exitSignal == value)
-				{
-					return;
-				}
-				_exitSignal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitSignal);
+			set => SetProperty(ref _exitSignal, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("readVariableActions")] 
 		public CArray<audioAudioSceneVariableReadActionData> ReadVariableActions
 		{
-			get
-			{
-				if (_readVariableActions == null)
-				{
-					_readVariableActions = (CArray<audioAudioSceneVariableReadActionData>) CR2WTypeManager.Create("array:audioAudioSceneVariableReadActionData", "readVariableActions", cr2w, this);
-				}
-				return _readVariableActions;
-			}
-			set
-			{
-				if (_readVariableActions == value)
-				{
-					return;
-				}
-				_readVariableActions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _readVariableActions);
+			set => SetProperty(ref _readVariableActions, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("conditions")] 
 		public CArray<CName> Conditions
 		{
-			get
-			{
-				if (_conditions == null)
-				{
-					_conditions = (CArray<CName>) CR2WTypeManager.Create("array:CName", "conditions", cr2w, this);
-				}
-				return _conditions;
-			}
-			set
-			{
-				if (_conditions == value)
-				{
-					return;
-				}
-				_conditions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _conditions);
+			set => SetProperty(ref _conditions, value);
 		}
 
 		public audioAudioStateTransitionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

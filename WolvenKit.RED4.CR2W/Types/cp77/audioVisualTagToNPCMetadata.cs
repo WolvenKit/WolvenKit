@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("visualTags")] 
 		public CArray<CName> VisualTags
 		{
-			get
-			{
-				if (_visualTags == null)
-				{
-					_visualTags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "visualTags", cr2w, this);
-				}
-				return _visualTags;
-			}
-			set
-			{
-				if (_visualTags == value)
-				{
-					return;
-				}
-				_visualTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualTags);
+			set => SetProperty(ref _visualTags, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("foleyNPCMetadata")] 
 		public CName FoleyNPCMetadata
 		{
-			get
-			{
-				if (_foleyNPCMetadata == null)
-				{
-					_foleyNPCMetadata = (CName) CR2WTypeManager.Create("CName", "foleyNPCMetadata", cr2w, this);
-				}
-				return _foleyNPCMetadata;
-			}
-			set
-			{
-				if (_foleyNPCMetadata == value)
-				{
-					return;
-				}
-				_foleyNPCMetadata = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _foleyNPCMetadata);
+			set => SetProperty(ref _foleyNPCMetadata, value);
 		}
 
 		public audioVisualTagToNPCMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

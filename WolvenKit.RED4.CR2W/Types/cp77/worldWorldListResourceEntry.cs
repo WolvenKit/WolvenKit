@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("world")] 
 		public raRef<CResource> World
 		{
-			get
-			{
-				if (_world == null)
-				{
-					_world = (raRef<CResource>) CR2WTypeManager.Create("raRef:CResource", "world", cr2w, this);
-				}
-				return _world;
-			}
-			set
-			{
-				if (_world == value)
-				{
-					return;
-				}
-				_world = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _world);
+			set => SetProperty(ref _world, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("streamingWorld")] 
 		public raRef<CResource> StreamingWorld
 		{
-			get
-			{
-				if (_streamingWorld == null)
-				{
-					_streamingWorld = (raRef<CResource>) CR2WTypeManager.Create("raRef:CResource", "streamingWorld", cr2w, this);
-				}
-				return _streamingWorld;
-			}
-			set
-			{
-				if (_streamingWorld == value)
-				{
-					return;
-				}
-				_streamingWorld = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _streamingWorld);
+			set => SetProperty(ref _streamingWorld, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("worldName")] 
 		public CString WorldName
 		{
-			get
-			{
-				if (_worldName == null)
-				{
-					_worldName = (CString) CR2WTypeManager.Create("String", "worldName", cr2w, this);
-				}
-				return _worldName;
-			}
-			set
-			{
-				if (_worldName == value)
-				{
-					return;
-				}
-				_worldName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _worldName);
+			set => SetProperty(ref _worldName, value);
 		}
 
 		public worldWorldListResourceEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

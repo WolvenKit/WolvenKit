@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ToHoverAnimationName")] 
 		public CName ToHoverAnimationName
 		{
-			get
-			{
-				if (_toHoverAnimationName == null)
-				{
-					_toHoverAnimationName = (CName) CR2WTypeManager.Create("CName", "ToHoverAnimationName", cr2w, this);
-				}
-				return _toHoverAnimationName;
-			}
-			set
-			{
-				if (_toHoverAnimationName == value)
-				{
-					return;
-				}
-				_toHoverAnimationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toHoverAnimationName);
+			set => SetProperty(ref _toHoverAnimationName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ToPressedAnimationName")] 
 		public CName ToPressedAnimationName
 		{
-			get
-			{
-				if (_toPressedAnimationName == null)
-				{
-					_toPressedAnimationName = (CName) CR2WTypeManager.Create("CName", "ToPressedAnimationName", cr2w, this);
-				}
-				return _toPressedAnimationName;
-			}
-			set
-			{
-				if (_toPressedAnimationName == value)
-				{
-					return;
-				}
-				_toPressedAnimationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toPressedAnimationName);
+			set => SetProperty(ref _toPressedAnimationName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("ToDefaultAnimationName")] 
 		public CName ToDefaultAnimationName
 		{
-			get
-			{
-				if (_toDefaultAnimationName == null)
-				{
-					_toDefaultAnimationName = (CName) CR2WTypeManager.Create("CName", "ToDefaultAnimationName", cr2w, this);
-				}
-				return _toDefaultAnimationName;
-			}
-			set
-			{
-				if (_toDefaultAnimationName == value)
-				{
-					return;
-				}
-				_toDefaultAnimationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toDefaultAnimationName);
+			set => SetProperty(ref _toDefaultAnimationName, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ToDisabledAnimationName")] 
 		public CName ToDisabledAnimationName
 		{
-			get
-			{
-				if (_toDisabledAnimationName == null)
-				{
-					_toDisabledAnimationName = (CName) CR2WTypeManager.Create("CName", "ToDisabledAnimationName", cr2w, this);
-				}
-				return _toDisabledAnimationName;
-			}
-			set
-			{
-				if (_toDisabledAnimationName == value)
-				{
-					return;
-				}
-				_toDisabledAnimationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toDisabledAnimationName);
+			set => SetProperty(ref _toDisabledAnimationName, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("InputAnimation")] 
 		public CHandle<inkanimProxy> InputAnimation
 		{
-			get
-			{
-				if (_inputAnimation == null)
-				{
-					_inputAnimation = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "InputAnimation", cr2w, this);
-				}
-				return _inputAnimation;
-			}
-			set
-			{
-				if (_inputAnimation == value)
-				{
-					return;
-				}
-				_inputAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputAnimation);
+			set => SetProperty(ref _inputAnimation, value);
 		}
 
 		public PlayLibraryAnimationButtonView(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

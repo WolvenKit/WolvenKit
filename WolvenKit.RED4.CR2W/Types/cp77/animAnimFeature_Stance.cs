@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stanceState")] 
 		public CInt32 StanceState
 		{
-			get
-			{
-				if (_stanceState == null)
-				{
-					_stanceState = (CInt32) CR2WTypeManager.Create("Int32", "stanceState", cr2w, this);
-				}
-				return _stanceState;
-			}
-			set
-			{
-				if (_stanceState == value)
-				{
-					return;
-				}
-				_stanceState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stanceState);
+			set => SetProperty(ref _stanceState, value);
 		}
 
 		public animAnimFeature_Stance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

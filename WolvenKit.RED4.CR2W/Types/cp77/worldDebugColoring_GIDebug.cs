@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("GIVisibleColor")] 
 		public CColor GIVisibleColor
 		{
-			get
-			{
-				if (_gIVisibleColor == null)
-				{
-					_gIVisibleColor = (CColor) CR2WTypeManager.Create("Color", "GIVisibleColor", cr2w, this);
-				}
-				return _gIVisibleColor;
-			}
-			set
-			{
-				if (_gIVisibleColor == value)
-				{
-					return;
-				}
-				_gIVisibleColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gIVisibleColor);
+			set => SetProperty(ref _gIVisibleColor, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("GITransparentColor")] 
 		public CColor GITransparentColor
 		{
-			get
-			{
-				if (_gITransparentColor == null)
-				{
-					_gITransparentColor = (CColor) CR2WTypeManager.Create("Color", "GITransparentColor", cr2w, this);
-				}
-				return _gITransparentColor;
-			}
-			set
-			{
-				if (_gITransparentColor == value)
-				{
-					return;
-				}
-				_gITransparentColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gITransparentColor);
+			set => SetProperty(ref _gITransparentColor, value);
 		}
 
 		public worldDebugColoring_GIDebug(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

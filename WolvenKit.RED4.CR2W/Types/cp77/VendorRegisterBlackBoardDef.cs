@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vendors")] 
 		public gamebbScriptID_Variant Vendors
 		{
-			get
-			{
-				if (_vendors == null)
-				{
-					_vendors = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "vendors", cr2w, this);
-				}
-				return _vendors;
-			}
-			set
-			{
-				if (_vendors == value)
-				{
-					return;
-				}
-				_vendors = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vendors);
+			set => SetProperty(ref _vendors, value);
 		}
 
 		public VendorRegisterBlackBoardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

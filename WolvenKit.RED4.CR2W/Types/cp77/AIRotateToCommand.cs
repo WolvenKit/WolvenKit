@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("target")] 
 		public AIPositionSpec Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (AIPositionSpec) CR2WTypeManager.Create("AIPositionSpec", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("angleTolerance")] 
 		public CFloat AngleTolerance
 		{
-			get
-			{
-				if (_angleTolerance == null)
-				{
-					_angleTolerance = (CFloat) CR2WTypeManager.Create("Float", "angleTolerance", cr2w, this);
-				}
-				return _angleTolerance;
-			}
-			set
-			{
-				if (_angleTolerance == value)
-				{
-					return;
-				}
-				_angleTolerance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _angleTolerance);
+			set => SetProperty(ref _angleTolerance, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("angleOffset")] 
 		public CFloat AngleOffset
 		{
-			get
-			{
-				if (_angleOffset == null)
-				{
-					_angleOffset = (CFloat) CR2WTypeManager.Create("Float", "angleOffset", cr2w, this);
-				}
-				return _angleOffset;
-			}
-			set
-			{
-				if (_angleOffset == value)
-				{
-					return;
-				}
-				_angleOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _angleOffset);
+			set => SetProperty(ref _angleOffset, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("speed")] 
 		public CFloat Speed
 		{
-			get
-			{
-				if (_speed == null)
-				{
-					_speed = (CFloat) CR2WTypeManager.Create("Float", "speed", cr2w, this);
-				}
-				return _speed;
-			}
-			set
-			{
-				if (_speed == value)
-				{
-					return;
-				}
-				_speed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speed);
+			set => SetProperty(ref _speed, value);
 		}
 
 		public AIRotateToCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

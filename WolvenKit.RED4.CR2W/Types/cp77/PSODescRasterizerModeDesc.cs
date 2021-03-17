@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("wireframe")] 
 		public CBool Wireframe
 		{
-			get
-			{
-				if (_wireframe == null)
-				{
-					_wireframe = (CBool) CR2WTypeManager.Create("Bool", "wireframe", cr2w, this);
-				}
-				return _wireframe;
-			}
-			set
-			{
-				if (_wireframe == value)
-				{
-					return;
-				}
-				_wireframe = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wireframe);
+			set => SetProperty(ref _wireframe, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("frontWinding")] 
 		public CEnum<PSODescRasterizerModeFrontFaceWinding> FrontWinding
 		{
-			get
-			{
-				if (_frontWinding == null)
-				{
-					_frontWinding = (CEnum<PSODescRasterizerModeFrontFaceWinding>) CR2WTypeManager.Create("PSODescRasterizerModeFrontFaceWinding", "frontWinding", cr2w, this);
-				}
-				return _frontWinding;
-			}
-			set
-			{
-				if (_frontWinding == value)
-				{
-					return;
-				}
-				_frontWinding = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frontWinding);
+			set => SetProperty(ref _frontWinding, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("cullMode")] 
 		public CEnum<PSODescRasterizerModeCullMode> CullMode
 		{
-			get
-			{
-				if (_cullMode == null)
-				{
-					_cullMode = (CEnum<PSODescRasterizerModeCullMode>) CR2WTypeManager.Create("PSODescRasterizerModeCullMode", "cullMode", cr2w, this);
-				}
-				return _cullMode;
-			}
-			set
-			{
-				if (_cullMode == value)
-				{
-					return;
-				}
-				_cullMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cullMode);
+			set => SetProperty(ref _cullMode, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("allowMSAA")] 
 		public CBool AllowMSAA
 		{
-			get
-			{
-				if (_allowMSAA == null)
-				{
-					_allowMSAA = (CBool) CR2WTypeManager.Create("Bool", "allowMSAA", cr2w, this);
-				}
-				return _allowMSAA;
-			}
-			set
-			{
-				if (_allowMSAA == value)
-				{
-					return;
-				}
-				_allowMSAA = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _allowMSAA);
+			set => SetProperty(ref _allowMSAA, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("conservativeRasterization")] 
 		public CBool ConservativeRasterization
 		{
-			get
-			{
-				if (_conservativeRasterization == null)
-				{
-					_conservativeRasterization = (CBool) CR2WTypeManager.Create("Bool", "conservativeRasterization", cr2w, this);
-				}
-				return _conservativeRasterization;
-			}
-			set
-			{
-				if (_conservativeRasterization == value)
-				{
-					return;
-				}
-				_conservativeRasterization = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _conservativeRasterization);
+			set => SetProperty(ref _conservativeRasterization, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("offsetMode")] 
 		public CEnum<PSODescRasterizerModeOffsetMode> OffsetMode
 		{
-			get
-			{
-				if (_offsetMode == null)
-				{
-					_offsetMode = (CEnum<PSODescRasterizerModeOffsetMode>) CR2WTypeManager.Create("PSODescRasterizerModeOffsetMode", "offsetMode", cr2w, this);
-				}
-				return _offsetMode;
-			}
-			set
-			{
-				if (_offsetMode == value)
-				{
-					return;
-				}
-				_offsetMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offsetMode);
+			set => SetProperty(ref _offsetMode, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("scissors")] 
 		public CBool Scissors
 		{
-			get
-			{
-				if (_scissors == null)
-				{
-					_scissors = (CBool) CR2WTypeManager.Create("Bool", "scissors", cr2w, this);
-				}
-				return _scissors;
-			}
-			set
-			{
-				if (_scissors == value)
-				{
-					return;
-				}
-				_scissors = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scissors);
+			set => SetProperty(ref _scissors, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("valid")] 
 		public CBool Valid
 		{
-			get
-			{
-				if (_valid == null)
-				{
-					_valid = (CBool) CR2WTypeManager.Create("Bool", "valid", cr2w, this);
-				}
-				return _valid;
-			}
-			set
-			{
-				if (_valid == value)
-				{
-					return;
-				}
-				_valid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _valid);
+			set => SetProperty(ref _valid, value);
 		}
 
 		public PSODescRasterizerModeDesc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

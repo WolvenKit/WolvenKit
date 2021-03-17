@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statName")] 
 		public inkTextWidgetReference StatName
 		{
-			get
-			{
-				if (_statName == null)
-				{
-					_statName = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "statName", cr2w, this);
-				}
-				return _statName;
-			}
-			set
-			{
-				if (_statName == value)
-				{
-					return;
-				}
-				_statName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statName);
+			set => SetProperty(ref _statName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("statValue")] 
 		public inkTextWidgetReference StatValue
 		{
-			get
-			{
-				if (_statValue == null)
-				{
-					_statValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "statValue", cr2w, this);
-				}
-				return _statValue;
-			}
-			set
-			{
-				if (_statValue == value)
-				{
-					return;
-				}
-				_statValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statValue);
+			set => SetProperty(ref _statValue, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("statComparedContainer")] 
 		public inkWidgetReference StatComparedContainer
 		{
-			get
-			{
-				if (_statComparedContainer == null)
-				{
-					_statComparedContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "statComparedContainer", cr2w, this);
-				}
-				return _statComparedContainer;
-			}
-			set
-			{
-				if (_statComparedContainer == value)
-				{
-					return;
-				}
-				_statComparedContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statComparedContainer);
+			set => SetProperty(ref _statComparedContainer, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("statComparedValue")] 
 		public inkTextWidgetReference StatComparedValue
 		{
-			get
-			{
-				if (_statComparedValue == null)
-				{
-					_statComparedValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "statComparedValue", cr2w, this);
-				}
-				return _statComparedValue;
-			}
-			set
-			{
-				if (_statComparedValue == value)
-				{
-					return;
-				}
-				_statComparedValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statComparedValue);
+			set => SetProperty(ref _statComparedValue, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("arrow")] 
 		public inkImageWidgetReference Arrow
 		{
-			get
-			{
-				if (_arrow == null)
-				{
-					_arrow = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "arrow", cr2w, this);
-				}
-				return _arrow;
-			}
-			set
-			{
-				if (_arrow == value)
-				{
-					return;
-				}
-				_arrow = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _arrow);
+			set => SetProperty(ref _arrow, value);
 		}
 
 		public ItemTooltipStatController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

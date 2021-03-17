@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_SimpleDevice> AnimFeature
 		{
-			get
-			{
-				if (_animFeature == null)
-				{
-					_animFeature = (CHandle<AnimFeature_SimpleDevice>) CR2WTypeManager.Create("handle:AnimFeature_SimpleDevice", "animFeature", cr2w, this);
-				}
-				return _animFeature;
-			}
-			set
-			{
-				if (_animFeature == value)
-				{
-					return;
-				}
-				_animFeature = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animFeature);
+			set => SetProperty(ref _animFeature, value);
 		}
 
 		[Ordinal(94)] 
 		[RED("hitCount")] 
 		public CInt32 HitCount
 		{
-			get
-			{
-				if (_hitCount == null)
-				{
-					_hitCount = (CInt32) CR2WTypeManager.Create("Int32", "hitCount", cr2w, this);
-				}
-				return _hitCount;
-			}
-			set
-			{
-				if (_hitCount == value)
-				{
-					return;
-				}
-				_hitCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitCount);
+			set => SetProperty(ref _hitCount, value);
 		}
 
 		[Ordinal(95)] 
 		[RED("meshComponent")] 
 		public CHandle<entMeshComponent> MeshComponent
 		{
-			get
-			{
-				if (_meshComponent == null)
-				{
-					_meshComponent = (CHandle<entMeshComponent>) CR2WTypeManager.Create("handle:entMeshComponent", "meshComponent", cr2w, this);
-				}
-				return _meshComponent;
-			}
-			set
-			{
-				if (_meshComponent == value)
-				{
-					return;
-				}
-				_meshComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshComponent);
+			set => SetProperty(ref _meshComponent, value);
 		}
 
 		[Ordinal(96)] 
 		[RED("meshAppearence")] 
 		public CName MeshAppearence
 		{
-			get
-			{
-				if (_meshAppearence == null)
-				{
-					_meshAppearence = (CName) CR2WTypeManager.Create("CName", "meshAppearence", cr2w, this);
-				}
-				return _meshAppearence;
-			}
-			set
-			{
-				if (_meshAppearence == value)
-				{
-					return;
-				}
-				_meshAppearence = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshAppearence);
+			set => SetProperty(ref _meshAppearence, value);
 		}
 
 		[Ordinal(97)] 
 		[RED("meshAppearenceBreaking")] 
 		public CName MeshAppearenceBreaking
 		{
-			get
-			{
-				if (_meshAppearenceBreaking == null)
-				{
-					_meshAppearenceBreaking = (CName) CR2WTypeManager.Create("CName", "meshAppearenceBreaking", cr2w, this);
-				}
-				return _meshAppearenceBreaking;
-			}
-			set
-			{
-				if (_meshAppearenceBreaking == value)
-				{
-					return;
-				}
-				_meshAppearenceBreaking = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshAppearenceBreaking);
+			set => SetProperty(ref _meshAppearenceBreaking, value);
 		}
 
 		[Ordinal(98)] 
 		[RED("meshAppearenceBroken")] 
 		public CName MeshAppearenceBroken
 		{
-			get
-			{
-				if (_meshAppearenceBroken == null)
-				{
-					_meshAppearenceBroken = (CName) CR2WTypeManager.Create("CName", "meshAppearenceBroken", cr2w, this);
-				}
-				return _meshAppearenceBroken;
-			}
-			set
-			{
-				if (_meshAppearenceBroken == value)
-				{
-					return;
-				}
-				_meshAppearenceBroken = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshAppearenceBroken);
+			set => SetProperty(ref _meshAppearenceBroken, value);
 		}
 
 		[Ordinal(99)] 
 		[RED("defaultDelay")] 
 		public CFloat DefaultDelay
 		{
-			get
-			{
-				if (_defaultDelay == null)
-				{
-					_defaultDelay = (CFloat) CR2WTypeManager.Create("Float", "defaultDelay", cr2w, this);
-				}
-				return _defaultDelay;
-			}
-			set
-			{
-				if (_defaultDelay == value)
-				{
-					return;
-				}
-				_defaultDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultDelay);
+			set => SetProperty(ref _defaultDelay, value);
 		}
 
 		[Ordinal(100)] 
 		[RED("yellowDelay")] 
 		public CFloat YellowDelay
 		{
-			get
-			{
-				if (_yellowDelay == null)
-				{
-					_yellowDelay = (CFloat) CR2WTypeManager.Create("Float", "yellowDelay", cr2w, this);
-				}
-				return _yellowDelay;
-			}
-			set
-			{
-				if (_yellowDelay == value)
-				{
-					return;
-				}
-				_yellowDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _yellowDelay);
+			set => SetProperty(ref _yellowDelay, value);
 		}
 
 		[Ordinal(101)] 
 		[RED("redDelay")] 
 		public CFloat RedDelay
 		{
-			get
-			{
-				if (_redDelay == null)
-				{
-					_redDelay = (CFloat) CR2WTypeManager.Create("Float", "redDelay", cr2w, this);
-				}
-				return _redDelay;
-			}
-			set
-			{
-				if (_redDelay == value)
-				{
-					return;
-				}
-				_redDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _redDelay);
+			set => SetProperty(ref _redDelay, value);
 		}
 
 		public Activator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

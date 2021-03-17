@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dependableEntities")] 
 		public CArray<NodeRef> DependableEntities
 		{
-			get
-			{
-				if (_dependableEntities == null)
-				{
-					_dependableEntities = (CArray<NodeRef>) CR2WTypeManager.Create("array:NodeRef", "dependableEntities", cr2w, this);
-				}
-				return _dependableEntities;
-			}
-			set
-			{
-				if (_dependableEntities == value)
-				{
-					return;
-				}
-				_dependableEntities = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dependableEntities);
+			set => SetProperty(ref _dependableEntities, value);
 		}
 
 		public sampleVisWireMasterTwo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

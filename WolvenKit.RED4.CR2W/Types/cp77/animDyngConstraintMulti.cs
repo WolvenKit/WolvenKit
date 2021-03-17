@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("innerConstraints")] 
 		public CArray<CHandle<animIDyngConstraint>> InnerConstraints
 		{
-			get
-			{
-				if (_innerConstraints == null)
-				{
-					_innerConstraints = (CArray<CHandle<animIDyngConstraint>>) CR2WTypeManager.Create("array:handle:animIDyngConstraint", "innerConstraints", cr2w, this);
-				}
-				return _innerConstraints;
-			}
-			set
-			{
-				if (_innerConstraints == value)
-				{
-					return;
-				}
-				_innerConstraints = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _innerConstraints);
+			set => SetProperty(ref _innerConstraints, value);
 		}
 
 		public animDyngConstraintMulti(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

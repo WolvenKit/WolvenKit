@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bendPowerOffsetInCM")] 
 		public CFloat BendPowerOffsetInCM
 		{
-			get
-			{
-				if (_bendPowerOffsetInCM == null)
-				{
-					_bendPowerOffsetInCM = (CFloat) CR2WTypeManager.Create("Float", "bendPowerOffsetInCM", cr2w, this);
-				}
-				return _bendPowerOffsetInCM;
-			}
-			set
-			{
-				if (_bendPowerOffsetInCM == value)
-				{
-					return;
-				}
-				_bendPowerOffsetInCM = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bendPowerOffsetInCM);
+			set => SetProperty(ref _bendPowerOffsetInCM, value);
 		}
 
 		public garmentBendingParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

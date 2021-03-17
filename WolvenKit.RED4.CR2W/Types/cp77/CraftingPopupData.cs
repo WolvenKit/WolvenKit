@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemTooltipData")] 
 		public CHandle<InventoryTooltipData> ItemTooltipData
 		{
-			get
-			{
-				if (_itemTooltipData == null)
-				{
-					_itemTooltipData = (CHandle<InventoryTooltipData>) CR2WTypeManager.Create("handle:InventoryTooltipData", "itemTooltipData", cr2w, this);
-				}
-				return _itemTooltipData;
-			}
-			set
-			{
-				if (_itemTooltipData == value)
-				{
-					return;
-				}
-				_itemTooltipData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemTooltipData);
+			set => SetProperty(ref _itemTooltipData, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("craftingCommand")] 
 		public CEnum<CraftingCommands> CraftingCommand
 		{
-			get
-			{
-				if (_craftingCommand == null)
-				{
-					_craftingCommand = (CEnum<CraftingCommands>) CR2WTypeManager.Create("CraftingCommands", "craftingCommand", cr2w, this);
-				}
-				return _craftingCommand;
-			}
-			set
-			{
-				if (_craftingCommand == value)
-				{
-					return;
-				}
-				_craftingCommand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _craftingCommand);
+			set => SetProperty(ref _craftingCommand, value);
 		}
 
 		public CraftingPopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

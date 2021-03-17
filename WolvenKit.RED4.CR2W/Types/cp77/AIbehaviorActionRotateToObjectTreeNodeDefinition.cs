@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("completeWhenRotated")] 
 		public CHandle<AIArgumentMapping> CompleteWhenRotated
 		{
-			get
-			{
-				if (_completeWhenRotated == null)
-				{
-					_completeWhenRotated = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "completeWhenRotated", cr2w, this);
-				}
-				return _completeWhenRotated;
-			}
-			set
-			{
-				if (_completeWhenRotated == value)
-				{
-					return;
-				}
-				_completeWhenRotated = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _completeWhenRotated);
+			set => SetProperty(ref _completeWhenRotated, value);
 		}
 
 		public AIbehaviorActionRotateToObjectTreeNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

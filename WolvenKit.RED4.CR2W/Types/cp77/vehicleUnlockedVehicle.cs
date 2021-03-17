@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicleID")] 
 		public vehicleGarageVehicleID VehicleID
 		{
-			get
-			{
-				if (_vehicleID == null)
-				{
-					_vehicleID = (vehicleGarageVehicleID) CR2WTypeManager.Create("vehicleGarageVehicleID", "vehicleID", cr2w, this);
-				}
-				return _vehicleID;
-			}
-			set
-			{
-				if (_vehicleID == value)
-				{
-					return;
-				}
-				_vehicleID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleID);
+			set => SetProperty(ref _vehicleID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("health")] 
 		public CFloat Health
 		{
-			get
-			{
-				if (_health == null)
-				{
-					_health = (CFloat) CR2WTypeManager.Create("Float", "health", cr2w, this);
-				}
-				return _health;
-			}
-			set
-			{
-				if (_health == value)
-				{
-					return;
-				}
-				_health = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _health);
+			set => SetProperty(ref _health, value);
 		}
 
 		public vehicleUnlockedVehicle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

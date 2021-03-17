@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("surveillanceCamera")] 
 		public CBool SurveillanceCamera
 		{
-			get
-			{
-				if (_surveillanceCamera == null)
-				{
-					_surveillanceCamera = (CBool) CR2WTypeManager.Create("Bool", "surveillanceCamera", cr2w, this);
-				}
-				return _surveillanceCamera;
-			}
-			set
-			{
-				if (_surveillanceCamera == value)
-				{
-					return;
-				}
-				_surveillanceCamera = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _surveillanceCamera);
+			set => SetProperty(ref _surveillanceCamera, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("securityTurret")] 
 		public CBool SecurityTurret
 		{
-			get
-			{
-				if (_securityTurret == null)
-				{
-					_securityTurret = (CBool) CR2WTypeManager.Create("Bool", "securityTurret", cr2w, this);
-				}
-				return _securityTurret;
-			}
-			set
-			{
-				if (_securityTurret == value)
-				{
-					return;
-				}
-				_securityTurret = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securityTurret);
+			set => SetProperty(ref _securityTurret, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("puppet")] 
 		public CBool Puppet
 		{
-			get
-			{
-				if (_puppet == null)
-				{
-					_puppet = (CBool) CR2WTypeManager.Create("Bool", "puppet", cr2w, this);
-				}
-				return _puppet;
-			}
-			set
-			{
-				if (_puppet == value)
-				{
-					return;
-				}
-				_puppet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppet);
+			set => SetProperty(ref _puppet, value);
 		}
 
 		public ConnectedClassTypes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

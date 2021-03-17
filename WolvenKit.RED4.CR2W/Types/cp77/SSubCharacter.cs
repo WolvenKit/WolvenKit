@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("persistentID")] 
 		public gamePersistentID PersistentID
 		{
-			get
-			{
-				if (_persistentID == null)
-				{
-					_persistentID = (gamePersistentID) CR2WTypeManager.Create("gamePersistentID", "persistentID", cr2w, this);
-				}
-				return _persistentID;
-			}
-			set
-			{
-				if (_persistentID == value)
-				{
-					return;
-				}
-				_persistentID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _persistentID);
+			set => SetProperty(ref _persistentID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("subCharType")] 
 		public CEnum<gamedataSubCharacter> SubCharType
 		{
-			get
-			{
-				if (_subCharType == null)
-				{
-					_subCharType = (CEnum<gamedataSubCharacter>) CR2WTypeManager.Create("gamedataSubCharacter", "subCharType", cr2w, this);
-				}
-				return _subCharType;
-			}
-			set
-			{
-				if (_subCharType == value)
-				{
-					return;
-				}
-				_subCharType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subCharType);
+			set => SetProperty(ref _subCharType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("equipmentData")] 
 		public CHandle<EquipmentSystemPlayerData> EquipmentData
 		{
-			get
-			{
-				if (_equipmentData == null)
-				{
-					_equipmentData = (CHandle<EquipmentSystemPlayerData>) CR2WTypeManager.Create("handle:EquipmentSystemPlayerData", "equipmentData", cr2w, this);
-				}
-				return _equipmentData;
-			}
-			set
-			{
-				if (_equipmentData == value)
-				{
-					return;
-				}
-				_equipmentData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipmentData);
+			set => SetProperty(ref _equipmentData, value);
 		}
 
 		public SSubCharacter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

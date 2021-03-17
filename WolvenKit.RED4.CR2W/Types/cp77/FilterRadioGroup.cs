@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("libraryPath")] 
 		public inkWidgetLibraryReference LibraryPath
 		{
-			get
-			{
-				if (_libraryPath == null)
-				{
-					_libraryPath = (inkWidgetLibraryReference) CR2WTypeManager.Create("inkWidgetLibraryReference", "libraryPath", cr2w, this);
-				}
-				return _libraryPath;
-			}
-			set
-			{
-				if (_libraryPath == value)
-				{
-					return;
-				}
-				_libraryPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _libraryPath);
+			set => SetProperty(ref _libraryPath, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("TooltipsManager")] 
 		public wCHandle<gameuiTooltipsManager> TooltipsManager
 		{
-			get
-			{
-				if (_tooltipsManager == null)
-				{
-					_tooltipsManager = (wCHandle<gameuiTooltipsManager>) CR2WTypeManager.Create("whandle:gameuiTooltipsManager", "TooltipsManager", cr2w, this);
-				}
-				return _tooltipsManager;
-			}
-			set
-			{
-				if (_tooltipsManager == value)
-				{
-					return;
-				}
-				_tooltipsManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsManager);
+			set => SetProperty(ref _tooltipsManager, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("TooltipIndex")] 
 		public CInt32 TooltipIndex
 		{
-			get
-			{
-				if (_tooltipIndex == null)
-				{
-					_tooltipIndex = (CInt32) CR2WTypeManager.Create("Int32", "TooltipIndex", cr2w, this);
-				}
-				return _tooltipIndex;
-			}
-			set
-			{
-				if (_tooltipIndex == value)
-				{
-					return;
-				}
-				_tooltipIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipIndex);
+			set => SetProperty(ref _tooltipIndex, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("toggles")] 
 		public CArray<wCHandle<inkToggleController>> Toggles
 		{
-			get
-			{
-				if (_toggles == null)
-				{
-					_toggles = (CArray<wCHandle<inkToggleController>>) CR2WTypeManager.Create("array:whandle:inkToggleController", "toggles", cr2w, this);
-				}
-				return _toggles;
-			}
-			set
-			{
-				if (_toggles == value)
-				{
-					return;
-				}
-				_toggles = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toggles);
+			set => SetProperty(ref _toggles, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("rootRef")] 
 		public wCHandle<inkCompoundWidget> RootRef
 		{
-			get
-			{
-				if (_rootRef == null)
-				{
-					_rootRef = (wCHandle<inkCompoundWidget>) CR2WTypeManager.Create("whandle:inkCompoundWidget", "rootRef", cr2w, this);
-				}
-				return _rootRef;
-			}
-			set
-			{
-				if (_rootRef == value)
-				{
-					return;
-				}
-				_rootRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rootRef);
+			set => SetProperty(ref _rootRef, value);
 		}
 
 		public FilterRadioGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

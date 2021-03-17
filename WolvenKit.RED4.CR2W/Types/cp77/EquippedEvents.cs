@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stateMachineInstanceData")] 
 		public gamestateMachineStateMachineInstanceData StateMachineInstanceData
 		{
-			get
-			{
-				if (_stateMachineInstanceData == null)
-				{
-					_stateMachineInstanceData = (gamestateMachineStateMachineInstanceData) CR2WTypeManager.Create("gamestateMachineStateMachineInstanceData", "stateMachineInstanceData", cr2w, this);
-				}
-				return _stateMachineInstanceData;
-			}
-			set
-			{
-				if (_stateMachineInstanceData == value)
-				{
-					return;
-				}
-				_stateMachineInstanceData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stateMachineInstanceData);
+			set => SetProperty(ref _stateMachineInstanceData, value);
 		}
 
 		public EquippedEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

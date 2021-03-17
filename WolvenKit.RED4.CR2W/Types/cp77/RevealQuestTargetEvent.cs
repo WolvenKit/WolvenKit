@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sourceName")] 
 		public CName SourceName
 		{
-			get
-			{
-				if (_sourceName == null)
-				{
-					_sourceName = (CName) CR2WTypeManager.Create("CName", "sourceName", cr2w, this);
-				}
-				return _sourceName;
-			}
-			set
-			{
-				if (_sourceName == value)
-				{
-					return;
-				}
-				_sourceName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sourceName);
+			set => SetProperty(ref _sourceName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("durationType")] 
 		public CEnum<ERevealDurationType> DurationType
 		{
-			get
-			{
-				if (_durationType == null)
-				{
-					_durationType = (CEnum<ERevealDurationType>) CR2WTypeManager.Create("ERevealDurationType", "durationType", cr2w, this);
-				}
-				return _durationType;
-			}
-			set
-			{
-				if (_durationType == value)
-				{
-					return;
-				}
-				_durationType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _durationType);
+			set => SetProperty(ref _durationType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("reveal")] 
 		public CBool Reveal
 		{
-			get
-			{
-				if (_reveal == null)
-				{
-					_reveal = (CBool) CR2WTypeManager.Create("Bool", "reveal", cr2w, this);
-				}
-				return _reveal;
-			}
-			set
-			{
-				if (_reveal == value)
-				{
-					return;
-				}
-				_reveal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reveal);
+			set => SetProperty(ref _reveal, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("timeout")] 
 		public CFloat Timeout
 		{
-			get
-			{
-				if (_timeout == null)
-				{
-					_timeout = (CFloat) CR2WTypeManager.Create("Float", "timeout", cr2w, this);
-				}
-				return _timeout;
-			}
-			set
-			{
-				if (_timeout == value)
-				{
-					return;
-				}
-				_timeout = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeout);
+			set => SetProperty(ref _timeout, value);
 		}
 
 		public RevealQuestTargetEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

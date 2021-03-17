@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("source")] 
 		public wCHandle<gameObject> Source
 		{
-			get
-			{
-				if (_source == null)
-				{
-					_source = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "source", cr2w, this);
-				}
-				return _source;
-			}
-			set
-			{
-				if (_source == value)
-				{
-					return;
-				}
-				_source = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("stimType")] 
 		public CEnum<gamedataStimType> StimType
 		{
-			get
-			{
-				if (_stimType == null)
-				{
-					_stimType = (CEnum<gamedataStimType>) CR2WTypeManager.Create("gamedataStimType", "stimType", cr2w, this);
-				}
-				return _stimType;
-			}
-			set
-			{
-				if (_stimType == value)
-				{
-					return;
-				}
-				_stimType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stimType);
+			set => SetProperty(ref _stimType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tags")] 
 		public CArray<CName> Tags
 		{
-			get
-			{
-				if (_tags == null)
-				{
-					_tags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "tags", cr2w, this);
-				}
-				return _tags;
-			}
-			set
-			{
-				if (_tags == value)
-				{
-					return;
-				}
-				_tags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tags);
+			set => SetProperty(ref _tags, value);
 		}
 
 		public StimEventData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

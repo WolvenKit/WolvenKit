@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get
-			{
-				if (_slotName == null)
-				{
-					_slotName = (CName) CR2WTypeManager.Create("CName", "slotName", cr2w, this);
-				}
-				return _slotName;
-			}
-			set
-			{
-				if (_slotName == value)
-				{
-					return;
-				}
-				_slotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotName);
+			set => SetProperty(ref _slotName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("cyberBlood")] 
 		public CBool CyberBlood
 		{
-			get
-			{
-				if (_cyberBlood == null)
-				{
-					_cyberBlood = (CBool) CR2WTypeManager.Create("Bool", "cyberBlood", cr2w, this);
-				}
-				return _cyberBlood;
-			}
-			set
-			{
-				if (_cyberBlood == value)
-				{
-					return;
-				}
-				_cyberBlood = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cyberBlood);
+			set => SetProperty(ref _cyberBlood, value);
 		}
 
 		public BloodPuddleEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

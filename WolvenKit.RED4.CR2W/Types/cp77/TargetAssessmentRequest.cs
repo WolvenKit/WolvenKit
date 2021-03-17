@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetToAssess")] 
 		public wCHandle<gameObject> TargetToAssess
 		{
-			get
-			{
-				if (_targetToAssess == null)
-				{
-					_targetToAssess = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "targetToAssess", cr2w, this);
-				}
-				return _targetToAssess;
-			}
-			set
-			{
-				if (_targetToAssess == value)
-				{
-					return;
-				}
-				_targetToAssess = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetToAssess);
+			set => SetProperty(ref _targetToAssess, value);
 		}
 
 		public TargetAssessmentRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("notificationType")] 
 		public CEnum<CraftingNotificationType> NotificationType
 		{
-			get
-			{
-				if (_notificationType == null)
-				{
-					_notificationType = (CEnum<CraftingNotificationType>) CR2WTypeManager.Create("CraftingNotificationType", "notificationType", cr2w, this);
-				}
-				return _notificationType;
-			}
-			set
-			{
-				if (_notificationType == value)
-				{
-					return;
-				}
-				_notificationType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _notificationType);
+			set => SetProperty(ref _notificationType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("perkName")] 
 		public CString PerkName
 		{
-			get
-			{
-				if (_perkName == null)
-				{
-					_perkName = (CString) CR2WTypeManager.Create("String", "perkName", cr2w, this);
-				}
-				return _perkName;
-			}
-			set
-			{
-				if (_perkName == value)
-				{
-					return;
-				}
-				_perkName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perkName);
+			set => SetProperty(ref _perkName, value);
 		}
 
 		public CraftingNotificationEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

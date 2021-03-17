@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("spawnSetNameToCommunityID")] 
 		public gameCommunitySpawnSetNameToID SpawnSetNameToCommunityID
 		{
-			get
-			{
-				if (_spawnSetNameToCommunityID == null)
-				{
-					_spawnSetNameToCommunityID = (gameCommunitySpawnSetNameToID) CR2WTypeManager.Create("gameCommunitySpawnSetNameToID", "spawnSetNameToCommunityID", cr2w, this);
-				}
-				return _spawnSetNameToCommunityID;
-			}
-			set
-			{
-				if (_spawnSetNameToCommunityID == value)
-				{
-					return;
-				}
-				_spawnSetNameToCommunityID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnSetNameToCommunityID);
+			set => SetProperty(ref _spawnSetNameToCommunityID, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("crowdCreationRegistry")] 
 		public CHandle<gameCrowdCreationDataRegistry> CrowdCreationRegistry
 		{
-			get
-			{
-				if (_crowdCreationRegistry == null)
-				{
-					_crowdCreationRegistry = (CHandle<gameCrowdCreationDataRegistry>) CR2WTypeManager.Create("handle:gameCrowdCreationDataRegistry", "crowdCreationRegistry", cr2w, this);
-				}
-				return _crowdCreationRegistry;
-			}
-			set
-			{
-				if (_crowdCreationRegistry == value)
-				{
-					return;
-				}
-				_crowdCreationRegistry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _crowdCreationRegistry);
+			set => SetProperty(ref _crowdCreationRegistry, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("communitiesData")] 
 		public CArray<worldCommunityRegistryItem> CommunitiesData
 		{
-			get
-			{
-				if (_communitiesData == null)
-				{
-					_communitiesData = (CArray<worldCommunityRegistryItem>) CR2WTypeManager.Create("array:worldCommunityRegistryItem", "communitiesData", cr2w, this);
-				}
-				return _communitiesData;
-			}
-			set
-			{
-				if (_communitiesData == value)
-				{
-					return;
-				}
-				_communitiesData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _communitiesData);
+			set => SetProperty(ref _communitiesData, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("workspotsPersistentData")] 
 		public CArray<AISpotPersistentData> WorkspotsPersistentData
 		{
-			get
-			{
-				if (_workspotsPersistentData == null)
-				{
-					_workspotsPersistentData = (CArray<AISpotPersistentData>) CR2WTypeManager.Create("array:AISpotPersistentData", "workspotsPersistentData", cr2w, this);
-				}
-				return _workspotsPersistentData;
-			}
-			set
-			{
-				if (_workspotsPersistentData == value)
-				{
-					return;
-				}
-				_workspotsPersistentData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotsPersistentData);
+			set => SetProperty(ref _workspotsPersistentData, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("representsCrowd")] 
 		public CBool RepresentsCrowd
 		{
-			get
-			{
-				if (_representsCrowd == null)
-				{
-					_representsCrowd = (CBool) CR2WTypeManager.Create("Bool", "representsCrowd", cr2w, this);
-				}
-				return _representsCrowd;
-			}
-			set
-			{
-				if (_representsCrowd == value)
-				{
-					return;
-				}
-				_representsCrowd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _representsCrowd);
+			set => SetProperty(ref _representsCrowd, value);
 		}
 
 		public worldCommunityRegistryNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

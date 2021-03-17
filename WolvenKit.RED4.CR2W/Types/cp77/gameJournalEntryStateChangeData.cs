@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entryPath")] 
 		public CHandle<gameJournalPath> EntryPath
 		{
-			get
-			{
-				if (_entryPath == null)
-				{
-					_entryPath = (CHandle<gameJournalPath>) CR2WTypeManager.Create("handle:gameJournalPath", "entryPath", cr2w, this);
-				}
-				return _entryPath;
-			}
-			set
-			{
-				if (_entryPath == value)
-				{
-					return;
-				}
-				_entryPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryPath);
+			set => SetProperty(ref _entryPath, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entryName")] 
 		public CString EntryName
 		{
-			get
-			{
-				if (_entryName == null)
-				{
-					_entryName = (CString) CR2WTypeManager.Create("String", "entryName", cr2w, this);
-				}
-				return _entryName;
-			}
-			set
-			{
-				if (_entryName == value)
-				{
-					return;
-				}
-				_entryName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryName);
+			set => SetProperty(ref _entryName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entryType")] 
 		public CName EntryType
 		{
-			get
-			{
-				if (_entryType == null)
-				{
-					_entryType = (CName) CR2WTypeManager.Create("CName", "entryType", cr2w, this);
-				}
-				return _entryType;
-			}
-			set
-			{
-				if (_entryType == value)
-				{
-					return;
-				}
-				_entryType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryType);
+			set => SetProperty(ref _entryType, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isEntryTracked")] 
 		public CBool IsEntryTracked
 		{
-			get
-			{
-				if (_isEntryTracked == null)
-				{
-					_isEntryTracked = (CBool) CR2WTypeManager.Create("Bool", "isEntryTracked", cr2w, this);
-				}
-				return _isEntryTracked;
-			}
-			set
-			{
-				if (_isEntryTracked == value)
-				{
-					return;
-				}
-				_isEntryTracked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEntryTracked);
+			set => SetProperty(ref _isEntryTracked, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isQuestEntryTracked")] 
 		public CBool IsQuestEntryTracked
 		{
-			get
-			{
-				if (_isQuestEntryTracked == null)
-				{
-					_isQuestEntryTracked = (CBool) CR2WTypeManager.Create("Bool", "isQuestEntryTracked", cr2w, this);
-				}
-				return _isQuestEntryTracked;
-			}
-			set
-			{
-				if (_isQuestEntryTracked == value)
-				{
-					return;
-				}
-				_isQuestEntryTracked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isQuestEntryTracked);
+			set => SetProperty(ref _isQuestEntryTracked, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("oldState")] 
 		public CEnum<gameJournalEntryState> OldState
 		{
-			get
-			{
-				if (_oldState == null)
-				{
-					_oldState = (CEnum<gameJournalEntryState>) CR2WTypeManager.Create("gameJournalEntryState", "oldState", cr2w, this);
-				}
-				return _oldState;
-			}
-			set
-			{
-				if (_oldState == value)
-				{
-					return;
-				}
-				_oldState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _oldState);
+			set => SetProperty(ref _oldState, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("newState")] 
 		public CEnum<gameJournalEntryState> NewState
 		{
-			get
-			{
-				if (_newState == null)
-				{
-					_newState = (CEnum<gameJournalEntryState>) CR2WTypeManager.Create("gameJournalEntryState", "newState", cr2w, this);
-				}
-				return _newState;
-			}
-			set
-			{
-				if (_newState == value)
-				{
-					return;
-				}
-				_newState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newState);
+			set => SetProperty(ref _newState, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("notifyOption")] 
 		public CEnum<gameJournalNotifyOption> NotifyOption
 		{
-			get
-			{
-				if (_notifyOption == null)
-				{
-					_notifyOption = (CEnum<gameJournalNotifyOption>) CR2WTypeManager.Create("gameJournalNotifyOption", "notifyOption", cr2w, this);
-				}
-				return _notifyOption;
-			}
-			set
-			{
-				if (_notifyOption == value)
-				{
-					return;
-				}
-				_notifyOption = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _notifyOption);
+			set => SetProperty(ref _notifyOption, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("changeType")] 
 		public CEnum<gameJournalChangeType> ChangeType
 		{
-			get
-			{
-				if (_changeType == null)
-				{
-					_changeType = (CEnum<gameJournalChangeType>) CR2WTypeManager.Create("gameJournalChangeType", "changeType", cr2w, this);
-				}
-				return _changeType;
-			}
-			set
-			{
-				if (_changeType == value)
-				{
-					return;
-				}
-				_changeType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _changeType);
+			set => SetProperty(ref _changeType, value);
 		}
 
 		public gameJournalEntryStateChangeData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("StatLabelRef")] 
 		public inkTextWidgetReference StatLabelRef
 		{
-			get
-			{
-				if (_statLabelRef == null)
-				{
-					_statLabelRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "StatLabelRef", cr2w, this);
-				}
-				return _statLabelRef;
-			}
-			set
-			{
-				if (_statLabelRef == value)
-				{
-					return;
-				}
-				_statLabelRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statLabelRef);
+			set => SetProperty(ref _statLabelRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("StatValueRef")] 
 		public inkTextWidgetReference StatValueRef
 		{
-			get
-			{
-				if (_statValueRef == null)
-				{
-					_statValueRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "StatValueRef", cr2w, this);
-				}
-				return _statValueRef;
-			}
-			set
-			{
-				if (_statValueRef == value)
-				{
-					return;
-				}
-				_statValueRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statValueRef);
+			set => SetProperty(ref _statValueRef, value);
 		}
 
 		public StatsDetailViewController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

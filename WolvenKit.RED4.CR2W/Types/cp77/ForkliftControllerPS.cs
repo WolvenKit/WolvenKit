@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("forkliftSetup")] 
 		public ForkliftSetup ForkliftSetup
 		{
-			get
-			{
-				if (_forkliftSetup == null)
-				{
-					_forkliftSetup = (ForkliftSetup) CR2WTypeManager.Create("ForkliftSetup", "forkliftSetup", cr2w, this);
-				}
-				return _forkliftSetup;
-			}
-			set
-			{
-				if (_forkliftSetup == value)
-				{
-					return;
-				}
-				_forkliftSetup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forkliftSetup);
+			set => SetProperty(ref _forkliftSetup, value);
 		}
 
 		[Ordinal(104)] 
 		[RED("isUp")] 
 		public CBool IsUp
 		{
-			get
-			{
-				if (_isUp == null)
-				{
-					_isUp = (CBool) CR2WTypeManager.Create("Bool", "isUp", cr2w, this);
-				}
-				return _isUp;
-			}
-			set
-			{
-				if (_isUp == value)
-				{
-					return;
-				}
-				_isUp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isUp);
+			set => SetProperty(ref _isUp, value);
 		}
 
 		public ForkliftControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

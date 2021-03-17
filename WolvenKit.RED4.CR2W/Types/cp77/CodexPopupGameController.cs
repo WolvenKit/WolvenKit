@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("title")] 
 		public inkTextWidgetReference Title
 		{
-			get
-			{
-				if (_title == null)
-				{
-					_title = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "title", cr2w, this);
-				}
-				return _title;
-			}
-			set
-			{
-				if (_title == value)
-				{
-					return;
-				}
-				_title = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _title);
+			set => SetProperty(ref _title, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("text")] 
 		public inkTextWidgetReference Text
 		{
-			get
-			{
-				if (_text == null)
-				{
-					_text = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "text", cr2w, this);
-				}
-				return _text;
-			}
-			set
-			{
-				if (_text == value)
-				{
-					return;
-				}
-				_text = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _text);
+			set => SetProperty(ref _text, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("image")] 
 		public inkImageWidgetReference Image
 		{
-			get
-			{
-				if (_image == null)
-				{
-					_image = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "image", cr2w, this);
-				}
-				return _image;
-			}
-			set
-			{
-				if (_image == value)
-				{
-					return;
-				}
-				_image = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _image);
+			set => SetProperty(ref _image, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("buttonHintsManagerRef")] 
 		public inkWidgetReference ButtonHintsManagerRef
 		{
-			get
-			{
-				if (_buttonHintsManagerRef == null)
-				{
-					_buttonHintsManagerRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "buttonHintsManagerRef", cr2w, this);
-				}
-				return _buttonHintsManagerRef;
-			}
-			set
-			{
-				if (_buttonHintsManagerRef == value)
-				{
-					return;
-				}
-				_buttonHintsManagerRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonHintsManagerRef);
+			set => SetProperty(ref _buttonHintsManagerRef, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("player")] 
 		public wCHandle<gameObject> Player
 		{
-			get
-			{
-				if (_player == null)
-				{
-					_player = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "player", cr2w, this);
-				}
-				return _player;
-			}
-			set
-			{
-				if (_player == value)
-				{
-					return;
-				}
-				_player = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _player);
+			set => SetProperty(ref _player, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("journalMgr")] 
 		public wCHandle<gameJournalManager> JournalMgr
 		{
-			get
-			{
-				if (_journalMgr == null)
-				{
-					_journalMgr = (wCHandle<gameJournalManager>) CR2WTypeManager.Create("whandle:gameJournalManager", "journalMgr", cr2w, this);
-				}
-				return _journalMgr;
-			}
-			set
-			{
-				if (_journalMgr == value)
-				{
-					return;
-				}
-				_journalMgr = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _journalMgr);
+			set => SetProperty(ref _journalMgr, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("data")] 
 		public CHandle<CodexPopupData> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CHandle<CodexPopupData>) CR2WTypeManager.Create("handle:CodexPopupData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		public CodexPopupGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

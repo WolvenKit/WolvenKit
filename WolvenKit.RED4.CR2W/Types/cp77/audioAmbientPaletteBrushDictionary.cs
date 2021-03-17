@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entries")] 
 		public CArray<audioAmbientPaletteBrushDictionaryItem> Entries
 		{
-			get
-			{
-				if (_entries == null)
-				{
-					_entries = (CArray<audioAmbientPaletteBrushDictionaryItem>) CR2WTypeManager.Create("array:audioAmbientPaletteBrushDictionaryItem", "entries", cr2w, this);
-				}
-				return _entries;
-			}
-			set
-			{
-				if (_entries == value)
-				{
-					return;
-				}
-				_entries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entryType")] 
 		public CHandle<audioAmbientPaletteBrushDictionaryItem> EntryType
 		{
-			get
-			{
-				if (_entryType == null)
-				{
-					_entryType = (CHandle<audioAmbientPaletteBrushDictionaryItem>) CR2WTypeManager.Create("handle:audioAmbientPaletteBrushDictionaryItem", "entryType", cr2w, this);
-				}
-				return _entryType;
-			}
-			set
-			{
-				if (_entryType == value)
-				{
-					return;
-				}
-				_entryType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryType);
+			set => SetProperty(ref _entryType, value);
 		}
 
 		public audioAmbientPaletteBrushDictionary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

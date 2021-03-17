@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entityId")] 
 		public entEntityID EntityId
 		{
-			get
-			{
-				if (_entityId == null)
-				{
-					_entityId = (entEntityID) CR2WTypeManager.Create("entEntityID", "entityId", cr2w, this);
-				}
-				return _entityId;
-			}
-			set
-			{
-				if (_entityId == value)
-				{
-					return;
-				}
-				_entityId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityId);
+			set => SetProperty(ref _entityId, value);
 		}
 
 		public gameCommunityID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

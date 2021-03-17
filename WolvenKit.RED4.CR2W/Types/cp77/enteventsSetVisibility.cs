@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("visible")] 
 		public CBool Visible
 		{
-			get
-			{
-				if (_visible == null)
-				{
-					_visible = (CBool) CR2WTypeManager.Create("Bool", "visible", cr2w, this);
-				}
-				return _visible;
-			}
-			set
-			{
-				if (_visible == value)
-				{
-					return;
-				}
-				_visible = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visible);
+			set => SetProperty(ref _visible, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("source")] 
 		public CEnum<entVisibilityParamSource> Source
 		{
-			get
-			{
-				if (_source == null)
-				{
-					_source = (CEnum<entVisibilityParamSource>) CR2WTypeManager.Create("entVisibilityParamSource", "source", cr2w, this);
-				}
-				return _source;
-			}
-			set
-			{
-				if (_source == value)
-				{
-					return;
-				}
-				_source = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
 		}
 
 		public enteventsSetVisibility(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

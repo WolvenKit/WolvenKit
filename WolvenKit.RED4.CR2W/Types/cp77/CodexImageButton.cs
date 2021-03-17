@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("image")] 
 		public inkImageWidgetReference Image
 		{
-			get
-			{
-				if (_image == null)
-				{
-					_image = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "image", cr2w, this);
-				}
-				return _image;
-			}
-			set
-			{
-				if (_image == value)
-				{
-					return;
-				}
-				_image = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _image);
+			set => SetProperty(ref _image, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("border")] 
 		public inkImageWidgetReference Border
 		{
-			get
-			{
-				if (_border == null)
-				{
-					_border = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "border", cr2w, this);
-				}
-				return _border;
-			}
-			set
-			{
-				if (_border == value)
-				{
-					return;
-				}
-				_border = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _border);
+			set => SetProperty(ref _border, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("translateOnSelect")] 
 		public inkWidgetReference TranslateOnSelect
 		{
-			get
-			{
-				if (_translateOnSelect == null)
-				{
-					_translateOnSelect = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "translateOnSelect", cr2w, this);
-				}
-				return _translateOnSelect;
-			}
-			set
-			{
-				if (_translateOnSelect == value)
-				{
-					return;
-				}
-				_translateOnSelect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _translateOnSelect);
+			set => SetProperty(ref _translateOnSelect, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("selectTranslationX")] 
 		public CFloat SelectTranslationX
 		{
-			get
-			{
-				if (_selectTranslationX == null)
-				{
-					_selectTranslationX = (CFloat) CR2WTypeManager.Create("Float", "selectTranslationX", cr2w, this);
-				}
-				return _selectTranslationX;
-			}
-			set
-			{
-				if (_selectTranslationX == value)
-				{
-					return;
-				}
-				_selectTranslationX = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectTranslationX);
+			set => SetProperty(ref _selectTranslationX, value);
 		}
 
 		public CodexImageButton(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

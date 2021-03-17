@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Icon")] 
 		public inkImageWidgetReference Icon
 		{
-			get
-			{
-				if (_icon == null)
-				{
-					_icon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "Icon", cr2w, this);
-				}
-				return _icon;
-			}
-			set
-			{
-				if (_icon == value)
-				{
-					return;
-				}
-				_icon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _icon);
+			set => SetProperty(ref _icon, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("UnavaliableText")] 
 		public inkTextWidgetReference UnavaliableText
 		{
-			get
-			{
-				if (_unavaliableText == null)
-				{
-					_unavaliableText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "UnavaliableText", cr2w, this);
-				}
-				return _unavaliableText;
-			}
-			set
-			{
-				if (_unavaliableText == value)
-				{
-					return;
-				}
-				_unavaliableText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unavaliableText);
+			set => SetProperty(ref _unavaliableText, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("Root")] 
 		public wCHandle<inkWidget> Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "Root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		public AHintItemController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

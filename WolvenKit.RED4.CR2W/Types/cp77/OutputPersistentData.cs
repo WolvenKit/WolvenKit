@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("currentSecurityState")] 
 		public CEnum<ESecuritySystemState> CurrentSecurityState
 		{
-			get
-			{
-				if (_currentSecurityState == null)
-				{
-					_currentSecurityState = (CEnum<ESecuritySystemState>) CR2WTypeManager.Create("ESecuritySystemState", "currentSecurityState", cr2w, this);
-				}
-				return _currentSecurityState;
-			}
-			set
-			{
-				if (_currentSecurityState == value)
-				{
-					return;
-				}
-				_currentSecurityState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentSecurityState);
+			set => SetProperty(ref _currentSecurityState, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("breachOrigin")] 
 		public CEnum<EBreachOrigin> BreachOrigin
 		{
-			get
-			{
-				if (_breachOrigin == null)
-				{
-					_breachOrigin = (CEnum<EBreachOrigin>) CR2WTypeManager.Create("EBreachOrigin", "breachOrigin", cr2w, this);
-				}
-				return _breachOrigin;
-			}
-			set
-			{
-				if (_breachOrigin == value)
-				{
-					return;
-				}
-				_breachOrigin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _breachOrigin);
+			set => SetProperty(ref _breachOrigin, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("securityStateChanged")] 
 		public CBool SecurityStateChanged
 		{
-			get
-			{
-				if (_securityStateChanged == null)
-				{
-					_securityStateChanged = (CBool) CR2WTypeManager.Create("Bool", "securityStateChanged", cr2w, this);
-				}
-				return _securityStateChanged;
-			}
-			set
-			{
-				if (_securityStateChanged == value)
-				{
-					return;
-				}
-				_securityStateChanged = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securityStateChanged);
+			set => SetProperty(ref _securityStateChanged, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("lastKnownPosition")] 
 		public Vector4 LastKnownPosition
 		{
-			get
-			{
-				if (_lastKnownPosition == null)
-				{
-					_lastKnownPosition = (Vector4) CR2WTypeManager.Create("Vector4", "lastKnownPosition", cr2w, this);
-				}
-				return _lastKnownPosition;
-			}
-			set
-			{
-				if (_lastKnownPosition == value)
-				{
-					return;
-				}
-				_lastKnownPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastKnownPosition);
+			set => SetProperty(ref _lastKnownPosition, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("type")] 
 		public CEnum<ESecurityNotificationType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<ESecurityNotificationType>) CR2WTypeManager.Create("ESecurityNotificationType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("areaType")] 
 		public CEnum<ESecurityAreaType> AreaType
 		{
-			get
-			{
-				if (_areaType == null)
-				{
-					_areaType = (CEnum<ESecurityAreaType>) CR2WTypeManager.Create("ESecurityAreaType", "areaType", cr2w, this);
-				}
-				return _areaType;
-			}
-			set
-			{
-				if (_areaType == value)
-				{
-					return;
-				}
-				_areaType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaType);
+			set => SetProperty(ref _areaType, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("objectOfInterest")] 
 		public entEntityID ObjectOfInterest
 		{
-			get
-			{
-				if (_objectOfInterest == null)
-				{
-					_objectOfInterest = (entEntityID) CR2WTypeManager.Create("entEntityID", "objectOfInterest", cr2w, this);
-				}
-				return _objectOfInterest;
-			}
-			set
-			{
-				if (_objectOfInterest == value)
-				{
-					return;
-				}
-				_objectOfInterest = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectOfInterest);
+			set => SetProperty(ref _objectOfInterest, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("whoBreached")] 
 		public entEntityID WhoBreached
 		{
-			get
-			{
-				if (_whoBreached == null)
-				{
-					_whoBreached = (entEntityID) CR2WTypeManager.Create("entEntityID", "whoBreached", cr2w, this);
-				}
-				return _whoBreached;
-			}
-			set
-			{
-				if (_whoBreached == value)
-				{
-					return;
-				}
-				_whoBreached = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _whoBreached);
+			set => SetProperty(ref _whoBreached, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("reporter")] 
 		public gamePersistentID Reporter
 		{
-			get
-			{
-				if (_reporter == null)
-				{
-					_reporter = (gamePersistentID) CR2WTypeManager.Create("gamePersistentID", "reporter", cr2w, this);
-				}
-				return _reporter;
-			}
-			set
-			{
-				if (_reporter == value)
-				{
-					return;
-				}
-				_reporter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reporter);
+			set => SetProperty(ref _reporter, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("id")] 
 		public CInt32 Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CInt32) CR2WTypeManager.Create("Int32", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		public OutputPersistentData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

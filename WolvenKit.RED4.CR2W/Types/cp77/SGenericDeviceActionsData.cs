@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("toggleON")] 
 		public SDeviceActionBoolData ToggleON
 		{
-			get
-			{
-				if (_toggleON == null)
-				{
-					_toggleON = (SDeviceActionBoolData) CR2WTypeManager.Create("SDeviceActionBoolData", "toggleON", cr2w, this);
-				}
-				return _toggleON;
-			}
-			set
-			{
-				if (_toggleON == value)
-				{
-					return;
-				}
-				_toggleON = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toggleON);
+			set => SetProperty(ref _toggleON, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("togglePower")] 
 		public SDeviceActionBoolData TogglePower
 		{
-			get
-			{
-				if (_togglePower == null)
-				{
-					_togglePower = (SDeviceActionBoolData) CR2WTypeManager.Create("SDeviceActionBoolData", "togglePower", cr2w, this);
-				}
-				return _togglePower;
-			}
-			set
-			{
-				if (_togglePower == value)
-				{
-					return;
-				}
-				_togglePower = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _togglePower);
+			set => SetProperty(ref _togglePower, value);
 		}
 
 		public SGenericDeviceActionsData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

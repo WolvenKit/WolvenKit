@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sourceID")] 
 		public entEntityID SourceID
 		{
-			get
-			{
-				if (_sourceID == null)
-				{
-					_sourceID = (entEntityID) CR2WTypeManager.Create("entEntityID", "sourceID", cr2w, this);
-				}
-				return _sourceID;
-			}
-			set
-			{
-				if (_sourceID == value)
-				{
-					return;
-				}
-				_sourceID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sourceID);
+			set => SetProperty(ref _sourceID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("pingType")] 
 		public CEnum<EPingType> PingType
 		{
-			get
-			{
-				if (_pingType == null)
-				{
-					_pingType = (CEnum<EPingType>) CR2WTypeManager.Create("EPingType", "pingType", cr2w, this);
-				}
-				return _pingType;
-			}
-			set
-			{
-				if (_pingType == value)
-				{
-					return;
-				}
-				_pingType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pingType);
+			set => SetProperty(ref _pingType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("pingNetworkEffect")] 
 		public CHandle<gameEffectInstance> PingNetworkEffect
 		{
-			get
-			{
-				if (_pingNetworkEffect == null)
-				{
-					_pingNetworkEffect = (CHandle<gameEffectInstance>) CR2WTypeManager.Create("handle:gameEffectInstance", "pingNetworkEffect", cr2w, this);
-				}
-				return _pingNetworkEffect;
-			}
-			set
-			{
-				if (_pingNetworkEffect == value)
-				{
-					return;
-				}
-				_pingNetworkEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pingNetworkEffect);
+			set => SetProperty(ref _pingNetworkEffect, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("timeout")] 
 		public CFloat Timeout
 		{
-			get
-			{
-				if (_timeout == null)
-				{
-					_timeout = (CFloat) CR2WTypeManager.Create("Float", "timeout", cr2w, this);
-				}
-				return _timeout;
-			}
-			set
-			{
-				if (_timeout == value)
-				{
-					return;
-				}
-				_timeout = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeout);
+			set => SetProperty(ref _timeout, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("ammountOfIntervals")] 
 		public CInt32 AmmountOfIntervals
 		{
-			get
-			{
-				if (_ammountOfIntervals == null)
-				{
-					_ammountOfIntervals = (CInt32) CR2WTypeManager.Create("Int32", "ammountOfIntervals", cr2w, this);
-				}
-				return _ammountOfIntervals;
-			}
-			set
-			{
-				if (_ammountOfIntervals == value)
-				{
-					return;
-				}
-				_ammountOfIntervals = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ammountOfIntervals);
+			set => SetProperty(ref _ammountOfIntervals, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("linksCount")] 
 		public CInt32 LinksCount
 		{
-			get
-			{
-				if (_linksCount == null)
-				{
-					_linksCount = (CInt32) CR2WTypeManager.Create("Int32", "linksCount", cr2w, this);
-				}
-				return _linksCount;
-			}
-			set
-			{
-				if (_linksCount == value)
-				{
-					return;
-				}
-				_linksCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linksCount);
+			set => SetProperty(ref _linksCount, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("currentInterval")] 
 		public CInt32 CurrentInterval
 		{
-			get
-			{
-				if (_currentInterval == null)
-				{
-					_currentInterval = (CInt32) CR2WTypeManager.Create("Int32", "currentInterval", cr2w, this);
-				}
-				return _currentInterval;
-			}
-			set
-			{
-				if (_currentInterval == value)
-				{
-					return;
-				}
-				_currentInterval = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentInterval);
+			set => SetProperty(ref _currentInterval, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("delayID")] 
 		public gameDelayID DelayID
 		{
-			get
-			{
-				if (_delayID == null)
-				{
-					_delayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "delayID", cr2w, this);
-				}
-				return _delayID;
-			}
-			set
-			{
-				if (_delayID == value)
-				{
-					return;
-				}
-				_delayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delayID);
+			set => SetProperty(ref _delayID, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("linkType")] 
 		public CEnum<ELinkType> LinkType
 		{
-			get
-			{
-				if (_linkType == null)
-				{
-					_linkType = (CEnum<ELinkType>) CR2WTypeManager.Create("ELinkType", "linkType", cr2w, this);
-				}
-				return _linkType;
-			}
-			set
-			{
-				if (_linkType == value)
-				{
-					return;
-				}
-				_linkType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linkType);
+			set => SetProperty(ref _linkType, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("revealNetwork")] 
 		public CBool RevealNetwork
 		{
-			get
-			{
-				if (_revealNetwork == null)
-				{
-					_revealNetwork = (CBool) CR2WTypeManager.Create("Bool", "revealNetwork", cr2w, this);
-				}
-				return _revealNetwork;
-			}
-			set
-			{
-				if (_revealNetwork == value)
-				{
-					return;
-				}
-				_revealNetwork = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revealNetwork);
+			set => SetProperty(ref _revealNetwork, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("linkFXresource")] 
 		public gameFxResource LinkFXresource
 		{
-			get
-			{
-				if (_linkFXresource == null)
-				{
-					_linkFXresource = (gameFxResource) CR2WTypeManager.Create("gameFxResource", "linkFXresource", cr2w, this);
-				}
-				return _linkFXresource;
-			}
-			set
-			{
-				if (_linkFXresource == value)
-				{
-					return;
-				}
-				_linkFXresource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _linkFXresource);
+			set => SetProperty(ref _linkFXresource, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("sourcePosition")] 
 		public Vector4 SourcePosition
 		{
-			get
-			{
-				if (_sourcePosition == null)
-				{
-					_sourcePosition = (Vector4) CR2WTypeManager.Create("Vector4", "sourcePosition", cr2w, this);
-				}
-				return _sourcePosition;
-			}
-			set
-			{
-				if (_sourcePosition == value)
-				{
-					return;
-				}
-				_sourcePosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sourcePosition);
+			set => SetProperty(ref _sourcePosition, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("hasActiveVirtualNetwork")] 
 		public CBool HasActiveVirtualNetwork
 		{
-			get
-			{
-				if (_hasActiveVirtualNetwork == null)
-				{
-					_hasActiveVirtualNetwork = (CBool) CR2WTypeManager.Create("Bool", "hasActiveVirtualNetwork", cr2w, this);
-				}
-				return _hasActiveVirtualNetwork;
-			}
-			set
-			{
-				if (_hasActiveVirtualNetwork == value)
-				{
-					return;
-				}
-				_hasActiveVirtualNetwork = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasActiveVirtualNetwork);
+			set => SetProperty(ref _hasActiveVirtualNetwork, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("virtualNetworkShape")] 
 		public wCHandle<gamedataVirtualNetwork_Record> VirtualNetworkShape
 		{
-			get
-			{
-				if (_virtualNetworkShape == null)
-				{
-					_virtualNetworkShape = (wCHandle<gamedataVirtualNetwork_Record>) CR2WTypeManager.Create("whandle:gamedataVirtualNetwork_Record", "virtualNetworkShape", cr2w, this);
-				}
-				return _virtualNetworkShape;
-			}
-			set
-			{
-				if (_virtualNetworkShape == value)
-				{
-					return;
-				}
-				_virtualNetworkShape = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _virtualNetworkShape);
+			set => SetProperty(ref _virtualNetworkShape, value);
 		}
 
 		public PingCachedData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

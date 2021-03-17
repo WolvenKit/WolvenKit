@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("pos")] 
 		public Vector2 Pos
 		{
-			get
-			{
-				if (_pos == null)
-				{
-					_pos = (Vector2) CR2WTypeManager.Create("Vector2", "pos", cr2w, this);
-				}
-				return _pos;
-			}
-			set
-			{
-				if (_pos == value)
-				{
-					return;
-				}
-				_pos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pos);
+			set => SetProperty(ref _pos, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isVisible")] 
 		public CBool IsVisible
 		{
-			get
-			{
-				if (_isVisible == null)
-				{
-					_isVisible = (CBool) CR2WTypeManager.Create("Bool", "isVisible", cr2w, this);
-				}
-				return _isVisible;
-			}
-			set
-			{
-				if (_isVisible == value)
-				{
-					return;
-				}
-				_isVisible = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isVisible);
+			set => SetProperty(ref _isVisible, value);
 		}
 
 		public inkCursorInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

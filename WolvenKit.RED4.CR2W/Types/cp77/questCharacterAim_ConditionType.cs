@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get
-			{
-				if (_isPlayer == null)
-				{
-					_isPlayer = (CBool) CR2WTypeManager.Create("Bool", "isPlayer", cr2w, this);
-				}
-				return _isPlayer;
-			}
-			set
-			{
-				if (_isPlayer == value)
-				{
-					return;
-				}
-				_isPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("preciseAiming")] 
 		public CBool PreciseAiming
 		{
-			get
-			{
-				if (_preciseAiming == null)
-				{
-					_preciseAiming = (CBool) CR2WTypeManager.Create("Bool", "preciseAiming", cr2w, this);
-				}
-				return _preciseAiming;
-			}
-			set
-			{
-				if (_preciseAiming == value)
-				{
-					return;
-				}
-				_preciseAiming = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _preciseAiming);
+			set => SetProperty(ref _preciseAiming, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("targetRef")] 
 		public gameEntityReference TargetRef
 		{
-			get
-			{
-				if (_targetRef == null)
-				{
-					_targetRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "targetRef", cr2w, this);
-				}
-				return _targetRef;
-			}
-			set
-			{
-				if (_targetRef == value)
-				{
-					return;
-				}
-				_targetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetRef);
+			set => SetProperty(ref _targetRef, value);
 		}
 
 		public questCharacterAim_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

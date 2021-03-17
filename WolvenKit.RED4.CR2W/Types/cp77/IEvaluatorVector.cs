@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("freeAxes")] 
 		public CEnum<EFreeVectorAxes> FreeAxes
 		{
-			get
-			{
-				if (_freeAxes == null)
-				{
-					_freeAxes = (CEnum<EFreeVectorAxes>) CR2WTypeManager.Create("EFreeVectorAxes", "freeAxes", cr2w, this);
-				}
-				return _freeAxes;
-			}
-			set
-			{
-				if (_freeAxes == value)
-				{
-					return;
-				}
-				_freeAxes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _freeAxes);
+			set => SetProperty(ref _freeAxes, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("spill")] 
 		public CBool Spill
 		{
-			get
-			{
-				if (_spill == null)
-				{
-					_spill = (CBool) CR2WTypeManager.Create("Bool", "spill", cr2w, this);
-				}
-				return _spill;
-			}
-			set
-			{
-				if (_spill == value)
-				{
-					return;
-				}
-				_spill = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spill);
+			set => SetProperty(ref _spill, value);
 		}
 
 		public IEvaluatorVector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

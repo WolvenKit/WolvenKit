@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("behaviorResourceHash")] 
 		public CUInt32 BehaviorResourceHash
 		{
-			get
-			{
-				if (_behaviorResourceHash == null)
-				{
-					_behaviorResourceHash = (CUInt32) CR2WTypeManager.Create("Uint32", "behaviorResourceHash", cr2w, this);
-				}
-				return _behaviorResourceHash;
-			}
-			set
-			{
-				if (_behaviorResourceHash == value)
-				{
-					return;
-				}
-				_behaviorResourceHash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _behaviorResourceHash);
+			set => SetProperty(ref _behaviorResourceHash, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("generation")] 
 		public CUInt32 Generation
 		{
-			get
-			{
-				if (_generation == null)
-				{
-					_generation = (CUInt32) CR2WTypeManager.Create("Uint32", "generation", cr2w, this);
-				}
-				return _generation;
-			}
-			set
-			{
-				if (_generation == value)
-				{
-					return;
-				}
-				_generation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _generation);
+			set => SetProperty(ref _generation, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entries")] 
 		public CArray<AIbehaviorNodeStatusDebuggerCommandEntry> Entries
 		{
-			get
-			{
-				if (_entries == null)
-				{
-					_entries = (CArray<AIbehaviorNodeStatusDebuggerCommandEntry>) CR2WTypeManager.Create("array:AIbehaviorNodeStatusDebuggerCommandEntry", "entries", cr2w, this);
-				}
-				return _entries;
-			}
-			set
-			{
-				if (_entries == value)
-				{
-					return;
-				}
-				_entries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
 		}
 
 		public AIbehaviorNodeStatusDebuggerCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

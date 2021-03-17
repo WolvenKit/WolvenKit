@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("interactionEntity")] 
 		public wCHandle<entEntity> InteractionEntity
 		{
-			get
-			{
-				if (_interactionEntity == null)
-				{
-					_interactionEntity = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "interactionEntity", cr2w, this);
-				}
-				return _interactionEntity;
-			}
-			set
-			{
-				if (_interactionEntity == value)
-				{
-					return;
-				}
-				_interactionEntity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interactionEntity);
+			set => SetProperty(ref _interactionEntity, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("interactionType")] 
 		public CName InteractionType
 		{
-			get
-			{
-				if (_interactionType == null)
-				{
-					_interactionType = (CName) CR2WTypeManager.Create("CName", "interactionType", cr2w, this);
-				}
-				return _interactionType;
-			}
-			set
-			{
-				if (_interactionType == value)
-				{
-					return;
-				}
-				_interactionType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interactionType);
+			set => SetProperty(ref _interactionType, value);
 		}
 
 		public gamestateMachineparameterTypeInteractionDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

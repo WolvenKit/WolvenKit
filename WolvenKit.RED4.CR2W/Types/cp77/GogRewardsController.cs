@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("containerWidget")] 
 		public inkWidgetReference ContainerWidget
 		{
-			get
-			{
-				if (_containerWidget == null)
-				{
-					_containerWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "containerWidget", cr2w, this);
-				}
-				return _containerWidget;
-			}
-			set
-			{
-				if (_containerWidget == value)
-				{
-					return;
-				}
-				_containerWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _containerWidget);
+			set => SetProperty(ref _containerWidget, value);
 		}
 
 		public GogRewardsController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

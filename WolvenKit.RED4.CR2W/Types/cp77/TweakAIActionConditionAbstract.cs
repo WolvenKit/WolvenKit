@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actionRecord")] 
 		public wCHandle<gamedataAIAction_Record> ActionRecord
 		{
-			get
-			{
-				if (_actionRecord == null)
-				{
-					_actionRecord = (wCHandle<gamedataAIAction_Record>) CR2WTypeManager.Create("whandle:gamedataAIAction_Record", "actionRecord", cr2w, this);
-				}
-				return _actionRecord;
-			}
-			set
-			{
-				if (_actionRecord == value)
-				{
-					return;
-				}
-				_actionRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionRecord);
+			set => SetProperty(ref _actionRecord, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("actionDebugName")] 
 		public CString ActionDebugName
 		{
-			get
-			{
-				if (_actionDebugName == null)
-				{
-					_actionDebugName = (CString) CR2WTypeManager.Create("String", "actionDebugName", cr2w, this);
-				}
-				return _actionDebugName;
-			}
-			set
-			{
-				if (_actionDebugName == value)
-				{
-					return;
-				}
-				_actionDebugName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionDebugName);
+			set => SetProperty(ref _actionDebugName, value);
 		}
 
 		public TweakAIActionConditionAbstract(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -30,414 +30,144 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("value")] 
 		public inkTextWidgetReference Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
-			get
-			{
-				if (_label == null)
-				{
-					_label = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "label", cr2w, this);
-				}
-				return _label;
-			}
-			set
-			{
-				if (_label == value)
-				{
-					return;
-				}
-				_label = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _label);
+			set => SetProperty(ref _label, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("addBtn")] 
 		public inkWidgetReference AddBtn
 		{
-			get
-			{
-				if (_addBtn == null)
-				{
-					_addBtn = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "addBtn", cr2w, this);
-				}
-				return _addBtn;
-			}
-			set
-			{
-				if (_addBtn == value)
-				{
-					return;
-				}
-				_addBtn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addBtn);
+			set => SetProperty(ref _addBtn, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("addBtnhitArea")] 
 		public inkWidgetReference AddBtnhitArea
 		{
-			get
-			{
-				if (_addBtnhitArea == null)
-				{
-					_addBtnhitArea = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "addBtnhitArea", cr2w, this);
-				}
-				return _addBtnhitArea;
-			}
-			set
-			{
-				if (_addBtnhitArea == value)
-				{
-					return;
-				}
-				_addBtnhitArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addBtnhitArea);
+			set => SetProperty(ref _addBtnhitArea, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("minusBtn")] 
 		public inkWidgetReference MinusBtn
 		{
-			get
-			{
-				if (_minusBtn == null)
-				{
-					_minusBtn = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "minusBtn", cr2w, this);
-				}
-				return _minusBtn;
-			}
-			set
-			{
-				if (_minusBtn == value)
-				{
-					return;
-				}
-				_minusBtn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minusBtn);
+			set => SetProperty(ref _minusBtn, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("minusBtnhitArea")] 
 		public inkWidgetReference MinusBtnhitArea
 		{
-			get
-			{
-				if (_minusBtnhitArea == null)
-				{
-					_minusBtnhitArea = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "minusBtnhitArea", cr2w, this);
-				}
-				return _minusBtnhitArea;
-			}
-			set
-			{
-				if (_minusBtnhitArea == value)
-				{
-					return;
-				}
-				_minusBtnhitArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minusBtnhitArea);
+			set => SetProperty(ref _minusBtnhitArea, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("minMaxLabel")] 
 		public inkWidgetReference MinMaxLabel
 		{
-			get
-			{
-				if (_minMaxLabel == null)
-				{
-					_minMaxLabel = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "minMaxLabel", cr2w, this);
-				}
-				return _minMaxLabel;
-			}
-			set
-			{
-				if (_minMaxLabel == value)
-				{
-					return;
-				}
-				_minMaxLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minMaxLabel);
+			set => SetProperty(ref _minMaxLabel, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("minMaxLabelText")] 
 		public inkTextWidgetReference MinMaxLabelText
 		{
-			get
-			{
-				if (_minMaxLabelText == null)
-				{
-					_minMaxLabelText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "minMaxLabelText", cr2w, this);
-				}
-				return _minMaxLabelText;
-			}
-			set
-			{
-				if (_minMaxLabelText == value)
-				{
-					return;
-				}
-				_minMaxLabelText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minMaxLabelText);
+			set => SetProperty(ref _minMaxLabelText, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("minusBtnNONE")] 
 		public inkWidgetReference MinusBtnNONE
 		{
-			get
-			{
-				if (_minusBtnNONE == null)
-				{
-					_minusBtnNONE = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "minusBtnNONE", cr2w, this);
-				}
-				return _minusBtnNONE;
-			}
-			set
-			{
-				if (_minusBtnNONE == value)
-				{
-					return;
-				}
-				_minusBtnNONE = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minusBtnNONE);
+			set => SetProperty(ref _minusBtnNONE, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("addBtnNONE")] 
 		public inkWidgetReference AddBtnNONE
 		{
-			get
-			{
-				if (_addBtnNONE == null)
-				{
-					_addBtnNONE = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "addBtnNONE", cr2w, this);
-				}
-				return _addBtnNONE;
-			}
-			set
-			{
-				if (_addBtnNONE == value)
-				{
-					return;
-				}
-				_addBtnNONE = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addBtnNONE);
+			set => SetProperty(ref _addBtnNONE, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("data")] 
 		public CHandle<CharacterCreationAttributeData> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CHandle<CharacterCreationAttributeData>) CR2WTypeManager.Create("handle:CharacterCreationAttributeData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("animating")] 
 		public CBool Animating
 		{
-			get
-			{
-				if (_animating == null)
-				{
-					_animating = (CBool) CR2WTypeManager.Create("Bool", "animating", cr2w, this);
-				}
-				return _animating;
-			}
-			set
-			{
-				if (_animating == value)
-				{
-					return;
-				}
-				_animating = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animating);
+			set => SetProperty(ref _animating, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("minusEnabled")] 
 		public CBool MinusEnabled
 		{
-			get
-			{
-				if (_minusEnabled == null)
-				{
-					_minusEnabled = (CBool) CR2WTypeManager.Create("Bool", "minusEnabled", cr2w, this);
-				}
-				return _minusEnabled;
-			}
-			set
-			{
-				if (_minusEnabled == value)
-				{
-					return;
-				}
-				_minusEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minusEnabled);
+			set => SetProperty(ref _minusEnabled, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("addEnabled")] 
 		public CBool AddEnabled
 		{
-			get
-			{
-				if (_addEnabled == null)
-				{
-					_addEnabled = (CBool) CR2WTypeManager.Create("Bool", "addEnabled", cr2w, this);
-				}
-				return _addEnabled;
-			}
-			set
-			{
-				if (_addEnabled == value)
-				{
-					return;
-				}
-				_addEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addEnabled);
+			set => SetProperty(ref _addEnabled, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("maxed")] 
 		public CBool Maxed
 		{
-			get
-			{
-				if (_maxed == null)
-				{
-					_maxed = (CBool) CR2WTypeManager.Create("Bool", "maxed", cr2w, this);
-				}
-				return _maxed;
-			}
-			set
-			{
-				if (_maxed == value)
-				{
-					return;
-				}
-				_maxed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxed);
+			set => SetProperty(ref _maxed, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("addBtnState")] 
 		public CEnum<AttributeButtonState> AddBtnState
 		{
-			get
-			{
-				if (_addBtnState == null)
-				{
-					_addBtnState = (CEnum<AttributeButtonState>) CR2WTypeManager.Create("AttributeButtonState", "addBtnState", cr2w, this);
-				}
-				return _addBtnState;
-			}
-			set
-			{
-				if (_addBtnState == value)
-				{
-					return;
-				}
-				_addBtnState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addBtnState);
+			set => SetProperty(ref _addBtnState, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("minusBtnState")] 
 		public CEnum<AttributeButtonState> MinusBtnState
 		{
-			get
-			{
-				if (_minusBtnState == null)
-				{
-					_minusBtnState = (CEnum<AttributeButtonState>) CR2WTypeManager.Create("AttributeButtonState", "minusBtnState", cr2w, this);
-				}
-				return _minusBtnState;
-			}
-			set
-			{
-				if (_minusBtnState == value)
-				{
-					return;
-				}
-				_minusBtnState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minusBtnState);
+			set => SetProperty(ref _minusBtnState, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("state")] 
 		public CEnum<AttributeButtonState> State
 		{
-			get
-			{
-				if (_state == null)
-				{
-					_state = (CEnum<AttributeButtonState>) CR2WTypeManager.Create("AttributeButtonState", "state", cr2w, this);
-				}
-				return _state;
-			}
-			set
-			{
-				if (_state == value)
-				{
-					return;
-				}
-				_state = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
 		}
 
 		public characterCreationStatsAttributeBtn(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

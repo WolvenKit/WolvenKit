@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("workspotNode")] 
 		public NodeRef WorkspotNode
 		{
-			get
-			{
-				if (_workspotNode == null)
-				{
-					_workspotNode = (NodeRef) CR2WTypeManager.Create("NodeRef", "workspotNode", cr2w, this);
-				}
-				return _workspotNode;
-			}
-			set
-			{
-				if (_workspotNode == value)
-				{
-					return;
-				}
-				_workspotNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotNode);
+			set => SetProperty(ref _workspotNode, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("moveToWorkspot")] 
 		public CBool MoveToWorkspot
 		{
-			get
-			{
-				if (_moveToWorkspot == null)
-				{
-					_moveToWorkspot = (CBool) CR2WTypeManager.Create("Bool", "moveToWorkspot", cr2w, this);
-				}
-				return _moveToWorkspot;
-			}
-			set
-			{
-				if (_moveToWorkspot == value)
-				{
-					return;
-				}
-				_moveToWorkspot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _moveToWorkspot);
+			set => SetProperty(ref _moveToWorkspot, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("forceEntryAnimName")] 
 		public CName ForceEntryAnimName
 		{
-			get
-			{
-				if (_forceEntryAnimName == null)
-				{
-					_forceEntryAnimName = (CName) CR2WTypeManager.Create("CName", "forceEntryAnimName", cr2w, this);
-				}
-				return _forceEntryAnimName;
-			}
-			set
-			{
-				if (_forceEntryAnimName == value)
-				{
-					return;
-				}
-				_forceEntryAnimName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceEntryAnimName);
+			set => SetProperty(ref _forceEntryAnimName, value);
 		}
 
 		public questUseWorkspotCommandParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

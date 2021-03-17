@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ownerPuppet")] 
 		public wCHandle<PlayerPuppet> OwnerPuppet
 		{
-			get
-			{
-				if (_ownerPuppet == null)
-				{
-					_ownerPuppet = (wCHandle<PlayerPuppet>) CR2WTypeManager.Create("whandle:PlayerPuppet", "ownerPuppet", cr2w, this);
-				}
-				return _ownerPuppet;
-			}
-			set
-			{
-				if (_ownerPuppet == value)
-				{
-					return;
-				}
-				_ownerPuppet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerPuppet);
+			set => SetProperty(ref _ownerPuppet, value);
 		}
 
 		public ArmorStatListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

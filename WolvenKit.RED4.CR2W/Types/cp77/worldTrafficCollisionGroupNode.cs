@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("collisionEntries")] 
 		public CArray<worldCollisionGroupEntry> CollisionEntries
 		{
-			get
-			{
-				if (_collisionEntries == null)
-				{
-					_collisionEntries = (CArray<worldCollisionGroupEntry>) CR2WTypeManager.Create("array:worldCollisionGroupEntry", "collisionEntries", cr2w, this);
-				}
-				return _collisionEntries;
-			}
-			set
-			{
-				if (_collisionEntries == value)
-				{
-					return;
-				}
-				_collisionEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collisionEntries);
+			set => SetProperty(ref _collisionEntries, value);
 		}
 
 		public worldTrafficCollisionGroupNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

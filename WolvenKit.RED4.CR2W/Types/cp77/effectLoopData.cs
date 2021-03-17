@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("startTime")] 
 		public CFloat StartTime
 		{
-			get
-			{
-				if (_startTime == null)
-				{
-					_startTime = (CFloat) CR2WTypeManager.Create("Float", "startTime", cr2w, this);
-				}
-				return _startTime;
-			}
-			set
-			{
-				if (_startTime == value)
-				{
-					return;
-				}
-				_startTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startTime);
+			set => SetProperty(ref _startTime, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("endTime")] 
 		public CFloat EndTime
 		{
-			get
-			{
-				if (_endTime == null)
-				{
-					_endTime = (CFloat) CR2WTypeManager.Create("Float", "endTime", cr2w, this);
-				}
-				return _endTime;
-			}
-			set
-			{
-				if (_endTime == value)
-				{
-					return;
-				}
-				_endTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endTime);
+			set => SetProperty(ref _endTime, value);
 		}
 
 		public effectLoopData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

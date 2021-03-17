@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attribiuteLevel")] 
 		public CString AttribiuteLevel
 		{
-			get
-			{
-				if (_attribiuteLevel == null)
-				{
-					_attribiuteLevel = (CString) CR2WTypeManager.Create("String", "attribiuteLevel", cr2w, this);
-				}
-				return _attribiuteLevel;
-			}
-			set
-			{
-				if (_attribiuteLevel == value)
-				{
-					return;
-				}
-				_attribiuteLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attribiuteLevel);
+			set => SetProperty(ref _attribiuteLevel, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("maxedOrMinimumLabelText")] 
 		public CString MaxedOrMinimumLabelText
 		{
-			get
-			{
-				if (_maxedOrMinimumLabelText == null)
-				{
-					_maxedOrMinimumLabelText = (CString) CR2WTypeManager.Create("String", "maxedOrMinimumLabelText", cr2w, this);
-				}
-				return _maxedOrMinimumLabelText;
-			}
-			set
-			{
-				if (_maxedOrMinimumLabelText == value)
-				{
-					return;
-				}
-				_maxedOrMinimumLabelText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxedOrMinimumLabelText);
+			set => SetProperty(ref _maxedOrMinimumLabelText, value);
 		}
 
 		public CharacterCreationTooltipData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

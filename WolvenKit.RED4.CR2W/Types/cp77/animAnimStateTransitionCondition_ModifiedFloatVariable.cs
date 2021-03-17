@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("variableName")] 
 		public CName VariableName
 		{
-			get
-			{
-				if (_variableName == null)
-				{
-					_variableName = (CName) CR2WTypeManager.Create("CName", "variableName", cr2w, this);
-				}
-				return _variableName;
-			}
-			set
-			{
-				if (_variableName == value)
-				{
-					return;
-				}
-				_variableName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _variableName);
+			set => SetProperty(ref _variableName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("compareValue")] 
 		public CFloat CompareValue
 		{
-			get
-			{
-				if (_compareValue == null)
-				{
-					_compareValue = (CFloat) CR2WTypeManager.Create("Float", "compareValue", cr2w, this);
-				}
-				return _compareValue;
-			}
-			set
-			{
-				if (_compareValue == value)
-				{
-					return;
-				}
-				_compareValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _compareValue);
+			set => SetProperty(ref _compareValue, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("compareFunc")] 
 		public CEnum<animCompareFunc> CompareFunc
 		{
-			get
-			{
-				if (_compareFunc == null)
-				{
-					_compareFunc = (CEnum<animCompareFunc>) CR2WTypeManager.Create("animCompareFunc", "compareFunc", cr2w, this);
-				}
-				return _compareFunc;
-			}
-			set
-			{
-				if (_compareFunc == value)
-				{
-					return;
-				}
-				_compareFunc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _compareFunc);
+			set => SetProperty(ref _compareFunc, value);
 		}
 
 		public animAnimStateTransitionCondition_ModifiedFloatVariable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

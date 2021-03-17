@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("widgetBody")] 
 		public inkWidgetReference WidgetBody
 		{
-			get
-			{
-				if (_widgetBody == null)
-				{
-					_widgetBody = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "widgetBody", cr2w, this);
-				}
-				return _widgetBody;
-			}
-			set
-			{
-				if (_widgetBody == value)
-				{
-					return;
-				}
-				_widgetBody = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetBody);
+			set => SetProperty(ref _widgetBody, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("widgetCool")] 
 		public inkWidgetReference WidgetCool
 		{
-			get
-			{
-				if (_widgetCool == null)
-				{
-					_widgetCool = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "widgetCool", cr2w, this);
-				}
-				return _widgetCool;
-			}
-			set
-			{
-				if (_widgetCool == value)
-				{
-					return;
-				}
-				_widgetCool = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetCool);
+			set => SetProperty(ref _widgetCool, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("widgetInt")] 
 		public inkWidgetReference WidgetInt
 		{
-			get
-			{
-				if (_widgetInt == null)
-				{
-					_widgetInt = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "widgetInt", cr2w, this);
-				}
-				return _widgetInt;
-			}
-			set
-			{
-				if (_widgetInt == value)
-				{
-					return;
-				}
-				_widgetInt = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetInt);
+			set => SetProperty(ref _widgetInt, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("widgetRef")] 
 		public inkWidgetReference WidgetRef
 		{
-			get
-			{
-				if (_widgetRef == null)
-				{
-					_widgetRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "widgetRef", cr2w, this);
-				}
-				return _widgetRef;
-			}
-			set
-			{
-				if (_widgetRef == value)
-				{
-					return;
-				}
-				_widgetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetRef);
+			set => SetProperty(ref _widgetRef, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("widgetTech")] 
 		public inkWidgetReference WidgetTech
 		{
-			get
-			{
-				if (_widgetTech == null)
-				{
-					_widgetTech = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "widgetTech", cr2w, this);
-				}
-				return _widgetTech;
-			}
-			set
-			{
-				if (_widgetTech == value)
-				{
-					return;
-				}
-				_widgetTech = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetTech);
+			set => SetProperty(ref _widgetTech, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("logicBody")] 
 		public CHandle<CyberwareAttributes_Logic> LogicBody
 		{
-			get
-			{
-				if (_logicBody == null)
-				{
-					_logicBody = (CHandle<CyberwareAttributes_Logic>) CR2WTypeManager.Create("handle:CyberwareAttributes_Logic", "logicBody", cr2w, this);
-				}
-				return _logicBody;
-			}
-			set
-			{
-				if (_logicBody == value)
-				{
-					return;
-				}
-				_logicBody = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _logicBody);
+			set => SetProperty(ref _logicBody, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("logicCool")] 
 		public CHandle<CyberwareAttributes_Logic> LogicCool
 		{
-			get
-			{
-				if (_logicCool == null)
-				{
-					_logicCool = (CHandle<CyberwareAttributes_Logic>) CR2WTypeManager.Create("handle:CyberwareAttributes_Logic", "logicCool", cr2w, this);
-				}
-				return _logicCool;
-			}
-			set
-			{
-				if (_logicCool == value)
-				{
-					return;
-				}
-				_logicCool = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _logicCool);
+			set => SetProperty(ref _logicCool, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("logicInt")] 
 		public CHandle<CyberwareAttributes_Logic> LogicInt
 		{
-			get
-			{
-				if (_logicInt == null)
-				{
-					_logicInt = (CHandle<CyberwareAttributes_Logic>) CR2WTypeManager.Create("handle:CyberwareAttributes_Logic", "logicInt", cr2w, this);
-				}
-				return _logicInt;
-			}
-			set
-			{
-				if (_logicInt == value)
-				{
-					return;
-				}
-				_logicInt = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _logicInt);
+			set => SetProperty(ref _logicInt, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("logicRef")] 
 		public CHandle<CyberwareAttributes_Logic> LogicRef
 		{
-			get
-			{
-				if (_logicRef == null)
-				{
-					_logicRef = (CHandle<CyberwareAttributes_Logic>) CR2WTypeManager.Create("handle:CyberwareAttributes_Logic", "logicRef", cr2w, this);
-				}
-				return _logicRef;
-			}
-			set
-			{
-				if (_logicRef == value)
-				{
-					return;
-				}
-				_logicRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _logicRef);
+			set => SetProperty(ref _logicRef, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("logicTech")] 
 		public CHandle<CyberwareAttributes_Logic> LogicTech
 		{
-			get
-			{
-				if (_logicTech == null)
-				{
-					_logicTech = (CHandle<CyberwareAttributes_Logic>) CR2WTypeManager.Create("handle:CyberwareAttributes_Logic", "logicTech", cr2w, this);
-				}
-				return _logicTech;
-			}
-			set
-			{
-				if (_logicTech == value)
-				{
-					return;
-				}
-				_logicTech = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _logicTech);
+			set => SetProperty(ref _logicTech, value);
 		}
 
 		public CyberwareAttributes_ContainersStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("parentDevice")] 
 		public DeviceLink ParentDevice
 		{
-			get
-			{
-				if (_parentDevice == null)
-				{
-					_parentDevice = (DeviceLink) CR2WTypeManager.Create("DeviceLink", "parentDevice", cr2w, this);
-				}
-				return _parentDevice;
-			}
-			set
-			{
-				if (_parentDevice == value)
-				{
-					return;
-				}
-				_parentDevice = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentDevice);
+			set => SetProperty(ref _parentDevice, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("isConnected")] 
 		public CBool IsConnected
 		{
-			get
-			{
-				if (_isConnected == null)
-				{
-					_isConnected = (CBool) CR2WTypeManager.Create("Bool", "isConnected", cr2w, this);
-				}
-				return _isConnected;
-			}
-			set
-			{
-				if (_isConnected == value)
-				{
-					return;
-				}
-				_isConnected = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isConnected);
+			set => SetProperty(ref _isConnected, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("ownerEntityID")] 
 		public entEntityID OwnerEntityID
 		{
-			get
-			{
-				if (_ownerEntityID == null)
-				{
-					_ownerEntityID = (entEntityID) CR2WTypeManager.Create("entEntityID", "ownerEntityID", cr2w, this);
-				}
-				return _ownerEntityID;
-			}
-			set
-			{
-				if (_ownerEntityID == value)
-				{
-					return;
-				}
-				_ownerEntityID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerEntityID);
+			set => SetProperty(ref _ownerEntityID, value);
 		}
 
 		public DeviceLinkComponentPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

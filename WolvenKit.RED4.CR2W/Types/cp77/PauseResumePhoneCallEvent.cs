@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("callDuration")] 
 		public CFloat CallDuration
 		{
-			get
-			{
-				if (_callDuration == null)
-				{
-					_callDuration = (CFloat) CR2WTypeManager.Create("Float", "callDuration", cr2w, this);
-				}
-				return _callDuration;
-			}
-			set
-			{
-				if (_callDuration == value)
-				{
-					return;
-				}
-				_callDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callDuration);
+			set => SetProperty(ref _callDuration, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("pauseCall")] 
 		public CBool PauseCall
 		{
-			get
-			{
-				if (_pauseCall == null)
-				{
-					_pauseCall = (CBool) CR2WTypeManager.Create("Bool", "pauseCall", cr2w, this);
-				}
-				return _pauseCall;
-			}
-			set
-			{
-				if (_pauseCall == value)
-				{
-					return;
-				}
-				_pauseCall = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pauseCall);
+			set => SetProperty(ref _pauseCall, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("statPoolType")] 
 		public CEnum<gamedataStatPoolType> StatPoolType
 		{
-			get
-			{
-				if (_statPoolType == null)
-				{
-					_statPoolType = (CEnum<gamedataStatPoolType>) CR2WTypeManager.Create("gamedataStatPoolType", "statPoolType", cr2w, this);
-				}
-				return _statPoolType;
-			}
-			set
-			{
-				if (_statPoolType == value)
-				{
-					return;
-				}
-				_statPoolType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statPoolType);
+			set => SetProperty(ref _statPoolType, value);
 		}
 
 		public PauseResumePhoneCallEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

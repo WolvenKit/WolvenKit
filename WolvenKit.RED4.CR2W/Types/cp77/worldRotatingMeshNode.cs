@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rotationAxis")] 
 		public CEnum<worldRotatingMeshNodeAxis> RotationAxis
 		{
-			get
-			{
-				if (_rotationAxis == null)
-				{
-					_rotationAxis = (CEnum<worldRotatingMeshNodeAxis>) CR2WTypeManager.Create("worldRotatingMeshNodeAxis", "rotationAxis", cr2w, this);
-				}
-				return _rotationAxis;
-			}
-			set
-			{
-				if (_rotationAxis == value)
-				{
-					return;
-				}
-				_rotationAxis = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotationAxis);
+			set => SetProperty(ref _rotationAxis, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("fullRotationTime")] 
 		public CFloat FullRotationTime
 		{
-			get
-			{
-				if (_fullRotationTime == null)
-				{
-					_fullRotationTime = (CFloat) CR2WTypeManager.Create("Float", "fullRotationTime", cr2w, this);
-				}
-				return _fullRotationTime;
-			}
-			set
-			{
-				if (_fullRotationTime == value)
-				{
-					return;
-				}
-				_fullRotationTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fullRotationTime);
+			set => SetProperty(ref _fullRotationTime, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("reverseDirection")] 
 		public CBool ReverseDirection
 		{
-			get
-			{
-				if (_reverseDirection == null)
-				{
-					_reverseDirection = (CBool) CR2WTypeManager.Create("Bool", "reverseDirection", cr2w, this);
-				}
-				return _reverseDirection;
-			}
-			set
-			{
-				if (_reverseDirection == value)
-				{
-					return;
-				}
-				_reverseDirection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reverseDirection);
+			set => SetProperty(ref _reverseDirection, value);
 		}
 
 		public worldRotatingMeshNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

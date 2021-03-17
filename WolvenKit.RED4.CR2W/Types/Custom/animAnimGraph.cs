@@ -6,7 +6,15 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
     public class animAnimGraph : animAnimGraph_
     {
-        [Ordinal(999)] [RED("jsonFilesDirectory")] public CString JsonFilesDirectory { get; set; }
+        private CString _jsonFilesDirectory;
+
+        [Ordinal(999)]
+        [RED("jsonFilesDirectory")]
+        public CString JsonFilesDirectory
+        {
+            get => GetProperty(ref _jsonFilesDirectory);
+            set => SetProperty(ref _jsonFilesDirectory, value);
+        }
 
         public animAnimGraph(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }

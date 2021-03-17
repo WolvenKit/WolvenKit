@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("typeName")] 
 		public CName TypeName
 		{
-			get
-			{
-				if (_typeName == null)
-				{
-					_typeName = (CName) CR2WTypeManager.Create("CName", "typeName", cr2w, this);
-				}
-				return _typeName;
-			}
-			set
-			{
-				if (_typeName == value)
-				{
-					return;
-				}
-				_typeName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _typeName);
+			set => SetProperty(ref _typeName, value);
 		}
 
 		public worldWaterPatchNodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

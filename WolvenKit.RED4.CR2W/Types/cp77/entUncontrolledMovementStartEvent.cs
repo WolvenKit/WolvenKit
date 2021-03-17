@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ragdollNoGroundThreshold")] 
 		public CFloat RagdollNoGroundThreshold
 		{
-			get
-			{
-				if (_ragdollNoGroundThreshold == null)
-				{
-					_ragdollNoGroundThreshold = (CFloat) CR2WTypeManager.Create("Float", "ragdollNoGroundThreshold", cr2w, this);
-				}
-				return _ragdollNoGroundThreshold;
-			}
-			set
-			{
-				if (_ragdollNoGroundThreshold == value)
-				{
-					return;
-				}
-				_ragdollNoGroundThreshold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ragdollNoGroundThreshold);
+			set => SetProperty(ref _ragdollNoGroundThreshold, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ragdollOnCollision")] 
 		public CBool RagdollOnCollision
 		{
-			get
-			{
-				if (_ragdollOnCollision == null)
-				{
-					_ragdollOnCollision = (CBool) CR2WTypeManager.Create("Bool", "ragdollOnCollision", cr2w, this);
-				}
-				return _ragdollOnCollision;
-			}
-			set
-			{
-				if (_ragdollOnCollision == value)
-				{
-					return;
-				}
-				_ragdollOnCollision = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ragdollOnCollision);
+			set => SetProperty(ref _ragdollOnCollision, value);
 		}
 
 		public entUncontrolledMovementStartEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

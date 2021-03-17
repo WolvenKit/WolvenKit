@@ -6,7 +6,15 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
     public class animAnimFeatureEntry : animAnimFeatureEntry_
     {
-        [Ordinal(999)] [RED("debugEnabled")] public CBool DebugEnabled { get; set; }
+        private CBool _debugEnabled;
+
+        [Ordinal(999)]
+        [RED("debugEnabled")]
+        public CBool DebugEnabled
+        {
+            get => GetProperty(ref _debugEnabled);
+            set => SetProperty(ref _debugEnabled, value);
+        }
 
         public animAnimFeatureEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }

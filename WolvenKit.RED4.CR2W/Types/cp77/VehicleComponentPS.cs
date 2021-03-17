@@ -36,552 +36,192 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("defaultStateSet")] 
 		public CBool DefaultStateSet
 		{
-			get
-			{
-				if (_defaultStateSet == null)
-				{
-					_defaultStateSet = (CBool) CR2WTypeManager.Create("Bool", "defaultStateSet", cr2w, this);
-				}
-				return _defaultStateSet;
-			}
-			set
-			{
-				if (_defaultStateSet == value)
-				{
-					return;
-				}
-				_defaultStateSet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultStateSet);
+			set => SetProperty(ref _defaultStateSet, value);
 		}
 
 		[Ordinal(104)] 
 		[RED("stateModifiedByQuest")] 
 		public CBool StateModifiedByQuest
 		{
-			get
-			{
-				if (_stateModifiedByQuest == null)
-				{
-					_stateModifiedByQuest = (CBool) CR2WTypeManager.Create("Bool", "stateModifiedByQuest", cr2w, this);
-				}
-				return _stateModifiedByQuest;
-			}
-			set
-			{
-				if (_stateModifiedByQuest == value)
-				{
-					return;
-				}
-				_stateModifiedByQuest = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stateModifiedByQuest);
+			set => SetProperty(ref _stateModifiedByQuest, value);
 		}
 
 		[Ordinal(105)] 
 		[RED("playerVehicle")] 
 		public CBool PlayerVehicle
 		{
-			get
-			{
-				if (_playerVehicle == null)
-				{
-					_playerVehicle = (CBool) CR2WTypeManager.Create("Bool", "playerVehicle", cr2w, this);
-				}
-				return _playerVehicle;
-			}
-			set
-			{
-				if (_playerVehicle == value)
-				{
-					return;
-				}
-				_playerVehicle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerVehicle);
+			set => SetProperty(ref _playerVehicle, value);
 		}
 
 		[Ordinal(106)] 
 		[RED("npcOccupiedSlots")] 
 		public CArray<CName> NpcOccupiedSlots
 		{
-			get
-			{
-				if (_npcOccupiedSlots == null)
-				{
-					_npcOccupiedSlots = (CArray<CName>) CR2WTypeManager.Create("array:CName", "npcOccupiedSlots", cr2w, this);
-				}
-				return _npcOccupiedSlots;
-			}
-			set
-			{
-				if (_npcOccupiedSlots == value)
-				{
-					return;
-				}
-				_npcOccupiedSlots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _npcOccupiedSlots);
+			set => SetProperty(ref _npcOccupiedSlots, value);
 		}
 
 		[Ordinal(107)] 
 		[RED("isDestroyed")] 
 		public CBool IsDestroyed
 		{
-			get
-			{
-				if (_isDestroyed == null)
-				{
-					_isDestroyed = (CBool) CR2WTypeManager.Create("Bool", "isDestroyed", cr2w, this);
-				}
-				return _isDestroyed;
-			}
-			set
-			{
-				if (_isDestroyed == value)
-				{
-					return;
-				}
-				_isDestroyed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDestroyed);
+			set => SetProperty(ref _isDestroyed, value);
 		}
 
 		[Ordinal(108)] 
 		[RED("isStolen")] 
 		public CBool IsStolen
 		{
-			get
-			{
-				if (_isStolen == null)
-				{
-					_isStolen = (CBool) CR2WTypeManager.Create("Bool", "isStolen", cr2w, this);
-				}
-				return _isStolen;
-			}
-			set
-			{
-				if (_isStolen == value)
-				{
-					return;
-				}
-				_isStolen = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isStolen);
+			set => SetProperty(ref _isStolen, value);
 		}
 
 		[Ordinal(109)] 
 		[RED("crystalDomeQuestModified")] 
 		public CBool CrystalDomeQuestModified
 		{
-			get
-			{
-				if (_crystalDomeQuestModified == null)
-				{
-					_crystalDomeQuestModified = (CBool) CR2WTypeManager.Create("Bool", "crystalDomeQuestModified", cr2w, this);
-				}
-				return _crystalDomeQuestModified;
-			}
-			set
-			{
-				if (_crystalDomeQuestModified == value)
-				{
-					return;
-				}
-				_crystalDomeQuestModified = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _crystalDomeQuestModified);
+			set => SetProperty(ref _crystalDomeQuestModified, value);
 		}
 
 		[Ordinal(110)] 
 		[RED("crystalDomeQuestState")] 
 		public CBool CrystalDomeQuestState
 		{
-			get
-			{
-				if (_crystalDomeQuestState == null)
-				{
-					_crystalDomeQuestState = (CBool) CR2WTypeManager.Create("Bool", "crystalDomeQuestState", cr2w, this);
-				}
-				return _crystalDomeQuestState;
-			}
-			set
-			{
-				if (_crystalDomeQuestState == value)
-				{
-					return;
-				}
-				_crystalDomeQuestState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _crystalDomeQuestState);
+			set => SetProperty(ref _crystalDomeQuestState, value);
 		}
 
 		[Ordinal(111)] 
 		[RED("crystalDomeState")] 
 		public CBool CrystalDomeState
 		{
-			get
-			{
-				if (_crystalDomeState == null)
-				{
-					_crystalDomeState = (CBool) CR2WTypeManager.Create("Bool", "crystalDomeState", cr2w, this);
-				}
-				return _crystalDomeState;
-			}
-			set
-			{
-				if (_crystalDomeState == value)
-				{
-					return;
-				}
-				_crystalDomeState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _crystalDomeState);
+			set => SetProperty(ref _crystalDomeState, value);
 		}
 
 		[Ordinal(112)] 
 		[RED("visualDestructionSet")] 
 		public CBool VisualDestructionSet
 		{
-			get
-			{
-				if (_visualDestructionSet == null)
-				{
-					_visualDestructionSet = (CBool) CR2WTypeManager.Create("Bool", "visualDestructionSet", cr2w, this);
-				}
-				return _visualDestructionSet;
-			}
-			set
-			{
-				if (_visualDestructionSet == value)
-				{
-					return;
-				}
-				_visualDestructionSet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualDestructionSet);
+			set => SetProperty(ref _visualDestructionSet, value);
 		}
 
 		[Ordinal(113)] 
 		[RED("visualDestructionNeeded")] 
 		public CBool VisualDestructionNeeded
 		{
-			get
-			{
-				if (_visualDestructionNeeded == null)
-				{
-					_visualDestructionNeeded = (CBool) CR2WTypeManager.Create("Bool", "visualDestructionNeeded", cr2w, this);
-				}
-				return _visualDestructionNeeded;
-			}
-			set
-			{
-				if (_visualDestructionNeeded == value)
-				{
-					return;
-				}
-				_visualDestructionNeeded = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualDestructionNeeded);
+			set => SetProperty(ref _visualDestructionNeeded, value);
 		}
 
 		[Ordinal(114)] 
 		[RED("exploded")] 
 		public CBool Exploded
 		{
-			get
-			{
-				if (_exploded == null)
-				{
-					_exploded = (CBool) CR2WTypeManager.Create("Bool", "exploded", cr2w, this);
-				}
-				return _exploded;
-			}
-			set
-			{
-				if (_exploded == value)
-				{
-					return;
-				}
-				_exploded = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exploded);
+			set => SetProperty(ref _exploded, value);
 		}
 
 		[Ordinal(115)] 
 		[RED("sirenOn")] 
 		public CBool SirenOn
 		{
-			get
-			{
-				if (_sirenOn == null)
-				{
-					_sirenOn = (CBool) CR2WTypeManager.Create("Bool", "sirenOn", cr2w, this);
-				}
-				return _sirenOn;
-			}
-			set
-			{
-				if (_sirenOn == value)
-				{
-					return;
-				}
-				_sirenOn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sirenOn);
+			set => SetProperty(ref _sirenOn, value);
 		}
 
 		[Ordinal(116)] 
 		[RED("sirenSoundOn")] 
 		public CBool SirenSoundOn
 		{
-			get
-			{
-				if (_sirenSoundOn == null)
-				{
-					_sirenSoundOn = (CBool) CR2WTypeManager.Create("Bool", "sirenSoundOn", cr2w, this);
-				}
-				return _sirenSoundOn;
-			}
-			set
-			{
-				if (_sirenSoundOn == value)
-				{
-					return;
-				}
-				_sirenSoundOn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sirenSoundOn);
+			set => SetProperty(ref _sirenSoundOn, value);
 		}
 
 		[Ordinal(117)] 
 		[RED("sirenLightsOn")] 
 		public CBool SirenLightsOn
 		{
-			get
-			{
-				if (_sirenLightsOn == null)
-				{
-					_sirenLightsOn = (CBool) CR2WTypeManager.Create("Bool", "sirenLightsOn", cr2w, this);
-				}
-				return _sirenLightsOn;
-			}
-			set
-			{
-				if (_sirenLightsOn == value)
-				{
-					return;
-				}
-				_sirenLightsOn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sirenLightsOn);
+			set => SetProperty(ref _sirenLightsOn, value);
 		}
 
 		[Ordinal(118)] 
 		[RED("anyDoorOpen")] 
 		public CBool AnyDoorOpen
 		{
-			get
-			{
-				if (_anyDoorOpen == null)
-				{
-					_anyDoorOpen = (CBool) CR2WTypeManager.Create("Bool", "anyDoorOpen", cr2w, this);
-				}
-				return _anyDoorOpen;
-			}
-			set
-			{
-				if (_anyDoorOpen == value)
-				{
-					return;
-				}
-				_anyDoorOpen = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _anyDoorOpen);
+			set => SetProperty(ref _anyDoorOpen, value);
 		}
 
 		[Ordinal(119)] 
 		[RED("previousInteractionState")] 
 		public CArray<TemporaryDoorState> PreviousInteractionState
 		{
-			get
-			{
-				if (_previousInteractionState == null)
-				{
-					_previousInteractionState = (CArray<TemporaryDoorState>) CR2WTypeManager.Create("array:TemporaryDoorState", "previousInteractionState", cr2w, this);
-				}
-				return _previousInteractionState;
-			}
-			set
-			{
-				if (_previousInteractionState == value)
-				{
-					return;
-				}
-				_previousInteractionState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousInteractionState);
+			set => SetProperty(ref _previousInteractionState, value);
 		}
 
 		[Ordinal(120)] 
 		[RED("thrusterState")] 
 		public CBool ThrusterState
 		{
-			get
-			{
-				if (_thrusterState == null)
-				{
-					_thrusterState = (CBool) CR2WTypeManager.Create("Bool", "thrusterState", cr2w, this);
-				}
-				return _thrusterState;
-			}
-			set
-			{
-				if (_thrusterState == value)
-				{
-					return;
-				}
-				_thrusterState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _thrusterState);
+			set => SetProperty(ref _thrusterState, value);
 		}
 
 		[Ordinal(121)] 
 		[RED("uiQuestModified")] 
 		public CBool UiQuestModified
 		{
-			get
-			{
-				if (_uiQuestModified == null)
-				{
-					_uiQuestModified = (CBool) CR2WTypeManager.Create("Bool", "uiQuestModified", cr2w, this);
-				}
-				return _uiQuestModified;
-			}
-			set
-			{
-				if (_uiQuestModified == value)
-				{
-					return;
-				}
-				_uiQuestModified = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uiQuestModified);
+			set => SetProperty(ref _uiQuestModified, value);
 		}
 
 		[Ordinal(122)] 
 		[RED("uiState")] 
 		public CBool UiState
 		{
-			get
-			{
-				if (_uiState == null)
-				{
-					_uiState = (CBool) CR2WTypeManager.Create("Bool", "uiState", cr2w, this);
-				}
-				return _uiState;
-			}
-			set
-			{
-				if (_uiState == value)
-				{
-					return;
-				}
-				_uiState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uiState);
+			set => SetProperty(ref _uiState, value);
 		}
 
 		[Ordinal(123)] 
 		[RED("vehicleSkillChecks")] 
 		public CHandle<EngDemoContainer> VehicleSkillChecks
 		{
-			get
-			{
-				if (_vehicleSkillChecks == null)
-				{
-					_vehicleSkillChecks = (CHandle<EngDemoContainer>) CR2WTypeManager.Create("handle:EngDemoContainer", "vehicleSkillChecks", cr2w, this);
-				}
-				return _vehicleSkillChecks;
-			}
-			set
-			{
-				if (_vehicleSkillChecks == value)
-				{
-					return;
-				}
-				_vehicleSkillChecks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleSkillChecks);
+			set => SetProperty(ref _vehicleSkillChecks, value);
 		}
 
 		[Ordinal(124)] 
 		[RED("ready")] 
 		public CBool Ready
 		{
-			get
-			{
-				if (_ready == null)
-				{
-					_ready = (CBool) CR2WTypeManager.Create("Bool", "ready", cr2w, this);
-				}
-				return _ready;
-			}
-			set
-			{
-				if (_ready == value)
-				{
-					return;
-				}
-				_ready = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ready);
+			set => SetProperty(ref _ready, value);
 		}
 
 		[Ordinal(125)] 
 		[RED("isPlayerPerformingBodyDisposal")] 
 		public CBool IsPlayerPerformingBodyDisposal
 		{
-			get
-			{
-				if (_isPlayerPerformingBodyDisposal == null)
-				{
-					_isPlayerPerformingBodyDisposal = (CBool) CR2WTypeManager.Create("Bool", "isPlayerPerformingBodyDisposal", cr2w, this);
-				}
-				return _isPlayerPerformingBodyDisposal;
-			}
-			set
-			{
-				if (_isPlayerPerformingBodyDisposal == value)
-				{
-					return;
-				}
-				_isPlayerPerformingBodyDisposal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayerPerformingBodyDisposal);
+			set => SetProperty(ref _isPlayerPerformingBodyDisposal, value);
 		}
 
 		[Ordinal(126)] 
 		[RED("vehicleControllerPS")] 
 		public CHandle<vehicleControllerPS> VehicleControllerPS
 		{
-			get
-			{
-				if (_vehicleControllerPS == null)
-				{
-					_vehicleControllerPS = (CHandle<vehicleControllerPS>) CR2WTypeManager.Create("handle:vehicleControllerPS", "vehicleControllerPS", cr2w, this);
-				}
-				return _vehicleControllerPS;
-			}
-			set
-			{
-				if (_vehicleControllerPS == value)
-				{
-					return;
-				}
-				_vehicleControllerPS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleControllerPS);
+			set => SetProperty(ref _vehicleControllerPS, value);
 		}
 
 		public VehicleComponentPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

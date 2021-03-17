@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("reactionType")] 
 		public CInt32 ReactionType
 		{
-			get
-			{
-				if (_reactionType == null)
-				{
-					_reactionType = (CInt32) CR2WTypeManager.Create("Int32", "reactionType", cr2w, this);
-				}
-				return _reactionType;
-			}
-			set
-			{
-				if (_reactionType == value)
-				{
-					return;
-				}
-				_reactionType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reactionType);
+			set => SetProperty(ref _reactionType, value);
 		}
 
 		public AnimFeature_StimReactions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

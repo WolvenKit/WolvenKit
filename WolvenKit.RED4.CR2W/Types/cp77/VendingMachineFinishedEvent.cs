@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isFree")] 
 		public CBool IsFree
 		{
-			get
-			{
-				if (_isFree == null)
-				{
-					_isFree = (CBool) CR2WTypeManager.Create("Bool", "isFree", cr2w, this);
-				}
-				return _isFree;
-			}
-			set
-			{
-				if (_isFree == value)
-				{
-					return;
-				}
-				_isFree = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isFree);
+			set => SetProperty(ref _isFree, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isReady")] 
 		public CBool IsReady
 		{
-			get
-			{
-				if (_isReady == null)
-				{
-					_isReady = (CBool) CR2WTypeManager.Create("Bool", "isReady", cr2w, this);
-				}
-				return _isReady;
-			}
-			set
-			{
-				if (_isReady == value)
-				{
-					return;
-				}
-				_isReady = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isReady);
+			set => SetProperty(ref _isReady, value);
 		}
 
 		public VendingMachineFinishedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

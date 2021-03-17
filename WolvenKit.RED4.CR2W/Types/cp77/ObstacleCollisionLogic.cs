@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hasTriggered")] 
 		public CBool HasTriggered
 		{
-			get
-			{
-				if (_hasTriggered == null)
-				{
-					_hasTriggered = (CBool) CR2WTypeManager.Create("Bool", "hasTriggered", cr2w, this);
-				}
-				return _hasTriggered;
-			}
-			set
-			{
-				if (_hasTriggered == value)
-				{
-					return;
-				}
-				_hasTriggered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasTriggered);
+			set => SetProperty(ref _hasTriggered, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("invincibityBonusTime")] 
 		public CFloat InvincibityBonusTime
 		{
-			get
-			{
-				if (_invincibityBonusTime == null)
-				{
-					_invincibityBonusTime = (CFloat) CR2WTypeManager.Create("Float", "invincibityBonusTime", cr2w, this);
-				}
-				return _invincibityBonusTime;
-			}
-			set
-			{
-				if (_invincibityBonusTime == value)
-				{
-					return;
-				}
-				_invincibityBonusTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _invincibityBonusTime);
+			set => SetProperty(ref _invincibityBonusTime, value);
 		}
 
 		public ObstacleCollisionLogic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

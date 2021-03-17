@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_CameraBreathing> AnimFeature
 		{
-			get
-			{
-				if (_animFeature == null)
-				{
-					_animFeature = (CHandle<AnimFeature_CameraBreathing>) CR2WTypeManager.Create("handle:AnimFeature_CameraBreathing", "animFeature", cr2w, this);
-				}
-				return _animFeature;
-			}
-			set
-			{
-				if (_animFeature == value)
-				{
-					return;
-				}
-				_animFeature = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animFeature);
+			set => SetProperty(ref _animFeature, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("animFeatureName")] 
 		public CName AnimFeatureName
 		{
-			get
-			{
-				if (_animFeatureName == null)
-				{
-					_animFeatureName = (CName) CR2WTypeManager.Create("CName", "animFeatureName", cr2w, this);
-				}
-				return _animFeatureName;
-			}
-			set
-			{
-				if (_animFeatureName == value)
-				{
-					return;
-				}
-				_animFeatureName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animFeatureName);
+			set => SetProperty(ref _animFeatureName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		public PlayBreathingAnimationEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

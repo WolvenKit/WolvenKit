@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("voContext")] 
 		public CName VoContext
 		{
-			get
-			{
-				if (_voContext == null)
-				{
-					_voContext = (CName) CR2WTypeManager.Create("CName", "voContext", cr2w, this);
-				}
-				return _voContext;
-			}
-			set
-			{
-				if (_voContext == value)
-				{
-					return;
-				}
-				_voContext = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _voContext);
+			set => SetProperty(ref _voContext, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isQuest")] 
 		public CBool IsQuest
 		{
-			get
-			{
-				if (_isQuest == null)
-				{
-					_isQuest = (CBool) CR2WTypeManager.Create("Bool", "isQuest", cr2w, this);
-				}
-				return _isQuest;
-			}
-			set
-			{
-				if (_isQuest == value)
-				{
-					return;
-				}
-				_isQuest = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isQuest);
+			set => SetProperty(ref _isQuest, value);
 		}
 
 		public animAnimEvent_GameplayVo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

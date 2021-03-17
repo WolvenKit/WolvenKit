@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("thumbnailWidgetPackage")] 
 		public SThumbnailWidgetPackage ThumbnailWidgetPackage
 		{
-			get
-			{
-				if (_thumbnailWidgetPackage == null)
-				{
-					_thumbnailWidgetPackage = (SThumbnailWidgetPackage) CR2WTypeManager.Create("SThumbnailWidgetPackage", "thumbnailWidgetPackage", cr2w, this);
-				}
-				return _thumbnailWidgetPackage;
-			}
-			set
-			{
-				if (_thumbnailWidgetPackage == value)
-				{
-					return;
-				}
-				_thumbnailWidgetPackage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _thumbnailWidgetPackage);
+			set => SetProperty(ref _thumbnailWidgetPackage, value);
 		}
 
 		public ThumbnailUI(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

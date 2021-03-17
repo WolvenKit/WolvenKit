@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sceneWorldMarkerTag")] 
 		public CName SceneWorldMarkerTag
 		{
-			get
-			{
-				if (_sceneWorldMarkerTag == null)
-				{
-					_sceneWorldMarkerTag = (CName) CR2WTypeManager.Create("CName", "sceneWorldMarkerTag", cr2w, this);
-				}
-				return _sceneWorldMarkerTag;
-			}
-			set
-			{
-				if (_sceneWorldMarkerTag == value)
-				{
-					return;
-				}
-				_sceneWorldMarkerTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneWorldMarkerTag);
+			set => SetProperty(ref _sceneWorldMarkerTag, value);
 		}
 
 		public questSceneLocation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

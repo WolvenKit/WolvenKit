@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("owner")] 
 		public wCHandle<NPCPuppet> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<NPCPuppet>) CR2WTypeManager.Create("whandle:NPCPuppet", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("minotaurMechComponent")] 
 		public CHandle<MinotaurMechComponent> MinotaurMechComponent
 		{
-			get
-			{
-				if (_minotaurMechComponent == null)
-				{
-					_minotaurMechComponent = (CHandle<MinotaurMechComponent>) CR2WTypeManager.Create("handle:MinotaurMechComponent", "minotaurMechComponent", cr2w, this);
-				}
-				return _minotaurMechComponent;
-			}
-			set
-			{
-				if (_minotaurMechComponent == value)
-				{
-					return;
-				}
-				_minotaurMechComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minotaurMechComponent);
+			set => SetProperty(ref _minotaurMechComponent, value);
 		}
 
 		public MinotaurOnStatusEffectAppliedListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

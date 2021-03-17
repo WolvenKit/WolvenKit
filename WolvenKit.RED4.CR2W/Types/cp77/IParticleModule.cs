@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("editorName")] 
 		public CString EditorName
 		{
-			get
-			{
-				if (_editorName == null)
-				{
-					_editorName = (CString) CR2WTypeManager.Create("String", "editorName", cr2w, this);
-				}
-				return _editorName;
-			}
-			set
-			{
-				if (_editorName == value)
-				{
-					return;
-				}
-				_editorName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _editorName);
+			set => SetProperty(ref _editorName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("editorGroup")] 
 		public CString EditorGroup
 		{
-			get
-			{
-				if (_editorGroup == null)
-				{
-					_editorGroup = (CString) CR2WTypeManager.Create("String", "editorGroup", cr2w, this);
-				}
-				return _editorGroup;
-			}
-			set
-			{
-				if (_editorGroup == value)
-				{
-					return;
-				}
-				_editorGroup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _editorGroup);
+			set => SetProperty(ref _editorGroup, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get
-			{
-				if (_isEnabled == null)
-				{
-					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
-				}
-				return _isEnabled;
-			}
-			set
-			{
-				if (_isEnabled == value)
-				{
-					return;
-				}
-				_isEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
 		}
 
 		public IParticleModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timeToSkip")] 
 		public CFloat TimeToSkip
 		{
-			get
-			{
-				if (_timeToSkip == null)
-				{
-					_timeToSkip = (CFloat) CR2WTypeManager.Create("Float", "timeToSkip", cr2w, this);
-				}
-				return _timeToSkip;
-			}
-			set
-			{
-				if (_timeToSkip == value)
-				{
-					return;
-				}
-				_timeToSkip = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeToSkip);
+			set => SetProperty(ref _timeToSkip, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("nativeText")] 
 		public CString NativeText
 		{
-			get
-			{
-				if (_nativeText == null)
-				{
-					_nativeText = (CString) CR2WTypeManager.Create("String", "nativeText", cr2w, this);
-				}
-				return _nativeText;
-			}
-			set
-			{
-				if (_nativeText == value)
-				{
-					return;
-				}
-				_nativeText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nativeText);
+			set => SetProperty(ref _nativeText, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("preTranslatedTextWidget")] 
 		public inkTextWidgetReference PreTranslatedTextWidget
 		{
-			get
-			{
-				if (_preTranslatedTextWidget == null)
-				{
-					_preTranslatedTextWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "preTranslatedTextWidget", cr2w, this);
-				}
-				return _preTranslatedTextWidget;
-			}
-			set
-			{
-				if (_preTranslatedTextWidget == value)
-				{
-					return;
-				}
-				_preTranslatedTextWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _preTranslatedTextWidget);
+			set => SetProperty(ref _preTranslatedTextWidget, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("postTranslatedTextWidget")] 
 		public inkTextWidgetReference PostTranslatedTextWidget
 		{
-			get
-			{
-				if (_postTranslatedTextWidget == null)
-				{
-					_postTranslatedTextWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "postTranslatedTextWidget", cr2w, this);
-				}
-				return _postTranslatedTextWidget;
-			}
-			set
-			{
-				if (_postTranslatedTextWidget == value)
-				{
-					return;
-				}
-				_postTranslatedTextWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _postTranslatedTextWidget);
+			set => SetProperty(ref _postTranslatedTextWidget, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("nativeTextWidget")] 
 		public inkRichTextBoxWidgetReference NativeTextWidget
 		{
-			get
-			{
-				if (_nativeTextWidget == null)
-				{
-					_nativeTextWidget = (inkRichTextBoxWidgetReference) CR2WTypeManager.Create("inkRichTextBoxWidgetReference", "nativeTextWidget", cr2w, this);
-				}
-				return _nativeTextWidget;
-			}
-			set
-			{
-				if (_nativeTextWidget == value)
-				{
-					return;
-				}
-				_nativeTextWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nativeTextWidget);
+			set => SetProperty(ref _nativeTextWidget, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("translatedTextWidget")] 
 		public inkTextWidgetReference TranslatedTextWidget
 		{
-			get
-			{
-				if (_translatedTextWidget == null)
-				{
-					_translatedTextWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "translatedTextWidget", cr2w, this);
-				}
-				return _translatedTextWidget;
-			}
-			set
-			{
-				if (_translatedTextWidget == value)
-				{
-					return;
-				}
-				_translatedTextWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _translatedTextWidget);
+			set => SetProperty(ref _translatedTextWidget, value);
 		}
 
 		public inkTextKiroshiAnimationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dt")] 
 		public CFloat Dt
 		{
-			get
-			{
-				if (_dt == null)
-				{
-					_dt = (CFloat) CR2WTypeManager.Create("Float", "dt", cr2w, this);
-				}
-				return _dt;
-			}
-			set
-			{
-				if (_dt == value)
-				{
-					return;
-				}
-				_dt = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dt);
+			set => SetProperty(ref _dt, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("compression")] 
 		public CInt8 Compression
 		{
-			get
-			{
-				if (_compression == null)
-				{
-					_compression = (CInt8) CR2WTypeManager.Create("Int8", "compression", cr2w, this);
-				}
-				return _compression;
-			}
-			set
-			{
-				if (_compression == value)
-				{
-					return;
-				}
-				_compression = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _compression);
+			set => SetProperty(ref _compression, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("numFrames")] 
 		public CUInt16 NumFrames
 		{
-			get
-			{
-				if (_numFrames == null)
-				{
-					_numFrames = (CUInt16) CR2WTypeManager.Create("Uint16", "numFrames", cr2w, this);
-				}
-				return _numFrames;
-			}
-			set
-			{
-				if (_numFrames == value)
-				{
-					return;
-				}
-				_numFrames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numFrames);
+			set => SetProperty(ref _numFrames, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("dataAddr")] 
 		public CUInt32 DataAddr
 		{
-			get
-			{
-				if (_dataAddr == null)
-				{
-					_dataAddr = (CUInt32) CR2WTypeManager.Create("Uint32", "dataAddr", cr2w, this);
-				}
-				return _dataAddr;
-			}
-			set
-			{
-				if (_dataAddr == value)
-				{
-					return;
-				}
-				_dataAddr = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dataAddr);
+			set => SetProperty(ref _dataAddr, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("dataAddrFallback")] 
 		public CUInt32 DataAddrFallback
 		{
-			get
-			{
-				if (_dataAddrFallback == null)
-				{
-					_dataAddrFallback = (CUInt32) CR2WTypeManager.Create("Uint32", "dataAddrFallback", cr2w, this);
-				}
-				return _dataAddrFallback;
-			}
-			set
-			{
-				if (_dataAddrFallback == value)
-				{
-					return;
-				}
-				_dataAddrFallback = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dataAddrFallback);
+			set => SetProperty(ref _dataAddrFallback, value);
 		}
 
 		public animSAnimationBufferBitwiseCompressedData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

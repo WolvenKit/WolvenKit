@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ForcedTarget")] 
 		public entEntityID ForcedTarget
 		{
-			get
-			{
-				if (_forcedTarget == null)
-				{
-					_forcedTarget = (entEntityID) CR2WTypeManager.Create("entEntityID", "ForcedTarget", cr2w, this);
-				}
-				return _forcedTarget;
-			}
-			set
-			{
-				if (_forcedTarget == value)
-				{
-					return;
-				}
-				_forcedTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forcedTarget);
+			set => SetProperty(ref _forcedTarget, value);
 		}
 
 		public QuestSpotTargetReference(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

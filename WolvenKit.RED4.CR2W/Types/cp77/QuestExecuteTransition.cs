@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("transition")] 
 		public AreaTypeTransition Transition
 		{
-			get
-			{
-				if (_transition == null)
-				{
-					_transition = (AreaTypeTransition) CR2WTypeManager.Create("AreaTypeTransition", "transition", cr2w, this);
-				}
-				return _transition;
-			}
-			set
-			{
-				if (_transition == value)
-				{
-					return;
-				}
-				_transition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transition);
+			set => SetProperty(ref _transition, value);
 		}
 
 		public QuestExecuteTransition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

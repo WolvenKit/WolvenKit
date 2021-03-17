@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isInDefaultState")] 
 		public gamebbScriptID_Bool IsInDefaultState
 		{
-			get
-			{
-				if (_isInDefaultState == null)
-				{
-					_isInDefaultState = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "isInDefaultState", cr2w, this);
-				}
-				return _isInDefaultState;
-			}
-			set
-			{
-				if (_isInDefaultState == value)
-				{
-					return;
-				}
-				_isInDefaultState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInDefaultState);
+			set => SetProperty(ref _isInDefaultState, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("shutdownModule")] 
 		public gamebbScriptID_Int32 ShutdownModule
 		{
-			get
-			{
-				if (_shutdownModule == null)
-				{
-					_shutdownModule = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "shutdownModule", cr2w, this);
-				}
-				return _shutdownModule;
-			}
-			set
-			{
-				if (_shutdownModule == value)
-				{
-					return;
-				}
-				_shutdownModule = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shutdownModule);
+			set => SetProperty(ref _shutdownModule, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("bootModule")] 
 		public gamebbScriptID_Int32 BootModule
 		{
-			get
-			{
-				if (_bootModule == null)
-				{
-					_bootModule = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "bootModule", cr2w, this);
-				}
-				return _bootModule;
-			}
-			set
-			{
-				if (_bootModule == value)
-				{
-					return;
-				}
-				_bootModule = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bootModule);
+			set => SetProperty(ref _bootModule, value);
 		}
 
 		public BackDoorDeviceBlackboardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

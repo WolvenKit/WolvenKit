@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("transformIndex")] 
 		public animTransformIndex TransformIndex
 		{
-			get
-			{
-				if (_transformIndex == null)
-				{
-					_transformIndex = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "transformIndex", cr2w, this);
-				}
-				return _transformIndex;
-			}
-			set
-			{
-				if (_transformIndex == value)
-				{
-					return;
-				}
-				_transformIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transformIndex);
+			set => SetProperty(ref _transformIndex, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("inputTransformIndex")] 
 		public animTransformIndex InputTransformIndex
 		{
-			get
-			{
-				if (_inputTransformIndex == null)
-				{
-					_inputTransformIndex = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "inputTransformIndex", cr2w, this);
-				}
-				return _inputTransformIndex;
-			}
-			set
-			{
-				if (_inputTransformIndex == value)
-				{
-					return;
-				}
-				_inputTransformIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputTransformIndex);
+			set => SetProperty(ref _inputTransformIndex, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("up")] 
 		public Vector3 Up
 		{
-			get
-			{
-				if (_up == null)
-				{
-					_up = (Vector3) CR2WTypeManager.Create("Vector3", "up", cr2w, this);
-				}
-				return _up;
-			}
-			set
-			{
-				if (_up == value)
-				{
-					return;
-				}
-				_up = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _up);
+			set => SetProperty(ref _up, value);
 		}
 
 		public animAnimNodeSourceChannel_OrientationVector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

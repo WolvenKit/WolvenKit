@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("calTransform")] 
 		public CMatrix CalTransform
 		{
-			get
-			{
-				if (_calTransform == null)
-				{
-					_calTransform = (CMatrix) CR2WTypeManager.Create("Matrix", "calTransform", cr2w, this);
-				}
-				return _calTransform;
-			}
-			set
-			{
-				if (_calTransform == value)
-				{
-					return;
-				}
-				_calTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _calTransform);
+			set => SetProperty(ref _calTransform, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("yle")] 
 		public CHandle<vgVectorGraphicStyle> Yle
 		{
-			get
-			{
-				if (_yle == null)
-				{
-					_yle = (CHandle<vgVectorGraphicStyle>) CR2WTypeManager.Create("handle:vgVectorGraphicStyle", "yle", cr2w, this);
-				}
-				return _yle;
-			}
-			set
-			{
-				if (_yle == value)
-				{
-					return;
-				}
-				_yle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _yle);
+			set => SetProperty(ref _yle, value);
 		}
 
 		public vgBaseVectorGraphicShape(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

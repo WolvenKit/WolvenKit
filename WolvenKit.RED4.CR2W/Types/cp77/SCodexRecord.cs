@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("RecordID")] 
 		public TweakDBID RecordID
 		{
-			get
-			{
-				if (_recordID == null)
-				{
-					_recordID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "RecordID", cr2w, this);
-				}
-				return _recordID;
-			}
-			set
-			{
-				if (_recordID == value)
-				{
-					return;
-				}
-				_recordID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recordID);
+			set => SetProperty(ref _recordID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("RecordContent")] 
 		public CArray<SCodexRecordPart> RecordContent
 		{
-			get
-			{
-				if (_recordContent == null)
-				{
-					_recordContent = (CArray<SCodexRecordPart>) CR2WTypeManager.Create("array:SCodexRecordPart", "RecordContent", cr2w, this);
-				}
-				return _recordContent;
-			}
-			set
-			{
-				if (_recordContent == value)
-				{
-					return;
-				}
-				_recordContent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _recordContent);
+			set => SetProperty(ref _recordContent, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("Tags")] 
 		public CArray<CName> Tags
 		{
-			get
-			{
-				if (_tags == null)
-				{
-					_tags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "Tags", cr2w, this);
-				}
-				return _tags;
-			}
-			set
-			{
-				if (_tags == value)
-				{
-					return;
-				}
-				_tags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tags);
+			set => SetProperty(ref _tags, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("Unlocked")] 
 		public CBool Unlocked
 		{
-			get
-			{
-				if (_unlocked == null)
-				{
-					_unlocked = (CBool) CR2WTypeManager.Create("Bool", "Unlocked", cr2w, this);
-				}
-				return _unlocked;
-			}
-			set
-			{
-				if (_unlocked == value)
-				{
-					return;
-				}
-				_unlocked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unlocked);
+			set => SetProperty(ref _unlocked, value);
 		}
 
 		public SCodexRecord(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

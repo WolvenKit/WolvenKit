@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("agentID")] 
 		public entEntityID AgentID
 		{
-			get
-			{
-				if (_agentID == null)
-				{
-					_agentID = (entEntityID) CR2WTypeManager.Create("entEntityID", "agentID", cr2w, this);
-				}
-				return _agentID;
-			}
-			set
-			{
-				if (_agentID == value)
-				{
-					return;
-				}
-				_agentID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _agentID);
+			set => SetProperty(ref _agentID, value);
 		}
 
 		public ReprimandAgentDisconnectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

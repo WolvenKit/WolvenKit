@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("braindanceSetVisible")] 
 		public CArray<inkWidgetReference> BraindanceSetVisible
 		{
-			get
-			{
-				if (_braindanceSetVisible == null)
-				{
-					_braindanceSetVisible = (CArray<inkWidgetReference>) CR2WTypeManager.Create("array:inkWidgetReference", "braindanceSetVisible", cr2w, this);
-				}
-				return _braindanceSetVisible;
-			}
-			set
-			{
-				if (_braindanceSetVisible == value)
-				{
-					return;
-				}
-				_braindanceSetVisible = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _braindanceSetVisible);
+			set => SetProperty(ref _braindanceSetVisible, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("braindanceSetHidden")] 
 		public CArray<inkWidgetReference> BraindanceSetHidden
 		{
-			get
-			{
-				if (_braindanceSetHidden == null)
-				{
-					_braindanceSetHidden = (CArray<inkWidgetReference>) CR2WTypeManager.Create("array:inkWidgetReference", "braindanceSetHidden", cr2w, this);
-				}
-				return _braindanceSetHidden;
-			}
-			set
-			{
-				if (_braindanceSetHidden == value)
-				{
-					return;
-				}
-				_braindanceSetHidden = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _braindanceSetHidden);
+			set => SetProperty(ref _braindanceSetHidden, value);
 		}
 
 		public scannerBorderLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

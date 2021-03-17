@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ScannerVulnerabilitiesRightPanel")] 
 		public inkCompoundWidgetReference ScannerVulnerabilitiesRightPanel
 		{
-			get
-			{
-				if (_scannerVulnerabilitiesRightPanel == null)
-				{
-					_scannerVulnerabilitiesRightPanel = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "ScannerVulnerabilitiesRightPanel", cr2w, this);
-				}
-				return _scannerVulnerabilitiesRightPanel;
-			}
-			set
-			{
-				if (_scannerVulnerabilitiesRightPanel == value)
-				{
-					return;
-				}
-				_scannerVulnerabilitiesRightPanel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerVulnerabilitiesRightPanel);
+			set => SetProperty(ref _scannerVulnerabilitiesRightPanel, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("vulnerabilitiesCallbackID")] 
 		public CUInt32 VulnerabilitiesCallbackID
 		{
-			get
-			{
-				if (_vulnerabilitiesCallbackID == null)
-				{
-					_vulnerabilitiesCallbackID = (CUInt32) CR2WTypeManager.Create("Uint32", "vulnerabilitiesCallbackID", cr2w, this);
-				}
-				return _vulnerabilitiesCallbackID;
-			}
-			set
-			{
-				if (_vulnerabilitiesCallbackID == value)
-				{
-					return;
-				}
-				_vulnerabilitiesCallbackID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vulnerabilitiesCallbackID);
+			set => SetProperty(ref _vulnerabilitiesCallbackID, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isValidVulnerabilities")] 
 		public CBool IsValidVulnerabilities
 		{
-			get
-			{
-				if (_isValidVulnerabilities == null)
-				{
-					_isValidVulnerabilities = (CBool) CR2WTypeManager.Create("Bool", "isValidVulnerabilities", cr2w, this);
-				}
-				return _isValidVulnerabilities;
-			}
-			set
-			{
-				if (_isValidVulnerabilities == value)
-				{
-					return;
-				}
-				_isValidVulnerabilities = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isValidVulnerabilities);
+			set => SetProperty(ref _isValidVulnerabilities, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("vulnerabilityWidgets")] 
 		public CArray<wCHandle<inkWidget>> VulnerabilityWidgets
 		{
-			get
-			{
-				if (_vulnerabilityWidgets == null)
-				{
-					_vulnerabilityWidgets = (CArray<wCHandle<inkWidget>>) CR2WTypeManager.Create("array:whandle:inkWidget", "vulnerabilityWidgets", cr2w, this);
-				}
-				return _vulnerabilityWidgets;
-			}
-			set
-			{
-				if (_vulnerabilityWidgets == value)
-				{
-					return;
-				}
-				_vulnerabilityWidgets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vulnerabilityWidgets);
+			set => SetProperty(ref _vulnerabilityWidgets, value);
 		}
 
 		public ScannerVulnerabilitiesGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

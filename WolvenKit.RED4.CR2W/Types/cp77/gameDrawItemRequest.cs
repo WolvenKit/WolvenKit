@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("equipAnimationType")] 
 		public CEnum<gameEquipAnimationType> EquipAnimationType
 		{
-			get
-			{
-				if (_equipAnimationType == null)
-				{
-					_equipAnimationType = (CEnum<gameEquipAnimationType>) CR2WTypeManager.Create("gameEquipAnimationType", "equipAnimationType", cr2w, this);
-				}
-				return _equipAnimationType;
-			}
-			set
-			{
-				if (_equipAnimationType == value)
-				{
-					return;
-				}
-				_equipAnimationType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipAnimationType);
+			set => SetProperty(ref _equipAnimationType, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("assignOnly")] 
 		public CBool AssignOnly
 		{
-			get
-			{
-				if (_assignOnly == null)
-				{
-					_assignOnly = (CBool) CR2WTypeManager.Create("Bool", "assignOnly", cr2w, this);
-				}
-				return _assignOnly;
-			}
-			set
-			{
-				if (_assignOnly == value)
-				{
-					return;
-				}
-				_assignOnly = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _assignOnly);
+			set => SetProperty(ref _assignOnly, value);
 		}
 
 		public gameDrawItemRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

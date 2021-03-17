@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gameObject")] 
 		public CHandle<gameObject> GameObject
 		{
-			get
-			{
-				if (_gameObject == null)
-				{
-					_gameObject = (CHandle<gameObject>) CR2WTypeManager.Create("handle:gameObject", "gameObject", cr2w, this);
-				}
-				return _gameObject;
-			}
-			set
-			{
-				if (_gameObject == value)
-				{
-					return;
-				}
-				_gameObject = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameObject);
+			set => SetProperty(ref _gameObject, value);
 		}
 
 		public gameIObjectScriptBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemData")] 
 		public InventoryItemData ItemData
 		{
-			get
-			{
-				if (_itemData == null)
-				{
-					_itemData = (InventoryItemData) CR2WTypeManager.Create("InventoryItemData", "itemData", cr2w, this);
-				}
-				return _itemData;
-			}
-			set
-			{
-				if (_itemData == value)
-				{
-					return;
-				}
-				_itemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemData);
+			set => SetProperty(ref _itemData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("actionName")] 
 		public CHandle<inkActionName> ActionName
 		{
-			get
-			{
-				if (_actionName == null)
-				{
-					_actionName = (CHandle<inkActionName>) CR2WTypeManager.Create("handle:inkActionName", "actionName", cr2w, this);
-				}
-				return _actionName;
-			}
-			set
-			{
-				if (_actionName == value)
-				{
-					return;
-				}
-				_actionName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionName);
+			set => SetProperty(ref _actionName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("displayContext")] 
 		public CEnum<gameItemDisplayContext> DisplayContext
 		{
-			get
-			{
-				if (_displayContext == null)
-				{
-					_displayContext = (CEnum<gameItemDisplayContext>) CR2WTypeManager.Create("gameItemDisplayContext", "displayContext", cr2w, this);
-				}
-				return _displayContext;
-			}
-			set
-			{
-				if (_displayContext == value)
-				{
-					return;
-				}
-				_displayContext = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _displayContext);
+			set => SetProperty(ref _displayContext, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isBuybackStack")] 
 		public CBool IsBuybackStack
 		{
-			get
-			{
-				if (_isBuybackStack == null)
-				{
-					_isBuybackStack = (CBool) CR2WTypeManager.Create("Bool", "isBuybackStack", cr2w, this);
-				}
-				return _isBuybackStack;
-			}
-			set
-			{
-				if (_isBuybackStack == value)
-				{
-					return;
-				}
-				_isBuybackStack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isBuybackStack);
+			set => SetProperty(ref _isBuybackStack, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("evt")] 
 		public CHandle<inkPointerEvent> Evt
 		{
-			get
-			{
-				if (_evt == null)
-				{
-					_evt = (CHandle<inkPointerEvent>) CR2WTypeManager.Create("handle:inkPointerEvent", "evt", cr2w, this);
-				}
-				return _evt;
-			}
-			set
-			{
-				if (_evt == value)
-				{
-					return;
-				}
-				_evt = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _evt);
+			set => SetProperty(ref _evt, value);
 		}
 
 		public ItemDisplayClickEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("equipmentAreas")] 
 		public CArray<CEnum<gamedataEquipmentArea>> EquipmentAreas
 		{
-			get
-			{
-				if (_equipmentAreas == null)
-				{
-					_equipmentAreas = (CArray<CEnum<gamedataEquipmentArea>>) CR2WTypeManager.Create("array:gamedataEquipmentArea", "equipmentAreas", cr2w, this);
-				}
-				return _equipmentAreas;
-			}
-			set
-			{
-				if (_equipmentAreas == value)
-				{
-					return;
-				}
-				_equipmentAreas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipmentAreas);
+			set => SetProperty(ref _equipmentAreas, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("displaysRoot")] 
 		public wCHandle<inkWidget> DisplaysRoot
 		{
-			get
-			{
-				if (_displaysRoot == null)
-				{
-					_displaysRoot = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "displaysRoot", cr2w, this);
-				}
-				return _displaysRoot;
-			}
-			set
-			{
-				if (_displaysRoot == value)
-				{
-					return;
-				}
-				_displaysRoot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _displaysRoot);
+			set => SetProperty(ref _displaysRoot, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("displayControllers")] 
 		public CArray<CHandle<InventoryItemDisplayController>> DisplayControllers
 		{
-			get
-			{
-				if (_displayControllers == null)
-				{
-					_displayControllers = (CArray<CHandle<InventoryItemDisplayController>>) CR2WTypeManager.Create("array:handle:InventoryItemDisplayController", "displayControllers", cr2w, this);
-				}
-				return _displayControllers;
-			}
-			set
-			{
-				if (_displayControllers == value)
-				{
-					return;
-				}
-				_displayControllers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _displayControllers);
+			set => SetProperty(ref _displayControllers, value);
 		}
 
 		public EquipmentAreaDisplays(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

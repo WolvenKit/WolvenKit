@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("localInplaceResource")] 
 		public CArray<rRef<CResource>> LocalInplaceResource
 		{
-			get
-			{
-				if (_localInplaceResource == null)
-				{
-					_localInplaceResource = (CArray<rRef<CResource>>) CR2WTypeManager.Create("array:rRef:CResource", "localInplaceResource", cr2w, this);
-				}
-				return _localInplaceResource;
-			}
-			set
-			{
-				if (_localInplaceResource == value)
-				{
-					return;
-				}
-				_localInplaceResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localInplaceResource);
+			set => SetProperty(ref _localInplaceResource, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("externInplaceResource")] 
 		public raRef<worldStreamingSectorInplaceContent> ExternInplaceResource
 		{
-			get
-			{
-				if (_externInplaceResource == null)
-				{
-					_externInplaceResource = (raRef<worldStreamingSectorInplaceContent>) CR2WTypeManager.Create("raRef:worldStreamingSectorInplaceContent", "externInplaceResource", cr2w, this);
-				}
-				return _externInplaceResource;
-			}
-			set
-			{
-				if (_externInplaceResource == value)
-				{
-					return;
-				}
-				_externInplaceResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _externInplaceResource);
+			set => SetProperty(ref _externInplaceResource, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("level")] 
 		public CUInt8 Level
 		{
-			get
-			{
-				if (_level == null)
-				{
-					_level = (CUInt8) CR2WTypeManager.Create("Uint8", "level", cr2w, this);
-				}
-				return _level;
-			}
-			set
-			{
-				if (_level == value)
-				{
-					return;
-				}
-				_level = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _level);
+			set => SetProperty(ref _level, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("category")] 
 		public CInt8 Category
 		{
-			get
-			{
-				if (_category == null)
-				{
-					_category = (CInt8) CR2WTypeManager.Create("Int8", "category", cr2w, this);
-				}
-				return _category;
-			}
-			set
-			{
-				if (_category == value)
-				{
-					return;
-				}
-				_category = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _category);
+			set => SetProperty(ref _category, value);
 		}
 
 		public worldStreamingSector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

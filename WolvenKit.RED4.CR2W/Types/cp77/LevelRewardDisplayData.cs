@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("level")] 
 		public CInt32 Level
 		{
-			get
-			{
-				if (_level == null)
-				{
-					_level = (CInt32) CR2WTypeManager.Create("Int32", "level", cr2w, this);
-				}
-				return _level;
-			}
-			set
-			{
-				if (_level == value)
-				{
-					return;
-				}
-				_level = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _level);
+			set => SetProperty(ref _level, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rewardName")] 
 		public CString RewardName
 		{
-			get
-			{
-				if (_rewardName == null)
-				{
-					_rewardName = (CString) CR2WTypeManager.Create("String", "rewardName", cr2w, this);
-				}
-				return _rewardName;
-			}
-			set
-			{
-				if (_rewardName == value)
-				{
-					return;
-				}
-				_rewardName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rewardName);
+			set => SetProperty(ref _rewardName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("description")] 
 		public CString Description
 		{
-			get
-			{
-				if (_description == null)
-				{
-					_description = (CString) CR2WTypeManager.Create("String", "description", cr2w, this);
-				}
-				return _description;
-			}
-			set
-			{
-				if (_description == value)
-				{
-					return;
-				}
-				_description = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _description);
+			set => SetProperty(ref _description, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("icon")] 
 		public CName Icon
 		{
-			get
-			{
-				if (_icon == null)
-				{
-					_icon = (CName) CR2WTypeManager.Create("CName", "icon", cr2w, this);
-				}
-				return _icon;
-			}
-			set
-			{
-				if (_icon == value)
-				{
-					return;
-				}
-				_icon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _icon);
+			set => SetProperty(ref _icon, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("locPackage")] 
 		public CHandle<gameUILocalizationDataPackage> LocPackage
 		{
-			get
-			{
-				if (_locPackage == null)
-				{
-					_locPackage = (CHandle<gameUILocalizationDataPackage>) CR2WTypeManager.Create("handle:gameUILocalizationDataPackage", "locPackage", cr2w, this);
-				}
-				return _locPackage;
-			}
-			set
-			{
-				if (_locPackage == value)
-				{
-					return;
-				}
-				_locPackage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _locPackage);
+			set => SetProperty(ref _locPackage, value);
 		}
 
 		public LevelRewardDisplayData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animationDatabase")] 
 		public CHandle<gameSmartObjectAnimationDatabase> AnimationDatabase
 		{
-			get
-			{
-				if (_animationDatabase == null)
-				{
-					_animationDatabase = (CHandle<gameSmartObjectAnimationDatabase>) CR2WTypeManager.Create("handle:gameSmartObjectAnimationDatabase", "animationDatabase", cr2w, this);
-				}
-				return _animationDatabase;
-			}
-			set
-			{
-				if (_animationDatabase == value)
-				{
-					return;
-				}
-				_animationDatabase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationDatabase);
+			set => SetProperty(ref _animationDatabase, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("compiledNodesData")] 
 		public CHandle<gameCompiledNodes> CompiledNodesData
 		{
-			get
-			{
-				if (_compiledNodesData == null)
-				{
-					_compiledNodesData = (CHandle<gameCompiledNodes>) CR2WTypeManager.Create("handle:gameCompiledNodes", "compiledNodesData", cr2w, this);
-				}
-				return _compiledNodesData;
-			}
-			set
-			{
-				if (_compiledNodesData == value)
-				{
-					return;
-				}
-				_compiledNodesData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _compiledNodesData);
+			set => SetProperty(ref _compiledNodesData, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("transformDictionary")] 
 		public CHandle<gameSmartObjectTransformDictionary> TransformDictionary
 		{
-			get
-			{
-				if (_transformDictionary == null)
-				{
-					_transformDictionary = (CHandle<gameSmartObjectTransformDictionary>) CR2WTypeManager.Create("handle:gameSmartObjectTransformDictionary", "transformDictionary", cr2w, this);
-				}
-				return _transformDictionary;
-			}
-			set
-			{
-				if (_transformDictionary == value)
-				{
-					return;
-				}
-				_transformDictionary = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transformDictionary);
+			set => SetProperty(ref _transformDictionary, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("propertyDictionary")] 
 		public CHandle<gameSmartObjectPropertyDictionary> PropertyDictionary
 		{
-			get
-			{
-				if (_propertyDictionary == null)
-				{
-					_propertyDictionary = (CHandle<gameSmartObjectPropertyDictionary>) CR2WTypeManager.Create("handle:gameSmartObjectPropertyDictionary", "propertyDictionary", cr2w, this);
-				}
-				return _propertyDictionary;
-			}
-			set
-			{
-				if (_propertyDictionary == value)
-				{
-					return;
-				}
-				_propertyDictionary = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _propertyDictionary);
+			set => SetProperty(ref _propertyDictionary, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("transformSequenceDictionary")] 
 		public CHandle<gameSmartObjectTransformSequenceDictionary> TransformSequenceDictionary
 		{
-			get
-			{
-				if (_transformSequenceDictionary == null)
-				{
-					_transformSequenceDictionary = (CHandle<gameSmartObjectTransformSequenceDictionary>) CR2WTypeManager.Create("handle:gameSmartObjectTransformSequenceDictionary", "transformSequenceDictionary", cr2w, this);
-				}
-				return _transformSequenceDictionary;
-			}
-			set
-			{
-				if (_transformSequenceDictionary == value)
-				{
-					return;
-				}
-				_transformSequenceDictionary = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transformSequenceDictionary);
+			set => SetProperty(ref _transformSequenceDictionary, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("soMembership")] 
 		public CHandle<gameSmartObjectMembership> SoMembership
 		{
-			get
-			{
-				if (_soMembership == null)
-				{
-					_soMembership = (CHandle<gameSmartObjectMembership>) CR2WTypeManager.Create("handle:gameSmartObjectMembership", "soMembership", cr2w, this);
-				}
-				return _soMembership;
-			}
-			set
-			{
-				if (_soMembership == value)
-				{
-					return;
-				}
-				_soMembership = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soMembership);
+			set => SetProperty(ref _soMembership, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("localBoundingBox")] 
 		public Box LocalBoundingBox
 		{
-			get
-			{
-				if (_localBoundingBox == null)
-				{
-					_localBoundingBox = (Box) CR2WTypeManager.Create("Box", "localBoundingBox", cr2w, this);
-				}
-				return _localBoundingBox;
-			}
-			set
-			{
-				if (_localBoundingBox == value)
-				{
-					return;
-				}
-				_localBoundingBox = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localBoundingBox);
+			set => SetProperty(ref _localBoundingBox, value);
 		}
 
 		public gameSmartObjectsCompiledResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -25,299 +25,104 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Countdown")] 
 		public inkCanvasWidgetReference Countdown
 		{
-			get
-			{
-				if (_countdown == null)
-				{
-					_countdown = (inkCanvasWidgetReference) CR2WTypeManager.Create("inkCanvasWidgetReference", "Countdown", cr2w, this);
-				}
-				return _countdown;
-			}
-			set
-			{
-				if (_countdown == value)
-				{
-					return;
-				}
-				_countdown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _countdown);
+			set => SetProperty(ref _countdown, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("PositionCounter")] 
 		public inkCanvasWidgetReference PositionCounter
 		{
-			get
-			{
-				if (_positionCounter == null)
-				{
-					_positionCounter = (inkCanvasWidgetReference) CR2WTypeManager.Create("inkCanvasWidgetReference", "PositionCounter", cr2w, this);
-				}
-				return _positionCounter;
-			}
-			set
-			{
-				if (_positionCounter == value)
-				{
-					return;
-				}
-				_positionCounter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _positionCounter);
+			set => SetProperty(ref _positionCounter, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("RacePosition")] 
 		public inkTextWidgetReference RacePosition
 		{
-			get
-			{
-				if (_racePosition == null)
-				{
-					_racePosition = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "RacePosition", cr2w, this);
-				}
-				return _racePosition;
-			}
-			set
-			{
-				if (_racePosition == value)
-				{
-					return;
-				}
-				_racePosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _racePosition);
+			set => SetProperty(ref _racePosition, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("RaceTime")] 
 		public inkTextWidgetReference RaceTime
 		{
-			get
-			{
-				if (_raceTime == null)
-				{
-					_raceTime = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "RaceTime", cr2w, this);
-				}
-				return _raceTime;
-			}
-			set
-			{
-				if (_raceTime == value)
-				{
-					return;
-				}
-				_raceTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _raceTime);
+			set => SetProperty(ref _raceTime, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("RaceCheckpoint")] 
 		public inkTextWidgetReference RaceCheckpoint
 		{
-			get
-			{
-				if (_raceCheckpoint == null)
-				{
-					_raceCheckpoint = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "RaceCheckpoint", cr2w, this);
-				}
-				return _raceCheckpoint;
-			}
-			set
-			{
-				if (_raceCheckpoint == value)
-				{
-					return;
-				}
-				_raceCheckpoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _raceCheckpoint);
+			set => SetProperty(ref _raceCheckpoint, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("maxPosition")] 
 		public CInt32 MaxPosition
 		{
-			get
-			{
-				if (_maxPosition == null)
-				{
-					_maxPosition = (CInt32) CR2WTypeManager.Create("Int32", "maxPosition", cr2w, this);
-				}
-				return _maxPosition;
-			}
-			set
-			{
-				if (_maxPosition == value)
-				{
-					return;
-				}
-				_maxPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxPosition);
+			set => SetProperty(ref _maxPosition, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("maxCheckpoint")] 
 		public CInt32 MaxCheckpoint
 		{
-			get
-			{
-				if (_maxCheckpoint == null)
-				{
-					_maxCheckpoint = (CInt32) CR2WTypeManager.Create("Int32", "maxCheckpoint", cr2w, this);
-				}
-				return _maxCheckpoint;
-			}
-			set
-			{
-				if (_maxCheckpoint == value)
-				{
-					return;
-				}
-				_maxCheckpoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxCheckpoint);
+			set => SetProperty(ref _maxCheckpoint, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("playerPosition")] 
 		public CInt32 PlayerPosition
 		{
-			get
-			{
-				if (_playerPosition == null)
-				{
-					_playerPosition = (CInt32) CR2WTypeManager.Create("Int32", "playerPosition", cr2w, this);
-				}
-				return _playerPosition;
-			}
-			set
-			{
-				if (_playerPosition == value)
-				{
-					return;
-				}
-				_playerPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerPosition);
+			set => SetProperty(ref _playerPosition, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("minute")] 
 		public CInt32 Minute
 		{
-			get
-			{
-				if (_minute == null)
-				{
-					_minute = (CInt32) CR2WTypeManager.Create("Int32", "minute", cr2w, this);
-				}
-				return _minute;
-			}
-			set
-			{
-				if (_minute == value)
-				{
-					return;
-				}
-				_minute = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minute);
+			set => SetProperty(ref _minute, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("activeVehicleUIBlackboard")] 
 		public wCHandle<gameIBlackboard> ActiveVehicleUIBlackboard
 		{
-			get
-			{
-				if (_activeVehicleUIBlackboard == null)
-				{
-					_activeVehicleUIBlackboard = (wCHandle<gameIBlackboard>) CR2WTypeManager.Create("whandle:gameIBlackboard", "activeVehicleUIBlackboard", cr2w, this);
-				}
-				return _activeVehicleUIBlackboard;
-			}
-			set
-			{
-				if (_activeVehicleUIBlackboard == value)
-				{
-					return;
-				}
-				_activeVehicleUIBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeVehicleUIBlackboard);
+			set => SetProperty(ref _activeVehicleUIBlackboard, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("activeVehicle")] 
 		public wCHandle<vehicleBaseObject> ActiveVehicle
 		{
-			get
-			{
-				if (_activeVehicle == null)
-				{
-					_activeVehicle = (wCHandle<vehicleBaseObject>) CR2WTypeManager.Create("whandle:vehicleBaseObject", "activeVehicle", cr2w, this);
-				}
-				return _activeVehicle;
-			}
-			set
-			{
-				if (_activeVehicle == value)
-				{
-					return;
-				}
-				_activeVehicle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeVehicle);
+			set => SetProperty(ref _activeVehicle, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("raceStartEngineTime")] 
 		public EngineTime RaceStartEngineTime
 		{
-			get
-			{
-				if (_raceStartEngineTime == null)
-				{
-					_raceStartEngineTime = (EngineTime) CR2WTypeManager.Create("EngineTime", "raceStartEngineTime", cr2w, this);
-				}
-				return _raceStartEngineTime;
-			}
-			set
-			{
-				if (_raceStartEngineTime == value)
-				{
-					return;
-				}
-				_raceStartEngineTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _raceStartEngineTime);
+			set => SetProperty(ref _raceStartEngineTime, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("factCallbackID")] 
 		public CUInt32 FactCallbackID
 		{
-			get
-			{
-				if (_factCallbackID == null)
-				{
-					_factCallbackID = (CUInt32) CR2WTypeManager.Create("Uint32", "factCallbackID", cr2w, this);
-				}
-				return _factCallbackID;
-			}
-			set
-			{
-				if (_factCallbackID == value)
-				{
-					return;
-				}
-				_factCallbackID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factCallbackID);
+			set => SetProperty(ref _factCallbackID, value);
 		}
 
 		public hudCarRaceController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

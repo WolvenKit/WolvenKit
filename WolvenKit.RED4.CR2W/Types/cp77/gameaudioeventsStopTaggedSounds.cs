@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("audioTag")] 
 		public CName AudioTag
 		{
-			get
-			{
-				if (_audioTag == null)
-				{
-					_audioTag = (CName) CR2WTypeManager.Create("CName", "audioTag", cr2w, this);
-				}
-				return _audioTag;
-			}
-			set
-			{
-				if (_audioTag == value)
-				{
-					return;
-				}
-				_audioTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioTag);
+			set => SetProperty(ref _audioTag, value);
 		}
 
 		public gameaudioeventsStopTaggedSounds(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

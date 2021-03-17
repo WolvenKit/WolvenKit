@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("signShape")] 
 		public CEnum<SignShape> SignShape
 		{
-			get
-			{
-				if (_signShape == null)
-				{
-					_signShape = (CEnum<SignShape>) CR2WTypeManager.Create("SignShape", "signShape", cr2w, this);
-				}
-				return _signShape;
-			}
-			set
-			{
-				if (_signShape == value)
-				{
-					return;
-				}
-				_signShape = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _signShape);
+			set => SetProperty(ref _signShape, value);
 		}
 
 		[Ordinal(87)] 
 		[RED("type")] 
 		public CEnum<SignType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<SignType>) CR2WTypeManager.Create("SignType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(88)] 
 		[RED("message")] 
 		public CString Message
 		{
-			get
-			{
-				if (_message == null)
-				{
-					_message = (CString) CR2WTypeManager.Create("String", "message", cr2w, this);
-				}
-				return _message;
-			}
-			set
-			{
-				if (_message == value)
-				{
-					return;
-				}
-				_message = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _message);
+			set => SetProperty(ref _message, value);
 		}
 
 		public InteractiveSign(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

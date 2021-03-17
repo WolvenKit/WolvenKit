@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isHidden")] 
 		public CBool IsHidden
 		{
-			get
-			{
-				if (_isHidden == null)
-				{
-					_isHidden = (CBool) CR2WTypeManager.Create("Bool", "isHidden", cr2w, this);
-				}
-				return _isHidden;
-			}
-			set
-			{
-				if (_isHidden == value)
-				{
-					return;
-				}
-				_isHidden = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isHidden);
+			set => SetProperty(ref _isHidden, value);
 		}
 
 		public ToggleGameplayMappinVisibilityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

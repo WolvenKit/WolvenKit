@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetEntityWithCounter")] 
 		public NodeRef TargetEntityWithCounter
 		{
-			get
-			{
-				if (_targetEntityWithCounter == null)
-				{
-					_targetEntityWithCounter = (NodeRef) CR2WTypeManager.Create("NodeRef", "targetEntityWithCounter", cr2w, this);
-				}
-				return _targetEntityWithCounter;
-			}
-			set
-			{
-				if (_targetEntityWithCounter == value)
-				{
-					return;
-				}
-				_targetEntityWithCounter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetEntityWithCounter);
+			set => SetProperty(ref _targetEntityWithCounter, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("targetPersistentID")] 
 		public gamePersistentID TargetPersistentID
 		{
-			get
-			{
-				if (_targetPersistentID == null)
-				{
-					_targetPersistentID = (gamePersistentID) CR2WTypeManager.Create("gamePersistentID", "targetPersistentID", cr2w, this);
-				}
-				return _targetPersistentID;
-			}
-			set
-			{
-				if (_targetPersistentID == value)
-				{
-					return;
-				}
-				_targetPersistentID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetPersistentID);
+			set => SetProperty(ref _targetPersistentID, value);
 		}
 
 		public SampleInteractiveEntityThatBumpsTheCounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

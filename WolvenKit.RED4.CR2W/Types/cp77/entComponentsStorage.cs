@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("components")] 
 		public CArray<CHandle<entIComponent>> Components
 		{
-			get
-			{
-				if (_components == null)
-				{
-					_components = (CArray<CHandle<entIComponent>>) CR2WTypeManager.Create("array:handle:entIComponent", "components", cr2w, this);
-				}
-				return _components;
-			}
-			set
-			{
-				if (_components == value)
-				{
-					return;
-				}
-				_components = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _components);
+			set => SetProperty(ref _components, value);
 		}
 
 		public entComponentsStorage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

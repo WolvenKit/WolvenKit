@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("customActions")] 
 		public SCustomDeviceActionsData CustomActions
 		{
-			get
-			{
-				if (_customActions == null)
-				{
-					_customActions = (SCustomDeviceActionsData) CR2WTypeManager.Create("SCustomDeviceActionsData", "customActions", cr2w, this);
-				}
-				return _customActions;
-			}
-			set
-			{
-				if (_customActions == value)
-				{
-					return;
-				}
-				_customActions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customActions);
+			set => SetProperty(ref _customActions, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("customActionsOperations")] 
 		public CArray<SCustomActionOperationData> CustomActionsOperations
 		{
-			get
-			{
-				if (_customActionsOperations == null)
-				{
-					_customActionsOperations = (CArray<SCustomActionOperationData>) CR2WTypeManager.Create("array:SCustomActionOperationData", "customActionsOperations", cr2w, this);
-				}
-				return _customActionsOperations;
-			}
-			set
-			{
-				if (_customActionsOperations == value)
-				{
-					return;
-				}
-				_customActionsOperations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customActionsOperations);
+			set => SetProperty(ref _customActionsOperations, value);
 		}
 
 		public CustomActionOperations(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("deviceName")] 
 		public CName DeviceName
 		{
-			get
-			{
-				if (_deviceName == null)
-				{
-					_deviceName = (CName) CR2WTypeManager.Create("CName", "deviceName", cr2w, this);
-				}
-				return _deviceName;
-			}
-			set
-			{
-				if (_deviceName == value)
-				{
-					return;
-				}
-				_deviceName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deviceName);
+			set => SetProperty(ref _deviceName, value);
 		}
 
 		public CPOVotingDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

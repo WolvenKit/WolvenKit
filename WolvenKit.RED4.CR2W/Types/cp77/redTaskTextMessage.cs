@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("taskId")] 
 		public CUInt32 TaskId
 		{
-			get
-			{
-				if (_taskId == null)
-				{
-					_taskId = (CUInt32) CR2WTypeManager.Create("Uint32", "taskId", cr2w, this);
-				}
-				return _taskId;
-			}
-			set
-			{
-				if (_taskId == value)
-				{
-					return;
-				}
-				_taskId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _taskId);
+			set => SetProperty(ref _taskId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("text")] 
 		public CString Text
 		{
-			get
-			{
-				if (_text == null)
-				{
-					_text = (CString) CR2WTypeManager.Create("String", "text", cr2w, this);
-				}
-				return _text;
-			}
-			set
-			{
-				if (_text == value)
-				{
-					return;
-				}
-				_text = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _text);
+			set => SetProperty(ref _text, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CEnum<redTaskTextMessageType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<redTaskTextMessageType>) CR2WTypeManager.Create("redTaskTextMessageType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		public redTaskTextMessage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

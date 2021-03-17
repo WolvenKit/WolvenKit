@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("spotter")] 
 		public wCHandle<entEntity> Spotter
 		{
-			get
-			{
-				if (_spotter == null)
-				{
-					_spotter = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "spotter", cr2w, this);
-				}
-				return _spotter;
-			}
-			set
-			{
-				if (_spotter == value)
-				{
-					return;
-				}
-				_spotter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spotter);
+			set => SetProperty(ref _spotter, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("spotted")] 
 		public wCHandle<entEntity> Spotted
 		{
-			get
-			{
-				if (_spotted == null)
-				{
-					_spotted = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "spotted", cr2w, this);
-				}
-				return _spotted;
-			}
-			set
-			{
-				if (_spotted == value)
-				{
-					return;
-				}
-				_spotted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spotted);
+			set => SetProperty(ref _spotted, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isHostile")] 
 		public CBool IsHostile
 		{
-			get
-			{
-				if (_isHostile == null)
-				{
-					_isHostile = (CBool) CR2WTypeManager.Create("Bool", "isHostile", cr2w, this);
-				}
-				return _isHostile;
-			}
-			set
-			{
-				if (_isHostile == value)
-				{
-					return;
-				}
-				_isHostile = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isHostile);
+			set => SetProperty(ref _isHostile, value);
 		}
 
 		public AIEntitySpotted(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

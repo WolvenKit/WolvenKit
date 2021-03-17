@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animationType")] 
 		public CEnum<EAnimationType> AnimationType
 		{
-			get
-			{
-				if (_animationType == null)
-				{
-					_animationType = (CEnum<EAnimationType>) CR2WTypeManager.Create("EAnimationType", "animationType", cr2w, this);
-				}
-				return _animationType;
-			}
-			set
-			{
-				if (_animationType == value)
-				{
-					return;
-				}
-				_animationType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationType);
+			set => SetProperty(ref _animationType, value);
 		}
 
 		[Ordinal(100)] 
 		[RED("rotateClockwise")] 
 		public CBool RotateClockwise
 		{
-			get
-			{
-				if (_rotateClockwise == null)
-				{
-					_rotateClockwise = (CBool) CR2WTypeManager.Create("Bool", "rotateClockwise", cr2w, this);
-				}
-				return _rotateClockwise;
-			}
-			set
-			{
-				if (_rotateClockwise == value)
-				{
-					return;
-				}
-				_rotateClockwise = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotateClockwise);
+			set => SetProperty(ref _rotateClockwise, value);
 		}
 
 		[Ordinal(101)] 
 		[RED("randomizeBladesSpeed")] 
 		public CBool RandomizeBladesSpeed
 		{
-			get
-			{
-				if (_randomizeBladesSpeed == null)
-				{
-					_randomizeBladesSpeed = (CBool) CR2WTypeManager.Create("Bool", "randomizeBladesSpeed", cr2w, this);
-				}
-				return _randomizeBladesSpeed;
-			}
-			set
-			{
-				if (_randomizeBladesSpeed == value)
-				{
-					return;
-				}
-				_randomizeBladesSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _randomizeBladesSpeed);
+			set => SetProperty(ref _randomizeBladesSpeed, value);
 		}
 
 		[Ordinal(102)] 
 		[RED("maxRotationSpeed")] 
 		public CFloat MaxRotationSpeed
 		{
-			get
-			{
-				if (_maxRotationSpeed == null)
-				{
-					_maxRotationSpeed = (CFloat) CR2WTypeManager.Create("Float", "maxRotationSpeed", cr2w, this);
-				}
-				return _maxRotationSpeed;
-			}
-			set
-			{
-				if (_maxRotationSpeed == value)
-				{
-					return;
-				}
-				_maxRotationSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxRotationSpeed);
+			set => SetProperty(ref _maxRotationSpeed, value);
 		}
 
 		[Ordinal(103)] 
 		[RED("timeToMaxRotation")] 
 		public CFloat TimeToMaxRotation
 		{
-			get
-			{
-				if (_timeToMaxRotation == null)
-				{
-					_timeToMaxRotation = (CFloat) CR2WTypeManager.Create("Float", "timeToMaxRotation", cr2w, this);
-				}
-				return _timeToMaxRotation;
-			}
-			set
-			{
-				if (_timeToMaxRotation == value)
-				{
-					return;
-				}
-				_timeToMaxRotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeToMaxRotation);
+			set => SetProperty(ref _timeToMaxRotation, value);
 		}
 
 		[Ordinal(104)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_RotatingObject> AnimFeature
 		{
-			get
-			{
-				if (_animFeature == null)
-				{
-					_animFeature = (CHandle<AnimFeature_RotatingObject>) CR2WTypeManager.Create("handle:AnimFeature_RotatingObject", "animFeature", cr2w, this);
-				}
-				return _animFeature;
-			}
-			set
-			{
-				if (_animFeature == value)
-				{
-					return;
-				}
-				_animFeature = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animFeature);
+			set => SetProperty(ref _animFeature, value);
 		}
 
 		[Ordinal(105)] 
 		[RED("updateComp")] 
 		public CHandle<UpdateComponent> UpdateComp
 		{
-			get
-			{
-				if (_updateComp == null)
-				{
-					_updateComp = (CHandle<UpdateComponent>) CR2WTypeManager.Create("handle:UpdateComponent", "updateComp", cr2w, this);
-				}
-				return _updateComp;
-			}
-			set
-			{
-				if (_updateComp == value)
-				{
-					return;
-				}
-				_updateComp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _updateComp);
+			set => SetProperty(ref _updateComp, value);
 		}
 
 		public Fan(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

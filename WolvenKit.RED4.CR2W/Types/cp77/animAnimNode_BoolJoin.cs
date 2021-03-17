@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("input")] 
 		public animBoolLink Input
 		{
-			get
-			{
-				if (_input == null)
-				{
-					_input = (animBoolLink) CR2WTypeManager.Create("animBoolLink", "input", cr2w, this);
-				}
-				return _input;
-			}
-			set
-			{
-				if (_input == value)
-				{
-					return;
-				}
-				_input = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _input);
+			set => SetProperty(ref _input, value);
 		}
 
 		public animAnimNode_BoolJoin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

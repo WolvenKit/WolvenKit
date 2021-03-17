@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("editorEventId")] 
 		public CUInt64 EditorEventId
 		{
-			get
-			{
-				if (_editorEventId == null)
-				{
-					_editorEventId = (CUInt64) CR2WTypeManager.Create("Uint64", "editorEventId", cr2w, this);
-				}
-				return _editorEventId;
-			}
-			set
-			{
-				if (_editorEventId == value)
-				{
-					return;
-				}
-				_editorEventId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _editorEventId);
+			set => SetProperty(ref _editorEventId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("originNodeId")] 
 		public scnNodeId OriginNodeId
 		{
-			get
-			{
-				if (_originNodeId == null)
-				{
-					_originNodeId = (scnNodeId) CR2WTypeManager.Create("scnNodeId", "originNodeId", cr2w, this);
-				}
-				return _originNodeId;
-			}
-			set
-			{
-				if (_originNodeId == value)
-				{
-					return;
-				}
-				_originNodeId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _originNodeId);
+			set => SetProperty(ref _originNodeId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("sceneEventIds")] 
 		public CArray<scnSceneEventId> SceneEventIds
 		{
-			get
-			{
-				if (_sceneEventIds == null)
-				{
-					_sceneEventIds = (CArray<scnSceneEventId>) CR2WTypeManager.Create("array:scnSceneEventId", "sceneEventIds", cr2w, this);
-				}
-				return _sceneEventIds;
-			}
-			set
-			{
-				if (_sceneEventIds == value)
-				{
-					return;
-				}
-				_sceneEventIds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneEventIds);
+			set => SetProperty(ref _sceneEventIds, value);
 		}
 
 		public scnSceneEventSymbol(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

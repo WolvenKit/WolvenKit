@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get
-			{
-				if (_objectRef == null)
-				{
-					_objectRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "objectRef", cr2w, this);
-				}
-				return _objectRef;
-			}
-			set
-			{
-				if (_objectRef == value)
-				{
-					return;
-				}
-				_objectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get
-			{
-				if (_isPlayer == null)
-				{
-					_isPlayer = (CBool) CR2WTypeManager.Create("Bool", "isPlayer", cr2w, this);
-				}
-				return _isPlayer;
-			}
-			set
-			{
-				if (_isPlayer == value)
-				{
-					return;
-				}
-				_isPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("statType")] 
 		public CEnum<gamedataStatType> StatType
 		{
-			get
-			{
-				if (_statType == null)
-				{
-					_statType = (CEnum<gamedataStatType>) CR2WTypeManager.Create("gamedataStatType", "statType", cr2w, this);
-				}
-				return _statType;
-			}
-			set
-			{
-				if (_statType == value)
-				{
-					return;
-				}
-				_statType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statType);
+			set => SetProperty(ref _statType, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("value")] 
 		public CFloat Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CFloat) CR2WTypeManager.Create("Float", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("setExactValue")] 
 		public CBool SetExactValue
 		{
-			get
-			{
-				if (_setExactValue == null)
-				{
-					_setExactValue = (CBool) CR2WTypeManager.Create("Bool", "setExactValue", cr2w, this);
-				}
-				return _setExactValue;
-			}
-			set
-			{
-				if (_setExactValue == value)
-				{
-					return;
-				}
-				_setExactValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setExactValue);
+			set => SetProperty(ref _setExactValue, value);
 		}
 
 		public questEntityManagerSetStat_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -24,276 +24,96 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("titleWidget")] 
 		public inkTextWidgetReference TitleWidget
 		{
-			get
-			{
-				if (_titleWidget == null)
-				{
-					_titleWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "titleWidget", cr2w, this);
-				}
-				return _titleWidget;
-			}
-			set
-			{
-				if (_titleWidget == value)
-				{
-					return;
-				}
-				_titleWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _titleWidget);
+			set => SetProperty(ref _titleWidget, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("ownerNameWidget")] 
 		public inkTextWidgetReference OwnerNameWidget
 		{
-			get
-			{
-				if (_ownerNameWidget == null)
-				{
-					_ownerNameWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "ownerNameWidget", cr2w, this);
-				}
-				return _ownerNameWidget;
-			}
-			set
-			{
-				if (_ownerNameWidget == value)
-				{
-					return;
-				}
-				_ownerNameWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerNameWidget);
+			set => SetProperty(ref _ownerNameWidget, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("dateWidget")] 
 		public inkTextWidgetReference DateWidget
 		{
-			get
-			{
-				if (_dateWidget == null)
-				{
-					_dateWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "dateWidget", cr2w, this);
-				}
-				return _dateWidget;
-			}
-			set
-			{
-				if (_dateWidget == value)
-				{
-					return;
-				}
-				_dateWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dateWidget);
+			set => SetProperty(ref _dateWidget, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("datePanelWidget")] 
 		public inkTextWidgetReference DatePanelWidget
 		{
-			get
-			{
-				if (_datePanelWidget == null)
-				{
-					_datePanelWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "datePanelWidget", cr2w, this);
-				}
-				return _datePanelWidget;
-			}
-			set
-			{
-				if (_datePanelWidget == value)
-				{
-					return;
-				}
-				_datePanelWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _datePanelWidget);
+			set => SetProperty(ref _datePanelWidget, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("ownerPanelWidget")] 
 		public inkTextWidgetReference OwnerPanelWidget
 		{
-			get
-			{
-				if (_ownerPanelWidget == null)
-				{
-					_ownerPanelWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "ownerPanelWidget", cr2w, this);
-				}
-				return _ownerPanelWidget;
-			}
-			set
-			{
-				if (_ownerPanelWidget == value)
-				{
-					return;
-				}
-				_ownerPanelWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerPanelWidget);
+			set => SetProperty(ref _ownerPanelWidget, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("textContentWidget")] 
 		public inkTextWidgetReference TextContentWidget
 		{
-			get
-			{
-				if (_textContentWidget == null)
-				{
-					_textContentWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "textContentWidget", cr2w, this);
-				}
-				return _textContentWidget;
-			}
-			set
-			{
-				if (_textContentWidget == value)
-				{
-					return;
-				}
-				_textContentWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textContentWidget);
+			set => SetProperty(ref _textContentWidget, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("textContentHolder")] 
 		public inkWidgetReference TextContentHolder
 		{
-			get
-			{
-				if (_textContentHolder == null)
-				{
-					_textContentHolder = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "textContentHolder", cr2w, this);
-				}
-				return _textContentHolder;
-			}
-			set
-			{
-				if (_textContentHolder == value)
-				{
-					return;
-				}
-				_textContentHolder = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textContentHolder);
+			set => SetProperty(ref _textContentHolder, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("videoContentWidget")] 
 		public inkVideoWidgetReference VideoContentWidget
 		{
-			get
-			{
-				if (_videoContentWidget == null)
-				{
-					_videoContentWidget = (inkVideoWidgetReference) CR2WTypeManager.Create("inkVideoWidgetReference", "videoContentWidget", cr2w, this);
-				}
-				return _videoContentWidget;
-			}
-			set
-			{
-				if (_videoContentWidget == value)
-				{
-					return;
-				}
-				_videoContentWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _videoContentWidget);
+			set => SetProperty(ref _videoContentWidget, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("imageContentWidget")] 
 		public inkImageWidgetReference ImageContentWidget
 		{
-			get
-			{
-				if (_imageContentWidget == null)
-				{
-					_imageContentWidget = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "imageContentWidget", cr2w, this);
-				}
-				return _imageContentWidget;
-			}
-			set
-			{
-				if (_imageContentWidget == value)
-				{
-					return;
-				}
-				_imageContentWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _imageContentWidget);
+			set => SetProperty(ref _imageContentWidget, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("closeButtonWidget")] 
 		public inkWidgetReference CloseButtonWidget
 		{
-			get
-			{
-				if (_closeButtonWidget == null)
-				{
-					_closeButtonWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "closeButtonWidget", cr2w, this);
-				}
-				return _closeButtonWidget;
-			}
-			set
-			{
-				if (_closeButtonWidget == value)
-				{
-					return;
-				}
-				_closeButtonWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _closeButtonWidget);
+			set => SetProperty(ref _closeButtonWidget, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("documentType")] 
 		public CEnum<EDocumentType> DocumentType
 		{
-			get
-			{
-				if (_documentType == null)
-				{
-					_documentType = (CEnum<EDocumentType>) CR2WTypeManager.Create("EDocumentType", "documentType", cr2w, this);
-				}
-				return _documentType;
-			}
-			set
-			{
-				if (_documentType == value)
-				{
-					return;
-				}
-				_documentType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _documentType);
+			set => SetProperty(ref _documentType, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("lastPlayedVideo")] 
 		public redResourceReferenceScriptToken LastPlayedVideo
 		{
-			get
-			{
-				if (_lastPlayedVideo == null)
-				{
-					_lastPlayedVideo = (redResourceReferenceScriptToken) CR2WTypeManager.Create("redResourceReferenceScriptToken", "lastPlayedVideo", cr2w, this);
-				}
-				return _lastPlayedVideo;
-			}
-			set
-			{
-				if (_lastPlayedVideo == value)
-				{
-					return;
-				}
-				_lastPlayedVideo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastPlayedVideo);
+			set => SetProperty(ref _lastPlayedVideo, value);
 		}
 
 		public ComputerDocumentWidgetController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

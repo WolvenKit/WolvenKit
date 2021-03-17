@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("owner")] 
 		public wCHandle<IScriptable> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<IScriptable>) CR2WTypeManager.Create("whandle:IScriptable", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("triggerButton")] 
 		public wCHandle<DropdownButtonController> TriggerButton
 		{
-			get
-			{
-				if (_triggerButton == null)
-				{
-					_triggerButton = (wCHandle<DropdownButtonController>) CR2WTypeManager.Create("whandle:DropdownButtonController", "triggerButton", cr2w, this);
-				}
-				return _triggerButton;
-			}
-			set
-			{
-				if (_triggerButton == value)
-				{
-					return;
-				}
-				_triggerButton = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerButton);
+			set => SetProperty(ref _triggerButton, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("identifier")] 
 		public CVariant Identifier
 		{
-			get
-			{
-				if (_identifier == null)
-				{
-					_identifier = (CVariant) CR2WTypeManager.Create("Variant", "identifier", cr2w, this);
-				}
-				return _identifier;
-			}
-			set
-			{
-				if (_identifier == value)
-				{
-					return;
-				}
-				_identifier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _identifier);
+			set => SetProperty(ref _identifier, value);
 		}
 
 		public DropdownItemClickedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

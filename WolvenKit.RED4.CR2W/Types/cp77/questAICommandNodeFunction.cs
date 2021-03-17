@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("order")] 
 		public CUInt32 Order
 		{
-			get
-			{
-				if (_order == null)
-				{
-					_order = (CUInt32) CR2WTypeManager.Create("Uint32", "order", cr2w, this);
-				}
-				return _order;
-			}
-			set
-			{
-				if (_order == value)
-				{
-					return;
-				}
-				_order = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _order);
+			set => SetProperty(ref _order, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("nodeType")] 
 		public CName NodeType
 		{
-			get
-			{
-				if (_nodeType == null)
-				{
-					_nodeType = (CName) CR2WTypeManager.Create("CName", "nodeType", cr2w, this);
-				}
-				return _nodeType;
-			}
-			set
-			{
-				if (_nodeType == value)
-				{
-					return;
-				}
-				_nodeType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeType);
+			set => SetProperty(ref _nodeType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("commandCategory")] 
 		public CName CommandCategory
 		{
-			get
-			{
-				if (_commandCategory == null)
-				{
-					_commandCategory = (CName) CR2WTypeManager.Create("CName", "commandCategory", cr2w, this);
-				}
-				return _commandCategory;
-			}
-			set
-			{
-				if (_commandCategory == value)
-				{
-					return;
-				}
-				_commandCategory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _commandCategory);
+			set => SetProperty(ref _commandCategory, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("friendlyName")] 
 		public CString FriendlyName
 		{
-			get
-			{
-				if (_friendlyName == null)
-				{
-					_friendlyName = (CString) CR2WTypeManager.Create("String", "friendlyName", cr2w, this);
-				}
-				return _friendlyName;
-			}
-			set
-			{
-				if (_friendlyName == value)
-				{
-					return;
-				}
-				_friendlyName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _friendlyName);
+			set => SetProperty(ref _friendlyName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("paramsType")] 
 		public CName ParamsType
 		{
-			get
-			{
-				if (_paramsType == null)
-				{
-					_paramsType = (CName) CR2WTypeManager.Create("CName", "paramsType", cr2w, this);
-				}
-				return _paramsType;
-			}
-			set
-			{
-				if (_paramsType == value)
-				{
-					return;
-				}
-				_paramsType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _paramsType);
+			set => SetProperty(ref _paramsType, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("nodeColor")] 
 		public CColor NodeColor
 		{
-			get
-			{
-				if (_nodeColor == null)
-				{
-					_nodeColor = (CColor) CR2WTypeManager.Create("Color", "nodeColor", cr2w, this);
-				}
-				return _nodeColor;
-			}
-			set
-			{
-				if (_nodeColor == value)
-				{
-					return;
-				}
-				_nodeColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeColor);
+			set => SetProperty(ref _nodeColor, value);
 		}
 
 		public questAICommandNodeFunction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

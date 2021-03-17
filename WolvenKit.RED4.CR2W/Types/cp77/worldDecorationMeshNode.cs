@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("startAsleep")] 
 		public CBool StartAsleep
 		{
-			get
-			{
-				if (_startAsleep == null)
-				{
-					_startAsleep = (CBool) CR2WTypeManager.Create("Bool", "startAsleep", cr2w, this);
-				}
-				return _startAsleep;
-			}
-			set
-			{
-				if (_startAsleep == value)
-				{
-					return;
-				}
-				_startAsleep = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startAsleep);
+			set => SetProperty(ref _startAsleep, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("filterDataSource")] 
 		public CEnum<physicsFilterDataSource> FilterDataSource
 		{
-			get
-			{
-				if (_filterDataSource == null)
-				{
-					_filterDataSource = (CEnum<physicsFilterDataSource>) CR2WTypeManager.Create("physicsFilterDataSource", "filterDataSource", cr2w, this);
-				}
-				return _filterDataSource;
-			}
-			set
-			{
-				if (_filterDataSource == value)
-				{
-					return;
-				}
-				_filterDataSource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filterDataSource);
+			set => SetProperty(ref _filterDataSource, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
-			get
-			{
-				if (_filterData == null)
-				{
-					_filterData = (CHandle<physicsFilterData>) CR2WTypeManager.Create("handle:physicsFilterData", "filterData", cr2w, this);
-				}
-				return _filterData;
-			}
-			set
-			{
-				if (_filterData == value)
-				{
-					return;
-				}
-				_filterData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filterData);
+			set => SetProperty(ref _filterData, value);
 		}
 
 		public worldDecorationMeshNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("points")] 
 		public CArray<Vector2> Points
 		{
-			get
-			{
-				if (_points == null)
-				{
-					_points = (CArray<Vector2>) CR2WTypeManager.Create("array:Vector2", "points", cr2w, this);
-				}
-				return _points;
-			}
-			set
-			{
-				if (_points == value)
-				{
-					return;
-				}
-				_points = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _points);
+			set => SetProperty(ref _points, value);
 		}
 
 		public inkShapePreset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

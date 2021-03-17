@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("leftHandSide")] 
 		public CHandle<AIArgumentMapping> LeftHandSide
 		{
-			get
-			{
-				if (_leftHandSide == null)
-				{
-					_leftHandSide = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "leftHandSide", cr2w, this);
-				}
-				return _leftHandSide;
-			}
-			set
-			{
-				if (_leftHandSide == value)
-				{
-					return;
-				}
-				_leftHandSide = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _leftHandSide);
+			set => SetProperty(ref _leftHandSide, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rightHandSide")] 
 		public CHandle<AIArgumentMapping> RightHandSide
 		{
-			get
-			{
-				if (_rightHandSide == null)
-				{
-					_rightHandSide = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "rightHandSide", cr2w, this);
-				}
-				return _rightHandSide;
-			}
-			set
-			{
-				if (_rightHandSide == value)
-				{
-					return;
-				}
-				_rightHandSide = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rightHandSide);
+			set => SetProperty(ref _rightHandSide, value);
 		}
 
 		public AIbehaviorAssignTaskItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

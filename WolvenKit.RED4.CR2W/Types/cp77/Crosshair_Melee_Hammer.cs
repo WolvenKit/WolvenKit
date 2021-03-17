@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetColorChange")] 
 		public inkWidgetReference TargetColorChange
 		{
-			get
-			{
-				if (_targetColorChange == null)
-				{
-					_targetColorChange = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "targetColorChange", cr2w, this);
-				}
-				return _targetColorChange;
-			}
-			set
-			{
-				if (_targetColorChange == value)
-				{
-					return;
-				}
-				_targetColorChange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetColorChange);
+			set => SetProperty(ref _targetColorChange, value);
 		}
 
 		public Crosshair_Melee_Hammer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

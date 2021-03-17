@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("transform")] 
 		public animTransformIndex Transform
 		{
-			get
-			{
-				if (_transform == null)
-				{
-					_transform = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "transform", cr2w, this);
-				}
-				return _transform;
-			}
-			set
-			{
-				if (_transform == value)
-				{
-					return;
-				}
-				_transform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transform);
+			set => SetProperty(ref _transform, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("axis")] 
 		public Vector3 Axis
 		{
-			get
-			{
-				if (_axis == null)
-				{
-					_axis = (Vector3) CR2WTypeManager.Create("Vector3", "axis", cr2w, this);
-				}
-				return _axis;
-			}
-			set
-			{
-				if (_axis == value)
-				{
-					return;
-				}
-				_axis = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _axis);
+			set => SetProperty(ref _axis, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("valueScale")] 
 		public CFloat ValueScale
 		{
-			get
-			{
-				if (_valueScale == null)
-				{
-					_valueScale = (CFloat) CR2WTypeManager.Create("Float", "valueScale", cr2w, this);
-				}
-				return _valueScale;
-			}
-			set
-			{
-				if (_valueScale == value)
-				{
-					return;
-				}
-				_valueScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _valueScale);
+			set => SetProperty(ref _valueScale, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("clamp")] 
 		public CBool Clamp
 		{
-			get
-			{
-				if (_clamp == null)
-				{
-					_clamp = (CBool) CR2WTypeManager.Create("Bool", "clamp", cr2w, this);
-				}
-				return _clamp;
-			}
-			set
-			{
-				if (_clamp == value)
-				{
-					return;
-				}
-				_clamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clamp);
+			set => SetProperty(ref _clamp, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("angleMin")] 
 		public CFloat AngleMin
 		{
-			get
-			{
-				if (_angleMin == null)
-				{
-					_angleMin = (CFloat) CR2WTypeManager.Create("Float", "angleMin", cr2w, this);
-				}
-				return _angleMin;
-			}
-			set
-			{
-				if (_angleMin == value)
-				{
-					return;
-				}
-				_angleMin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _angleMin);
+			set => SetProperty(ref _angleMin, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("angleMax")] 
 		public CFloat AngleMax
 		{
-			get
-			{
-				if (_angleMax == null)
-				{
-					_angleMax = (CFloat) CR2WTypeManager.Create("Float", "angleMax", cr2w, this);
-				}
-				return _angleMax;
-			}
-			set
-			{
-				if (_angleMax == value)
-				{
-					return;
-				}
-				_angleMax = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _angleMax);
+			set => SetProperty(ref _angleMax, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("angleValueNode")] 
 		public animFloatLink AngleValueNode
 		{
-			get
-			{
-				if (_angleValueNode == null)
-				{
-					_angleValueNode = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "angleValueNode", cr2w, this);
-				}
-				return _angleValueNode;
-			}
-			set
-			{
-				if (_angleValueNode == value)
-				{
-					return;
-				}
-				_angleValueNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _angleValueNode);
+			set => SetProperty(ref _angleValueNode, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("angleSpeedNode")] 
 		public animFloatLink AngleSpeedNode
 		{
-			get
-			{
-				if (_angleSpeedNode == null)
-				{
-					_angleSpeedNode = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "angleSpeedNode", cr2w, this);
-				}
-				return _angleSpeedNode;
-			}
-			set
-			{
-				if (_angleSpeedNode == value)
-				{
-					return;
-				}
-				_angleSpeedNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _angleSpeedNode);
+			set => SetProperty(ref _angleSpeedNode, value);
 		}
 
 		public animAnimNode_TransformRotator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

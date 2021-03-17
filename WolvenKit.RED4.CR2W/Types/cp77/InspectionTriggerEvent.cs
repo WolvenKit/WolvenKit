@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("item")] 
 		public CString Item
 		{
-			get
-			{
-				if (_item == null)
-				{
-					_item = (CString) CR2WTypeManager.Create("String", "item", cr2w, this);
-				}
-				return _item;
-			}
-			set
-			{
-				if (_item == value)
-				{
-					return;
-				}
-				_item = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _item);
+			set => SetProperty(ref _item, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("offset")] 
 		public CFloat Offset
 		{
-			get
-			{
-				if (_offset == null)
-				{
-					_offset = (CFloat) CR2WTypeManager.Create("Float", "offset", cr2w, this);
-				}
-				return _offset;
-			}
-			set
-			{
-				if (_offset == value)
-				{
-					return;
-				}
-				_offset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offset);
+			set => SetProperty(ref _offset, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("adsOffset")] 
 		public CFloat AdsOffset
 		{
-			get
-			{
-				if (_adsOffset == null)
-				{
-					_adsOffset = (CFloat) CR2WTypeManager.Create("Float", "adsOffset", cr2w, this);
-				}
-				return _adsOffset;
-			}
-			set
-			{
-				if (_adsOffset == value)
-				{
-					return;
-				}
-				_adsOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _adsOffset);
+			set => SetProperty(ref _adsOffset, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("timeToScan")] 
 		public CFloat TimeToScan
 		{
-			get
-			{
-				if (_timeToScan == null)
-				{
-					_timeToScan = (CFloat) CR2WTypeManager.Create("Float", "timeToScan", cr2w, this);
-				}
-				return _timeToScan;
-			}
-			set
-			{
-				if (_timeToScan == value)
-				{
-					return;
-				}
-				_timeToScan = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeToScan);
+			set => SetProperty(ref _timeToScan, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("inspectedObjID")] 
 		public entEntityID InspectedObjID
 		{
-			get
-			{
-				if (_inspectedObjID == null)
-				{
-					_inspectedObjID = (entEntityID) CR2WTypeManager.Create("entEntityID", "inspectedObjID", cr2w, this);
-				}
-				return _inspectedObjID;
-			}
-			set
-			{
-				if (_inspectedObjID == value)
-				{
-					return;
-				}
-				_inspectedObjID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inspectedObjID);
+			set => SetProperty(ref _inspectedObjID, value);
 		}
 
 		public InspectionTriggerEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

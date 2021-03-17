@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isVendorGrid")] 
 		public CBool IsVendorGrid
 		{
-			get
-			{
-				if (_isVendorGrid == null)
-				{
-					_isVendorGrid = (CBool) CR2WTypeManager.Create("Bool", "isVendorGrid", cr2w, this);
-				}
-				return _isVendorGrid;
-			}
-			set
-			{
-				if (_isVendorGrid == value)
-				{
-					return;
-				}
-				_isVendorGrid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isVendorGrid);
+			set => SetProperty(ref _isVendorGrid, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("openTime")] 
 		public GameTime OpenTime
 		{
-			get
-			{
-				if (_openTime == null)
-				{
-					_openTime = (GameTime) CR2WTypeManager.Create("GameTime", "openTime", cr2w, this);
-				}
-				return _openTime;
-			}
-			set
-			{
-				if (_openTime == value)
-				{
-					return;
-				}
-				_openTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _openTime);
+			set => SetProperty(ref _openTime, value);
 		}
 
 		public VendorDataView(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

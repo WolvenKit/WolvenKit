@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetObjectMapping")] 
 		public CHandle<AIArgumentMapping> TargetObjectMapping
 		{
-			get
-			{
-				if (_targetObjectMapping == null)
-				{
-					_targetObjectMapping = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "targetObjectMapping", cr2w, this);
-				}
-				return _targetObjectMapping;
-			}
-			set
-			{
-				if (_targetObjectMapping == value)
-				{
-					return;
-				}
-				_targetObjectMapping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetObjectMapping);
+			set => SetProperty(ref _targetObjectMapping, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("targetThreat")] 
 		public wCHandle<gameObject> TargetThreat
 		{
-			get
-			{
-				if (_targetThreat == null)
-				{
-					_targetThreat = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "targetThreat", cr2w, this);
-				}
-				return _targetThreat;
-			}
-			set
-			{
-				if (_targetThreat == value)
-				{
-					return;
-				}
-				_targetThreat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetThreat);
+			set => SetProperty(ref _targetThreat, value);
 		}
 
 		public CheckThreat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

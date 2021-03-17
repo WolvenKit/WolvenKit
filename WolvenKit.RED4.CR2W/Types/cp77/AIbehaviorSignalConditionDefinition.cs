@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("signalName")] 
 		public CName SignalName
 		{
-			get
-			{
-				if (_signalName == null)
-				{
-					_signalName = (CName) CR2WTypeManager.Create("CName", "signalName", cr2w, this);
-				}
-				return _signalName;
-			}
-			set
-			{
-				if (_signalName == value)
-				{
-					return;
-				}
-				_signalName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _signalName);
+			set => SetProperty(ref _signalName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("mode")] 
 		public CEnum<AIbehaviorSignalConditionModes> Mode
 		{
-			get
-			{
-				if (_mode == null)
-				{
-					_mode = (CEnum<AIbehaviorSignalConditionModes>) CR2WTypeManager.Create("AIbehaviorSignalConditionModes", "mode", cr2w, this);
-				}
-				return _mode;
-			}
-			set
-			{
-				if (_mode == value)
-				{
-					return;
-				}
-				_mode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mode);
+			set => SetProperty(ref _mode, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("tagSignal")] 
 		public CBool TagSignal
 		{
-			get
-			{
-				if (_tagSignal == null)
-				{
-					_tagSignal = (CBool) CR2WTypeManager.Create("Bool", "tagSignal", cr2w, this);
-				}
-				return _tagSignal;
-			}
-			set
-			{
-				if (_tagSignal == value)
-				{
-					return;
-				}
-				_tagSignal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tagSignal);
+			set => SetProperty(ref _tagSignal, value);
 		}
 
 		public AIbehaviorSignalConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

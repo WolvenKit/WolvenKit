@@ -23,253 +23,88 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gameplayActiveFlagsRefreshPolicy")] 
 		public PlayerVisionModeControllerRefreshPolicy GameplayActiveFlagsRefreshPolicy
 		{
-			get
-			{
-				if (_gameplayActiveFlagsRefreshPolicy == null)
-				{
-					_gameplayActiveFlagsRefreshPolicy = (PlayerVisionModeControllerRefreshPolicy) CR2WTypeManager.Create("PlayerVisionModeControllerRefreshPolicy", "gameplayActiveFlagsRefreshPolicy", cr2w, this);
-				}
-				return _gameplayActiveFlagsRefreshPolicy;
-			}
-			set
-			{
-				if (_gameplayActiveFlagsRefreshPolicy == value)
-				{
-					return;
-				}
-				_gameplayActiveFlagsRefreshPolicy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameplayActiveFlagsRefreshPolicy);
+			set => SetProperty(ref _gameplayActiveFlagsRefreshPolicy, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("blackboardIds")] 
 		public PlayerVisionModeControllerBBIds BlackboardIds
 		{
-			get
-			{
-				if (_blackboardIds == null)
-				{
-					_blackboardIds = (PlayerVisionModeControllerBBIds) CR2WTypeManager.Create("PlayerVisionModeControllerBBIds", "blackboardIds", cr2w, this);
-				}
-				return _blackboardIds;
-			}
-			set
-			{
-				if (_blackboardIds == value)
-				{
-					return;
-				}
-				_blackboardIds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboardIds);
+			set => SetProperty(ref _blackboardIds, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("blackboardValuesIds")] 
 		public PlayerVisionModeControllerBBValuesIds BlackboardValuesIds
 		{
-			get
-			{
-				if (_blackboardValuesIds == null)
-				{
-					_blackboardValuesIds = (PlayerVisionModeControllerBBValuesIds) CR2WTypeManager.Create("PlayerVisionModeControllerBBValuesIds", "blackboardValuesIds", cr2w, this);
-				}
-				return _blackboardValuesIds;
-			}
-			set
-			{
-				if (_blackboardValuesIds == value)
-				{
-					return;
-				}
-				_blackboardValuesIds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboardValuesIds);
+			set => SetProperty(ref _blackboardValuesIds, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("blackboardListenersFunctions")] 
 		public PlayerVisionModeControllerBlackboardListenersFunctions BlackboardListenersFunctions
 		{
-			get
-			{
-				if (_blackboardListenersFunctions == null)
-				{
-					_blackboardListenersFunctions = (PlayerVisionModeControllerBlackboardListenersFunctions) CR2WTypeManager.Create("PlayerVisionModeControllerBlackboardListenersFunctions", "blackboardListenersFunctions", cr2w, this);
-				}
-				return _blackboardListenersFunctions;
-			}
-			set
-			{
-				if (_blackboardListenersFunctions == value)
-				{
-					return;
-				}
-				_blackboardListenersFunctions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboardListenersFunctions);
+			set => SetProperty(ref _blackboardListenersFunctions, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("blackboardListeners")] 
 		public PlayerVisionModeControllerBBListeners BlackboardListeners
 		{
-			get
-			{
-				if (_blackboardListeners == null)
-				{
-					_blackboardListeners = (PlayerVisionModeControllerBBListeners) CR2WTypeManager.Create("PlayerVisionModeControllerBBListeners", "blackboardListeners", cr2w, this);
-				}
-				return _blackboardListeners;
-			}
-			set
-			{
-				if (_blackboardListeners == value)
-				{
-					return;
-				}
-				_blackboardListeners = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboardListeners);
+			set => SetProperty(ref _blackboardListeners, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("gameplayActiveFlags")] 
 		public PlayerVisionModeControllerActiveFlags GameplayActiveFlags
 		{
-			get
-			{
-				if (_gameplayActiveFlags == null)
-				{
-					_gameplayActiveFlags = (PlayerVisionModeControllerActiveFlags) CR2WTypeManager.Create("PlayerVisionModeControllerActiveFlags", "gameplayActiveFlags", cr2w, this);
-				}
-				return _gameplayActiveFlags;
-			}
-			set
-			{
-				if (_gameplayActiveFlags == value)
-				{
-					return;
-				}
-				_gameplayActiveFlags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameplayActiveFlags);
+			set => SetProperty(ref _gameplayActiveFlags, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("inputActionsNames")] 
 		public PlayerVisionModeControllerInputActionsNames InputActionsNames
 		{
-			get
-			{
-				if (_inputActionsNames == null)
-				{
-					_inputActionsNames = (PlayerVisionModeControllerInputActionsNames) CR2WTypeManager.Create("PlayerVisionModeControllerInputActionsNames", "inputActionsNames", cr2w, this);
-				}
-				return _inputActionsNames;
-			}
-			set
-			{
-				if (_inputActionsNames == value)
-				{
-					return;
-				}
-				_inputActionsNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputActionsNames);
+			set => SetProperty(ref _inputActionsNames, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("inputListeners")] 
 		public PlayerVisionModeControllerInputListeners InputListeners
 		{
-			get
-			{
-				if (_inputListeners == null)
-				{
-					_inputListeners = (PlayerVisionModeControllerInputListeners) CR2WTypeManager.Create("PlayerVisionModeControllerInputListeners", "inputListeners", cr2w, this);
-				}
-				return _inputListeners;
-			}
-			set
-			{
-				if (_inputListeners == value)
-				{
-					return;
-				}
-				_inputListeners = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputListeners);
+			set => SetProperty(ref _inputListeners, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("inputActiveFlags")] 
 		public PlayerVisionModeControllerInputActiveFlags InputActiveFlags
 		{
-			get
-			{
-				if (_inputActiveFlags == null)
-				{
-					_inputActiveFlags = (PlayerVisionModeControllerInputActiveFlags) CR2WTypeManager.Create("PlayerVisionModeControllerInputActiveFlags", "inputActiveFlags", cr2w, this);
-				}
-				return _inputActiveFlags;
-			}
-			set
-			{
-				if (_inputActiveFlags == value)
-				{
-					return;
-				}
-				_inputActiveFlags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputActiveFlags);
+			set => SetProperty(ref _inputActiveFlags, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("otherVars")] 
 		public PlayerVisionModeControllerOtherVars OtherVars
 		{
-			get
-			{
-				if (_otherVars == null)
-				{
-					_otherVars = (PlayerVisionModeControllerOtherVars) CR2WTypeManager.Create("PlayerVisionModeControllerOtherVars", "otherVars", cr2w, this);
-				}
-				return _otherVars;
-			}
-			set
-			{
-				if (_otherVars == value)
-				{
-					return;
-				}
-				_otherVars = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _otherVars);
+			set => SetProperty(ref _otherVars, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		public PlayerVisionModeController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

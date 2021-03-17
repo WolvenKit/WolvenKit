@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statType")] 
 		public CEnum<gamedataStatType> StatType
 		{
-			get
-			{
-				if (_statType == null)
-				{
-					_statType = (CEnum<gamedataStatType>) CR2WTypeManager.Create("gamedataStatType", "statType", cr2w, this);
-				}
-				return _statType;
-			}
-			set
-			{
-				if (_statType == value)
-				{
-					return;
-				}
-				_statType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statType);
+			set => SetProperty(ref _statType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("value")] 
 		public CFloat Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CFloat) CR2WTypeManager.Create("Float", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("baseValue")] 
 		public CFloat BaseValue
 		{
-			get
-			{
-				if (_baseValue == null)
-				{
-					_baseValue = (CFloat) CR2WTypeManager.Create("Float", "baseValue", cr2w, this);
-				}
-				return _baseValue;
-			}
-			set
-			{
-				if (_baseValue == value)
-				{
-					return;
-				}
-				_baseValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _baseValue);
+			set => SetProperty(ref _baseValue, value);
 		}
 
 		public ScannerStatDetails(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

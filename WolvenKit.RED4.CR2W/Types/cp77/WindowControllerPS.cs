@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("windowSkillChecks")] 
 		public CHandle<EngDemoContainer> WindowSkillChecks
 		{
-			get
-			{
-				if (_windowSkillChecks == null)
-				{
-					_windowSkillChecks = (CHandle<EngDemoContainer>) CR2WTypeManager.Create("handle:EngDemoContainer", "windowSkillChecks", cr2w, this);
-				}
-				return _windowSkillChecks;
-			}
-			set
-			{
-				if (_windowSkillChecks == value)
-				{
-					return;
-				}
-				_windowSkillChecks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _windowSkillChecks);
+			set => SetProperty(ref _windowSkillChecks, value);
 		}
 
 		public WindowControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

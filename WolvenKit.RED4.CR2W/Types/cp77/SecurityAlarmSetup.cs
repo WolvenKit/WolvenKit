@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("useSound")] 
 		public CBool UseSound
 		{
-			get
-			{
-				if (_useSound == null)
-				{
-					_useSound = (CBool) CR2WTypeManager.Create("Bool", "useSound", cr2w, this);
-				}
-				return _useSound;
-			}
-			set
-			{
-				if (_useSound == value)
-				{
-					return;
-				}
-				_useSound = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useSound);
+			set => SetProperty(ref _useSound, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("alarmSound")] 
 		public CName AlarmSound
 		{
-			get
-			{
-				if (_alarmSound == null)
-				{
-					_alarmSound = (CName) CR2WTypeManager.Create("CName", "alarmSound", cr2w, this);
-				}
-				return _alarmSound;
-			}
-			set
-			{
-				if (_alarmSound == value)
-				{
-					return;
-				}
-				_alarmSound = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alarmSound);
+			set => SetProperty(ref _alarmSound, value);
 		}
 
 		public SecurityAlarmSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

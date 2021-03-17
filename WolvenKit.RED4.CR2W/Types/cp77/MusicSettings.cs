@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statusEffect")] 
 		public CEnum<ESoundStatusEffects> StatusEffect
 		{
-			get
-			{
-				if (_statusEffect == null)
-				{
-					_statusEffect = (CEnum<ESoundStatusEffects>) CR2WTypeManager.Create("ESoundStatusEffects", "statusEffect", cr2w, this);
-				}
-				return _statusEffect;
-			}
-			set
-			{
-				if (_statusEffect == value)
-				{
-					return;
-				}
-				_statusEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statusEffect);
+			set => SetProperty(ref _statusEffect, value);
 		}
 
 		public MusicSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

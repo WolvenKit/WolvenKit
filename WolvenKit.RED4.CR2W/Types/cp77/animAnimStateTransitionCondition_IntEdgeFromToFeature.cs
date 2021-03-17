@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fromValue")] 
 		public CInt32 FromValue
 		{
-			get
-			{
-				if (_fromValue == null)
-				{
-					_fromValue = (CInt32) CR2WTypeManager.Create("Int32", "fromValue", cr2w, this);
-				}
-				return _fromValue;
-			}
-			set
-			{
-				if (_fromValue == value)
-				{
-					return;
-				}
-				_fromValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fromValue);
+			set => SetProperty(ref _fromValue, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("toValue")] 
 		public CInt32 ToValue
 		{
-			get
-			{
-				if (_toValue == null)
-				{
-					_toValue = (CInt32) CR2WTypeManager.Create("Int32", "toValue", cr2w, this);
-				}
-				return _toValue;
-			}
-			set
-			{
-				if (_toValue == value)
-				{
-					return;
-				}
-				_toValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toValue);
+			set => SetProperty(ref _toValue, value);
 		}
 
 		public animAnimStateTransitionCondition_IntEdgeFromToFeature(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

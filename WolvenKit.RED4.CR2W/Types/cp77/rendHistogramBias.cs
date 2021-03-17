@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mulCoef")] 
 		public Vector3 MulCoef
 		{
-			get
-			{
-				if (_mulCoef == null)
-				{
-					_mulCoef = (Vector3) CR2WTypeManager.Create("Vector3", "mulCoef", cr2w, this);
-				}
-				return _mulCoef;
-			}
-			set
-			{
-				if (_mulCoef == value)
-				{
-					return;
-				}
-				_mulCoef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mulCoef);
+			set => SetProperty(ref _mulCoef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("addCoef")] 
 		public Vector3 AddCoef
 		{
-			get
-			{
-				if (_addCoef == null)
-				{
-					_addCoef = (Vector3) CR2WTypeManager.Create("Vector3", "addCoef", cr2w, this);
-				}
-				return _addCoef;
-			}
-			set
-			{
-				if (_addCoef == value)
-				{
-					return;
-				}
-				_addCoef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addCoef);
+			set => SetProperty(ref _addCoef, value);
 		}
 
 		public rendHistogramBias(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

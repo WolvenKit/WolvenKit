@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("exhaustionRtpc")] 
 		public CName ExhaustionRtpc
 		{
-			get
-			{
-				if (_exhaustionRtpc == null)
-				{
-					_exhaustionRtpc = (CName) CR2WTypeManager.Create("CName", "exhaustionRtpc", cr2w, this);
-				}
-				return _exhaustionRtpc;
-			}
-			set
-			{
-				if (_exhaustionRtpc == value)
-				{
-					return;
-				}
-				_exhaustionRtpc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exhaustionRtpc);
+			set => SetProperty(ref _exhaustionRtpc, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("idleFadeOutRtpc")] 
 		public CName IdleFadeOutRtpc
 		{
-			get
-			{
-				if (_idleFadeOutRtpc == null)
-				{
-					_idleFadeOutRtpc = (CName) CR2WTypeManager.Create("CName", "idleFadeOutRtpc", cr2w, this);
-				}
-				return _idleFadeOutRtpc;
-			}
-			set
-			{
-				if (_idleFadeOutRtpc == value)
-				{
-					return;
-				}
-				_idleFadeOutRtpc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _idleFadeOutRtpc);
+			set => SetProperty(ref _idleFadeOutRtpc, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("initialState")] 
 		public CName InitialState
 		{
-			get
-			{
-				if (_initialState == null)
-				{
-					_initialState = (CName) CR2WTypeManager.Create("CName", "initialState", cr2w, this);
-				}
-				return _initialState;
-			}
-			set
-			{
-				if (_initialState == value)
-				{
-					return;
-				}
-				_initialState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialState);
+			set => SetProperty(ref _initialState, value);
 		}
 
 		public audioBreathingSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

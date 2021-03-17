@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("editorName")] 
 		public CString EditorName
 		{
-			get
-			{
-				if (_editorName == null)
-				{
-					_editorName = (CString) CR2WTypeManager.Create("String", "editorName", cr2w, this);
-				}
-				return _editorName;
-			}
-			set
-			{
-				if (_editorName == value)
-				{
-					return;
-				}
-				_editorName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _editorName);
+			set => SetProperty(ref _editorName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("selectedNodeIDPath")] 
 		public toolsEditorObjectIDPath SelectedNodeIDPath
 		{
-			get
-			{
-				if (_selectedNodeIDPath == null)
-				{
-					_selectedNodeIDPath = (toolsEditorObjectIDPath) CR2WTypeManager.Create("toolsEditorObjectIDPath", "selectedNodeIDPath", cr2w, this);
-				}
-				return _selectedNodeIDPath;
-			}
-			set
-			{
-				if (_selectedNodeIDPath == value)
-				{
-					return;
-				}
-				_selectedNodeIDPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectedNodeIDPath);
+			set => SetProperty(ref _selectedNodeIDPath, value);
 		}
 
 		public toolsLastNodeSelection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

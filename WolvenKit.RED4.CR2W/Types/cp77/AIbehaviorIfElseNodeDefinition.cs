@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("condition")] 
 		public CHandle<AIbehaviorExpressionSocket> Condition
 		{
-			get
-			{
-				if (_condition == null)
-				{
-					_condition = (CHandle<AIbehaviorExpressionSocket>) CR2WTypeManager.Create("handle:AIbehaviorExpressionSocket", "condition", cr2w, this);
-				}
-				return _condition;
-			}
-			set
-			{
-				if (_condition == value)
-				{
-					return;
-				}
-				_condition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _condition);
+			set => SetProperty(ref _condition, value);
 		}
 
 		public AIbehaviorIfElseNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("prereq")] 
 		public CHandle<gameIPrereq> Prereq
 		{
-			get
-			{
-				if (_prereq == null)
-				{
-					_prereq = (CHandle<gameIPrereq>) CR2WTypeManager.Create("handle:gameIPrereq", "prereq", cr2w, this);
-				}
-				return _prereq;
-			}
-			set
-			{
-				if (_prereq == value)
-				{
-					return;
-				}
-				_prereq = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prereq);
+			set => SetProperty(ref _prereq, value);
 		}
 
 		public gameEffectObjectFilter_RejectOnPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

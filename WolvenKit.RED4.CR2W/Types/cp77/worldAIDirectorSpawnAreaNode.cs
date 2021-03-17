@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("groupKey")] 
 		public CName GroupKey
 		{
-			get
-			{
-				if (_groupKey == null)
-				{
-					_groupKey = (CName) CR2WTypeManager.Create("CName", "groupKey", cr2w, this);
-				}
-				return _groupKey;
-			}
-			set
-			{
-				if (_groupKey == value)
-				{
-					return;
-				}
-				_groupKey = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _groupKey);
+			set => SetProperty(ref _groupKey, value);
 		}
 
 		public worldAIDirectorSpawnAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("aimPoint")] 
 		public Vector4 AimPoint
 		{
-			get
-			{
-				if (_aimPoint == null)
-				{
-					_aimPoint = (Vector4) CR2WTypeManager.Create("Vector4", "aimPoint", cr2w, this);
-				}
-				return _aimPoint;
-			}
-			set
-			{
-				if (_aimPoint == value)
-				{
-					return;
-				}
-				_aimPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aimPoint);
+			set => SetProperty(ref _aimPoint, value);
 		}
 
 		public animAnimFeature_Aim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

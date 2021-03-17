@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("videoPath")] 
 		public redResourceReferenceScriptToken VideoPath
 		{
-			get
-			{
-				if (_videoPath == null)
-				{
-					_videoPath = (redResourceReferenceScriptToken) CR2WTypeManager.Create("redResourceReferenceScriptToken", "videoPath", cr2w, this);
-				}
-				return _videoPath;
-			}
-			set
-			{
-				if (_videoPath == value)
-				{
-					return;
-				}
-				_videoPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _videoPath);
+			set => SetProperty(ref _videoPath, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("audioEvent")] 
 		public CName AudioEvent
 		{
-			get
-			{
-				if (_audioEvent == null)
-				{
-					_audioEvent = (CName) CR2WTypeManager.Create("CName", "audioEvent", cr2w, this);
-				}
-				return _audioEvent;
-			}
-			set
-			{
-				if (_audioEvent == value)
-				{
-					return;
-				}
-				_audioEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioEvent);
+			set => SetProperty(ref _audioEvent, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("looped")] 
 		public CBool Looped
 		{
-			get
-			{
-				if (_looped == null)
-				{
-					_looped = (CBool) CR2WTypeManager.Create("Bool", "looped", cr2w, this);
-				}
-				return _looped;
-			}
-			set
-			{
-				if (_looped == value)
-				{
-					return;
-				}
-				_looped = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _looped);
+			set => SetProperty(ref _looped, value);
 		}
 
 		public SequenceVideo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

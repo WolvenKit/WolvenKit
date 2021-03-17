@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("customAnimations")] 
 		public CHandle<WidgetAnimationManager> CustomAnimations
 		{
-			get
-			{
-				if (_customAnimations == null)
-				{
-					_customAnimations = (CHandle<WidgetAnimationManager>) CR2WTypeManager.Create("handle:WidgetAnimationManager", "customAnimations", cr2w, this);
-				}
-				return _customAnimations;
-			}
-			set
-			{
-				if (_customAnimations == value)
-				{
-					return;
-				}
-				_customAnimations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customAnimations);
+			set => SetProperty(ref _customAnimations, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("onSpawnAnimations")] 
 		public CArray<CName> OnSpawnAnimations
 		{
-			get
-			{
-				if (_onSpawnAnimations == null)
-				{
-					_onSpawnAnimations = (CArray<CName>) CR2WTypeManager.Create("array:CName", "onSpawnAnimations", cr2w, this);
-				}
-				return _onSpawnAnimations;
-			}
-			set
-			{
-				if (_onSpawnAnimations == value)
-				{
-					return;
-				}
-				_onSpawnAnimations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onSpawnAnimations);
+			set => SetProperty(ref _onSpawnAnimations, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("defaultLibraryItemName")] 
 		public CName DefaultLibraryItemName
 		{
-			get
-			{
-				if (_defaultLibraryItemName == null)
-				{
-					_defaultLibraryItemName = (CName) CR2WTypeManager.Create("CName", "defaultLibraryItemName", cr2w, this);
-				}
-				return _defaultLibraryItemName;
-			}
-			set
-			{
-				if (_defaultLibraryItemName == value)
-				{
-					return;
-				}
-				_defaultLibraryItemName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultLibraryItemName);
+			set => SetProperty(ref _defaultLibraryItemName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("defaultLibraryItemAnchor")] 
 		public CEnum<inkEAnchor> DefaultLibraryItemAnchor
 		{
-			get
-			{
-				if (_defaultLibraryItemAnchor == null)
-				{
-					_defaultLibraryItemAnchor = (CEnum<inkEAnchor>) CR2WTypeManager.Create("inkEAnchor", "defaultLibraryItemAnchor", cr2w, this);
-				}
-				return _defaultLibraryItemAnchor;
-			}
-			set
-			{
-				if (_defaultLibraryItemAnchor == value)
-				{
-					return;
-				}
-				_defaultLibraryItemAnchor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultLibraryItemAnchor);
+			set => SetProperty(ref _defaultLibraryItemAnchor, value);
 		}
 
 		public SceneScreenUIAnimationsData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

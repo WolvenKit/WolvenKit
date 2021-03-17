@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("park")] 
 		public CBool Park
 		{
-			get
-			{
-				if (_park == null)
-				{
-					_park = (CBool) CR2WTypeManager.Create("Bool", "park", cr2w, this);
-				}
-				return _park;
-			}
-			set
-			{
-				if (_park == value)
-				{
-					return;
-				}
-				_park = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _park);
+			set => SetProperty(ref _park, value);
 		}
 
 		public vehicleParkedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("readIndex")] 
 		public CInt32 ReadIndex
 		{
-			get
-			{
-				if (_readIndex == null)
-				{
-					_readIndex = (CInt32) CR2WTypeManager.Create("Int32", "readIndex", cr2w, this);
-				}
-				return _readIndex;
-			}
-			set
-			{
-				if (_readIndex == value)
-				{
-					return;
-				}
-				_readIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _readIndex);
+			set => SetProperty(ref _readIndex, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("writeIndex")] 
 		public CInt32 WriteIndex
 		{
-			get
-			{
-				if (_writeIndex == null)
-				{
-					_writeIndex = (CInt32) CR2WTypeManager.Create("Int32", "writeIndex", cr2w, this);
-				}
-				return _writeIndex;
-			}
-			set
-			{
-				if (_writeIndex == value)
-				{
-					return;
-				}
-				_writeIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _writeIndex);
+			set => SetProperty(ref _writeIndex, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("maxSize")] 
 		public CInt32 MaxSize
 		{
-			get
-			{
-				if (_maxSize == null)
-				{
-					_maxSize = (CInt32) CR2WTypeManager.Create("Int32", "maxSize", cr2w, this);
-				}
-				return _maxSize;
-			}
-			set
-			{
-				if (_maxSize == value)
-				{
-					return;
-				}
-				_maxSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxSize);
+			set => SetProperty(ref _maxSize, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("entries")] 
 		public CArray<CString> Entries
 		{
-			get
-			{
-				if (_entries == null)
-				{
-					_entries = (CArray<CString>) CR2WTypeManager.Create("array:String", "entries", cr2w, this);
-				}
-				return _entries;
-			}
-			set
-			{
-				if (_entries == value)
-				{
-					return;
-				}
-				_entries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("panel")] 
 		public inkVerticalPanelWidgetReference Panel
 		{
-			get
-			{
-				if (_panel == null)
-				{
-					_panel = (inkVerticalPanelWidgetReference) CR2WTypeManager.Create("inkVerticalPanelWidgetReference", "panel", cr2w, this);
-				}
-				return _panel;
-			}
-			set
-			{
-				if (_panel == value)
-				{
-					return;
-				}
-				_panel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _panel);
+			set => SetProperty(ref _panel, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("onNewEntries")] 
 		public CUInt32 OnNewEntries
 		{
-			get
-			{
-				if (_onNewEntries == null)
-				{
-					_onNewEntries = (CUInt32) CR2WTypeManager.Create("Uint32", "onNewEntries", cr2w, this);
-				}
-				return _onNewEntries;
-			}
-			set
-			{
-				if (_onNewEntries == value)
-				{
-					return;
-				}
-				_onNewEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onNewEntries);
+			set => SetProperty(ref _onNewEntries, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("onHide")] 
 		public CUInt32 OnHide
 		{
-			get
-			{
-				if (_onHide == null)
-				{
-					_onHide = (CUInt32) CR2WTypeManager.Create("Uint32", "onHide", cr2w, this);
-				}
-				return _onHide;
-			}
-			set
-			{
-				if (_onHide == value)
-				{
-					return;
-				}
-				_onHide = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onHide);
+			set => SetProperty(ref _onHide, value);
 		}
 
 		public activityLogGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

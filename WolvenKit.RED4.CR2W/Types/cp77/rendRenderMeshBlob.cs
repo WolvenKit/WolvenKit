@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("header")] 
 		public rendRenderMeshBlobHeader Header
 		{
-			get
-			{
-				if (_header == null)
-				{
-					_header = (rendRenderMeshBlobHeader) CR2WTypeManager.Create("rendRenderMeshBlobHeader", "header", cr2w, this);
-				}
-				return _header;
-			}
-			set
-			{
-				if (_header == value)
-				{
-					return;
-				}
-				_header = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _header);
+			set => SetProperty(ref _header, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("renderBuffer")] 
 		public DataBuffer RenderBuffer
 		{
-			get
-			{
-				if (_renderBuffer == null)
-				{
-					_renderBuffer = (DataBuffer) CR2WTypeManager.Create("DataBuffer", "renderBuffer", cr2w, this);
-				}
-				return _renderBuffer;
-			}
-			set
-			{
-				if (_renderBuffer == value)
-				{
-					return;
-				}
-				_renderBuffer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _renderBuffer);
+			set => SetProperty(ref _renderBuffer, value);
 		}
 
 		public rendRenderMeshBlob(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

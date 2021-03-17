@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("woundedTypeToCompare")] 
 		public CEnum<EWoundedBodyPart> WoundedTypeToCompare
 		{
-			get
-			{
-				if (_woundedTypeToCompare == null)
-				{
-					_woundedTypeToCompare = (CEnum<EWoundedBodyPart>) CR2WTypeManager.Create("EWoundedBodyPart", "woundedTypeToCompare", cr2w, this);
-				}
-				return _woundedTypeToCompare;
-			}
-			set
-			{
-				if (_woundedTypeToCompare == value)
-				{
-					return;
-				}
-				_woundedTypeToCompare = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _woundedTypeToCompare);
+			set => SetProperty(ref _woundedTypeToCompare, value);
 		}
 
 		public CheckCurrentWoundedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

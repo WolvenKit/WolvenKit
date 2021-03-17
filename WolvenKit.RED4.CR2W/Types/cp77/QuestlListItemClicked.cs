@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("questData")] 
 		public wCHandle<gameJournalQuest> QuestData
 		{
-			get
-			{
-				if (_questData == null)
-				{
-					_questData = (wCHandle<gameJournalQuest>) CR2WTypeManager.Create("whandle:gameJournalQuest", "questData", cr2w, this);
-				}
-				return _questData;
-			}
-			set
-			{
-				if (_questData == value)
-				{
-					return;
-				}
-				_questData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questData);
+			set => SetProperty(ref _questData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("skipAnimation")] 
 		public CBool SkipAnimation
 		{
-			get
-			{
-				if (_skipAnimation == null)
-				{
-					_skipAnimation = (CBool) CR2WTypeManager.Create("Bool", "skipAnimation", cr2w, this);
-				}
-				return _skipAnimation;
-			}
-			set
-			{
-				if (_skipAnimation == value)
-				{
-					return;
-				}
-				_skipAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skipAnimation);
+			set => SetProperty(ref _skipAnimation, value);
 		}
 
 		public QuestlListItemClicked(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

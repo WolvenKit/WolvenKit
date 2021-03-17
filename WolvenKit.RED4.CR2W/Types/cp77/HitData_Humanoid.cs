@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("reactionZonesSide")] 
 		public CEnum<ReactionZones_Humanoid_Side> ReactionZonesSide
 		{
-			get
-			{
-				if (_reactionZonesSide == null)
-				{
-					_reactionZonesSide = (CEnum<ReactionZones_Humanoid_Side>) CR2WTypeManager.Create("ReactionZones_Humanoid_Side", "reactionZonesSide", cr2w, this);
-				}
-				return _reactionZonesSide;
-			}
-			set
-			{
-				if (_reactionZonesSide == value)
-				{
-					return;
-				}
-				_reactionZonesSide = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reactionZonesSide);
+			set => SetProperty(ref _reactionZonesSide, value);
 		}
 
 		public HitData_Humanoid(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

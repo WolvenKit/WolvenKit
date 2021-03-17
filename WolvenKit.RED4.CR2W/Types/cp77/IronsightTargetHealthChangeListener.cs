@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("parentIronsight")] 
 		public wCHandle<IronsightGameController> ParentIronsight
 		{
-			get
-			{
-				if (_parentIronsight == null)
-				{
-					_parentIronsight = (wCHandle<IronsightGameController>) CR2WTypeManager.Create("whandle:IronsightGameController", "parentIronsight", cr2w, this);
-				}
-				return _parentIronsight;
-			}
-			set
-			{
-				if (_parentIronsight == value)
-				{
-					return;
-				}
-				_parentIronsight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentIronsight);
+			set => SetProperty(ref _parentIronsight, value);
 		}
 
 		public IronsightTargetHealthChangeListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

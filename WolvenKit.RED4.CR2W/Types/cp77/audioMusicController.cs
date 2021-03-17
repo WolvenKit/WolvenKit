@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("playEvent")] 
 		public CName PlayEvent
 		{
-			get
-			{
-				if (_playEvent == null)
-				{
-					_playEvent = (CName) CR2WTypeManager.Create("CName", "playEvent", cr2w, this);
-				}
-				return _playEvent;
-			}
-			set
-			{
-				if (_playEvent == value)
-				{
-					return;
-				}
-				_playEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playEvent);
+			set => SetProperty(ref _playEvent, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("stopEvent")] 
 		public CName StopEvent
 		{
-			get
-			{
-				if (_stopEvent == null)
-				{
-					_stopEvent = (CName) CR2WTypeManager.Create("CName", "stopEvent", cr2w, this);
-				}
-				return _stopEvent;
-			}
-			set
-			{
-				if (_stopEvent == value)
-				{
-					return;
-				}
-				_stopEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stopEvent);
+			set => SetProperty(ref _stopEvent, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("muteEvent")] 
 		public CName MuteEvent
 		{
-			get
-			{
-				if (_muteEvent == null)
-				{
-					_muteEvent = (CName) CR2WTypeManager.Create("CName", "muteEvent", cr2w, this);
-				}
-				return _muteEvent;
-			}
-			set
-			{
-				if (_muteEvent == value)
-				{
-					return;
-				}
-				_muteEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _muteEvent);
+			set => SetProperty(ref _muteEvent, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("unmuteEvent")] 
 		public CName UnmuteEvent
 		{
-			get
-			{
-				if (_unmuteEvent == null)
-				{
-					_unmuteEvent = (CName) CR2WTypeManager.Create("CName", "unmuteEvent", cr2w, this);
-				}
-				return _unmuteEvent;
-			}
-			set
-			{
-				if (_unmuteEvent == value)
-				{
-					return;
-				}
-				_unmuteEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unmuteEvent);
+			set => SetProperty(ref _unmuteEvent, value);
 		}
 
 		public audioMusicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

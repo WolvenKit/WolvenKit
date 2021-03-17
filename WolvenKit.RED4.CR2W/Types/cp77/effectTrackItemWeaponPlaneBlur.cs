@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("farPlaneMultiplier")] 
 		public effectEffectParameterEvaluatorFloat FarPlaneMultiplier
 		{
-			get
-			{
-				if (_farPlaneMultiplier == null)
-				{
-					_farPlaneMultiplier = (effectEffectParameterEvaluatorFloat) CR2WTypeManager.Create("effectEffectParameterEvaluatorFloat", "farPlaneMultiplier", cr2w, this);
-				}
-				return _farPlaneMultiplier;
-			}
-			set
-			{
-				if (_farPlaneMultiplier == value)
-				{
-					return;
-				}
-				_farPlaneMultiplier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _farPlaneMultiplier);
+			set => SetProperty(ref _farPlaneMultiplier, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("override")] 
 		public CBool Override
 		{
-			get
-			{
-				if (_override == null)
-				{
-					_override = (CBool) CR2WTypeManager.Create("Bool", "override", cr2w, this);
-				}
-				return _override;
-			}
-			set
-			{
-				if (_override == value)
-				{
-					return;
-				}
-				_override = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _override);
+			set => SetProperty(ref _override, value);
 		}
 
 		public effectTrackItemWeaponPlaneBlur(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hasTriggered")] 
 		public CBool HasTriggered
 		{
-			get
-			{
-				if (_hasTriggered == null)
-				{
-					_hasTriggered = (CBool) CR2WTypeManager.Create("Bool", "hasTriggered", cr2w, this);
-				}
-				return _hasTriggered;
-			}
-			set
-			{
-				if (_hasTriggered == value)
-				{
-					return;
-				}
-				_hasTriggered = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasTriggered);
+			set => SetProperty(ref _hasTriggered, value);
 		}
 
 		public BonusCollisionLogic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

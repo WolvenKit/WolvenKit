@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("initialDuration")] 
 		public CFloat InitialDuration
 		{
-			get
-			{
-				if (_initialDuration == null)
-				{
-					_initialDuration = (CFloat) CR2WTypeManager.Create("Float", "initialDuration", cr2w, this);
-				}
-				return _initialDuration;
-			}
-			set
-			{
-				if (_initialDuration == value)
-				{
-					return;
-				}
-				_initialDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialDuration);
+			set => SetProperty(ref _initialDuration, value);
 		}
 
 		public MuteArmDurationModifier(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

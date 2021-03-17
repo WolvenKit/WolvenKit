@@ -44,736 +44,256 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("menusData")] 
 		public CHandle<MenuDataBuilder> MenusData
 		{
-			get
-			{
-				if (_menusData == null)
-				{
-					_menusData = (CHandle<MenuDataBuilder>) CR2WTypeManager.Create("handle:MenuDataBuilder", "menusData", cr2w, this);
-				}
-				return _menusData;
-			}
-			set
-			{
-				if (_menusData == value)
-				{
-					return;
-				}
-				_menusData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menusData);
+			set => SetProperty(ref _menusData, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("menuEventDispatcher")] 
 		public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
-			get
-			{
-				if (_menuEventDispatcher == null)
-				{
-					_menuEventDispatcher = (wCHandle<inkMenuEventDispatcher>) CR2WTypeManager.Create("whandle:inkMenuEventDispatcher", "menuEventDispatcher", cr2w, this);
-				}
-				return _menuEventDispatcher;
-			}
-			set
-			{
-				if (_menuEventDispatcher == value)
-				{
-					return;
-				}
-				_menuEventDispatcher = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuEventDispatcher);
+			set => SetProperty(ref _menuEventDispatcher, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("menuCtrl")] 
 		public wCHandle<MenuHubLogicController> MenuCtrl
 		{
-			get
-			{
-				if (_menuCtrl == null)
-				{
-					_menuCtrl = (wCHandle<MenuHubLogicController>) CR2WTypeManager.Create("whandle:MenuHubLogicController", "menuCtrl", cr2w, this);
-				}
-				return _menuCtrl;
-			}
-			set
-			{
-				if (_menuCtrl == value)
-				{
-					return;
-				}
-				_menuCtrl = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuCtrl);
+			set => SetProperty(ref _menuCtrl, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("metaCtrl")] 
 		public wCHandle<MetaQuestLogicController> MetaCtrl
 		{
-			get
-			{
-				if (_metaCtrl == null)
-				{
-					_metaCtrl = (wCHandle<MetaQuestLogicController>) CR2WTypeManager.Create("whandle:MetaQuestLogicController", "metaCtrl", cr2w, this);
-				}
-				return _metaCtrl;
-			}
-			set
-			{
-				if (_metaCtrl == value)
-				{
-					return;
-				}
-				_metaCtrl = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metaCtrl);
+			set => SetProperty(ref _metaCtrl, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("subMenuCtrl")] 
 		public wCHandle<SubMenuPanelLogicController> SubMenuCtrl
 		{
-			get
-			{
-				if (_subMenuCtrl == null)
-				{
-					_subMenuCtrl = (wCHandle<SubMenuPanelLogicController>) CR2WTypeManager.Create("whandle:SubMenuPanelLogicController", "subMenuCtrl", cr2w, this);
-				}
-				return _subMenuCtrl;
-			}
-			set
-			{
-				if (_subMenuCtrl == value)
-				{
-					return;
-				}
-				_subMenuCtrl = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subMenuCtrl);
+			set => SetProperty(ref _subMenuCtrl, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("timeCtrl")] 
 		public wCHandle<HubTimeSkipController> TimeCtrl
 		{
-			get
-			{
-				if (_timeCtrl == null)
-				{
-					_timeCtrl = (wCHandle<HubTimeSkipController>) CR2WTypeManager.Create("whandle:HubTimeSkipController", "timeCtrl", cr2w, this);
-				}
-				return _timeCtrl;
-			}
-			set
-			{
-				if (_timeCtrl == value)
-				{
-					return;
-				}
-				_timeCtrl = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeCtrl);
+			set => SetProperty(ref _timeCtrl, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("player")] 
 		public wCHandle<PlayerPuppet> Player
 		{
-			get
-			{
-				if (_player == null)
-				{
-					_player = (wCHandle<PlayerPuppet>) CR2WTypeManager.Create("whandle:PlayerPuppet", "player", cr2w, this);
-				}
-				return _player;
-			}
-			set
-			{
-				if (_player == value)
-				{
-					return;
-				}
-				_player = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _player);
+			set => SetProperty(ref _player, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("playerDevSystem")] 
 		public CHandle<PlayerDevelopmentSystem> PlayerDevSystem
 		{
-			get
-			{
-				if (_playerDevSystem == null)
-				{
-					_playerDevSystem = (CHandle<PlayerDevelopmentSystem>) CR2WTypeManager.Create("handle:PlayerDevelopmentSystem", "playerDevSystem", cr2w, this);
-				}
-				return _playerDevSystem;
-			}
-			set
-			{
-				if (_playerDevSystem == value)
-				{
-					return;
-				}
-				_playerDevSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerDevSystem);
+			set => SetProperty(ref _playerDevSystem, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("transaction")] 
 		public CHandle<gameTransactionSystem> Transaction
 		{
-			get
-			{
-				if (_transaction == null)
-				{
-					_transaction = (CHandle<gameTransactionSystem>) CR2WTypeManager.Create("handle:gameTransactionSystem", "transaction", cr2w, this);
-				}
-				return _transaction;
-			}
-			set
-			{
-				if (_transaction == value)
-				{
-					return;
-				}
-				_transaction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transaction);
+			set => SetProperty(ref _transaction, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("playerStatsBlackboard")] 
 		public CHandle<gameIBlackboard> PlayerStatsBlackboard
 		{
-			get
-			{
-				if (_playerStatsBlackboard == null)
-				{
-					_playerStatsBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "playerStatsBlackboard", cr2w, this);
-				}
-				return _playerStatsBlackboard;
-			}
-			set
-			{
-				if (_playerStatsBlackboard == value)
-				{
-					return;
-				}
-				_playerStatsBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerStatsBlackboard);
+			set => SetProperty(ref _playerStatsBlackboard, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("hubMenuBlackboard")] 
 		public CHandle<gameIBlackboard> HubMenuBlackboard
 		{
-			get
-			{
-				if (_hubMenuBlackboard == null)
-				{
-					_hubMenuBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "hubMenuBlackboard", cr2w, this);
-				}
-				return _hubMenuBlackboard;
-			}
-			set
-			{
-				if (_hubMenuBlackboard == value)
-				{
-					return;
-				}
-				_hubMenuBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hubMenuBlackboard);
+			set => SetProperty(ref _hubMenuBlackboard, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("characterCredListener")] 
 		public CUInt32 CharacterCredListener
 		{
-			get
-			{
-				if (_characterCredListener == null)
-				{
-					_characterCredListener = (CUInt32) CR2WTypeManager.Create("Uint32", "characterCredListener", cr2w, this);
-				}
-				return _characterCredListener;
-			}
-			set
-			{
-				if (_characterCredListener == value)
-				{
-					return;
-				}
-				_characterCredListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _characterCredListener);
+			set => SetProperty(ref _characterCredListener, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("characterLevelListener")] 
 		public CUInt32 CharacterLevelListener
 		{
-			get
-			{
-				if (_characterLevelListener == null)
-				{
-					_characterLevelListener = (CUInt32) CR2WTypeManager.Create("Uint32", "characterLevelListener", cr2w, this);
-				}
-				return _characterLevelListener;
-			}
-			set
-			{
-				if (_characterLevelListener == value)
-				{
-					return;
-				}
-				_characterLevelListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _characterLevelListener);
+			set => SetProperty(ref _characterLevelListener, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("characterCurrentXPListener")] 
 		public CUInt32 CharacterCurrentXPListener
 		{
-			get
-			{
-				if (_characterCurrentXPListener == null)
-				{
-					_characterCurrentXPListener = (CUInt32) CR2WTypeManager.Create("Uint32", "characterCurrentXPListener", cr2w, this);
-				}
-				return _characterCurrentXPListener;
-			}
-			set
-			{
-				if (_characterCurrentXPListener == value)
-				{
-					return;
-				}
-				_characterCurrentXPListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _characterCurrentXPListener);
+			set => SetProperty(ref _characterCurrentXPListener, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("characterCredPointsListener")] 
 		public CUInt32 CharacterCredPointsListener
 		{
-			get
-			{
-				if (_characterCredPointsListener == null)
-				{
-					_characterCredPointsListener = (CUInt32) CR2WTypeManager.Create("Uint32", "characterCredPointsListener", cr2w, this);
-				}
-				return _characterCredPointsListener;
-			}
-			set
-			{
-				if (_characterCredPointsListener == value)
-				{
-					return;
-				}
-				_characterCredPointsListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _characterCredPointsListener);
+			set => SetProperty(ref _characterCredPointsListener, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("weightListener")] 
 		public CUInt32 WeightListener
 		{
-			get
-			{
-				if (_weightListener == null)
-				{
-					_weightListener = (CUInt32) CR2WTypeManager.Create("Uint32", "weightListener", cr2w, this);
-				}
-				return _weightListener;
-			}
-			set
-			{
-				if (_weightListener == value)
-				{
-					return;
-				}
-				_weightListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightListener);
+			set => SetProperty(ref _weightListener, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("maxWeightListener")] 
 		public CUInt32 MaxWeightListener
 		{
-			get
-			{
-				if (_maxWeightListener == null)
-				{
-					_maxWeightListener = (CUInt32) CR2WTypeManager.Create("Uint32", "maxWeightListener", cr2w, this);
-				}
-				return _maxWeightListener;
-			}
-			set
-			{
-				if (_maxWeightListener == value)
-				{
-					return;
-				}
-				_maxWeightListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxWeightListener);
+			set => SetProperty(ref _maxWeightListener, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("submenuHiddenListener")] 
 		public CUInt32 SubmenuHiddenListener
 		{
-			get
-			{
-				if (_submenuHiddenListener == null)
-				{
-					_submenuHiddenListener = (CUInt32) CR2WTypeManager.Create("Uint32", "submenuHiddenListener", cr2w, this);
-				}
-				return _submenuHiddenListener;
-			}
-			set
-			{
-				if (_submenuHiddenListener == value)
-				{
-					return;
-				}
-				_submenuHiddenListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _submenuHiddenListener);
+			set => SetProperty(ref _submenuHiddenListener, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("metaQuestStatusListener")] 
 		public CUInt32 MetaQuestStatusListener
 		{
-			get
-			{
-				if (_metaQuestStatusListener == null)
-				{
-					_metaQuestStatusListener = (CUInt32) CR2WTypeManager.Create("Uint32", "metaQuestStatusListener", cr2w, this);
-				}
-				return _metaQuestStatusListener;
-			}
-			set
-			{
-				if (_metaQuestStatusListener == value)
-				{
-					return;
-				}
-				_metaQuestStatusListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metaQuestStatusListener);
+			set => SetProperty(ref _metaQuestStatusListener, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("journalManager")] 
 		public wCHandle<gameJournalManager> JournalManager
 		{
-			get
-			{
-				if (_journalManager == null)
-				{
-					_journalManager = (wCHandle<gameJournalManager>) CR2WTypeManager.Create("whandle:gameJournalManager", "journalManager", cr2w, this);
-				}
-				return _journalManager;
-			}
-			set
-			{
-				if (_journalManager == value)
-				{
-					return;
-				}
-				_journalManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _journalManager);
+			set => SetProperty(ref _journalManager, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("trackedEntry")] 
 		public wCHandle<gameJournalQuestObjective> TrackedEntry
 		{
-			get
-			{
-				if (_trackedEntry == null)
-				{
-					_trackedEntry = (wCHandle<gameJournalQuestObjective>) CR2WTypeManager.Create("whandle:gameJournalQuestObjective", "trackedEntry", cr2w, this);
-				}
-				return _trackedEntry;
-			}
-			set
-			{
-				if (_trackedEntry == value)
-				{
-					return;
-				}
-				_trackedEntry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trackedEntry);
+			set => SetProperty(ref _trackedEntry, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("trackedPhase")] 
 		public wCHandle<gameJournalQuestPhase> TrackedPhase
 		{
-			get
-			{
-				if (_trackedPhase == null)
-				{
-					_trackedPhase = (wCHandle<gameJournalQuestPhase>) CR2WTypeManager.Create("whandle:gameJournalQuestPhase", "trackedPhase", cr2w, this);
-				}
-				return _trackedPhase;
-			}
-			set
-			{
-				if (_trackedPhase == value)
-				{
-					return;
-				}
-				_trackedPhase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trackedPhase);
+			set => SetProperty(ref _trackedPhase, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("trackedQuest")] 
 		public wCHandle<gameJournalQuest> TrackedQuest
 		{
-			get
-			{
-				if (_trackedQuest == null)
-				{
-					_trackedQuest = (wCHandle<gameJournalQuest>) CR2WTypeManager.Create("whandle:gameJournalQuest", "trackedQuest", cr2w, this);
-				}
-				return _trackedQuest;
-			}
-			set
-			{
-				if (_trackedQuest == value)
-				{
-					return;
-				}
-				_trackedQuest = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trackedQuest);
+			set => SetProperty(ref _trackedQuest, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("notificationRoot")] 
 		public inkWidgetReference NotificationRoot
 		{
-			get
-			{
-				if (_notificationRoot == null)
-				{
-					_notificationRoot = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "notificationRoot", cr2w, this);
-				}
-				return _notificationRoot;
-			}
-			set
-			{
-				if (_notificationRoot == value)
-				{
-					return;
-				}
-				_notificationRoot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _notificationRoot);
+			set => SetProperty(ref _notificationRoot, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("buttonHintsManagerRef")] 
 		public inkWidgetReference ButtonHintsManagerRef
 		{
-			get
-			{
-				if (_buttonHintsManagerRef == null)
-				{
-					_buttonHintsManagerRef = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "buttonHintsManagerRef", cr2w, this);
-				}
-				return _buttonHintsManagerRef;
-			}
-			set
-			{
-				if (_buttonHintsManagerRef == value)
-				{
-					return;
-				}
-				_buttonHintsManagerRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonHintsManagerRef);
+			set => SetProperty(ref _buttonHintsManagerRef, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("bgFluff")] 
 		public inkWidgetReference BgFluff
 		{
-			get
-			{
-				if (_bgFluff == null)
-				{
-					_bgFluff = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "bgFluff", cr2w, this);
-				}
-				return _bgFluff;
-			}
-			set
-			{
-				if (_bgFluff == value)
-				{
-					return;
-				}
-				_bgFluff = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bgFluff);
+			set => SetProperty(ref _bgFluff, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("dataManager")] 
 		public CHandle<PlayerDevelopmentDataManager> DataManager
 		{
-			get
-			{
-				if (_dataManager == null)
-				{
-					_dataManager = (CHandle<PlayerDevelopmentDataManager>) CR2WTypeManager.Create("handle:PlayerDevelopmentDataManager", "dataManager", cr2w, this);
-				}
-				return _dataManager;
-			}
-			set
-			{
-				if (_dataManager == value)
-				{
-					return;
-				}
-				_dataManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dataManager);
+			set => SetProperty(ref _dataManager, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("buttonHintsController")] 
 		public wCHandle<ButtonHints> ButtonHintsController
 		{
-			get
-			{
-				if (_buttonHintsController == null)
-				{
-					_buttonHintsController = (wCHandle<ButtonHints>) CR2WTypeManager.Create("whandle:ButtonHints", "buttonHintsController", cr2w, this);
-				}
-				return _buttonHintsController;
-			}
-			set
-			{
-				if (_buttonHintsController == value)
-				{
-					return;
-				}
-				_buttonHintsController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _buttonHintsController);
+			set => SetProperty(ref _buttonHintsController, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("gameTimeContainer")] 
 		public inkWidgetReference GameTimeContainer
 		{
-			get
-			{
-				if (_gameTimeContainer == null)
-				{
-					_gameTimeContainer = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "gameTimeContainer", cr2w, this);
-				}
-				return _gameTimeContainer;
-			}
-			set
-			{
-				if (_gameTimeContainer == value)
-				{
-					return;
-				}
-				_gameTimeContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameTimeContainer);
+			set => SetProperty(ref _gameTimeContainer, value);
 		}
 
 		[Ordinal(32)] 
 		[RED("gameTimeController")] 
 		public CHandle<gameuiTimeDisplayLogicController> GameTimeController
 		{
-			get
-			{
-				if (_gameTimeController == null)
-				{
-					_gameTimeController = (CHandle<gameuiTimeDisplayLogicController>) CR2WTypeManager.Create("handle:gameuiTimeDisplayLogicController", "gameTimeController", cr2w, this);
-				}
-				return _gameTimeController;
-			}
-			set
-			{
-				if (_gameTimeController == value)
-				{
-					return;
-				}
-				_gameTimeController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameTimeController);
+			set => SetProperty(ref _gameTimeController, value);
 		}
 
 		[Ordinal(33)] 
 		[RED("previousRequest")] 
 		public CHandle<OpenMenuRequest> PreviousRequest
 		{
-			get
-			{
-				if (_previousRequest == null)
-				{
-					_previousRequest = (CHandle<OpenMenuRequest>) CR2WTypeManager.Create("handle:OpenMenuRequest", "previousRequest", cr2w, this);
-				}
-				return _previousRequest;
-			}
-			set
-			{
-				if (_previousRequest == value)
-				{
-					return;
-				}
-				_previousRequest = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousRequest);
+			set => SetProperty(ref _previousRequest, value);
 		}
 
 		[Ordinal(34)] 
 		[RED("currentRequest")] 
 		public CHandle<OpenMenuRequest> CurrentRequest
 		{
-			get
-			{
-				if (_currentRequest == null)
-				{
-					_currentRequest = (CHandle<OpenMenuRequest>) CR2WTypeManager.Create("handle:OpenMenuRequest", "currentRequest", cr2w, this);
-				}
-				return _currentRequest;
-			}
-			set
-			{
-				if (_currentRequest == value)
-				{
-					return;
-				}
-				_currentRequest = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentRequest);
+			set => SetProperty(ref _currentRequest, value);
 		}
 
 		public MenuHubGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

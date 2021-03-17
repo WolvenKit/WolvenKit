@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("activeCrosshairs")] 
 		public CArray<CHandle<Crosshair>> ActiveCrosshairs
 		{
-			get
-			{
-				if (_activeCrosshairs == null)
-				{
-					_activeCrosshairs = (CArray<CHandle<Crosshair>>) CR2WTypeManager.Create("array:handle:Crosshair", "activeCrosshairs", cr2w, this);
-				}
-				return _activeCrosshairs;
-			}
-			set
-			{
-				if (_activeCrosshairs == value)
-				{
-					return;
-				}
-				_activeCrosshairs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeCrosshairs);
+			set => SetProperty(ref _activeCrosshairs, value);
 		}
 
 		public CrosshairModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

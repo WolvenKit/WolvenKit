@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rotation")] 
 		public CHandle<IEvaluatorVector> Rotation
 		{
-			get
-			{
-				if (_rotation == null)
-				{
-					_rotation = (CHandle<IEvaluatorVector>) CR2WTypeManager.Create("handle:IEvaluatorVector", "rotation", cr2w, this);
-				}
-				return _rotation;
-			}
-			set
-			{
-				if (_rotation == value)
-				{
-					return;
-				}
-				_rotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rotation);
+			set => SetProperty(ref _rotation, value);
 		}
 
 		public CParticleInitializerRotation3D(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("overrideEntries")] 
 		public CArray<inkNavigationOverrideEntry> OverrideEntries
 		{
-			get
-			{
-				if (_overrideEntries == null)
-				{
-					_overrideEntries = (CArray<inkNavigationOverrideEntry>) CR2WTypeManager.Create("array:inkNavigationOverrideEntry", "overrideEntries", cr2w, this);
-				}
-				return _overrideEntries;
-			}
-			set
-			{
-				if (_overrideEntries == value)
-				{
-					return;
-				}
-				_overrideEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideEntries);
+			set => SetProperty(ref _overrideEntries, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("useGlobalInput")] 
 		public CBool UseGlobalInput
 		{
-			get
-			{
-				if (_useGlobalInput == null)
-				{
-					_useGlobalInput = (CBool) CR2WTypeManager.Create("Bool", "useGlobalInput", cr2w, this);
-				}
-				return _useGlobalInput;
-			}
-			set
-			{
-				if (_useGlobalInput == value)
-				{
-					return;
-				}
-				_useGlobalInput = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useGlobalInput);
+			set => SetProperty(ref _useGlobalInput, value);
 		}
 
 		public inkContainerNavigationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

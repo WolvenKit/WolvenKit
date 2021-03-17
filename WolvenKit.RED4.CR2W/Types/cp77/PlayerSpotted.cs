@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("comesFromNPC")] 
 		public CBool ComesFromNPC
 		{
-			get
-			{
-				if (_comesFromNPC == null)
-				{
-					_comesFromNPC = (CBool) CR2WTypeManager.Create("Bool", "comesFromNPC", cr2w, this);
-				}
-				return _comesFromNPC;
-			}
-			set
-			{
-				if (_comesFromNPC == value)
-				{
-					return;
-				}
-				_comesFromNPC = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _comesFromNPC);
+			set => SetProperty(ref _comesFromNPC, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ownerID")] 
 		public gamePersistentID OwnerID
 		{
-			get
-			{
-				if (_ownerID == null)
-				{
-					_ownerID = (gamePersistentID) CR2WTypeManager.Create("gamePersistentID", "ownerID", cr2w, this);
-				}
-				return _ownerID;
-			}
-			set
-			{
-				if (_ownerID == value)
-				{
-					return;
-				}
-				_ownerID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerID);
+			set => SetProperty(ref _ownerID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("doesSee")] 
 		public CBool DoesSee
 		{
-			get
-			{
-				if (_doesSee == null)
-				{
-					_doesSee = (CBool) CR2WTypeManager.Create("Bool", "doesSee", cr2w, this);
-				}
-				return _doesSee;
-			}
-			set
-			{
-				if (_doesSee == value)
-				{
-					return;
-				}
-				_doesSee = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _doesSee);
+			set => SetProperty(ref _doesSee, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("agentAreas")] 
 		public CArray<CHandle<SecurityAreaControllerPS>> AgentAreas
 		{
-			get
-			{
-				if (_agentAreas == null)
-				{
-					_agentAreas = (CArray<CHandle<SecurityAreaControllerPS>>) CR2WTypeManager.Create("array:handle:SecurityAreaControllerPS", "agentAreas", cr2w, this);
-				}
-				return _agentAreas;
-			}
-			set
-			{
-				if (_agentAreas == value)
-				{
-					return;
-				}
-				_agentAreas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _agentAreas);
+			set => SetProperty(ref _agentAreas, value);
 		}
 
 		public PlayerSpotted(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

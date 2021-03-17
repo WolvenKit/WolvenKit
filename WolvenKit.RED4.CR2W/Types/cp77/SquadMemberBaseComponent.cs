@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("baseSquadRecord")] 
 		public wCHandle<gamedataAISquadParams_Record> BaseSquadRecord
 		{
-			get
-			{
-				if (_baseSquadRecord == null)
-				{
-					_baseSquadRecord = (wCHandle<gamedataAISquadParams_Record>) CR2WTypeManager.Create("whandle:gamedataAISquadParams_Record", "baseSquadRecord", cr2w, this);
-				}
-				return _baseSquadRecord;
-			}
-			set
-			{
-				if (_baseSquadRecord == value)
-				{
-					return;
-				}
-				_baseSquadRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _baseSquadRecord);
+			set => SetProperty(ref _baseSquadRecord, value);
 		}
 
 		public SquadMemberBaseComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

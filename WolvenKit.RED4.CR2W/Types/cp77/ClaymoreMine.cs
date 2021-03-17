@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("visualComponent")] 
 		public CHandle<entMeshComponent> VisualComponent
 		{
-			get
-			{
-				if (_visualComponent == null)
-				{
-					_visualComponent = (CHandle<entMeshComponent>) CR2WTypeManager.Create("handle:entMeshComponent", "visualComponent", cr2w, this);
-				}
-				return _visualComponent;
-			}
-			set
-			{
-				if (_visualComponent == value)
-				{
-					return;
-				}
-				_visualComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualComponent);
+			set => SetProperty(ref _visualComponent, value);
 		}
 
 		[Ordinal(58)] 
 		[RED("triggerAreaIndicator")] 
 		public CHandle<entMeshComponent> TriggerAreaIndicator
 		{
-			get
-			{
-				if (_triggerAreaIndicator == null)
-				{
-					_triggerAreaIndicator = (CHandle<entMeshComponent>) CR2WTypeManager.Create("handle:entMeshComponent", "triggerAreaIndicator", cr2w, this);
-				}
-				return _triggerAreaIndicator;
-			}
-			set
-			{
-				if (_triggerAreaIndicator == value)
-				{
-					return;
-				}
-				_triggerAreaIndicator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerAreaIndicator);
+			set => SetProperty(ref _triggerAreaIndicator, value);
 		}
 
 		[Ordinal(59)] 
 		[RED("shootCollision")] 
 		public CHandle<entSimpleColliderComponent> ShootCollision
 		{
-			get
-			{
-				if (_shootCollision == null)
-				{
-					_shootCollision = (CHandle<entSimpleColliderComponent>) CR2WTypeManager.Create("handle:entSimpleColliderComponent", "shootCollision", cr2w, this);
-				}
-				return _shootCollision;
-			}
-			set
-			{
-				if (_shootCollision == value)
-				{
-					return;
-				}
-				_shootCollision = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shootCollision);
+			set => SetProperty(ref _shootCollision, value);
 		}
 
 		[Ordinal(60)] 
 		[RED("triggerComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerComponent
 		{
-			get
-			{
-				if (_triggerComponent == null)
-				{
-					_triggerComponent = (CHandle<gameStaticTriggerAreaComponent>) CR2WTypeManager.Create("handle:gameStaticTriggerAreaComponent", "triggerComponent", cr2w, this);
-				}
-				return _triggerComponent;
-			}
-			set
-			{
-				if (_triggerComponent == value)
-				{
-					return;
-				}
-				_triggerComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerComponent);
+			set => SetProperty(ref _triggerComponent, value);
 		}
 
 		[Ordinal(61)] 
 		[RED("alive")] 
 		public CBool Alive
 		{
-			get
-			{
-				if (_alive == null)
-				{
-					_alive = (CBool) CR2WTypeManager.Create("Bool", "alive", cr2w, this);
-				}
-				return _alive;
-			}
-			set
-			{
-				if (_alive == value)
-				{
-					return;
-				}
-				_alive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alive);
+			set => SetProperty(ref _alive, value);
 		}
 
 		[Ordinal(62)] 
 		[RED("armed")] 
 		public CBool Armed
 		{
-			get
-			{
-				if (_armed == null)
-				{
-					_armed = (CBool) CR2WTypeManager.Create("Bool", "armed", cr2w, this);
-				}
-				return _armed;
-			}
-			set
-			{
-				if (_armed == value)
-				{
-					return;
-				}
-				_armed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _armed);
+			set => SetProperty(ref _armed, value);
 		}
 
 		public ClaymoreMine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

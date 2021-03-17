@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("uiEventsByAction")] 
 		public CHandle<audioKeyUiSoundDictionary> UiEventsByAction
 		{
-			get
-			{
-				if (_uiEventsByAction == null)
-				{
-					_uiEventsByAction = (CHandle<audioKeyUiSoundDictionary>) CR2WTypeManager.Create("handle:audioKeyUiSoundDictionary", "uiEventsByAction", cr2w, this);
-				}
-				return _uiEventsByAction;
-			}
-			set
-			{
-				if (_uiEventsByAction == value)
-				{
-					return;
-				}
-				_uiEventsByAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uiEventsByAction);
+			set => SetProperty(ref _uiEventsByAction, value);
 		}
 
 		public audioUiControl(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

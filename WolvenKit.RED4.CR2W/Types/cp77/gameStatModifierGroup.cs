@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statModifierArray")] 
 		public CArray<CHandle<gameStatModifierData>> StatModifierArray
 		{
-			get
-			{
-				if (_statModifierArray == null)
-				{
-					_statModifierArray = (CArray<CHandle<gameStatModifierData>>) CR2WTypeManager.Create("array:handle:gameStatModifierData", "statModifierArray", cr2w, this);
-				}
-				return _statModifierArray;
-			}
-			set
-			{
-				if (_statModifierArray == value)
-				{
-					return;
-				}
-				_statModifierArray = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statModifierArray);
+			set => SetProperty(ref _statModifierArray, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("statModifiersLimit")] 
 		public CInt32 StatModifiersLimit
 		{
-			get
-			{
-				if (_statModifiersLimit == null)
-				{
-					_statModifiersLimit = (CInt32) CR2WTypeManager.Create("Int32", "statModifiersLimit", cr2w, this);
-				}
-				return _statModifiersLimit;
-			}
-			set
-			{
-				if (_statModifiersLimit == value)
-				{
-					return;
-				}
-				_statModifiersLimit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statModifiersLimit);
+			set => SetProperty(ref _statModifiersLimit, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("statModifiersLimitModifier")] 
 		public TweakDBID StatModifiersLimitModifier
 		{
-			get
-			{
-				if (_statModifiersLimitModifier == null)
-				{
-					_statModifiersLimitModifier = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "statModifiersLimitModifier", cr2w, this);
-				}
-				return _statModifiersLimitModifier;
-			}
-			set
-			{
-				if (_statModifiersLimitModifier == value)
-				{
-					return;
-				}
-				_statModifiersLimitModifier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statModifiersLimitModifier);
+			set => SetProperty(ref _statModifiersLimitModifier, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("drawBasedOnStatType")] 
 		public CBool DrawBasedOnStatType
 		{
-			get
-			{
-				if (_drawBasedOnStatType == null)
-				{
-					_drawBasedOnStatType = (CBool) CR2WTypeManager.Create("Bool", "drawBasedOnStatType", cr2w, this);
-				}
-				return _drawBasedOnStatType;
-			}
-			set
-			{
-				if (_drawBasedOnStatType == value)
-				{
-					return;
-				}
-				_drawBasedOnStatType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _drawBasedOnStatType);
+			set => SetProperty(ref _drawBasedOnStatType, value);
 		}
 
 		public gameStatModifierGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

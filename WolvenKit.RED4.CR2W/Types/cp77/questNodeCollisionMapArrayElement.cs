@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectRef")] 
 		public NodeRef ObjectRef
 		{
-			get
-			{
-				if (_objectRef == null)
-				{
-					_objectRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "objectRef", cr2w, this);
-				}
-				return _objectRef;
-			}
-			set
-			{
-				if (_objectRef == value)
-				{
-					return;
-				}
-				_objectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("componentsCollisionMapArray")] 
 		public CArray<questComponentCollisionMapArrayElement> ComponentsCollisionMapArray
 		{
-			get
-			{
-				if (_componentsCollisionMapArray == null)
-				{
-					_componentsCollisionMapArray = (CArray<questComponentCollisionMapArrayElement>) CR2WTypeManager.Create("array:questComponentCollisionMapArrayElement", "componentsCollisionMapArray", cr2w, this);
-				}
-				return _componentsCollisionMapArray;
-			}
-			set
-			{
-				if (_componentsCollisionMapArray == value)
-				{
-					return;
-				}
-				_componentsCollisionMapArray = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _componentsCollisionMapArray);
+			set => SetProperty(ref _componentsCollisionMapArray, value);
 		}
 
 		public questNodeCollisionMapArrayElement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

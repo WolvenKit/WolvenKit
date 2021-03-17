@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("widgetPos")] 
 		public wCHandle<inkTextWidget> WidgetPos
 		{
-			get
-			{
-				if (_widgetPos == null)
-				{
-					_widgetPos = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "widgetPos", cr2w, this);
-				}
-				return _widgetPos;
-			}
-			set
-			{
-				if (_widgetPos == value)
-				{
-					return;
-				}
-				_widgetPos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetPos);
+			set => SetProperty(ref _widgetPos, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("worldPos")] 
 		public wCHandle<inkTextWidget> WorldPos
 		{
-			get
-			{
-				if (_worldPos == null)
-				{
-					_worldPos = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "worldPos", cr2w, this);
-				}
-				return _worldPos;
-			}
-			set
-			{
-				if (_worldPos == value)
-				{
-					return;
-				}
-				_worldPos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _worldPos);
+			set => SetProperty(ref _worldPos, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("projection")] 
 		public CHandle<inkScreenProjection> Projection
 		{
-			get
-			{
-				if (_projection == null)
-				{
-					_projection = (CHandle<inkScreenProjection>) CR2WTypeManager.Create("handle:inkScreenProjection", "projection", cr2w, this);
-				}
-				return _projection;
-			}
-			set
-			{
-				if (_projection == value)
-				{
-					return;
-				}
-				_projection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projection);
+			set => SetProperty(ref _projection, value);
 		}
 
 		public sampleScreenProjectionLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

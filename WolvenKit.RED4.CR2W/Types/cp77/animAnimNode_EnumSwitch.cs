@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enumName")] 
 		public CName EnumName
 		{
-			get
-			{
-				if (_enumName == null)
-				{
-					_enumName = (CName) CR2WTypeManager.Create("CName", "enumName", cr2w, this);
-				}
-				return _enumName;
-			}
-			set
-			{
-				if (_enumName == value)
-				{
-					return;
-				}
-				_enumName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enumName);
+			set => SetProperty(ref _enumName, value);
 		}
 
 		public animAnimNode_EnumSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

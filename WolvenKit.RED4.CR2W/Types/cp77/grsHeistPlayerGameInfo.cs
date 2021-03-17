@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("peerID")] 
 		public netPeerID PeerID
 		{
-			get
-			{
-				if (_peerID == null)
-				{
-					_peerID = (netPeerID) CR2WTypeManager.Create("netPeerID", "peerID", cr2w, this);
-				}
-				return _peerID;
-			}
-			set
-			{
-				if (_peerID == value)
-				{
-					return;
-				}
-				_peerID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _peerID);
+			set => SetProperty(ref _peerID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isInGame")] 
 		public CBool IsInGame
 		{
-			get
-			{
-				if (_isInGame == null)
-				{
-					_isInGame = (CBool) CR2WTypeManager.Create("Bool", "isInGame", cr2w, this);
-				}
-				return _isInGame;
-			}
-			set
-			{
-				if (_isInGame == value)
-				{
-					return;
-				}
-				_isInGame = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInGame);
+			set => SetProperty(ref _isInGame, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isReady")] 
 		public CBool IsReady
 		{
-			get
-			{
-				if (_isReady == null)
-				{
-					_isReady = (CBool) CR2WTypeManager.Create("Bool", "isReady", cr2w, this);
-				}
-				return _isReady;
-			}
-			set
-			{
-				if (_isReady == value)
-				{
-					return;
-				}
-				_isReady = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isReady);
+			set => SetProperty(ref _isReady, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isRespawning")] 
 		public CBool IsRespawning
 		{
-			get
-			{
-				if (_isRespawning == null)
-				{
-					_isRespawning = (CBool) CR2WTypeManager.Create("Bool", "isRespawning", cr2w, this);
-				}
-				return _isRespawning;
-			}
-			set
-			{
-				if (_isRespawning == value)
-				{
-					return;
-				}
-				_isRespawning = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isRespawning);
+			set => SetProperty(ref _isRespawning, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isDead")] 
 		public CBool IsDead
 		{
-			get
-			{
-				if (_isDead == null)
-				{
-					_isDead = (CBool) CR2WTypeManager.Create("Bool", "isDead", cr2w, this);
-				}
-				return _isDead;
-			}
-			set
-			{
-				if (_isDead == value)
-				{
-					return;
-				}
-				_isDead = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDead);
+			set => SetProperty(ref _isDead, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("spawnTime")] 
 		public netTime SpawnTime
 		{
-			get
-			{
-				if (_spawnTime == null)
-				{
-					_spawnTime = (netTime) CR2WTypeManager.Create("netTime", "spawnTime", cr2w, this);
-				}
-				return _spawnTime;
-			}
-			set
-			{
-				if (_spawnTime == value)
-				{
-					return;
-				}
-				_spawnTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnTime);
+			set => SetProperty(ref _spawnTime, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("killCount")] 
 		public CUInt32 KillCount
 		{
-			get
-			{
-				if (_killCount == null)
-				{
-					_killCount = (CUInt32) CR2WTypeManager.Create("Uint32", "killCount", cr2w, this);
-				}
-				return _killCount;
-			}
-			set
-			{
-				if (_killCount == value)
-				{
-					return;
-				}
-				_killCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _killCount);
+			set => SetProperty(ref _killCount, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("deathCount")] 
 		public CUInt32 DeathCount
 		{
-			get
-			{
-				if (_deathCount == null)
-				{
-					_deathCount = (CUInt32) CR2WTypeManager.Create("Uint32", "deathCount", cr2w, this);
-				}
-				return _deathCount;
-			}
-			set
-			{
-				if (_deathCount == value)
-				{
-					return;
-				}
-				_deathCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deathCount);
+			set => SetProperty(ref _deathCount, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("characterRecord")] 
 		public CString CharacterRecord
 		{
-			get
-			{
-				if (_characterRecord == null)
-				{
-					_characterRecord = (CString) CR2WTypeManager.Create("String", "characterRecord", cr2w, this);
-				}
-				return _characterRecord;
-			}
-			set
-			{
-				if (_characterRecord == value)
-				{
-					return;
-				}
-				_characterRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _characterRecord);
+			set => SetProperty(ref _characterRecord, value);
 		}
 
 		public grsHeistPlayerGameInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

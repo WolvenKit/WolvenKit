@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("factProperties")] 
 		public ComputerQuickHackData FactProperties
 		{
-			get
-			{
-				if (_factProperties == null)
-				{
-					_factProperties = (ComputerQuickHackData) CR2WTypeManager.Create("ComputerQuickHackData", "factProperties", cr2w, this);
-				}
-				return _factProperties;
-			}
-			set
-			{
-				if (_factProperties == value)
-				{
-					return;
-				}
-				_factProperties = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factProperties);
+			set => SetProperty(ref _factProperties, value);
 		}
 
 		public FactQuickHack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

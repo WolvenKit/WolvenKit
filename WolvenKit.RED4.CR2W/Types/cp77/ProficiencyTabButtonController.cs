@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("proxy")] 
 		public CHandle<inkanimProxy> Proxy
 		{
-			get
-			{
-				if (_proxy == null)
-				{
-					_proxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "proxy", cr2w, this);
-				}
-				return _proxy;
-			}
-			set
-			{
-				if (_proxy == value)
-				{
-					return;
-				}
-				_proxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _proxy);
+			set => SetProperty(ref _proxy, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("isToggledState")] 
 		public CBool IsToggledState
 		{
-			get
-			{
-				if (_isToggledState == null)
-				{
-					_isToggledState = (CBool) CR2WTypeManager.Create("Bool", "isToggledState", cr2w, this);
-				}
-				return _isToggledState;
-			}
-			set
-			{
-				if (_isToggledState == value)
-				{
-					return;
-				}
-				_isToggledState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isToggledState);
+			set => SetProperty(ref _isToggledState, value);
 		}
 
 		public ProficiencyTabButtonController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

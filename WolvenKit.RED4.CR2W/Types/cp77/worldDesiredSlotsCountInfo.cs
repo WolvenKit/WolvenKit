@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("siredSlotsCount")] 
 		public CFloat SiredSlotsCount
 		{
-			get
-			{
-				if (_siredSlotsCount == null)
-				{
-					_siredSlotsCount = (CFloat) CR2WTypeManager.Create("Float", "siredSlotsCount", cr2w, this);
-				}
-				return _siredSlotsCount;
-			}
-			set
-			{
-				if (_siredSlotsCount == value)
-				{
-					return;
-				}
-				_siredSlotsCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _siredSlotsCount);
+			set => SetProperty(ref _siredSlotsCount, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("nCoeff")] 
 		public CFloat NCoeff
 		{
-			get
-			{
-				if (_nCoeff == null)
-				{
-					_nCoeff = (CFloat) CR2WTypeManager.Create("Float", "nCoeff", cr2w, this);
-				}
-				return _nCoeff;
-			}
-			set
-			{
-				if (_nCoeff == value)
-				{
-					return;
-				}
-				_nCoeff = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nCoeff);
+			set => SetProperty(ref _nCoeff, value);
 		}
 
 		public worldDesiredSlotsCountInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

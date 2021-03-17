@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("syncTag")] 
 		public CName SyncTag
 		{
-			get
-			{
-				if (_syncTag == null)
-				{
-					_syncTag = (CName) CR2WTypeManager.Create("CName", "syncTag", cr2w, this);
-				}
-				return _syncTag;
-			}
-			set
-			{
-				if (_syncTag == value)
-				{
-					return;
-				}
-				_syncTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _syncTag);
+			set => SetProperty(ref _syncTag, value);
 		}
 
 		public animAnimNode_SkSyncedSlaveAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("honkTime")] 
 		public CFloat HonkTime
 		{
-			get
-			{
-				if (_honkTime == null)
-				{
-					_honkTime = (CFloat) CR2WTypeManager.Create("Float", "honkTime", cr2w, this);
-				}
-				return _honkTime;
-			}
-			set
-			{
-				if (_honkTime == value)
-				{
-					return;
-				}
-				_honkTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _honkTime);
+			set => SetProperty(ref _honkTime, value);
 		}
 
 		public VehicleQuestHornEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

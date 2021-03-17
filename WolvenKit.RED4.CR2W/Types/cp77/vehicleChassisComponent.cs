@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("collisionResource")] 
 		public rRef<physicsSystemResource> CollisionResource
 		{
-			get
-			{
-				if (_collisionResource == null)
-				{
-					_collisionResource = (rRef<physicsSystemResource>) CR2WTypeManager.Create("rRef:physicsSystemResource", "collisionResource", cr2w, this);
-				}
-				return _collisionResource;
-			}
-			set
-			{
-				if (_collisionResource == value)
-				{
-					return;
-				}
-				_collisionResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _collisionResource);
+			set => SetProperty(ref _collisionResource, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("optionalPlayerOnlyCollisionResource")] 
 		public rRef<physicsSystemResource> OptionalPlayerOnlyCollisionResource
 		{
-			get
-			{
-				if (_optionalPlayerOnlyCollisionResource == null)
-				{
-					_optionalPlayerOnlyCollisionResource = (rRef<physicsSystemResource>) CR2WTypeManager.Create("rRef:physicsSystemResource", "optionalPlayerOnlyCollisionResource", cr2w, this);
-				}
-				return _optionalPlayerOnlyCollisionResource;
-			}
-			set
-			{
-				if (_optionalPlayerOnlyCollisionResource == value)
-				{
-					return;
-				}
-				_optionalPlayerOnlyCollisionResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _optionalPlayerOnlyCollisionResource);
+			set => SetProperty(ref _optionalPlayerOnlyCollisionResource, value);
 		}
 
 		public vehicleChassisComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("overrides")] 
 		public CArray<CUInt32> Overrides
 		{
-			get
-			{
-				if (_overrides == null)
-				{
-					_overrides = (CArray<CUInt32>) CR2WTypeManager.Create("array:Uint32", "overrides", cr2w, this);
-				}
-				return _overrides;
-			}
-			set
-			{
-				if (_overrides == value)
-				{
-					return;
-				}
-				_overrides = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrides);
+			set => SetProperty(ref _overrides, value);
 		}
 
 		public LibTreeParametersForwarder(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

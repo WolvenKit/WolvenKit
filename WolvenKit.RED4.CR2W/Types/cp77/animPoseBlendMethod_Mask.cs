@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("maskName")] 
 		public CName MaskName
 		{
-			get
-			{
-				if (_maskName == null)
-				{
-					_maskName = (CName) CR2WTypeManager.Create("CName", "maskName", cr2w, this);
-				}
-				return _maskName;
-			}
-			set
-			{
-				if (_maskName == value)
-				{
-					return;
-				}
-				_maskName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maskName);
+			set => SetProperty(ref _maskName, value);
 		}
 
 		public animPoseBlendMethod_Mask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

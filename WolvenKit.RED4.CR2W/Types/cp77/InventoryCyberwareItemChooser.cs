@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("leftSlotsContainer")] 
 		public inkCompoundWidgetReference LeftSlotsContainer
 		{
-			get
-			{
-				if (_leftSlotsContainer == null)
-				{
-					_leftSlotsContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "leftSlotsContainer", cr2w, this);
-				}
-				return _leftSlotsContainer;
-			}
-			set
-			{
-				if (_leftSlotsContainer == value)
-				{
-					return;
-				}
-				_leftSlotsContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _leftSlotsContainer);
+			set => SetProperty(ref _leftSlotsContainer, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("rightSlotsContainer")] 
 		public inkCompoundWidgetReference RightSlotsContainer
 		{
-			get
-			{
-				if (_rightSlotsContainer == null)
-				{
-					_rightSlotsContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "rightSlotsContainer", cr2w, this);
-				}
-				return _rightSlotsContainer;
-			}
-			set
-			{
-				if (_rightSlotsContainer == value)
-				{
-					return;
-				}
-				_rightSlotsContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rightSlotsContainer);
+			set => SetProperty(ref _rightSlotsContainer, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("itemData")] 
 		public InventoryItemData ItemData
 		{
-			get
-			{
-				if (_itemData == null)
-				{
-					_itemData = (InventoryItemData) CR2WTypeManager.Create("InventoryItemData", "itemData", cr2w, this);
-				}
-				return _itemData;
-			}
-			set
-			{
-				if (_itemData == value)
-				{
-					return;
-				}
-				_itemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemData);
+			set => SetProperty(ref _itemData, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("itemDatas")] 
 		public CArray<InventoryItemData> ItemDatas
 		{
-			get
-			{
-				if (_itemDatas == null)
-				{
-					_itemDatas = (CArray<InventoryItemData>) CR2WTypeManager.Create("array:InventoryItemData", "itemDatas", cr2w, this);
-				}
-				return _itemDatas;
-			}
-			set
-			{
-				if (_itemDatas == value)
-				{
-					return;
-				}
-				_itemDatas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemDatas);
+			set => SetProperty(ref _itemDatas, value);
 		}
 
 		public InventoryCyberwareItemChooser(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

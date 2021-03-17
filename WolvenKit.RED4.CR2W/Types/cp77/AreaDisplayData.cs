@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attributeId")] 
 		public TweakDBID AttributeId
 		{
-			get
-			{
-				if (_attributeId == null)
-				{
-					_attributeId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "attributeId", cr2w, this);
-				}
-				return _attributeId;
-			}
-			set
-			{
-				if (_attributeId == value)
-				{
-					return;
-				}
-				_attributeId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributeId);
+			set => SetProperty(ref _attributeId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("perks")] 
 		public CArray<CHandle<PerkDisplayData>> Perks
 		{
-			get
-			{
-				if (_perks == null)
-				{
-					_perks = (CArray<CHandle<PerkDisplayData>>) CR2WTypeManager.Create("array:handle:PerkDisplayData", "perks", cr2w, this);
-				}
-				return _perks;
-			}
-			set
-			{
-				if (_perks == value)
-				{
-					return;
-				}
-				_perks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perks);
+			set => SetProperty(ref _perks, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("locked")] 
 		public CBool Locked
 		{
-			get
-			{
-				if (_locked == null)
-				{
-					_locked = (CBool) CR2WTypeManager.Create("Bool", "locked", cr2w, this);
-				}
-				return _locked;
-			}
-			set
-			{
-				if (_locked == value)
-				{
-					return;
-				}
-				_locked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _locked);
+			set => SetProperty(ref _locked, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("proficency")] 
 		public CEnum<gamedataProficiencyType> Proficency
 		{
-			get
-			{
-				if (_proficency == null)
-				{
-					_proficency = (CEnum<gamedataProficiencyType>) CR2WTypeManager.Create("gamedataProficiencyType", "proficency", cr2w, this);
-				}
-				return _proficency;
-			}
-			set
-			{
-				if (_proficency == value)
-				{
-					return;
-				}
-				_proficency = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _proficency);
+			set => SetProperty(ref _proficency, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("area")] 
 		public CEnum<gamedataPerkArea> Area
 		{
-			get
-			{
-				if (_area == null)
-				{
-					_area = (CEnum<gamedataPerkArea>) CR2WTypeManager.Create("gamedataPerkArea", "area", cr2w, this);
-				}
-				return _area;
-			}
-			set
-			{
-				if (_area == value)
-				{
-					return;
-				}
-				_area = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _area);
+			set => SetProperty(ref _area, value);
 		}
 
 		public AreaDisplayData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

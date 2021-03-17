@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("script")] 
 		public CHandle<AIbehaviortaskStackScript> Script
 		{
-			get
-			{
-				if (_script == null)
-				{
-					_script = (CHandle<AIbehaviortaskStackScript>) CR2WTypeManager.Create("handle:AIbehaviortaskStackScript", "script", cr2w, this);
-				}
-				return _script;
-			}
-			set
-			{
-				if (_script == value)
-				{
-					return;
-				}
-				_script = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _script);
+			set => SetProperty(ref _script, value);
 		}
 
 		public AIbehaviorStackScriptTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

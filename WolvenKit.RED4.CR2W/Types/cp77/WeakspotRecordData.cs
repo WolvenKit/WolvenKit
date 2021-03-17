@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isInvulnerable")] 
 		public CBool IsInvulnerable
 		{
-			get
-			{
-				if (_isInvulnerable == null)
-				{
-					_isInvulnerable = (CBool) CR2WTypeManager.Create("Bool", "isInvulnerable", cr2w, this);
-				}
-				return _isInvulnerable;
-			}
-			set
-			{
-				if (_isInvulnerable == value)
-				{
-					return;
-				}
-				_isInvulnerable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInvulnerable);
+			set => SetProperty(ref _isInvulnerable, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("slotID")] 
 		public TweakDBID SlotID
 		{
-			get
-			{
-				if (_slotID == null)
-				{
-					_slotID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "slotID", cr2w, this);
-				}
-				return _slotID;
-			}
-			set
-			{
-				if (_slotID == value)
-				{
-					return;
-				}
-				_slotID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("reducedMeleeDamage")] 
 		public CBool ReducedMeleeDamage
 		{
-			get
-			{
-				if (_reducedMeleeDamage == null)
-				{
-					_reducedMeleeDamage = (CBool) CR2WTypeManager.Create("Bool", "reducedMeleeDamage", cr2w, this);
-				}
-				return _reducedMeleeDamage;
-			}
-			set
-			{
-				if (_reducedMeleeDamage == value)
-				{
-					return;
-				}
-				_reducedMeleeDamage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reducedMeleeDamage);
+			set => SetProperty(ref _reducedMeleeDamage, value);
 		}
 
 		public WeakspotRecordData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

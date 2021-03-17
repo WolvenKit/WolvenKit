@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("command")] 
 		public CHandle<AIArgumentMapping> Command
 		{
-			get
-			{
-				if (_command == null)
-				{
-					_command = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "command", cr2w, this);
-				}
-				return _command;
-			}
-			set
-			{
-				if (_command == value)
-				{
-					return;
-				}
-				_command = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _command);
+			set => SetProperty(ref _command, value);
 		}
 
 		public AIbehaviorActionTreeNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

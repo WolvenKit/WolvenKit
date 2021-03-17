@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("expValue")] 
 		public CInt32 ExpValue
 		{
-			get
-			{
-				if (_expValue == null)
-				{
-					_expValue = (CInt32) CR2WTypeManager.Create("Int32", "expValue", cr2w, this);
-				}
-				return _expValue;
-			}
-			set
-			{
-				if (_expValue == value)
-				{
-					return;
-				}
-				_expValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _expValue);
+			set => SetProperty(ref _expValue, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("expProgress")] 
 		public CFloat ExpProgress
 		{
-			get
-			{
-				if (_expProgress == null)
-				{
-					_expProgress = (CFloat) CR2WTypeManager.Create("Float", "expProgress", cr2w, this);
-				}
-				return _expProgress;
-			}
-			set
-			{
-				if (_expProgress == value)
-				{
-					return;
-				}
-				_expProgress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _expProgress);
+			set => SetProperty(ref _expProgress, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("delta")] 
 		public CInt32 Delta
 		{
-			get
-			{
-				if (_delta == null)
-				{
-					_delta = (CInt32) CR2WTypeManager.Create("Int32", "delta", cr2w, this);
-				}
-				return _delta;
-			}
-			set
-			{
-				if (_delta == value)
-				{
-					return;
-				}
-				_delta = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delta);
+			set => SetProperty(ref _delta, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("notificationColorTheme")] 
 		public CName NotificationColorTheme
 		{
-			get
-			{
-				if (_notificationColorTheme == null)
-				{
-					_notificationColorTheme = (CName) CR2WTypeManager.Create("CName", "notificationColorTheme", cr2w, this);
-				}
-				return _notificationColorTheme;
-			}
-			set
-			{
-				if (_notificationColorTheme == value)
-				{
-					return;
-				}
-				_notificationColorTheme = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _notificationColorTheme);
+			set => SetProperty(ref _notificationColorTheme, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("canBeMerged")] 
 		public CBool CanBeMerged
 		{
-			get
-			{
-				if (_canBeMerged == null)
-				{
-					_canBeMerged = (CBool) CR2WTypeManager.Create("Bool", "canBeMerged", cr2w, this);
-				}
-				return _canBeMerged;
-			}
-			set
-			{
-				if (_canBeMerged == value)
-				{
-					return;
-				}
-				_canBeMerged = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _canBeMerged);
+			set => SetProperty(ref _canBeMerged, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("currentLevel")] 
 		public CInt32 CurrentLevel
 		{
-			get
-			{
-				if (_currentLevel == null)
-				{
-					_currentLevel = (CInt32) CR2WTypeManager.Create("Int32", "currentLevel", cr2w, this);
-				}
-				return _currentLevel;
-			}
-			set
-			{
-				if (_currentLevel == value)
-				{
-					return;
-				}
-				_currentLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentLevel);
+			set => SetProperty(ref _currentLevel, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("isLevelMaxed")] 
 		public CBool IsLevelMaxed
 		{
-			get
-			{
-				if (_isLevelMaxed == null)
-				{
-					_isLevelMaxed = (CBool) CR2WTypeManager.Create("Bool", "isLevelMaxed", cr2w, this);
-				}
-				return _isLevelMaxed;
-			}
-			set
-			{
-				if (_isLevelMaxed == value)
-				{
-					return;
-				}
-				_isLevelMaxed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isLevelMaxed);
+			set => SetProperty(ref _isLevelMaxed, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("type")] 
 		public CEnum<gamedataProficiencyType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<gamedataProficiencyType>) CR2WTypeManager.Create("gamedataProficiencyType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		public gameuiProgressionViewData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

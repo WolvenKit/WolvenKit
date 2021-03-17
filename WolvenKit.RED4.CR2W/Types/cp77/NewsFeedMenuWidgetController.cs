@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bannersListWidgetPath")] 
 		public CName BannersListWidgetPath
 		{
-			get
-			{
-				if (_bannersListWidgetPath == null)
-				{
-					_bannersListWidgetPath = (CName) CR2WTypeManager.Create("CName", "bannersListWidgetPath", cr2w, this);
-				}
-				return _bannersListWidgetPath;
-			}
-			set
-			{
-				if (_bannersListWidgetPath == value)
-				{
-					return;
-				}
-				_bannersListWidgetPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bannersListWidgetPath);
+			set => SetProperty(ref _bannersListWidgetPath, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("bannersListWidget")] 
 		public inkWidgetReference BannersListWidget
 		{
-			get
-			{
-				if (_bannersListWidget == null)
-				{
-					_bannersListWidget = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "bannersListWidget", cr2w, this);
-				}
-				return _bannersListWidget;
-			}
-			set
-			{
-				if (_bannersListWidget == value)
-				{
-					return;
-				}
-				_bannersListWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bannersListWidget);
+			set => SetProperty(ref _bannersListWidget, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isInitialized")] 
 		public CBool IsInitialized
 		{
-			get
-			{
-				if (_isInitialized == null)
-				{
-					_isInitialized = (CBool) CR2WTypeManager.Create("Bool", "isInitialized", cr2w, this);
-				}
-				return _isInitialized;
-			}
-			set
-			{
-				if (_isInitialized == value)
-				{
-					return;
-				}
-				_isInitialized = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInitialized);
+			set => SetProperty(ref _isInitialized, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("bannerWidgetsData")] 
 		public CArray<SBannerWidgetPackage> BannerWidgetsData
 		{
-			get
-			{
-				if (_bannerWidgetsData == null)
-				{
-					_bannerWidgetsData = (CArray<SBannerWidgetPackage>) CR2WTypeManager.Create("array:SBannerWidgetPackage", "bannerWidgetsData", cr2w, this);
-				}
-				return _bannerWidgetsData;
-			}
-			set
-			{
-				if (_bannerWidgetsData == value)
-				{
-					return;
-				}
-				_bannerWidgetsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bannerWidgetsData);
+			set => SetProperty(ref _bannerWidgetsData, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("fullBannerWidgetData")] 
 		public SBannerWidgetPackage FullBannerWidgetData
 		{
-			get
-			{
-				if (_fullBannerWidgetData == null)
-				{
-					_fullBannerWidgetData = (SBannerWidgetPackage) CR2WTypeManager.Create("SBannerWidgetPackage", "fullBannerWidgetData", cr2w, this);
-				}
-				return _fullBannerWidgetData;
-			}
-			set
-			{
-				if (_fullBannerWidgetData == value)
-				{
-					return;
-				}
-				_fullBannerWidgetData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fullBannerWidgetData);
+			set => SetProperty(ref _fullBannerWidgetData, value);
 		}
 
 		public NewsFeedMenuWidgetController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

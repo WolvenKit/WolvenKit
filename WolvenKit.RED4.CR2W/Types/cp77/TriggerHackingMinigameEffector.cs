@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("listener")] 
 		public CUInt32 Listener
 		{
-			get
-			{
-				if (_listener == null)
-				{
-					_listener = (CUInt32) CR2WTypeManager.Create("Uint32", "listener", cr2w, this);
-				}
-				return _listener;
-			}
-			set
-			{
-				if (_listener == value)
-				{
-					return;
-				}
-				_listener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _listener);
+			set => SetProperty(ref _listener, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("item")] 
 		public gameItemID Item
 		{
-			get
-			{
-				if (_item == null)
-				{
-					_item = (gameItemID) CR2WTypeManager.Create("gameItemID", "item", cr2w, this);
-				}
-				return _item;
-			}
-			set
-			{
-				if (_item == value)
-				{
-					return;
-				}
-				_item = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _item);
+			set => SetProperty(ref _item, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("reward")] 
 		public TweakDBID Reward
 		{
-			get
-			{
-				if (_reward == null)
-				{
-					_reward = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "reward", cr2w, this);
-				}
-				return _reward;
-			}
-			set
-			{
-				if (_reward == value)
-				{
-					return;
-				}
-				_reward = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reward);
+			set => SetProperty(ref _reward, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("journalEntry")] 
 		public CString JournalEntry
 		{
-			get
-			{
-				if (_journalEntry == null)
-				{
-					_journalEntry = (CString) CR2WTypeManager.Create("String", "journalEntry", cr2w, this);
-				}
-				return _journalEntry;
-			}
-			set
-			{
-				if (_journalEntry == value)
-				{
-					return;
-				}
-				_journalEntry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _journalEntry);
+			set => SetProperty(ref _journalEntry, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("fact")] 
 		public CName Fact
 		{
-			get
-			{
-				if (_fact == null)
-				{
-					_fact = (CName) CR2WTypeManager.Create("CName", "fact", cr2w, this);
-				}
-				return _fact;
-			}
-			set
-			{
-				if (_fact == value)
-				{
-					return;
-				}
-				_fact = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fact);
+			set => SetProperty(ref _fact, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("factValue")] 
 		public CInt32 FactValue
 		{
-			get
-			{
-				if (_factValue == null)
-				{
-					_factValue = (CInt32) CR2WTypeManager.Create("Int32", "factValue", cr2w, this);
-				}
-				return _factValue;
-			}
-			set
-			{
-				if (_factValue == value)
-				{
-					return;
-				}
-				_factValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factValue);
+			set => SetProperty(ref _factValue, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("showPopup")] 
 		public CBool ShowPopup
 		{
-			get
-			{
-				if (_showPopup == null)
-				{
-					_showPopup = (CBool) CR2WTypeManager.Create("Bool", "showPopup", cr2w, this);
-				}
-				return _showPopup;
-			}
-			set
-			{
-				if (_showPopup == value)
-				{
-					return;
-				}
-				_showPopup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showPopup);
+			set => SetProperty(ref _showPopup, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("returnToJournal")] 
 		public CBool ReturnToJournal
 		{
-			get
-			{
-				if (_returnToJournal == null)
-				{
-					_returnToJournal = (CBool) CR2WTypeManager.Create("Bool", "returnToJournal", cr2w, this);
-				}
-				return _returnToJournal;
-			}
-			set
-			{
-				if (_returnToJournal == value)
-				{
-					return;
-				}
-				_returnToJournal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _returnToJournal);
+			set => SetProperty(ref _returnToJournal, value);
 		}
 
 		public TriggerHackingMinigameEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

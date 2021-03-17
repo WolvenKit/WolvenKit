@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("node")] 
 		public CHandle<gamedataValueNode> Node
 		{
-			get
-			{
-				if (_node == null)
-				{
-					_node = (CHandle<gamedataValueNode>) CR2WTypeManager.Create("handle:gamedataValueNode", "node", cr2w, this);
-				}
-				return _node;
-			}
-			set
-			{
-				if (_node == value)
-				{
-					return;
-				}
-				_node = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _node);
+			set => SetProperty(ref _node, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("deriveInfo")] 
 		public CEnum<gamedataVariableNodeVariableValueDeriveInfo> DeriveInfo
 		{
-			get
-			{
-				if (_deriveInfo == null)
-				{
-					_deriveInfo = (CEnum<gamedataVariableNodeVariableValueDeriveInfo>) CR2WTypeManager.Create("gamedataVariableNodeVariableValueDeriveInfo", "deriveInfo", cr2w, this);
-				}
-				return _deriveInfo;
-			}
-			set
-			{
-				if (_deriveInfo == value)
-				{
-					return;
-				}
-				_deriveInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deriveInfo);
+			set => SetProperty(ref _deriveInfo, value);
 		}
 
 		public gamedataVariableNodeVariableValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

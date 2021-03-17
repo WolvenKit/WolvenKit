@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("root")] 
 		public CHandle<AIbehaviorTreeNodeDefinition> Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (CHandle<AIbehaviorTreeNodeDefinition>) CR2WTypeManager.Create("handle:AIbehaviorTreeNodeDefinition", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("arguments")] 
 		public AITreeArgumentsDefinition Arguments
 		{
-			get
-			{
-				if (_arguments == null)
-				{
-					_arguments = (AITreeArgumentsDefinition) CR2WTypeManager.Create("AITreeArgumentsDefinition", "arguments", cr2w, this);
-				}
-				return _arguments;
-			}
-			set
-			{
-				if (_arguments == value)
-				{
-					return;
-				}
-				_arguments = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _arguments);
+			set => SetProperty(ref _arguments, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("delegate")] 
 		public CHandle<AIbehaviorBehaviorDelegate> Delegate
 		{
-			get
-			{
-				if (_delegate == null)
-				{
-					_delegate = (CHandle<AIbehaviorBehaviorDelegate>) CR2WTypeManager.Create("handle:AIbehaviorBehaviorDelegate", "delegate", cr2w, this);
-				}
-				return _delegate;
-			}
-			set
-			{
-				if (_delegate == value)
-				{
-					return;
-				}
-				_delegate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delegate);
+			set => SetProperty(ref _delegate, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("initializationEvents")] 
 		public CArray<CName> InitializationEvents
 		{
-			get
-			{
-				if (_initializationEvents == null)
-				{
-					_initializationEvents = (CArray<CName>) CR2WTypeManager.Create("array:CName", "initializationEvents", cr2w, this);
-				}
-				return _initializationEvents;
-			}
-			set
-			{
-				if (_initializationEvents == value)
-				{
-					return;
-				}
-				_initializationEvents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initializationEvents);
+			set => SetProperty(ref _initializationEvents, value);
 		}
 
 		public AIbehaviorResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

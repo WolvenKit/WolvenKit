@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("scannerData")] 
 		public scannerDataStructure ScannerData
 		{
-			get
-			{
-				if (_scannerData == null)
-				{
-					_scannerData = (scannerDataStructure) CR2WTypeManager.Create("scannerDataStructure", "scannerData", cr2w, this);
-				}
-				return _scannerData;
-			}
-			set
-			{
-				if (_scannerData == value)
-				{
-					return;
-				}
-				_scannerData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerData);
+			set => SetProperty(ref _scannerData, value);
 		}
 
 		public GameObjectScanStats(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

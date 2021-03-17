@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("NPCHit")] 
 		public gamebbScriptID_Bool NPCHit
 		{
-			get
-			{
-				if (_nPCHit == null)
-				{
-					_nPCHit = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "NPCHit", cr2w, this);
-				}
-				return _nPCHit;
-			}
-			set
-			{
-				if (_nPCHit == value)
-				{
-					return;
-				}
-				_nPCHit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nPCHit);
+			set => SetProperty(ref _nPCHit, value);
 		}
 
 		public QuickMeleeDataDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

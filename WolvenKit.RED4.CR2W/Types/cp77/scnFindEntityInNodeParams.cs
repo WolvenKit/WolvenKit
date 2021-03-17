@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get
-			{
-				if (_nodeRef == null)
-				{
-					_nodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "nodeRef", cr2w, this);
-				}
-				return _nodeRef;
-			}
-			set
-			{
-				if (_nodeRef == value)
-				{
-					return;
-				}
-				_nodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeRef);
+			set => SetProperty(ref _nodeRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("forceMaxVisibility")] 
 		public CBool ForceMaxVisibility
 		{
-			get
-			{
-				if (_forceMaxVisibility == null)
-				{
-					_forceMaxVisibility = (CBool) CR2WTypeManager.Create("Bool", "forceMaxVisibility", cr2w, this);
-				}
-				return _forceMaxVisibility;
-			}
-			set
-			{
-				if (_forceMaxVisibility == value)
-				{
-					return;
-				}
-				_forceMaxVisibility = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceMaxVisibility);
+			set => SetProperty(ref _forceMaxVisibility, value);
 		}
 
 		public scnFindEntityInNodeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

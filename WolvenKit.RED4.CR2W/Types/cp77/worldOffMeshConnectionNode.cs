@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isBidirectional")] 
 		public CBool IsBidirectional
 		{
-			get
-			{
-				if (_isBidirectional == null)
-				{
-					_isBidirectional = (CBool) CR2WTypeManager.Create("Bool", "isBidirectional", cr2w, this);
-				}
-				return _isBidirectional;
-			}
-			set
-			{
-				if (_isBidirectional == value)
-				{
-					return;
-				}
-				_isBidirectional = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isBidirectional);
+			set => SetProperty(ref _isBidirectional, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get
-			{
-				if (_radius == null)
-				{
-					_radius = (CFloat) CR2WTypeManager.Create("Float", "radius", cr2w, this);
-				}
-				return _radius;
-			}
-			set
-			{
-				if (_radius == value)
-				{
-					return;
-				}
-				_radius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radius);
+			set => SetProperty(ref _radius, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("type")] 
 		public CEnum<worldOffMeshConnectionType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<worldOffMeshConnectionType>) CR2WTypeManager.Create("worldOffMeshConnectionType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("tags")] 
 		public CArray<CName> Tags
 		{
-			get
-			{
-				if (_tags == null)
-				{
-					_tags = (CArray<CName>) CR2WTypeManager.Create("array:CName", "tags", cr2w, this);
-				}
-				return _tags;
-			}
-			set
-			{
-				if (_tags == value)
-				{
-					return;
-				}
-				_tags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tags);
+			set => SetProperty(ref _tags, value);
 		}
 
 		public worldOffMeshConnectionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

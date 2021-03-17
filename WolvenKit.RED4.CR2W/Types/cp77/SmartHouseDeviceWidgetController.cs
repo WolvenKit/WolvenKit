@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("interiorManagerSlot")] 
 		public wCHandle<inkWidget> InteriorManagerSlot
 		{
-			get
-			{
-				if (_interiorManagerSlot == null)
-				{
-					_interiorManagerSlot = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "interiorManagerSlot", cr2w, this);
-				}
-				return _interiorManagerSlot;
-			}
-			set
-			{
-				if (_interiorManagerSlot == value)
-				{
-					return;
-				}
-				_interiorManagerSlot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interiorManagerSlot);
+			set => SetProperty(ref _interiorManagerSlot, value);
 		}
 
 		public SmartHouseDeviceWidgetController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

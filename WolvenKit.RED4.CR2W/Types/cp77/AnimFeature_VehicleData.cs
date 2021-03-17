@@ -27,345 +27,120 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isInVehicle")] 
 		public CBool IsInVehicle
 		{
-			get
-			{
-				if (_isInVehicle == null)
-				{
-					_isInVehicle = (CBool) CR2WTypeManager.Create("Bool", "isInVehicle", cr2w, this);
-				}
-				return _isInVehicle;
-			}
-			set
-			{
-				if (_isInVehicle == value)
-				{
-					return;
-				}
-				_isInVehicle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInVehicle);
+			set => SetProperty(ref _isInVehicle, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isDriver")] 
 		public CBool IsDriver
 		{
-			get
-			{
-				if (_isDriver == null)
-				{
-					_isDriver = (CBool) CR2WTypeManager.Create("Bool", "isDriver", cr2w, this);
-				}
-				return _isDriver;
-			}
-			set
-			{
-				if (_isDriver == value)
-				{
-					return;
-				}
-				_isDriver = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDriver);
+			set => SetProperty(ref _isDriver, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("vehType")] 
 		public CInt32 VehType
 		{
-			get
-			{
-				if (_vehType == null)
-				{
-					_vehType = (CInt32) CR2WTypeManager.Create("Int32", "vehType", cr2w, this);
-				}
-				return _vehType;
-			}
-			set
-			{
-				if (_vehType == value)
-				{
-					return;
-				}
-				_vehType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehType);
+			set => SetProperty(ref _vehType, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("vehSlot")] 
 		public CInt32 VehSlot
 		{
-			get
-			{
-				if (_vehSlot == null)
-				{
-					_vehSlot = (CInt32) CR2WTypeManager.Create("Int32", "vehSlot", cr2w, this);
-				}
-				return _vehSlot;
-			}
-			set
-			{
-				if (_vehSlot == value)
-				{
-					return;
-				}
-				_vehSlot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehSlot);
+			set => SetProperty(ref _vehSlot, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isInCombat")] 
 		public CBool IsInCombat
 		{
-			get
-			{
-				if (_isInCombat == null)
-				{
-					_isInCombat = (CBool) CR2WTypeManager.Create("Bool", "isInCombat", cr2w, this);
-				}
-				return _isInCombat;
-			}
-			set
-			{
-				if (_isInCombat == value)
-				{
-					return;
-				}
-				_isInCombat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInCombat);
+			set => SetProperty(ref _isInCombat, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isInWindowCombat")] 
 		public CBool IsInWindowCombat
 		{
-			get
-			{
-				if (_isInWindowCombat == null)
-				{
-					_isInWindowCombat = (CBool) CR2WTypeManager.Create("Bool", "isInWindowCombat", cr2w, this);
-				}
-				return _isInWindowCombat;
-			}
-			set
-			{
-				if (_isInWindowCombat == value)
-				{
-					return;
-				}
-				_isInWindowCombat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInWindowCombat);
+			set => SetProperty(ref _isInWindowCombat, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isInDriverCombat")] 
 		public CBool IsInDriverCombat
 		{
-			get
-			{
-				if (_isInDriverCombat == null)
-				{
-					_isInDriverCombat = (CBool) CR2WTypeManager.Create("Bool", "isInDriverCombat", cr2w, this);
-				}
-				return _isInDriverCombat;
-			}
-			set
-			{
-				if (_isInDriverCombat == value)
-				{
-					return;
-				}
-				_isInDriverCombat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInDriverCombat);
+			set => SetProperty(ref _isInDriverCombat, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("vehClass")] 
 		public CInt32 VehClass
 		{
-			get
-			{
-				if (_vehClass == null)
-				{
-					_vehClass = (CInt32) CR2WTypeManager.Create("Int32", "vehClass", cr2w, this);
-				}
-				return _vehClass;
-			}
-			set
-			{
-				if (_vehClass == value)
-				{
-					return;
-				}
-				_vehClass = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehClass);
+			set => SetProperty(ref _vehClass, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isEnteringCombat")] 
 		public CBool IsEnteringCombat
 		{
-			get
-			{
-				if (_isEnteringCombat == null)
-				{
-					_isEnteringCombat = (CBool) CR2WTypeManager.Create("Bool", "isEnteringCombat", cr2w, this);
-				}
-				return _isEnteringCombat;
-			}
-			set
-			{
-				if (_isEnteringCombat == value)
-				{
-					return;
-				}
-				_isEnteringCombat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnteringCombat);
+			set => SetProperty(ref _isEnteringCombat, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("enteringCombatDuration")] 
 		public CFloat EnteringCombatDuration
 		{
-			get
-			{
-				if (_enteringCombatDuration == null)
-				{
-					_enteringCombatDuration = (CFloat) CR2WTypeManager.Create("Float", "enteringCombatDuration", cr2w, this);
-				}
-				return _enteringCombatDuration;
-			}
-			set
-			{
-				if (_enteringCombatDuration == value)
-				{
-					return;
-				}
-				_enteringCombatDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enteringCombatDuration);
+			set => SetProperty(ref _enteringCombatDuration, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("isExitingCombat")] 
 		public CBool IsExitingCombat
 		{
-			get
-			{
-				if (_isExitingCombat == null)
-				{
-					_isExitingCombat = (CBool) CR2WTypeManager.Create("Bool", "isExitingCombat", cr2w, this);
-				}
-				return _isExitingCombat;
-			}
-			set
-			{
-				if (_isExitingCombat == value)
-				{
-					return;
-				}
-				_isExitingCombat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isExitingCombat);
+			set => SetProperty(ref _isExitingCombat, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("exitingCombatDuration")] 
 		public CFloat ExitingCombatDuration
 		{
-			get
-			{
-				if (_exitingCombatDuration == null)
-				{
-					_exitingCombatDuration = (CFloat) CR2WTypeManager.Create("Float", "exitingCombatDuration", cr2w, this);
-				}
-				return _exitingCombatDuration;
-			}
-			set
-			{
-				if (_exitingCombatDuration == value)
-				{
-					return;
-				}
-				_exitingCombatDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitingCombatDuration);
+			set => SetProperty(ref _exitingCombatDuration, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("isEnteringVehicle")] 
 		public CBool IsEnteringVehicle
 		{
-			get
-			{
-				if (_isEnteringVehicle == null)
-				{
-					_isEnteringVehicle = (CBool) CR2WTypeManager.Create("Bool", "isEnteringVehicle", cr2w, this);
-				}
-				return _isEnteringVehicle;
-			}
-			set
-			{
-				if (_isEnteringVehicle == value)
-				{
-					return;
-				}
-				_isEnteringVehicle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnteringVehicle);
+			set => SetProperty(ref _isEnteringVehicle, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("isExitingVehicle")] 
 		public CBool IsExitingVehicle
 		{
-			get
-			{
-				if (_isExitingVehicle == null)
-				{
-					_isExitingVehicle = (CBool) CR2WTypeManager.Create("Bool", "isExitingVehicle", cr2w, this);
-				}
-				return _isExitingVehicle;
-			}
-			set
-			{
-				if (_isExitingVehicle == value)
-				{
-					return;
-				}
-				_isExitingVehicle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isExitingVehicle);
+			set => SetProperty(ref _isExitingVehicle, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("isWorldRenderPlane")] 
 		public CBool IsWorldRenderPlane
 		{
-			get
-			{
-				if (_isWorldRenderPlane == null)
-				{
-					_isWorldRenderPlane = (CBool) CR2WTypeManager.Create("Bool", "isWorldRenderPlane", cr2w, this);
-				}
-				return _isWorldRenderPlane;
-			}
-			set
-			{
-				if (_isWorldRenderPlane == value)
-				{
-					return;
-				}
-				_isWorldRenderPlane = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isWorldRenderPlane);
+			set => SetProperty(ref _isWorldRenderPlane, value);
 		}
 
 		public AnimFeature_VehicleData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

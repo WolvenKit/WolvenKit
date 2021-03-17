@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("outPosition")] 
 		public CHandle<AIArgumentMapping> OutPosition
 		{
-			get
-			{
-				if (_outPosition == null)
-				{
-					_outPosition = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outPosition", cr2w, this);
-				}
-				return _outPosition;
-			}
-			set
-			{
-				if (_outPosition == value)
-				{
-					return;
-				}
-				_outPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outPosition);
+			set => SetProperty(ref _outPosition, value);
 		}
 
 		public GetOwnPosition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

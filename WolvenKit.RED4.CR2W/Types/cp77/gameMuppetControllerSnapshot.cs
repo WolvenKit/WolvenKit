@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("controllerId")] 
 		public CName ControllerId
 		{
-			get
-			{
-				if (_controllerId == null)
-				{
-					_controllerId = (CName) CR2WTypeManager.Create("CName", "controllerId", cr2w, this);
-				}
-				return _controllerId;
-			}
-			set
-			{
-				if (_controllerId == value)
-				{
-					return;
-				}
-				_controllerId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _controllerId);
+			set => SetProperty(ref _controllerId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		public gameMuppetControllerSnapshot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

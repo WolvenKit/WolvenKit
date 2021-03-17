@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("presetID")] 
 		public TweakDBID PresetID
 		{
-			get
-			{
-				if (_presetID == null)
-				{
-					_presetID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "presetID", cr2w, this);
-				}
-				return _presetID;
-			}
-			set
-			{
-				if (_presetID == value)
-				{
-					return;
-				}
-				_presetID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _presetID);
+			set => SetProperty(ref _presetID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get
-			{
-				if (_puppetRef == null)
-				{
-					_puppetRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "puppetRef", cr2w, this);
-				}
-				return _puppetRef;
-			}
-			set
-			{
-				if (_puppetRef == value)
-				{
-					return;
-				}
-				_puppetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppetRef);
+			set => SetProperty(ref _puppetRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("squadType")] 
 		public CEnum<AISquadType> SquadType
 		{
-			get
-			{
-				if (_squadType == null)
-				{
-					_squadType = (CEnum<AISquadType>) CR2WTypeManager.Create("AISquadType", "squadType", cr2w, this);
-				}
-				return _squadType;
-			}
-			set
-			{
-				if (_squadType == value)
-				{
-					return;
-				}
-				_squadType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _squadType);
+			set => SetProperty(ref _squadType, value);
 		}
 
 		public questCharacterManagerCombat_AssignSquad(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

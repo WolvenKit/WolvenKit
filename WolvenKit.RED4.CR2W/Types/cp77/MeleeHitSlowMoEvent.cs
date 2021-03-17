@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isStrongAttack")] 
 		public CBool IsStrongAttack
 		{
-			get
-			{
-				if (_isStrongAttack == null)
-				{
-					_isStrongAttack = (CBool) CR2WTypeManager.Create("Bool", "isStrongAttack", cr2w, this);
-				}
-				return _isStrongAttack;
-			}
-			set
-			{
-				if (_isStrongAttack == value)
-				{
-					return;
-				}
-				_isStrongAttack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isStrongAttack);
+			set => SetProperty(ref _isStrongAttack, value);
 		}
 
 		public MeleeHitSlowMoEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

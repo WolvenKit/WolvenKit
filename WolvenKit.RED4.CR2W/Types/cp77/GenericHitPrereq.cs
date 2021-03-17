@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isSync")] 
 		public CBool IsSync
 		{
-			get
-			{
-				if (_isSync == null)
-				{
-					_isSync = (CBool) CR2WTypeManager.Create("Bool", "isSync", cr2w, this);
-				}
-				return _isSync;
-			}
-			set
-			{
-				if (_isSync == value)
-				{
-					return;
-				}
-				_isSync = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isSync);
+			set => SetProperty(ref _isSync, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("callbackType")] 
 		public CEnum<gameDamageCallbackType> CallbackType
 		{
-			get
-			{
-				if (_callbackType == null)
-				{
-					_callbackType = (CEnum<gameDamageCallbackType>) CR2WTypeManager.Create("gameDamageCallbackType", "callbackType", cr2w, this);
-				}
-				return _callbackType;
-			}
-			set
-			{
-				if (_callbackType == value)
-				{
-					return;
-				}
-				_callbackType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callbackType);
+			set => SetProperty(ref _callbackType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("pipelineStage")] 
 		public CEnum<gameDamagePipelineStage> PipelineStage
 		{
-			get
-			{
-				if (_pipelineStage == null)
-				{
-					_pipelineStage = (CEnum<gameDamagePipelineStage>) CR2WTypeManager.Create("gameDamagePipelineStage", "pipelineStage", cr2w, this);
-				}
-				return _pipelineStage;
-			}
-			set
-			{
-				if (_pipelineStage == value)
-				{
-					return;
-				}
-				_pipelineStage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pipelineStage);
+			set => SetProperty(ref _pipelineStage, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("attackType")] 
 		public CEnum<gamedataAttackType> AttackType
 		{
-			get
-			{
-				if (_attackType == null)
-				{
-					_attackType = (CEnum<gamedataAttackType>) CR2WTypeManager.Create("gamedataAttackType", "attackType", cr2w, this);
-				}
-				return _attackType;
-			}
-			set
-			{
-				if (_attackType == value)
-				{
-					return;
-				}
-				_attackType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackType);
+			set => SetProperty(ref _attackType, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("conditions")] 
 		public CArray<CHandle<BaseHitPrereqCondition>> Conditions
 		{
-			get
-			{
-				if (_conditions == null)
-				{
-					_conditions = (CArray<CHandle<BaseHitPrereqCondition>>) CR2WTypeManager.Create("array:handle:BaseHitPrereqCondition", "conditions", cr2w, this);
-				}
-				return _conditions;
-			}
-			set
-			{
-				if (_conditions == value)
-				{
-					return;
-				}
-				_conditions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _conditions);
+			set => SetProperty(ref _conditions, value);
 		}
 
 		public GenericHitPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

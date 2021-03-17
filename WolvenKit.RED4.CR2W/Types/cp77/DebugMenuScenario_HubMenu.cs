@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("defaultMenu")] 
 		public CName DefaultMenu
 		{
-			get
-			{
-				if (_defaultMenu == null)
-				{
-					_defaultMenu = (CName) CR2WTypeManager.Create("CName", "defaultMenu", cr2w, this);
-				}
-				return _defaultMenu;
-			}
-			set
-			{
-				if (_defaultMenu == value)
-				{
-					return;
-				}
-				_defaultMenu = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultMenu);
+			set => SetProperty(ref _defaultMenu, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("cpoDefaultMenu")] 
 		public CName CpoDefaultMenu
 		{
-			get
-			{
-				if (_cpoDefaultMenu == null)
-				{
-					_cpoDefaultMenu = (CName) CR2WTypeManager.Create("CName", "cpoDefaultMenu", cr2w, this);
-				}
-				return _cpoDefaultMenu;
-			}
-			set
-			{
-				if (_cpoDefaultMenu == value)
-				{
-					return;
-				}
-				_cpoDefaultMenu = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cpoDefaultMenu);
+			set => SetProperty(ref _cpoDefaultMenu, value);
 		}
 
 		public DebugMenuScenario_HubMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

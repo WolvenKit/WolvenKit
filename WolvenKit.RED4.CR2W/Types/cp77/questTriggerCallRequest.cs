@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("caller")] 
 		public CName Caller
 		{
-			get
-			{
-				if (_caller == null)
-				{
-					_caller = (CName) CR2WTypeManager.Create("CName", "caller", cr2w, this);
-				}
-				return _caller;
-			}
-			set
-			{
-				if (_caller == value)
-				{
-					return;
-				}
-				_caller = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _caller);
+			set => SetProperty(ref _caller, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("addressee")] 
 		public CName Addressee
 		{
-			get
-			{
-				if (_addressee == null)
-				{
-					_addressee = (CName) CR2WTypeManager.Create("CName", "addressee", cr2w, this);
-				}
-				return _addressee;
-			}
-			set
-			{
-				if (_addressee == value)
-				{
-					return;
-				}
-				_addressee = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addressee);
+			set => SetProperty(ref _addressee, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("callPhase")] 
 		public CEnum<questPhoneCallPhase> CallPhase
 		{
-			get
-			{
-				if (_callPhase == null)
-				{
-					_callPhase = (CEnum<questPhoneCallPhase>) CR2WTypeManager.Create("questPhoneCallPhase", "callPhase", cr2w, this);
-				}
-				return _callPhase;
-			}
-			set
-			{
-				if (_callPhase == value)
-				{
-					return;
-				}
-				_callPhase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callPhase);
+			set => SetProperty(ref _callPhase, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("callMode")] 
 		public CEnum<questPhoneCallMode> CallMode
 		{
-			get
-			{
-				if (_callMode == null)
-				{
-					_callMode = (CEnum<questPhoneCallMode>) CR2WTypeManager.Create("questPhoneCallMode", "callMode", cr2w, this);
-				}
-				return _callMode;
-			}
-			set
-			{
-				if (_callMode == value)
-				{
-					return;
-				}
-				_callMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _callMode);
+			set => SetProperty(ref _callMode, value);
 		}
 
 		public questTriggerCallRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

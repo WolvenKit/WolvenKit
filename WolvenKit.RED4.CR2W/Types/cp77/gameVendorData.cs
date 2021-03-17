@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vendorId")] 
 		public CString VendorId
 		{
-			get
-			{
-				if (_vendorId == null)
-				{
-					_vendorId = (CString) CR2WTypeManager.Create("String", "vendorId", cr2w, this);
-				}
-				return _vendorId;
-			}
-			set
-			{
-				if (_vendorId == value)
-				{
-					return;
-				}
-				_vendorId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vendorId);
+			set => SetProperty(ref _vendorId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entityID")] 
 		public entEntityID EntityID
 		{
-			get
-			{
-				if (_entityID == null)
-				{
-					_entityID = (entEntityID) CR2WTypeManager.Create("entEntityID", "entityID", cr2w, this);
-				}
-				return _entityID;
-			}
-			set
-			{
-				if (_entityID == value)
-				{
-					return;
-				}
-				_entityID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityID);
+			set => SetProperty(ref _entityID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		public gameVendorData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

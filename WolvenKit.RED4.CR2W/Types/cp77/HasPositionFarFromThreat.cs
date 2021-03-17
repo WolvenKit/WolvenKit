@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("desiredDistance")] 
 		public CFloat DesiredDistance
 		{
-			get
-			{
-				if (_desiredDistance == null)
-				{
-					_desiredDistance = (CFloat) CR2WTypeManager.Create("Float", "desiredDistance", cr2w, this);
-				}
-				return _desiredDistance;
-			}
-			set
-			{
-				if (_desiredDistance == value)
-				{
-					return;
-				}
-				_desiredDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _desiredDistance);
+			set => SetProperty(ref _desiredDistance, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("minDistance")] 
 		public CFloat MinDistance
 		{
-			get
-			{
-				if (_minDistance == null)
-				{
-					_minDistance = (CFloat) CR2WTypeManager.Create("Float", "minDistance", cr2w, this);
-				}
-				return _minDistance;
-			}
-			set
-			{
-				if (_minDistance == value)
-				{
-					return;
-				}
-				_minDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minDistance);
+			set => SetProperty(ref _minDistance, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("minPathLength")] 
 		public CFloat MinPathLength
 		{
-			get
-			{
-				if (_minPathLength == null)
-				{
-					_minPathLength = (CFloat) CR2WTypeManager.Create("Float", "minPathLength", cr2w, this);
-				}
-				return _minPathLength;
-			}
-			set
-			{
-				if (_minPathLength == value)
-				{
-					return;
-				}
-				_minPathLength = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minPathLength);
+			set => SetProperty(ref _minPathLength, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("distanceFromTraffic")] 
 		public CFloat DistanceFromTraffic
 		{
-			get
-			{
-				if (_distanceFromTraffic == null)
-				{
-					_distanceFromTraffic = (CFloat) CR2WTypeManager.Create("Float", "distanceFromTraffic", cr2w, this);
-				}
-				return _distanceFromTraffic;
-			}
-			set
-			{
-				if (_distanceFromTraffic == value)
-				{
-					return;
-				}
-				_distanceFromTraffic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distanceFromTraffic);
+			set => SetProperty(ref _distanceFromTraffic, value);
 		}
 
 		public HasPositionFarFromThreat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

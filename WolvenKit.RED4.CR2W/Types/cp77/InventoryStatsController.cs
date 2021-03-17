@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("detailsButton")] 
 		public inkWidgetReference DetailsButton
 		{
-			get
-			{
-				if (_detailsButton == null)
-				{
-					_detailsButton = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "detailsButton", cr2w, this);
-				}
-				return _detailsButton;
-			}
-			set
-			{
-				if (_detailsButton == value)
-				{
-					return;
-				}
-				_detailsButton = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _detailsButton);
+			set => SetProperty(ref _detailsButton, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entryContainer")] 
 		public inkCompoundWidgetReference EntryContainer
 		{
-			get
-			{
-				if (_entryContainer == null)
-				{
-					_entryContainer = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "entryContainer", cr2w, this);
-				}
-				return _entryContainer;
-			}
-			set
-			{
-				if (_entryContainer == value)
-				{
-					return;
-				}
-				_entryContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryContainer);
+			set => SetProperty(ref _entryContainer, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("healthEntryController")] 
 		public wCHandle<InventoryStatsEntryController> HealthEntryController
 		{
-			get
-			{
-				if (_healthEntryController == null)
-				{
-					_healthEntryController = (wCHandle<InventoryStatsEntryController>) CR2WTypeManager.Create("whandle:InventoryStatsEntryController", "healthEntryController", cr2w, this);
-				}
-				return _healthEntryController;
-			}
-			set
-			{
-				if (_healthEntryController == value)
-				{
-					return;
-				}
-				_healthEntryController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _healthEntryController);
+			set => SetProperty(ref _healthEntryController, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("armorEntryController")] 
 		public wCHandle<InventoryStatsEntryController> ArmorEntryController
 		{
-			get
-			{
-				if (_armorEntryController == null)
-				{
-					_armorEntryController = (wCHandle<InventoryStatsEntryController>) CR2WTypeManager.Create("whandle:InventoryStatsEntryController", "armorEntryController", cr2w, this);
-				}
-				return _armorEntryController;
-			}
-			set
-			{
-				if (_armorEntryController == value)
-				{
-					return;
-				}
-				_armorEntryController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _armorEntryController);
+			set => SetProperty(ref _armorEntryController, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("staminaEntryController")] 
 		public wCHandle<InventoryStatsEntryController> StaminaEntryController
 		{
-			get
-			{
-				if (_staminaEntryController == null)
-				{
-					_staminaEntryController = (wCHandle<InventoryStatsEntryController>) CR2WTypeManager.Create("whandle:InventoryStatsEntryController", "staminaEntryController", cr2w, this);
-				}
-				return _staminaEntryController;
-			}
-			set
-			{
-				if (_staminaEntryController == value)
-				{
-					return;
-				}
-				_staminaEntryController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _staminaEntryController);
+			set => SetProperty(ref _staminaEntryController, value);
 		}
 
 		public InventoryStatsController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

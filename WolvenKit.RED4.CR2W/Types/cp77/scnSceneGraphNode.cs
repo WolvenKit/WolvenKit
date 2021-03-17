@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nodeId")] 
 		public scnNodeId NodeId
 		{
-			get
-			{
-				if (_nodeId == null)
-				{
-					_nodeId = (scnNodeId) CR2WTypeManager.Create("scnNodeId", "nodeId", cr2w, this);
-				}
-				return _nodeId;
-			}
-			set
-			{
-				if (_nodeId == value)
-				{
-					return;
-				}
-				_nodeId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeId);
+			set => SetProperty(ref _nodeId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ffStrategy")] 
 		public CEnum<scnFastForwardStrategy> FfStrategy
 		{
-			get
-			{
-				if (_ffStrategy == null)
-				{
-					_ffStrategy = (CEnum<scnFastForwardStrategy>) CR2WTypeManager.Create("scnFastForwardStrategy", "ffStrategy", cr2w, this);
-				}
-				return _ffStrategy;
-			}
-			set
-			{
-				if (_ffStrategy == value)
-				{
-					return;
-				}
-				_ffStrategy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ffStrategy);
+			set => SetProperty(ref _ffStrategy, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("outputSockets")] 
 		public CArray<scnOutputSocket> OutputSockets
 		{
-			get
-			{
-				if (_outputSockets == null)
-				{
-					_outputSockets = (CArray<scnOutputSocket>) CR2WTypeManager.Create("array:scnOutputSocket", "outputSockets", cr2w, this);
-				}
-				return _outputSockets;
-			}
-			set
-			{
-				if (_outputSockets == value)
-				{
-					return;
-				}
-				_outputSockets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outputSockets);
+			set => SetProperty(ref _outputSockets, value);
 		}
 
 		public scnSceneGraphNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

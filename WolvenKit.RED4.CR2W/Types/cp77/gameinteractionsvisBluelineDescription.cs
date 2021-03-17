@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("parts")] 
 		public CArray<CHandle<gameinteractionsvisBluelinePart>> Parts
 		{
-			get
-			{
-				if (_parts == null)
-				{
-					_parts = (CArray<CHandle<gameinteractionsvisBluelinePart>>) CR2WTypeManager.Create("array:handle:gameinteractionsvisBluelinePart", "parts", cr2w, this);
-				}
-				return _parts;
-			}
-			set
-			{
-				if (_parts == value)
-				{
-					return;
-				}
-				_parts = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parts);
+			set => SetProperty(ref _parts, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("logicOperator")] 
 		public CEnum<ELogicOperator> LogicOperator
 		{
-			get
-			{
-				if (_logicOperator == null)
-				{
-					_logicOperator = (CEnum<ELogicOperator>) CR2WTypeManager.Create("ELogicOperator", "logicOperator", cr2w, this);
-				}
-				return _logicOperator;
-			}
-			set
-			{
-				if (_logicOperator == value)
-				{
-					return;
-				}
-				_logicOperator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _logicOperator);
+			set => SetProperty(ref _logicOperator, value);
 		}
 
 		public gameinteractionsvisBluelineDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("LUT")] 
 		public rRef<CBitmapTexture> LUT
 		{
-			get
-			{
-				if (_lUT == null)
-				{
-					_lUT = (rRef<CBitmapTexture>) CR2WTypeManager.Create("rRef:CBitmapTexture", "LUT", cr2w, this);
-				}
-				return _lUT;
-			}
-			set
-			{
-				if (_lUT == value)
-				{
-					return;
-				}
-				_lUT = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lUT);
+			set => SetProperty(ref _lUT, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("inputMapping")] 
 		public CEnum<EColorMappingFunction> InputMapping
 		{
-			get
-			{
-				if (_inputMapping == null)
-				{
-					_inputMapping = (CEnum<EColorMappingFunction>) CR2WTypeManager.Create("EColorMappingFunction", "inputMapping", cr2w, this);
-				}
-				return _inputMapping;
-			}
-			set
-			{
-				if (_inputMapping == value)
-				{
-					return;
-				}
-				_inputMapping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputMapping);
+			set => SetProperty(ref _inputMapping, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("outputMapping")] 
 		public CEnum<EColorMappingFunction> OutputMapping
 		{
-			get
-			{
-				if (_outputMapping == null)
-				{
-					_outputMapping = (CEnum<EColorMappingFunction>) CR2WTypeManager.Create("EColorMappingFunction", "outputMapping", cr2w, this);
-				}
-				return _outputMapping;
-			}
-			set
-			{
-				if (_outputMapping == value)
-				{
-					return;
-				}
-				_outputMapping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outputMapping);
+			set => SetProperty(ref _outputMapping, value);
 		}
 
 		public ColorGradingLutParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

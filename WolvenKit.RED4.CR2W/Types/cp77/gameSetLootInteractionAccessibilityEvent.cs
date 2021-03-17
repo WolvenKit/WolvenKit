@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("accessible")] 
 		public CBool Accessible
 		{
-			get
-			{
-				if (_accessible == null)
-				{
-					_accessible = (CBool) CR2WTypeManager.Create("Bool", "accessible", cr2w, this);
-				}
-				return _accessible;
-			}
-			set
-			{
-				if (_accessible == value)
-				{
-					return;
-				}
-				_accessible = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _accessible);
+			set => SetProperty(ref _accessible, value);
 		}
 
 		public gameSetLootInteractionAccessibilityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

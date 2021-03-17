@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("set")] 
 		public CEnum<questQuickItemsSet> Set
 		{
-			get
-			{
-				if (_set == null)
-				{
-					_set = (CEnum<questQuickItemsSet>) CR2WTypeManager.Create("questQuickItemsSet", "set", cr2w, this);
-				}
-				return _set;
-			}
-			set
-			{
-				if (_set == value)
-				{
-					return;
-				}
-				_set = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _set);
+			set => SetProperty(ref _set, value);
 		}
 
 		public questQuickItemsManager_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

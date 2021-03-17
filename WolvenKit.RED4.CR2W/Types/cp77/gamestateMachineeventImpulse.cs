@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("impulse")] 
 		public Vector4 Impulse
 		{
-			get
-			{
-				if (_impulse == null)
-				{
-					_impulse = (Vector4) CR2WTypeManager.Create("Vector4", "impulse", cr2w, this);
-				}
-				return _impulse;
-			}
-			set
-			{
-				if (_impulse == value)
-				{
-					return;
-				}
-				_impulse = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _impulse);
+			set => SetProperty(ref _impulse, value);
 		}
 
 		public gamestateMachineeventImpulse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

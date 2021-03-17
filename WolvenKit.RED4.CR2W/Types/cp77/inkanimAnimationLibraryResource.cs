@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sequences")] 
 		public CArray<CHandle<inkanimSequence>> Sequences
 		{
-			get
-			{
-				if (_sequences == null)
-				{
-					_sequences = (CArray<CHandle<inkanimSequence>>) CR2WTypeManager.Create("array:handle:inkanimSequence", "sequences", cr2w, this);
-				}
-				return _sequences;
-			}
-			set
-			{
-				if (_sequences == value)
-				{
-					return;
-				}
-				_sequences = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sequences);
+			set => SetProperty(ref _sequences, value);
 		}
 
 		public inkanimAnimationLibraryResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

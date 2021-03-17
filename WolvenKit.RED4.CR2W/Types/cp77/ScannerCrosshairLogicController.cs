@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rootWidget")] 
 		public wCHandle<inkWidget> RootWidget
 		{
-			get
-			{
-				if (_rootWidget == null)
-				{
-					_rootWidget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "rootWidget", cr2w, this);
-				}
-				return _rootWidget;
-			}
-			set
-			{
-				if (_rootWidget == value)
-				{
-					return;
-				}
-				_rootWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rootWidget);
+			set => SetProperty(ref _rootWidget, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("projection")] 
 		public CHandle<inkScreenProjection> Projection
 		{
-			get
-			{
-				if (_projection == null)
-				{
-					_projection = (CHandle<inkScreenProjection>) CR2WTypeManager.Create("handle:inkScreenProjection", "projection", cr2w, this);
-				}
-				return _projection;
-			}
-			set
-			{
-				if (_projection == value)
-				{
-					return;
-				}
-				_projection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _projection);
+			set => SetProperty(ref _projection, value);
 		}
 
 		public ScannerCrosshairLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

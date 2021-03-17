@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("val")] 
 		public CUInt64 Val
 		{
-			get
-			{
-				if (_val == null)
-				{
-					_val = (CUInt64) CR2WTypeManager.Create("Uint64", "val", cr2w, this);
-				}
-				return _val;
-			}
-			set
-			{
-				if (_val == value)
-				{
-					return;
-				}
-				_val = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _val);
+			set => SetProperty(ref _val, value);
 		}
 
 		public scnlocSignature(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

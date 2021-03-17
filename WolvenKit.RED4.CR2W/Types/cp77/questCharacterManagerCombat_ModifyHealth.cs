@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get
-			{
-				if (_puppetRef == null)
-				{
-					_puppetRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "puppetRef", cr2w, this);
-				}
-				return _puppetRef;
-			}
-			set
-			{
-				if (_puppetRef == value)
-				{
-					return;
-				}
-				_puppetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppetRef);
+			set => SetProperty(ref _puppetRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get
-			{
-				if (_isPlayer == null)
-				{
-					_isPlayer = (CBool) CR2WTypeManager.Create("Bool", "isPlayer", cr2w, this);
-				}
-				return _isPlayer;
-			}
-			set
-			{
-				if (_isPlayer == value)
-				{
-					return;
-				}
-				_isPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("percent")] 
 		public CFloat Percent
 		{
-			get
-			{
-				if (_percent == null)
-				{
-					_percent = (CFloat) CR2WTypeManager.Create("Float", "percent", cr2w, this);
-				}
-				return _percent;
-			}
-			set
-			{
-				if (_percent == value)
-				{
-					return;
-				}
-				_percent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _percent);
+			set => SetProperty(ref _percent, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("setExactValue")] 
 		public CBool SetExactValue
 		{
-			get
-			{
-				if (_setExactValue == null)
-				{
-					_setExactValue = (CBool) CR2WTypeManager.Create("Bool", "setExactValue", cr2w, this);
-				}
-				return _setExactValue;
-			}
-			set
-			{
-				if (_setExactValue == value)
-				{
-					return;
-				}
-				_setExactValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setExactValue);
+			set => SetProperty(ref _setExactValue, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("noDamageIndicator")] 
 		public CBool NoDamageIndicator
 		{
-			get
-			{
-				if (_noDamageIndicator == null)
-				{
-					_noDamageIndicator = (CBool) CR2WTypeManager.Create("Bool", "noDamageIndicator", cr2w, this);
-				}
-				return _noDamageIndicator;
-			}
-			set
-			{
-				if (_noDamageIndicator == value)
-				{
-					return;
-				}
-				_noDamageIndicator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _noDamageIndicator);
+			set => SetProperty(ref _noDamageIndicator, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("damageSourceRef")] 
 		public gameEntityReference DamageSourceRef
 		{
-			get
-			{
-				if (_damageSourceRef == null)
-				{
-					_damageSourceRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "damageSourceRef", cr2w, this);
-				}
-				return _damageSourceRef;
-			}
-			set
-			{
-				if (_damageSourceRef == value)
-				{
-					return;
-				}
-				_damageSourceRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damageSourceRef);
+			set => SetProperty(ref _damageSourceRef, value);
 		}
 
 		public questCharacterManagerCombat_ModifyHealth(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

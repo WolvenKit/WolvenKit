@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lsitener")] 
 		public wCHandle<SensorDevice> Lsitener
 		{
-			get
-			{
-				if (_lsitener == null)
-				{
-					_lsitener = (wCHandle<SensorDevice>) CR2WTypeManager.Create("whandle:SensorDevice", "lsitener", cr2w, this);
-				}
-				return _lsitener;
-			}
-			set
-			{
-				if (_lsitener == value)
-				{
-					return;
-				}
-				_lsitener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lsitener);
+			set => SetProperty(ref _lsitener, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lsitenTarget")] 
 		public wCHandle<gameObject> LsitenTarget
 		{
-			get
-			{
-				if (_lsitenTarget == null)
-				{
-					_lsitenTarget = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "lsitenTarget", cr2w, this);
-				}
-				return _lsitenTarget;
-			}
-			set
-			{
-				if (_lsitenTarget == value)
-				{
-					return;
-				}
-				_lsitenTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lsitenTarget);
+			set => SetProperty(ref _lsitenTarget, value);
 		}
 
 		public TargetedObjectDeathListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

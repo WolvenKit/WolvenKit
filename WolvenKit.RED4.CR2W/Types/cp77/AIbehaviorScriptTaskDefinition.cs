@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("script")] 
 		public CHandle<AIbehaviortaskScript> Script
 		{
-			get
-			{
-				if (_script == null)
-				{
-					_script = (CHandle<AIbehaviortaskScript>) CR2WTypeManager.Create("handle:AIbehaviortaskScript", "script", cr2w, this);
-				}
-				return _script;
-			}
-			set
-			{
-				if (_script == value)
-				{
-					return;
-				}
-				_script = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _script);
+			set => SetProperty(ref _script, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("disableLazyInitialization")] 
 		public CBool DisableLazyInitialization
 		{
-			get
-			{
-				if (_disableLazyInitialization == null)
-				{
-					_disableLazyInitialization = (CBool) CR2WTypeManager.Create("Bool", "disableLazyInitialization", cr2w, this);
-				}
-				return _disableLazyInitialization;
-			}
-			set
-			{
-				if (_disableLazyInitialization == value)
-				{
-					return;
-				}
-				_disableLazyInitialization = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _disableLazyInitialization);
+			set => SetProperty(ref _disableLazyInitialization, value);
 		}
 
 		public AIbehaviorScriptTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

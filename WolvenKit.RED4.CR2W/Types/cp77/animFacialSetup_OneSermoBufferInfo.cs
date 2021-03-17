@@ -28,368 +28,128 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("numGlobalLimits")] 
 		public CUInt16 NumGlobalLimits
 		{
-			get
-			{
-				if (_numGlobalLimits == null)
-				{
-					_numGlobalLimits = (CUInt16) CR2WTypeManager.Create("Uint16", "numGlobalLimits", cr2w, this);
-				}
-				return _numGlobalLimits;
-			}
-			set
-			{
-				if (_numGlobalLimits == value)
-				{
-					return;
-				}
-				_numGlobalLimits = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numGlobalLimits);
+			set => SetProperty(ref _numGlobalLimits, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("numInfluencedPoses")] 
 		public CUInt16 NumInfluencedPoses
 		{
-			get
-			{
-				if (_numInfluencedPoses == null)
-				{
-					_numInfluencedPoses = (CUInt16) CR2WTypeManager.Create("Uint16", "numInfluencedPoses", cr2w, this);
-				}
-				return _numInfluencedPoses;
-			}
-			set
-			{
-				if (_numInfluencedPoses == value)
-				{
-					return;
-				}
-				_numInfluencedPoses = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numInfluencedPoses);
+			set => SetProperty(ref _numInfluencedPoses, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("numInfluenceIndices")] 
 		public CUInt16 NumInfluenceIndices
 		{
-			get
-			{
-				if (_numInfluenceIndices == null)
-				{
-					_numInfluenceIndices = (CUInt16) CR2WTypeManager.Create("Uint16", "numInfluenceIndices", cr2w, this);
-				}
-				return _numInfluenceIndices;
-			}
-			set
-			{
-				if (_numInfluenceIndices == value)
-				{
-					return;
-				}
-				_numInfluenceIndices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numInfluenceIndices);
+			set => SetProperty(ref _numInfluenceIndices, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("numUpperLowerFace")] 
 		public CUInt16 NumUpperLowerFace
 		{
-			get
-			{
-				if (_numUpperLowerFace == null)
-				{
-					_numUpperLowerFace = (CUInt16) CR2WTypeManager.Create("Uint16", "numUpperLowerFace", cr2w, this);
-				}
-				return _numUpperLowerFace;
-			}
-			set
-			{
-				if (_numUpperLowerFace == value)
-				{
-					return;
-				}
-				_numUpperLowerFace = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numUpperLowerFace);
+			set => SetProperty(ref _numUpperLowerFace, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("numLipsyncPosesSides")] 
 		public CUInt16 NumLipsyncPosesSides
 		{
-			get
-			{
-				if (_numLipsyncPosesSides == null)
-				{
-					_numLipsyncPosesSides = (CUInt16) CR2WTypeManager.Create("Uint16", "numLipsyncPosesSides", cr2w, this);
-				}
-				return _numLipsyncPosesSides;
-			}
-			set
-			{
-				if (_numLipsyncPosesSides == value)
-				{
-					return;
-				}
-				_numLipsyncPosesSides = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numLipsyncPosesSides);
+			set => SetProperty(ref _numLipsyncPosesSides, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("numAllCorrectives")] 
 		public CUInt16 NumAllCorrectives
 		{
-			get
-			{
-				if (_numAllCorrectives == null)
-				{
-					_numAllCorrectives = (CUInt16) CR2WTypeManager.Create("Uint16", "numAllCorrectives", cr2w, this);
-				}
-				return _numAllCorrectives;
-			}
-			set
-			{
-				if (_numAllCorrectives == value)
-				{
-					return;
-				}
-				_numAllCorrectives = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numAllCorrectives);
+			set => SetProperty(ref _numAllCorrectives, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("numGlobalCorrectiveEntries")] 
 		public CUInt16 NumGlobalCorrectiveEntries
 		{
-			get
-			{
-				if (_numGlobalCorrectiveEntries == null)
-				{
-					_numGlobalCorrectiveEntries = (CUInt16) CR2WTypeManager.Create("Uint16", "numGlobalCorrectiveEntries", cr2w, this);
-				}
-				return _numGlobalCorrectiveEntries;
-			}
-			set
-			{
-				if (_numGlobalCorrectiveEntries == value)
-				{
-					return;
-				}
-				_numGlobalCorrectiveEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numGlobalCorrectiveEntries);
+			set => SetProperty(ref _numGlobalCorrectiveEntries, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("numInbetweenCorrectiveEntries")] 
 		public CUInt16 NumInbetweenCorrectiveEntries
 		{
-			get
-			{
-				if (_numInbetweenCorrectiveEntries == null)
-				{
-					_numInbetweenCorrectiveEntries = (CUInt16) CR2WTypeManager.Create("Uint16", "numInbetweenCorrectiveEntries", cr2w, this);
-				}
-				return _numInbetweenCorrectiveEntries;
-			}
-			set
-			{
-				if (_numInbetweenCorrectiveEntries == value)
-				{
-					return;
-				}
-				_numInbetweenCorrectiveEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numInbetweenCorrectiveEntries);
+			set => SetProperty(ref _numInbetweenCorrectiveEntries, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("numCorrectiveInfluencedPoses")] 
 		public CUInt16 NumCorrectiveInfluencedPoses
 		{
-			get
-			{
-				if (_numCorrectiveInfluencedPoses == null)
-				{
-					_numCorrectiveInfluencedPoses = (CUInt16) CR2WTypeManager.Create("Uint16", "numCorrectiveInfluencedPoses", cr2w, this);
-				}
-				return _numCorrectiveInfluencedPoses;
-			}
-			set
-			{
-				if (_numCorrectiveInfluencedPoses == value)
-				{
-					return;
-				}
-				_numCorrectiveInfluencedPoses = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numCorrectiveInfluencedPoses);
+			set => SetProperty(ref _numCorrectiveInfluencedPoses, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("numCorrectiveInfluenceIndices")] 
 		public CUInt16 NumCorrectiveInfluenceIndices
 		{
-			get
-			{
-				if (_numCorrectiveInfluenceIndices == null)
-				{
-					_numCorrectiveInfluenceIndices = (CUInt16) CR2WTypeManager.Create("Uint16", "numCorrectiveInfluenceIndices", cr2w, this);
-				}
-				return _numCorrectiveInfluenceIndices;
-			}
-			set
-			{
-				if (_numCorrectiveInfluenceIndices == value)
-				{
-					return;
-				}
-				_numCorrectiveInfluenceIndices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numCorrectiveInfluenceIndices);
+			set => SetProperty(ref _numCorrectiveInfluenceIndices, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("numAllMainPoses")] 
 		public CUInt16 NumAllMainPoses
 		{
-			get
-			{
-				if (_numAllMainPoses == null)
-				{
-					_numAllMainPoses = (CUInt16) CR2WTypeManager.Create("Uint16", "numAllMainPoses", cr2w, this);
-				}
-				return _numAllMainPoses;
-			}
-			set
-			{
-				if (_numAllMainPoses == value)
-				{
-					return;
-				}
-				_numAllMainPoses = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numAllMainPoses);
+			set => SetProperty(ref _numAllMainPoses, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("numAllMainPosesInbetweens")] 
 		public CUInt16 NumAllMainPosesInbetweens
 		{
-			get
-			{
-				if (_numAllMainPosesInbetweens == null)
-				{
-					_numAllMainPosesInbetweens = (CUInt16) CR2WTypeManager.Create("Uint16", "numAllMainPosesInbetweens", cr2w, this);
-				}
-				return _numAllMainPosesInbetweens;
-			}
-			set
-			{
-				if (_numAllMainPosesInbetweens == value)
-				{
-					return;
-				}
-				_numAllMainPosesInbetweens = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numAllMainPosesInbetweens);
+			set => SetProperty(ref _numAllMainPosesInbetweens, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("numAllMainPosesInbetweenScopeMultipliers")] 
 		public CUInt16 NumAllMainPosesInbetweenScopeMultipliers
 		{
-			get
-			{
-				if (_numAllMainPosesInbetweenScopeMultipliers == null)
-				{
-					_numAllMainPosesInbetweenScopeMultipliers = (CUInt16) CR2WTypeManager.Create("Uint16", "numAllMainPosesInbetweenScopeMultipliers", cr2w, this);
-				}
-				return _numAllMainPosesInbetweenScopeMultipliers;
-			}
-			set
-			{
-				if (_numAllMainPosesInbetweenScopeMultipliers == value)
-				{
-					return;
-				}
-				_numAllMainPosesInbetweenScopeMultipliers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numAllMainPosesInbetweenScopeMultipliers);
+			set => SetProperty(ref _numAllMainPosesInbetweenScopeMultipliers, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("numEnvelopesPerTrackMapping")] 
 		public CUInt16 NumEnvelopesPerTrackMapping
 		{
-			get
-			{
-				if (_numEnvelopesPerTrackMapping == null)
-				{
-					_numEnvelopesPerTrackMapping = (CUInt16) CR2WTypeManager.Create("Uint16", "numEnvelopesPerTrackMapping", cr2w, this);
-				}
-				return _numEnvelopesPerTrackMapping;
-			}
-			set
-			{
-				if (_numEnvelopesPerTrackMapping == value)
-				{
-					return;
-				}
-				_numEnvelopesPerTrackMapping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numEnvelopesPerTrackMapping);
+			set => SetProperty(ref _numEnvelopesPerTrackMapping, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("wrinkleStartingIndex")] 
 		public CUInt16 WrinkleStartingIndex
 		{
-			get
-			{
-				if (_wrinkleStartingIndex == null)
-				{
-					_wrinkleStartingIndex = (CUInt16) CR2WTypeManager.Create("Uint16", "wrinkleStartingIndex", cr2w, this);
-				}
-				return _wrinkleStartingIndex;
-			}
-			set
-			{
-				if (_wrinkleStartingIndex == value)
-				{
-					return;
-				}
-				_wrinkleStartingIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wrinkleStartingIndex);
+			set => SetProperty(ref _wrinkleStartingIndex, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("numWrinkles")] 
 		public CUInt16 NumWrinkles
 		{
-			get
-			{
-				if (_numWrinkles == null)
-				{
-					_numWrinkles = (CUInt16) CR2WTypeManager.Create("Uint16", "numWrinkles", cr2w, this);
-				}
-				return _numWrinkles;
-			}
-			set
-			{
-				if (_numWrinkles == value)
-				{
-					return;
-				}
-				_numWrinkles = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numWrinkles);
+			set => SetProperty(ref _numWrinkles, value);
 		}
 
 		public animFacialSetup_OneSermoBufferInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemData")] 
 		public InventoryItemData ItemData
 		{
-			get
-			{
-				if (_itemData == null)
-				{
-					_itemData = (InventoryItemData) CR2WTypeManager.Create("InventoryItemData", "itemData", cr2w, this);
-				}
-				return _itemData;
-			}
-			set
-			{
-				if (_itemData == value)
-				{
-					return;
-				}
-				_itemData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemData);
+			set => SetProperty(ref _itemData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("display")] 
 		public wCHandle<InventoryItemDisplayController> Display
 		{
-			get
-			{
-				if (_display == null)
-				{
-					_display = (wCHandle<InventoryItemDisplayController>) CR2WTypeManager.Create("whandle:InventoryItemDisplayController", "display", cr2w, this);
-				}
-				return _display;
-			}
-			set
-			{
-				if (_display == value)
-				{
-					return;
-				}
-				_display = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _display);
+			set => SetProperty(ref _display, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("widget")] 
 		public wCHandle<inkWidget> Widget
 		{
-			get
-			{
-				if (_widget == null)
-				{
-					_widget = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "widget", cr2w, this);
-				}
-				return _widget;
-			}
-			set
-			{
-				if (_widget == value)
-				{
-					return;
-				}
-				_widget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widget);
+			set => SetProperty(ref _widget, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isBuybackStack")] 
 		public CBool IsBuybackStack
 		{
-			get
-			{
-				if (_isBuybackStack == null)
-				{
-					_isBuybackStack = (CBool) CR2WTypeManager.Create("Bool", "isBuybackStack", cr2w, this);
-				}
-				return _isBuybackStack;
-			}
-			set
-			{
-				if (_isBuybackStack == value)
-				{
-					return;
-				}
-				_isBuybackStack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isBuybackStack);
+			set => SetProperty(ref _isBuybackStack, value);
 		}
 
 		public ItemDisplayHoverOverEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

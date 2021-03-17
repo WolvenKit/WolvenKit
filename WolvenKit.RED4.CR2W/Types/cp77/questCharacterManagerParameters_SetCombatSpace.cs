@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get
-			{
-				if (_puppetRef == null)
-				{
-					_puppetRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "puppetRef", cr2w, this);
-				}
-				return _puppetRef;
-			}
-			set
-			{
-				if (_puppetRef == value)
-				{
-					return;
-				}
-				_puppetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppetRef);
+			set => SetProperty(ref _puppetRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("combatSpaceSize")] 
 		public CEnum<AICombatSpaceSize> CombatSpaceSize
 		{
-			get
-			{
-				if (_combatSpaceSize == null)
-				{
-					_combatSpaceSize = (CEnum<AICombatSpaceSize>) CR2WTypeManager.Create("AICombatSpaceSize", "combatSpaceSize", cr2w, this);
-				}
-				return _combatSpaceSize;
-			}
-			set
-			{
-				if (_combatSpaceSize == value)
-				{
-					return;
-				}
-				_combatSpaceSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _combatSpaceSize);
+			set => SetProperty(ref _combatSpaceSize, value);
 		}
 
 		public questCharacterManagerParameters_SetCombatSpace(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

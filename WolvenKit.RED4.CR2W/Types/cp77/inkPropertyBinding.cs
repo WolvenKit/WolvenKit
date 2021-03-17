@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("propertyName")] 
 		public CName PropertyName
 		{
-			get
-			{
-				if (_propertyName == null)
-				{
-					_propertyName = (CName) CR2WTypeManager.Create("CName", "propertyName", cr2w, this);
-				}
-				return _propertyName;
-			}
-			set
-			{
-				if (_propertyName == value)
-				{
-					return;
-				}
-				_propertyName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _propertyName);
+			set => SetProperty(ref _propertyName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("stylePath")] 
 		public CName StylePath
 		{
-			get
-			{
-				if (_stylePath == null)
-				{
-					_stylePath = (CName) CR2WTypeManager.Create("CName", "stylePath", cr2w, this);
-				}
-				return _stylePath;
-			}
-			set
-			{
-				if (_stylePath == value)
-				{
-					return;
-				}
-				_stylePath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stylePath);
+			set => SetProperty(ref _stylePath, value);
 		}
 
 		public inkPropertyBinding(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

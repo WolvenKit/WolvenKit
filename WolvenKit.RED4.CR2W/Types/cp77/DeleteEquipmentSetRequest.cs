@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("setName")] 
 		public CString SetName
 		{
-			get
-			{
-				if (_setName == null)
-				{
-					_setName = (CString) CR2WTypeManager.Create("String", "setName", cr2w, this);
-				}
-				return _setName;
-			}
-			set
-			{
-				if (_setName == value)
-				{
-					return;
-				}
-				_setName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setName);
+			set => SetProperty(ref _setName, value);
 		}
 
 		public DeleteEquipmentSetRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

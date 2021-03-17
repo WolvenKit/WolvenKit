@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("action")] 
 		public CEnum<vehicleEQuestVehicleDoorState> Action
 		{
-			get
-			{
-				if (_action == null)
-				{
-					_action = (CEnum<vehicleEQuestVehicleDoorState>) CR2WTypeManager.Create("vehicleEQuestVehicleDoorState", "action", cr2w, this);
-				}
-				return _action;
-			}
-			set
-			{
-				if (_action == value)
-				{
-					return;
-				}
-				_action = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("door")] 
 		public CEnum<vehicleEVehicleDoor> Door
 		{
-			get
-			{
-				if (_door == null)
-				{
-					_door = (CEnum<vehicleEVehicleDoor>) CR2WTypeManager.Create("vehicleEVehicleDoor", "door", cr2w, this);
-				}
-				return _door;
-			}
-			set
-			{
-				if (_door == value)
-				{
-					return;
-				}
-				_door = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _door);
+			set => SetProperty(ref _door, value);
 		}
 
 		public vehicleToggleDoorWrapperEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

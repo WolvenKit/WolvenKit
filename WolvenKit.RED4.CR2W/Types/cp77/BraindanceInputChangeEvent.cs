@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bdSystem")] 
 		public CHandle<BraindanceSystem> BdSystem
 		{
-			get
-			{
-				if (_bdSystem == null)
-				{
-					_bdSystem = (CHandle<BraindanceSystem>) CR2WTypeManager.Create("handle:BraindanceSystem", "bdSystem", cr2w, this);
-				}
-				return _bdSystem;
-			}
-			set
-			{
-				if (_bdSystem == value)
-				{
-					return;
-				}
-				_bdSystem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bdSystem);
+			set => SetProperty(ref _bdSystem, value);
 		}
 
 		public BraindanceInputChangeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

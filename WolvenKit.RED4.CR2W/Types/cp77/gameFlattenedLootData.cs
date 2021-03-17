@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lootID")] 
 		public TweakDBID LootID
 		{
-			get
-			{
-				if (_lootID == null)
-				{
-					_lootID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "lootID", cr2w, this);
-				}
-				return _lootID;
-			}
-			set
-			{
-				if (_lootID == value)
-				{
-					return;
-				}
-				_lootID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lootID);
+			set => SetProperty(ref _lootID, value);
 		}
 
 		public gameFlattenedLootData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

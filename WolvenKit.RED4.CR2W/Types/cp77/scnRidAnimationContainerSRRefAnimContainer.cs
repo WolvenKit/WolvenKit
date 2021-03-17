@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animation")] 
 		public scnRidAnimationSRRefId Animation
 		{
-			get
-			{
-				if (_animation == null)
-				{
-					_animation = (scnRidAnimationSRRefId) CR2WTypeManager.Create("scnRidAnimationSRRefId", "animation", cr2w, this);
-				}
-				return _animation;
-			}
-			set
-			{
-				if (_animation == value)
-				{
-					return;
-				}
-				_animation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animation);
+			set => SetProperty(ref _animation, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("context")] 
 		public scnRidAnimationContainerSRRefAnimContainerContext Context
 		{
-			get
-			{
-				if (_context == null)
-				{
-					_context = (scnRidAnimationContainerSRRefAnimContainerContext) CR2WTypeManager.Create("scnRidAnimationContainerSRRefAnimContainerContext", "context", cr2w, this);
-				}
-				return _context;
-			}
-			set
-			{
-				if (_context == value)
-				{
-					return;
-				}
-				_context = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _context);
+			set => SetProperty(ref _context, value);
 		}
 
 		public scnRidAnimationContainerSRRefAnimContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

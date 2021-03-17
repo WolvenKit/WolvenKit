@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemName")] 
 		public CName ItemName
 		{
-			get
-			{
-				if (_itemName == null)
-				{
-					_itemName = (CName) CR2WTypeManager.Create("CName", "itemName", cr2w, this);
-				}
-				return _itemName;
-			}
-			set
-			{
-				if (_itemName == value)
-				{
-					return;
-				}
-				_itemName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemName);
+			set => SetProperty(ref _itemName, value);
 		}
 
 		public gameaudioeventsNotifyItemUnequippedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

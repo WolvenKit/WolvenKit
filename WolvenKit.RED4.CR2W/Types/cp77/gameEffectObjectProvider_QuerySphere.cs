@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gatherOnlyPuppets")] 
 		public CBool GatherOnlyPuppets
 		{
-			get
-			{
-				if (_gatherOnlyPuppets == null)
-				{
-					_gatherOnlyPuppets = (CBool) CR2WTypeManager.Create("Bool", "gatherOnlyPuppets", cr2w, this);
-				}
-				return _gatherOnlyPuppets;
-			}
-			set
-			{
-				if (_gatherOnlyPuppets == value)
-				{
-					return;
-				}
-				_gatherOnlyPuppets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gatherOnlyPuppets);
+			set => SetProperty(ref _gatherOnlyPuppets, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
-			get
-			{
-				if (_filterData == null)
-				{
-					_filterData = (CHandle<physicsFilterData>) CR2WTypeManager.Create("handle:physicsFilterData", "filterData", cr2w, this);
-				}
-				return _filterData;
-			}
-			set
-			{
-				if (_filterData == value)
-				{
-					return;
-				}
-				_filterData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filterData);
+			set => SetProperty(ref _filterData, value);
 		}
 
 		public gameEffectObjectProvider_QuerySphere(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

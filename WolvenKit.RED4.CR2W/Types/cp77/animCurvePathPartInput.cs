@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("curveLengthStart")] 
 		public CFloat CurveLengthStart
 		{
-			get
-			{
-				if (_curveLengthStart == null)
-				{
-					_curveLengthStart = (CFloat) CR2WTypeManager.Create("Float", "curveLengthStart", cr2w, this);
-				}
-				return _curveLengthStart;
-			}
-			set
-			{
-				if (_curveLengthStart == value)
-				{
-					return;
-				}
-				_curveLengthStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _curveLengthStart);
+			set => SetProperty(ref _curveLengthStart, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("curveLengthEnd")] 
 		public CFloat CurveLengthEnd
 		{
-			get
-			{
-				if (_curveLengthEnd == null)
-				{
-					_curveLengthEnd = (CFloat) CR2WTypeManager.Create("Float", "curveLengthEnd", cr2w, this);
-				}
-				return _curveLengthEnd;
-			}
-			set
-			{
-				if (_curveLengthEnd == value)
-				{
-					return;
-				}
-				_curveLengthEnd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _curveLengthEnd);
+			set => SetProperty(ref _curveLengthEnd, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("controllerName")] 
 		public CName ControllerName
 		{
-			get
-			{
-				if (_controllerName == null)
-				{
-					_controllerName = (CName) CR2WTypeManager.Create("CName", "controllerName", cr2w, this);
-				}
-				return _controllerName;
-			}
-			set
-			{
-				if (_controllerName == value)
-				{
-					return;
-				}
-				_controllerName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _controllerName);
+			set => SetProperty(ref _controllerName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("eventNameStart")] 
 		public CName EventNameStart
 		{
-			get
-			{
-				if (_eventNameStart == null)
-				{
-					_eventNameStart = (CName) CR2WTypeManager.Create("CName", "eventNameStart", cr2w, this);
-				}
-				return _eventNameStart;
-			}
-			set
-			{
-				if (_eventNameStart == value)
-				{
-					return;
-				}
-				_eventNameStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventNameStart);
+			set => SetProperty(ref _eventNameStart, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("eventNameEnd")] 
 		public CName EventNameEnd
 		{
-			get
-			{
-				if (_eventNameEnd == null)
-				{
-					_eventNameEnd = (CName) CR2WTypeManager.Create("CName", "eventNameEnd", cr2w, this);
-				}
-				return _eventNameEnd;
-			}
-			set
-			{
-				if (_eventNameEnd == value)
-				{
-					return;
-				}
-				_eventNameEnd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventNameEnd);
+			set => SetProperty(ref _eventNameEnd, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("startBlendTime")] 
 		public CFloat StartBlendTime
 		{
-			get
-			{
-				if (_startBlendTime == null)
-				{
-					_startBlendTime = (CFloat) CR2WTypeManager.Create("Float", "startBlendTime", cr2w, this);
-				}
-				return _startBlendTime;
-			}
-			set
-			{
-				if (_startBlendTime == value)
-				{
-					return;
-				}
-				_startBlendTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startBlendTime);
+			set => SetProperty(ref _startBlendTime, value);
 		}
 
 		public animCurvePathPartInput(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

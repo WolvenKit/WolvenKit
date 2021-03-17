@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ncartTimetableSetup")] 
 		public NcartTimetableSetup NcartTimetableSetup
 		{
-			get
-			{
-				if (_ncartTimetableSetup == null)
-				{
-					_ncartTimetableSetup = (NcartTimetableSetup) CR2WTypeManager.Create("NcartTimetableSetup", "ncartTimetableSetup", cr2w, this);
-				}
-				return _ncartTimetableSetup;
-			}
-			set
-			{
-				if (_ncartTimetableSetup == value)
-				{
-					return;
-				}
-				_ncartTimetableSetup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ncartTimetableSetup);
+			set => SetProperty(ref _ncartTimetableSetup, value);
 		}
 
 		[Ordinal(104)] 
 		[RED("currentTimeToDepart")] 
 		public CInt32 CurrentTimeToDepart
 		{
-			get
-			{
-				if (_currentTimeToDepart == null)
-				{
-					_currentTimeToDepart = (CInt32) CR2WTypeManager.Create("Int32", "currentTimeToDepart", cr2w, this);
-				}
-				return _currentTimeToDepart;
-			}
-			set
-			{
-				if (_currentTimeToDepart == value)
-				{
-					return;
-				}
-				_currentTimeToDepart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentTimeToDepart);
+			set => SetProperty(ref _currentTimeToDepart, value);
 		}
 
 		public NcartTimetableControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

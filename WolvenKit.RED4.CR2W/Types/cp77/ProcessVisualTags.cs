@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemTDBID")] 
 		public TweakDBID ItemTDBID
 		{
-			get
-			{
-				if (_itemTDBID == null)
-				{
-					_itemTDBID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "itemTDBID", cr2w, this);
-				}
-				return _itemTDBID;
-			}
-			set
-			{
-				if (_itemTDBID == value)
-				{
-					return;
-				}
-				_itemTDBID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemTDBID);
+			set => SetProperty(ref _itemTDBID, value);
 		}
 
 		public ProcessVisualTags(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

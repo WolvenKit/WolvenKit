@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("group")] 
 		public CName Group
 		{
-			get
-			{
-				if (_group == null)
-				{
-					_group = (CName) CR2WTypeManager.Create("CName", "group", cr2w, this);
-				}
-				return _group;
-			}
-			set
-			{
-				if (_group == value)
-				{
-					return;
-				}
-				_group = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _group);
+			set => SetProperty(ref _group, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		public animAnimNode_BoolInput(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

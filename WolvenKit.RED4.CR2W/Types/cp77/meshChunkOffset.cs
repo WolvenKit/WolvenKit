@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("chunkIndex")] 
 		public CUInt32 ChunkIndex
 		{
-			get
-			{
-				if (_chunkIndex == null)
-				{
-					_chunkIndex = (CUInt32) CR2WTypeManager.Create("Uint32", "chunkIndex", cr2w, this);
-				}
-				return _chunkIndex;
-			}
-			set
-			{
-				if (_chunkIndex == value)
-				{
-					return;
-				}
-				_chunkIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chunkIndex);
+			set => SetProperty(ref _chunkIndex, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("start")] 
 		public CUInt16 Start
 		{
-			get
-			{
-				if (_start == null)
-				{
-					_start = (CUInt16) CR2WTypeManager.Create("Uint16", "start", cr2w, this);
-				}
-				return _start;
-			}
-			set
-			{
-				if (_start == value)
-				{
-					return;
-				}
-				_start = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _start);
+			set => SetProperty(ref _start, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("count")] 
 		public CUInt16 Count
 		{
-			get
-			{
-				if (_count == null)
-				{
-					_count = (CUInt16) CR2WTypeManager.Create("Uint16", "count", cr2w, this);
-				}
-				return _count;
-			}
-			set
-			{
-				if (_count == value)
-				{
-					return;
-				}
-				_count = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _count);
+			set => SetProperty(ref _count, value);
 		}
 
 		public meshChunkOffset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bodyID")] 
 		public entEntityID BodyID
 		{
-			get
-			{
-				if (_bodyID == null)
-				{
-					_bodyID = (entEntityID) CR2WTypeManager.Create("entEntityID", "bodyID", cr2w, this);
-				}
-				return _bodyID;
-			}
-			set
-			{
-				if (_bodyID == value)
-				{
-					return;
-				}
-				_bodyID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyID);
+			set => SetProperty(ref _bodyID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("removeEvent")] 
 		public CBool RemoveEvent
 		{
-			get
-			{
-				if (_removeEvent == null)
-				{
-					_removeEvent = (CBool) CR2WTypeManager.Create("Bool", "removeEvent", cr2w, this);
-				}
-				return _removeEvent;
-			}
-			set
-			{
-				if (_removeEvent == value)
-				{
-					return;
-				}
-				_removeEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _removeEvent);
+			set => SetProperty(ref _removeEvent, value);
 		}
 
 		public IgnoreListEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

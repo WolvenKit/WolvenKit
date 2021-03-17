@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("type")] 
 		public CEnum<gamedataWorkspotCategory> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<gamedataWorkspotCategory>) CR2WTypeManager.Create("gamedataWorkspotCategory", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("probability")] 
 		public CFloat Probability
 		{
-			get
-			{
-				if (_probability == null)
-				{
-					_probability = (CFloat) CR2WTypeManager.Create("Float", "probability", cr2w, this);
-				}
-				return _probability;
-			}
-			set
-			{
-				if (_probability == value)
-				{
-					return;
-				}
-				_probability = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _probability);
+			set => SetProperty(ref _probability, value);
 		}
 
 		public gameSpotSequenceCategory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

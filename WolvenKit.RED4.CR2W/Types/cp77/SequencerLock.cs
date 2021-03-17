@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("shouldLock")] 
 		public CBool ShouldLock
 		{
-			get
-			{
-				if (_shouldLock == null)
-				{
-					_shouldLock = (CBool) CR2WTypeManager.Create("Bool", "shouldLock", cr2w, this);
-				}
-				return _shouldLock;
-			}
-			set
-			{
-				if (_shouldLock == value)
-				{
-					return;
-				}
-				_shouldLock = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldLock);
+			set => SetProperty(ref _shouldLock, value);
 		}
 
 		public SequencerLock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

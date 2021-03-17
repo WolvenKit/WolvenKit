@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("useEntry")] 
 		public CBool UseEntry
 		{
-			get
-			{
-				if (_useEntry == null)
-				{
-					_useEntry = (CBool) CR2WTypeManager.Create("Bool", "useEntry", cr2w, this);
-				}
-				return _useEntry;
-			}
-			set
-			{
-				if (_useEntry == value)
-				{
-					return;
-				}
-				_useEntry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useEntry);
+			set => SetProperty(ref _useEntry, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useExit")] 
 		public CBool UseExit
 		{
-			get
-			{
-				if (_useExit == null)
-				{
-					_useExit = (CBool) CR2WTypeManager.Create("Bool", "useExit", cr2w, this);
-				}
-				return _useExit;
-			}
-			set
-			{
-				if (_useExit == value)
-				{
-					return;
-				}
-				_useExit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useExit);
+			set => SetProperty(ref _useExit, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entrySpeed")] 
 		public CFloat EntrySpeed
 		{
-			get
-			{
-				if (_entrySpeed == null)
-				{
-					_entrySpeed = (CFloat) CR2WTypeManager.Create("Float", "entrySpeed", cr2w, this);
-				}
-				return _entrySpeed;
-			}
-			set
-			{
-				if (_entrySpeed == value)
-				{
-					return;
-				}
-				_entrySpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entrySpeed);
+			set => SetProperty(ref _entrySpeed, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("exitSpeed")] 
 		public CFloat ExitSpeed
 		{
-			get
-			{
-				if (_exitSpeed == null)
-				{
-					_exitSpeed = (CFloat) CR2WTypeManager.Create("Float", "exitSpeed", cr2w, this);
-				}
-				return _exitSpeed;
-			}
-			set
-			{
-				if (_exitSpeed == value)
-				{
-					return;
-				}
-				_exitSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitSpeed);
+			set => SetProperty(ref _exitSpeed, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("entryTransform")] 
 		public Transform EntryTransform
 		{
-			get
-			{
-				if (_entryTransform == null)
-				{
-					_entryTransform = (Transform) CR2WTypeManager.Create("Transform", "entryTransform", cr2w, this);
-				}
-				return _entryTransform;
-			}
-			set
-			{
-				if (_entryTransform == value)
-				{
-					return;
-				}
-				_entryTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryTransform);
+			set => SetProperty(ref _entryTransform, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("exitTransform")] 
 		public Transform ExitTransform
 		{
-			get
-			{
-				if (_exitTransform == null)
-				{
-					_exitTransform = (Transform) CR2WTypeManager.Create("Transform", "exitTransform", cr2w, this);
-				}
-				return _exitTransform;
-			}
-			set
-			{
-				if (_exitTransform == value)
-				{
-					return;
-				}
-				_exitTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitTransform);
+			set => SetProperty(ref _exitTransform, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("entryMarker")] 
 		public scnMarker EntryMarker
 		{
-			get
-			{
-				if (_entryMarker == null)
-				{
-					_entryMarker = (scnMarker) CR2WTypeManager.Create("scnMarker", "entryMarker", cr2w, this);
-				}
-				return _entryMarker;
-			}
-			set
-			{
-				if (_entryMarker == value)
-				{
-					return;
-				}
-				_entryMarker = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryMarker);
+			set => SetProperty(ref _entryMarker, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("exitMarker")] 
 		public scnMarker ExitMarker
 		{
-			get
-			{
-				if (_exitMarker == null)
-				{
-					_exitMarker = (scnMarker) CR2WTypeManager.Create("scnMarker", "exitMarker", cr2w, this);
-				}
-				return _exitMarker;
-			}
-			set
-			{
-				if (_exitMarker == value)
-				{
-					return;
-				}
-				_exitMarker = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitMarker);
+			set => SetProperty(ref _exitMarker, value);
 		}
 
 		public scnVehicleMoveOnSpline_Overrides(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

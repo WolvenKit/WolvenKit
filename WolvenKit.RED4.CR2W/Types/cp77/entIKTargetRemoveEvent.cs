@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ikTargetRef")] 
 		public animIKTargetRef IkTargetRef
 		{
-			get
-			{
-				if (_ikTargetRef == null)
-				{
-					_ikTargetRef = (animIKTargetRef) CR2WTypeManager.Create("animIKTargetRef", "ikTargetRef", cr2w, this);
-				}
-				return _ikTargetRef;
-			}
-			set
-			{
-				if (_ikTargetRef == value)
-				{
-					return;
-				}
-				_ikTargetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ikTargetRef);
+			set => SetProperty(ref _ikTargetRef, value);
 		}
 
 		public entIKTargetRemoveEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

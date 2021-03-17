@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("endOfCombat")] 
 		public CName EndOfCombat
 		{
-			get
-			{
-				if (_endOfCombat == null)
-				{
-					_endOfCombat = (CName) CR2WTypeManager.Create("CName", "endOfCombat", cr2w, this);
-				}
-				return _endOfCombat;
-			}
-			set
-			{
-				if (_endOfCombat == value)
-				{
-					return;
-				}
-				_endOfCombat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endOfCombat);
+			set => SetProperty(ref _endOfCombat, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("inCombat")] 
 		public CName InCombat
 		{
-			get
-			{
-				if (_inCombat == null)
-				{
-					_inCombat = (CName) CR2WTypeManager.Create("CName", "inCombat", cr2w, this);
-				}
-				return _inCombat;
-			}
-			set
-			{
-				if (_inCombat == value)
-				{
-					return;
-				}
-				_inCombat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inCombat);
+			set => SetProperty(ref _inCombat, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("inStealth")] 
 		public CName InStealth
 		{
-			get
-			{
-				if (_inStealth == null)
-				{
-					_inStealth = (CName) CR2WTypeManager.Create("CName", "inStealth", cr2w, this);
-				}
-				return _inStealth;
-			}
-			set
-			{
-				if (_inStealth == value)
-				{
-					return;
-				}
-				_inStealth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inStealth);
+			set => SetProperty(ref _inStealth, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("aiAlerted")] 
 		public CName AiAlerted
 		{
-			get
-			{
-				if (_aiAlerted == null)
-				{
-					_aiAlerted = (CName) CR2WTypeManager.Create("CName", "aiAlerted", cr2w, this);
-				}
-				return _aiAlerted;
-			}
-			set
-			{
-				if (_aiAlerted == value)
-				{
-					return;
-				}
-				_aiAlerted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _aiAlerted);
+			set => SetProperty(ref _aiAlerted, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("sceneBootstrapSignpost")] 
 		public CName SceneBootstrapSignpost
 		{
-			get
-			{
-				if (_sceneBootstrapSignpost == null)
-				{
-					_sceneBootstrapSignpost = (CName) CR2WTypeManager.Create("CName", "sceneBootstrapSignpost", cr2w, this);
-				}
-				return _sceneBootstrapSignpost;
-			}
-			set
-			{
-				if (_sceneBootstrapSignpost == value)
-				{
-					return;
-				}
-				_sceneBootstrapSignpost = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneBootstrapSignpost);
+			set => SetProperty(ref _sceneBootstrapSignpost, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("reservedSignposts")] 
 		public CArray<CName> ReservedSignposts
 		{
-			get
-			{
-				if (_reservedSignposts == null)
-				{
-					_reservedSignposts = (CArray<CName>) CR2WTypeManager.Create("array:CName", "reservedSignposts", cr2w, this);
-				}
-				return _reservedSignposts;
-			}
-			set
-			{
-				if (_reservedSignposts == value)
-				{
-					return;
-				}
-				_reservedSignposts = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reservedSignposts);
+			set => SetProperty(ref _reservedSignposts, value);
 		}
 
 		public audioDefaultMixingSignposts(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

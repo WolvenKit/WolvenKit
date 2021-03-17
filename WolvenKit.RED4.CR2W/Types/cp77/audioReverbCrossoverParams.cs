@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dist")] 
 		public CFloat Dist
 		{
-			get
-			{
-				if (_dist == null)
-				{
-					_dist = (CFloat) CR2WTypeManager.Create("Float", "dist", cr2w, this);
-				}
-				return _dist;
-			}
-			set
-			{
-				if (_dist == value)
-				{
-					return;
-				}
-				_dist = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dist);
+			set => SetProperty(ref _dist, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("fade")] 
 		public CFloat Fade
 		{
-			get
-			{
-				if (_fade == null)
-				{
-					_fade = (CFloat) CR2WTypeManager.Create("Float", "fade", cr2w, this);
-				}
-				return _fade;
-			}
-			set
-			{
-				if (_fade == value)
-				{
-					return;
-				}
-				_fade = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fade);
+			set => SetProperty(ref _fade, value);
 		}
 
 		public audioReverbCrossoverParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

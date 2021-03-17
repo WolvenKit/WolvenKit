@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("baseSpeed")] 
 		public CFloat BaseSpeed
 		{
-			get
-			{
-				if (_baseSpeed == null)
-				{
-					_baseSpeed = (CFloat) CR2WTypeManager.Create("Float", "baseSpeed", cr2w, this);
-				}
-				return _baseSpeed;
-			}
-			set
-			{
-				if (_baseSpeed == value)
-				{
-					return;
-				}
-				_baseSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _baseSpeed);
+			set => SetProperty(ref _baseSpeed, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("analogTurnRate")] 
 		public CFloat AnalogTurnRate
 		{
-			get
-			{
-				if (_analogTurnRate == null)
-				{
-					_analogTurnRate = (CFloat) CR2WTypeManager.Create("Float", "analogTurnRate", cr2w, this);
-				}
-				return _analogTurnRate;
-			}
-			set
-			{
-				if (_analogTurnRate == value)
-				{
-					return;
-				}
-				_analogTurnRate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _analogTurnRate);
+			set => SetProperty(ref _analogTurnRate, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("mouseTurnRate")] 
 		public CFloat MouseTurnRate
 		{
-			get
-			{
-				if (_mouseTurnRate == null)
-				{
-					_mouseTurnRate = (CFloat) CR2WTypeManager.Create("Float", "mouseTurnRate", cr2w, this);
-				}
-				return _mouseTurnRate;
-			}
-			set
-			{
-				if (_mouseTurnRate == value)
-				{
-					return;
-				}
-				_mouseTurnRate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mouseTurnRate);
+			set => SetProperty(ref _mouseTurnRate, value);
 		}
 
 		[Ordinal(43)] 
 		[RED("activationBlendTime")] 
 		public CFloat ActivationBlendTime
 		{
-			get
-			{
-				if (_activationBlendTime == null)
-				{
-					_activationBlendTime = (CFloat) CR2WTypeManager.Create("Float", "activationBlendTime", cr2w, this);
-				}
-				return _activationBlendTime;
-			}
-			set
-			{
-				if (_activationBlendTime == value)
-				{
-					return;
-				}
-				_activationBlendTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activationBlendTime);
+			set => SetProperty(ref _activationBlendTime, value);
 		}
 
 		[Ordinal(44)] 
 		[RED("deactivationBlendTime")] 
 		public CFloat DeactivationBlendTime
 		{
-			get
-			{
-				if (_deactivationBlendTime == null)
-				{
-					_deactivationBlendTime = (CFloat) CR2WTypeManager.Create("Float", "deactivationBlendTime", cr2w, this);
-				}
-				return _deactivationBlendTime;
-			}
-			set
-			{
-				if (_deactivationBlendTime == value)
-				{
-					return;
-				}
-				_deactivationBlendTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deactivationBlendTime);
+			set => SetProperty(ref _deactivationBlendTime, value);
 		}
 
 		[Ordinal(45)] 
 		[RED("usePhysicalCollision")] 
 		public CBool UsePhysicalCollision
 		{
-			get
-			{
-				if (_usePhysicalCollision == null)
-				{
-					_usePhysicalCollision = (CBool) CR2WTypeManager.Create("Bool", "usePhysicalCollision", cr2w, this);
-				}
-				return _usePhysicalCollision;
-			}
-			set
-			{
-				if (_usePhysicalCollision == value)
-				{
-					return;
-				}
-				_usePhysicalCollision = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _usePhysicalCollision);
+			set => SetProperty(ref _usePhysicalCollision, value);
 		}
 
 		public gameFreeCamera(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

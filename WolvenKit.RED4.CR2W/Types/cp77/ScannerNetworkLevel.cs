@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("networkLevel")] 
 		public CInt32 NetworkLevel
 		{
-			get
-			{
-				if (_networkLevel == null)
-				{
-					_networkLevel = (CInt32) CR2WTypeManager.Create("Int32", "networkLevel", cr2w, this);
-				}
-				return _networkLevel;
-			}
-			set
-			{
-				if (_networkLevel == value)
-				{
-					return;
-				}
-				_networkLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _networkLevel);
+			set => SetProperty(ref _networkLevel, value);
 		}
 
 		public ScannerNetworkLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("verticalPhaseData")] 
 		public physicsclothPhaseConfig VerticalPhaseData
 		{
-			get
-			{
-				if (_verticalPhaseData == null)
-				{
-					_verticalPhaseData = (physicsclothPhaseConfig) CR2WTypeManager.Create("physicsclothPhaseConfig", "verticalPhaseData", cr2w, this);
-				}
-				return _verticalPhaseData;
-			}
-			set
-			{
-				if (_verticalPhaseData == value)
-				{
-					return;
-				}
-				_verticalPhaseData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _verticalPhaseData);
+			set => SetProperty(ref _verticalPhaseData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("horizontalPhaseData")] 
 		public physicsclothPhaseConfig HorizontalPhaseData
 		{
-			get
-			{
-				if (_horizontalPhaseData == null)
-				{
-					_horizontalPhaseData = (physicsclothPhaseConfig) CR2WTypeManager.Create("physicsclothPhaseConfig", "horizontalPhaseData", cr2w, this);
-				}
-				return _horizontalPhaseData;
-			}
-			set
-			{
-				if (_horizontalPhaseData == value)
-				{
-					return;
-				}
-				_horizontalPhaseData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _horizontalPhaseData);
+			set => SetProperty(ref _horizontalPhaseData, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("bendPhaseData")] 
 		public physicsclothPhaseConfig BendPhaseData
 		{
-			get
-			{
-				if (_bendPhaseData == null)
-				{
-					_bendPhaseData = (physicsclothPhaseConfig) CR2WTypeManager.Create("physicsclothPhaseConfig", "bendPhaseData", cr2w, this);
-				}
-				return _bendPhaseData;
-			}
-			set
-			{
-				if (_bendPhaseData == value)
-				{
-					return;
-				}
-				_bendPhaseData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bendPhaseData);
+			set => SetProperty(ref _bendPhaseData, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("shearPhaseData")] 
 		public physicsclothPhaseConfig ShearPhaseData
 		{
-			get
-			{
-				if (_shearPhaseData == null)
-				{
-					_shearPhaseData = (physicsclothPhaseConfig) CR2WTypeManager.Create("physicsclothPhaseConfig", "shearPhaseData", cr2w, this);
-				}
-				return _shearPhaseData;
-			}
-			set
-			{
-				if (_shearPhaseData == value)
-				{
-					return;
-				}
-				_shearPhaseData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shearPhaseData);
+			set => SetProperty(ref _shearPhaseData, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("runtimeInfo")] 
 		public physicsclothRuntimeInfo RuntimeInfo
 		{
-			get
-			{
-				if (_runtimeInfo == null)
-				{
-					_runtimeInfo = (physicsclothRuntimeInfo) CR2WTypeManager.Create("physicsclothRuntimeInfo", "runtimeInfo", cr2w, this);
-				}
-				return _runtimeInfo;
-			}
-			set
-			{
-				if (_runtimeInfo == value)
-				{
-					return;
-				}
-				_runtimeInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _runtimeInfo);
+			set => SetProperty(ref _runtimeInfo, value);
 		}
 
 		public physicsclothState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

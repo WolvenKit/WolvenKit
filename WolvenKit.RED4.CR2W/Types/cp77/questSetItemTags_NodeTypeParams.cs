@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectRef")] 
 		public CHandle<questUniversalRef> ObjectRef
 		{
-			get
-			{
-				if (_objectRef == null)
-				{
-					_objectRef = (CHandle<questUniversalRef>) CR2WTypeManager.Create("handle:questUniversalRef", "objectRef", cr2w, this);
-				}
-				return _objectRef;
-			}
-			set
-			{
-				if (_objectRef == value)
-				{
-					return;
-				}
-				_objectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemId")] 
 		public TweakDBID ItemId
 		{
-			get
-			{
-				if (_itemId == null)
-				{
-					_itemId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "itemId", cr2w, this);
-				}
-				return _itemId;
-			}
-			set
-			{
-				if (_itemId == value)
-				{
-					return;
-				}
-				_itemId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemId);
+			set => SetProperty(ref _itemId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("addTags")] 
 		public CBool AddTags
 		{
-			get
-			{
-				if (_addTags == null)
-				{
-					_addTags = (CBool) CR2WTypeManager.Create("Bool", "addTags", cr2w, this);
-				}
-				return _addTags;
-			}
-			set
-			{
-				if (_addTags == value)
-				{
-					return;
-				}
-				_addTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addTags);
+			set => SetProperty(ref _addTags, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("tags")] 
 		public CEnum<gameEItemDynamicTags> Tags
 		{
-			get
-			{
-				if (_tags == null)
-				{
-					_tags = (CEnum<gameEItemDynamicTags>) CR2WTypeManager.Create("gameEItemDynamicTags", "tags", cr2w, this);
-				}
-				return _tags;
-			}
-			set
-			{
-				if (_tags == value)
-				{
-					return;
-				}
-				_tags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tags);
+			set => SetProperty(ref _tags, value);
 		}
 
 		public questSetItemTags_NodeTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

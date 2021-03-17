@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("visibleObject")] 
 		public CHandle<senseVisibleObject> VisibleObject
 		{
-			get
-			{
-				if (_visibleObject == null)
-				{
-					_visibleObject = (CHandle<senseVisibleObject>) CR2WTypeManager.Create("handle:senseVisibleObject", "visibleObject", cr2w, this);
-				}
-				return _visibleObject;
-			}
-			set
-			{
-				if (_visibleObject == value)
-				{
-					return;
-				}
-				_visibleObject = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visibleObject);
+			set => SetProperty(ref _visibleObject, value);
 		}
 
 		public senseVisibleObjectComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

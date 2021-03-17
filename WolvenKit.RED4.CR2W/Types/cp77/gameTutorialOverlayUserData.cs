@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hideOnInput")] 
 		public CBool HideOnInput
 		{
-			get
-			{
-				if (_hideOnInput == null)
-				{
-					_hideOnInput = (CBool) CR2WTypeManager.Create("Bool", "hideOnInput", cr2w, this);
-				}
-				return _hideOnInput;
-			}
-			set
-			{
-				if (_hideOnInput == value)
-				{
-					return;
-				}
-				_hideOnInput = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hideOnInput);
+			set => SetProperty(ref _hideOnInput, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("overlayId")] 
 		public CUInt32 OverlayId
 		{
-			get
-			{
-				if (_overlayId == null)
-				{
-					_overlayId = (CUInt32) CR2WTypeManager.Create("Uint32", "overlayId", cr2w, this);
-				}
-				return _overlayId;
-			}
-			set
-			{
-				if (_overlayId == value)
-				{
-					return;
-				}
-				_overlayId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overlayId);
+			set => SetProperty(ref _overlayId, value);
 		}
 
 		public gameTutorialOverlayUserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

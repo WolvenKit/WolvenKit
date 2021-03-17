@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("grid")] 
 		public inkUniformGridWidgetReference Grid
 		{
-			get
-			{
-				if (_grid == null)
-				{
-					_grid = (inkUniformGridWidgetReference) CR2WTypeManager.Create("inkUniformGridWidgetReference", "grid", cr2w, this);
-				}
-				return _grid;
-			}
-			set
-			{
-				if (_grid == value)
-				{
-					return;
-				}
-				_grid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grid);
+			set => SetProperty(ref _grid, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("title")] 
 		public inkTextWidgetReference Title
 		{
-			get
-			{
-				if (_title == null)
-				{
-					_title = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "title", cr2w, this);
-				}
-				return _title;
-			}
-			set
-			{
-				if (_title == value)
-				{
-					return;
-				}
-				_title = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _title);
+			set => SetProperty(ref _title, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("option")] 
 		public wCHandle<gameuiCharacterCustomizationOption> Option
 		{
-			get
-			{
-				if (_option == null)
-				{
-					_option = (wCHandle<gameuiCharacterCustomizationOption>) CR2WTypeManager.Create("whandle:gameuiCharacterCustomizationOption", "option", cr2w, this);
-				}
-				return _option;
-			}
-			set
-			{
-				if (_option == value)
-				{
-					return;
-				}
-				_option = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _option);
+			set => SetProperty(ref _option, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("selectedIndex")] 
 		public CInt32 SelectedIndex
 		{
-			get
-			{
-				if (_selectedIndex == null)
-				{
-					_selectedIndex = (CInt32) CR2WTypeManager.Create("Int32", "selectedIndex", cr2w, this);
-				}
-				return _selectedIndex;
-			}
-			set
-			{
-				if (_selectedIndex == value)
-				{
-					return;
-				}
-				_selectedIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectedIndex);
+			set => SetProperty(ref _selectedIndex, value);
 		}
 
 		public characterCreationBodyMorphOptionColorPicker(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

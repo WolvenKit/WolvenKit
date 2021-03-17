@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("simulationFilter")] 
 		public physicsSimulationFilter SimulationFilter
 		{
-			get
-			{
-				if (_simulationFilter == null)
-				{
-					_simulationFilter = (physicsSimulationFilter) CR2WTypeManager.Create("physicsSimulationFilter", "simulationFilter", cr2w, this);
-				}
-				return _simulationFilter;
-			}
-			set
-			{
-				if (_simulationFilter == value)
-				{
-					return;
-				}
-				_simulationFilter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _simulationFilter);
+			set => SetProperty(ref _simulationFilter, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("queryFilter")] 
 		public physicsQueryFilter QueryFilter
 		{
-			get
-			{
-				if (_queryFilter == null)
-				{
-					_queryFilter = (physicsQueryFilter) CR2WTypeManager.Create("physicsQueryFilter", "queryFilter", cr2w, this);
-				}
-				return _queryFilter;
-			}
-			set
-			{
-				if (_queryFilter == value)
-				{
-					return;
-				}
-				_queryFilter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _queryFilter);
+			set => SetProperty(ref _queryFilter, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("preset")] 
 		public CName Preset
 		{
-			get
-			{
-				if (_preset == null)
-				{
-					_preset = (CName) CR2WTypeManager.Create("CName", "preset", cr2w, this);
-				}
-				return _preset;
-			}
-			set
-			{
-				if (_preset == value)
-				{
-					return;
-				}
-				_preset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _preset);
+			set => SetProperty(ref _preset, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("customFilterData")] 
 		public CHandle<physicsCustomFilterData> CustomFilterData
 		{
-			get
-			{
-				if (_customFilterData == null)
-				{
-					_customFilterData = (CHandle<physicsCustomFilterData>) CR2WTypeManager.Create("handle:physicsCustomFilterData", "customFilterData", cr2w, this);
-				}
-				return _customFilterData;
-			}
-			set
-			{
-				if (_customFilterData == value)
-				{
-					return;
-				}
-				_customFilterData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customFilterData);
+			set => SetProperty(ref _customFilterData, value);
 		}
 
 		public physicsFilterData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

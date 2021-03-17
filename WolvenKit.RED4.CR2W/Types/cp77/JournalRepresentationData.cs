@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Data")] 
 		public wCHandle<gameJournalEntry> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (wCHandle<gameJournalEntry>) CR2WTypeManager.Create("whandle:gameJournalEntry", "Data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("OnscreenData")] 
 		public wCHandle<gameJournalOnscreensStructuredGroup> OnscreenData
 		{
-			get
-			{
-				if (_onscreenData == null)
-				{
-					_onscreenData = (wCHandle<gameJournalOnscreensStructuredGroup>) CR2WTypeManager.Create("whandle:gameJournalOnscreensStructuredGroup", "OnscreenData", cr2w, this);
-				}
-				return _onscreenData;
-			}
-			set
-			{
-				if (_onscreenData == value)
-				{
-					return;
-				}
-				_onscreenData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onscreenData);
+			set => SetProperty(ref _onscreenData, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("Reference")] 
 		public wCHandle<inkWidget> Reference
 		{
-			get
-			{
-				if (_reference == null)
-				{
-					_reference = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "Reference", cr2w, this);
-				}
-				return _reference;
-			}
-			set
-			{
-				if (_reference == value)
-				{
-					return;
-				}
-				_reference = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reference);
+			set => SetProperty(ref _reference, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("IsNew")] 
 		public CBool IsNew
 		{
-			get
-			{
-				if (_isNew == null)
-				{
-					_isNew = (CBool) CR2WTypeManager.Create("Bool", "IsNew", cr2w, this);
-				}
-				return _isNew;
-			}
-			set
-			{
-				if (_isNew == value)
-				{
-					return;
-				}
-				_isNew = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isNew);
+			set => SetProperty(ref _isNew, value);
 		}
 
 		public JournalRepresentationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("devicesMappings")] 
 		public CArray<inkInputDevicesMappingsJSON> DevicesMappings
 		{
-			get
-			{
-				if (_devicesMappings == null)
-				{
-					_devicesMappings = (CArray<inkInputDevicesMappingsJSON>) CR2WTypeManager.Create("array:inkInputDevicesMappingsJSON", "devicesMappings", cr2w, this);
-				}
-				return _devicesMappings;
-			}
-			set
-			{
-				if (_devicesMappings == value)
-				{
-					return;
-				}
-				_devicesMappings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _devicesMappings);
+			set => SetProperty(ref _devicesMappings, value);
 		}
 
 		public inkInputKeyDictionaryJSON(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("caller")] 
 		public CHandle<gameJournalPath> Caller
 		{
-			get
-			{
-				if (_caller == null)
-				{
-					_caller = (CHandle<gameJournalPath>) CR2WTypeManager.Create("handle:gameJournalPath", "caller", cr2w, this);
-				}
-				return _caller;
-			}
-			set
-			{
-				if (_caller == value)
-				{
-					return;
-				}
-				_caller = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _caller);
+			set => SetProperty(ref _caller, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("addressee")] 
 		public CHandle<gameJournalPath> Addressee
 		{
-			get
-			{
-				if (_addressee == null)
-				{
-					_addressee = (CHandle<gameJournalPath>) CR2WTypeManager.Create("handle:gameJournalPath", "addressee", cr2w, this);
-				}
-				return _addressee;
-			}
-			set
-			{
-				if (_addressee == value)
-				{
-					return;
-				}
-				_addressee = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addressee);
+			set => SetProperty(ref _addressee, value);
 		}
 
 		public questPhonePickUp_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lightSourcesName")] 
 		public CName LightSourcesName
 		{
-			get
-			{
-				if (_lightSourcesName == null)
-				{
-					_lightSourcesName = (CName) CR2WTypeManager.Create("CName", "lightSourcesName", cr2w, this);
-				}
-				return _lightSourcesName;
-			}
-			set
-			{
-				if (_lightSourcesName == value)
-				{
-					return;
-				}
-				_lightSourcesName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lightSourcesName);
+			set => SetProperty(ref _lightSourcesName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("preset")] 
 		public TweakDBID Preset
 		{
-			get
-			{
-				if (_preset == null)
-				{
-					_preset = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "preset", cr2w, this);
-				}
-				return _preset;
-			}
-			set
-			{
-				if (_preset == value)
-				{
-					return;
-				}
-				_preset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _preset);
+			set => SetProperty(ref _preset, value);
 		}
 
 		public gamedataLightPreset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("useWorkspot")] 
 		public CBool UseWorkspot
 		{
-			get
-			{
-				if (_useWorkspot == null)
-				{
-					_useWorkspot = (CBool) CR2WTypeManager.Create("Bool", "useWorkspot", cr2w, this);
-				}
-				return _useWorkspot;
-			}
-			set
-			{
-				if (_useWorkspot == value)
-				{
-					return;
-				}
-				_useWorkspot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useWorkspot);
+			set => SetProperty(ref _useWorkspot, value);
 		}
 
 		public QuestForceCameraZoom(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

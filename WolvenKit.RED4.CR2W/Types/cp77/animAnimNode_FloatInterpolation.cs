@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("x1")] 
 		public CFloat X1
 		{
-			get
-			{
-				if (_x1 == null)
-				{
-					_x1 = (CFloat) CR2WTypeManager.Create("Float", "x1", cr2w, this);
-				}
-				return _x1;
-			}
-			set
-			{
-				if (_x1 == value)
-				{
-					return;
-				}
-				_x1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _x1);
+			set => SetProperty(ref _x1, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("x2")] 
 		public CFloat X2
 		{
-			get
-			{
-				if (_x2 == null)
-				{
-					_x2 = (CFloat) CR2WTypeManager.Create("Float", "x2", cr2w, this);
-				}
-				return _x2;
-			}
-			set
-			{
-				if (_x2 == value)
-				{
-					return;
-				}
-				_x2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _x2);
+			set => SetProperty(ref _x2, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("y1")] 
 		public CFloat Y1
 		{
-			get
-			{
-				if (_y1 == null)
-				{
-					_y1 = (CFloat) CR2WTypeManager.Create("Float", "y1", cr2w, this);
-				}
-				return _y1;
-			}
-			set
-			{
-				if (_y1 == value)
-				{
-					return;
-				}
-				_y1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _y1);
+			set => SetProperty(ref _y1, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("y2")] 
 		public CFloat Y2
 		{
-			get
-			{
-				if (_y2 == null)
-				{
-					_y2 = (CFloat) CR2WTypeManager.Create("Float", "y2", cr2w, this);
-				}
-				return _y2;
-			}
-			set
-			{
-				if (_y2 == value)
-				{
-					return;
-				}
-				_y2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _y2);
+			set => SetProperty(ref _y2, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("interpolationType")] 
 		public CEnum<animEAnimGraphMathInterpolation> InterpolationType
 		{
-			get
-			{
-				if (_interpolationType == null)
-				{
-					_interpolationType = (CEnum<animEAnimGraphMathInterpolation>) CR2WTypeManager.Create("animEAnimGraphMathInterpolation", "interpolationType", cr2w, this);
-				}
-				return _interpolationType;
-			}
-			set
-			{
-				if (_interpolationType == value)
-				{
-					return;
-				}
-				_interpolationType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interpolationType);
+			set => SetProperty(ref _interpolationType, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("inputNode")] 
 		public animFloatLink InputNode
 		{
-			get
-			{
-				if (_inputNode == null)
-				{
-					_inputNode = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "inputNode", cr2w, this);
-				}
-				return _inputNode;
-			}
-			set
-			{
-				if (_inputNode == value)
-				{
-					return;
-				}
-				_inputNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputNode);
+			set => SetProperty(ref _inputNode, value);
 		}
 
 		public animAnimNode_FloatInterpolation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

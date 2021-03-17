@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("SelectionMenuVisible")] 
 		public gamebbScriptID_Bool SelectionMenuVisible
 		{
-			get
-			{
-				if (_selectionMenuVisible == null)
-				{
-					_selectionMenuVisible = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "SelectionMenuVisible", cr2w, this);
-				}
-				return _selectionMenuVisible;
-			}
-			set
-			{
-				if (_selectionMenuVisible == value)
-				{
-					return;
-				}
-				_selectionMenuVisible = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _selectionMenuVisible);
+			set => SetProperty(ref _selectionMenuVisible, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("CharacterRecordId")] 
 		public gamebbScriptID_Variant CharacterRecordId
 		{
-			get
-			{
-				if (_characterRecordId == null)
-				{
-					_characterRecordId = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "CharacterRecordId", cr2w, this);
-				}
-				return _characterRecordId;
-			}
-			set
-			{
-				if (_characterRecordId == value)
-				{
-					return;
-				}
-				_characterRecordId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _characterRecordId);
+			set => SetProperty(ref _characterRecordId, value);
 		}
 
 		public UI_CpoCharacterSelectionDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

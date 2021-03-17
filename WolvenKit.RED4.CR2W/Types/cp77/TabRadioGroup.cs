@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("root")] 
 		public inkCompoundWidgetReference Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("toggles")] 
 		public CArray<wCHandle<TabButtonController>> Toggles
 		{
-			get
-			{
-				if (_toggles == null)
-				{
-					_toggles = (CArray<wCHandle<TabButtonController>>) CR2WTypeManager.Create("array:whandle:TabButtonController", "toggles", cr2w, this);
-				}
-				return _toggles;
-			}
-			set
-			{
-				if (_toggles == value)
-				{
-					return;
-				}
-				_toggles = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toggles);
+			set => SetProperty(ref _toggles, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("TooltipsManager")] 
 		public wCHandle<gameuiTooltipsManager> TooltipsManager
 		{
-			get
-			{
-				if (_tooltipsManager == null)
-				{
-					_tooltipsManager = (wCHandle<gameuiTooltipsManager>) CR2WTypeManager.Create("whandle:gameuiTooltipsManager", "TooltipsManager", cr2w, this);
-				}
-				return _tooltipsManager;
-			}
-			set
-			{
-				if (_tooltipsManager == value)
-				{
-					return;
-				}
-				_tooltipsManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsManager);
+			set => SetProperty(ref _tooltipsManager, value);
 		}
 
 		public TabRadioGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

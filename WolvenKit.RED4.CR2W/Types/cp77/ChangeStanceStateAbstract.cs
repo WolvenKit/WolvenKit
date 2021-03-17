@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("changeStateOnDeactivate")] 
 		public CBool ChangeStateOnDeactivate
 		{
-			get
-			{
-				if (_changeStateOnDeactivate == null)
-				{
-					_changeStateOnDeactivate = (CBool) CR2WTypeManager.Create("Bool", "changeStateOnDeactivate", cr2w, this);
-				}
-				return _changeStateOnDeactivate;
-			}
-			set
-			{
-				if (_changeStateOnDeactivate == value)
-				{
-					return;
-				}
-				_changeStateOnDeactivate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _changeStateOnDeactivate);
+			set => SetProperty(ref _changeStateOnDeactivate, value);
 		}
 
 		public ChangeStanceStateAbstract(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

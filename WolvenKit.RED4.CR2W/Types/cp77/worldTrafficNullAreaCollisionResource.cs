@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nullAreasCollisionData")] 
 		public CHandle<worldTrafficNullAreaCollisionData> NullAreasCollisionData
 		{
-			get
-			{
-				if (_nullAreasCollisionData == null)
-				{
-					_nullAreasCollisionData = (CHandle<worldTrafficNullAreaCollisionData>) CR2WTypeManager.Create("handle:worldTrafficNullAreaCollisionData", "nullAreasCollisionData", cr2w, this);
-				}
-				return _nullAreasCollisionData;
-			}
-			set
-			{
-				if (_nullAreasCollisionData == value)
-				{
-					return;
-				}
-				_nullAreasCollisionData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nullAreasCollisionData);
+			set => SetProperty(ref _nullAreasCollisionData, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("nullAreaBlockadeData")] 
 		public CHandle<worldTrafficNullAreaDynamicBlockadeData> NullAreaBlockadeData
 		{
-			get
-			{
-				if (_nullAreaBlockadeData == null)
-				{
-					_nullAreaBlockadeData = (CHandle<worldTrafficNullAreaDynamicBlockadeData>) CR2WTypeManager.Create("handle:worldTrafficNullAreaDynamicBlockadeData", "nullAreaBlockadeData", cr2w, this);
-				}
-				return _nullAreaBlockadeData;
-			}
-			set
-			{
-				if (_nullAreaBlockadeData == value)
-				{
-					return;
-				}
-				_nullAreaBlockadeData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nullAreaBlockadeData);
+			set => SetProperty(ref _nullAreaBlockadeData, value);
 		}
 
 		public worldTrafficNullAreaCollisionResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

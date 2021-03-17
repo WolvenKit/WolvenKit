@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("status")] 
 		public CEnum<entAppearanceStatus> Status
 		{
-			get
-			{
-				if (_status == null)
-				{
-					_status = (CEnum<entAppearanceStatus>) CR2WTypeManager.Create("entAppearanceStatus", "status", cr2w, this);
-				}
-				return _status;
-			}
-			set
-			{
-				if (_status == value)
-				{
-					return;
-				}
-				_status = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _status);
+			set => SetProperty(ref _status, value);
 		}
 
 		public entAppearanceStatusEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("prevScenario")] 
 		public CName PrevScenario
 		{
-			get
-			{
-				if (_prevScenario == null)
-				{
-					_prevScenario = (CName) CR2WTypeManager.Create("CName", "prevScenario", cr2w, this);
-				}
-				return _prevScenario;
-			}
-			set
-			{
-				if (_prevScenario == value)
-				{
-					return;
-				}
-				_prevScenario = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prevScenario);
+			set => SetProperty(ref _prevScenario, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("currSubMenuName")] 
 		public CName CurrSubMenuName
 		{
-			get
-			{
-				if (_currSubMenuName == null)
-				{
-					_currSubMenuName = (CName) CR2WTypeManager.Create("CName", "currSubMenuName", cr2w, this);
-				}
-				return _currSubMenuName;
-			}
-			set
-			{
-				if (_currSubMenuName == value)
-				{
-					return;
-				}
-				_currSubMenuName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currSubMenuName);
+			set => SetProperty(ref _currSubMenuName, value);
 		}
 
 		public MenuScenario_PreGameSubMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

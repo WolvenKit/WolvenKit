@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("updateBucket")] 
 		public CEnum<UpdateBucketEnum> UpdateBucket
 		{
-			get
-			{
-				if (_updateBucket == null)
-				{
-					_updateBucket = (CEnum<UpdateBucketEnum>) CR2WTypeManager.Create("UpdateBucketEnum", "updateBucket", cr2w, this);
-				}
-				return _updateBucket;
-			}
-			set
-			{
-				if (_updateBucket == value)
-				{
-					return;
-				}
-				_updateBucket = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _updateBucket);
+			set => SetProperty(ref _updateBucket, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("lootQuality")] 
 		public CEnum<gamedataQuality> LootQuality
 		{
-			get
-			{
-				if (_lootQuality == null)
-				{
-					_lootQuality = (CEnum<gamedataQuality>) CR2WTypeManager.Create("gamedataQuality", "lootQuality", cr2w, this);
-				}
-				return _lootQuality;
-			}
-			set
-			{
-				if (_lootQuality == value)
-				{
-					return;
-				}
-				_lootQuality = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lootQuality);
+			set => SetProperty(ref _lootQuality, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("isIconic")] 
 		public CBool IsIconic
 		{
-			get
-			{
-				if (_isIconic == null)
-				{
-					_isIconic = (CBool) CR2WTypeManager.Create("Bool", "isIconic", cr2w, this);
-				}
-				return _isIconic;
-			}
-			set
-			{
-				if (_isIconic == value)
-				{
-					return;
-				}
-				_isIconic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isIconic);
+			set => SetProperty(ref _isIconic, value);
 		}
 
 		public gameItemObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

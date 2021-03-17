@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("streamingContextName")] 
 		public CName StreamingContextName
 		{
-			get
-			{
-				if (_streamingContextName == null)
-				{
-					_streamingContextName = (CName) CR2WTypeManager.Create("CName", "streamingContextName", cr2w, this);
-				}
-				return _streamingContextName;
-			}
-			set
-			{
-				if (_streamingContextName == value)
-				{
-					return;
-				}
-				_streamingContextName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _streamingContextName);
+			set => SetProperty(ref _streamingContextName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("highPriority")] 
 		public CBool HighPriority
 		{
-			get
-			{
-				if (_highPriority == null)
-				{
-					_highPriority = (CBool) CR2WTypeManager.Create("Bool", "highPriority", cr2w, this);
-				}
-				return _highPriority;
-			}
-			set
-			{
-				if (_highPriority == value)
-				{
-					return;
-				}
-				_highPriority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highPriority);
+			set => SetProperty(ref _highPriority, value);
 		}
 
 		public PreloadAnimationsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Followers")] 
 		public CArray<gameEntityReference> Followers
 		{
-			get
-			{
-				if (_followers == null)
-				{
-					_followers = (CArray<gameEntityReference>) CR2WTypeManager.Create("array:gameEntityReference", "Followers", cr2w, this);
-				}
-				return _followers;
-			}
-			set
-			{
-				if (_followers == value)
-				{
-					return;
-				}
-				_followers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _followers);
+			set => SetProperty(ref _followers, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("vehicleLeaderRef")] 
 		public gameEntityReference VehicleLeaderRef
 		{
-			get
-			{
-				if (_vehicleLeaderRef == null)
-				{
-					_vehicleLeaderRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "vehicleLeaderRef", cr2w, this);
-				}
-				return _vehicleLeaderRef;
-			}
-			set
-			{
-				if (_vehicleLeaderRef == value)
-				{
-					return;
-				}
-				_vehicleLeaderRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleLeaderRef);
+			set => SetProperty(ref _vehicleLeaderRef, value);
 		}
 
 		public questAssignConvoy_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

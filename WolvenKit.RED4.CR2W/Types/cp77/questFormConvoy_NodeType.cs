@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("leaderRef")] 
 		public gameEntityReference LeaderRef
 		{
-			get
-			{
-				if (_leaderRef == null)
-				{
-					_leaderRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "leaderRef", cr2w, this);
-				}
-				return _leaderRef;
-			}
-			set
-			{
-				if (_leaderRef == value)
-				{
-					return;
-				}
-				_leaderRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _leaderRef);
+			set => SetProperty(ref _leaderRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("formationType")] 
 		public CEnum<vehicleFormationType> FormationType
 		{
-			get
-			{
-				if (_formationType == null)
-				{
-					_formationType = (CEnum<vehicleFormationType>) CR2WTypeManager.Create("vehicleFormationType", "formationType", cr2w, this);
-				}
-				return _formationType;
-			}
-			set
-			{
-				if (_formationType == value)
-				{
-					return;
-				}
-				_formationType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _formationType);
+			set => SetProperty(ref _formationType, value);
 		}
 
 		public questFormConvoy_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

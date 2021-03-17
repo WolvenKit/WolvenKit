@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("perksMenuAttributeItem")] 
 		public CHandle<PerksMenuAttributeItemController> PerksMenuAttributeItem
 		{
-			get
-			{
-				if (_perksMenuAttributeItem == null)
-				{
-					_perksMenuAttributeItem = (CHandle<PerksMenuAttributeItemController>) CR2WTypeManager.Create("handle:PerksMenuAttributeItemController", "perksMenuAttributeItem", cr2w, this);
-				}
-				return _perksMenuAttributeItem;
-			}
-			set
-			{
-				if (_perksMenuAttributeItem == value)
-				{
-					return;
-				}
-				_perksMenuAttributeItem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perksMenuAttributeItem);
+			set => SetProperty(ref _perksMenuAttributeItem, value);
 		}
 
 		public PerksMenuAttributeItemCreated(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

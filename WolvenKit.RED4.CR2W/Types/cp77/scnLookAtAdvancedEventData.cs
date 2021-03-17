@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("basic")] 
 		public scnAnimTargetBasicData Basic
 		{
-			get
-			{
-				if (_basic == null)
-				{
-					_basic = (scnAnimTargetBasicData) CR2WTypeManager.Create("scnAnimTargetBasicData", "basic", cr2w, this);
-				}
-				return _basic;
-			}
-			set
-			{
-				if (_basic == value)
-				{
-					return;
-				}
-				_basic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _basic);
+			set => SetProperty(ref _basic, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("requests")] 
 		public CArray<animLookAtRequestForPart> Requests
 		{
-			get
-			{
-				if (_requests == null)
-				{
-					_requests = (CArray<animLookAtRequestForPart>) CR2WTypeManager.Create("array:animLookAtRequestForPart", "requests", cr2w, this);
-				}
-				return _requests;
-			}
-			set
-			{
-				if (_requests == value)
-				{
-					return;
-				}
-				_requests = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requests);
+			set => SetProperty(ref _requests, value);
 		}
 
 		public scnLookAtAdvancedEventData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("pe")] 
 		public CEnum<vgEStyleAttributeType> Pe
 		{
-			get
-			{
-				if (_pe == null)
-				{
-					_pe = (CEnum<vgEStyleAttributeType>) CR2WTypeManager.Create("vgEStyleAttributeType", "pe", cr2w, this);
-				}
-				return _pe;
-			}
-			set
-			{
-				if (_pe == value)
-				{
-					return;
-				}
-				_pe = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pe);
+			set => SetProperty(ref _pe, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lue")] 
 		public CVariant Lue
 		{
-			get
-			{
-				if (_lue == null)
-				{
-					_lue = (CVariant) CR2WTypeManager.Create("Variant", "lue", cr2w, this);
-				}
-				return _lue;
-			}
-			set
-			{
-				if (_lue == value)
-				{
-					return;
-				}
-				_lue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lue);
+			set => SetProperty(ref _lue, value);
 		}
 
 		public vgAttributeTypeValuePair(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

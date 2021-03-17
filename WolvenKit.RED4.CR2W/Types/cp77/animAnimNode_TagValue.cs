@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tag")] 
 		public CName Tag
 		{
-			get
-			{
-				if (_tag == null)
-				{
-					_tag = (CName) CR2WTypeManager.Create("CName", "tag", cr2w, this);
-				}
-				return _tag;
-			}
-			set
-			{
-				if (_tag == value)
-				{
-					return;
-				}
-				_tag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tag);
+			set => SetProperty(ref _tag, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("defaultValue")] 
 		public CFloat DefaultValue
 		{
-			get
-			{
-				if (_defaultValue == null)
-				{
-					_defaultValue = (CFloat) CR2WTypeManager.Create("Float", "defaultValue", cr2w, this);
-				}
-				return _defaultValue;
-			}
-			set
-			{
-				if (_defaultValue == value)
-				{
-					return;
-				}
-				_defaultValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultValue);
+			set => SetProperty(ref _defaultValue, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("oneMinus")] 
 		public CBool OneMinus
 		{
-			get
-			{
-				if (_oneMinus == null)
-				{
-					_oneMinus = (CBool) CR2WTypeManager.Create("Bool", "oneMinus", cr2w, this);
-				}
-				return _oneMinus;
-			}
-			set
-			{
-				if (_oneMinus == value)
-				{
-					return;
-				}
-				_oneMinus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _oneMinus);
+			set => SetProperty(ref _oneMinus, value);
 		}
 
 		public animAnimNode_TagValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attackType")] 
 		public CEnum<gamedataAttackType> AttackType
 		{
-			get
-			{
-				if (_attackType == null)
-				{
-					_attackType = (CEnum<gamedataAttackType>) CR2WTypeManager.Create("gamedataAttackType", "attackType", cr2w, this);
-				}
-				return _attackType;
-			}
-			set
-			{
-				if (_attackType == value)
-				{
-					return;
-				}
-				_attackType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackType);
+			set => SetProperty(ref _attackType, value);
 		}
 
 		public AttackTypeHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

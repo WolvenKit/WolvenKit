@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get
-			{
-				if (_slotName == null)
-				{
-					_slotName = (CName) CR2WTypeManager.Create("CName", "slotName", cr2w, this);
-				}
-				return _slotName;
-			}
-			set
-			{
-				if (_slotName == value)
-				{
-					return;
-				}
-				_slotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotName);
+			set => SetProperty(ref _slotName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("relativePosition")] 
 		public Vector3 RelativePosition
 		{
-			get
-			{
-				if (_relativePosition == null)
-				{
-					_relativePosition = (Vector3) CR2WTypeManager.Create("Vector3", "relativePosition", cr2w, this);
-				}
-				return _relativePosition;
-			}
-			set
-			{
-				if (_relativePosition == value)
-				{
-					return;
-				}
-				_relativePosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _relativePosition);
+			set => SetProperty(ref _relativePosition, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("relativeRotation")] 
 		public Quaternion RelativeRotation
 		{
-			get
-			{
-				if (_relativeRotation == null)
-				{
-					_relativeRotation = (Quaternion) CR2WTypeManager.Create("Quaternion", "relativeRotation", cr2w, this);
-				}
-				return _relativeRotation;
-			}
-			set
-			{
-				if (_relativeRotation == value)
-				{
-					return;
-				}
-				_relativeRotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _relativeRotation);
+			set => SetProperty(ref _relativeRotation, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("boneName")] 
 		public CName BoneName
 		{
-			get
-			{
-				if (_boneName == null)
-				{
-					_boneName = (CName) CR2WTypeManager.Create("CName", "boneName", cr2w, this);
-				}
-				return _boneName;
-			}
-			set
-			{
-				if (_boneName == value)
-				{
-					return;
-				}
-				_boneName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _boneName);
+			set => SetProperty(ref _boneName, value);
 		}
 
 		public entSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

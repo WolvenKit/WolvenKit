@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("clue")] 
 		public CName Clue
 		{
-			get
-			{
-				if (_clue == null)
-				{
-					_clue = (CName) CR2WTypeManager.Create("CName", "clue", cr2w, this);
-				}
-				return _clue;
-			}
-			set
-			{
-				if (_clue == value)
-				{
-					return;
-				}
-				_clue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clue);
+			set => SetProperty(ref _clue, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("showUI")] 
 		public CBool ShowUI
 		{
-			get
-			{
-				if (_showUI == null)
-				{
-					_showUI = (CBool) CR2WTypeManager.Create("Bool", "showUI", cr2w, this);
-				}
-				return _showUI;
-			}
-			set
-			{
-				if (_showUI == value)
-				{
-					return;
-				}
-				_showUI = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showUI);
+			set => SetProperty(ref _showUI, value);
 		}
 
 		public TEMP_ScanningEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

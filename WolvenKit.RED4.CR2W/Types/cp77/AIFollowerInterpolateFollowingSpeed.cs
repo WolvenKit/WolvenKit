@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enterCondition")] 
 		public TweakDBID EnterCondition
 		{
-			get
-			{
-				if (_enterCondition == null)
-				{
-					_enterCondition = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "enterCondition", cr2w, this);
-				}
-				return _enterCondition;
-			}
-			set
-			{
-				if (_enterCondition == value)
-				{
-					return;
-				}
-				_enterCondition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enterCondition);
+			set => SetProperty(ref _enterCondition, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("exitCondition")] 
 		public TweakDBID ExitCondition
 		{
-			get
-			{
-				if (_exitCondition == null)
-				{
-					_exitCondition = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "exitCondition", cr2w, this);
-				}
-				return _exitCondition;
-			}
-			set
-			{
-				if (_exitCondition == value)
-				{
-					return;
-				}
-				_exitCondition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitCondition);
+			set => SetProperty(ref _exitCondition, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("minInterpolationDistanceToDestination")] 
 		public CFloat MinInterpolationDistanceToDestination
 		{
-			get
-			{
-				if (_minInterpolationDistanceToDestination == null)
-				{
-					_minInterpolationDistanceToDestination = (CFloat) CR2WTypeManager.Create("Float", "minInterpolationDistanceToDestination", cr2w, this);
-				}
-				return _minInterpolationDistanceToDestination;
-			}
-			set
-			{
-				if (_minInterpolationDistanceToDestination == value)
-				{
-					return;
-				}
-				_minInterpolationDistanceToDestination = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _minInterpolationDistanceToDestination);
+			set => SetProperty(ref _minInterpolationDistanceToDestination, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("maxInterpolationDistanceToDestination")] 
 		public CFloat MaxInterpolationDistanceToDestination
 		{
-			get
-			{
-				if (_maxInterpolationDistanceToDestination == null)
-				{
-					_maxInterpolationDistanceToDestination = (CFloat) CR2WTypeManager.Create("Float", "maxInterpolationDistanceToDestination", cr2w, this);
-				}
-				return _maxInterpolationDistanceToDestination;
-			}
-			set
-			{
-				if (_maxInterpolationDistanceToDestination == value)
-				{
-					return;
-				}
-				_maxInterpolationDistanceToDestination = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxInterpolationDistanceToDestination);
+			set => SetProperty(ref _maxInterpolationDistanceToDestination, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("maxTimeDilation")] 
 		public CFloat MaxTimeDilation
 		{
-			get
-			{
-				if (_maxTimeDilation == null)
-				{
-					_maxTimeDilation = (CFloat) CR2WTypeManager.Create("Float", "maxTimeDilation", cr2w, this);
-				}
-				return _maxTimeDilation;
-			}
-			set
-			{
-				if (_maxTimeDilation == value)
-				{
-					return;
-				}
-				_maxTimeDilation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxTimeDilation);
+			set => SetProperty(ref _maxTimeDilation, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("enterConditionInstance")] 
 		public wCHandle<gamedataAIActionCondition_Record> EnterConditionInstance
 		{
-			get
-			{
-				if (_enterConditionInstance == null)
-				{
-					_enterConditionInstance = (wCHandle<gamedataAIActionCondition_Record>) CR2WTypeManager.Create("whandle:gamedataAIActionCondition_Record", "enterConditionInstance", cr2w, this);
-				}
-				return _enterConditionInstance;
-			}
-			set
-			{
-				if (_enterConditionInstance == value)
-				{
-					return;
-				}
-				_enterConditionInstance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enterConditionInstance);
+			set => SetProperty(ref _enterConditionInstance, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("exitConditionInstace")] 
 		public wCHandle<gamedataAIActionCondition_Record> ExitConditionInstace
 		{
-			get
-			{
-				if (_exitConditionInstace == null)
-				{
-					_exitConditionInstace = (wCHandle<gamedataAIActionCondition_Record>) CR2WTypeManager.Create("whandle:gamedataAIActionCondition_Record", "exitConditionInstace", cr2w, this);
-				}
-				return _exitConditionInstace;
-			}
-			set
-			{
-				if (_exitConditionInstace == value)
-				{
-					return;
-				}
-				_exitConditionInstace = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exitConditionInstace);
+			set => SetProperty(ref _exitConditionInstace, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("reason")] 
 		public CName Reason
 		{
-			get
-			{
-				if (_reason == null)
-				{
-					_reason = (CName) CR2WTypeManager.Create("CName", "reason", cr2w, this);
-				}
-				return _reason;
-			}
-			set
-			{
-				if (_reason == value)
-				{
-					return;
-				}
-				_reason = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reason);
+			set => SetProperty(ref _reason, value);
 		}
 
 		public AIFollowerInterpolateFollowingSpeed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

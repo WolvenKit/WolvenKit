@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inputController")] 
 		public CEnum<questInputDevice> InputController
 		{
-			get
-			{
-				if (_inputController == null)
-				{
-					_inputController = (CEnum<questInputDevice>) CR2WTypeManager.Create("questInputDevice", "inputController", cr2w, this);
-				}
-				return _inputController;
-			}
-			set
-			{
-				if (_inputController == value)
-				{
-					return;
-				}
-				_inputController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputController);
+			set => SetProperty(ref _inputController, value);
 		}
 
 		public questInputController_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

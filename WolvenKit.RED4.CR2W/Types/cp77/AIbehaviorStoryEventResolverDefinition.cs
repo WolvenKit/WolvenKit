@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("storyTier")] 
 		public CHandle<AIArgumentMapping> StoryTier
 		{
-			get
-			{
-				if (_storyTier == null)
-				{
-					_storyTier = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "storyTier", cr2w, this);
-				}
-				return _storyTier;
-			}
-			set
-			{
-				if (_storyTier == value)
-				{
-					return;
-				}
-				_storyTier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _storyTier);
+			set => SetProperty(ref _storyTier, value);
 		}
 
 		public AIbehaviorStoryEventResolverDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

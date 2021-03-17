@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("windowBlindersState")] 
 		public CEnum<EWindowBlindersStates> WindowBlindersState
 		{
-			get
-			{
-				if (_windowBlindersState == null)
-				{
-					_windowBlindersState = (CEnum<EWindowBlindersStates>) CR2WTypeManager.Create("EWindowBlindersStates", "windowBlindersState", cr2w, this);
-				}
-				return _windowBlindersState;
-			}
-			set
-			{
-				if (_windowBlindersState == value)
-				{
-					return;
-				}
-				_windowBlindersState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _windowBlindersState);
+			set => SetProperty(ref _windowBlindersState, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hasOpenInteraction")] 
 		public CBool HasOpenInteraction
 		{
-			get
-			{
-				if (_hasOpenInteraction == null)
-				{
-					_hasOpenInteraction = (CBool) CR2WTypeManager.Create("Bool", "hasOpenInteraction", cr2w, this);
-				}
-				return _hasOpenInteraction;
-			}
-			set
-			{
-				if (_hasOpenInteraction == value)
-				{
-					return;
-				}
-				_hasOpenInteraction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasOpenInteraction);
+			set => SetProperty(ref _hasOpenInteraction, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hasTiltInteraction")] 
 		public CBool HasTiltInteraction
 		{
-			get
-			{
-				if (_hasTiltInteraction == null)
-				{
-					_hasTiltInteraction = (CBool) CR2WTypeManager.Create("Bool", "hasTiltInteraction", cr2w, this);
-				}
-				return _hasTiltInteraction;
-			}
-			set
-			{
-				if (_hasTiltInteraction == value)
-				{
-					return;
-				}
-				_hasTiltInteraction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasTiltInteraction);
+			set => SetProperty(ref _hasTiltInteraction, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hasQuickHack")] 
 		public CBool HasQuickHack
 		{
-			get
-			{
-				if (_hasQuickHack == null)
-				{
-					_hasQuickHack = (CBool) CR2WTypeManager.Create("Bool", "hasQuickHack", cr2w, this);
-				}
-				return _hasQuickHack;
-			}
-			set
-			{
-				if (_hasQuickHack == value)
-				{
-					return;
-				}
-				_hasQuickHack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasQuickHack);
+			set => SetProperty(ref _hasQuickHack, value);
 		}
 
 		public WindowBlindersData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

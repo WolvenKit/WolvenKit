@@ -23,253 +23,88 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("explosiveSkillChecks")] 
 		public CHandle<EngDemoContainer> ExplosiveSkillChecks
 		{
-			get
-			{
-				if (_explosiveSkillChecks == null)
-				{
-					_explosiveSkillChecks = (CHandle<EngDemoContainer>) CR2WTypeManager.Create("handle:EngDemoContainer", "explosiveSkillChecks", cr2w, this);
-				}
-				return _explosiveSkillChecks;
-			}
-			set
-			{
-				if (_explosiveSkillChecks == value)
-				{
-					return;
-				}
-				_explosiveSkillChecks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _explosiveSkillChecks);
+			set => SetProperty(ref _explosiveSkillChecks, value);
 		}
 
 		[Ordinal(109)] 
 		[RED("explosionDefinition")] 
 		public CArray<ExplosiveDeviceResourceDefinition> ExplosionDefinition
 		{
-			get
-			{
-				if (_explosionDefinition == null)
-				{
-					_explosionDefinition = (CArray<ExplosiveDeviceResourceDefinition>) CR2WTypeManager.Create("array:ExplosiveDeviceResourceDefinition", "explosionDefinition", cr2w, this);
-				}
-				return _explosionDefinition;
-			}
-			set
-			{
-				if (_explosionDefinition == value)
-				{
-					return;
-				}
-				_explosionDefinition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _explosionDefinition);
+			set => SetProperty(ref _explosionDefinition, value);
 		}
 
 		[Ordinal(110)] 
 		[RED("explosiveWithQhacks")] 
 		public CBool ExplosiveWithQhacks
 		{
-			get
-			{
-				if (_explosiveWithQhacks == null)
-				{
-					_explosiveWithQhacks = (CBool) CR2WTypeManager.Create("Bool", "explosiveWithQhacks", cr2w, this);
-				}
-				return _explosiveWithQhacks;
-			}
-			set
-			{
-				if (_explosiveWithQhacks == value)
-				{
-					return;
-				}
-				_explosiveWithQhacks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _explosiveWithQhacks);
+			set => SetProperty(ref _explosiveWithQhacks, value);
 		}
 
 		[Ordinal(111)] 
 		[RED("HealthDecay")] 
 		public CFloat HealthDecay
 		{
-			get
-			{
-				if (_healthDecay == null)
-				{
-					_healthDecay = (CFloat) CR2WTypeManager.Create("Float", "HealthDecay", cr2w, this);
-				}
-				return _healthDecay;
-			}
-			set
-			{
-				if (_healthDecay == value)
-				{
-					return;
-				}
-				_healthDecay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _healthDecay);
+			set => SetProperty(ref _healthDecay, value);
 		}
 
 		[Ordinal(112)] 
 		[RED("timeToMeshSwap")] 
 		public CFloat TimeToMeshSwap
 		{
-			get
-			{
-				if (_timeToMeshSwap == null)
-				{
-					_timeToMeshSwap = (CFloat) CR2WTypeManager.Create("Float", "timeToMeshSwap", cr2w, this);
-				}
-				return _timeToMeshSwap;
-			}
-			set
-			{
-				if (_timeToMeshSwap == value)
-				{
-					return;
-				}
-				_timeToMeshSwap = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeToMeshSwap);
+			set => SetProperty(ref _timeToMeshSwap, value);
 		}
 
 		[Ordinal(113)] 
 		[RED("shouldDistractionHitVFXIgnoreHitPosition")] 
 		public CBool ShouldDistractionHitVFXIgnoreHitPosition
 		{
-			get
-			{
-				if (_shouldDistractionHitVFXIgnoreHitPosition == null)
-				{
-					_shouldDistractionHitVFXIgnoreHitPosition = (CBool) CR2WTypeManager.Create("Bool", "shouldDistractionHitVFXIgnoreHitPosition", cr2w, this);
-				}
-				return _shouldDistractionHitVFXIgnoreHitPosition;
-			}
-			set
-			{
-				if (_shouldDistractionHitVFXIgnoreHitPosition == value)
-				{
-					return;
-				}
-				_shouldDistractionHitVFXIgnoreHitPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldDistractionHitVFXIgnoreHitPosition);
+			set => SetProperty(ref _shouldDistractionHitVFXIgnoreHitPosition, value);
 		}
 
 		[Ordinal(114)] 
 		[RED("canBeDisabledWithQhacks")] 
 		public CBool CanBeDisabledWithQhacks
 		{
-			get
-			{
-				if (_canBeDisabledWithQhacks == null)
-				{
-					_canBeDisabledWithQhacks = (CBool) CR2WTypeManager.Create("Bool", "canBeDisabledWithQhacks", cr2w, this);
-				}
-				return _canBeDisabledWithQhacks;
-			}
-			set
-			{
-				if (_canBeDisabledWithQhacks == value)
-				{
-					return;
-				}
-				_canBeDisabledWithQhacks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _canBeDisabledWithQhacks);
+			set => SetProperty(ref _canBeDisabledWithQhacks, value);
 		}
 
 		[Ordinal(115)] 
 		[RED("disarmed")] 
 		public CBool Disarmed
 		{
-			get
-			{
-				if (_disarmed == null)
-				{
-					_disarmed = (CBool) CR2WTypeManager.Create("Bool", "disarmed", cr2w, this);
-				}
-				return _disarmed;
-			}
-			set
-			{
-				if (_disarmed == value)
-				{
-					return;
-				}
-				_disarmed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _disarmed);
+			set => SetProperty(ref _disarmed, value);
 		}
 
 		[Ordinal(116)] 
 		[RED("exploded")] 
 		public CBool Exploded
 		{
-			get
-			{
-				if (_exploded == null)
-				{
-					_exploded = (CBool) CR2WTypeManager.Create("Bool", "exploded", cr2w, this);
-				}
-				return _exploded;
-			}
-			set
-			{
-				if (_exploded == value)
-				{
-					return;
-				}
-				_exploded = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exploded);
+			set => SetProperty(ref _exploded, value);
 		}
 
 		[Ordinal(117)] 
 		[RED("provideExplodeAction")] 
 		public CBool ProvideExplodeAction
 		{
-			get
-			{
-				if (_provideExplodeAction == null)
-				{
-					_provideExplodeAction = (CBool) CR2WTypeManager.Create("Bool", "provideExplodeAction", cr2w, this);
-				}
-				return _provideExplodeAction;
-			}
-			set
-			{
-				if (_provideExplodeAction == value)
-				{
-					return;
-				}
-				_provideExplodeAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _provideExplodeAction);
+			set => SetProperty(ref _provideExplodeAction, value);
 		}
 
 		[Ordinal(118)] 
 		[RED("doExplosiveEngineerLogic")] 
 		public CBool DoExplosiveEngineerLogic
 		{
-			get
-			{
-				if (_doExplosiveEngineerLogic == null)
-				{
-					_doExplosiveEngineerLogic = (CBool) CR2WTypeManager.Create("Bool", "doExplosiveEngineerLogic", cr2w, this);
-				}
-				return _doExplosiveEngineerLogic;
-			}
-			set
-			{
-				if (_doExplosiveEngineerLogic == value)
-				{
-					return;
-				}
-				_doExplosiveEngineerLogic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _doExplosiveEngineerLogic);
+			set => SetProperty(ref _doExplosiveEngineerLogic, value);
 		}
 
 		public ExplosiveDeviceControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

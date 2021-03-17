@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isQuestResolved")] 
 		public CBool IsQuestResolved
 		{
-			get
-			{
-				if (_isQuestResolved == null)
-				{
-					_isQuestResolved = (CBool) CR2WTypeManager.Create("Bool", "isQuestResolved", cr2w, this);
-				}
-				return _isQuestResolved;
-			}
-			set
-			{
-				if (_isQuestResolved == value)
-				{
-					return;
-				}
-				_isQuestResolved = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isQuestResolved);
+			set => SetProperty(ref _isQuestResolved, value);
 		}
 
 		public QuestListItemHoverOverEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

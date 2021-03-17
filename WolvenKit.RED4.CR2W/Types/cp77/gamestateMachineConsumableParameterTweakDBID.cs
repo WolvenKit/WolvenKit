@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("consumed")] 
 		public CBool Consumed
 		{
-			get
-			{
-				if (_consumed == null)
-				{
-					_consumed = (CBool) CR2WTypeManager.Create("Bool", "consumed", cr2w, this);
-				}
-				return _consumed;
-			}
-			set
-			{
-				if (_consumed == value)
-				{
-					return;
-				}
-				_consumed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _consumed);
+			set => SetProperty(ref _consumed, value);
 		}
 
 		public gamestateMachineConsumableParameterTweakDBID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

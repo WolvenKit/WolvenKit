@@ -31,437 +31,152 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("maxVisible")] 
 		public CInt32 MaxVisible
 		{
-			get
-			{
-				if (_maxVisible == null)
-				{
-					_maxVisible = (CInt32) CR2WTypeManager.Create("Int32", "maxVisible", cr2w, this);
-				}
-				return _maxVisible;
-			}
-			set
-			{
-				if (_maxVisible == value)
-				{
-					return;
-				}
-				_maxVisible = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxVisible);
+			set => SetProperty(ref _maxVisible, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("maxAccumulatedVisible")] 
 		public CInt32 MaxAccumulatedVisible
 		{
-			get
-			{
-				if (_maxAccumulatedVisible == null)
-				{
-					_maxAccumulatedVisible = (CInt32) CR2WTypeManager.Create("Int32", "maxAccumulatedVisible", cr2w, this);
-				}
-				return _maxAccumulatedVisible;
-			}
-			set
-			{
-				if (_maxAccumulatedVisible == value)
-				{
-					return;
-				}
-				_maxAccumulatedVisible = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxAccumulatedVisible);
+			set => SetProperty(ref _maxAccumulatedVisible, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("realOwner")] 
 		public wCHandle<gameObject> RealOwner
 		{
-			get
-			{
-				if (_realOwner == null)
-				{
-					_realOwner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "realOwner", cr2w, this);
-				}
-				return _realOwner;
-			}
-			set
-			{
-				if (_realOwner == value)
-				{
-					return;
-				}
-				_realOwner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _realOwner);
+			set => SetProperty(ref _realOwner, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("digitsQueue")] 
 		public CHandle<inkScriptFIFOQueue> DigitsQueue
 		{
-			get
-			{
-				if (_digitsQueue == null)
-				{
-					_digitsQueue = (CHandle<inkScriptFIFOQueue>) CR2WTypeManager.Create("handle:inkScriptFIFOQueue", "digitsQueue", cr2w, this);
-				}
-				return _digitsQueue;
-			}
-			set
-			{
-				if (_digitsQueue == value)
-				{
-					return;
-				}
-				_digitsQueue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _digitsQueue);
+			set => SetProperty(ref _digitsQueue, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("isBeingUsed")] 
 		public CBool IsBeingUsed
 		{
-			get
-			{
-				if (_isBeingUsed == null)
-				{
-					_isBeingUsed = (CBool) CR2WTypeManager.Create("Bool", "isBeingUsed", cr2w, this);
-				}
-				return _isBeingUsed;
-			}
-			set
-			{
-				if (_isBeingUsed == value)
-				{
-					return;
-				}
-				_isBeingUsed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isBeingUsed);
+			set => SetProperty(ref _isBeingUsed, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("ActiveWeapon")] 
 		public gameSlotWeaponData ActiveWeapon
 		{
-			get
-			{
-				if (_activeWeapon == null)
-				{
-					_activeWeapon = (gameSlotWeaponData) CR2WTypeManager.Create("gameSlotWeaponData", "ActiveWeapon", cr2w, this);
-				}
-				return _activeWeapon;
-			}
-			set
-			{
-				if (_activeWeapon == value)
-				{
-					return;
-				}
-				_activeWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeWeapon);
+			set => SetProperty(ref _activeWeapon, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("BufferedRosterData")] 
 		public CHandle<gameSlotDataHolder> BufferedRosterData
 		{
-			get
-			{
-				if (_bufferedRosterData == null)
-				{
-					_bufferedRosterData = (CHandle<gameSlotDataHolder>) CR2WTypeManager.Create("handle:gameSlotDataHolder", "BufferedRosterData", cr2w, this);
-				}
-				return _bufferedRosterData;
-			}
-			set
-			{
-				if (_bufferedRosterData == value)
-				{
-					return;
-				}
-				_bufferedRosterData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bufferedRosterData);
+			set => SetProperty(ref _bufferedRosterData, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("individualControllerArray")] 
 		public CArray<wCHandle<DamageDigitLogicController>> IndividualControllerArray
 		{
-			get
-			{
-				if (_individualControllerArray == null)
-				{
-					_individualControllerArray = (CArray<wCHandle<DamageDigitLogicController>>) CR2WTypeManager.Create("array:whandle:DamageDigitLogicController", "individualControllerArray", cr2w, this);
-				}
-				return _individualControllerArray;
-			}
-			set
-			{
-				if (_individualControllerArray == value)
-				{
-					return;
-				}
-				_individualControllerArray = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _individualControllerArray);
+			set => SetProperty(ref _individualControllerArray, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("accumulatedControllerArray")] 
 		public CArray<AccumulatedDamageDigitsNode> AccumulatedControllerArray
 		{
-			get
-			{
-				if (_accumulatedControllerArray == null)
-				{
-					_accumulatedControllerArray = (CArray<AccumulatedDamageDigitsNode>) CR2WTypeManager.Create("array:AccumulatedDamageDigitsNode", "accumulatedControllerArray", cr2w, this);
-				}
-				return _accumulatedControllerArray;
-			}
-			set
-			{
-				if (_accumulatedControllerArray == value)
-				{
-					return;
-				}
-				_accumulatedControllerArray = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _accumulatedControllerArray);
+			set => SetProperty(ref _accumulatedControllerArray, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("damageDigitsMode")] 
 		public CEnum<gameuiDamageDigitsMode> DamageDigitsMode
 		{
-			get
-			{
-				if (_damageDigitsMode == null)
-				{
-					_damageDigitsMode = (CEnum<gameuiDamageDigitsMode>) CR2WTypeManager.Create("gameuiDamageDigitsMode", "damageDigitsMode", cr2w, this);
-				}
-				return _damageDigitsMode;
-			}
-			set
-			{
-				if (_damageDigitsMode == value)
-				{
-					return;
-				}
-				_damageDigitsMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damageDigitsMode);
+			set => SetProperty(ref _damageDigitsMode, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("showDigitsIndividual")] 
 		public CBool ShowDigitsIndividual
 		{
-			get
-			{
-				if (_showDigitsIndividual == null)
-				{
-					_showDigitsIndividual = (CBool) CR2WTypeManager.Create("Bool", "showDigitsIndividual", cr2w, this);
-				}
-				return _showDigitsIndividual;
-			}
-			set
-			{
-				if (_showDigitsIndividual == value)
-				{
-					return;
-				}
-				_showDigitsIndividual = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showDigitsIndividual);
+			set => SetProperty(ref _showDigitsIndividual, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("showDigitsAccumulated")] 
 		public CBool ShowDigitsAccumulated
 		{
-			get
-			{
-				if (_showDigitsAccumulated == null)
-				{
-					_showDigitsAccumulated = (CBool) CR2WTypeManager.Create("Bool", "showDigitsAccumulated", cr2w, this);
-				}
-				return _showDigitsAccumulated;
-			}
-			set
-			{
-				if (_showDigitsAccumulated == value)
-				{
-					return;
-				}
-				_showDigitsAccumulated = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showDigitsAccumulated);
+			set => SetProperty(ref _showDigitsAccumulated, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("damageDigitsStickingMode")] 
 		public CEnum<gameuiDamageDigitsStickingMode> DamageDigitsStickingMode
 		{
-			get
-			{
-				if (_damageDigitsStickingMode == null)
-				{
-					_damageDigitsStickingMode = (CEnum<gameuiDamageDigitsStickingMode>) CR2WTypeManager.Create("gameuiDamageDigitsStickingMode", "damageDigitsStickingMode", cr2w, this);
-				}
-				return _damageDigitsStickingMode;
-			}
-			set
-			{
-				if (_damageDigitsStickingMode == value)
-				{
-					return;
-				}
-				_damageDigitsStickingMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damageDigitsStickingMode);
+			set => SetProperty(ref _damageDigitsStickingMode, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("damageInfoBB")] 
 		public wCHandle<gameIBlackboard> DamageInfoBB
 		{
-			get
-			{
-				if (_damageInfoBB == null)
-				{
-					_damageInfoBB = (wCHandle<gameIBlackboard>) CR2WTypeManager.Create("whandle:gameIBlackboard", "damageInfoBB", cr2w, this);
-				}
-				return _damageInfoBB;
-			}
-			set
-			{
-				if (_damageInfoBB == value)
-				{
-					return;
-				}
-				_damageInfoBB = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damageInfoBB);
+			set => SetProperty(ref _damageInfoBB, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("UIBlackboard")] 
 		public wCHandle<gameIBlackboard> UIBlackboard
 		{
-			get
-			{
-				if (_uIBlackboard == null)
-				{
-					_uIBlackboard = (wCHandle<gameIBlackboard>) CR2WTypeManager.Create("whandle:gameIBlackboard", "UIBlackboard", cr2w, this);
-				}
-				return _uIBlackboard;
-			}
-			set
-			{
-				if (_uIBlackboard == value)
-				{
-					return;
-				}
-				_uIBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uIBlackboard);
+			set => SetProperty(ref _uIBlackboard, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("damageListBlackboardId")] 
 		public CUInt32 DamageListBlackboardId
 		{
-			get
-			{
-				if (_damageListBlackboardId == null)
-				{
-					_damageListBlackboardId = (CUInt32) CR2WTypeManager.Create("Uint32", "damageListBlackboardId", cr2w, this);
-				}
-				return _damageListBlackboardId;
-			}
-			set
-			{
-				if (_damageListBlackboardId == value)
-				{
-					return;
-				}
-				_damageListBlackboardId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damageListBlackboardId);
+			set => SetProperty(ref _damageListBlackboardId, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("BBWeaponListBlackboardId")] 
 		public CUInt32 BBWeaponListBlackboardId
 		{
-			get
-			{
-				if (_bBWeaponListBlackboardId == null)
-				{
-					_bBWeaponListBlackboardId = (CUInt32) CR2WTypeManager.Create("Uint32", "BBWeaponListBlackboardId", cr2w, this);
-				}
-				return _bBWeaponListBlackboardId;
-			}
-			set
-			{
-				if (_bBWeaponListBlackboardId == value)
-				{
-					return;
-				}
-				_bBWeaponListBlackboardId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bBWeaponListBlackboardId);
+			set => SetProperty(ref _bBWeaponListBlackboardId, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("damageDigitsModeBlackboardId")] 
 		public CUInt32 DamageDigitsModeBlackboardId
 		{
-			get
-			{
-				if (_damageDigitsModeBlackboardId == null)
-				{
-					_damageDigitsModeBlackboardId = (CUInt32) CR2WTypeManager.Create("Uint32", "damageDigitsModeBlackboardId", cr2w, this);
-				}
-				return _damageDigitsModeBlackboardId;
-			}
-			set
-			{
-				if (_damageDigitsModeBlackboardId == value)
-				{
-					return;
-				}
-				_damageDigitsModeBlackboardId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damageDigitsModeBlackboardId);
+			set => SetProperty(ref _damageDigitsModeBlackboardId, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("damageDigitsStickingModeBlackboardId")] 
 		public CUInt32 DamageDigitsStickingModeBlackboardId
 		{
-			get
-			{
-				if (_damageDigitsStickingModeBlackboardId == null)
-				{
-					_damageDigitsStickingModeBlackboardId = (CUInt32) CR2WTypeManager.Create("Uint32", "damageDigitsStickingModeBlackboardId", cr2w, this);
-				}
-				return _damageDigitsStickingModeBlackboardId;
-			}
-			set
-			{
-				if (_damageDigitsStickingModeBlackboardId == value)
-				{
-					return;
-				}
-				_damageDigitsStickingModeBlackboardId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damageDigitsStickingModeBlackboardId);
+			set => SetProperty(ref _damageDigitsStickingModeBlackboardId, value);
 		}
 
 		public DamageDigitsGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

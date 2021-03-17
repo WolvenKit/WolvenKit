@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isScanningCluesBlocked")] 
 		public CBool IsScanningCluesBlocked
 		{
-			get
-			{
-				if (_isScanningCluesBlocked == null)
-				{
-					_isScanningCluesBlocked = (CBool) CR2WTypeManager.Create("Bool", "isScanningCluesBlocked", cr2w, this);
-				}
-				return _isScanningCluesBlocked;
-			}
-			set
-			{
-				if (_isScanningCluesBlocked == value)
-				{
-					return;
-				}
-				_isScanningCluesBlocked = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isScanningCluesBlocked);
+			set => SetProperty(ref _isScanningCluesBlocked, value);
 		}
 
 		public ScanInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

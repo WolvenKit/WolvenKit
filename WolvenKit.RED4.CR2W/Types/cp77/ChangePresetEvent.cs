@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("presetID")] 
 		public CEnum<ESmartHousePreset> PresetID
 		{
-			get
-			{
-				if (_presetID == null)
-				{
-					_presetID = (CEnum<ESmartHousePreset>) CR2WTypeManager.Create("ESmartHousePreset", "presetID", cr2w, this);
-				}
-				return _presetID;
-			}
-			set
-			{
-				if (_presetID == value)
-				{
-					return;
-				}
-				_presetID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _presetID);
+			set => SetProperty(ref _presetID, value);
 		}
 
 		public ChangePresetEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

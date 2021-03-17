@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("items")] 
 		public CArray<wCHandle<gameItemObject>> Items
 		{
-			get
-			{
-				if (_items == null)
-				{
-					_items = (CArray<wCHandle<gameItemObject>>) CR2WTypeManager.Create("array:whandle:gameItemObject", "items", cr2w, this);
-				}
-				return _items;
-			}
-			set
-			{
-				if (_items == value)
-				{
-					return;
-				}
-				_items = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _items);
+			set => SetProperty(ref _items, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("effects")] 
 		public CArray<CHandle<gameEffectInstance>> Effects
 		{
-			get
-			{
-				if (_effects == null)
-				{
-					_effects = (CArray<CHandle<gameEffectInstance>>) CR2WTypeManager.Create("array:handle:gameEffectInstance", "effects", cr2w, this);
-				}
-				return _effects;
-			}
-			set
-			{
-				if (_effects == value)
-				{
-					return;
-				}
-				_effects = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effects);
+			set => SetProperty(ref _effects, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("overrideMaterialName")] 
 		public CString OverrideMaterialName
 		{
-			get
-			{
-				if (_overrideMaterialName == null)
-				{
-					_overrideMaterialName = (CString) CR2WTypeManager.Create("String", "overrideMaterialName", cr2w, this);
-				}
-				return _overrideMaterialName;
-			}
-			set
-			{
-				if (_overrideMaterialName == value)
-				{
-					return;
-				}
-				_overrideMaterialName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideMaterialName);
+			set => SetProperty(ref _overrideMaterialName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("overrideMaterialTag")] 
 		public CName OverrideMaterialTag
 		{
-			get
-			{
-				if (_overrideMaterialTag == null)
-				{
-					_overrideMaterialTag = (CName) CR2WTypeManager.Create("CName", "overrideMaterialTag", cr2w, this);
-				}
-				return _overrideMaterialTag;
-			}
-			set
-			{
-				if (_overrideMaterialTag == value)
-				{
-					return;
-				}
-				_overrideMaterialTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideMaterialTag);
+			set => SetProperty(ref _overrideMaterialTag, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("effectInstance")] 
 		public CHandle<gameEffectInstance> EffectInstance
 		{
-			get
-			{
-				if (_effectInstance == null)
-				{
-					_effectInstance = (CHandle<gameEffectInstance>) CR2WTypeManager.Create("handle:gameEffectInstance", "effectInstance", cr2w, this);
-				}
-				return _effectInstance;
-			}
-			set
-			{
-				if (_effectInstance == value)
-				{
-					return;
-				}
-				_effectInstance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectInstance);
+			set => SetProperty(ref _effectInstance, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("ownerEffect")] 
 		public CHandle<gameEffectInstance> OwnerEffect
 		{
-			get
-			{
-				if (_ownerEffect == null)
-				{
-					_ownerEffect = (CHandle<gameEffectInstance>) CR2WTypeManager.Create("handle:gameEffectInstance", "ownerEffect", cr2w, this);
-				}
-				return _ownerEffect;
-			}
-			set
-			{
-				if (_ownerEffect == value)
-				{
-					return;
-				}
-				_ownerEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ownerEffect);
+			set => SetProperty(ref _ownerEffect, value);
 		}
 
 		public ApplyShaderOnEquipmentEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

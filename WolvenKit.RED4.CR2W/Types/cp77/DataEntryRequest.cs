@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dataType")] 
 		public CEnum<EGameSessionDataType> DataType
 		{
-			get
-			{
-				if (_dataType == null)
-				{
-					_dataType = (CEnum<EGameSessionDataType>) CR2WTypeManager.Create("EGameSessionDataType", "dataType", cr2w, this);
-				}
-				return _dataType;
-			}
-			set
-			{
-				if (_dataType == value)
-				{
-					return;
-				}
-				_dataType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dataType);
+			set => SetProperty(ref _dataType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("data")] 
 		public CVariant Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CVariant) CR2WTypeManager.Create("Variant", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		public DataEntryRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

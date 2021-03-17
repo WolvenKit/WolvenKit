@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isAmingWithWeapon")] 
 		public CBool IsAmingWithWeapon
 		{
-			get
-			{
-				if (_isAmingWithWeapon == null)
-				{
-					_isAmingWithWeapon = (CBool) CR2WTypeManager.Create("Bool", "isAmingWithWeapon", cr2w, this);
-				}
-				return _isAmingWithWeapon;
-			}
-			set
-			{
-				if (_isAmingWithWeapon == value)
-				{
-					return;
-				}
-				_isAmingWithWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isAmingWithWeapon);
+			set => SetProperty(ref _isAmingWithWeapon, value);
 		}
 
 		public ZoomLevelAimEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

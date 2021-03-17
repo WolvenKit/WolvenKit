@@ -27,345 +27,120 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("MetaQuestHint")] 
 		public inkWidgetReference MetaQuestHint
 		{
-			get
-			{
-				if (_metaQuestHint == null)
-				{
-					_metaQuestHint = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "MetaQuestHint", cr2w, this);
-				}
-				return _metaQuestHint;
-			}
-			set
-			{
-				if (_metaQuestHint == value)
-				{
-					return;
-				}
-				_metaQuestHint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metaQuestHint);
+			set => SetProperty(ref _metaQuestHint, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("MetaQuestHintText")] 
 		public inkTextWidgetReference MetaQuestHintText
 		{
-			get
-			{
-				if (_metaQuestHintText == null)
-				{
-					_metaQuestHintText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "MetaQuestHintText", cr2w, this);
-				}
-				return _metaQuestHintText;
-			}
-			set
-			{
-				if (_metaQuestHintText == value)
-				{
-					return;
-				}
-				_metaQuestHintText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metaQuestHintText);
+			set => SetProperty(ref _metaQuestHintText, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("MetaQuest1")] 
 		public inkWidgetReference MetaQuest1
 		{
-			get
-			{
-				if (_metaQuest1 == null)
-				{
-					_metaQuest1 = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "MetaQuest1", cr2w, this);
-				}
-				return _metaQuest1;
-			}
-			set
-			{
-				if (_metaQuest1 == value)
-				{
-					return;
-				}
-				_metaQuest1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metaQuest1);
+			set => SetProperty(ref _metaQuest1, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("MetaQuest2")] 
 		public inkWidgetReference MetaQuest2
 		{
-			get
-			{
-				if (_metaQuest2 == null)
-				{
-					_metaQuest2 = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "MetaQuest2", cr2w, this);
-				}
-				return _metaQuest2;
-			}
-			set
-			{
-				if (_metaQuest2 == value)
-				{
-					return;
-				}
-				_metaQuest2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metaQuest2);
+			set => SetProperty(ref _metaQuest2, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("MetaQuest3")] 
 		public inkWidgetReference MetaQuest3
 		{
-			get
-			{
-				if (_metaQuest3 == null)
-				{
-					_metaQuest3 = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "MetaQuest3", cr2w, this);
-				}
-				return _metaQuest3;
-			}
-			set
-			{
-				if (_metaQuest3 == value)
-				{
-					return;
-				}
-				_metaQuest3 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metaQuest3);
+			set => SetProperty(ref _metaQuest3, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("MetaQuest1Value")] 
 		public inkTextWidgetReference MetaQuest1Value
 		{
-			get
-			{
-				if (_metaQuest1Value == null)
-				{
-					_metaQuest1Value = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "MetaQuest1Value", cr2w, this);
-				}
-				return _metaQuest1Value;
-			}
-			set
-			{
-				if (_metaQuest1Value == value)
-				{
-					return;
-				}
-				_metaQuest1Value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metaQuest1Value);
+			set => SetProperty(ref _metaQuest1Value, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("MetaQuest2Value")] 
 		public inkTextWidgetReference MetaQuest2Value
 		{
-			get
-			{
-				if (_metaQuest2Value == null)
-				{
-					_metaQuest2Value = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "MetaQuest2Value", cr2w, this);
-				}
-				return _metaQuest2Value;
-			}
-			set
-			{
-				if (_metaQuest2Value == value)
-				{
-					return;
-				}
-				_metaQuest2Value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metaQuest2Value);
+			set => SetProperty(ref _metaQuest2Value, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("MetaQuest3Value")] 
 		public inkTextWidgetReference MetaQuest3Value
 		{
-			get
-			{
-				if (_metaQuest3Value == null)
-				{
-					_metaQuest3Value = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "MetaQuest3Value", cr2w, this);
-				}
-				return _metaQuest3Value;
-			}
-			set
-			{
-				if (_metaQuest3Value == value)
-				{
-					return;
-				}
-				_metaQuest3Value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metaQuest3Value);
+			set => SetProperty(ref _metaQuest3Value, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("metaQuest1Description")] 
 		public CString MetaQuest1Description
 		{
-			get
-			{
-				if (_metaQuest1Description == null)
-				{
-					_metaQuest1Description = (CString) CR2WTypeManager.Create("String", "metaQuest1Description", cr2w, this);
-				}
-				return _metaQuest1Description;
-			}
-			set
-			{
-				if (_metaQuest1Description == value)
-				{
-					return;
-				}
-				_metaQuest1Description = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metaQuest1Description);
+			set => SetProperty(ref _metaQuest1Description, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("metaQuest2Description")] 
 		public CString MetaQuest2Description
 		{
-			get
-			{
-				if (_metaQuest2Description == null)
-				{
-					_metaQuest2Description = (CString) CR2WTypeManager.Create("String", "metaQuest2Description", cr2w, this);
-				}
-				return _metaQuest2Description;
-			}
-			set
-			{
-				if (_metaQuest2Description == value)
-				{
-					return;
-				}
-				_metaQuest2Description = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metaQuest2Description);
+			set => SetProperty(ref _metaQuest2Description, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("metaQuest3Description")] 
 		public CString MetaQuest3Description
 		{
-			get
-			{
-				if (_metaQuest3Description == null)
-				{
-					_metaQuest3Description = (CString) CR2WTypeManager.Create("String", "metaQuest3Description", cr2w, this);
-				}
-				return _metaQuest3Description;
-			}
-			set
-			{
-				if (_metaQuest3Description == value)
-				{
-					return;
-				}
-				_metaQuest3Description = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metaQuest3Description);
+			set => SetProperty(ref _metaQuest3Description, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("animMeta1")] 
 		public CHandle<inkanimProxy> AnimMeta1
 		{
-			get
-			{
-				if (_animMeta1 == null)
-				{
-					_animMeta1 = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animMeta1", cr2w, this);
-				}
-				return _animMeta1;
-			}
-			set
-			{
-				if (_animMeta1 == value)
-				{
-					return;
-				}
-				_animMeta1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animMeta1);
+			set => SetProperty(ref _animMeta1, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("animMeta2")] 
 		public CHandle<inkanimProxy> AnimMeta2
 		{
-			get
-			{
-				if (_animMeta2 == null)
-				{
-					_animMeta2 = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animMeta2", cr2w, this);
-				}
-				return _animMeta2;
-			}
-			set
-			{
-				if (_animMeta2 == value)
-				{
-					return;
-				}
-				_animMeta2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animMeta2);
+			set => SetProperty(ref _animMeta2, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("animMeta3")] 
 		public CHandle<inkanimProxy> AnimMeta3
 		{
-			get
-			{
-				if (_animMeta3 == null)
-				{
-					_animMeta3 = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animMeta3", cr2w, this);
-				}
-				return _animMeta3;
-			}
-			set
-			{
-				if (_animMeta3 == value)
-				{
-					return;
-				}
-				_animMeta3 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animMeta3);
+			set => SetProperty(ref _animMeta3, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("animTooltip")] 
 		public CHandle<inkanimProxy> AnimTooltip
 		{
-			get
-			{
-				if (_animTooltip == null)
-				{
-					_animTooltip = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animTooltip", cr2w, this);
-				}
-				return _animTooltip;
-			}
-			set
-			{
-				if (_animTooltip == value)
-				{
-					return;
-				}
-				_animTooltip = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animTooltip);
+			set => SetProperty(ref _animTooltip, value);
 		}
 
 		public MetaQuestLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

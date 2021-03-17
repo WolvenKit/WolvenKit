@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("type")] 
 		public CEnum<navLocomotionPathSegmentTypes> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<navLocomotionPathSegmentTypes>) CR2WTypeManager.Create("navLocomotionPathSegmentTypes", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("segmentEnd")] 
 		public navSerializableSplineProgression SegmentEnd
 		{
-			get
-			{
-				if (_segmentEnd == null)
-				{
-					_segmentEnd = (navSerializableSplineProgression) CR2WTypeManager.Create("navSerializableSplineProgression", "segmentEnd", cr2w, this);
-				}
-				return _segmentEnd;
-			}
-			set
-			{
-				if (_segmentEnd == value)
-				{
-					return;
-				}
-				_segmentEnd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _segmentEnd);
+			set => SetProperty(ref _segmentEnd, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("offMeshLink")] 
 		public CUInt64 OffMeshLink
 		{
-			get
-			{
-				if (_offMeshLink == null)
-				{
-					_offMeshLink = (CUInt64) CR2WTypeManager.Create("Uint64", "offMeshLink", cr2w, this);
-				}
-				return _offMeshLink;
-			}
-			set
-			{
-				if (_offMeshLink == value)
-				{
-					return;
-				}
-				_offMeshLink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offMeshLink);
+			set => SetProperty(ref _offMeshLink, value);
 		}
 
 		public navLocomotionPathSegmentInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

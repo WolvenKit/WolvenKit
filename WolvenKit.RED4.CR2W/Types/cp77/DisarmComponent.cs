@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isDisarmingOngoing")] 
 		public CBool IsDisarmingOngoing
 		{
-			get
-			{
-				if (_isDisarmingOngoing == null)
-				{
-					_isDisarmingOngoing = (CBool) CR2WTypeManager.Create("Bool", "isDisarmingOngoing", cr2w, this);
-				}
-				return _isDisarmingOngoing;
-			}
-			set
-			{
-				if (_isDisarmingOngoing == value)
-				{
-					return;
-				}
-				_isDisarmingOngoing = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDisarmingOngoing);
+			set => SetProperty(ref _isDisarmingOngoing, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("requester")] 
 		public wCHandle<gameObject> Requester
 		{
-			get
-			{
-				if (_requester == null)
-				{
-					_requester = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "requester", cr2w, this);
-				}
-				return _requester;
-			}
-			set
-			{
-				if (_requester == value)
-				{
-					return;
-				}
-				_requester = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requester);
+			set => SetProperty(ref _requester, value);
 		}
 
 		public DisarmComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

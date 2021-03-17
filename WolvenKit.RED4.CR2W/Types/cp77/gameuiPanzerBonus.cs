@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fallingSpeed")] 
 		public CFloat FallingSpeed
 		{
-			get
-			{
-				if (_fallingSpeed == null)
-				{
-					_fallingSpeed = (CFloat) CR2WTypeManager.Create("Float", "fallingSpeed", cr2w, this);
-				}
-				return _fallingSpeed;
-			}
-			set
-			{
-				if (_fallingSpeed == value)
-				{
-					return;
-				}
-				_fallingSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fallingSpeed);
+			set => SetProperty(ref _fallingSpeed, value);
 		}
 
 		public gameuiPanzerBonus(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("text")] 
 		public CString Text
 		{
-			get
-			{
-				if (_text == null)
-				{
-					_text = (CString) CR2WTypeManager.Create("String", "text", cr2w, this);
-				}
-				return _text;
-			}
-			set
-			{
-				if (_text == value)
-				{
-					return;
-				}
-				_text = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _text);
+			set => SetProperty(ref _text, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("translation")] 
 		public CString Translation
 		{
-			get
-			{
-				if (_translation == null)
-				{
-					_translation = (CString) CR2WTypeManager.Create("String", "translation", cr2w, this);
-				}
-				return _translation;
-			}
-			set
-			{
-				if (_translation == value)
-				{
-					return;
-				}
-				_translation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _translation);
+			set => SetProperty(ref _translation, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("preTranslatedText")] 
 		public CString PreTranslatedText
 		{
-			get
-			{
-				if (_preTranslatedText == null)
-				{
-					_preTranslatedText = (CString) CR2WTypeManager.Create("String", "preTranslatedText", cr2w, this);
-				}
-				return _preTranslatedText;
-			}
-			set
-			{
-				if (_preTranslatedText == value)
-				{
-					return;
-				}
-				_preTranslatedText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _preTranslatedText);
+			set => SetProperty(ref _preTranslatedText, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("postTranslatedText")] 
 		public CString PostTranslatedText
 		{
-			get
-			{
-				if (_postTranslatedText == null)
-				{
-					_postTranslatedText = (CString) CR2WTypeManager.Create("String", "postTranslatedText", cr2w, this);
-				}
-				return _postTranslatedText;
-			}
-			set
-			{
-				if (_postTranslatedText == value)
-				{
-					return;
-				}
-				_postTranslatedText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _postTranslatedText);
+			set => SetProperty(ref _postTranslatedText, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("language")] 
 		public CEnum<scnDialogLineLanguage> Language
 		{
-			get
-			{
-				if (_language == null)
-				{
-					_language = (CEnum<scnDialogLineLanguage>) CR2WTypeManager.Create("scnDialogLineLanguage", "language", cr2w, this);
-				}
-				return _language;
-			}
-			set
-			{
-				if (_language == value)
-				{
-					return;
-				}
-				_language = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _language);
+			set => SetProperty(ref _language, value);
 		}
 
 		public scnDialogDisplayString(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

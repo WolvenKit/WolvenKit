@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isOn")] 
 		public CBool IsOn
 		{
-			get
-			{
-				if (_isOn == null)
-				{
-					_isOn = (CBool) CR2WTypeManager.Create("Bool", "isOn", cr2w, this);
-				}
-				return _isOn;
-			}
-			set
-			{
-				if (_isOn == value)
-				{
-					return;
-				}
-				_isOn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isOn);
+			set => SetProperty(ref _isOn, value);
 		}
 
 		public AnimFeature_DistractionState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("focusModeOperations")] 
 		public CArray<SFocusModeOperationData> FocusModeOperations_
 		{
-			get
-			{
-				if (_focusModeOperations == null)
-				{
-					_focusModeOperations = (CArray<SFocusModeOperationData>) CR2WTypeManager.Create("array:SFocusModeOperationData", "focusModeOperations", cr2w, this);
-				}
-				return _focusModeOperations;
-			}
-			set
-			{
-				if (_focusModeOperations == value)
-				{
-					return;
-				}
-				_focusModeOperations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _focusModeOperations);
+			set => SetProperty(ref _focusModeOperations, value);
 		}
 
 		public FocusModeOperations(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

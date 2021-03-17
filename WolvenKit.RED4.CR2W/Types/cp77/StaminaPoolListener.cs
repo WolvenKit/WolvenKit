@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("staminaBar")] 
 		public wCHandle<StaminabarWidgetGameController> StaminaBar
 		{
-			get
-			{
-				if (_staminaBar == null)
-				{
-					_staminaBar = (wCHandle<StaminabarWidgetGameController>) CR2WTypeManager.Create("whandle:StaminabarWidgetGameController", "staminaBar", cr2w, this);
-				}
-				return _staminaBar;
-			}
-			set
-			{
-				if (_staminaBar == value)
-				{
-					return;
-				}
-				_staminaBar = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _staminaBar);
+			set => SetProperty(ref _staminaBar, value);
 		}
 
 		public StaminaPoolListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

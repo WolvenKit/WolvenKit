@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isRemote")] 
 		public CBool IsRemote
 		{
-			get
-			{
-				if (_isRemote == null)
-				{
-					_isRemote = (CBool) CR2WTypeManager.Create("Bool", "isRemote", cr2w, this);
-				}
-				return _isRemote;
-			}
-			set
-			{
-				if (_isRemote == value)
-				{
-					return;
-				}
-				_isRemote = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isRemote);
+			set => SetProperty(ref _isRemote, value);
 		}
 
 		public SetExposeQuickHacks(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

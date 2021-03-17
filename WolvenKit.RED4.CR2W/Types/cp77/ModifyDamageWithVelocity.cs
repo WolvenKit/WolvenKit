@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("percentMult")] 
 		public CFloat PercentMult
 		{
-			get
-			{
-				if (_percentMult == null)
-				{
-					_percentMult = (CFloat) CR2WTypeManager.Create("Float", "percentMult", cr2w, this);
-				}
-				return _percentMult;
-			}
-			set
-			{
-				if (_percentMult == value)
-				{
-					return;
-				}
-				_percentMult = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _percentMult);
+			set => SetProperty(ref _percentMult, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("unitThreshold")] 
 		public CFloat UnitThreshold
 		{
-			get
-			{
-				if (_unitThreshold == null)
-				{
-					_unitThreshold = (CFloat) CR2WTypeManager.Create("Float", "unitThreshold", cr2w, this);
-				}
-				return _unitThreshold;
-			}
-			set
-			{
-				if (_unitThreshold == value)
-				{
-					return;
-				}
-				_unitThreshold = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unitThreshold);
+			set => SetProperty(ref _unitThreshold, value);
 		}
 
 		public ModifyDamageWithVelocity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

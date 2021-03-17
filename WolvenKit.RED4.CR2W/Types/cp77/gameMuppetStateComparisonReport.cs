@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("frameID")] 
 		public CUInt32 FrameID
 		{
-			get
-			{
-				if (_frameID == null)
-				{
-					_frameID = (CUInt32) CR2WTypeManager.Create("Uint32", "frameID", cr2w, this);
-				}
-				return _frameID;
-			}
-			set
-			{
-				if (_frameID == value)
-				{
-					return;
-				}
-				_frameID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _frameID);
+			set => SetProperty(ref _frameID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("items")] 
 		public CArray<gameMuppetComparisonReportItem> Items
 		{
-			get
-			{
-				if (_items == null)
-				{
-					_items = (CArray<gameMuppetComparisonReportItem>) CR2WTypeManager.Create("array:gameMuppetComparisonReportItem", "items", cr2w, this);
-				}
-				return _items;
-			}
-			set
-			{
-				if (_items == value)
-				{
-					return;
-				}
-				_items = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _items);
+			set => SetProperty(ref _items, value);
 		}
 
 		public gameMuppetStateComparisonReport(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

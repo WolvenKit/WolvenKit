@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("brushCategory")] 
 		public CName BrushCategory
 		{
-			get
-			{
-				if (_brushCategory == null)
-				{
-					_brushCategory = (CName) CR2WTypeManager.Create("CName", "brushCategory", cr2w, this);
-				}
-				return _brushCategory;
-			}
-			set
-			{
-				if (_brushCategory == value)
-				{
-					return;
-				}
-				_brushCategory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _brushCategory);
+			set => SetProperty(ref _brushCategory, value);
 		}
 
 		public audioAmbientPaletteEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

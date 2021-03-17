@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("desiredSpeed")] 
 		public CFloat DesiredSpeed
 		{
-			get
-			{
-				if (_desiredSpeed == null)
-				{
-					_desiredSpeed = (CFloat) CR2WTypeManager.Create("Float", "desiredSpeed", cr2w, this);
-				}
-				return _desiredSpeed;
-			}
-			set
-			{
-				if (_desiredSpeed == value)
-				{
-					return;
-				}
-				_desiredSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _desiredSpeed);
+			set => SetProperty(ref _desiredSpeed, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isJumping")] 
 		public CBool IsJumping
 		{
-			get
-			{
-				if (_isJumping == null)
-				{
-					_isJumping = (CBool) CR2WTypeManager.Create("Bool", "isJumping", cr2w, this);
-				}
-				return _isJumping;
-			}
-			set
-			{
-				if (_isJumping == value)
-				{
-					return;
-				}
-				_isJumping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isJumping);
+			set => SetProperty(ref _isJumping, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isFalling")] 
 		public CBool IsFalling
 		{
-			get
-			{
-				if (_isFalling == null)
-				{
-					_isFalling = (CBool) CR2WTypeManager.Create("Bool", "isFalling", cr2w, this);
-				}
-				return _isFalling;
-			}
-			set
-			{
-				if (_isFalling == value)
-				{
-					return;
-				}
-				_isFalling = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isFalling);
+			set => SetProperty(ref _isFalling, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isDoubleJumped")] 
 		public CBool IsDoubleJumped
 		{
-			get
-			{
-				if (_isDoubleJumped == null)
-				{
-					_isDoubleJumped = (CBool) CR2WTypeManager.Create("Bool", "isDoubleJumped", cr2w, this);
-				}
-				return _isDoubleJumped;
-			}
-			set
-			{
-				if (_isDoubleJumped == value)
-				{
-					return;
-				}
-				_isDoubleJumped = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isDoubleJumped);
+			set => SetProperty(ref _isDoubleJumped, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("moveStyle")] 
 		public CEnum<gameMuppetMoveStyle> MoveStyle
 		{
-			get
-			{
-				if (_moveStyle == null)
-				{
-					_moveStyle = (CEnum<gameMuppetMoveStyle>) CR2WTypeManager.Create("gameMuppetMoveStyle", "moveStyle", cr2w, this);
-				}
-				return _moveStyle;
-			}
-			set
-			{
-				if (_moveStyle == value)
-				{
-					return;
-				}
-				_moveStyle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _moveStyle);
+			set => SetProperty(ref _moveStyle, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("jumpStartFrameId")] 
 		public CUInt32 JumpStartFrameId
 		{
-			get
-			{
-				if (_jumpStartFrameId == null)
-				{
-					_jumpStartFrameId = (CUInt32) CR2WTypeManager.Create("Uint32", "jumpStartFrameId", cr2w, this);
-				}
-				return _jumpStartFrameId;
-			}
-			set
-			{
-				if (_jumpStartFrameId == value)
-				{
-					return;
-				}
-				_jumpStartFrameId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _jumpStartFrameId);
+			set => SetProperty(ref _jumpStartFrameId, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("landFrameId")] 
 		public CUInt32 LandFrameId
 		{
-			get
-			{
-				if (_landFrameId == null)
-				{
-					_landFrameId = (CUInt32) CR2WTypeManager.Create("Uint32", "landFrameId", cr2w, this);
-				}
-				return _landFrameId;
-			}
-			set
-			{
-				if (_landFrameId == value)
-				{
-					return;
-				}
-				_landFrameId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _landFrameId);
+			set => SetProperty(ref _landFrameId, value);
 		}
 
 		public gameMuppetMoveState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entries")] 
 		public CArray<audioLocomotionCustomActionEventDictionaryItem> Entries
 		{
-			get
-			{
-				if (_entries == null)
-				{
-					_entries = (CArray<audioLocomotionCustomActionEventDictionaryItem>) CR2WTypeManager.Create("array:audioLocomotionCustomActionEventDictionaryItem", "entries", cr2w, this);
-				}
-				return _entries;
-			}
-			set
-			{
-				if (_entries == value)
-				{
-					return;
-				}
-				_entries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entryType")] 
 		public CHandle<audioLocomotionCustomActionEventDictionaryItem> EntryType
 		{
-			get
-			{
-				if (_entryType == null)
-				{
-					_entryType = (CHandle<audioLocomotionCustomActionEventDictionaryItem>) CR2WTypeManager.Create("handle:audioLocomotionCustomActionEventDictionaryItem", "entryType", cr2w, this);
-				}
-				return _entryType;
-			}
-			set
-			{
-				if (_entryType == value)
-				{
-					return;
-				}
-				_entryType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryType);
+			set => SetProperty(ref _entryType, value);
 		}
 
 		public audioLocomotionCustomActionEventDictionary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

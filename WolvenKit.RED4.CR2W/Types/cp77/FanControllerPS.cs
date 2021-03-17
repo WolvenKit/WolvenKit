@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fanSetup")] 
 		public FanSetup FanSetup
 		{
-			get
-			{
-				if (_fanSetup == null)
-				{
-					_fanSetup = (FanSetup) CR2WTypeManager.Create("FanSetup", "fanSetup", cr2w, this);
-				}
-				return _fanSetup;
-			}
-			set
-			{
-				if (_fanSetup == value)
-				{
-					return;
-				}
-				_fanSetup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fanSetup);
+			set => SetProperty(ref _fanSetup, value);
 		}
 
 		public FanControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

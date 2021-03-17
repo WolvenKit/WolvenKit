@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("action")] 
 		public CEnum<questControlCrowdAction> Action
 		{
-			get
-			{
-				if (_action == null)
-				{
-					_action = (CEnum<questControlCrowdAction>) CR2WTypeManager.Create("questControlCrowdAction", "action", cr2w, this);
-				}
-				return _action;
-			}
-			set
-			{
-				if (_action == value)
-				{
-					return;
-				}
-				_action = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("debugSource")] 
 		public CName DebugSource
 		{
-			get
-			{
-				if (_debugSource == null)
-				{
-					_debugSource = (CName) CR2WTypeManager.Create("CName", "debugSource", cr2w, this);
-				}
-				return _debugSource;
-			}
-			set
-			{
-				if (_debugSource == value)
-				{
-					return;
-				}
-				_debugSource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _debugSource);
+			set => SetProperty(ref _debugSource, value);
 		}
 
 		public questCrowdManagerNodeType_ControlCrowd(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

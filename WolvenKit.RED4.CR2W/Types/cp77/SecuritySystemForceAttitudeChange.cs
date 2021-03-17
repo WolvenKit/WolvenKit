@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("newAttitude")] 
 		public CName NewAttitude
 		{
-			get
-			{
-				if (_newAttitude == null)
-				{
-					_newAttitude = (CName) CR2WTypeManager.Create("CName", "newAttitude", cr2w, this);
-				}
-				return _newAttitude;
-			}
-			set
-			{
-				if (_newAttitude == value)
-				{
-					return;
-				}
-				_newAttitude = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newAttitude);
+			set => SetProperty(ref _newAttitude, value);
 		}
 
 		public SecuritySystemForceAttitudeChange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

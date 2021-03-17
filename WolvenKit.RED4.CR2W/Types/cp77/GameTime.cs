@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("seconds")] 
 		public CInt32 Seconds
 		{
-			get
-			{
-				if (_seconds == null)
-				{
-					_seconds = (CInt32) CR2WTypeManager.Create("Int32", "seconds", cr2w, this);
-				}
-				return _seconds;
-			}
-			set
-			{
-				if (_seconds == value)
-				{
-					return;
-				}
-				_seconds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _seconds);
+			set => SetProperty(ref _seconds, value);
 		}
 
 		public GameTime(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

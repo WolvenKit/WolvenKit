@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("offset")] 
 		public CUInt32 Offset
 		{
-			get
-			{
-				if (_offset == null)
-				{
-					_offset = (CUInt32) CR2WTypeManager.Create("Uint32", "offset", cr2w, this);
-				}
-				return _offset;
-			}
-			set
-			{
-				if (_offset == value)
-				{
-					return;
-				}
-				_offset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offset);
+			set => SetProperty(ref _offset, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("size")] 
 		public CUInt32 Size
 		{
-			get
-			{
-				if (_size == null)
-				{
-					_size = (CUInt32) CR2WTypeManager.Create("Uint32", "size", cr2w, this);
-				}
-				return _size;
-			}
-			set
-			{
-				if (_size == value)
-				{
-					return;
-				}
-				_size = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _size);
+			set => SetProperty(ref _size, value);
 		}
 
 		public meshLocalMaterialHeader(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

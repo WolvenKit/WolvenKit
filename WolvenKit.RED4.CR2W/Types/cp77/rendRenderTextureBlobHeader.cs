@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("version")] 
 		public CUInt32 Version
 		{
-			get
-			{
-				if (_version == null)
-				{
-					_version = (CUInt32) CR2WTypeManager.Create("Uint32", "version", cr2w, this);
-				}
-				return _version;
-			}
-			set
-			{
-				if (_version == value)
-				{
-					return;
-				}
-				_version = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _version);
+			set => SetProperty(ref _version, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sizeInfo")] 
 		public rendRenderTextureBlobSizeInfo SizeInfo
 		{
-			get
-			{
-				if (_sizeInfo == null)
-				{
-					_sizeInfo = (rendRenderTextureBlobSizeInfo) CR2WTypeManager.Create("rendRenderTextureBlobSizeInfo", "sizeInfo", cr2w, this);
-				}
-				return _sizeInfo;
-			}
-			set
-			{
-				if (_sizeInfo == value)
-				{
-					return;
-				}
-				_sizeInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sizeInfo);
+			set => SetProperty(ref _sizeInfo, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("textureInfo")] 
 		public rendRenderTextureBlobTextureInfo TextureInfo
 		{
-			get
-			{
-				if (_textureInfo == null)
-				{
-					_textureInfo = (rendRenderTextureBlobTextureInfo) CR2WTypeManager.Create("rendRenderTextureBlobTextureInfo", "textureInfo", cr2w, this);
-				}
-				return _textureInfo;
-			}
-			set
-			{
-				if (_textureInfo == value)
-				{
-					return;
-				}
-				_textureInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textureInfo);
+			set => SetProperty(ref _textureInfo, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("mipMapInfo")] 
 		public CArray<rendRenderTextureBlobMipMapInfo> MipMapInfo
 		{
-			get
-			{
-				if (_mipMapInfo == null)
-				{
-					_mipMapInfo = (CArray<rendRenderTextureBlobMipMapInfo>) CR2WTypeManager.Create("array:rendRenderTextureBlobMipMapInfo", "mipMapInfo", cr2w, this);
-				}
-				return _mipMapInfo;
-			}
-			set
-			{
-				if (_mipMapInfo == value)
-				{
-					return;
-				}
-				_mipMapInfo = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mipMapInfo);
+			set => SetProperty(ref _mipMapInfo, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("histogramData")] 
 		public CArray<rendHistogramBias> HistogramData
 		{
-			get
-			{
-				if (_histogramData == null)
-				{
-					_histogramData = (CArray<rendHistogramBias>) CR2WTypeManager.Create("array:rendHistogramBias", "histogramData", cr2w, this);
-				}
-				return _histogramData;
-			}
-			set
-			{
-				if (_histogramData == value)
-				{
-					return;
-				}
-				_histogramData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _histogramData);
+			set => SetProperty(ref _histogramData, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("flags")] 
 		public CUInt32 Flags
 		{
-			get
-			{
-				if (_flags == null)
-				{
-					_flags = (CUInt32) CR2WTypeManager.Create("Uint32", "flags", cr2w, this);
-				}
-				return _flags;
-			}
-			set
-			{
-				if (_flags == value)
-				{
-					return;
-				}
-				_flags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flags);
+			set => SetProperty(ref _flags, value);
 		}
 
 		public rendRenderTextureBlobHeader(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

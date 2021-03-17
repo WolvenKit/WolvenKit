@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("range")] 
 		public CFloat Range
 		{
-			get
-			{
-				if (_range == null)
-				{
-					_range = (CFloat) CR2WTypeManager.Create("Float", "range", cr2w, this);
-				}
-				return _range;
-			}
-			set
-			{
-				if (_range == value)
-				{
-					return;
-				}
-				_range = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _range);
+			set => SetProperty(ref _range, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("offset")] 
 		public Vector4 Offset
 		{
-			get
-			{
-				if (_offset == null)
-				{
-					_offset = (Vector4) CR2WTypeManager.Create("Vector4", "offset", cr2w, this);
-				}
-				return _offset;
-			}
-			set
-			{
-				if (_offset == value)
-				{
-					return;
-				}
-				_offset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offset);
+			set => SetProperty(ref _offset, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("damageType")] 
 		public TweakDBID DamageType
 		{
-			get
-			{
-				if (_damageType == null)
-				{
-					_damageType = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "damageType", cr2w, this);
-				}
-				return _damageType;
-			}
-			set
-			{
-				if (_damageType == value)
-				{
-					return;
-				}
-				_damageType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damageType);
+			set => SetProperty(ref _damageType, value);
 		}
 
 		public SDamageOperationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

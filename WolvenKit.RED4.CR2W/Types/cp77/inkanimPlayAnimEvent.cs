@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animName")] 
 		public CName AnimName
 		{
-			get
-			{
-				if (_animName == null)
-				{
-					_animName = (CName) CR2WTypeManager.Create("CName", "animName", cr2w, this);
-				}
-				return _animName;
-			}
-			set
-			{
-				if (_animName == value)
-				{
-					return;
-				}
-				_animName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animName);
+			set => SetProperty(ref _animName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("playbackOptions")] 
 		public inkanimPlaybackOptions PlaybackOptions
 		{
-			get
-			{
-				if (_playbackOptions == null)
-				{
-					_playbackOptions = (inkanimPlaybackOptions) CR2WTypeManager.Create("inkanimPlaybackOptions", "playbackOptions", cr2w, this);
-				}
-				return _playbackOptions;
-			}
-			set
-			{
-				if (_playbackOptions == value)
-				{
-					return;
-				}
-				_playbackOptions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playbackOptions);
+			set => SetProperty(ref _playbackOptions, value);
 		}
 
 		public inkanimPlayAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

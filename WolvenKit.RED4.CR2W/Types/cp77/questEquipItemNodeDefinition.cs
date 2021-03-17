@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entityReference")] 
 		public CHandle<questObservableUniversalRef> EntityReference
 		{
-			get
-			{
-				if (_entityReference == null)
-				{
-					_entityReference = (CHandle<questObservableUniversalRef>) CR2WTypeManager.Create("handle:questObservableUniversalRef", "entityReference", cr2w, this);
-				}
-				return _entityReference;
-			}
-			set
-			{
-				if (_entityReference == value)
-				{
-					return;
-				}
-				_entityReference = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityReference);
+			set => SetProperty(ref _entityReference, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("params")] 
 		public CHandle<questEquipItemParams> Params
 		{
-			get
-			{
-				if (_params == null)
-				{
-					_params = (CHandle<questEquipItemParams>) CR2WTypeManager.Create("handle:questEquipItemParams", "params", cr2w, this);
-				}
-				return _params;
-			}
-			set
-			{
-				if (_params == value)
-				{
-					return;
-				}
-				_params = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
 		}
 
 		public questEquipItemNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

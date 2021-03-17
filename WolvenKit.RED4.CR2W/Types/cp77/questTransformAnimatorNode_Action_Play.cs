@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timesPlayed")] 
 		public CInt32 TimesPlayed
 		{
-			get
-			{
-				if (_timesPlayed == null)
-				{
-					_timesPlayed = (CInt32) CR2WTypeManager.Create("Int32", "timesPlayed", cr2w, this);
-				}
-				return _timesPlayed;
-			}
-			set
-			{
-				if (_timesPlayed == value)
-				{
-					return;
-				}
-				_timesPlayed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timesPlayed);
+			set => SetProperty(ref _timesPlayed, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timeScale")] 
 		public CFloat TimeScale
 		{
-			get
-			{
-				if (_timeScale == null)
-				{
-					_timeScale = (CFloat) CR2WTypeManager.Create("Float", "timeScale", cr2w, this);
-				}
-				return _timeScale;
-			}
-			set
-			{
-				if (_timeScale == value)
-				{
-					return;
-				}
-				_timeScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeScale);
+			set => SetProperty(ref _timeScale, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("reverse")] 
 		public CBool Reverse
 		{
-			get
-			{
-				if (_reverse == null)
-				{
-					_reverse = (CBool) CR2WTypeManager.Create("Bool", "reverse", cr2w, this);
-				}
-				return _reverse;
-			}
-			set
-			{
-				if (_reverse == value)
-				{
-					return;
-				}
-				_reverse = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reverse);
+			set => SetProperty(ref _reverse, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("useEntitySetup")] 
 		public CBool UseEntitySetup
 		{
-			get
-			{
-				if (_useEntitySetup == null)
-				{
-					_useEntitySetup = (CBool) CR2WTypeManager.Create("Bool", "useEntitySetup", cr2w, this);
-				}
-				return _useEntitySetup;
-			}
-			set
-			{
-				if (_useEntitySetup == value)
-				{
-					return;
-				}
-				_useEntitySetup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useEntitySetup);
+			set => SetProperty(ref _useEntitySetup, value);
 		}
 
 		public questTransformAnimatorNode_Action_Play(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mask")] 
 		public CUInt8 Mask
 		{
-			get
-			{
-				if (_mask == null)
-				{
-					_mask = (CUInt8) CR2WTypeManager.Create("Uint8", "mask", cr2w, this);
-				}
-				return _mask;
-			}
-			set
-			{
-				if (_mask == value)
-				{
-					return;
-				}
-				_mask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mask);
+			set => SetProperty(ref _mask, value);
 		}
 
 		public scnGenderMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lod")] 
 		public CInt32 Lod
 		{
-			get
-			{
-				if (_lod == null)
-				{
-					_lod = (CInt32) CR2WTypeManager.Create("Int32", "lod", cr2w, this);
-				}
-				return _lod;
-			}
-			set
-			{
-				if (_lod == value)
-				{
-					return;
-				}
-				_lod = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lod);
+			set => SetProperty(ref _lod, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("group")] 
 		public CName Group
 		{
-			get
-			{
-				if (_group == null)
-				{
-					_group = (CName) CR2WTypeManager.Create("CName", "group", cr2w, this);
-				}
-				return _group;
-			}
-			set
-			{
-				if (_group == value)
-				{
-					return;
-				}
-				_group = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _group);
+			set => SetProperty(ref _group, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("animFeatureValue")] 
 		public CBool AnimFeatureValue
 		{
-			get
-			{
-				if (_animFeatureValue == null)
-				{
-					_animFeatureValue = (CBool) CR2WTypeManager.Create("Bool", "animFeatureValue", cr2w, this);
-				}
-				return _animFeatureValue;
-			}
-			set
-			{
-				if (_animFeatureValue == value)
-				{
-					return;
-				}
-				_animFeatureValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animFeatureValue);
+			set => SetProperty(ref _animFeatureValue, value);
 		}
 
 		public animConditionalSegmentCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

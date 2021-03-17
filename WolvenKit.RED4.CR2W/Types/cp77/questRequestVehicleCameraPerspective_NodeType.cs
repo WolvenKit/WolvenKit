@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cameraPerspective")] 
 		public CEnum<questVehicleCameraPerspective> CameraPerspective
 		{
-			get
-			{
-				if (_cameraPerspective == null)
-				{
-					_cameraPerspective = (CEnum<questVehicleCameraPerspective>) CR2WTypeManager.Create("questVehicleCameraPerspective", "cameraPerspective", cr2w, this);
-				}
-				return _cameraPerspective;
-			}
-			set
-			{
-				if (_cameraPerspective == value)
-				{
-					return;
-				}
-				_cameraPerspective = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameraPerspective);
+			set => SetProperty(ref _cameraPerspective, value);
 		}
 
 		public questRequestVehicleCameraPerspective_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("treeReference")] 
 		public CHandle<AIArgumentMapping> TreeReference
 		{
-			get
-			{
-				if (_treeReference == null)
-				{
-					_treeReference = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "treeReference", cr2w, this);
-				}
-				return _treeReference;
-			}
-			set
-			{
-				if (_treeReference == value)
-				{
-					return;
-				}
-				_treeReference = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _treeReference);
+			set => SetProperty(ref _treeReference, value);
 		}
 
 		public AIbehaviorIncludedTreeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

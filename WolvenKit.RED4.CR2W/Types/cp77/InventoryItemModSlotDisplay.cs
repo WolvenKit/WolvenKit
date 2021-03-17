@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotBorder")] 
 		public inkWidgetReference SlotBorder
 		{
-			get
-			{
-				if (_slotBorder == null)
-				{
-					_slotBorder = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "slotBorder", cr2w, this);
-				}
-				return _slotBorder;
-			}
-			set
-			{
-				if (_slotBorder == value)
-				{
-					return;
-				}
-				_slotBorder = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotBorder);
+			set => SetProperty(ref _slotBorder, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("slotBackground")] 
 		public inkWidgetReference SlotBackground
 		{
-			get
-			{
-				if (_slotBackground == null)
-				{
-					_slotBackground = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "slotBackground", cr2w, this);
-				}
-				return _slotBackground;
-			}
-			set
-			{
-				if (_slotBackground == value)
-				{
-					return;
-				}
-				_slotBackground = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotBackground);
+			set => SetProperty(ref _slotBackground, value);
 		}
 
 		public InventoryItemModSlotDisplay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

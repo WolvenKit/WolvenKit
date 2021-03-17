@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("playbackOptions")] 
 		public inkanimPlaybackOptions PlaybackOptions
 		{
-			get
-			{
-				if (_playbackOptions == null)
-				{
-					_playbackOptions = (inkanimPlaybackOptions) CR2WTypeManager.Create("inkanimPlaybackOptions", "playbackOptions", cr2w, this);
-				}
-				return _playbackOptions;
-			}
-			set
-			{
-				if (_playbackOptions == value)
-				{
-					return;
-				}
-				_playbackOptions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playbackOptions);
+			set => SetProperty(ref _playbackOptions, value);
 		}
 
 		public PlaybackOptionsUpdateData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

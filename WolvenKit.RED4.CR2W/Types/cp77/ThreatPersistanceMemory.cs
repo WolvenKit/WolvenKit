@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("threats")] 
 		public CArray<wCHandle<entEntity>> Threats
 		{
-			get
-			{
-				if (_threats == null)
-				{
-					_threats = (CArray<wCHandle<entEntity>>) CR2WTypeManager.Create("array:whandle:entEntity", "threats", cr2w, this);
-				}
-				return _threats;
-			}
-			set
-			{
-				if (_threats == value)
-				{
-					return;
-				}
-				_threats = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _threats);
+			set => SetProperty(ref _threats, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isPersistent")] 
 		public CArray<CBool> IsPersistent
 		{
-			get
-			{
-				if (_isPersistent == null)
-				{
-					_isPersistent = (CArray<CBool>) CR2WTypeManager.Create("array:Bool", "isPersistent", cr2w, this);
-				}
-				return _isPersistent;
-			}
-			set
-			{
-				if (_isPersistent == value)
-				{
-					return;
-				}
-				_isPersistent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPersistent);
+			set => SetProperty(ref _isPersistent, value);
 		}
 
 		public ThreatPersistanceMemory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

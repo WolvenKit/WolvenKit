@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statusEffectRecordID")] 
 		public TweakDBID StatusEffectRecordID
 		{
-			get
-			{
-				if (_statusEffectRecordID == null)
-				{
-					_statusEffectRecordID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "statusEffectRecordID", cr2w, this);
-				}
-				return _statusEffectRecordID;
-			}
-			set
-			{
-				if (_statusEffectRecordID == value)
-				{
-					return;
-				}
-				_statusEffectRecordID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statusEffectRecordID);
+			set => SetProperty(ref _statusEffectRecordID, value);
 		}
 
 		public gameStatusEffectBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("scale")] 
 		public CFloat Scale
 		{
-			get
-			{
-				if (_scale == null)
-				{
-					_scale = (CFloat) CR2WTypeManager.Create("Float", "scale", cr2w, this);
-				}
-				return _scale;
-			}
-			set
-			{
-				if (_scale == value)
-				{
-					return;
-				}
-				_scale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scale);
+			set => SetProperty(ref _scale, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("intensityMultiplier")] 
 		public effectEffectParameterEvaluatorFloat IntensityMultiplier
 		{
-			get
-			{
-				if (_intensityMultiplier == null)
-				{
-					_intensityMultiplier = (effectEffectParameterEvaluatorFloat) CR2WTypeManager.Create("effectEffectParameterEvaluatorFloat", "intensityMultiplier", cr2w, this);
-				}
-				return _intensityMultiplier;
-			}
-			set
-			{
-				if (_intensityMultiplier == value)
-				{
-					return;
-				}
-				_intensityMultiplier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _intensityMultiplier);
+			set => SetProperty(ref _intensityMultiplier, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("intensity")] 
 		public effectEffectParameterEvaluatorFloat Intensity
 		{
-			get
-			{
-				if (_intensity == null)
-				{
-					_intensity = (effectEffectParameterEvaluatorFloat) CR2WTypeManager.Create("effectEffectParameterEvaluatorFloat", "intensity", cr2w, this);
-				}
-				return _intensity;
-			}
-			set
-			{
-				if (_intensity == value)
-				{
-					return;
-				}
-				_intensity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _intensity);
+			set => SetProperty(ref _intensity, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("radius")] 
 		public effectEffectParameterEvaluatorFloat Radius
 		{
-			get
-			{
-				if (_radius == null)
-				{
-					_radius = (effectEffectParameterEvaluatorFloat) CR2WTypeManager.Create("effectEffectParameterEvaluatorFloat", "radius", cr2w, this);
-				}
-				return _radius;
-			}
-			set
-			{
-				if (_radius == value)
-				{
-					return;
-				}
-				_radius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radius);
+			set => SetProperty(ref _radius, value);
 		}
 
 		public effectTrackItemLightParameter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

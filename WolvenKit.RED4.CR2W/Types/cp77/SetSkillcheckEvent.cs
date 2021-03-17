@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("skillcheckContainer")] 
 		public CHandle<BaseSkillCheckContainer> SkillcheckContainer
 		{
-			get
-			{
-				if (_skillcheckContainer == null)
-				{
-					_skillcheckContainer = (CHandle<BaseSkillCheckContainer>) CR2WTypeManager.Create("handle:BaseSkillCheckContainer", "skillcheckContainer", cr2w, this);
-				}
-				return _skillcheckContainer;
-			}
-			set
-			{
-				if (_skillcheckContainer == value)
-				{
-					return;
-				}
-				_skillcheckContainer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skillcheckContainer);
+			set => SetProperty(ref _skillcheckContainer, value);
 		}
 
 		public SetSkillcheckEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

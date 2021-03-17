@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cycleTime")] 
 		public CFloat CycleTime
 		{
-			get
-			{
-				if (_cycleTime == null)
-				{
-					_cycleTime = (CFloat) CR2WTypeManager.Create("Float", "cycleTime", cr2w, this);
-				}
-				return _cycleTime;
-			}
-			set
-			{
-				if (_cycleTime == value)
-				{
-					return;
-				}
-				_cycleTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cycleTime);
+			set => SetProperty(ref _cycleTime, value);
 		}
 
 		public AnimFeature_TriggerModeChange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

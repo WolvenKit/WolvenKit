@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cameraDeadBodyData")] 
 		public CArray<CHandle<CameraDeadBodyInternalData>> CameraDeadBodyData
 		{
-			get
-			{
-				if (_cameraDeadBodyData == null)
-				{
-					_cameraDeadBodyData = (CArray<CHandle<CameraDeadBodyInternalData>>) CR2WTypeManager.Create("array:handle:CameraDeadBodyInternalData", "cameraDeadBodyData", cr2w, this);
-				}
-				return _cameraDeadBodyData;
-			}
-			set
-			{
-				if (_cameraDeadBodyData == value)
-				{
-					return;
-				}
-				_cameraDeadBodyData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameraDeadBodyData);
+			set => SetProperty(ref _cameraDeadBodyData, value);
 		}
 
 		public CameraDeadBodySessionDataModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

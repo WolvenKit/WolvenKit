@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("startValue")] 
 		public CFloat StartValue
 		{
-			get
-			{
-				if (_startValue == null)
-				{
-					_startValue = (CFloat) CR2WTypeManager.Create("Float", "startValue", cr2w, this);
-				}
-				return _startValue;
-			}
-			set
-			{
-				if (_startValue == value)
-				{
-					return;
-				}
-				_startValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startValue);
+			set => SetProperty(ref _startValue, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("endValue")] 
 		public CFloat EndValue
 		{
-			get
-			{
-				if (_endValue == null)
-				{
-					_endValue = (CFloat) CR2WTypeManager.Create("Float", "endValue", cr2w, this);
-				}
-				return _endValue;
-			}
-			set
-			{
-				if (_endValue == value)
-				{
-					return;
-				}
-				_endValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endValue);
+			set => SetProperty(ref _endValue, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("goShortPath")] 
 		public CBool GoShortPath
 		{
-			get
-			{
-				if (_goShortPath == null)
-				{
-					_goShortPath = (CBool) CR2WTypeManager.Create("Bool", "goShortPath", cr2w, this);
-				}
-				return _goShortPath;
-			}
-			set
-			{
-				if (_goShortPath == value)
-				{
-					return;
-				}
-				_goShortPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _goShortPath);
+			set => SetProperty(ref _goShortPath, value);
 		}
 
 		public inkanimRotationInterpolator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

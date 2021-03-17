@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("commandName")] 
 		public CName CommandName
 		{
-			get
-			{
-				if (_commandName == null)
-				{
-					_commandName = (CName) CR2WTypeManager.Create("CName", "commandName", cr2w, this);
-				}
-				return _commandName;
-			}
-			set
-			{
-				if (_commandName == value)
-				{
-					return;
-				}
-				_commandName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _commandName);
+			set => SetProperty(ref _commandName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useInheritance")] 
 		public CBool UseInheritance
 		{
-			get
-			{
-				if (_useInheritance == null)
-				{
-					_useInheritance = (CBool) CR2WTypeManager.Create("Bool", "useInheritance", cr2w, this);
-				}
-				return _useInheritance;
-			}
-			set
-			{
-				if (_useInheritance == value)
-				{
-					return;
-				}
-				_useInheritance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useInheritance);
+			set => SetProperty(ref _useInheritance, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("cmdCbId")] 
 		public CUInt32 CmdCbId
 		{
-			get
-			{
-				if (_cmdCbId == null)
-				{
-					_cmdCbId = (CUInt32) CR2WTypeManager.Create("Uint32", "cmdCbId", cr2w, this);
-				}
-				return _cmdCbId;
-			}
-			set
-			{
-				if (_cmdCbId == value)
-				{
-					return;
-				}
-				_cmdCbId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cmdCbId);
+			set => SetProperty(ref _cmdCbId, value);
 		}
 
 		public PassiveCommandCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

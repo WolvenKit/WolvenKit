@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entity")] 
 		public wCHandle<entEntity> Entity
 		{
-			get
-			{
-				if (_entity == null)
-				{
-					_entity = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "entity", cr2w, this);
-				}
-				return _entity;
-			}
-			set
-			{
-				if (_entity == value)
-				{
-					return;
-				}
-				_entity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entity);
+			set => SetProperty(ref _entity, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("worldPosition")] 
 		public WorldPosition WorldPosition
 		{
-			get
-			{
-				if (_worldPosition == null)
-				{
-					_worldPosition = (WorldPosition) CR2WTypeManager.Create("WorldPosition", "worldPosition", cr2w, this);
-				}
-				return _worldPosition;
-			}
-			set
-			{
-				if (_worldPosition == value)
-				{
-					return;
-				}
-				_worldPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _worldPosition);
+			set => SetProperty(ref _worldPosition, value);
 		}
 
 		public AIPositionSpec(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

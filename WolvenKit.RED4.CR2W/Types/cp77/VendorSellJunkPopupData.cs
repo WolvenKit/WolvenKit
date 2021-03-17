@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("items")] 
 		public CArray<wCHandle<gameItemData>> Items
 		{
-			get
-			{
-				if (_items == null)
-				{
-					_items = (CArray<wCHandle<gameItemData>>) CR2WTypeManager.Create("array:whandle:gameItemData", "items", cr2w, this);
-				}
-				return _items;
-			}
-			set
-			{
-				if (_items == value)
-				{
-					return;
-				}
-				_items = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _items);
+			set => SetProperty(ref _items, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("limitedItems")] 
 		public CArray<CHandle<VendorJunkSellItem>> LimitedItems
 		{
-			get
-			{
-				if (_limitedItems == null)
-				{
-					_limitedItems = (CArray<CHandle<VendorJunkSellItem>>) CR2WTypeManager.Create("array:handle:VendorJunkSellItem", "limitedItems", cr2w, this);
-				}
-				return _limitedItems;
-			}
-			set
-			{
-				if (_limitedItems == value)
-				{
-					return;
-				}
-				_limitedItems = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _limitedItems);
+			set => SetProperty(ref _limitedItems, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("itemsQuantity")] 
 		public CInt32 ItemsQuantity
 		{
-			get
-			{
-				if (_itemsQuantity == null)
-				{
-					_itemsQuantity = (CInt32) CR2WTypeManager.Create("Int32", "itemsQuantity", cr2w, this);
-				}
-				return _itemsQuantity;
-			}
-			set
-			{
-				if (_itemsQuantity == value)
-				{
-					return;
-				}
-				_itemsQuantity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemsQuantity);
+			set => SetProperty(ref _itemsQuantity, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("limitedItemsQuantity")] 
 		public CInt32 LimitedItemsQuantity
 		{
-			get
-			{
-				if (_limitedItemsQuantity == null)
-				{
-					_limitedItemsQuantity = (CInt32) CR2WTypeManager.Create("Int32", "limitedItemsQuantity", cr2w, this);
-				}
-				return _limitedItemsQuantity;
-			}
-			set
-			{
-				if (_limitedItemsQuantity == value)
-				{
-					return;
-				}
-				_limitedItemsQuantity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _limitedItemsQuantity);
+			set => SetProperty(ref _limitedItemsQuantity, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("totalPrice")] 
 		public CFloat TotalPrice
 		{
-			get
-			{
-				if (_totalPrice == null)
-				{
-					_totalPrice = (CFloat) CR2WTypeManager.Create("Float", "totalPrice", cr2w, this);
-				}
-				return _totalPrice;
-			}
-			set
-			{
-				if (_totalPrice == value)
-				{
-					return;
-				}
-				_totalPrice = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _totalPrice);
+			set => SetProperty(ref _totalPrice, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("limitedTotalPrice")] 
 		public CInt32 LimitedTotalPrice
 		{
-			get
-			{
-				if (_limitedTotalPrice == null)
-				{
-					_limitedTotalPrice = (CInt32) CR2WTypeManager.Create("Int32", "limitedTotalPrice", cr2w, this);
-				}
-				return _limitedTotalPrice;
-			}
-			set
-			{
-				if (_limitedTotalPrice == value)
-				{
-					return;
-				}
-				_limitedTotalPrice = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _limitedTotalPrice);
+			set => SetProperty(ref _limitedTotalPrice, value);
 		}
 
 		public VendorSellJunkPopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

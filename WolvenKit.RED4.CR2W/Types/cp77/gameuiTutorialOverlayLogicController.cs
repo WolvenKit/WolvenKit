@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hideInMenu")] 
 		public CBool HideInMenu
 		{
-			get
-			{
-				if (_hideInMenu == null)
-				{
-					_hideInMenu = (CBool) CR2WTypeManager.Create("Bool", "hideInMenu", cr2w, this);
-				}
-				return _hideInMenu;
-			}
-			set
-			{
-				if (_hideInMenu == value)
-				{
-					return;
-				}
-				_hideInMenu = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hideInMenu);
+			set => SetProperty(ref _hideInMenu, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hideOnInput")] 
 		public CBool HideOnInput
 		{
-			get
-			{
-				if (_hideOnInput == null)
-				{
-					_hideOnInput = (CBool) CR2WTypeManager.Create("Bool", "hideOnInput", cr2w, this);
-				}
-				return _hideOnInput;
-			}
-			set
-			{
-				if (_hideOnInput == value)
-				{
-					return;
-				}
-				_hideOnInput = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hideOnInput);
+			set => SetProperty(ref _hideOnInput, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("showAnimation")] 
 		public CName ShowAnimation
 		{
-			get
-			{
-				if (_showAnimation == null)
-				{
-					_showAnimation = (CName) CR2WTypeManager.Create("CName", "showAnimation", cr2w, this);
-				}
-				return _showAnimation;
-			}
-			set
-			{
-				if (_showAnimation == value)
-				{
-					return;
-				}
-				_showAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _showAnimation);
+			set => SetProperty(ref _showAnimation, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("hideAnimation")] 
 		public CName HideAnimation
 		{
-			get
-			{
-				if (_hideAnimation == null)
-				{
-					_hideAnimation = (CName) CR2WTypeManager.Create("CName", "hideAnimation", cr2w, this);
-				}
-				return _hideAnimation;
-			}
-			set
-			{
-				if (_hideAnimation == value)
-				{
-					return;
-				}
-				_hideAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hideAnimation);
+			set => SetProperty(ref _hideAnimation, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get
-			{
-				if (_animProxy == null)
-				{
-					_animProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animProxy", cr2w, this);
-				}
-				return _animProxy;
-			}
-			set
-			{
-				if (_animProxy == value)
-				{
-					return;
-				}
-				_animProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animProxy);
+			set => SetProperty(ref _animProxy, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("tutorialManager")] 
 		public wCHandle<questTutorialManager> TutorialManager
 		{
-			get
-			{
-				if (_tutorialManager == null)
-				{
-					_tutorialManager = (wCHandle<questTutorialManager>) CR2WTypeManager.Create("whandle:questTutorialManager", "tutorialManager", cr2w, this);
-				}
-				return _tutorialManager;
-			}
-			set
-			{
-				if (_tutorialManager == value)
-				{
-					return;
-				}
-				_tutorialManager = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tutorialManager);
+			set => SetProperty(ref _tutorialManager, value);
 		}
 
 		public gameuiTutorialOverlayLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

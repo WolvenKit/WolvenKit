@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("perspective")] 
 		public CEnum<scnBraindancePerspective> Perspective
 		{
-			get
-			{
-				if (_perspective == null)
-				{
-					_perspective = (CEnum<scnBraindancePerspective>) CR2WTypeManager.Create("scnBraindancePerspective", "perspective", cr2w, this);
-				}
-				return _perspective;
-			}
-			set
-			{
-				if (_perspective == value)
-				{
-					return;
-				}
-				_perspective = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perspective);
+			set => SetProperty(ref _perspective, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sceneFile")] 
 		public raRef<scnSceneResource> SceneFile
 		{
-			get
-			{
-				if (_sceneFile == null)
-				{
-					_sceneFile = (raRef<scnSceneResource>) CR2WTypeManager.Create("raRef:scnSceneResource", "sceneFile", cr2w, this);
-				}
-				return _sceneFile;
-			}
-			set
-			{
-				if (_sceneFile == value)
-				{
-					return;
-				}
-				_sceneFile = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneFile);
+			set => SetProperty(ref _sceneFile, value);
 		}
 
 		public scnBraindancePerspective_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

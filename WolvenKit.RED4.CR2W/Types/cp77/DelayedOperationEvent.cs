@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("operationHandler")] 
 		public CHandle<DeviceOperations> OperationHandler
 		{
-			get
-			{
-				if (_operationHandler == null)
-				{
-					_operationHandler = (CHandle<DeviceOperations>) CR2WTypeManager.Create("handle:DeviceOperations", "operationHandler", cr2w, this);
-				}
-				return _operationHandler;
-			}
-			set
-			{
-				if (_operationHandler == value)
-				{
-					return;
-				}
-				_operationHandler = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _operationHandler);
+			set => SetProperty(ref _operationHandler, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("operation")] 
 		public SBaseDeviceOperationData Operation
 		{
-			get
-			{
-				if (_operation == null)
-				{
-					_operation = (SBaseDeviceOperationData) CR2WTypeManager.Create("SBaseDeviceOperationData", "operation", cr2w, this);
-				}
-				return _operation;
-			}
-			set
-			{
-				if (_operation == value)
-				{
-					return;
-				}
-				_operation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _operation);
+			set => SetProperty(ref _operation, value);
 		}
 
 		public DelayedOperationEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

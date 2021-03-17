@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vectorCoodrinateType")] 
 		public CEnum<animVectorCoordinateType> VectorCoodrinateType
 		{
-			get
-			{
-				if (_vectorCoodrinateType == null)
-				{
-					_vectorCoodrinateType = (CEnum<animVectorCoordinateType>) CR2WTypeManager.Create("animVectorCoordinateType", "vectorCoodrinateType", cr2w, this);
-				}
-				return _vectorCoodrinateType;
-			}
-			set
-			{
-				if (_vectorCoodrinateType == value)
-				{
-					return;
-				}
-				_vectorCoodrinateType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vectorCoodrinateType);
+			set => SetProperty(ref _vectorCoodrinateType, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("input")] 
 		public animVectorLink Input
 		{
-			get
-			{
-				if (_input == null)
-				{
-					_input = (animVectorLink) CR2WTypeManager.Create("animVectorLink", "input", cr2w, this);
-				}
-				return _input;
-			}
-			set
-			{
-				if (_input == value)
-				{
-					return;
-				}
-				_input = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _input);
+			set => SetProperty(ref _input, value);
 		}
 
 		public animAnimNode_CoordinateFromVector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

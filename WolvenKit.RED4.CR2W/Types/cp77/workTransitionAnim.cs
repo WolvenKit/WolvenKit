@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fromIdle")] 
 		public CName FromIdle
 		{
-			get
-			{
-				if (_fromIdle == null)
-				{
-					_fromIdle = (CName) CR2WTypeManager.Create("CName", "fromIdle", cr2w, this);
-				}
-				return _fromIdle;
-			}
-			set
-			{
-				if (_fromIdle == value)
-				{
-					return;
-				}
-				_fromIdle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fromIdle);
+			set => SetProperty(ref _fromIdle, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("toIdle")] 
 		public CName ToIdle
 		{
-			get
-			{
-				if (_toIdle == null)
-				{
-					_toIdle = (CName) CR2WTypeManager.Create("CName", "toIdle", cr2w, this);
-				}
-				return _toIdle;
-			}
-			set
-			{
-				if (_toIdle == value)
-				{
-					return;
-				}
-				_toIdle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _toIdle);
+			set => SetProperty(ref _toIdle, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("transitionAnim")] 
 		public CName TransitionAnim
 		{
-			get
-			{
-				if (_transitionAnim == null)
-				{
-					_transitionAnim = (CName) CR2WTypeManager.Create("CName", "transitionAnim", cr2w, this);
-				}
-				return _transitionAnim;
-			}
-			set
-			{
-				if (_transitionAnim == value)
-				{
-					return;
-				}
-				_transitionAnim = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transitionAnim);
+			set => SetProperty(ref _transitionAnim, value);
 		}
 
 		public workTransitionAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

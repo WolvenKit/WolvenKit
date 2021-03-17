@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ContactAvatarRef")] 
 		public inkImageWidgetReference ContactAvatarRef
 		{
-			get
-			{
-				if (_contactAvatarRef == null)
-				{
-					_contactAvatarRef = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "ContactAvatarRef", cr2w, this);
-				}
-				return _contactAvatarRef;
-			}
-			set
-			{
-				if (_contactAvatarRef == value)
-				{
-					return;
-				}
-				_contactAvatarRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contactAvatarRef);
+			set => SetProperty(ref _contactAvatarRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ContactNameRef")] 
 		public inkTextWidgetReference ContactNameRef
 		{
-			get
-			{
-				if (_contactNameRef == null)
-				{
-					_contactNameRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "ContactNameRef", cr2w, this);
-				}
-				return _contactNameRef;
-			}
-			set
-			{
-				if (_contactNameRef == value)
-				{
-					return;
-				}
-				_contactNameRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contactNameRef);
+			set => SetProperty(ref _contactNameRef, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ContactDescriptionRef")] 
 		public inkTextWidgetReference ContactDescriptionRef
 		{
-			get
-			{
-				if (_contactDescriptionRef == null)
-				{
-					_contactDescriptionRef = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "ContactDescriptionRef", cr2w, this);
-				}
-				return _contactDescriptionRef;
-			}
-			set
-			{
-				if (_contactDescriptionRef == value)
-				{
-					return;
-				}
-				_contactDescriptionRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contactDescriptionRef);
+			set => SetProperty(ref _contactDescriptionRef, value);
 		}
 
 		public SocialPanelContactsDetails(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

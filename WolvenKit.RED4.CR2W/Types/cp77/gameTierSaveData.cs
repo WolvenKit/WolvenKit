@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("globalTiers")] 
 		public CArray<gameGlobalTierSaveData> GlobalTiers
 		{
-			get
-			{
-				if (_globalTiers == null)
-				{
-					_globalTiers = (CArray<gameGlobalTierSaveData>) CR2WTypeManager.Create("array:gameGlobalTierSaveData", "globalTiers", cr2w, this);
-				}
-				return _globalTiers;
-			}
-			set
-			{
-				if (_globalTiers == value)
-				{
-					return;
-				}
-				_globalTiers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _globalTiers);
+			set => SetProperty(ref _globalTiers, value);
 		}
 
 		public gameTierSaveData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

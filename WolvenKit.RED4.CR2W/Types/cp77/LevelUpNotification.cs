@@ -30,414 +30,144 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("levelup_data")] 
 		public CHandle<gameuiLevelUpNotificationViewData> Levelup_data
 		{
-			get
-			{
-				if (_levelup_data == null)
-				{
-					_levelup_data = (CHandle<gameuiLevelUpNotificationViewData>) CR2WTypeManager.Create("handle:gameuiLevelUpNotificationViewData", "levelup_data", cr2w, this);
-				}
-				return _levelup_data;
-			}
-			set
-			{
-				if (_levelup_data == value)
-				{
-					return;
-				}
-				_levelup_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelup_data);
+			set => SetProperty(ref _levelup_data, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("animation")] 
 		public CHandle<inkanimProxy> Animation
 		{
-			get
-			{
-				if (_animation == null)
-				{
-					_animation = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animation", cr2w, this);
-				}
-				return _animation;
-			}
-			set
-			{
-				if (_animation == value)
-				{
-					return;
-				}
-				_animation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animation);
+			set => SetProperty(ref _animation, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("bonusRecord")] 
 		public CHandle<gamedataPassiveProficiencyBonus_Record> BonusRecord
 		{
-			get
-			{
-				if (_bonusRecord == null)
-				{
-					_bonusRecord = (CHandle<gamedataPassiveProficiencyBonus_Record>) CR2WTypeManager.Create("handle:gamedataPassiveProficiencyBonus_Record", "bonusRecord", cr2w, this);
-				}
-				return _bonusRecord;
-			}
-			set
-			{
-				if (_bonusRecord == value)
-				{
-					return;
-				}
-				_bonusRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bonusRecord);
+			set => SetProperty(ref _bonusRecord, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("LevelUpLabelText")] 
 		public inkTextWidgetReference LevelUpLabelText
 		{
-			get
-			{
-				if (_levelUpLabelText == null)
-				{
-					_levelUpLabelText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "LevelUpLabelText", cr2w, this);
-				}
-				return _levelUpLabelText;
-			}
-			set
-			{
-				if (_levelUpLabelText == value)
-				{
-					return;
-				}
-				_levelUpLabelText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelUpLabelText);
+			set => SetProperty(ref _levelUpLabelText, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("LevelUpValue")] 
 		public inkTextWidgetReference LevelUpValue
 		{
-			get
-			{
-				if (_levelUpValue == null)
-				{
-					_levelUpValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "LevelUpValue", cr2w, this);
-				}
-				return _levelUpValue;
-			}
-			set
-			{
-				if (_levelUpValue == value)
-				{
-					return;
-				}
-				_levelUpValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelUpValue);
+			set => SetProperty(ref _levelUpValue, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("LevelUpHolder")] 
 		public inkWidgetReference LevelUpHolder
 		{
-			get
-			{
-				if (_levelUpHolder == null)
-				{
-					_levelUpHolder = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "LevelUpHolder", cr2w, this);
-				}
-				return _levelUpHolder;
-			}
-			set
-			{
-				if (_levelUpHolder == value)
-				{
-					return;
-				}
-				_levelUpHolder = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelUpHolder);
+			set => SetProperty(ref _levelUpHolder, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("LevelUpPreviousValue")] 
 		public inkTextWidgetReference LevelUpPreviousValue
 		{
-			get
-			{
-				if (_levelUpPreviousValue == null)
-				{
-					_levelUpPreviousValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "LevelUpPreviousValue", cr2w, this);
-				}
-				return _levelUpPreviousValue;
-			}
-			set
-			{
-				if (_levelUpPreviousValue == value)
-				{
-					return;
-				}
-				_levelUpPreviousValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelUpPreviousValue);
+			set => SetProperty(ref _levelUpPreviousValue, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("AttributePointsValue")] 
 		public inkTextWidgetReference AttributePointsValue
 		{
-			get
-			{
-				if (_attributePointsValue == null)
-				{
-					_attributePointsValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "AttributePointsValue", cr2w, this);
-				}
-				return _attributePointsValue;
-			}
-			set
-			{
-				if (_attributePointsValue == value)
-				{
-					return;
-				}
-				_attributePointsValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributePointsValue);
+			set => SetProperty(ref _attributePointsValue, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("AttributePointsPreviousValue")] 
 		public inkTextWidgetReference AttributePointsPreviousValue
 		{
-			get
-			{
-				if (_attributePointsPreviousValue == null)
-				{
-					_attributePointsPreviousValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "AttributePointsPreviousValue", cr2w, this);
-				}
-				return _attributePointsPreviousValue;
-			}
-			set
-			{
-				if (_attributePointsPreviousValue == value)
-				{
-					return;
-				}
-				_attributePointsPreviousValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributePointsPreviousValue);
+			set => SetProperty(ref _attributePointsPreviousValue, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("AttributePointsHolder")] 
 		public inkWidgetReference AttributePointsHolder
 		{
-			get
-			{
-				if (_attributePointsHolder == null)
-				{
-					_attributePointsHolder = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "AttributePointsHolder", cr2w, this);
-				}
-				return _attributePointsHolder;
-			}
-			set
-			{
-				if (_attributePointsHolder == value)
-				{
-					return;
-				}
-				_attributePointsHolder = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributePointsHolder);
+			set => SetProperty(ref _attributePointsHolder, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("PerkPointsValue")] 
 		public inkTextWidgetReference PerkPointsValue
 		{
-			get
-			{
-				if (_perkPointsValue == null)
-				{
-					_perkPointsValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "PerkPointsValue", cr2w, this);
-				}
-				return _perkPointsValue;
-			}
-			set
-			{
-				if (_perkPointsValue == value)
-				{
-					return;
-				}
-				_perkPointsValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perkPointsValue);
+			set => SetProperty(ref _perkPointsValue, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("PerkPreviousValue")] 
 		public inkTextWidgetReference PerkPreviousValue
 		{
-			get
-			{
-				if (_perkPreviousValue == null)
-				{
-					_perkPreviousValue = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "PerkPreviousValue", cr2w, this);
-				}
-				return _perkPreviousValue;
-			}
-			set
-			{
-				if (_perkPreviousValue == value)
-				{
-					return;
-				}
-				_perkPreviousValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perkPreviousValue);
+			set => SetProperty(ref _perkPreviousValue, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("SkillIcon")] 
 		public inkImageWidgetReference SkillIcon
 		{
-			get
-			{
-				if (_skillIcon == null)
-				{
-					_skillIcon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "SkillIcon", cr2w, this);
-				}
-				return _skillIcon;
-			}
-			set
-			{
-				if (_skillIcon == value)
-				{
-					return;
-				}
-				_skillIcon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skillIcon);
+			set => SetProperty(ref _skillIcon, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("SkillIconShadow")] 
 		public inkImageWidgetReference SkillIconShadow
 		{
-			get
-			{
-				if (_skillIconShadow == null)
-				{
-					_skillIconShadow = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "SkillIconShadow", cr2w, this);
-				}
-				return _skillIconShadow;
-			}
-			set
-			{
-				if (_skillIconShadow == value)
-				{
-					return;
-				}
-				_skillIconShadow = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skillIconShadow);
+			set => SetProperty(ref _skillIconShadow, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("bonusDisplay")] 
 		public CHandle<LevelRewardDisplayData> BonusDisplay
 		{
-			get
-			{
-				if (_bonusDisplay == null)
-				{
-					_bonusDisplay = (CHandle<LevelRewardDisplayData>) CR2WTypeManager.Create("handle:LevelRewardDisplayData", "bonusDisplay", cr2w, this);
-				}
-				return _bonusDisplay;
-			}
-			set
-			{
-				if (_bonusDisplay == value)
-				{
-					return;
-				}
-				_bonusDisplay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bonusDisplay);
+			set => SetProperty(ref _bonusDisplay, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("passiveBonusRewardLabel")] 
 		public inkTextWidgetReference PassiveBonusRewardLabel
 		{
-			get
-			{
-				if (_passiveBonusRewardLabel == null)
-				{
-					_passiveBonusRewardLabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "passiveBonusRewardLabel", cr2w, this);
-				}
-				return _passiveBonusRewardLabel;
-			}
-			set
-			{
-				if (_passiveBonusRewardLabel == value)
-				{
-					return;
-				}
-				_passiveBonusRewardLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _passiveBonusRewardLabel);
+			set => SetProperty(ref _passiveBonusRewardLabel, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("passiveBonusReward")] 
 		public inkWidgetReference PassiveBonusReward
 		{
-			get
-			{
-				if (_passiveBonusReward == null)
-				{
-					_passiveBonusReward = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "passiveBonusReward", cr2w, this);
-				}
-				return _passiveBonusReward;
-			}
-			set
-			{
-				if (_passiveBonusReward == value)
-				{
-					return;
-				}
-				_passiveBonusReward = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _passiveBonusReward);
+			set => SetProperty(ref _passiveBonusReward, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("unlockedActivites")] 
 		public CInt32 UnlockedActivites
 		{
-			get
-			{
-				if (_unlockedActivites == null)
-				{
-					_unlockedActivites = (CInt32) CR2WTypeManager.Create("Int32", "unlockedActivites", cr2w, this);
-				}
-				return _unlockedActivites;
-			}
-			set
-			{
-				if (_unlockedActivites == value)
-				{
-					return;
-				}
-				_unlockedActivites = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unlockedActivites);
+			set => SetProperty(ref _unlockedActivites, value);
 		}
 
 		public LevelUpNotification(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

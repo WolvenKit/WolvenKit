@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mixSignpost")] 
 		public CName MixSignpost
 		{
-			get
-			{
-				if (_mixSignpost == null)
-				{
-					_mixSignpost = (CName) CR2WTypeManager.Create("CName", "mixSignpost", cr2w, this);
-				}
-				return _mixSignpost;
-			}
-			set
-			{
-				if (_mixSignpost == value)
-				{
-					return;
-				}
-				_mixSignpost = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mixSignpost);
+			set => SetProperty(ref _mixSignpost, value);
 		}
 
 		public questAudioMixNodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

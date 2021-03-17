@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("TooltipsData")] 
 		public CArray<CHandle<ATooltipData>> TooltipsData
 		{
-			get
-			{
-				if (_tooltipsData == null)
-				{
-					_tooltipsData = (CArray<CHandle<ATooltipData>>) CR2WTypeManager.Create("array:handle:ATooltipData", "TooltipsData", cr2w, this);
-				}
-				return _tooltipsData;
-			}
-			set
-			{
-				if (_tooltipsData == value)
-				{
-					return;
-				}
-				_tooltipsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tooltipsData);
+			set => SetProperty(ref _tooltipsData, value);
 		}
 
 		public TooltipProvider(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

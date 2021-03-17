@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("level")] 
 		public CInt32 Level
 		{
-			get
-			{
-				if (_level == null)
-				{
-					_level = (CInt32) CR2WTypeManager.Create("Int32", "level", cr2w, this);
-				}
-				return _level;
-			}
-			set
-			{
-				if (_level == value)
-				{
-					return;
-				}
-				_level = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _level);
+			set => SetProperty(ref _level, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isHard")] 
 		public CBool IsHard
 		{
-			get
-			{
-				if (_isHard == null)
-				{
-					_isHard = (CBool) CR2WTypeManager.Create("Bool", "isHard", cr2w, this);
-				}
-				return _isHard;
-			}
-			set
-			{
-				if (_isHard == value)
-				{
-					return;
-				}
-				_isHard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isHard);
+			set => SetProperty(ref _isHard, value);
 		}
 
 		public ScannerLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

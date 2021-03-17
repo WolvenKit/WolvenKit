@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("destinationName")] 
 		public CName DestinationName
 		{
-			get
-			{
-				if (_destinationName == null)
-				{
-					_destinationName = (CName) CR2WTypeManager.Create("CName", "destinationName", cr2w, this);
-				}
-				return _destinationName;
-			}
-			set
-			{
-				if (_destinationName == value)
-				{
-					return;
-				}
-				_destinationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _destinationName);
+			set => SetProperty(ref _destinationName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("data")] 
 		public CInt32 Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CInt32) CR2WTypeManager.Create("Int32", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		public gameMovingPlatformArrivedAt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

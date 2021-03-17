@@ -30,414 +30,144 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("MaxHealth")] 
 		public gamebbScriptID_Int32 MaxHealth
 		{
-			get
-			{
-				if (_maxHealth == null)
-				{
-					_maxHealth = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "MaxHealth", cr2w, this);
-				}
-				return _maxHealth;
-			}
-			set
-			{
-				if (_maxHealth == value)
-				{
-					return;
-				}
-				_maxHealth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxHealth);
+			set => SetProperty(ref _maxHealth, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("CurrentHealth")] 
 		public gamebbScriptID_Int32 CurrentHealth
 		{
-			get
-			{
-				if (_currentHealth == null)
-				{
-					_currentHealth = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "CurrentHealth", cr2w, this);
-				}
-				return _currentHealth;
-			}
-			set
-			{
-				if (_currentHealth == value)
-				{
-					return;
-				}
-				_currentHealth = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentHealth);
+			set => SetProperty(ref _currentHealth, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("PhysicalResistance")] 
 		public gamebbScriptID_Int32 PhysicalResistance
 		{
-			get
-			{
-				if (_physicalResistance == null)
-				{
-					_physicalResistance = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "PhysicalResistance", cr2w, this);
-				}
-				return _physicalResistance;
-			}
-			set
-			{
-				if (_physicalResistance == value)
-				{
-					return;
-				}
-				_physicalResistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _physicalResistance);
+			set => SetProperty(ref _physicalResistance, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ThermalResistance")] 
 		public gamebbScriptID_Int32 ThermalResistance
 		{
-			get
-			{
-				if (_thermalResistance == null)
-				{
-					_thermalResistance = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "ThermalResistance", cr2w, this);
-				}
-				return _thermalResistance;
-			}
-			set
-			{
-				if (_thermalResistance == value)
-				{
-					return;
-				}
-				_thermalResistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _thermalResistance);
+			set => SetProperty(ref _thermalResistance, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("EnergyResistance")] 
 		public gamebbScriptID_Int32 EnergyResistance
 		{
-			get
-			{
-				if (_energyResistance == null)
-				{
-					_energyResistance = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "EnergyResistance", cr2w, this);
-				}
-				return _energyResistance;
-			}
-			set
-			{
-				if (_energyResistance == value)
-				{
-					return;
-				}
-				_energyResistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _energyResistance);
+			set => SetProperty(ref _energyResistance, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ChemicalResistance")] 
 		public gamebbScriptID_Int32 ChemicalResistance
 		{
-			get
-			{
-				if (_chemicalResistance == null)
-				{
-					_chemicalResistance = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "ChemicalResistance", cr2w, this);
-				}
-				return _chemicalResistance;
-			}
-			set
-			{
-				if (_chemicalResistance == value)
-				{
-					return;
-				}
-				_chemicalResistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chemicalResistance);
+			set => SetProperty(ref _chemicalResistance, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("Level")] 
 		public gamebbScriptID_Int32 Level
 		{
-			get
-			{
-				if (_level == null)
-				{
-					_level = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "Level", cr2w, this);
-				}
-				return _level;
-			}
-			set
-			{
-				if (_level == value)
-				{
-					return;
-				}
-				_level = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _level);
+			set => SetProperty(ref _level, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("CurrentXP")] 
 		public gamebbScriptID_Int32 CurrentXP
 		{
-			get
-			{
-				if (_currentXP == null)
-				{
-					_currentXP = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "CurrentXP", cr2w, this);
-				}
-				return _currentXP;
-			}
-			set
-			{
-				if (_currentXP == value)
-				{
-					return;
-				}
-				_currentXP = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentXP);
+			set => SetProperty(ref _currentXP, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("StreetCredLevel")] 
 		public gamebbScriptID_Int32 StreetCredLevel
 		{
-			get
-			{
-				if (_streetCredLevel == null)
-				{
-					_streetCredLevel = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "StreetCredLevel", cr2w, this);
-				}
-				return _streetCredLevel;
-			}
-			set
-			{
-				if (_streetCredLevel == value)
-				{
-					return;
-				}
-				_streetCredLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _streetCredLevel);
+			set => SetProperty(ref _streetCredLevel, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("StreetCredPoints")] 
 		public gamebbScriptID_Int32 StreetCredPoints
 		{
-			get
-			{
-				if (_streetCredPoints == null)
-				{
-					_streetCredPoints = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "StreetCredPoints", cr2w, this);
-				}
-				return _streetCredPoints;
-			}
-			set
-			{
-				if (_streetCredPoints == value)
-				{
-					return;
-				}
-				_streetCredPoints = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _streetCredPoints);
+			set => SetProperty(ref _streetCredPoints, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("Attributes")] 
 		public gamebbScriptID_Variant Attributes
 		{
-			get
-			{
-				if (_attributes == null)
-				{
-					_attributes = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "Attributes", cr2w, this);
-				}
-				return _attributes;
-			}
-			set
-			{
-				if (_attributes == value)
-				{
-					return;
-				}
-				_attributes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attributes);
+			set => SetProperty(ref _attributes, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("DevelopmentPoints")] 
 		public gamebbScriptID_Variant DevelopmentPoints
 		{
-			get
-			{
-				if (_developmentPoints == null)
-				{
-					_developmentPoints = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "DevelopmentPoints", cr2w, this);
-				}
-				return _developmentPoints;
-			}
-			set
-			{
-				if (_developmentPoints == value)
-				{
-					return;
-				}
-				_developmentPoints = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _developmentPoints);
+			set => SetProperty(ref _developmentPoints, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("Proficiency")] 
 		public gamebbScriptID_Variant Proficiency
 		{
-			get
-			{
-				if (_proficiency == null)
-				{
-					_proficiency = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "Proficiency", cr2w, this);
-				}
-				return _proficiency;
-			}
-			set
-			{
-				if (_proficiency == value)
-				{
-					return;
-				}
-				_proficiency = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _proficiency);
+			set => SetProperty(ref _proficiency, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("Perks")] 
 		public gamebbScriptID_Variant Perks
 		{
-			get
-			{
-				if (_perks == null)
-				{
-					_perks = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "Perks", cr2w, this);
-				}
-				return _perks;
-			}
-			set
-			{
-				if (_perks == value)
-				{
-					return;
-				}
-				_perks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perks);
+			set => SetProperty(ref _perks, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("ModifiedPerkArea")] 
 		public gamebbScriptID_Variant ModifiedPerkArea
 		{
-			get
-			{
-				if (_modifiedPerkArea == null)
-				{
-					_modifiedPerkArea = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ModifiedPerkArea", cr2w, this);
-				}
-				return _modifiedPerkArea;
-			}
-			set
-			{
-				if (_modifiedPerkArea == value)
-				{
-					return;
-				}
-				_modifiedPerkArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _modifiedPerkArea);
+			set => SetProperty(ref _modifiedPerkArea, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("weightMax")] 
 		public gamebbScriptID_Int32 WeightMax
 		{
-			get
-			{
-				if (_weightMax == null)
-				{
-					_weightMax = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "weightMax", cr2w, this);
-				}
-				return _weightMax;
-			}
-			set
-			{
-				if (_weightMax == value)
-				{
-					return;
-				}
-				_weightMax = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightMax);
+			set => SetProperty(ref _weightMax, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("currentInventoryWeight")] 
 		public gamebbScriptID_Float CurrentInventoryWeight
 		{
-			get
-			{
-				if (_currentInventoryWeight == null)
-				{
-					_currentInventoryWeight = (gamebbScriptID_Float) CR2WTypeManager.Create("gamebbScriptID_Float", "currentInventoryWeight", cr2w, this);
-				}
-				return _currentInventoryWeight;
-			}
-			set
-			{
-				if (_currentInventoryWeight == value)
-				{
-					return;
-				}
-				_currentInventoryWeight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentInventoryWeight);
+			set => SetProperty(ref _currentInventoryWeight, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("isReplacer")] 
 		public gamebbScriptID_Bool IsReplacer
 		{
-			get
-			{
-				if (_isReplacer == null)
-				{
-					_isReplacer = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "isReplacer", cr2w, this);
-				}
-				return _isReplacer;
-			}
-			set
-			{
-				if (_isReplacer == value)
-				{
-					return;
-				}
-				_isReplacer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isReplacer);
+			set => SetProperty(ref _isReplacer, value);
 		}
 
 		public UI_PlayerStatsDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

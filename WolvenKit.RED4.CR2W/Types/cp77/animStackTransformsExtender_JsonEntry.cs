@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("parentName")] 
 		public CName ParentName
 		{
-			get
-			{
-				if (_parentName == null)
-				{
-					_parentName = (CName) CR2WTypeManager.Create("CName", "parentName", cr2w, this);
-				}
-				return _parentName;
-			}
-			set
-			{
-				if (_parentName == value)
-				{
-					return;
-				}
-				_parentName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentName);
+			set => SetProperty(ref _parentName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("referenceTransformLs")] 
 		public QsTransform ReferenceTransformLs
 		{
-			get
-			{
-				if (_referenceTransformLs == null)
-				{
-					_referenceTransformLs = (QsTransform) CR2WTypeManager.Create("QsTransform", "referenceTransformLs", cr2w, this);
-				}
-				return _referenceTransformLs;
-			}
-			set
-			{
-				if (_referenceTransformLs == value)
-				{
-					return;
-				}
-				_referenceTransformLs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _referenceTransformLs);
+			set => SetProperty(ref _referenceTransformLs, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("snapMethod")] 
 		public CEnum<animStackTransformsExtender_SnapToBoneMethod> SnapMethod
 		{
-			get
-			{
-				if (_snapMethod == null)
-				{
-					_snapMethod = (CEnum<animStackTransformsExtender_SnapToBoneMethod>) CR2WTypeManager.Create("animStackTransformsExtender_SnapToBoneMethod", "snapMethod", cr2w, this);
-				}
-				return _snapMethod;
-			}
-			set
-			{
-				if (_snapMethod == value)
-				{
-					return;
-				}
-				_snapMethod = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _snapMethod);
+			set => SetProperty(ref _snapMethod, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("snapToReference")] 
 		public CBool SnapToReference
 		{
-			get
-			{
-				if (_snapToReference == null)
-				{
-					_snapToReference = (CBool) CR2WTypeManager.Create("Bool", "snapToReference", cr2w, this);
-				}
-				return _snapToReference;
-			}
-			set
-			{
-				if (_snapToReference == value)
-				{
-					return;
-				}
-				_snapToReference = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _snapToReference);
+			set => SetProperty(ref _snapToReference, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("snapTargetBone")] 
 		public CName SnapTargetBone
 		{
-			get
-			{
-				if (_snapTargetBone == null)
-				{
-					_snapTargetBone = (CName) CR2WTypeManager.Create("CName", "snapTargetBone", cr2w, this);
-				}
-				return _snapTargetBone;
-			}
-			set
-			{
-				if (_snapTargetBone == value)
-				{
-					return;
-				}
-				_snapTargetBone = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _snapTargetBone);
+			set => SetProperty(ref _snapTargetBone, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("offsetToReference")] 
 		public CBool OffsetToReference
 		{
-			get
-			{
-				if (_offsetToReference == null)
-				{
-					_offsetToReference = (CBool) CR2WTypeManager.Create("Bool", "offsetToReference", cr2w, this);
-				}
-				return _offsetToReference;
-			}
-			set
-			{
-				if (_offsetToReference == value)
-				{
-					return;
-				}
-				_offsetToReference = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offsetToReference);
+			set => SetProperty(ref _offsetToReference, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("offsetSpaceBone")] 
 		public CName OffsetSpaceBone
 		{
-			get
-			{
-				if (_offsetSpaceBone == null)
-				{
-					_offsetSpaceBone = (CName) CR2WTypeManager.Create("CName", "offsetSpaceBone", cr2w, this);
-				}
-				return _offsetSpaceBone;
-			}
-			set
-			{
-				if (_offsetSpaceBone == value)
-				{
-					return;
-				}
-				_offsetSpaceBone = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offsetSpaceBone);
+			set => SetProperty(ref _offsetSpaceBone, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("offset")] 
 		public QsTransform Offset
 		{
-			get
-			{
-				if (_offset == null)
-				{
-					_offset = (QsTransform) CR2WTypeManager.Create("QsTransform", "offset", cr2w, this);
-				}
-				return _offset;
-			}
-			set
-			{
-				if (_offset == value)
-				{
-					return;
-				}
-				_offset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offset);
+			set => SetProperty(ref _offset, value);
 		}
 
 		public animStackTransformsExtender_JsonEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ActionsData")] 
 		public gamebbScriptID_Variant ActionsData
 		{
-			get
-			{
-				if (_actionsData == null)
-				{
-					_actionsData = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ActionsData", cr2w, this);
-				}
-				return _actionsData;
-			}
-			set
-			{
-				if (_actionsData == value)
-				{
-					return;
-				}
-				_actionsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionsData);
+			set => SetProperty(ref _actionsData, value);
 		}
 
 		public UI_HUDButtonHintDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

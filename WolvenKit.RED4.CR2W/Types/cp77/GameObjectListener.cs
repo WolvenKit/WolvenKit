@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("prereqOwner")] 
 		public CHandle<gamePrereqState> PrereqOwner
 		{
-			get
-			{
-				if (_prereqOwner == null)
-				{
-					_prereqOwner = (CHandle<gamePrereqState>) CR2WTypeManager.Create("handle:gamePrereqState", "prereqOwner", cr2w, this);
-				}
-				return _prereqOwner;
-			}
-			set
-			{
-				if (_prereqOwner == value)
-				{
-					return;
-				}
-				_prereqOwner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prereqOwner);
+			set => SetProperty(ref _prereqOwner, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("e3HackBlock")] 
 		public CBool E3HackBlock
 		{
-			get
-			{
-				if (_e3HackBlock == null)
-				{
-					_e3HackBlock = (CBool) CR2WTypeManager.Create("Bool", "e3HackBlock", cr2w, this);
-				}
-				return _e3HackBlock;
-			}
-			set
-			{
-				if (_e3HackBlock == value)
-				{
-					return;
-				}
-				_e3HackBlock = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _e3HackBlock);
+			set => SetProperty(ref _e3HackBlock, value);
 		}
 
 		public GameObjectListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

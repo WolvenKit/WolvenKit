@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("speedLink")] 
 		public animFloatLink SpeedLink
 		{
-			get
-			{
-				if (_speedLink == null)
-				{
-					_speedLink = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "speedLink", cr2w, this);
-				}
-				return _speedLink;
-			}
-			set
-			{
-				if (_speedLink == value)
-				{
-					return;
-				}
-				_speedLink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speedLink);
+			set => SetProperty(ref _speedLink, value);
 		}
 
 		public animAnimNode_SkPhaseWithSpeedAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

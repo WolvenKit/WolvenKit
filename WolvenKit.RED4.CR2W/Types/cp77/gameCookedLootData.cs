@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lootTables")] 
 		public CArray<TweakDBID> LootTables
 		{
-			get
-			{
-				if (_lootTables == null)
-				{
-					_lootTables = (CArray<TweakDBID>) CR2WTypeManager.Create("array:TweakDBID", "lootTables", cr2w, this);
-				}
-				return _lootTables;
-			}
-			set
-			{
-				if (_lootTables == value)
-				{
-					return;
-				}
-				_lootTables = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lootTables);
+			set => SetProperty(ref _lootTables, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("contentAssignment")] 
 		public TweakDBID ContentAssignment
 		{
-			get
-			{
-				if (_contentAssignment == null)
-				{
-					_contentAssignment = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "contentAssignment", cr2w, this);
-				}
-				return _contentAssignment;
-			}
-			set
-			{
-				if (_contentAssignment == value)
-				{
-					return;
-				}
-				_contentAssignment = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contentAssignment);
+			set => SetProperty(ref _contentAssignment, value);
 		}
 
 		public gameCookedLootData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

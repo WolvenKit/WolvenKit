@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entityReference")] 
 		public gameEntityReference EntityReference
 		{
-			get
-			{
-				if (_entityReference == null)
-				{
-					_entityReference = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "entityReference", cr2w, this);
-				}
-				return _entityReference;
-			}
-			set
-			{
-				if (_entityReference == value)
-				{
-					return;
-				}
-				_entityReference = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityReference);
+			set => SetProperty(ref _entityReference, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("params")] 
 		public CHandle<questRotateToParams> Params
 		{
-			get
-			{
-				if (_params == null)
-				{
-					_params = (CHandle<questRotateToParams>) CR2WTypeManager.Create("handle:questRotateToParams", "params", cr2w, this);
-				}
-				return _params;
-			}
-			set
-			{
-				if (_params == value)
-				{
-					return;
-				}
-				_params = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
 		}
 
 		public questRotateToNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("members")] 
 		public CArray<gameSmartObjectMembershipMemberShip> Members
 		{
-			get
-			{
-				if (_members == null)
-				{
-					_members = (CArray<gameSmartObjectMembershipMemberShip>) CR2WTypeManager.Create("array:gameSmartObjectMembershipMemberShip", "members", cr2w, this);
-				}
-				return _members;
-			}
-			set
-			{
-				if (_members == value)
-				{
-					return;
-				}
-				_members = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _members);
+			set => SetProperty(ref _members, value);
 		}
 
 		public gameSmartObjectMembership(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

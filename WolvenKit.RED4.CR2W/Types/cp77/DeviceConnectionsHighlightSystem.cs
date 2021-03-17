@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("highlightedDeviceID")] 
 		public entEntityID HighlightedDeviceID
 		{
-			get
-			{
-				if (_highlightedDeviceID == null)
-				{
-					_highlightedDeviceID = (entEntityID) CR2WTypeManager.Create("entEntityID", "highlightedDeviceID", cr2w, this);
-				}
-				return _highlightedDeviceID;
-			}
-			set
-			{
-				if (_highlightedDeviceID == value)
-				{
-					return;
-				}
-				_highlightedDeviceID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highlightedDeviceID);
+			set => SetProperty(ref _highlightedDeviceID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("highlightedConnectionsIDs")] 
 		public CArray<entEntityID> HighlightedConnectionsIDs
 		{
-			get
-			{
-				if (_highlightedConnectionsIDs == null)
-				{
-					_highlightedConnectionsIDs = (CArray<entEntityID>) CR2WTypeManager.Create("array:entEntityID", "highlightedConnectionsIDs", cr2w, this);
-				}
-				return _highlightedConnectionsIDs;
-			}
-			set
-			{
-				if (_highlightedConnectionsIDs == value)
-				{
-					return;
-				}
-				_highlightedConnectionsIDs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highlightedConnectionsIDs);
+			set => SetProperty(ref _highlightedConnectionsIDs, value);
 		}
 
 		public DeviceConnectionsHighlightSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

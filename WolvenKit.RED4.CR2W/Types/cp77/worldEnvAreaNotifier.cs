@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("priority")] 
 		public CUInt8 Priority
 		{
-			get
-			{
-				if (_priority == null)
-				{
-					_priority = (CUInt8) CR2WTypeManager.Create("Uint8", "priority", cr2w, this);
-				}
-				return _priority;
-			}
-			set
-			{
-				if (_priority == value)
-				{
-					return;
-				}
-				_priority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _priority);
+			set => SetProperty(ref _priority, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("horizontalFadeDistance")] 
 		public CFloat HorizontalFadeDistance
 		{
-			get
-			{
-				if (_horizontalFadeDistance == null)
-				{
-					_horizontalFadeDistance = (CFloat) CR2WTypeManager.Create("Float", "horizontalFadeDistance", cr2w, this);
-				}
-				return _horizontalFadeDistance;
-			}
-			set
-			{
-				if (_horizontalFadeDistance == value)
-				{
-					return;
-				}
-				_horizontalFadeDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _horizontalFadeDistance);
+			set => SetProperty(ref _horizontalFadeDistance, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("verticalFadeDistance")] 
 		public CFloat VerticalFadeDistance
 		{
-			get
-			{
-				if (_verticalFadeDistance == null)
-				{
-					_verticalFadeDistance = (CFloat) CR2WTypeManager.Create("Float", "verticalFadeDistance", cr2w, this);
-				}
-				return _verticalFadeDistance;
-			}
-			set
-			{
-				if (_verticalFadeDistance == value)
-				{
-					return;
-				}
-				_verticalFadeDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _verticalFadeDistance);
+			set => SetProperty(ref _verticalFadeDistance, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("blendTimeIn")] 
 		public CFloat BlendTimeIn
 		{
-			get
-			{
-				if (_blendTimeIn == null)
-				{
-					_blendTimeIn = (CFloat) CR2WTypeManager.Create("Float", "blendTimeIn", cr2w, this);
-				}
-				return _blendTimeIn;
-			}
-			set
-			{
-				if (_blendTimeIn == value)
-				{
-					return;
-				}
-				_blendTimeIn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendTimeIn);
+			set => SetProperty(ref _blendTimeIn, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("blendTimeOut")] 
 		public CFloat BlendTimeOut
 		{
-			get
-			{
-				if (_blendTimeOut == null)
-				{
-					_blendTimeOut = (CFloat) CR2WTypeManager.Create("Float", "blendTimeOut", cr2w, this);
-				}
-				return _blendTimeOut;
-			}
-			set
-			{
-				if (_blendTimeOut == value)
-				{
-					return;
-				}
-				_blendTimeOut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendTimeOut);
+			set => SetProperty(ref _blendTimeOut, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("env")] 
 		public rRef<worldEnvironmentAreaParameters> Env
 		{
-			get
-			{
-				if (_env == null)
-				{
-					_env = (rRef<worldEnvironmentAreaParameters>) CR2WTypeManager.Create("rRef:worldEnvironmentAreaParameters", "env", cr2w, this);
-				}
-				return _env;
-			}
-			set
-			{
-				if (_env == value)
-				{
-					return;
-				}
-				_env = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _env);
+			set => SetProperty(ref _env, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("params")] 
 		public WorldRenderAreaSettings Params
 		{
-			get
-			{
-				if (_params == null)
-				{
-					_params = (WorldRenderAreaSettings) CR2WTypeManager.Create("WorldRenderAreaSettings", "params", cr2w, this);
-				}
-				return _params;
-			}
-			set
-			{
-				if (_params == value)
-				{
-					return;
-				}
-				_params = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("weatherStateNames")] 
 		public CArray<CName> WeatherStateNames
 		{
-			get
-			{
-				if (_weatherStateNames == null)
-				{
-					_weatherStateNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "weatherStateNames", cr2w, this);
-				}
-				return _weatherStateNames;
-			}
-			set
-			{
-				if (_weatherStateNames == value)
-				{
-					return;
-				}
-				_weatherStateNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weatherStateNames);
+			set => SetProperty(ref _weatherStateNames, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("weatherStateValues")] 
 		public CArray<CBool> WeatherStateValues
 		{
-			get
-			{
-				if (_weatherStateValues == null)
-				{
-					_weatherStateValues = (CArray<CBool>) CR2WTypeManager.Create("array:Bool", "weatherStateValues", cr2w, this);
-				}
-				return _weatherStateValues;
-			}
-			set
-			{
-				if (_weatherStateValues == value)
-				{
-					return;
-				}
-				_weatherStateValues = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weatherStateValues);
+			set => SetProperty(ref _weatherStateValues, value);
 		}
 
 		public worldEnvAreaNotifier(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

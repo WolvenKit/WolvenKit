@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("data")] 
 		public wCHandle<gameJournalQuest> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (wCHandle<gameJournalQuest>) CR2WTypeManager.Create("whandle:gameJournalQuest", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		public QuestUpdateUserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

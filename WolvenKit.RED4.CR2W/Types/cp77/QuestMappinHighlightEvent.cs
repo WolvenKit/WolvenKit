@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hash")] 
 		public CUInt32 Hash
 		{
-			get
-			{
-				if (_hash == null)
-				{
-					_hash = (CUInt32) CR2WTypeManager.Create("Uint32", "hash", cr2w, this);
-				}
-				return _hash;
-			}
-			set
-			{
-				if (_hash == value)
-				{
-					return;
-				}
-				_hash = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hash);
+			set => SetProperty(ref _hash, value);
 		}
 
 		public QuestMappinHighlightEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

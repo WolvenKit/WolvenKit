@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("descResult")] 
 		public CHandle<worldgeometryDescriptionResult> DescResult
 		{
-			get
-			{
-				if (_descResult == null)
-				{
-					_descResult = (CHandle<worldgeometryDescriptionResult>) CR2WTypeManager.Create("handle:worldgeometryDescriptionResult", "descResult", cr2w, this);
-				}
-				return _descResult;
-			}
-			set
-			{
-				if (_descResult == value)
-				{
-					return;
-				}
-				_descResult = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _descResult);
+			set => SetProperty(ref _descResult, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("obstacleEnd")] 
 		public Vector4 ObstacleEnd
 		{
-			get
-			{
-				if (_obstacleEnd == null)
-				{
-					_obstacleEnd = (Vector4) CR2WTypeManager.Create("Vector4", "obstacleEnd", cr2w, this);
-				}
-				return _obstacleEnd;
-			}
-			set
-			{
-				if (_obstacleEnd == value)
-				{
-					return;
-				}
-				_obstacleEnd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _obstacleEnd);
+			set => SetProperty(ref _obstacleEnd, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("climbValid")] 
 		public CBool ClimbValid
 		{
-			get
-			{
-				if (_climbValid == null)
-				{
-					_climbValid = (CBool) CR2WTypeManager.Create("Bool", "climbValid", cr2w, this);
-				}
-				return _climbValid;
-			}
-			set
-			{
-				if (_climbValid == value)
-				{
-					return;
-				}
-				_climbValid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _climbValid);
+			set => SetProperty(ref _climbValid, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("vaultValid")] 
 		public CBool VaultValid
 		{
-			get
-			{
-				if (_vaultValid == null)
-				{
-					_vaultValid = (CBool) CR2WTypeManager.Create("Bool", "vaultValid", cr2w, this);
-				}
-				return _vaultValid;
-			}
-			set
-			{
-				if (_vaultValid == value)
-				{
-					return;
-				}
-				_vaultValid = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vaultValid);
+			set => SetProperty(ref _vaultValid, value);
 		}
 
 		public gamePlayerClimbInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

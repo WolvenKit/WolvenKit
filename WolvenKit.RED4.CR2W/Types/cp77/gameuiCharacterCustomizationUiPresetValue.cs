@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("optionName")] 
 		public CName OptionName
 		{
-			get
-			{
-				if (_optionName == null)
-				{
-					_optionName = (CName) CR2WTypeManager.Create("CName", "optionName", cr2w, this);
-				}
-				return _optionName;
-			}
-			set
-			{
-				if (_optionName == value)
-				{
-					return;
-				}
-				_optionName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _optionName);
+			set => SetProperty(ref _optionName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("value")] 
 		public CUInt32 Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CUInt32) CR2WTypeManager.Create("Uint32", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		public gameuiCharacterCustomizationUiPresetValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

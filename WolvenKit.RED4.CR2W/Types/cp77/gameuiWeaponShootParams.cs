@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fromWorldPosition")] 
 		public Vector4 FromWorldPosition
 		{
-			get
-			{
-				if (_fromWorldPosition == null)
-				{
-					_fromWorldPosition = (Vector4) CR2WTypeManager.Create("Vector4", "fromWorldPosition", cr2w, this);
-				}
-				return _fromWorldPosition;
-			}
-			set
-			{
-				if (_fromWorldPosition == value)
-				{
-					return;
-				}
-				_fromWorldPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fromWorldPosition);
+			set => SetProperty(ref _fromWorldPosition, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("forward")] 
 		public Vector4 Forward
 		{
-			get
-			{
-				if (_forward == null)
-				{
-					_forward = (Vector4) CR2WTypeManager.Create("Vector4", "forward", cr2w, this);
-				}
-				return _forward;
-			}
-			set
-			{
-				if (_forward == value)
-				{
-					return;
-				}
-				_forward = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forward);
+			set => SetProperty(ref _forward, value);
 		}
 
 		public gameuiWeaponShootParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

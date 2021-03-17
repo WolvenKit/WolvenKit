@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("filter")] 
 		public worldSceneRecordingNodeFilter Filter
 		{
-			get
-			{
-				if (_filter == null)
-				{
-					_filter = (worldSceneRecordingNodeFilter) CR2WTypeManager.Create("worldSceneRecordingNodeFilter", "filter", cr2w, this);
-				}
-				return _filter;
-			}
-			set
-			{
-				if (_filter == value)
-				{
-					return;
-				}
-				_filter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _filter);
+			set => SetProperty(ref _filter, value);
 		}
 
 		public worldSceneRecordingContentObserverNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

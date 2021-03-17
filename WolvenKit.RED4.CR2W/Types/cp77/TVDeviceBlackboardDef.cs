@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("PreviousChannel")] 
 		public gamebbScriptID_Int32 PreviousChannel
 		{
-			get
-			{
-				if (_previousChannel == null)
-				{
-					_previousChannel = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "PreviousChannel", cr2w, this);
-				}
-				return _previousChannel;
-			}
-			set
-			{
-				if (_previousChannel == value)
-				{
-					return;
-				}
-				_previousChannel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousChannel);
+			set => SetProperty(ref _previousChannel, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("CurrentChannel")] 
 		public gamebbScriptID_Int32 CurrentChannel
 		{
-			get
-			{
-				if (_currentChannel == null)
-				{
-					_currentChannel = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "CurrentChannel", cr2w, this);
-				}
-				return _currentChannel;
-			}
-			set
-			{
-				if (_currentChannel == value)
-				{
-					return;
-				}
-				_currentChannel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentChannel);
+			set => SetProperty(ref _currentChannel, value);
 		}
 
 		public TVDeviceBlackboardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

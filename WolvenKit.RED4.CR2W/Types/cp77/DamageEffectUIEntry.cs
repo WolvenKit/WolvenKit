@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("valueStat")] 
 		public CEnum<gamedataStatType> ValueStat
 		{
-			get
-			{
-				if (_valueStat == null)
-				{
-					_valueStat = (CEnum<gamedataStatType>) CR2WTypeManager.Create("gamedataStatType", "valueStat", cr2w, this);
-				}
-				return _valueStat;
-			}
-			set
-			{
-				if (_valueStat == value)
-				{
-					return;
-				}
-				_valueStat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _valueStat);
+			set => SetProperty(ref _valueStat, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("targetStat")] 
 		public CEnum<gamedataStatType> TargetStat
 		{
-			get
-			{
-				if (_targetStat == null)
-				{
-					_targetStat = (CEnum<gamedataStatType>) CR2WTypeManager.Create("gamedataStatType", "targetStat", cr2w, this);
-				}
-				return _targetStat;
-			}
-			set
-			{
-				if (_targetStat == value)
-				{
-					return;
-				}
-				_targetStat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetStat);
+			set => SetProperty(ref _targetStat, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("displayType")] 
 		public CEnum<DamageEffectDisplayType> DisplayType
 		{
-			get
-			{
-				if (_displayType == null)
-				{
-					_displayType = (CEnum<DamageEffectDisplayType>) CR2WTypeManager.Create("DamageEffectDisplayType", "displayType", cr2w, this);
-				}
-				return _displayType;
-			}
-			set
-			{
-				if (_displayType == value)
-				{
-					return;
-				}
-				_displayType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _displayType);
+			set => SetProperty(ref _displayType, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("valueToDisplay")] 
 		public CFloat ValueToDisplay
 		{
-			get
-			{
-				if (_valueToDisplay == null)
-				{
-					_valueToDisplay = (CFloat) CR2WTypeManager.Create("Float", "valueToDisplay", cr2w, this);
-				}
-				return _valueToDisplay;
-			}
-			set
-			{
-				if (_valueToDisplay == value)
-				{
-					return;
-				}
-				_valueToDisplay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _valueToDisplay);
+			set => SetProperty(ref _valueToDisplay, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("effectorDuration")] 
 		public CFloat EffectorDuration
 		{
-			get
-			{
-				if (_effectorDuration == null)
-				{
-					_effectorDuration = (CFloat) CR2WTypeManager.Create("Float", "effectorDuration", cr2w, this);
-				}
-				return _effectorDuration;
-			}
-			set
-			{
-				if (_effectorDuration == value)
-				{
-					return;
-				}
-				_effectorDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectorDuration);
+			set => SetProperty(ref _effectorDuration, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("effectorDelay")] 
 		public CFloat EffectorDelay
 		{
-			get
-			{
-				if (_effectorDelay == null)
-				{
-					_effectorDelay = (CFloat) CR2WTypeManager.Create("Float", "effectorDelay", cr2w, this);
-				}
-				return _effectorDelay;
-			}
-			set
-			{
-				if (_effectorDelay == value)
-				{
-					return;
-				}
-				_effectorDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effectorDelay);
+			set => SetProperty(ref _effectorDelay, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isContinuous")] 
 		public CBool IsContinuous
 		{
-			get
-			{
-				if (_isContinuous == null)
-				{
-					_isContinuous = (CBool) CR2WTypeManager.Create("Bool", "isContinuous", cr2w, this);
-				}
-				return _isContinuous;
-			}
-			set
-			{
-				if (_isContinuous == value)
-				{
-					return;
-				}
-				_isContinuous = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isContinuous);
+			set => SetProperty(ref _isContinuous, value);
 		}
 
 		public DamageEffectUIEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

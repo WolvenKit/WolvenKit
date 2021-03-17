@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("MuteArmActive")] 
 		public gamebbScriptID_Bool MuteArmActive
 		{
-			get
-			{
-				if (_muteArmActive == null)
-				{
-					_muteArmActive = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "MuteArmActive", cr2w, this);
-				}
-				return _muteArmActive;
-			}
-			set
-			{
-				if (_muteArmActive == value)
-				{
-					return;
-				}
-				_muteArmActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _muteArmActive);
+			set => SetProperty(ref _muteArmActive, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("MuteArmRadius")] 
 		public gamebbScriptID_Float MuteArmRadius
 		{
-			get
-			{
-				if (_muteArmRadius == null)
-				{
-					_muteArmRadius = (gamebbScriptID_Float) CR2WTypeManager.Create("gamebbScriptID_Float", "MuteArmRadius", cr2w, this);
-				}
-				return _muteArmRadius;
-			}
-			set
-			{
-				if (_muteArmRadius == value)
-				{
-					return;
-				}
-				_muteArmRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _muteArmRadius);
+			set => SetProperty(ref _muteArmRadius, value);
 		}
 
 		public CW_MuteArmDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

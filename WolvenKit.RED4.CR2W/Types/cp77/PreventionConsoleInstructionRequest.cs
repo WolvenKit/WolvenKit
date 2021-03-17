@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("instruction")] 
 		public CEnum<EPreventionSystemInstruction> Instruction
 		{
-			get
-			{
-				if (_instruction == null)
-				{
-					_instruction = (CEnum<EPreventionSystemInstruction>) CR2WTypeManager.Create("EPreventionSystemInstruction", "instruction", cr2w, this);
-				}
-				return _instruction;
-			}
-			set
-			{
-				if (_instruction == value)
-				{
-					return;
-				}
-				_instruction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instruction);
+			set => SetProperty(ref _instruction, value);
 		}
 
 		public PreventionConsoleInstructionRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

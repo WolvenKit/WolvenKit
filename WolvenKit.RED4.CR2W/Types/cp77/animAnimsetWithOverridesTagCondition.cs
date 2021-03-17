@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animsetTags")] 
 		public redTagList AnimsetTags
 		{
-			get
-			{
-				if (_animsetTags == null)
-				{
-					_animsetTags = (redTagList) CR2WTypeManager.Create("redTagList", "animsetTags", cr2w, this);
-				}
-				return _animsetTags;
-			}
-			set
-			{
-				if (_animsetTags == value)
-				{
-					return;
-				}
-				_animsetTags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animsetTags);
+			set => SetProperty(ref _animsetTags, value);
 		}
 
 		public animAnimsetWithOverridesTagCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

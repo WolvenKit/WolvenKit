@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Proximity")] 
 		public CFloat Proximity
 		{
-			get
-			{
-				if (_proximity == null)
-				{
-					_proximity = (CFloat) CR2WTypeManager.Create("Float", "Proximity", cr2w, this);
-				}
-				return _proximity;
-			}
-			set
-			{
-				if (_proximity == value)
-				{
-					return;
-				}
-				_proximity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _proximity);
+			set => SetProperty(ref _proximity, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("Scale")] 
 		public CFloat Scale
 		{
-			get
-			{
-				if (_scale == null)
-				{
-					_scale = (CFloat) CR2WTypeManager.Create("Float", "Scale", cr2w, this);
-				}
-				return _scale;
-			}
-			set
-			{
-				if (_scale == value)
-				{
-					return;
-				}
-				_scale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scale);
+			set => SetProperty(ref _scale, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ScaleVariation")] 
 		public CFloat ScaleVariation
 		{
-			get
-			{
-				if (_scaleVariation == null)
-				{
-					_scaleVariation = (CFloat) CR2WTypeManager.Create("Float", "ScaleVariation", cr2w, this);
-				}
-				return _scaleVariation;
-			}
-			set
-			{
-				if (_scaleVariation == value)
-				{
-					return;
-				}
-				_scaleVariation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scaleVariation);
+			set => SetProperty(ref _scaleVariation, value);
 		}
 
 		public worldFoliageBrushParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("encodedShapesRef")] 
 		public raRef<minimapEncodedShapes> EncodedShapesRef
 		{
-			get
-			{
-				if (_encodedShapesRef == null)
-				{
-					_encodedShapesRef = (raRef<minimapEncodedShapes>) CR2WTypeManager.Create("raRef:minimapEncodedShapes", "encodedShapesRef", cr2w, this);
-				}
-				return _encodedShapesRef;
-			}
-			set
-			{
-				if (_encodedShapesRef == value)
-				{
-					return;
-				}
-				_encodedShapesRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _encodedShapesRef);
+			set => SetProperty(ref _encodedShapesRef, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("localBounds")] 
 		public Box LocalBounds
 		{
-			get
-			{
-				if (_localBounds == null)
-				{
-					_localBounds = (Box) CR2WTypeManager.Create("Box", "localBounds", cr2w, this);
-				}
-				return _localBounds;
-			}
-			set
-			{
-				if (_localBounds == value)
-				{
-					return;
-				}
-				_localBounds = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localBounds);
+			set => SetProperty(ref _localBounds, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("allInteriorShapes")] 
 		public CBool AllInteriorShapes
 		{
-			get
-			{
-				if (_allInteriorShapes == null)
-				{
-					_allInteriorShapes = (CBool) CR2WTypeManager.Create("Bool", "allInteriorShapes", cr2w, this);
-				}
-				return _allInteriorShapes;
-			}
-			set
-			{
-				if (_allInteriorShapes == value)
-				{
-					return;
-				}
-				_allInteriorShapes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _allInteriorShapes);
+			set => SetProperty(ref _allInteriorShapes, value);
 		}
 
 		public MinimapDataNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetEntityID")] 
 		public entEntityID TargetEntityID
 		{
-			get
-			{
-				if (_targetEntityID == null)
-				{
-					_targetEntityID = (entEntityID) CR2WTypeManager.Create("entEntityID", "targetEntityID", cr2w, this);
-				}
-				return _targetEntityID;
-			}
-			set
-			{
-				if (_targetEntityID == value)
-				{
-					return;
-				}
-				_targetEntityID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetEntityID);
+			set => SetProperty(ref _targetEntityID, value);
 		}
 
 		public QuestStopFollowingTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

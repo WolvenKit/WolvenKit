@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("DataSource")] 
 		public CEnum<CodexDataSource> DataSource
 		{
-			get
-			{
-				if (_dataSource == null)
-				{
-					_dataSource = (CEnum<CodexDataSource>) CR2WTypeManager.Create("CodexDataSource", "DataSource", cr2w, this);
-				}
-				return _dataSource;
-			}
-			set
-			{
-				if (_dataSource == value)
-				{
-					return;
-				}
-				_dataSource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dataSource);
+			set => SetProperty(ref _dataSource, value);
 		}
 
 		public CodexUserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

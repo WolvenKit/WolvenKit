@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("dontDeactivateInput")] 
 		public CBool DontDeactivateInput
 		{
-			get
-			{
-				if (_dontDeactivateInput == null)
-				{
-					_dontDeactivateInput = (CBool) CR2WTypeManager.Create("Bool", "dontDeactivateInput", cr2w, this);
-				}
-				return _dontDeactivateInput;
-			}
-			set
-			{
-				if (_dontDeactivateInput == value)
-				{
-					return;
-				}
-				_dontDeactivateInput = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dontDeactivateInput);
+			set => SetProperty(ref _dontDeactivateInput, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("inputLink")] 
 		public animPoseLink InputLink
 		{
-			get
-			{
-				if (_inputLink == null)
-				{
-					_inputLink = (animPoseLink) CR2WTypeManager.Create("animPoseLink", "inputLink", cr2w, this);
-				}
-				return _inputLink;
-			}
-			set
-			{
-				if (_inputLink == value)
-				{
-					return;
-				}
-				_inputLink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputLink);
+			set => SetProperty(ref _inputLink, value);
 		}
 
 		public animAnimNode_GraphSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

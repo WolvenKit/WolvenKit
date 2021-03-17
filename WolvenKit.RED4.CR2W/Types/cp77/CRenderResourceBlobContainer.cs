@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("blob")] 
 		public CHandle<IRenderResourceBlob> Blob
 		{
-			get
-			{
-				if (_blob == null)
-				{
-					_blob = (CHandle<IRenderResourceBlob>) CR2WTypeManager.Create("handle:IRenderResourceBlob", "blob", cr2w, this);
-				}
-				return _blob;
-			}
-			set
-			{
-				if (_blob == value)
-				{
-					return;
-				}
-				_blob = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blob);
+			set => SetProperty(ref _blob, value);
 		}
 
 		public CRenderResourceBlobContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

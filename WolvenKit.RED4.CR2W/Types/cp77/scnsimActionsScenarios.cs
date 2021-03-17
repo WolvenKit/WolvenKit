@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("allScenarios")] 
 		public CArray<scnsimActionsScenariosNodeScenarios> AllScenarios
 		{
-			get
-			{
-				if (_allScenarios == null)
-				{
-					_allScenarios = (CArray<scnsimActionsScenariosNodeScenarios>) CR2WTypeManager.Create("array:scnsimActionsScenariosNodeScenarios", "allScenarios", cr2w, this);
-				}
-				return _allScenarios;
-			}
-			set
-			{
-				if (_allScenarios == value)
-				{
-					return;
-				}
-				_allScenarios = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _allScenarios);
+			set => SetProperty(ref _allScenarios, value);
 		}
 
 		public scnsimActionsScenarios(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

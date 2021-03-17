@@ -24,276 +24,96 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("system")] 
 		public CHandle<SecuritySystemControllerPS> System
 		{
-			get
-			{
-				if (_system == null)
-				{
-					_system = (CHandle<SecuritySystemControllerPS>) CR2WTypeManager.Create("handle:SecuritySystemControllerPS", "system", cr2w, this);
-				}
-				return _system;
-			}
-			set
-			{
-				if (_system == value)
-				{
-					return;
-				}
-				_system = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _system);
+			set => SetProperty(ref _system, value);
 		}
 
 		[Ordinal(105)] 
 		[RED("usersInPerimeter")] 
 		public CArray<AreaEntry> UsersInPerimeter
 		{
-			get
-			{
-				if (_usersInPerimeter == null)
-				{
-					_usersInPerimeter = (CArray<AreaEntry>) CR2WTypeManager.Create("array:AreaEntry", "usersInPerimeter", cr2w, this);
-				}
-				return _usersInPerimeter;
-			}
-			set
-			{
-				if (_usersInPerimeter == value)
-				{
-					return;
-				}
-				_usersInPerimeter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _usersInPerimeter);
+			set => SetProperty(ref _usersInPerimeter, value);
 		}
 
 		[Ordinal(106)] 
 		[RED("isPlayerInside")] 
 		public CBool IsPlayerInside
 		{
-			get
-			{
-				if (_isPlayerInside == null)
-				{
-					_isPlayerInside = (CBool) CR2WTypeManager.Create("Bool", "isPlayerInside", cr2w, this);
-				}
-				return _isPlayerInside;
-			}
-			set
-			{
-				if (_isPlayerInside == value)
-				{
-					return;
-				}
-				_isPlayerInside = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayerInside);
+			set => SetProperty(ref _isPlayerInside, value);
 		}
 
 		[Ordinal(107)] 
 		[RED("securityAccessLevel")] 
 		public CEnum<ESecurityAccessLevel> SecurityAccessLevel
 		{
-			get
-			{
-				if (_securityAccessLevel == null)
-				{
-					_securityAccessLevel = (CEnum<ESecurityAccessLevel>) CR2WTypeManager.Create("ESecurityAccessLevel", "securityAccessLevel", cr2w, this);
-				}
-				return _securityAccessLevel;
-			}
-			set
-			{
-				if (_securityAccessLevel == value)
-				{
-					return;
-				}
-				_securityAccessLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securityAccessLevel);
+			set => SetProperty(ref _securityAccessLevel, value);
 		}
 
 		[Ordinal(108)] 
 		[RED("securityAreaType")] 
 		public CEnum<ESecurityAreaType> SecurityAreaType
 		{
-			get
-			{
-				if (_securityAreaType == null)
-				{
-					_securityAreaType = (CEnum<ESecurityAreaType>) CR2WTypeManager.Create("ESecurityAreaType", "securityAreaType", cr2w, this);
-				}
-				return _securityAreaType;
-			}
-			set
-			{
-				if (_securityAreaType == value)
-				{
-					return;
-				}
-				_securityAreaType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securityAreaType);
+			set => SetProperty(ref _securityAreaType, value);
 		}
 
 		[Ordinal(109)] 
 		[RED("eventsFilters")] 
 		public EventsFilters EventsFilters
 		{
-			get
-			{
-				if (_eventsFilters == null)
-				{
-					_eventsFilters = (EventsFilters) CR2WTypeManager.Create("EventsFilters", "eventsFilters", cr2w, this);
-				}
-				return _eventsFilters;
-			}
-			set
-			{
-				if (_eventsFilters == value)
-				{
-					return;
-				}
-				_eventsFilters = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventsFilters);
+			set => SetProperty(ref _eventsFilters, value);
 		}
 
 		[Ordinal(110)] 
 		[RED("areaTransitions")] 
 		public CArray<AreaTypeTransition> AreaTransitions
 		{
-			get
-			{
-				if (_areaTransitions == null)
-				{
-					_areaTransitions = (CArray<AreaTypeTransition>) CR2WTypeManager.Create("array:AreaTypeTransition", "areaTransitions", cr2w, this);
-				}
-				return _areaTransitions;
-			}
-			set
-			{
-				if (_areaTransitions == value)
-				{
-					return;
-				}
-				_areaTransitions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaTransitions);
+			set => SetProperty(ref _areaTransitions, value);
 		}
 
 		[Ordinal(111)] 
 		[RED("pendingDisableRequest")] 
 		public CBool PendingDisableRequest
 		{
-			get
-			{
-				if (_pendingDisableRequest == null)
-				{
-					_pendingDisableRequest = (CBool) CR2WTypeManager.Create("Bool", "pendingDisableRequest", cr2w, this);
-				}
-				return _pendingDisableRequest;
-			}
-			set
-			{
-				if (_pendingDisableRequest == value)
-				{
-					return;
-				}
-				_pendingDisableRequest = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pendingDisableRequest);
+			set => SetProperty(ref _pendingDisableRequest, value);
 		}
 
 		[Ordinal(112)] 
 		[RED("lastOutput")] 
 		public OutputPersistentData LastOutput
 		{
-			get
-			{
-				if (_lastOutput == null)
-				{
-					_lastOutput = (OutputPersistentData) CR2WTypeManager.Create("OutputPersistentData", "lastOutput", cr2w, this);
-				}
-				return _lastOutput;
-			}
-			set
-			{
-				if (_lastOutput == value)
-				{
-					return;
-				}
-				_lastOutput = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastOutput);
+			set => SetProperty(ref _lastOutput, value);
 		}
 
 		[Ordinal(113)] 
 		[RED("questPlayerHasTriggeredCombat")] 
 		public CBool QuestPlayerHasTriggeredCombat
 		{
-			get
-			{
-				if (_questPlayerHasTriggeredCombat == null)
-				{
-					_questPlayerHasTriggeredCombat = (CBool) CR2WTypeManager.Create("Bool", "questPlayerHasTriggeredCombat", cr2w, this);
-				}
-				return _questPlayerHasTriggeredCombat;
-			}
-			set
-			{
-				if (_questPlayerHasTriggeredCombat == value)
-				{
-					return;
-				}
-				_questPlayerHasTriggeredCombat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _questPlayerHasTriggeredCombat);
+			set => SetProperty(ref _questPlayerHasTriggeredCombat, value);
 		}
 
 		[Ordinal(114)] 
 		[RED("hasThisAreaReceivedCombatNotification")] 
 		public CBool HasThisAreaReceivedCombatNotification
 		{
-			get
-			{
-				if (_hasThisAreaReceivedCombatNotification == null)
-				{
-					_hasThisAreaReceivedCombatNotification = (CBool) CR2WTypeManager.Create("Bool", "hasThisAreaReceivedCombatNotification", cr2w, this);
-				}
-				return _hasThisAreaReceivedCombatNotification;
-			}
-			set
-			{
-				if (_hasThisAreaReceivedCombatNotification == value)
-				{
-					return;
-				}
-				_hasThisAreaReceivedCombatNotification = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasThisAreaReceivedCombatNotification);
+			set => SetProperty(ref _hasThisAreaReceivedCombatNotification, value);
 		}
 
 		[Ordinal(115)] 
 		[RED("pendingNotifyPlayerAboutTransition")] 
 		public CBool PendingNotifyPlayerAboutTransition
 		{
-			get
-			{
-				if (_pendingNotifyPlayerAboutTransition == null)
-				{
-					_pendingNotifyPlayerAboutTransition = (CBool) CR2WTypeManager.Create("Bool", "pendingNotifyPlayerAboutTransition", cr2w, this);
-				}
-				return _pendingNotifyPlayerAboutTransition;
-			}
-			set
-			{
-				if (_pendingNotifyPlayerAboutTransition == value)
-				{
-					return;
-				}
-				_pendingNotifyPlayerAboutTransition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pendingNotifyPlayerAboutTransition);
+			set => SetProperty(ref _pendingNotifyPlayerAboutTransition, value);
 		}
 
 		public SecurityAreaControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
-			get
-			{
-				if (_label == null)
-				{
-					_label = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "label", cr2w, this);
-				}
-				return _label;
-			}
-			set
-			{
-				if (_label == value)
-				{
-					return;
-				}
-				_label = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _label);
+			set => SetProperty(ref _label, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("desc")] 
 		public inkTextWidgetReference Desc
 		{
-			get
-			{
-				if (_desc == null)
-				{
-					_desc = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "desc", cr2w, this);
-				}
-				return _desc;
-			}
-			set
-			{
-				if (_desc == value)
-				{
-					return;
-				}
-				_desc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _desc);
+			set => SetProperty(ref _desc, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
-			get
-			{
-				if (_icon == null)
-				{
-					_icon = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "icon", cr2w, this);
-				}
-				return _icon;
-			}
-			set
-			{
-				if (_icon == value)
-				{
-					return;
-				}
-				_icon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _icon);
+			set => SetProperty(ref _icon, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("fluffHeader")] 
 		public inkTextWidgetReference FluffHeader
 		{
-			get
-			{
-				if (_fluffHeader == null)
-				{
-					_fluffHeader = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "fluffHeader", cr2w, this);
-				}
-				return _fluffHeader;
-			}
-			set
-			{
-				if (_fluffHeader == value)
-				{
-					return;
-				}
-				_fluffHeader = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fluffHeader);
+			set => SetProperty(ref _fluffHeader, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("root")] 
 		public CHandle<inkWidget> Root
 		{
-			get
-			{
-				if (_root == null)
-				{
-					_root = (CHandle<inkWidget>) CR2WTypeManager.Create("handle:inkWidget", "root", cr2w, this);
-				}
-				return _root;
-			}
-			set
-			{
-				if (_root == value)
-				{
-					return;
-				}
-				_root = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("data")] 
 		public CHandle<CustomQuestNotificationUserData> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CHandle<CustomQuestNotificationUserData>) CR2WTypeManager.Create("handle:CustomQuestNotificationUserData", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
-			get
-			{
-				if (_animationProxy == null)
-				{
-					_animationProxy = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "animationProxy", cr2w, this);
-				}
-				return _animationProxy;
-			}
-			set
-			{
-				if (_animationProxy == value)
-				{
-					return;
-				}
-				_animationProxy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationProxy);
+			set => SetProperty(ref _animationProxy, value);
 		}
 
 		public CustomQuestNotificationGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

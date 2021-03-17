@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("deviceSettings")] 
 		public audioDeviceStateSettings DeviceSettings
 		{
-			get
-			{
-				if (_deviceSettings == null)
-				{
-					_deviceSettings = (audioDeviceStateSettings) CR2WTypeManager.Create("audioDeviceStateSettings", "deviceSettings", cr2w, this);
-				}
-				return _deviceSettings;
-			}
-			set
-			{
-				if (_deviceSettings == value)
-				{
-					return;
-				}
-				_deviceSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deviceSettings);
+			set => SetProperty(ref _deviceSettings, value);
 		}
 
 		public audioDeviceSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

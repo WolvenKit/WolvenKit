@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("puppet")] 
 		public gameEntityReference Puppet
 		{
-			get
-			{
-				if (_puppet == null)
-				{
-					_puppet = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "puppet", cr2w, this);
-				}
-				return _puppet;
-			}
-			set
-			{
-				if (_puppet == value)
-				{
-					return;
-				}
-				_puppet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppet);
+			set => SetProperty(ref _puppet, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("tree")] 
 		public CHandle<questForcedBehaviorReference> Tree
 		{
-			get
-			{
-				if (_tree == null)
-				{
-					_tree = (CHandle<questForcedBehaviorReference>) CR2WTypeManager.Create("handle:questForcedBehaviorReference", "tree", cr2w, this);
-				}
-				return _tree;
-			}
-			set
-			{
-				if (_tree == value)
-				{
-					return;
-				}
-				_tree = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tree);
+			set => SetProperty(ref _tree, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("behavior")] 
 		public CHandle<AIbehaviorParameterizedBehavior> Behavior
 		{
-			get
-			{
-				if (_behavior == null)
-				{
-					_behavior = (CHandle<AIbehaviorParameterizedBehavior>) CR2WTypeManager.Create("handle:AIbehaviorParameterizedBehavior", "behavior", cr2w, this);
-				}
-				return _behavior;
-			}
-			set
-			{
-				if (_behavior == value)
-				{
-					return;
-				}
-				_behavior = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _behavior);
+			set => SetProperty(ref _behavior, value);
 		}
 
 		public questForcedBehaviourNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

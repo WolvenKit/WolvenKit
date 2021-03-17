@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("syncType")] 
 		public CEnum<audioMusicSyncType> SyncType
 		{
-			get
-			{
-				if (_syncType == null)
-				{
-					_syncType = (CEnum<audioMusicSyncType>) CR2WTypeManager.Create("audioMusicSyncType", "syncType", cr2w, this);
-				}
-				return _syncType;
-			}
-			set
-			{
-				if (_syncType == value)
-				{
-					return;
-				}
-				_syncType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _syncType);
+			set => SetProperty(ref _syncType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("description")] 
 		public CString Description
 		{
-			get
-			{
-				if (_description == null)
-				{
-					_description = (CString) CR2WTypeManager.Create("String", "description", cr2w, this);
-				}
-				return _description;
-			}
-			set
-			{
-				if (_description == value)
-				{
-					return;
-				}
-				_description = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _description);
+			set => SetProperty(ref _description, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("syncTrack")] 
 		public CName SyncTrack
 		{
-			get
-			{
-				if (_syncTrack == null)
-				{
-					_syncTrack = (CName) CR2WTypeManager.Create("CName", "syncTrack", cr2w, this);
-				}
-				return _syncTrack;
-			}
-			set
-			{
-				if (_syncTrack == value)
-				{
-					return;
-				}
-				_syncTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _syncTrack);
+			set => SetProperty(ref _syncTrack, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("userCue")] 
 		public CName UserCue
 		{
-			get
-			{
-				if (_userCue == null)
-				{
-					_userCue = (CName) CR2WTypeManager.Create("CName", "userCue", cr2w, this);
-				}
-				return _userCue;
-			}
-			set
-			{
-				if (_userCue == value)
-				{
-					return;
-				}
-				_userCue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _userCue);
+			set => SetProperty(ref _userCue, value);
 		}
 
 		public questAudioMusicSyncNodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

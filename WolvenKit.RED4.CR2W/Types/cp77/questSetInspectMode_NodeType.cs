@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("objectID")] 
 		public CString ObjectID
 		{
-			get
-			{
-				if (_objectID == null)
-				{
-					_objectID = (CString) CR2WTypeManager.Create("String", "objectID", cr2w, this);
-				}
-				return _objectID;
-			}
-			set
-			{
-				if (_objectID == value)
-				{
-					return;
-				}
-				_objectID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _objectID);
+			set => SetProperty(ref _objectID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("startingOffset")] 
 		public CFloat StartingOffset
 		{
-			get
-			{
-				if (_startingOffset == null)
-				{
-					_startingOffset = (CFloat) CR2WTypeManager.Create("Float", "startingOffset", cr2w, this);
-				}
-				return _startingOffset;
-			}
-			set
-			{
-				if (_startingOffset == value)
-				{
-					return;
-				}
-				_startingOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startingOffset);
+			set => SetProperty(ref _startingOffset, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("zoomOffset")] 
 		public CFloat ZoomOffset
 		{
-			get
-			{
-				if (_zoomOffset == null)
-				{
-					_zoomOffset = (CFloat) CR2WTypeManager.Create("Float", "zoomOffset", cr2w, this);
-				}
-				return _zoomOffset;
-			}
-			set
-			{
-				if (_zoomOffset == value)
-				{
-					return;
-				}
-				_zoomOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _zoomOffset);
+			set => SetProperty(ref _zoomOffset, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("timeInterval")] 
 		public CFloat TimeInterval
 		{
-			get
-			{
-				if (_timeInterval == null)
-				{
-					_timeInterval = (CFloat) CR2WTypeManager.Create("Float", "timeInterval", cr2w, this);
-				}
-				return _timeInterval;
-			}
-			set
-			{
-				if (_timeInterval == value)
-				{
-					return;
-				}
-				_timeInterval = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeInterval);
+			set => SetProperty(ref _timeInterval, value);
 		}
 
 		public questSetInspectMode_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

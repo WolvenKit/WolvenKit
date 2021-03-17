@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entityRef")] 
 		public NodeRef EntityRef
 		{
-			get
-			{
-				if (_entityRef == null)
-				{
-					_entityRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "entityRef", cr2w, this);
-				}
-				return _entityRef;
-			}
-			set
-			{
-				if (_entityRef == value)
-				{
-					return;
-				}
-				_entityRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityRef);
+			set => SetProperty(ref _entityRef, value);
 		}
 
 		public entTriggerNotifier_Entity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

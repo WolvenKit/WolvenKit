@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("soundName")] 
 		public CName SoundName
 		{
-			get
-			{
-				if (_soundName == null)
-				{
-					_soundName = (CName) CR2WTypeManager.Create("CName", "soundName", cr2w, this);
-				}
-				return _soundName;
-			}
-			set
-			{
-				if (_soundName == value)
-				{
-					return;
-				}
-				_soundName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soundName);
+			set => SetProperty(ref _soundName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("unique")] 
 		public CBool Unique
 		{
-			get
-			{
-				if (_unique == null)
-				{
-					_unique = (CBool) CR2WTypeManager.Create("Bool", "unique", cr2w, this);
-				}
-				return _unique;
-			}
-			set
-			{
-				if (_unique == value)
-				{
-					return;
-				}
-				_unique = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unique);
+			set => SetProperty(ref _unique, value);
 		}
 
 		public gameTransformAnimation_PlaySound(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

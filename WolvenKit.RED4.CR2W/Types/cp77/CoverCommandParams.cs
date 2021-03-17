@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("exposureMethods")] 
 		public CArray<CEnum<AICoverExposureMethod>> ExposureMethods
 		{
-			get
-			{
-				if (_exposureMethods == null)
-				{
-					_exposureMethods = (CArray<CEnum<AICoverExposureMethod>>) CR2WTypeManager.Create("array:AICoverExposureMethod", "exposureMethods", cr2w, this);
-				}
-				return _exposureMethods;
-			}
-			set
-			{
-				if (_exposureMethods == value)
-				{
-					return;
-				}
-				_exposureMethods = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _exposureMethods);
+			set => SetProperty(ref _exposureMethods, value);
 		}
 
 		public CoverCommandParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

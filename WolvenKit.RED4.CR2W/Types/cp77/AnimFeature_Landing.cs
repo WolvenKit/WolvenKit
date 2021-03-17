@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("type")] 
 		public CInt32 Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CInt32) CR2WTypeManager.Create("Int32", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("impactSpeed")] 
 		public CFloat ImpactSpeed
 		{
-			get
-			{
-				if (_impactSpeed == null)
-				{
-					_impactSpeed = (CFloat) CR2WTypeManager.Create("Float", "impactSpeed", cr2w, this);
-				}
-				return _impactSpeed;
-			}
-			set
-			{
-				if (_impactSpeed == value)
-				{
-					return;
-				}
-				_impactSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _impactSpeed);
+			set => SetProperty(ref _impactSpeed, value);
 		}
 
 		public AnimFeature_Landing(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

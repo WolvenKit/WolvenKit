@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entryPath")] 
 		public CHandle<gameJournalPath> EntryPath
 		{
-			get
-			{
-				if (_entryPath == null)
-				{
-					_entryPath = (CHandle<gameJournalPath>) CR2WTypeManager.Create("handle:gameJournalPath", "entryPath", cr2w, this);
-				}
-				return _entryPath;
-			}
-			set
-			{
-				if (_entryPath == value)
-				{
-					return;
-				}
-				_entryPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryPath);
+			set => SetProperty(ref _entryPath, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("oldValue")] 
 		public CInt32 OldValue
 		{
-			get
-			{
-				if (_oldValue == null)
-				{
-					_oldValue = (CInt32) CR2WTypeManager.Create("Int32", "oldValue", cr2w, this);
-				}
-				return _oldValue;
-			}
-			set
-			{
-				if (_oldValue == value)
-				{
-					return;
-				}
-				_oldValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _oldValue);
+			set => SetProperty(ref _oldValue, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("newValue")] 
 		public CInt32 NewValue
 		{
-			get
-			{
-				if (_newValue == null)
-				{
-					_newValue = (CInt32) CR2WTypeManager.Create("Int32", "newValue", cr2w, this);
-				}
-				return _newValue;
-			}
-			set
-			{
-				if (_newValue == value)
-				{
-					return;
-				}
-				_newValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newValue);
+			set => SetProperty(ref _newValue, value);
 		}
 
 		public gameJournalQuestObjectiveCounterData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotData")] 
 		public CArray<gameOccupantSlotData> SlotData
 		{
-			get
-			{
-				if (_slotData == null)
-				{
-					_slotData = (CArray<gameOccupantSlotData>) CR2WTypeManager.Create("array:gameOccupantSlotData", "slotData", cr2w, this);
-				}
-				return _slotData;
-			}
-			set
-			{
-				if (_slotData == value)
-				{
-					return;
-				}
-				_slotData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotData);
+			set => SetProperty(ref _slotData, value);
 		}
 
 		public gameOccupantSlotComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

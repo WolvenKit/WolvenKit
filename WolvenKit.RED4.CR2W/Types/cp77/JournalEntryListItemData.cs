@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entry")] 
 		public wCHandle<gameJournalEntry> Entry
 		{
-			get
-			{
-				if (_entry == null)
-				{
-					_entry = (wCHandle<gameJournalEntry>) CR2WTypeManager.Create("whandle:gameJournalEntry", "entry", cr2w, this);
-				}
-				return _entry;
-			}
-			set
-			{
-				if (_entry == value)
-				{
-					return;
-				}
-				_entry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entry);
+			set => SetProperty(ref _entry, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("extraData")] 
 		public CHandle<IScriptable> ExtraData
 		{
-			get
-			{
-				if (_extraData == null)
-				{
-					_extraData = (CHandle<IScriptable>) CR2WTypeManager.Create("handle:IScriptable", "extraData", cr2w, this);
-				}
-				return _extraData;
-			}
-			set
-			{
-				if (_extraData == value)
-				{
-					return;
-				}
-				_extraData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _extraData);
+			set => SetProperty(ref _extraData, value);
 		}
 
 		public JournalEntryListItemData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

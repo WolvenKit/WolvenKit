@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("activeBraindanceVisionMode")] 
 		public gamebbScriptID_Int32 ActiveBraindanceVisionMode
 		{
-			get
-			{
-				if (_activeBraindanceVisionMode == null)
-				{
-					_activeBraindanceVisionMode = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "activeBraindanceVisionMode", cr2w, this);
-				}
-				return _activeBraindanceVisionMode;
-			}
-			set
-			{
-				if (_activeBraindanceVisionMode == value)
-				{
-					return;
-				}
-				_activeBraindanceVisionMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeBraindanceVisionMode);
+			set => SetProperty(ref _activeBraindanceVisionMode, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lastBraindanceVisionMode")] 
 		public gamebbScriptID_Int32 LastBraindanceVisionMode
 		{
-			get
-			{
-				if (_lastBraindanceVisionMode == null)
-				{
-					_lastBraindanceVisionMode = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "lastBraindanceVisionMode", cr2w, this);
-				}
-				return _lastBraindanceVisionMode;
-			}
-			set
-			{
-				if (_lastBraindanceVisionMode == value)
-				{
-					return;
-				}
-				_lastBraindanceVisionMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastBraindanceVisionMode);
+			set => SetProperty(ref _lastBraindanceVisionMode, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("Progress")] 
 		public gamebbScriptID_Float Progress
 		{
-			get
-			{
-				if (_progress == null)
-				{
-					_progress = (gamebbScriptID_Float) CR2WTypeManager.Create("gamebbScriptID_Float", "Progress", cr2w, this);
-				}
-				return _progress;
-			}
-			set
-			{
-				if (_progress == value)
-				{
-					return;
-				}
-				_progress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _progress);
+			set => SetProperty(ref _progress, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("SectionTime")] 
 		public gamebbScriptID_Float SectionTime
 		{
-			get
-			{
-				if (_sectionTime == null)
-				{
-					_sectionTime = (gamebbScriptID_Float) CR2WTypeManager.Create("gamebbScriptID_Float", "SectionTime", cr2w, this);
-				}
-				return _sectionTime;
-			}
-			set
-			{
-				if (_sectionTime == value)
-				{
-					return;
-				}
-				_sectionTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sectionTime);
+			set => SetProperty(ref _sectionTime, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("Clue")] 
 		public gamebbScriptID_Variant Clue
 		{
-			get
-			{
-				if (_clue == null)
-				{
-					_clue = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "Clue", cr2w, this);
-				}
-				return _clue;
-			}
-			set
-			{
-				if (_clue == value)
-				{
-					return;
-				}
-				_clue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clue);
+			set => SetProperty(ref _clue, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("IsActive")] 
 		public gamebbScriptID_Bool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "IsActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("EnableExit")] 
 		public gamebbScriptID_Bool EnableExit
 		{
-			get
-			{
-				if (_enableExit == null)
-				{
-					_enableExit = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "EnableExit", cr2w, this);
-				}
-				return _enableExit;
-			}
-			set
-			{
-				if (_enableExit == value)
-				{
-					return;
-				}
-				_enableExit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableExit);
+			set => SetProperty(ref _enableExit, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("IsFPP")] 
 		public gamebbScriptID_Bool IsFPP
 		{
-			get
-			{
-				if (_isFPP == null)
-				{
-					_isFPP = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "IsFPP", cr2w, this);
-				}
-				return _isFPP;
-			}
-			set
-			{
-				if (_isFPP == value)
-				{
-					return;
-				}
-				_isFPP = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isFPP);
+			set => SetProperty(ref _isFPP, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("PlaybackSpeed")] 
 		public gamebbScriptID_Variant PlaybackSpeed
 		{
-			get
-			{
-				if (_playbackSpeed == null)
-				{
-					_playbackSpeed = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "PlaybackSpeed", cr2w, this);
-				}
-				return _playbackSpeed;
-			}
-			set
-			{
-				if (_playbackSpeed == value)
-				{
-					return;
-				}
-				_playbackSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playbackSpeed);
+			set => SetProperty(ref _playbackSpeed, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("PlaybackDirection")] 
 		public gamebbScriptID_Variant PlaybackDirection
 		{
-			get
-			{
-				if (_playbackDirection == null)
-				{
-					_playbackDirection = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "PlaybackDirection", cr2w, this);
-				}
-				return _playbackDirection;
-			}
-			set
-			{
-				if (_playbackDirection == value)
-				{
-					return;
-				}
-				_playbackDirection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playbackDirection);
+			set => SetProperty(ref _playbackDirection, value);
 		}
 
 		public BraindanceBlackboardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

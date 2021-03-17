@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actionMask")] 
 		public SBraindanceInputMask ActionMask
 		{
-			get
-			{
-				if (_actionMask == null)
-				{
-					_actionMask = (SBraindanceInputMask) CR2WTypeManager.Create("SBraindanceInputMask", "actionMask", cr2w, this);
-				}
-				return _actionMask;
-			}
-			set
-			{
-				if (_actionMask == value)
-				{
-					return;
-				}
-				_actionMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionMask);
+			set => SetProperty(ref _actionMask, value);
 		}
 
 		public EnableFields(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

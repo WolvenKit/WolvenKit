@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weaponID")] 
 		public gameItemID WeaponID
 		{
-			get
-			{
-				if (_weaponID == null)
-				{
-					_weaponID = (gameItemID) CR2WTypeManager.Create("gameItemID", "weaponID", cr2w, this);
-				}
-				return _weaponID;
-			}
-			set
-			{
-				if (_weaponID == value)
-				{
-					return;
-				}
-				_weaponID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponID);
+			set => SetProperty(ref _weaponID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ammoCurrent")] 
 		public CInt32 AmmoCurrent
 		{
-			get
-			{
-				if (_ammoCurrent == null)
-				{
-					_ammoCurrent = (CInt32) CR2WTypeManager.Create("Int32", "ammoCurrent", cr2w, this);
-				}
-				return _ammoCurrent;
-			}
-			set
-			{
-				if (_ammoCurrent == value)
-				{
-					return;
-				}
-				_ammoCurrent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ammoCurrent);
+			set => SetProperty(ref _ammoCurrent, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("magazineCap")] 
 		public CInt32 MagazineCap
 		{
-			get
-			{
-				if (_magazineCap == null)
-				{
-					_magazineCap = (CInt32) CR2WTypeManager.Create("Int32", "magazineCap", cr2w, this);
-				}
-				return _magazineCap;
-			}
-			set
-			{
-				if (_magazineCap == value)
-				{
-					return;
-				}
-				_magazineCap = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _magazineCap);
+			set => SetProperty(ref _magazineCap, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ammoId")] 
 		public gameItemID AmmoId
 		{
-			get
-			{
-				if (_ammoId == null)
-				{
-					_ammoId = (gameItemID) CR2WTypeManager.Create("gameItemID", "ammoId", cr2w, this);
-				}
-				return _ammoId;
-			}
-			set
-			{
-				if (_ammoId == value)
-				{
-					return;
-				}
-				_ammoId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ammoId);
+			set => SetProperty(ref _ammoId, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("triggerModeCurrent")] 
 		public CEnum<gamedataTriggerMode> TriggerModeCurrent
 		{
-			get
-			{
-				if (_triggerModeCurrent == null)
-				{
-					_triggerModeCurrent = (CEnum<gamedataTriggerMode>) CR2WTypeManager.Create("gamedataTriggerMode", "triggerModeCurrent", cr2w, this);
-				}
-				return _triggerModeCurrent;
-			}
-			set
-			{
-				if (_triggerModeCurrent == value)
-				{
-					return;
-				}
-				_triggerModeCurrent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerModeCurrent);
+			set => SetProperty(ref _triggerModeCurrent, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("triggerModeList")] 
 		public CArray<CEnum<gamedataTriggerMode>> TriggerModeList
 		{
-			get
-			{
-				if (_triggerModeList == null)
-				{
-					_triggerModeList = (CArray<CEnum<gamedataTriggerMode>>) CR2WTypeManager.Create("array:gamedataTriggerMode", "triggerModeList", cr2w, this);
-				}
-				return _triggerModeList;
-			}
-			set
-			{
-				if (_triggerModeList == value)
-				{
-					return;
-				}
-				_triggerModeList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerModeList);
+			set => SetProperty(ref _triggerModeList, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("evolution")] 
 		public CEnum<gamedataWeaponEvolution> Evolution
 		{
-			get
-			{
-				if (_evolution == null)
-				{
-					_evolution = (CEnum<gamedataWeaponEvolution>) CR2WTypeManager.Create("gamedataWeaponEvolution", "evolution", cr2w, this);
-				}
-				return _evolution;
-			}
-			set
-			{
-				if (_evolution == value)
-				{
-					return;
-				}
-				_evolution = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _evolution);
+			set => SetProperty(ref _evolution, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get
-			{
-				if (_isActive == null)
-				{
-					_isActive = (CBool) CR2WTypeManager.Create("Bool", "isActive", cr2w, this);
-				}
-				return _isActive;
-			}
-			set
-			{
-				if (_isActive == value)
-				{
-					return;
-				}
-				_isActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isFirstEquip")] 
 		public CBool IsFirstEquip
 		{
-			get
-			{
-				if (_isFirstEquip == null)
-				{
-					_isFirstEquip = (CBool) CR2WTypeManager.Create("Bool", "isFirstEquip", cr2w, this);
-				}
-				return _isFirstEquip;
-			}
-			set
-			{
-				if (_isFirstEquip == value)
-				{
-					return;
-				}
-				_isFirstEquip = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isFirstEquip);
+			set => SetProperty(ref _isFirstEquip, value);
 		}
 
 		public gameSlotWeaponData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

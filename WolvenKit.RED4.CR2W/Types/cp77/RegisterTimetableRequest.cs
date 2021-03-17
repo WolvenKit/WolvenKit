@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("requesterData")] 
 		public PSOwnerData RequesterData
 		{
-			get
-			{
-				if (_requesterData == null)
-				{
-					_requesterData = (PSOwnerData) CR2WTypeManager.Create("PSOwnerData", "requesterData", cr2w, this);
-				}
-				return _requesterData;
-			}
-			set
-			{
-				if (_requesterData == value)
-				{
-					return;
-				}
-				_requesterData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requesterData);
+			set => SetProperty(ref _requesterData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timeTable")] 
 		public CArray<SDeviceTimetableEntry> TimeTable
 		{
-			get
-			{
-				if (_timeTable == null)
-				{
-					_timeTable = (CArray<SDeviceTimetableEntry>) CR2WTypeManager.Create("array:SDeviceTimetableEntry", "timeTable", cr2w, this);
-				}
-				return _timeTable;
-			}
-			set
-			{
-				if (_timeTable == value)
-				{
-					return;
-				}
-				_timeTable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeTable);
+			set => SetProperty(ref _timeTable, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lights")] 
 		public CInt32 Lights
 		{
-			get
-			{
-				if (_lights == null)
-				{
-					_lights = (CInt32) CR2WTypeManager.Create("Int32", "lights", cr2w, this);
-				}
-				return _lights;
-			}
-			set
-			{
-				if (_lights == value)
-				{
-					return;
-				}
-				_lights = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lights);
+			set => SetProperty(ref _lights, value);
 		}
 
 		public RegisterTimetableRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

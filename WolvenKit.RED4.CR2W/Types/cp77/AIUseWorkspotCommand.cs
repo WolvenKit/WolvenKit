@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("workspotNode")] 
 		public NodeRef WorkspotNode
 		{
-			get
-			{
-				if (_workspotNode == null)
-				{
-					_workspotNode = (NodeRef) CR2WTypeManager.Create("NodeRef", "workspotNode", cr2w, this);
-				}
-				return _workspotNode;
-			}
-			set
-			{
-				if (_workspotNode == value)
-				{
-					return;
-				}
-				_workspotNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotNode);
+			set => SetProperty(ref _workspotNode, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("jumpToEntry")] 
 		public CBool JumpToEntry
 		{
-			get
-			{
-				if (_jumpToEntry == null)
-				{
-					_jumpToEntry = (CBool) CR2WTypeManager.Create("Bool", "jumpToEntry", cr2w, this);
-				}
-				return _jumpToEntry;
-			}
-			set
-			{
-				if (_jumpToEntry == value)
-				{
-					return;
-				}
-				_jumpToEntry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _jumpToEntry);
+			set => SetProperty(ref _jumpToEntry, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("entryId")] 
 		public workWorkEntryId EntryId
 		{
-			get
-			{
-				if (_entryId == null)
-				{
-					_entryId = (workWorkEntryId) CR2WTypeManager.Create("workWorkEntryId", "entryId", cr2w, this);
-				}
-				return _entryId;
-			}
-			set
-			{
-				if (_entryId == value)
-				{
-					return;
-				}
-				_entryId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryId);
+			set => SetProperty(ref _entryId, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("entryTag")] 
 		public CName EntryTag
 		{
-			get
-			{
-				if (_entryTag == null)
-				{
-					_entryTag = (CName) CR2WTypeManager.Create("CName", "entryTag", cr2w, this);
-				}
-				return _entryTag;
-			}
-			set
-			{
-				if (_entryTag == value)
-				{
-					return;
-				}
-				_entryTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryTag);
+			set => SetProperty(ref _entryTag, value);
 		}
 
 		public AIUseWorkspotCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

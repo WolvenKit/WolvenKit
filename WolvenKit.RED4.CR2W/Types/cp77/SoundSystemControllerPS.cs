@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("defaultAction")] 
 		public CInt32 DefaultAction
 		{
-			get
-			{
-				if (_defaultAction == null)
-				{
-					_defaultAction = (CInt32) CR2WTypeManager.Create("Int32", "defaultAction", cr2w, this);
-				}
-				return _defaultAction;
-			}
-			set
-			{
-				if (_defaultAction == value)
-				{
-					return;
-				}
-				_defaultAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultAction);
+			set => SetProperty(ref _defaultAction, value);
 		}
 
 		[Ordinal(105)] 
 		[RED("soundSystemSettings")] 
 		public CArray<SoundSystemSettings> SoundSystemSettings
 		{
-			get
-			{
-				if (_soundSystemSettings == null)
-				{
-					_soundSystemSettings = (CArray<SoundSystemSettings>) CR2WTypeManager.Create("array:SoundSystemSettings", "soundSystemSettings", cr2w, this);
-				}
-				return _soundSystemSettings;
-			}
-			set
-			{
-				if (_soundSystemSettings == value)
-				{
-					return;
-				}
-				_soundSystemSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soundSystemSettings);
+			set => SetProperty(ref _soundSystemSettings, value);
 		}
 
 		[Ordinal(106)] 
 		[RED("currentEvent")] 
 		public CHandle<ChangeMusicAction> CurrentEvent
 		{
-			get
-			{
-				if (_currentEvent == null)
-				{
-					_currentEvent = (CHandle<ChangeMusicAction>) CR2WTypeManager.Create("handle:ChangeMusicAction", "currentEvent", cr2w, this);
-				}
-				return _currentEvent;
-			}
-			set
-			{
-				if (_currentEvent == value)
-				{
-					return;
-				}
-				_currentEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentEvent);
+			set => SetProperty(ref _currentEvent, value);
 		}
 
 		[Ordinal(107)] 
 		[RED("cachedEvent")] 
 		public CHandle<ChangeMusicAction> CachedEvent
 		{
-			get
-			{
-				if (_cachedEvent == null)
-				{
-					_cachedEvent = (CHandle<ChangeMusicAction>) CR2WTypeManager.Create("handle:ChangeMusicAction", "cachedEvent", cr2w, this);
-				}
-				return _cachedEvent;
-			}
-			set
-			{
-				if (_cachedEvent == value)
-				{
-					return;
-				}
-				_cachedEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cachedEvent);
+			set => SetProperty(ref _cachedEvent, value);
 		}
 
 		public SoundSystemControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

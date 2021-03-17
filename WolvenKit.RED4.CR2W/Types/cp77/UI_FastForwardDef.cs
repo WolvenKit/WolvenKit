@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("FastForwardAvailable")] 
 		public gamebbScriptID_Bool FastForwardAvailable
 		{
-			get
-			{
-				if (_fastForwardAvailable == null)
-				{
-					_fastForwardAvailable = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "FastForwardAvailable", cr2w, this);
-				}
-				return _fastForwardAvailable;
-			}
-			set
-			{
-				if (_fastForwardAvailable == value)
-				{
-					return;
-				}
-				_fastForwardAvailable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fastForwardAvailable);
+			set => SetProperty(ref _fastForwardAvailable, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("FastForwardActive")] 
 		public gamebbScriptID_Bool FastForwardActive
 		{
-			get
-			{
-				if (_fastForwardActive == null)
-				{
-					_fastForwardActive = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "FastForwardActive", cr2w, this);
-				}
-				return _fastForwardActive;
-			}
-			set
-			{
-				if (_fastForwardActive == value)
-				{
-					return;
-				}
-				_fastForwardActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fastForwardActive);
+			set => SetProperty(ref _fastForwardActive, value);
 		}
 
 		public UI_FastForwardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

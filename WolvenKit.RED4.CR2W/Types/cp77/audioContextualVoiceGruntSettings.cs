@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("painShort")] 
 		public audioContextualVoiceGrunt PainShort
 		{
-			get
-			{
-				if (_painShort == null)
-				{
-					_painShort = (audioContextualVoiceGrunt) CR2WTypeManager.Create("audioContextualVoiceGrunt", "painShort", cr2w, this);
-				}
-				return _painShort;
-			}
-			set
-			{
-				if (_painShort == value)
-				{
-					return;
-				}
-				_painShort = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _painShort);
+			set => SetProperty(ref _painShort, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("effort")] 
 		public audioContextualVoiceGrunt Effort
 		{
-			get
-			{
-				if (_effort == null)
-				{
-					_effort = (audioContextualVoiceGrunt) CR2WTypeManager.Create("audioContextualVoiceGrunt", "effort", cr2w, this);
-				}
-				return _effort;
-			}
-			set
-			{
-				if (_effort == value)
-				{
-					return;
-				}
-				_effort = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _effort);
+			set => SetProperty(ref _effort, value);
 		}
 
 		public audioContextualVoiceGruntSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

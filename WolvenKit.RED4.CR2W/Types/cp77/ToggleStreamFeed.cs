@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vRoomFake")] 
 		public CBool VRoomFake
 		{
-			get
-			{
-				if (_vRoomFake == null)
-				{
-					_vRoomFake = (CBool) CR2WTypeManager.Create("Bool", "vRoomFake", cr2w, this);
-				}
-				return _vRoomFake;
-			}
-			set
-			{
-				if (_vRoomFake == value)
-				{
-					return;
-				}
-				_vRoomFake = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vRoomFake);
+			set => SetProperty(ref _vRoomFake, value);
 		}
 
 		public ToggleStreamFeed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

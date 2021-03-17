@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("action")] 
 		public CEnum<gamedataWorkspotActionType> Action
 		{
-			get
-			{
-				if (_action == null)
-				{
-					_action = (CEnum<gamedataWorkspotActionType>) CR2WTypeManager.Create("gamedataWorkspotActionType", "action", cr2w, this);
-				}
-				return _action;
-			}
-			set
-			{
-				if (_action == value)
-				{
-					return;
-				}
-				_action = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("workspots")] 
 		public CArray<CHandle<WorkspotEntryData>> Workspots
 		{
-			get
-			{
-				if (_workspots == null)
-				{
-					_workspots = (CArray<CHandle<WorkspotEntryData>>) CR2WTypeManager.Create("array:handle:WorkspotEntryData", "workspots", cr2w, this);
-				}
-				return _workspots;
-			}
-			set
-			{
-				if (_workspots == value)
-				{
-					return;
-				}
-				_workspots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspots);
+			set => SetProperty(ref _workspots, value);
 		}
 
 		public WorkspotMapData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

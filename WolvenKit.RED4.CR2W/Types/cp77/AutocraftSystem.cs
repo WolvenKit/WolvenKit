@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("active")] 
 		public CBool Active
 		{
-			get
-			{
-				if (_active == null)
-				{
-					_active = (CBool) CR2WTypeManager.Create("Bool", "active", cr2w, this);
-				}
-				return _active;
-			}
-			set
-			{
-				if (_active == value)
-				{
-					return;
-				}
-				_active = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _active);
+			set => SetProperty(ref _active, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("cycleDuration")] 
 		public CFloat CycleDuration
 		{
-			get
-			{
-				if (_cycleDuration == null)
-				{
-					_cycleDuration = (CFloat) CR2WTypeManager.Create("Float", "cycleDuration", cr2w, this);
-				}
-				return _cycleDuration;
-			}
-			set
-			{
-				if (_cycleDuration == value)
-				{
-					return;
-				}
-				_cycleDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cycleDuration);
+			set => SetProperty(ref _cycleDuration, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("currentDelayID")] 
 		public gameDelayID CurrentDelayID
 		{
-			get
-			{
-				if (_currentDelayID == null)
-				{
-					_currentDelayID = (gameDelayID) CR2WTypeManager.Create("gameDelayID", "currentDelayID", cr2w, this);
-				}
-				return _currentDelayID;
-			}
-			set
-			{
-				if (_currentDelayID == value)
-				{
-					return;
-				}
-				_currentDelayID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentDelayID);
+			set => SetProperty(ref _currentDelayID, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("itemsUsed")] 
 		public CArray<gameItemID> ItemsUsed
 		{
-			get
-			{
-				if (_itemsUsed == null)
-				{
-					_itemsUsed = (CArray<gameItemID>) CR2WTypeManager.Create("array:gameItemID", "itemsUsed", cr2w, this);
-				}
-				return _itemsUsed;
-			}
-			set
-			{
-				if (_itemsUsed == value)
-				{
-					return;
-				}
-				_itemsUsed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemsUsed);
+			set => SetProperty(ref _itemsUsed, value);
 		}
 
 		public AutocraftSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

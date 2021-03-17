@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("dependableEntities")] 
 		public CArray<NodeRef> DependableEntities
 		{
-			get
-			{
-				if (_dependableEntities == null)
-				{
-					_dependableEntities = (CArray<NodeRef>) CR2WTypeManager.Create("array:NodeRef", "dependableEntities", cr2w, this);
-				}
-				return _dependableEntities;
-			}
-			set
-			{
-				if (_dependableEntities == value)
-				{
-					return;
-				}
-				_dependableEntities = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dependableEntities);
+			set => SetProperty(ref _dependableEntities, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("inFocus")] 
 		public CBool InFocus
 		{
-			get
-			{
-				if (_inFocus == null)
-				{
-					_inFocus = (CBool) CR2WTypeManager.Create("Bool", "inFocus", cr2w, this);
-				}
-				return _inFocus;
-			}
-			set
-			{
-				if (_inFocus == value)
-				{
-					return;
-				}
-				_inFocus = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inFocus);
+			set => SetProperty(ref _inFocus, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("found")] 
 		public CBool Found
 		{
-			get
-			{
-				if (_found == null)
-				{
-					_found = (CBool) CR2WTypeManager.Create("Bool", "found", cr2w, this);
-				}
-				return _found;
-			}
-			set
-			{
-				if (_found == value)
-				{
-					return;
-				}
-				_found = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _found);
+			set => SetProperty(ref _found, value);
 		}
 
 		[Ordinal(43)] 
 		[RED("lookedAt")] 
 		public CBool LookedAt
 		{
-			get
-			{
-				if (_lookedAt == null)
-				{
-					_lookedAt = (CBool) CR2WTypeManager.Create("Bool", "lookedAt", cr2w, this);
-				}
-				return _lookedAt;
-			}
-			set
-			{
-				if (_lookedAt == value)
-				{
-					return;
-				}
-				_lookedAt = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lookedAt);
+			set => SetProperty(ref _lookedAt, value);
 		}
 
 		public sampleVisWireMaster(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

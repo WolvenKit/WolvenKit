@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cameraLimit")] 
 		public CInt32 CameraLimit
 		{
-			get
-			{
-				if (_cameraLimit == null)
-				{
-					_cameraLimit = (CInt32) CR2WTypeManager.Create("Int32", "cameraLimit", cr2w, this);
-				}
-				return _cameraLimit;
-			}
-			set
-			{
-				if (_cameraLimit == value)
-				{
-					return;
-				}
-				_cameraLimit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameraLimit);
+			set => SetProperty(ref _cameraLimit, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("cameraList")] 
 		public CArray<wCHandle<SurveillanceCamera>> CameraList
 		{
-			get
-			{
-				if (_cameraList == null)
-				{
-					_cameraList = (CArray<wCHandle<SurveillanceCamera>>) CR2WTypeManager.Create("array:whandle:SurveillanceCamera", "cameraList", cr2w, this);
-				}
-				return _cameraList;
-			}
-			set
-			{
-				if (_cameraList == value)
-				{
-					return;
-				}
-				_cameraList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cameraList);
+			set => SetProperty(ref _cameraList, value);
 		}
 
 		public CameraTagEnemyLimitDataModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

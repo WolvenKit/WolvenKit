@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("numInSockets")] 
 		public CUInt32 NumInSockets
 		{
-			get
-			{
-				if (_numInSockets == null)
-				{
-					_numInSockets = (CUInt32) CR2WTypeManager.Create("Uint32", "numInSockets", cr2w, this);
-				}
-				return _numInSockets;
-			}
-			set
-			{
-				if (_numInSockets == value)
-				{
-					return;
-				}
-				_numInSockets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _numInSockets);
+			set => SetProperty(ref _numInSockets, value);
 		}
 
 		public scnAndNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

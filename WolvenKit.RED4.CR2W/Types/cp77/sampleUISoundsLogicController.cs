@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("textWidget")] 
 		public wCHandle<inkTextWidget> TextWidget
 		{
-			get
-			{
-				if (_textWidget == null)
-				{
-					_textWidget = (wCHandle<inkTextWidget>) CR2WTypeManager.Create("whandle:inkTextWidget", "textWidget", cr2w, this);
-				}
-				return _textWidget;
-			}
-			set
-			{
-				if (_textWidget == value)
-				{
-					return;
-				}
-				_textWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textWidget);
+			set => SetProperty(ref _textWidget, value);
 		}
 
 		public sampleUISoundsLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

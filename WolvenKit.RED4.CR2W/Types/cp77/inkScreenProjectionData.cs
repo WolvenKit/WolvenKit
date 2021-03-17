@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entity")] 
 		public wCHandle<entEntity> Entity
 		{
-			get
-			{
-				if (_entity == null)
-				{
-					_entity = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "entity", cr2w, this);
-				}
-				return _entity;
-			}
-			set
-			{
-				if (_entity == value)
-				{
-					return;
-				}
-				_entity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entity);
+			set => SetProperty(ref _entity, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("slotComponentName")] 
 		public CName SlotComponentName
 		{
-			get
-			{
-				if (_slotComponentName == null)
-				{
-					_slotComponentName = (CName) CR2WTypeManager.Create("CName", "slotComponentName", cr2w, this);
-				}
-				return _slotComponentName;
-			}
-			set
-			{
-				if (_slotComponentName == value)
-				{
-					return;
-				}
-				_slotComponentName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotComponentName);
+			set => SetProperty(ref _slotComponentName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get
-			{
-				if (_slotName == null)
-				{
-					_slotName = (CName) CR2WTypeManager.Create("CName", "slotName", cr2w, this);
-				}
-				return _slotName;
-			}
-			set
-			{
-				if (_slotName == value)
-				{
-					return;
-				}
-				_slotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotName);
+			set => SetProperty(ref _slotName, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("slotFallbackName")] 
 		public CName SlotFallbackName
 		{
-			get
-			{
-				if (_slotFallbackName == null)
-				{
-					_slotFallbackName = (CName) CR2WTypeManager.Create("CName", "slotFallbackName", cr2w, this);
-				}
-				return _slotFallbackName;
-			}
-			set
-			{
-				if (_slotFallbackName == value)
-				{
-					return;
-				}
-				_slotFallbackName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotFallbackName);
+			set => SetProperty(ref _slotFallbackName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("staticWorldPosition")] 
 		public Vector4 StaticWorldPosition
 		{
-			get
-			{
-				if (_staticWorldPosition == null)
-				{
-					_staticWorldPosition = (Vector4) CR2WTypeManager.Create("Vector4", "staticWorldPosition", cr2w, this);
-				}
-				return _staticWorldPosition;
-			}
-			set
-			{
-				if (_staticWorldPosition == value)
-				{
-					return;
-				}
-				_staticWorldPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _staticWorldPosition);
+			set => SetProperty(ref _staticWorldPosition, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("fixedWorldOffset")] 
 		public Vector4 FixedWorldOffset
 		{
-			get
-			{
-				if (_fixedWorldOffset == null)
-				{
-					_fixedWorldOffset = (Vector4) CR2WTypeManager.Create("Vector4", "fixedWorldOffset", cr2w, this);
-				}
-				return _fixedWorldOffset;
-			}
-			set
-			{
-				if (_fixedWorldOffset == value)
-				{
-					return;
-				}
-				_fixedWorldOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fixedWorldOffset);
+			set => SetProperty(ref _fixedWorldOffset, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("userData")] 
 		public wCHandle<IScriptable> UserData
 		{
-			get
-			{
-				if (_userData == null)
-				{
-					_userData = (wCHandle<IScriptable>) CR2WTypeManager.Create("whandle:IScriptable", "userData", cr2w, this);
-				}
-				return _userData;
-			}
-			set
-			{
-				if (_userData == value)
-				{
-					return;
-				}
-				_userData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _userData);
+			set => SetProperty(ref _userData, value);
 		}
 
 		public inkScreenProjectionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

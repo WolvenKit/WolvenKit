@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bAndValues")] 
 		public CBool BAndValues
 		{
-			get
-			{
-				if (_bAndValues == null)
-				{
-					_bAndValues = (CBool) CR2WTypeManager.Create("Bool", "bAndValues", cr2w, this);
-				}
-				return _bAndValues;
-			}
-			set
-			{
-				if (_bAndValues == value)
-				{
-					return;
-				}
-				_bAndValues = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bAndValues);
+			set => SetProperty(ref _bAndValues, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("prereqList")] 
 		public CArray<gamePrereqCheckData> PrereqList
 		{
-			get
-			{
-				if (_prereqList == null)
-				{
-					_prereqList = (CArray<gamePrereqCheckData>) CR2WTypeManager.Create("array:gamePrereqCheckData", "prereqList", cr2w, this);
-				}
-				return _prereqList;
-			}
-			set
-			{
-				if (_prereqList == value)
-				{
-					return;
-				}
-				_prereqList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prereqList);
+			set => SetProperty(ref _prereqList, value);
 		}
 
 		public gamePrereqData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

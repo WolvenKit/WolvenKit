@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("menuBuilder")] 
 		public CHandle<MenuDataBuilder> MenuBuilder
 		{
-			get
-			{
-				if (_menuBuilder == null)
-				{
-					_menuBuilder = (CHandle<MenuDataBuilder>) CR2WTypeManager.Create("handle:MenuDataBuilder", "menuBuilder", cr2w, this);
-				}
-				return _menuBuilder;
-			}
-			set
-			{
-				if (_menuBuilder == value)
-				{
-					return;
-				}
-				_menuBuilder = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuBuilder);
+			set => SetProperty(ref _menuBuilder, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("menuDataIndex")] 
 		public CInt32 MenuDataIndex
 		{
-			get
-			{
-				if (_menuDataIndex == null)
-				{
-					_menuDataIndex = (CInt32) CR2WTypeManager.Create("Int32", "menuDataIndex", cr2w, this);
-				}
-				return _menuDataIndex;
-			}
-			set
-			{
-				if (_menuDataIndex == value)
-				{
-					return;
-				}
-				_menuDataIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuDataIndex);
+			set => SetProperty(ref _menuDataIndex, value);
 		}
 
 		public SubmenuDataBuilder(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

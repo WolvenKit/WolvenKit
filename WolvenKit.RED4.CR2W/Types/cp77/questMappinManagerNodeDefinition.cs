@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("path")] 
 		public CHandle<gameJournalPath> Path
 		{
-			get
-			{
-				if (_path == null)
-				{
-					_path = (CHandle<gameJournalPath>) CR2WTypeManager.Create("handle:gameJournalPath", "path", cr2w, this);
-				}
-				return _path;
-			}
-			set
-			{
-				if (_path == value)
-				{
-					return;
-				}
-				_path = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _path);
+			set => SetProperty(ref _path, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("disablePreviousMappins")] 
 		public CBool DisablePreviousMappins
 		{
-			get
-			{
-				if (_disablePreviousMappins == null)
-				{
-					_disablePreviousMappins = (CBool) CR2WTypeManager.Create("Bool", "disablePreviousMappins", cr2w, this);
-				}
-				return _disablePreviousMappins;
-			}
-			set
-			{
-				if (_disablePreviousMappins == value)
-				{
-					return;
-				}
-				_disablePreviousMappins = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _disablePreviousMappins);
+			set => SetProperty(ref _disablePreviousMappins, value);
 		}
 
 		public questMappinManagerNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

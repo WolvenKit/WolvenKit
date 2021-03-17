@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetPath_DpadUp")] 
 		public wCHandle<inkWidget> TargetPath_DpadUp
 		{
-			get
-			{
-				if (_targetPath_DpadUp == null)
-				{
-					_targetPath_DpadUp = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "targetPath_DpadUp", cr2w, this);
-				}
-				return _targetPath_DpadUp;
-			}
-			set
-			{
-				if (_targetPath_DpadUp == value)
-				{
-					return;
-				}
-				_targetPath_DpadUp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetPath_DpadUp);
+			set => SetProperty(ref _targetPath_DpadUp, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("targetPath_DpadDown")] 
 		public wCHandle<inkWidget> TargetPath_DpadDown
 		{
-			get
-			{
-				if (_targetPath_DpadDown == null)
-				{
-					_targetPath_DpadDown = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "targetPath_DpadDown", cr2w, this);
-				}
-				return _targetPath_DpadDown;
-			}
-			set
-			{
-				if (_targetPath_DpadDown == value)
-				{
-					return;
-				}
-				_targetPath_DpadDown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetPath_DpadDown);
+			set => SetProperty(ref _targetPath_DpadDown, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("targetPath_DpadLeft")] 
 		public wCHandle<inkWidget> TargetPath_DpadLeft
 		{
-			get
-			{
-				if (_targetPath_DpadLeft == null)
-				{
-					_targetPath_DpadLeft = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "targetPath_DpadLeft", cr2w, this);
-				}
-				return _targetPath_DpadLeft;
-			}
-			set
-			{
-				if (_targetPath_DpadLeft == value)
-				{
-					return;
-				}
-				_targetPath_DpadLeft = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetPath_DpadLeft);
+			set => SetProperty(ref _targetPath_DpadLeft, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("targetPath_DpadRight")] 
 		public wCHandle<inkWidget> TargetPath_DpadRight
 		{
-			get
-			{
-				if (_targetPath_DpadRight == null)
-				{
-					_targetPath_DpadRight = (wCHandle<inkWidget>) CR2WTypeManager.Create("whandle:inkWidget", "targetPath_DpadRight", cr2w, this);
-				}
-				return _targetPath_DpadRight;
-			}
-			set
-			{
-				if (_targetPath_DpadRight == value)
-				{
-					return;
-				}
-				_targetPath_DpadRight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetPath_DpadRight);
+			set => SetProperty(ref _targetPath_DpadRight, value);
 		}
 
 		public fullscreenDpadSupported(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

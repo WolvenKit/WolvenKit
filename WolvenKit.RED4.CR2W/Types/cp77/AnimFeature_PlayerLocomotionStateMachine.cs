@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inAirState")] 
 		public CBool InAirState
 		{
-			get
-			{
-				if (_inAirState == null)
-				{
-					_inAirState = (CBool) CR2WTypeManager.Create("Bool", "inAirState", cr2w, this);
-				}
-				return _inAirState;
-			}
-			set
-			{
-				if (_inAirState == value)
-				{
-					return;
-				}
-				_inAirState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inAirState);
+			set => SetProperty(ref _inAirState, value);
 		}
 
 		public AnimFeature_PlayerLocomotionStateMachine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("clueRecord")] 
 		public TweakDBID ClueRecord
 		{
-			get
-			{
-				if (_clueRecord == null)
-				{
-					_clueRecord = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "clueRecord", cr2w, this);
-				}
-				return _clueRecord;
-			}
-			set
-			{
-				if (_clueRecord == value)
-				{
-					return;
-				}
-				_clueRecord = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clueRecord);
+			set => SetProperty(ref _clueRecord, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("percentage")] 
 		public CFloat Percentage
 		{
-			get
-			{
-				if (_percentage == null)
-				{
-					_percentage = (CFloat) CR2WTypeManager.Create("Float", "percentage", cr2w, this);
-				}
-				return _percentage;
-			}
-			set
-			{
-				if (_percentage == value)
-				{
-					return;
-				}
-				_percentage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _percentage);
+			set => SetProperty(ref _percentage, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("facts")] 
 		public CArray<SFactOperationData> Facts
 		{
-			get
-			{
-				if (_facts == null)
-				{
-					_facts = (CArray<SFactOperationData>) CR2WTypeManager.Create("array:SFactOperationData", "facts", cr2w, this);
-				}
-				return _facts;
-			}
-			set
-			{
-				if (_facts == value)
-				{
-					return;
-				}
-				_facts = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _facts);
+			set => SetProperty(ref _facts, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("wasInspected")] 
 		public CBool WasInspected
 		{
-			get
-			{
-				if (_wasInspected == null)
-				{
-					_wasInspected = (CBool) CR2WTypeManager.Create("Bool", "wasInspected", cr2w, this);
-				}
-				return _wasInspected;
-			}
-			set
-			{
-				if (_wasInspected == value)
-				{
-					return;
-				}
-				_wasInspected = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasInspected);
+			set => SetProperty(ref _wasInspected, value);
 		}
 
 		public ClueRecordData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

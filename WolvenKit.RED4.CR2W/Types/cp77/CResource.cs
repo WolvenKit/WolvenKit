@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cookingPlatform")] 
 		public CEnum<ECookingPlatform> CookingPlatform
 		{
-			get
-			{
-				if (_cookingPlatform == null)
-				{
-					_cookingPlatform = (CEnum<ECookingPlatform>) CR2WTypeManager.Create("ECookingPlatform", "cookingPlatform", cr2w, this);
-				}
-				return _cookingPlatform;
-			}
-			set
-			{
-				if (_cookingPlatform == value)
-				{
-					return;
-				}
-				_cookingPlatform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cookingPlatform);
+			set => SetProperty(ref _cookingPlatform, value);
 		}
 
 		public CResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

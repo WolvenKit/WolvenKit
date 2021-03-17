@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("track")] 
 		public CBool Track
 		{
-			get
-			{
-				if (_track == null)
-				{
-					_track = (CBool) CR2WTypeManager.Create("Bool", "track", cr2w, this);
-				}
-				return _track;
-			}
-			set
-			{
-				if (_track == value)
-				{
-					return;
-				}
-				_track = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _track);
+			set => SetProperty(ref _track, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("commandClassNames")] 
 		public CArray<CName> CommandClassNames
 		{
-			get
-			{
-				if (_commandClassNames == null)
-				{
-					_commandClassNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "commandClassNames", cr2w, this);
-				}
-				return _commandClassNames;
-			}
-			set
-			{
-				if (_commandClassNames == value)
-				{
-					return;
-				}
-				_commandClassNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _commandClassNames);
+			set => SetProperty(ref _commandClassNames, value);
 		}
 
 		public CommandSignal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

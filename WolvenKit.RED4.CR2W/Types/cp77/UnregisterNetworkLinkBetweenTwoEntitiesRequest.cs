@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("firstID")] 
 		public entEntityID FirstID
 		{
-			get
-			{
-				if (_firstID == null)
-				{
-					_firstID = (entEntityID) CR2WTypeManager.Create("entEntityID", "firstID", cr2w, this);
-				}
-				return _firstID;
-			}
-			set
-			{
-				if (_firstID == value)
-				{
-					return;
-				}
-				_firstID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _firstID);
+			set => SetProperty(ref _firstID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("secondID")] 
 		public entEntityID SecondID
 		{
-			get
-			{
-				if (_secondID == null)
-				{
-					_secondID = (entEntityID) CR2WTypeManager.Create("entEntityID", "secondID", cr2w, this);
-				}
-				return _secondID;
-			}
-			set
-			{
-				if (_secondID == value)
-				{
-					return;
-				}
-				_secondID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _secondID);
+			set => SetProperty(ref _secondID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("onlyRemoveWeakLink")] 
 		public CBool OnlyRemoveWeakLink
 		{
-			get
-			{
-				if (_onlyRemoveWeakLink == null)
-				{
-					_onlyRemoveWeakLink = (CBool) CR2WTypeManager.Create("Bool", "onlyRemoveWeakLink", cr2w, this);
-				}
-				return _onlyRemoveWeakLink;
-			}
-			set
-			{
-				if (_onlyRemoveWeakLink == value)
-				{
-					return;
-				}
-				_onlyRemoveWeakLink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onlyRemoveWeakLink);
+			set => SetProperty(ref _onlyRemoveWeakLink, value);
 		}
 
 		public UnregisterNetworkLinkBetweenTwoEntitiesRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

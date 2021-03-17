@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hour")] 
 		public CEnum<communityECommunitySpawnTime> Hour
 		{
-			get
-			{
-				if (_hour == null)
-				{
-					_hour = (CEnum<communityECommunitySpawnTime>) CR2WTypeManager.Create("communityECommunitySpawnTime", "hour", cr2w, this);
-				}
-				return _hour;
-			}
-			set
-			{
-				if (_hour == value)
-				{
-					return;
-				}
-				_hour = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hour);
+			set => SetProperty(ref _hour, value);
 		}
 
 		public communityTimePeriod(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

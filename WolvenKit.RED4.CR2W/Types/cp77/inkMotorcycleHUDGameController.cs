@@ -52,920 +52,320 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vehicleBlackboard")] 
 		public wCHandle<gameIBlackboard> VehicleBlackboard
 		{
-			get
-			{
-				if (_vehicleBlackboard == null)
-				{
-					_vehicleBlackboard = (wCHandle<gameIBlackboard>) CR2WTypeManager.Create("whandle:gameIBlackboard", "vehicleBlackboard", cr2w, this);
-				}
-				return _vehicleBlackboard;
-			}
-			set
-			{
-				if (_vehicleBlackboard == value)
-				{
-					return;
-				}
-				_vehicleBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleBlackboard);
+			set => SetProperty(ref _vehicleBlackboard, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("activeVehicleUIBlackboard")] 
 		public wCHandle<gameIBlackboard> ActiveVehicleUIBlackboard
 		{
-			get
-			{
-				if (_activeVehicleUIBlackboard == null)
-				{
-					_activeVehicleUIBlackboard = (wCHandle<gameIBlackboard>) CR2WTypeManager.Create("whandle:gameIBlackboard", "activeVehicleUIBlackboard", cr2w, this);
-				}
-				return _activeVehicleUIBlackboard;
-			}
-			set
-			{
-				if (_activeVehicleUIBlackboard == value)
-				{
-					return;
-				}
-				_activeVehicleUIBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeVehicleUIBlackboard);
+			set => SetProperty(ref _activeVehicleUIBlackboard, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("vehicleBBStateConectionId")] 
 		public CUInt32 VehicleBBStateConectionId
 		{
-			get
-			{
-				if (_vehicleBBStateConectionId == null)
-				{
-					_vehicleBBStateConectionId = (CUInt32) CR2WTypeManager.Create("Uint32", "vehicleBBStateConectionId", cr2w, this);
-				}
-				return _vehicleBBStateConectionId;
-			}
-			set
-			{
-				if (_vehicleBBStateConectionId == value)
-				{
-					return;
-				}
-				_vehicleBBStateConectionId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleBBStateConectionId);
+			set => SetProperty(ref _vehicleBBStateConectionId, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("speedBBConnectionId")] 
 		public CUInt32 SpeedBBConnectionId
 		{
-			get
-			{
-				if (_speedBBConnectionId == null)
-				{
-					_speedBBConnectionId = (CUInt32) CR2WTypeManager.Create("Uint32", "speedBBConnectionId", cr2w, this);
-				}
-				return _speedBBConnectionId;
-			}
-			set
-			{
-				if (_speedBBConnectionId == value)
-				{
-					return;
-				}
-				_speedBBConnectionId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speedBBConnectionId);
+			set => SetProperty(ref _speedBBConnectionId, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("gearBBConnectionId")] 
 		public CUInt32 GearBBConnectionId
 		{
-			get
-			{
-				if (_gearBBConnectionId == null)
-				{
-					_gearBBConnectionId = (CUInt32) CR2WTypeManager.Create("Uint32", "gearBBConnectionId", cr2w, this);
-				}
-				return _gearBBConnectionId;
-			}
-			set
-			{
-				if (_gearBBConnectionId == value)
-				{
-					return;
-				}
-				_gearBBConnectionId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gearBBConnectionId);
+			set => SetProperty(ref _gearBBConnectionId, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("tppBBConnectionId")] 
 		public CUInt32 TppBBConnectionId
 		{
-			get
-			{
-				if (_tppBBConnectionId == null)
-				{
-					_tppBBConnectionId = (CUInt32) CR2WTypeManager.Create("Uint32", "tppBBConnectionId", cr2w, this);
-				}
-				return _tppBBConnectionId;
-			}
-			set
-			{
-				if (_tppBBConnectionId == value)
-				{
-					return;
-				}
-				_tppBBConnectionId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tppBBConnectionId);
+			set => SetProperty(ref _tppBBConnectionId, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("rpmValueBBConnectionId")] 
 		public CUInt32 RpmValueBBConnectionId
 		{
-			get
-			{
-				if (_rpmValueBBConnectionId == null)
-				{
-					_rpmValueBBConnectionId = (CUInt32) CR2WTypeManager.Create("Uint32", "rpmValueBBConnectionId", cr2w, this);
-				}
-				return _rpmValueBBConnectionId;
-			}
-			set
-			{
-				if (_rpmValueBBConnectionId == value)
-				{
-					return;
-				}
-				_rpmValueBBConnectionId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rpmValueBBConnectionId);
+			set => SetProperty(ref _rpmValueBBConnectionId, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("leanAngleBBConnectionId")] 
 		public CUInt32 LeanAngleBBConnectionId
 		{
-			get
-			{
-				if (_leanAngleBBConnectionId == null)
-				{
-					_leanAngleBBConnectionId = (CUInt32) CR2WTypeManager.Create("Uint32", "leanAngleBBConnectionId", cr2w, this);
-				}
-				return _leanAngleBBConnectionId;
-			}
-			set
-			{
-				if (_leanAngleBBConnectionId == value)
-				{
-					return;
-				}
-				_leanAngleBBConnectionId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _leanAngleBBConnectionId);
+			set => SetProperty(ref _leanAngleBBConnectionId, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("playerStateBBConnectionId")] 
 		public CUInt32 PlayerStateBBConnectionId
 		{
-			get
-			{
-				if (_playerStateBBConnectionId == null)
-				{
-					_playerStateBBConnectionId = (CUInt32) CR2WTypeManager.Create("Uint32", "playerStateBBConnectionId", cr2w, this);
-				}
-				return _playerStateBBConnectionId;
-			}
-			set
-			{
-				if (_playerStateBBConnectionId == value)
-				{
-					return;
-				}
-				_playerStateBBConnectionId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerStateBBConnectionId);
+			set => SetProperty(ref _playerStateBBConnectionId, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("playOptionReverse")] 
 		public inkanimPlaybackOptions PlayOptionReverse
 		{
-			get
-			{
-				if (_playOptionReverse == null)
-				{
-					_playOptionReverse = (inkanimPlaybackOptions) CR2WTypeManager.Create("inkanimPlaybackOptions", "playOptionReverse", cr2w, this);
-				}
-				return _playOptionReverse;
-			}
-			set
-			{
-				if (_playOptionReverse == value)
-				{
-					return;
-				}
-				_playOptionReverse = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playOptionReverse);
+			set => SetProperty(ref _playOptionReverse, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("rootWidget")] 
 		public wCHandle<inkCanvasWidget> RootWidget
 		{
-			get
-			{
-				if (_rootWidget == null)
-				{
-					_rootWidget = (wCHandle<inkCanvasWidget>) CR2WTypeManager.Create("whandle:inkCanvasWidget", "rootWidget", cr2w, this);
-				}
-				return _rootWidget;
-			}
-			set
-			{
-				if (_rootWidget == value)
-				{
-					return;
-				}
-				_rootWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rootWidget);
+			set => SetProperty(ref _rootWidget, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("mainCanvas")] 
 		public wCHandle<inkCanvasWidget> MainCanvas
 		{
-			get
-			{
-				if (_mainCanvas == null)
-				{
-					_mainCanvas = (wCHandle<inkCanvasWidget>) CR2WTypeManager.Create("whandle:inkCanvasWidget", "mainCanvas", cr2w, this);
-				}
-				return _mainCanvas;
-			}
-			set
-			{
-				if (_mainCanvas == value)
-				{
-					return;
-				}
-				_mainCanvas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mainCanvas);
+			set => SetProperty(ref _mainCanvas, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("activeChunks")] 
 		public CInt32 ActiveChunks
 		{
-			get
-			{
-				if (_activeChunks == null)
-				{
-					_activeChunks = (CInt32) CR2WTypeManager.Create("Int32", "activeChunks", cr2w, this);
-				}
-				return _activeChunks;
-			}
-			set
-			{
-				if (_activeChunks == value)
-				{
-					return;
-				}
-				_activeChunks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activeChunks);
+			set => SetProperty(ref _activeChunks, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("chunksNumber")] 
 		public CInt32 ChunksNumber
 		{
-			get
-			{
-				if (_chunksNumber == null)
-				{
-					_chunksNumber = (CInt32) CR2WTypeManager.Create("Int32", "chunksNumber", cr2w, this);
-				}
-				return _chunksNumber;
-			}
-			set
-			{
-				if (_chunksNumber == value)
-				{
-					return;
-				}
-				_chunksNumber = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chunksNumber);
+			set => SetProperty(ref _chunksNumber, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("dynamicRpmPath")] 
 		public CName DynamicRpmPath
 		{
-			get
-			{
-				if (_dynamicRpmPath == null)
-				{
-					_dynamicRpmPath = (CName) CR2WTypeManager.Create("CName", "dynamicRpmPath", cr2w, this);
-				}
-				return _dynamicRpmPath;
-			}
-			set
-			{
-				if (_dynamicRpmPath == value)
-				{
-					return;
-				}
-				_dynamicRpmPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dynamicRpmPath);
+			set => SetProperty(ref _dynamicRpmPath, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("rpmPerChunk")] 
 		public CInt32 RpmPerChunk
 		{
-			get
-			{
-				if (_rpmPerChunk == null)
-				{
-					_rpmPerChunk = (CInt32) CR2WTypeManager.Create("Int32", "rpmPerChunk", cr2w, this);
-				}
-				return _rpmPerChunk;
-			}
-			set
-			{
-				if (_rpmPerChunk == value)
-				{
-					return;
-				}
-				_rpmPerChunk = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rpmPerChunk);
+			set => SetProperty(ref _rpmPerChunk, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("hasRevMax")] 
 		public CBool HasRevMax
 		{
-			get
-			{
-				if (_hasRevMax == null)
-				{
-					_hasRevMax = (CBool) CR2WTypeManager.Create("Bool", "hasRevMax", cr2w, this);
-				}
-				return _hasRevMax;
-			}
-			set
-			{
-				if (_hasRevMax == value)
-				{
-					return;
-				}
-				_hasRevMax = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasRevMax);
+			set => SetProperty(ref _hasRevMax, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("HiResMode")] 
 		public CBool HiResMode
 		{
-			get
-			{
-				if (_hiResMode == null)
-				{
-					_hiResMode = (CBool) CR2WTypeManager.Create("Bool", "HiResMode", cr2w, this);
-				}
-				return _hiResMode;
-			}
-			set
-			{
-				if (_hiResMode == value)
-				{
-					return;
-				}
-				_hiResMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hiResMode);
+			set => SetProperty(ref _hiResMode, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("revMaxPath")] 
 		public CName RevMaxPath
 		{
-			get
-			{
-				if (_revMaxPath == null)
-				{
-					_revMaxPath = (CName) CR2WTypeManager.Create("CName", "revMaxPath", cr2w, this);
-				}
-				return _revMaxPath;
-			}
-			set
-			{
-				if (_revMaxPath == value)
-				{
-					return;
-				}
-				_revMaxPath = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revMaxPath);
+			set => SetProperty(ref _revMaxPath, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("revMaxChunk")] 
 		public CInt32 RevMaxChunk
 		{
-			get
-			{
-				if (_revMaxChunk == null)
-				{
-					_revMaxChunk = (CInt32) CR2WTypeManager.Create("Int32", "revMaxChunk", cr2w, this);
-				}
-				return _revMaxChunk;
-			}
-			set
-			{
-				if (_revMaxChunk == value)
-				{
-					return;
-				}
-				_revMaxChunk = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revMaxChunk);
+			set => SetProperty(ref _revMaxChunk, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("revMax")] 
 		public CInt32 RevMax
 		{
-			get
-			{
-				if (_revMax == null)
-				{
-					_revMax = (CInt32) CR2WTypeManager.Create("Int32", "revMax", cr2w, this);
-				}
-				return _revMax;
-			}
-			set
-			{
-				if (_revMax == value)
-				{
-					return;
-				}
-				_revMax = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revMax);
+			set => SetProperty(ref _revMax, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("revRedLine")] 
 		public CInt32 RevRedLine
 		{
-			get
-			{
-				if (_revRedLine == null)
-				{
-					_revRedLine = (CInt32) CR2WTypeManager.Create("Int32", "revRedLine", cr2w, this);
-				}
-				return _revRedLine;
-			}
-			set
-			{
-				if (_revRedLine == value)
-				{
-					return;
-				}
-				_revRedLine = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revRedLine);
+			set => SetProperty(ref _revRedLine, value);
 		}
 
 		[Ordinal(32)] 
 		[RED("maxSpeed")] 
 		public CInt32 MaxSpeed
 		{
-			get
-			{
-				if (_maxSpeed == null)
-				{
-					_maxSpeed = (CInt32) CR2WTypeManager.Create("Int32", "maxSpeed", cr2w, this);
-				}
-				return _maxSpeed;
-			}
-			set
-			{
-				if (_maxSpeed == value)
-				{
-					return;
-				}
-				_maxSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxSpeed);
+			set => SetProperty(ref _maxSpeed, value);
 		}
 
 		[Ordinal(33)] 
 		[RED("speedTextWidget")] 
 		public inkTextWidgetReference SpeedTextWidget
 		{
-			get
-			{
-				if (_speedTextWidget == null)
-				{
-					_speedTextWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "speedTextWidget", cr2w, this);
-				}
-				return _speedTextWidget;
-			}
-			set
-			{
-				if (_speedTextWidget == value)
-				{
-					return;
-				}
-				_speedTextWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speedTextWidget);
+			set => SetProperty(ref _speedTextWidget, value);
 		}
 
 		[Ordinal(34)] 
 		[RED("gearTextWidget")] 
 		public inkTextWidgetReference GearTextWidget
 		{
-			get
-			{
-				if (_gearTextWidget == null)
-				{
-					_gearTextWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "gearTextWidget", cr2w, this);
-				}
-				return _gearTextWidget;
-			}
-			set
-			{
-				if (_gearTextWidget == value)
-				{
-					return;
-				}
-				_gearTextWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gearTextWidget);
+			set => SetProperty(ref _gearTextWidget, value);
 		}
 
 		[Ordinal(35)] 
 		[RED("RPMTextWidget")] 
 		public inkTextWidgetReference RPMTextWidget
 		{
-			get
-			{
-				if (_rPMTextWidget == null)
-				{
-					_rPMTextWidget = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "RPMTextWidget", cr2w, this);
-				}
-				return _rPMTextWidget;
-			}
-			set
-			{
-				if (_rPMTextWidget == value)
-				{
-					return;
-				}
-				_rPMTextWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rPMTextWidget);
+			set => SetProperty(ref _rPMTextWidget, value);
 		}
 
 		[Ordinal(36)] 
 		[RED("lower")] 
 		public wCHandle<inkCanvasWidget> Lower
 		{
-			get
-			{
-				if (_lower == null)
-				{
-					_lower = (wCHandle<inkCanvasWidget>) CR2WTypeManager.Create("whandle:inkCanvasWidget", "lower", cr2w, this);
-				}
-				return _lower;
-			}
-			set
-			{
-				if (_lower == value)
-				{
-					return;
-				}
-				_lower = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lower);
+			set => SetProperty(ref _lower, value);
 		}
 
 		[Ordinal(37)] 
 		[RED("lowerSpeedBigR")] 
 		public wCHandle<inkCanvasWidget> LowerSpeedBigR
 		{
-			get
-			{
-				if (_lowerSpeedBigR == null)
-				{
-					_lowerSpeedBigR = (wCHandle<inkCanvasWidget>) CR2WTypeManager.Create("whandle:inkCanvasWidget", "lowerSpeedBigR", cr2w, this);
-				}
-				return _lowerSpeedBigR;
-			}
-			set
-			{
-				if (_lowerSpeedBigR == value)
-				{
-					return;
-				}
-				_lowerSpeedBigR = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lowerSpeedBigR);
+			set => SetProperty(ref _lowerSpeedBigR, value);
 		}
 
 		[Ordinal(38)] 
 		[RED("lowerSpeedBigL")] 
 		public wCHandle<inkCanvasWidget> LowerSpeedBigL
 		{
-			get
-			{
-				if (_lowerSpeedBigL == null)
-				{
-					_lowerSpeedBigL = (wCHandle<inkCanvasWidget>) CR2WTypeManager.Create("whandle:inkCanvasWidget", "lowerSpeedBigL", cr2w, this);
-				}
-				return _lowerSpeedBigL;
-			}
-			set
-			{
-				if (_lowerSpeedBigL == value)
-				{
-					return;
-				}
-				_lowerSpeedBigL = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lowerSpeedBigL);
+			set => SetProperty(ref _lowerSpeedBigL, value);
 		}
 
 		[Ordinal(39)] 
 		[RED("lowerSpeedSmallR")] 
 		public wCHandle<inkCanvasWidget> LowerSpeedSmallR
 		{
-			get
-			{
-				if (_lowerSpeedSmallR == null)
-				{
-					_lowerSpeedSmallR = (wCHandle<inkCanvasWidget>) CR2WTypeManager.Create("whandle:inkCanvasWidget", "lowerSpeedSmallR", cr2w, this);
-				}
-				return _lowerSpeedSmallR;
-			}
-			set
-			{
-				if (_lowerSpeedSmallR == value)
-				{
-					return;
-				}
-				_lowerSpeedSmallR = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lowerSpeedSmallR);
+			set => SetProperty(ref _lowerSpeedSmallR, value);
 		}
 
 		[Ordinal(40)] 
 		[RED("lowerSpeedSmallL")] 
 		public wCHandle<inkCanvasWidget> LowerSpeedSmallL
 		{
-			get
-			{
-				if (_lowerSpeedSmallL == null)
-				{
-					_lowerSpeedSmallL = (wCHandle<inkCanvasWidget>) CR2WTypeManager.Create("whandle:inkCanvasWidget", "lowerSpeedSmallL", cr2w, this);
-				}
-				return _lowerSpeedSmallL;
-			}
-			set
-			{
-				if (_lowerSpeedSmallL == value)
-				{
-					return;
-				}
-				_lowerSpeedSmallL = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lowerSpeedSmallL);
+			set => SetProperty(ref _lowerSpeedSmallL, value);
 		}
 
 		[Ordinal(41)] 
 		[RED("lowerSpeedFluffR")] 
 		public wCHandle<inkImageWidget> LowerSpeedFluffR
 		{
-			get
-			{
-				if (_lowerSpeedFluffR == null)
-				{
-					_lowerSpeedFluffR = (wCHandle<inkImageWidget>) CR2WTypeManager.Create("whandle:inkImageWidget", "lowerSpeedFluffR", cr2w, this);
-				}
-				return _lowerSpeedFluffR;
-			}
-			set
-			{
-				if (_lowerSpeedFluffR == value)
-				{
-					return;
-				}
-				_lowerSpeedFluffR = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lowerSpeedFluffR);
+			set => SetProperty(ref _lowerSpeedFluffR, value);
 		}
 
 		[Ordinal(42)] 
 		[RED("lowerSpeedFluffL")] 
 		public wCHandle<inkImageWidget> LowerSpeedFluffL
 		{
-			get
-			{
-				if (_lowerSpeedFluffL == null)
-				{
-					_lowerSpeedFluffL = (wCHandle<inkImageWidget>) CR2WTypeManager.Create("whandle:inkImageWidget", "lowerSpeedFluffL", cr2w, this);
-				}
-				return _lowerSpeedFluffL;
-			}
-			set
-			{
-				if (_lowerSpeedFluffL == value)
-				{
-					return;
-				}
-				_lowerSpeedFluffL = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lowerSpeedFluffL);
+			set => SetProperty(ref _lowerSpeedFluffL, value);
 		}
 
 		[Ordinal(43)] 
 		[RED("hudLowerPart")] 
 		public wCHandle<inkCanvasWidget> HudLowerPart
 		{
-			get
-			{
-				if (_hudLowerPart == null)
-				{
-					_hudLowerPart = (wCHandle<inkCanvasWidget>) CR2WTypeManager.Create("whandle:inkCanvasWidget", "hudLowerPart", cr2w, this);
-				}
-				return _hudLowerPart;
-			}
-			set
-			{
-				if (_hudLowerPart == value)
-				{
-					return;
-				}
-				_hudLowerPart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hudLowerPart);
+			set => SetProperty(ref _hudLowerPart, value);
 		}
 
 		[Ordinal(44)] 
 		[RED("lowerfluff_R")] 
 		public wCHandle<inkCanvasWidget> Lowerfluff_R
 		{
-			get
-			{
-				if (_lowerfluff_R == null)
-				{
-					_lowerfluff_R = (wCHandle<inkCanvasWidget>) CR2WTypeManager.Create("whandle:inkCanvasWidget", "lowerfluff_R", cr2w, this);
-				}
-				return _lowerfluff_R;
-			}
-			set
-			{
-				if (_lowerfluff_R == value)
-				{
-					return;
-				}
-				_lowerfluff_R = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lowerfluff_R);
+			set => SetProperty(ref _lowerfluff_R, value);
 		}
 
 		[Ordinal(45)] 
 		[RED("lowerfluff_L")] 
 		public wCHandle<inkCanvasWidget> Lowerfluff_L
 		{
-			get
-			{
-				if (_lowerfluff_L == null)
-				{
-					_lowerfluff_L = (wCHandle<inkCanvasWidget>) CR2WTypeManager.Create("whandle:inkCanvasWidget", "lowerfluff_L", cr2w, this);
-				}
-				return _lowerfluff_L;
-			}
-			set
-			{
-				if (_lowerfluff_L == value)
-				{
-					return;
-				}
-				_lowerfluff_L = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lowerfluff_L);
+			set => SetProperty(ref _lowerfluff_L, value);
 		}
 
 		[Ordinal(46)] 
 		[RED("HudHideAnimation")] 
 		public CHandle<inkanimProxy> HudHideAnimation
 		{
-			get
-			{
-				if (_hudHideAnimation == null)
-				{
-					_hudHideAnimation = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "HudHideAnimation", cr2w, this);
-				}
-				return _hudHideAnimation;
-			}
-			set
-			{
-				if (_hudHideAnimation == value)
-				{
-					return;
-				}
-				_hudHideAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hudHideAnimation);
+			set => SetProperty(ref _hudHideAnimation, value);
 		}
 
 		[Ordinal(47)] 
 		[RED("HudShowAnimation")] 
 		public CHandle<inkanimProxy> HudShowAnimation
 		{
-			get
-			{
-				if (_hudShowAnimation == null)
-				{
-					_hudShowAnimation = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "HudShowAnimation", cr2w, this);
-				}
-				return _hudShowAnimation;
-			}
-			set
-			{
-				if (_hudShowAnimation == value)
-				{
-					return;
-				}
-				_hudShowAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hudShowAnimation);
+			set => SetProperty(ref _hudShowAnimation, value);
 		}
 
 		[Ordinal(48)] 
 		[RED("HudRedLineAnimation")] 
 		public CHandle<inkanimProxy> HudRedLineAnimation
 		{
-			get
-			{
-				if (_hudRedLineAnimation == null)
-				{
-					_hudRedLineAnimation = (CHandle<inkanimProxy>) CR2WTypeManager.Create("handle:inkanimProxy", "HudRedLineAnimation", cr2w, this);
-				}
-				return _hudRedLineAnimation;
-			}
-			set
-			{
-				if (_hudRedLineAnimation == value)
-				{
-					return;
-				}
-				_hudRedLineAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hudRedLineAnimation);
+			set => SetProperty(ref _hudRedLineAnimation, value);
 		}
 
 		[Ordinal(49)] 
 		[RED("fluffBlinking")] 
 		public CHandle<inkanimController> FluffBlinking
 		{
-			get
-			{
-				if (_fluffBlinking == null)
-				{
-					_fluffBlinking = (CHandle<inkanimController>) CR2WTypeManager.Create("handle:inkanimController", "fluffBlinking", cr2w, this);
-				}
-				return _fluffBlinking;
-			}
-			set
-			{
-				if (_fluffBlinking == value)
-				{
-					return;
-				}
-				_fluffBlinking = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fluffBlinking);
+			set => SetProperty(ref _fluffBlinking, value);
 		}
 
 		public inkMotorcycleHUDGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attitudeListener")] 
 		public CHandle<gameScriptedPrereqAttitudeListenerWrapper> AttitudeListener
 		{
-			get
-			{
-				if (_attitudeListener == null)
-				{
-					_attitudeListener = (CHandle<gameScriptedPrereqAttitudeListenerWrapper>) CR2WTypeManager.Create("handle:gameScriptedPrereqAttitudeListenerWrapper", "attitudeListener", cr2w, this);
-				}
-				return _attitudeListener;
-			}
-			set
-			{
-				if (_attitudeListener == value)
-				{
-					return;
-				}
-				_attitudeListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attitudeListener);
+			set => SetProperty(ref _attitudeListener, value);
 		}
 
 		public NPCAttitudeTowardsPlayerPrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

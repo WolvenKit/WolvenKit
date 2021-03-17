@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("traceResult")] 
 		public physicsTraceResult TraceResult
 		{
-			get
-			{
-				if (_traceResult == null)
-				{
-					_traceResult = (physicsTraceResult) CR2WTypeManager.Create("physicsTraceResult", "traceResult", cr2w, this);
-				}
-				return _traceResult;
-			}
-			set
-			{
-				if (_traceResult == value)
-				{
-					return;
-				}
-				_traceResult = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _traceResult);
+			set => SetProperty(ref _traceResult, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (Vector4) CR2WTypeManager.Create("Vector4", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hitObject")] 
 		public wCHandle<entEntity> HitObject
 		{
-			get
-			{
-				if (_hitObject == null)
-				{
-					_hitObject = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "hitObject", cr2w, this);
-				}
-				return _hitObject;
-			}
-			set
-			{
-				if (_hitObject == value)
-				{
-					return;
-				}
-				_hitObject = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitObject);
+			set => SetProperty(ref _hitObject, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hitComponent")] 
 		public wCHandle<entIComponent> HitComponent
 		{
-			get
-			{
-				if (_hitComponent == null)
-				{
-					_hitComponent = (wCHandle<entIComponent>) CR2WTypeManager.Create("whandle:entIComponent", "hitComponent", cr2w, this);
-				}
-				return _hitComponent;
-			}
-			set
-			{
-				if (_hitComponent == value)
-				{
-					return;
-				}
-				_hitComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitComponent);
+			set => SetProperty(ref _hitComponent, value);
 		}
 
 		public gameprojectileBroadPhaseHitEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

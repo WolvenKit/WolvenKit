@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mountData")] 
 		public CHandle<AIArgumentMapping> MountData
 		{
-			get
-			{
-				if (_mountData == null)
-				{
-					_mountData = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "mountData", cr2w, this);
-				}
-				return _mountData;
-			}
-			set
-			{
-				if (_mountData == value)
-				{
-					return;
-				}
-				_mountData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mountData);
+			set => SetProperty(ref _mountData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("workspotData")] 
 		public CHandle<AIArgumentMapping> WorkspotData
 		{
-			get
-			{
-				if (_workspotData == null)
-				{
-					_workspotData = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "workspotData", cr2w, this);
-				}
-				return _workspotData;
-			}
-			set
-			{
-				if (_workspotData == value)
-				{
-					return;
-				}
-				_workspotData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workspotData);
+			set => SetProperty(ref _workspotData, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isInstant")] 
 		public CHandle<AIArgumentMapping> IsInstant
 		{
-			get
-			{
-				if (_isInstant == null)
-				{
-					_isInstant = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "isInstant", cr2w, this);
-				}
-				return _isInstant;
-			}
-			set
-			{
-				if (_isInstant == value)
-				{
-					return;
-				}
-				_isInstant = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInstant);
+			set => SetProperty(ref _isInstant, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("behaviorCallbackName")] 
 		public CName BehaviorCallbackName
 		{
-			get
-			{
-				if (_behaviorCallbackName == null)
-				{
-					_behaviorCallbackName = (CName) CR2WTypeManager.Create("CName", "behaviorCallbackName", cr2w, this);
-				}
-				return _behaviorCallbackName;
-			}
-			set
-			{
-				if (_behaviorCallbackName == value)
-				{
-					return;
-				}
-				_behaviorCallbackName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _behaviorCallbackName);
+			set => SetProperty(ref _behaviorCallbackName, value);
 		}
 
 		public AIbehaviorMountEventResolverDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

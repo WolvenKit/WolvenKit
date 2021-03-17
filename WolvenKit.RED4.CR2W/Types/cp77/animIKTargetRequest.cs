@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weightPosition")] 
 		public CFloat WeightPosition
 		{
-			get
-			{
-				if (_weightPosition == null)
-				{
-					_weightPosition = (CFloat) CR2WTypeManager.Create("Float", "weightPosition", cr2w, this);
-				}
-				return _weightPosition;
-			}
-			set
-			{
-				if (_weightPosition == value)
-				{
-					return;
-				}
-				_weightPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightPosition);
+			set => SetProperty(ref _weightPosition, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("weightOrientation")] 
 		public CFloat WeightOrientation
 		{
-			get
-			{
-				if (_weightOrientation == null)
-				{
-					_weightOrientation = (CFloat) CR2WTypeManager.Create("Float", "weightOrientation", cr2w, this);
-				}
-				return _weightOrientation;
-			}
-			set
-			{
-				if (_weightOrientation == value)
-				{
-					return;
-				}
-				_weightOrientation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightOrientation);
+			set => SetProperty(ref _weightOrientation, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("transitionIn")] 
 		public CFloat TransitionIn
 		{
-			get
-			{
-				if (_transitionIn == null)
-				{
-					_transitionIn = (CFloat) CR2WTypeManager.Create("Float", "transitionIn", cr2w, this);
-				}
-				return _transitionIn;
-			}
-			set
-			{
-				if (_transitionIn == value)
-				{
-					return;
-				}
-				_transitionIn = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transitionIn);
+			set => SetProperty(ref _transitionIn, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("transitionOut")] 
 		public CFloat TransitionOut
 		{
-			get
-			{
-				if (_transitionOut == null)
-				{
-					_transitionOut = (CFloat) CR2WTypeManager.Create("Float", "transitionOut", cr2w, this);
-				}
-				return _transitionOut;
-			}
-			set
-			{
-				if (_transitionOut == value)
-				{
-					return;
-				}
-				_transitionOut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transitionOut);
+			set => SetProperty(ref _transitionOut, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("priority")] 
 		public CInt32 Priority
 		{
-			get
-			{
-				if (_priority == null)
-				{
-					_priority = (CInt32) CR2WTypeManager.Create("Int32", "priority", cr2w, this);
-				}
-				return _priority;
-			}
-			set
-			{
-				if (_priority == value)
-				{
-					return;
-				}
-				_priority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _priority);
+			set => SetProperty(ref _priority, value);
 		}
 
 		public animIKTargetRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

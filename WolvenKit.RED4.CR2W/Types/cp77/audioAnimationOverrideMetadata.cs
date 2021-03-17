@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animationOverrides")] 
 		public CHandle<audioAnimationOverrideDictionary> AnimationOverrides
 		{
-			get
-			{
-				if (_animationOverrides == null)
-				{
-					_animationOverrides = (CHandle<audioAnimationOverrideDictionary>) CR2WTypeManager.Create("handle:audioAnimationOverrideDictionary", "animationOverrides", cr2w, this);
-				}
-				return _animationOverrides;
-			}
-			set
-			{
-				if (_animationOverrides == value)
-				{
-					return;
-				}
-				_animationOverrides = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationOverrides);
+			set => SetProperty(ref _animationOverrides, value);
 		}
 
 		public audioAnimationOverrideMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

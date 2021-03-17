@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("range")] 
 		public CFloat Range
 		{
-			get
-			{
-				if (_range == null)
-				{
-					_range = (CFloat) CR2WTypeManager.Create("Float", "range", cr2w, this);
-				}
-				return _range;
-			}
-			set
-			{
-				if (_range == value)
-				{
-					return;
-				}
-				_range = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _range);
+			set => SetProperty(ref _range, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rangeLimit")] 
 		public CFloat RangeLimit
 		{
-			get
-			{
-				if (_rangeLimit == null)
-				{
-					_rangeLimit = (CFloat) CR2WTypeManager.Create("Float", "rangeLimit", cr2w, this);
-				}
-				return _rangeLimit;
-			}
-			set
-			{
-				if (_rangeLimit == value)
-				{
-					return;
-				}
-				_rangeLimit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rangeLimit);
+			set => SetProperty(ref _rangeLimit, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("screenEdgeFadeRange")] 
 		public CFloat ScreenEdgeFadeRange
 		{
-			get
-			{
-				if (_screenEdgeFadeRange == null)
-				{
-					_screenEdgeFadeRange = (CFloat) CR2WTypeManager.Create("Float", "screenEdgeFadeRange", cr2w, this);
-				}
-				return _screenEdgeFadeRange;
-			}
-			set
-			{
-				if (_screenEdgeFadeRange == value)
-				{
-					return;
-				}
-				_screenEdgeFadeRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _screenEdgeFadeRange);
+			set => SetProperty(ref _screenEdgeFadeRange, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("distanceFadeLimit")] 
 		public CFloat DistanceFadeLimit
 		{
-			get
-			{
-				if (_distanceFadeLimit == null)
-				{
-					_distanceFadeLimit = (CFloat) CR2WTypeManager.Create("Float", "distanceFadeLimit", cr2w, this);
-				}
-				return _distanceFadeLimit;
-			}
-			set
-			{
-				if (_distanceFadeLimit == value)
-				{
-					return;
-				}
-				_distanceFadeLimit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distanceFadeLimit);
+			set => SetProperty(ref _distanceFadeLimit, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("distanceFadeRange")] 
 		public CFloat DistanceFadeRange
 		{
-			get
-			{
-				if (_distanceFadeRange == null)
-				{
-					_distanceFadeRange = (CFloat) CR2WTypeManager.Create("Float", "distanceFadeRange", cr2w, this);
-				}
-				return _distanceFadeRange;
-			}
-			set
-			{
-				if (_distanceFadeRange == value)
-				{
-					return;
-				}
-				_distanceFadeRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distanceFadeRange);
+			set => SetProperty(ref _distanceFadeRange, value);
 		}
 
 		public ContactShadowsConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

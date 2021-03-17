@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("useCustomColor")] 
 		public CBool UseCustomColor
 		{
-			get
-			{
-				if (_useCustomColor == null)
-				{
-					_useCustomColor = (CBool) CR2WTypeManager.Create("Bool", "useCustomColor", cr2w, this);
-				}
-				return _useCustomColor;
-			}
-			set
-			{
-				if (_useCustomColor == value)
-				{
-					return;
-				}
-				_useCustomColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useCustomColor);
+			set => SetProperty(ref _useCustomColor, value);
 		}
 
 		public worldAmbientAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

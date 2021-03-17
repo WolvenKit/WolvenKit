@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isVisible")] 
 		public CBool IsVisible
 		{
-			get
-			{
-				if (_isVisible == null)
-				{
-					_isVisible = (CBool) CR2WTypeManager.Create("Bool", "isVisible", cr2w, this);
-				}
-				return _isVisible;
-			}
-			set
-			{
-				if (_isVisible == value)
-				{
-					return;
-				}
-				_isVisible = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isVisible);
+			set => SetProperty(ref _isVisible, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sourceName")] 
 		public CName SourceName
 		{
-			get
-			{
-				if (_sourceName == null)
-				{
-					_sourceName = (CName) CR2WTypeManager.Create("CName", "sourceName", cr2w, this);
-				}
-				return _sourceName;
-			}
-			set
-			{
-				if (_sourceName == value)
-				{
-					return;
-				}
-				_sourceName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sourceName);
+			set => SetProperty(ref _sourceName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("transitionTime")] 
 		public CFloat TransitionTime
 		{
-			get
-			{
-				if (_transitionTime == null)
-				{
-					_transitionTime = (CFloat) CR2WTypeManager.Create("Float", "transitionTime", cr2w, this);
-				}
-				return _transitionTime;
-			}
-			set
-			{
-				if (_transitionTime == value)
-				{
-					return;
-				}
-				_transitionTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transitionTime);
+			set => SetProperty(ref _transitionTime, value);
 		}
 
 		public ToggleVisibilityInAnimSystemEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

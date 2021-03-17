@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enabled")] 
 		public CBool Enabled
 		{
-			get
-			{
-				if (_enabled == null)
-				{
-					_enabled = (CBool) CR2WTypeManager.Create("Bool", "enabled", cr2w, this);
-				}
-				return _enabled;
-			}
-			set
-			{
-				if (_enabled == value)
-				{
-					return;
-				}
-				_enabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enabled);
+			set => SetProperty(ref _enabled, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("enableMask")] 
 		public entTagMask EnableMask
 		{
-			get
-			{
-				if (_enableMask == null)
-				{
-					_enableMask = (entTagMask) CR2WTypeManager.Create("entTagMask", "enableMask", cr2w, this);
-				}
-				return _enableMask;
-			}
-			set
-			{
-				if (_enableMask == value)
-				{
-					return;
-				}
-				_enableMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableMask);
+			set => SetProperty(ref _enableMask, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("bindName")] 
 		public CName BindName
 		{
-			get
-			{
-				if (_bindName == null)
-				{
-					_bindName = (CName) CR2WTypeManager.Create("CName", "bindName", cr2w, this);
-				}
-				return _bindName;
-			}
-			set
-			{
-				if (_bindName == value)
-				{
-					return;
-				}
-				_bindName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bindName);
+			set => SetProperty(ref _bindName, value);
 		}
 
 		public entIBinding(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

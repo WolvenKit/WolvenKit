@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("communityEntries")] 
 		public CArray<AIGuardAreaConnectedCommunity> CommunityEntries
 		{
-			get
-			{
-				if (_communityEntries == null)
-				{
-					_communityEntries = (CArray<AIGuardAreaConnectedCommunity>) CR2WTypeManager.Create("array:AIGuardAreaConnectedCommunity", "communityEntries", cr2w, this);
-				}
-				return _communityEntries;
-			}
-			set
-			{
-				if (_communityEntries == value)
-				{
-					return;
-				}
-				_communityEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _communityEntries);
+			set => SetProperty(ref _communityEntries, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("combatCommunityEntries")] 
 		public CArray<AICombatGuardAreaConnectedCommunity> CombatCommunityEntries
 		{
-			get
-			{
-				if (_combatCommunityEntries == null)
-				{
-					_combatCommunityEntries = (CArray<AICombatGuardAreaConnectedCommunity>) CR2WTypeManager.Create("array:AICombatGuardAreaConnectedCommunity", "combatCommunityEntries", cr2w, this);
-				}
-				return _combatCommunityEntries;
-			}
-			set
-			{
-				if (_combatCommunityEntries == value)
-				{
-					return;
-				}
-				_combatCommunityEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _combatCommunityEntries);
+			set => SetProperty(ref _combatCommunityEntries, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("pursuitArea")] 
 		public NodeRef PursuitArea
 		{
-			get
-			{
-				if (_pursuitArea == null)
-				{
-					_pursuitArea = (NodeRef) CR2WTypeManager.Create("NodeRef", "pursuitArea", cr2w, this);
-				}
-				return _pursuitArea;
-			}
-			set
-			{
-				if (_pursuitArea == value)
-				{
-					return;
-				}
-				_pursuitArea = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pursuitArea);
+			set => SetProperty(ref _pursuitArea, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("pursuitRange")] 
 		public CFloat PursuitRange
 		{
-			get
-			{
-				if (_pursuitRange == null)
-				{
-					_pursuitRange = (CFloat) CR2WTypeManager.Create("Float", "pursuitRange", cr2w, this);
-				}
-				return _pursuitRange;
-			}
-			set
-			{
-				if (_pursuitRange == value)
-				{
-					return;
-				}
-				_pursuitRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pursuitRange);
+			set => SetProperty(ref _pursuitRange, value);
 		}
 
 		public worldGuardAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lifePathId")] 
 		public TweakDBID LifePathId
 		{
-			get
-			{
-				if (_lifePathId == null)
-				{
-					_lifePathId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "lifePathId", cr2w, this);
-				}
-				return _lifePathId;
-			}
-			set
-			{
-				if (_lifePathId == value)
-				{
-					return;
-				}
-				_lifePathId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lifePathId);
+			set => SetProperty(ref _lifePathId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("inverted")] 
 		public CBool Inverted
 		{
-			get
-			{
-				if (_inverted == null)
-				{
-					_inverted = (CBool) CR2WTypeManager.Create("Bool", "inverted", cr2w, this);
-				}
-				return _inverted;
-			}
-			set
-			{
-				if (_inverted == value)
-				{
-					return;
-				}
-				_inverted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inverted);
+			set => SetProperty(ref _inverted, value);
 		}
 
 		public LifePath_ScriptConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

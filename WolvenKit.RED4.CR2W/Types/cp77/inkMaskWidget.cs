@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("textureAtlas")] 
 		public raRef<inkTextureAtlas> TextureAtlas
 		{
-			get
-			{
-				if (_textureAtlas == null)
-				{
-					_textureAtlas = (raRef<inkTextureAtlas>) CR2WTypeManager.Create("raRef:inkTextureAtlas", "textureAtlas", cr2w, this);
-				}
-				return _textureAtlas;
-			}
-			set
-			{
-				if (_textureAtlas == value)
-				{
-					return;
-				}
-				_textureAtlas = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _textureAtlas);
+			set => SetProperty(ref _textureAtlas, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("texturePart")] 
 		public CName TexturePart
 		{
-			get
-			{
-				if (_texturePart == null)
-				{
-					_texturePart = (CName) CR2WTypeManager.Create("CName", "texturePart", cr2w, this);
-				}
-				return _texturePart;
-			}
-			set
-			{
-				if (_texturePart == value)
-				{
-					return;
-				}
-				_texturePart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _texturePart);
+			set => SetProperty(ref _texturePart, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("dynamicTextureMask")] 
 		public CName DynamicTextureMask
 		{
-			get
-			{
-				if (_dynamicTextureMask == null)
-				{
-					_dynamicTextureMask = (CName) CR2WTypeManager.Create("CName", "dynamicTextureMask", cr2w, this);
-				}
-				return _dynamicTextureMask;
-			}
-			set
-			{
-				if (_dynamicTextureMask == value)
-				{
-					return;
-				}
-				_dynamicTextureMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dynamicTextureMask);
+			set => SetProperty(ref _dynamicTextureMask, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("dataSource")] 
 		public CEnum<inkMaskDataSource> DataSource
 		{
-			get
-			{
-				if (_dataSource == null)
-				{
-					_dataSource = (CEnum<inkMaskDataSource>) CR2WTypeManager.Create("inkMaskDataSource", "dataSource", cr2w, this);
-				}
-				return _dataSource;
-			}
-			set
-			{
-				if (_dataSource == value)
-				{
-					return;
-				}
-				_dataSource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dataSource);
+			set => SetProperty(ref _dataSource, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("invertMask")] 
 		public CBool InvertMask
 		{
-			get
-			{
-				if (_invertMask == null)
-				{
-					_invertMask = (CBool) CR2WTypeManager.Create("Bool", "invertMask", cr2w, this);
-				}
-				return _invertMask;
-			}
-			set
-			{
-				if (_invertMask == value)
-				{
-					return;
-				}
-				_invertMask = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _invertMask);
+			set => SetProperty(ref _invertMask, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("maskTransparency")] 
 		public CFloat MaskTransparency
 		{
-			get
-			{
-				if (_maskTransparency == null)
-				{
-					_maskTransparency = (CFloat) CR2WTypeManager.Create("Float", "maskTransparency", cr2w, this);
-				}
-				return _maskTransparency;
-			}
-			set
-			{
-				if (_maskTransparency == value)
-				{
-					return;
-				}
-				_maskTransparency = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maskTransparency);
+			set => SetProperty(ref _maskTransparency, value);
 		}
 
 		public inkMaskWidget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

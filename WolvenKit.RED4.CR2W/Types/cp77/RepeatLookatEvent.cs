@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("target")] 
 		public wCHandle<entEntity> Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		public RepeatLookatEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

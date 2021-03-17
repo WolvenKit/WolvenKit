@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("positionName")] 
 		public CName PositionName
 		{
-			get
-			{
-				if (_positionName == null)
-				{
-					_positionName = (CName) CR2WTypeManager.Create("CName", "positionName", cr2w, this);
-				}
-				return _positionName;
-			}
-			set
-			{
-				if (_positionName == value)
-				{
-					return;
-				}
-				_positionName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _positionName);
+			set => SetProperty(ref _positionName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("doNavTest")] 
 		public CBool DoNavTest
 		{
-			get
-			{
-				if (_doNavTest == null)
-				{
-					_doNavTest = (CBool) CR2WTypeManager.Create("Bool", "doNavTest", cr2w, this);
-				}
-				return _doNavTest;
-			}
-			set
-			{
-				if (_doNavTest == value)
-				{
-					return;
-				}
-				_doNavTest = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _doNavTest);
+			set => SetProperty(ref _doNavTest, value);
 		}
 
 		public AICTreeNodeActionTeleportToPositionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bone")] 
 		public animTransformIndex Bone
 		{
-			get
-			{
-				if (_bone == null)
-				{
-					_bone = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "bone", cr2w, this);
-				}
-				return _bone;
-			}
-			set
-			{
-				if (_bone == value)
-				{
-					return;
-				}
-				_bone = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bone);
+			set => SetProperty(ref _bone, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ellipsoidTransformLS")] 
 		public QsTransform EllipsoidTransformLS
 		{
-			get
-			{
-				if (_ellipsoidTransformLS == null)
-				{
-					_ellipsoidTransformLS = (QsTransform) CR2WTypeManager.Create("QsTransform", "ellipsoidTransformLS", cr2w, this);
-				}
-				return _ellipsoidTransformLS;
-			}
-			set
-			{
-				if (_ellipsoidTransformLS == value)
-				{
-					return;
-				}
-				_ellipsoidTransformLS = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ellipsoidTransformLS);
+			set => SetProperty(ref _ellipsoidTransformLS, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("constraintRadius")] 
 		public CFloat ConstraintRadius
 		{
-			get
-			{
-				if (_constraintRadius == null)
-				{
-					_constraintRadius = (CFloat) CR2WTypeManager.Create("Float", "constraintRadius", cr2w, this);
-				}
-				return _constraintRadius;
-			}
-			set
-			{
-				if (_constraintRadius == value)
-				{
-					return;
-				}
-				_constraintRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _constraintRadius);
+			set => SetProperty(ref _constraintRadius, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("constraintScale1")] 
 		public CFloat ConstraintScale1
 		{
-			get
-			{
-				if (_constraintScale1 == null)
-				{
-					_constraintScale1 = (CFloat) CR2WTypeManager.Create("Float", "constraintScale1", cr2w, this);
-				}
-				return _constraintScale1;
-			}
-			set
-			{
-				if (_constraintScale1 == value)
-				{
-					return;
-				}
-				_constraintScale1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _constraintScale1);
+			set => SetProperty(ref _constraintScale1, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("constraintScale2")] 
 		public CFloat ConstraintScale2
 		{
-			get
-			{
-				if (_constraintScale2 == null)
-				{
-					_constraintScale2 = (CFloat) CR2WTypeManager.Create("Float", "constraintScale2", cr2w, this);
-				}
-				return _constraintScale2;
-			}
-			set
-			{
-				if (_constraintScale2 == value)
-				{
-					return;
-				}
-				_constraintScale2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _constraintScale2);
+			set => SetProperty(ref _constraintScale2, value);
 		}
 
 		public animDyngConstraintEllipsoid_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

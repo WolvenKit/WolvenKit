@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("conversations")] 
 		public CArray<audioConversationItemMetadata> Conversations
 		{
-			get
-			{
-				if (_conversations == null)
-				{
-					_conversations = (CArray<audioConversationItemMetadata>) CR2WTypeManager.Create("array:audioConversationItemMetadata", "conversations", cr2w, this);
-				}
-				return _conversations;
-			}
-			set
-			{
-				if (_conversations == value)
-				{
-					return;
-				}
-				_conversations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _conversations);
+			set => SetProperty(ref _conversations, value);
 		}
 
 		public audioConversationMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

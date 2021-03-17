@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("throwUnequip")] 
 		public gamebbScriptID_Bool ThrowUnequip
 		{
-			get
-			{
-				if (_throwUnequip == null)
-				{
-					_throwUnequip = (gamebbScriptID_Bool) CR2WTypeManager.Create("gamebbScriptID_Bool", "throwUnequip", cr2w, this);
-				}
-				return _throwUnequip;
-			}
-			set
-			{
-				if (_throwUnequip == value)
-				{
-					return;
-				}
-				_throwUnequip = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _throwUnequip);
+			set => SetProperty(ref _throwUnequip, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lastThrowAngle")] 
 		public gamebbScriptID_Float LastThrowAngle
 		{
-			get
-			{
-				if (_lastThrowAngle == null)
-				{
-					_lastThrowAngle = (gamebbScriptID_Float) CR2WTypeManager.Create("gamebbScriptID_Float", "lastThrowAngle", cr2w, this);
-				}
-				return _lastThrowAngle;
-			}
-			set
-			{
-				if (_lastThrowAngle == value)
-				{
-					return;
-				}
-				_lastThrowAngle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastThrowAngle);
+			set => SetProperty(ref _lastThrowAngle, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lastThrowPosition")] 
 		public gamebbScriptID_Vector4 LastThrowPosition
 		{
-			get
-			{
-				if (_lastThrowPosition == null)
-				{
-					_lastThrowPosition = (gamebbScriptID_Vector4) CR2WTypeManager.Create("gamebbScriptID_Vector4", "lastThrowPosition", cr2w, this);
-				}
-				return _lastThrowPosition;
-			}
-			set
-			{
-				if (_lastThrowPosition == value)
-				{
-					return;
-				}
-				_lastThrowPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastThrowPosition);
+			set => SetProperty(ref _lastThrowPosition, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("lastThrowStartType")] 
 		public gamebbScriptID_Variant LastThrowStartType
 		{
-			get
-			{
-				if (_lastThrowStartType == null)
-				{
-					_lastThrowStartType = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "lastThrowStartType", cr2w, this);
-				}
-				return _lastThrowStartType;
-			}
-			set
-			{
-				if (_lastThrowStartType == value)
-				{
-					return;
-				}
-				_lastThrowStartType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lastThrowStartType);
+			set => SetProperty(ref _lastThrowStartType, value);
 		}
 
 		public CombatGadgetDataDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

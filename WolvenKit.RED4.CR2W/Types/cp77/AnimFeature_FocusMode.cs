@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isFocusModeActive")] 
 		public CBool IsFocusModeActive
 		{
-			get
-			{
-				if (_isFocusModeActive == null)
-				{
-					_isFocusModeActive = (CBool) CR2WTypeManager.Create("Bool", "isFocusModeActive", cr2w, this);
-				}
-				return _isFocusModeActive;
-			}
-			set
-			{
-				if (_isFocusModeActive == value)
-				{
-					return;
-				}
-				_isFocusModeActive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isFocusModeActive);
+			set => SetProperty(ref _isFocusModeActive, value);
 		}
 
 		public AnimFeature_FocusMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

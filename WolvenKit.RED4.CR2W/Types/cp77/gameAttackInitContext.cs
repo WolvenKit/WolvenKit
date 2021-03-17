@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("record")] 
 		public CHandle<gamedataAttack_Record> Record
 		{
-			get
-			{
-				if (_record == null)
-				{
-					_record = (CHandle<gamedataAttack_Record>) CR2WTypeManager.Create("handle:gamedataAttack_Record", "record", cr2w, this);
-				}
-				return _record;
-			}
-			set
-			{
-				if (_record == value)
-				{
-					return;
-				}
-				_record = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _record);
+			set => SetProperty(ref _record, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("instigator")] 
 		public wCHandle<gameObject> Instigator
 		{
-			get
-			{
-				if (_instigator == null)
-				{
-					_instigator = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "instigator", cr2w, this);
-				}
-				return _instigator;
-			}
-			set
-			{
-				if (_instigator == value)
-				{
-					return;
-				}
-				_instigator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instigator);
+			set => SetProperty(ref _instigator, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("source")] 
 		public wCHandle<gameObject> Source
 		{
-			get
-			{
-				if (_source == null)
-				{
-					_source = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "source", cr2w, this);
-				}
-				return _source;
-			}
-			set
-			{
-				if (_source == value)
-				{
-					return;
-				}
-				_source = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("weapon")] 
 		public wCHandle<gameweaponObject> Weapon
 		{
-			get
-			{
-				if (_weapon == null)
-				{
-					_weapon = (wCHandle<gameweaponObject>) CR2WTypeManager.Create("whandle:gameweaponObject", "weapon", cr2w, this);
-				}
-				return _weapon;
-			}
-			set
-			{
-				if (_weapon == value)
-				{
-					return;
-				}
-				_weapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weapon);
+			set => SetProperty(ref _weapon, value);
 		}
 
 		public gameAttackInitContext(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

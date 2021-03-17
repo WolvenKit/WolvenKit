@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("radioTier")] 
 		public CUInt32 RadioTier
 		{
-			get
-			{
-				if (_radioTier == null)
-				{
-					_radioTier = (CUInt32) CR2WTypeManager.Create("Uint32", "radioTier", cr2w, this);
-				}
-				return _radioTier;
-			}
-			set
-			{
-				if (_radioTier == value)
-				{
-					return;
-				}
-				_radioTier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radioTier);
+			set => SetProperty(ref _radioTier, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("overrideTier")] 
 		public CBool OverrideTier
 		{
-			get
-			{
-				if (_overrideTier == null)
-				{
-					_overrideTier = (CBool) CR2WTypeManager.Create("Bool", "overrideTier", cr2w, this);
-				}
-				return _overrideTier;
-			}
-			set
-			{
-				if (_overrideTier == value)
-				{
-					return;
-				}
-				_overrideTier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideTier);
+			set => SetProperty(ref _overrideTier, value);
 		}
 
 		public VehicleRadioTierEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

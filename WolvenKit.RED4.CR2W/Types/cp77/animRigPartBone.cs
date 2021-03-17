@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bone")] 
 		public CName Bone
 		{
-			get
-			{
-				if (_bone == null)
-				{
-					_bone = (CName) CR2WTypeManager.Create("CName", "bone", cr2w, this);
-				}
-				return _bone;
-			}
-			set
-			{
-				if (_bone == value)
-				{
-					return;
-				}
-				_bone = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bone);
+			set => SetProperty(ref _bone, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get
-			{
-				if (_weight == null)
-				{
-					_weight = (CFloat) CR2WTypeManager.Create("Float", "weight", cr2w, this);
-				}
-				return _weight;
-			}
-			set
-			{
-				if (_weight == value)
-				{
-					return;
-				}
-				_weight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weight);
+			set => SetProperty(ref _weight, value);
 		}
 
 		public animRigPartBone(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("data")] 
 		public CHandle<AISignalSenderTask> Data
 		{
-			get
-			{
-				if (_data == null)
-				{
-					_data = (CHandle<AISignalSenderTask>) CR2WTypeManager.Create("handle:AISignalSenderTask", "data", cr2w, this);
-				}
-				return _data;
-			}
-			set
-			{
-				if (_data == value)
-				{
-					return;
-				}
-				_data = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("priority")] 
 		public CFloat Priority
 		{
-			get
-			{
-				if (_priority == null)
-				{
-					_priority = (CFloat) CR2WTypeManager.Create("Float", "priority", cr2w, this);
-				}
-				return _priority;
-			}
-			set
-			{
-				if (_priority == value)
-				{
-					return;
-				}
-				_priority = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _priority);
+			set => SetProperty(ref _priority, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("lifeTime")] 
 		public CFloat LifeTime
 		{
-			get
-			{
-				if (_lifeTime == null)
-				{
-					_lifeTime = (CFloat) CR2WTypeManager.Create("Float", "lifeTime", cr2w, this);
-				}
-				return _lifeTime;
-			}
-			set
-			{
-				if (_lifeTime == value)
-				{
-					return;
-				}
-				_lifeTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lifeTime);
+			set => SetProperty(ref _lifeTime, value);
 		}
 
 		public GateSignal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("preset")] 
 		public DiodeLightPreset Preset
 		{
-			get
-			{
-				if (_preset == null)
-				{
-					_preset = (DiodeLightPreset) CR2WTypeManager.Create("DiodeLightPreset", "preset", cr2w, this);
-				}
-				return _preset;
-			}
-			set
-			{
-				if (_preset == value)
-				{
-					return;
-				}
-				_preset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _preset);
+			set => SetProperty(ref _preset, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("delay")] 
 		public CFloat Delay
 		{
-			get
-			{
-				if (_delay == null)
-				{
-					_delay = (CFloat) CR2WTypeManager.Create("Float", "delay", cr2w, this);
-				}
-				return _delay;
-			}
-			set
-			{
-				if (_delay == value)
-				{
-					return;
-				}
-				_delay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delay);
+			set => SetProperty(ref _delay, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("force")] 
 		public CBool Force
 		{
-			get
-			{
-				if (_force == null)
-				{
-					_force = (CBool) CR2WTypeManager.Create("Bool", "force", cr2w, this);
-				}
-				return _force;
-			}
-			set
-			{
-				if (_force == value)
-				{
-					return;
-				}
-				_force = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _force);
+			set => SetProperty(ref _force, value);
 		}
 
 		public ApplyDiodeLightPresetEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

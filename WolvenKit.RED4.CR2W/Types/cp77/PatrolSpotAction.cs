@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("patrolAction")] 
 		public CHandle<AIArgumentMapping> PatrolAction
 		{
-			get
-			{
-				if (_patrolAction == null)
-				{
-					_patrolAction = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "patrolAction", cr2w, this);
-				}
-				return _patrolAction;
-			}
-			set
-			{
-				if (_patrolAction == value)
-				{
-					return;
-				}
-				_patrolAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _patrolAction);
+			set => SetProperty(ref _patrolAction, value);
 		}
 
 		public PatrolSpotAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

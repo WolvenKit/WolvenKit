@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("requestedState")] 
 		public CEnum<entAppearanceStatus> RequestedState
 		{
-			get
-			{
-				if (_requestedState == null)
-				{
-					_requestedState = (CEnum<entAppearanceStatus>) CR2WTypeManager.Create("entAppearanceStatus", "requestedState", cr2w, this);
-				}
-				return _requestedState;
-			}
-			set
-			{
-				if (_requestedState == value)
-				{
-					return;
-				}
-				_requestedState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requestedState);
+			set => SetProperty(ref _requestedState, value);
 		}
 
 		public entShadowMeshChangeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

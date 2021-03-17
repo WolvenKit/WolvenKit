@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("role")] 
 		public CEnum<EAIRole> Role
 		{
-			get
-			{
-				if (_role == null)
-				{
-					_role = (CEnum<EAIRole>) CR2WTypeManager.Create("EAIRole", "role", cr2w, this);
-				}
-				return _role;
-			}
-			set
-			{
-				if (_role == value)
-				{
-					return;
-				}
-				_role = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _role);
+			set => SetProperty(ref _role, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("roleCbId")] 
 		public CUInt32 RoleCbId
 		{
-			get
-			{
-				if (_roleCbId == null)
-				{
-					_roleCbId = (CUInt32) CR2WTypeManager.Create("Uint32", "roleCbId", cr2w, this);
-				}
-				return _roleCbId;
-			}
-			set
-			{
-				if (_roleCbId == value)
-				{
-					return;
-				}
-				_roleCbId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _roleCbId);
+			set => SetProperty(ref _roleCbId, value);
 		}
 
 		public PassiveRoleCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

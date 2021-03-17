@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("piercingEffect")] 
 		public gameEffectRef PiercingEffect
 		{
-			get
-			{
-				if (_piercingEffect == null)
-				{
-					_piercingEffect = (gameEffectRef) CR2WTypeManager.Create("gameEffectRef", "piercingEffect", cr2w, this);
-				}
-				return _piercingEffect;
-			}
-			set
-			{
-				if (_piercingEffect == value)
-				{
-					return;
-				}
-				_piercingEffect = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _piercingEffect);
+			set => SetProperty(ref _piercingEffect, value);
 		}
 
 		[Ordinal(52)] 
 		[RED("pierceTime")] 
 		public CFloat PierceTime
 		{
-			get
-			{
-				if (_pierceTime == null)
-				{
-					_pierceTime = (CFloat) CR2WTypeManager.Create("Float", "pierceTime", cr2w, this);
-				}
-				return _pierceTime;
-			}
-			set
-			{
-				if (_pierceTime == value)
-				{
-					return;
-				}
-				_pierceTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pierceTime);
+			set => SetProperty(ref _pierceTime, value);
 		}
 
 		[Ordinal(53)] 
 		[RED("energyLossFactor")] 
 		public CFloat EnergyLossFactor
 		{
-			get
-			{
-				if (_energyLossFactor == null)
-				{
-					_energyLossFactor = (CFloat) CR2WTypeManager.Create("Float", "energyLossFactor", cr2w, this);
-				}
-				return _energyLossFactor;
-			}
-			set
-			{
-				if (_energyLossFactor == value)
-				{
-					return;
-				}
-				_energyLossFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _energyLossFactor);
+			set => SetProperty(ref _energyLossFactor, value);
 		}
 
 		[Ordinal(54)] 
 		[RED("startVelocity")] 
 		public CFloat StartVelocity
 		{
-			get
-			{
-				if (_startVelocity == null)
-				{
-					_startVelocity = (CFloat) CR2WTypeManager.Create("Float", "startVelocity", cr2w, this);
-				}
-				return _startVelocity;
-			}
-			set
-			{
-				if (_startVelocity == value)
-				{
-					return;
-				}
-				_startVelocity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startVelocity);
+			set => SetProperty(ref _startVelocity, value);
 		}
 
 		[Ordinal(55)] 
 		[RED("grenadeLifetime")] 
 		public CFloat GrenadeLifetime
 		{
-			get
-			{
-				if (_grenadeLifetime == null)
-				{
-					_grenadeLifetime = (CFloat) CR2WTypeManager.Create("Float", "grenadeLifetime", cr2w, this);
-				}
-				return _grenadeLifetime;
-			}
-			set
-			{
-				if (_grenadeLifetime == value)
-				{
-					return;
-				}
-				_grenadeLifetime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _grenadeLifetime);
+			set => SetProperty(ref _grenadeLifetime, value);
 		}
 
 		[Ordinal(56)] 
 		[RED("gravitySimulation")] 
 		public CFloat GravitySimulation
 		{
-			get
-			{
-				if (_gravitySimulation == null)
-				{
-					_gravitySimulation = (CFloat) CR2WTypeManager.Create("Float", "gravitySimulation", cr2w, this);
-				}
-				return _gravitySimulation;
-			}
-			set
-			{
-				if (_gravitySimulation == value)
-				{
-					return;
-				}
-				_gravitySimulation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gravitySimulation);
+			set => SetProperty(ref _gravitySimulation, value);
 		}
 
 		[Ordinal(57)] 
 		[RED("trailEffectName")] 
 		public CName TrailEffectName
 		{
-			get
-			{
-				if (_trailEffectName == null)
-				{
-					_trailEffectName = (CName) CR2WTypeManager.Create("CName", "trailEffectName", cr2w, this);
-				}
-				return _trailEffectName;
-			}
-			set
-			{
-				if (_trailEffectName == value)
-				{
-					return;
-				}
-				_trailEffectName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trailEffectName);
+			set => SetProperty(ref _trailEffectName, value);
 		}
 
 		[Ordinal(58)] 
 		[RED("alive")] 
 		public CBool Alive
 		{
-			get
-			{
-				if (_alive == null)
-				{
-					_alive = (CBool) CR2WTypeManager.Create("Bool", "alive", cr2w, this);
-				}
-				return _alive;
-			}
-			set
-			{
-				if (_alive == value)
-				{
-					return;
-				}
-				_alive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _alive);
+			set => SetProperty(ref _alive, value);
 		}
 
 		public piercingGrenade(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

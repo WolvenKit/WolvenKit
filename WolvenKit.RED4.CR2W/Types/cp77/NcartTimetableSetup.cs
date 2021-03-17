@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("departFrequency")] 
 		public CInt32 DepartFrequency
 		{
-			get
-			{
-				if (_departFrequency == null)
-				{
-					_departFrequency = (CInt32) CR2WTypeManager.Create("Int32", "departFrequency", cr2w, this);
-				}
-				return _departFrequency;
-			}
-			set
-			{
-				if (_departFrequency == value)
-				{
-					return;
-				}
-				_departFrequency = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _departFrequency);
+			set => SetProperty(ref _departFrequency, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("uiUpdateFrequency")] 
 		public CInt32 UiUpdateFrequency
 		{
-			get
-			{
-				if (_uiUpdateFrequency == null)
-				{
-					_uiUpdateFrequency = (CInt32) CR2WTypeManager.Create("Int32", "uiUpdateFrequency", cr2w, this);
-				}
-				return _uiUpdateFrequency;
-			}
-			set
-			{
-				if (_uiUpdateFrequency == value)
-				{
-					return;
-				}
-				_uiUpdateFrequency = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _uiUpdateFrequency);
+			set => SetProperty(ref _uiUpdateFrequency, value);
 		}
 
 		public NcartTimetableSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

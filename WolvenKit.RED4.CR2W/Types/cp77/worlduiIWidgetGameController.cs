@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("elementRecordID")] 
 		public TweakDBID ElementRecordID
 		{
-			get
-			{
-				if (_elementRecordID == null)
-				{
-					_elementRecordID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "elementRecordID", cr2w, this);
-				}
-				return _elementRecordID;
-			}
-			set
-			{
-				if (_elementRecordID == value)
-				{
-					return;
-				}
-				_elementRecordID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _elementRecordID);
+			set => SetProperty(ref _elementRecordID, value);
 		}
 
 		public worlduiIWidgetGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

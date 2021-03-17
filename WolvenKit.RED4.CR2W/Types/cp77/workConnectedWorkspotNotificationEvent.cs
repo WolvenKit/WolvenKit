@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("evtName")] 
 		public CName EvtName
 		{
-			get
-			{
-				if (_evtName == null)
-				{
-					_evtName = (CName) CR2WTypeManager.Create("CName", "evtName", cr2w, this);
-				}
-				return _evtName;
-			}
-			set
-			{
-				if (_evtName == value)
-				{
-					return;
-				}
-				_evtName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _evtName);
+			set => SetProperty(ref _evtName, value);
 		}
 
 		public workConnectedWorkspotNotificationEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

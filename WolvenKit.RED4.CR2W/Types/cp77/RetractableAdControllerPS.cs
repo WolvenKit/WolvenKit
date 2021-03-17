@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isControlled")] 
 		public CBool IsControlled
 		{
-			get
-			{
-				if (_isControlled == null)
-				{
-					_isControlled = (CBool) CR2WTypeManager.Create("Bool", "isControlled", cr2w, this);
-				}
-				return _isControlled;
-			}
-			set
-			{
-				if (_isControlled == value)
-				{
-					return;
-				}
-				_isControlled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isControlled);
+			set => SetProperty(ref _isControlled, value);
 		}
 
 		public RetractableAdControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

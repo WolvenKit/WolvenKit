@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("consumableType")] 
 		public CInt32 ConsumableType
 		{
-			get
-			{
-				if (_consumableType == null)
-				{
-					_consumableType = (CInt32) CR2WTypeManager.Create("Int32", "consumableType", cr2w, this);
-				}
-				return _consumableType;
-			}
-			set
-			{
-				if (_consumableType == value)
-				{
-					return;
-				}
-				_consumableType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _consumableType);
+			set => SetProperty(ref _consumableType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useConsumable")] 
 		public CBool UseConsumable
 		{
-			get
-			{
-				if (_useConsumable == null)
-				{
-					_useConsumable = (CBool) CR2WTypeManager.Create("Bool", "useConsumable", cr2w, this);
-				}
-				return _useConsumable;
-			}
-			set
-			{
-				if (_useConsumable == value)
-				{
-					return;
-				}
-				_useConsumable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useConsumable);
+			set => SetProperty(ref _useConsumable, value);
 		}
 
 		public animAnimFeature_ConsumableAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inverted")] 
 		public CBool Inverted
 		{
-			get
-			{
-				if (_inverted == null)
-				{
-					_inverted = (CBool) CR2WTypeManager.Create("Bool", "inverted", cr2w, this);
-				}
-				return _inverted;
-			}
-			set
-			{
-				if (_inverted == value)
-				{
-					return;
-				}
-				_inverted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inverted);
+			set => SetProperty(ref _inverted, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("limitToSpecifiedSpeakersStations")] 
 		public CBool LimitToSpecifiedSpeakersStations
 		{
-			get
-			{
-				if (_limitToSpecifiedSpeakersStations == null)
-				{
-					_limitToSpecifiedSpeakersStations = (CBool) CR2WTypeManager.Create("Bool", "limitToSpecifiedSpeakersStations", cr2w, this);
-				}
-				return _limitToSpecifiedSpeakersStations;
-			}
-			set
-			{
-				if (_limitToSpecifiedSpeakersStations == value)
-				{
-					return;
-				}
-				_limitToSpecifiedSpeakersStations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _limitToSpecifiedSpeakersStations);
+			set => SetProperty(ref _limitToSpecifiedSpeakersStations, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("speakerType")] 
 		public CEnum<audioRadioSpeakerType> SpeakerType
 		{
-			get
-			{
-				if (_speakerType == null)
-				{
-					_speakerType = (CEnum<audioRadioSpeakerType>) CR2WTypeManager.Create("audioRadioSpeakerType", "speakerType", cr2w, this);
-				}
-				return _speakerType;
-			}
-			set
-			{
-				if (_speakerType == value)
-				{
-					return;
-				}
-				_speakerType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speakerType);
+			set => SetProperty(ref _speakerType, value);
 		}
 
 		public questRadio_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

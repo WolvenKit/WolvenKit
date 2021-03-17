@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("structs")] 
 		public CArray<gameNetrunnerPrototypeStruct> Structs
 		{
-			get
-			{
-				if (_structs == null)
-				{
-					_structs = (CArray<gameNetrunnerPrototypeStruct>) CR2WTypeManager.Create("array:gameNetrunnerPrototypeStruct", "structs", cr2w, this);
-				}
-				return _structs;
-			}
-			set
-			{
-				if (_structs == value)
-				{
-					return;
-				}
-				_structs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _structs);
+			set => SetProperty(ref _structs, value);
 		}
 
 		public gameNetrunnerPrototypeComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

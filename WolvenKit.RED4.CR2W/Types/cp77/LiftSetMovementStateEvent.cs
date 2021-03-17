@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("movementState")] 
 		public CEnum<gamePlatformMovementState> MovementState
 		{
-			get
-			{
-				if (_movementState == null)
-				{
-					_movementState = (CEnum<gamePlatformMovementState>) CR2WTypeManager.Create("gamePlatformMovementState", "movementState", cr2w, this);
-				}
-				return _movementState;
-			}
-			set
-			{
-				if (_movementState == value)
-				{
-					return;
-				}
-				_movementState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movementState);
+			set => SetProperty(ref _movementState, value);
 		}
 
 		public LiftSetMovementStateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

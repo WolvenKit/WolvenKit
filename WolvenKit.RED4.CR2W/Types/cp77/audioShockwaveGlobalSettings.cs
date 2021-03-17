@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("explosionPropagationSpeed")] 
 		public CFloat ExplosionPropagationSpeed
 		{
-			get
-			{
-				if (_explosionPropagationSpeed == null)
-				{
-					_explosionPropagationSpeed = (CFloat) CR2WTypeManager.Create("Float", "explosionPropagationSpeed", cr2w, this);
-				}
-				return _explosionPropagationSpeed;
-			}
-			set
-			{
-				if (_explosionPropagationSpeed == value)
-				{
-					return;
-				}
-				_explosionPropagationSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _explosionPropagationSpeed);
+			set => SetProperty(ref _explosionPropagationSpeed, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("thumpPropagationSpeed")] 
 		public CFloat ThumpPropagationSpeed
 		{
-			get
-			{
-				if (_thumpPropagationSpeed == null)
-				{
-					_thumpPropagationSpeed = (CFloat) CR2WTypeManager.Create("Float", "thumpPropagationSpeed", cr2w, this);
-				}
-				return _thumpPropagationSpeed;
-			}
-			set
-			{
-				if (_thumpPropagationSpeed == value)
-				{
-					return;
-				}
-				_thumpPropagationSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _thumpPropagationSpeed);
+			set => SetProperty(ref _thumpPropagationSpeed, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("electroshockPropagationSpeed")] 
 		public CFloat ElectroshockPropagationSpeed
 		{
-			get
-			{
-				if (_electroshockPropagationSpeed == null)
-				{
-					_electroshockPropagationSpeed = (CFloat) CR2WTypeManager.Create("Float", "electroshockPropagationSpeed", cr2w, this);
-				}
-				return _electroshockPropagationSpeed;
-			}
-			set
-			{
-				if (_electroshockPropagationSpeed == value)
-				{
-					return;
-				}
-				_electroshockPropagationSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _electroshockPropagationSpeed);
+			set => SetProperty(ref _electroshockPropagationSpeed, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("revealPropagationSpeed")] 
 		public CFloat RevealPropagationSpeed
 		{
-			get
-			{
-				if (_revealPropagationSpeed == null)
-				{
-					_revealPropagationSpeed = (CFloat) CR2WTypeManager.Create("Float", "revealPropagationSpeed", cr2w, this);
-				}
-				return _revealPropagationSpeed;
-			}
-			set
-			{
-				if (_revealPropagationSpeed == value)
-				{
-					return;
-				}
-				_revealPropagationSpeed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revealPropagationSpeed);
+			set => SetProperty(ref _revealPropagationSpeed, value);
 		}
 
 		public audioShockwaveGlobalSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

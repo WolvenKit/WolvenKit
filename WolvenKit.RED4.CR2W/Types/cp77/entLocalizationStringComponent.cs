@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Strings")] 
 		public CArray<entLocalizationStringMapEntry> Strings
 		{
-			get
-			{
-				if (_strings == null)
-				{
-					_strings = (CArray<entLocalizationStringMapEntry>) CR2WTypeManager.Create("array:entLocalizationStringMapEntry", "Strings", cr2w, this);
-				}
-				return _strings;
-			}
-			set
-			{
-				if (_strings == value)
-				{
-					return;
-				}
-				_strings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _strings);
+			set => SetProperty(ref _strings, value);
 		}
 
 		public entLocalizationStringComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

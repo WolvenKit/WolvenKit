@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tracks")] 
 		public CArray<CName> Tracks
 		{
-			get
-			{
-				if (_tracks == null)
-				{
-					_tracks = (CArray<CName>) CR2WTypeManager.Create("array:CName", "tracks", cr2w, this);
-				}
-				return _tracks;
-			}
-			set
-			{
-				if (_tracks == value)
-				{
-					return;
-				}
-				_tracks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tracks);
+			set => SetProperty(ref _tracks, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("speaker")] 
 		public CEnum<audioRadioSpeakerType> Speaker
 		{
-			get
-			{
-				if (_speaker == null)
-				{
-					_speaker = (CEnum<audioRadioSpeakerType>) CR2WTypeManager.Create("audioRadioSpeakerType", "speaker", cr2w, this);
-				}
-				return _speaker;
-			}
-			set
-			{
-				if (_speaker == value)
-				{
-					return;
-				}
-				_speaker = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speaker);
+			set => SetProperty(ref _speaker, value);
 		}
 
 		public audioRadioStationMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

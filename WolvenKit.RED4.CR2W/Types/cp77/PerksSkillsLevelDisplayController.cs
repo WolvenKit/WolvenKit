@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("tint")] 
 		public inkWidgetReference Tint
 		{
-			get
-			{
-				if (_tint == null)
-				{
-					_tint = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "tint", cr2w, this);
-				}
-				return _tint;
-			}
-			set
-			{
-				if (_tint == value)
-				{
-					return;
-				}
-				_tint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tint);
+			set => SetProperty(ref _tint, value);
 		}
 
 		public PerksSkillsLevelDisplayController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

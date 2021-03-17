@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("index")] 
 		public CInt32 Index
 		{
-			get
-			{
-				if (_index == null)
-				{
-					_index = (CInt32) CR2WTypeManager.Create("Int32", "index", cr2w, this);
-				}
-				return _index;
-			}
-			set
-			{
-				if (_index == value)
-				{
-					return;
-				}
-				_index = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _index);
+			set => SetProperty(ref _index, value);
 		}
 
 		public PerksMenuProficiencyItemClicked(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("list")] 
 		public CArray<CHandle<LibTreeDefTreeVariable>> List
 		{
-			get
-			{
-				if (_list == null)
-				{
-					_list = (CArray<CHandle<LibTreeDefTreeVariable>>) CR2WTypeManager.Create("array:handle:LibTreeDefTreeVariable", "list", cr2w, this);
-				}
-				return _list;
-			}
-			set
-			{
-				if (_list == value)
-				{
-					return;
-				}
-				_list = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _list);
+			set => SetProperty(ref _list, value);
 		}
 
 		public LibTreeDefTreeVariablesList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

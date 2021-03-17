@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sequence")] 
 		public CArray<CUInt16> Sequence
 		{
-			get
-			{
-				if (_sequence == null)
-				{
-					_sequence = (CArray<CUInt16>) CR2WTypeManager.Create("array:Uint16", "sequence", cr2w, this);
-				}
-				return _sequence;
-			}
-			set
-			{
-				if (_sequence == value)
-				{
-					return;
-				}
-				_sequence = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sequence);
+			set => SetProperty(ref _sequence, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("id")] 
 		public CUInt8 Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CUInt8) CR2WTypeManager.Create("Uint8", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		public gameSmartObjectTransformSequenceDictionaryEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

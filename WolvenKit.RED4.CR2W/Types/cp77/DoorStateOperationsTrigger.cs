@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("triggerData")] 
 		public CHandle<DoorStateOperationTriggerData> TriggerData
 		{
-			get
-			{
-				if (_triggerData == null)
-				{
-					_triggerData = (CHandle<DoorStateOperationTriggerData>) CR2WTypeManager.Create("handle:DoorStateOperationTriggerData", "triggerData", cr2w, this);
-				}
-				return _triggerData;
-			}
-			set
-			{
-				if (_triggerData == value)
-				{
-					return;
-				}
-				_triggerData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggerData);
+			set => SetProperty(ref _triggerData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("wasStateCached")] 
 		public CBool WasStateCached
 		{
-			get
-			{
-				if (_wasStateCached == null)
-				{
-					_wasStateCached = (CBool) CR2WTypeManager.Create("Bool", "wasStateCached", cr2w, this);
-				}
-				return _wasStateCached;
-			}
-			set
-			{
-				if (_wasStateCached == value)
-				{
-					return;
-				}
-				_wasStateCached = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasStateCached);
+			set => SetProperty(ref _wasStateCached, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("cachedState")] 
 		public CEnum<EDoorStatus> CachedState
 		{
-			get
-			{
-				if (_cachedState == null)
-				{
-					_cachedState = (CEnum<EDoorStatus>) CR2WTypeManager.Create("EDoorStatus", "cachedState", cr2w, this);
-				}
-				return _cachedState;
-			}
-			set
-			{
-				if (_cachedState == value)
-				{
-					return;
-				}
-				_cachedState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cachedState);
+			set => SetProperty(ref _cachedState, value);
 		}
 
 		public DoorStateOperationsTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

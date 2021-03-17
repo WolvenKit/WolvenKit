@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("offMeshConnection")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnection
 		{
-			get
-			{
-				if (_offMeshConnection == null)
-				{
-					_offMeshConnection = (CHandle<AIOffMeshConnectionComponent>) CR2WTypeManager.Create("handle:AIOffMeshConnectionComponent", "offMeshConnection", cr2w, this);
-				}
-				return _offMeshConnection;
-			}
-			set
-			{
-				if (_offMeshConnection == value)
-				{
-					return;
-				}
-				_offMeshConnection = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offMeshConnection);
+			set => SetProperty(ref _offMeshConnection, value);
 		}
 
 		public ActivatedDeviceCover(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

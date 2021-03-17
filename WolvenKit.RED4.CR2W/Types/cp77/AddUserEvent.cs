@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("userEntry")] 
 		public SecuritySystemClearanceEntry UserEntry
 		{
-			get
-			{
-				if (_userEntry == null)
-				{
-					_userEntry = (SecuritySystemClearanceEntry) CR2WTypeManager.Create("SecuritySystemClearanceEntry", "userEntry", cr2w, this);
-				}
-				return _userEntry;
-			}
-			set
-			{
-				if (_userEntry == value)
-				{
-					return;
-				}
-				_userEntry = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _userEntry);
+			set => SetProperty(ref _userEntry, value);
 		}
 
 		public AddUserEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

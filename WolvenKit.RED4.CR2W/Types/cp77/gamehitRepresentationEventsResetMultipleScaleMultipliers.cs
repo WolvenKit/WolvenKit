@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("shapeNames")] 
 		public CArray<CName> ShapeNames
 		{
-			get
-			{
-				if (_shapeNames == null)
-				{
-					_shapeNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "shapeNames", cr2w, this);
-				}
-				return _shapeNames;
-			}
-			set
-			{
-				if (_shapeNames == value)
-				{
-					return;
-				}
-				_shapeNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shapeNames);
+			set => SetProperty(ref _shapeNames, value);
 		}
 
 		public gamehitRepresentationEventsResetMultipleScaleMultipliers(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

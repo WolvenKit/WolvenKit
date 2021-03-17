@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bodyPart")] 
 		public CName BodyPart
 		{
-			get
-			{
-				if (_bodyPart == null)
-				{
-					_bodyPart = (CName) CR2WTypeManager.Create("CName", "bodyPart", cr2w, this);
-				}
-				return _bodyPart;
-			}
-			set
-			{
-				if (_bodyPart == value)
-				{
-					return;
-				}
-				_bodyPart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyPart);
+			set => SetProperty(ref _bodyPart, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("woundType")] 
 		public CName WoundType
 		{
-			get
-			{
-				if (_woundType == null)
-				{
-					_woundType = (CName) CR2WTypeManager.Create("CName", "woundType", cr2w, this);
-				}
-				return _woundType;
-			}
-			set
-			{
-				if (_woundType == value)
-				{
-					return;
-				}
-				_woundType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _woundType);
+			set => SetProperty(ref _woundType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hitPosition")] 
 		public Vector3 HitPosition
 		{
-			get
-			{
-				if (_hitPosition == null)
-				{
-					_hitPosition = (Vector3) CR2WTypeManager.Create("Vector3", "hitPosition", cr2w, this);
-				}
-				return _hitPosition;
-			}
-			set
-			{
-				if (_hitPosition == value)
-				{
-					return;
-				}
-				_hitPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitPosition);
+			set => SetProperty(ref _hitPosition, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isCritical")] 
 		public CBool IsCritical
 		{
-			get
-			{
-				if (_isCritical == null)
-				{
-					_isCritical = (CBool) CR2WTypeManager.Create("Bool", "isCritical", cr2w, this);
-				}
-				return _isCritical;
-			}
-			set
-			{
-				if (_isCritical == value)
-				{
-					return;
-				}
-				_isCritical = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isCritical);
+			set => SetProperty(ref _isCritical, value);
 		}
 
 		public DismemberEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

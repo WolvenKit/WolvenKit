@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fact")] 
 		public CName Fact
 		{
-			get
-			{
-				if (_fact == null)
-				{
-					_fact = (CName) CR2WTypeManager.Create("CName", "fact", cr2w, this);
-				}
-				return _fact;
-			}
-			set
-			{
-				if (_fact == value)
-				{
-					return;
-				}
-				_fact = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fact);
+			set => SetProperty(ref _fact, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("value")] 
 		public CInt32 Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CInt32) CR2WTypeManager.Create("Int32", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		public SetFactEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

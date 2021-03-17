@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("attrRef")] 
 		public AIbehaviorDelegateAttrRef AttrRef
 		{
-			get
-			{
-				if (_attrRef == null)
-				{
-					_attrRef = (AIbehaviorDelegateAttrRef) CR2WTypeManager.Create("AIbehaviorDelegateAttrRef", "attrRef", cr2w, this);
-				}
-				return _attrRef;
-			}
-			set
-			{
-				if (_attrRef == value)
-				{
-					return;
-				}
-				_attrRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attrRef);
+			set => SetProperty(ref _attrRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("taskRef")] 
 		public AIbehaviorDelegateTaskRef TaskRef
 		{
-			get
-			{
-				if (_taskRef == null)
-				{
-					_taskRef = (AIbehaviorDelegateTaskRef) CR2WTypeManager.Create("AIbehaviorDelegateTaskRef", "taskRef", cr2w, this);
-				}
-				return _taskRef;
-			}
-			set
-			{
-				if (_taskRef == value)
-				{
-					return;
-				}
-				_taskRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _taskRef);
+			set => SetProperty(ref _taskRef, value);
 		}
 
 		public TestBehaviorDelegateTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

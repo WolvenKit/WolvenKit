@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("e3_lockInReferencePose")] 
 		public CBool E3_lockInReferencePose
 		{
-			get
-			{
-				if (_e3_lockInReferencePose == null)
-				{
-					_e3_lockInReferencePose = (CBool) CR2WTypeManager.Create("Bool", "e3_lockInReferencePose", cr2w, this);
-				}
-				return _e3_lockInReferencePose;
-			}
-			set
-			{
-				if (_e3_lockInReferencePose == value)
-				{
-					return;
-				}
-				_e3_lockInReferencePose = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _e3_lockInReferencePose);
+			set => SetProperty(ref _e3_lockInReferencePose, value);
 		}
 
 		public AnimFeature_DeviceWorkspot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

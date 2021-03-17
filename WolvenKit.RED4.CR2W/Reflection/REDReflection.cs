@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using WolvenKit.RED4.CR2W.Types;
@@ -22,6 +23,29 @@ namespace WolvenKit.RED4.CR2W.Reflection
         #endregion Fields
 
         #region Methods
+
+        public static CVariable GetPropertyByREDName(this CVariable cvar, string propertyName)
+        {
+            foreach (var member in GetMembers(cvar))
+            {
+                var memberInfo = member.GetMemberInfo();
+                if (memberInfo.MemberType != MemberTypes.Property)
+                {
+                    continue;
+                }
+
+                var attr = memberInfo.GetCustomAttribute<REDAttribute>();
+                if (attr == null || attr.Name != propertyName)
+                {
+                    continue;
+                }
+
+                var propertyInfo = (PropertyInfo)member.GetMemberInfo();
+                return (CVariable)propertyInfo.GetMethod.Invoke(cvar, null);
+            }
+
+            return null;
+        }
 
         public static IEnumerable<Member> GetREDBuffers(this CVariable cvar) =>
             GetMembers(cvar)
@@ -88,7 +112,7 @@ namespace WolvenKit.RED4.CR2W.Reflection
 
         private static IEnumerable<Member> GetMembersInternal(CVariable cvar) => cvar.accessor.GetMembers();
 
-        private static string GetREDTypeFroWkitType(string typename) =>
+        private static string GetREDTypeFromWkitType(string typename) =>
             typename switch
             {
                 "CUInt8" => "Uint8",
@@ -163,15 +187,24 @@ namespace WolvenKit.RED4.CR2W.Reflection
                     var v1 = flags.MoveNext() ? flags.Current : 0;
                     return $"static:{v1},{GetREDTypeString(genprop, flags)}";
                 }
+                if (gentype == typeof(curveData<>))
+                {
+                    return $"curveData:{GetREDTypeString(genprop, flags)}";
+                }
+                if (gentype == typeof(multiChannelCurve<>))
+                {
+                    return $"multiChannelCurve:{GetREDTypeString(genprop, flags)}";
+                }
                 if (gentype == typeof(CEnum<>))
                 {
+                    return GetREDTypeString(genprop, flags);
                 }
 
                 return type.GetPrettyGenericTypes();
             }
             else
             {
-                return GetREDTypeFroWkitType(type.Name);
+                return GetREDTypeFromWkitType(type.Name);
             }
         }
 

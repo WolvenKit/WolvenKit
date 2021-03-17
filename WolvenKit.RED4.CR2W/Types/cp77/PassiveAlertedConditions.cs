@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("highLevelCbId")] 
 		public CUInt32 HighLevelCbId
 		{
-			get
-			{
-				if (_highLevelCbId == null)
-				{
-					_highLevelCbId = (CUInt32) CR2WTypeManager.Create("Uint32", "highLevelCbId", cr2w, this);
-				}
-				return _highLevelCbId;
-			}
-			set
-			{
-				if (_highLevelCbId == value)
-				{
-					return;
-				}
-				_highLevelCbId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highLevelCbId);
+			set => SetProperty(ref _highLevelCbId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("delayEvaluationCbId")] 
 		public CUInt32 DelayEvaluationCbId
 		{
-			get
-			{
-				if (_delayEvaluationCbId == null)
-				{
-					_delayEvaluationCbId = (CUInt32) CR2WTypeManager.Create("Uint32", "delayEvaluationCbId", cr2w, this);
-				}
-				return _delayEvaluationCbId;
-			}
-			set
-			{
-				if (_delayEvaluationCbId == value)
-				{
-					return;
-				}
-				_delayEvaluationCbId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _delayEvaluationCbId);
+			set => SetProperty(ref _delayEvaluationCbId, value);
 		}
 
 		public PassiveAlertedConditions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

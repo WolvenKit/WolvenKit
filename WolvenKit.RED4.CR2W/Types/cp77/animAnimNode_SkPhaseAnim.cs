@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("phase")] 
 		public CName Phase
 		{
-			get
-			{
-				if (_phase == null)
-				{
-					_phase = (CName) CR2WTypeManager.Create("CName", "phase", cr2w, this);
-				}
-				return _phase;
-			}
-			set
-			{
-				if (_phase == value)
-				{
-					return;
-				}
-				_phase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _phase);
+			set => SetProperty(ref _phase, value);
 		}
 
 		public animAnimNode_SkPhaseAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

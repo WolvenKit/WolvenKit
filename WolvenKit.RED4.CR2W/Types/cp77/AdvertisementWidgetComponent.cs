@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("format")] 
 		public CEnum<AdvertisementFormat> Format
 		{
-			get
-			{
-				if (_format == null)
-				{
-					_format = (CEnum<AdvertisementFormat>) CR2WTypeManager.Create("AdvertisementFormat", "format", cr2w, this);
-				}
-				return _format;
-			}
-			set
-			{
-				if (_format == value)
-				{
-					return;
-				}
-				_format = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _format);
+			set => SetProperty(ref _format, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("adGroupTDBID")] 
 		public TweakDBID AdGroupTDBID
 		{
-			get
-			{
-				if (_adGroupTDBID == null)
-				{
-					_adGroupTDBID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "adGroupTDBID", cr2w, this);
-				}
-				return _adGroupTDBID;
-			}
-			set
-			{
-				if (_adGroupTDBID == value)
-				{
-					return;
-				}
-				_adGroupTDBID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _adGroupTDBID);
+			set => SetProperty(ref _adGroupTDBID, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("enableOverride")] 
 		public CBool EnableOverride
 		{
-			get
-			{
-				if (_enableOverride == null)
-				{
-					_enableOverride = (CBool) CR2WTypeManager.Create("Bool", "enableOverride", cr2w, this);
-				}
-				return _enableOverride;
-			}
-			set
-			{
-				if (_enableOverride == value)
-				{
-					return;
-				}
-				_enableOverride = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableOverride);
+			set => SetProperty(ref _enableOverride, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("adOverrideTDBID")] 
 		public TweakDBID AdOverrideTDBID
 		{
-			get
-			{
-				if (_adOverrideTDBID == null)
-				{
-					_adOverrideTDBID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "adOverrideTDBID", cr2w, this);
-				}
-				return _adOverrideTDBID;
-			}
-			set
-			{
-				if (_adOverrideTDBID == value)
-				{
-					return;
-				}
-				_adOverrideTDBID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _adOverrideTDBID);
+			set => SetProperty(ref _adOverrideTDBID, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("adVersion")] 
 		public CUInt32 AdVersion
 		{
-			get
-			{
-				if (_adVersion == null)
-				{
-					_adVersion = (CUInt32) CR2WTypeManager.Create("Uint32", "adVersion", cr2w, this);
-				}
-				return _adVersion;
-			}
-			set
-			{
-				if (_adVersion == value)
-				{
-					return;
-				}
-				_adVersion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _adVersion);
+			set => SetProperty(ref _adVersion, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("useOnlyAttachedLights")] 
 		public CBool UseOnlyAttachedLights
 		{
-			get
-			{
-				if (_useOnlyAttachedLights == null)
-				{
-					_useOnlyAttachedLights = (CBool) CR2WTypeManager.Create("Bool", "useOnlyAttachedLights", cr2w, this);
-				}
-				return _useOnlyAttachedLights;
-			}
-			set
-			{
-				if (_useOnlyAttachedLights == value)
-				{
-					return;
-				}
-				_useOnlyAttachedLights = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useOnlyAttachedLights);
+			set => SetProperty(ref _useOnlyAttachedLights, value);
 		}
 
 		public AdvertisementWidgetComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

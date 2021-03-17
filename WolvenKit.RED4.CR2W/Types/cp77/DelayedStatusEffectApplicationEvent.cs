@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("statusEffectEvent")] 
 		public CHandle<gameeventsApplyStatusEffectEvent> StatusEffectEvent
 		{
-			get
-			{
-				if (_statusEffectEvent == null)
-				{
-					_statusEffectEvent = (CHandle<gameeventsApplyStatusEffectEvent>) CR2WTypeManager.Create("handle:gameeventsApplyStatusEffectEvent", "statusEffectEvent", cr2w, this);
-				}
-				return _statusEffectEvent;
-			}
-			set
-			{
-				if (_statusEffectEvent == value)
-				{
-					return;
-				}
-				_statusEffectEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _statusEffectEvent);
+			set => SetProperty(ref _statusEffectEvent, value);
 		}
 
 		public DelayedStatusEffectApplicationEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

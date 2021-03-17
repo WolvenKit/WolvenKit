@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("floatTrack")] 
 		public CInt32 FloatTrack
 		{
-			get
-			{
-				if (_floatTrack == null)
-				{
-					_floatTrack = (CInt32) CR2WTypeManager.Create("Int32", "floatTrack", cr2w, this);
-				}
-				return _floatTrack;
-			}
-			set
-			{
-				if (_floatTrack == value)
-				{
-					return;
-				}
-				_floatTrack = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _floatTrack);
+			set => SetProperty(ref _floatTrack, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("floatTrackIndex")] 
 		public animNamedTrackIndex FloatTrackIndex
 		{
-			get
-			{
-				if (_floatTrackIndex == null)
-				{
-					_floatTrackIndex = (animNamedTrackIndex) CR2WTypeManager.Create("animNamedTrackIndex", "floatTrackIndex", cr2w, this);
-				}
-				return _floatTrackIndex;
-			}
-			set
-			{
-				if (_floatTrackIndex == value)
-				{
-					return;
-				}
-				_floatTrackIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _floatTrackIndex);
+			set => SetProperty(ref _floatTrackIndex, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("outputTransform")] 
 		public CInt16 OutputTransform
 		{
-			get
-			{
-				if (_outputTransform == null)
-				{
-					_outputTransform = (CInt16) CR2WTypeManager.Create("Int16", "outputTransform", cr2w, this);
-				}
-				return _outputTransform;
-			}
-			set
-			{
-				if (_outputTransform == value)
-				{
-					return;
-				}
-				_outputTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outputTransform);
+			set => SetProperty(ref _outputTransform, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("transformIndex")] 
 		public animTransformIndex TransformIndex
 		{
-			get
-			{
-				if (_transformIndex == null)
-				{
-					_transformIndex = (animTransformIndex) CR2WTypeManager.Create("animTransformIndex", "transformIndex", cr2w, this);
-				}
-				return _transformIndex;
-			}
-			set
-			{
-				if (_transformIndex == value)
-				{
-					return;
-				}
-				_transformIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transformIndex);
+			set => SetProperty(ref _transformIndex, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("channel")] 
 		public CEnum<animTransformChannel> Channel
 		{
-			get
-			{
-				if (_channel == null)
-				{
-					_channel = (CEnum<animTransformChannel>) CR2WTypeManager.Create("animTransformChannel", "channel", cr2w, this);
-				}
-				return _channel;
-			}
-			set
-			{
-				if (_channel == value)
-				{
-					return;
-				}
-				_channel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _channel);
+			set => SetProperty(ref _channel, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("mulFactor")] 
 		public CFloat MulFactor
 		{
-			get
-			{
-				if (_mulFactor == null)
-				{
-					_mulFactor = (CFloat) CR2WTypeManager.Create("Float", "mulFactor", cr2w, this);
-				}
-				return _mulFactor;
-			}
-			set
-			{
-				if (_mulFactor == value)
-				{
-					return;
-				}
-				_mulFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mulFactor);
+			set => SetProperty(ref _mulFactor, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get
-			{
-				if (_weight == null)
-				{
-					_weight = (CFloat) CR2WTypeManager.Create("Float", "weight", cr2w, this);
-				}
-				return _weight;
-			}
-			set
-			{
-				if (_weight == value)
-				{
-					return;
-				}
-				_weight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weight);
+			set => SetProperty(ref _weight, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("weightNode")] 
 		public animFloatLink WeightNode
 		{
-			get
-			{
-				if (_weightNode == null)
-				{
-					_weightNode = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "weightNode", cr2w, this);
-				}
-				return _weightNode;
-			}
-			set
-			{
-				if (_weightNode == value)
-				{
-					return;
-				}
-				_weightNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightNode);
+			set => SetProperty(ref _weightNode, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("mulFactorNode")] 
 		public animFloatLink MulFactorNode
 		{
-			get
-			{
-				if (_mulFactorNode == null)
-				{
-					_mulFactorNode = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "mulFactorNode", cr2w, this);
-				}
-				return _mulFactorNode;
-			}
-			set
-			{
-				if (_mulFactorNode == value)
-				{
-					return;
-				}
-				_mulFactorNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mulFactorNode);
+			set => SetProperty(ref _mulFactorNode, value);
 		}
 
 		public animAnimNode_TransformToTrack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

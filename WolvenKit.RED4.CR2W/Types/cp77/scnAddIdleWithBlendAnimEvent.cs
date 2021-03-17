@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("performerId")] 
 		public scnPerformerId PerformerId
 		{
-			get
-			{
-				if (_performerId == null)
-				{
-					_performerId = (scnPerformerId) CR2WTypeManager.Create("scnPerformerId", "performerId", cr2w, this);
-				}
-				return _performerId;
-			}
-			set
-			{
-				if (_performerId == value)
-				{
-					return;
-				}
-				_performerId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _performerId);
+			set => SetProperty(ref _performerId, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("actorComponent")] 
 		public CName ActorComponent
 		{
-			get
-			{
-				if (_actorComponent == null)
-				{
-					_actorComponent = (CName) CR2WTypeManager.Create("CName", "actorComponent", cr2w, this);
-				}
-				return _actorComponent;
-			}
-			set
-			{
-				if (_actorComponent == value)
-				{
-					return;
-				}
-				_actorComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actorComponent);
+			set => SetProperty(ref _actorComponent, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("targetWeight")] 
 		public CFloat TargetWeight
 		{
-			get
-			{
-				if (_targetWeight == null)
-				{
-					_targetWeight = (CFloat) CR2WTypeManager.Create("Float", "targetWeight", cr2w, this);
-				}
-				return _targetWeight;
-			}
-			set
-			{
-				if (_targetWeight == value)
-				{
-					return;
-				}
-				_targetWeight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetWeight);
+			set => SetProperty(ref _targetWeight, value);
 		}
 
 		public scnAddIdleWithBlendAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

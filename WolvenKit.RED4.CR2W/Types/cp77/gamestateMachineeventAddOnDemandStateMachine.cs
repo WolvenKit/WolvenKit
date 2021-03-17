@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stateMachineName")] 
 		public CName StateMachineName
 		{
-			get
-			{
-				if (_stateMachineName == null)
-				{
-					_stateMachineName = (CName) CR2WTypeManager.Create("CName", "stateMachineName", cr2w, this);
-				}
-				return _stateMachineName;
-			}
-			set
-			{
-				if (_stateMachineName == value)
-				{
-					return;
-				}
-				_stateMachineName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stateMachineName);
+			set => SetProperty(ref _stateMachineName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("instanceData")] 
 		public gamestateMachineStateMachineInstanceData InstanceData
 		{
-			get
-			{
-				if (_instanceData == null)
-				{
-					_instanceData = (gamestateMachineStateMachineInstanceData) CR2WTypeManager.Create("gamestateMachineStateMachineInstanceData", "instanceData", cr2w, this);
-				}
-				return _instanceData;
-			}
-			set
-			{
-				if (_instanceData == value)
-				{
-					return;
-				}
-				_instanceData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _instanceData);
+			set => SetProperty(ref _instanceData, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tryHotSwap")] 
 		public CBool TryHotSwap
 		{
-			get
-			{
-				if (_tryHotSwap == null)
-				{
-					_tryHotSwap = (CBool) CR2WTypeManager.Create("Bool", "tryHotSwap", cr2w, this);
-				}
-				return _tryHotSwap;
-			}
-			set
-			{
-				if (_tryHotSwap == value)
-				{
-					return;
-				}
-				_tryHotSwap = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tryHotSwap);
+			set => SetProperty(ref _tryHotSwap, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		public gamestateMachineeventAddOnDemandStateMachine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

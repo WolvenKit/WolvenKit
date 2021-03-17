@@ -24,276 +24,96 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("amountText")] 
 		public inkTextWidgetReference AmountText
 		{
-			get
-			{
-				if (_amountText == null)
-				{
-					_amountText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "amountText", cr2w, this);
-				}
-				return _amountText;
-			}
-			set
-			{
-				if (_amountText == value)
-				{
-					return;
-				}
-				_amountText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _amountText);
+			set => SetProperty(ref _amountText, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("expFill")] 
 		public inkWidgetReference ExpFill
 		{
-			get
-			{
-				if (_expFill == null)
-				{
-					_expFill = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "expFill", cr2w, this);
-				}
-				return _expFill;
-			}
-			set
-			{
-				if (_expFill == value)
-				{
-					return;
-				}
-				_expFill = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _expFill);
+			set => SetProperty(ref _expFill, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("perkHolder")] 
 		public inkWidgetReference PerkHolder
 		{
-			get
-			{
-				if (_perkHolder == null)
-				{
-					_perkHolder = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "perkHolder", cr2w, this);
-				}
-				return _perkHolder;
-			}
-			set
-			{
-				if (_perkHolder == value)
-				{
-					return;
-				}
-				_perkHolder = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _perkHolder);
+			set => SetProperty(ref _perkHolder, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("levelUpAnimation")] 
 		public inkWidgetReference LevelUpAnimation
 		{
-			get
-			{
-				if (_levelUpAnimation == null)
-				{
-					_levelUpAnimation = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "levelUpAnimation", cr2w, this);
-				}
-				return _levelUpAnimation;
-			}
-			set
-			{
-				if (_levelUpAnimation == value)
-				{
-					return;
-				}
-				_levelUpAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelUpAnimation);
+			set => SetProperty(ref _levelUpAnimation, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("expAnimation")] 
 		public inkWidgetReference ExpAnimation
 		{
-			get
-			{
-				if (_expAnimation == null)
-				{
-					_expAnimation = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "expAnimation", cr2w, this);
-				}
-				return _expAnimation;
-			}
-			set
-			{
-				if (_expAnimation == value)
-				{
-					return;
-				}
-				_expAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _expAnimation);
+			set => SetProperty(ref _expAnimation, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("nextLevelText")] 
 		public inkTextWidgetReference NextLevelText
 		{
-			get
-			{
-				if (_nextLevelText == null)
-				{
-					_nextLevelText = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "nextLevelText", cr2w, this);
-				}
-				return _nextLevelText;
-			}
-			set
-			{
-				if (_nextLevelText == value)
-				{
-					return;
-				}
-				_nextLevelText = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nextLevelText);
+			set => SetProperty(ref _nextLevelText, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("expPointText1")] 
 		public inkTextWidgetReference ExpPointText1
 		{
-			get
-			{
-				if (_expPointText1 == null)
-				{
-					_expPointText1 = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "expPointText1", cr2w, this);
-				}
-				return _expPointText1;
-			}
-			set
-			{
-				if (_expPointText1 == value)
-				{
-					return;
-				}
-				_expPointText1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _expPointText1);
+			set => SetProperty(ref _expPointText1, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("expPointText2")] 
 		public inkTextWidgetReference ExpPointText2
 		{
-			get
-			{
-				if (_expPointText2 == null)
-				{
-					_expPointText2 = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "expPointText2", cr2w, this);
-				}
-				return _expPointText2;
-			}
-			set
-			{
-				if (_expPointText2 == value)
-				{
-					return;
-				}
-				_expPointText2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _expPointText2);
+			set => SetProperty(ref _expPointText2, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("levelUpBlackboard")] 
 		public CHandle<gameIBlackboard> LevelUpBlackboard
 		{
-			get
-			{
-				if (_levelUpBlackboard == null)
-				{
-					_levelUpBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "levelUpBlackboard", cr2w, this);
-				}
-				return _levelUpBlackboard;
-			}
-			set
-			{
-				if (_levelUpBlackboard == value)
-				{
-					return;
-				}
-				_levelUpBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _levelUpBlackboard);
+			set => SetProperty(ref _levelUpBlackboard, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("playerLevelUpListener")] 
 		public CUInt32 PlayerLevelUpListener
 		{
-			get
-			{
-				if (_playerLevelUpListener == null)
-				{
-					_playerLevelUpListener = (CUInt32) CR2WTypeManager.Create("Uint32", "playerLevelUpListener", cr2w, this);
-				}
-				return _playerLevelUpListener;
-			}
-			set
-			{
-				if (_playerLevelUpListener == value)
-				{
-					return;
-				}
-				_playerLevelUpListener = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerLevelUpListener);
+			set => SetProperty(ref _playerLevelUpListener, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("isLevelUp")] 
 		public CBool IsLevelUp
 		{
-			get
-			{
-				if (_isLevelUp == null)
-				{
-					_isLevelUp = (CBool) CR2WTypeManager.Create("Bool", "isLevelUp", cr2w, this);
-				}
-				return _isLevelUp;
-			}
-			set
-			{
-				if (_isLevelUp == value)
-				{
-					return;
-				}
-				_isLevelUp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isLevelUp);
+			set => SetProperty(ref _isLevelUp, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("currentExp")] 
 		public CInt32 CurrentExp
 		{
-			get
-			{
-				if (_currentExp == null)
-				{
-					_currentExp = (CInt32) CR2WTypeManager.Create("Int32", "currentExp", cr2w, this);
-				}
-				return _currentExp;
-			}
-			set
-			{
-				if (_currentExp == value)
-				{
-					return;
-				}
-				_currentExp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentExp);
+			set => SetProperty(ref _currentExp, value);
 		}
 
 		public CraftingSkillWidget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

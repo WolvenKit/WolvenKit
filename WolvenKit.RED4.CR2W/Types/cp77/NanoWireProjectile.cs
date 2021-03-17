@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("maxAttackRange")] 
 		public CFloat MaxAttackRange
 		{
-			get
-			{
-				if (_maxAttackRange == null)
-				{
-					_maxAttackRange = (CFloat) CR2WTypeManager.Create("Float", "maxAttackRange", cr2w, this);
-				}
-				return _maxAttackRange;
-			}
-			set
-			{
-				if (_maxAttackRange == value)
-				{
-					return;
-				}
-				_maxAttackRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxAttackRange);
+			set => SetProperty(ref _maxAttackRange, value);
 		}
 
 		[Ordinal(52)] 
 		[RED("launchMode")] 
 		public CEnum<ELaunchMode> LaunchMode
 		{
-			get
-			{
-				if (_launchMode == null)
-				{
-					_launchMode = (CEnum<ELaunchMode>) CR2WTypeManager.Create("ELaunchMode", "launchMode", cr2w, this);
-				}
-				return _launchMode;
-			}
-			set
-			{
-				if (_launchMode == value)
-				{
-					return;
-				}
-				_launchMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _launchMode);
+			set => SetProperty(ref _launchMode, value);
 		}
 
 		public NanoWireProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

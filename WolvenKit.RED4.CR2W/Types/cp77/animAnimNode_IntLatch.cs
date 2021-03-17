@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("input")] 
 		public animIntLink Input
 		{
-			get
-			{
-				if (_input == null)
-				{
-					_input = (animIntLink) CR2WTypeManager.Create("animIntLink", "input", cr2w, this);
-				}
-				return _input;
-			}
-			set
-			{
-				if (_input == value)
-				{
-					return;
-				}
-				_input = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _input);
+			set => SetProperty(ref _input, value);
 		}
 
 		public animAnimNode_IntLatch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

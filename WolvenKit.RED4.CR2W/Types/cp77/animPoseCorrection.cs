@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rbfCoefficient")] 
 		public CFloat RbfCoefficient
 		{
-			get
-			{
-				if (_rbfCoefficient == null)
-				{
-					_rbfCoefficient = (CFloat) CR2WTypeManager.Create("Float", "rbfCoefficient", cr2w, this);
-				}
-				return _rbfCoefficient;
-			}
-			set
-			{
-				if (_rbfCoefficient == value)
-				{
-					return;
-				}
-				_rbfCoefficient = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rbfCoefficient);
+			set => SetProperty(ref _rbfCoefficient, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rbfPowValue")] 
 		public CFloat RbfPowValue
 		{
-			get
-			{
-				if (_rbfPowValue == null)
-				{
-					_rbfPowValue = (CFloat) CR2WTypeManager.Create("Float", "rbfPowValue", cr2w, this);
-				}
-				return _rbfPowValue;
-			}
-			set
-			{
-				if (_rbfPowValue == value)
-				{
-					return;
-				}
-				_rbfPowValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rbfPowValue);
+			set => SetProperty(ref _rbfPowValue, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("compareBones", 4)] 
 		public CStatic<animCompareBone> CompareBones
 		{
-			get
-			{
-				if (_compareBones == null)
-				{
-					_compareBones = (CStatic<animCompareBone>) CR2WTypeManager.Create("static:4,animCompareBone", "compareBones", cr2w, this);
-				}
-				return _compareBones;
-			}
-			set
-			{
-				if (_compareBones == value)
-				{
-					return;
-				}
-				_compareBones = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _compareBones);
+			set => SetProperty(ref _compareBones, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("boneCorrections", 4)] 
 		public CStatic<animBoneCorrection> BoneCorrections
 		{
-			get
-			{
-				if (_boneCorrections == null)
-				{
-					_boneCorrections = (CStatic<animBoneCorrection>) CR2WTypeManager.Create("static:4,animBoneCorrection", "boneCorrections", cr2w, this);
-				}
-				return _boneCorrections;
-			}
-			set
-			{
-				if (_boneCorrections == value)
-				{
-					return;
-				}
-				_boneCorrections = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _boneCorrections);
+			set => SetProperty(ref _boneCorrections, value);
 		}
 
 		public animPoseCorrection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

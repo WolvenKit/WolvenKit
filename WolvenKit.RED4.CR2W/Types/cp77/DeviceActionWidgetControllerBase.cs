@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("actions")] 
 		public CArray<wCHandle<gamedeviceAction>> Actions
 		{
-			get
-			{
-				if (_actions == null)
-				{
-					_actions = (CArray<wCHandle<gamedeviceAction>>) CR2WTypeManager.Create("array:whandle:gamedeviceAction", "actions", cr2w, this);
-				}
-				return _actions;
-			}
-			set
-			{
-				if (_actions == value)
-				{
-					return;
-				}
-				_actions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actions);
+			set => SetProperty(ref _actions, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("actionData")] 
 		public CHandle<ResolveActionData> ActionData
 		{
-			get
-			{
-				if (_actionData == null)
-				{
-					_actionData = (CHandle<ResolveActionData>) CR2WTypeManager.Create("handle:ResolveActionData", "actionData", cr2w, this);
-				}
-				return _actionData;
-			}
-			set
-			{
-				if (_actionData == value)
-				{
-					return;
-				}
-				_actionData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actionData);
+			set => SetProperty(ref _actionData, value);
 		}
 
 		public DeviceActionWidgetControllerBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("initType")] 
 		public CEnum<gameMovingPlatformMovementInitializationType> InitType
 		{
-			get
-			{
-				if (_initType == null)
-				{
-					_initType = (CEnum<gameMovingPlatformMovementInitializationType>) CR2WTypeManager.Create("gameMovingPlatformMovementInitializationType", "initType", cr2w, this);
-				}
-				return _initType;
-			}
-			set
-			{
-				if (_initType == value)
-				{
-					return;
-				}
-				_initType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initType);
+			set => SetProperty(ref _initType, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("initValue")] 
 		public CFloat InitValue
 		{
-			get
-			{
-				if (_initValue == null)
-				{
-					_initValue = (CFloat) CR2WTypeManager.Create("Float", "initValue", cr2w, this);
-				}
-				return _initValue;
-			}
-			set
-			{
-				if (_initValue == value)
-				{
-					return;
-				}
-				_initValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initValue);
+			set => SetProperty(ref _initValue, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("startNode")] 
 		public NodeRef StartNode
 		{
-			get
-			{
-				if (_startNode == null)
-				{
-					_startNode = (NodeRef) CR2WTypeManager.Create("NodeRef", "startNode", cr2w, this);
-				}
-				return _startNode;
-			}
-			set
-			{
-				if (_startNode == value)
-				{
-					return;
-				}
-				_startNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startNode);
+			set => SetProperty(ref _startNode, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("endNode")] 
 		public NodeRef EndNode
 		{
-			get
-			{
-				if (_endNode == null)
-				{
-					_endNode = (NodeRef) CR2WTypeManager.Create("NodeRef", "endNode", cr2w, this);
-				}
-				return _endNode;
-			}
-			set
-			{
-				if (_endNode == value)
-				{
-					return;
-				}
-				_endNode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endNode);
+			set => SetProperty(ref _endNode, value);
 		}
 
 		public gameIMovingPlatformMovementInitData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

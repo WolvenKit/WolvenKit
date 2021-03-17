@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isTinted")] 
 		public CBool IsTinted
 		{
-			get
-			{
-				if (_isTinted == null)
-				{
-					_isTinted = (CBool) CR2WTypeManager.Create("Bool", "isTinted", cr2w, this);
-				}
-				return _isTinted;
-			}
-			set
-			{
-				if (_isTinted == value)
-				{
-					return;
-				}
-				_isTinted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isTinted);
+			set => SetProperty(ref _isTinted, value);
 		}
 
 		[Ordinal(104)] 
 		[RED("useAppearances")] 
 		public CBool UseAppearances
 		{
-			get
-			{
-				if (_useAppearances == null)
-				{
-					_useAppearances = (CBool) CR2WTypeManager.Create("Bool", "useAppearances", cr2w, this);
-				}
-				return _useAppearances;
-			}
-			set
-			{
-				if (_useAppearances == value)
-				{
-					return;
-				}
-				_useAppearances = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useAppearances);
+			set => SetProperty(ref _useAppearances, value);
 		}
 
 		[Ordinal(105)] 
 		[RED("clearAppearance")] 
 		public CName ClearAppearance
 		{
-			get
-			{
-				if (_clearAppearance == null)
-				{
-					_clearAppearance = (CName) CR2WTypeManager.Create("CName", "clearAppearance", cr2w, this);
-				}
-				return _clearAppearance;
-			}
-			set
-			{
-				if (_clearAppearance == value)
-				{
-					return;
-				}
-				_clearAppearance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _clearAppearance);
+			set => SetProperty(ref _clearAppearance, value);
 		}
 
 		[Ordinal(106)] 
 		[RED("tintedAppearance")] 
 		public CName TintedAppearance
 		{
-			get
-			{
-				if (_tintedAppearance == null)
-				{
-					_tintedAppearance = (CName) CR2WTypeManager.Create("CName", "tintedAppearance", cr2w, this);
-				}
-				return _tintedAppearance;
-			}
-			set
-			{
-				if (_tintedAppearance == value)
-				{
-					return;
-				}
-				_tintedAppearance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _tintedAppearance);
+			set => SetProperty(ref _tintedAppearance, value);
 		}
 
 		public DisplayGlassControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

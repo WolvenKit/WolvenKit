@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("gameState")] 
 		public CHandle<gameuiMinigameState> GameState
 		{
-			get
-			{
-				if (_gameState == null)
-				{
-					_gameState = (CHandle<gameuiMinigameState>) CR2WTypeManager.Create("handle:gameuiMinigameState", "gameState", cr2w, this);
-				}
-				return _gameState;
-			}
-			set
-			{
-				if (_gameState == value)
-				{
-					return;
-				}
-				_gameState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameState);
+			set => SetProperty(ref _gameState, value);
 		}
 
 		public gameuiOnHitPlayerEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

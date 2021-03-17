@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animationName")] 
 		public CName AnimationName
 		{
-			get
-			{
-				if (_animationName == null)
-				{
-					_animationName = (CName) CR2WTypeManager.Create("CName", "animationName", cr2w, this);
-				}
-				return _animationName;
-			}
-			set
-			{
-				if (_animationName == value)
-				{
-					return;
-				}
-				_animationName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animationName);
+			set => SetProperty(ref _animationName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useFixedCoordinates")] 
 		public CBool UseFixedCoordinates
 		{
-			get
-			{
-				if (_useFixedCoordinates == null)
-				{
-					_useFixedCoordinates = (CBool) CR2WTypeManager.Create("Bool", "useFixedCoordinates", cr2w, this);
-				}
-				return _useFixedCoordinates;
-			}
-			set
-			{
-				if (_useFixedCoordinates == value)
-				{
-					return;
-				}
-				_useFixedCoordinates = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useFixedCoordinates);
+			set => SetProperty(ref _useFixedCoordinates, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("fixedCoordinates")] 
 		public CArray<CFloat> FixedCoordinates
 		{
-			get
-			{
-				if (_fixedCoordinates == null)
-				{
-					_fixedCoordinates = (CArray<CFloat>) CR2WTypeManager.Create("array:Float", "fixedCoordinates", cr2w, this);
-				}
-				return _fixedCoordinates;
-			}
-			set
-			{
-				if (_fixedCoordinates == value)
-				{
-					return;
-				}
-				_fixedCoordinates = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fixedCoordinates);
+			set => SetProperty(ref _fixedCoordinates, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("useStaticPose")] 
 		public CBool UseStaticPose
 		{
-			get
-			{
-				if (_useStaticPose == null)
-				{
-					_useStaticPose = (CBool) CR2WTypeManager.Create("Bool", "useStaticPose", cr2w, this);
-				}
-				return _useStaticPose;
-			}
-			set
-			{
-				if (_useStaticPose == value)
-				{
-					return;
-				}
-				_useStaticPose = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useStaticPose);
+			set => SetProperty(ref _useStaticPose, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("staticPoseTime")] 
 		public CFloat StaticPoseTime
 		{
-			get
-			{
-				if (_staticPoseTime == null)
-				{
-					_staticPoseTime = (CFloat) CR2WTypeManager.Create("Float", "staticPoseTime", cr2w, this);
-				}
-				return _staticPoseTime;
-			}
-			set
-			{
-				if (_staticPoseTime == value)
-				{
-					return;
-				}
-				_staticPoseTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _staticPoseTime);
+			set => SetProperty(ref _staticPoseTime, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("staticPoseProgress")] 
 		public CFloat StaticPoseProgress
 		{
-			get
-			{
-				if (_staticPoseProgress == null)
-				{
-					_staticPoseProgress = (CFloat) CR2WTypeManager.Create("Float", "staticPoseProgress", cr2w, this);
-				}
-				return _staticPoseProgress;
-			}
-			set
-			{
-				if (_staticPoseProgress == value)
-				{
-					return;
-				}
-				_staticPoseProgress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _staticPoseProgress);
+			set => SetProperty(ref _staticPoseProgress, value);
 		}
 
 		public animAnimNode_BlendSpace_InternalsBlendSpacePoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

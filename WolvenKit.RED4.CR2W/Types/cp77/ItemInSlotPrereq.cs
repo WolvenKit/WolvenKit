@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotID")] 
 		public TweakDBID SlotID
 		{
-			get
-			{
-				if (_slotID == null)
-				{
-					_slotID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "slotID", cr2w, this);
-				}
-				return _slotID;
-			}
-			set
-			{
-				if (_slotID == value)
-				{
-					return;
-				}
-				_slotID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("slotCheckType")] 
 		public CEnum<EItemSlotCheckType> SlotCheckType
 		{
-			get
-			{
-				if (_slotCheckType == null)
-				{
-					_slotCheckType = (CEnum<EItemSlotCheckType>) CR2WTypeManager.Create("EItemSlotCheckType", "slotCheckType", cr2w, this);
-				}
-				return _slotCheckType;
-			}
-			set
-			{
-				if (_slotCheckType == value)
-				{
-					return;
-				}
-				_slotCheckType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotCheckType);
+			set => SetProperty(ref _slotCheckType, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("itemType")] 
 		public CEnum<gamedataItemType> ItemType
 		{
-			get
-			{
-				if (_itemType == null)
-				{
-					_itemType = (CEnum<gamedataItemType>) CR2WTypeManager.Create("gamedataItemType", "itemType", cr2w, this);
-				}
-				return _itemType;
-			}
-			set
-			{
-				if (_itemType == value)
-				{
-					return;
-				}
-				_itemType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemType);
+			set => SetProperty(ref _itemType, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("itemCategory")] 
 		public CEnum<gamedataItemCategory> ItemCategory
 		{
-			get
-			{
-				if (_itemCategory == null)
-				{
-					_itemCategory = (CEnum<gamedataItemCategory>) CR2WTypeManager.Create("gamedataItemCategory", "itemCategory", cr2w, this);
-				}
-				return _itemCategory;
-			}
-			set
-			{
-				if (_itemCategory == value)
-				{
-					return;
-				}
-				_itemCategory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemCategory);
+			set => SetProperty(ref _itemCategory, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("weaponEvolution")] 
 		public CEnum<gamedataWeaponEvolution> WeaponEvolution
 		{
-			get
-			{
-				if (_weaponEvolution == null)
-				{
-					_weaponEvolution = (CEnum<gamedataWeaponEvolution>) CR2WTypeManager.Create("gamedataWeaponEvolution", "weaponEvolution", cr2w, this);
-				}
-				return _weaponEvolution;
-			}
-			set
-			{
-				if (_weaponEvolution == value)
-				{
-					return;
-				}
-				_weaponEvolution = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponEvolution);
+			set => SetProperty(ref _weaponEvolution, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("itemTag")] 
 		public CName ItemTag
 		{
-			get
-			{
-				if (_itemTag == null)
-				{
-					_itemTag = (CName) CR2WTypeManager.Create("CName", "itemTag", cr2w, this);
-				}
-				return _itemTag;
-			}
-			set
-			{
-				if (_itemTag == value)
-				{
-					return;
-				}
-				_itemTag = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemTag);
+			set => SetProperty(ref _itemTag, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("invert")] 
 		public CBool Invert
 		{
-			get
-			{
-				if (_invert == null)
-				{
-					_invert = (CBool) CR2WTypeManager.Create("Bool", "invert", cr2w, this);
-				}
-				return _invert;
-			}
-			set
-			{
-				if (_invert == value)
-				{
-					return;
-				}
-				_invert = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _invert);
+			set => SetProperty(ref _invert, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("skipOnApply")] 
 		public CBool SkipOnApply
 		{
-			get
-			{
-				if (_skipOnApply == null)
-				{
-					_skipOnApply = (CBool) CR2WTypeManager.Create("Bool", "skipOnApply", cr2w, this);
-				}
-				return _skipOnApply;
-			}
-			set
-			{
-				if (_skipOnApply == value)
-				{
-					return;
-				}
-				_skipOnApply = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skipOnApply);
+			set => SetProperty(ref _skipOnApply, value);
 		}
 
 		public ItemInSlotPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

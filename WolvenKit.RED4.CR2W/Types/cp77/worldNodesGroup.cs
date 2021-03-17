@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CName Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CName) CR2WTypeManager.Create("CName", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("id")] 
 		public CUInt64 Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CUInt64) CR2WTypeManager.Create("Uint64", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("groupUniqueId")] 
 		public CRUID GroupUniqueId
 		{
-			get
-			{
-				if (_groupUniqueId == null)
-				{
-					_groupUniqueId = (CRUID) CR2WTypeManager.Create("CRUID", "groupUniqueId", cr2w, this);
-				}
-				return _groupUniqueId;
-			}
-			set
-			{
-				if (_groupUniqueId == value)
-				{
-					return;
-				}
-				_groupUniqueId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _groupUniqueId);
+			set => SetProperty(ref _groupUniqueId, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("nodes")] 
 		public CArray<CHandle<worldNode>> Nodes
 		{
-			get
-			{
-				if (_nodes == null)
-				{
-					_nodes = (CArray<CHandle<worldNode>>) CR2WTypeManager.Create("array:handle:worldNode", "nodes", cr2w, this);
-				}
-				return _nodes;
-			}
-			set
-			{
-				if (_nodes == value)
-				{
-					return;
-				}
-				_nodes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodes);
+			set => SetProperty(ref _nodes, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("subGroups")] 
 		public CArray<CHandle<worldNodesGroup>> SubGroups
 		{
-			get
-			{
-				if (_subGroups == null)
-				{
-					_subGroups = (CArray<CHandle<worldNodesGroup>>) CR2WTypeManager.Create("array:handle:worldNodesGroup", "subGroups", cr2w, this);
-				}
-				return _subGroups;
-			}
-			set
-			{
-				if (_subGroups == value)
-				{
-					return;
-				}
-				_subGroups = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subGroups);
+			set => SetProperty(ref _subGroups, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("type")] 
 		public CEnum<worldNodeGroupType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<worldNodeGroupType>) CR2WTypeManager.Create("worldNodeGroupType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("keepPosition")] 
 		public CBool KeepPosition
 		{
-			get
-			{
-				if (_keepPosition == null)
-				{
-					_keepPosition = (CBool) CR2WTypeManager.Create("Bool", "keepPosition", cr2w, this);
-				}
-				return _keepPosition;
-			}
-			set
-			{
-				if (_keepPosition == value)
-				{
-					return;
-				}
-				_keepPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _keepPosition);
+			set => SetProperty(ref _keepPosition, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("transform")] 
 		public Transform Transform
 		{
-			get
-			{
-				if (_transform == null)
-				{
-					_transform = (Transform) CR2WTypeManager.Create("Transform", "transform", cr2w, this);
-				}
-				return _transform;
-			}
-			set
-			{
-				if (_transform == value)
-				{
-					return;
-				}
-				_transform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transform);
+			set => SetProperty(ref _transform, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("transformCalculated")] 
 		public CBool TransformCalculated
 		{
-			get
-			{
-				if (_transformCalculated == null)
-				{
-					_transformCalculated = (CBool) CR2WTypeManager.Create("Bool", "transformCalculated", cr2w, this);
-				}
-				return _transformCalculated;
-			}
-			set
-			{
-				if (_transformCalculated == value)
-				{
-					return;
-				}
-				_transformCalculated = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transformCalculated);
+			set => SetProperty(ref _transformCalculated, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("customPivotOffset")] 
 		public Transform CustomPivotOffset
 		{
-			get
-			{
-				if (_customPivotOffset == null)
-				{
-					_customPivotOffset = (Transform) CR2WTypeManager.Create("Transform", "customPivotOffset", cr2w, this);
-				}
-				return _customPivotOffset;
-			}
-			set
-			{
-				if (_customPivotOffset == value)
-				{
-					return;
-				}
-				_customPivotOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customPivotOffset);
+			set => SetProperty(ref _customPivotOffset, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("proxyMeshGroupBuildParams")] 
 		public worldProxyMeshGroupBuildParams ProxyMeshGroupBuildParams
 		{
-			get
-			{
-				if (_proxyMeshGroupBuildParams == null)
-				{
-					_proxyMeshGroupBuildParams = (worldProxyMeshGroupBuildParams) CR2WTypeManager.Create("worldProxyMeshGroupBuildParams", "proxyMeshGroupBuildParams", cr2w, this);
-				}
-				return _proxyMeshGroupBuildParams;
-			}
-			set
-			{
-				if (_proxyMeshGroupBuildParams == value)
-				{
-					return;
-				}
-				_proxyMeshGroupBuildParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _proxyMeshGroupBuildParams);
+			set => SetProperty(ref _proxyMeshGroupBuildParams, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("proxyMesh")] 
 		public raRef<CMesh> ProxyMesh
 		{
-			get
-			{
-				if (_proxyMesh == null)
-				{
-					_proxyMesh = (raRef<CMesh>) CR2WTypeManager.Create("raRef:CMesh", "proxyMesh", cr2w, this);
-				}
-				return _proxyMesh;
-			}
-			set
-			{
-				if (_proxyMesh == value)
-				{
-					return;
-				}
-				_proxyMesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _proxyMesh);
+			set => SetProperty(ref _proxyMesh, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("proxyDistanceFactor")] 
 		public CFloat ProxyDistanceFactor
 		{
-			get
-			{
-				if (_proxyDistanceFactor == null)
-				{
-					_proxyDistanceFactor = (CFloat) CR2WTypeManager.Create("Float", "proxyDistanceFactor", cr2w, this);
-				}
-				return _proxyDistanceFactor;
-			}
-			set
-			{
-				if (_proxyDistanceFactor == value)
-				{
-					return;
-				}
-				_proxyDistanceFactor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _proxyDistanceFactor);
+			set => SetProperty(ref _proxyDistanceFactor, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("metadataArray")] 
 		public CArray<CHandle<worldPrefabMetadata>> MetadataArray
 		{
-			get
-			{
-				if (_metadataArray == null)
-				{
-					_metadataArray = (CArray<CHandle<worldPrefabMetadata>>) CR2WTypeManager.Create("array:handle:worldPrefabMetadata", "metadataArray", cr2w, this);
-				}
-				return _metadataArray;
-			}
-			set
-			{
-				if (_metadataArray == value)
-				{
-					return;
-				}
-				_metadataArray = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _metadataArray);
+			set => SetProperty(ref _metadataArray, value);
 		}
 
 		public worldNodesGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

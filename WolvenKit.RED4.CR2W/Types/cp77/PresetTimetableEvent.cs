@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("arrayPosition")] 
 		public CInt32 ArrayPosition
 		{
-			get
-			{
-				if (_arrayPosition == null)
-				{
-					_arrayPosition = (CInt32) CR2WTypeManager.Create("Int32", "arrayPosition", cr2w, this);
-				}
-				return _arrayPosition;
-			}
-			set
-			{
-				if (_arrayPosition == value)
-				{
-					return;
-				}
-				_arrayPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _arrayPosition);
+			set => SetProperty(ref _arrayPosition, value);
 		}
 
 		public PresetTimetableEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

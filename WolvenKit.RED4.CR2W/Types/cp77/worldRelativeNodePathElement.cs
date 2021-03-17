@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("prefab")] 
 		public CString Prefab
 		{
-			get
-			{
-				if (_prefab == null)
-				{
-					_prefab = (CString) CR2WTypeManager.Create("String", "prefab", cr2w, this);
-				}
-				return _prefab;
-			}
-			set
-			{
-				if (_prefab == value)
-				{
-					return;
-				}
-				_prefab = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prefab);
+			set => SetProperty(ref _prefab, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("nodeID")] 
 		public CUInt64 NodeID
 		{
-			get
-			{
-				if (_nodeID == null)
-				{
-					_nodeID = (CUInt64) CR2WTypeManager.Create("Uint64", "nodeID", cr2w, this);
-				}
-				return _nodeID;
-			}
-			set
-			{
-				if (_nodeID == value)
-				{
-					return;
-				}
-				_nodeID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeID);
+			set => SetProperty(ref _nodeID, value);
 		}
 
 		public worldRelativeNodePathElement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("lethal")] 
 		public CBool Lethal
 		{
-			get
-			{
-				if (_lethal == null)
-				{
-					_lethal = (CBool) CR2WTypeManager.Create("Bool", "lethal", cr2w, this);
-				}
-				return _lethal;
-			}
-			set
-			{
-				if (_lethal == value)
-				{
-					return;
-				}
-				_lethal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lethal);
+			set => SetProperty(ref _lethal, value);
 		}
 
 		public questVehicleCrowdHit_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

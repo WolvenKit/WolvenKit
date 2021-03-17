@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("slotId")] 
 		public TweakDBID SlotId
 		{
-			get
-			{
-				if (_slotId == null)
-				{
-					_slotId = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "slotId", cr2w, this);
-				}
-				return _slotId;
-			}
-			set
-			{
-				if (_slotId == value)
-				{
-					return;
-				}
-				_slotId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotId);
+			set => SetProperty(ref _slotId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemId")] 
 		public gameItemID ItemId
 		{
-			get
-			{
-				if (_itemId == null)
-				{
-					_itemId = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemId", cr2w, this);
-				}
-				return _itemId;
-			}
-			set
-			{
-				if (_itemId == value)
-				{
-					return;
-				}
-				_itemId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemId);
+			set => SetProperty(ref _itemId, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("startingRenderingPlane")] 
 		public CEnum<ERenderingPlane> StartingRenderingPlane
 		{
-			get
-			{
-				if (_startingRenderingPlane == null)
-				{
-					_startingRenderingPlane = (CEnum<ERenderingPlane>) CR2WTypeManager.Create("ERenderingPlane", "startingRenderingPlane", cr2w, this);
-				}
-				return _startingRenderingPlane;
-			}
-			set
-			{
-				if (_startingRenderingPlane == value)
-				{
-					return;
-				}
-				_startingRenderingPlane = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startingRenderingPlane);
+			set => SetProperty(ref _startingRenderingPlane, value);
 		}
 
 		public gamestateMachineparameterTypeItemEquipRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

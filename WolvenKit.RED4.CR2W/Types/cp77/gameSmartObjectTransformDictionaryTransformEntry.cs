@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("transform")] 
 		public Transform Transform
 		{
-			get
-			{
-				if (_transform == null)
-				{
-					_transform = (Transform) CR2WTypeManager.Create("Transform", "transform", cr2w, this);
-				}
-				return _transform;
-			}
-			set
-			{
-				if (_transform == value)
-				{
-					return;
-				}
-				_transform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transform);
+			set => SetProperty(ref _transform, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("usage")] 
 		public CUInt32 Usage
 		{
-			get
-			{
-				if (_usage == null)
-				{
-					_usage = (CUInt32) CR2WTypeManager.Create("Uint32", "usage", cr2w, this);
-				}
-				return _usage;
-			}
-			set
-			{
-				if (_usage == value)
-				{
-					return;
-				}
-				_usage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _usage);
+			set => SetProperty(ref _usage, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("id")] 
 		public CUInt16 Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (CUInt16) CR2WTypeManager.Create("Uint16", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		public gameSmartObjectTransformDictionaryTransformEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

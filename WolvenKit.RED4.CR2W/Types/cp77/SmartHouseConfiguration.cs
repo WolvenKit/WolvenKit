@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("enableInteraction")] 
 		public CBool EnableInteraction
 		{
-			get
-			{
-				if (_enableInteraction == null)
-				{
-					_enableInteraction = (CBool) CR2WTypeManager.Create("Bool", "enableInteraction", cr2w, this);
-				}
-				return _enableInteraction;
-			}
-			set
-			{
-				if (_enableInteraction == value)
-				{
-					return;
-				}
-				_enableInteraction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enableInteraction);
+			set => SetProperty(ref _enableInteraction, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("factName")] 
 		public CName FactName
 		{
-			get
-			{
-				if (_factName == null)
-				{
-					_factName = (CName) CR2WTypeManager.Create("CName", "factName", cr2w, this);
-				}
-				return _factName;
-			}
-			set
-			{
-				if (_factName == value)
-				{
-					return;
-				}
-				_factName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factName);
+			set => SetProperty(ref _factName, value);
 		}
 
 		public SmartHouseConfiguration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

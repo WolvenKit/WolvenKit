@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("resource")] 
 		public rRef<gameSmartObjectResource> Resource
 		{
-			get
-			{
-				if (_resource == null)
-				{
-					_resource = (rRef<gameSmartObjectResource>) CR2WTypeManager.Create("rRef:gameSmartObjectResource", "resource", cr2w, this);
-				}
-				return _resource;
-			}
-			set
-			{
-				if (_resource == value)
-				{
-					return;
-				}
-				_resource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resource);
+			set => SetProperty(ref _resource, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("actions")] 
 		public CArray<CName> Actions
 		{
-			get
-			{
-				if (_actions == null)
-				{
-					_actions = (CArray<CName>) CR2WTypeManager.Create("array:CName", "actions", cr2w, this);
-				}
-				return _actions;
-			}
-			set
-			{
-				if (_actions == value)
-				{
-					return;
-				}
-				_actions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _actions);
+			set => SetProperty(ref _actions, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("motionActionDatabase")] 
 		public rRef<animActionAnimDatabase> MotionActionDatabase
 		{
-			get
-			{
-				if (_motionActionDatabase == null)
-				{
-					_motionActionDatabase = (rRef<animActionAnimDatabase>) CR2WTypeManager.Create("rRef:animActionAnimDatabase", "motionActionDatabase", cr2w, this);
-				}
-				return _motionActionDatabase;
-			}
-			set
-			{
-				if (_motionActionDatabase == value)
-				{
-					return;
-				}
-				_motionActionDatabase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _motionActionDatabase);
+			set => SetProperty(ref _motionActionDatabase, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("enabled")] 
 		public CBool Enabled
 		{
-			get
-			{
-				if (_enabled == null)
-				{
-					_enabled = (CBool) CR2WTypeManager.Create("Bool", "enabled", cr2w, this);
-				}
-				return _enabled;
-			}
-			set
-			{
-				if (_enabled == value)
-				{
-					return;
-				}
-				_enabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _enabled);
+			set => SetProperty(ref _enabled, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("overrideGeneratedParameters")] 
 		public CBool OverrideGeneratedParameters
 		{
-			get
-			{
-				if (_overrideGeneratedParameters == null)
-				{
-					_overrideGeneratedParameters = (CBool) CR2WTypeManager.Create("Bool", "overrideGeneratedParameters", cr2w, this);
-				}
-				return _overrideGeneratedParameters;
-			}
-			set
-			{
-				if (_overrideGeneratedParameters == value)
-				{
-					return;
-				}
-				_overrideGeneratedParameters = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _overrideGeneratedParameters);
+			set => SetProperty(ref _overrideGeneratedParameters, value);
 		}
 
 		public gameSmartObjectDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

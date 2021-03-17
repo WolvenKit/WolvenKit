@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ItemModSystemUpdated")] 
 		public gamebbScriptID_Variant ItemModSystemUpdated
 		{
-			get
-			{
-				if (_itemModSystemUpdated == null)
-				{
-					_itemModSystemUpdated = (gamebbScriptID_Variant) CR2WTypeManager.Create("gamebbScriptID_Variant", "ItemModSystemUpdated", cr2w, this);
-				}
-				return _itemModSystemUpdated;
-			}
-			set
-			{
-				if (_itemModSystemUpdated == value)
-				{
-					return;
-				}
-				_itemModSystemUpdated = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemModSystemUpdated);
+			set => SetProperty(ref _itemModSystemUpdated, value);
 		}
 
 		public UI_ItemModSystemDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

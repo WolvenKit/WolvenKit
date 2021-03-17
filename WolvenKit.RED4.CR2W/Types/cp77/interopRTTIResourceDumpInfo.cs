@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("extension")] 
 		public CString Extension
 		{
-			get
-			{
-				if (_extension == null)
-				{
-					_extension = (CString) CR2WTypeManager.Create("String", "extension", cr2w, this);
-				}
-				return _extension;
-			}
-			set
-			{
-				if (_extension == value)
-				{
-					return;
-				}
-				_extension = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _extension);
+			set => SetProperty(ref _extension, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("deprecatedExtension")] 
 		public CString DeprecatedExtension
 		{
-			get
-			{
-				if (_deprecatedExtension == null)
-				{
-					_deprecatedExtension = (CString) CR2WTypeManager.Create("String", "deprecatedExtension", cr2w, this);
-				}
-				return _deprecatedExtension;
-			}
-			set
-			{
-				if (_deprecatedExtension == value)
-				{
-					return;
-				}
-				_deprecatedExtension = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deprecatedExtension);
+			set => SetProperty(ref _deprecatedExtension, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("friendlyDescription")] 
 		public CString FriendlyDescription
 		{
-			get
-			{
-				if (_friendlyDescription == null)
-				{
-					_friendlyDescription = (CString) CR2WTypeManager.Create("String", "friendlyDescription", cr2w, this);
-				}
-				return _friendlyDescription;
-			}
-			set
-			{
-				if (_friendlyDescription == value)
-				{
-					return;
-				}
-				_friendlyDescription = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _friendlyDescription);
+			set => SetProperty(ref _friendlyDescription, value);
 		}
 
 		public interopRTTIResourceDumpInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

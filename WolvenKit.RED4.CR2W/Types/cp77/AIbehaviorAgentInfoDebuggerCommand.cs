@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entityId")] 
 		public entEntityID EntityId
 		{
-			get
-			{
-				if (_entityId == null)
-				{
-					_entityId = (entEntityID) CR2WTypeManager.Create("entEntityID", "entityId", cr2w, this);
-				}
-				return _entityId;
-			}
-			set
-			{
-				if (_entityId == value)
-				{
-					return;
-				}
-				_entityId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityId);
+			set => SetProperty(ref _entityId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("agentName")] 
 		public CString AgentName
 		{
-			get
-			{
-				if (_agentName == null)
-				{
-					_agentName = (CString) CR2WTypeManager.Create("String", "agentName", cr2w, this);
-				}
-				return _agentName;
-			}
-			set
-			{
-				if (_agentName == value)
-				{
-					return;
-				}
-				_agentName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _agentName);
+			set => SetProperty(ref _agentName, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isSelected")] 
 		public CBool IsSelected
 		{
-			get
-			{
-				if (_isSelected == null)
-				{
-					_isSelected = (CBool) CR2WTypeManager.Create("Bool", "isSelected", cr2w, this);
-				}
-				return _isSelected;
-			}
-			set
-			{
-				if (_isSelected == value)
-				{
-					return;
-				}
-				_isSelected = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isSelected);
+			set => SetProperty(ref _isSelected, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("entries")] 
 		public CArray<AIbehaviorAgentInfoDebuggerCommandEntry> Entries
 		{
-			get
-			{
-				if (_entries == null)
-				{
-					_entries = (CArray<AIbehaviorAgentInfoDebuggerCommandEntry>) CR2WTypeManager.Create("array:AIbehaviorAgentInfoDebuggerCommandEntry", "entries", cr2w, this);
-				}
-				return _entries;
-			}
-			set
-			{
-				if (_entries == value)
-				{
-					return;
-				}
-				_entries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
 		}
 
 		public AIbehaviorAgentInfoDebuggerCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

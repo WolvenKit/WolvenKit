@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("canHaveObjectMarker")] 
 		public CBool CanHaveObjectMarker
 		{
-			get
-			{
-				if (_canHaveObjectMarker == null)
-				{
-					_canHaveObjectMarker = (CBool) CR2WTypeManager.Create("Bool", "canHaveObjectMarker", cr2w, this);
-				}
-				return _canHaveObjectMarker;
-			}
-			set
-			{
-				if (_canHaveObjectMarker == value)
-				{
-					return;
-				}
-				_canHaveObjectMarker = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _canHaveObjectMarker);
+			set => SetProperty(ref _canHaveObjectMarker, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isVisible")] 
 		public CBool IsVisible
 		{
-			get
-			{
-				if (_isVisible == null)
-				{
-					_isVisible = (CBool) CR2WTypeManager.Create("Bool", "isVisible", cr2w, this);
-				}
-				return _isVisible;
-			}
-			set
-			{
-				if (_isVisible == value)
-				{
-					return;
-				}
-				_isVisible = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isVisible);
+			set => SetProperty(ref _isVisible, value);
 		}
 
 		public gameeventsObjectMarkerVisibilityUpdated(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("damagePreview")] 
 		public CHandle<DamagePreviewController> DamagePreview
 		{
-			get
-			{
-				if (_damagePreview == null)
-				{
-					_damagePreview = (CHandle<DamagePreviewController>) CR2WTypeManager.Create("handle:DamagePreviewController", "damagePreview", cr2w, this);
-				}
-				return _damagePreview;
-			}
-			set
-			{
-				if (_damagePreview == value)
-				{
-					return;
-				}
-				_damagePreview = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damagePreview);
+			set => SetProperty(ref _damagePreview, value);
 		}
 
 		public NameplateBarLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

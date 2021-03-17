@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("preset")] 
 		public CEnum<questCameraPlanesPreset> Preset
 		{
-			get
-			{
-				if (_preset == null)
-				{
-					_preset = (CEnum<questCameraPlanesPreset>) CR2WTypeManager.Create("questCameraPlanesPreset", "preset", cr2w, this);
-				}
-				return _preset;
-			}
-			set
-			{
-				if (_preset == value)
-				{
-					return;
-				}
-				_preset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _preset);
+			set => SetProperty(ref _preset, value);
 		}
 
 		public questCameraClippingPlane_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("spawnerRef")] 
 		public NodeRef SpawnerRef
 		{
-			get
-			{
-				if (_spawnerRef == null)
-				{
-					_spawnerRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "spawnerRef", cr2w, this);
-				}
-				return _spawnerRef;
-			}
-			set
-			{
-				if (_spawnerRef == value)
-				{
-					return;
-				}
-				_spawnerRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnerRef);
+			set => SetProperty(ref _spawnerRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entryID")] 
 		public CName EntryID
 		{
-			get
-			{
-				if (_entryID == null)
-				{
-					_entryID = (CName) CR2WTypeManager.Create("CName", "entryID", cr2w, this);
-				}
-				return _entryID;
-			}
-			set
-			{
-				if (_entryID == value)
-				{
-					return;
-				}
-				_entryID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entryID);
+			set => SetProperty(ref _entryID, value);
 		}
 
 		public StimTargetData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

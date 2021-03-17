@@ -24,276 +24,96 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("investigationSpots")] 
 		public CArray<Vector4> InvestigationSpots
 		{
-			get
-			{
-				if (_investigationSpots == null)
-				{
-					_investigationSpots = (CArray<Vector4>) CR2WTypeManager.Create("array:Vector4", "investigationSpots", cr2w, this);
-				}
-				return _investigationSpots;
-			}
-			set
-			{
-				if (_investigationSpots == value)
-				{
-					return;
-				}
-				_investigationSpots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _investigationSpots);
+			set => SetProperty(ref _investigationSpots, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("investigateController")] 
 		public CBool InvestigateController
 		{
-			get
-			{
-				if (_investigateController == null)
-				{
-					_investigateController = (CBool) CR2WTypeManager.Create("Bool", "investigateController", cr2w, this);
-				}
-				return _investigateController;
-			}
-			set
-			{
-				if (_investigateController == value)
-				{
-					return;
-				}
-				_investigateController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _investigateController);
+			set => SetProperty(ref _investigateController, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("controllerEntity")] 
 		public wCHandle<entEntity> ControllerEntity
 		{
-			get
-			{
-				if (_controllerEntity == null)
-				{
-					_controllerEntity = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "controllerEntity", cr2w, this);
-				}
-				return _controllerEntity;
-			}
-			set
-			{
-				if (_controllerEntity == value)
-				{
-					return;
-				}
-				_controllerEntity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _controllerEntity);
+			set => SetProperty(ref _controllerEntity, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("mainDeviceEntity")] 
 		public wCHandle<entEntity> MainDeviceEntity
 		{
-			get
-			{
-				if (_mainDeviceEntity == null)
-				{
-					_mainDeviceEntity = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "mainDeviceEntity", cr2w, this);
-				}
-				return _mainDeviceEntity;
-			}
-			set
-			{
-				if (_mainDeviceEntity == value)
-				{
-					return;
-				}
-				_mainDeviceEntity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mainDeviceEntity);
+			set => SetProperty(ref _mainDeviceEntity, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("distrationPoint")] 
 		public Vector4 DistrationPoint
 		{
-			get
-			{
-				if (_distrationPoint == null)
-				{
-					_distrationPoint = (Vector4) CR2WTypeManager.Create("Vector4", "distrationPoint", cr2w, this);
-				}
-				return _distrationPoint;
-			}
-			set
-			{
-				if (_distrationPoint == value)
-				{
-					return;
-				}
-				_distrationPoint = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distrationPoint);
+			set => SetProperty(ref _distrationPoint, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("attackInstigator")] 
 		public wCHandle<entEntity> AttackInstigator
 		{
-			get
-			{
-				if (_attackInstigator == null)
-				{
-					_attackInstigator = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "attackInstigator", cr2w, this);
-				}
-				return _attackInstigator;
-			}
-			set
-			{
-				if (_attackInstigator == value)
-				{
-					return;
-				}
-				_attackInstigator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackInstigator);
+			set => SetProperty(ref _attackInstigator, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("attackInstigatorPosition")] 
 		public Vector4 AttackInstigatorPosition
 		{
-			get
-			{
-				if (_attackInstigatorPosition == null)
-				{
-					_attackInstigatorPosition = (Vector4) CR2WTypeManager.Create("Vector4", "attackInstigatorPosition", cr2w, this);
-				}
-				return _attackInstigatorPosition;
-			}
-			set
-			{
-				if (_attackInstigatorPosition == value)
-				{
-					return;
-				}
-				_attackInstigatorPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attackInstigatorPosition);
+			set => SetProperty(ref _attackInstigatorPosition, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("revealsInstigatorPosition")] 
 		public CBool RevealsInstigatorPosition
 		{
-			get
-			{
-				if (_revealsInstigatorPosition == null)
-				{
-					_revealsInstigatorPosition = (CBool) CR2WTypeManager.Create("Bool", "revealsInstigatorPosition", cr2w, this);
-				}
-				return _revealsInstigatorPosition;
-			}
-			set
-			{
-				if (_revealsInstigatorPosition == value)
-				{
-					return;
-				}
-				_revealsInstigatorPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _revealsInstigatorPosition);
+			set => SetProperty(ref _revealsInstigatorPosition, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("illegalAction")] 
 		public CBool IllegalAction
 		{
-			get
-			{
-				if (_illegalAction == null)
-				{
-					_illegalAction = (CBool) CR2WTypeManager.Create("Bool", "illegalAction", cr2w, this);
-				}
-				return _illegalAction;
-			}
-			set
-			{
-				if (_illegalAction == value)
-				{
-					return;
-				}
-				_illegalAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _illegalAction);
+			set => SetProperty(ref _illegalAction, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("fearPhase")] 
 		public CInt32 FearPhase
 		{
-			get
-			{
-				if (_fearPhase == null)
-				{
-					_fearPhase = (CInt32) CR2WTypeManager.Create("Int32", "fearPhase", cr2w, this);
-				}
-				return _fearPhase;
-			}
-			set
-			{
-				if (_fearPhase == value)
-				{
-					return;
-				}
-				_fearPhase = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fearPhase);
+			set => SetProperty(ref _fearPhase, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("skipReactionDelay")] 
 		public CBool SkipReactionDelay
 		{
-			get
-			{
-				if (_skipReactionDelay == null)
-				{
-					_skipReactionDelay = (CBool) CR2WTypeManager.Create("Bool", "skipReactionDelay", cr2w, this);
-				}
-				return _skipReactionDelay;
-			}
-			set
-			{
-				if (_skipReactionDelay == value)
-				{
-					return;
-				}
-				_skipReactionDelay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skipReactionDelay);
+			set => SetProperty(ref _skipReactionDelay, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("skipInitialAnimation")] 
 		public CBool SkipInitialAnimation
 		{
-			get
-			{
-				if (_skipInitialAnimation == null)
-				{
-					_skipInitialAnimation = (CBool) CR2WTypeManager.Create("Bool", "skipInitialAnimation", cr2w, this);
-				}
-				return _skipInitialAnimation;
-			}
-			set
-			{
-				if (_skipInitialAnimation == value)
-				{
-					return;
-				}
-				_skipInitialAnimation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skipInitialAnimation);
+			set => SetProperty(ref _skipInitialAnimation, value);
 		}
 
 		public stimInvestigateData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

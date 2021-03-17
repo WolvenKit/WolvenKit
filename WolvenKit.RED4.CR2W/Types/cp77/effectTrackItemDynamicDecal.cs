@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("material")] 
 		public rRef<IMaterial> Material
 		{
-			get
-			{
-				if (_material == null)
-				{
-					_material = (rRef<IMaterial>) CR2WTypeManager.Create("rRef:IMaterial", "material", cr2w, this);
-				}
-				return _material;
-			}
-			set
-			{
-				if (_material == value)
-				{
-					return;
-				}
-				_material = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _material);
+			set => SetProperty(ref _material, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("width")] 
 		public CFloat Width
 		{
-			get
-			{
-				if (_width == null)
-				{
-					_width = (CFloat) CR2WTypeManager.Create("Float", "width", cr2w, this);
-				}
-				return _width;
-			}
-			set
-			{
-				if (_width == value)
-				{
-					return;
-				}
-				_width = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _width);
+			set => SetProperty(ref _width, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("height")] 
 		public CFloat Height
 		{
-			get
-			{
-				if (_height == null)
-				{
-					_height = (CFloat) CR2WTypeManager.Create("Float", "height", cr2w, this);
-				}
-				return _height;
-			}
-			set
-			{
-				if (_height == value)
-				{
-					return;
-				}
-				_height = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _height);
+			set => SetProperty(ref _height, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("fadeInTime")] 
 		public CFloat FadeInTime
 		{
-			get
-			{
-				if (_fadeInTime == null)
-				{
-					_fadeInTime = (CFloat) CR2WTypeManager.Create("Float", "fadeInTime", cr2w, this);
-				}
-				return _fadeInTime;
-			}
-			set
-			{
-				if (_fadeInTime == value)
-				{
-					return;
-				}
-				_fadeInTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fadeInTime);
+			set => SetProperty(ref _fadeInTime, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("fadeOutTime")] 
 		public CFloat FadeOutTime
 		{
-			get
-			{
-				if (_fadeOutTime == null)
-				{
-					_fadeOutTime = (CFloat) CR2WTypeManager.Create("Float", "fadeOutTime", cr2w, this);
-				}
-				return _fadeOutTime;
-			}
-			set
-			{
-				if (_fadeOutTime == value)
-				{
-					return;
-				}
-				_fadeOutTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fadeOutTime);
+			set => SetProperty(ref _fadeOutTime, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("additionalRotation")] 
 		public CFloat AdditionalRotation
 		{
-			get
-			{
-				if (_additionalRotation == null)
-				{
-					_additionalRotation = (CFloat) CR2WTypeManager.Create("Float", "additionalRotation", cr2w, this);
-				}
-				return _additionalRotation;
-			}
-			set
-			{
-				if (_additionalRotation == value)
-				{
-					return;
-				}
-				_additionalRotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additionalRotation);
+			set => SetProperty(ref _additionalRotation, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("randomRotation")] 
 		public CBool RandomRotation
 		{
-			get
-			{
-				if (_randomRotation == null)
-				{
-					_randomRotation = (CBool) CR2WTypeManager.Create("Bool", "randomRotation", cr2w, this);
-				}
-				return _randomRotation;
-			}
-			set
-			{
-				if (_randomRotation == value)
-				{
-					return;
-				}
-				_randomRotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _randomRotation);
+			set => SetProperty(ref _randomRotation, value);
 		}
 
 		public effectTrackItemDynamicDecal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

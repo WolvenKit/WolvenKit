@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("npcStates")] 
 		public AIActionNPCStates NpcStates
 		{
-			get
-			{
-				if (_npcStates == null)
-				{
-					_npcStates = (AIActionNPCStates) CR2WTypeManager.Create("AIActionNPCStates", "npcStates", cr2w, this);
-				}
-				return _npcStates;
-			}
-			set
-			{
-				if (_npcStates == value)
-				{
-					return;
-				}
-				_npcStates = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _npcStates);
+			set => SetProperty(ref _npcStates, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("playerStates")] 
 		public AIActionPlayerStates PlayerStates
 		{
-			get
-			{
-				if (_playerStates == null)
-				{
-					_playerStates = (AIActionPlayerStates) CR2WTypeManager.Create("AIActionPlayerStates", "playerStates", cr2w, this);
-				}
-				return _playerStates;
-			}
-			set
-			{
-				if (_playerStates == value)
-				{
-					return;
-				}
-				_playerStates = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerStates);
+			set => SetProperty(ref _playerStates, value);
 		}
 
 		public AIActionTargetStates(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

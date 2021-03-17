@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ammoData")] 
 		public CArray<gameAmmoData> AmmoData
 		{
-			get
-			{
-				if (_ammoData == null)
-				{
-					_ammoData = (CArray<gameAmmoData>) CR2WTypeManager.Create("array:gameAmmoData", "ammoData", cr2w, this);
-				}
-				return _ammoData;
-			}
-			set
-			{
-				if (_ammoData == value)
-				{
-					return;
-				}
-				_ammoData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ammoData);
+			set => SetProperty(ref _ammoData, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("weapon")] 
 		public gameSlotWeaponData Weapon
 		{
-			get
-			{
-				if (_weapon == null)
-				{
-					_weapon = (gameSlotWeaponData) CR2WTypeManager.Create("gameSlotWeaponData", "weapon", cr2w, this);
-				}
-				return _weapon;
-			}
-			set
-			{
-				if (_weapon == value)
-				{
-					return;
-				}
-				_weapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weapon);
+			set => SetProperty(ref _weapon, value);
 		}
 
 		public gameSlotDataHolder(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

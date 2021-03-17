@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("subCharacterID")] 
 		public TweakDBID SubCharacterID
 		{
-			get
-			{
-				if (_subCharacterID == null)
-				{
-					_subCharacterID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "subCharacterID", cr2w, this);
-				}
-				return _subCharacterID;
-			}
-			set
-			{
-				if (_subCharacterID == value)
-				{
-					return;
-				}
-				_subCharacterID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subCharacterID);
+			set => SetProperty(ref _subCharacterID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (Vector4) CR2WTypeManager.Create("Vector4", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		public SpawnUniquePursuitSubCharacterRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

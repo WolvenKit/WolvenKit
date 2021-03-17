@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("moveToWorkspot")] 
 		public CBool MoveToWorkspot
 		{
-			get
-			{
-				if (_moveToWorkspot == null)
-				{
-					_moveToWorkspot = (CBool) CR2WTypeManager.Create("Bool", "moveToWorkspot", cr2w, this);
-				}
-				return _moveToWorkspot;
-			}
-			set
-			{
-				if (_moveToWorkspot == value)
-				{
-					return;
-				}
-				_moveToWorkspot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _moveToWorkspot);
+			set => SetProperty(ref _moveToWorkspot, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("forceEntryAnimName")] 
 		public CName ForceEntryAnimName
 		{
-			get
-			{
-				if (_forceEntryAnimName == null)
-				{
-					_forceEntryAnimName = (CName) CR2WTypeManager.Create("CName", "forceEntryAnimName", cr2w, this);
-				}
-				return _forceEntryAnimName;
-			}
-			set
-			{
-				if (_forceEntryAnimName == value)
-				{
-					return;
-				}
-				_forceEntryAnimName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceEntryAnimName);
+			set => SetProperty(ref _forceEntryAnimName, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("workExcludedGestures")] 
 		public CArray<workWorkEntryId> WorkExcludedGestures
 		{
-			get
-			{
-				if (_workExcludedGestures == null)
-				{
-					_workExcludedGestures = (CArray<workWorkEntryId>) CR2WTypeManager.Create("array:workWorkEntryId", "workExcludedGestures", cr2w, this);
-				}
-				return _workExcludedGestures;
-			}
-			set
-			{
-				if (_workExcludedGestures == value)
-				{
-					return;
-				}
-				_workExcludedGestures = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _workExcludedGestures);
+			set => SetProperty(ref _workExcludedGestures, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("infiniteSequenceEntryId")] 
 		public workWorkEntryId InfiniteSequenceEntryId
 		{
-			get
-			{
-				if (_infiniteSequenceEntryId == null)
-				{
-					_infiniteSequenceEntryId = (workWorkEntryId) CR2WTypeManager.Create("workWorkEntryId", "infiniteSequenceEntryId", cr2w, this);
-				}
-				return _infiniteSequenceEntryId;
-			}
-			set
-			{
-				if (_infiniteSequenceEntryId == value)
-				{
-					return;
-				}
-				_infiniteSequenceEntryId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _infiniteSequenceEntryId);
+			set => SetProperty(ref _infiniteSequenceEntryId, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("idleOnlyMode")] 
 		public CBool IdleOnlyMode
 		{
-			get
-			{
-				if (_idleOnlyMode == null)
-				{
-					_idleOnlyMode = (CBool) CR2WTypeManager.Create("Bool", "idleOnlyMode", cr2w, this);
-				}
-				return _idleOnlyMode;
-			}
-			set
-			{
-				if (_idleOnlyMode == value)
-				{
-					return;
-				}
-				_idleOnlyMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _idleOnlyMode);
+			set => SetProperty(ref _idleOnlyMode, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("continueInCombat")] 
 		public CBool ContinueInCombat
 		{
-			get
-			{
-				if (_continueInCombat == null)
-				{
-					_continueInCombat = (CBool) CR2WTypeManager.Create("Bool", "continueInCombat", cr2w, this);
-				}
-				return _continueInCombat;
-			}
-			set
-			{
-				if (_continueInCombat == value)
-				{
-					return;
-				}
-				_continueInCombat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _continueInCombat);
+			set => SetProperty(ref _continueInCombat, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("movementType")] 
 		public CEnum<moveMovementType> MovementType
 		{
-			get
-			{
-				if (_movementType == null)
-				{
-					_movementType = (CEnum<moveMovementType>) CR2WTypeManager.Create("moveMovementType", "movementType", cr2w, this);
-				}
-				return _movementType;
-			}
-			set
-			{
-				if (_movementType == value)
-				{
-					return;
-				}
-				_movementType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _movementType);
+			set => SetProperty(ref _movementType, value);
 		}
 
 		public AIBaseUseWorkspotCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

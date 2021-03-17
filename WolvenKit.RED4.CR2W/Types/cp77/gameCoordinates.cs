@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("latitude")] 
 		public CInt32 Latitude
 		{
-			get
-			{
-				if (_latitude == null)
-				{
-					_latitude = (CInt32) CR2WTypeManager.Create("Int32", "latitude", cr2w, this);
-				}
-				return _latitude;
-			}
-			set
-			{
-				if (_latitude == value)
-				{
-					return;
-				}
-				_latitude = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _latitude);
+			set => SetProperty(ref _latitude, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("longitude")] 
 		public CInt32 Longitude
 		{
-			get
-			{
-				if (_longitude == null)
-				{
-					_longitude = (CInt32) CR2WTypeManager.Create("Int32", "longitude", cr2w, this);
-				}
-				return _longitude;
-			}
-			set
-			{
-				if (_longitude == value)
-				{
-					return;
-				}
-				_longitude = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _longitude);
+			set => SetProperty(ref _longitude, value);
 		}
 
 		public gameCoordinates(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

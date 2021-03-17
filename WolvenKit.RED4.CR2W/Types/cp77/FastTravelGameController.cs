@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fastTravelPointsList")] 
 		public inkCompoundWidgetReference FastTravelPointsList
 		{
-			get
-			{
-				if (_fastTravelPointsList == null)
-				{
-					_fastTravelPointsList = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "fastTravelPointsList", cr2w, this);
-				}
-				return _fastTravelPointsList;
-			}
-			set
-			{
-				if (_fastTravelPointsList == value)
-				{
-					return;
-				}
-				_fastTravelPointsList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fastTravelPointsList);
+			set => SetProperty(ref _fastTravelPointsList, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("menuEventDispatcher")] 
 		public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
-			get
-			{
-				if (_menuEventDispatcher == null)
-				{
-					_menuEventDispatcher = (wCHandle<inkMenuEventDispatcher>) CR2WTypeManager.Create("whandle:inkMenuEventDispatcher", "menuEventDispatcher", cr2w, this);
-				}
-				return _menuEventDispatcher;
-			}
-			set
-			{
-				if (_menuEventDispatcher == value)
-				{
-					return;
-				}
-				_menuEventDispatcher = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuEventDispatcher);
+			set => SetProperty(ref _menuEventDispatcher, value);
 		}
 
 		public FastTravelGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

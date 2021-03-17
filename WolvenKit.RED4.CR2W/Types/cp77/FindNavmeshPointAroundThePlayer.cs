@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("outPositionArgument")] 
 		public CHandle<AIArgumentMapping> OutPositionArgument
 		{
-			get
-			{
-				if (_outPositionArgument == null)
-				{
-					_outPositionArgument = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "outPositionArgument", cr2w, this);
-				}
-				return _outPositionArgument;
-			}
-			set
-			{
-				if (_outPositionArgument == value)
-				{
-					return;
-				}
-				_outPositionArgument = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outPositionArgument);
+			set => SetProperty(ref _outPositionArgument, value);
 		}
 
 		public FindNavmeshPointAroundThePlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

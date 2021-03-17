@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("localTransform")] 
 		public WorldTransform LocalTransform
 		{
-			get
-			{
-				if (_localTransform == null)
-				{
-					_localTransform = (WorldTransform) CR2WTypeManager.Create("WorldTransform", "localTransform", cr2w, this);
-				}
-				return _localTransform;
-			}
-			set
-			{
-				if (_localTransform == value)
-				{
-					return;
-				}
-				_localTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _localTransform);
+			set => SetProperty(ref _localTransform, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("parentTransform")] 
 		public CHandle<entITransformBinding> ParentTransform
 		{
-			get
-			{
-				if (_parentTransform == null)
-				{
-					_parentTransform = (CHandle<entITransformBinding>) CR2WTypeManager.Create("handle:entITransformBinding", "parentTransform", cr2w, this);
-				}
-				return _parentTransform;
-			}
-			set
-			{
-				if (_parentTransform == value)
-				{
-					return;
-				}
-				_parentTransform = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _parentTransform);
+			set => SetProperty(ref _parentTransform, value);
 		}
 
 		public entIPlacedComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

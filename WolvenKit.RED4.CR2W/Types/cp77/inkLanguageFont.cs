@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("font")] 
 		public raRef<inkFontFamilyResource> Font
 		{
-			get
-			{
-				if (_font == null)
-				{
-					_font = (raRef<inkFontFamilyResource>) CR2WTypeManager.Create("raRef:inkFontFamilyResource", "font", cr2w, this);
-				}
-				return _font;
-			}
-			set
-			{
-				if (_font == value)
-				{
-					return;
-				}
-				_font = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _font);
+			set => SetProperty(ref _font, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("mapper")] 
 		public CHandle<inkLanguageFontMapper> Mapper
 		{
-			get
-			{
-				if (_mapper == null)
-				{
-					_mapper = (CHandle<inkLanguageFontMapper>) CR2WTypeManager.Create("handle:inkLanguageFontMapper", "mapper", cr2w, this);
-				}
-				return _mapper;
-			}
-			set
-			{
-				if (_mapper == value)
-				{
-					return;
-				}
-				_mapper = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mapper);
+			set => SetProperty(ref _mapper, value);
 		}
 
 		public inkLanguageFont(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

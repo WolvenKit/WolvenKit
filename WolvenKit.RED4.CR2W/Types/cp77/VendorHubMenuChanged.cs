@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("item")] 
 		public CEnum<HubVendorMenuItems> Item
 		{
-			get
-			{
-				if (_item == null)
-				{
-					_item = (CEnum<HubVendorMenuItems>) CR2WTypeManager.Create("HubVendorMenuItems", "item", cr2w, this);
-				}
-				return _item;
-			}
-			set
-			{
-				if (_item == value)
-				{
-					return;
-				}
-				_item = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _item);
+			set => SetProperty(ref _item, value);
 		}
 
 		public VendorHubMenuChanged(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

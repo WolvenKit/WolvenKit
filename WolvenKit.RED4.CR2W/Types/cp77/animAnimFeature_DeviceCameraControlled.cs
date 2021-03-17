@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("currentRotation")] 
 		public Vector4 CurrentRotation
 		{
-			get
-			{
-				if (_currentRotation == null)
-				{
-					_currentRotation = (Vector4) CR2WTypeManager.Create("Vector4", "currentRotation", cr2w, this);
-				}
-				return _currentRotation;
-			}
-			set
-			{
-				if (_currentRotation == value)
-				{
-					return;
-				}
-				_currentRotation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentRotation);
+			set => SetProperty(ref _currentRotation, value);
 		}
 
 		public animAnimFeature_DeviceCameraControlled(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

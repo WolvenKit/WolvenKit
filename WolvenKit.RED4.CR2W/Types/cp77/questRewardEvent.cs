@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rewardName")] 
 		public TweakDBID RewardName
 		{
-			get
-			{
-				if (_rewardName == null)
-				{
-					_rewardName = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "rewardName", cr2w, this);
-				}
-				return _rewardName;
-			}
-			set
-			{
-				if (_rewardName == value)
-				{
-					return;
-				}
-				_rewardName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rewardName);
+			set => SetProperty(ref _rewardName, value);
 		}
 
 		public questRewardEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

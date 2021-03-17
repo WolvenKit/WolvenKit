@@ -45,759 +45,264 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("owner")] 
 		public wCHandle<vehicleBaseObject> Owner
 		{
-			get
-			{
-				if (_owner == null)
-				{
-					_owner = (wCHandle<vehicleBaseObject>) CR2WTypeManager.Create("whandle:vehicleBaseObject", "owner", cr2w, this);
-				}
-				return _owner;
-			}
-			set
-			{
-				if (_owner == value)
-				{
-					return;
-				}
-				_owner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useKinematic")] 
 		public CBool UseKinematic
 		{
-			get
-			{
-				if (_useKinematic == null)
-				{
-					_useKinematic = (CBool) CR2WTypeManager.Create("Bool", "useKinematic", cr2w, this);
-				}
-				return _useKinematic;
-			}
-			set
-			{
-				if (_useKinematic == value)
-				{
-					return;
-				}
-				_useKinematic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useKinematic);
+			set => SetProperty(ref _useKinematic, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("needDriver")] 
 		public CBool NeedDriver
 		{
-			get
-			{
-				if (_needDriver == null)
-				{
-					_needDriver = (CBool) CR2WTypeManager.Create("Bool", "needDriver", cr2w, this);
-				}
-				return _needDriver;
-			}
-			set
-			{
-				if (_needDriver == value)
-				{
-					return;
-				}
-				_needDriver = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _needDriver);
+			set => SetProperty(ref _needDriver, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("targetObjToReach")] 
 		public wCHandle<gameObject> TargetObjToReach
 		{
-			get
-			{
-				if (_targetObjToReach == null)
-				{
-					_targetObjToReach = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "targetObjToReach", cr2w, this);
-				}
-				return _targetObjToReach;
-			}
-			set
-			{
-				if (_targetObjToReach == value)
-				{
-					return;
-				}
-				_targetObjToReach = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetObjToReach);
+			set => SetProperty(ref _targetObjToReach, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("targetObjToFollow")] 
 		public wCHandle<gameObject> TargetObjToFollow
 		{
-			get
-			{
-				if (_targetObjToFollow == null)
-				{
-					_targetObjToFollow = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "targetObjToFollow", cr2w, this);
-				}
-				return _targetObjToFollow;
-			}
-			set
-			{
-				if (_targetObjToFollow == value)
-				{
-					return;
-				}
-				_targetObjToFollow = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetObjToFollow);
+			set => SetProperty(ref _targetObjToFollow, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("targetRef")] 
 		public NodeRef TargetRef
 		{
-			get
-			{
-				if (_targetRef == null)
-				{
-					_targetRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "targetRef", cr2w, this);
-				}
-				return _targetRef;
-			}
-			set
-			{
-				if (_targetRef == value)
-				{
-					return;
-				}
-				_targetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetRef);
+			set => SetProperty(ref _targetRef, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("splineRef")] 
 		public NodeRef SplineRef
 		{
-			get
-			{
-				if (_splineRef == null)
-				{
-					_splineRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "splineRef", cr2w, this);
-				}
-				return _splineRef;
-			}
-			set
-			{
-				if (_splineRef == value)
-				{
-					return;
-				}
-				_splineRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _splineRef);
+			set => SetProperty(ref _splineRef, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("splineRefBackwards")] 
 		public NodeRef SplineRefBackwards
 		{
-			get
-			{
-				if (_splineRefBackwards == null)
-				{
-					_splineRefBackwards = (NodeRef) CR2WTypeManager.Create("NodeRef", "splineRefBackwards", cr2w, this);
-				}
-				return _splineRefBackwards;
-			}
-			set
-			{
-				if (_splineRefBackwards == value)
-				{
-					return;
-				}
-				_splineRefBackwards = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _splineRefBackwards);
+			set => SetProperty(ref _splineRefBackwards, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get
-			{
-				if (_vehicleRef == null)
-				{
-					_vehicleRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "vehicleRef", cr2w, this);
-				}
-				return _vehicleRef;
-			}
-			set
-			{
-				if (_vehicleRef == value)
-				{
-					return;
-				}
-				_vehicleRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleRef);
+			set => SetProperty(ref _vehicleRef, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("targetPosition")] 
 		public Vector3 TargetPosition
 		{
-			get
-			{
-				if (_targetPosition == null)
-				{
-					_targetPosition = (Vector3) CR2WTypeManager.Create("Vector3", "targetPosition", cr2w, this);
-				}
-				return _targetPosition;
-			}
-			set
-			{
-				if (_targetPosition == value)
-				{
-					return;
-				}
-				_targetPosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetPosition);
+			set => SetProperty(ref _targetPosition, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("drivingID")] 
 		public TweakDBID DrivingID
 		{
-			get
-			{
-				if (_drivingID == null)
-				{
-					_drivingID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "drivingID", cr2w, this);
-				}
-				return _drivingID;
-			}
-			set
-			{
-				if (_drivingID == value)
-				{
-					return;
-				}
-				_drivingID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _drivingID);
+			set => SetProperty(ref _drivingID, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("distanceMin")] 
 		public CFloat DistanceMin
 		{
-			get
-			{
-				if (_distanceMin == null)
-				{
-					_distanceMin = (CFloat) CR2WTypeManager.Create("Float", "distanceMin", cr2w, this);
-				}
-				return _distanceMin;
-			}
-			set
-			{
-				if (_distanceMin == value)
-				{
-					return;
-				}
-				_distanceMin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distanceMin);
+			set => SetProperty(ref _distanceMin, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("distanceMax")] 
 		public CFloat DistanceMax
 		{
-			get
-			{
-				if (_distanceMax == null)
-				{
-					_distanceMax = (CFloat) CR2WTypeManager.Create("Float", "distanceMax", cr2w, this);
-				}
-				return _distanceMax;
-			}
-			set
-			{
-				if (_distanceMax == value)
-				{
-					return;
-				}
-				_distanceMax = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distanceMax);
+			set => SetProperty(ref _distanceMax, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("wantToStop")] 
 		public CBool WantToStop
 		{
-			get
-			{
-				if (_wantToStop == null)
-				{
-					_wantToStop = (CBool) CR2WTypeManager.Create("Bool", "wantToStop", cr2w, this);
-				}
-				return _wantToStop;
-			}
-			set
-			{
-				if (_wantToStop == value)
-				{
-					return;
-				}
-				_wantToStop = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wantToStop);
+			set => SetProperty(ref _wantToStop, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("stopHasReachedTarget")] 
 		public CBool StopHasReachedTarget
 		{
-			get
-			{
-				if (_stopHasReachedTarget == null)
-				{
-					_stopHasReachedTarget = (CBool) CR2WTypeManager.Create("Bool", "stopHasReachedTarget", cr2w, this);
-				}
-				return _stopHasReachedTarget;
-			}
-			set
-			{
-				if (_stopHasReachedTarget == value)
-				{
-					return;
-				}
-				_stopHasReachedTarget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stopHasReachedTarget);
+			set => SetProperty(ref _stopHasReachedTarget, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("driveBackwards")] 
 		public CBool DriveBackwards
 		{
-			get
-			{
-				if (_driveBackwards == null)
-				{
-					_driveBackwards = (CBool) CR2WTypeManager.Create("Bool", "driveBackwards", cr2w, this);
-				}
-				return _driveBackwards;
-			}
-			set
-			{
-				if (_driveBackwards == value)
-				{
-					return;
-				}
-				_driveBackwards = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _driveBackwards);
+			set => SetProperty(ref _driveBackwards, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("reverseSpline")] 
 		public CBool ReverseSpline
 		{
-			get
-			{
-				if (_reverseSpline == null)
-				{
-					_reverseSpline = (CBool) CR2WTypeManager.Create("Bool", "reverseSpline", cr2w, this);
-				}
-				return _reverseSpline;
-			}
-			set
-			{
-				if (_reverseSpline == value)
-				{
-					return;
-				}
-				_reverseSpline = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reverseSpline);
+			set => SetProperty(ref _reverseSpline, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("startFromClosest")] 
 		public CBool StartFromClosest
 		{
-			get
-			{
-				if (_startFromClosest == null)
-				{
-					_startFromClosest = (CBool) CR2WTypeManager.Create("Bool", "startFromClosest", cr2w, this);
-				}
-				return _startFromClosest;
-			}
-			set
-			{
-				if (_startFromClosest == value)
-				{
-					return;
-				}
-				_startFromClosest = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _startFromClosest);
+			set => SetProperty(ref _startFromClosest, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("canClearActions")] 
 		public CBool CanClearActions
 		{
-			get
-			{
-				if (_canClearActions == null)
-				{
-					_canClearActions = (CBool) CR2WTypeManager.Create("Bool", "canClearActions", cr2w, this);
-				}
-				return _canClearActions;
-			}
-			set
-			{
-				if (_canClearActions == value)
-				{
-					return;
-				}
-				_canClearActions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _canClearActions);
+			set => SetProperty(ref _canClearActions, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("keepDistanceParamBool")] 
 		public CBool KeepDistanceParamBool
 		{
-			get
-			{
-				if (_keepDistanceParamBool == null)
-				{
-					_keepDistanceParamBool = (CBool) CR2WTypeManager.Create("Bool", "keepDistanceParamBool", cr2w, this);
-				}
-				return _keepDistanceParamBool;
-			}
-			set
-			{
-				if (_keepDistanceParamBool == value)
-				{
-					return;
-				}
-				_keepDistanceParamBool = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _keepDistanceParamBool);
+			set => SetProperty(ref _keepDistanceParamBool, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("keepDistanceParamCompanion")] 
 		public wCHandle<gameObject> KeepDistanceParamCompanion
 		{
-			get
-			{
-				if (_keepDistanceParamCompanion == null)
-				{
-					_keepDistanceParamCompanion = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "keepDistanceParamCompanion", cr2w, this);
-				}
-				return _keepDistanceParamCompanion;
-			}
-			set
-			{
-				if (_keepDistanceParamCompanion == value)
-				{
-					return;
-				}
-				_keepDistanceParamCompanion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _keepDistanceParamCompanion);
+			set => SetProperty(ref _keepDistanceParamCompanion, value);
 		}
 
 		[Ordinal(21)] 
 		[RED("keepDistanceParamDistance")] 
 		public CFloat KeepDistanceParamDistance
 		{
-			get
-			{
-				if (_keepDistanceParamDistance == null)
-				{
-					_keepDistanceParamDistance = (CFloat) CR2WTypeManager.Create("Float", "keepDistanceParamDistance", cr2w, this);
-				}
-				return _keepDistanceParamDistance;
-			}
-			set
-			{
-				if (_keepDistanceParamDistance == value)
-				{
-					return;
-				}
-				_keepDistanceParamDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _keepDistanceParamDistance);
+			set => SetProperty(ref _keepDistanceParamDistance, value);
 		}
 
 		[Ordinal(22)] 
 		[RED("rubberBandingBool")] 
 		public CBool RubberBandingBool
 		{
-			get
-			{
-				if (_rubberBandingBool == null)
-				{
-					_rubberBandingBool = (CBool) CR2WTypeManager.Create("Bool", "rubberBandingBool", cr2w, this);
-				}
-				return _rubberBandingBool;
-			}
-			set
-			{
-				if (_rubberBandingBool == value)
-				{
-					return;
-				}
-				_rubberBandingBool = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rubberBandingBool);
+			set => SetProperty(ref _rubberBandingBool, value);
 		}
 
 		[Ordinal(23)] 
 		[RED("rubberBandingTargetRef")] 
 		public wCHandle<gameObject> RubberBandingTargetRef
 		{
-			get
-			{
-				if (_rubberBandingTargetRef == null)
-				{
-					_rubberBandingTargetRef = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "rubberBandingTargetRef", cr2w, this);
-				}
-				return _rubberBandingTargetRef;
-			}
-			set
-			{
-				if (_rubberBandingTargetRef == value)
-				{
-					return;
-				}
-				_rubberBandingTargetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rubberBandingTargetRef);
+			set => SetProperty(ref _rubberBandingTargetRef, value);
 		}
 
 		[Ordinal(24)] 
 		[RED("rubberBandingMinDistance")] 
 		public CFloat RubberBandingMinDistance
 		{
-			get
-			{
-				if (_rubberBandingMinDistance == null)
-				{
-					_rubberBandingMinDistance = (CFloat) CR2WTypeManager.Create("Float", "rubberBandingMinDistance", cr2w, this);
-				}
-				return _rubberBandingMinDistance;
-			}
-			set
-			{
-				if (_rubberBandingMinDistance == value)
-				{
-					return;
-				}
-				_rubberBandingMinDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rubberBandingMinDistance);
+			set => SetProperty(ref _rubberBandingMinDistance, value);
 		}
 
 		[Ordinal(25)] 
 		[RED("rubberBandingMaxDistance")] 
 		public CFloat RubberBandingMaxDistance
 		{
-			get
-			{
-				if (_rubberBandingMaxDistance == null)
-				{
-					_rubberBandingMaxDistance = (CFloat) CR2WTypeManager.Create("Float", "rubberBandingMaxDistance", cr2w, this);
-				}
-				return _rubberBandingMaxDistance;
-			}
-			set
-			{
-				if (_rubberBandingMaxDistance == value)
-				{
-					return;
-				}
-				_rubberBandingMaxDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rubberBandingMaxDistance);
+			set => SetProperty(ref _rubberBandingMaxDistance, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("rubberBandingStopAndWait")] 
 		public CBool RubberBandingStopAndWait
 		{
-			get
-			{
-				if (_rubberBandingStopAndWait == null)
-				{
-					_rubberBandingStopAndWait = (CBool) CR2WTypeManager.Create("Bool", "rubberBandingStopAndWait", cr2w, this);
-				}
-				return _rubberBandingStopAndWait;
-			}
-			set
-			{
-				if (_rubberBandingStopAndWait == value)
-				{
-					return;
-				}
-				_rubberBandingStopAndWait = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rubberBandingStopAndWait);
+			set => SetProperty(ref _rubberBandingStopAndWait, value);
 		}
 
 		[Ordinal(27)] 
 		[RED("rubberBandingTeleportToCatchUp")] 
 		public CBool RubberBandingTeleportToCatchUp
 		{
-			get
-			{
-				if (_rubberBandingTeleportToCatchUp == null)
-				{
-					_rubberBandingTeleportToCatchUp = (CBool) CR2WTypeManager.Create("Bool", "rubberBandingTeleportToCatchUp", cr2w, this);
-				}
-				return _rubberBandingTeleportToCatchUp;
-			}
-			set
-			{
-				if (_rubberBandingTeleportToCatchUp == value)
-				{
-					return;
-				}
-				_rubberBandingTeleportToCatchUp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rubberBandingTeleportToCatchUp);
+			set => SetProperty(ref _rubberBandingTeleportToCatchUp, value);
 		}
 
 		[Ordinal(28)] 
 		[RED("rubberBandingStayInFront")] 
 		public CBool RubberBandingStayInFront
 		{
-			get
-			{
-				if (_rubberBandingStayInFront == null)
-				{
-					_rubberBandingStayInFront = (CBool) CR2WTypeManager.Create("Bool", "rubberBandingStayInFront", cr2w, this);
-				}
-				return _rubberBandingStayInFront;
-			}
-			set
-			{
-				if (_rubberBandingStayInFront == value)
-				{
-					return;
-				}
-				_rubberBandingStayInFront = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rubberBandingStayInFront);
+			set => SetProperty(ref _rubberBandingStayInFront, value);
 		}
 
 		[Ordinal(29)] 
 		[RED("secureTimeOut")] 
 		public CFloat SecureTimeOut
 		{
-			get
-			{
-				if (_secureTimeOut == null)
-				{
-					_secureTimeOut = (CFloat) CR2WTypeManager.Create("Float", "secureTimeOut", cr2w, this);
-				}
-				return _secureTimeOut;
-			}
-			set
-			{
-				if (_secureTimeOut == value)
-				{
-					return;
-				}
-				_secureTimeOut = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _secureTimeOut);
+			set => SetProperty(ref _secureTimeOut, value);
 		}
 
 		[Ordinal(30)] 
 		[RED("portalsList")] 
 		public CHandle<vehiclePortalsList> PortalsList
 		{
-			get
-			{
-				if (_portalsList == null)
-				{
-					_portalsList = (CHandle<vehiclePortalsList>) CR2WTypeManager.Create("handle:vehiclePortalsList", "portalsList", cr2w, this);
-				}
-				return _portalsList;
-			}
-			set
-			{
-				if (_portalsList == value)
-				{
-					return;
-				}
-				_portalsList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _portalsList);
+			set => SetProperty(ref _portalsList, value);
 		}
 
 		[Ordinal(31)] 
 		[RED("trafficTryNeighborsForStart")] 
 		public CBool TrafficTryNeighborsForStart
 		{
-			get
-			{
-				if (_trafficTryNeighborsForStart == null)
-				{
-					_trafficTryNeighborsForStart = (CBool) CR2WTypeManager.Create("Bool", "trafficTryNeighborsForStart", cr2w, this);
-				}
-				return _trafficTryNeighborsForStart;
-			}
-			set
-			{
-				if (_trafficTryNeighborsForStart == value)
-				{
-					return;
-				}
-				_trafficTryNeighborsForStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trafficTryNeighborsForStart);
+			set => SetProperty(ref _trafficTryNeighborsForStart, value);
 		}
 
 		[Ordinal(32)] 
 		[RED("trafficTryNeighborsForEnd")] 
 		public CBool TrafficTryNeighborsForEnd
 		{
-			get
-			{
-				if (_trafficTryNeighborsForEnd == null)
-				{
-					_trafficTryNeighborsForEnd = (CBool) CR2WTypeManager.Create("Bool", "trafficTryNeighborsForEnd", cr2w, this);
-				}
-				return _trafficTryNeighborsForEnd;
-			}
-			set
-			{
-				if (_trafficTryNeighborsForEnd == value)
-				{
-					return;
-				}
-				_trafficTryNeighborsForEnd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trafficTryNeighborsForEnd);
+			set => SetProperty(ref _trafficTryNeighborsForEnd, value);
 		}
 
 		public vehicleAutonomousData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

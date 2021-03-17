@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hudEntryName")] 
 		public CName HudEntryName
 		{
-			get
-			{
-				if (_hudEntryName == null)
-				{
-					_hudEntryName = (CName) CR2WTypeManager.Create("CName", "hudEntryName", cr2w, this);
-				}
-				return _hudEntryName;
-			}
-			set
-			{
-				if (_hudEntryName == value)
-				{
-					return;
-				}
-				_hudEntryName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hudEntryName);
+			set => SetProperty(ref _hudEntryName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("visibility")] 
 		public CEnum<worlduiEntryVisibility> Visibility
 		{
-			get
-			{
-				if (_visibility == null)
-				{
-					_visibility = (CEnum<worlduiEntryVisibility>) CR2WTypeManager.Create("worlduiEntryVisibility", "visibility", cr2w, this);
-				}
-				return _visibility;
-			}
-			set
-			{
-				if (_visibility == value)
-				{
-					return;
-				}
-				_visibility = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visibility);
+			set => SetProperty(ref _visibility, value);
 		}
 
 		public questHUDEntryVisibilityData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

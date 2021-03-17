@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("bodyGroupName")] 
 		public CName BodyGroupName
 		{
-			get
-			{
-				if (_bodyGroupName == null)
-				{
-					_bodyGroupName = (CName) CR2WTypeManager.Create("CName", "bodyGroupName", cr2w, this);
-				}
-				return _bodyGroupName;
-			}
-			set
-			{
-				if (_bodyGroupName == value)
-				{
-					return;
-				}
-				_bodyGroupName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bodyGroupName);
+			set => SetProperty(ref _bodyGroupName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get
-			{
-				if (_puppetRef == null)
-				{
-					_puppetRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "puppetRef", cr2w, this);
-				}
-				return _puppetRef;
-			}
-			set
-			{
-				if (_puppetRef == value)
-				{
-					return;
-				}
-				_puppetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _puppetRef);
+			set => SetProperty(ref _puppetRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get
-			{
-				if (_isPlayer == null)
-				{
-					_isPlayer = (CBool) CR2WTypeManager.Create("Bool", "isPlayer", cr2w, this);
-				}
-				return _isPlayer;
-			}
-			set
-			{
-				if (_isPlayer == value)
-				{
-					return;
-				}
-				_isPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("customizedSize")] 
 		public CBool CustomizedSize
 		{
-			get
-			{
-				if (_customizedSize == null)
-				{
-					_customizedSize = (CBool) CR2WTypeManager.Create("Bool", "customizedSize", cr2w, this);
-				}
-				return _customizedSize;
-			}
-			set
-			{
-				if (_customizedSize == value)
-				{
-					return;
-				}
-				_customizedSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customizedSize);
+			set => SetProperty(ref _customizedSize, value);
 		}
 
 		public questCharacterManagerVisuals_BreastSizeController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

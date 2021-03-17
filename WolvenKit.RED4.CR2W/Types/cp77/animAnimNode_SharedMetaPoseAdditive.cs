@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weightLink")] 
 		public animFloatLink WeightLink
 		{
-			get
-			{
-				if (_weightLink == null)
-				{
-					_weightLink = (animFloatLink) CR2WTypeManager.Create("animFloatLink", "weightLink", cr2w, this);
-				}
-				return _weightLink;
-			}
-			set
-			{
-				if (_weightLink == value)
-				{
-					return;
-				}
-				_weightLink = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weightLink);
+			set => SetProperty(ref _weightLink, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("additiveType")] 
 		public CEnum<animEAnimGraphAdditiveType> AdditiveType
 		{
-			get
-			{
-				if (_additiveType == null)
-				{
-					_additiveType = (CEnum<animEAnimGraphAdditiveType>) CR2WTypeManager.Create("animEAnimGraphAdditiveType", "additiveType", cr2w, this);
-				}
-				return _additiveType;
-			}
-			set
-			{
-				if (_additiveType == value)
-				{
-					return;
-				}
-				_additiveType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additiveType);
+			set => SetProperty(ref _additiveType, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("blendTracks")] 
 		public CEnum<animEBlendTracksMode> BlendTracks
 		{
-			get
-			{
-				if (_blendTracks == null)
-				{
-					_blendTracks = (CEnum<animEBlendTracksMode>) CR2WTypeManager.Create("animEBlendTracksMode", "blendTracks", cr2w, this);
-				}
-				return _blendTracks;
-			}
-			set
-			{
-				if (_blendTracks == value)
-				{
-					return;
-				}
-				_blendTracks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blendTracks);
+			set => SetProperty(ref _blendTracks, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("convertParentPoseToAdditive")] 
 		public CBool ConvertParentPoseToAdditive
 		{
-			get
-			{
-				if (_convertParentPoseToAdditive == null)
-				{
-					_convertParentPoseToAdditive = (CBool) CR2WTypeManager.Create("Bool", "convertParentPoseToAdditive", cr2w, this);
-				}
-				return _convertParentPoseToAdditive;
-			}
-			set
-			{
-				if (_convertParentPoseToAdditive == value)
-				{
-					return;
-				}
-				_convertParentPoseToAdditive = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _convertParentPoseToAdditive);
+			set => SetProperty(ref _convertParentPoseToAdditive, value);
 		}
 
 		public animAnimNode_SharedMetaPoseAdditive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("currentControlPoints")] 
 		public CArray<gamePatrolSplineControlPoint> CurrentControlPoints
 		{
-			get
-			{
-				if (_currentControlPoints == null)
-				{
-					_currentControlPoints = (CArray<gamePatrolSplineControlPoint>) CR2WTypeManager.Create("array:gamePatrolSplineControlPoint", "currentControlPoints", cr2w, this);
-				}
-				return _currentControlPoints;
-			}
-			set
-			{
-				if (_currentControlPoints == value)
-				{
-					return;
-				}
-				_currentControlPoints = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentControlPoints);
+			set => SetProperty(ref _currentControlPoints, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entrySplineParam")] 
 		public CFloat EntrySplineParam
 		{
-			get
-			{
-				if (_entrySplineParam == null)
-				{
-					_entrySplineParam = (CFloat) CR2WTypeManager.Create("Float", "entrySplineParam", cr2w, this);
-				}
-				return _entrySplineParam;
-			}
-			set
-			{
-				if (_entrySplineParam == value)
-				{
-					return;
-				}
-				_entrySplineParam = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entrySplineParam);
+			set => SetProperty(ref _entrySplineParam, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("controlPointIndex")] 
 		public CUInt32 ControlPointIndex
 		{
-			get
-			{
-				if (_controlPointIndex == null)
-				{
-					_controlPointIndex = (CUInt32) CR2WTypeManager.Create("Uint32", "controlPointIndex", cr2w, this);
-				}
-				return _controlPointIndex;
-			}
-			set
-			{
-				if (_controlPointIndex == value)
-				{
-					return;
-				}
-				_controlPointIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _controlPointIndex);
+			set => SetProperty(ref _controlPointIndex, value);
 		}
 
 		public gamePatrolSplineProgress(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

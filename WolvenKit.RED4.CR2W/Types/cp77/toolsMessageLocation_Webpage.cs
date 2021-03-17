@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("link")] 
 		public CString Link
 		{
-			get
-			{
-				if (_link == null)
-				{
-					_link = (CString) CR2WTypeManager.Create("String", "link", cr2w, this);
-				}
-				return _link;
-			}
-			set
-			{
-				if (_link == value)
-				{
-					return;
-				}
-				_link = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _link);
+			set => SetProperty(ref _link, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("text")] 
 		public CString Text
 		{
-			get
-			{
-				if (_text == null)
-				{
-					_text = (CString) CR2WTypeManager.Create("String", "text", cr2w, this);
-				}
-				return _text;
-			}
-			set
-			{
-				if (_text == value)
-				{
-					return;
-				}
-				_text = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _text);
+			set => SetProperty(ref _text, value);
 		}
 
 		public toolsMessageLocation_Webpage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

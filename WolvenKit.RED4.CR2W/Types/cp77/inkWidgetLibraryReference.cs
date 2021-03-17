@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("widgetLibrary")] 
 		public inkWidgetLibraryResourceWrapper WidgetLibrary
 		{
-			get
-			{
-				if (_widgetLibrary == null)
-				{
-					_widgetLibrary = (inkWidgetLibraryResourceWrapper) CR2WTypeManager.Create("inkWidgetLibraryResourceWrapper", "widgetLibrary", cr2w, this);
-				}
-				return _widgetLibrary;
-			}
-			set
-			{
-				if (_widgetLibrary == value)
-				{
-					return;
-				}
-				_widgetLibrary = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetLibrary);
+			set => SetProperty(ref _widgetLibrary, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("widgetItem")] 
 		public CName WidgetItem
 		{
-			get
-			{
-				if (_widgetItem == null)
-				{
-					_widgetItem = (CName) CR2WTypeManager.Create("CName", "widgetItem", cr2w, this);
-				}
-				return _widgetItem;
-			}
-			set
-			{
-				if (_widgetItem == value)
-				{
-					return;
-				}
-				_widgetItem = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _widgetItem);
+			set => SetProperty(ref _widgetItem, value);
 		}
 
 		public inkWidgetLibraryReference(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

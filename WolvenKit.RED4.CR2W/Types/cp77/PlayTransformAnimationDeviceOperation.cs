@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("transformAnimations")] 
 		public CArray<STransformAnimationData> TransformAnimations
 		{
-			get
-			{
-				if (_transformAnimations == null)
-				{
-					_transformAnimations = (CArray<STransformAnimationData>) CR2WTypeManager.Create("array:STransformAnimationData", "transformAnimations", cr2w, this);
-				}
-				return _transformAnimations;
-			}
-			set
-			{
-				if (_transformAnimations == value)
-				{
-					return;
-				}
-				_transformAnimations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transformAnimations);
+			set => SetProperty(ref _transformAnimations, value);
 		}
 
 		public PlayTransformAnimationDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

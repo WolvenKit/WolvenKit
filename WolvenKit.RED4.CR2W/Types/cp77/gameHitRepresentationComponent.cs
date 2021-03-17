@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("representations")] 
 		public CArray<gameHitShapeContainer> Representations
 		{
-			get
-			{
-				if (_representations == null)
-				{
-					_representations = (CArray<gameHitShapeContainer>) CR2WTypeManager.Create("array:gameHitShapeContainer", "representations", cr2w, this);
-				}
-				return _representations;
-			}
-			set
-			{
-				if (_representations == value)
-				{
-					return;
-				}
-				_representations = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _representations);
+			set => SetProperty(ref _representations, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("physicsMaterial")] 
 		public CName PhysicsMaterial
 		{
-			get
-			{
-				if (_physicsMaterial == null)
-				{
-					_physicsMaterial = (CName) CR2WTypeManager.Create("CName", "physicsMaterial", cr2w, this);
-				}
-				return _physicsMaterial;
-			}
-			set
-			{
-				if (_physicsMaterial == value)
-				{
-					return;
-				}
-				_physicsMaterial = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _physicsMaterial);
+			set => SetProperty(ref _physicsMaterial, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("bvhRoot")] 
 		public gameHitShapeBVH BvhRoot
 		{
-			get
-			{
-				if (_bvhRoot == null)
-				{
-					_bvhRoot = (gameHitShapeBVH) CR2WTypeManager.Create("gameHitShapeBVH", "bvhRoot", cr2w, this);
-				}
-				return _bvhRoot;
-			}
-			set
-			{
-				if (_bvhRoot == value)
-				{
-					return;
-				}
-				_bvhRoot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bvhRoot);
+			set => SetProperty(ref _bvhRoot, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("useResourceData")] 
 		public CBool UseResourceData
 		{
-			get
-			{
-				if (_useResourceData == null)
-				{
-					_useResourceData = (CBool) CR2WTypeManager.Create("Bool", "useResourceData", cr2w, this);
-				}
-				return _useResourceData;
-			}
-			set
-			{
-				if (_useResourceData == value)
-				{
-					return;
-				}
-				_useResourceData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useResourceData);
+			set => SetProperty(ref _useResourceData, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("resource")] 
 		public raRef<gameHitRepresentationResource> Resource
 		{
-			get
-			{
-				if (_resource == null)
-				{
-					_resource = (raRef<gameHitRepresentationResource>) CR2WTypeManager.Create("raRef:gameHitRepresentationResource", "resource", cr2w, this);
-				}
-				return _resource;
-			}
-			set
-			{
-				if (_resource == value)
-				{
-					return;
-				}
-				_resource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resource);
+			set => SetProperty(ref _resource, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("appearanceOverrides")] 
 		public CArray<gameHitRepresentationOverride> AppearanceOverrides
 		{
-			get
-			{
-				if (_appearanceOverrides == null)
-				{
-					_appearanceOverrides = (CArray<gameHitRepresentationOverride>) CR2WTypeManager.Create("array:gameHitRepresentationOverride", "appearanceOverrides", cr2w, this);
-				}
-				return _appearanceOverrides;
-			}
-			set
-			{
-				if (_appearanceOverrides == value)
-				{
-					return;
-				}
-				_appearanceOverrides = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _appearanceOverrides);
+			set => SetProperty(ref _appearanceOverrides, value);
 		}
 
 		public gameHitRepresentationComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("spawnerReference")] 
 		public NodeRef SpawnerReference
 		{
-			get
-			{
-				if (_spawnerReference == null)
-				{
-					_spawnerReference = (NodeRef) CR2WTypeManager.Create("NodeRef", "spawnerReference", cr2w, this);
-				}
-				return _spawnerReference;
-			}
-			set
-			{
-				if (_spawnerReference == value)
-				{
-					return;
-				}
-				_spawnerReference = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spawnerReference);
+			set => SetProperty(ref _spawnerReference, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("communityEntryNames")] 
 		public CArray<CName> CommunityEntryNames
 		{
-			get
-			{
-				if (_communityEntryNames == null)
-				{
-					_communityEntryNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "communityEntryNames", cr2w, this);
-				}
-				return _communityEntryNames;
-			}
-			set
-			{
-				if (_communityEntryNames == value)
-				{
-					return;
-				}
-				_communityEntryNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _communityEntryNames);
+			set => SetProperty(ref _communityEntryNames, value);
 		}
 
 		public questSpawnerReady_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

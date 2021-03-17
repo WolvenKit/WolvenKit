@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("center")] 
 		public Vector2 Center
 		{
-			get
-			{
-				if (_center == null)
-				{
-					_center = (Vector2) CR2WTypeManager.Create("Vector2", "center", cr2w, this);
-				}
-				return _center;
-			}
-			set
-			{
-				if (_center == value)
-				{
-					return;
-				}
-				_center = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _center);
+			set => SetProperty(ref _center, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("targetableRegionSize")] 
 		public Vector2 TargetableRegionSize
 		{
-			get
-			{
-				if (_targetableRegionSize == null)
-				{
-					_targetableRegionSize = (Vector2) CR2WTypeManager.Create("Vector2", "targetableRegionSize", cr2w, this);
-				}
-				return _targetableRegionSize;
-			}
-			set
-			{
-				if (_targetableRegionSize == value)
-				{
-					return;
-				}
-				_targetableRegionSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetableRegionSize);
+			set => SetProperty(ref _targetableRegionSize, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("reticleSize")] 
 		public Vector2 ReticleSize
 		{
-			get
-			{
-				if (_reticleSize == null)
-				{
-					_reticleSize = (Vector2) CR2WTypeManager.Create("Vector2", "reticleSize", cr2w, this);
-				}
-				return _reticleSize;
-			}
-			set
-			{
-				if (_reticleSize == value)
-				{
-					return;
-				}
-				_reticleSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reticleSize);
+			set => SetProperty(ref _reticleSize, value);
 		}
 
 		public gamesmartGunUISightParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

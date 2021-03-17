@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("distance")] 
 		public CFloat Distance
 		{
-			get
-			{
-				if (_distance == null)
-				{
-					_distance = (CFloat) CR2WTypeManager.Create("Float", "distance", cr2w, this);
-				}
-				return _distance;
-			}
-			set
-			{
-				if (_distance == value)
-				{
-					return;
-				}
-				_distance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distance);
+			set => SetProperty(ref _distance, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("angle")] 
 		public CFloat Angle
 		{
-			get
-			{
-				if (_angle == null)
-				{
-					_angle = (CFloat) CR2WTypeManager.Create("Float", "angle", cr2w, this);
-				}
-				return _angle;
-			}
-			set
-			{
-				if (_angle == value)
-				{
-					return;
-				}
-				_angle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _angle);
+			set => SetProperty(ref _angle, value);
 		}
 
 		public SetManouverPosition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

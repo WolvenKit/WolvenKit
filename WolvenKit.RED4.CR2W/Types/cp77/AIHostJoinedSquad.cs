@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("squad")] 
 		public CName Squad
 		{
-			get
-			{
-				if (_squad == null)
-				{
-					_squad = (CName) CR2WTypeManager.Create("CName", "squad", cr2w, this);
-				}
-				return _squad;
-			}
-			set
-			{
-				if (_squad == value)
-				{
-					return;
-				}
-				_squad = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _squad);
+			set => SetProperty(ref _squad, value);
 		}
 
 		public AIHostJoinedSquad(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

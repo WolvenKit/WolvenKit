@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("customMaterialLookup")] 
 		public CName CustomMaterialLookup
 		{
-			get
-			{
-				if (_customMaterialLookup == null)
-				{
-					_customMaterialLookup = (CName) CR2WTypeManager.Create("CName", "customMaterialLookup", cr2w, this);
-				}
-				return _customMaterialLookup;
-			}
-			set
-			{
-				if (_customMaterialLookup == value)
-				{
-					return;
-				}
-				_customMaterialLookup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _customMaterialLookup);
+			set => SetProperty(ref _customMaterialLookup, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get
-			{
-				if (_isPlayer == null)
-				{
-					_isPlayer = (CBool) CR2WTypeManager.Create("Bool", "isPlayer", cr2w, this);
-				}
-				return _isPlayer;
-			}
-			set
-			{
-				if (_isPlayer == value)
-				{
-					return;
-				}
-				_isPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
 		}
 
 		public audioLocomotionEmitterMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

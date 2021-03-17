@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("renderSceneLayer")] 
 		public CEnum<RenderSceneLayer> RenderSceneLayer
 		{
-			get
-			{
-				if (_renderSceneLayer == null)
-				{
-					_renderSceneLayer = (CEnum<RenderSceneLayer>) CR2WTypeManager.Create("RenderSceneLayer", "renderSceneLayer", cr2w, this);
-				}
-				return _renderSceneLayer;
-			}
-			set
-			{
-				if (_renderSceneLayer == value)
-				{
-					return;
-				}
-				_renderSceneLayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _renderSceneLayer);
+			set => SetProperty(ref _renderSceneLayer, value);
 		}
 
 		public questSetRenderLayer_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

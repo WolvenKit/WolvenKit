@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("curves")] 
 		public CArray<rRef<gameVehicleCurveSet>> Curves
 		{
-			get
-			{
-				if (_curves == null)
-				{
-					_curves = (CArray<rRef<gameVehicleCurveSet>>) CR2WTypeManager.Create("array:rRef:gameVehicleCurveSet", "curves", cr2w, this);
-				}
-				return _curves;
-			}
-			set
-			{
-				if (_curves == value)
-				{
-					return;
-				}
-				_curves = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _curves);
+			set => SetProperty(ref _curves, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("commonCurves")] 
 		public CArray<rRef<gameVehicleCommonCurveSet>> CommonCurves
 		{
-			get
-			{
-				if (_commonCurves == null)
-				{
-					_commonCurves = (CArray<rRef<gameVehicleCommonCurveSet>>) CR2WTypeManager.Create("array:rRef:gameVehicleCommonCurveSet", "commonCurves", cr2w, this);
-				}
-				return _commonCurves;
-			}
-			set
-			{
-				if (_commonCurves == value)
-				{
-					return;
-				}
-				_commonCurves = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _commonCurves);
+			set => SetProperty(ref _commonCurves, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("bikeCurves")] 
 		public CArray<rRef<vehicleBikeCurveSet>> BikeCurves
 		{
-			get
-			{
-				if (_bikeCurves == null)
-				{
-					_bikeCurves = (CArray<rRef<vehicleBikeCurveSet>>) CR2WTypeManager.Create("array:rRef:vehicleBikeCurveSet", "bikeCurves", cr2w, this);
-				}
-				return _bikeCurves;
-			}
-			set
-			{
-				if (_bikeCurves == value)
-				{
-					return;
-				}
-				_bikeCurves = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bikeCurves);
+			set => SetProperty(ref _bikeCurves, value);
 		}
 
 		public gameVehicleCurvesLibrary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

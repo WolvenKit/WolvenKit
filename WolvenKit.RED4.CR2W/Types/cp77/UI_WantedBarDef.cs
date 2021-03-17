@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("CurrentBounty")] 
 		public gamebbScriptID_Int32 CurrentBounty
 		{
-			get
-			{
-				if (_currentBounty == null)
-				{
-					_currentBounty = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "CurrentBounty", cr2w, this);
-				}
-				return _currentBounty;
-			}
-			set
-			{
-				if (_currentBounty == value)
-				{
-					return;
-				}
-				_currentBounty = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentBounty);
+			set => SetProperty(ref _currentBounty, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("CurrentWantedLevel")] 
 		public gamebbScriptID_Int32 CurrentWantedLevel
 		{
-			get
-			{
-				if (_currentWantedLevel == null)
-				{
-					_currentWantedLevel = (gamebbScriptID_Int32) CR2WTypeManager.Create("gamebbScriptID_Int32", "CurrentWantedLevel", cr2w, this);
-				}
-				return _currentWantedLevel;
-			}
-			set
-			{
-				if (_currentWantedLevel == value)
-				{
-					return;
-				}
-				_currentWantedLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentWantedLevel);
+			set => SetProperty(ref _currentWantedLevel, value);
 		}
 
 		public UI_WantedBarDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

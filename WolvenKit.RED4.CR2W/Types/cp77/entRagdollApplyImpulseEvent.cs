@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("worldImpulsePos")] 
 		public Vector4 WorldImpulsePos
 		{
-			get
-			{
-				if (_worldImpulsePos == null)
-				{
-					_worldImpulsePos = (Vector4) CR2WTypeManager.Create("Vector4", "worldImpulsePos", cr2w, this);
-				}
-				return _worldImpulsePos;
-			}
-			set
-			{
-				if (_worldImpulsePos == value)
-				{
-					return;
-				}
-				_worldImpulsePos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _worldImpulsePos);
+			set => SetProperty(ref _worldImpulsePos, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("worldImpulseValue")] 
 		public Vector4 WorldImpulseValue
 		{
-			get
-			{
-				if (_worldImpulseValue == null)
-				{
-					_worldImpulseValue = (Vector4) CR2WTypeManager.Create("Vector4", "worldImpulseValue", cr2w, this);
-				}
-				return _worldImpulseValue;
-			}
-			set
-			{
-				if (_worldImpulseValue == value)
-				{
-					return;
-				}
-				_worldImpulseValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _worldImpulseValue);
+			set => SetProperty(ref _worldImpulseValue, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("influenceRadius")] 
 		public CFloat InfluenceRadius
 		{
-			get
-			{
-				if (_influenceRadius == null)
-				{
-					_influenceRadius = (CFloat) CR2WTypeManager.Create("Float", "influenceRadius", cr2w, this);
-				}
-				return _influenceRadius;
-			}
-			set
-			{
-				if (_influenceRadius == value)
-				{
-					return;
-				}
-				_influenceRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _influenceRadius);
+			set => SetProperty(ref _influenceRadius, value);
 		}
 
 		public entRagdollApplyImpulseEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

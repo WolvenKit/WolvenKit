@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inProgress")] 
 		public CBool InProgress
 		{
-			get
-			{
-				if (_inProgress == null)
-				{
-					_inProgress = (CBool) CR2WTypeManager.Create("Bool", "inProgress", cr2w, this);
-				}
-				return _inProgress;
-			}
-			set
-			{
-				if (_inProgress == value)
-				{
-					return;
-				}
-				_inProgress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inProgress);
+			set => SetProperty(ref _inProgress, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sceneFile")] 
 		public raRef<scnSceneResource> SceneFile
 		{
-			get
-			{
-				if (_sceneFile == null)
-				{
-					_sceneFile = (raRef<scnSceneResource>) CR2WTypeManager.Create("raRef:scnSceneResource", "sceneFile", cr2w, this);
-				}
-				return _sceneFile;
-			}
-			set
-			{
-				if (_sceneFile == value)
-				{
-					return;
-				}
-				_sceneFile = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sceneFile);
+			set => SetProperty(ref _sceneFile, value);
 		}
 
 		public scnBraindanceJumpInProgress_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

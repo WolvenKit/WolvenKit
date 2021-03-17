@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("locomotionMode")] 
 		public CArray<CEnum<gamedataLocomotionMode>> LocomotionMode
 		{
-			get
-			{
-				if (_locomotionMode == null)
-				{
-					_locomotionMode = (CArray<CEnum<gamedataLocomotionMode>>) CR2WTypeManager.Create("array:gamedataLocomotionMode", "locomotionMode", cr2w, this);
-				}
-				return _locomotionMode;
-			}
-			set
-			{
-				if (_locomotionMode == value)
-				{
-					return;
-				}
-				_locomotionMode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _locomotionMode);
+			set => SetProperty(ref _locomotionMode, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("invert")] 
 		public CBool Invert
 		{
-			get
-			{
-				if (_invert == null)
-				{
-					_invert = (CBool) CR2WTypeManager.Create("Bool", "invert", cr2w, this);
-				}
-				return _invert;
-			}
-			set
-			{
-				if (_invert == value)
-				{
-					return;
-				}
-				_invert = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _invert);
+			set => SetProperty(ref _invert, value);
 		}
 
 		public NPCLocomotionTypePrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

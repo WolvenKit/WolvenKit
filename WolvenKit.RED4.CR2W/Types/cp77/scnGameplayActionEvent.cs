@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("performer")] 
 		public scnPerformerId Performer
 		{
-			get
-			{
-				if (_performer == null)
-				{
-					_performer = (scnPerformerId) CR2WTypeManager.Create("scnPerformerId", "performer", cr2w, this);
-				}
-				return _performer;
-			}
-			set
-			{
-				if (_performer == value)
-				{
-					return;
-				}
-				_performer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _performer);
+			set => SetProperty(ref _performer, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("gameplayActionData")] 
 		public CHandle<scnIGameplayActionData> GameplayActionData
 		{
-			get
-			{
-				if (_gameplayActionData == null)
-				{
-					_gameplayActionData = (CHandle<scnIGameplayActionData>) CR2WTypeManager.Create("handle:scnIGameplayActionData", "gameplayActionData", cr2w, this);
-				}
-				return _gameplayActionData;
-			}
-			set
-			{
-				if (_gameplayActionData == value)
-				{
-					return;
-				}
-				_gameplayActionData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameplayActionData);
+			set => SetProperty(ref _gameplayActionData, value);
 		}
 
 		public scnGameplayActionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

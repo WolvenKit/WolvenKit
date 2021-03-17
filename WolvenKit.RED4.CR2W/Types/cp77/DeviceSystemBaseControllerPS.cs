@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("quickHacksEnabled")] 
 		public CBool QuickHacksEnabled
 		{
-			get
-			{
-				if (_quickHacksEnabled == null)
-				{
-					_quickHacksEnabled = (CBool) CR2WTypeManager.Create("Bool", "quickHacksEnabled", cr2w, this);
-				}
-				return _quickHacksEnabled;
-			}
-			set
-			{
-				if (_quickHacksEnabled == value)
-				{
-					return;
-				}
-				_quickHacksEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _quickHacksEnabled);
+			set => SetProperty(ref _quickHacksEnabled, value);
 		}
 
 		public DeviceSystemBaseControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

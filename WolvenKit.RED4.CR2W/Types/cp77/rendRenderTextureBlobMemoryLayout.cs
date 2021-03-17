@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rowPitch")] 
 		public CUInt32 RowPitch
 		{
-			get
-			{
-				if (_rowPitch == null)
-				{
-					_rowPitch = (CUInt32) CR2WTypeManager.Create("Uint32", "rowPitch", cr2w, this);
-				}
-				return _rowPitch;
-			}
-			set
-			{
-				if (_rowPitch == value)
-				{
-					return;
-				}
-				_rowPitch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rowPitch);
+			set => SetProperty(ref _rowPitch, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("slicePitch")] 
 		public CUInt32 SlicePitch
 		{
-			get
-			{
-				if (_slicePitch == null)
-				{
-					_slicePitch = (CUInt32) CR2WTypeManager.Create("Uint32", "slicePitch", cr2w, this);
-				}
-				return _slicePitch;
-			}
-			set
-			{
-				if (_slicePitch == value)
-				{
-					return;
-				}
-				_slicePitch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slicePitch);
+			set => SetProperty(ref _slicePitch, value);
 		}
 
 		public rendRenderTextureBlobMemoryLayout(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

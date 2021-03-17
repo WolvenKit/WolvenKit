@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("contrast")] 
 		public effectEffectParameterEvaluatorFloat Contrast
 		{
-			get
-			{
-				if (_contrast == null)
-				{
-					_contrast = (effectEffectParameterEvaluatorFloat) CR2WTypeManager.Create("effectEffectParameterEvaluatorFloat", "contrast", cr2w, this);
-				}
-				return _contrast;
-			}
-			set
-			{
-				if (_contrast == value)
-				{
-					return;
-				}
-				_contrast = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contrast);
+			set => SetProperty(ref _contrast, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("contrastPivot")] 
 		public effectEffectParameterEvaluatorFloat ContrastPivot
 		{
-			get
-			{
-				if (_contrastPivot == null)
-				{
-					_contrastPivot = (effectEffectParameterEvaluatorFloat) CR2WTypeManager.Create("effectEffectParameterEvaluatorFloat", "contrastPivot", cr2w, this);
-				}
-				return _contrastPivot;
-			}
-			set
-			{
-				if (_contrastPivot == value)
-				{
-					return;
-				}
-				_contrastPivot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _contrastPivot);
+			set => SetProperty(ref _contrastPivot, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("saturation")] 
 		public effectEffectParameterEvaluatorFloat Saturation
 		{
-			get
-			{
-				if (_saturation == null)
-				{
-					_saturation = (effectEffectParameterEvaluatorFloat) CR2WTypeManager.Create("effectEffectParameterEvaluatorFloat", "saturation", cr2w, this);
-				}
-				return _saturation;
-			}
-			set
-			{
-				if (_saturation == value)
-				{
-					return;
-				}
-				_saturation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _saturation);
+			set => SetProperty(ref _saturation, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("hue")] 
 		public effectEffectParameterEvaluatorFloat Hue
 		{
-			get
-			{
-				if (_hue == null)
-				{
-					_hue = (effectEffectParameterEvaluatorFloat) CR2WTypeManager.Create("effectEffectParameterEvaluatorFloat", "hue", cr2w, this);
-				}
-				return _hue;
-			}
-			set
-			{
-				if (_hue == value)
-				{
-					return;
-				}
-				_hue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hue);
+			set => SetProperty(ref _hue, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("brightness")] 
 		public effectEffectParameterEvaluatorFloat Brightness
 		{
-			get
-			{
-				if (_brightness == null)
-				{
-					_brightness = (effectEffectParameterEvaluatorFloat) CR2WTypeManager.Create("effectEffectParameterEvaluatorFloat", "brightness", cr2w, this);
-				}
-				return _brightness;
-			}
-			set
-			{
-				if (_brightness == value)
-				{
-					return;
-				}
-				_brightness = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _brightness);
+			set => SetProperty(ref _brightness, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("lowRange")] 
 		public effectEffectParameterEvaluatorFloat LowRange
 		{
-			get
-			{
-				if (_lowRange == null)
-				{
-					_lowRange = (effectEffectParameterEvaluatorFloat) CR2WTypeManager.Create("effectEffectParameterEvaluatorFloat", "lowRange", cr2w, this);
-				}
-				return _lowRange;
-			}
-			set
-			{
-				if (_lowRange == value)
-				{
-					return;
-				}
-				_lowRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lowRange);
+			set => SetProperty(ref _lowRange, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("highRange")] 
 		public effectEffectParameterEvaluatorFloat HighRange
 		{
-			get
-			{
-				if (_highRange == null)
-				{
-					_highRange = (effectEffectParameterEvaluatorFloat) CR2WTypeManager.Create("effectEffectParameterEvaluatorFloat", "highRange", cr2w, this);
-				}
-				return _highRange;
-			}
-			set
-			{
-				if (_highRange == value)
-				{
-					return;
-				}
-				_highRange = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highRange);
+			set => SetProperty(ref _highRange, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("lift")] 
 		public effectEffectParameterEvaluatorVector Lift
 		{
-			get
-			{
-				if (_lift == null)
-				{
-					_lift = (effectEffectParameterEvaluatorVector) CR2WTypeManager.Create("effectEffectParameterEvaluatorVector", "lift", cr2w, this);
-				}
-				return _lift;
-			}
-			set
-			{
-				if (_lift == value)
-				{
-					return;
-				}
-				_lift = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lift);
+			set => SetProperty(ref _lift, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("gamma")] 
 		public effectEffectParameterEvaluatorVector Gamma
 		{
-			get
-			{
-				if (_gamma == null)
-				{
-					_gamma = (effectEffectParameterEvaluatorVector) CR2WTypeManager.Create("effectEffectParameterEvaluatorVector", "gamma", cr2w, this);
-				}
-				return _gamma;
-			}
-			set
-			{
-				if (_gamma == value)
-				{
-					return;
-				}
-				_gamma = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gamma);
+			set => SetProperty(ref _gamma, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("gain")] 
 		public effectEffectParameterEvaluatorVector Gain
 		{
-			get
-			{
-				if (_gain == null)
-				{
-					_gain = (effectEffectParameterEvaluatorVector) CR2WTypeManager.Create("effectEffectParameterEvaluatorVector", "gain", cr2w, this);
-				}
-				return _gain;
-			}
-			set
-			{
-				if (_gain == value)
-				{
-					return;
-				}
-				_gain = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gain);
+			set => SetProperty(ref _gain, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("offset")] 
 		public effectEffectParameterEvaluatorVector Offset
 		{
-			get
-			{
-				if (_offset == null)
-				{
-					_offset = (effectEffectParameterEvaluatorVector) CR2WTypeManager.Create("effectEffectParameterEvaluatorVector", "offset", cr2w, this);
-				}
-				return _offset;
-			}
-			set
-			{
-				if (_offset == value)
-				{
-					return;
-				}
-				_offset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offset);
+			set => SetProperty(ref _offset, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("shadow")] 
 		public effectEffectParameterEvaluatorVector Shadow
 		{
-			get
-			{
-				if (_shadow == null)
-				{
-					_shadow = (effectEffectParameterEvaluatorVector) CR2WTypeManager.Create("effectEffectParameterEvaluatorVector", "shadow", cr2w, this);
-				}
-				return _shadow;
-			}
-			set
-			{
-				if (_shadow == value)
-				{
-					return;
-				}
-				_shadow = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shadow);
+			set => SetProperty(ref _shadow, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("midtone")] 
 		public effectEffectParameterEvaluatorVector Midtone
 		{
-			get
-			{
-				if (_midtone == null)
-				{
-					_midtone = (effectEffectParameterEvaluatorVector) CR2WTypeManager.Create("effectEffectParameterEvaluatorVector", "midtone", cr2w, this);
-				}
-				return _midtone;
-			}
-			set
-			{
-				if (_midtone == value)
-				{
-					return;
-				}
-				_midtone = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _midtone);
+			set => SetProperty(ref _midtone, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("highlight")] 
 		public effectEffectParameterEvaluatorVector Highlight
 		{
-			get
-			{
-				if (_highlight == null)
-				{
-					_highlight = (effectEffectParameterEvaluatorVector) CR2WTypeManager.Create("effectEffectParameterEvaluatorVector", "highlight", cr2w, this);
-				}
-				return _highlight;
-			}
-			set
-			{
-				if (_highlight == value)
-				{
-					return;
-				}
-				_highlight = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _highlight);
+			set => SetProperty(ref _highlight, value);
 		}
 
 		public effectTrackItemColorGradeV2(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

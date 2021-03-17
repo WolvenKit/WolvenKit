@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("NormalDistance")] 
 		public Vector4 NormalDistance
 		{
-			get
-			{
-				if (_normalDistance == null)
-				{
-					_normalDistance = (Vector4) CR2WTypeManager.Create("Vector4", "NormalDistance", cr2w, this);
-				}
-				return _normalDistance;
-			}
-			set
-			{
-				if (_normalDistance == value)
-				{
-					return;
-				}
-				_normalDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _normalDistance);
+			set => SetProperty(ref _normalDistance, value);
 		}
 
 		public Plane(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("rtFormats", 8)] 
 		public CStatic<CEnum<GpuWrapApieTextureFormat>> RtFormats
 		{
-			get
-			{
-				if (_rtFormats == null)
-				{
-					_rtFormats = (CStatic<CEnum<GpuWrapApieTextureFormat>>) CR2WTypeManager.Create("static:8,GpuWrapApieTextureFormat", "rtFormats", cr2w, this);
-				}
-				return _rtFormats;
-			}
-			set
-			{
-				if (_rtFormats == value)
-				{
-					return;
-				}
-				_rtFormats = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rtFormats);
+			set => SetProperty(ref _rtFormats, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("dsFormat")] 
 		public CEnum<GpuWrapApieTextureFormat> DsFormat
 		{
-			get
-			{
-				if (_dsFormat == null)
-				{
-					_dsFormat = (CEnum<GpuWrapApieTextureFormat>) CR2WTypeManager.Create("GpuWrapApieTextureFormat", "dsFormat", cr2w, this);
-				}
-				return _dsFormat;
-			}
-			set
-			{
-				if (_dsFormat == value)
-				{
-					return;
-				}
-				_dsFormat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dsFormat);
+			set => SetProperty(ref _dsFormat, value);
 		}
 
 		public PSODescRenderTargetSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

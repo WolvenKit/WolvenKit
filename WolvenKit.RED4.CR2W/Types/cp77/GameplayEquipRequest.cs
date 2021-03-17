@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("slotIndex")] 
 		public CInt32 SlotIndex
 		{
-			get
-			{
-				if (_slotIndex == null)
-				{
-					_slotIndex = (CInt32) CR2WTypeManager.Create("Int32", "slotIndex", cr2w, this);
-				}
-				return _slotIndex;
-			}
-			set
-			{
-				if (_slotIndex == value)
-				{
-					return;
-				}
-				_slotIndex = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotIndex);
+			set => SetProperty(ref _slotIndex, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("addToInventory")] 
 		public CBool AddToInventory
 		{
-			get
-			{
-				if (_addToInventory == null)
-				{
-					_addToInventory = (CBool) CR2WTypeManager.Create("Bool", "addToInventory", cr2w, this);
-				}
-				return _addToInventory;
-			}
-			set
-			{
-				if (_addToInventory == value)
-				{
-					return;
-				}
-				_addToInventory = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _addToInventory);
+			set => SetProperty(ref _addToInventory, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("equipToCurrentActiveSlot")] 
 		public CBool EquipToCurrentActiveSlot
 		{
-			get
-			{
-				if (_equipToCurrentActiveSlot == null)
-				{
-					_equipToCurrentActiveSlot = (CBool) CR2WTypeManager.Create("Bool", "equipToCurrentActiveSlot", cr2w, this);
-				}
-				return _equipToCurrentActiveSlot;
-			}
-			set
-			{
-				if (_equipToCurrentActiveSlot == value)
-				{
-					return;
-				}
-				_equipToCurrentActiveSlot = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _equipToCurrentActiveSlot);
+			set => SetProperty(ref _equipToCurrentActiveSlot, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("blockUpdateWeaponActiveSlots")] 
 		public CBool BlockUpdateWeaponActiveSlots
 		{
-			get
-			{
-				if (_blockUpdateWeaponActiveSlots == null)
-				{
-					_blockUpdateWeaponActiveSlots = (CBool) CR2WTypeManager.Create("Bool", "blockUpdateWeaponActiveSlots", cr2w, this);
-				}
-				return _blockUpdateWeaponActiveSlots;
-			}
-			set
-			{
-				if (_blockUpdateWeaponActiveSlots == value)
-				{
-					return;
-				}
-				_blockUpdateWeaponActiveSlots = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blockUpdateWeaponActiveSlots);
+			set => SetProperty(ref _blockUpdateWeaponActiveSlots, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("forceEquipWeapon")] 
 		public CBool ForceEquipWeapon
 		{
-			get
-			{
-				if (_forceEquipWeapon == null)
-				{
-					_forceEquipWeapon = (CBool) CR2WTypeManager.Create("Bool", "forceEquipWeapon", cr2w, this);
-				}
-				return _forceEquipWeapon;
-			}
-			set
-			{
-				if (_forceEquipWeapon == value)
-				{
-					return;
-				}
-				_forceEquipWeapon = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _forceEquipWeapon);
+			set => SetProperty(ref _forceEquipWeapon, value);
 		}
 
 		public GameplayEquipRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

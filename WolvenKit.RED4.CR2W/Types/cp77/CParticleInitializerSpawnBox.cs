@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("extents")] 
 		public CHandle<IEvaluatorVector> Extents
 		{
-			get
-			{
-				if (_extents == null)
-				{
-					_extents = (CHandle<IEvaluatorVector>) CR2WTypeManager.Create("handle:IEvaluatorVector", "extents", cr2w, this);
-				}
-				return _extents;
-			}
-			set
-			{
-				if (_extents == value)
-				{
-					return;
-				}
-				_extents = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _extents);
+			set => SetProperty(ref _extents, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("worldSpace")] 
 		public CBool WorldSpace
 		{
-			get
-			{
-				if (_worldSpace == null)
-				{
-					_worldSpace = (CBool) CR2WTypeManager.Create("Bool", "worldSpace", cr2w, this);
-				}
-				return _worldSpace;
-			}
-			set
-			{
-				if (_worldSpace == value)
-				{
-					return;
-				}
-				_worldSpace = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _worldSpace);
+			set => SetProperty(ref _worldSpace, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("surfaceOnly")] 
 		public CBool SurfaceOnly
 		{
-			get
-			{
-				if (_surfaceOnly == null)
-				{
-					_surfaceOnly = (CBool) CR2WTypeManager.Create("Bool", "surfaceOnly", cr2w, this);
-				}
-				return _surfaceOnly;
-			}
-			set
-			{
-				if (_surfaceOnly == value)
-				{
-					return;
-				}
-				_surfaceOnly = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _surfaceOnly);
+			set => SetProperty(ref _surfaceOnly, value);
 		}
 
 		public CParticleInitializerSpawnBox(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

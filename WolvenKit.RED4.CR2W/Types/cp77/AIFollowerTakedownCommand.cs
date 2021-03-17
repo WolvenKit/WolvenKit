@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetRef")] 
 		public gameEntityReference TargetRef
 		{
-			get
-			{
-				if (_targetRef == null)
-				{
-					_targetRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "targetRef", cr2w, this);
-				}
-				return _targetRef;
-			}
-			set
-			{
-				if (_targetRef == value)
-				{
-					return;
-				}
-				_targetRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetRef);
+			set => SetProperty(ref _targetRef, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("approachBeforeTakedown")] 
 		public CBool ApproachBeforeTakedown
 		{
-			get
-			{
-				if (_approachBeforeTakedown == null)
-				{
-					_approachBeforeTakedown = (CBool) CR2WTypeManager.Create("Bool", "approachBeforeTakedown", cr2w, this);
-				}
-				return _approachBeforeTakedown;
-			}
-			set
-			{
-				if (_approachBeforeTakedown == value)
-				{
-					return;
-				}
-				_approachBeforeTakedown = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _approachBeforeTakedown);
+			set => SetProperty(ref _approachBeforeTakedown, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("doNotTeleportIfTargetIsVisible")] 
 		public CBool DoNotTeleportIfTargetIsVisible
 		{
-			get
-			{
-				if (_doNotTeleportIfTargetIsVisible == null)
-				{
-					_doNotTeleportIfTargetIsVisible = (CBool) CR2WTypeManager.Create("Bool", "doNotTeleportIfTargetIsVisible", cr2w, this);
-				}
-				return _doNotTeleportIfTargetIsVisible;
-			}
-			set
-			{
-				if (_doNotTeleportIfTargetIsVisible == value)
-				{
-					return;
-				}
-				_doNotTeleportIfTargetIsVisible = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _doNotTeleportIfTargetIsVisible);
+			set => SetProperty(ref _doNotTeleportIfTargetIsVisible, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("target")] 
 		public wCHandle<gameObject> Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		public AIFollowerTakedownCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

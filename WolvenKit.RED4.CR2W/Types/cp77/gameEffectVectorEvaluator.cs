@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("modifier")] 
 		public CFloat Modifier
 		{
-			get
-			{
-				if (_modifier == null)
-				{
-					_modifier = (CFloat) CR2WTypeManager.Create("Float", "modifier", cr2w, this);
-				}
-				return _modifier;
-			}
-			set
-			{
-				if (_modifier == value)
-				{
-					return;
-				}
-				_modifier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _modifier);
+			set => SetProperty(ref _modifier, value);
 		}
 
 		public gameEffectVectorEvaluator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

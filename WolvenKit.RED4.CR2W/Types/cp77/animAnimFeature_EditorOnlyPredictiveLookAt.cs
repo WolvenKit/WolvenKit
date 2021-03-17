@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get
-			{
-				if (_isEnabled == null)
-				{
-					_isEnabled = (CBool) CR2WTypeManager.Create("Bool", "isEnabled", cr2w, this);
-				}
-				return _isEnabled;
-			}
-			set
-			{
-				if (_isEnabled == value)
-				{
-					return;
-				}
-				_isEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("target")] 
 		public Vector4 Target
 		{
-			get
-			{
-				if (_target == null)
-				{
-					_target = (Vector4) CR2WTypeManager.Create("Vector4", "target", cr2w, this);
-				}
-				return _target;
-			}
-			set
-			{
-				if (_target == value)
-				{
-					return;
-				}
-				_target = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("suppress")] 
 		public CFloat Suppress
 		{
-			get
-			{
-				if (_suppress == null)
-				{
-					_suppress = (CFloat) CR2WTypeManager.Create("Float", "suppress", cr2w, this);
-				}
-				return _suppress;
-			}
-			set
-			{
-				if (_suppress == value)
-				{
-					return;
-				}
-				_suppress = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _suppress);
+			set => SetProperty(ref _suppress, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("mode")] 
 		public CInt32 Mode
 		{
-			get
-			{
-				if (_mode == null)
-				{
-					_mode = (CInt32) CR2WTypeManager.Create("Int32", "mode", cr2w, this);
-				}
-				return _mode;
-			}
-			set
-			{
-				if (_mode == value)
-				{
-					return;
-				}
-				_mode = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mode);
+			set => SetProperty(ref _mode, value);
 		}
 
 		public animAnimFeature_EditorOnlyPredictiveLookAt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

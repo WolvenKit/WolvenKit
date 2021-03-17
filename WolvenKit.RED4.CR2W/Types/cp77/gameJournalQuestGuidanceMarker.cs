@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get
-			{
-				if (_nodeRef == null)
-				{
-					_nodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "nodeRef", cr2w, this);
-				}
-				return _nodeRef;
-			}
-			set
-			{
-				if (_nodeRef == value)
-				{
-					return;
-				}
-				_nodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeRef);
+			set => SetProperty(ref _nodeRef, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("pathfindingType")] 
 		public CEnum<gameQuestGuidanceMarkerPathfindingType> PathfindingType
 		{
-			get
-			{
-				if (_pathfindingType == null)
-				{
-					_pathfindingType = (CEnum<gameQuestGuidanceMarkerPathfindingType>) CR2WTypeManager.Create("gameQuestGuidanceMarkerPathfindingType", "pathfindingType", cr2w, this);
-				}
-				return _pathfindingType;
-			}
-			set
-			{
-				if (_pathfindingType == value)
-				{
-					return;
-				}
-				_pathfindingType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _pathfindingType);
+			set => SetProperty(ref _pathfindingType, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isPortal")] 
 		public CBool IsPortal
 		{
-			get
-			{
-				if (_isPortal == null)
-				{
-					_isPortal = (CBool) CR2WTypeManager.Create("Bool", "isPortal", cr2w, this);
-				}
-				return _isPortal;
-			}
-			set
-			{
-				if (_isPortal == value)
-				{
-					return;
-				}
-				_isPortal = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPortal);
+			set => SetProperty(ref _isPortal, value);
 		}
 
 		public gameJournalQuestGuidanceMarker(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

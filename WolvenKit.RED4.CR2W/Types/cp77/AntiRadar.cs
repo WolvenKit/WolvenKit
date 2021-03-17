@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("colliderComponent")] 
 		public CHandle<entIComponent> ColliderComponent
 		{
-			get
-			{
-				if (_colliderComponent == null)
-				{
-					_colliderComponent = (CHandle<entIComponent>) CR2WTypeManager.Create("handle:entIComponent", "colliderComponent", cr2w, this);
-				}
-				return _colliderComponent;
-			}
-			set
-			{
-				if (_colliderComponent == value)
-				{
-					return;
-				}
-				_colliderComponent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _colliderComponent);
+			set => SetProperty(ref _colliderComponent, value);
 		}
 
 		[Ordinal(58)] 
 		[RED("gameEffectRef")] 
 		public gameEffectRef GameEffectRef
 		{
-			get
-			{
-				if (_gameEffectRef == null)
-				{
-					_gameEffectRef = (gameEffectRef) CR2WTypeManager.Create("gameEffectRef", "gameEffectRef", cr2w, this);
-				}
-				return _gameEffectRef;
-			}
-			set
-			{
-				if (_gameEffectRef == value)
-				{
-					return;
-				}
-				_gameEffectRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameEffectRef);
+			set => SetProperty(ref _gameEffectRef, value);
 		}
 
 		[Ordinal(59)] 
 		[RED("gameEffectInstance")] 
 		public CHandle<gameEffectInstance> GameEffectInstance
 		{
-			get
-			{
-				if (_gameEffectInstance == null)
-				{
-					_gameEffectInstance = (CHandle<gameEffectInstance>) CR2WTypeManager.Create("handle:gameEffectInstance", "gameEffectInstance", cr2w, this);
-				}
-				return _gameEffectInstance;
-			}
-			set
-			{
-				if (_gameEffectInstance == value)
-				{
-					return;
-				}
-				_gameEffectInstance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _gameEffectInstance);
+			set => SetProperty(ref _gameEffectInstance, value);
 		}
 
 		[Ordinal(60)] 
 		[RED("jammedSensorsArray")] 
 		public CArray<wCHandle<SensorDevice>> JammedSensorsArray
 		{
-			get
-			{
-				if (_jammedSensorsArray == null)
-				{
-					_jammedSensorsArray = (CArray<wCHandle<SensorDevice>>) CR2WTypeManager.Create("array:whandle:SensorDevice", "jammedSensorsArray", cr2w, this);
-				}
-				return _jammedSensorsArray;
-			}
-			set
-			{
-				if (_jammedSensorsArray == value)
-				{
-					return;
-				}
-				_jammedSensorsArray = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _jammedSensorsArray);
+			set => SetProperty(ref _jammedSensorsArray, value);
 		}
 
 		public AntiRadar(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

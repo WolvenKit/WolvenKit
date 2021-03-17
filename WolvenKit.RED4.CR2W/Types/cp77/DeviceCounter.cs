@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("devices")] 
 		public CArray<CHandle<gameDeviceComponentPS>> Devices
 		{
-			get
-			{
-				if (_devices == null)
-				{
-					_devices = (CArray<CHandle<gameDeviceComponentPS>>) CR2WTypeManager.Create("array:handle:gameDeviceComponentPS", "devices", cr2w, this);
-				}
-				return _devices;
-			}
-			set
-			{
-				if (_devices == value)
-				{
-					return;
-				}
-				_devices = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _devices);
+			set => SetProperty(ref _devices, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("systemType")] 
 		public CEnum<EVirtualSystem> SystemType
 		{
-			get
-			{
-				if (_systemType == null)
-				{
-					_systemType = (CEnum<EVirtualSystem>) CR2WTypeManager.Create("EVirtualSystem", "systemType", cr2w, this);
-				}
-				return _systemType;
-			}
-			set
-			{
-				if (_systemType == value)
-				{
-					return;
-				}
-				_systemType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _systemType);
+			set => SetProperty(ref _systemType, value);
 		}
 
 		public DeviceCounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("defaultColor")] 
 		public CColor DefaultColor
 		{
-			get
-			{
-				if (_defaultColor == null)
-				{
-					_defaultColor = (CColor) CR2WTypeManager.Create("Color", "defaultColor", cr2w, this);
-				}
-				return _defaultColor;
-			}
-			set
-			{
-				if (_defaultColor == value)
-				{
-					return;
-				}
-				_defaultColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultColor);
+			set => SetProperty(ref _defaultColor, value);
 		}
 
 		public worldDebugColoring_Device(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

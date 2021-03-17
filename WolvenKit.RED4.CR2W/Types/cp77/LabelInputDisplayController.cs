@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inputLabel")] 
 		public inkTextWidgetReference InputLabel
 		{
-			get
-			{
-				if (_inputLabel == null)
-				{
-					_inputLabel = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "inputLabel", cr2w, this);
-				}
-				return _inputLabel;
-			}
-			set
-			{
-				if (_inputLabel == value)
-				{
-					return;
-				}
-				_inputLabel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inputLabel);
+			set => SetProperty(ref _inputLabel, value);
 		}
 
 		public LabelInputDisplayController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

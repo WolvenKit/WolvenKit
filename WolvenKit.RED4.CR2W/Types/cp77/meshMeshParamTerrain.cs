@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("chunkBoundingBoxes")] 
 		public CArray<Box> ChunkBoundingBoxes
 		{
-			get
-			{
-				if (_chunkBoundingBoxes == null)
-				{
-					_chunkBoundingBoxes = (CArray<Box>) CR2WTypeManager.Create("array:Box", "chunkBoundingBoxes", cr2w, this);
-				}
-				return _chunkBoundingBoxes;
-			}
-			set
-			{
-				if (_chunkBoundingBoxes == value)
-				{
-					return;
-				}
-				_chunkBoundingBoxes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _chunkBoundingBoxes);
+			set => SetProperty(ref _chunkBoundingBoxes, value);
 		}
 
 		public meshMeshParamTerrain(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

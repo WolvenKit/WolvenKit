@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("soundBank")] 
 		public CName SoundBank
 		{
-			get
-			{
-				if (_soundBank == null)
-				{
-					_soundBank = (CName) CR2WTypeManager.Create("CName", "soundBank", cr2w, this);
-				}
-				return _soundBank;
-			}
-			set
-			{
-				if (_soundBank == value)
-				{
-					return;
-				}
-				_soundBank = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soundBank);
+			set => SetProperty(ref _soundBank, value);
 		}
 
 		public audioSoundBankStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

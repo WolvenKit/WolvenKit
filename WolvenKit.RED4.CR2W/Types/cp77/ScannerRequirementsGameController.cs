@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ScannerRequirementsRightPanel")] 
 		public inkCompoundWidgetReference ScannerRequirementsRightPanel
 		{
-			get
-			{
-				if (_scannerRequirementsRightPanel == null)
-				{
-					_scannerRequirementsRightPanel = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "ScannerRequirementsRightPanel", cr2w, this);
-				}
-				return _scannerRequirementsRightPanel;
-			}
-			set
-			{
-				if (_scannerRequirementsRightPanel == value)
-				{
-					return;
-				}
-				_scannerRequirementsRightPanel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scannerRequirementsRightPanel);
+			set => SetProperty(ref _scannerRequirementsRightPanel, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("requirementsCallbackID")] 
 		public CUInt32 RequirementsCallbackID
 		{
-			get
-			{
-				if (_requirementsCallbackID == null)
-				{
-					_requirementsCallbackID = (CUInt32) CR2WTypeManager.Create("Uint32", "requirementsCallbackID", cr2w, this);
-				}
-				return _requirementsCallbackID;
-			}
-			set
-			{
-				if (_requirementsCallbackID == value)
-				{
-					return;
-				}
-				_requirementsCallbackID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requirementsCallbackID);
+			set => SetProperty(ref _requirementsCallbackID, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isValidRequirements")] 
 		public CBool IsValidRequirements
 		{
-			get
-			{
-				if (_isValidRequirements == null)
-				{
-					_isValidRequirements = (CBool) CR2WTypeManager.Create("Bool", "isValidRequirements", cr2w, this);
-				}
-				return _isValidRequirements;
-			}
-			set
-			{
-				if (_isValidRequirements == value)
-				{
-					return;
-				}
-				_isValidRequirements = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isValidRequirements);
+			set => SetProperty(ref _isValidRequirements, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("requirementWidgets")] 
 		public CArray<wCHandle<inkWidget>> RequirementWidgets
 		{
-			get
-			{
-				if (_requirementWidgets == null)
-				{
-					_requirementWidgets = (CArray<wCHandle<inkWidget>>) CR2WTypeManager.Create("array:whandle:inkWidget", "requirementWidgets", cr2w, this);
-				}
-				return _requirementWidgets;
-			}
-			set
-			{
-				if (_requirementWidgets == value)
-				{
-					return;
-				}
-				_requirementWidgets = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requirementWidgets);
+			set => SetProperty(ref _requirementWidgets, value);
 		}
 
 		public ScannerRequirementsGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

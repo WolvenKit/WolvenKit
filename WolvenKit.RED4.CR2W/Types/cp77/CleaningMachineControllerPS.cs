@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cleaningMachineSkillChecks")] 
 		public CHandle<EngDemoContainer> CleaningMachineSkillChecks
 		{
-			get
-			{
-				if (_cleaningMachineSkillChecks == null)
-				{
-					_cleaningMachineSkillChecks = (CHandle<EngDemoContainer>) CR2WTypeManager.Create("handle:EngDemoContainer", "cleaningMachineSkillChecks", cr2w, this);
-				}
-				return _cleaningMachineSkillChecks;
-			}
-			set
-			{
-				if (_cleaningMachineSkillChecks == value)
-				{
-					return;
-				}
-				_cleaningMachineSkillChecks = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cleaningMachineSkillChecks);
+			set => SetProperty(ref _cleaningMachineSkillChecks, value);
 		}
 
 		public CleaningMachineControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

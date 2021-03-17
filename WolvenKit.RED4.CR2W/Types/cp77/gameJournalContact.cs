@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public LocalizationString Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (LocalizationString) CR2WTypeManager.Create("LocalizationString", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("avatarID")] 
 		public TweakDBID AvatarID
 		{
-			get
-			{
-				if (_avatarID == null)
-				{
-					_avatarID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "avatarID", cr2w, this);
-				}
-				return _avatarID;
-			}
-			set
-			{
-				if (_avatarID == value)
-				{
-					return;
-				}
-				_avatarID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _avatarID);
+			set => SetProperty(ref _avatarID, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("type")] 
 		public CEnum<gameContactType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<gameContactType>) CR2WTypeManager.Create("gameContactType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("useFlatMessageLayout")] 
 		public CBool UseFlatMessageLayout
 		{
-			get
-			{
-				if (_useFlatMessageLayout == null)
-				{
-					_useFlatMessageLayout = (CBool) CR2WTypeManager.Create("Bool", "useFlatMessageLayout", cr2w, this);
-				}
-				return _useFlatMessageLayout;
-			}
-			set
-			{
-				if (_useFlatMessageLayout == value)
-				{
-					return;
-				}
-				_useFlatMessageLayout = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useFlatMessageLayout);
+			set => SetProperty(ref _useFlatMessageLayout, value);
 		}
 
 		public gameJournalContact(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

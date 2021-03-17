@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("answerContext")] 
 		public CName AnswerContext
 		{
-			get
-			{
-				if (_answerContext == null)
-				{
-					_answerContext = (CName) CR2WTypeManager.Create("CName", "answerContext", cr2w, this);
-				}
-				return _answerContext;
-			}
-			set
-			{
-				if (_answerContext == value)
-				{
-					return;
-				}
-				_answerContext = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _answerContext);
+			set => SetProperty(ref _answerContext, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get
-			{
-				if (_radius == null)
-				{
-					_radius = (CFloat) CR2WTypeManager.Create("Float", "radius", cr2w, this);
-				}
-				return _radius;
-			}
-			set
-			{
-				if (_radius == value)
-				{
-					return;
-				}
-				_radius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _radius);
+			set => SetProperty(ref _radius, value);
 		}
 
 		public audioVoiceContextAnswer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

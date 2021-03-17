@@ -19,161 +19,56 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("width")] 
 		public CUInt32 Width
 		{
-			get
-			{
-				if (_width == null)
-				{
-					_width = (CUInt32) CR2WTypeManager.Create("Uint32", "width", cr2w, this);
-				}
-				return _width;
-			}
-			set
-			{
-				if (_width == value)
-				{
-					return;
-				}
-				_width = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _width);
+			set => SetProperty(ref _width, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("height")] 
 		public CUInt32 Height
 		{
-			get
-			{
-				if (_height == null)
-				{
-					_height = (CUInt32) CR2WTypeManager.Create("Uint32", "height", cr2w, this);
-				}
-				return _height;
-			}
-			set
-			{
-				if (_height == value)
-				{
-					return;
-				}
-				_height = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _height);
+			set => SetProperty(ref _height, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("scaleToViewport")] 
 		public CBool ScaleToViewport
 		{
-			get
-			{
-				if (_scaleToViewport == null)
-				{
-					_scaleToViewport = (CBool) CR2WTypeManager.Create("Bool", "scaleToViewport", cr2w, this);
-				}
-				return _scaleToViewport;
-			}
-			set
-			{
-				if (_scaleToViewport == value)
-				{
-					return;
-				}
-				_scaleToViewport = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scaleToViewport);
+			set => SetProperty(ref _scaleToViewport, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("mipChain")] 
 		public CBool MipChain
 		{
-			get
-			{
-				if (_mipChain == null)
-				{
-					_mipChain = (CBool) CR2WTypeManager.Create("Bool", "mipChain", cr2w, this);
-				}
-				return _mipChain;
-			}
-			set
-			{
-				if (_mipChain == value)
-				{
-					return;
-				}
-				_mipChain = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mipChain);
+			set => SetProperty(ref _mipChain, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("samplesCount")] 
 		public CUInt8 SamplesCount
 		{
-			get
-			{
-				if (_samplesCount == null)
-				{
-					_samplesCount = (CUInt8) CR2WTypeManager.Create("Uint8", "samplesCount", cr2w, this);
-				}
-				return _samplesCount;
-			}
-			set
-			{
-				if (_samplesCount == value)
-				{
-					return;
-				}
-				_samplesCount = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _samplesCount);
+			set => SetProperty(ref _samplesCount, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("dataFormat")] 
 		public CEnum<DynamicTextureDataFormat> DataFormat
 		{
-			get
-			{
-				if (_dataFormat == null)
-				{
-					_dataFormat = (CEnum<DynamicTextureDataFormat>) CR2WTypeManager.Create("DynamicTextureDataFormat", "dataFormat", cr2w, this);
-				}
-				return _dataFormat;
-			}
-			set
-			{
-				if (_dataFormat == value)
-				{
-					return;
-				}
-				_dataFormat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _dataFormat);
+			set => SetProperty(ref _dataFormat, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("generator")] 
 		public CHandle<IDynamicTextureGenerator> Generator
 		{
-			get
-			{
-				if (_generator == null)
-				{
-					_generator = (CHandle<IDynamicTextureGenerator>) CR2WTypeManager.Create("handle:IDynamicTextureGenerator", "generator", cr2w, this);
-				}
-				return _generator;
-			}
-			set
-			{
-				if (_generator == value)
-				{
-					return;
-				}
-				_generator = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _generator);
+			set => SetProperty(ref _generator, value);
 		}
 
 		public DynamicTexture(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

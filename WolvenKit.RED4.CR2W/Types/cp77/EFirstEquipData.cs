@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("weaponID")] 
 		public TweakDBID WeaponID
 		{
-			get
-			{
-				if (_weaponID == null)
-				{
-					_weaponID = (TweakDBID) CR2WTypeManager.Create("TweakDBID", "weaponID", cr2w, this);
-				}
-				return _weaponID;
-			}
-			set
-			{
-				if (_weaponID == value)
-				{
-					return;
-				}
-				_weaponID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _weaponID);
+			set => SetProperty(ref _weaponID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hasPlayedFirstEquip")] 
 		public CBool HasPlayedFirstEquip
 		{
-			get
-			{
-				if (_hasPlayedFirstEquip == null)
-				{
-					_hasPlayedFirstEquip = (CBool) CR2WTypeManager.Create("Bool", "hasPlayedFirstEquip", cr2w, this);
-				}
-				return _hasPlayedFirstEquip;
-			}
-			set
-			{
-				if (_hasPlayedFirstEquip == value)
-				{
-					return;
-				}
-				_hasPlayedFirstEquip = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasPlayedFirstEquip);
+			set => SetProperty(ref _hasPlayedFirstEquip, value);
 		}
 
 		public EFirstEquipData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("curveResources")] 
 		public CArray<CurveResourceSetEntry> CurveResources
 		{
-			get
-			{
-				if (_curveResources == null)
-				{
-					_curveResources = (CArray<CurveResourceSetEntry>) CR2WTypeManager.Create("array:CurveResourceSetEntry", "curveResources", cr2w, this);
-				}
-				return _curveResources;
-			}
-			set
-			{
-				if (_curveResources == value)
-				{
-					return;
-				}
-				_curveResources = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _curveResources);
+			set => SetProperty(ref _curveResources, value);
 		}
 
 		public CurveResourceSet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

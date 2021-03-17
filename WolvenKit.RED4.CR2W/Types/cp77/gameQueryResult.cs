@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("hitShapes")] 
 		public CArray<gameShapeData> HitShapes
 		{
-			get
-			{
-				if (_hitShapes == null)
-				{
-					_hitShapes = (CArray<gameShapeData>) CR2WTypeManager.Create("array:gameShapeData", "hitShapes", cr2w, this);
-				}
-				return _hitShapes;
-			}
-			set
-			{
-				if (_hitShapes == value)
-				{
-					return;
-				}
-				_hitShapes = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitShapes);
+			set => SetProperty(ref _hitShapes, value);
 		}
 
 		public gameQueryResult(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

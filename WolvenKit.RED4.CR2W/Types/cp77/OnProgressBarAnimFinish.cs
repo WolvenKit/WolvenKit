@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("FullbarSize")] 
 		public CFloat FullbarSize
 		{
-			get
-			{
-				if (_fullbarSize == null)
-				{
-					_fullbarSize = (CFloat) CR2WTypeManager.Create("Float", "FullbarSize", cr2w, this);
-				}
-				return _fullbarSize;
-			}
-			set
-			{
-				if (_fullbarSize == value)
-				{
-					return;
-				}
-				_fullbarSize = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fullbarSize);
+			set => SetProperty(ref _fullbarSize, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("IsNegative")] 
 		public CBool IsNegative
 		{
-			get
-			{
-				if (_isNegative == null)
-				{
-					_isNegative = (CBool) CR2WTypeManager.Create("Bool", "IsNegative", cr2w, this);
-				}
-				return _isNegative;
-			}
-			set
-			{
-				if (_isNegative == value)
-				{
-					return;
-				}
-				_isNegative = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isNegative);
+			set => SetProperty(ref _isNegative, value);
 		}
 
 		public OnProgressBarAnimFinish(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

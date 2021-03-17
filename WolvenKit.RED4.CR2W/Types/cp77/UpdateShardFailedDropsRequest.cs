@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("resetCounter")] 
 		public CBool ResetCounter
 		{
-			get
-			{
-				if (_resetCounter == null)
-				{
-					_resetCounter = (CBool) CR2WTypeManager.Create("Bool", "resetCounter", cr2w, this);
-				}
-				return _resetCounter;
-			}
-			set
-			{
-				if (_resetCounter == value)
-				{
-					return;
-				}
-				_resetCounter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resetCounter);
+			set => SetProperty(ref _resetCounter, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("newFailedAttempts")] 
 		public CFloat NewFailedAttempts
 		{
-			get
-			{
-				if (_newFailedAttempts == null)
-				{
-					_newFailedAttempts = (CFloat) CR2WTypeManager.Create("Float", "newFailedAttempts", cr2w, this);
-				}
-				return _newFailedAttempts;
-			}
-			set
-			{
-				if (_newFailedAttempts == value)
-				{
-					return;
-				}
-				_newFailedAttempts = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _newFailedAttempts);
+			set => SetProperty(ref _newFailedAttempts, value);
 		}
 
 		public UpdateShardFailedDropsRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("positionOffset")] 
 		public CFloat PositionOffset
 		{
-			get
-			{
-				if (_positionOffset == null)
-				{
-					_positionOffset = (CFloat) CR2WTypeManager.Create("Float", "positionOffset", cr2w, this);
-				}
-				return _positionOffset;
-			}
-			set
-			{
-				if (_positionOffset == value)
-				{
-					return;
-				}
-				_positionOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _positionOffset);
+			set => SetProperty(ref _positionOffset, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("flickerStrength")] 
 		public CFloat FlickerStrength
 		{
-			get
-			{
-				if (_flickerStrength == null)
-				{
-					_flickerStrength = (CFloat) CR2WTypeManager.Create("Float", "flickerStrength", cr2w, this);
-				}
-				return _flickerStrength;
-			}
-			set
-			{
-				if (_flickerStrength == value)
-				{
-					return;
-				}
-				_flickerStrength = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flickerStrength);
+			set => SetProperty(ref _flickerStrength, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("flickerPeriod")] 
 		public CFloat FlickerPeriod
 		{
-			get
-			{
-				if (_flickerPeriod == null)
-				{
-					_flickerPeriod = (CFloat) CR2WTypeManager.Create("Float", "flickerPeriod", cr2w, this);
-				}
-				return _flickerPeriod;
-			}
-			set
-			{
-				if (_flickerPeriod == value)
-				{
-					return;
-				}
-				_flickerPeriod = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flickerPeriod);
+			set => SetProperty(ref _flickerPeriod, value);
 		}
 
 		public rendSLightFlickering(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

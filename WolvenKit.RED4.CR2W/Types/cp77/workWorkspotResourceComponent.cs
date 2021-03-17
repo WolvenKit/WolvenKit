@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("resource")] 
 		public rRef<workWorkspotResource> Resource
 		{
-			get
-			{
-				if (_resource == null)
-				{
-					_resource = (rRef<workWorkspotResource>) CR2WTypeManager.Create("rRef:workWorkspotResource", "resource", cr2w, this);
-				}
-				return _resource;
-			}
-			set
-			{
-				if (_resource == value)
-				{
-					return;
-				}
-				_resource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resource);
+			set => SetProperty(ref _resource, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("npcResource")] 
 		public rRef<workWorkspotResource> NpcResource
 		{
-			get
-			{
-				if (_npcResource == null)
-				{
-					_npcResource = (rRef<workWorkspotResource>) CR2WTypeManager.Create("rRef:workWorkspotResource", "npcResource", cr2w, this);
-				}
-				return _npcResource;
-			}
-			set
-			{
-				if (_npcResource == value)
-				{
-					return;
-				}
-				_npcResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _npcResource);
+			set => SetProperty(ref _npcResource, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("deviceResource")] 
 		public rRef<workWorkspotResource> DeviceResource
 		{
-			get
-			{
-				if (_deviceResource == null)
-				{
-					_deviceResource = (rRef<workWorkspotResource>) CR2WTypeManager.Create("rRef:workWorkspotResource", "deviceResource", cr2w, this);
-				}
-				return _deviceResource;
-			}
-			set
-			{
-				if (_deviceResource == value)
-				{
-					return;
-				}
-				_deviceResource = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deviceResource);
+			set => SetProperty(ref _deviceResource, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("syncSlotName")] 
 		public CName SyncSlotName
 		{
-			get
-			{
-				if (_syncSlotName == null)
-				{
-					_syncSlotName = (CName) CR2WTypeManager.Create("CName", "syncSlotName", cr2w, this);
-				}
-				return _syncSlotName;
-			}
-			set
-			{
-				if (_syncSlotName == value)
-				{
-					return;
-				}
-				_syncSlotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _syncSlotName);
+			set => SetProperty(ref _syncSlotName, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("shouldCrouch")] 
 		public CBool ShouldCrouch
 		{
-			get
-			{
-				if (_shouldCrouch == null)
-				{
-					_shouldCrouch = (CBool) CR2WTypeManager.Create("Bool", "shouldCrouch", cr2w, this);
-				}
-				return _shouldCrouch;
-			}
-			set
-			{
-				if (_shouldCrouch == value)
-				{
-					return;
-				}
-				_shouldCrouch = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shouldCrouch);
+			set => SetProperty(ref _shouldCrouch, value);
 		}
 
 		public workWorkspotResourceComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

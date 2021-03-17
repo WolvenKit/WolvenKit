@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stadiaControllerPage")] 
 		public inkWidgetReference StadiaControllerPage
 		{
-			get
-			{
-				if (_stadiaControllerPage == null)
-				{
-					_stadiaControllerPage = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "stadiaControllerPage", cr2w, this);
-				}
-				return _stadiaControllerPage;
-			}
-			set
-			{
-				if (_stadiaControllerPage == value)
-				{
-					return;
-				}
-				_stadiaControllerPage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stadiaControllerPage);
+			set => SetProperty(ref _stadiaControllerPage, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("nintendoControllerPage")] 
 		public inkWidgetReference NintendoControllerPage
 		{
-			get
-			{
-				if (_nintendoControllerPage == null)
-				{
-					_nintendoControllerPage = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "nintendoControllerPage", cr2w, this);
-				}
-				return _nintendoControllerPage;
-			}
-			set
-			{
-				if (_nintendoControllerPage == value)
-				{
-					return;
-				}
-				_nintendoControllerPage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nintendoControllerPage);
+			set => SetProperty(ref _nintendoControllerPage, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("durangoControllerPage")] 
 		public inkWidgetReference DurangoControllerPage
 		{
-			get
-			{
-				if (_durangoControllerPage == null)
-				{
-					_durangoControllerPage = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "durangoControllerPage", cr2w, this);
-				}
-				return _durangoControllerPage;
-			}
-			set
-			{
-				if (_durangoControllerPage == value)
-				{
-					return;
-				}
-				_durangoControllerPage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _durangoControllerPage);
+			set => SetProperty(ref _durangoControllerPage, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("orbisControllerPage")] 
 		public inkWidgetReference OrbisControllerPage
 		{
-			get
-			{
-				if (_orbisControllerPage == null)
-				{
-					_orbisControllerPage = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "orbisControllerPage", cr2w, this);
-				}
-				return _orbisControllerPage;
-			}
-			set
-			{
-				if (_orbisControllerPage == value)
-				{
-					return;
-				}
-				_orbisControllerPage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _orbisControllerPage);
+			set => SetProperty(ref _orbisControllerPage, value);
 		}
 
 		public gameuiStadiaControllersGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

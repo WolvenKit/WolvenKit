@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("entityID")] 
 		public entEntityID EntityID
 		{
-			get
-			{
-				if (_entityID == null)
-				{
-					_entityID = (entEntityID) CR2WTypeManager.Create("entEntityID", "entityID", cr2w, this);
-				}
-				return _entityID;
-			}
-			set
-			{
-				if (_entityID == value)
-				{
-					return;
-				}
-				_entityID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _entityID);
+			set => SetProperty(ref _entityID, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("calls")] 
 		public CInt32 Calls
 		{
-			get
-			{
-				if (_calls == null)
-				{
-					_calls = (CInt32) CR2WTypeManager.Create("Int32", "calls", cr2w, this);
-				}
-				return _calls;
-			}
-			set
-			{
-				if (_calls == value)
-				{
-					return;
-				}
-				_calls = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _calls);
+			set => SetProperty(ref _calls, value);
 		}
 
 		public SHitNPC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

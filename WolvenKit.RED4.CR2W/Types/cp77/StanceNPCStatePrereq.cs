@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("valueToListen")] 
 		public CEnum<gamedataNPCStanceState> ValueToListen
 		{
-			get
-			{
-				if (_valueToListen == null)
-				{
-					_valueToListen = (CEnum<gamedataNPCStanceState>) CR2WTypeManager.Create("gamedataNPCStanceState", "valueToListen", cr2w, this);
-				}
-				return _valueToListen;
-			}
-			set
-			{
-				if (_valueToListen == value)
-				{
-					return;
-				}
-				_valueToListen = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _valueToListen);
+			set => SetProperty(ref _valueToListen, value);
 		}
 
 		public StanceNPCStatePrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

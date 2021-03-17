@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("var0")] 
 		public CInt32 Var0
 		{
-			get
-			{
-				if (_var0 == null)
-				{
-					_var0 = (CInt32) CR2WTypeManager.Create("Int32", "var0", cr2w, this);
-				}
-				return _var0;
-			}
-			set
-			{
-				if (_var0 == value)
-				{
-					return;
-				}
-				_var0 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _var0);
+			set => SetProperty(ref _var0, value);
 		}
 
 		public Sample_Class_2_6(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

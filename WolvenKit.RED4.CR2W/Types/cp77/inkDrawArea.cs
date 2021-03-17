@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("size")] 
 		public Vector2 Size
 		{
-			get
-			{
-				if (_size == null)
-				{
-					_size = (Vector2) CR2WTypeManager.Create("Vector2", "size", cr2w, this);
-				}
-				return _size;
-			}
-			set
-			{
-				if (_size == value)
-				{
-					return;
-				}
-				_size = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _size);
+			set => SetProperty(ref _size, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("scale")] 
 		public CFloat Scale
 		{
-			get
-			{
-				if (_scale == null)
-				{
-					_scale = (CFloat) CR2WTypeManager.Create("Float", "scale", cr2w, this);
-				}
-				return _scale;
-			}
-			set
-			{
-				if (_scale == value)
-				{
-					return;
-				}
-				_scale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scale);
+			set => SetProperty(ref _scale, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("relativePosition")] 
 		public Vector2 RelativePosition
 		{
-			get
-			{
-				if (_relativePosition == null)
-				{
-					_relativePosition = (Vector2) CR2WTypeManager.Create("Vector2", "relativePosition", cr2w, this);
-				}
-				return _relativePosition;
-			}
-			set
-			{
-				if (_relativePosition == value)
-				{
-					return;
-				}
-				_relativePosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _relativePosition);
+			set => SetProperty(ref _relativePosition, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("absolutePosition")] 
 		public Vector2 AbsolutePosition
 		{
-			get
-			{
-				if (_absolutePosition == null)
-				{
-					_absolutePosition = (Vector2) CR2WTypeManager.Create("Vector2", "absolutePosition", cr2w, this);
-				}
-				return _absolutePosition;
-			}
-			set
-			{
-				if (_absolutePosition == value)
-				{
-					return;
-				}
-				_absolutePosition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _absolutePosition);
+			set => SetProperty(ref _absolutePosition, value);
 		}
 
 		public inkDrawArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

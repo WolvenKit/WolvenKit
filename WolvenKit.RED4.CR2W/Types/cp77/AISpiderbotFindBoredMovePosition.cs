@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("maxWanderDistance")] 
 		public CHandle<AIArgumentMapping> MaxWanderDistance
 		{
-			get
-			{
-				if (_maxWanderDistance == null)
-				{
-					_maxWanderDistance = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "maxWanderDistance", cr2w, this);
-				}
-				return _maxWanderDistance;
-			}
-			set
-			{
-				if (_maxWanderDistance == value)
-				{
-					return;
-				}
-				_maxWanderDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _maxWanderDistance);
+			set => SetProperty(ref _maxWanderDistance, value);
 		}
 
 		public AISpiderbotFindBoredMovePosition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

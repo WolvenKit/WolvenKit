@@ -31,437 +31,152 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("securityBlackBoardID")] 
 		public CUInt32 SecurityBlackBoardID
 		{
-			get
-			{
-				if (_securityBlackBoardID == null)
-				{
-					_securityBlackBoardID = (CUInt32) CR2WTypeManager.Create("Uint32", "securityBlackBoardID", cr2w, this);
-				}
-				return _securityBlackBoardID;
-			}
-			set
-			{
-				if (_securityBlackBoardID == value)
-				{
-					return;
-				}
-				_securityBlackBoardID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securityBlackBoardID);
+			set => SetProperty(ref _securityBlackBoardID, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("combatBlackBoardID")] 
 		public CUInt32 CombatBlackBoardID
 		{
-			get
-			{
-				if (_combatBlackBoardID == null)
-				{
-					_combatBlackBoardID = (CUInt32) CR2WTypeManager.Create("Uint32", "combatBlackBoardID", cr2w, this);
-				}
-				return _combatBlackBoardID;
-			}
-			set
-			{
-				if (_combatBlackBoardID == value)
-				{
-					return;
-				}
-				_combatBlackBoardID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _combatBlackBoardID);
+			set => SetProperty(ref _combatBlackBoardID, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("wantedValueBlackboardID")] 
 		public CUInt32 WantedValueBlackboardID
 		{
-			get
-			{
-				if (_wantedValueBlackboardID == null)
-				{
-					_wantedValueBlackboardID = (CUInt32) CR2WTypeManager.Create("Uint32", "wantedValueBlackboardID", cr2w, this);
-				}
-				return _wantedValueBlackboardID;
-			}
-			set
-			{
-				if (_wantedValueBlackboardID == value)
-				{
-					return;
-				}
-				_wantedValueBlackboardID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wantedValueBlackboardID);
+			set => SetProperty(ref _wantedValueBlackboardID, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("bountyAmountBlackboardID")] 
 		public CUInt32 BountyAmountBlackboardID
 		{
-			get
-			{
-				if (_bountyAmountBlackboardID == null)
-				{
-					_bountyAmountBlackboardID = (CUInt32) CR2WTypeManager.Create("Uint32", "bountyAmountBlackboardID", cr2w, this);
-				}
-				return _bountyAmountBlackboardID;
-			}
-			set
-			{
-				if (_bountyAmountBlackboardID == value)
-				{
-					return;
-				}
-				_bountyAmountBlackboardID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bountyAmountBlackboardID);
+			set => SetProperty(ref _bountyAmountBlackboardID, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("playerBlackboardID")] 
 		public CUInt32 PlayerBlackboardID
 		{
-			get
-			{
-				if (_playerBlackboardID == null)
-				{
-					_playerBlackboardID = (CUInt32) CR2WTypeManager.Create("Uint32", "playerBlackboardID", cr2w, this);
-				}
-				return _playerBlackboardID;
-			}
-			set
-			{
-				if (_playerBlackboardID == value)
-				{
-					return;
-				}
-				_playerBlackboardID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerBlackboardID);
+			set => SetProperty(ref _playerBlackboardID, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("blackboard")] 
 		public CHandle<gameIBlackboard> Blackboard
 		{
-			get
-			{
-				if (_blackboard == null)
-				{
-					_blackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "blackboard", cr2w, this);
-				}
-				return _blackboard;
-			}
-			set
-			{
-				if (_blackboard == value)
-				{
-					return;
-				}
-				_blackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _blackboard);
+			set => SetProperty(ref _blackboard, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("bountyPrice")] 
 		public CInt32 BountyPrice
 		{
-			get
-			{
-				if (_bountyPrice == null)
-				{
-					_bountyPrice = (CInt32) CR2WTypeManager.Create("Int32", "bountyPrice", cr2w, this);
-				}
-				return _bountyPrice;
-			}
-			set
-			{
-				if (_bountyPrice == value)
-				{
-					return;
-				}
-				_bountyPrice = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _bountyPrice);
+			set => SetProperty(ref _bountyPrice, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("wantedBlackboard")] 
 		public CHandle<gameIBlackboard> WantedBlackboard
 		{
-			get
-			{
-				if (_wantedBlackboard == null)
-				{
-					_wantedBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "wantedBlackboard", cr2w, this);
-				}
-				return _wantedBlackboard;
-			}
-			set
-			{
-				if (_wantedBlackboard == value)
-				{
-					return;
-				}
-				_wantedBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wantedBlackboard);
+			set => SetProperty(ref _wantedBlackboard, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("wantedBlackboardDef")] 
 		public CHandle<UI_WantedBarDef> WantedBlackboardDef
 		{
-			get
-			{
-				if (_wantedBlackboardDef == null)
-				{
-					_wantedBlackboardDef = (CHandle<UI_WantedBarDef>) CR2WTypeManager.Create("handle:UI_WantedBarDef", "wantedBlackboardDef", cr2w, this);
-				}
-				return _wantedBlackboardDef;
-			}
-			set
-			{
-				if (_wantedBlackboardDef == value)
-				{
-					return;
-				}
-				_wantedBlackboardDef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wantedBlackboardDef);
+			set => SetProperty(ref _wantedBlackboardDef, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("playerInCombat")] 
 		public CBool PlayerInCombat
 		{
-			get
-			{
-				if (_playerInCombat == null)
-				{
-					_playerInCombat = (CBool) CR2WTypeManager.Create("Bool", "playerInCombat", cr2w, this);
-				}
-				return _playerInCombat;
-			}
-			set
-			{
-				if (_playerInCombat == value)
-				{
-					return;
-				}
-				_playerInCombat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerInCombat);
+			set => SetProperty(ref _playerInCombat, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("playerPuppet")] 
 		public wCHandle<gameObject> PlayerPuppet
 		{
-			get
-			{
-				if (_playerPuppet == null)
-				{
-					_playerPuppet = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "playerPuppet", cr2w, this);
-				}
-				return _playerPuppet;
-			}
-			set
-			{
-				if (_playerPuppet == value)
-				{
-					return;
-				}
-				_playerPuppet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playerPuppet);
+			set => SetProperty(ref _playerPuppet, value);
 		}
 
 		[Ordinal(14)] 
 		[RED("currentSecurityZoneType")] 
 		public CEnum<ESecurityAreaType> CurrentSecurityZoneType
 		{
-			get
-			{
-				if (_currentSecurityZoneType == null)
-				{
-					_currentSecurityZoneType = (CEnum<ESecurityAreaType>) CR2WTypeManager.Create("ESecurityAreaType", "currentSecurityZoneType", cr2w, this);
-				}
-				return _currentSecurityZoneType;
-			}
-			set
-			{
-				if (_currentSecurityZoneType == value)
-				{
-					return;
-				}
-				_currentSecurityZoneType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentSecurityZoneType);
+			set => SetProperty(ref _currentSecurityZoneType, value);
 		}
 
 		[Ordinal(15)] 
 		[RED("vehicleZoneBlackboard")] 
 		public CHandle<gameIBlackboard> VehicleZoneBlackboard
 		{
-			get
-			{
-				if (_vehicleZoneBlackboard == null)
-				{
-					_vehicleZoneBlackboard = (CHandle<gameIBlackboard>) CR2WTypeManager.Create("handle:gameIBlackboard", "vehicleZoneBlackboard", cr2w, this);
-				}
-				return _vehicleZoneBlackboard;
-			}
-			set
-			{
-				if (_vehicleZoneBlackboard == value)
-				{
-					return;
-				}
-				_vehicleZoneBlackboard = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleZoneBlackboard);
+			set => SetProperty(ref _vehicleZoneBlackboard, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("vehicleZoneBlackboardDef")] 
 		public CHandle<LocalPlayerDef> VehicleZoneBlackboardDef
 		{
-			get
-			{
-				if (_vehicleZoneBlackboardDef == null)
-				{
-					_vehicleZoneBlackboardDef = (CHandle<LocalPlayerDef>) CR2WTypeManager.Create("handle:LocalPlayerDef", "vehicleZoneBlackboardDef", cr2w, this);
-				}
-				return _vehicleZoneBlackboardDef;
-			}
-			set
-			{
-				if (_vehicleZoneBlackboardDef == value)
-				{
-					return;
-				}
-				_vehicleZoneBlackboardDef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleZoneBlackboardDef);
+			set => SetProperty(ref _vehicleZoneBlackboardDef, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("vehicleZoneBlackboardID")] 
 		public CUInt32 VehicleZoneBlackboardID
 		{
-			get
-			{
-				if (_vehicleZoneBlackboardID == null)
-				{
-					_vehicleZoneBlackboardID = (CUInt32) CR2WTypeManager.Create("Uint32", "vehicleZoneBlackboardID", cr2w, this);
-				}
-				return _vehicleZoneBlackboardID;
-			}
-			set
-			{
-				if (_vehicleZoneBlackboardID == value)
-				{
-					return;
-				}
-				_vehicleZoneBlackboardID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vehicleZoneBlackboardID);
+			set => SetProperty(ref _vehicleZoneBlackboardID, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("WANTED_TIER_SIZE")] 
 		public CInt32 WANTED_TIER_SIZE
 		{
-			get
-			{
-				if (_wANTED_TIER_SIZE == null)
-				{
-					_wANTED_TIER_SIZE = (CInt32) CR2WTypeManager.Create("Int32", "WANTED_TIER_SIZE", cr2w, this);
-				}
-				return _wANTED_TIER_SIZE;
-			}
-			set
-			{
-				if (_wANTED_TIER_SIZE == value)
-				{
-					return;
-				}
-				_wANTED_TIER_SIZE = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wANTED_TIER_SIZE);
+			set => SetProperty(ref _wANTED_TIER_SIZE, value);
 		}
 
 		[Ordinal(19)] 
 		[RED("wantedLevel")] 
 		public CInt32 WantedLevel
 		{
-			get
-			{
-				if (_wantedLevel == null)
-				{
-					_wantedLevel = (CInt32) CR2WTypeManager.Create("Int32", "wantedLevel", cr2w, this);
-				}
-				return _wantedLevel;
-			}
-			set
-			{
-				if (_wantedLevel == value)
-				{
-					return;
-				}
-				_wantedLevel = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wantedLevel);
+			set => SetProperty(ref _wantedLevel, value);
 		}
 
 		[Ordinal(20)] 
 		[RED("factListenerID")] 
 		public CUInt32 FactListenerID
 		{
-			get
-			{
-				if (_factListenerID == null)
-				{
-					_factListenerID = (CUInt32) CR2WTypeManager.Create("Uint32", "factListenerID", cr2w, this);
-				}
-				return _factListenerID;
-			}
-			set
-			{
-				if (_factListenerID == value)
-				{
-					return;
-				}
-				_factListenerID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _factListenerID);
+			set => SetProperty(ref _factListenerID, value);
 		}
 
 		public ZoneAlertNotificationQueue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

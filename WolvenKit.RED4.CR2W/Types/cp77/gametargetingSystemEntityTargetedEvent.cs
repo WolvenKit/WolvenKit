@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetingEntity")] 
 		public wCHandle<entEntity> TargetingEntity
 		{
-			get
-			{
-				if (_targetingEntity == null)
-				{
-					_targetingEntity = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "targetingEntity", cr2w, this);
-				}
-				return _targetingEntity;
-			}
-			set
-			{
-				if (_targetingEntity == value)
-				{
-					return;
-				}
-				_targetingEntity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetingEntity);
+			set => SetProperty(ref _targetingEntity, value);
 		}
 
 		public gametargetingSystemEntityTargetedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

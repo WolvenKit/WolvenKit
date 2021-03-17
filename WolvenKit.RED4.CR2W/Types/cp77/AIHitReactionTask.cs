@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("activationTimeStamp")] 
 		public CFloat ActivationTimeStamp
 		{
-			get
-			{
-				if (_activationTimeStamp == null)
-				{
-					_activationTimeStamp = (CFloat) CR2WTypeManager.Create("Float", "activationTimeStamp", cr2w, this);
-				}
-				return _activationTimeStamp;
-			}
-			set
-			{
-				if (_activationTimeStamp == value)
-				{
-					return;
-				}
-				_activationTimeStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _activationTimeStamp);
+			set => SetProperty(ref _activationTimeStamp, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("reactionDuration")] 
 		public CFloat ReactionDuration
 		{
-			get
-			{
-				if (_reactionDuration == null)
-				{
-					_reactionDuration = (CFloat) CR2WTypeManager.Create("Float", "reactionDuration", cr2w, this);
-				}
-				return _reactionDuration;
-			}
-			set
-			{
-				if (_reactionDuration == value)
-				{
-					return;
-				}
-				_reactionDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _reactionDuration);
+			set => SetProperty(ref _reactionDuration, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hitReactionAction")] 
 		public CHandle<ActionHitReactionScriptProxy> HitReactionAction
 		{
-			get
-			{
-				if (_hitReactionAction == null)
-				{
-					_hitReactionAction = (CHandle<ActionHitReactionScriptProxy>) CR2WTypeManager.Create("handle:ActionHitReactionScriptProxy", "hitReactionAction", cr2w, this);
-				}
-				return _hitReactionAction;
-			}
-			set
-			{
-				if (_hitReactionAction == value)
-				{
-					return;
-				}
-				_hitReactionAction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitReactionAction);
+			set => SetProperty(ref _hitReactionAction, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hitReactionType")] 
 		public CEnum<animHitReactionType> HitReactionType
 		{
-			get
-			{
-				if (_hitReactionType == null)
-				{
-					_hitReactionType = (CEnum<animHitReactionType>) CR2WTypeManager.Create("animHitReactionType", "hitReactionType", cr2w, this);
-				}
-				return _hitReactionType;
-			}
-			set
-			{
-				if (_hitReactionType == value)
-				{
-					return;
-				}
-				_hitReactionType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hitReactionType);
+			set => SetProperty(ref _hitReactionType, value);
 		}
 
 		public AIHitReactionTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

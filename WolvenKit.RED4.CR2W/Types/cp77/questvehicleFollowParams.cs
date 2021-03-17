@@ -20,184 +20,64 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("targetEntRef")] 
 		public gameEntityReference TargetEntRef
 		{
-			get
-			{
-				if (_targetEntRef == null)
-				{
-					_targetEntRef = (gameEntityReference) CR2WTypeManager.Create("gameEntityReference", "targetEntRef", cr2w, this);
-				}
-				return _targetEntRef;
-			}
-			set
-			{
-				if (_targetEntRef == value)
-				{
-					return;
-				}
-				_targetEntRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _targetEntRef);
+			set => SetProperty(ref _targetEntRef, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("distanceMin")] 
 		public CFloat DistanceMin
 		{
-			get
-			{
-				if (_distanceMin == null)
-				{
-					_distanceMin = (CFloat) CR2WTypeManager.Create("Float", "distanceMin", cr2w, this);
-				}
-				return _distanceMin;
-			}
-			set
-			{
-				if (_distanceMin == value)
-				{
-					return;
-				}
-				_distanceMin = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distanceMin);
+			set => SetProperty(ref _distanceMin, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("distanceMax")] 
 		public CFloat DistanceMax
 		{
-			get
-			{
-				if (_distanceMax == null)
-				{
-					_distanceMax = (CFloat) CR2WTypeManager.Create("Float", "distanceMax", cr2w, this);
-				}
-				return _distanceMax;
-			}
-			set
-			{
-				if (_distanceMax == value)
-				{
-					return;
-				}
-				_distanceMax = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _distanceMax);
+			set => SetProperty(ref _distanceMax, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get
-			{
-				if (_isPlayer == null)
-				{
-					_isPlayer = (CBool) CR2WTypeManager.Create("Bool", "isPlayer", cr2w, this);
-				}
-				return _isPlayer;
-			}
-			set
-			{
-				if (_isPlayer == value)
-				{
-					return;
-				}
-				_isPlayer = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("stopWhenTargetReached")] 
 		public CBool StopWhenTargetReached
 		{
-			get
-			{
-				if (_stopWhenTargetReached == null)
-				{
-					_stopWhenTargetReached = (CBool) CR2WTypeManager.Create("Bool", "stopWhenTargetReached", cr2w, this);
-				}
-				return _stopWhenTargetReached;
-			}
-			set
-			{
-				if (_stopWhenTargetReached == value)
-				{
-					return;
-				}
-				_stopWhenTargetReached = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stopWhenTargetReached);
+			set => SetProperty(ref _stopWhenTargetReached, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("useTraffic")] 
 		public CBool UseTraffic
 		{
-			get
-			{
-				if (_useTraffic == null)
-				{
-					_useTraffic = (CBool) CR2WTypeManager.Create("Bool", "useTraffic", cr2w, this);
-				}
-				return _useTraffic;
-			}
-			set
-			{
-				if (_useTraffic == value)
-				{
-					return;
-				}
-				_useTraffic = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useTraffic);
+			set => SetProperty(ref _useTraffic, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("trafficTryNeighborsForStart")] 
 		public CBool TrafficTryNeighborsForStart
 		{
-			get
-			{
-				if (_trafficTryNeighborsForStart == null)
-				{
-					_trafficTryNeighborsForStart = (CBool) CR2WTypeManager.Create("Bool", "trafficTryNeighborsForStart", cr2w, this);
-				}
-				return _trafficTryNeighborsForStart;
-			}
-			set
-			{
-				if (_trafficTryNeighborsForStart == value)
-				{
-					return;
-				}
-				_trafficTryNeighborsForStart = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trafficTryNeighborsForStart);
+			set => SetProperty(ref _trafficTryNeighborsForStart, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("trafficTryNeighborsForEnd")] 
 		public CBool TrafficTryNeighborsForEnd
 		{
-			get
-			{
-				if (_trafficTryNeighborsForEnd == null)
-				{
-					_trafficTryNeighborsForEnd = (CBool) CR2WTypeManager.Create("Bool", "trafficTryNeighborsForEnd", cr2w, this);
-				}
-				return _trafficTryNeighborsForEnd;
-			}
-			set
-			{
-				if (_trafficTryNeighborsForEnd == value)
-				{
-					return;
-				}
-				_trafficTryNeighborsForEnd = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _trafficTryNeighborsForEnd);
+			set => SetProperty(ref _trafficTryNeighborsForEnd, value);
 		}
 
 		public questvehicleFollowParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("fictitiousAccelerationWs")] 
 		public Vector4 FictitiousAccelerationWs
 		{
-			get
-			{
-				if (_fictitiousAccelerationWs == null)
-				{
-					_fictitiousAccelerationWs = (Vector4) CR2WTypeManager.Create("Vector4", "fictitiousAccelerationWs", cr2w, this);
-				}
-				return _fictitiousAccelerationWs;
-			}
-			set
-			{
-				if (_fictitiousAccelerationWs == value)
-				{
-					return;
-				}
-				_fictitiousAccelerationWs = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fictitiousAccelerationWs);
+			set => SetProperty(ref _fictitiousAccelerationWs, value);
 		}
 
 		public animAnimFeature_DangleExternalInput(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

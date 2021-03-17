@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("type")] 
 		public CEnum<gamedataDevelopmentPointType> Type
 		{
-			get
-			{
-				if (_type == null)
-				{
-					_type = (CEnum<gamedataDevelopmentPointType>) CR2WTypeManager.Create("gamedataDevelopmentPointType", "type", cr2w, this);
-				}
-				return _type;
-			}
-			set
-			{
-				if (_type == value)
-				{
-					return;
-				}
-				_type = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("spent")] 
 		public CInt32 Spent
 		{
-			get
-			{
-				if (_spent == null)
-				{
-					_spent = (CInt32) CR2WTypeManager.Create("Int32", "spent", cr2w, this);
-				}
-				return _spent;
-			}
-			set
-			{
-				if (_spent == value)
-				{
-					return;
-				}
-				_spent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _spent);
+			set => SetProperty(ref _spent, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("unspent")] 
 		public CInt32 Unspent
 		{
-			get
-			{
-				if (_unspent == null)
-				{
-					_unspent = (CInt32) CR2WTypeManager.Create("Int32", "unspent", cr2w, this);
-				}
-				return _unspent;
-			}
-			set
-			{
-				if (_unspent == value)
-				{
-					return;
-				}
-				_unspent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _unspent);
+			set => SetProperty(ref _unspent, value);
 		}
 
 		public SDevelopmentPoints(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

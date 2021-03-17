@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("globalNodeRef")] 
 		public worldGlobalNodeRef GlobalNodeRef
 		{
-			get
-			{
-				if (_globalNodeRef == null)
-				{
-					_globalNodeRef = (worldGlobalNodeRef) CR2WTypeManager.Create("worldGlobalNodeRef", "globalNodeRef", cr2w, this);
-				}
-				return _globalNodeRef;
-			}
-			set
-			{
-				if (_globalNodeRef == value)
-				{
-					return;
-				}
-				_globalNodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _globalNodeRef);
+			set => SetProperty(ref _globalNodeRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("PrefabVariantsReplicatedInfos")] 
 		public CArray<questPrefabVariantReplicatedInfo> PrefabVariantsReplicatedInfos
 		{
-			get
-			{
-				if (_prefabVariantsReplicatedInfos == null)
-				{
-					_prefabVariantsReplicatedInfos = (CArray<questPrefabVariantReplicatedInfo>) CR2WTypeManager.Create("array:questPrefabVariantReplicatedInfo", "PrefabVariantsReplicatedInfos", cr2w, this);
-				}
-				return _prefabVariantsReplicatedInfos;
-			}
-			set
-			{
-				if (_prefabVariantsReplicatedInfos == value)
-				{
-					return;
-				}
-				_prefabVariantsReplicatedInfos = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _prefabVariantsReplicatedInfos);
+			set => SetProperty(ref _prefabVariantsReplicatedInfos, value);
 		}
 
 		public questPrefabVariantMapArrayElement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

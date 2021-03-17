@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("wasSeen")] 
 		public CBool WasSeen
 		{
-			get
-			{
-				if (_wasSeen == null)
-				{
-					_wasSeen = (CBool) CR2WTypeManager.Create("Bool", "wasSeen", cr2w, this);
-				}
-				return _wasSeen;
-			}
-			set
-			{
-				if (_wasSeen == value)
-				{
-					return;
-				}
-				_wasSeen = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _wasSeen);
+			set => SetProperty(ref _wasSeen, value);
 		}
 
 		public SetAnyTargetIsLocked(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

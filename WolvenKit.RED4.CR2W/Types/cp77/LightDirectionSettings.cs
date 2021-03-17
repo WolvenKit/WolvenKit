@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("direction")] 
 		public GlobalLightingTrajectoryOverride Direction
 		{
-			get
-			{
-				if (_direction == null)
-				{
-					_direction = (GlobalLightingTrajectoryOverride) CR2WTypeManager.Create("GlobalLightingTrajectoryOverride", "direction", cr2w, this);
-				}
-				return _direction;
-			}
-			set
-			{
-				if (_direction == value)
-				{
-					return;
-				}
-				_direction = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _direction);
+			set => SetProperty(ref _direction, value);
 		}
 
 		public LightDirectionSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

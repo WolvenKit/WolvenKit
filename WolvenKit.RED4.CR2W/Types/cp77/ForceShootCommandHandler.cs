@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("inCommand")] 
 		public CHandle<AIArgumentMapping> InCommand
 		{
-			get
-			{
-				if (_inCommand == null)
-				{
-					_inCommand = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "inCommand", cr2w, this);
-				}
-				return _inCommand;
-			}
-			set
-			{
-				if (_inCommand == value)
-				{
-					return;
-				}
-				_inCommand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _inCommand);
+			set => SetProperty(ref _inCommand, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("currentCommand")] 
 		public wCHandle<AIForceShootCommand> CurrentCommand
 		{
-			get
-			{
-				if (_currentCommand == null)
-				{
-					_currentCommand = (wCHandle<AIForceShootCommand>) CR2WTypeManager.Create("whandle:AIForceShootCommand", "currentCommand", cr2w, this);
-				}
-				return _currentCommand;
-			}
-			set
-			{
-				if (_currentCommand == value)
-				{
-					return;
-				}
-				_currentCommand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentCommand);
+			set => SetProperty(ref _currentCommand, value);
 		}
 
 		public ForceShootCommandHandler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

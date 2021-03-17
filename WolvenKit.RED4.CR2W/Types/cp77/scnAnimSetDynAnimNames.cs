@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("animVariable", 1)] 
 		public CStatic<CName> AnimVariable
 		{
-			get
-			{
-				if (_animVariable == null)
-				{
-					_animVariable = (CStatic<CName>) CR2WTypeManager.Create("static:1,CName", "animVariable", cr2w, this);
-				}
-				return _animVariable;
-			}
-			set
-			{
-				if (_animVariable == value)
-				{
-					return;
-				}
-				_animVariable = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animVariable);
+			set => SetProperty(ref _animVariable, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("animNames")] 
 		public CArray<CName> AnimNames
 		{
-			get
-			{
-				if (_animNames == null)
-				{
-					_animNames = (CArray<CName>) CR2WTypeManager.Create("array:CName", "animNames", cr2w, this);
-				}
-				return _animNames;
-			}
-			set
-			{
-				if (_animNames == value)
-				{
-					return;
-				}
-				_animNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _animNames);
+			set => SetProperty(ref _animNames, value);
 		}
 
 		public scnAnimSetDynAnimNames(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

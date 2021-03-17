@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("onState")] 
 		public inkWidgetReference OnState
 		{
-			get
-			{
-				if (_onState == null)
-				{
-					_onState = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "onState", cr2w, this);
-				}
-				return _onState;
-			}
-			set
-			{
-				if (_onState == value)
-				{
-					return;
-				}
-				_onState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onState);
+			set => SetProperty(ref _onState, value);
 		}
 
 		[Ordinal(16)] 
 		[RED("offState")] 
 		public inkWidgetReference OffState
 		{
-			get
-			{
-				if (_offState == null)
-				{
-					_offState = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "offState", cr2w, this);
-				}
-				return _offState;
-			}
-			set
-			{
-				if (_offState == value)
-				{
-					return;
-				}
-				_offState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offState);
+			set => SetProperty(ref _offState, value);
 		}
 
 		[Ordinal(17)] 
 		[RED("onStateBody")] 
 		public inkWidgetReference OnStateBody
 		{
-			get
-			{
-				if (_onStateBody == null)
-				{
-					_onStateBody = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "onStateBody", cr2w, this);
-				}
-				return _onStateBody;
-			}
-			set
-			{
-				if (_onStateBody == value)
-				{
-					return;
-				}
-				_onStateBody = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _onStateBody);
+			set => SetProperty(ref _onStateBody, value);
 		}
 
 		[Ordinal(18)] 
 		[RED("offStateBody")] 
 		public inkWidgetReference OffStateBody
 		{
-			get
-			{
-				if (_offStateBody == null)
-				{
-					_offStateBody = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "offStateBody", cr2w, this);
-				}
-				return _offStateBody;
-			}
-			set
-			{
-				if (_offStateBody == value)
-				{
-					return;
-				}
-				_offStateBody = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offStateBody);
+			set => SetProperty(ref _offStateBody, value);
 		}
 
 		public SettingsSelectorControllerBool(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("isOpen")] 
 		public CBool IsOpen
 		{
-			get
-			{
-				if (_isOpen == null)
-				{
-					_isOpen = (CBool) CR2WTypeManager.Create("Bool", "isOpen", cr2w, this);
-				}
-				return _isOpen;
-			}
-			set
-			{
-				if (_isOpen == value)
-				{
-					return;
-				}
-				_isOpen = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isOpen);
+			set => SetProperty(ref _isOpen, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isTilted")] 
 		public CBool IsTilted
 		{
-			get
-			{
-				if (_isTilted == null)
-				{
-					_isTilted = (CBool) CR2WTypeManager.Create("Bool", "isTilted", cr2w, this);
-				}
-				return _isTilted;
-			}
-			set
-			{
-				if (_isTilted == value)
-				{
-					return;
-				}
-				_isTilted = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isTilted);
+			set => SetProperty(ref _isTilted, value);
 		}
 
 		public WindowBlindersReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

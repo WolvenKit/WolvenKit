@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("condition")] 
 		public CHandle<AIbehaviorPassiveConditionDefinition> Condition
 		{
-			get
-			{
-				if (_condition == null)
-				{
-					_condition = (CHandle<AIbehaviorPassiveConditionDefinition>) CR2WTypeManager.Create("handle:AIbehaviorPassiveConditionDefinition", "condition", cr2w, this);
-				}
-				return _condition;
-			}
-			set
-			{
-				if (_condition == value)
-				{
-					return;
-				}
-				_condition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _condition);
+			set => SetProperty(ref _condition, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("resultIfFailed")] 
 		public CEnum<AIbehaviorCompletionStatus> ResultIfFailed
 		{
-			get
-			{
-				if (_resultIfFailed == null)
-				{
-					_resultIfFailed = (CEnum<AIbehaviorCompletionStatus>) CR2WTypeManager.Create("AIbehaviorCompletionStatus", "resultIfFailed", cr2w, this);
-				}
-				return _resultIfFailed;
-			}
-			set
-			{
-				if (_resultIfFailed == value)
-				{
-					return;
-				}
-				_resultIfFailed = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _resultIfFailed);
+			set => SetProperty(ref _resultIfFailed, value);
 		}
 
 		public AIbehaviorPassiveConditionNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

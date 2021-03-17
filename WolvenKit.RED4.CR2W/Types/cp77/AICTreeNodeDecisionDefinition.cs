@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("child")] 
 		public CHandle<LibTreeINodeDefinition> Child
 		{
-			get
-			{
-				if (_child == null)
-				{
-					_child = (CHandle<LibTreeINodeDefinition>) CR2WTypeManager.Create("handle:LibTreeINodeDefinition", "child", cr2w, this);
-				}
-				return _child;
-			}
-			set
-			{
-				if (_child == value)
-				{
-					return;
-				}
-				_child = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _child);
+			set => SetProperty(ref _child, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("expressions")] 
 		public CArray<CHandle<LibTreeINodeDefinition>> Expressions
 		{
-			get
-			{
-				if (_expressions == null)
-				{
-					_expressions = (CArray<CHandle<LibTreeINodeDefinition>>) CR2WTypeManager.Create("array:handle:LibTreeINodeDefinition", "expressions", cr2w, this);
-				}
-				return _expressions;
-			}
-			set
-			{
-				if (_expressions == value)
-				{
-					return;
-				}
-				_expressions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _expressions);
+			set => SetProperty(ref _expressions, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("interruption")] 
 		public AIInterruptionSignal Interruption
 		{
-			get
-			{
-				if (_interruption == null)
-				{
-					_interruption = (AIInterruptionSignal) CR2WTypeManager.Create("AIInterruptionSignal", "interruption", cr2w, this);
-				}
-				return _interruption;
-			}
-			set
-			{
-				if (_interruption == value)
-				{
-					return;
-				}
-				_interruption = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interruption);
+			set => SetProperty(ref _interruption, value);
 		}
 
 		public AICTreeNodeDecisionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

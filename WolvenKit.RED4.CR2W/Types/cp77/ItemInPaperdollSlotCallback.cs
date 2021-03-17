@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("paperdollPuppet")] 
 		public wCHandle<gamePuppet> PaperdollPuppet
 		{
-			get
-			{
-				if (_paperdollPuppet == null)
-				{
-					_paperdollPuppet = (wCHandle<gamePuppet>) CR2WTypeManager.Create("whandle:gamePuppet", "paperdollPuppet", cr2w, this);
-				}
-				return _paperdollPuppet;
-			}
-			set
-			{
-				if (_paperdollPuppet == value)
-				{
-					return;
-				}
-				_paperdollPuppet = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _paperdollPuppet);
+			set => SetProperty(ref _paperdollPuppet, value);
 		}
 
 		public ItemInPaperdollSlotCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

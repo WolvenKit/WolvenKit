@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("previousState")] 
 		public CBool PreviousState
 		{
-			get
-			{
-				if (_previousState == null)
-				{
-					_previousState = (CBool) CR2WTypeManager.Create("Bool", "previousState", cr2w, this);
-				}
-				return _previousState;
-			}
-			set
-			{
-				if (_previousState == value)
-				{
-					return;
-				}
-				_previousState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousState);
+			set => SetProperty(ref _previousState, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isInState")] 
 		public CBool IsInState
 		{
-			get
-			{
-				if (_isInState == null)
-				{
-					_isInState = (CBool) CR2WTypeManager.Create("Bool", "isInState", cr2w, this);
-				}
-				return _isInState;
-			}
-			set
-			{
-				if (_isInState == value)
-				{
-					return;
-				}
-				_isInState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInState);
+			set => SetProperty(ref _isInState, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("skipWhenApplied")] 
 		public CBool SkipWhenApplied
 		{
-			get
-			{
-				if (_skipWhenApplied == null)
-				{
-					_skipWhenApplied = (CBool) CR2WTypeManager.Create("Bool", "skipWhenApplied", cr2w, this);
-				}
-				return _skipWhenApplied;
-			}
-			set
-			{
-				if (_skipWhenApplied == value)
-				{
-					return;
-				}
-				_skipWhenApplied = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skipWhenApplied);
+			set => SetProperty(ref _skipWhenApplied, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("valueToListen")] 
 		public CInt32 ValueToListen
 		{
-			get
-			{
-				if (_valueToListen == null)
-				{
-					_valueToListen = (CInt32) CR2WTypeManager.Create("Int32", "valueToListen", cr2w, this);
-				}
-				return _valueToListen;
-			}
-			set
-			{
-				if (_valueToListen == value)
-				{
-					return;
-				}
-				_valueToListen = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _valueToListen);
+			set => SetProperty(ref _valueToListen, value);
 		}
 
 		public PlayerStateMachinePrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

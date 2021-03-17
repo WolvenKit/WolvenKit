@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("defaultColor")] 
 		public CColor DefaultColor
 		{
-			get
-			{
-				if (_defaultColor == null)
-				{
-					_defaultColor = (CColor) CR2WTypeManager.Create("Color", "defaultColor", cr2w, this);
-				}
-				return _defaultColor;
-			}
-			set
-			{
-				if (_defaultColor == value)
-				{
-					return;
-				}
-				_defaultColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _defaultColor);
+			set => SetProperty(ref _defaultColor, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("mergedMeshColor")] 
 		public CColor MergedMeshColor
 		{
-			get
-			{
-				if (_mergedMeshColor == null)
-				{
-					_mergedMeshColor = (CColor) CR2WTypeManager.Create("Color", "mergedMeshColor", cr2w, this);
-				}
-				return _mergedMeshColor;
-			}
-			set
-			{
-				if (_mergedMeshColor == value)
-				{
-					return;
-				}
-				_mergedMeshColor = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mergedMeshColor);
+			set => SetProperty(ref _mergedMeshColor, value);
 		}
 
 		public worldDebugColoring_MergedMeshes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

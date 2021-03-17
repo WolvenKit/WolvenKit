@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("value")] 
 		public CFloat Value
 		{
-			get
-			{
-				if (_value == null)
-				{
-					_value = (CFloat) CR2WTypeManager.Create("Float", "value", cr2w, this);
-				}
-				return _value;
-			}
-			set
-			{
-				if (_value == value)
-				{
-					return;
-				}
-				_value = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("default")] 
 		public CFloat Default
 		{
-			get
-			{
-				if (_default == null)
-				{
-					_default = (CFloat) CR2WTypeManager.Create("Float", "default", cr2w, this);
-				}
-				return _default;
-			}
-			set
-			{
-				if (_default == value)
-				{
-					return;
-				}
-				_default = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _default);
+			set => SetProperty(ref _default, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("min")] 
 		public CFloat Min
 		{
-			get
-			{
-				if (_min == null)
-				{
-					_min = (CFloat) CR2WTypeManager.Create("Float", "min", cr2w, this);
-				}
-				return _min;
-			}
-			set
-			{
-				if (_min == value)
-				{
-					return;
-				}
-				_min = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _min);
+			set => SetProperty(ref _min, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("max")] 
 		public CFloat Max
 		{
-			get
-			{
-				if (_max == null)
-				{
-					_max = (CFloat) CR2WTypeManager.Create("Float", "max", cr2w, this);
-				}
-				return _max;
-			}
-			set
-			{
-				if (_max == value)
-				{
-					return;
-				}
-				_max = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _max);
+			set => SetProperty(ref _max, value);
 		}
 
 		public animAnimVariableFloat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

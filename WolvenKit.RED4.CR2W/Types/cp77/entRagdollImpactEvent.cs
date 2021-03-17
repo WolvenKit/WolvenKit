@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("otherEntity")] 
 		public wCHandle<entEntity> OtherEntity
 		{
-			get
-			{
-				if (_otherEntity == null)
-				{
-					_otherEntity = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "otherEntity", cr2w, this);
-				}
-				return _otherEntity;
-			}
-			set
-			{
-				if (_otherEntity == value)
-				{
-					return;
-				}
-				_otherEntity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _otherEntity);
+			set => SetProperty(ref _otherEntity, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("triggeredSimulation")] 
 		public CBool TriggeredSimulation
 		{
-			get
-			{
-				if (_triggeredSimulation == null)
-				{
-					_triggeredSimulation = (CBool) CR2WTypeManager.Create("Bool", "triggeredSimulation", cr2w, this);
-				}
-				return _triggeredSimulation;
-			}
-			set
-			{
-				if (_triggeredSimulation == value)
-				{
-					return;
-				}
-				_triggeredSimulation = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _triggeredSimulation);
+			set => SetProperty(ref _triggeredSimulation, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("impactPoints")] 
 		public CArray<entRagdollImpactPointData> ImpactPoints
 		{
-			get
-			{
-				if (_impactPoints == null)
-				{
-					_impactPoints = (CArray<entRagdollImpactPointData>) CR2WTypeManager.Create("array:entRagdollImpactPointData", "impactPoints", cr2w, this);
-				}
-				return _impactPoints;
-			}
-			set
-			{
-				if (_impactPoints == value)
-				{
-					return;
-				}
-				_impactPoints = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _impactPoints);
+			set => SetProperty(ref _impactPoints, value);
 		}
 
 		public entRagdollImpactEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

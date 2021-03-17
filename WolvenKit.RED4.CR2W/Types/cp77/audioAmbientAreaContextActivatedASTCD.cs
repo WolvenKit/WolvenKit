@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("areaMixingContext")] 
 		public CName AreaMixingContext
 		{
-			get
-			{
-				if (_areaMixingContext == null)
-				{
-					_areaMixingContext = (CName) CR2WTypeManager.Create("CName", "areaMixingContext", cr2w, this);
-				}
-				return _areaMixingContext;
-			}
-			set
-			{
-				if (_areaMixingContext == value)
-				{
-					return;
-				}
-				_areaMixingContext = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _areaMixingContext);
+			set => SetProperty(ref _areaMixingContext, value);
 		}
 
 		public audioAmbientAreaContextActivatedASTCD(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -22,230 +22,80 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("audioEvent1")] 
 		public CName AudioEvent1
 		{
-			get
-			{
-				if (_audioEvent1 == null)
-				{
-					_audioEvent1 = (CName) CR2WTypeManager.Create("CName", "audioEvent1", cr2w, this);
-				}
-				return _audioEvent1;
-			}
-			set
-			{
-				if (_audioEvent1 == value)
-				{
-					return;
-				}
-				_audioEvent1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioEvent1);
+			set => SetProperty(ref _audioEvent1, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("audioEvent2")] 
 		public CName AudioEvent2
 		{
-			get
-			{
-				if (_audioEvent2 == null)
-				{
-					_audioEvent2 = (CName) CR2WTypeManager.Create("CName", "audioEvent2", cr2w, this);
-				}
-				return _audioEvent2;
-			}
-			set
-			{
-				if (_audioEvent2 == value)
-				{
-					return;
-				}
-				_audioEvent2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioEvent2);
+			set => SetProperty(ref _audioEvent2, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("audioEvent3")] 
 		public CName AudioEvent3
 		{
-			get
-			{
-				if (_audioEvent3 == null)
-				{
-					_audioEvent3 = (CName) CR2WTypeManager.Create("CName", "audioEvent3", cr2w, this);
-				}
-				return _audioEvent3;
-			}
-			set
-			{
-				if (_audioEvent3 == value)
-				{
-					return;
-				}
-				_audioEvent3 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioEvent3);
+			set => SetProperty(ref _audioEvent3, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("audioEvent4")] 
 		public CName AudioEvent4
 		{
-			get
-			{
-				if (_audioEvent4 == null)
-				{
-					_audioEvent4 = (CName) CR2WTypeManager.Create("CName", "audioEvent4", cr2w, this);
-				}
-				return _audioEvent4;
-			}
-			set
-			{
-				if (_audioEvent4 == value)
-				{
-					return;
-				}
-				_audioEvent4 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _audioEvent4);
+			set => SetProperty(ref _audioEvent4, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("useCustomDelays")] 
 		public CBool UseCustomDelays
 		{
-			get
-			{
-				if (_useCustomDelays == null)
-				{
-					_useCustomDelays = (CBool) CR2WTypeManager.Create("Bool", "useCustomDelays", cr2w, this);
-				}
-				return _useCustomDelays;
-			}
-			set
-			{
-				if (_useCustomDelays == value)
-				{
-					return;
-				}
-				_useCustomDelays = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useCustomDelays);
+			set => SetProperty(ref _useCustomDelays, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("speedOfSound")] 
 		public CFloat SpeedOfSound
 		{
-			get
-			{
-				if (_speedOfSound == null)
-				{
-					_speedOfSound = (CFloat) CR2WTypeManager.Create("Float", "speedOfSound", cr2w, this);
-				}
-				return _speedOfSound;
-			}
-			set
-			{
-				if (_speedOfSound == value)
-				{
-					return;
-				}
-				_speedOfSound = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _speedOfSound);
+			set => SetProperty(ref _speedOfSound, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("soundDelay1")] 
 		public CFloat SoundDelay1
 		{
-			get
-			{
-				if (_soundDelay1 == null)
-				{
-					_soundDelay1 = (CFloat) CR2WTypeManager.Create("Float", "soundDelay1", cr2w, this);
-				}
-				return _soundDelay1;
-			}
-			set
-			{
-				if (_soundDelay1 == value)
-				{
-					return;
-				}
-				_soundDelay1 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soundDelay1);
+			set => SetProperty(ref _soundDelay1, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("soundDelay2")] 
 		public CFloat SoundDelay2
 		{
-			get
-			{
-				if (_soundDelay2 == null)
-				{
-					_soundDelay2 = (CFloat) CR2WTypeManager.Create("Float", "soundDelay2", cr2w, this);
-				}
-				return _soundDelay2;
-			}
-			set
-			{
-				if (_soundDelay2 == value)
-				{
-					return;
-				}
-				_soundDelay2 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soundDelay2);
+			set => SetProperty(ref _soundDelay2, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("soundDelay3")] 
 		public CFloat SoundDelay3
 		{
-			get
-			{
-				if (_soundDelay3 == null)
-				{
-					_soundDelay3 = (CFloat) CR2WTypeManager.Create("Float", "soundDelay3", cr2w, this);
-				}
-				return _soundDelay3;
-			}
-			set
-			{
-				if (_soundDelay3 == value)
-				{
-					return;
-				}
-				_soundDelay3 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soundDelay3);
+			set => SetProperty(ref _soundDelay3, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("soundDelay4")] 
 		public CFloat SoundDelay4
 		{
-			get
-			{
-				if (_soundDelay4 == null)
-				{
-					_soundDelay4 = (CFloat) CR2WTypeManager.Create("Float", "soundDelay4", cr2w, this);
-				}
-				return _soundDelay4;
-			}
-			set
-			{
-				if (_soundDelay4 == value)
-				{
-					return;
-				}
-				_soundDelay4 = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _soundDelay4);
+			set => SetProperty(ref _soundDelay4, value);
 		}
 
 		public audioAdvertSoundMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

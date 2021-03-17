@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("outlineWidget")] 
 		public inkShapeWidgetReference OutlineWidget
 		{
-			get
-			{
-				if (_outlineWidget == null)
-				{
-					_outlineWidget = (inkShapeWidgetReference) CR2WTypeManager.Create("inkShapeWidgetReference", "outlineWidget", cr2w, this);
-				}
-				return _outlineWidget;
-			}
-			set
-			{
-				if (_outlineWidget == value)
-				{
-					return;
-				}
-				_outlineWidget = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outlineWidget);
+			set => SetProperty(ref _outlineWidget, value);
 		}
 
 		public gameuiWorldMapDebugOutlineLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

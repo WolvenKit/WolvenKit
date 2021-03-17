@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("simpleLinkGroup")] 
 		public CName SimpleLinkGroup
 		{
-			get
-			{
-				if (_simpleLinkGroup == null)
-				{
-					_simpleLinkGroup = (CName) CR2WTypeManager.Create("CName", "simpleLinkGroup", cr2w, this);
-				}
-				return _simpleLinkGroup;
-			}
-			set
-			{
-				if (_simpleLinkGroup == value)
-				{
-					return;
-				}
-				_simpleLinkGroup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _simpleLinkGroup);
+			set => SetProperty(ref _simpleLinkGroup, value);
 		}
 
 		public gameuiCharacterCustomizationPersonalLinkController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

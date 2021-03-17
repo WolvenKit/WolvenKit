@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("children")] 
 		public CArray<CHandle<inkWidget>> Children
 		{
-			get
-			{
-				if (_children == null)
-				{
-					_children = (CArray<CHandle<inkWidget>>) CR2WTypeManager.Create("array:handle:inkWidget", "children", cr2w, this);
-				}
-				return _children;
-			}
-			set
-			{
-				if (_children == value)
-				{
-					return;
-				}
-				_children = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _children);
+			set => SetProperty(ref _children, value);
 		}
 
 		public inkMultiChildren(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

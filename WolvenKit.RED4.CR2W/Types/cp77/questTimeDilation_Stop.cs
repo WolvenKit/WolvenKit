@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("easeOutCurve")] 
 		public CName EaseOutCurve
 		{
-			get
-			{
-				if (_easeOutCurve == null)
-				{
-					_easeOutCurve = (CName) CR2WTypeManager.Create("CName", "easeOutCurve", cr2w, this);
-				}
-				return _easeOutCurve;
-			}
-			set
-			{
-				if (_easeOutCurve == value)
-				{
-					return;
-				}
-				_easeOutCurve = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _easeOutCurve);
+			set => SetProperty(ref _easeOutCurve, value);
 		}
 
 		public questTimeDilation_Stop(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

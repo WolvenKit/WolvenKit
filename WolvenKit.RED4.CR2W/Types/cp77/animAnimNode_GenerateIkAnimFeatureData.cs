@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("ikChainSettings")] 
 		public CArray<animIKChainSettings> IkChainSettings
 		{
-			get
-			{
-				if (_ikChainSettings == null)
-				{
-					_ikChainSettings = (CArray<animIKChainSettings>) CR2WTypeManager.Create("array:animIKChainSettings", "ikChainSettings", cr2w, this);
-				}
-				return _ikChainSettings;
-			}
-			set
-			{
-				if (_ikChainSettings == value)
-				{
-					return;
-				}
-				_ikChainSettings = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _ikChainSettings);
+			set => SetProperty(ref _ikChainSettings, value);
 		}
 
 		public animAnimNode_GenerateIkAnimFeatureData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

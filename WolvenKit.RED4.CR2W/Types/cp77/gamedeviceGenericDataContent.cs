@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("name")] 
 		public CString Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CString) CR2WTypeManager.Create("String", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("content")] 
 		public CArray<gamedeviceDataElement> Content
 		{
-			get
-			{
-				if (_content == null)
-				{
-					_content = (CArray<gamedeviceDataElement>) CR2WTypeManager.Create("array:gamedeviceDataElement", "content", cr2w, this);
-				}
-				return _content;
-			}
-			set
-			{
-				if (_content == value)
-				{
-					return;
-				}
-				_content = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _content);
+			set => SetProperty(ref _content, value);
 		}
 
 		public gamedeviceGenericDataContent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

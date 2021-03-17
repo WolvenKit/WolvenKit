@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("available")] 
 		public CBool Available
 		{
-			get
-			{
-				if (_available == null)
-				{
-					_available = (CBool) CR2WTypeManager.Create("Bool", "available", cr2w, this);
-				}
-				return _available;
-			}
-			set
-			{
-				if (_available == value)
-				{
-					return;
-				}
-				_available = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _available);
+			set => SetProperty(ref _available, value);
 		}
 
 		public scnInterruptAvailability_Operation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

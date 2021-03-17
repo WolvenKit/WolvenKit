@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("params")] 
 		public CArray<questElevator_ManageNPCAttachment_NodeTypeParams> Params
 		{
-			get
-			{
-				if (_params == null)
-				{
-					_params = (CArray<questElevator_ManageNPCAttachment_NodeTypeParams>) CR2WTypeManager.Create("array:questElevator_ManageNPCAttachment_NodeTypeParams", "params", cr2w, this);
-				}
-				return _params;
-			}
-			set
-			{
-				if (_params == value)
-				{
-					return;
-				}
-				_params = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
 		}
 
 		public questElevator_ManageNPCAttachment_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

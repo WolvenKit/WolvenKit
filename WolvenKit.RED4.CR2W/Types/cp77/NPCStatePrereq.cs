@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("previousState")] 
 		public CBool PreviousState
 		{
-			get
-			{
-				if (_previousState == null)
-				{
-					_previousState = (CBool) CR2WTypeManager.Create("Bool", "previousState", cr2w, this);
-				}
-				return _previousState;
-			}
-			set
-			{
-				if (_previousState == value)
-				{
-					return;
-				}
-				_previousState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _previousState);
+			set => SetProperty(ref _previousState, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isInState")] 
 		public CBool IsInState
 		{
-			get
-			{
-				if (_isInState == null)
-				{
-					_isInState = (CBool) CR2WTypeManager.Create("Bool", "isInState", cr2w, this);
-				}
-				return _isInState;
-			}
-			set
-			{
-				if (_isInState == value)
-				{
-					return;
-				}
-				_isInState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isInState);
+			set => SetProperty(ref _isInState, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("skipWhenApplied")] 
 		public CBool SkipWhenApplied
 		{
-			get
-			{
-				if (_skipWhenApplied == null)
-				{
-					_skipWhenApplied = (CBool) CR2WTypeManager.Create("Bool", "skipWhenApplied", cr2w, this);
-				}
-				return _skipWhenApplied;
-			}
-			set
-			{
-				if (_skipWhenApplied == value)
-				{
-					return;
-				}
-				_skipWhenApplied = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _skipWhenApplied);
+			set => SetProperty(ref _skipWhenApplied, value);
 		}
 
 		public NPCStatePrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

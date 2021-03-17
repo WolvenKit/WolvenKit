@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("threat")] 
 		public wCHandle<entEntity> Threat
 		{
-			get
-			{
-				if (_threat == null)
-				{
-					_threat = (wCHandle<entEntity>) CR2WTypeManager.Create("whandle:entEntity", "threat", cr2w, this);
-				}
-				return _threat;
-			}
-			set
-			{
-				if (_threat == value)
-				{
-					return;
-				}
-				_threat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _threat);
+			set => SetProperty(ref _threat, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get
-			{
-				if (_position == null)
-				{
-					_position = (Vector4) CR2WTypeManager.Create("Vector4", "position", cr2w, this);
-				}
-				return _position;
-			}
-			set
-			{
-				if (_position == value)
-				{
-					return;
-				}
-				_position = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("timeStamp")] 
 		public CFloat TimeStamp
 		{
-			get
-			{
-				if (_timeStamp == null)
-				{
-					_timeStamp = (CFloat) CR2WTypeManager.Create("Float", "timeStamp", cr2w, this);
-				}
-				return _timeStamp;
-			}
-			set
-			{
-				if (_timeStamp == value)
-				{
-					return;
-				}
-				_timeStamp = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeStamp);
+			set => SetProperty(ref _timeStamp, value);
 		}
 
 		public DroppedThreatData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

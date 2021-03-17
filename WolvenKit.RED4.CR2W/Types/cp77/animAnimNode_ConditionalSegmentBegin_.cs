@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("condition")] 
 		public animConditionalSegmentCondition Condition
 		{
-			get
-			{
-				if (_condition == null)
-				{
-					_condition = (animConditionalSegmentCondition) CR2WTypeManager.Create("animConditionalSegmentCondition", "condition", cr2w, this);
-				}
-				return _condition;
-			}
-			set
-			{
-				if (_condition == value)
-				{
-					return;
-				}
-				_condition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _condition);
+			set => SetProperty(ref _condition, value);
 		}
 
 		public animAnimNode_ConditionalSegmentBegin_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

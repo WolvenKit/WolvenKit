@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("libraryName")] 
 		public CName LibraryName
 		{
-			get
-			{
-				if (_libraryName == null)
-				{
-					_libraryName = (CName) CR2WTypeManager.Create("CName", "libraryName", cr2w, this);
-				}
-				return _libraryName;
-			}
-			set
-			{
-				if (_libraryName == value)
-				{
-					return;
-				}
-				_libraryName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _libraryName);
+			set => SetProperty(ref _libraryName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("offset")] 
 		public CFloat Offset
 		{
-			get
-			{
-				if (_offset == null)
-				{
-					_offset = (CFloat) CR2WTypeManager.Create("Float", "offset", cr2w, this);
-				}
-				return _offset;
-			}
-			set
-			{
-				if (_offset == value)
-				{
-					return;
-				}
-				_offset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offset);
+			set => SetProperty(ref _offset, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("repeatPatternDensity")] 
 		public CUInt32 RepeatPatternDensity
 		{
-			get
-			{
-				if (_repeatPatternDensity == null)
-				{
-					_repeatPatternDensity = (CUInt32) CR2WTypeManager.Create("Uint32", "repeatPatternDensity", cr2w, this);
-				}
-				return _repeatPatternDensity;
-			}
-			set
-			{
-				if (_repeatPatternDensity == value)
-				{
-					return;
-				}
-				_repeatPatternDensity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _repeatPatternDensity);
+			set => SetProperty(ref _repeatPatternDensity, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("repeatPatternStartOffset")] 
 		public CUInt32 RepeatPatternStartOffset
 		{
-			get
-			{
-				if (_repeatPatternStartOffset == null)
-				{
-					_repeatPatternStartOffset = (CUInt32) CR2WTypeManager.Create("Uint32", "repeatPatternStartOffset", cr2w, this);
-				}
-				return _repeatPatternStartOffset;
-			}
-			set
-			{
-				if (_repeatPatternStartOffset == value)
-				{
-					return;
-				}
-				_repeatPatternStartOffset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _repeatPatternStartOffset);
+			set => SetProperty(ref _repeatPatternStartOffset, value);
 		}
 
 		public gameuiRoadEditorDecorationSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

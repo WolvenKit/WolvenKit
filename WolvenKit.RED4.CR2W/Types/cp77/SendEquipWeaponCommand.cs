@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("secondary")] 
 		public CBool Secondary
 		{
-			get
-			{
-				if (_secondary == null)
-				{
-					_secondary = (CBool) CR2WTypeManager.Create("Bool", "secondary", cr2w, this);
-				}
-				return _secondary;
-			}
-			set
-			{
-				if (_secondary == value)
-				{
-					return;
-				}
-				_secondary = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _secondary);
+			set => SetProperty(ref _secondary, value);
 		}
 
 		public SendEquipWeaponCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

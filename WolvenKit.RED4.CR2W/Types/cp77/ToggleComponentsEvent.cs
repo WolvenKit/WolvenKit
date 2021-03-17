@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("componentsData")] 
 		public CArray<SComponentOperationData> ComponentsData
 		{
-			get
-			{
-				if (_componentsData == null)
-				{
-					_componentsData = (CArray<SComponentOperationData>) CR2WTypeManager.Create("array:SComponentOperationData", "componentsData", cr2w, this);
-				}
-				return _componentsData;
-			}
-			set
-			{
-				if (_componentsData == value)
-				{
-					return;
-				}
-				_componentsData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _componentsData);
+			set => SetProperty(ref _componentsData, value);
 		}
 
 		public ToggleComponentsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

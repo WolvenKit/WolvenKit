@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("apperanceName")] 
 		public CName ApperanceName
 		{
-			get
-			{
-				if (_apperanceName == null)
-				{
-					_apperanceName = (CName) CR2WTypeManager.Create("CName", "apperanceName", cr2w, this);
-				}
-				return _apperanceName;
-			}
-			set
-			{
-				if (_apperanceName == value)
-				{
-					return;
-				}
-				_apperanceName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _apperanceName);
+			set => SetProperty(ref _apperanceName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("materialFrom")] 
 		public CName MaterialFrom
 		{
-			get
-			{
-				if (_materialFrom == null)
-				{
-					_materialFrom = (CName) CR2WTypeManager.Create("CName", "materialFrom", cr2w, this);
-				}
-				return _materialFrom;
-			}
-			set
-			{
-				if (_materialFrom == value)
-				{
-					return;
-				}
-				_materialFrom = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _materialFrom);
+			set => SetProperty(ref _materialFrom, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("material")] 
 		public CName Material
 		{
-			get
-			{
-				if (_material == null)
-				{
-					_material = (CName) CR2WTypeManager.Create("CName", "material", cr2w, this);
-				}
-				return _material;
-			}
-			set
-			{
-				if (_material == value)
-				{
-					return;
-				}
-				_material = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _material);
+			set => SetProperty(ref _material, value);
 		}
 
 		public physicsApperanceMaterial(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

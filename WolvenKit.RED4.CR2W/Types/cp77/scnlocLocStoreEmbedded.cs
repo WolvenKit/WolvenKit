@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("vdEntries")] 
 		public CArray<scnlocLocStoreEmbeddedVariantDescriptorEntry> VdEntries
 		{
-			get
-			{
-				if (_vdEntries == null)
-				{
-					_vdEntries = (CArray<scnlocLocStoreEmbeddedVariantDescriptorEntry>) CR2WTypeManager.Create("array:scnlocLocStoreEmbeddedVariantDescriptorEntry", "vdEntries", cr2w, this);
-				}
-				return _vdEntries;
-			}
-			set
-			{
-				if (_vdEntries == value)
-				{
-					return;
-				}
-				_vdEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vdEntries);
+			set => SetProperty(ref _vdEntries, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("vpEntries")] 
 		public CArray<scnlocLocStoreEmbeddedVariantPayloadEntry> VpEntries
 		{
-			get
-			{
-				if (_vpEntries == null)
-				{
-					_vpEntries = (CArray<scnlocLocStoreEmbeddedVariantPayloadEntry>) CR2WTypeManager.Create("array:scnlocLocStoreEmbeddedVariantPayloadEntry", "vpEntries", cr2w, this);
-				}
-				return _vpEntries;
-			}
-			set
-			{
-				if (_vpEntries == value)
-				{
-					return;
-				}
-				_vpEntries = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _vpEntries);
+			set => SetProperty(ref _vpEntries, value);
 		}
 
 		public scnlocLocStoreEmbedded(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

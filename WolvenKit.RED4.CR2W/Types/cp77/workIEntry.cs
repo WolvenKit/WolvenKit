@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("id")] 
 		public workWorkEntryId Id
 		{
-			get
-			{
-				if (_id == null)
-				{
-					_id = (workWorkEntryId) CR2WTypeManager.Create("workWorkEntryId", "id", cr2w, this);
-				}
-				return _id;
-			}
-			set
-			{
-				if (_id == value)
-				{
-					return;
-				}
-				_id = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("flags")] 
 		public CUInt32 Flags
 		{
-			get
-			{
-				if (_flags == null)
-				{
-					_flags = (CUInt32) CR2WTypeManager.Create("Uint32", "flags", cr2w, this);
-				}
-				return _flags;
-			}
-			set
-			{
-				if (_flags == value)
-				{
-					return;
-				}
-				_flags = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _flags);
+			set => SetProperty(ref _flags, value);
 		}
 
 		public workIEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

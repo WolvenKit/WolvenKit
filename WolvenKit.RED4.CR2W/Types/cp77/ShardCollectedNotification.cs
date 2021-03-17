@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("shardTitle")] 
 		public inkTextWidgetReference ShardTitle
 		{
-			get
-			{
-				if (_shardTitle == null)
-				{
-					_shardTitle = (inkTextWidgetReference) CR2WTypeManager.Create("inkTextWidgetReference", "shardTitle", cr2w, this);
-				}
-				return _shardTitle;
-			}
-			set
-			{
-				if (_shardTitle == value)
-				{
-					return;
-				}
-				_shardTitle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _shardTitle);
+			set => SetProperty(ref _shardTitle, value);
 		}
 
 		public ShardCollectedNotification(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

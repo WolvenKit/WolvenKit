@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("destination")] 
 		public CHandle<AIArgumentMapping> Destination
 		{
-			get
-			{
-				if (_destination == null)
-				{
-					_destination = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "destination", cr2w, this);
-				}
-				return _destination;
-			}
-			set
-			{
-				if (_destination == value)
-				{
-					return;
-				}
-				_destination = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _destination);
+			set => SetProperty(ref _destination, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("offset")] 
 		public CHandle<AIArgumentMapping> Offset
 		{
-			get
-			{
-				if (_offset == null)
-				{
-					_offset = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "offset", cr2w, this);
-				}
-				return _offset;
-			}
-			set
-			{
-				if (_offset == value)
-				{
-					return;
-				}
-				_offset = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _offset);
+			set => SetProperty(ref _offset, value);
 		}
 
 		public AIbehaviorActionSlideToObjectNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

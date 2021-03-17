@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("user")] 
 		public entEntityID User
 		{
-			get
-			{
-				if (_user == null)
-				{
-					_user = (entEntityID) CR2WTypeManager.Create("entEntityID", "user", cr2w, this);
-				}
-				return _user;
-			}
-			set
-			{
-				if (_user == value)
-				{
-					return;
-				}
-				_user = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _user);
+			set => SetProperty(ref _user, value);
 		}
 
 		public AreaEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

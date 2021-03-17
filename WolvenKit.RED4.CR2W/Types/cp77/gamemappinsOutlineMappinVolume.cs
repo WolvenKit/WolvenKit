@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("height")] 
 		public CFloat Height
 		{
-			get
-			{
-				if (_height == null)
-				{
-					_height = (CFloat) CR2WTypeManager.Create("Float", "height", cr2w, this);
-				}
-				return _height;
-			}
-			set
-			{
-				if (_height == value)
-				{
-					return;
-				}
-				_height = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _height);
+			set => SetProperty(ref _height, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("outlinePoints")] 
 		public CArray<Vector2> OutlinePoints
 		{
-			get
-			{
-				if (_outlinePoints == null)
-				{
-					_outlinePoints = (CArray<Vector2>) CR2WTypeManager.Create("array:Vector2", "outlinePoints", cr2w, this);
-				}
-				return _outlinePoints;
-			}
-			set
-			{
-				if (_outlinePoints == value)
-				{
-					return;
-				}
-				_outlinePoints = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outlinePoints);
+			set => SetProperty(ref _outlinePoints, value);
 		}
 
 		public gamemappinsOutlineMappinVolume(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

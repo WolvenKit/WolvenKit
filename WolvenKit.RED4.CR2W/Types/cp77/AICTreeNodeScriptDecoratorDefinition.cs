@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("script")] 
 		public CHandle<gameActionScript> Script
 		{
-			get
-			{
-				if (_script == null)
-				{
-					_script = (CHandle<gameActionScript>) CR2WTypeManager.Create("handle:gameActionScript", "script", cr2w, this);
-				}
-				return _script;
-			}
-			set
-			{
-				if (_script == value)
-				{
-					return;
-				}
-				_script = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _script);
+			set => SetProperty(ref _script, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("scriptName")] 
 		public CName ScriptName
 		{
-			get
-			{
-				if (_scriptName == null)
-				{
-					_scriptName = (CName) CR2WTypeManager.Create("CName", "scriptName", cr2w, this);
-				}
-				return _scriptName;
-			}
-			set
-			{
-				if (_scriptName == value)
-				{
-					return;
-				}
-				_scriptName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scriptName);
+			set => SetProperty(ref _scriptName, value);
 		}
 
 		public AICTreeNodeScriptDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

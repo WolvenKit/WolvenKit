@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("requestNumber")] 
 		public CInt32 RequestNumber
 		{
-			get
-			{
-				if (_requestNumber == null)
-				{
-					_requestNumber = (CInt32) CR2WTypeManager.Create("Int32", "requestNumber", cr2w, this);
-				}
-				return _requestNumber;
-			}
-			set
-			{
-				if (_requestNumber == value)
-				{
-					return;
-				}
-				_requestNumber = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _requestNumber);
+			set => SetProperty(ref _requestNumber, value);
 		}
 
 		public LightSwitchRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

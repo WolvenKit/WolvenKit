@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("securityAreaData")] 
 		public SecurityAreaData SecurityAreaData
 		{
-			get
-			{
-				if (_securityAreaData == null)
-				{
-					_securityAreaData = (SecurityAreaData) CR2WTypeManager.Create("SecurityAreaData", "securityAreaData", cr2w, this);
-				}
-				return _securityAreaData;
-			}
-			set
-			{
-				if (_securityAreaData == value)
-				{
-					return;
-				}
-				_securityAreaData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _securityAreaData);
+			set => SetProperty(ref _securityAreaData, value);
 		}
 
 		[Ordinal(26)] 
 		[RED("whoBreached")] 
 		public wCHandle<gameObject> WhoBreached
 		{
-			get
-			{
-				if (_whoBreached == null)
-				{
-					_whoBreached = (wCHandle<gameObject>) CR2WTypeManager.Create("whandle:gameObject", "whoBreached", cr2w, this);
-				}
-				return _whoBreached;
-			}
-			set
-			{
-				if (_whoBreached == value)
-				{
-					return;
-				}
-				_whoBreached = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _whoBreached);
+			set => SetProperty(ref _whoBreached, value);
 		}
 
 		public SecurityAreaEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("subCharType")] 
 		public CEnum<gamedataSubCharacter> SubCharType
 		{
-			get
-			{
-				if (_subCharType == null)
-				{
-					_subCharType = (CEnum<gamedataSubCharacter>) CR2WTypeManager.Create("gamedataSubCharacter", "subCharType", cr2w, this);
-				}
-				return _subCharType;
-			}
-			set
-			{
-				if (_subCharType == value)
-				{
-					return;
-				}
-				_subCharType = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _subCharType);
+			set => SetProperty(ref _subCharType, value);
 		}
 
 		public SubCharEquipRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("setup")] 
 		public worldHeatmapSetup Setup
 		{
-			get
-			{
-				if (_setup == null)
-				{
-					_setup = (worldHeatmapSetup) CR2WTypeManager.Create("worldHeatmapSetup", "setup", cr2w, this);
-				}
-				return _setup;
-			}
-			set
-			{
-				if (_setup == value)
-				{
-					return;
-				}
-				_setup = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _setup);
+			set => SetProperty(ref _setup, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("name")] 
 		public CString Name
 		{
-			get
-			{
-				if (_name == null)
-				{
-					_name = (CString) CR2WTypeManager.Create("String", "name", cr2w, this);
-				}
-				return _name;
-			}
-			set
-			{
-				if (_name == value)
-				{
-					return;
-				}
-				_name = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("layerNames")] 
 		public CArray<CString> LayerNames
 		{
-			get
-			{
-				if (_layerNames == null)
-				{
-					_layerNames = (CArray<CString>) CR2WTypeManager.Create("array:String", "layerNames", cr2w, this);
-				}
-				return _layerNames;
-			}
-			set
-			{
-				if (_layerNames == value)
-				{
-					return;
-				}
-				_layerNames = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _layerNames);
+			set => SetProperty(ref _layerNames, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("layers")] 
 		public CArray<raRef<worldHeatmapLayer>> Layers
 		{
-			get
-			{
-				if (_layers == null)
-				{
-					_layers = (CArray<raRef<worldHeatmapLayer>>) CR2WTypeManager.Create("array:raRef:worldHeatmapLayer", "layers", cr2w, this);
-				}
-				return _layers;
-			}
-			set
-			{
-				if (_layers == value)
-				{
-					return;
-				}
-				_layers = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _layers);
+			set => SetProperty(ref _layers, value);
 		}
 
 		public worldHeatmapResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

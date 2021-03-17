@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get
-			{
-				if (_nodeRef == null)
-				{
-					_nodeRef = (NodeRef) CR2WTypeManager.Create("NodeRef", "nodeRef", cr2w, this);
-				}
-				return _nodeRef;
-			}
-			set
-			{
-				if (_nodeRef == value)
-				{
-					return;
-				}
-				_nodeRef = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _nodeRef);
+			set => SetProperty(ref _nodeRef, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("visualizerStyle")] 
 		public CEnum<scnChoiceNodeNsVisualizerStyle> VisualizerStyle
 		{
-			get
-			{
-				if (_visualizerStyle == null)
-				{
-					_visualizerStyle = (CEnum<scnChoiceNodeNsVisualizerStyle>) CR2WTypeManager.Create("scnChoiceNodeNsVisualizerStyle", "visualizerStyle", cr2w, this);
-				}
-				return _visualizerStyle;
-			}
-			set
-			{
-				if (_visualizerStyle == value)
-				{
-					return;
-				}
-				_visualizerStyle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _visualizerStyle);
+			set => SetProperty(ref _visualizerStyle, value);
 		}
 
 		public scnChoiceNodeNsAttachToGameObjectParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("sequenceCategories")] 
 		public gameCategorySelectionProbability SequenceCategories
 		{
-			get
-			{
-				if (_sequenceCategories == null)
-				{
-					_sequenceCategories = (gameCategorySelectionProbability) CR2WTypeManager.Create("gameCategorySelectionProbability", "sequenceCategories", cr2w, this);
-				}
-				return _sequenceCategories;
-			}
-			set
-			{
-				if (_sequenceCategories == value)
-				{
-					return;
-				}
-				_sequenceCategories = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _sequenceCategories);
+			set => SetProperty(ref _sequenceCategories, value);
 		}
 
 		public workSetSequenceCategoriesCommandData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

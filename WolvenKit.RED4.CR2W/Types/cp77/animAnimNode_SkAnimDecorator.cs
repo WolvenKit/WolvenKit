@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("Fallback")] 
 		public animPoseLink Fallback
 		{
-			get
-			{
-				if (_fallback == null)
-				{
-					_fallback = (animPoseLink) CR2WTypeManager.Create("animPoseLink", "Fallback", cr2w, this);
-				}
-				return _fallback;
-			}
-			set
-			{
-				if (_fallback == value)
-				{
-					return;
-				}
-				_fallback = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _fallback);
+			set => SetProperty(ref _fallback, value);
 		}
 
 		public animAnimNode_SkAnimDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

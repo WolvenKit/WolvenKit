@@ -26,322 +26,112 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("useLookat")] 
 		public CBool UseLookat
 		{
-			get
-			{
-				if (_useLookat == null)
-				{
-					_useLookat = (CBool) CR2WTypeManager.Create("Bool", "useLookat", cr2w, this);
-				}
-				return _useLookat;
-			}
-			set
-			{
-				if (_useLookat == value)
-				{
-					return;
-				}
-				_useLookat = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useLookat);
+			set => SetProperty(ref _useLookat, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useLeftHand")] 
 		public CBool UseLeftHand
 		{
-			get
-			{
-				if (_useLeftHand == null)
-				{
-					_useLeftHand = (CBool) CR2WTypeManager.Create("Bool", "useLeftHand", cr2w, this);
-				}
-				return _useLeftHand;
-			}
-			set
-			{
-				if (_useLeftHand == value)
-				{
-					return;
-				}
-				_useLeftHand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useLeftHand);
+			set => SetProperty(ref _useLeftHand, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("useRightHand")] 
 		public CBool UseRightHand
 		{
-			get
-			{
-				if (_useRightHand == null)
-				{
-					_useRightHand = (CBool) CR2WTypeManager.Create("Bool", "useRightHand", cr2w, this);
-				}
-				return _useRightHand;
-			}
-			set
-			{
-				if (_useRightHand == value)
-				{
-					return;
-				}
-				_useRightHand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useRightHand);
+			set => SetProperty(ref _useRightHand, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("attachRightHandtoLeftHand")] 
 		public CBool AttachRightHandtoLeftHand
 		{
-			get
-			{
-				if (_attachRightHandtoLeftHand == null)
-				{
-					_attachRightHandtoLeftHand = (CBool) CR2WTypeManager.Create("Bool", "attachRightHandtoLeftHand", cr2w, this);
-				}
-				return _attachRightHandtoLeftHand;
-			}
-			set
-			{
-				if (_attachRightHandtoLeftHand == value)
-				{
-					return;
-				}
-				_attachRightHandtoLeftHand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attachRightHandtoLeftHand);
+			set => SetProperty(ref _attachRightHandtoLeftHand, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("attachLeftHandtoRightHand")] 
 		public CBool AttachLeftHandtoRightHand
 		{
-			get
-			{
-				if (_attachLeftHandtoRightHand == null)
-				{
-					_attachLeftHandtoRightHand = (CBool) CR2WTypeManager.Create("Bool", "attachLeftHandtoRightHand", cr2w, this);
-				}
-				return _attachLeftHandtoRightHand;
-			}
-			set
-			{
-				if (_attachLeftHandtoRightHand == value)
-				{
-					return;
-				}
-				_attachLeftHandtoRightHand = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attachLeftHandtoRightHand);
+			set => SetProperty(ref _attachLeftHandtoRightHand, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get
-			{
-				if (_slotName == null)
-				{
-					_slotName = (CName) CR2WTypeManager.Create("CName", "slotName", cr2w, this);
-				}
-				return _slotName;
-			}
-			set
-			{
-				if (_slotName == value)
-				{
-					return;
-				}
-				_slotName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _slotName);
+			set => SetProperty(ref _slotName, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("lookatStyle")] 
 		public CEnum<animLookAtStyle> LookatStyle
 		{
-			get
-			{
-				if (_lookatStyle == null)
-				{
-					_lookatStyle = (CEnum<animLookAtStyle>) CR2WTypeManager.Create("animLookAtStyle", "lookatStyle", cr2w, this);
-				}
-				return _lookatStyle;
-			}
-			set
-			{
-				if (_lookatStyle == value)
-				{
-					return;
-				}
-				_lookatStyle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _lookatStyle);
+			set => SetProperty(ref _lookatStyle, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("hasOutTransition")] 
 		public CBool HasOutTransition
 		{
-			get
-			{
-				if (_hasOutTransition == null)
-				{
-					_hasOutTransition = (CBool) CR2WTypeManager.Create("Bool", "hasOutTransition", cr2w, this);
-				}
-				return _hasOutTransition;
-			}
-			set
-			{
-				if (_hasOutTransition == value)
-				{
-					return;
-				}
-				_hasOutTransition = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hasOutTransition);
+			set => SetProperty(ref _hasOutTransition, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("outTransitionStyle")] 
 		public CEnum<animLookAtStyle> OutTransitionStyle
 		{
-			get
-			{
-				if (_outTransitionStyle == null)
-				{
-					_outTransitionStyle = (CEnum<animLookAtStyle>) CR2WTypeManager.Create("animLookAtStyle", "outTransitionStyle", cr2w, this);
-				}
-				return _outTransitionStyle;
-			}
-			set
-			{
-				if (_outTransitionStyle == value)
-				{
-					return;
-				}
-				_outTransitionStyle = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outTransitionStyle);
+			set => SetProperty(ref _outTransitionStyle, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("softLimitDegrees")] 
 		public CEnum<animLookAtLimitDegreesType> SoftLimitDegrees
 		{
-			get
-			{
-				if (_softLimitDegrees == null)
-				{
-					_softLimitDegrees = (CEnum<animLookAtLimitDegreesType>) CR2WTypeManager.Create("animLookAtLimitDegreesType", "softLimitDegrees", cr2w, this);
-				}
-				return _softLimitDegrees;
-			}
-			set
-			{
-				if (_softLimitDegrees == value)
-				{
-					return;
-				}
-				_softLimitDegrees = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _softLimitDegrees);
+			set => SetProperty(ref _softLimitDegrees, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("hardLimitDegrees")] 
 		public CEnum<animLookAtLimitDegreesType> HardLimitDegrees
 		{
-			get
-			{
-				if (_hardLimitDegrees == null)
-				{
-					_hardLimitDegrees = (CEnum<animLookAtLimitDegreesType>) CR2WTypeManager.Create("animLookAtLimitDegreesType", "hardLimitDegrees", cr2w, this);
-				}
-				return _hardLimitDegrees;
-			}
-			set
-			{
-				if (_hardLimitDegrees == value)
-				{
-					return;
-				}
-				_hardLimitDegrees = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hardLimitDegrees);
+			set => SetProperty(ref _hardLimitDegrees, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("hardLimitDistance")] 
 		public CEnum<animLookAtLimitDistanceType> HardLimitDistance
 		{
-			get
-			{
-				if (_hardLimitDistance == null)
-				{
-					_hardLimitDistance = (CEnum<animLookAtLimitDistanceType>) CR2WTypeManager.Create("animLookAtLimitDistanceType", "hardLimitDistance", cr2w, this);
-				}
-				return _hardLimitDistance;
-			}
-			set
-			{
-				if (_hardLimitDistance == value)
-				{
-					return;
-				}
-				_hardLimitDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _hardLimitDistance);
+			set => SetProperty(ref _hardLimitDistance, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("backLimitDegrees")] 
 		public CEnum<animLookAtLimitDegreesType> BackLimitDegrees
 		{
-			get
-			{
-				if (_backLimitDegrees == null)
-				{
-					_backLimitDegrees = (CEnum<animLookAtLimitDegreesType>) CR2WTypeManager.Create("animLookAtLimitDegreesType", "backLimitDegrees", cr2w, this);
-				}
-				return _backLimitDegrees;
-			}
-			set
-			{
-				if (_backLimitDegrees == value)
-				{
-					return;
-				}
-				_backLimitDegrees = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _backLimitDegrees);
+			set => SetProperty(ref _backLimitDegrees, value);
 		}
 
 		[Ordinal(13)] 
 		[RED("additionalParts")] 
 		public CArray<animLookAtPartRequest> AdditionalParts
 		{
-			get
-			{
-				if (_additionalParts == null)
-				{
-					_additionalParts = (CArray<animLookAtPartRequest>) CR2WTypeManager.Create("array:animLookAtPartRequest", "additionalParts", cr2w, this);
-				}
-				return _additionalParts;
-			}
-			set
-			{
-				if (_additionalParts == value)
-				{
-					return;
-				}
-				_additionalParts = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _additionalParts);
+			set => SetProperty(ref _additionalParts, value);
 		}
 
 		public AIActionLookatParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

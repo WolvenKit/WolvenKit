@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("scale")] 
 		public CHandle<IEvaluatorVector> Scale
 		{
-			get
-			{
-				if (_scale == null)
-				{
-					_scale = (CHandle<IEvaluatorVector>) CR2WTypeManager.Create("handle:IEvaluatorVector", "scale", cr2w, this);
-				}
-				return _scale;
-			}
-			set
-			{
-				if (_scale == value)
-				{
-					return;
-				}
-				_scale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _scale);
+			set => SetProperty(ref _scale, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("timelifeLimit")] 
 		public CHandle<IEvaluatorFloat> TimelifeLimit
 		{
-			get
-			{
-				if (_timelifeLimit == null)
-				{
-					_timelifeLimit = (CHandle<IEvaluatorFloat>) CR2WTypeManager.Create("handle:IEvaluatorFloat", "timelifeLimit", cr2w, this);
-				}
-				return _timelifeLimit;
-			}
-			set
-			{
-				if (_timelifeLimit == value)
-				{
-					return;
-				}
-				_timelifeLimit = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timelifeLimit);
+			set => SetProperty(ref _timelifeLimit, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("noiseInterval")] 
 		public CFloat NoiseInterval
 		{
-			get
-			{
-				if (_noiseInterval == null)
-				{
-					_noiseInterval = (CFloat) CR2WTypeManager.Create("Float", "noiseInterval", cr2w, this);
-				}
-				return _noiseInterval;
-			}
-			set
-			{
-				if (_noiseInterval == value)
-				{
-					return;
-				}
-				_noiseInterval = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _noiseInterval);
+			set => SetProperty(ref _noiseInterval, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("worldSpace")] 
 		public CBool WorldSpace
 		{
-			get
-			{
-				if (_worldSpace == null)
-				{
-					_worldSpace = (CBool) CR2WTypeManager.Create("Bool", "worldSpace", cr2w, this);
-				}
-				return _worldSpace;
-			}
-			set
-			{
-				if (_worldSpace == value)
-				{
-					return;
-				}
-				_worldSpace = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _worldSpace);
+			set => SetProperty(ref _worldSpace, value);
 		}
 
 		public CParticleModificatorVelocityTurbulize(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

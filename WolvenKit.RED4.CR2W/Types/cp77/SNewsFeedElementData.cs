@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("banners")] 
 		public CArray<SsimpleBanerData> Banners
 		{
-			get
-			{
-				if (_banners == null)
-				{
-					_banners = (CArray<SsimpleBanerData>) CR2WTypeManager.Create("array:SsimpleBanerData", "banners", cr2w, this);
-				}
-				return _banners;
-			}
-			set
-			{
-				if (_banners == value)
-				{
-					return;
-				}
-				_banners = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _banners);
+			set => SetProperty(ref _banners, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("currentBanner")] 
 		public CInt32 CurrentBanner
 		{
-			get
-			{
-				if (_currentBanner == null)
-				{
-					_currentBanner = (CInt32) CR2WTypeManager.Create("Int32", "currentBanner", cr2w, this);
-				}
-				return _currentBanner;
-			}
-			set
-			{
-				if (_currentBanner == value)
-				{
-					return;
-				}
-				_currentBanner = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentBanner);
+			set => SetProperty(ref _currentBanner, value);
 		}
 
 		public SNewsFeedElementData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

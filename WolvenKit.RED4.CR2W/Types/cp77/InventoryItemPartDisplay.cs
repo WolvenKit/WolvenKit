@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("PartIconImage")] 
 		public inkImageWidgetReference PartIconImage
 		{
-			get
-			{
-				if (_partIconImage == null)
-				{
-					_partIconImage = (inkImageWidgetReference) CR2WTypeManager.Create("inkImageWidgetReference", "PartIconImage", cr2w, this);
-				}
-				return _partIconImage;
-			}
-			set
-			{
-				if (_partIconImage == value)
-				{
-					return;
-				}
-				_partIconImage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _partIconImage);
+			set => SetProperty(ref _partIconImage, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("Rarity")] 
 		public inkWidgetReference Rarity
 		{
-			get
-			{
-				if (_rarity == null)
-				{
-					_rarity = (inkWidgetReference) CR2WTypeManager.Create("inkWidgetReference", "Rarity", cr2w, this);
-				}
-				return _rarity;
-			}
-			set
-			{
-				if (_rarity == value)
-				{
-					return;
-				}
-				_rarity = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rarity);
+			set => SetProperty(ref _rarity, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("TexturePartName")] 
 		public CName TexturePartName
 		{
-			get
-			{
-				if (_texturePartName == null)
-				{
-					_texturePartName = (CName) CR2WTypeManager.Create("CName", "TexturePartName", cr2w, this);
-				}
-				return _texturePartName;
-			}
-			set
-			{
-				if (_texturePartName == value)
-				{
-					return;
-				}
-				_texturePartName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _texturePartName);
+			set => SetProperty(ref _texturePartName, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("attachmentData")] 
 		public InventoryItemAttachments AttachmentData
 		{
-			get
-			{
-				if (_attachmentData == null)
-				{
-					_attachmentData = (InventoryItemAttachments) CR2WTypeManager.Create("InventoryItemAttachments", "attachmentData", cr2w, this);
-				}
-				return _attachmentData;
-			}
-			set
-			{
-				if (_attachmentData == value)
-				{
-					return;
-				}
-				_attachmentData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _attachmentData);
+			set => SetProperty(ref _attachmentData, value);
 		}
 
 		public InventoryItemPartDisplay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

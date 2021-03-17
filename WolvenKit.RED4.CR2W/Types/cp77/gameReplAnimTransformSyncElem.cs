@@ -18,138 +18,48 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("definitionId")] 
 		public CInt32 DefinitionId
 		{
-			get
-			{
-				if (_definitionId == null)
-				{
-					_definitionId = (CInt32) CR2WTypeManager.Create("Int32", "definitionId", cr2w, this);
-				}
-				return _definitionId;
-			}
-			set
-			{
-				if (_definitionId == value)
-				{
-					return;
-				}
-				_definitionId = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _definitionId);
+			set => SetProperty(ref _definitionId, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("currentTime")] 
 		public CFloat CurrentTime
 		{
-			get
-			{
-				if (_currentTime == null)
-				{
-					_currentTime = (CFloat) CR2WTypeManager.Create("Float", "currentTime", cr2w, this);
-				}
-				return _currentTime;
-			}
-			set
-			{
-				if (_currentTime == value)
-				{
-					return;
-				}
-				_currentTime = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _currentTime);
+			set => SetProperty(ref _currentTime, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("timeScale")] 
 		public CFloat TimeScale
 		{
-			get
-			{
-				if (_timeScale == null)
-				{
-					_timeScale = (CFloat) CR2WTypeManager.Create("Float", "timeScale", cr2w, this);
-				}
-				return _timeScale;
-			}
-			set
-			{
-				if (_timeScale == value)
-				{
-					return;
-				}
-				_timeScale = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeScale);
+			set => SetProperty(ref _timeScale, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get
-			{
-				if (_duration == null)
-				{
-					_duration = (CFloat) CR2WTypeManager.Create("Float", "duration", cr2w, this);
-				}
-				return _duration;
-			}
-			set
-			{
-				if (_duration == value)
-				{
-					return;
-				}
-				_duration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("timesToPlay")] 
 		public CInt32 TimesToPlay
 		{
-			get
-			{
-				if (_timesToPlay == null)
-				{
-					_timesToPlay = (CInt32) CR2WTypeManager.Create("Int32", "timesToPlay", cr2w, this);
-				}
-				return _timesToPlay;
-			}
-			set
-			{
-				if (_timesToPlay == value)
-				{
-					return;
-				}
-				_timesToPlay = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timesToPlay);
+			set => SetProperty(ref _timesToPlay, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("playing")] 
 		public CBool Playing
 		{
-			get
-			{
-				if (_playing == null)
-				{
-					_playing = (CBool) CR2WTypeManager.Create("Bool", "playing", cr2w, this);
-				}
-				return _playing;
-			}
-			set
-			{
-				if (_playing == value)
-				{
-					return;
-				}
-				_playing = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _playing);
+			set => SetProperty(ref _playing, value);
 		}
 
 		public gameReplAnimTransformSyncElem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

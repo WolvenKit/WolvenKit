@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("eventName")] 
 		public CName EventName
 		{
-			get
-			{
-				if (_eventName == null)
-				{
-					_eventName = (CName) CR2WTypeManager.Create("CName", "eventName", cr2w, this);
-				}
-				return _eventName;
-			}
-			set
-			{
-				if (_eventName == value)
-				{
-					return;
-				}
-				_eventName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _eventName);
+			set => SetProperty(ref _eventName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("transitions")] 
 		public AIFSMTransitionListDefinition Transitions
 		{
-			get
-			{
-				if (_transitions == null)
-				{
-					_transitions = (AIFSMTransitionListDefinition) CR2WTypeManager.Create("AIFSMTransitionListDefinition", "transitions", cr2w, this);
-				}
-				return _transitions;
-			}
-			set
-			{
-				if (_transitions == value)
-				{
-					return;
-				}
-				_transitions = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _transitions);
+			set => SetProperty(ref _transitions, value);
 		}
 
 		public AIFSMEventTransitionsListDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

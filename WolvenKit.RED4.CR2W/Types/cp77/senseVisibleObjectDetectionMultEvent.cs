@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("multiplier")] 
 		public CFloat Multiplier
 		{
-			get
-			{
-				if (_multiplier == null)
-				{
-					_multiplier = (CFloat) CR2WTypeManager.Create("Float", "multiplier", cr2w, this);
-				}
-				return _multiplier;
-			}
-			set
-			{
-				if (_multiplier == value)
-				{
-					return;
-				}
-				_multiplier = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _multiplier);
+			set => SetProperty(ref _multiplier, value);
 		}
 
 		public senseVisibleObjectDetectionMultEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

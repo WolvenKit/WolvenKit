@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get
-			{
-				if (_itemID == null)
-				{
-					_itemID = (gameItemID) CR2WTypeManager.Create("gameItemID", "itemID", cr2w, this);
-				}
-				return _itemID;
-			}
-			set
-			{
-				if (_itemID == value)
-				{
-					return;
-				}
-				_itemID = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("itemLogQueueEmpty")] 
 		public CBool ItemLogQueueEmpty
 		{
-			get
-			{
-				if (_itemLogQueueEmpty == null)
-				{
-					_itemLogQueueEmpty = (CBool) CR2WTypeManager.Create("Bool", "itemLogQueueEmpty", cr2w, this);
-				}
-				return _itemLogQueueEmpty;
-			}
-			set
-			{
-				if (_itemLogQueueEmpty == value)
-				{
-					return;
-				}
-				_itemLogQueueEmpty = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _itemLogQueueEmpty);
+			set => SetProperty(ref _itemLogQueueEmpty, value);
 		}
 
 		public ItemLogUserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

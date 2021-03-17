@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("useCurrentPolicy")] 
 		public CBool UseCurrentPolicy
 		{
-			get
-			{
-				if (_useCurrentPolicy == null)
-				{
-					_useCurrentPolicy = (CBool) CR2WTypeManager.Create("Bool", "useCurrentPolicy", cr2w, this);
-				}
-				return _useCurrentPolicy;
-			}
-			set
-			{
-				if (_useCurrentPolicy == value)
-				{
-					return;
-				}
-				_useCurrentPolicy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useCurrentPolicy);
+			set => SetProperty(ref _useCurrentPolicy, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("waitForPolicy")] 
 		public CBool WaitForPolicy
 		{
-			get
-			{
-				if (_waitForPolicy == null)
-				{
-					_waitForPolicy = (CBool) CR2WTypeManager.Create("Bool", "waitForPolicy", cr2w, this);
-				}
-				return _waitForPolicy;
-			}
-			set
-			{
-				if (_waitForPolicy == value)
-				{
-					return;
-				}
-				_waitForPolicy = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _waitForPolicy);
+			set => SetProperty(ref _waitForPolicy, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("stopWhenDestinationReached")] 
 		public CHandle<AIArgumentMapping> StopWhenDestinationReached
 		{
-			get
-			{
-				if (_stopWhenDestinationReached == null)
-				{
-					_stopWhenDestinationReached = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "stopWhenDestinationReached", cr2w, this);
-				}
-				return _stopWhenDestinationReached;
-			}
-			set
-			{
-				if (_stopWhenDestinationReached == value)
-				{
-					return;
-				}
-				_stopWhenDestinationReached = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stopWhenDestinationReached);
+			set => SetProperty(ref _stopWhenDestinationReached, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("policies")] 
 		public CArray<CHandle<AIbehaviorMovementPolicyTaskItemDefinition>> Policies
 		{
-			get
-			{
-				if (_policies == null)
-				{
-					_policies = (CArray<CHandle<AIbehaviorMovementPolicyTaskItemDefinition>>) CR2WTypeManager.Create("array:handle:AIbehaviorMovementPolicyTaskItemDefinition", "policies", cr2w, this);
-				}
-				return _policies;
-			}
-			set
-			{
-				if (_policies == value)
-				{
-					return;
-				}
-				_policies = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _policies);
+			set => SetProperty(ref _policies, value);
 		}
 
 		public AIbehaviorMovementPolicyTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

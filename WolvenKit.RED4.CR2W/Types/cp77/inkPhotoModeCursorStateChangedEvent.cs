@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("cursorEnabled")] 
 		public CBool CursorEnabled
 		{
-			get
-			{
-				if (_cursorEnabled == null)
-				{
-					_cursorEnabled = (CBool) CR2WTypeManager.Create("Bool", "cursorEnabled", cr2w, this);
-				}
-				return _cursorEnabled;
-			}
-			set
-			{
-				if (_cursorEnabled == value)
-				{
-					return;
-				}
-				_cursorEnabled = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _cursorEnabled);
+			set => SetProperty(ref _cursorEnabled, value);
 		}
 
 		public inkPhotoModeCursorStateChangedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

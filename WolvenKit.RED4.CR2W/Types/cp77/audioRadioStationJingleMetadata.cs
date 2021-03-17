@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("introJingleEvent")] 
 		public CName IntroJingleEvent
 		{
-			get
-			{
-				if (_introJingleEvent == null)
-				{
-					_introJingleEvent = (CName) CR2WTypeManager.Create("CName", "introJingleEvent", cr2w, this);
-				}
-				return _introJingleEvent;
-			}
-			set
-			{
-				if (_introJingleEvent == value)
-				{
-					return;
-				}
-				_introJingleEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _introJingleEvent);
+			set => SetProperty(ref _introJingleEvent, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("introDuration")] 
 		public CFloat IntroDuration
 		{
-			get
-			{
-				if (_introDuration == null)
-				{
-					_introDuration = (CFloat) CR2WTypeManager.Create("Float", "introDuration", cr2w, this);
-				}
-				return _introDuration;
-			}
-			set
-			{
-				if (_introDuration == value)
-				{
-					return;
-				}
-				_introDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _introDuration);
+			set => SetProperty(ref _introDuration, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("middleJingleEvent")] 
 		public CName MiddleJingleEvent
 		{
-			get
-			{
-				if (_middleJingleEvent == null)
-				{
-					_middleJingleEvent = (CName) CR2WTypeManager.Create("CName", "middleJingleEvent", cr2w, this);
-				}
-				return _middleJingleEvent;
-			}
-			set
-			{
-				if (_middleJingleEvent == value)
-				{
-					return;
-				}
-				_middleJingleEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _middleJingleEvent);
+			set => SetProperty(ref _middleJingleEvent, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("endJingleEvent")] 
 		public CName EndJingleEvent
 		{
-			get
-			{
-				if (_endJingleEvent == null)
-				{
-					_endJingleEvent = (CName) CR2WTypeManager.Create("CName", "endJingleEvent", cr2w, this);
-				}
-				return _endJingleEvent;
-			}
-			set
-			{
-				if (_endJingleEvent == value)
-				{
-					return;
-				}
-				_endJingleEvent = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _endJingleEvent);
+			set => SetProperty(ref _endJingleEvent, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("outroDuration")] 
 		public CFloat OutroDuration
 		{
-			get
-			{
-				if (_outroDuration == null)
-				{
-					_outroDuration = (CFloat) CR2WTypeManager.Create("Float", "outroDuration", cr2w, this);
-				}
-				return _outroDuration;
-			}
-			set
-			{
-				if (_outroDuration == value)
-				{
-					return;
-				}
-				_outroDuration = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _outroDuration);
+			set => SetProperty(ref _outroDuration, value);
 		}
 
 		public audioRadioStationJingleMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

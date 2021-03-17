@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("door")] 
 		public CEnum<vehicleEVehicleDoor> Door
 		{
-			get
-			{
-				if (_door == null)
-				{
-					_door = (CEnum<vehicleEVehicleDoor>) CR2WTypeManager.Create("vehicleEVehicleDoor", "door", cr2w, this);
-				}
-				return _door;
-			}
-			set
-			{
-				if (_door == value)
-				{
-					return;
-				}
-				_door = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _door);
+			set => SetProperty(ref _door, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("interactionState")] 
 		public CEnum<vehicleVehicleDoorInteractionState> InteractionState
 		{
-			get
-			{
-				if (_interactionState == null)
-				{
-					_interactionState = (CEnum<vehicleVehicleDoorInteractionState>) CR2WTypeManager.Create("vehicleVehicleDoorInteractionState", "interactionState", cr2w, this);
-				}
-				return _interactionState;
-			}
-			set
-			{
-				if (_interactionState == value)
-				{
-					return;
-				}
-				_interactionState = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _interactionState);
+			set => SetProperty(ref _interactionState, value);
 		}
 
 		public TemporaryDoorState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

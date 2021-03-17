@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("stateNameMapping")] 
 		public CHandle<AIArgumentMapping> StateNameMapping
 		{
-			get
-			{
-				if (_stateNameMapping == null)
-				{
-					_stateNameMapping = (CHandle<AIArgumentMapping>) CR2WTypeManager.Create("handle:AIArgumentMapping", "stateNameMapping", cr2w, this);
-				}
-				return _stateNameMapping;
-			}
-			set
-			{
-				if (_stateNameMapping == value)
-				{
-					return;
-				}
-				_stateNameMapping = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _stateNameMapping);
+			set => SetProperty(ref _stateNameMapping, value);
 		}
 
 		public HighLevelStateMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

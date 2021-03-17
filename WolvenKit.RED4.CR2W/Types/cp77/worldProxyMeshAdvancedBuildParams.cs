@@ -17,115 +17,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("boundingBoxSyncParams")] 
 		public worldProxyBoundingBoxSyncParams BoundingBoxSyncParams
 		{
-			get
-			{
-				if (_boundingBoxSyncParams == null)
-				{
-					_boundingBoxSyncParams = (worldProxyBoundingBoxSyncParams) CR2WTypeManager.Create("worldProxyBoundingBoxSyncParams", "boundingBoxSyncParams", cr2w, this);
-				}
-				return _boundingBoxSyncParams;
-			}
-			set
-			{
-				if (_boundingBoxSyncParams == value)
-				{
-					return;
-				}
-				_boundingBoxSyncParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _boundingBoxSyncParams);
+			set => SetProperty(ref _boundingBoxSyncParams, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("surfaceFlattenParams")] 
 		public worldProxySurfaceFlattenParams SurfaceFlattenParams
 		{
-			get
-			{
-				if (_surfaceFlattenParams == null)
-				{
-					_surfaceFlattenParams = (worldProxySurfaceFlattenParams) CR2WTypeManager.Create("worldProxySurfaceFlattenParams", "surfaceFlattenParams", cr2w, this);
-				}
-				return _surfaceFlattenParams;
-			}
-			set
-			{
-				if (_surfaceFlattenParams == value)
-				{
-					return;
-				}
-				_surfaceFlattenParams = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _surfaceFlattenParams);
+			set => SetProperty(ref _surfaceFlattenParams, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("misc")] 
 		public worldProxyMiscAdvancedParams Misc
 		{
-			get
-			{
-				if (_misc == null)
-				{
-					_misc = (worldProxyMiscAdvancedParams) CR2WTypeManager.Create("worldProxyMiscAdvancedParams", "misc", cr2w, this);
-				}
-				return _misc;
-			}
-			set
-			{
-				if (_misc == value)
-				{
-					return;
-				}
-				_misc = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _misc);
+			set => SetProperty(ref _misc, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("rayBias")] 
 		public CFloat RayBias
 		{
-			get
-			{
-				if (_rayBias == null)
-				{
-					_rayBias = (CFloat) CR2WTypeManager.Create("Float", "rayBias", cr2w, this);
-				}
-				return _rayBias;
-			}
-			set
-			{
-				if (_rayBias == value)
-				{
-					return;
-				}
-				_rayBias = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rayBias);
+			set => SetProperty(ref _rayBias, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("rayMaxDistance")] 
 		public CFloat RayMaxDistance
 		{
-			get
-			{
-				if (_rayMaxDistance == null)
-				{
-					_rayMaxDistance = (CFloat) CR2WTypeManager.Create("Float", "rayMaxDistance", cr2w, this);
-				}
-				return _rayMaxDistance;
-			}
-			set
-			{
-				if (_rayMaxDistance == value)
-				{
-					return;
-				}
-				_rayMaxDistance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _rayMaxDistance);
+			set => SetProperty(ref _rayMaxDistance, value);
 		}
 
 		public worldProxyMeshAdvancedBuildParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

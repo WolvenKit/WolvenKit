@@ -16,92 +16,32 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("commandName")] 
 		public CName CommandName
 		{
-			get
-			{
-				if (_commandName == null)
-				{
-					_commandName = (CName) CR2WTypeManager.Create("CName", "commandName", cr2w, this);
-				}
-				return _commandName;
-			}
-			set
-			{
-				if (_commandName == value)
-				{
-					return;
-				}
-				_commandName = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _commandName);
+			set => SetProperty(ref _commandName, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useInheritance")] 
 		public CBool UseInheritance
 		{
-			get
-			{
-				if (_useInheritance == null)
-				{
-					_useInheritance = (CBool) CR2WTypeManager.Create("Bool", "useInheritance", cr2w, this);
-				}
-				return _useInheritance;
-			}
-			set
-			{
-				if (_useInheritance == value)
-				{
-					return;
-				}
-				_useInheritance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _useInheritance);
+			set => SetProperty(ref _useInheritance, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isEnqueued")] 
 		public CBool IsEnqueued
 		{
-			get
-			{
-				if (_isEnqueued == null)
-				{
-					_isEnqueued = (CBool) CR2WTypeManager.Create("Bool", "isEnqueued", cr2w, this);
-				}
-				return _isEnqueued;
-			}
-			set
-			{
-				if (_isEnqueued == value)
-				{
-					return;
-				}
-				_isEnqueued = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isEnqueued);
+			set => SetProperty(ref _isEnqueued, value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isExecuting")] 
 		public CBool IsExecuting
 		{
-			get
-			{
-				if (_isExecuting == null)
-				{
-					_isExecuting = (CBool) CR2WTypeManager.Create("Bool", "isExecuting", cr2w, this);
-				}
-				return _isExecuting;
-			}
-			set
-			{
-				if (_isExecuting == value)
-				{
-					return;
-				}
-				_isExecuting = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isExecuting);
+			set => SetProperty(ref _isExecuting, value);
 		}
 
 		public AIbehaviorCommandConditionExpressionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("menuList")] 
 		public inkCompoundWidgetReference MenuList
 		{
-			get
-			{
-				if (_menuList == null)
-				{
-					_menuList = (inkCompoundWidgetReference) CR2WTypeManager.Create("inkCompoundWidgetReference", "menuList", cr2w, this);
-				}
-				return _menuList;
-			}
-			set
-			{
-				if (_menuList == value)
-				{
-					return;
-				}
-				_menuList = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuList);
+			set => SetProperty(ref _menuList, value);
 		}
 
 		[Ordinal(4)] 
 		[RED("menuEventDispatcher")] 
 		public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
-			get
-			{
-				if (_menuEventDispatcher == null)
-				{
-					_menuEventDispatcher = (wCHandle<inkMenuEventDispatcher>) CR2WTypeManager.Create("whandle:inkMenuEventDispatcher", "menuEventDispatcher", cr2w, this);
-				}
-				return _menuEventDispatcher;
-			}
-			set
-			{
-				if (_menuEventDispatcher == value)
-				{
-					return;
-				}
-				_menuEventDispatcher = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuEventDispatcher);
+			set => SetProperty(ref _menuEventDispatcher, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("menuListController")] 
 		public wCHandle<inkListController> MenuListController
 		{
-			get
-			{
-				if (_menuListController == null)
-				{
-					_menuListController = (wCHandle<inkListController>) CR2WTypeManager.Create("whandle:inkListController", "menuListController", cr2w, this);
-				}
-				return _menuListController;
-			}
-			set
-			{
-				if (_menuListController == value)
-				{
-					return;
-				}
-				_menuListController = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _menuListController);
+			set => SetProperty(ref _menuListController, value);
 		}
 
 		public gameuiMenuItemListGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

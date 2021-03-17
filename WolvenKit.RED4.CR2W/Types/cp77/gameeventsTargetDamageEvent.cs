@@ -13,23 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("damage")] 
 		public CFloat Damage
 		{
-			get
-			{
-				if (_damage == null)
-				{
-					_damage = (CFloat) CR2WTypeManager.Create("Float", "damage", cr2w, this);
-				}
-				return _damage;
-			}
-			set
-			{
-				if (_damage == value)
-				{
-					return;
-				}
-				_damage = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _damage);
+			set => SetProperty(ref _damage, value);
 		}
 
 		public gameeventsTargetDamageEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

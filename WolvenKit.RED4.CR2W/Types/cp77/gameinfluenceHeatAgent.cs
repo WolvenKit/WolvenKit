@@ -15,69 +15,24 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("timeToNextUpdate")] 
 		public CFloat TimeToNextUpdate
 		{
-			get
-			{
-				if (_timeToNextUpdate == null)
-				{
-					_timeToNextUpdate = (CFloat) CR2WTypeManager.Create("Float", "timeToNextUpdate", cr2w, this);
-				}
-				return _timeToNextUpdate;
-			}
-			set
-			{
-				if (_timeToNextUpdate == value)
-				{
-					return;
-				}
-				_timeToNextUpdate = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _timeToNextUpdate);
+			set => SetProperty(ref _timeToNextUpdate, value);
 		}
 
 		[Ordinal(1)] 
 		[RED("heatRadius")] 
 		public CFloat HeatRadius
 		{
-			get
-			{
-				if (_heatRadius == null)
-				{
-					_heatRadius = (CFloat) CR2WTypeManager.Create("Float", "heatRadius", cr2w, this);
-				}
-				return _heatRadius;
-			}
-			set
-			{
-				if (_heatRadius == value)
-				{
-					return;
-				}
-				_heatRadius = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _heatRadius);
+			set => SetProperty(ref _heatRadius, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("heatValue")] 
 		public CFloat HeatValue
 		{
-			get
-			{
-				if (_heatValue == null)
-				{
-					_heatValue = (CFloat) CR2WTypeManager.Create("Float", "heatValue", cr2w, this);
-				}
-				return _heatValue;
-			}
-			set
-			{
-				if (_heatValue == value)
-				{
-					return;
-				}
-				_heatValue = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _heatValue);
+			set => SetProperty(ref _heatValue, value);
 		}
 
 		public gameinfluenceHeatAgent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

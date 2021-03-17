@@ -21,207 +21,72 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("mesh")] 
 		public raRef<CMesh> Mesh
 		{
-			get
-			{
-				if (_mesh == null)
-				{
-					_mesh = (raRef<CMesh>) CR2WTypeManager.Create("raRef:CMesh", "mesh", cr2w, this);
-				}
-				return _mesh;
-			}
-			set
-			{
-				if (_mesh == value)
-				{
-					return;
-				}
-				_mesh = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _mesh);
+			set => SetProperty(ref _mesh, value);
 		}
 
 		[Ordinal(5)] 
 		[RED("meshAppearance")] 
 		public CName MeshAppearance
 		{
-			get
-			{
-				if (_meshAppearance == null)
-				{
-					_meshAppearance = (CName) CR2WTypeManager.Create("CName", "meshAppearance", cr2w, this);
-				}
-				return _meshAppearance;
-			}
-			set
-			{
-				if (_meshAppearance == value)
-				{
-					return;
-				}
-				_meshAppearance = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _meshAppearance);
+			set => SetProperty(ref _meshAppearance, value);
 		}
 
 		[Ordinal(6)] 
 		[RED("deformationData")] 
 		public CArray<CMatrix> DeformationData
 		{
-			get
-			{
-				if (_deformationData == null)
-				{
-					_deformationData = (CArray<CMatrix>) CR2WTypeManager.Create("array:Matrix", "deformationData", cr2w, this);
-				}
-				return _deformationData;
-			}
-			set
-			{
-				if (_deformationData == value)
-				{
-					return;
-				}
-				_deformationData = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deformationData);
+			set => SetProperty(ref _deformationData, value);
 		}
 
 		[Ordinal(7)] 
 		[RED("deformedBox")] 
 		public Box DeformedBox
 		{
-			get
-			{
-				if (_deformedBox == null)
-				{
-					_deformedBox = (Box) CR2WTypeManager.Create("Box", "deformedBox", cr2w, this);
-				}
-				return _deformedBox;
-			}
-			set
-			{
-				if (_deformedBox == value)
-				{
-					return;
-				}
-				_deformedBox = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _deformedBox);
+			set => SetProperty(ref _deformedBox, value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isBendedRoad")] 
 		public CBool IsBendedRoad
 		{
-			get
-			{
-				if (_isBendedRoad == null)
-				{
-					_isBendedRoad = (CBool) CR2WTypeManager.Create("Bool", "isBendedRoad", cr2w, this);
-				}
-				return _isBendedRoad;
-			}
-			set
-			{
-				if (_isBendedRoad == value)
-				{
-					return;
-				}
-				_isBendedRoad = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _isBendedRoad);
+			set => SetProperty(ref _isBendedRoad, value);
 		}
 
 		[Ordinal(9)] 
 		[RED("castShadows")] 
 		public CBool CastShadows
 		{
-			get
-			{
-				if (_castShadows == null)
-				{
-					_castShadows = (CBool) CR2WTypeManager.Create("Bool", "castShadows", cr2w, this);
-				}
-				return _castShadows;
-			}
-			set
-			{
-				if (_castShadows == value)
-				{
-					return;
-				}
-				_castShadows = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _castShadows);
+			set => SetProperty(ref _castShadows, value);
 		}
 
 		[Ordinal(10)] 
 		[RED("castLocalShadows")] 
 		public CBool CastLocalShadows
 		{
-			get
-			{
-				if (_castLocalShadows == null)
-				{
-					_castLocalShadows = (CBool) CR2WTypeManager.Create("Bool", "castLocalShadows", cr2w, this);
-				}
-				return _castLocalShadows;
-			}
-			set
-			{
-				if (_castLocalShadows == value)
-				{
-					return;
-				}
-				_castLocalShadows = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _castLocalShadows);
+			set => SetProperty(ref _castLocalShadows, value);
 		}
 
 		[Ordinal(11)] 
 		[RED("removeFromRainMap")] 
 		public CBool RemoveFromRainMap
 		{
-			get
-			{
-				if (_removeFromRainMap == null)
-				{
-					_removeFromRainMap = (CBool) CR2WTypeManager.Create("Bool", "removeFromRainMap", cr2w, this);
-				}
-				return _removeFromRainMap;
-			}
-			set
-			{
-				if (_removeFromRainMap == value)
-				{
-					return;
-				}
-				_removeFromRainMap = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _removeFromRainMap);
+			set => SetProperty(ref _removeFromRainMap, value);
 		}
 
 		[Ordinal(12)] 
 		[RED("navigationSetting")] 
 		public NavGenNavigationSetting NavigationSetting
 		{
-			get
-			{
-				if (_navigationSetting == null)
-				{
-					_navigationSetting = (NavGenNavigationSetting) CR2WTypeManager.Create("NavGenNavigationSetting", "navigationSetting", cr2w, this);
-				}
-				return _navigationSetting;
-			}
-			set
-			{
-				if (_navigationSetting == value)
-				{
-					return;
-				}
-				_navigationSetting = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _navigationSetting);
+			set => SetProperty(ref _navigationSetting, value);
 		}
 
 		public worldBendedMeshNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

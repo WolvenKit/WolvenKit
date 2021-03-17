@@ -14,46 +14,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("initialAbsorbtion")] 
 		public CFloat InitialAbsorbtion
 		{
-			get
-			{
-				if (_initialAbsorbtion == null)
-				{
-					_initialAbsorbtion = (CFloat) CR2WTypeManager.Create("Float", "initialAbsorbtion", cr2w, this);
-				}
-				return _initialAbsorbtion;
-			}
-			set
-			{
-				if (_initialAbsorbtion == value)
-				{
-					return;
-				}
-				_initialAbsorbtion = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _initialAbsorbtion);
+			set => SetProperty(ref _initialAbsorbtion, value);
 		}
 
 		[Ordinal(2)] 
 		[RED("absorptionPerMeter")] 
 		public CFloat AbsorptionPerMeter
 		{
-			get
-			{
-				if (_absorptionPerMeter == null)
-				{
-					_absorptionPerMeter = (CFloat) CR2WTypeManager.Create("Float", "absorptionPerMeter", cr2w, this);
-				}
-				return _absorptionPerMeter;
-			}
-			set
-			{
-				if (_absorptionPerMeter == value)
-				{
-					return;
-				}
-				_absorptionPerMeter = value;
-				PropertySet(this);
-			}
+			get => GetProperty(ref _absorptionPerMeter);
+			set => SetProperty(ref _absorptionPerMeter, value);
 		}
 
 		public audioPhysicalObstructionSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
