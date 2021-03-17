@@ -42,7 +42,6 @@ namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
         [Expose("Author")]
         [Expose("SelectedGames")]
         [Expose("AutoInstallMods")]
-        [Expose("AutoUpdatesEnabled")]
         [Expose("CreateModForW3")]
         [Expose("CreateModForCP77")]
         public FirstSetupWizardModel FirstSetupWizardModel { get; set; }

@@ -6,6 +6,7 @@
  xmlns:hc="https://handyorg.github.io/handycontrol"
  MaxHeight="600"
  xmlns:local="clr-namespace:WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard"
+ xmlns:services="clr-namespace:WolvenKit.Functionality.Services;assembly=WolvenKit.App"
  xmlns:xamlbehaviors="http://schemas.microsoft.com/xaml/behaviors">
 
     <xamlbehaviors:Interaction.Triggers>
@@ -111,13 +112,13 @@
                             </Grid>
                             <Grid Margin="5,32,10,0">
 
-                                <TextBlock VerticalAlignment="Center" Text="Automatic updates" />
+                                <TextBlock VerticalAlignment="Center" Text="Show guided tour" />
                                 <TextBox
                                  Margin="200,0,0,0"
                                  HorizontalAlignment="Stretch"
                                  VerticalAlignment="Stretch"
                                  IsEnabled="False"
-                                 Text="{Binding AutoUpdatesEnabled}" />
+                                 Text="{Binding Source={x:Static services:SettingsManager.ShowGuidedTour}, Path=., StringFormat={}{0}}" />
                             </Grid>
                             <hc:Divider
                              Margin="0,32,10,0"
