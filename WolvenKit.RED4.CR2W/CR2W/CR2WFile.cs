@@ -83,6 +83,8 @@ namespace WolvenKit.RED4.CR2W
         private CR2WFile additionalCr2WFile;
         public byte[] AdditionalCr2WFileBytes;
 
+        public bool CreatePropertyOnAccess = true;
+
         #endregion
 
         #region Properties
@@ -722,6 +724,8 @@ namespace WolvenKit.RED4.CR2W
         #region Write
         public void Write(BinaryWriter file)
         {
+            CreatePropertyOnAccess = false;
+
             // update data
             //m_fileheader.timeStamp = CDateTime.Now.ToUInt64();    //this will change any vanilla assets simply by opening and saving in wkit
             var nn = new List<CR2WNameWrapper>(Names);
@@ -858,6 +862,8 @@ namespace WolvenKit.RED4.CR2W
                 file.BaseStream.Seek(0, SeekOrigin.End);
                 file.Write(AdditionalCr2WFileBytes);
             }
+
+            CreatePropertyOnAccess = true;
         }
 
         /// <summary>

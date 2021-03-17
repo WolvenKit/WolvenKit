@@ -223,7 +223,15 @@ namespace WolvenKit.RED4.CR2W.Types
 
         #region Methods
 
-        internal T GetProperty<T>(ref T backingField, [CallerMemberName] string callerName = "") where T : class => backingField ??= Create<T>(callerName);
+        internal T GetProperty<T>(ref T backingField, [CallerMemberName] string callerName = "") where T : class
+        {
+            if (backingField == null && cr2w.CreatePropertyOnAccess)
+            {
+                backingField = Create<T>(callerName);
+            }
+
+            return backingField;
+        }
 
         internal void SetProperty<T>(ref T backingField, T value, [CallerMemberName] string callerName = "") where T : class
         {
