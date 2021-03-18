@@ -1110,7 +1110,7 @@ namespace WolvenKit.RED4.CR2W
                                     .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
                             }
 
-                            if (cvar is scnAnimName scnname)
+                            if (cvar is scnAnimName scnname && scnname.Unk1 != null)
                             {
                                 returnedVariables.AddRange(scnname.Unk1
                                     .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));

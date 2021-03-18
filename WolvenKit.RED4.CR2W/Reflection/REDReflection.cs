@@ -109,7 +109,7 @@ namespace WolvenKit.RED4.CR2W.Reflection
         public static MemberSet GetMembers(CVariable cvar) =>
             MembersCache.GetOrAdd(cvar.GetType(), new Lazy<MemberSet>(() => cvar.accessor.GetMembers())).Value;
 
-        private static REDAttribute GetREDAttribute(Member member)
+        public static REDAttribute GetREDAttribute(Member member)
         {
             var attrs = GetMemberAttributes(member);
             for (int i = 0; i < attrs.Length; i++)

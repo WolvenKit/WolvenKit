@@ -46,33 +46,6 @@ namespace WolvenKit.RED4.CR2W.Types
 
             
             accessor = TypeAccessor.Create(this.GetType());
-
-            // instantiate all REDproperties
-            //InstantiateAllRedProps();
-        }
-
-        private void InstantiateAllRedProps()
-        {
-            foreach (var item in this.GetREDMembers(true))
-            {
-                var o = accessor[this, item.Name];
-                if (o is CVariable cvar)
-                {
-                }
-                else // is null
-                {
-                    var att = item.GetMemberAttribute<REDAttribute>();
-                    // instantiate
-                    var vartype = REDReflection.GetREDTypeString(item.Type, att.Flags);
-                    var varname = REDReflection.GetREDNameString(item);
-
-                    var newvar = CR2WTypeManager.Create(vartype, varname, this.cr2w, this);     // create new variable and parent to this 
-                    if (newvar != null)
-                    {
-                        accessor[this, item.Name] = newvar;
-                    }
-                }
-            }
         }
 
         #endregion
@@ -263,7 +236,13 @@ namespace WolvenKit.RED4.CR2W.Types
                 throw new Exception("REDAttribute not defined!");
             }
 
-            return Create<T>(attr.Name, attr.Flags);
+            var varName = attr.Name;
+            if (string.IsNullOrWhiteSpace(varName) && attr is REDBufferAttribute {IsIgnored: true})
+            {
+                varName = callerName;
+            }
+
+            return Create<T>(varName, attr.Flags);
         }
 
         internal void PropertySet([CallerMemberName] string callerName = "")
@@ -432,7 +411,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 var members = this.GetREDMembers(true);
                 foreach (var item in members)
                 {
-                    var att = item.GetMemberAttribute<REDAttribute>();
+                    var att = REDReflection.GetREDAttribute(item);
                     // don't write ignored buffers, they get written in the class
                     if (att is REDBufferAttribute bufferAttribute && bufferAttribute.IsIgnored)
                     {
@@ -563,7 +542,12 @@ namespace WolvenKit.RED4.CR2W.Types
 
             foreach (Member item in redproperties)
             {
-                var att = item.GetMemberAttribute<T>();
+                var att = REDReflection.GetREDAttribute(item);
+                if (att is not T)
+                {
+                    continue;
+                }
+
                 if (att is REDBufferAttribute {IsIgnored: true})
                 {
                     // add IsSerialized?
@@ -642,7 +626,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 var members = this.GetREDMembers(true);
                 foreach (var item in members)
                 {
-                    var att = item.GetMemberAttribute<REDAttribute>();
+                    var att = REDReflection.GetREDAttribute(item);
                     // don't write ignored buffers, they get written in the class
                     if (att is REDBufferAttribute bufferAttribute && bufferAttribute.IsIgnored)
                     {
@@ -665,7 +649,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 var members = this.GetREDMembers(false);
                 foreach (var item in members)
                 {
-                    var att = item.GetMemberAttribute<REDAttribute>();
+                    var att = REDReflection.GetREDAttribute(item);
                     if (this.accessor[this, item.Name] is CVariable av)
                     {
                         if (av != null)
@@ -694,11 +678,17 @@ namespace WolvenKit.RED4.CR2W.Types
                 // write all Buffers
                 foreach (Member item in this.GetREDBuffers())
                 {
-                    var att = item.GetMemberAttribute<REDBufferAttribute>();
+                    var att = REDReflection.GetREDAttribute(item) as REDBufferAttribute;
+                    if (att == null)
+                    {
+                        continue;
+                    }
 
                     // ignore some RedBuffers (formerly unknown bytes)
                     if (att.IsIgnored)
+                    {
                         continue;
+                    }
                     else
                     {
                         var b = this.accessor[this, item.Name];
