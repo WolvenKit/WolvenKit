@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -1110,10 +1109,12 @@ namespace WolvenKit.ViewModels.Shell
 
             void OpenAudioFile(string full)
             {
-                // #convert2MVVMSoon
-                //   var z = (AudioToolView)ServiceLocator.Default.ResolveType<AudioToolView>();
-                //   ExecuteAudioTool();
-                //   z.AddAudioItem(full);
+
+
+
+                var z = (AudioToolViewModel)ServiceLocator.Default.ResolveType<AudioToolViewModel>();
+                ExecuteAudioTool();
+                z.AddAudioItem(full);
             }
 
             void ShellExecute(string path)
