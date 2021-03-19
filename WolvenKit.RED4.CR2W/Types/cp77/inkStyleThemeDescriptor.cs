@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkStyleThemeDescriptor : CVariable
 	{
-		[Ordinal(0)] [RED("themeID")] public CName ThemeID { get; set; }
-		[Ordinal(1)] [RED("themeNameLocKey")] public CName ThemeNameLocKey { get; set; }
+		private CName _themeID;
+		private CName _themeNameLocKey;
+
+		[Ordinal(0)] 
+		[RED("themeID")] 
+		public CName ThemeID
+		{
+			get => GetProperty(ref _themeID);
+			set => SetProperty(ref _themeID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("themeNameLocKey")] 
+		public CName ThemeNameLocKey
+		{
+			get => GetProperty(ref _themeNameLocKey);
+			set => SetProperty(ref _themeNameLocKey, value);
+		}
 
 		public inkStyleThemeDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

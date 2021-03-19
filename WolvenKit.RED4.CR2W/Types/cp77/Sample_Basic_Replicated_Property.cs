@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Sample_Basic_Replicated_Property : CVariable
 	{
-		[Ordinal(0)] [RED("property")] public CBool Property { get; set; }
+		private CBool _property;
+
+		[Ordinal(0)] 
+		[RED("property")] 
+		public CBool Property
+		{
+			get => GetProperty(ref _property);
+			set => SetProperty(ref _property, value);
+		}
 
 		public Sample_Basic_Replicated_Property(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

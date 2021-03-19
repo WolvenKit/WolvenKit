@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameHitDetectionDebugFrameDataShapeEntry : CVariable
 	{
-		[Ordinal(0)] [RED("ansformWS")] public WorldTransform AnsformWS { get; set; }
+		private WorldTransform _ansformWS;
+
+		[Ordinal(0)] 
+		[RED("ansformWS")] 
+		public WorldTransform AnsformWS
+		{
+			get => GetProperty(ref _ansformWS);
+			set => SetProperty(ref _ansformWS, value);
+		}
 
 		public gameHitDetectionDebugFrameDataShapeEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

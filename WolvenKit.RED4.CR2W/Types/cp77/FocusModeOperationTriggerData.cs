@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FocusModeOperationTriggerData : DeviceOperationTriggerData
 	{
-		[Ordinal(1)] [RED("operationType")] public CEnum<ETriggerOperationType> OperationType { get; set; }
-		[Ordinal(2)] [RED("isLookedAt")] public CBool IsLookedAt { get; set; }
+		private CEnum<ETriggerOperationType> _operationType;
+		private CBool _isLookedAt;
+
+		[Ordinal(1)] 
+		[RED("operationType")] 
+		public CEnum<ETriggerOperationType> OperationType
+		{
+			get => GetProperty(ref _operationType);
+			set => SetProperty(ref _operationType, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("isLookedAt")] 
+		public CBool IsLookedAt
+		{
+			get => GetProperty(ref _isLookedAt);
+			set => SetProperty(ref _isLookedAt, value);
+		}
 
 		public FocusModeOperationTriggerData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

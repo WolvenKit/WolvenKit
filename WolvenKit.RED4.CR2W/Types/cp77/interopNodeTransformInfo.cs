@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class interopNodeTransformInfo : CVariable
 	{
-		[Ordinal(0)] [RED("id")] public interopStringWithID Id { get; set; }
-		[Ordinal(1)] [RED("transformInfo")] public interopTransformInfo TransformInfo { get; set; }
+		private interopStringWithID _id;
+		private interopTransformInfo _transformInfo;
+
+		[Ordinal(0)] 
+		[RED("id")] 
+		public interopStringWithID Id
+		{
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("transformInfo")] 
+		public interopTransformInfo TransformInfo
+		{
+			get => GetProperty(ref _transformInfo);
+			set => SetProperty(ref _transformInfo, value);
+		}
 
 		public interopNodeTransformInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

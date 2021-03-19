@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questContentLock_ConditionType : questIContentConditionType
 	{
-		[Ordinal(0)] [RED("isContentBlocked")] public CBool IsContentBlocked { get; set; }
+		private CBool _isContentBlocked;
+
+		[Ordinal(0)] 
+		[RED("isContentBlocked")] 
+		public CBool IsContentBlocked
+		{
+			get => GetProperty(ref _isContentBlocked);
+			set => SetProperty(ref _isContentBlocked, value);
+		}
 
 		public questContentLock_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

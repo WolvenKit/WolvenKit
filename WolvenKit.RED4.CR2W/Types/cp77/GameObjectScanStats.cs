@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GameObjectScanStats : CVariable
 	{
-		[Ordinal(0)] [RED("scannerData")] public scannerDataStructure ScannerData { get; set; }
+		private scannerDataStructure _scannerData;
+
+		[Ordinal(0)] 
+		[RED("scannerData")] 
+		public scannerDataStructure ScannerData
+		{
+			get => GetProperty(ref _scannerData);
+			set => SetProperty(ref _scannerData, value);
+		}
 
 		public GameObjectScanStats(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

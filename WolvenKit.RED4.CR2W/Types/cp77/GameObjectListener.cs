@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GameObjectListener : IScriptable
 	{
-		[Ordinal(0)] [RED("prereqOwner")] public CHandle<gamePrereqState> PrereqOwner { get; set; }
-		[Ordinal(1)] [RED("e3HackBlock")] public CBool E3HackBlock { get; set; }
+		private CHandle<gamePrereqState> _prereqOwner;
+		private CBool _e3HackBlock;
+
+		[Ordinal(0)] 
+		[RED("prereqOwner")] 
+		public CHandle<gamePrereqState> PrereqOwner
+		{
+			get => GetProperty(ref _prereqOwner);
+			set => SetProperty(ref _prereqOwner, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("e3HackBlock")] 
+		public CBool E3HackBlock
+		{
+			get => GetProperty(ref _e3HackBlock);
+			set => SetProperty(ref _e3HackBlock, value);
+		}
 
 		public GameObjectListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

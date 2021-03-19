@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UI_ActivityLogDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("activityLogHide")] public gamebbScriptID_Bool ActivityLogHide { get; set; }
+		private gamebbScriptID_Bool _activityLogHide;
+
+		[Ordinal(0)] 
+		[RED("activityLogHide")] 
+		public gamebbScriptID_Bool ActivityLogHide
+		{
+			get => GetProperty(ref _activityLogHide);
+			set => SetProperty(ref _activityLogHide, value);
+		}
 
 		public UI_ActivityLogDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

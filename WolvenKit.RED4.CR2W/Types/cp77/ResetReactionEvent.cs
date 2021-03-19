@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ResetReactionEvent : redEvent
 	{
-		[Ordinal(0)] [RED("data")] public CHandle<AIReactionData> Data { get; set; }
+		private CHandle<AIReactionData> _data;
+
+		[Ordinal(0)] 
+		[RED("data")] 
+		public CHandle<AIReactionData> Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
 
 		public ResetReactionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

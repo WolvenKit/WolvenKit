@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class NarrationJournalGameController : gameuiHUDGameController
 	{
-		[Ordinal(9)] [RED("entriesContainer")] public inkCompoundWidgetReference EntriesContainer { get; set; }
-		[Ordinal(10)] [RED("narrationJournalBlackboardId")] public CUInt32 NarrationJournalBlackboardId { get; set; }
+		private inkCompoundWidgetReference _entriesContainer;
+		private CUInt32 _narrationJournalBlackboardId;
+
+		[Ordinal(9)] 
+		[RED("entriesContainer")] 
+		public inkCompoundWidgetReference EntriesContainer
+		{
+			get => GetProperty(ref _entriesContainer);
+			set => SetProperty(ref _entriesContainer, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("narrationJournalBlackboardId")] 
+		public CUInt32 NarrationJournalBlackboardId
+		{
+			get => GetProperty(ref _narrationJournalBlackboardId);
+			set => SetProperty(ref _narrationJournalBlackboardId, value);
+		}
 
 		public NarrationJournalGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

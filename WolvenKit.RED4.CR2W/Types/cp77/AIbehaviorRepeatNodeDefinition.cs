@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorRepeatNodeDefinition : AIbehaviorDecoratorNodeDefinition
 	{
-		[Ordinal(1)] [RED("limit")] public CHandle<AIArgumentMapping> Limit { get; set; }
-		[Ordinal(2)] [RED("repeatChildOnFailure")] public CBool RepeatChildOnFailure { get; set; }
+		private CHandle<AIArgumentMapping> _limit;
+		private CBool _repeatChildOnFailure;
+
+		[Ordinal(1)] 
+		[RED("limit")] 
+		public CHandle<AIArgumentMapping> Limit
+		{
+			get => GetProperty(ref _limit);
+			set => SetProperty(ref _limit, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("repeatChildOnFailure")] 
+		public CBool RepeatChildOnFailure
+		{
+			get => GetProperty(ref _repeatChildOnFailure);
+			set => SetProperty(ref _repeatChildOnFailure, value);
+		}
 
 		public AIbehaviorRepeatNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,10 +7,42 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AdHocAnimationDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("IsActive")] public gamebbScriptID_Bool IsActive { get; set; }
-		[Ordinal(1)] [RED("AnimationIndex")] public gamebbScriptID_Int32 AnimationIndex { get; set; }
-		[Ordinal(2)] [RED("UseBothHands")] public gamebbScriptID_Bool UseBothHands { get; set; }
-		[Ordinal(3)] [RED("UnequipWeapon")] public gamebbScriptID_Bool UnequipWeapon { get; set; }
+		private gamebbScriptID_Bool _isActive;
+		private gamebbScriptID_Int32 _animationIndex;
+		private gamebbScriptID_Bool _useBothHands;
+		private gamebbScriptID_Bool _unequipWeapon;
+
+		[Ordinal(0)] 
+		[RED("IsActive")] 
+		public gamebbScriptID_Bool IsActive
+		{
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("AnimationIndex")] 
+		public gamebbScriptID_Int32 AnimationIndex
+		{
+			get => GetProperty(ref _animationIndex);
+			set => SetProperty(ref _animationIndex, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("UseBothHands")] 
+		public gamebbScriptID_Bool UseBothHands
+		{
+			get => GetProperty(ref _useBothHands);
+			set => SetProperty(ref _useBothHands, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("UnequipWeapon")] 
+		public gamebbScriptID_Bool UnequipWeapon
+		{
+			get => GetProperty(ref _unequipWeapon);
+			set => SetProperty(ref _unequipWeapon, value);
+		}
 
 		public AdHocAnimationDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

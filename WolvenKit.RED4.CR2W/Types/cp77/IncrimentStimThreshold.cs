@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class IncrimentStimThreshold : AIbehaviortaskScript
 	{
-		[Ordinal(0)] [RED("thresholdTimeout")] public CFloat ThresholdTimeout { get; set; }
+		private CFloat _thresholdTimeout;
+
+		[Ordinal(0)] 
+		[RED("thresholdTimeout")] 
+		public CFloat ThresholdTimeout
+		{
+			get => GetProperty(ref _thresholdTimeout);
+			set => SetProperty(ref _thresholdTimeout, value);
+		}
 
 		public IncrimentStimThreshold(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

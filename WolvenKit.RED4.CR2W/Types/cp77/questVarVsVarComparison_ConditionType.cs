@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questVarVsVarComparison_ConditionType : questIFactsDBConditionType
 	{
-		[Ordinal(0)] [RED("factName1")] public CString FactName1 { get; set; }
-		[Ordinal(1)] [RED("factName2")] public CString FactName2 { get; set; }
-		[Ordinal(2)] [RED("comparisonType")] public CEnum<EComparisonType> ComparisonType { get; set; }
+		private CString _factName1;
+		private CString _factName2;
+		private CEnum<EComparisonType> _comparisonType;
+
+		[Ordinal(0)] 
+		[RED("factName1")] 
+		public CString FactName1
+		{
+			get => GetProperty(ref _factName1);
+			set => SetProperty(ref _factName1, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("factName2")] 
+		public CString FactName2
+		{
+			get => GetProperty(ref _factName2);
+			set => SetProperty(ref _factName2, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("comparisonType")] 
+		public CEnum<EComparisonType> ComparisonType
+		{
+			get => GetProperty(ref _comparisonType);
+			set => SetProperty(ref _comparisonType, value);
+		}
 
 		public questVarVsVarComparison_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

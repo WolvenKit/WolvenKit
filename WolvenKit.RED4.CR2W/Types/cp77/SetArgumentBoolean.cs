@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetArgumentBoolean : SetArguments
 	{
-		[Ordinal(1)] [RED("customVar")] public CBool CustomVar { get; set; }
+		private CBool _customVar;
+
+		[Ordinal(1)] 
+		[RED("customVar")] 
+		public CBool CustomVar
+		{
+			get => GetProperty(ref _customVar);
+			set => SetProperty(ref _customVar, value);
+		}
 
 		public SetArgumentBoolean(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

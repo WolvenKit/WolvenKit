@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectTriggerNode : worldAreaShapeNode
 	{
-		[Ordinal(6)] [RED("effectDescs")] public CArray<CHandle<gameEffectTriggerEffectDesc>> EffectDescs { get; set; }
+		private CArray<CHandle<gameEffectTriggerEffectDesc>> _effectDescs;
+
+		[Ordinal(6)] 
+		[RED("effectDescs")] 
+		public CArray<CHandle<gameEffectTriggerEffectDesc>> EffectDescs
+		{
+			get => GetProperty(ref _effectDescs);
+			set => SetProperty(ref _effectDescs, value);
+		}
 
 		public gameEffectTriggerNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

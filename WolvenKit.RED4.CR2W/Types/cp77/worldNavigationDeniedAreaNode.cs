@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldNavigationDeniedAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(6)] [RED("flags")] public CEnum<worldEDeniedAreaFlags> Flags { get; set; }
+		private CEnum<worldEDeniedAreaFlags> _flags;
+
+		[Ordinal(6)] 
+		[RED("flags")] 
+		public CEnum<worldEDeniedAreaFlags> Flags
+		{
+			get => GetProperty(ref _flags);
+			set => SetProperty(ref _flags, value);
+		}
 
 		public worldNavigationDeniedAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

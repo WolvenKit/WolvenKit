@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectObjectFilter_BlockingGeometry : gameEffectObjectGroupFilter
 	{
-		[Ordinal(0)] [RED("inclusive")] public CBool Inclusive { get; set; }
-		[Ordinal(1)] [RED("sortQueryResultsByDistance")] public CBool SortQueryResultsByDistance { get; set; }
+		private CBool _inclusive;
+		private CBool _sortQueryResultsByDistance;
+
+		[Ordinal(0)] 
+		[RED("inclusive")] 
+		public CBool Inclusive
+		{
+			get => GetProperty(ref _inclusive);
+			set => SetProperty(ref _inclusive, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("sortQueryResultsByDistance")] 
+		public CBool SortQueryResultsByDistance
+		{
+			get => GetProperty(ref _sortQueryResultsByDistance);
+			set => SetProperty(ref _sortQueryResultsByDistance, value);
+		}
 
 		public gameEffectObjectFilter_BlockingGeometry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

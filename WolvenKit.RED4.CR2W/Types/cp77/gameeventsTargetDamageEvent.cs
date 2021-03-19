@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameeventsTargetDamageEvent : gameeventsTargetHitEvent
 	{
-		[Ordinal(12)] [RED("damage")] public CFloat Damage { get; set; }
+		private CFloat _damage;
+
+		[Ordinal(12)] 
+		[RED("damage")] 
+		public CFloat Damage
+		{
+			get => GetProperty(ref _damage);
+			set => SetProperty(ref _damage, value);
+		}
 
 		public gameeventsTargetDamageEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

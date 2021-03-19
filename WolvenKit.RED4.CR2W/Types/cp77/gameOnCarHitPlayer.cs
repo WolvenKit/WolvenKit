@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameOnCarHitPlayer : redEvent
 	{
-		[Ordinal(0)] [RED("hitDirection")] public Vector4 HitDirection { get; set; }
-		[Ordinal(1)] [RED("carId")] public entEntityID CarId { get; set; }
+		private Vector4 _hitDirection;
+		private entEntityID _carId;
+
+		[Ordinal(0)] 
+		[RED("hitDirection")] 
+		public Vector4 HitDirection
+		{
+			get => GetProperty(ref _hitDirection);
+			set => SetProperty(ref _hitDirection, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("carId")] 
+		public entEntityID CarId
+		{
+			get => GetProperty(ref _carId);
+			set => SetProperty(ref _carId, value);
+		}
 
 		public gameOnCarHitPlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

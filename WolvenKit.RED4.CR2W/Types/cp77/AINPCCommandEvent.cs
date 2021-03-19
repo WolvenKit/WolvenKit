@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AINPCCommandEvent : AIAIEvent
 	{
-		[Ordinal(2)] [RED("command")] public CHandle<AICommand> Command { get; set; }
+		private CHandle<AICommand> _command;
+
+		[Ordinal(2)] 
+		[RED("command")] 
+		public CHandle<AICommand> Command
+		{
+			get => GetProperty(ref _command);
+			set => SetProperty(ref _command, value);
+		}
 
 		public AINPCCommandEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EndScreenData : CVariable
 	{
-		[Ordinal(0)] [RED("unlockedPrograms")] public CArray<ProgramData> UnlockedPrograms { get; set; }
-		[Ordinal(1)] [RED("outcome")] public CEnum<OutcomeMessage> Outcome { get; set; }
+		private CArray<ProgramData> _unlockedPrograms;
+		private CEnum<OutcomeMessage> _outcome;
+
+		[Ordinal(0)] 
+		[RED("unlockedPrograms")] 
+		public CArray<ProgramData> UnlockedPrograms
+		{
+			get => GetProperty(ref _unlockedPrograms);
+			set => SetProperty(ref _unlockedPrograms, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("outcome")] 
+		public CEnum<OutcomeMessage> Outcome
+		{
+			get => GetProperty(ref _outcome);
+			set => SetProperty(ref _outcome, value);
+		}
 
 		public EndScreenData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

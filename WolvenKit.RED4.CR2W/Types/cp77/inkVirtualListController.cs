@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkVirtualListController : inkVirtualCompoundController
 	{
-		[Ordinal(6)] [RED("itemTemplates")] public CArray<inkWidgetLibraryReference> ItemTemplates { get; set; }
-		[Ordinal(7)] [RED("cycleNavigation")] public CBool CycleNavigation { get; set; }
+		private CArray<inkWidgetLibraryReference> _itemTemplates;
+		private CBool _cycleNavigation;
+
+		[Ordinal(6)] 
+		[RED("itemTemplates")] 
+		public CArray<inkWidgetLibraryReference> ItemTemplates
+		{
+			get => GetProperty(ref _itemTemplates);
+			set => SetProperty(ref _itemTemplates, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("cycleNavigation")] 
+		public CBool CycleNavigation
+		{
+			get => GetProperty(ref _cycleNavigation);
+			set => SetProperty(ref _cycleNavigation, value);
+		}
 
 		public inkVirtualListController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

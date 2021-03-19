@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioVoiceContextAnswer : CVariable
 	{
-		[Ordinal(0)] [RED("answerContext")] public CName AnswerContext { get; set; }
-		[Ordinal(1)] [RED("radius")] public CFloat Radius { get; set; }
+		private CName _answerContext;
+		private CFloat _radius;
+
+		[Ordinal(0)] 
+		[RED("answerContext")] 
+		public CName AnswerContext
+		{
+			get => GetProperty(ref _answerContext);
+			set => SetProperty(ref _answerContext, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("radius")] 
+		public CFloat Radius
+		{
+			get => GetProperty(ref _radius);
+			set => SetProperty(ref _radius, value);
+		}
 
 		public audioVoiceContextAnswer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

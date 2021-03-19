@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ForceUIRefreshEvent : redEvent
 	{
-		[Ordinal(0)] [RED("ownerID")] public entEntityID OwnerID { get; set; }
+		private entEntityID _ownerID;
+
+		[Ordinal(0)] 
+		[RED("ownerID")] 
+		public entEntityID OwnerID
+		{
+			get => GetProperty(ref _ownerID);
+			set => SetProperty(ref _ownerID, value);
+		}
 
 		public ForceUIRefreshEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldEffectNode : worldNode
 	{
-		[Ordinal(4)] [RED("effect")] public raRef<worldEffect> Effect { get; set; }
-		[Ordinal(5)] [RED("streamingDistanceOverride")] public CFloat StreamingDistanceOverride { get; set; }
+		private raRef<worldEffect> _effect;
+		private CFloat _streamingDistanceOverride;
+
+		[Ordinal(4)] 
+		[RED("effect")] 
+		public raRef<worldEffect> Effect
+		{
+			get => GetProperty(ref _effect);
+			set => SetProperty(ref _effect, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("streamingDistanceOverride")] 
+		public CFloat StreamingDistanceOverride
+		{
+			get => GetProperty(ref _streamingDistanceOverride);
+			set => SetProperty(ref _streamingDistanceOverride, value);
+		}
 
 		public worldEffectNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

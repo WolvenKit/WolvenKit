@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class WidgetAnimationManager : IScriptable
 	{
-		[Ordinal(0)] [RED("animations")] public CArray<SWidgetAnimationData> Animations { get; set; }
+		private CArray<SWidgetAnimationData> _animations;
+
+		[Ordinal(0)] 
+		[RED("animations")] 
+		public CArray<SWidgetAnimationData> Animations
+		{
+			get => GetProperty(ref _animations);
+			set => SetProperty(ref _animations, value);
+		}
 
 		public WidgetAnimationManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

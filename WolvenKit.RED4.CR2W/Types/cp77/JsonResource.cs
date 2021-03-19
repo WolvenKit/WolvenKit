@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class JsonResource : CResource
 	{
-		[Ordinal(1)] [RED("root")] public CHandle<ISerializable> Root { get; set; }
+		private CHandle<ISerializable> _root;
+
+		[Ordinal(1)] 
+		[RED("root")] 
+		public CHandle<ISerializable> Root
+		{
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
+		}
 
 		public JsonResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

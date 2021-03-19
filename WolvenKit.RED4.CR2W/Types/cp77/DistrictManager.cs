@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DistrictManager : IScriptable
 	{
-		[Ordinal(0)] [RED("system")] public wCHandle<PreventionSystem> System { get; set; }
-		[Ordinal(1)] [RED("stack")] public CArray<CHandle<District>> Stack { get; set; }
-		[Ordinal(2)] [RED("visitedDistricts")] public CArray<TweakDBID> VisitedDistricts { get; set; }
+		private wCHandle<PreventionSystem> _system;
+		private CArray<CHandle<District>> _stack;
+		private CArray<TweakDBID> _visitedDistricts;
+
+		[Ordinal(0)] 
+		[RED("system")] 
+		public wCHandle<PreventionSystem> System
+		{
+			get => GetProperty(ref _system);
+			set => SetProperty(ref _system, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("stack")] 
+		public CArray<CHandle<District>> Stack
+		{
+			get => GetProperty(ref _stack);
+			set => SetProperty(ref _stack, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("visitedDistricts")] 
+		public CArray<TweakDBID> VisitedDistricts
+		{
+			get => GetProperty(ref _visitedDistricts);
+			set => SetProperty(ref _visitedDistricts, value);
+		}
 
 		public DistrictManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

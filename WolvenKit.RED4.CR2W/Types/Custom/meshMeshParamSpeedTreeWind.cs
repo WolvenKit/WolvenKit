@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
 	public class meshMeshParamSpeedTreeWind : meshMeshParamSpeedTreeWind_
     {
-        [Ordinal(0)] [REDBuffer] public CUInt32 Unk1 { get; set; }
-        [Ordinal(1)] [REDBuffer(true)] public CArrayCompressed<CFloat> Unk2 { get; set; }
+        private CUInt32 _unk1;
+        private CArrayCompressed<CFloat> _unk2;
+
+        [Ordinal(0)]
+        [REDBuffer]
+        public CUInt32 Unk1
+        {
+            get => GetProperty(ref _unk1);
+            set => SetProperty(ref _unk1, value);
+        }
+
+        [Ordinal(1)]
+        [REDBuffer(true)]
+        public CArrayCompressed<CFloat> Unk2
+        {
+            get => GetProperty(ref _unk2);
+            set => SetProperty(ref _unk2, value);
+        }
 
         public meshMeshParamSpeedTreeWind(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

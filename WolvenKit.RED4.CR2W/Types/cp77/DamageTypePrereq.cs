@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DamageTypePrereq : GenericHitPrereq
 	{
-		[Ordinal(5)] [RED("damageType")] public CEnum<gamedataDamageType> DamageType { get; set; }
+		private CEnum<gamedataDamageType> _damageType;
+
+		[Ordinal(5)] 
+		[RED("damageType")] 
+		public CEnum<gamedataDamageType> DamageType
+		{
+			get => GetProperty(ref _damageType);
+			set => SetProperty(ref _damageType, value);
+		}
 
 		public DamageTypePrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

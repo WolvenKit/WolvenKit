@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DropPointCallback : gameInventoryScriptCallback
 	{
-		[Ordinal(1)] [RED("dps")] public wCHandle<DropPointSystem> Dps { get; set; }
+		private wCHandle<DropPointSystem> _dps;
+
+		[Ordinal(1)] 
+		[RED("dps")] 
+		public wCHandle<DropPointSystem> Dps
+		{
+			get => GetProperty(ref _dps);
+			set => SetProperty(ref _dps, value);
+		}
 
 		public DropPointCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,11 +7,51 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SmartHouseControllerPS : MasterControllerPS
 	{
-		[Ordinal(104)] [RED("timetable")] public CArray<SPresetTimetableEntry> Timetable { get; set; }
-		[Ordinal(105)] [RED("activePreset")] public CHandle<SmartHousePreset> ActivePreset { get; set; }
-		[Ordinal(106)] [RED("availablePresets")] public CArray<CHandle<SmartHousePreset>> AvailablePresets { get; set; }
-		[Ordinal(107)] [RED("smartHouseCustomization")] public SmartHouseConfiguration SmartHouseCustomization { get; set; }
-		[Ordinal(108)] [RED("callbackID")] public CUInt32 CallbackID { get; set; }
+		private CArray<SPresetTimetableEntry> _timetable;
+		private CHandle<SmartHousePreset> _activePreset;
+		private CArray<CHandle<SmartHousePreset>> _availablePresets;
+		private SmartHouseConfiguration _smartHouseCustomization;
+		private CUInt32 _callbackID;
+
+		[Ordinal(104)] 
+		[RED("timetable")] 
+		public CArray<SPresetTimetableEntry> Timetable
+		{
+			get => GetProperty(ref _timetable);
+			set => SetProperty(ref _timetable, value);
+		}
+
+		[Ordinal(105)] 
+		[RED("activePreset")] 
+		public CHandle<SmartHousePreset> ActivePreset
+		{
+			get => GetProperty(ref _activePreset);
+			set => SetProperty(ref _activePreset, value);
+		}
+
+		[Ordinal(106)] 
+		[RED("availablePresets")] 
+		public CArray<CHandle<SmartHousePreset>> AvailablePresets
+		{
+			get => GetProperty(ref _availablePresets);
+			set => SetProperty(ref _availablePresets, value);
+		}
+
+		[Ordinal(107)] 
+		[RED("smartHouseCustomization")] 
+		public SmartHouseConfiguration SmartHouseCustomization
+		{
+			get => GetProperty(ref _smartHouseCustomization);
+			set => SetProperty(ref _smartHouseCustomization, value);
+		}
+
+		[Ordinal(108)] 
+		[RED("callbackID")] 
+		public CUInt32 CallbackID
+		{
+			get => GetProperty(ref _callbackID);
+			set => SetProperty(ref _callbackID, value);
+		}
 
 		public SmartHouseControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

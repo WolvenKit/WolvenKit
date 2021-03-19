@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectExecutor : gameEffectNode
 	{
-		[Ordinal(0)] [RED("usesHitCooldown")] public CBool UsesHitCooldown { get; set; }
+		private CBool _usesHitCooldown;
+
+		[Ordinal(0)] 
+		[RED("usesHitCooldown")] 
+		public CBool UsesHitCooldown
+		{
+			get => GetProperty(ref _usesHitCooldown);
+			set => SetProperty(ref _usesHitCooldown, value);
+		}
 
 		public gameEffectExecutor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

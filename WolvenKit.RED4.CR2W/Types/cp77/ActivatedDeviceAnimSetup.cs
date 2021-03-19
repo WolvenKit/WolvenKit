@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ActivatedDeviceAnimSetup : CVariable
 	{
-		[Ordinal(0)] [RED("animationTime")] public CFloat AnimationTime { get; set; }
+		private CFloat _animationTime;
+
+		[Ordinal(0)] 
+		[RED("animationTime")] 
+		public CFloat AnimationTime
+		{
+			get => GetProperty(ref _animationTime);
+			set => SetProperty(ref _animationTime, value);
+		}
 
 		public ActivatedDeviceAnimSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

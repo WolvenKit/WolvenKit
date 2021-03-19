@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiCrosshairBaseMelee : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(18)] [RED("meleeStateBlackboardId")] public CUInt32 MeleeStateBlackboardId { get; set; }
-		[Ordinal(19)] [RED("playerSMBB")] public CHandle<gameIBlackboard> PlayerSMBB { get; set; }
+		private CUInt32 _meleeStateBlackboardId;
+		private CHandle<gameIBlackboard> _playerSMBB;
+
+		[Ordinal(18)] 
+		[RED("meleeStateBlackboardId")] 
+		public CUInt32 MeleeStateBlackboardId
+		{
+			get => GetProperty(ref _meleeStateBlackboardId);
+			set => SetProperty(ref _meleeStateBlackboardId, value);
+		}
+
+		[Ordinal(19)] 
+		[RED("playerSMBB")] 
+		public CHandle<gameIBlackboard> PlayerSMBB
+		{
+			get => GetProperty(ref _playerSMBB);
+			set => SetProperty(ref _playerSMBB, value);
+		}
 
 		public gameuiCrosshairBaseMelee(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

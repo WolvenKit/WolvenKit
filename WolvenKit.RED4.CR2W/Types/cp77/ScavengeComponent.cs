@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScavengeComponent : gameScriptableComponent
 	{
-		[Ordinal(5)] [RED("scavengeTargets")] public CArray<wCHandle<gameObject>> ScavengeTargets { get; set; }
+		private CArray<wCHandle<gameObject>> _scavengeTargets;
+
+		[Ordinal(5)] 
+		[RED("scavengeTargets")] 
+		public CArray<wCHandle<gameObject>> ScavengeTargets
+		{
+			get => GetProperty(ref _scavengeTargets);
+			set => SetProperty(ref _scavengeTargets, value);
+		}
 
 		public ScavengeComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

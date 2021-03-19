@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PullSquadSyncRequest : AIAIEvent
 	{
-		[Ordinal(2)] [RED("squadType")] public CEnum<AISquadType> SquadType { get; set; }
+		private CEnum<AISquadType> _squadType;
+
+		[Ordinal(2)] 
+		[RED("squadType")] 
+		public CEnum<AISquadType> SquadType
+		{
+			get => GetProperty(ref _squadType);
+			set => SetProperty(ref _squadType, value);
+		}
 
 		public PullSquadSyncRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

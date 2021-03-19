@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameComponent : entIComponent
 	{
-		[Ordinal(3)] [RED("persistentState")] public CHandle<gamePersistentState> PersistentState { get; set; }
+		private CHandle<gamePersistentState> _persistentState;
+
+		[Ordinal(3)] 
+		[RED("persistentState")] 
+		public CHandle<gamePersistentState> PersistentState
+		{
+			get => GetProperty(ref _persistentState);
+			set => SetProperty(ref _persistentState, value);
+		}
 
 		public gameComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

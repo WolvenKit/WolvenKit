@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GetTargetLastKnownPosition : AIbehaviortaskScript
 	{
-		[Ordinal(0)] [RED("inTargetObject")] public CHandle<AIArgumentMapping> InTargetObject { get; set; }
-		[Ordinal(1)] [RED("outPosition")] public CHandle<AIArgumentMapping> OutPosition { get; set; }
-		[Ordinal(2)] [RED("predictionTime")] public CFloat PredictionTime { get; set; }
+		private CHandle<AIArgumentMapping> _inTargetObject;
+		private CHandle<AIArgumentMapping> _outPosition;
+		private CFloat _predictionTime;
+
+		[Ordinal(0)] 
+		[RED("inTargetObject")] 
+		public CHandle<AIArgumentMapping> InTargetObject
+		{
+			get => GetProperty(ref _inTargetObject);
+			set => SetProperty(ref _inTargetObject, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("outPosition")] 
+		public CHandle<AIArgumentMapping> OutPosition
+		{
+			get => GetProperty(ref _outPosition);
+			set => SetProperty(ref _outPosition, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("predictionTime")] 
+		public CFloat PredictionTime
+		{
+			get => GetProperty(ref _predictionTime);
+			set => SetProperty(ref _predictionTime, value);
+		}
 
 		public GetTargetLastKnownPosition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

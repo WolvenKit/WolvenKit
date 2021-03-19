@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class effectLoopData : CVariable
 	{
-		[Ordinal(0)] [RED("startTime")] public CFloat StartTime { get; set; }
-		[Ordinal(1)] [RED("endTime")] public CFloat EndTime { get; set; }
+		private CFloat _startTime;
+		private CFloat _endTime;
+
+		[Ordinal(0)] 
+		[RED("startTime")] 
+		public CFloat StartTime
+		{
+			get => GetProperty(ref _startTime);
+			set => SetProperty(ref _startTime, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("endTime")] 
+		public CFloat EndTime
+		{
+			get => GetProperty(ref _endTime);
+			set => SetProperty(ref _endTime, value);
+		}
 
 		public effectLoopData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioMeleeWeaponSettings : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("quickAttackSettings")] public audioMeleeAttackSettings QuickAttackSettings { get; set; }
-		[Ordinal(2)] [RED("strongAttackSettings")] public audioMeleeAttackSettings StrongAttackSettings { get; set; }
-		[Ordinal(3)] [RED("weaponHandlingSettings")] public audioWeaponHandlingSettings WeaponHandlingSettings { get; set; }
+		private audioMeleeAttackSettings _quickAttackSettings;
+		private audioMeleeAttackSettings _strongAttackSettings;
+		private audioWeaponHandlingSettings _weaponHandlingSettings;
+
+		[Ordinal(1)] 
+		[RED("quickAttackSettings")] 
+		public audioMeleeAttackSettings QuickAttackSettings
+		{
+			get => GetProperty(ref _quickAttackSettings);
+			set => SetProperty(ref _quickAttackSettings, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("strongAttackSettings")] 
+		public audioMeleeAttackSettings StrongAttackSettings
+		{
+			get => GetProperty(ref _strongAttackSettings);
+			set => SetProperty(ref _strongAttackSettings, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("weaponHandlingSettings")] 
+		public audioWeaponHandlingSettings WeaponHandlingSettings
+		{
+			get => GetProperty(ref _weaponHandlingSettings);
+			set => SetProperty(ref _weaponHandlingSettings, value);
+		}
 
 		public audioMeleeWeaponSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

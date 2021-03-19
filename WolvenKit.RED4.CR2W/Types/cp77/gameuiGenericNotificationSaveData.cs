@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiGenericNotificationSaveData : gameuiBaseUIData
 	{
-		[Ordinal(1)] [RED("notificationsData")] public CArray<gameuiGenericNotificationData> NotificationsData { get; set; }
+		private CArray<gameuiGenericNotificationData> _notificationsData;
+
+		[Ordinal(1)] 
+		[RED("notificationsData")] 
+		public CArray<gameuiGenericNotificationData> NotificationsData
+		{
+			get => GetProperty(ref _notificationsData);
+			set => SetProperty(ref _notificationsData, value);
+		}
 
 		public gameuiGenericNotificationSaveData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

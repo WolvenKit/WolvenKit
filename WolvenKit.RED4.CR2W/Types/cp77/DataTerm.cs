@@ -7,13 +7,69 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DataTerm : InteractiveDevice
 	{
-		[Ordinal(93)] [RED("linkedFastTravelPoint")] public CHandle<gameFastTravelPointData> LinkedFastTravelPoint { get; set; }
-		[Ordinal(94)] [RED("exitNode")] public NodeRef ExitNode { get; set; }
-		[Ordinal(95)] [RED("fastTravelComponent")] public CHandle<FastTravelComponent> FastTravelComponent { get; set; }
-		[Ordinal(96)] [RED("lockColiderComponent")] public CHandle<entIPlacedComponent> LockColiderComponent { get; set; }
-		[Ordinal(97)] [RED("mappinID")] public gameNewMappinID MappinID { get; set; }
-		[Ordinal(98)] [RED("isShortGlitchActive")] public CBool IsShortGlitchActive { get; set; }
-		[Ordinal(99)] [RED("shortGlitchDelayID")] public gameDelayID ShortGlitchDelayID { get; set; }
+		private CHandle<gameFastTravelPointData> _linkedFastTravelPoint;
+		private NodeRef _exitNode;
+		private CHandle<FastTravelComponent> _fastTravelComponent;
+		private CHandle<entIPlacedComponent> _lockColiderComponent;
+		private gameNewMappinID _mappinID;
+		private CBool _isShortGlitchActive;
+		private gameDelayID _shortGlitchDelayID;
+
+		[Ordinal(93)] 
+		[RED("linkedFastTravelPoint")] 
+		public CHandle<gameFastTravelPointData> LinkedFastTravelPoint
+		{
+			get => GetProperty(ref _linkedFastTravelPoint);
+			set => SetProperty(ref _linkedFastTravelPoint, value);
+		}
+
+		[Ordinal(94)] 
+		[RED("exitNode")] 
+		public NodeRef ExitNode
+		{
+			get => GetProperty(ref _exitNode);
+			set => SetProperty(ref _exitNode, value);
+		}
+
+		[Ordinal(95)] 
+		[RED("fastTravelComponent")] 
+		public CHandle<FastTravelComponent> FastTravelComponent
+		{
+			get => GetProperty(ref _fastTravelComponent);
+			set => SetProperty(ref _fastTravelComponent, value);
+		}
+
+		[Ordinal(96)] 
+		[RED("lockColiderComponent")] 
+		public CHandle<entIPlacedComponent> LockColiderComponent
+		{
+			get => GetProperty(ref _lockColiderComponent);
+			set => SetProperty(ref _lockColiderComponent, value);
+		}
+
+		[Ordinal(97)] 
+		[RED("mappinID")] 
+		public gameNewMappinID MappinID
+		{
+			get => GetProperty(ref _mappinID);
+			set => SetProperty(ref _mappinID, value);
+		}
+
+		[Ordinal(98)] 
+		[RED("isShortGlitchActive")] 
+		public CBool IsShortGlitchActive
+		{
+			get => GetProperty(ref _isShortGlitchActive);
+			set => SetProperty(ref _isShortGlitchActive, value);
+		}
+
+		[Ordinal(99)] 
+		[RED("shortGlitchDelayID")] 
+		public gameDelayID ShortGlitchDelayID
+		{
+			get => GetProperty(ref _shortGlitchDelayID);
+			set => SetProperty(ref _shortGlitchDelayID, value);
+		}
 
 		public DataTerm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DisplayGlass : InteractiveDevice
 	{
-		[Ordinal(93)] [RED("collider")] public CHandle<entIPlacedComponent> Collider { get; set; }
-		[Ordinal(94)] [RED("isDestroyed")] public CBool IsDestroyed { get; set; }
+		private CHandle<entIPlacedComponent> _collider;
+		private CBool _isDestroyed;
+
+		[Ordinal(93)] 
+		[RED("collider")] 
+		public CHandle<entIPlacedComponent> Collider
+		{
+			get => GetProperty(ref _collider);
+			set => SetProperty(ref _collider, value);
+		}
+
+		[Ordinal(94)] 
+		[RED("isDestroyed")] 
+		public CBool IsDestroyed
+		{
+			get => GetProperty(ref _isDestroyed);
+			set => SetProperty(ref _isDestroyed, value);
+		}
 
 		public DisplayGlass(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

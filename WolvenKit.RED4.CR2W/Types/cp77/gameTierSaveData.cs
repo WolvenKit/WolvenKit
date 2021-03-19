@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameTierSaveData : ISerializable
 	{
-		[Ordinal(0)] [RED("globalTiers")] public CArray<gameGlobalTierSaveData> GlobalTiers { get; set; }
+		private CArray<gameGlobalTierSaveData> _globalTiers;
+
+		[Ordinal(0)] 
+		[RED("globalTiers")] 
+		public CArray<gameGlobalTierSaveData> GlobalTiers
+		{
+			get => GetProperty(ref _globalTiers);
+			set => SetProperty(ref _globalTiers, value);
+		}
 
 		public gameTierSaveData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

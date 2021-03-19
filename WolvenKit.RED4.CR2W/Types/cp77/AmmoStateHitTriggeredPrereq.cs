@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AmmoStateHitTriggeredPrereq : HitTriggeredPrereq
 	{
-		[Ordinal(5)] [RED("valueToListen")] public CEnum<EMagazineAmmoState> ValueToListen { get; set; }
+		private CEnum<EMagazineAmmoState> _valueToListen;
+
+		[Ordinal(5)] 
+		[RED("valueToListen")] 
+		public CEnum<EMagazineAmmoState> ValueToListen
+		{
+			get => GetProperty(ref _valueToListen);
+			set => SetProperty(ref _valueToListen, value);
+		}
 
 		public AmmoStateHitTriggeredPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

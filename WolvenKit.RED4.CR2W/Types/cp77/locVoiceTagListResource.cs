@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class locVoiceTagListResource : CResource
 	{
-		[Ordinal(1)] [RED("voiceTags")] public CArray<locVoiceTag> VoiceTags { get; set; }
+		private CArray<locVoiceTag> _voiceTags;
+
+		[Ordinal(1)] 
+		[RED("voiceTags")] 
+		public CArray<locVoiceTag> VoiceTags
+		{
+			get => GetProperty(ref _voiceTags);
+			set => SetProperty(ref _voiceTags, value);
+		}
 
 		public locVoiceTagListResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

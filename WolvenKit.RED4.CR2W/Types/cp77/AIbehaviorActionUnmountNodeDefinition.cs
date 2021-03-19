@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorActionUnmountNodeDefinition : AIbehaviorActionMountHandlingNodeDefinition
 	{
-		[Ordinal(1)] [RED("mountData")] public CHandle<AIArgumentMapping> MountData { get; set; }
+		private CHandle<AIArgumentMapping> _mountData;
+
+		[Ordinal(1)] 
+		[RED("mountData")] 
+		public CHandle<AIArgumentMapping> MountData
+		{
+			get => GetProperty(ref _mountData);
+			set => SetProperty(ref _mountData, value);
+		}
 
 		public AIbehaviorActionUnmountNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

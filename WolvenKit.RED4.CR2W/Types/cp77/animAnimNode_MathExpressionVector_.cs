@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_MathExpressionVector_ : animAnimNode_VectorValue
 	{
-		[Ordinal(11)] [RED("expressionData")] public animMathExpressionNodeData ExpressionData { get; set; }
+		private animMathExpressionNodeData _expressionData;
+
+		[Ordinal(11)] 
+		[RED("expressionData")] 
+		public animMathExpressionNodeData ExpressionData
+		{
+			get => GetProperty(ref _expressionData);
+			set => SetProperty(ref _expressionData, value);
+		}
 
 		public animAnimNode_MathExpressionVector_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

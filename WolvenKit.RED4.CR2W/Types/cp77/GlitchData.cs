@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GlitchData : CVariable
 	{
-		[Ordinal(0)] [RED("intensity")] public CFloat Intensity { get; set; }
-		[Ordinal(1)] [RED("state")] public CEnum<EGlitchState> State { get; set; }
+		private CFloat _intensity;
+		private CEnum<EGlitchState> _state;
+
+		[Ordinal(0)] 
+		[RED("intensity")] 
+		public CFloat Intensity
+		{
+			get => GetProperty(ref _intensity);
+			set => SetProperty(ref _intensity, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("state")] 
+		public CEnum<EGlitchState> State
+		{
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
+		}
 
 		public GlitchData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

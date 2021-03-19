@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioFootwearType : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("itemNames")] public CArray<CName> ItemNames { get; set; }
+		private CArray<CName> _itemNames;
+
+		[Ordinal(1)] 
+		[RED("itemNames")] 
+		public CArray<CName> ItemNames
+		{
+			get => GetProperty(ref _itemNames);
+			set => SetProperty(ref _itemNames, value);
+		}
 
 		public audioFootwearType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

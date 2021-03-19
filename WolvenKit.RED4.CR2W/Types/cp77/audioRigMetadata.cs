@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioRigMetadata : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("positionBones")] public CArray<CName> PositionBones { get; set; }
-		[Ordinal(2)] [RED("defaultBone")] public CName DefaultBone { get; set; }
+		private CArray<CName> _positionBones;
+		private CName _defaultBone;
+
+		[Ordinal(1)] 
+		[RED("positionBones")] 
+		public CArray<CName> PositionBones
+		{
+			get => GetProperty(ref _positionBones);
+			set => SetProperty(ref _positionBones, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("defaultBone")] 
+		public CName DefaultBone
+		{
+			get => GetProperty(ref _defaultBone);
+			set => SetProperty(ref _defaultBone, value);
+		}
 
 		public audioRigMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

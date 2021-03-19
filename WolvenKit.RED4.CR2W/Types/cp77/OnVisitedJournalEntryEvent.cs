@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class OnVisitedJournalEntryEvent : redEvent
 	{
-		[Ordinal(0)] [RED("entry")] public wCHandle<gameJournalEntry> Entry { get; set; }
+		private wCHandle<gameJournalEntry> _entry;
+
+		[Ordinal(0)] 
+		[RED("entry")] 
+		public wCHandle<gameJournalEntry> Entry
+		{
+			get => GetProperty(ref _entry);
+			set => SetProperty(ref _entry, value);
+		}
 
 		public OnVisitedJournalEntryEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

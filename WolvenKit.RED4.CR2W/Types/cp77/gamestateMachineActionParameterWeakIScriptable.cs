@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamestateMachineActionParameterWeakIScriptable : CVariable
 	{
-		[Ordinal(0)] [RED("name")] public CName Name { get; set; }
-		[Ordinal(1)] [RED("value")] public wCHandle<IScriptable> Value { get; set; }
+		private CName _name;
+		private wCHandle<IScriptable> _value;
+
+		[Ordinal(0)] 
+		[RED("name")] 
+		public CName Name
+		{
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("value")] 
+		public wCHandle<IScriptable> Value
+		{
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
+		}
 
 		public gamestateMachineActionParameterWeakIScriptable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questSetFastTravelBinksGroup_NodeType : questIUIManagerNodeType
 	{
-		[Ordinal(0)] [RED("selectedBinkDataGroup")] public TweakDBID SelectedBinkDataGroup { get; set; }
+		private TweakDBID _selectedBinkDataGroup;
+
+		[Ordinal(0)] 
+		[RED("selectedBinkDataGroup")] 
+		public TweakDBID SelectedBinkDataGroup
+		{
+			get => GetProperty(ref _selectedBinkDataGroup);
+			set => SetProperty(ref _selectedBinkDataGroup, value);
+		}
 
 		public questSetFastTravelBinksGroup_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DismembermentExplosionEvent : redEvent
 	{
-		[Ordinal(0)] [RED("epicentrum")] public Vector4 Epicentrum { get; set; }
-		[Ordinal(1)] [RED("strength")] public CFloat Strength { get; set; }
+		private Vector4 _epicentrum;
+		private CFloat _strength;
+
+		[Ordinal(0)] 
+		[RED("epicentrum")] 
+		public Vector4 Epicentrum
+		{
+			get => GetProperty(ref _epicentrum);
+			set => SetProperty(ref _epicentrum, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("strength")] 
+		public CFloat Strength
+		{
+			get => GetProperty(ref _strength);
+			set => SetProperty(ref _strength, value);
+		}
 
 		public DismembermentExplosionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

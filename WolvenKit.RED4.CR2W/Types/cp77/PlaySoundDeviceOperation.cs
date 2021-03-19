@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PlaySoundDeviceOperation : DeviceOperationBase
 	{
-		[Ordinal(5)] [RED("SFXs")] public CArray<SSFXOperationData> SFXs { get; set; }
+		private CArray<SSFXOperationData> _sFXs;
+
+		[Ordinal(5)] 
+		[RED("SFXs")] 
+		public CArray<SSFXOperationData> SFXs
+		{
+			get => GetProperty(ref _sFXs);
+			set => SetProperty(ref _sFXs, value);
+		}
 
 		public PlaySoundDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

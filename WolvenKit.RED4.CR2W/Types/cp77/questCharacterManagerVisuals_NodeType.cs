@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questCharacterManagerVisuals_NodeType : questICharacterManager_NodeType
 	{
-		[Ordinal(0)] [RED("subtype")] public CHandle<questICharacterManagerVisuals_NodeSubType> Subtype { get; set; }
+		private CHandle<questICharacterManagerVisuals_NodeSubType> _subtype;
+
+		[Ordinal(0)] 
+		[RED("subtype")] 
+		public CHandle<questICharacterManagerVisuals_NodeSubType> Subtype
+		{
+			get => GetProperty(ref _subtype);
+			set => SetProperty(ref _subtype, value);
+		}
 
 		public questCharacterManagerVisuals_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

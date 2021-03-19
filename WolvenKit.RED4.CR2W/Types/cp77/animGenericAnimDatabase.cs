@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animGenericAnimDatabase : CResource
 	{
-		[Ordinal(1)] [RED("rows")] public CArray<animGenericAnimDatabase_DatabaseRow> Rows { get; set; }
+		private CArray<animGenericAnimDatabase_DatabaseRow> _rows;
+
+		[Ordinal(1)] 
+		[RED("rows")] 
+		public CArray<animGenericAnimDatabase_DatabaseRow> Rows
+		{
+			get => GetProperty(ref _rows);
+			set => SetProperty(ref _rows, value);
+		}
 
 		public animGenericAnimDatabase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

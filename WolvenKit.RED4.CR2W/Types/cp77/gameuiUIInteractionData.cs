@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiUIInteractionData : CVariable
 	{
-		[Ordinal(0)] [RED("interactionListActive")] public CBool InteractionListActive { get; set; }
-		[Ordinal(1)] [RED("terminalInteractionActive")] public CBool TerminalInteractionActive { get; set; }
+		private CBool _interactionListActive;
+		private CBool _terminalInteractionActive;
+
+		[Ordinal(0)] 
+		[RED("interactionListActive")] 
+		public CBool InteractionListActive
+		{
+			get => GetProperty(ref _interactionListActive);
+			set => SetProperty(ref _interactionListActive, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("terminalInteractionActive")] 
+		public CBool TerminalInteractionActive
+		{
+			get => GetProperty(ref _terminalInteractionActive);
+			set => SetProperty(ref _terminalInteractionActive, value);
+		}
 
 		public gameuiUIInteractionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

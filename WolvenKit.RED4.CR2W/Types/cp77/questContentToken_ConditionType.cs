@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questContentToken_ConditionType : questIContentConditionType
 	{
-		[Ordinal(0)] [RED("type")] public CEnum<questQuestContentType> Type { get; set; }
+		private CEnum<questQuestContentType> _type;
+
+		[Ordinal(0)] 
+		[RED("type")] 
+		public CEnum<questQuestContentType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
 
 		public questContentToken_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

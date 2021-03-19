@@ -7,11 +7,51 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class garmentCollarAreaParams : CVariable
 	{
-		[Ordinal(0)] [RED("enable")] public CBool Enable { get; set; }
-		[Ordinal(1)] [RED("radiusInCM")] public CFloat RadiusInCM { get; set; }
-		[Ordinal(2)] [RED("radiusForTriangleRemovalInCM")] public CFloat RadiusForTriangleRemovalInCM { get; set; }
-		[Ordinal(3)] [RED("offsetFromSkinInCM")] public CFloat OffsetFromSkinInCM { get; set; }
-		[Ordinal(4)] [RED("offset")] public Vector3 Offset { get; set; }
+		private CBool _enable;
+		private CFloat _radiusInCM;
+		private CFloat _radiusForTriangleRemovalInCM;
+		private CFloat _offsetFromSkinInCM;
+		private Vector3 _offset;
+
+		[Ordinal(0)] 
+		[RED("enable")] 
+		public CBool Enable
+		{
+			get => GetProperty(ref _enable);
+			set => SetProperty(ref _enable, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("radiusInCM")] 
+		public CFloat RadiusInCM
+		{
+			get => GetProperty(ref _radiusInCM);
+			set => SetProperty(ref _radiusInCM, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("radiusForTriangleRemovalInCM")] 
+		public CFloat RadiusForTriangleRemovalInCM
+		{
+			get => GetProperty(ref _radiusForTriangleRemovalInCM);
+			set => SetProperty(ref _radiusForTriangleRemovalInCM, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("offsetFromSkinInCM")] 
+		public CFloat OffsetFromSkinInCM
+		{
+			get => GetProperty(ref _offsetFromSkinInCM);
+			set => SetProperty(ref _offsetFromSkinInCM, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("offset")] 
+		public Vector3 Offset
+		{
+			get => GetProperty(ref _offset);
+			set => SetProperty(ref _offset, value);
+		}
 
 		public garmentCollarAreaParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

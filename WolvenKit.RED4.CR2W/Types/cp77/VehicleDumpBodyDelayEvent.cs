@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VehicleDumpBodyDelayEvent : redEvent
 	{
-		[Ordinal(0)] [RED("bodyToDump")] public wCHandle<gameObject> BodyToDump { get; set; }
-		[Ordinal(1)] [RED("psm")] public CHandle<gameIBlackboard> Psm { get; set; }
+		private wCHandle<gameObject> _bodyToDump;
+		private CHandle<gameIBlackboard> _psm;
+
+		[Ordinal(0)] 
+		[RED("bodyToDump")] 
+		public wCHandle<gameObject> BodyToDump
+		{
+			get => GetProperty(ref _bodyToDump);
+			set => SetProperty(ref _bodyToDump, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("psm")] 
+		public CHandle<gameIBlackboard> Psm
+		{
+			get => GetProperty(ref _psm);
+			set => SetProperty(ref _psm, value);
+		}
 
 		public VehicleDumpBodyDelayEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

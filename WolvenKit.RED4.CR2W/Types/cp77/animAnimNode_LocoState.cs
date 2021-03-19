@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_LocoState : animAnimNode_State
 	{
-		[Ordinal(17)] [RED("type")] public CEnum<animLocoStateType> Type { get; set; }
-		[Ordinal(18)] [RED("locoTag")] public CName LocoTag { get; set; }
+		private CEnum<animLocoStateType> _type;
+		private CName _locoTag;
+
+		[Ordinal(17)] 
+		[RED("type")] 
+		public CEnum<animLocoStateType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
+
+		[Ordinal(18)] 
+		[RED("locoTag")] 
+		public CName LocoTag
+		{
+			get => GetProperty(ref _locoTag);
+			set => SetProperty(ref _locoTag, value);
+		}
 
 		public animAnimNode_LocoState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

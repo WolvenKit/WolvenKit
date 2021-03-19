@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class buildsWidgetGameController : gameuiWidgetGameController
 	{
-		[Ordinal(2)] [RED("horizontalPanelsList")] public CArray<wCHandle<inkHorizontalPanelWidget>> HorizontalPanelsList { get; set; }
+		private CArray<wCHandle<inkHorizontalPanelWidget>> _horizontalPanelsList;
+
+		[Ordinal(2)] 
+		[RED("horizontalPanelsList")] 
+		public CArray<wCHandle<inkHorizontalPanelWidget>> HorizontalPanelsList
+		{
+			get => GetProperty(ref _horizontalPanelsList);
+			set => SetProperty(ref _horizontalPanelsList, value);
+		}
 
 		public buildsWidgetGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamedataValueNode : gamedataDataNode
 	{
-		[Ordinal(3)] [RED("data")] public CHandle<gamedataValueDataNode> Data { get; set; }
-		[Ordinal(4)] [RED("group")] public CHandle<gamedataGroupNode> Group { get; set; }
+		private CHandle<gamedataValueDataNode> _data;
+		private CHandle<gamedataGroupNode> _group;
+
+		[Ordinal(3)] 
+		[RED("data")] 
+		public CHandle<gamedataValueDataNode> Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("group")] 
+		public CHandle<gamedataGroupNode> Group
+		{
+			get => GetProperty(ref _group);
+			set => SetProperty(ref _group, value);
+		}
 
 		public gamedataValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

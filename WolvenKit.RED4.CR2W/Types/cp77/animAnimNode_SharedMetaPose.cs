@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_SharedMetaPose : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] [RED("weightLink")] public animFloatLink WeightLink { get; set; }
+		private animFloatLink _weightLink;
+
+		[Ordinal(12)] 
+		[RED("weightLink")] 
+		public animFloatLink WeightLink
+		{
+			get => GetProperty(ref _weightLink);
+			set => SetProperty(ref _weightLink, value);
+		}
 
 		public animAnimNode_SharedMetaPose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

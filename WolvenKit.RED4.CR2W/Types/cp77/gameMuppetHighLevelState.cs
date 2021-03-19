@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameMuppetHighLevelState : CVariable
 	{
-		[Ordinal(0)] [RED("isDead")] public CBool IsDead { get; set; }
-		[Ordinal(1)] [RED("deathFrameId")] public CUInt32 DeathFrameId { get; set; }
+		private CBool _isDead;
+		private CUInt32 _deathFrameId;
+
+		[Ordinal(0)] 
+		[RED("isDead")] 
+		public CBool IsDead
+		{
+			get => GetProperty(ref _isDead);
+			set => SetProperty(ref _isDead, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("deathFrameId")] 
+		public CUInt32 DeathFrameId
+		{
+			get => GetProperty(ref _deathFrameId);
+			set => SetProperty(ref _deathFrameId, value);
+		}
 
 		public gameMuppetHighLevelState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

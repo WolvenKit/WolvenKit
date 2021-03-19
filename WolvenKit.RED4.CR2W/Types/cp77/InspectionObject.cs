@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InspectionObject : gameObject
 	{
-		[Ordinal(40)] [RED("interaction")] public CHandle<gameinteractionsComponent> Interaction { get; set; }
+		private CHandle<gameinteractionsComponent> _interaction;
+
+		[Ordinal(40)] 
+		[RED("interaction")] 
+		public CHandle<gameinteractionsComponent> Interaction
+		{
+			get => GetProperty(ref _interaction);
+			set => SetProperty(ref _interaction, value);
+		}
 
 		public InspectionObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

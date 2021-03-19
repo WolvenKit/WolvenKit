@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LightColorSettings : IAreaSettings
 	{
-		[Ordinal(2)] [RED("light")] public worldWorldGlobalLightParameters Light { get; set; }
+		private worldWorldGlobalLightParameters _light;
+
+		[Ordinal(2)] 
+		[RED("light")] 
+		public worldWorldGlobalLightParameters Light
+		{
+			get => GetProperty(ref _light);
+			set => SetProperty(ref _light, value);
+		}
 
 		public LightColorSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

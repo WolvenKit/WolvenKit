@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnSectionInternalsActorBehavior : CVariable
 	{
-		[Ordinal(0)] [RED("actorId")] public scnActorId ActorId { get; set; }
-		[Ordinal(1)] [RED("behaviorMode")] public CEnum<scnSectionInternalsActorBehaviorMode> BehaviorMode { get; set; }
+		private scnActorId _actorId;
+		private CEnum<scnSectionInternalsActorBehaviorMode> _behaviorMode;
+
+		[Ordinal(0)] 
+		[RED("actorId")] 
+		public scnActorId ActorId
+		{
+			get => GetProperty(ref _actorId);
+			set => SetProperty(ref _actorId, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("behaviorMode")] 
+		public CEnum<scnSectionInternalsActorBehaviorMode> BehaviorMode
+		{
+			get => GetProperty(ref _behaviorMode);
+			set => SetProperty(ref _behaviorMode, value);
+		}
 
 		public scnSectionInternalsActorBehavior(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

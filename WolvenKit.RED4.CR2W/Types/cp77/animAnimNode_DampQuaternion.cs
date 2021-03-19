@@ -7,11 +7,51 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_DampQuaternion : animAnimNode_QuaternionValue
 	{
-		[Ordinal(11)] [RED("defaultRotationSpeed")] public CFloat DefaultRotationSpeed { get; set; }
-		[Ordinal(12)] [RED("defaultInitialValue")] public EulerAngles DefaultInitialValue { get; set; }
-		[Ordinal(13)] [RED("inputNode")] public animQuaternionLink InputNode { get; set; }
-		[Ordinal(14)] [RED("initialValueNode")] public animQuaternionLink InitialValueNode { get; set; }
-		[Ordinal(15)] [RED("rotationSpeedNode")] public animFloatLink RotationSpeedNode { get; set; }
+		private CFloat _defaultRotationSpeed;
+		private EulerAngles _defaultInitialValue;
+		private animQuaternionLink _inputNode;
+		private animQuaternionLink _initialValueNode;
+		private animFloatLink _rotationSpeedNode;
+
+		[Ordinal(11)] 
+		[RED("defaultRotationSpeed")] 
+		public CFloat DefaultRotationSpeed
+		{
+			get => GetProperty(ref _defaultRotationSpeed);
+			set => SetProperty(ref _defaultRotationSpeed, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("defaultInitialValue")] 
+		public EulerAngles DefaultInitialValue
+		{
+			get => GetProperty(ref _defaultInitialValue);
+			set => SetProperty(ref _defaultInitialValue, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("inputNode")] 
+		public animQuaternionLink InputNode
+		{
+			get => GetProperty(ref _inputNode);
+			set => SetProperty(ref _inputNode, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("initialValueNode")] 
+		public animQuaternionLink InitialValueNode
+		{
+			get => GetProperty(ref _initialValueNode);
+			set => SetProperty(ref _initialValueNode, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("rotationSpeedNode")] 
+		public animFloatLink RotationSpeedNode
+		{
+			get => GetProperty(ref _rotationSpeedNode);
+			set => SetProperty(ref _rotationSpeedNode, value);
+		}
 
 		public animAnimNode_DampQuaternion(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioVoiceTriggerPerSquadOrderMapItem : CVariable
 	{
-		[Ordinal(0)] [RED("name")] public CName Name { get; set; }
-		[Ordinal(1)] [RED("triggerName")] public CName TriggerName { get; set; }
+		private CName _name;
+		private CName _triggerName;
+
+		[Ordinal(0)] 
+		[RED("name")] 
+		public CName Name
+		{
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("triggerName")] 
+		public CName TriggerName
+		{
+			get => GetProperty(ref _triggerName);
+			set => SetProperty(ref _triggerName, value);
+		}
 
 		public audioVoiceTriggerPerSquadOrderMapItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

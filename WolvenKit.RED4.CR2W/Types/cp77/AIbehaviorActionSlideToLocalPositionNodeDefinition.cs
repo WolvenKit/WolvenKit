@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorActionSlideToLocalPositionNodeDefinition : AIbehaviorActionSlideNodeDefinition
 	{
-		[Ordinal(4)] [RED("localOffset")] public CHandle<AIArgumentMapping> LocalOffset { get; set; }
+		private CHandle<AIArgumentMapping> _localOffset;
+
+		[Ordinal(4)] 
+		[RED("localOffset")] 
+		public CHandle<AIArgumentMapping> LocalOffset
+		{
+			get => GetProperty(ref _localOffset);
+			set => SetProperty(ref _localOffset, value);
+		}
 
 		public AIbehaviorActionSlideToLocalPositionNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

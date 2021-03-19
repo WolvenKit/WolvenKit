@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LightSwitchRequest : redEvent
 	{
-		[Ordinal(0)] [RED("requestNumber")] public CInt32 RequestNumber { get; set; }
+		private CInt32 _requestNumber;
+
+		[Ordinal(0)] 
+		[RED("requestNumber")] 
+		public CInt32 RequestNumber
+		{
+			get => GetProperty(ref _requestNumber);
+			set => SetProperty(ref _requestNumber, value);
+		}
 
 		public LightSwitchRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

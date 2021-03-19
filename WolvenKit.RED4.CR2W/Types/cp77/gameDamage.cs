@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameDamage : IScriptable
 	{
-		[Ordinal(0)] [RED("damageType")] public CEnum<gamedataDamageType> DamageType { get; set; }
-		[Ordinal(1)] [RED("value")] public CFloat Value { get; set; }
+		private CEnum<gamedataDamageType> _damageType;
+		private CFloat _value;
+
+		[Ordinal(0)] 
+		[RED("damageType")] 
+		public CEnum<gamedataDamageType> DamageType
+		{
+			get => GetProperty(ref _damageType);
+			set => SetProperty(ref _damageType, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("value")] 
+		public CFloat Value
+		{
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
+		}
 
 		public gameDamage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

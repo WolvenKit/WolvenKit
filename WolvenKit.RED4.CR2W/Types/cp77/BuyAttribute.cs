@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BuyAttribute : gamePlayerScriptableSystemRequest
 	{
-		[Ordinal(1)] [RED("attributeType")] public CEnum<gamedataStatType> AttributeType { get; set; }
-		[Ordinal(2)] [RED("grantAttributePoint")] public CBool GrantAttributePoint { get; set; }
+		private CEnum<gamedataStatType> _attributeType;
+		private CBool _grantAttributePoint;
+
+		[Ordinal(1)] 
+		[RED("attributeType")] 
+		public CEnum<gamedataStatType> AttributeType
+		{
+			get => GetProperty(ref _attributeType);
+			set => SetProperty(ref _attributeType, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("grantAttributePoint")] 
+		public CBool GrantAttributePoint
+		{
+			get => GetProperty(ref _grantAttributePoint);
+			set => SetProperty(ref _grantAttributePoint, value);
+		}
 
 		public BuyAttribute(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

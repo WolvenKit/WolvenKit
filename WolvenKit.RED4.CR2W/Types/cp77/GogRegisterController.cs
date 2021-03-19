@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GogRegisterController : gameuiBaseGOGRegisterController
 	{
-		[Ordinal(1)] [RED("linkWidget")] public inkWidgetReference LinkWidget { get; set; }
-		[Ordinal(2)] [RED("qrImageWidget")] public inkWidgetReference QrImageWidget { get; set; }
+		private inkWidgetReference _linkWidget;
+		private inkWidgetReference _qrImageWidget;
+
+		[Ordinal(1)] 
+		[RED("linkWidget")] 
+		public inkWidgetReference LinkWidget
+		{
+			get => GetProperty(ref _linkWidget);
+			set => SetProperty(ref _linkWidget, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("qrImageWidget")] 
+		public inkWidgetReference QrImageWidget
+		{
+			get => GetProperty(ref _qrImageWidget);
+			set => SetProperty(ref _qrImageWidget, value);
+		}
 
 		public GogRegisterController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

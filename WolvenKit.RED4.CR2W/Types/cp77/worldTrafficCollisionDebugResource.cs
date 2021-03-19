@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldTrafficCollisionDebugResource : CResource
 	{
-		[Ordinal(1)] [RED("data")] public CHandle<worldTrafficCollisionDebug> Data { get; set; }
+		private CHandle<worldTrafficCollisionDebug> _data;
+
+		[Ordinal(1)] 
+		[RED("data")] 
+		public CHandle<worldTrafficCollisionDebug> Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
 
 		public worldTrafficCollisionDebugResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

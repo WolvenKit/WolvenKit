@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEntitySpawnerComponent : gameComponent
 	{
-		[Ordinal(4)] [RED("slotDataArray")] public CArray<gameEntitySpawnerSlotData> SlotDataArray { get; set; }
+		private CArray<gameEntitySpawnerSlotData> _slotDataArray;
+
+		[Ordinal(4)] 
+		[RED("slotDataArray")] 
+		public CArray<gameEntitySpawnerSlotData> SlotDataArray
+		{
+			get => GetProperty(ref _slotDataArray);
+			set => SetProperty(ref _slotDataArray, value);
+		}
 
 		public gameEntitySpawnerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

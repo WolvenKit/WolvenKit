@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questDrillingState_ConditionType : questIObjectConditionType
 	{
-		[Ordinal(0)] [RED("objectRef")] public NodeRef ObjectRef { get; set; }
-		[Ordinal(1)] [RED("state")] public CEnum<questDrillingState> State { get; set; }
+		private NodeRef _objectRef;
+		private CEnum<questDrillingState> _state;
+
+		[Ordinal(0)] 
+		[RED("objectRef")] 
+		public NodeRef ObjectRef
+		{
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("state")] 
+		public CEnum<questDrillingState> State
+		{
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
+		}
 
 		public questDrillingState_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

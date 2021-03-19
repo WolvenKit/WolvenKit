@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldCompiledSmartObjectsNode : worldNode
 	{
-		[Ordinal(4)] [RED("resource")] public raRef<gameSmartObjectsCompiledResource> Resource { get; set; }
+		private raRef<gameSmartObjectsCompiledResource> _resource;
+
+		[Ordinal(4)] 
+		[RED("resource")] 
+		public raRef<gameSmartObjectsCompiledResource> Resource
+		{
+			get => GetProperty(ref _resource);
+			set => SetProperty(ref _resource, value);
+		}
 
 		public worldCompiledSmartObjectsNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

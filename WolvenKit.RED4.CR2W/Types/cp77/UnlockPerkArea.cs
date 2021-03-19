@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UnlockPerkArea : gamePlayerScriptableSystemRequest
 	{
-		[Ordinal(1)] [RED("perkArea")] public CEnum<gamedataPerkArea> PerkArea { get; set; }
+		private CEnum<gamedataPerkArea> _perkArea;
+
+		[Ordinal(1)] 
+		[RED("perkArea")] 
+		public CEnum<gamedataPerkArea> PerkArea
+		{
+			get => GetProperty(ref _perkArea);
+			set => SetProperty(ref _perkArea, value);
+		}
 
 		public UnlockPerkArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

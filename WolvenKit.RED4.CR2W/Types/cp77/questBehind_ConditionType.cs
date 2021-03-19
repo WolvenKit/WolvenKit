@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questBehind_ConditionType : questISensesConditionType
 	{
-		[Ordinal(0)] [RED("targetRef")] public gameEntityReference TargetRef { get; set; }
-		[Ordinal(1)] [RED("eventType")] public CEnum<questBehindInteractionEventType> EventType { get; set; }
+		private gameEntityReference _targetRef;
+		private CEnum<questBehindInteractionEventType> _eventType;
+
+		[Ordinal(0)] 
+		[RED("targetRef")] 
+		public gameEntityReference TargetRef
+		{
+			get => GetProperty(ref _targetRef);
+			set => SetProperty(ref _targetRef, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("eventType")] 
+		public CEnum<questBehindInteractionEventType> EventType
+		{
+			get => GetProperty(ref _eventType);
+			set => SetProperty(ref _eventType, value);
+		}
 
 		public questBehind_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

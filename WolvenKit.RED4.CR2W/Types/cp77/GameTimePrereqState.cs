@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GameTimePrereqState : gamePrereqState
 	{
-		[Ordinal(0)] [RED("listener")] public CUInt32 Listener { get; set; }
+		private CUInt32 _listener;
+
+		[Ordinal(0)] 
+		[RED("listener")] 
+		public CUInt32 Listener
+		{
+			get => GetProperty(ref _listener);
+			set => SetProperty(ref _listener, value);
+		}
 
 		public GameTimePrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

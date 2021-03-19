@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnCheckPlayerTargetNodeDistanceReturnCondition : scnIReturnCondition
 	{
-		[Ordinal(0)] [RED("params")] public scnCheckPlayerTargetNodeDistanceReturnConditionParams Params { get; set; }
+		private scnCheckPlayerTargetNodeDistanceReturnConditionParams _params;
+
+		[Ordinal(0)] 
+		[RED("params")] 
+		public scnCheckPlayerTargetNodeDistanceReturnConditionParams Params
+		{
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
+		}
 
 		public scnCheckPlayerTargetNodeDistanceReturnCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TemporalPrereq : gameIScriptablePrereq
 	{
-		[Ordinal(0)] [RED("totalDuration")] public CFloat TotalDuration { get; set; }
+		private CFloat _totalDuration;
+
+		[Ordinal(0)] 
+		[RED("totalDuration")] 
+		public CFloat TotalDuration
+		{
+			get => GetProperty(ref _totalDuration);
+			set => SetProperty(ref _totalDuration, value);
+		}
 
 		public TemporalPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

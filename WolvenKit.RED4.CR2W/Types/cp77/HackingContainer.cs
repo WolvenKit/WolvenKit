@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HackingContainer : BaseSkillCheckContainer
 	{
-		[Ordinal(3)] [RED("hackingCheck")] public CHandle<HackingSkillCheck> HackingCheck { get; set; }
+		private CHandle<HackingSkillCheck> _hackingCheck;
+
+		[Ordinal(3)] 
+		[RED("hackingCheck")] 
+		public CHandle<HackingSkillCheck> HackingCheck
+		{
+			get => GetProperty(ref _hackingCheck);
+			set => SetProperty(ref _hackingCheck, value);
+		}
 
 		public HackingContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

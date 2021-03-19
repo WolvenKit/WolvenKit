@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VendorItemVirtualController : inkVirtualCompoundItemController
 	{
-		[Ordinal(15)] [RED("data")] public CHandle<VendorInventoryItemData> Data { get; set; }
+		private CHandle<VendorInventoryItemData> _data;
+
+		[Ordinal(15)] 
+		[RED("data")] 
+		public CHandle<VendorInventoryItemData> Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
 
 		public VendorItemVirtualController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

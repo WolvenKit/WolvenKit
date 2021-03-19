@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HotkeyWidgetStatsListener : gameScriptStatusEffectListener
 	{
-		[Ordinal(0)] [RED("controller")] public wCHandle<GenericHotkeyController> Controller { get; set; }
+		private wCHandle<GenericHotkeyController> _controller;
+
+		[Ordinal(0)] 
+		[RED("controller")] 
+		public wCHandle<GenericHotkeyController> Controller
+		{
+			get => GetProperty(ref _controller);
+			set => SetProperty(ref _controller, value);
+		}
 
 		public HotkeyWidgetStatsListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimSetCollection : CVariable
 	{
-		[Ordinal(0)] [RED("animSets")] public CArray<raRef<animAnimSet>> AnimSets { get; set; }
-		[Ordinal(1)] [RED("overrideAnimSets")] public CArray<animOverrideAnimSetRef> OverrideAnimSets { get; set; }
-		[Ordinal(2)] [RED("animWrapperVariables")] public CArray<animAnimWrapperVariableDescription> AnimWrapperVariables { get; set; }
+		private CArray<raRef<animAnimSet>> _animSets;
+		private CArray<animOverrideAnimSetRef> _overrideAnimSets;
+		private CArray<animAnimWrapperVariableDescription> _animWrapperVariables;
+
+		[Ordinal(0)] 
+		[RED("animSets")] 
+		public CArray<raRef<animAnimSet>> AnimSets
+		{
+			get => GetProperty(ref _animSets);
+			set => SetProperty(ref _animSets, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("overrideAnimSets")] 
+		public CArray<animOverrideAnimSetRef> OverrideAnimSets
+		{
+			get => GetProperty(ref _overrideAnimSets);
+			set => SetProperty(ref _overrideAnimSets, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("animWrapperVariables")] 
+		public CArray<animAnimWrapperVariableDescription> AnimWrapperVariables
+		{
+			get => GetProperty(ref _animWrapperVariables);
+			set => SetProperty(ref _animWrapperVariables, value);
+		}
 
 		public animAnimSetCollection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

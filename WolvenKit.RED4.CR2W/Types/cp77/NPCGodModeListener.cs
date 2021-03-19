@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class NPCGodModeListener : gameScriptStatsListener
 	{
-		[Ordinal(0)] [RED("owner")] public wCHandle<NPCPuppet> Owner { get; set; }
+		private wCHandle<NPCPuppet> _owner;
+
+		[Ordinal(0)] 
+		[RED("owner")] 
+		public wCHandle<NPCPuppet> Owner
+		{
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
+		}
 
 		public NPCGodModeListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

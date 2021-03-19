@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamestateMachineparameterTypeRequestReload : IScriptable
 	{
-		[Ordinal(0)] [RED("item")] public wCHandle<gameItemObject> Item { get; set; }
+		private wCHandle<gameItemObject> _item;
+
+		[Ordinal(0)] 
+		[RED("item")] 
+		public wCHandle<gameItemObject> Item
+		{
+			get => GetProperty(ref _item);
+			set => SetProperty(ref _item, value);
+		}
 
 		public gamestateMachineparameterTypeRequestReload(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

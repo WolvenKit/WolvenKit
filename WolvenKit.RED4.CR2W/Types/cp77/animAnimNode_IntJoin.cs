@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_IntJoin : animAnimNode_IntValue
 	{
-		[Ordinal(11)] [RED("input")] public animIntLink Input { get; set; }
+		private animIntLink _input;
+
+		[Ordinal(11)] 
+		[RED("input")] 
+		public animIntLink Input
+		{
+			get => GetProperty(ref _input);
+			set => SetProperty(ref _input, value);
+		}
 
 		public animAnimNode_IntJoin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

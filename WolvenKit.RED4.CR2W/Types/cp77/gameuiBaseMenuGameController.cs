@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiBaseMenuGameController : gameuiWidgetGameController
 	{
-		[Ordinal(2)] [RED("puppetSceneInfos")] public CArray<gameuiBaseMenuGameControllerPuppetSceneInfo> PuppetSceneInfos { get; set; }
+		private CArray<gameuiBaseMenuGameControllerPuppetSceneInfo> _puppetSceneInfos;
+
+		[Ordinal(2)] 
+		[RED("puppetSceneInfos")] 
+		public CArray<gameuiBaseMenuGameControllerPuppetSceneInfo> PuppetSceneInfos
+		{
+			get => GetProperty(ref _puppetSceneInfos);
+			set => SetProperty(ref _puppetSceneInfos, value);
+		}
 
 		public gameuiBaseMenuGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

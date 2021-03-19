@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiRequestPopContextEvent : redEvent
 	{
-		[Ordinal(0)] [RED("context")] public CEnum<UIGameContext> Context { get; set; }
+		private CEnum<UIGameContext> _context;
+
+		[Ordinal(0)] 
+		[RED("context")] 
+		public CEnum<UIGameContext> Context
+		{
+			get => GetProperty(ref _context);
+			set => SetProperty(ref _context, value);
+		}
 
 		public gameuiRequestPopContextEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

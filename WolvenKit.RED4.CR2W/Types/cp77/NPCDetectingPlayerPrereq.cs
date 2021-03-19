@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class NPCDetectingPlayerPrereq : gameIScriptablePrereq
 	{
-		[Ordinal(0)] [RED("threshold")] public CFloat Threshold { get; set; }
+		private CFloat _threshold;
+
+		[Ordinal(0)] 
+		[RED("threshold")] 
+		public CFloat Threshold
+		{
+			get => GetProperty(ref _threshold);
+			set => SetProperty(ref _threshold, value);
+		}
 
 		public NPCDetectingPlayerPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

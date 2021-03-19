@@ -7,10 +7,42 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScannerRequirementsGameController : BaseChunkGameController
 	{
-		[Ordinal(5)] [RED("ScannerRequirementsRightPanel")] public inkCompoundWidgetReference ScannerRequirementsRightPanel { get; set; }
-		[Ordinal(6)] [RED("requirementsCallbackID")] public CUInt32 RequirementsCallbackID { get; set; }
-		[Ordinal(7)] [RED("isValidRequirements")] public CBool IsValidRequirements { get; set; }
-		[Ordinal(8)] [RED("requirementWidgets")] public CArray<wCHandle<inkWidget>> RequirementWidgets { get; set; }
+		private inkCompoundWidgetReference _scannerRequirementsRightPanel;
+		private CUInt32 _requirementsCallbackID;
+		private CBool _isValidRequirements;
+		private CArray<wCHandle<inkWidget>> _requirementWidgets;
+
+		[Ordinal(5)] 
+		[RED("ScannerRequirementsRightPanel")] 
+		public inkCompoundWidgetReference ScannerRequirementsRightPanel
+		{
+			get => GetProperty(ref _scannerRequirementsRightPanel);
+			set => SetProperty(ref _scannerRequirementsRightPanel, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("requirementsCallbackID")] 
+		public CUInt32 RequirementsCallbackID
+		{
+			get => GetProperty(ref _requirementsCallbackID);
+			set => SetProperty(ref _requirementsCallbackID, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("isValidRequirements")] 
+		public CBool IsValidRequirements
+		{
+			get => GetProperty(ref _isValidRequirements);
+			set => SetProperty(ref _isValidRequirements, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("requirementWidgets")] 
+		public CArray<wCHandle<inkWidget>> RequirementWidgets
+		{
+			get => GetProperty(ref _requirementWidgets);
+			set => SetProperty(ref _requirementWidgets, value);
+		}
 
 		public ScannerRequirementsGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

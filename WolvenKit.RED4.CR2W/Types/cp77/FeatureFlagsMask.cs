@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FeatureFlagsMask : CVariable
 	{
-		[Ordinal(0)] [RED("flags")] public CUInt64 Flags { get; set; }
+		private CUInt64 _flags;
+
+		[Ordinal(0)] 
+		[RED("flags")] 
+		public CUInt64 Flags
+		{
+			get => GetProperty(ref _flags);
+			set => SetProperty(ref _flags, value);
+		}
 
 		public FeatureFlagsMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

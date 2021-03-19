@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class QuickSlotButtonHoldStartEvent : redEvent
 	{
-		[Ordinal(0)] [RED("dPadItemDirection")] public CEnum<EDPadSlot> DPadItemDirection { get; set; }
+		private CEnum<EDPadSlot> _dPadItemDirection;
+
+		[Ordinal(0)] 
+		[RED("dPadItemDirection")] 
+		public CEnum<EDPadSlot> DPadItemDirection
+		{
+			get => GetProperty(ref _dPadItemDirection);
+			set => SetProperty(ref _dPadItemDirection, value);
+		}
 
 		public QuickSlotButtonHoldStartEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

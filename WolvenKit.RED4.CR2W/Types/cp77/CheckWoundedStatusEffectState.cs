@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CheckWoundedStatusEffectState : AIStatusEffectCondition
 	{
-		[Ordinal(0)] [RED("stateToCheck")] public CEnum<EstatusEffectsState> StateToCheck { get; set; }
+		private CEnum<EstatusEffectsState> _stateToCheck;
+
+		[Ordinal(0)] 
+		[RED("stateToCheck")] 
+		public CEnum<EstatusEffectsState> StateToCheck
+		{
+			get => GetProperty(ref _stateToCheck);
+			set => SetProperty(ref _stateToCheck, value);
+		}
 
 		public CheckWoundedStatusEffectState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

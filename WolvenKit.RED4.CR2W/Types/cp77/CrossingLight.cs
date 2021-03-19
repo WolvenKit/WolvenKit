@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CrossingLight : TrafficLight
 	{
-		[Ordinal(89)] [RED("audioLightIsGreen")] public CBool AudioLightIsGreen { get; set; }
+		private CBool _audioLightIsGreen;
+
+		[Ordinal(89)] 
+		[RED("audioLightIsGreen")] 
+		public CBool AudioLightIsGreen
+		{
+			get => GetProperty(ref _audioLightIsGreen);
+			set => SetProperty(ref _audioLightIsGreen, value);
+		}
 
 		public CrossingLight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

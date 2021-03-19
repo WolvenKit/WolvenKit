@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_Output : animAnimNode_Base
 	{
-		[Ordinal(11)] [RED("node")] public animPoseLink Node { get; set; }
+		private animPoseLink _node;
+
+		[Ordinal(11)] 
+		[RED("node")] 
+		public animPoseLink Node
+		{
+			get => GetProperty(ref _node);
+			set => SetProperty(ref _node, value);
+		}
 
 		public animAnimNode_Output(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

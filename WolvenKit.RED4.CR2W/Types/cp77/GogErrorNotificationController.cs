@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GogErrorNotificationController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("errorMessageWidget")] public inkWidgetReference ErrorMessageWidget { get; set; }
+		private inkWidgetReference _errorMessageWidget;
+
+		[Ordinal(1)] 
+		[RED("errorMessageWidget")] 
+		public inkWidgetReference ErrorMessageWidget
+		{
+			get => GetProperty(ref _errorMessageWidget);
+			set => SetProperty(ref _errorMessageWidget, value);
+		}
 
 		public GogErrorNotificationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

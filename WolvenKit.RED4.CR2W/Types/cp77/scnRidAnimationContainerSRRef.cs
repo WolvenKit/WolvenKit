@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnRidAnimationContainerSRRef : CVariable
 	{
-		[Ordinal(0)] [RED("animations")] public CArray<scnRidAnimationContainerSRRefAnimContainer> Animations { get; set; }
+		private CArray<scnRidAnimationContainerSRRefAnimContainer> _animations;
+
+		[Ordinal(0)] 
+		[RED("animations")] 
+		public CArray<scnRidAnimationContainerSRRefAnimContainer> Animations
+		{
+			get => GetProperty(ref _animations);
+			set => SetProperty(ref _animations, value);
+		}
 
 		public scnRidAnimationContainerSRRef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiGenericNotificationReceiverGameController : gameuiWidgetGameController
 	{
-		[Ordinal(2)] [RED("ItemChanged")] public inkEmptyCallback ItemChanged { get; set; }
+		private inkEmptyCallback _itemChanged;
+
+		[Ordinal(2)] 
+		[RED("ItemChanged")] 
+		public inkEmptyCallback ItemChanged
+		{
+			get => GetProperty(ref _itemChanged);
+			set => SetProperty(ref _itemChanged, value);
+		}
 
 		public gameuiGenericNotificationReceiverGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

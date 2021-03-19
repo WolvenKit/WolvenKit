@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class IgnoreListEvent : redEvent
 	{
-		[Ordinal(0)] [RED("bodyID")] public entEntityID BodyID { get; set; }
-		[Ordinal(1)] [RED("removeEvent")] public CBool RemoveEvent { get; set; }
+		private entEntityID _bodyID;
+		private CBool _removeEvent;
+
+		[Ordinal(0)] 
+		[RED("bodyID")] 
+		public entEntityID BodyID
+		{
+			get => GetProperty(ref _bodyID);
+			set => SetProperty(ref _bodyID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("removeEvent")] 
+		public CBool RemoveEvent
+		{
+			get => GetProperty(ref _removeEvent);
+			set => SetProperty(ref _removeEvent, value);
+		}
 
 		public IgnoreListEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entHitRepresentationDataParameter : entEntityParameter
 	{
-		[Ordinal(0)] [RED("hitRepresentationOverrides")] public CArray<gameHitRepresentationOverride> HitRepresentationOverrides { get; set; }
+		private CArray<gameHitRepresentationOverride> _hitRepresentationOverrides;
+
+		[Ordinal(0)] 
+		[RED("hitRepresentationOverrides")] 
+		public CArray<gameHitRepresentationOverride> HitRepresentationOverrides
+		{
+			get => GetProperty(ref _hitRepresentationOverrides);
+			set => SetProperty(ref _hitRepresentationOverrides, value);
+		}
 
 		public entHitRepresentationDataParameter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,16 +7,96 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CyberwareAttributes_ContainersStruct : CVariable
 	{
-		[Ordinal(0)] [RED("widgetBody")] public inkWidgetReference WidgetBody { get; set; }
-		[Ordinal(1)] [RED("widgetCool")] public inkWidgetReference WidgetCool { get; set; }
-		[Ordinal(2)] [RED("widgetInt")] public inkWidgetReference WidgetInt { get; set; }
-		[Ordinal(3)] [RED("widgetRef")] public inkWidgetReference WidgetRef { get; set; }
-		[Ordinal(4)] [RED("widgetTech")] public inkWidgetReference WidgetTech { get; set; }
-		[Ordinal(5)] [RED("logicBody")] public CHandle<CyberwareAttributes_Logic> LogicBody { get; set; }
-		[Ordinal(6)] [RED("logicCool")] public CHandle<CyberwareAttributes_Logic> LogicCool { get; set; }
-		[Ordinal(7)] [RED("logicInt")] public CHandle<CyberwareAttributes_Logic> LogicInt { get; set; }
-		[Ordinal(8)] [RED("logicRef")] public CHandle<CyberwareAttributes_Logic> LogicRef { get; set; }
-		[Ordinal(9)] [RED("logicTech")] public CHandle<CyberwareAttributes_Logic> LogicTech { get; set; }
+		private inkWidgetReference _widgetBody;
+		private inkWidgetReference _widgetCool;
+		private inkWidgetReference _widgetInt;
+		private inkWidgetReference _widgetRef;
+		private inkWidgetReference _widgetTech;
+		private CHandle<CyberwareAttributes_Logic> _logicBody;
+		private CHandle<CyberwareAttributes_Logic> _logicCool;
+		private CHandle<CyberwareAttributes_Logic> _logicInt;
+		private CHandle<CyberwareAttributes_Logic> _logicRef;
+		private CHandle<CyberwareAttributes_Logic> _logicTech;
+
+		[Ordinal(0)] 
+		[RED("widgetBody")] 
+		public inkWidgetReference WidgetBody
+		{
+			get => GetProperty(ref _widgetBody);
+			set => SetProperty(ref _widgetBody, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("widgetCool")] 
+		public inkWidgetReference WidgetCool
+		{
+			get => GetProperty(ref _widgetCool);
+			set => SetProperty(ref _widgetCool, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("widgetInt")] 
+		public inkWidgetReference WidgetInt
+		{
+			get => GetProperty(ref _widgetInt);
+			set => SetProperty(ref _widgetInt, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("widgetRef")] 
+		public inkWidgetReference WidgetRef
+		{
+			get => GetProperty(ref _widgetRef);
+			set => SetProperty(ref _widgetRef, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("widgetTech")] 
+		public inkWidgetReference WidgetTech
+		{
+			get => GetProperty(ref _widgetTech);
+			set => SetProperty(ref _widgetTech, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("logicBody")] 
+		public CHandle<CyberwareAttributes_Logic> LogicBody
+		{
+			get => GetProperty(ref _logicBody);
+			set => SetProperty(ref _logicBody, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("logicCool")] 
+		public CHandle<CyberwareAttributes_Logic> LogicCool
+		{
+			get => GetProperty(ref _logicCool);
+			set => SetProperty(ref _logicCool, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("logicInt")] 
+		public CHandle<CyberwareAttributes_Logic> LogicInt
+		{
+			get => GetProperty(ref _logicInt);
+			set => SetProperty(ref _logicInt, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("logicRef")] 
+		public CHandle<CyberwareAttributes_Logic> LogicRef
+		{
+			get => GetProperty(ref _logicRef);
+			set => SetProperty(ref _logicRef, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("logicTech")] 
+		public CHandle<CyberwareAttributes_Logic> LogicTech
+		{
+			get => GetProperty(ref _logicTech);
+			set => SetProperty(ref _logicTech, value);
+		}
 
 		public CyberwareAttributes_ContainersStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

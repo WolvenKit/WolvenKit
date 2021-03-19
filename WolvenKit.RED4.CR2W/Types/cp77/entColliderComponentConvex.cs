@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entColliderComponentConvex : entColliderComponentShape
 	{
-		[Ordinal(1)] [RED("mesh")] public rRef<CMesh> Mesh { get; set; }
+		private rRef<CMesh> _mesh;
+
+		[Ordinal(1)] 
+		[RED("mesh")] 
+		public rRef<CMesh> Mesh
+		{
+			get => GetProperty(ref _mesh);
+			set => SetProperty(ref _mesh, value);
+		}
 
 		public entColliderComponentConvex(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

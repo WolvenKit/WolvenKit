@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameprojectileLinearMovementEvent : redEvent
 	{
-		[Ordinal(0)] [RED("targetPosition")] public Vector4 TargetPosition { get; set; }
+		private Vector4 _targetPosition;
+
+		[Ordinal(0)] 
+		[RED("targetPosition")] 
+		public Vector4 TargetPosition
+		{
+			get => GetProperty(ref _targetPosition);
+			set => SetProperty(ref _targetPosition, value);
+		}
 
 		public gameprojectileLinearMovementEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

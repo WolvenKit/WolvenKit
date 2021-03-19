@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BlurAreaSettings : IAreaSettings
 	{
-		[Ordinal(2)] [RED("circularBlurRadius")] public CFloat CircularBlurRadius { get; set; }
+		private CFloat _circularBlurRadius;
+
+		[Ordinal(2)] 
+		[RED("circularBlurRadius")] 
+		public CFloat CircularBlurRadius
+		{
+			get => GetProperty(ref _circularBlurRadius);
+			set => SetProperty(ref _circularBlurRadius, value);
+		}
 
 		public BlurAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

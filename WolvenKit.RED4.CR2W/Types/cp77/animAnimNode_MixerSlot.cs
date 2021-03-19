@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_MixerSlot : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] [RED("maxNormalAnimEntriesCount")] public CUInt16 MaxNormalAnimEntriesCount { get; set; }
-		[Ordinal(13)] [RED("maxAdditiveAnimEntriesCount")] public CUInt16 MaxAdditiveAnimEntriesCount { get; set; }
-		[Ordinal(14)] [RED("maxOverrideAnimEntriesCount")] public CUInt16 MaxOverrideAnimEntriesCount { get; set; }
+		private CUInt16 _maxNormalAnimEntriesCount;
+		private CUInt16 _maxAdditiveAnimEntriesCount;
+		private CUInt16 _maxOverrideAnimEntriesCount;
+
+		[Ordinal(12)] 
+		[RED("maxNormalAnimEntriesCount")] 
+		public CUInt16 MaxNormalAnimEntriesCount
+		{
+			get => GetProperty(ref _maxNormalAnimEntriesCount);
+			set => SetProperty(ref _maxNormalAnimEntriesCount, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("maxAdditiveAnimEntriesCount")] 
+		public CUInt16 MaxAdditiveAnimEntriesCount
+		{
+			get => GetProperty(ref _maxAdditiveAnimEntriesCount);
+			set => SetProperty(ref _maxAdditiveAnimEntriesCount, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("maxOverrideAnimEntriesCount")] 
+		public CUInt16 MaxOverrideAnimEntriesCount
+		{
+			get => GetProperty(ref _maxOverrideAnimEntriesCount);
+			set => SetProperty(ref _maxOverrideAnimEntriesCount, value);
+		}
 
 		public animAnimNode_MixerSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

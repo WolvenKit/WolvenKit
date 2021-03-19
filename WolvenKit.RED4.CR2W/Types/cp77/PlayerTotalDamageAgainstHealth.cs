@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PlayerTotalDamageAgainstHealth : CVariable
 	{
-		[Ordinal(0)] [RED("player")] public wCHandle<gameObject> Player { get; set; }
-		[Ordinal(1)] [RED("totalDamage")] public CFloat TotalDamage { get; set; }
-		[Ordinal(2)] [RED("targetHealth")] public CFloat TargetHealth { get; set; }
+		private wCHandle<gameObject> _player;
+		private CFloat _totalDamage;
+		private CFloat _targetHealth;
+
+		[Ordinal(0)] 
+		[RED("player")] 
+		public wCHandle<gameObject> Player
+		{
+			get => GetProperty(ref _player);
+			set => SetProperty(ref _player, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("totalDamage")] 
+		public CFloat TotalDamage
+		{
+			get => GetProperty(ref _totalDamage);
+			set => SetProperty(ref _totalDamage, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("targetHealth")] 
+		public CFloat TargetHealth
+		{
+			get => GetProperty(ref _targetHealth);
+			set => SetProperty(ref _targetHealth, value);
+		}
 
 		public PlayerTotalDamageAgainstHealth(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

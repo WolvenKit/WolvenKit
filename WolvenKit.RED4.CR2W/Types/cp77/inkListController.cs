@@ -7,11 +7,51 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkListController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("itemLibraryID")] public CName ItemLibraryID { get; set; }
-		[Ordinal(2)] [RED("cycledNavigation")] public CBool CycledNavigation { get; set; }
-		[Ordinal(3)] [RED("beginToggled")] public CBool BeginToggled { get; set; }
-		[Ordinal(4)] [RED("ItemSelected")] public inkListControllerCallback ItemSelected { get; set; }
-		[Ordinal(5)] [RED("ItemActivated")] public inkListControllerCallback ItemActivated { get; set; }
+		private CName _itemLibraryID;
+		private CBool _cycledNavigation;
+		private CBool _beginToggled;
+		private inkListControllerCallback _itemSelected;
+		private inkListControllerCallback _itemActivated;
+
+		[Ordinal(1)] 
+		[RED("itemLibraryID")] 
+		public CName ItemLibraryID
+		{
+			get => GetProperty(ref _itemLibraryID);
+			set => SetProperty(ref _itemLibraryID, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("cycledNavigation")] 
+		public CBool CycledNavigation
+		{
+			get => GetProperty(ref _cycledNavigation);
+			set => SetProperty(ref _cycledNavigation, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("beginToggled")] 
+		public CBool BeginToggled
+		{
+			get => GetProperty(ref _beginToggled);
+			set => SetProperty(ref _beginToggled, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("ItemSelected")] 
+		public inkListControllerCallback ItemSelected
+		{
+			get => GetProperty(ref _itemSelected);
+			set => SetProperty(ref _itemSelected, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("ItemActivated")] 
+		public inkListControllerCallback ItemActivated
+		{
+			get => GetProperty(ref _itemActivated);
+			set => SetProperty(ref _itemActivated, value);
+		}
 
 		public inkListController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

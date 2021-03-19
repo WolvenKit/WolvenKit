@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameJournalRootFolderEntry : gameJournalFolderEntry
 	{
-		[Ordinal(2)] [RED("descriptor")] public raRef<gameJournalDescriptorResource> Descriptor { get; set; }
+		private raRef<gameJournalDescriptorResource> _descriptor;
+
+		[Ordinal(2)] 
+		[RED("descriptor")] 
+		public raRef<gameJournalDescriptorResource> Descriptor
+		{
+			get => GetProperty(ref _descriptor);
+			set => SetProperty(ref _descriptor, value);
+		}
 
 		public gameJournalRootFolderEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

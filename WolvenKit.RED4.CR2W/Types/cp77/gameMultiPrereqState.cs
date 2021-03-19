@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameMultiPrereqState : gamePrereqState
 	{
-		[Ordinal(0)] [RED("nestedStates")] public CArray<CHandle<gamePrereqState>> NestedStates { get; set; }
+		private CArray<CHandle<gamePrereqState>> _nestedStates;
+
+		[Ordinal(0)] 
+		[RED("nestedStates")] 
+		public CArray<CHandle<gamePrereqState>> NestedStates
+		{
+			get => GetProperty(ref _nestedStates);
+			set => SetProperty(ref _nestedStates, value);
+		}
 
 		public gameMultiPrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

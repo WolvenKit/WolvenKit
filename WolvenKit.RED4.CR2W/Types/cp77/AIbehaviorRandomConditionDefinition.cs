@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorRandomConditionDefinition : AIbehaviorConditionDefinition
 	{
-		[Ordinal(1)] [RED("chance")] public CFloat Chance { get; set; }
+		private CFloat _chance;
+
+		[Ordinal(1)] 
+		[RED("chance")] 
+		public CFloat Chance
+		{
+			get => GetProperty(ref _chance);
+			set => SetProperty(ref _chance, value);
+		}
 
 		public AIbehaviorRandomConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

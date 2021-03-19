@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiStealthIndicatorGameController : gameuiHUDGameController
 	{
-		[Ordinal(9)] [RED("rootWidget")] public wCHandle<inkCompoundWidget> RootWidget { get; set; }
+		private wCHandle<inkCompoundWidget> _rootWidget;
+
+		[Ordinal(9)] 
+		[RED("rootWidget")] 
+		public wCHandle<inkCompoundWidget> RootWidget
+		{
+			get => GetProperty(ref _rootWidget);
+			set => SetProperty(ref _rootWidget, value);
+		}
 
 		public gameuiStealthIndicatorGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

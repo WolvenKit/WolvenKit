@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameJournalBriefingVideoSection : gameJournalBriefingBaseSection
 	{
-		[Ordinal(1)] [RED("videoResource")] public raRef<Bink> VideoResource { get; set; }
+		private raRef<Bink> _videoResource;
+
+		[Ordinal(1)] 
+		[RED("videoResource")] 
+		public raRef<Bink> VideoResource
+		{
+			get => GetProperty(ref _videoResource);
+			set => SetProperty(ref _videoResource, value);
+		}
 
 		public gameJournalBriefingVideoSection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

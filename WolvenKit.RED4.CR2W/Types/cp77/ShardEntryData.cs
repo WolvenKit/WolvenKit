@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ShardEntryData : GenericCodexEntryData
 	{
-		[Ordinal(10)] [RED("isCrypted")] public CBool IsCrypted { get; set; }
+		private CBool _isCrypted;
+
+		[Ordinal(10)] 
+		[RED("isCrypted")] 
+		public CBool IsCrypted
+		{
+			get => GetProperty(ref _isCrypted);
+			set => SetProperty(ref _isCrypted, value);
+		}
 
 		public ShardEntryData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

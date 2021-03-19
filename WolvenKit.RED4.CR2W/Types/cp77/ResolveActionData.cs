@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ResolveActionData : IScriptable
 	{
-		[Ordinal(0)] [RED("password")] public CString Password { get; set; }
+		private CString _password;
+
+		[Ordinal(0)] 
+		[RED("password")] 
+		public CString Password
+		{
+			get => GetProperty(ref _password);
+			set => SetProperty(ref _password, value);
+		}
 
 		public ResolveActionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

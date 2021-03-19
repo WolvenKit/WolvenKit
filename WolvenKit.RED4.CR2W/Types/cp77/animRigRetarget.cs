@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animRigRetarget : CVariable
 	{
-		[Ordinal(0)] [RED("sourceRig")] public rRef<animRig> SourceRig { get; set; }
+		private rRef<animRig> _sourceRig;
+
+		[Ordinal(0)] 
+		[RED("sourceRig")] 
+		public rRef<animRig> SourceRig
+		{
+			get => GetProperty(ref _sourceRig);
+			set => SetProperty(ref _sourceRig, value);
+		}
 
 		public animRigRetarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

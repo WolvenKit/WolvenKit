@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animIntLink : CVariable
 	{
-		[Ordinal(0)] [RED("node")] public wCHandle<animAnimNode_IntValue> Node { get; set; }
+		private wCHandle<animAnimNode_IntValue> _node;
+
+		[Ordinal(0)] 
+		[RED("node")] 
+		public wCHandle<animAnimNode_IntValue> Node
+		{
+			get => GetProperty(ref _node);
+			set => SetProperty(ref _node, value);
+		}
 
 		public animIntLink(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

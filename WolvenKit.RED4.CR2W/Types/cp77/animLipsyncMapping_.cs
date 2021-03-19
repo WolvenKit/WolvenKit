@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animLipsyncMapping_ : CResource
 	{
-		[Ordinal(1)] [RED("languageCodeName")] public CName LanguageCodeName { get; set; }
-		[Ordinal(2)] [RED("scenePaths")] public CArray<CUInt64> ScenePaths { get; set; }
-		[Ordinal(4)] [RED("sceneEntries")] public CArray<animLipsyncMappingSceneEntry> SceneEntries { get; set; }
+		private CName _languageCodeName;
+		private CArray<CUInt64> _scenePaths;
+		private CArray<animLipsyncMappingSceneEntry> _sceneEntries;
+
+		[Ordinal(1)] 
+		[RED("languageCodeName")] 
+		public CName LanguageCodeName
+		{
+			get => GetProperty(ref _languageCodeName);
+			set => SetProperty(ref _languageCodeName, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("scenePaths")] 
+		public CArray<CUInt64> ScenePaths
+		{
+			get => GetProperty(ref _scenePaths);
+			set => SetProperty(ref _scenePaths, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("sceneEntries")] 
+		public CArray<animLipsyncMappingSceneEntry> SceneEntries
+		{
+			get => GetProperty(ref _sceneEntries);
+			set => SetProperty(ref _sceneEntries, value);
+		}
 
 		public animLipsyncMapping_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

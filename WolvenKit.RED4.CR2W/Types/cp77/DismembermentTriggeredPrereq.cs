@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DismembermentTriggeredPrereq : gameIScriptablePrereq
 	{
-		[Ordinal(0)] [RED("currValue")] public CUInt32 CurrValue { get; set; }
+		private CUInt32 _currValue;
+
+		[Ordinal(0)] 
+		[RED("currValue")] 
+		public CUInt32 CurrValue
+		{
+			get => GetProperty(ref _currValue);
+			set => SetProperty(ref _currValue, value);
+		}
 
 		public DismembermentTriggeredPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

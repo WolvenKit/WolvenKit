@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIHumanComponentPS : AICommandQueuePS
 	{
-		[Ordinal(2)] [RED("spotUsageToken")] public AISpotUsageToken SpotUsageToken { get; set; }
+		private AISpotUsageToken _spotUsageToken;
+
+		[Ordinal(2)] 
+		[RED("spotUsageToken")] 
+		public AISpotUsageToken SpotUsageToken
+		{
+			get => GetProperty(ref _spotUsageToken);
+			set => SetProperty(ref _spotUsageToken, value);
+		}
 
 		public AIHumanComponentPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

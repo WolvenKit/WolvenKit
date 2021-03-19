@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamestateMachineeventPostponedParameterInt : gamestateMachineeventPostponedParameterBase
 	{
-		[Ordinal(2)] [RED("value")] public CInt32 Value { get; set; }
+		private CInt32 _value;
+
+		[Ordinal(2)] 
+		[RED("value")] 
+		public CInt32 Value
+		{
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
+		}
 
 		public gamestateMachineeventPostponedParameterInt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

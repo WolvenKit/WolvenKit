@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CrossingLightControllerPS : TrafficLightControllerPS
 	{
-		[Ordinal(103)] [RED("crossingLightSFXSetup")] public CrossingLightSetup CrossingLightSFXSetup { get; set; }
+		private CrossingLightSetup _crossingLightSFXSetup;
+
+		[Ordinal(103)] 
+		[RED("crossingLightSFXSetup")] 
+		public CrossingLightSetup CrossingLightSFXSetup
+		{
+			get => GetProperty(ref _crossingLightSFXSetup);
+			set => SetProperty(ref _crossingLightSFXSetup, value);
+		}
 
 		public CrossingLightControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

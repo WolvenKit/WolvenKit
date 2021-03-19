@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldWaterPatchNodeType : CVariable
 	{
-		[Ordinal(0)] [RED("typeName")] public CName TypeName { get; set; }
+		private CName _typeName;
+
+		[Ordinal(0)] 
+		[RED("typeName")] 
+		public CName TypeName
+		{
+			get => GetProperty(ref _typeName);
+			set => SetProperty(ref _typeName, value);
+		}
 
 		public worldWaterPatchNodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

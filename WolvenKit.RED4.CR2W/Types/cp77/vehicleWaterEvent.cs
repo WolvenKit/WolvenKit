@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class vehicleWaterEvent : redEvent
 	{
-		[Ordinal(0)] [RED("isInWater")] public CBool IsInWater { get; set; }
+		private CBool _isInWater;
+
+		[Ordinal(0)] 
+		[RED("isInWater")] 
+		public CBool IsInWater
+		{
+			get => GetProperty(ref _isInWater);
+			set => SetProperty(ref _isInWater, value);
+		}
 
 		public vehicleWaterEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

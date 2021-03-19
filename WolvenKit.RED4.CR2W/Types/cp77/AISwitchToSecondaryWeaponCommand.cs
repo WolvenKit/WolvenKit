@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AISwitchToSecondaryWeaponCommand : AICommand
 	{
-		[Ordinal(4)] [RED("unEquip")] public CBool UnEquip { get; set; }
+		private CBool _unEquip;
+
+		[Ordinal(4)] 
+		[RED("unEquip")] 
+		public CBool UnEquip
+		{
+			get => GetProperty(ref _unEquip);
+			set => SetProperty(ref _unEquip, value);
+		}
 
 		public AISwitchToSecondaryWeaponCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

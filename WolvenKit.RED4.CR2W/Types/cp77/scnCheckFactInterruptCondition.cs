@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnCheckFactInterruptCondition : scnIInterruptCondition
 	{
-		[Ordinal(0)] [RED("params")] public scnCheckFactInterruptConditionParams Params { get; set; }
+		private scnCheckFactInterruptConditionParams _params;
+
+		[Ordinal(0)] 
+		[RED("params")] 
+		public scnCheckFactInterruptConditionParams Params
+		{
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
+		}
 
 		public scnCheckFactInterruptCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

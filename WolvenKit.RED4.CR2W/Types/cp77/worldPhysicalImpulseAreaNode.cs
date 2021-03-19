@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldPhysicalImpulseAreaNode : worldPhysicalTriggerAreaNode
 	{
-		[Ordinal(7)] [RED("impulse")] public Vector3 Impulse { get; set; }
-		[Ordinal(8)] [RED("impulseRadius")] public CFloat ImpulseRadius { get; set; }
+		private Vector3 _impulse;
+		private CFloat _impulseRadius;
+
+		[Ordinal(7)] 
+		[RED("impulse")] 
+		public Vector3 Impulse
+		{
+			get => GetProperty(ref _impulse);
+			set => SetProperty(ref _impulse, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("impulseRadius")] 
+		public CFloat ImpulseRadius
+		{
+			get => GetProperty(ref _impulseRadius);
+			set => SetProperty(ref _impulseRadius, value);
+		}
 
 		public worldPhysicalImpulseAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

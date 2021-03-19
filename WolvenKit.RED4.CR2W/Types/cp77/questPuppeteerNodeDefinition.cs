@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questPuppeteerNodeDefinition : questDisableableNodeDefinition
 	{
-		[Ordinal(2)] [RED("effector")] public CHandle<questPuppetsEffector> Effector { get; set; }
-		[Ordinal(3)] [RED("reference")] public gameEntityReference Reference { get; set; }
+		private CHandle<questPuppetsEffector> _effector;
+		private gameEntityReference _reference;
+
+		[Ordinal(2)] 
+		[RED("effector")] 
+		public CHandle<questPuppetsEffector> Effector
+		{
+			get => GetProperty(ref _effector);
+			set => SetProperty(ref _effector, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("reference")] 
+		public gameEntityReference Reference
+		{
+			get => GetProperty(ref _reference);
+			set => SetProperty(ref _reference, value);
+		}
 
 		public questPuppeteerNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

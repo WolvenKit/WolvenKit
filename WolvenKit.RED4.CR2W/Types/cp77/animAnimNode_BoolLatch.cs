@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_BoolLatch : animAnimNode_BoolValue
 	{
-		[Ordinal(11)] [RED("input")] public animBoolLink Input { get; set; }
+		private animBoolLink _input;
+
+		[Ordinal(11)] 
+		[RED("input")] 
+		public animBoolLink Input
+		{
+			get => GetProperty(ref _input);
+			set => SetProperty(ref _input, value);
+		}
 
 		public animAnimNode_BoolLatch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

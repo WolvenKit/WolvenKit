@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class vgVectorGraphicStyle : ISerializable
 	{
-		[Ordinal(0)] [RED("attributes")] public CArray<vgAttributeTypeValuePair> Attributes { get; set; }
+		private CArray<vgAttributeTypeValuePair> _attributes;
+
+		[Ordinal(0)] 
+		[RED("attributes")] 
+		public CArray<vgAttributeTypeValuePair> Attributes
+		{
+			get => GetProperty(ref _attributes);
+			set => SetProperty(ref _attributes, value);
+		}
 
 		public vgVectorGraphicStyle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

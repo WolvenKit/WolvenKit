@@ -19,6 +19,8 @@ using WolvenKit.Common.Services;
 using WolvenKit.Common.FNV1A;
 using Newtonsoft.Json;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED4.CR2W.Exceptions;
+using WolvenKit.RED4.CR2W.Reflection;
 
 namespace WolvenKit.RED4.CR2W
 {
@@ -80,6 +82,8 @@ namespace WolvenKit.RED4.CR2W
 
         private CR2WFile additionalCr2WFile;
         public byte[] AdditionalCr2WFileBytes;
+
+        public bool CreatePropertyOnAccess = true;
 
         #endregion
 
@@ -377,7 +381,12 @@ namespace WolvenKit.RED4.CR2W
             var size = file.ReadUInt32();
 
             // Read Value
-            var parsedvar = CR2WTypeManager.Create(typename, varname, this, parent);
+            var parsedvar = parent.GetPropertyByREDName(varname);
+            if (parsedvar.REDType != typename)
+            {
+                throw new TypeMismatchException(typename, parsedvar.REDType);
+            }
+
             // The "size" variable read is something a bit strange : it takes itself into account.
             parsedvar.Read(file, size - 4);
 
@@ -715,6 +724,8 @@ namespace WolvenKit.RED4.CR2W
         #region Write
         public void Write(BinaryWriter file)
         {
+            CreatePropertyOnAccess = false;
+
             // update data
             //m_fileheader.timeStamp = CDateTime.Now.ToUInt64();    //this will change any vanilla assets simply by opening and saving in wkit
             var nn = new List<CR2WNameWrapper>(Names);
@@ -851,6 +862,8 @@ namespace WolvenKit.RED4.CR2W
                 file.BaseStream.Seek(0, SeekOrigin.End);
                 file.Write(AdditionalCr2WFileBytes);
             }
+
+            CreatePropertyOnAccess = true;
         }
 
         /// <summary>
@@ -1097,7 +1110,7 @@ namespace WolvenKit.RED4.CR2W
                                     .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
                             }
 
-                            if (cvar is scnAnimName scnname)
+                            if (cvar is scnAnimName scnname && scnname.Unk1 != null)
                             {
                                 returnedVariables.AddRange(scnname.Unk1
                                     .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));

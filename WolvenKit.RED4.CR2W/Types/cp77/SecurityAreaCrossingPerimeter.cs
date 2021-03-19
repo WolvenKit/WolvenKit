@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SecurityAreaCrossingPerimeter : SecurityAreaEvent
 	{
-		[Ordinal(27)] [RED("entered")] public CBool Entered { get; set; }
+		private CBool _entered;
+
+		[Ordinal(27)] 
+		[RED("entered")] 
+		public CBool Entered
+		{
+			get => GetProperty(ref _entered);
+			set => SetProperty(ref _entered, value);
+		}
 
 		public SecurityAreaCrossingPerimeter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

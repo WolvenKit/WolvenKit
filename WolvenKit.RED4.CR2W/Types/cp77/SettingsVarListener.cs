@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SettingsVarListener : userSettingsVarListener
 	{
-		[Ordinal(0)] [RED("ctrl")] public wCHandle<SettingsMainGameController> Ctrl { get; set; }
+		private wCHandle<SettingsMainGameController> _ctrl;
+
+		[Ordinal(0)] 
+		[RED("ctrl")] 
+		public wCHandle<SettingsMainGameController> Ctrl
+		{
+			get => GetProperty(ref _ctrl);
+			set => SetProperty(ref _ctrl, value);
+		}
 
 		public SettingsVarListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class OverloadDevice : ActionBool
 	{
-		[Ordinal(25)] [RED("killDelay")] public CFloat KillDelay { get; set; }
+		private CFloat _killDelay;
+
+		[Ordinal(25)] 
+		[RED("killDelay")] 
+		public CFloat KillDelay
+		{
+			get => GetProperty(ref _killDelay);
+			set => SetProperty(ref _killDelay, value);
+		}
 
 		public OverloadDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

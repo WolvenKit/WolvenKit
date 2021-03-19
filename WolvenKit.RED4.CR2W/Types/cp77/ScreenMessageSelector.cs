@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScreenMessageSelector : inkTweakDBIDSelector
 	{
-		[Ordinal(1)] [RED("replaceTextWithCustomNumber")] public CBool ReplaceTextWithCustomNumber { get; set; }
-		[Ordinal(2)] [RED("customNumber")] public CInt32 CustomNumber { get; set; }
+		private CBool _replaceTextWithCustomNumber;
+		private CInt32 _customNumber;
+
+		[Ordinal(1)] 
+		[RED("replaceTextWithCustomNumber")] 
+		public CBool ReplaceTextWithCustomNumber
+		{
+			get => GetProperty(ref _replaceTextWithCustomNumber);
+			set => SetProperty(ref _replaceTextWithCustomNumber, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("customNumber")] 
+		public CInt32 CustomNumber
+		{
+			get => GetProperty(ref _customNumber);
+			set => SetProperty(ref _customNumber, value);
+		}
 
 		public ScreenMessageSelector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

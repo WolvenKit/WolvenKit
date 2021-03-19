@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameNetrunnerPrototypeComponent : entIComponent
 	{
-		[Ordinal(3)] [RED("structs")] public CArray<gameNetrunnerPrototypeStruct> Structs { get; set; }
+		private CArray<gameNetrunnerPrototypeStruct> _structs;
+
+		[Ordinal(3)] 
+		[RED("structs")] 
+		public CArray<gameNetrunnerPrototypeStruct> Structs
+		{
+			get => GetProperty(ref _structs);
+			set => SetProperty(ref _structs, value);
+		}
 
 		public gameNetrunnerPrototypeComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

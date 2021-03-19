@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BodyPartHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(1)] [RED("bodyPart")] public CName BodyPart { get; set; }
-		[Ordinal(2)] [RED("attackSubtype")] public CEnum<gamedataAttackSubtype> AttackSubtype { get; set; }
+		private CName _bodyPart;
+		private CEnum<gamedataAttackSubtype> _attackSubtype;
+
+		[Ordinal(1)] 
+		[RED("bodyPart")] 
+		public CName BodyPart
+		{
+			get => GetProperty(ref _bodyPart);
+			set => SetProperty(ref _bodyPart, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("attackSubtype")] 
+		public CEnum<gamedataAttackSubtype> AttackSubtype
+		{
+			get => GetProperty(ref _attackSubtype);
+			set => SetProperty(ref _attackSubtype, value);
+		}
 
 		public BodyPartHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

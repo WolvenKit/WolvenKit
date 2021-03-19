@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questAnimationEventsOverrideNode : questIAudioNodeType
 	{
-		[Ordinal(0)] [RED("perActorOverrides")] public CArray<questActorOverrideEntry> PerActorOverrides { get; set; }
-		[Ordinal(1)] [RED("GlobalMetadata")] public CName GlobalMetadata { get; set; }
+		private CArray<questActorOverrideEntry> _perActorOverrides;
+		private CName _globalMetadata;
+
+		[Ordinal(0)] 
+		[RED("perActorOverrides")] 
+		public CArray<questActorOverrideEntry> PerActorOverrides
+		{
+			get => GetProperty(ref _perActorOverrides);
+			set => SetProperty(ref _perActorOverrides, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("GlobalMetadata")] 
+		public CName GlobalMetadata
+		{
+			get => GetProperty(ref _globalMetadata);
+			set => SetProperty(ref _globalMetadata, value);
+		}
 
 		public questAnimationEventsOverrideNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

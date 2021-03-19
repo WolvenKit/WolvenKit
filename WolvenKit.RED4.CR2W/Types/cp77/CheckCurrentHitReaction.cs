@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CheckCurrentHitReaction : HitConditions
 	{
-		[Ordinal(0)] [RED("HitReactionTypeToCompare")] public CEnum<animHitReactionType> HitReactionTypeToCompare { get; set; }
-		[Ordinal(1)] [RED("CustomStimNameToCompare")] public CName CustomStimNameToCompare { get; set; }
-		[Ordinal(2)] [RED("shouldCheckDeathStimName")] public CBool ShouldCheckDeathStimName { get; set; }
+		private CEnum<animHitReactionType> _hitReactionTypeToCompare;
+		private CName _customStimNameToCompare;
+		private CBool _shouldCheckDeathStimName;
+
+		[Ordinal(0)] 
+		[RED("HitReactionTypeToCompare")] 
+		public CEnum<animHitReactionType> HitReactionTypeToCompare
+		{
+			get => GetProperty(ref _hitReactionTypeToCompare);
+			set => SetProperty(ref _hitReactionTypeToCompare, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("CustomStimNameToCompare")] 
+		public CName CustomStimNameToCompare
+		{
+			get => GetProperty(ref _customStimNameToCompare);
+			set => SetProperty(ref _customStimNameToCompare, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("shouldCheckDeathStimName")] 
+		public CBool ShouldCheckDeathStimName
+		{
+			get => GetProperty(ref _shouldCheckDeathStimName);
+			set => SetProperty(ref _shouldCheckDeathStimName, value);
+		}
 
 		public CheckCurrentHitReaction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

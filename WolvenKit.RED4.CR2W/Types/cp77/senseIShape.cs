@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class senseIShape : IScriptable
 	{
-		[Ordinal(0)] [RED("id")] public TweakDBID Id { get; set; }
+		private TweakDBID _id;
+
+		[Ordinal(0)] 
+		[RED("id")] 
+		public TweakDBID Id
+		{
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
+		}
 
 		public senseIShape(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

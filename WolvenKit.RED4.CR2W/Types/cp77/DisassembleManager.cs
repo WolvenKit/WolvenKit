@@ -7,21 +7,141 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DisassembleManager : gameuiMenuGameController
 	{
-		[Ordinal(3)] [RED("listRef")] public inkCompoundWidgetReference ListRef { get; set; }
-		[Ordinal(4)] [RED("initialPopupDelay")] public CFloat InitialPopupDelay { get; set; }
-		[Ordinal(5)] [RED("popupList")] public CArray<CHandle<DisassemblePopupLogicController>> PopupList { get; set; }
-		[Ordinal(6)] [RED("listOfAddedInventoryItems")] public CArray<InventoryItemData> ListOfAddedInventoryItems { get; set; }
-		[Ordinal(7)] [RED("player")] public wCHandle<PlayerPuppet> Player { get; set; }
-		[Ordinal(8)] [RED("InventoryManager")] public CHandle<InventoryDataManagerV2> InventoryManager { get; set; }
-		[Ordinal(9)] [RED("transactionSystem")] public CHandle<gameTransactionSystem> TransactionSystem { get; set; }
-		[Ordinal(10)] [RED("root")] public CHandle<inkWidget> Root { get; set; }
-		[Ordinal(11)] [RED("animProxy")] public CHandle<inkanimProxy> AnimProxy { get; set; }
-		[Ordinal(12)] [RED("alpha_fadein")] public CHandle<inkanimDefinition> Alpha_fadein { get; set; }
-		[Ordinal(13)] [RED("AnimOptions")] public inkanimPlaybackOptions AnimOptions { get; set; }
-		[Ordinal(14)] [RED("DisassembleCallback")] public CHandle<UI_CraftingDef> DisassembleCallback { get; set; }
-		[Ordinal(15)] [RED("DisassembleBlackboard")] public CHandle<gameIBlackboard> DisassembleBlackboard { get; set; }
-		[Ordinal(16)] [RED("DisassembleBBID")] public CUInt32 DisassembleBBID { get; set; }
-		[Ordinal(17)] [RED("CraftingBBID")] public CUInt32 CraftingBBID { get; set; }
+		private inkCompoundWidgetReference _listRef;
+		private CFloat _initialPopupDelay;
+		private CArray<CHandle<DisassemblePopupLogicController>> _popupList;
+		private CArray<InventoryItemData> _listOfAddedInventoryItems;
+		private wCHandle<PlayerPuppet> _player;
+		private CHandle<InventoryDataManagerV2> _inventoryManager;
+		private CHandle<gameTransactionSystem> _transactionSystem;
+		private CHandle<inkWidget> _root;
+		private CHandle<inkanimProxy> _animProxy;
+		private CHandle<inkanimDefinition> _alpha_fadein;
+		private inkanimPlaybackOptions _animOptions;
+		private CHandle<UI_CraftingDef> _disassembleCallback;
+		private CHandle<gameIBlackboard> _disassembleBlackboard;
+		private CUInt32 _disassembleBBID;
+		private CUInt32 _craftingBBID;
+
+		[Ordinal(3)] 
+		[RED("listRef")] 
+		public inkCompoundWidgetReference ListRef
+		{
+			get => GetProperty(ref _listRef);
+			set => SetProperty(ref _listRef, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("initialPopupDelay")] 
+		public CFloat InitialPopupDelay
+		{
+			get => GetProperty(ref _initialPopupDelay);
+			set => SetProperty(ref _initialPopupDelay, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("popupList")] 
+		public CArray<CHandle<DisassemblePopupLogicController>> PopupList
+		{
+			get => GetProperty(ref _popupList);
+			set => SetProperty(ref _popupList, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("listOfAddedInventoryItems")] 
+		public CArray<InventoryItemData> ListOfAddedInventoryItems
+		{
+			get => GetProperty(ref _listOfAddedInventoryItems);
+			set => SetProperty(ref _listOfAddedInventoryItems, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("player")] 
+		public wCHandle<PlayerPuppet> Player
+		{
+			get => GetProperty(ref _player);
+			set => SetProperty(ref _player, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("InventoryManager")] 
+		public CHandle<InventoryDataManagerV2> InventoryManager
+		{
+			get => GetProperty(ref _inventoryManager);
+			set => SetProperty(ref _inventoryManager, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("transactionSystem")] 
+		public CHandle<gameTransactionSystem> TransactionSystem
+		{
+			get => GetProperty(ref _transactionSystem);
+			set => SetProperty(ref _transactionSystem, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("root")] 
+		public CHandle<inkWidget> Root
+		{
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("animProxy")] 
+		public CHandle<inkanimProxy> AnimProxy
+		{
+			get => GetProperty(ref _animProxy);
+			set => SetProperty(ref _animProxy, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("alpha_fadein")] 
+		public CHandle<inkanimDefinition> Alpha_fadein
+		{
+			get => GetProperty(ref _alpha_fadein);
+			set => SetProperty(ref _alpha_fadein, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("AnimOptions")] 
+		public inkanimPlaybackOptions AnimOptions
+		{
+			get => GetProperty(ref _animOptions);
+			set => SetProperty(ref _animOptions, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("DisassembleCallback")] 
+		public CHandle<UI_CraftingDef> DisassembleCallback
+		{
+			get => GetProperty(ref _disassembleCallback);
+			set => SetProperty(ref _disassembleCallback, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("DisassembleBlackboard")] 
+		public CHandle<gameIBlackboard> DisassembleBlackboard
+		{
+			get => GetProperty(ref _disassembleBlackboard);
+			set => SetProperty(ref _disassembleBlackboard, value);
+		}
+
+		[Ordinal(16)] 
+		[RED("DisassembleBBID")] 
+		public CUInt32 DisassembleBBID
+		{
+			get => GetProperty(ref _disassembleBBID);
+			set => SetProperty(ref _disassembleBBID, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("CraftingBBID")] 
+		public CUInt32 CraftingBBID
+		{
+			get => GetProperty(ref _craftingBBID);
+			set => SetProperty(ref _craftingBBID, value);
+		}
 
 		public DisassembleManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

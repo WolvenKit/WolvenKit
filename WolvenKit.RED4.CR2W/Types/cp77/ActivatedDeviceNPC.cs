@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ActivatedDeviceNPC : ActivatedDeviceTransfromAnim
 	{
-		[Ordinal(94)] [RED("hasProperAnimations")] public CBool HasProperAnimations { get; set; }
+		private CBool _hasProperAnimations;
+
+		[Ordinal(94)] 
+		[RED("hasProperAnimations")] 
+		public CBool HasProperAnimations
+		{
+			get => GetProperty(ref _hasProperAnimations);
+			set => SetProperty(ref _hasProperAnimations, value);
+		}
 
 		public ActivatedDeviceNPC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

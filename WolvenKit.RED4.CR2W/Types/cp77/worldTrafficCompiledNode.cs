@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldTrafficCompiledNode : worldNode
 	{
-		[Ordinal(4)] [RED("aabb")] public Box Aabb { get; set; }
+		private Box _aabb;
+
+		[Ordinal(4)] 
+		[RED("aabb")] 
+		public Box Aabb
+		{
+			get => GetProperty(ref _aabb);
+			set => SetProperty(ref _aabb, value);
+		}
 
 		public worldTrafficCompiledNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

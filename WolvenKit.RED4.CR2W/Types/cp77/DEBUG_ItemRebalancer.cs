@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DEBUG_ItemRebalancer : gameObject
 	{
-		[Ordinal(40)] [RED("nodeRef")] public NodeRef NodeRef { get; set; }
+		private NodeRef _nodeRef;
+
+		[Ordinal(40)] 
+		[RED("nodeRef")] 
+		public NodeRef NodeRef
+		{
+			get => GetProperty(ref _nodeRef);
+			set => SetProperty(ref _nodeRef, value);
+		}
 
 		public DEBUG_ItemRebalancer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

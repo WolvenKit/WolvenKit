@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questPlaylistTrackNode : questIAudioNodeType
 	{
-		[Ordinal(0)] [RED("playlistEvents")] public CArray<audioPlaylistTrackEventStruct> PlaylistEvents { get; set; }
+		private CArray<audioPlaylistTrackEventStruct> _playlistEvents;
+
+		[Ordinal(0)] 
+		[RED("playlistEvents")] 
+		public CArray<audioPlaylistTrackEventStruct> PlaylistEvents
+		{
+			get => GetProperty(ref _playlistEvents);
+			set => SetProperty(ref _playlistEvents, value);
+		}
 
 		public questPlaylistTrackNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CheckArguments : AIbehaviorconditionScript
 	{
-		[Ordinal(0)] [RED("argumentVar")] public CName ArgumentVar { get; set; }
+		private CName _argumentVar;
+
+		[Ordinal(0)] 
+		[RED("argumentVar")] 
+		public CName ArgumentVar
+		{
+			get => GetProperty(ref _argumentVar);
+			set => SetProperty(ref _argumentVar, value);
+		}
 
 		public CheckArguments(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

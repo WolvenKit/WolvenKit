@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HitDamageOverTimePrereq : GenericHitPrereq
 	{
-		[Ordinal(5)] [RED("dotType")] public CEnum<gamedataStatusEffectType> DotType { get; set; }
+		private CEnum<gamedataStatusEffectType> _dotType;
+
+		[Ordinal(5)] 
+		[RED("dotType")] 
+		public CEnum<gamedataStatusEffectType> DotType
+		{
+			get => GetProperty(ref _dotType);
+			set => SetProperty(ref _dotType, value);
+		}
 
 		public HitDamageOverTimePrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

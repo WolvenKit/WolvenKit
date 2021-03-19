@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questIBehaviourManager_NodeType : questIRetNodeType
 	{
-		[Ordinal(0)] [RED("puppetRef")] public gameEntityReference PuppetRef { get; set; }
+		private gameEntityReference _puppetRef;
+
+		[Ordinal(0)] 
+		[RED("puppetRef")] 
+		public gameEntityReference PuppetRef
+		{
+			get => GetProperty(ref _puppetRef);
+			set => SetProperty(ref _puppetRef, value);
+		}
 
 		public questIBehaviourManager_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

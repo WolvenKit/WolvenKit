@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioGrenadeEntitySettings : audioEntitySettings
 	{
-		[Ordinal(6)] [RED("explosionSound")] public CName ExplosionSound { get; set; }
+		private CName _explosionSound;
+
+		[Ordinal(6)] 
+		[RED("explosionSound")] 
+		public CName ExplosionSound
+		{
+			get => GetProperty(ref _explosionSound);
+			set => SetProperty(ref _explosionSound, value);
+		}
 
 		public audioGrenadeEntitySettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

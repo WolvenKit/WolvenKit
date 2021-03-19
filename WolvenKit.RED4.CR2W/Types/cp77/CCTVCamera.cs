@@ -7,10 +7,42 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CCTVCamera : gameObject
 	{
-		[Ordinal(40)] [RED("mesh")] public CHandle<entMeshComponent> Mesh { get; set; }
-		[Ordinal(41)] [RED("camera")] public CHandle<gameCameraComponent> Camera { get; set; }
-		[Ordinal(42)] [RED("isControlled")] public CBool IsControlled { get; set; }
-		[Ordinal(43)] [RED("cachedPuppetID")] public entEntityID CachedPuppetID { get; set; }
+		private CHandle<entMeshComponent> _mesh;
+		private CHandle<gameCameraComponent> _camera;
+		private CBool _isControlled;
+		private entEntityID _cachedPuppetID;
+
+		[Ordinal(40)] 
+		[RED("mesh")] 
+		public CHandle<entMeshComponent> Mesh
+		{
+			get => GetProperty(ref _mesh);
+			set => SetProperty(ref _mesh, value);
+		}
+
+		[Ordinal(41)] 
+		[RED("camera")] 
+		public CHandle<gameCameraComponent> Camera
+		{
+			get => GetProperty(ref _camera);
+			set => SetProperty(ref _camera, value);
+		}
+
+		[Ordinal(42)] 
+		[RED("isControlled")] 
+		public CBool IsControlled
+		{
+			get => GetProperty(ref _isControlled);
+			set => SetProperty(ref _isControlled, value);
+		}
+
+		[Ordinal(43)] 
+		[RED("cachedPuppetID")] 
+		public entEntityID CachedPuppetID
+		{
+			get => GetProperty(ref _cachedPuppetID);
+			set => SetProperty(ref _cachedPuppetID, value);
+		}
 
 		public CCTVCamera(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

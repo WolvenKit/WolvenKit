@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameMuppetControllersSnapshot : CVariable
 	{
-		[Ordinal(0)] [RED("controllers")] public CArray<gameMuppetControllerSnapshot> Controllers { get; set; }
+		private CArray<gameMuppetControllerSnapshot> _controllers;
+
+		[Ordinal(0)] 
+		[RED("controllers")] 
+		public CArray<gameMuppetControllerSnapshot> Controllers
+		{
+			get => GetProperty(ref _controllers);
+			set => SetProperty(ref _controllers, value);
+		}
 
 		public gameMuppetControllersSnapshot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

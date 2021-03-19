@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioKeyUiControlDictionary : audioInlinedAudioMetadata
 	{
-		[Ordinal(1)] [RED("entries")] public CArray<audioKeyUiControlPairDictionaryItem> Entries { get; set; }
-		[Ordinal(2)] [RED("entryType")] public CHandle<audioKeyUiControlPairDictionaryItem> EntryType { get; set; }
+		private CArray<audioKeyUiControlPairDictionaryItem> _entries;
+		private CHandle<audioKeyUiControlPairDictionaryItem> _entryType;
+
+		[Ordinal(1)] 
+		[RED("entries")] 
+		public CArray<audioKeyUiControlPairDictionaryItem> Entries
+		{
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("entryType")] 
+		public CHandle<audioKeyUiControlPairDictionaryItem> EntryType
+		{
+			get => GetProperty(ref _entryType);
+			set => SetProperty(ref _entryType, value);
+		}
 
 		public audioKeyUiControlDictionary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

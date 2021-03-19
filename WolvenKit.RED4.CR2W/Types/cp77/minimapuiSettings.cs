@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class minimapuiSettings : CVariable
 	{
-		[Ordinal(0)] [RED("showTime")] public CFloat ShowTime { get; set; }
-		[Ordinal(1)] [RED("hideTime")] public CFloat HideTime { get; set; }
+		private CFloat _showTime;
+		private CFloat _hideTime;
+
+		[Ordinal(0)] 
+		[RED("showTime")] 
+		public CFloat ShowTime
+		{
+			get => GetProperty(ref _showTime);
+			set => SetProperty(ref _showTime, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("hideTime")] 
+		public CFloat HideTime
+		{
+			get => GetProperty(ref _hideTime);
+			set => SetProperty(ref _hideTime, value);
+		}
 
 		public minimapuiSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

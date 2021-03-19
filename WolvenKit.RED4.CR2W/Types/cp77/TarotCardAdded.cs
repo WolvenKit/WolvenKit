@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TarotCardAdded : redEvent
 	{
-		[Ordinal(0)] [RED("imagePart")] public CName ImagePart { get; set; }
-		[Ordinal(1)] [RED("cardName")] public CString CardName { get; set; }
+		private CName _imagePart;
+		private CString _cardName;
+
+		[Ordinal(0)] 
+		[RED("imagePart")] 
+		public CName ImagePart
+		{
+			get => GetProperty(ref _imagePart);
+			set => SetProperty(ref _imagePart, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("cardName")] 
+		public CString CardName
+		{
+			get => GetProperty(ref _cardName);
+			set => SetProperty(ref _cardName, value);
+		}
 
 		public TarotCardAdded(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

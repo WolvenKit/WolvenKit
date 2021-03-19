@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class KeyBindings : CVariable
 	{
-		[Ordinal(0)] [RED("DPAD_UP")] public TweakDBID DPAD_UP { get; set; }
-		[Ordinal(1)] [RED("RB")] public TweakDBID RB { get; set; }
+		private TweakDBID _dPAD_UP;
+		private TweakDBID _rB;
+
+		[Ordinal(0)] 
+		[RED("DPAD_UP")] 
+		public TweakDBID DPAD_UP
+		{
+			get => GetProperty(ref _dPAD_UP);
+			set => SetProperty(ref _dPAD_UP, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("RB")] 
+		public TweakDBID RB
+		{
+			get => GetProperty(ref _rB);
+			set => SetProperty(ref _rB, value);
+		}
 
 		public KeyBindings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

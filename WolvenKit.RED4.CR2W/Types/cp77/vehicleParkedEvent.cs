@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class vehicleParkedEvent : redEvent
 	{
-		[Ordinal(0)] [RED("park")] public CBool Park { get; set; }
+		private CBool _park;
+
+		[Ordinal(0)] 
+		[RED("park")] 
+		public CBool Park
+		{
+			get => GetProperty(ref _park);
+			set => SetProperty(ref _park, value);
+		}
 
 		public vehicleParkedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

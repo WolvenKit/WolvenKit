@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class WeaponVendingMachine : VendingMachine
 	{
-		[Ordinal(97)] [RED("bigAdScreen")] public wCHandle<IWorldWidgetComponent> BigAdScreen { get; set; }
+		private wCHandle<IWorldWidgetComponent> _bigAdScreen;
+
+		[Ordinal(97)] 
+		[RED("bigAdScreen")] 
+		public wCHandle<IWorldWidgetComponent> BigAdScreen
+		{
+			get => GetProperty(ref _bigAdScreen);
+			set => SetProperty(ref _bigAdScreen, value);
+		}
 
 		public WeaponVendingMachine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

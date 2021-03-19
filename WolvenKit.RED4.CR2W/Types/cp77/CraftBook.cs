@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CraftBook : IScriptable
 	{
-		[Ordinal(0)] [RED("knownRecipes")] public CArray<ItemRecipe> KnownRecipes { get; set; }
-		[Ordinal(1)] [RED("owner")] public wCHandle<gameObject> Owner { get; set; }
+		private CArray<ItemRecipe> _knownRecipes;
+		private wCHandle<gameObject> _owner;
+
+		[Ordinal(0)] 
+		[RED("knownRecipes")] 
+		public CArray<ItemRecipe> KnownRecipes
+		{
+			get => GetProperty(ref _knownRecipes);
+			set => SetProperty(ref _knownRecipes, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("owner")] 
+		public wCHandle<gameObject> Owner
+		{
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
+		}
 
 		public CraftBook(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

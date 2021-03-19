@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VendorGameItemData : IScriptable
 	{
-		[Ordinal(0)] [RED("gameItemData")] public CHandle<gameItemData> GameItemData { get; set; }
-		[Ordinal(1)] [RED("itemStack")] public gameSItemStack ItemStack { get; set; }
+		private CHandle<gameItemData> _gameItemData;
+		private gameSItemStack _itemStack;
+
+		[Ordinal(0)] 
+		[RED("gameItemData")] 
+		public CHandle<gameItemData> GameItemData
+		{
+			get => GetProperty(ref _gameItemData);
+			set => SetProperty(ref _gameItemData, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("itemStack")] 
+		public gameSItemStack ItemStack
+		{
+			get => GetProperty(ref _itemStack);
+			set => SetProperty(ref _itemStack, value);
+		}
 
 		public VendorGameItemData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class drillMachineEvent : redEvent
 	{
-		[Ordinal(0)] [RED("newTargetDevice")] public wCHandle<gameObject> NewTargetDevice { get; set; }
-		[Ordinal(1)] [RED("newIsActive")] public CBool NewIsActive { get; set; }
+		private wCHandle<gameObject> _newTargetDevice;
+		private CBool _newIsActive;
+
+		[Ordinal(0)] 
+		[RED("newTargetDevice")] 
+		public wCHandle<gameObject> NewTargetDevice
+		{
+			get => GetProperty(ref _newTargetDevice);
+			set => SetProperty(ref _newTargetDevice, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("newIsActive")] 
+		public CBool NewIsActive
+		{
+			get => GetProperty(ref _newIsActive);
+			set => SetProperty(ref _newIsActive, value);
+		}
 
 		public drillMachineEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

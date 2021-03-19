@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnGameplayActionEvent : scnSceneEvent
 	{
-		[Ordinal(6)] [RED("performer")] public scnPerformerId Performer { get; set; }
-		[Ordinal(7)] [RED("gameplayActionData")] public CHandle<scnIGameplayActionData> GameplayActionData { get; set; }
+		private scnPerformerId _performer;
+		private CHandle<scnIGameplayActionData> _gameplayActionData;
+
+		[Ordinal(6)] 
+		[RED("performer")] 
+		public scnPerformerId Performer
+		{
+			get => GetProperty(ref _performer);
+			set => SetProperty(ref _performer, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("gameplayActionData")] 
+		public CHandle<scnIGameplayActionData> GameplayActionData
+		{
+			get => GetProperty(ref _gameplayActionData);
+			set => SetProperty(ref _gameplayActionData, value);
+		}
 
 		public scnGameplayActionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

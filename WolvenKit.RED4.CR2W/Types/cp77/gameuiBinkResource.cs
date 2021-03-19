@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiBinkResource : CVariable
 	{
-		[Ordinal(0)] [RED("video")] public raRef<Bink> Video { get; set; }
+		private raRef<Bink> _video;
+
+		[Ordinal(0)] 
+		[RED("video")] 
+		public raRef<Bink> Video
+		{
+			get => GetProperty(ref _video);
+			set => SetProperty(ref _video, value);
+		}
 
 		public gameuiBinkResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

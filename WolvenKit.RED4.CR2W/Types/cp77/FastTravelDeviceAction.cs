@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FastTravelDeviceAction : ActionBool
 	{
-		[Ordinal(25)] [RED("fastTravelPointData")] public CHandle<gameFastTravelPointData> FastTravelPointData { get; set; }
+		private CHandle<gameFastTravelPointData> _fastTravelPointData;
+
+		[Ordinal(25)] 
+		[RED("fastTravelPointData")] 
+		public CHandle<gameFastTravelPointData> FastTravelPointData
+		{
+			get => GetProperty(ref _fastTravelPointData);
+			set => SetProperty(ref _fastTravelPointData, value);
+		}
 
 		public FastTravelDeviceAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

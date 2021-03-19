@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkVirtualCompoundController : inkDiscreteNavigationController
 	{
-		[Ordinal(4)] [RED("ItemSelected")] public inkVirtualCompoundControllerCallback ItemSelected { get; set; }
-		[Ordinal(5)] [RED("ItemActivated")] public inkVirtualCompoundControllerCallback ItemActivated { get; set; }
+		private inkVirtualCompoundControllerCallback _itemSelected;
+		private inkVirtualCompoundControllerCallback _itemActivated;
+
+		[Ordinal(4)] 
+		[RED("ItemSelected")] 
+		public inkVirtualCompoundControllerCallback ItemSelected
+		{
+			get => GetProperty(ref _itemSelected);
+			set => SetProperty(ref _itemSelected, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("ItemActivated")] 
+		public inkVirtualCompoundControllerCallback ItemActivated
+		{
+			get => GetProperty(ref _itemActivated);
+			set => SetProperty(ref _itemActivated, value);
+		}
 
 		public inkVirtualCompoundController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

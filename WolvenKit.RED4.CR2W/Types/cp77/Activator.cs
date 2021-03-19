@@ -7,15 +7,87 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Activator : InteractiveMasterDevice
 	{
-		[Ordinal(93)] [RED("animFeature")] public CHandle<AnimFeature_SimpleDevice> AnimFeature { get; set; }
-		[Ordinal(94)] [RED("hitCount")] public CInt32 HitCount { get; set; }
-		[Ordinal(95)] [RED("meshComponent")] public CHandle<entMeshComponent> MeshComponent { get; set; }
-		[Ordinal(96)] [RED("meshAppearence")] public CName MeshAppearence { get; set; }
-		[Ordinal(97)] [RED("meshAppearenceBreaking")] public CName MeshAppearenceBreaking { get; set; }
-		[Ordinal(98)] [RED("meshAppearenceBroken")] public CName MeshAppearenceBroken { get; set; }
-		[Ordinal(99)] [RED("defaultDelay")] public CFloat DefaultDelay { get; set; }
-		[Ordinal(100)] [RED("yellowDelay")] public CFloat YellowDelay { get; set; }
-		[Ordinal(101)] [RED("redDelay")] public CFloat RedDelay { get; set; }
+		private CHandle<AnimFeature_SimpleDevice> _animFeature;
+		private CInt32 _hitCount;
+		private CHandle<entMeshComponent> _meshComponent;
+		private CName _meshAppearence;
+		private CName _meshAppearenceBreaking;
+		private CName _meshAppearenceBroken;
+		private CFloat _defaultDelay;
+		private CFloat _yellowDelay;
+		private CFloat _redDelay;
+
+		[Ordinal(93)] 
+		[RED("animFeature")] 
+		public CHandle<AnimFeature_SimpleDevice> AnimFeature
+		{
+			get => GetProperty(ref _animFeature);
+			set => SetProperty(ref _animFeature, value);
+		}
+
+		[Ordinal(94)] 
+		[RED("hitCount")] 
+		public CInt32 HitCount
+		{
+			get => GetProperty(ref _hitCount);
+			set => SetProperty(ref _hitCount, value);
+		}
+
+		[Ordinal(95)] 
+		[RED("meshComponent")] 
+		public CHandle<entMeshComponent> MeshComponent
+		{
+			get => GetProperty(ref _meshComponent);
+			set => SetProperty(ref _meshComponent, value);
+		}
+
+		[Ordinal(96)] 
+		[RED("meshAppearence")] 
+		public CName MeshAppearence
+		{
+			get => GetProperty(ref _meshAppearence);
+			set => SetProperty(ref _meshAppearence, value);
+		}
+
+		[Ordinal(97)] 
+		[RED("meshAppearenceBreaking")] 
+		public CName MeshAppearenceBreaking
+		{
+			get => GetProperty(ref _meshAppearenceBreaking);
+			set => SetProperty(ref _meshAppearenceBreaking, value);
+		}
+
+		[Ordinal(98)] 
+		[RED("meshAppearenceBroken")] 
+		public CName MeshAppearenceBroken
+		{
+			get => GetProperty(ref _meshAppearenceBroken);
+			set => SetProperty(ref _meshAppearenceBroken, value);
+		}
+
+		[Ordinal(99)] 
+		[RED("defaultDelay")] 
+		public CFloat DefaultDelay
+		{
+			get => GetProperty(ref _defaultDelay);
+			set => SetProperty(ref _defaultDelay, value);
+		}
+
+		[Ordinal(100)] 
+		[RED("yellowDelay")] 
+		public CFloat YellowDelay
+		{
+			get => GetProperty(ref _yellowDelay);
+			set => SetProperty(ref _yellowDelay, value);
+		}
+
+		[Ordinal(101)] 
+		[RED("redDelay")] 
+		public CFloat RedDelay
+		{
+			get => GetProperty(ref _redDelay);
+			set => SetProperty(ref _redDelay, value);
+		}
 
 		public Activator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

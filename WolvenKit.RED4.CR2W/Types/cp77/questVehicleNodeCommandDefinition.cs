@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questVehicleNodeCommandDefinition : questAICommandNodeBase
 	{
-		[Ordinal(2)] [RED("vehicle")] public gameEntityReference Vehicle { get; set; }
-		[Ordinal(3)] [RED("commandParams")] public CHandle<questVehicleCommandParams> CommandParams { get; set; }
+		private gameEntityReference _vehicle;
+		private CHandle<questVehicleCommandParams> _commandParams;
+
+		[Ordinal(2)] 
+		[RED("vehicle")] 
+		public gameEntityReference Vehicle
+		{
+			get => GetProperty(ref _vehicle);
+			set => SetProperty(ref _vehicle, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("commandParams")] 
+		public CHandle<questVehicleCommandParams> CommandParams
+		{
+			get => GetProperty(ref _commandParams);
+			set => SetProperty(ref _commandParams, value);
+		}
 
 		public questVehicleNodeCommandDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

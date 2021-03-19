@@ -34,11 +34,11 @@ namespace WolvenKit.RED4.CR2W.Types
         [Ordinal(4)] [REDBuffer(true)] public CUInt32 Alignment { get; set; }
         [Ordinal(5)] [REDBuffer(true)] public CByteArray Data { get; set; }
 
-        public string Elementtype { get; set; }
+        public string Elementtype => REDReflection.GetREDTypeString(typeof(T));
 
         //private List<CurvePoint<T>> Elements { get; set; } = new();
 
-        public override string REDType => $"multiChannelCurve:{Elementtype}";
+        public override string REDType => REDReflection.GetREDTypeString(GetType());
 
         public override void Read(BinaryReader file, uint size)
         {

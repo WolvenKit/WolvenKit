@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EffectExecutor_SlashEffect_Entry : CVariable
 	{
-		[Ordinal(0)] [RED("attackNumber")] public CInt32 AttackNumber { get; set; }
-		[Ordinal(1)] [RED("effectNames")] public CArray<CName> EffectNames { get; set; }
+		private CInt32 _attackNumber;
+		private CArray<CName> _effectNames;
+
+		[Ordinal(0)] 
+		[RED("attackNumber")] 
+		public CInt32 AttackNumber
+		{
+			get => GetProperty(ref _attackNumber);
+			set => SetProperty(ref _attackNumber, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("effectNames")] 
+		public CArray<CName> EffectNames
+		{
+			get => GetProperty(ref _effectNames);
+			set => SetProperty(ref _effectNames, value);
+		}
 
 		public EffectExecutor_SlashEffect_Entry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,12 +7,60 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkISystemRequestsHandler : IScriptable
 	{
-		[Ordinal(0)] [RED("SavesReady")] public inkSystemRequesResult SavesReady { get; set; }
-		[Ordinal(1)] [RED("SaveMetadataReady")] public inkSaveMetadataRequestResult SaveMetadataReady { get; set; }
-		[Ordinal(2)] [RED("SaveDeleted")] public inkDeleteRequestResult SaveDeleted { get; set; }
-		[Ordinal(3)] [RED("ServersSearchResult")] public inkSystemServerRequesResult ServersSearchResult { get; set; }
-		[Ordinal(4)] [RED("UserChanged")] public inkUserIdResult UserChanged { get; set; }
-		[Ordinal(5)] [RED("UserIdResult")] public inkUserIdResult UserIdResult { get; set; }
+		private inkSystemRequesResult _savesReady;
+		private inkSaveMetadataRequestResult _saveMetadataReady;
+		private inkDeleteRequestResult _saveDeleted;
+		private inkSystemServerRequesResult _serversSearchResult;
+		private inkUserIdResult _userChanged;
+		private inkUserIdResult _userIdResult;
+
+		[Ordinal(0)] 
+		[RED("SavesReady")] 
+		public inkSystemRequesResult SavesReady
+		{
+			get => GetProperty(ref _savesReady);
+			set => SetProperty(ref _savesReady, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("SaveMetadataReady")] 
+		public inkSaveMetadataRequestResult SaveMetadataReady
+		{
+			get => GetProperty(ref _saveMetadataReady);
+			set => SetProperty(ref _saveMetadataReady, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("SaveDeleted")] 
+		public inkDeleteRequestResult SaveDeleted
+		{
+			get => GetProperty(ref _saveDeleted);
+			set => SetProperty(ref _saveDeleted, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("ServersSearchResult")] 
+		public inkSystemServerRequesResult ServersSearchResult
+		{
+			get => GetProperty(ref _serversSearchResult);
+			set => SetProperty(ref _serversSearchResult, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("UserChanged")] 
+		public inkUserIdResult UserChanged
+		{
+			get => GetProperty(ref _userChanged);
+			set => SetProperty(ref _userChanged, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("UserIdResult")] 
+		public inkUserIdResult UserIdResult
+		{
+			get => GetProperty(ref _userIdResult);
+			set => SetProperty(ref _userIdResult, value);
+		}
 
 		public inkISystemRequestsHandler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

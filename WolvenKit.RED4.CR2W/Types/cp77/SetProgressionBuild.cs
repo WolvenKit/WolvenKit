@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetProgressionBuild : gamePlayerScriptableSystemRequest
 	{
-		[Ordinal(1)] [RED("buildType")] public CEnum<gamedataBuildType> BuildType { get; set; }
+		private CEnum<gamedataBuildType> _buildType;
+
+		[Ordinal(1)] 
+		[RED("buildType")] 
+		public CEnum<gamedataBuildType> BuildType
+		{
+			get => GetProperty(ref _buildType);
+			set => SetProperty(ref _buildType, value);
+		}
 
 		public SetProgressionBuild(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

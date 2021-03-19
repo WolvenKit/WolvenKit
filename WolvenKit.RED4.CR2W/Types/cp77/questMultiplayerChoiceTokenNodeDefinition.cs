@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questMultiplayerChoiceTokenNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		[Ordinal(2)] [RED("params")] public questMultiplayerChoiceTokenParams Params { get; set; }
+		private questMultiplayerChoiceTokenParams _params;
+
+		[Ordinal(2)] 
+		[RED("params")] 
+		public questMultiplayerChoiceTokenParams Params
+		{
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
+		}
 
 		public questMultiplayerChoiceTokenNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

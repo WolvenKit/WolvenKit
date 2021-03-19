@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_ParentTransform : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] [RED("mapping")] public CArray<animAnimTransformMappingEntry> Mapping { get; set; }
+		private CArray<animAnimTransformMappingEntry> _mapping;
+
+		[Ordinal(12)] 
+		[RED("mapping")] 
+		public CArray<animAnimTransformMappingEntry> Mapping
+		{
+			get => GetProperty(ref _mapping);
+			set => SetProperty(ref _mapping, value);
+		}
 
 		public animAnimNode_ParentTransform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

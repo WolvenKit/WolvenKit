@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamestateMachineeventBaseEvent : redEvent
 	{
-		[Ordinal(0)] [RED("id")] public CName Id { get; set; }
+		private CName _id;
+
+		[Ordinal(0)] 
+		[RED("id")] 
+		public CName Id
+		{
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
+		}
 
 		public gamestateMachineeventBaseEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

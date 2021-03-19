@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Jukebox : InteractiveDevice
 	{
-		[Ordinal(93)] [RED("uiComponentBig")] public wCHandle<IWorldWidgetComponent> UiComponentBig { get; set; }
+		private wCHandle<IWorldWidgetComponent> _uiComponentBig;
+
+		[Ordinal(93)] 
+		[RED("uiComponentBig")] 
+		public wCHandle<IWorldWidgetComponent> UiComponentBig
+		{
+			get => GetProperty(ref _uiComponentBig);
+			set => SetProperty(ref _uiComponentBig, value);
+		}
 
 		public Jukebox(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

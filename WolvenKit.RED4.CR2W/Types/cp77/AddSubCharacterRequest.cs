@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AddSubCharacterRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("subCharObject")] public wCHandle<ScriptedPuppet> SubCharObject { get; set; }
+		private wCHandle<ScriptedPuppet> _subCharObject;
+
+		[Ordinal(0)] 
+		[RED("subCharObject")] 
+		public wCHandle<ScriptedPuppet> SubCharObject
+		{
+			get => GetProperty(ref _subCharObject);
+			set => SetProperty(ref _subCharObject, value);
+		}
 
 		public AddSubCharacterRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,10 +7,42 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkMenuAccountLogicController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("playerId")] public inkTextWidgetReference PlayerId { get; set; }
-		[Ordinal(2)] [RED("changeAccountLabelTextRef")] public inkTextWidgetReference ChangeAccountLabelTextRef { get; set; }
-		[Ordinal(3)] [RED("inputDisplayControllerRef")] public inkWidgetReference InputDisplayControllerRef { get; set; }
-		[Ordinal(4)] [RED("changeAccountEnabled")] public CBool ChangeAccountEnabled { get; set; }
+		private inkTextWidgetReference _playerId;
+		private inkTextWidgetReference _changeAccountLabelTextRef;
+		private inkWidgetReference _inputDisplayControllerRef;
+		private CBool _changeAccountEnabled;
+
+		[Ordinal(1)] 
+		[RED("playerId")] 
+		public inkTextWidgetReference PlayerId
+		{
+			get => GetProperty(ref _playerId);
+			set => SetProperty(ref _playerId, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("changeAccountLabelTextRef")] 
+		public inkTextWidgetReference ChangeAccountLabelTextRef
+		{
+			get => GetProperty(ref _changeAccountLabelTextRef);
+			set => SetProperty(ref _changeAccountLabelTextRef, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("inputDisplayControllerRef")] 
+		public inkWidgetReference InputDisplayControllerRef
+		{
+			get => GetProperty(ref _inputDisplayControllerRef);
+			set => SetProperty(ref _inputDisplayControllerRef, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("changeAccountEnabled")] 
+		public CBool ChangeAccountEnabled
+		{
+			get => GetProperty(ref _changeAccountEnabled);
+			set => SetProperty(ref _changeAccountEnabled, value);
+		}
 
 		public inkMenuAccountLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SystemDeviceWidgetController : DeviceWidgetControllerBase
 	{
-		[Ordinal(10)] [RED("slavesConnectedCount")] public inkTextWidgetReference SlavesConnectedCount { get; set; }
+		private inkTextWidgetReference _slavesConnectedCount;
+
+		[Ordinal(10)] 
+		[RED("slavesConnectedCount")] 
+		public inkTextWidgetReference SlavesConnectedCount
+		{
+			get => GetProperty(ref _slavesConnectedCount);
+			set => SetProperty(ref _slavesConnectedCount, value);
+		}
 
 		public SystemDeviceWidgetController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

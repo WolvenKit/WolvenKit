@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class RemoveAllStatusEffectOfTypeEvent : redEvent
 	{
-		[Ordinal(0)] [RED("statusEffectType")] public CEnum<gamedataStatusEffectType> StatusEffectType { get; set; }
+		private CEnum<gamedataStatusEffectType> _statusEffectType;
+
+		[Ordinal(0)] 
+		[RED("statusEffectType")] 
+		public CEnum<gamedataStatusEffectType> StatusEffectType
+		{
+			get => GetProperty(ref _statusEffectType);
+			set => SetProperty(ref _statusEffectType, value);
+		}
 
 		public RemoveAllStatusEffectOfTypeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

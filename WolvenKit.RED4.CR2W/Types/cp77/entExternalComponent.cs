@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entExternalComponent : entIComponent
 	{
-		[Ordinal(3)] [RED("externalComponentName")] public CName ExternalComponentName { get; set; }
+		private CName _externalComponentName;
+
+		[Ordinal(3)] 
+		[RED("externalComponentName")] 
+		public CName ExternalComponentName
+		{
+			get => GetProperty(ref _externalComponentName);
+			set => SetProperty(ref _externalComponentName, value);
+		}
 
 		public entExternalComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

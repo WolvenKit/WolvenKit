@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamebbScriptID : CVariable
 	{
-		[Ordinal(0)] [RED("None")] public gamebbID None { get; set; }
+		private gamebbID _none;
+
+		[Ordinal(0)] 
+		[RED("None")] 
+		public gamebbID None
+		{
+			get => GetProperty(ref _none);
+			set => SetProperty(ref _none, value);
+		}
 
 		public gamebbScriptID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

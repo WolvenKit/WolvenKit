@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CheckStatusEffect : AIStatusEffectCondition
 	{
-		[Ordinal(0)] [RED("statusEffectID")] public TweakDBID StatusEffectID { get; set; }
+		private TweakDBID _statusEffectID;
+
+		[Ordinal(0)] 
+		[RED("statusEffectID")] 
+		public TweakDBID StatusEffectID
+		{
+			get => GetProperty(ref _statusEffectID);
+			set => SetProperty(ref _statusEffectID, value);
+		}
 
 		public CheckStatusEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

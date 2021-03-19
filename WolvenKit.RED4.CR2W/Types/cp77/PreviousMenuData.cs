@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PreviousMenuData : IScriptable
 	{
-		[Ordinal(0)] [RED("openMenuRequest")] public CHandle<OpenMenuRequest> OpenMenuRequest { get; set; }
+		private CHandle<OpenMenuRequest> _openMenuRequest;
+
+		[Ordinal(0)] 
+		[RED("openMenuRequest")] 
+		public CHandle<OpenMenuRequest> OpenMenuRequest
+		{
+			get => GetProperty(ref _openMenuRequest);
+			set => SetProperty(ref _openMenuRequest, value);
+		}
 
 		public PreviousMenuData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

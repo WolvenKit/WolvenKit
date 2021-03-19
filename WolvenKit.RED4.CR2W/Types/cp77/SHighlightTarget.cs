@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SHighlightTarget : CVariable
 	{
-		[Ordinal(0)] [RED("targetID")] public entEntityID TargetID { get; set; }
-		[Ordinal(1)] [RED("highlightType")] public CEnum<EFocusForcedHighlightType> HighlightType { get; set; }
+		private entEntityID _targetID;
+		private CEnum<EFocusForcedHighlightType> _highlightType;
+
+		[Ordinal(0)] 
+		[RED("targetID")] 
+		public entEntityID TargetID
+		{
+			get => GetProperty(ref _targetID);
+			set => SetProperty(ref _targetID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("highlightType")] 
+		public CEnum<EFocusForcedHighlightType> HighlightType
+		{
+			get => GetProperty(ref _highlightType);
+			set => SetProperty(ref _highlightType, value);
+		}
 
 		public SHighlightTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

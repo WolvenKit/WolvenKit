@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIVehicleCommand : AICommand
 	{
-		[Ordinal(4)] [RED("useKinematic")] public CBool UseKinematic { get; set; }
-		[Ordinal(5)] [RED("needDriver")] public CBool NeedDriver { get; set; }
+		private CBool _useKinematic;
+		private CBool _needDriver;
+
+		[Ordinal(4)] 
+		[RED("useKinematic")] 
+		public CBool UseKinematic
+		{
+			get => GetProperty(ref _useKinematic);
+			set => SetProperty(ref _useKinematic, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("needDriver")] 
+		public CBool NeedDriver
+		{
+			get => GetProperty(ref _needDriver);
+			set => SetProperty(ref _needDriver, value);
+		}
 
 		public AIVehicleCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

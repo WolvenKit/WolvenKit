@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioEditorSelectedMeleeWeapon : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("selectedWeaponConfigurationName")] public CName SelectedWeaponConfigurationName { get; set; }
+		private CName _selectedWeaponConfigurationName;
+
+		[Ordinal(1)] 
+		[RED("selectedWeaponConfigurationName")] 
+		public CName SelectedWeaponConfigurationName
+		{
+			get => GetProperty(ref _selectedWeaponConfigurationName);
+			set => SetProperty(ref _selectedWeaponConfigurationName, value);
+		}
 
 		public audioEditorSelectedMeleeWeapon(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

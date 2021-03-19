@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScannerNetworkLevel : ScannerChunk
 	{
-		[Ordinal(0)] [RED("networkLevel")] public CInt32 NetworkLevel { get; set; }
+		private CInt32 _networkLevel;
+
+		[Ordinal(0)] 
+		[RED("networkLevel")] 
+		public CInt32 NetworkLevel
+		{
+			get => GetProperty(ref _networkLevel);
+			set => SetProperty(ref _networkLevel, value);
+		}
 
 		public ScannerNetworkLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameGodModeSaveData : ISerializable
 	{
-		[Ordinal(0)] [RED("gods")] public CArray<gameGodModeSaveEntityData> Gods { get; set; }
+		private CArray<gameGodModeSaveEntityData> _gods;
+
+		[Ordinal(0)] 
+		[RED("gods")] 
+		public CArray<gameGodModeSaveEntityData> Gods
+		{
+			get => GetProperty(ref _gods);
+			set => SetProperty(ref _gods, value);
+		}
 
 		public gameGodModeSaveData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

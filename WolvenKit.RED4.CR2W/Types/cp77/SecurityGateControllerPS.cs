@@ -7,10 +7,42 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SecurityGateControllerPS : MasterControllerPS
 	{
-		[Ordinal(104)] [RED("securityGateDetectionProperties")] public SecurityGateDetectionProperties SecurityGateDetectionProperties { get; set; }
-		[Ordinal(105)] [RED("securityGateResponseProperties")] public SecurityGateResponseProperties SecurityGateResponseProperties { get; set; }
-		[Ordinal(106)] [RED("securityGateStatus")] public CEnum<ESecurityGateStatus> SecurityGateStatus { get; set; }
-		[Ordinal(107)] [RED("trespassersDataList")] public CArray<TrespasserEntry> TrespassersDataList { get; set; }
+		private SecurityGateDetectionProperties _securityGateDetectionProperties;
+		private SecurityGateResponseProperties _securityGateResponseProperties;
+		private CEnum<ESecurityGateStatus> _securityGateStatus;
+		private CArray<TrespasserEntry> _trespassersDataList;
+
+		[Ordinal(104)] 
+		[RED("securityGateDetectionProperties")] 
+		public SecurityGateDetectionProperties SecurityGateDetectionProperties
+		{
+			get => GetProperty(ref _securityGateDetectionProperties);
+			set => SetProperty(ref _securityGateDetectionProperties, value);
+		}
+
+		[Ordinal(105)] 
+		[RED("securityGateResponseProperties")] 
+		public SecurityGateResponseProperties SecurityGateResponseProperties
+		{
+			get => GetProperty(ref _securityGateResponseProperties);
+			set => SetProperty(ref _securityGateResponseProperties, value);
+		}
+
+		[Ordinal(106)] 
+		[RED("securityGateStatus")] 
+		public CEnum<ESecurityGateStatus> SecurityGateStatus
+		{
+			get => GetProperty(ref _securityGateStatus);
+			set => SetProperty(ref _securityGateStatus, value);
+		}
+
+		[Ordinal(107)] 
+		[RED("trespassersDataList")] 
+		public CArray<TrespasserEntry> TrespassersDataList
+		{
+			get => GetProperty(ref _trespassersDataList);
+			set => SetProperty(ref _trespassersDataList, value);
+		}
 
 		public SecurityGateControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

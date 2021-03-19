@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ThrowableWeaponObject : gameweaponObject
 	{
-		[Ordinal(57)] [RED("projectileComponent")] public CHandle<gameprojectileComponent> ProjectileComponent { get; set; }
-		[Ordinal(58)] [RED("weaponOwner")] public wCHandle<gameObject> WeaponOwner { get; set; }
+		private CHandle<gameprojectileComponent> _projectileComponent;
+		private wCHandle<gameObject> _weaponOwner;
+
+		[Ordinal(57)] 
+		[RED("projectileComponent")] 
+		public CHandle<gameprojectileComponent> ProjectileComponent
+		{
+			get => GetProperty(ref _projectileComponent);
+			set => SetProperty(ref _projectileComponent, value);
+		}
+
+		[Ordinal(58)] 
+		[RED("weaponOwner")] 
+		public wCHandle<gameObject> WeaponOwner
+		{
+			get => GetProperty(ref _weaponOwner);
+			set => SetProperty(ref _weaponOwner, value);
+		}
 
 		public ThrowableWeaponObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

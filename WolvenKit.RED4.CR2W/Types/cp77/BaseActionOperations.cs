@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BaseActionOperations : DeviceOperations
 	{
-		[Ordinal(2)] [RED("baseActionsOperations")] public CArray<SBaseActionOperationData> BaseActionsOperations { get; set; }
+		private CArray<SBaseActionOperationData> _baseActionsOperations;
+
+		[Ordinal(2)] 
+		[RED("baseActionsOperations")] 
+		public CArray<SBaseActionOperationData> BaseActionsOperations
+		{
+			get => GetProperty(ref _baseActionsOperations);
+			set => SetProperty(ref _baseActionsOperations, value);
+		}
 
 		public BaseActionOperations(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using WolvenKit.RED4.CR2W.Types;
@@ -17,22 +18,44 @@ namespace WolvenKit.RED4.CR2W.Reflection
     {
         #region Fields
 
-        private static readonly ConcurrentDictionary<Type, Lazy<IEnumerable<Member>>> MembersCache = new();
+        private static readonly ConcurrentDictionary<Type, Lazy<MemberSet>> MembersCache = new();
+        private static readonly ConcurrentDictionary<Member, Lazy<object[]>> AttributeCache = new();
 
         #endregion Fields
 
         #region Methods
 
+        public static CVariable GetPropertyByREDName(this CVariable cvar, string propertyName)
+        {
+            foreach (var member in GetMembers(cvar))
+            {
+                if (member.GetMemberInfo().MemberType != MemberTypes.Property)
+                {
+                    continue;
+                }
+
+                var attr = GetREDAttribute(member);
+                if (attr == null || attr.Name != propertyName)
+                {
+                    continue;
+                }
+
+                return (CVariable)cvar.accessor[cvar, member.Name];
+            }
+
+            return null;
+        }
+
         public static IEnumerable<Member> GetREDBuffers(this CVariable cvar) =>
             GetMembers(cvar)
-                .Where(p => p.GetMemberAttribute<REDBufferAttribute>() is not null)
-                .OrderBy(p => p.Ordinal);
+                .Where(p => GetREDAttribute(p) is REDBufferAttribute)
+                .OrderBy(GetOrdinal);
 
         public static IEnumerable<Member> GetREDMembers(this CVariable cvar, bool includeBuffers) =>
             GetMembers(cvar)
                 .Where(p =>
                 {
-                    var attr = p.GetMemberAttribute<REDAttribute>();
+                    var attr = GetREDAttribute(p);
                     if (attr is null)
                     {
                         return false;
@@ -45,11 +68,11 @@ namespace WolvenKit.RED4.CR2W.Reflection
 
                     return true;
                 })
-                .OrderBy(p => p.Ordinal);
+                .OrderBy(GetOrdinal);
 
         public static string GetREDNameString(Member item)
         {
-            var attribute = item.GetMemberAttribute<REDAttribute>();
+            var attribute = GetREDAttribute(item);
             if (attribute is null || string.IsNullOrWhiteSpace(attribute.Name))
             {
                 return item.Name;
@@ -83,12 +106,41 @@ namespace WolvenKit.RED4.CR2W.Reflection
                 _ => typename
             };
 
-        private static IEnumerable<Member> GetMembers(CVariable cvar) =>
-            MembersCache.GetOrAdd(cvar.GetType(), new Lazy<IEnumerable<Member>>(() => GetMembersInternal(cvar))).Value;
+        public static MemberSet GetMembers(CVariable cvar) =>
+            MembersCache.GetOrAdd(cvar.GetType(), new Lazy<MemberSet>(() => cvar.accessor.GetMembers())).Value;
 
-        private static IEnumerable<Member> GetMembersInternal(CVariable cvar) => cvar.accessor.GetMembers();
+        public static REDAttribute GetREDAttribute(Member member)
+        {
+            var attrs = GetMemberAttributes(member);
+            for (int i = 0; i < attrs.Length; i++)
+            {
+                if (attrs[i] is REDAttribute red)
+                {
+                    return red;
+                }
+            }
 
-        private static string GetREDTypeFroWkitType(string typename) =>
+            return null;
+        }
+
+        private static int GetOrdinal(Member member)
+        {
+            var attrs = GetMemberAttributes(member);
+            for (int i = 0; i < attrs.Length; i++)
+            {
+                if (attrs[i] is OrdinalAttribute ord)
+                {
+                    return ord.Ordinal;
+                }
+            }
+
+            return -1;
+        }
+
+        private static object[] GetMemberAttributes(Member member) =>
+            AttributeCache.GetOrAdd(member, new Lazy<object[]>(() => member.GetMemberInfo().GetCustomAttributes(false))).Value;
+
+        private static string GetREDTypeFromWkitType(string typename) =>
             typename switch
             {
                 "CUInt8" => "Uint8",
@@ -163,15 +215,24 @@ namespace WolvenKit.RED4.CR2W.Reflection
                     var v1 = flags.MoveNext() ? flags.Current : 0;
                     return $"static:{v1},{GetREDTypeString(genprop, flags)}";
                 }
+                if (gentype == typeof(curveData<>))
+                {
+                    return $"curveData:{GetREDTypeString(genprop, flags)}";
+                }
+                if (gentype == typeof(multiChannelCurve<>))
+                {
+                    return $"multiChannelCurve:{GetREDTypeString(genprop, flags)}";
+                }
                 if (gentype == typeof(CEnum<>))
                 {
+                    return GetREDTypeString(genprop, flags);
                 }
 
                 return type.GetPrettyGenericTypes();
             }
             else
             {
-                return GetREDTypeFroWkitType(type.Name);
+                return GetREDTypeFromWkitType(type.Name);
             }
         }
 

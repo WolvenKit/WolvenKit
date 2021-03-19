@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PlayerQuickhackData : CVariable
 	{
-		[Ordinal(0)] [RED("actionTweak")] public TweakDBID ActionTweak { get; set; }
-		[Ordinal(1)] [RED("actionPenetration")] public CFloat ActionPenetration { get; set; }
-		[Ordinal(2)] [RED("quality")] public CInt32 Quality { get; set; }
+		private TweakDBID _actionTweak;
+		private CFloat _actionPenetration;
+		private CInt32 _quality;
+
+		[Ordinal(0)] 
+		[RED("actionTweak")] 
+		public TweakDBID ActionTweak
+		{
+			get => GetProperty(ref _actionTweak);
+			set => SetProperty(ref _actionTweak, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("actionPenetration")] 
+		public CFloat ActionPenetration
+		{
+			get => GetProperty(ref _actionPenetration);
+			set => SetProperty(ref _actionPenetration, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("quality")] 
+		public CInt32 Quality
+		{
+			get => GetProperty(ref _quality);
+			set => SetProperty(ref _quality, value);
+		}
 
 		public PlayerQuickhackData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIHostLeftSquad : AIAIEvent
 	{
-		[Ordinal(2)] [RED("squadInterface")] public wCHandle<AISquadScriptInterface> SquadInterface { get; set; }
+		private wCHandle<AISquadScriptInterface> _squadInterface;
+
+		[Ordinal(2)] 
+		[RED("squadInterface")] 
+		public wCHandle<AISquadScriptInterface> SquadInterface
+		{
+			get => GetProperty(ref _squadInterface);
+			set => SetProperty(ref _squadInterface, value);
+		}
 
 		public AIHostLeftSquad(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

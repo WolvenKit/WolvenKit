@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PlayerTargetChangedRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("playerTarget")] public entEntityID PlayerTarget { get; set; }
+		private entEntityID _playerTarget;
+
+		[Ordinal(0)] 
+		[RED("playerTarget")] 
+		public entEntityID PlayerTarget
+		{
+			get => GetProperty(ref _playerTarget);
+			set => SetProperty(ref _playerTarget, value);
+		}
 
 		public PlayerTargetChangedRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

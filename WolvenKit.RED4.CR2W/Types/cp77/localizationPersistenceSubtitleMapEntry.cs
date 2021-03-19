@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class localizationPersistenceSubtitleMapEntry : CVariable
 	{
-		[Ordinal(0)] [RED("subtitleGroup")] public CName SubtitleGroup { get; set; }
-		[Ordinal(1)] [RED("subtitleFile")] public raRef<JsonResource> SubtitleFile { get; set; }
+		private CName _subtitleGroup;
+		private raRef<JsonResource> _subtitleFile;
+
+		[Ordinal(0)] 
+		[RED("subtitleGroup")] 
+		public CName SubtitleGroup
+		{
+			get => GetProperty(ref _subtitleGroup);
+			set => SetProperty(ref _subtitleGroup, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("subtitleFile")] 
+		public raRef<JsonResource> SubtitleFile
+		{
+			get => GetProperty(ref _subtitleFile);
+			set => SetProperty(ref _subtitleFile, value);
+		}
 
 		public localizationPersistenceSubtitleMapEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

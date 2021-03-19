@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetBooleanArgumentWhenActive : AIbehaviortaskScript
 	{
-		[Ordinal(0)] [RED("booleanArgument")] public CName BooleanArgument { get; set; }
+		private CName _booleanArgument;
+
+		[Ordinal(0)] 
+		[RED("booleanArgument")] 
+		public CName BooleanArgument
+		{
+			get => GetProperty(ref _booleanArgument);
+			set => SetProperty(ref _booleanArgument, value);
+		}
 
 		public SetBooleanArgumentWhenActive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

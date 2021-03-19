@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldStreamingQueryDataResource : CResource
 	{
-		[Ordinal(1)] [RED("roadDatas")] public CArray<worldStreamingQueryRoadData> RoadDatas { get; set; }
-		[Ordinal(2)] [RED("connectedRoadDataIndices")] public CArray<CUInt16> ConnectedRoadDataIndices { get; set; }
+		private CArray<worldStreamingQueryRoadData> _roadDatas;
+		private CArray<CUInt16> _connectedRoadDataIndices;
+
+		[Ordinal(1)] 
+		[RED("roadDatas")] 
+		public CArray<worldStreamingQueryRoadData> RoadDatas
+		{
+			get => GetProperty(ref _roadDatas);
+			set => SetProperty(ref _roadDatas, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("connectedRoadDataIndices")] 
+		public CArray<CUInt16> ConnectedRoadDataIndices
+		{
+			get => GetProperty(ref _connectedRoadDataIndices);
+			set => SetProperty(ref _connectedRoadDataIndices, value);
+		}
 
 		public worldStreamingQueryDataResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

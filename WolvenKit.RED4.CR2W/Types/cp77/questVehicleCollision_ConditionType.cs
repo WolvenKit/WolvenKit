@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questVehicleCollision_ConditionType : questIVehicleConditionType
 	{
-		[Ordinal(0)] [RED("magnitude")] public CEnum<questImpulseMagnitude> Magnitude { get; set; }
+		private CEnum<questImpulseMagnitude> _magnitude;
+
+		[Ordinal(0)] 
+		[RED("magnitude")] 
+		public CEnum<questImpulseMagnitude> Magnitude
+		{
+			get => GetProperty(ref _magnitude);
+			set => SetProperty(ref _magnitude, value);
+		}
 
 		public questVehicleCollision_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

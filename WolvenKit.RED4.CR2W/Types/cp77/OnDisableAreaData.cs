@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class OnDisableAreaData : CVariable
 	{
-		[Ordinal(0)] [RED("agent")] public gamePersistentID Agent { get; set; }
-		[Ordinal(1)] [RED("remainingAreas")] public CArray<CHandle<SecurityAreaControllerPS>> RemainingAreas { get; set; }
+		private gamePersistentID _agent;
+		private CArray<CHandle<SecurityAreaControllerPS>> _remainingAreas;
+
+		[Ordinal(0)] 
+		[RED("agent")] 
+		public gamePersistentID Agent
+		{
+			get => GetProperty(ref _agent);
+			set => SetProperty(ref _agent, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("remainingAreas")] 
+		public CArray<CHandle<SecurityAreaControllerPS>> RemainingAreas
+		{
+			get => GetProperty(ref _remainingAreas);
+			set => SetProperty(ref _remainingAreas, value);
+		}
 
 		public OnDisableAreaData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

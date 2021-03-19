@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetDebugSceneThrehsold : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("newThreshold")] public CInt32 NewThreshold { get; set; }
+		private CInt32 _newThreshold;
+
+		[Ordinal(0)] 
+		[RED("newThreshold")] 
+		public CInt32 NewThreshold
+		{
+			get => GetProperty(ref _newThreshold);
+			set => SetProperty(ref _newThreshold, value);
+		}
 
 		public SetDebugSceneThrehsold(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

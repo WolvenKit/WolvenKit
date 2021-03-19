@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldTrafficPersistentResource : resStreamedResource
 	{
-		[Ordinal(1)] [RED("data")] public worldTrafficPersistentData Data { get; set; }
+		private worldTrafficPersistentData _data;
+
+		[Ordinal(1)] 
+		[RED("data")] 
+		public worldTrafficPersistentData Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
 
 		public worldTrafficPersistentResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

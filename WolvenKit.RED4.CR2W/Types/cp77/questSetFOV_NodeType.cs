@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questSetFOV_NodeType : questISceneManagerNodeType
 	{
-		[Ordinal(0)] [RED("FOV")] public CFloat FOV { get; set; }
+		private CFloat _fOV;
+
+		[Ordinal(0)] 
+		[RED("FOV")] 
+		public CFloat FOV
+		{
+			get => GetProperty(ref _fOV);
+			set => SetProperty(ref _fOV, value);
+		}
 
 		public questSetFOV_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class netEntityAttachmentInterface : CVariable
 	{
-		[Ordinal(0)] [RED("time")] public netTime Time { get; set; }
+		private netTime _time;
+
+		[Ordinal(0)] 
+		[RED("time")] 
+		public netTime Time
+		{
+			get => GetProperty(ref _time);
+			set => SetProperty(ref _time, value);
+		}
 
 		public netEntityAttachmentInterface(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

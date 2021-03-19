@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimFeature_DeviceWorkspot : animAnimFeature
 	{
-		[Ordinal(0)] [RED("e3_lockInReferencePose")] public CBool E3_lockInReferencePose { get; set; }
+		private CBool _e3_lockInReferencePose;
+
+		[Ordinal(0)] 
+		[RED("e3_lockInReferencePose")] 
+		public CBool E3_lockInReferencePose
+		{
+			get => GetProperty(ref _e3_lockInReferencePose);
+			set => SetProperty(ref _e3_lockInReferencePose, value);
+		}
 
 		public AnimFeature_DeviceWorkspot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

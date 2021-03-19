@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SlidingLadderControllerPS : BaseAnimatedDeviceControllerPS
 	{
-		[Ordinal(108)] [RED("isShootable")] public CBool IsShootable { get; set; }
-		[Ordinal(109)] [RED("animationTime")] public CFloat AnimationTime { get; set; }
+		private CBool _isShootable;
+		private CFloat _animationTime;
+
+		[Ordinal(108)] 
+		[RED("isShootable")] 
+		public CBool IsShootable
+		{
+			get => GetProperty(ref _isShootable);
+			set => SetProperty(ref _isShootable, value);
+		}
+
+		[Ordinal(109)] 
+		[RED("animationTime")] 
+		public CFloat AnimationTime
+		{
+			get => GetProperty(ref _animationTime);
+			set => SetProperty(ref _animationTime, value);
+		}
 
 		public SlidingLadderControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

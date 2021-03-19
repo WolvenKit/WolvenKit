@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldDebugColoring_SameResourceName : worldEditorDebugColoringSettings
 	{
-		[Ordinal(0)] [RED("alpha")] public CUInt8 Alpha { get; set; }
+		private CUInt8 _alpha;
+
+		[Ordinal(0)] 
+		[RED("alpha")] 
+		public CUInt8 Alpha
+		{
+			get => GetProperty(ref _alpha);
+			set => SetProperty(ref _alpha, value);
+		}
 
 		public worldDebugColoring_SameResourceName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIScanTargetCommand : AICommand
 	{
-		[Ordinal(4)] [RED("targetPuppetRef")] public gameEntityReference TargetPuppetRef { get; set; }
+		private gameEntityReference _targetPuppetRef;
+
+		[Ordinal(4)] 
+		[RED("targetPuppetRef")] 
+		public gameEntityReference TargetPuppetRef
+		{
+			get => GetProperty(ref _targetPuppetRef);
+			set => SetProperty(ref _targetPuppetRef, value);
+		}
 
 		public AIScanTargetCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

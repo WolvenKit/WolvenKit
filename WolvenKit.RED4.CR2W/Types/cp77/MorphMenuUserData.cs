@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MorphMenuUserData : IScriptable
 	{
-		[Ordinal(0)] [RED("optionsListInitialized")] public CBool OptionsListInitialized { get; set; }
+		private CBool _optionsListInitialized;
+
+		[Ordinal(0)] 
+		[RED("optionsListInitialized")] 
+		public CBool OptionsListInitialized
+		{
+			get => GetProperty(ref _optionsListInitialized);
+			set => SetProperty(ref _optionsListInitialized, value);
+		}
 
 		public MorphMenuUserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

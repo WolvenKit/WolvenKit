@@ -7,10 +7,42 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SoundSystemControllerPS : MasterControllerPS
 	{
-		[Ordinal(104)] [RED("defaultAction")] public CInt32 DefaultAction { get; set; }
-		[Ordinal(105)] [RED("soundSystemSettings")] public CArray<SoundSystemSettings> SoundSystemSettings { get; set; }
-		[Ordinal(106)] [RED("currentEvent")] public CHandle<ChangeMusicAction> CurrentEvent { get; set; }
-		[Ordinal(107)] [RED("cachedEvent")] public CHandle<ChangeMusicAction> CachedEvent { get; set; }
+		private CInt32 _defaultAction;
+		private CArray<SoundSystemSettings> _soundSystemSettings;
+		private CHandle<ChangeMusicAction> _currentEvent;
+		private CHandle<ChangeMusicAction> _cachedEvent;
+
+		[Ordinal(104)] 
+		[RED("defaultAction")] 
+		public CInt32 DefaultAction
+		{
+			get => GetProperty(ref _defaultAction);
+			set => SetProperty(ref _defaultAction, value);
+		}
+
+		[Ordinal(105)] 
+		[RED("soundSystemSettings")] 
+		public CArray<SoundSystemSettings> SoundSystemSettings
+		{
+			get => GetProperty(ref _soundSystemSettings);
+			set => SetProperty(ref _soundSystemSettings, value);
+		}
+
+		[Ordinal(106)] 
+		[RED("currentEvent")] 
+		public CHandle<ChangeMusicAction> CurrentEvent
+		{
+			get => GetProperty(ref _currentEvent);
+			set => SetProperty(ref _currentEvent, value);
+		}
+
+		[Ordinal(107)] 
+		[RED("cachedEvent")] 
+		public CHandle<ChangeMusicAction> CachedEvent
+		{
+			get => GetProperty(ref _cachedEvent);
+			set => SetProperty(ref _cachedEvent, value);
+		}
 
 		public SoundSystemControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

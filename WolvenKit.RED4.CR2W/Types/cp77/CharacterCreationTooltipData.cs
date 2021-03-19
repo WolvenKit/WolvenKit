@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CharacterCreationTooltipData : MessageTooltipData
 	{
-		[Ordinal(4)] [RED("attribiuteLevel")] public CString AttribiuteLevel { get; set; }
-		[Ordinal(5)] [RED("maxedOrMinimumLabelText")] public CString MaxedOrMinimumLabelText { get; set; }
+		private CString _attribiuteLevel;
+		private CString _maxedOrMinimumLabelText;
+
+		[Ordinal(4)] 
+		[RED("attribiuteLevel")] 
+		public CString AttribiuteLevel
+		{
+			get => GetProperty(ref _attribiuteLevel);
+			set => SetProperty(ref _attribiuteLevel, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("maxedOrMinimumLabelText")] 
+		public CString MaxedOrMinimumLabelText
+		{
+			get => GetProperty(ref _maxedOrMinimumLabelText);
+			set => SetProperty(ref _maxedOrMinimumLabelText, value);
+		}
 
 		public CharacterCreationTooltipData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

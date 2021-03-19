@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class QuickHackScreenOpen : redEvent
 	{
-		[Ordinal(0)] [RED("setToOpen")] public CBool SetToOpen { get; set; }
+		private CBool _setToOpen;
+
+		[Ordinal(0)] 
+		[RED("setToOpen")] 
+		public CBool SetToOpen
+		{
+			get => GetProperty(ref _setToOpen);
+			set => SetProperty(ref _setToOpen, value);
+		}
 
 		public QuickHackScreenOpen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

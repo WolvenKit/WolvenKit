@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MeleeBlockEvents : MeleeEventsTransition
 	{
-		[Ordinal(0)] [RED("blockStatFlag")] public CHandle<gameStatModifierData> BlockStatFlag { get; set; }
+		private CHandle<gameStatModifierData> _blockStatFlag;
+
+		[Ordinal(0)] 
+		[RED("blockStatFlag")] 
+		public CHandle<gameStatModifierData> BlockStatFlag
+		{
+			get => GetProperty(ref _blockStatFlag);
+			set => SetProperty(ref _blockStatFlag, value);
+		}
 
 		public MeleeBlockEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

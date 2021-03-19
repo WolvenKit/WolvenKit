@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CacheStatusEffectFXEvent : redEvent
 	{
-		[Ordinal(0)] [RED("vfxToCache")] public CArray<wCHandle<gamedataStatusEffectFX_Record>> VfxToCache { get; set; }
-		[Ordinal(1)] [RED("sfxToCache")] public CArray<wCHandle<gamedataStatusEffectFX_Record>> SfxToCache { get; set; }
+		private CArray<wCHandle<gamedataStatusEffectFX_Record>> _vfxToCache;
+		private CArray<wCHandle<gamedataStatusEffectFX_Record>> _sfxToCache;
+
+		[Ordinal(0)] 
+		[RED("vfxToCache")] 
+		public CArray<wCHandle<gamedataStatusEffectFX_Record>> VfxToCache
+		{
+			get => GetProperty(ref _vfxToCache);
+			set => SetProperty(ref _vfxToCache, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("sfxToCache")] 
+		public CArray<wCHandle<gamedataStatusEffectFX_Record>> SfxToCache
+		{
+			get => GetProperty(ref _sfxToCache);
+			set => SetProperty(ref _sfxToCache, value);
+		}
 
 		public CacheStatusEffectFXEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

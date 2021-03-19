@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PlayerVisionModeControllerInputActiveFlags : CVariable
 	{
-		[Ordinal(0)] [RED("buttonHold")] public CBool ButtonHold { get; set; }
-		[Ordinal(1)] [RED("buttonToggle")] public CBool ButtonToggle { get; set; }
+		private CBool _buttonHold;
+		private CBool _buttonToggle;
+
+		[Ordinal(0)] 
+		[RED("buttonHold")] 
+		public CBool ButtonHold
+		{
+			get => GetProperty(ref _buttonHold);
+			set => SetProperty(ref _buttonHold, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("buttonToggle")] 
+		public CBool ButtonToggle
+		{
+			get => GetProperty(ref _buttonToggle);
+			set => SetProperty(ref _buttonToggle, value);
+		}
 
 		public PlayerVisionModeControllerInputActiveFlags(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

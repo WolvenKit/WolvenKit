@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GlobalLightOverrideAreaSettings : IAreaSettings
 	{
-		[Ordinal(2)] [RED("color")] public curveData<HDRColor> Color { get; set; }
-		[Ordinal(3)] [RED("lightAzimuth")] public CFloat LightAzimuth { get; set; }
-		[Ordinal(4)] [RED("lightElevation")] public CFloat LightElevation { get; set; }
+		private curveData<HDRColor> _color;
+		private CFloat _lightAzimuth;
+		private CFloat _lightElevation;
+
+		[Ordinal(2)] 
+		[RED("color")] 
+		public curveData<HDRColor> Color
+		{
+			get => GetProperty(ref _color);
+			set => SetProperty(ref _color, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("lightAzimuth")] 
+		public CFloat LightAzimuth
+		{
+			get => GetProperty(ref _lightAzimuth);
+			set => SetProperty(ref _lightAzimuth, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("lightElevation")] 
+		public CFloat LightElevation
+		{
+			get => GetProperty(ref _lightElevation);
+			set => SetProperty(ref _lightElevation, value);
+		}
 
 		public GlobalLightOverrideAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class physicsColliderMesh_ : physicsICollider
 	{
-		[Ordinal(8)] [RED("faceMaterials")] public CArray<CName> FaceMaterials { get; set; }
-		[Ordinal(9)] [RED("compiledGeometryBuffer")] public DataBuffer CompiledGeometryBuffer { get; set; }
+		private CArray<CName> _faceMaterials;
+		private DataBuffer _compiledGeometryBuffer;
+
+		[Ordinal(8)] 
+		[RED("faceMaterials")] 
+		public CArray<CName> FaceMaterials
+		{
+			get => GetProperty(ref _faceMaterials);
+			set => SetProperty(ref _faceMaterials, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("compiledGeometryBuffer")] 
+		public DataBuffer CompiledGeometryBuffer
+		{
+			get => GetProperty(ref _compiledGeometryBuffer);
+			set => SetProperty(ref _compiledGeometryBuffer, value);
+		}
 
 		public physicsColliderMesh_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questDropItemFromSlot_NodeType : questIItemManagerNodeType
 	{
-		[Ordinal(0)] [RED("params")] public CArray<questDropItemFromSlot_NodeTypeParams> Params { get; set; }
+		private CArray<questDropItemFromSlot_NodeTypeParams> _params;
+
+		[Ordinal(0)] 
+		[RED("params")] 
+		public CArray<questDropItemFromSlot_NodeTypeParams> Params
+		{
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
+		}
 
 		public questDropItemFromSlot_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

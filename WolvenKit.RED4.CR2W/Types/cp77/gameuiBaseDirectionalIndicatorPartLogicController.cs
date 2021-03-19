@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiBaseDirectionalIndicatorPartLogicController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("defaultForwardFovRange")] public CFloat DefaultForwardFovRange { get; set; }
-		[Ordinal(2)] [RED("adjustedForwardFovRange")] public CFloat AdjustedForwardFovRange { get; set; }
+		private CFloat _defaultForwardFovRange;
+		private CFloat _adjustedForwardFovRange;
+
+		[Ordinal(1)] 
+		[RED("defaultForwardFovRange")] 
+		public CFloat DefaultForwardFovRange
+		{
+			get => GetProperty(ref _defaultForwardFovRange);
+			set => SetProperty(ref _defaultForwardFovRange, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("adjustedForwardFovRange")] 
+		public CFloat AdjustedForwardFovRange
+		{
+			get => GetProperty(ref _adjustedForwardFovRange);
+			set => SetProperty(ref _adjustedForwardFovRange, value);
+		}
 
 		public gameuiBaseDirectionalIndicatorPartLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimFeature_DroneStateAnimationData : animAnimFeature
 	{
-		[Ordinal(0)] [RED("statePose")] public CInt32 StatePose { get; set; }
+		private CInt32 _statePose;
+
+		[Ordinal(0)] 
+		[RED("statePose")] 
+		public CInt32 StatePose
+		{
+			get => GetProperty(ref _statePose);
+			set => SetProperty(ref _statePose, value);
+		}
 
 		public AnimFeature_DroneStateAnimationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

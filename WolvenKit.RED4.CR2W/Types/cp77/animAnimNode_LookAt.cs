@@ -7,13 +7,69 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_LookAt : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] [RED("transform")] public animTransformIndex Transform { get; set; }
-		[Ordinal(13)] [RED("forwardAxis")] public CEnum<animAxis> ForwardAxis { get; set; }
-		[Ordinal(14)] [RED("useLimits")] public CBool UseLimits { get; set; }
-		[Ordinal(15)] [RED("limitAxis")] public CEnum<animAxis> LimitAxis { get; set; }
-		[Ordinal(16)] [RED("limitAngle")] public CFloat LimitAngle { get; set; }
-		[Ordinal(17)] [RED("targetNode")] public animVectorLink TargetNode { get; set; }
-		[Ordinal(18)] [RED("weightNode")] public animFloatLink WeightNode { get; set; }
+		private animTransformIndex _transform;
+		private CEnum<animAxis> _forwardAxis;
+		private CBool _useLimits;
+		private CEnum<animAxis> _limitAxis;
+		private CFloat _limitAngle;
+		private animVectorLink _targetNode;
+		private animFloatLink _weightNode;
+
+		[Ordinal(12)] 
+		[RED("transform")] 
+		public animTransformIndex Transform
+		{
+			get => GetProperty(ref _transform);
+			set => SetProperty(ref _transform, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("forwardAxis")] 
+		public CEnum<animAxis> ForwardAxis
+		{
+			get => GetProperty(ref _forwardAxis);
+			set => SetProperty(ref _forwardAxis, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("useLimits")] 
+		public CBool UseLimits
+		{
+			get => GetProperty(ref _useLimits);
+			set => SetProperty(ref _useLimits, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("limitAxis")] 
+		public CEnum<animAxis> LimitAxis
+		{
+			get => GetProperty(ref _limitAxis);
+			set => SetProperty(ref _limitAxis, value);
+		}
+
+		[Ordinal(16)] 
+		[RED("limitAngle")] 
+		public CFloat LimitAngle
+		{
+			get => GetProperty(ref _limitAngle);
+			set => SetProperty(ref _limitAngle, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("targetNode")] 
+		public animVectorLink TargetNode
+		{
+			get => GetProperty(ref _targetNode);
+			set => SetProperty(ref _targetNode, value);
+		}
+
+		[Ordinal(18)] 
+		[RED("weightNode")] 
+		public animFloatLink WeightNode
+		{
+			get => GetProperty(ref _weightNode);
+			set => SetProperty(ref _weightNode, value);
+		}
 
 		public animAnimNode_LookAt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

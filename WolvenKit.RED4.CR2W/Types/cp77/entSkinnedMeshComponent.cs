@@ -7,17 +7,105 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entSkinnedMeshComponent : entISkinTargetComponent
 	{
-		[Ordinal(10)] [RED("mesh")] public raRef<CMesh> Mesh { get; set; }
-		[Ordinal(11)] [RED("meshAppearance")] public CName MeshAppearance { get; set; }
-		[Ordinal(12)] [RED("castShadows")] public CBool CastShadows { get; set; }
-		[Ordinal(13)] [RED("castLocalShadows")] public CBool CastLocalShadows { get; set; }
-		[Ordinal(14)] [RED("acceptDismemberment")] public CBool AcceptDismemberment { get; set; }
-		[Ordinal(15)] [RED("chunkMask")] public CUInt64 ChunkMask { get; set; }
-		[Ordinal(16)] [RED("renderingPlaneAnimationParam")] public CName RenderingPlaneAnimationParam { get; set; }
-		[Ordinal(17)] [RED("visibilityAnimationParam")] public CName VisibilityAnimationParam { get; set; }
-		[Ordinal(18)] [RED("isEnabled")] public CBool IsEnabled { get; set; }
-		[Ordinal(19)] [RED("LODMode")] public CEnum<entMeshComponentLODMode> LODMode { get; set; }
-		[Ordinal(20)] [RED("useProxyMeshAsShadowMesh")] public CBool UseProxyMeshAsShadowMesh { get; set; }
+		private raRef<CMesh> _mesh;
+		private CName _meshAppearance;
+		private CBool _castShadows;
+		private CBool _castLocalShadows;
+		private CBool _acceptDismemberment;
+		private CUInt64 _chunkMask;
+		private CName _renderingPlaneAnimationParam;
+		private CName _visibilityAnimationParam;
+		private CBool _isEnabled;
+		private CEnum<entMeshComponentLODMode> _lODMode;
+		private CBool _useProxyMeshAsShadowMesh;
+
+		[Ordinal(10)] 
+		[RED("mesh")] 
+		public raRef<CMesh> Mesh
+		{
+			get => GetProperty(ref _mesh);
+			set => SetProperty(ref _mesh, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("meshAppearance")] 
+		public CName MeshAppearance
+		{
+			get => GetProperty(ref _meshAppearance);
+			set => SetProperty(ref _meshAppearance, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("castShadows")] 
+		public CBool CastShadows
+		{
+			get => GetProperty(ref _castShadows);
+			set => SetProperty(ref _castShadows, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("castLocalShadows")] 
+		public CBool CastLocalShadows
+		{
+			get => GetProperty(ref _castLocalShadows);
+			set => SetProperty(ref _castLocalShadows, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("acceptDismemberment")] 
+		public CBool AcceptDismemberment
+		{
+			get => GetProperty(ref _acceptDismemberment);
+			set => SetProperty(ref _acceptDismemberment, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("chunkMask")] 
+		public CUInt64 ChunkMask
+		{
+			get => GetProperty(ref _chunkMask);
+			set => SetProperty(ref _chunkMask, value);
+		}
+
+		[Ordinal(16)] 
+		[RED("renderingPlaneAnimationParam")] 
+		public CName RenderingPlaneAnimationParam
+		{
+			get => GetProperty(ref _renderingPlaneAnimationParam);
+			set => SetProperty(ref _renderingPlaneAnimationParam, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("visibilityAnimationParam")] 
+		public CName VisibilityAnimationParam
+		{
+			get => GetProperty(ref _visibilityAnimationParam);
+			set => SetProperty(ref _visibilityAnimationParam, value);
+		}
+
+		[Ordinal(18)] 
+		[RED("isEnabled")] 
+		public CBool IsEnabled
+		{
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
+		}
+
+		[Ordinal(19)] 
+		[RED("LODMode")] 
+		public CEnum<entMeshComponentLODMode> LODMode
+		{
+			get => GetProperty(ref _lODMode);
+			set => SetProperty(ref _lODMode, value);
+		}
+
+		[Ordinal(20)] 
+		[RED("useProxyMeshAsShadowMesh")] 
+		public CBool UseProxyMeshAsShadowMesh
+		{
+			get => GetProperty(ref _useProxyMeshAsShadowMesh);
+			set => SetProperty(ref _useProxyMeshAsShadowMesh, value);
+		}
 
 		public entSkinnedMeshComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

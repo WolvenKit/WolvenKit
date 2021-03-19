@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioUiSpecificControlSettingsMap : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("specificControlSettingsMatrix")] public CArray<audioUiSpecificControlSettingsMapItem> SpecificControlSettingsMatrix { get; set; }
+		private CArray<audioUiSpecificControlSettingsMapItem> _specificControlSettingsMatrix;
+
+		[Ordinal(1)] 
+		[RED("specificControlSettingsMatrix")] 
+		public CArray<audioUiSpecificControlSettingsMapItem> SpecificControlSettingsMatrix
+		{
+			get => GetProperty(ref _specificControlSettingsMatrix);
+			set => SetProperty(ref _specificControlSettingsMatrix, value);
+		}
 
 		public audioUiSpecificControlSettingsMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

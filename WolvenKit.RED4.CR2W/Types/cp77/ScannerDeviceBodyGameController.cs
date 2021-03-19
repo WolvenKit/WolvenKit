@@ -7,14 +7,78 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScannerDeviceBodyGameController : BaseChunkGameController
 	{
-		[Ordinal(5)] [RED("networkStatusText")] public inkTextWidgetReference NetworkStatusText { get; set; }
-		[Ordinal(6)] [RED("deviceAuthorizationText")] public inkTextWidgetReference DeviceAuthorizationText { get; set; }
-		[Ordinal(7)] [RED("deviceAuthorizationRow")] public inkCompoundWidgetReference DeviceAuthorizationRow { get; set; }
-		[Ordinal(8)] [RED("networkStatusRow")] public inkCompoundWidgetReference NetworkStatusRow { get; set; }
-		[Ordinal(9)] [RED("networkStatusCallbackID")] public CUInt32 NetworkStatusCallbackID { get; set; }
-		[Ordinal(10)] [RED("deviceAuthorizationCallbackID")] public CUInt32 DeviceAuthorizationCallbackID { get; set; }
-		[Ordinal(11)] [RED("isValidnetworkStatus")] public CBool IsValidnetworkStatus { get; set; }
-		[Ordinal(12)] [RED("isValidDeviceAuthorization")] public CBool IsValidDeviceAuthorization { get; set; }
+		private inkTextWidgetReference _networkStatusText;
+		private inkTextWidgetReference _deviceAuthorizationText;
+		private inkCompoundWidgetReference _deviceAuthorizationRow;
+		private inkCompoundWidgetReference _networkStatusRow;
+		private CUInt32 _networkStatusCallbackID;
+		private CUInt32 _deviceAuthorizationCallbackID;
+		private CBool _isValidnetworkStatus;
+		private CBool _isValidDeviceAuthorization;
+
+		[Ordinal(5)] 
+		[RED("networkStatusText")] 
+		public inkTextWidgetReference NetworkStatusText
+		{
+			get => GetProperty(ref _networkStatusText);
+			set => SetProperty(ref _networkStatusText, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("deviceAuthorizationText")] 
+		public inkTextWidgetReference DeviceAuthorizationText
+		{
+			get => GetProperty(ref _deviceAuthorizationText);
+			set => SetProperty(ref _deviceAuthorizationText, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("deviceAuthorizationRow")] 
+		public inkCompoundWidgetReference DeviceAuthorizationRow
+		{
+			get => GetProperty(ref _deviceAuthorizationRow);
+			set => SetProperty(ref _deviceAuthorizationRow, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("networkStatusRow")] 
+		public inkCompoundWidgetReference NetworkStatusRow
+		{
+			get => GetProperty(ref _networkStatusRow);
+			set => SetProperty(ref _networkStatusRow, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("networkStatusCallbackID")] 
+		public CUInt32 NetworkStatusCallbackID
+		{
+			get => GetProperty(ref _networkStatusCallbackID);
+			set => SetProperty(ref _networkStatusCallbackID, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("deviceAuthorizationCallbackID")] 
+		public CUInt32 DeviceAuthorizationCallbackID
+		{
+			get => GetProperty(ref _deviceAuthorizationCallbackID);
+			set => SetProperty(ref _deviceAuthorizationCallbackID, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("isValidnetworkStatus")] 
+		public CBool IsValidnetworkStatus
+		{
+			get => GetProperty(ref _isValidnetworkStatus);
+			set => SetProperty(ref _isValidnetworkStatus, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("isValidDeviceAuthorization")] 
+		public CBool IsValidDeviceAuthorization
+		{
+			get => GetProperty(ref _isValidDeviceAuthorization);
+			set => SetProperty(ref _isValidDeviceAuthorization, value);
+		}
 
 		public ScannerDeviceBodyGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

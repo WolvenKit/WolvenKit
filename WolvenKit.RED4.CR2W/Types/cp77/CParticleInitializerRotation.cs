@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CParticleInitializerRotation : IParticleInitializer
 	{
-		[Ordinal(4)] [RED("rotation")] public CHandle<IEvaluatorFloat> Rotation { get; set; }
+		private CHandle<IEvaluatorFloat> _rotation;
+
+		[Ordinal(4)] 
+		[RED("rotation")] 
+		public CHandle<IEvaluatorFloat> Rotation
+		{
+			get => GetProperty(ref _rotation);
+			set => SetProperty(ref _rotation, value);
+		}
 
 		public CParticleInitializerRotation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioLanguageGameConfiguration : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("langsInProject")] public CArray<audioLanguageMapItem> LangsInProject { get; set; }
+		private CArray<audioLanguageMapItem> _langsInProject;
+
+		[Ordinal(1)] 
+		[RED("langsInProject")] 
+		public CArray<audioLanguageMapItem> LangsInProject
+		{
+			get => GetProperty(ref _langsInProject);
+			set => SetProperty(ref _langsInProject, value);
+		}
 
 		public audioLanguageGameConfiguration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

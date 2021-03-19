@@ -11,13 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta()]
     public class CColor : CColor_, IREDColor
     {
-        public CColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
-        {
-            Red = new CUInt8(cr2w, this, nameof(Red));
-            Green = new CUInt8(cr2w, this, nameof(Green));
-            Blue = new CUInt8(cr2w, this, nameof(Blue));
-            Alpha = new CUInt8(cr2w, this, nameof(Alpha));
-        }
+        public CColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public Color Value
         {

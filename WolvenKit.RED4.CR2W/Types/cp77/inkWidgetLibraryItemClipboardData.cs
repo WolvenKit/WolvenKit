@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkWidgetLibraryItemClipboardData : ISerializable
 	{
-		[Ordinal(0)] [RED("libraryItem")] public CHandle<inkWidgetLibraryItemUnpackedView> LibraryItem { get; set; }
+		private CHandle<inkWidgetLibraryItemUnpackedView> _libraryItem;
+
+		[Ordinal(0)] 
+		[RED("libraryItem")] 
+		public CHandle<inkWidgetLibraryItemUnpackedView> LibraryItem
+		{
+			get => GetProperty(ref _libraryItem);
+			set => SetProperty(ref _libraryItem, value);
+		}
 
 		public inkWidgetLibraryItemClipboardData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questForceModule_NodeType : questIVisionModeNodeType
 	{
-		[Ordinal(0)] [RED("params")] public CArray<questForceVMModule_NodeTypeParams> Params { get; set; }
+		private CArray<questForceVMModule_NodeTypeParams> _params;
+
+		[Ordinal(0)] 
+		[RED("params")] 
+		public CArray<questForceVMModule_NodeTypeParams> Params
+		{
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
+		}
 
 		public questForceModule_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

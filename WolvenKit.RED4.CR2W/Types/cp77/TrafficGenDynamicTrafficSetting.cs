@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TrafficGenDynamicTrafficSetting : CVariable
 	{
-		[Ordinal(0)] [RED("impact")] public CEnum<TrafficGenDynamicImpact> Impact { get; set; }
+		private CEnum<TrafficGenDynamicImpact> _impact;
+
+		[Ordinal(0)] 
+		[RED("impact")] 
+		public CEnum<TrafficGenDynamicImpact> Impact
+		{
+			get => GetProperty(ref _impact);
+			set => SetProperty(ref _impact, value);
+		}
 
 		public TrafficGenDynamicTrafficSetting(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

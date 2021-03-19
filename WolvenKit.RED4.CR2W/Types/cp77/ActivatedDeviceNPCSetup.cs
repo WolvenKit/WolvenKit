@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ActivatedDeviceNPCSetup : CVariable
 	{
-		[Ordinal(0)] [RED("npcSpawnerNodeRef")] public NodeRef NpcSpawnerNodeRef { get; set; }
-		[Ordinal(1)] [RED("npcSpawned")] public wCHandle<NPCPuppet> NpcSpawned { get; set; }
+		private NodeRef _npcSpawnerNodeRef;
+		private wCHandle<NPCPuppet> _npcSpawned;
+
+		[Ordinal(0)] 
+		[RED("npcSpawnerNodeRef")] 
+		public NodeRef NpcSpawnerNodeRef
+		{
+			get => GetProperty(ref _npcSpawnerNodeRef);
+			set => SetProperty(ref _npcSpawnerNodeRef, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("npcSpawned")] 
+		public wCHandle<NPCPuppet> NpcSpawned
+		{
+			get => GetProperty(ref _npcSpawned);
+			set => SetProperty(ref _npcSpawned, value);
+		}
 
 		public ActivatedDeviceNPCSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

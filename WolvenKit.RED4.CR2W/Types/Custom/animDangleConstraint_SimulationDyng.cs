@@ -6,7 +6,15 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
     public class animDangleConstraint_SimulationDyng : animDangleConstraint_SimulationDyng_
     {
-        [Ordinal(999)] [RED("drawDebugConstraint")] public CBool DrawDebugConstraint { get; set; }
+        private CBool _drawDebugConstraint;
+
+        [Ordinal(999)]
+        [RED("drawDebugConstraint")]
+        public CBool DrawDebugConstraint
+        {
+            get => GetProperty(ref _drawDebugConstraint);
+            set => SetProperty(ref _drawDebugConstraint, value);
+        }
 
         public animDangleConstraint_SimulationDyng(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }

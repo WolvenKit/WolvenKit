@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animIKTargetRef : CVariable
 	{
-		[Ordinal(0)] [RED("id")] public CInt32 Id { get; set; }
-		[Ordinal(1)] [RED("part")] public CName Part { get; set; }
+		private CInt32 _id;
+		private CName _part;
+
+		[Ordinal(0)] 
+		[RED("id")] 
+		public CInt32 Id
+		{
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("part")] 
+		public CName Part
+		{
+			get => GetProperty(ref _part);
+			set => SetProperty(ref _part, value);
+		}
 
 		public animIKTargetRef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

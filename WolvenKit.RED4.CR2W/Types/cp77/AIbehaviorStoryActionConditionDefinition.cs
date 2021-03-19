@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorStoryActionConditionDefinition : AIbehaviorConditionDefinition
 	{
-		[Ordinal(1)] [RED("action")] public CEnum<AIbehaviorStoryActionType> Action { get; set; }
+		private CEnum<AIbehaviorStoryActionType> _action;
+
+		[Ordinal(1)] 
+		[RED("action")] 
+		public CEnum<AIbehaviorStoryActionType> Action
+		{
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
+		}
 
 		public AIbehaviorStoryActionConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

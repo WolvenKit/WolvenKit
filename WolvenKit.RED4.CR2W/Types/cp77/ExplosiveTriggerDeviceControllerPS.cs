@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ExplosiveTriggerDeviceControllerPS : ExplosiveDeviceControllerPS
 	{
-		[Ordinal(119)] [RED("playerSafePass")] public CBool PlayerSafePass { get; set; }
-		[Ordinal(120)] [RED("triggerExploded")] public CBool TriggerExploded { get; set; }
+		private CBool _playerSafePass;
+		private CBool _triggerExploded;
+
+		[Ordinal(119)] 
+		[RED("playerSafePass")] 
+		public CBool PlayerSafePass
+		{
+			get => GetProperty(ref _playerSafePass);
+			set => SetProperty(ref _playerSafePass, value);
+		}
+
+		[Ordinal(120)] 
+		[RED("triggerExploded")] 
+		public CBool TriggerExploded
+		{
+			get => GetProperty(ref _triggerExploded);
+			set => SetProperty(ref _triggerExploded, value);
+		}
 
 		public ExplosiveTriggerDeviceControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

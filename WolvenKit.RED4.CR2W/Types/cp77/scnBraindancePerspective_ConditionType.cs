@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnBraindancePerspective_ConditionType : scnIBraindanceConditionType
 	{
-		[Ordinal(0)] [RED("perspective")] public CEnum<scnBraindancePerspective> Perspective { get; set; }
-		[Ordinal(1)] [RED("sceneFile")] public raRef<scnSceneResource> SceneFile { get; set; }
+		private CEnum<scnBraindancePerspective> _perspective;
+		private raRef<scnSceneResource> _sceneFile;
+
+		[Ordinal(0)] 
+		[RED("perspective")] 
+		public CEnum<scnBraindancePerspective> Perspective
+		{
+			get => GetProperty(ref _perspective);
+			set => SetProperty(ref _perspective, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("sceneFile")] 
+		public raRef<scnSceneResource> SceneFile
+		{
+			get => GetProperty(ref _sceneFile);
+			set => SetProperty(ref _sceneFile, value);
+		}
 
 		public scnBraindancePerspective_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

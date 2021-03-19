@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldQualitySetting : CVariable
 	{
-		[Ordinal(0)] [RED("QualityLevel")] public CEnum<ConfigGraphicsQualityLevel> QualityLevel { get; set; }
-		[Ordinal(1)] [RED("xEntitiesBudget")] public CUInt32 XEntitiesBudget { get; set; }
+		private CEnum<ConfigGraphicsQualityLevel> _qualityLevel;
+		private CUInt32 _xEntitiesBudget;
+
+		[Ordinal(0)] 
+		[RED("QualityLevel")] 
+		public CEnum<ConfigGraphicsQualityLevel> QualityLevel
+		{
+			get => GetProperty(ref _qualityLevel);
+			set => SetProperty(ref _qualityLevel, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("xEntitiesBudget")] 
+		public CUInt32 XEntitiesBudget
+		{
+			get => GetProperty(ref _xEntitiesBudget);
+			set => SetProperty(ref _xEntitiesBudget, value);
+		}
 
 		public worldQualitySetting(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

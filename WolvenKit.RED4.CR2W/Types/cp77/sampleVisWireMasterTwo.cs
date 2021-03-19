@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class sampleVisWireMasterTwo : gameObject
 	{
-		[Ordinal(40)] [RED("dependableEntities")] public CArray<NodeRef> DependableEntities { get; set; }
+		private CArray<NodeRef> _dependableEntities;
+
+		[Ordinal(40)] 
+		[RED("dependableEntities")] 
+		public CArray<NodeRef> DependableEntities
+		{
+			get => GetProperty(ref _dependableEntities);
+			set => SetProperty(ref _dependableEntities, value);
+		}
 
 		public sampleVisWireMasterTwo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

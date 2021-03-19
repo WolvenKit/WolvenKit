@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MovableDeviceControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(103)] [RED("MovableDeviceSetup")] public MovableDeviceSetup MovableDeviceSetup { get; set; }
-		[Ordinal(104)] [RED("movableDeviceSkillChecks")] public CHandle<DemolitionContainer> MovableDeviceSkillChecks { get; set; }
+		private MovableDeviceSetup _movableDeviceSetup;
+		private CHandle<DemolitionContainer> _movableDeviceSkillChecks;
+
+		[Ordinal(103)] 
+		[RED("MovableDeviceSetup")] 
+		public MovableDeviceSetup MovableDeviceSetup
+		{
+			get => GetProperty(ref _movableDeviceSetup);
+			set => SetProperty(ref _movableDeviceSetup, value);
+		}
+
+		[Ordinal(104)] 
+		[RED("movableDeviceSkillChecks")] 
+		public CHandle<DemolitionContainer> MovableDeviceSkillChecks
+		{
+			get => GetProperty(ref _movableDeviceSkillChecks);
+			set => SetProperty(ref _movableDeviceSkillChecks, value);
+		}
 
 		public MovableDeviceControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

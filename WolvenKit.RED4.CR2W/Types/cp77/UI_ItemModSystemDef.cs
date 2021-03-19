@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UI_ItemModSystemDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("ItemModSystemUpdated")] public gamebbScriptID_Variant ItemModSystemUpdated { get; set; }
+		private gamebbScriptID_Variant _itemModSystemUpdated;
+
+		[Ordinal(0)] 
+		[RED("ItemModSystemUpdated")] 
+		public gamebbScriptID_Variant ItemModSystemUpdated
+		{
+			get => GetProperty(ref _itemModSystemUpdated);
+			set => SetProperty(ref _itemModSystemUpdated, value);
+		}
 
 		public UI_ItemModSystemDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameSetScanningTimeEvent : redEvent
 	{
-		[Ordinal(0)] [RED("time")] public CFloat Time { get; set; }
+		private CFloat _time;
+
+		[Ordinal(0)] 
+		[RED("time")] 
+		public CFloat Time
+		{
+			get => GetProperty(ref _time);
+			set => SetProperty(ref _time, value);
+		}
 
 		public gameSetScanningTimeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

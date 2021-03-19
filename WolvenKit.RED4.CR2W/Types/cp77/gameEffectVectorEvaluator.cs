@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectVectorEvaluator : ISerializable
 	{
-		[Ordinal(0)] [RED("modifier")] public CFloat Modifier { get; set; }
+		private CFloat _modifier;
+
+		[Ordinal(0)] 
+		[RED("modifier")] 
+		public CFloat Modifier
+		{
+			get => GetProperty(ref _modifier);
+			set => SetProperty(ref _modifier, value);
+		}
 
 		public gameEffectVectorEvaluator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

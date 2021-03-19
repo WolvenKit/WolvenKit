@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class workWorkEntryId : CVariable
 	{
-		[Ordinal(0)] [RED("id")] public CUInt32 Id { get; set; }
+		private CUInt32 _id;
+
+		[Ordinal(0)] 
+		[RED("id")] 
+		public CUInt32 Id
+		{
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
+		}
 
 		public workWorkEntryId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

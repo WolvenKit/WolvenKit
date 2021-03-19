@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VehicleQuestToggleEngineEvent : redEvent
 	{
-		[Ordinal(0)] [RED("toggle")] public CBool Toggle { get; set; }
+		private CBool _toggle;
+
+		[Ordinal(0)] 
+		[RED("toggle")] 
+		public CBool Toggle
+		{
+			get => GetProperty(ref _toggle);
+			set => SetProperty(ref _toggle, value);
+		}
 
 		public VehicleQuestToggleEngineEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

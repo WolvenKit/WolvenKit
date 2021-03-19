@@ -7,11 +7,51 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CPOMissionDataAccessPoint : CPOMissionDevice
 	{
-		[Ordinal(45)] [RED("hasDataToDownload")] public CBool HasDataToDownload { get; set; }
-		[Ordinal(46)] [RED("damagesPresetName")] public CName DamagesPresetName { get; set; }
-		[Ordinal(47)] [RED("factsOnDownload")] public CArray<SFactToChange> FactsOnDownload { get; set; }
-		[Ordinal(48)] [RED("factsOnUpload")] public CArray<SFactToChange> FactsOnUpload { get; set; }
-		[Ordinal(49)] [RED("ownerDecidesOnTransfer")] public CBool OwnerDecidesOnTransfer { get; set; }
+		private CBool _hasDataToDownload;
+		private CName _damagesPresetName;
+		private CArray<SFactToChange> _factsOnDownload;
+		private CArray<SFactToChange> _factsOnUpload;
+		private CBool _ownerDecidesOnTransfer;
+
+		[Ordinal(45)] 
+		[RED("hasDataToDownload")] 
+		public CBool HasDataToDownload
+		{
+			get => GetProperty(ref _hasDataToDownload);
+			set => SetProperty(ref _hasDataToDownload, value);
+		}
+
+		[Ordinal(46)] 
+		[RED("damagesPresetName")] 
+		public CName DamagesPresetName
+		{
+			get => GetProperty(ref _damagesPresetName);
+			set => SetProperty(ref _damagesPresetName, value);
+		}
+
+		[Ordinal(47)] 
+		[RED("factsOnDownload")] 
+		public CArray<SFactToChange> FactsOnDownload
+		{
+			get => GetProperty(ref _factsOnDownload);
+			set => SetProperty(ref _factsOnDownload, value);
+		}
+
+		[Ordinal(48)] 
+		[RED("factsOnUpload")] 
+		public CArray<SFactToChange> FactsOnUpload
+		{
+			get => GetProperty(ref _factsOnUpload);
+			set => SetProperty(ref _factsOnUpload, value);
+		}
+
+		[Ordinal(49)] 
+		[RED("ownerDecidesOnTransfer")] 
+		public CBool OwnerDecidesOnTransfer
+		{
+			get => GetProperty(ref _ownerDecidesOnTransfer);
+			set => SetProperty(ref _ownerDecidesOnTransfer, value);
+		}
 
 		public CPOMissionDataAccessPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

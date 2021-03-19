@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiPlayerListGameController : gameuiHUDGameController
 	{
-		[Ordinal(9)] [RED("playerEntries")] public CArray<PlayerListEntryData> PlayerEntries { get; set; }
-		[Ordinal(10)] [RED("container")] public inkCompoundWidgetReference Container { get; set; }
+		private CArray<PlayerListEntryData> _playerEntries;
+		private inkCompoundWidgetReference _container;
+
+		[Ordinal(9)] 
+		[RED("playerEntries")] 
+		public CArray<PlayerListEntryData> PlayerEntries
+		{
+			get => GetProperty(ref _playerEntries);
+			set => SetProperty(ref _playerEntries, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("container")] 
+		public inkCompoundWidgetReference Container
+		{
+			get => GetProperty(ref _container);
+			set => SetProperty(ref _container, value);
+		}
 
 		public gameuiPlayerListGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animStackTransformsExtender_JsonProperties : ISerializable
 	{
-		[Ordinal(0)] [RED("entries")] public CArray<animStackTransformsExtender_JsonEntry> Entries { get; set; }
+		private CArray<animStackTransformsExtender_JsonEntry> _entries;
+
+		[Ordinal(0)] 
+		[RED("entries")] 
+		public CArray<animStackTransformsExtender_JsonEntry> Entries
+		{
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
+		}
 
 		public animStackTransformsExtender_JsonProperties(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TogglePersonalLink : ActionBool
 	{
-		[Ordinal(25)] [RED("cachedStatus")] public CEnum<EPersonalLinkConnectionStatus> CachedStatus { get; set; }
-		[Ordinal(26)] [RED("shouldSkipMiniGame")] public CBool ShouldSkipMiniGame { get; set; }
+		private CEnum<EPersonalLinkConnectionStatus> _cachedStatus;
+		private CBool _shouldSkipMiniGame;
+
+		[Ordinal(25)] 
+		[RED("cachedStatus")] 
+		public CEnum<EPersonalLinkConnectionStatus> CachedStatus
+		{
+			get => GetProperty(ref _cachedStatus);
+			set => SetProperty(ref _cachedStatus, value);
+		}
+
+		[Ordinal(26)] 
+		[RED("shouldSkipMiniGame")] 
+		public CBool ShouldSkipMiniGame
+		{
+			get => GetProperty(ref _shouldSkipMiniGame);
+			set => SetProperty(ref _shouldSkipMiniGame, value);
+		}
 
 		public TogglePersonalLink(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

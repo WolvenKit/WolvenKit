@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScannerVehicleName : ScannerChunk
 	{
-		[Ordinal(0)] [RED("vehicleName")] public CString VehicleName { get; set; }
+		private CString _vehicleName;
+
+		[Ordinal(0)] 
+		[RED("vehicleName")] 
+		public CString VehicleName
+		{
+			get => GetProperty(ref _vehicleName);
+			set => SetProperty(ref _vehicleName, value);
+		}
 
 		public ScannerVehicleName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

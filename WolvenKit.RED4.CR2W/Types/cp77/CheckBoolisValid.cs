@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CheckBoolisValid : AIbehaviorconditionScript
 	{
-		[Ordinal(0)] [RED("actionTweakIDMapping")] public CHandle<AIArgumentMapping> ActionTweakIDMapping { get; set; }
+		private CHandle<AIArgumentMapping> _actionTweakIDMapping;
+
+		[Ordinal(0)] 
+		[RED("actionTweakIDMapping")] 
+		public CHandle<AIArgumentMapping> ActionTweakIDMapping
+		{
+			get => GetProperty(ref _actionTweakIDMapping);
+			set => SetProperty(ref _actionTweakIDMapping, value);
+		}
 
 		public CheckBoolisValid(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

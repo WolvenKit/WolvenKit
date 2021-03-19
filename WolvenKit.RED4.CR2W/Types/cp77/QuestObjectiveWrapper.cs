@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class QuestObjectiveWrapper : ABaseQuestObjectiveWrapper
 	{
-		[Ordinal(6)] [RED("questSubObjectives")] public CArray<CHandle<QuestSubObjectiveWrapper>> QuestSubObjectives { get; set; }
+		private CArray<CHandle<QuestSubObjectiveWrapper>> _questSubObjectives;
+
+		[Ordinal(6)] 
+		[RED("questSubObjectives")] 
+		public CArray<CHandle<QuestSubObjectiveWrapper>> QuestSubObjectives
+		{
+			get => GetProperty(ref _questSubObjectives);
+			set => SetProperty(ref _questSubObjectives, value);
+		}
 
 		public QuestObjectiveWrapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

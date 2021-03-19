@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questUnequipItemNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		[Ordinal(2)] [RED("entityReference")] public gameEntityReference EntityReference { get; set; }
-		[Ordinal(3)] [RED("params")] public questUnequipItemParams Params { get; set; }
+		private gameEntityReference _entityReference;
+		private questUnequipItemParams _params;
+
+		[Ordinal(2)] 
+		[RED("entityReference")] 
+		public gameEntityReference EntityReference
+		{
+			get => GetProperty(ref _entityReference);
+			set => SetProperty(ref _entityReference, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("params")] 
+		public questUnequipItemParams Params
+		{
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
+		}
 
 		public questUnequipItemNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

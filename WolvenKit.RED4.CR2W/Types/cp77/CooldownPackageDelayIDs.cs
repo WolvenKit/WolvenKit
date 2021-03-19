@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CooldownPackageDelayIDs : CVariable
 	{
-		[Ordinal(0)] [RED("packageID")] public CooldownStorageID PackageID { get; set; }
-		[Ordinal(1)] [RED("delayIDs")] public CArray<gameDelayID> DelayIDs { get; set; }
+		private CooldownStorageID _packageID;
+		private CArray<gameDelayID> _delayIDs;
+
+		[Ordinal(0)] 
+		[RED("packageID")] 
+		public CooldownStorageID PackageID
+		{
+			get => GetProperty(ref _packageID);
+			set => SetProperty(ref _packageID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("delayIDs")] 
+		public CArray<gameDelayID> DelayIDs
+		{
+			get => GetProperty(ref _delayIDs);
+			set => SetProperty(ref _delayIDs, value);
+		}
 
 		public CooldownPackageDelayIDs(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

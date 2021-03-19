@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiTweakDBIconReference : inkIconReference
 	{
-		[Ordinal(0)] [RED("iconID")] public TweakDBID IconID { get; set; }
+		private TweakDBID _iconID;
+
+		[Ordinal(0)] 
+		[RED("iconID")] 
+		public TweakDBID IconID
+		{
+			get => GetProperty(ref _iconID);
+			set => SetProperty(ref _iconID, value);
+		}
 
 		public gameuiTweakDBIconReference(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

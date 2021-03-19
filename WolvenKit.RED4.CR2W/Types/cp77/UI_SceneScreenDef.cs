@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UI_SceneScreenDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("AnimName")] public gamebbScriptID_CName AnimName { get; set; }
+		private gamebbScriptID_CName _animName;
+
+		[Ordinal(0)] 
+		[RED("AnimName")] 
+		public gamebbScriptID_CName AnimName
+		{
+			get => GetProperty(ref _animName);
+			set => SetProperty(ref _animName, value);
+		}
 
 		public UI_SceneScreenDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

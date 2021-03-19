@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamedataSimpleValueNode : gamedataValueDataNode
 	{
-		[Ordinal(3)] [RED("type")] public CEnum<gamedataSimpleValueNodeValueType> Type { get; set; }
-		[Ordinal(4)] [RED("data")] public CString Data { get; set; }
+		private CEnum<gamedataSimpleValueNodeValueType> _type;
+		private CString _data;
+
+		[Ordinal(3)] 
+		[RED("type")] 
+		public CEnum<gamedataSimpleValueNodeValueType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("data")] 
+		public CString Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
 
 		public gamedataSimpleValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

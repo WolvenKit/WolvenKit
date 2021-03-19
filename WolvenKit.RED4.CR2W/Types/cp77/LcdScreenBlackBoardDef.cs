@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LcdScreenBlackBoardDef : DeviceBaseBlackboardDef
 	{
-		[Ordinal(7)] [RED("MessegeData")] public gamebbScriptID_Variant MessegeData { get; set; }
+		private gamebbScriptID_Variant _messegeData;
+
+		[Ordinal(7)] 
+		[RED("MessegeData")] 
+		public gamebbScriptID_Variant MessegeData
+		{
+			get => GetProperty(ref _messegeData);
+			set => SetProperty(ref _messegeData, value);
+		}
 
 		public LcdScreenBlackBoardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

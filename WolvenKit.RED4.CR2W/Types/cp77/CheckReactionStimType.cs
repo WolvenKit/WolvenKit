@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CheckReactionStimType : AIbehaviorconditionScript
 	{
-		[Ordinal(0)] [RED("stimToCompare")] public CEnum<gamedataStimType> StimToCompare { get; set; }
+		private CEnum<gamedataStimType> _stimToCompare;
+
+		[Ordinal(0)] 
+		[RED("stimToCompare")] 
+		public CEnum<gamedataStimType> StimToCompare
+		{
+			get => GetProperty(ref _stimToCompare);
+			set => SetProperty(ref _stimToCompare, value);
+		}
 
 		public CheckReactionStimType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

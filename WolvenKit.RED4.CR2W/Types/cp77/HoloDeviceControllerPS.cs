@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HoloDeviceControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(103)] [RED("isPlaying")] public CBool IsPlaying { get; set; }
+		private CBool _isPlaying;
+
+		[Ordinal(103)] 
+		[RED("isPlaying")] 
+		public CBool IsPlaying
+		{
+			get => GetProperty(ref _isPlaying);
+			set => SetProperty(ref _isPlaying, value);
+		}
 
 		public HoloDeviceControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

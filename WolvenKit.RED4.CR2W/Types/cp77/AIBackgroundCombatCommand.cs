@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIBackgroundCombatCommand : AICommand
 	{
-		[Ordinal(4)] [RED("steps")] public CArray<AIBackgroundCombatStep> Steps { get; set; }
+		private CArray<AIBackgroundCombatStep> _steps;
+
+		[Ordinal(4)] 
+		[RED("steps")] 
+		public CArray<AIBackgroundCombatStep> Steps
+		{
+			get => GetProperty(ref _steps);
+			set => SetProperty(ref _steps, value);
+		}
 
 		public AIBackgroundCombatCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

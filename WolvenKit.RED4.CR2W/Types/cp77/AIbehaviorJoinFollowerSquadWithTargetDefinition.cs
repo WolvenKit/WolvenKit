@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorJoinFollowerSquadWithTargetDefinition : AIbehaviorTaskDefinition
 	{
-		[Ordinal(1)] [RED("follower")] public CHandle<AIArgumentMapping> Follower { get; set; }
+		private CHandle<AIArgumentMapping> _follower;
+
+		[Ordinal(1)] 
+		[RED("follower")] 
+		public CHandle<AIArgumentMapping> Follower
+		{
+			get => GetProperty(ref _follower);
+			set => SetProperty(ref _follower, value);
+		}
 
 		public AIbehaviorJoinFollowerSquadWithTargetDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

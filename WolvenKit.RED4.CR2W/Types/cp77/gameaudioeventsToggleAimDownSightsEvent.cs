@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameaudioeventsToggleAimDownSightsEvent : redEvent
 	{
-		[Ordinal(0)] [RED("toggleOn")] public CBool ToggleOn { get; set; }
+		private CBool _toggleOn;
+
+		[Ordinal(0)] 
+		[RED("toggleOn")] 
+		public CBool ToggleOn
+		{
+			get => GetProperty(ref _toggleOn);
+			set => SetProperty(ref _toggleOn, value);
+		}
 
 		public gameaudioeventsToggleAimDownSightsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

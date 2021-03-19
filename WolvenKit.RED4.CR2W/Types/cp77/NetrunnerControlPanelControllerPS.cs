@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class NetrunnerControlPanelControllerPS : BasicDistractionDeviceControllerPS
 	{
-		[Ordinal(108)] [RED("factQuickHackSetup")] public ComputerQuickHackData FactQuickHackSetup { get; set; }
-		[Ordinal(109)] [RED("quickhackPerformed")] public CBool QuickhackPerformed { get; set; }
+		private ComputerQuickHackData _factQuickHackSetup;
+		private CBool _quickhackPerformed;
+
+		[Ordinal(108)] 
+		[RED("factQuickHackSetup")] 
+		public ComputerQuickHackData FactQuickHackSetup
+		{
+			get => GetProperty(ref _factQuickHackSetup);
+			set => SetProperty(ref _factQuickHackSetup, value);
+		}
+
+		[Ordinal(109)] 
+		[RED("quickhackPerformed")] 
+		public CBool QuickhackPerformed
+		{
+			get => GetProperty(ref _quickhackPerformed);
+			set => SetProperty(ref _quickhackPerformed, value);
+		}
 
 		public NetrunnerControlPanelControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class StatsManager : IScriptable
 	{
-		[Ordinal(0)] [RED("playerGodModeModifierData")] public CHandle<gameStatModifierData> PlayerGodModeModifierData { get; set; }
+		private CHandle<gameStatModifierData> _playerGodModeModifierData;
+
+		[Ordinal(0)] 
+		[RED("playerGodModeModifierData")] 
+		public CHandle<gameStatModifierData> PlayerGodModeModifierData
+		{
+			get => GetProperty(ref _playerGodModeModifierData);
+			set => SetProperty(ref _playerGodModeModifierData, value);
+		}
 
 		public StatsManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

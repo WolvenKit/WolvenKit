@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gametargetingSystemTargetFilterResult : IScriptable
 	{
-		[Ordinal(0)] [RED("hitEntId")] public entEntityID HitEntId { get; set; }
-		[Ordinal(1)] [RED("hitComponent")] public wCHandle<entIComponent> HitComponent { get; set; }
+		private entEntityID _hitEntId;
+		private wCHandle<entIComponent> _hitComponent;
+
+		[Ordinal(0)] 
+		[RED("hitEntId")] 
+		public entEntityID HitEntId
+		{
+			get => GetProperty(ref _hitEntId);
+			set => SetProperty(ref _hitEntId, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("hitComponent")] 
+		public wCHandle<entIComponent> HitComponent
+		{
+			get => GetProperty(ref _hitComponent);
+			set => SetProperty(ref _hitComponent, value);
+		}
 
 		public gametargetingSystemTargetFilterResult(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

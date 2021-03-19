@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PaperdollGlitchController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("PaperdollGlichRoot")] public inkWidgetReference PaperdollGlichRoot { get; set; }
-		[Ordinal(2)] [RED("GlitchAnimationName")] public CName GlitchAnimationName { get; set; }
+		private inkWidgetReference _paperdollGlichRoot;
+		private CName _glitchAnimationName;
+
+		[Ordinal(1)] 
+		[RED("PaperdollGlichRoot")] 
+		public inkWidgetReference PaperdollGlichRoot
+		{
+			get => GetProperty(ref _paperdollGlichRoot);
+			set => SetProperty(ref _paperdollGlichRoot, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("GlitchAnimationName")] 
+		public CName GlitchAnimationName
+		{
+			get => GetProperty(ref _glitchAnimationName);
+			set => SetProperty(ref _glitchAnimationName, value);
+		}
 
 		public PaperdollGlitchController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,14 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
 	public class gameLootResourceData : gameLootResourceData_
     {
-        [REDBuffer(true)] public CArrayCompressed<CookedLootData> Values { get; set; }
+        private CArrayCompressed<CookedLootData> _values;
+
+        [REDBuffer(true)]
+        public CArrayCompressed<CookedLootData> Values
+        {
+            get => GetProperty(ref _values);
+            set => SetProperty(ref _values, value);
+        }
 
         public gameLootResourceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
@@ -51,16 +58,34 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
     public class CookedLootData : CVariable
     {
+        private CUInt64 _key;
+        private CArrayVLQInt32<TweakDBID> _lootTableIds;
+        private TweakDBID _contentAssignment;
+
         public CookedLootData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            Key = new CUInt64(cr2w, this, nameof(Key)) { IsSerialized = true };
-            LootTableIds = new CArrayVLQInt32<TweakDBID>(cr2w, this, nameof(LootTableIds)) { IsSerialized = true };
-            ContentAssignment = new TweakDBID(cr2w, this, nameof(ContentAssignment)) { IsSerialized = true };
+            Key.IsSerialized = true;
+            LootTableIds.IsSerialized = true;
+            ContentAssignment.IsSerialized = true;
         }
 
-        [REDBuffer(true)] public CUInt64 Key { get; init; }
-        [REDBuffer(true)] public CArrayVLQInt32<TweakDBID> LootTableIds { get; init; }
-        [REDBuffer(true)] public TweakDBID ContentAssignment { get; init; }
+        [REDBuffer(true)]
+        public CUInt64 Key
+        {
+            get => GetProperty(ref _key);
+        }
+
+        [REDBuffer(true)]
+        public CArrayVLQInt32<TweakDBID> LootTableIds
+        {
+            get => GetProperty(ref _lootTableIds);
+        }
+
+        [REDBuffer(true)]
+        public TweakDBID ContentAssignment
+        {
+            get => GetProperty(ref _contentAssignment);
+        }
 
         public override void Read(BinaryReader file, uint size)
         {

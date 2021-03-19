@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UIVendorItemsSoldEvent : redEvent
 	{
-		[Ordinal(0)] [RED("itemsID")] public CArray<gameItemID> ItemsID { get; set; }
-		[Ordinal(1)] [RED("quantity")] public CArray<CInt32> Quantity { get; set; }
-		[Ordinal(2)] [RED("piecesPrice")] public CArray<CInt32> PiecesPrice { get; set; }
+		private CArray<gameItemID> _itemsID;
+		private CArray<CInt32> _quantity;
+		private CArray<CInt32> _piecesPrice;
+
+		[Ordinal(0)] 
+		[RED("itemsID")] 
+		public CArray<gameItemID> ItemsID
+		{
+			get => GetProperty(ref _itemsID);
+			set => SetProperty(ref _itemsID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("quantity")] 
+		public CArray<CInt32> Quantity
+		{
+			get => GetProperty(ref _quantity);
+			set => SetProperty(ref _quantity, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("piecesPrice")] 
+		public CArray<CInt32> PiecesPrice
+		{
+			get => GetProperty(ref _piecesPrice);
+			set => SetProperty(ref _piecesPrice, value);
+		}
 
 		public UIVendorItemsSoldEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

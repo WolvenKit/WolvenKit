@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldNodesGroupPath : CVariable
 	{
-		[Ordinal(0)] [RED("elements")] public CArray<CName> Elements { get; set; }
+		private CArray<CName> _elements;
+
+		[Ordinal(0)] 
+		[RED("elements")] 
+		public CArray<CName> Elements
+		{
+			get => GetProperty(ref _elements);
+			set => SetProperty(ref _elements, value);
+		}
 
 		public worldNodesGroupPath(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

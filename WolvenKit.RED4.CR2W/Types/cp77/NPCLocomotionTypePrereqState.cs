@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class NPCLocomotionTypePrereqState : gamePrereqState
 	{
-		[Ordinal(0)] [RED("owner")] public wCHandle<gameObject> Owner { get; set; }
-		[Ordinal(1)] [RED("listenerInt")] public CUInt32 ListenerInt { get; set; }
+		private wCHandle<gameObject> _owner;
+		private CUInt32 _listenerInt;
+
+		[Ordinal(0)] 
+		[RED("owner")] 
+		public wCHandle<gameObject> Owner
+		{
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("listenerInt")] 
+		public CUInt32 ListenerInt
+		{
+			get => GetProperty(ref _listenerInt);
+			set => SetProperty(ref _listenerInt, value);
+		}
 
 		public NPCLocomotionTypePrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

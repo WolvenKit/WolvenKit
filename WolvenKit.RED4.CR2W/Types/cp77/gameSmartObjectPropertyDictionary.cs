@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameSmartObjectPropertyDictionary : ISerializable
 	{
-		[Ordinal(0)] [RED("properties")] public CArray<gameSmartObjectPropertyDictionaryPropertyEntry> Properties { get; set; }
+		private CArray<gameSmartObjectPropertyDictionaryPropertyEntry> _properties;
+
+		[Ordinal(0)] 
+		[RED("properties")] 
+		public CArray<gameSmartObjectPropertyDictionaryPropertyEntry> Properties
+		{
+			get => GetProperty(ref _properties);
+			set => SetProperty(ref _properties, value);
+		}
 
 		public gameSmartObjectPropertyDictionary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

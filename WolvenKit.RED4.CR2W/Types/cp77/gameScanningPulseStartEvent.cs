@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameScanningPulseStartEvent : redEvent
 	{
-		[Ordinal(0)] [RED("targetsAffected")] public CInt32 TargetsAffected { get; set; }
+		private CInt32 _targetsAffected;
+
+		[Ordinal(0)] 
+		[RED("targetsAffected")] 
+		public CInt32 TargetsAffected
+		{
+			get => GetProperty(ref _targetsAffected);
+			set => SetProperty(ref _targetsAffected, value);
+		}
 
 		public gameScanningPulseStartEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameJournalRequestContext : CVariable
 	{
-		[Ordinal(0)] [RED("stateFilter")] public gameJournalRequestStateFilter StateFilter { get; set; }
-		[Ordinal(1)] [RED("classFilter")] public gameJournalRequestClassFilter ClassFilter { get; set; }
+		private gameJournalRequestStateFilter _stateFilter;
+		private gameJournalRequestClassFilter _classFilter;
+
+		[Ordinal(0)] 
+		[RED("stateFilter")] 
+		public gameJournalRequestStateFilter StateFilter
+		{
+			get => GetProperty(ref _stateFilter);
+			set => SetProperty(ref _stateFilter, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("classFilter")] 
+		public gameJournalRequestClassFilter ClassFilter
+		{
+			get => GetProperty(ref _classFilter);
+			set => SetProperty(ref _classFilter, value);
+		}
 
 		public gameJournalRequestContext(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

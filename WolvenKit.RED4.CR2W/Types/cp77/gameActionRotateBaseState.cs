@@ -7,12 +7,60 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameActionRotateBaseState : gameActionReplicatedState
 	{
-		[Ordinal(5)] [RED("angleOffset")] public CFloat AngleOffset { get; set; }
-		[Ordinal(6)] [RED("angleTolerance")] public CFloat AngleTolerance { get; set; }
-		[Ordinal(7)] [RED("keepUpdatingTarget")] public CBool KeepUpdatingTarget { get; set; }
-		[Ordinal(8)] [RED("useRotationTime")] public CBool UseRotationTime { get; set; }
-		[Ordinal(9)] [RED("rotationSpeed")] public CFloat RotationSpeed { get; set; }
-		[Ordinal(10)] [RED("rotationTime")] public CFloat RotationTime { get; set; }
+		private CFloat _angleOffset;
+		private CFloat _angleTolerance;
+		private CBool _keepUpdatingTarget;
+		private CBool _useRotationTime;
+		private CFloat _rotationSpeed;
+		private CFloat _rotationTime;
+
+		[Ordinal(5)] 
+		[RED("angleOffset")] 
+		public CFloat AngleOffset
+		{
+			get => GetProperty(ref _angleOffset);
+			set => SetProperty(ref _angleOffset, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("angleTolerance")] 
+		public CFloat AngleTolerance
+		{
+			get => GetProperty(ref _angleTolerance);
+			set => SetProperty(ref _angleTolerance, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("keepUpdatingTarget")] 
+		public CBool KeepUpdatingTarget
+		{
+			get => GetProperty(ref _keepUpdatingTarget);
+			set => SetProperty(ref _keepUpdatingTarget, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("useRotationTime")] 
+		public CBool UseRotationTime
+		{
+			get => GetProperty(ref _useRotationTime);
+			set => SetProperty(ref _useRotationTime, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("rotationSpeed")] 
+		public CFloat RotationSpeed
+		{
+			get => GetProperty(ref _rotationSpeed);
+			set => SetProperty(ref _rotationSpeed, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("rotationTime")] 
+		public CFloat RotationTime
+		{
+			get => GetProperty(ref _rotationTime);
+			set => SetProperty(ref _rotationTime, value);
+		}
 
 		public gameActionRotateBaseState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

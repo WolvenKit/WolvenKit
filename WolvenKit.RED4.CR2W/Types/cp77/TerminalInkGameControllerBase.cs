@@ -7,13 +7,69 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TerminalInkGameControllerBase : MasterDeviceInkGameControllerBase
 	{
-		[Ordinal(18)] [RED("layoutID")] public TweakDBID LayoutID { get; set; }
-		[Ordinal(19)] [RED("currentLayoutLibraryID")] public CName CurrentLayoutLibraryID { get; set; }
-		[Ordinal(20)] [RED("mainLayout")] public wCHandle<inkWidget> MainLayout { get; set; }
-		[Ordinal(21)] [RED("currentlyActiveDevices")] public CArray<gamePersistentID> CurrentlyActiveDevices { get; set; }
-		[Ordinal(22)] [RED("mainDisplayWidget")] public wCHandle<inkVideoWidget> MainDisplayWidget { get; set; }
-		[Ordinal(23)] [RED("terminalTitle")] public CString TerminalTitle { get; set; }
-		[Ordinal(24)] [RED("onGlitchingStateChangedListener")] public CUInt32 OnGlitchingStateChangedListener { get; set; }
+		private TweakDBID _layoutID;
+		private CName _currentLayoutLibraryID;
+		private wCHandle<inkWidget> _mainLayout;
+		private CArray<gamePersistentID> _currentlyActiveDevices;
+		private wCHandle<inkVideoWidget> _mainDisplayWidget;
+		private CString _terminalTitle;
+		private CUInt32 _onGlitchingStateChangedListener;
+
+		[Ordinal(18)] 
+		[RED("layoutID")] 
+		public TweakDBID LayoutID
+		{
+			get => GetProperty(ref _layoutID);
+			set => SetProperty(ref _layoutID, value);
+		}
+
+		[Ordinal(19)] 
+		[RED("currentLayoutLibraryID")] 
+		public CName CurrentLayoutLibraryID
+		{
+			get => GetProperty(ref _currentLayoutLibraryID);
+			set => SetProperty(ref _currentLayoutLibraryID, value);
+		}
+
+		[Ordinal(20)] 
+		[RED("mainLayout")] 
+		public wCHandle<inkWidget> MainLayout
+		{
+			get => GetProperty(ref _mainLayout);
+			set => SetProperty(ref _mainLayout, value);
+		}
+
+		[Ordinal(21)] 
+		[RED("currentlyActiveDevices")] 
+		public CArray<gamePersistentID> CurrentlyActiveDevices
+		{
+			get => GetProperty(ref _currentlyActiveDevices);
+			set => SetProperty(ref _currentlyActiveDevices, value);
+		}
+
+		[Ordinal(22)] 
+		[RED("mainDisplayWidget")] 
+		public wCHandle<inkVideoWidget> MainDisplayWidget
+		{
+			get => GetProperty(ref _mainDisplayWidget);
+			set => SetProperty(ref _mainDisplayWidget, value);
+		}
+
+		[Ordinal(23)] 
+		[RED("terminalTitle")] 
+		public CString TerminalTitle
+		{
+			get => GetProperty(ref _terminalTitle);
+			set => SetProperty(ref _terminalTitle, value);
+		}
+
+		[Ordinal(24)] 
+		[RED("onGlitchingStateChangedListener")] 
+		public CUInt32 OnGlitchingStateChangedListener
+		{
+			get => GetProperty(ref _onGlitchingStateChangedListener);
+			set => SetProperty(ref _onGlitchingStateChangedListener, value);
+		}
 
 		public TerminalInkGameControllerBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

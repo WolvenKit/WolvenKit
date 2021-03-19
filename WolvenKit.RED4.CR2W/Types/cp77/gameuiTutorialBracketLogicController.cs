@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiTutorialBracketLogicController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("loopAnim")] public CHandle<inkanimProxy> LoopAnim { get; set; }
+		private CHandle<inkanimProxy> _loopAnim;
+
+		[Ordinal(1)] 
+		[RED("loopAnim")] 
+		public CHandle<inkanimProxy> LoopAnim
+		{
+			get => GetProperty(ref _loopAnim);
+			set => SetProperty(ref _loopAnim, value);
+		}
 
 		public gameuiTutorialBracketLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

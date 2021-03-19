@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameObjectSpawnParametersList : gameObjectSpawnParameter
 	{
-		[Ordinal(0)] [RED("parameterList")] public CArray<CHandle<gameObjectSpawnParameter>> ParameterList { get; set; }
+		private CArray<CHandle<gameObjectSpawnParameter>> _parameterList;
+
+		[Ordinal(0)] 
+		[RED("parameterList")] 
+		public CArray<CHandle<gameObjectSpawnParameter>> ParameterList
+		{
+			get => GetProperty(ref _parameterList);
+			set => SetProperty(ref _parameterList, value);
+		}
 
 		public gameObjectSpawnParametersList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

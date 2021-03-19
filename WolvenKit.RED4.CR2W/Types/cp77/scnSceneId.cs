@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnSceneId : CVariable
 	{
-		[Ordinal(0)] [RED("resPathHash")] public CUInt64 ResPathHash { get; set; }
+		private CUInt64 _resPathHash;
+
+		[Ordinal(0)] 
+		[RED("resPathHash")] 
+		public CUInt64 ResPathHash
+		{
+			get => GetProperty(ref _resPathHash);
+			set => SetProperty(ref _resPathHash, value);
+		}
 
 		public scnSceneId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

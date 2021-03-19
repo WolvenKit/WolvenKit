@@ -7,10 +7,42 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animFloatClamp : CVariable
 	{
-		[Ordinal(0)] [RED("useMin")] public CBool UseMin { get; set; }
-		[Ordinal(1)] [RED("min")] public CFloat Min { get; set; }
-		[Ordinal(2)] [RED("useMax")] public CBool UseMax { get; set; }
-		[Ordinal(3)] [RED("max")] public CFloat Max { get; set; }
+		private CBool _useMin;
+		private CFloat _min;
+		private CBool _useMax;
+		private CFloat _max;
+
+		[Ordinal(0)] 
+		[RED("useMin")] 
+		public CBool UseMin
+		{
+			get => GetProperty(ref _useMin);
+			set => SetProperty(ref _useMin, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("min")] 
+		public CFloat Min
+		{
+			get => GetProperty(ref _min);
+			set => SetProperty(ref _min, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("useMax")] 
+		public CBool UseMax
+		{
+			get => GetProperty(ref _useMax);
+			set => SetProperty(ref _useMax, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("max")] 
+		public CFloat Max
+		{
+			get => GetProperty(ref _max);
+			set => SetProperty(ref _max, value);
+		}
 
 		public animFloatClamp(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

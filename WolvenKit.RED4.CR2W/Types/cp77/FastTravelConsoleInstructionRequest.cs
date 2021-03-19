@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FastTravelConsoleInstructionRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("instruction")] public CEnum<EFastTravelSystemInstruction> Instruction { get; set; }
-		[Ordinal(1)] [RED("magicFloat")] public CFloat MagicFloat { get; set; }
+		private CEnum<EFastTravelSystemInstruction> _instruction;
+		private CFloat _magicFloat;
+
+		[Ordinal(0)] 
+		[RED("instruction")] 
+		public CEnum<EFastTravelSystemInstruction> Instruction
+		{
+			get => GetProperty(ref _instruction);
+			set => SetProperty(ref _instruction, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("magicFloat")] 
+		public CFloat MagicFloat
+		{
+			get => GetProperty(ref _magicFloat);
+			set => SetProperty(ref _magicFloat, value);
+		}
 
 		public FastTravelConsoleInstructionRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

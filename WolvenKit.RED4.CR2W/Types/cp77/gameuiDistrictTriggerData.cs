@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiDistrictTriggerData : CVariable
 	{
-		[Ordinal(0)] [RED("district")] public CEnum<gamedataDistrict> District { get; set; }
-		[Ordinal(1)] [RED("triggerName")] public CName TriggerName { get; set; }
+		private CEnum<gamedataDistrict> _district;
+		private CName _triggerName;
+
+		[Ordinal(0)] 
+		[RED("district")] 
+		public CEnum<gamedataDistrict> District
+		{
+			get => GetProperty(ref _district);
+			set => SetProperty(ref _district, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("triggerName")] 
+		public CName TriggerName
+		{
+			get => GetProperty(ref _triggerName);
+			set => SetProperty(ref _triggerName, value);
+		}
 
 		public gameuiDistrictTriggerData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

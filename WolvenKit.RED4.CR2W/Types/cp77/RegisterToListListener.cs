@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class RegisterToListListener : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("object")] public wCHandle<gameObject> Object { get; set; }
-		[Ordinal(1)] [RED("funcName")] public CName FuncName { get; set; }
+		private wCHandle<gameObject> _object;
+		private CName _funcName;
+
+		[Ordinal(0)] 
+		[RED("object")] 
+		public wCHandle<gameObject> Object
+		{
+			get => GetProperty(ref _object);
+			set => SetProperty(ref _object, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("funcName")] 
+		public CName FuncName
+		{
+			get => GetProperty(ref _funcName);
+			set => SetProperty(ref _funcName, value);
+		}
 
 		public RegisterToListListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

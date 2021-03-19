@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ToggleCustomActionDeviceOperation : DeviceOperationBase
 	{
-		[Ordinal(5)] [RED("customActionID")] public CName CustomActionID { get; set; }
-		[Ordinal(6)] [RED("enabled")] public CBool Enabled { get; set; }
+		private CName _customActionID;
+		private CBool _enabled;
+
+		[Ordinal(5)] 
+		[RED("customActionID")] 
+		public CName CustomActionID
+		{
+			get => GetProperty(ref _customActionID);
+			set => SetProperty(ref _customActionID, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("enabled")] 
+		public CBool Enabled
+		{
+			get => GetProperty(ref _enabled);
+			set => SetProperty(ref _enabled, value);
+		}
 
 		public ToggleCustomActionDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

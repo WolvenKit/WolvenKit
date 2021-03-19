@@ -7,11 +7,51 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ProgressBarButton : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("craftingFill")] public inkWidgetReference CraftingFill { get; set; }
-		[Ordinal(2)] [RED("craftingLabel")] public inkTextWidgetReference CraftingLabel { get; set; }
-		[Ordinal(3)] [RED("ButtonController")] public wCHandle<inkButtonController> ButtonController { get; set; }
-		[Ordinal(4)] [RED("progressController")] public wCHandle<ProgressBarsController> ProgressController { get; set; }
-		[Ordinal(5)] [RED("available")] public CBool Available { get; set; }
+		private inkWidgetReference _craftingFill;
+		private inkTextWidgetReference _craftingLabel;
+		private wCHandle<inkButtonController> _buttonController;
+		private wCHandle<ProgressBarsController> _progressController;
+		private CBool _available;
+
+		[Ordinal(1)] 
+		[RED("craftingFill")] 
+		public inkWidgetReference CraftingFill
+		{
+			get => GetProperty(ref _craftingFill);
+			set => SetProperty(ref _craftingFill, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("craftingLabel")] 
+		public inkTextWidgetReference CraftingLabel
+		{
+			get => GetProperty(ref _craftingLabel);
+			set => SetProperty(ref _craftingLabel, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("ButtonController")] 
+		public wCHandle<inkButtonController> ButtonController
+		{
+			get => GetProperty(ref _buttonController);
+			set => SetProperty(ref _buttonController, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("progressController")] 
+		public wCHandle<ProgressBarsController> ProgressController
+		{
+			get => GetProperty(ref _progressController);
+			set => SetProperty(ref _progressController, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("available")] 
+		public CBool Available
+		{
+			get => GetProperty(ref _available);
+			set => SetProperty(ref _available, value);
+		}
 
 		public ProgressBarButton(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

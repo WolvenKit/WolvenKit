@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ModifyStatPoolValueEffector : gameEffector
 	{
-		[Ordinal(0)] [RED("statPoolUpdates")] public CArray<wCHandle<gamedataStatPoolUpdate_Record>> StatPoolUpdates { get; set; }
-		[Ordinal(1)] [RED("usePercent")] public CBool UsePercent { get; set; }
-		[Ordinal(2)] [RED("applicationTarget")] public CString ApplicationTarget { get; set; }
+		private CArray<wCHandle<gamedataStatPoolUpdate_Record>> _statPoolUpdates;
+		private CBool _usePercent;
+		private CString _applicationTarget;
+
+		[Ordinal(0)] 
+		[RED("statPoolUpdates")] 
+		public CArray<wCHandle<gamedataStatPoolUpdate_Record>> StatPoolUpdates
+		{
+			get => GetProperty(ref _statPoolUpdates);
+			set => SetProperty(ref _statPoolUpdates, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("usePercent")] 
+		public CBool UsePercent
+		{
+			get => GetProperty(ref _usePercent);
+			set => SetProperty(ref _usePercent, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("applicationTarget")] 
+		public CString ApplicationTarget
+		{
+			get => GetProperty(ref _applicationTarget);
+			set => SetProperty(ref _applicationTarget, value);
+		}
 
 		public ModifyStatPoolValueEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

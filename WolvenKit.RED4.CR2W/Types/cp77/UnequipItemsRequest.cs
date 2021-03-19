@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UnequipItemsRequest : gamePlayerScriptableSystemRequest
 	{
-		[Ordinal(1)] [RED("items")] public CArray<gameItemID> Items { get; set; }
+		private CArray<gameItemID> _items;
+
+		[Ordinal(1)] 
+		[RED("items")] 
+		public CArray<gameItemID> Items
+		{
+			get => GetProperty(ref _items);
+			set => SetProperty(ref _items, value);
+		}
 
 		public UnequipItemsRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

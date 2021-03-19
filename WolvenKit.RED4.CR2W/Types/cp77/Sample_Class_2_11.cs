@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Sample_Class_2_11 : CVariable
 	{
-		[Ordinal(0)] [RED("var0")] public CFloat Var0 { get; set; }
+		private CFloat _var0;
+
+		[Ordinal(0)] 
+		[RED("var0")] 
+		public CFloat Var0
+		{
+			get => GetProperty(ref _var0);
+			set => SetProperty(ref _var0, value);
+		}
 
 		public Sample_Class_2_11(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

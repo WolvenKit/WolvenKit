@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioNpcGunChoirSettings : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("voices")] public CArray<CName> Voices { get; set; }
+		private CArray<CName> _voices;
+
+		[Ordinal(1)] 
+		[RED("voices")] 
+		public CArray<CName> Voices
+		{
+			get => GetProperty(ref _voices);
+			set => SetProperty(ref _voices, value);
+		}
 
 		public audioNpcGunChoirSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

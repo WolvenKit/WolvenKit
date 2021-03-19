@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HubExperienceBarController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("foregroundContainer")] public inkWidgetReference ForegroundContainer { get; set; }
+		private inkWidgetReference _foregroundContainer;
+
+		[Ordinal(1)] 
+		[RED("foregroundContainer")] 
+		public inkWidgetReference ForegroundContainer
+		{
+			get => GetProperty(ref _foregroundContainer);
+			set => SetProperty(ref _foregroundContainer, value);
+		}
 
 		public HubExperienceBarController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

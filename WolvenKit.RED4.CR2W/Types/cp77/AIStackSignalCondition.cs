@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIStackSignalCondition : AIbehaviorStackScriptPassiveExpressionDefinition
 	{
-		[Ordinal(0)] [RED("signalName")] public CName SignalName { get; set; }
+		private CName _signalName;
+
+		[Ordinal(0)] 
+		[RED("signalName")] 
+		public CName SignalName
+		{
+			get => GetProperty(ref _signalName);
+			set => SetProperty(ref _signalName, value);
+		}
 
 		public AIStackSignalCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class cpPlayerDetectorPS : gameObjectPS
 	{
-		[Ordinal(0)] [RED("secondsCounter")] public CInt32 SecondsCounter { get; set; }
+		private CInt32 _secondsCounter;
+
+		[Ordinal(0)] 
+		[RED("secondsCounter")] 
+		public CInt32 SecondsCounter
+		{
+			get => GetProperty(ref _secondsCounter);
+			set => SetProperty(ref _secondsCounter, value);
+		}
 
 		public cpPlayerDetectorPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

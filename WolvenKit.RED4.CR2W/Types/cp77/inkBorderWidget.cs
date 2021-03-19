@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkBorderWidget : inkLeafWidget
 	{
-		[Ordinal(20)] [RED("thickness")] public CFloat Thickness { get; set; }
+		private CFloat _thickness;
+
+		[Ordinal(20)] 
+		[RED("thickness")] 
+		public CFloat Thickness
+		{
+			get => GetProperty(ref _thickness);
+			set => SetProperty(ref _thickness, value);
+		}
 
 		public inkBorderWidget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

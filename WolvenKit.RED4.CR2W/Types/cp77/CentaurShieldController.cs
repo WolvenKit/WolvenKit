@@ -7,12 +7,60 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CentaurShieldController : AICustomComponents
 	{
-		[Ordinal(5)] [RED("startWithShieldActive")] public CBool StartWithShieldActive { get; set; }
-		[Ordinal(6)] [RED("explosionAttack")] public gameEffectRef ExplosionAttack { get; set; }
-		[Ordinal(7)] [RED("animFeatureName")] public CName AnimFeatureName { get; set; }
-		[Ordinal(8)] [RED("shieldDestroyedModifierName")] public CName ShieldDestroyedModifierName { get; set; }
-		[Ordinal(9)] [RED("shieldState")] public CEnum<ECentaurShieldState> ShieldState { get; set; }
-		[Ordinal(10)] [RED("centaurBlackboard")] public CHandle<gameIBlackboard> CentaurBlackboard { get; set; }
+		private CBool _startWithShieldActive;
+		private gameEffectRef _explosionAttack;
+		private CName _animFeatureName;
+		private CName _shieldDestroyedModifierName;
+		private CEnum<ECentaurShieldState> _shieldState;
+		private CHandle<gameIBlackboard> _centaurBlackboard;
+
+		[Ordinal(5)] 
+		[RED("startWithShieldActive")] 
+		public CBool StartWithShieldActive
+		{
+			get => GetProperty(ref _startWithShieldActive);
+			set => SetProperty(ref _startWithShieldActive, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("explosionAttack")] 
+		public gameEffectRef ExplosionAttack
+		{
+			get => GetProperty(ref _explosionAttack);
+			set => SetProperty(ref _explosionAttack, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("animFeatureName")] 
+		public CName AnimFeatureName
+		{
+			get => GetProperty(ref _animFeatureName);
+			set => SetProperty(ref _animFeatureName, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("shieldDestroyedModifierName")] 
+		public CName ShieldDestroyedModifierName
+		{
+			get => GetProperty(ref _shieldDestroyedModifierName);
+			set => SetProperty(ref _shieldDestroyedModifierName, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("shieldState")] 
+		public CEnum<ECentaurShieldState> ShieldState
+		{
+			get => GetProperty(ref _shieldState);
+			set => SetProperty(ref _shieldState, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("centaurBlackboard")] 
+		public CHandle<gameIBlackboard> CentaurBlackboard
+		{
+			get => GetProperty(ref _centaurBlackboard);
+			set => SetProperty(ref _centaurBlackboard, value);
+		}
 
 		public CentaurShieldController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

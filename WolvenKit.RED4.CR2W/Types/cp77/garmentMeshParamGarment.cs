@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class garmentMeshParamGarment : meshMeshParameter
 	{
-		[Ordinal(0)] [RED("chunks")] public CArray<garmentMeshParamGarmentChunkData> Chunks { get; set; }
+		private CArray<garmentMeshParamGarmentChunkData> _chunks;
+
+		[Ordinal(0)] 
+		[RED("chunks")] 
+		public CArray<garmentMeshParamGarmentChunkData> Chunks
+		{
+			get => GetProperty(ref _chunks);
+			set => SetProperty(ref _chunks, value);
+		}
 
 		public garmentMeshParamGarment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

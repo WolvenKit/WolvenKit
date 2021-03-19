@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entRagdollApplyImpulseEvent : redEvent
 	{
-		[Ordinal(0)] [RED("worldImpulsePos")] public Vector4 WorldImpulsePos { get; set; }
-		[Ordinal(1)] [RED("worldImpulseValue")] public Vector4 WorldImpulseValue { get; set; }
-		[Ordinal(2)] [RED("influenceRadius")] public CFloat InfluenceRadius { get; set; }
+		private Vector4 _worldImpulsePos;
+		private Vector4 _worldImpulseValue;
+		private CFloat _influenceRadius;
+
+		[Ordinal(0)] 
+		[RED("worldImpulsePos")] 
+		public Vector4 WorldImpulsePos
+		{
+			get => GetProperty(ref _worldImpulsePos);
+			set => SetProperty(ref _worldImpulsePos, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("worldImpulseValue")] 
+		public Vector4 WorldImpulseValue
+		{
+			get => GetProperty(ref _worldImpulseValue);
+			set => SetProperty(ref _worldImpulseValue, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("influenceRadius")] 
+		public CFloat InfluenceRadius
+		{
+			get => GetProperty(ref _influenceRadius);
+			set => SetProperty(ref _influenceRadius, value);
+		}
 
 		public entRagdollApplyImpulseEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

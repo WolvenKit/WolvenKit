@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimStateTransitionCondition_CompositeSimultaneous : animIAnimStateTransitionCondition
 	{
-		[Ordinal(0)] [RED("conditions")] public CArray<CHandle<animIAnimStateTransitionCondition>> Conditions { get; set; }
+		private CArray<CHandle<animIAnimStateTransitionCondition>> _conditions;
+
+		[Ordinal(0)] 
+		[RED("conditions")] 
+		public CArray<CHandle<animIAnimStateTransitionCondition>> Conditions
+		{
+			get => GetProperty(ref _conditions);
+			set => SetProperty(ref _conditions, value);
+		}
 
 		public animAnimStateTransitionCondition_CompositeSimultaneous(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

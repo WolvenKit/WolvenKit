@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SecurityAlarmSetup : CVariable
 	{
-		[Ordinal(0)] [RED("useSound")] public CBool UseSound { get; set; }
-		[Ordinal(1)] [RED("alarmSound")] public CName AlarmSound { get; set; }
+		private CBool _useSound;
+		private CName _alarmSound;
+
+		[Ordinal(0)] 
+		[RED("useSound")] 
+		public CBool UseSound
+		{
+			get => GetProperty(ref _useSound);
+			set => SetProperty(ref _useSound, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("alarmSound")] 
+		public CName AlarmSound
+		{
+			get => GetProperty(ref _alarmSound);
+			set => SetProperty(ref _alarmSound, value);
+		}
 
 		public SecurityAlarmSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

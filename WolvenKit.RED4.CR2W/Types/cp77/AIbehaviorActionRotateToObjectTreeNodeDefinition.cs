@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorActionRotateToObjectTreeNodeDefinition : AIbehaviorActionRotateBaseTreeNodeDefinition
 	{
-		[Ordinal(5)] [RED("completeWhenRotated")] public CHandle<AIArgumentMapping> CompleteWhenRotated { get; set; }
+		private CHandle<AIArgumentMapping> _completeWhenRotated;
+
+		[Ordinal(5)] 
+		[RED("completeWhenRotated")] 
+		public CHandle<AIArgumentMapping> CompleteWhenRotated
+		{
+			get => GetProperty(ref _completeWhenRotated);
+			set => SetProperty(ref _completeWhenRotated, value);
+		}
 
 		public AIbehaviorActionRotateToObjectTreeNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

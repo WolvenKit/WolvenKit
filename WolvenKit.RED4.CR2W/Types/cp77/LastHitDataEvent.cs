@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LastHitDataEvent : redEvent
 	{
-		[Ordinal(0)] [RED("hitReactionBehaviorData")] public CHandle<HitReactionBehaviorData> HitReactionBehaviorData { get; set; }
+		private CHandle<HitReactionBehaviorData> _hitReactionBehaviorData;
+
+		[Ordinal(0)] 
+		[RED("hitReactionBehaviorData")] 
+		public CHandle<HitReactionBehaviorData> HitReactionBehaviorData
+		{
+			get => GetProperty(ref _hitReactionBehaviorData);
+			set => SetProperty(ref _hitReactionBehaviorData, value);
+		}
 
 		public LastHitDataEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

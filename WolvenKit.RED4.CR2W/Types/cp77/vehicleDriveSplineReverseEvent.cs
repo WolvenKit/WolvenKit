@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class vehicleDriveSplineReverseEvent : redEvent
 	{
-		[Ordinal(0)] [RED("splineRef")] public NodeRef SplineRef { get; set; }
-		[Ordinal(1)] [RED("backwards")] public CBool Backwards { get; set; }
-		[Ordinal(2)] [RED("reverseSpline")] public CBool ReverseSpline { get; set; }
+		private NodeRef _splineRef;
+		private CBool _backwards;
+		private CBool _reverseSpline;
+
+		[Ordinal(0)] 
+		[RED("splineRef")] 
+		public NodeRef SplineRef
+		{
+			get => GetProperty(ref _splineRef);
+			set => SetProperty(ref _splineRef, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("backwards")] 
+		public CBool Backwards
+		{
+			get => GetProperty(ref _backwards);
+			set => SetProperty(ref _backwards, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("reverseSpline")] 
+		public CBool ReverseSpline
+		{
+			get => GetProperty(ref _reverseSpline);
+			set => SetProperty(ref _reverseSpline, value);
+		}
 
 		public vehicleDriveSplineReverseEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

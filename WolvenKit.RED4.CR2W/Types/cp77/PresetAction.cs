@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PresetAction : ActionBool
 	{
-		[Ordinal(25)] [RED("preset")] public CHandle<SmartHousePreset> Preset { get; set; }
+		private CHandle<SmartHousePreset> _preset;
+
+		[Ordinal(25)] 
+		[RED("preset")] 
+		public CHandle<SmartHousePreset> Preset
+		{
+			get => GetProperty(ref _preset);
+			set => SetProperty(ref _preset, value);
+		}
 
 		public PresetAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

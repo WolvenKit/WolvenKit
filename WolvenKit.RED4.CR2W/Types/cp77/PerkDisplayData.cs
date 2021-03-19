@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PerkDisplayData : BasePerkDisplayData
 	{
-		[Ordinal(10)] [RED("area")] public CEnum<gamedataPerkArea> Area { get; set; }
-		[Ordinal(11)] [RED("type")] public CEnum<gamedataPerkType> Type { get; set; }
+		private CEnum<gamedataPerkArea> _area;
+		private CEnum<gamedataPerkType> _type;
+
+		[Ordinal(10)] 
+		[RED("area")] 
+		public CEnum<gamedataPerkArea> Area
+		{
+			get => GetProperty(ref _area);
+			set => SetProperty(ref _area, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("type")] 
+		public CEnum<gamedataPerkType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
 
 		public PerkDisplayData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

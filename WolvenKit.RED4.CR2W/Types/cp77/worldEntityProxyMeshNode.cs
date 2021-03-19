@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldEntityProxyMeshNode : worldPrefabProxyMeshNode
 	{
-		[Ordinal(19)] [RED("ownerGlobalId")] public worldGlobalNodeID OwnerGlobalId { get; set; }
-		[Ordinal(20)] [RED("entityAttachDistance")] public CFloat EntityAttachDistance { get; set; }
+		private worldGlobalNodeID _ownerGlobalId;
+		private CFloat _entityAttachDistance;
+
+		[Ordinal(19)] 
+		[RED("ownerGlobalId")] 
+		public worldGlobalNodeID OwnerGlobalId
+		{
+			get => GetProperty(ref _ownerGlobalId);
+			set => SetProperty(ref _ownerGlobalId, value);
+		}
+
+		[Ordinal(20)] 
+		[RED("entityAttachDistance")] 
+		public CFloat EntityAttachDistance
+		{
+			get => GetProperty(ref _entityAttachDistance);
+			set => SetProperty(ref _entityAttachDistance, value);
+		}
 
 		public worldEntityProxyMeshNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

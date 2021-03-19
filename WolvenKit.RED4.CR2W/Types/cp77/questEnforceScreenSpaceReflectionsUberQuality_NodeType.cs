@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questEnforceScreenSpaceReflectionsUberQuality_NodeType : questIRenderFxManagerNodeType
 	{
-		[Ordinal(0)] [RED("enabled")] public CBool Enabled { get; set; }
+		private CBool _enabled;
+
+		[Ordinal(0)] 
+		[RED("enabled")] 
+		public CBool Enabled
+		{
+			get => GetProperty(ref _enabled);
+			set => SetProperty(ref _enabled, value);
+		}
 
 		public questEnforceScreenSpaceReflectionsUberQuality_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

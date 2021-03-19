@@ -7,20 +7,132 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ExplodingBullet : BaseBullet
 	{
-		[Ordinal(56)] [RED("explosionTime")] public CFloat ExplosionTime { get; set; }
-		[Ordinal(57)] [RED("effectReference")] public gameEffectRef EffectReference { get; set; }
-		[Ordinal(58)] [RED("hasExploded")] public CBool HasExploded { get; set; }
-		[Ordinal(59)] [RED("initialPosition")] public Vector4 InitialPosition { get; set; }
-		[Ordinal(60)] [RED("trailStarted")] public CBool TrailStarted { get; set; }
-		[Ordinal(61)] [RED("weapon")] public wCHandle<gameweaponObject> Weapon { get; set; }
-		[Ordinal(62)] [RED("attack_record")] public CHandle<gamedataAttack_Record> Attack_record { get; set; }
-		[Ordinal(63)] [RED("attackID")] public TweakDBID AttackID { get; set; }
-		[Ordinal(64)] [RED("colliderBox")] public Vector4 ColliderBox { get; set; }
-		[Ordinal(65)] [RED("rotation")] public Quaternion Rotation { get; set; }
-		[Ordinal(66)] [RED("range")] public CFloat Range { get; set; }
-		[Ordinal(67)] [RED("explodeAfterRangeTravelled")] public CBool ExplodeAfterRangeTravelled { get; set; }
-		[Ordinal(68)] [RED("attack")] public CHandle<gameIAttack> Attack { get; set; }
-		[Ordinal(69)] [RED("BulletCollisionEvaluator")] public CHandle<BulletCollisionEvaluator> BulletCollisionEvaluator { get; set; }
+		private CFloat _explosionTime;
+		private gameEffectRef _effectReference;
+		private CBool _hasExploded;
+		private Vector4 _initialPosition;
+		private CBool _trailStarted;
+		private wCHandle<gameweaponObject> _weapon;
+		private CHandle<gamedataAttack_Record> _attack_record;
+		private TweakDBID _attackID;
+		private Vector4 _colliderBox;
+		private Quaternion _rotation;
+		private CFloat _range;
+		private CBool _explodeAfterRangeTravelled;
+		private CHandle<gameIAttack> _attack;
+		private CHandle<BulletCollisionEvaluator> _bulletCollisionEvaluator;
+
+		[Ordinal(56)] 
+		[RED("explosionTime")] 
+		public CFloat ExplosionTime
+		{
+			get => GetProperty(ref _explosionTime);
+			set => SetProperty(ref _explosionTime, value);
+		}
+
+		[Ordinal(57)] 
+		[RED("effectReference")] 
+		public gameEffectRef EffectReference
+		{
+			get => GetProperty(ref _effectReference);
+			set => SetProperty(ref _effectReference, value);
+		}
+
+		[Ordinal(58)] 
+		[RED("hasExploded")] 
+		public CBool HasExploded
+		{
+			get => GetProperty(ref _hasExploded);
+			set => SetProperty(ref _hasExploded, value);
+		}
+
+		[Ordinal(59)] 
+		[RED("initialPosition")] 
+		public Vector4 InitialPosition
+		{
+			get => GetProperty(ref _initialPosition);
+			set => SetProperty(ref _initialPosition, value);
+		}
+
+		[Ordinal(60)] 
+		[RED("trailStarted")] 
+		public CBool TrailStarted
+		{
+			get => GetProperty(ref _trailStarted);
+			set => SetProperty(ref _trailStarted, value);
+		}
+
+		[Ordinal(61)] 
+		[RED("weapon")] 
+		public wCHandle<gameweaponObject> Weapon
+		{
+			get => GetProperty(ref _weapon);
+			set => SetProperty(ref _weapon, value);
+		}
+
+		[Ordinal(62)] 
+		[RED("attack_record")] 
+		public CHandle<gamedataAttack_Record> Attack_record
+		{
+			get => GetProperty(ref _attack_record);
+			set => SetProperty(ref _attack_record, value);
+		}
+
+		[Ordinal(63)] 
+		[RED("attackID")] 
+		public TweakDBID AttackID
+		{
+			get => GetProperty(ref _attackID);
+			set => SetProperty(ref _attackID, value);
+		}
+
+		[Ordinal(64)] 
+		[RED("colliderBox")] 
+		public Vector4 ColliderBox
+		{
+			get => GetProperty(ref _colliderBox);
+			set => SetProperty(ref _colliderBox, value);
+		}
+
+		[Ordinal(65)] 
+		[RED("rotation")] 
+		public Quaternion Rotation
+		{
+			get => GetProperty(ref _rotation);
+			set => SetProperty(ref _rotation, value);
+		}
+
+		[Ordinal(66)] 
+		[RED("range")] 
+		public CFloat Range
+		{
+			get => GetProperty(ref _range);
+			set => SetProperty(ref _range, value);
+		}
+
+		[Ordinal(67)] 
+		[RED("explodeAfterRangeTravelled")] 
+		public CBool ExplodeAfterRangeTravelled
+		{
+			get => GetProperty(ref _explodeAfterRangeTravelled);
+			set => SetProperty(ref _explodeAfterRangeTravelled, value);
+		}
+
+		[Ordinal(68)] 
+		[RED("attack")] 
+		public CHandle<gameIAttack> Attack
+		{
+			get => GetProperty(ref _attack);
+			set => SetProperty(ref _attack, value);
+		}
+
+		[Ordinal(69)] 
+		[RED("BulletCollisionEvaluator")] 
+		public CHandle<BulletCollisionEvaluator> BulletCollisionEvaluator
+		{
+			get => GetProperty(ref _bulletCollisionEvaluator);
+			set => SetProperty(ref _bulletCollisionEvaluator, value);
+		}
 
 		public ExplodingBullet(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class RefreshFloorDataEvent : redEvent
 	{
-		[Ordinal(0)] [RED("passToEntity")] public CBool PassToEntity { get; set; }
+		private CBool _passToEntity;
+
+		[Ordinal(0)] 
+		[RED("passToEntity")] 
+		public CBool PassToEntity
+		{
+			get => GetProperty(ref _passToEntity);
+			set => SetProperty(ref _passToEntity, value);
+		}
 
 		public RefreshFloorDataEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

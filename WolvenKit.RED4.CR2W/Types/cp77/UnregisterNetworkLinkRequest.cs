@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UnregisterNetworkLinkRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("linksData")] public CArray<SNetworkLinkData> LinksData { get; set; }
+		private CArray<SNetworkLinkData> _linksData;
+
+		[Ordinal(0)] 
+		[RED("linksData")] 
+		public CArray<SNetworkLinkData> LinksData
+		{
+			get => GetProperty(ref _linksData);
+			set => SetProperty(ref _linksData, value);
+		}
 
 		public UnregisterNetworkLinkRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

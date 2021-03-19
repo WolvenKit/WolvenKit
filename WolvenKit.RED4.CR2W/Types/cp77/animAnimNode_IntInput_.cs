@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_IntInput_ : animAnimNode_IntValue
 	{
-		[Ordinal(11)] [RED("group")] public CName Group { get; set; }
-		[Ordinal(12)] [RED("name")] public CName Name { get; set; }
+		private CName _group;
+		private CName _name;
+
+		[Ordinal(11)] 
+		[RED("group")] 
+		public CName Group
+		{
+			get => GetProperty(ref _group);
+			set => SetProperty(ref _group, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("name")] 
+		public CName Name
+		{
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
+		}
 
 		public animAnimNode_IntInput_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

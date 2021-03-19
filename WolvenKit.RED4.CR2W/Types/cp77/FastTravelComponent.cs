@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FastTravelComponent : gameScriptableComponent
 	{
-		[Ordinal(5)] [RED("fastTravelNodes")] public CArray<CHandle<gameFastTravelPointData>> FastTravelNodes { get; set; }
+		private CArray<CHandle<gameFastTravelPointData>> _fastTravelNodes;
+
+		[Ordinal(5)] 
+		[RED("fastTravelNodes")] 
+		public CArray<CHandle<gameFastTravelPointData>> FastTravelNodes
+		{
+			get => GetProperty(ref _fastTravelNodes);
+			set => SetProperty(ref _fastTravelNodes, value);
+		}
 
 		public FastTravelComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

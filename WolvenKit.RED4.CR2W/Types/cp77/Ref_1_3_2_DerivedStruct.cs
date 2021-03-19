@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Ref_1_3_2_DerivedStruct : Ref_1_3_2_NonTrivialStruct
 	{
-		[Ordinal(2)] [RED("prop3")] public CBool Prop3 { get; set; }
+		private CBool _prop3;
+
+		[Ordinal(2)] 
+		[RED("prop3")] 
+		public CBool Prop3
+		{
+			get => GetProperty(ref _prop3);
+			set => SetProperty(ref _prop3, value);
+		}
 
 		public Ref_1_3_2_DerivedStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

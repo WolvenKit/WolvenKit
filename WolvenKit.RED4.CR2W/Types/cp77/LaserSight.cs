@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LaserSight : Attack_Beam
 	{
-		[Ordinal(0)] [RED("previousTarget")] public wCHandle<entEntity> PreviousTarget { get; set; }
+		private wCHandle<entEntity> _previousTarget;
+
+		[Ordinal(0)] 
+		[RED("previousTarget")] 
+		public wCHandle<entEntity> PreviousTarget
+		{
+			get => GetProperty(ref _previousTarget);
+			set => SetProperty(ref _previousTarget, value);
+		}
 
 		public LaserSight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

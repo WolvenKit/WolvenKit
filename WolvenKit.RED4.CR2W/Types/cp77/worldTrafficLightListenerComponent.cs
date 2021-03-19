@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldTrafficLightListenerComponent : entIComponent
 	{
-		[Ordinal(3)] [RED("intersectionRef")] public NodeRef IntersectionRef { get; set; }
-		[Ordinal(4)] [RED("groupIdx")] public CUInt32 GroupIdx { get; set; }
+		private NodeRef _intersectionRef;
+		private CUInt32 _groupIdx;
+
+		[Ordinal(3)] 
+		[RED("intersectionRef")] 
+		public NodeRef IntersectionRef
+		{
+			get => GetProperty(ref _intersectionRef);
+			set => SetProperty(ref _intersectionRef, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("groupIdx")] 
+		public CUInt32 GroupIdx
+		{
+			get => GetProperty(ref _groupIdx);
+			set => SetProperty(ref _groupIdx, value);
+		}
 
 		public worldTrafficLightListenerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CanPlayerHijackMountedNpcPrereqState : gamePrereqState
 	{
-		[Ordinal(0)] [RED("mountingListener")] public CHandle<gameScriptedPrereqMountingListenerWrapper> MountingListener { get; set; }
+		private CHandle<gameScriptedPrereqMountingListenerWrapper> _mountingListener;
+
+		[Ordinal(0)] 
+		[RED("mountingListener")] 
+		public CHandle<gameScriptedPrereqMountingListenerWrapper> MountingListener
+		{
+			get => GetProperty(ref _mountingListener);
+			set => SetProperty(ref _mountingListener, value);
+		}
 
 		public CanPlayerHijackMountedNpcPrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

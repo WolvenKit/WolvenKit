@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectObjectProvider_SweepOverTime : gameEffectObjectProvider
 	{
-		[Ordinal(0)] [RED("filterData")] public CHandle<physicsFilterData> FilterData { get; set; }
+		private CHandle<physicsFilterData> _filterData;
+
+		[Ordinal(0)] 
+		[RED("filterData")] 
+		public CHandle<physicsFilterData> FilterData
+		{
+			get => GetProperty(ref _filterData);
+			set => SetProperty(ref _filterData, value);
+		}
 
 		public gameEffectObjectProvider_SweepOverTime(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

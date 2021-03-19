@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questInjectLoot_NodeTypeParams : CVariable
 	{
-		[Ordinal(0)] [RED("objectRef")] public CHandle<questUniversalRef> ObjectRef { get; set; }
-		[Ordinal(1)] [RED("operations")] public CArray<questInjectLoot_NodeTypeParams_OperationData> Operations { get; set; }
+		private CHandle<questUniversalRef> _objectRef;
+		private CArray<questInjectLoot_NodeTypeParams_OperationData> _operations;
+
+		[Ordinal(0)] 
+		[RED("objectRef")] 
+		public CHandle<questUniversalRef> ObjectRef
+		{
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("operations")] 
+		public CArray<questInjectLoot_NodeTypeParams_OperationData> Operations
+		{
+			get => GetProperty(ref _operations);
+			set => SetProperty(ref _operations, value);
+		}
 
 		public questInjectLoot_NodeTypeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_OrientConstraint_WeightedTransform : CVariable
 	{
-		[Ordinal(0)] [RED("transform")] public animTransformIndex Transform { get; set; }
-		[Ordinal(1)] [RED("weight")] public CFloat Weight { get; set; }
+		private animTransformIndex _transform;
+		private CFloat _weight;
+
+		[Ordinal(0)] 
+		[RED("transform")] 
+		public animTransformIndex Transform
+		{
+			get => GetProperty(ref _transform);
+			set => SetProperty(ref _transform, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("weight")] 
+		public CFloat Weight
+		{
+			get => GetProperty(ref _weight);
+			set => SetProperty(ref _weight, value);
+		}
 
 		public animAnimNode_OrientConstraint_WeightedTransform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

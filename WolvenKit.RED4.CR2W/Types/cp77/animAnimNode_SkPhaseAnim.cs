@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_SkPhaseAnim : animAnimNode_SkAnim
 	{
-		[Ordinal(30)] [RED("phase")] public CName Phase { get; set; }
+		private CName _phase;
+
+		[Ordinal(30)] 
+		[RED("phase")] 
+		public CName Phase
+		{
+			get => GetProperty(ref _phase);
+			set => SetProperty(ref _phase, value);
+		}
 
 		public animAnimNode_SkPhaseAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

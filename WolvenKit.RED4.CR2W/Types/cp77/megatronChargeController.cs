@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class megatronChargeController : ChargeLogicController
 	{
-		[Ordinal(1)] [RED("chargeBar")] public wCHandle<inkImageWidget> ChargeBar { get; set; }
+		private wCHandle<inkImageWidget> _chargeBar;
+
+		[Ordinal(1)] 
+		[RED("chargeBar")] 
+		public wCHandle<inkImageWidget> ChargeBar
+		{
+			get => GetProperty(ref _chargeBar);
+			set => SetProperty(ref _chargeBar, value);
+		}
 
 		public megatronChargeController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

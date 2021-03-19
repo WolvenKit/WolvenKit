@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameVisionRevealExpiredEvent : redEvent
 	{
-		[Ordinal(0)] [RED("revealId")] public gameVisionModeSystemRevealIdentifier RevealId { get; set; }
+		private gameVisionModeSystemRevealIdentifier _revealId;
+
+		[Ordinal(0)] 
+		[RED("revealId")] 
+		public gameVisionModeSystemRevealIdentifier RevealId
+		{
+			get => GetProperty(ref _revealId);
+			set => SetProperty(ref _revealId, value);
+		}
 
 		public gameVisionRevealExpiredEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

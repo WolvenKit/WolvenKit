@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class StarController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("bountyBadgeWidget")] public inkWidgetReference BountyBadgeWidget { get; set; }
+		private inkWidgetReference _bountyBadgeWidget;
+
+		[Ordinal(1)] 
+		[RED("bountyBadgeWidget")] 
+		public inkWidgetReference BountyBadgeWidget
+		{
+			get => GetProperty(ref _bountyBadgeWidget);
+			set => SetProperty(ref _bountyBadgeWidget, value);
+		}
 
 		public StarController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

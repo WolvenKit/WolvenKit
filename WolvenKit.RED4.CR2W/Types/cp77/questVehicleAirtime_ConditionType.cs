@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questVehicleAirtime_ConditionType : questIVehicleConditionType
 	{
-		[Ordinal(0)] [RED("seconds")] public CFloat Seconds { get; set; }
+		private CFloat _seconds;
+
+		[Ordinal(0)] 
+		[RED("seconds")] 
+		public CFloat Seconds
+		{
+			get => GetProperty(ref _seconds);
+			set => SetProperty(ref _seconds, value);
+		}
 
 		public questVehicleAirtime_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

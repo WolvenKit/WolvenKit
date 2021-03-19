@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiInputHintManagerGameControllerData : gameuiBaseUIData
 	{
-		[Ordinal(1)] [RED("inputHintsData")] public CArray<gameuiInputHintData> InputHintsData { get; set; }
+		private CArray<gameuiInputHintData> _inputHintsData;
+
+		[Ordinal(1)] 
+		[RED("inputHintsData")] 
+		public CArray<gameuiInputHintData> InputHintsData
+		{
+			get => GetProperty(ref _inputHintsData);
+			set => SetProperty(ref _inputHintsData, value);
+		}
 
 		public gameuiInputHintManagerGameControllerData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

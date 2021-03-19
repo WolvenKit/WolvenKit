@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkCreditsResource : CResource
 	{
-		[Ordinal(1)] [RED("sections")] public CArray<inkCreditsSectionEntry> Sections { get; set; }
+		private CArray<inkCreditsSectionEntry> _sections;
+
+		[Ordinal(1)] 
+		[RED("sections")] 
+		public CArray<inkCreditsSectionEntry> Sections
+		{
+			get => GetProperty(ref _sections);
+			set => SetProperty(ref _sections, value);
+		}
 
 		public inkCreditsResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

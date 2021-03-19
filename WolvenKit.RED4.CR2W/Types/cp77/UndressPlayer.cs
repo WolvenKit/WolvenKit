@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UndressPlayer : redEvent
 	{
-		[Ordinal(0)] [RED("isCensored")] public CBool IsCensored { get; set; }
+		private CBool _isCensored;
+
+		[Ordinal(0)] 
+		[RED("isCensored")] 
+		public CBool IsCensored
+		{
+			get => GetProperty(ref _isCensored);
+			set => SetProperty(ref _isCensored, value);
+		}
 
 		public UndressPlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

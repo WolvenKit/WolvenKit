@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ToggleLock : ActionBool
 	{
-		[Ordinal(25)] [RED("shouldOpen")] public CBool ShouldOpen { get; set; }
+		private CBool _shouldOpen;
+
+		[Ordinal(25)] 
+		[RED("shouldOpen")] 
+		public CBool ShouldOpen
+		{
+			get => GetProperty(ref _shouldOpen);
+			set => SetProperty(ref _shouldOpen, value);
+		}
 
 		public ToggleLock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

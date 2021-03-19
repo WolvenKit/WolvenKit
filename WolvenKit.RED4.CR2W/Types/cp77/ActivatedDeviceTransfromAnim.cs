@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ActivatedDeviceTransfromAnim : InteractiveDevice
 	{
-		[Ordinal(93)] [RED("animationState")] public CInt32 AnimationState { get; set; }
+		private CInt32 _animationState;
+
+		[Ordinal(93)] 
+		[RED("animationState")] 
+		public CInt32 AnimationState
+		{
+			get => GetProperty(ref _animationState);
+			set => SetProperty(ref _animationState, value);
+		}
 
 		public ActivatedDeviceTransfromAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CyberwareItemLogicController : inkVirtualCompoundItemController
 	{
-		[Ordinal(15)] [RED("slotRoot")] public inkCompoundWidgetReference SlotRoot { get; set; }
-		[Ordinal(16)] [RED("slot")] public wCHandle<InventoryItemDisplayController> Slot { get; set; }
+		private inkCompoundWidgetReference _slotRoot;
+		private wCHandle<InventoryItemDisplayController> _slot;
+
+		[Ordinal(15)] 
+		[RED("slotRoot")] 
+		public inkCompoundWidgetReference SlotRoot
+		{
+			get => GetProperty(ref _slotRoot);
+			set => SetProperty(ref _slotRoot, value);
+		}
+
+		[Ordinal(16)] 
+		[RED("slot")] 
+		public wCHandle<InventoryItemDisplayController> Slot
+		{
+			get => GetProperty(ref _slot);
+			set => SetProperty(ref _slot, value);
+		}
 
 		public CyberwareItemLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameJournalQuestMapPinBase : gameJournalContainerEntry
 	{
-		[Ordinal(2)] [RED("enableGPS")] public CBool EnableGPS { get; set; }
+		private CBool _enableGPS;
+
+		[Ordinal(2)] 
+		[RED("enableGPS")] 
+		public CBool EnableGPS
+		{
+			get => GetProperty(ref _enableGPS);
+			set => SetProperty(ref _enableGPS, value);
+		}
 
 		public gameJournalQuestMapPinBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

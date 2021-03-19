@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldTrafficPersistentLaneSpots : CVariable
 	{
-		[Ordinal(0)] [RED("spots")] public CArray<CHandle<worldTrafficSpotCompiled>> Spots { get; set; }
+		private CArray<CHandle<worldTrafficSpotCompiled>> _spots;
+
+		[Ordinal(0)] 
+		[RED("spots")] 
+		public CArray<CHandle<worldTrafficSpotCompiled>> Spots
+		{
+			get => GetProperty(ref _spots);
+			set => SetProperty(ref _spots, value);
+		}
 
 		public worldTrafficPersistentLaneSpots(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,22 +7,150 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ElevatorInkGameController : DeviceInkGameControllerBase
 	{
-		[Ordinal(16)] [RED("verticalPanel")] public inkVerticalPanelWidgetReference VerticalPanel { get; set; }
-		[Ordinal(17)] [RED("currentFloorTextWidget")] public inkTextWidgetReference CurrentFloorTextWidget { get; set; }
-		[Ordinal(18)] [RED("openCloseButtonWidgets")] public inkCanvasWidgetReference OpenCloseButtonWidgets { get; set; }
-		[Ordinal(19)] [RED("elevatorUpArrowsWidget")] public inkFlexWidgetReference ElevatorUpArrowsWidget { get; set; }
-		[Ordinal(20)] [RED("elevatorDownArrowsWidget")] public inkFlexWidgetReference ElevatorDownArrowsWidget { get; set; }
-		[Ordinal(21)] [RED("waitingStateWidget")] public inkCanvasWidgetReference WaitingStateWidget { get; set; }
-		[Ordinal(22)] [RED("dataScanningWidget")] public inkCanvasWidgetReference DataScanningWidget { get; set; }
-		[Ordinal(23)] [RED("elevatorStoppedWidget")] public inkCanvasWidgetReference ElevatorStoppedWidget { get; set; }
-		[Ordinal(24)] [RED("isPlayerScanned")] public CBool IsPlayerScanned { get; set; }
-		[Ordinal(25)] [RED("isPaused")] public CBool IsPaused { get; set; }
-		[Ordinal(26)] [RED("isAuthorized")] public CBool IsAuthorized { get; set; }
-		[Ordinal(27)] [RED("animProxy")] public CHandle<inkanimProxy> AnimProxy { get; set; }
-		[Ordinal(28)] [RED("buttonSizes")] public CArray<CFloat> ButtonSizes { get; set; }
-		[Ordinal(29)] [RED("onChangeFloorListener")] public CUInt32 OnChangeFloorListener { get; set; }
-		[Ordinal(30)] [RED("onPlayerScannedListener")] public CUInt32 OnPlayerScannedListener { get; set; }
-		[Ordinal(31)] [RED("onPausedChangeListener")] public CUInt32 OnPausedChangeListener { get; set; }
+		private inkVerticalPanelWidgetReference _verticalPanel;
+		private inkTextWidgetReference _currentFloorTextWidget;
+		private inkCanvasWidgetReference _openCloseButtonWidgets;
+		private inkFlexWidgetReference _elevatorUpArrowsWidget;
+		private inkFlexWidgetReference _elevatorDownArrowsWidget;
+		private inkCanvasWidgetReference _waitingStateWidget;
+		private inkCanvasWidgetReference _dataScanningWidget;
+		private inkCanvasWidgetReference _elevatorStoppedWidget;
+		private CBool _isPlayerScanned;
+		private CBool _isPaused;
+		private CBool _isAuthorized;
+		private CHandle<inkanimProxy> _animProxy;
+		private CArray<CFloat> _buttonSizes;
+		private CUInt32 _onChangeFloorListener;
+		private CUInt32 _onPlayerScannedListener;
+		private CUInt32 _onPausedChangeListener;
+
+		[Ordinal(16)] 
+		[RED("verticalPanel")] 
+		public inkVerticalPanelWidgetReference VerticalPanel
+		{
+			get => GetProperty(ref _verticalPanel);
+			set => SetProperty(ref _verticalPanel, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("currentFloorTextWidget")] 
+		public inkTextWidgetReference CurrentFloorTextWidget
+		{
+			get => GetProperty(ref _currentFloorTextWidget);
+			set => SetProperty(ref _currentFloorTextWidget, value);
+		}
+
+		[Ordinal(18)] 
+		[RED("openCloseButtonWidgets")] 
+		public inkCanvasWidgetReference OpenCloseButtonWidgets
+		{
+			get => GetProperty(ref _openCloseButtonWidgets);
+			set => SetProperty(ref _openCloseButtonWidgets, value);
+		}
+
+		[Ordinal(19)] 
+		[RED("elevatorUpArrowsWidget")] 
+		public inkFlexWidgetReference ElevatorUpArrowsWidget
+		{
+			get => GetProperty(ref _elevatorUpArrowsWidget);
+			set => SetProperty(ref _elevatorUpArrowsWidget, value);
+		}
+
+		[Ordinal(20)] 
+		[RED("elevatorDownArrowsWidget")] 
+		public inkFlexWidgetReference ElevatorDownArrowsWidget
+		{
+			get => GetProperty(ref _elevatorDownArrowsWidget);
+			set => SetProperty(ref _elevatorDownArrowsWidget, value);
+		}
+
+		[Ordinal(21)] 
+		[RED("waitingStateWidget")] 
+		public inkCanvasWidgetReference WaitingStateWidget
+		{
+			get => GetProperty(ref _waitingStateWidget);
+			set => SetProperty(ref _waitingStateWidget, value);
+		}
+
+		[Ordinal(22)] 
+		[RED("dataScanningWidget")] 
+		public inkCanvasWidgetReference DataScanningWidget
+		{
+			get => GetProperty(ref _dataScanningWidget);
+			set => SetProperty(ref _dataScanningWidget, value);
+		}
+
+		[Ordinal(23)] 
+		[RED("elevatorStoppedWidget")] 
+		public inkCanvasWidgetReference ElevatorStoppedWidget
+		{
+			get => GetProperty(ref _elevatorStoppedWidget);
+			set => SetProperty(ref _elevatorStoppedWidget, value);
+		}
+
+		[Ordinal(24)] 
+		[RED("isPlayerScanned")] 
+		public CBool IsPlayerScanned
+		{
+			get => GetProperty(ref _isPlayerScanned);
+			set => SetProperty(ref _isPlayerScanned, value);
+		}
+
+		[Ordinal(25)] 
+		[RED("isPaused")] 
+		public CBool IsPaused
+		{
+			get => GetProperty(ref _isPaused);
+			set => SetProperty(ref _isPaused, value);
+		}
+
+		[Ordinal(26)] 
+		[RED("isAuthorized")] 
+		public CBool IsAuthorized
+		{
+			get => GetProperty(ref _isAuthorized);
+			set => SetProperty(ref _isAuthorized, value);
+		}
+
+		[Ordinal(27)] 
+		[RED("animProxy")] 
+		public CHandle<inkanimProxy> AnimProxy
+		{
+			get => GetProperty(ref _animProxy);
+			set => SetProperty(ref _animProxy, value);
+		}
+
+		[Ordinal(28)] 
+		[RED("buttonSizes")] 
+		public CArray<CFloat> ButtonSizes
+		{
+			get => GetProperty(ref _buttonSizes);
+			set => SetProperty(ref _buttonSizes, value);
+		}
+
+		[Ordinal(29)] 
+		[RED("onChangeFloorListener")] 
+		public CUInt32 OnChangeFloorListener
+		{
+			get => GetProperty(ref _onChangeFloorListener);
+			set => SetProperty(ref _onChangeFloorListener, value);
+		}
+
+		[Ordinal(30)] 
+		[RED("onPlayerScannedListener")] 
+		public CUInt32 OnPlayerScannedListener
+		{
+			get => GetProperty(ref _onPlayerScannedListener);
+			set => SetProperty(ref _onPlayerScannedListener, value);
+		}
+
+		[Ordinal(31)] 
+		[RED("onPausedChangeListener")] 
+		public CUInt32 OnPausedChangeListener
+		{
+			get => GetProperty(ref _onPausedChangeListener);
+			set => SetProperty(ref _onPausedChangeListener, value);
+		}
 
 		public ElevatorInkGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

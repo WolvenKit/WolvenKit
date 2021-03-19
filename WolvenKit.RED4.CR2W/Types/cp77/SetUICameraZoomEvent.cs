@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetUICameraZoomEvent : redEvent
 	{
-		[Ordinal(0)] [RED("hasUICameraZoom")] public CBool HasUICameraZoom { get; set; }
+		private CBool _hasUICameraZoom;
+
+		[Ordinal(0)] 
+		[RED("hasUICameraZoom")] 
+		public CBool HasUICameraZoom
+		{
+			get => GetProperty(ref _hasUICameraZoom);
+			set => SetProperty(ref _hasUICameraZoom, value);
+		}
 
 		public SetUICameraZoomEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

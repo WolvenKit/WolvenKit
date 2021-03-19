@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameVisualTagsAppearanceNamesPreset : ISerializable
 	{
-		[Ordinal(0)] [RED("presets")] public CArray<gameVisualTagsAppearanceNamesPreset_Entity> Presets { get; set; }
+		private CArray<gameVisualTagsAppearanceNamesPreset_Entity> _presets;
+
+		[Ordinal(0)] 
+		[RED("presets")] 
+		public CArray<gameVisualTagsAppearanceNamesPreset_Entity> Presets
+		{
+			get => GetProperty(ref _presets);
+			set => SetProperty(ref _presets, value);
+		}
 
 		public gameVisualTagsAppearanceNamesPreset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

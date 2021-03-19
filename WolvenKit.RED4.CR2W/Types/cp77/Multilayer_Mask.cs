@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Multilayer_Mask : CResource
 	{
-		[Ordinal(1)] [RED("renderResourceBlob")] public rendRenderMultilayerMaskResource RenderResourceBlob { get; set; }
+		private rendRenderMultilayerMaskResource _renderResourceBlob;
+
+		[Ordinal(1)] 
+		[RED("renderResourceBlob")] 
+		public rendRenderMultilayerMaskResource RenderResourceBlob
+		{
+			get => GetProperty(ref _renderResourceBlob);
+			set => SetProperty(ref _renderResourceBlob, value);
+		}
 
 		public Multilayer_Mask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

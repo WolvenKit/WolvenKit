@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class moveStrafingTarget : CVariable
 	{
-		[Ordinal(0)] [RED("position")] public Vector3 Position { get; set; }
-		[Ordinal(1)] [RED("object")] public wCHandle<gameObject> Object { get; set; }
+		private Vector3 _position;
+		private wCHandle<gameObject> _object;
+
+		[Ordinal(0)] 
+		[RED("position")] 
+		public Vector3 Position
+		{
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("object")] 
+		public wCHandle<gameObject> Object
+		{
+			get => GetProperty(ref _object);
+			set => SetProperty(ref _object, value);
+		}
 
 		public moveStrafingTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

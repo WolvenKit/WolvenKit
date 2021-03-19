@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetBloodPuddleSettingsEvent : redEvent
 	{
-		[Ordinal(0)] [RED("shouldSpawnBloodPuddle")] public CBool ShouldSpawnBloodPuddle { get; set; }
+		private CBool _shouldSpawnBloodPuddle;
+
+		[Ordinal(0)] 
+		[RED("shouldSpawnBloodPuddle")] 
+		public CBool ShouldSpawnBloodPuddle
+		{
+			get => GetProperty(ref _shouldSpawnBloodPuddle);
+			set => SetProperty(ref _shouldSpawnBloodPuddle, value);
+		}
 
 		public SetBloodPuddleSettingsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

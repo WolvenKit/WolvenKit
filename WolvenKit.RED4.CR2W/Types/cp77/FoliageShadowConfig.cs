@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FoliageShadowConfig : CVariable
 	{
-		[Ordinal(0)] [RED("foliageShadowCascadeGradient")] public CFloat FoliageShadowCascadeGradient { get; set; }
-		[Ordinal(1)] [RED("foliageShadowCascadeFilterScale")] public CFloat FoliageShadowCascadeFilterScale { get; set; }
-		[Ordinal(2)] [RED("foliageShadowCascadeGradientDistanceRange")] public CFloat FoliageShadowCascadeGradientDistanceRange { get; set; }
+		private CFloat _foliageShadowCascadeGradient;
+		private CFloat _foliageShadowCascadeFilterScale;
+		private CFloat _foliageShadowCascadeGradientDistanceRange;
+
+		[Ordinal(0)] 
+		[RED("foliageShadowCascadeGradient")] 
+		public CFloat FoliageShadowCascadeGradient
+		{
+			get => GetProperty(ref _foliageShadowCascadeGradient);
+			set => SetProperty(ref _foliageShadowCascadeGradient, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("foliageShadowCascadeFilterScale")] 
+		public CFloat FoliageShadowCascadeFilterScale
+		{
+			get => GetProperty(ref _foliageShadowCascadeFilterScale);
+			set => SetProperty(ref _foliageShadowCascadeFilterScale, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("foliageShadowCascadeGradientDistanceRange")] 
+		public CFloat FoliageShadowCascadeGradientDistanceRange
+		{
+			get => GetProperty(ref _foliageShadowCascadeGradientDistanceRange);
+			set => SetProperty(ref _foliageShadowCascadeGradientDistanceRange, value);
+		}
 
 		public FoliageShadowConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

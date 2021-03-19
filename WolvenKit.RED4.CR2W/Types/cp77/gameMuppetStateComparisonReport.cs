@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameMuppetStateComparisonReport : CVariable
 	{
-		[Ordinal(0)] [RED("frameID")] public CUInt32 FrameID { get; set; }
-		[Ordinal(1)] [RED("items")] public CArray<gameMuppetComparisonReportItem> Items { get; set; }
+		private CUInt32 _frameID;
+		private CArray<gameMuppetComparisonReportItem> _items;
+
+		[Ordinal(0)] 
+		[RED("frameID")] 
+		public CUInt32 FrameID
+		{
+			get => GetProperty(ref _frameID);
+			set => SetProperty(ref _frameID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("items")] 
+		public CArray<gameMuppetComparisonReportItem> Items
+		{
+			get => GetProperty(ref _items);
+			set => SetProperty(ref _items, value);
+		}
 
 		public gameMuppetStateComparisonReport(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

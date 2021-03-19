@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class communityVoiceTagInitializer : communitySpawnInitializer
 	{
-		[Ordinal(0)] [RED("voiceTagName")] public CName VoiceTagName { get; set; }
+		private CName _voiceTagName;
+
+		[Ordinal(0)] 
+		[RED("voiceTagName")] 
+		public CName VoiceTagName
+		{
+			get => GetProperty(ref _voiceTagName);
+			set => SetProperty(ref _voiceTagName, value);
+		}
 
 		public communityVoiceTagInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIPosition : CVariable
 	{
-		[Ordinal(0)] [RED("position")] public Vector3 Position { get; set; }
+		private Vector3 _position;
+
+		[Ordinal(0)] 
+		[RED("position")] 
+		public Vector3 Position
+		{
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
+		}
 
 		public AIPosition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

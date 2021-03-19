@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questdbgCallstackBlock : CVariable
 	{
-		[Ordinal(0)] [RED("id")] public CUInt64 Id { get; set; }
-		[Ordinal(1)] [RED("parentId")] public CUInt64 ParentId { get; set; }
+		private CUInt64 _id;
+		private CUInt64 _parentId;
+
+		[Ordinal(0)] 
+		[RED("id")] 
+		public CUInt64 Id
+		{
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("parentId")] 
+		public CUInt64 ParentId
+		{
+			get => GetProperty(ref _parentId);
+			set => SetProperty(ref _parentId, value);
+		}
 
 		public questdbgCallstackBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

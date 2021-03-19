@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TweakAIAction : TweakAIActionAbstract
 	{
-		[Ordinal(27)] [RED("record")] public TweakDBID Record { get; set; }
+		private TweakDBID _record;
+
+		[Ordinal(27)] 
+		[RED("record")] 
+		public TweakDBID Record
+		{
+			get => GetProperty(ref _record);
+			set => SetProperty(ref _record, value);
+		}
 
 		public TweakAIAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

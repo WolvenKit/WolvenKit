@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimFeature_Container : animAnimFeature
 	{
-		[Ordinal(0)] [RED("opened")] public CBool Opened { get; set; }
-		[Ordinal(1)] [RED("transitionDuration")] public CFloat TransitionDuration { get; set; }
+		private CBool _opened;
+		private CFloat _transitionDuration;
+
+		[Ordinal(0)] 
+		[RED("opened")] 
+		public CBool Opened
+		{
+			get => GetProperty(ref _opened);
+			set => SetProperty(ref _opened, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("transitionDuration")] 
+		public CFloat TransitionDuration
+		{
+			get => GetProperty(ref _transitionDuration);
+			set => SetProperty(ref _transitionDuration, value);
+		}
 
 		public AnimFeature_Container(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

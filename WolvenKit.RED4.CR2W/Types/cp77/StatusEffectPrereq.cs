@@ -7,11 +7,51 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class StatusEffectPrereq : gameIScriptablePrereq
 	{
-		[Ordinal(0)] [RED("statusEffectRecordID")] public TweakDBID StatusEffectRecordID { get; set; }
-		[Ordinal(1)] [RED("tag")] public CName Tag { get; set; }
-		[Ordinal(2)] [RED("checkType")] public CString CheckType { get; set; }
-		[Ordinal(3)] [RED("invert")] public CBool Invert { get; set; }
-		[Ordinal(4)] [RED("fireAndForget")] public CBool FireAndForget { get; set; }
+		private TweakDBID _statusEffectRecordID;
+		private CName _tag;
+		private CString _checkType;
+		private CBool _invert;
+		private CBool _fireAndForget;
+
+		[Ordinal(0)] 
+		[RED("statusEffectRecordID")] 
+		public TweakDBID StatusEffectRecordID
+		{
+			get => GetProperty(ref _statusEffectRecordID);
+			set => SetProperty(ref _statusEffectRecordID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("tag")] 
+		public CName Tag
+		{
+			get => GetProperty(ref _tag);
+			set => SetProperty(ref _tag, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("checkType")] 
+		public CString CheckType
+		{
+			get => GetProperty(ref _checkType);
+			set => SetProperty(ref _checkType, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("invert")] 
+		public CBool Invert
+		{
+			get => GetProperty(ref _invert);
+			set => SetProperty(ref _invert, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("fireAndForget")] 
+		public CBool FireAndForget
+		{
+			get => GetProperty(ref _fireAndForget);
+			set => SetProperty(ref _fireAndForget, value);
+		}
 
 		public StatusEffectPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

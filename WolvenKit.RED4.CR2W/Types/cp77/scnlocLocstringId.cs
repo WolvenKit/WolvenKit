@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnlocLocstringId : CVariable
 	{
-		[Ordinal(0)] [RED("ruid")] public CRUID Ruid { get; set; }
+		private CRUID _ruid;
+
+		[Ordinal(0)] 
+		[RED("ruid")] 
+		public CRUID Ruid
+		{
+			get => GetProperty(ref _ruid);
+			set => SetProperty(ref _ruid, value);
+		}
 
 		public scnlocLocstringId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

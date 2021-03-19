@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class KeyboardHoldIndicatorGameController : gameuiHoldIndicatorGameController
 	{
-		[Ordinal(6)] [RED("progress")] public inkImageWidgetReference Progress { get; set; }
+		private inkImageWidgetReference _progress;
+
+		[Ordinal(6)] 
+		[RED("progress")] 
+		public inkImageWidgetReference Progress
+		{
+			get => GetProperty(ref _progress);
+			set => SetProperty(ref _progress, value);
+		}
 
 		public KeyboardHoldIndicatorGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

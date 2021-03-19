@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorPredictTargetMovementDefinition : AIbehaviorTaskDefinition
 	{
-		[Ordinal(1)] [RED("target")] public CHandle<AIArgumentMapping> Target { get; set; }
-		[Ordinal(2)] [RED("timeInterval")] public CHandle<AIArgumentMapping> TimeInterval { get; set; }
-		[Ordinal(3)] [RED("result")] public CHandle<AIArgumentMapping> Result { get; set; }
+		private CHandle<AIArgumentMapping> _target;
+		private CHandle<AIArgumentMapping> _timeInterval;
+		private CHandle<AIArgumentMapping> _result;
+
+		[Ordinal(1)] 
+		[RED("target")] 
+		public CHandle<AIArgumentMapping> Target
+		{
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("timeInterval")] 
+		public CHandle<AIArgumentMapping> TimeInterval
+		{
+			get => GetProperty(ref _timeInterval);
+			set => SetProperty(ref _timeInterval, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("result")] 
+		public CHandle<AIArgumentMapping> Result
+		{
+			get => GetProperty(ref _result);
+			set => SetProperty(ref _result, value);
+		}
 
 		public AIbehaviorPredictTargetMovementDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

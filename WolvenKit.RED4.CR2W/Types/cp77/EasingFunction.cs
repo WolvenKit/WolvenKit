@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EasingFunction : CVariable
 	{
-		[Ordinal(0)] [RED("transitionType")] public CEnum<ETransitionType> TransitionType { get; set; }
-		[Ordinal(1)] [RED("easingType")] public CEnum<EEasingType> EasingType { get; set; }
+		private CEnum<ETransitionType> _transitionType;
+		private CEnum<EEasingType> _easingType;
+
+		[Ordinal(0)] 
+		[RED("transitionType")] 
+		public CEnum<ETransitionType> TransitionType
+		{
+			get => GetProperty(ref _transitionType);
+			set => SetProperty(ref _transitionType, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("easingType")] 
+		public CEnum<EEasingType> EasingType
+		{
+			get => GetProperty(ref _easingType);
+			set => SetProperty(ref _easingType, value);
+		}
 
 		public EasingFunction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

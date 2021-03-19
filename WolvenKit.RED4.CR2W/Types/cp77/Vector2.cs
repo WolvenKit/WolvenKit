@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Vector2 : CVariable
 	{
-		[Ordinal(0)] [RED("X")] public CFloat X { get; set; }
-		[Ordinal(1)] [RED("Y")] public CFloat Y { get; set; }
+		private CFloat _x;
+		private CFloat _y;
+
+		[Ordinal(0)] 
+		[RED("X")] 
+		public CFloat X
+		{
+			get => GetProperty(ref _x);
+			set => SetProperty(ref _x, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("Y")] 
+		public CFloat Y
+		{
+			get => GetProperty(ref _y);
+			set => SetProperty(ref _y, value);
+		}
 
 		public Vector2(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

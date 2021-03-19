@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DelayPrereqEvent : redEvent
 	{
-		[Ordinal(0)] [RED("state")] public CHandle<GameTimePrereqState> State { get; set; }
+		private CHandle<GameTimePrereqState> _state;
+
+		[Ordinal(0)] 
+		[RED("state")] 
+		public CHandle<GameTimePrereqState> State
+		{
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
+		}
 
 		public DelayPrereqEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

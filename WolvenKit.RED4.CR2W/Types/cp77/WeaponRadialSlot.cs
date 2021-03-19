@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class WeaponRadialSlot : RadialSlot
 	{
-		[Ordinal(9)] [RED("equipmentArea")] public CEnum<gamedataEquipmentArea> EquipmentArea { get; set; }
-		[Ordinal(10)] [RED("index")] public CInt32 Index { get; set; }
+		private CEnum<gamedataEquipmentArea> _equipmentArea;
+		private CInt32 _index;
+
+		[Ordinal(9)] 
+		[RED("equipmentArea")] 
+		public CEnum<gamedataEquipmentArea> EquipmentArea
+		{
+			get => GetProperty(ref _equipmentArea);
+			set => SetProperty(ref _equipmentArea, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("index")] 
+		public CInt32 Index
+		{
+			get => GetProperty(ref _index);
+			set => SetProperty(ref _index, value);
+		}
 
 		public WeaponRadialSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TargetNPCTypeHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(1)] [RED("type")] public CEnum<gamedataNPCType> Type { get; set; }
+		private CEnum<gamedataNPCType> _type;
+
+		[Ordinal(1)] 
+		[RED("type")] 
+		public CEnum<gamedataNPCType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
 
 		public TargetNPCTypeHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

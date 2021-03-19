@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkMultiChildren : inkChildren
 	{
-		[Ordinal(0)] [RED("children")] public CArray<CHandle<inkWidget>> Children { get; set; }
+		private CArray<CHandle<inkWidget>> _children;
+
+		[Ordinal(0)] 
+		[RED("children")] 
+		public CArray<CHandle<inkWidget>> Children
+		{
+			get => GetProperty(ref _children);
+			set => SetProperty(ref _children, value);
+		}
 
 		public inkMultiChildren(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

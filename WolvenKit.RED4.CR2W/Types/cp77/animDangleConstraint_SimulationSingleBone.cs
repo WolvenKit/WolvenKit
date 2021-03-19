@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animDangleConstraint_SimulationSingleBone : animDangleConstraint_Simulation
 	{
-		[Ordinal(13)] [RED("dangleBone")] public animTransformIndex DangleBone { get; set; }
+		private animTransformIndex _dangleBone;
+
+		[Ordinal(13)] 
+		[RED("dangleBone")] 
+		public animTransformIndex DangleBone
+		{
+			get => GetProperty(ref _dangleBone);
+			set => SetProperty(ref _dangleBone, value);
+		}
 
 		public animDangleConstraint_SimulationSingleBone(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

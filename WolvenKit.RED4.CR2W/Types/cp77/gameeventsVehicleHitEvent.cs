@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameeventsVehicleHitEvent : gameeventsHitEvent
 	{
-		[Ordinal(12)] [RED("vehicleVelocity")] public Vector4 VehicleVelocity { get; set; }
-		[Ordinal(13)] [RED("preyVelocity")] public Vector4 PreyVelocity { get; set; }
+		private Vector4 _vehicleVelocity;
+		private Vector4 _preyVelocity;
+
+		[Ordinal(12)] 
+		[RED("vehicleVelocity")] 
+		public Vector4 VehicleVelocity
+		{
+			get => GetProperty(ref _vehicleVelocity);
+			set => SetProperty(ref _vehicleVelocity, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("preyVelocity")] 
+		public Vector4 PreyVelocity
+		{
+			get => GetProperty(ref _preyVelocity);
+			set => SetProperty(ref _preyVelocity, value);
+		}
 
 		public gameeventsVehicleHitEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

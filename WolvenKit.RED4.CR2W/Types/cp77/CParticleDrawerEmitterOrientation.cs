@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CParticleDrawerEmitterOrientation : IParticleDrawer
 	{
-		[Ordinal(1)] [RED("coordinateSystem")] public EulerAngles CoordinateSystem { get; set; }
-		[Ordinal(2)] [RED("isGPUBased")] public CBool IsGPUBased { get; set; }
+		private EulerAngles _coordinateSystem;
+		private CBool _isGPUBased;
+
+		[Ordinal(1)] 
+		[RED("coordinateSystem")] 
+		public EulerAngles CoordinateSystem
+		{
+			get => GetProperty(ref _coordinateSystem);
+			set => SetProperty(ref _coordinateSystem, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("isGPUBased")] 
+		public CBool IsGPUBased
+		{
+			get => GetProperty(ref _isGPUBased);
+			set => SetProperty(ref _isGPUBased, value);
+		}
 
 		public CParticleDrawerEmitterOrientation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

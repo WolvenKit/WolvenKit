@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CTextureArrayEntry : CVariable
 	{
-		[Ordinal(0)] [RED("texture")] public rRef<CBitmapTexture> Texture { get; set; }
+		private rRef<CBitmapTexture> _texture;
+
+		[Ordinal(0)] 
+		[RED("texture")] 
+		public rRef<CBitmapTexture> Texture
+		{
+			get => GetProperty(ref _texture);
+			set => SetProperty(ref _texture, value);
+		}
 
 		public CTextureArrayEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

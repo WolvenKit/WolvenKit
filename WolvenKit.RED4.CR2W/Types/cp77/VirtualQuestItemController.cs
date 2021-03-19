@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VirtualQuestItemController : inkVirtualCompoundItemController
 	{
-		[Ordinal(15)] [RED("questItem")] public inkWidgetReference QuestItem { get; set; }
-		[Ordinal(16)] [RED("data")] public CHandle<VirutalNestedListData> Data { get; set; }
+		private inkWidgetReference _questItem;
+		private CHandle<VirutalNestedListData> _data;
+
+		[Ordinal(15)] 
+		[RED("questItem")] 
+		public inkWidgetReference QuestItem
+		{
+			get => GetProperty(ref _questItem);
+			set => SetProperty(ref _questItem, value);
+		}
+
+		[Ordinal(16)] 
+		[RED("data")] 
+		public CHandle<VirutalNestedListData> Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
 
 		public VirtualQuestItemController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

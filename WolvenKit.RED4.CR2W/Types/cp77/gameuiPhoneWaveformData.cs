@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiPhoneWaveformData : IScriptable
 	{
-		[Ordinal(0)] [RED("points")] public CArray<Vector4> Points { get; set; }
+		private CArray<Vector4> _points;
+
+		[Ordinal(0)] 
+		[RED("points")] 
+		public CArray<Vector4> Points
+		{
+			get => GetProperty(ref _points);
+			set => SetProperty(ref _points, value);
+		}
 
 		public gameuiPhoneWaveformData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

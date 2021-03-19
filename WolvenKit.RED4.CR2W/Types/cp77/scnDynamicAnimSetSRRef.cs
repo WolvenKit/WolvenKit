@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnDynamicAnimSetSRRef : CVariable
 	{
-		[Ordinal(0)] [RED("asyncAnimSet")] public raRef<animAnimSet> AsyncAnimSet { get; set; }
+		private raRef<animAnimSet> _asyncAnimSet;
+
+		[Ordinal(0)] 
+		[RED("asyncAnimSet")] 
+		public raRef<animAnimSet> AsyncAnimSet
+		{
+			get => GetProperty(ref _asyncAnimSet);
+			set => SetProperty(ref _asyncAnimSet, value);
+		}
 
 		public scnDynamicAnimSetSRRef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

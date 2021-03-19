@@ -7,19 +7,123 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class effectTrackItemForwardDecal : effectTrackItem
 	{
-		[Ordinal(3)] [RED("mesh")] public rRef<CMesh> Mesh { get; set; }
-		[Ordinal(4)] [RED("appearance")] public CName Appearance { get; set; }
-		[Ordinal(5)] [RED("scale")] public CHandle<IEvaluatorVector> Scale { get; set; }
-		[Ordinal(6)] [RED("additionalRotation")] public CFloat AdditionalRotation { get; set; }
-		[Ordinal(7)] [RED("sizeThreshold")] public CFloat SizeThreshold { get; set; }
-		[Ordinal(8)] [RED("randomRotation")] public CBool RandomRotation { get; set; }
-		[Ordinal(9)] [RED("randomAppearance")] public CBool RandomAppearance { get; set; }
-		[Ordinal(10)] [RED("isAttached")] public CBool IsAttached { get; set; }
-		[Ordinal(11)] [RED("subUVx")] public CUInt32 SubUVx { get; set; }
-		[Ordinal(12)] [RED("subUVy")] public CUInt32 SubUVy { get; set; }
-		[Ordinal(13)] [RED("frame")] public CUInt32 Frame { get; set; }
-		[Ordinal(14)] [RED("fadeOutTime")] public CFloat FadeOutTime { get; set; }
-		[Ordinal(15)] [RED("fadeInTime")] public CFloat FadeInTime { get; set; }
+		private rRef<CMesh> _mesh;
+		private CName _appearance;
+		private CHandle<IEvaluatorVector> _scale;
+		private CFloat _additionalRotation;
+		private CFloat _sizeThreshold;
+		private CBool _randomRotation;
+		private CBool _randomAppearance;
+		private CBool _isAttached;
+		private CUInt32 _subUVx;
+		private CUInt32 _subUVy;
+		private CUInt32 _frame;
+		private CFloat _fadeOutTime;
+		private CFloat _fadeInTime;
+
+		[Ordinal(3)] 
+		[RED("mesh")] 
+		public rRef<CMesh> Mesh
+		{
+			get => GetProperty(ref _mesh);
+			set => SetProperty(ref _mesh, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("appearance")] 
+		public CName Appearance
+		{
+			get => GetProperty(ref _appearance);
+			set => SetProperty(ref _appearance, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("scale")] 
+		public CHandle<IEvaluatorVector> Scale
+		{
+			get => GetProperty(ref _scale);
+			set => SetProperty(ref _scale, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("additionalRotation")] 
+		public CFloat AdditionalRotation
+		{
+			get => GetProperty(ref _additionalRotation);
+			set => SetProperty(ref _additionalRotation, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("sizeThreshold")] 
+		public CFloat SizeThreshold
+		{
+			get => GetProperty(ref _sizeThreshold);
+			set => SetProperty(ref _sizeThreshold, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("randomRotation")] 
+		public CBool RandomRotation
+		{
+			get => GetProperty(ref _randomRotation);
+			set => SetProperty(ref _randomRotation, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("randomAppearance")] 
+		public CBool RandomAppearance
+		{
+			get => GetProperty(ref _randomAppearance);
+			set => SetProperty(ref _randomAppearance, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("isAttached")] 
+		public CBool IsAttached
+		{
+			get => GetProperty(ref _isAttached);
+			set => SetProperty(ref _isAttached, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("subUVx")] 
+		public CUInt32 SubUVx
+		{
+			get => GetProperty(ref _subUVx);
+			set => SetProperty(ref _subUVx, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("subUVy")] 
+		public CUInt32 SubUVy
+		{
+			get => GetProperty(ref _subUVy);
+			set => SetProperty(ref _subUVy, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("frame")] 
+		public CUInt32 Frame
+		{
+			get => GetProperty(ref _frame);
+			set => SetProperty(ref _frame, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("fadeOutTime")] 
+		public CFloat FadeOutTime
+		{
+			get => GetProperty(ref _fadeOutTime);
+			set => SetProperty(ref _fadeOutTime, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("fadeInTime")] 
+		public CFloat FadeInTime
+		{
+			get => GetProperty(ref _fadeInTime);
+			set => SetProperty(ref _fadeInTime, value);
+		}
 
 		public effectTrackItemForwardDecal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

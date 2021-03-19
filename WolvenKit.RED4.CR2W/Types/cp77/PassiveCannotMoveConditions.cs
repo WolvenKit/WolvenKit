@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PassiveCannotMoveConditions : PassiveAutonomousCondition
 	{
-		[Ordinal(0)] [RED("statusEffectRemovedId")] public CUInt32 StatusEffectRemovedId { get; set; }
+		private CUInt32 _statusEffectRemovedId;
+
+		[Ordinal(0)] 
+		[RED("statusEffectRemovedId")] 
+		public CUInt32 StatusEffectRemovedId
+		{
+			get => GetProperty(ref _statusEffectRemovedId);
+			set => SetProperty(ref _statusEffectRemovedId, value);
+		}
 
 		public PassiveCannotMoveConditions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

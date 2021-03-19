@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ExplosiveDeviceDelayedEvent : redEvent
 	{
-		[Ordinal(0)] [RED("arrayIndex")] public CInt32 ArrayIndex { get; set; }
-		[Ordinal(1)] [RED("instigator")] public wCHandle<gameObject> Instigator { get; set; }
+		private CInt32 _arrayIndex;
+		private wCHandle<gameObject> _instigator;
+
+		[Ordinal(0)] 
+		[RED("arrayIndex")] 
+		public CInt32 ArrayIndex
+		{
+			get => GetProperty(ref _arrayIndex);
+			set => SetProperty(ref _arrayIndex, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("instigator")] 
+		public wCHandle<gameObject> Instigator
+		{
+			get => GetProperty(ref _instigator);
+			set => SetProperty(ref _instigator, value);
+		}
 
 		public ExplosiveDeviceDelayedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

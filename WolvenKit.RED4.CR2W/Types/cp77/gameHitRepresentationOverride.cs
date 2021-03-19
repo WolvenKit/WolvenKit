@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameHitRepresentationOverride : ISerializable
 	{
-		[Ordinal(0)] [RED("represenationOverride")] public gameHitShapeContainer RepresenationOverride { get; set; }
+		private gameHitShapeContainer _represenationOverride;
+
+		[Ordinal(0)] 
+		[RED("represenationOverride")] 
+		public gameHitShapeContainer RepresenationOverride
+		{
+			get => GetProperty(ref _represenationOverride);
+			set => SetProperty(ref _represenationOverride, value);
+		}
 
 		public gameHitRepresentationOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

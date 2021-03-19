@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class RemoveStatusEffectEvent : redEvent
 	{
-		[Ordinal(0)] [RED("effectID")] public TweakDBID EffectID { get; set; }
-		[Ordinal(1)] [RED("removeCount")] public CUInt32 RemoveCount { get; set; }
+		private TweakDBID _effectID;
+		private CUInt32 _removeCount;
+
+		[Ordinal(0)] 
+		[RED("effectID")] 
+		public TweakDBID EffectID
+		{
+			get => GetProperty(ref _effectID);
+			set => SetProperty(ref _effectID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("removeCount")] 
+		public CUInt32 RemoveCount
+		{
+			get => GetProperty(ref _removeCount);
+			set => SetProperty(ref _removeCount, value);
+		}
 
 		public RemoveStatusEffectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

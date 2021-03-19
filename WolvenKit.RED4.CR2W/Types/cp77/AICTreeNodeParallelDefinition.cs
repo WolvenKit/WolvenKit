@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AICTreeNodeParallelDefinition : AICTreeNodeChildrenListDefinition
 	{
-		[Ordinal(1)] [RED("forwardChildrenCompleteness")] public CBool ForwardChildrenCompleteness { get; set; }
+		private CBool _forwardChildrenCompleteness;
+
+		[Ordinal(1)] 
+		[RED("forwardChildrenCompleteness")] 
+		public CBool ForwardChildrenCompleteness
+		{
+			get => GetProperty(ref _forwardChildrenCompleteness);
+			set => SetProperty(ref _forwardChildrenCompleteness, value);
+		}
 
 		public AICTreeNodeParallelDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

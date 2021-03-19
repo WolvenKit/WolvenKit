@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GeometryShapeFace : CVariable
 	{
-		[Ordinal(0)] [RED("indices")] public CArray<CUInt32> Indices { get; set; }
+		private CArray<CUInt32> _indices;
+
+		[Ordinal(0)] 
+		[RED("indices")] 
+		public CArray<CUInt32> Indices
+		{
+			get => GetProperty(ref _indices);
+			set => SetProperty(ref _indices, value);
+		}
 
 		public GeometryShapeFace(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

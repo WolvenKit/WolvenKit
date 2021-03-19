@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SettingsCategoryItem : inkListItemController
 	{
-		[Ordinal(16)] [RED("labelHighlight")] public inkTextWidgetReference LabelHighlight { get; set; }
+		private inkTextWidgetReference _labelHighlight;
+
+		[Ordinal(16)] 
+		[RED("labelHighlight")] 
+		public inkTextWidgetReference LabelHighlight
+		{
+			get => GetProperty(ref _labelHighlight);
+			set => SetProperty(ref _labelHighlight, value);
+		}
 
 		public SettingsCategoryItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

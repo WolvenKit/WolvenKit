@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Ref_6_ReplicatedVariables_SubStructure : CVariable
 	{
-		[Ordinal(0)] [RED("exampleSubStructureVar")] public CBool ExampleSubStructureVar { get; set; }
+		private CBool _exampleSubStructureVar;
+
+		[Ordinal(0)] 
+		[RED("exampleSubStructureVar")] 
+		public CBool ExampleSubStructureVar
+		{
+			get => GetProperty(ref _exampleSubStructureVar);
+			set => SetProperty(ref _exampleSubStructureVar, value);
+		}
 
 		public Ref_6_ReplicatedVariables_SubStructure(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

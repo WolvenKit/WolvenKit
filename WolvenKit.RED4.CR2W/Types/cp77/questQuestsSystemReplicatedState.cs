@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questQuestsSystemReplicatedState : gameIGameSystemReplicatedState
 	{
-		[Ordinal(0)] [RED("replicatedQuestPrefabs")] public CArray<questQuestPrefabsEntry> ReplicatedQuestPrefabs { get; set; }
+		private CArray<questQuestPrefabsEntry> _replicatedQuestPrefabs;
+
+		[Ordinal(0)] 
+		[RED("replicatedQuestPrefabs")] 
+		public CArray<questQuestPrefabsEntry> ReplicatedQuestPrefabs
+		{
+			get => GetProperty(ref _replicatedQuestPrefabs);
+			set => SetProperty(ref _replicatedQuestPrefabs, value);
+		}
 
 		public questQuestsSystemReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

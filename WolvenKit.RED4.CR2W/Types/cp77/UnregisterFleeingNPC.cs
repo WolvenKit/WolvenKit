@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UnregisterFleeingNPC : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("runner")] public wCHandle<entEntity> Runner { get; set; }
+		private wCHandle<entEntity> _runner;
+
+		[Ordinal(0)] 
+		[RED("runner")] 
+		public wCHandle<entEntity> Runner
+		{
+			get => GetProperty(ref _runner);
+			set => SetProperty(ref _runner, value);
+		}
 
 		public UnregisterFleeingNPC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

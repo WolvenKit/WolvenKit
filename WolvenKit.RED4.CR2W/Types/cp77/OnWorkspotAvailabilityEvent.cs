@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class OnWorkspotAvailabilityEvent : redEvent
 	{
-		[Ordinal(0)] [RED("workspotRef")] public NodeRef WorkspotRef { get; set; }
+		private NodeRef _workspotRef;
+
+		[Ordinal(0)] 
+		[RED("workspotRef")] 
+		public NodeRef WorkspotRef
+		{
+			get => GetProperty(ref _workspotRef);
+			set => SetProperty(ref _workspotRef, value);
+		}
 
 		public OnWorkspotAvailabilityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

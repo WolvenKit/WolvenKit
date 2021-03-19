@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PerksLevelBarController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("foregroundImage")] public inkWidgetReference ForegroundImage { get; set; }
-		[Ordinal(2)] [RED("backgroundImage")] public inkWidgetReference BackgroundImage { get; set; }
+		private inkWidgetReference _foregroundImage;
+		private inkWidgetReference _backgroundImage;
+
+		[Ordinal(1)] 
+		[RED("foregroundImage")] 
+		public inkWidgetReference ForegroundImage
+		{
+			get => GetProperty(ref _foregroundImage);
+			set => SetProperty(ref _foregroundImage, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("backgroundImage")] 
+		public inkWidgetReference BackgroundImage
+		{
+			get => GetProperty(ref _backgroundImage);
+			set => SetProperty(ref _backgroundImage, value);
+		}
 
 		public PerksLevelBarController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

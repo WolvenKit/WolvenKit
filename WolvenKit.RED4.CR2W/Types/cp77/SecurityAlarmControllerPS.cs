@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SecurityAlarmControllerPS : MasterControllerPS
 	{
-		[Ordinal(104)] [RED("securityAlarmSetup")] public SecurityAlarmSetup SecurityAlarmSetup { get; set; }
-		[Ordinal(105)] [RED("securityAlarmState")] public CEnum<ESecuritySystemState> SecurityAlarmState { get; set; }
+		private SecurityAlarmSetup _securityAlarmSetup;
+		private CEnum<ESecuritySystemState> _securityAlarmState;
+
+		[Ordinal(104)] 
+		[RED("securityAlarmSetup")] 
+		public SecurityAlarmSetup SecurityAlarmSetup
+		{
+			get => GetProperty(ref _securityAlarmSetup);
+			set => SetProperty(ref _securityAlarmSetup, value);
+		}
+
+		[Ordinal(105)] 
+		[RED("securityAlarmState")] 
+		public CEnum<ESecuritySystemState> SecurityAlarmState
+		{
+			get => GetProperty(ref _securityAlarmState);
+			set => SetProperty(ref _securityAlarmState, value);
+		}
 
 		public SecurityAlarmControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,13 +7,69 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ForceDismembermentEffector : gameEffector
 	{
-		[Ordinal(0)] [RED("bodyPart")] public CEnum<gameDismBodyPart> BodyPart { get; set; }
-		[Ordinal(1)] [RED("woundType")] public CEnum<gameDismWoundType> WoundType { get; set; }
-		[Ordinal(2)] [RED("isCritical")] public CBool IsCritical { get; set; }
-		[Ordinal(3)] [RED("skipDeathAnim")] public CBool SkipDeathAnim { get; set; }
-		[Ordinal(4)] [RED("shouldKillNPC")] public CBool ShouldKillNPC { get; set; }
-		[Ordinal(5)] [RED("dismembermentChance")] public CFloat DismembermentChance { get; set; }
-		[Ordinal(6)] [RED("effectorRecord")] public CHandle<gamedataForceDismembermentEffector_Record> EffectorRecord { get; set; }
+		private CEnum<gameDismBodyPart> _bodyPart;
+		private CEnum<gameDismWoundType> _woundType;
+		private CBool _isCritical;
+		private CBool _skipDeathAnim;
+		private CBool _shouldKillNPC;
+		private CFloat _dismembermentChance;
+		private CHandle<gamedataForceDismembermentEffector_Record> _effectorRecord;
+
+		[Ordinal(0)] 
+		[RED("bodyPart")] 
+		public CEnum<gameDismBodyPart> BodyPart
+		{
+			get => GetProperty(ref _bodyPart);
+			set => SetProperty(ref _bodyPart, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("woundType")] 
+		public CEnum<gameDismWoundType> WoundType
+		{
+			get => GetProperty(ref _woundType);
+			set => SetProperty(ref _woundType, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("isCritical")] 
+		public CBool IsCritical
+		{
+			get => GetProperty(ref _isCritical);
+			set => SetProperty(ref _isCritical, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("skipDeathAnim")] 
+		public CBool SkipDeathAnim
+		{
+			get => GetProperty(ref _skipDeathAnim);
+			set => SetProperty(ref _skipDeathAnim, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("shouldKillNPC")] 
+		public CBool ShouldKillNPC
+		{
+			get => GetProperty(ref _shouldKillNPC);
+			set => SetProperty(ref _shouldKillNPC, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("dismembermentChance")] 
+		public CFloat DismembermentChance
+		{
+			get => GetProperty(ref _dismembermentChance);
+			set => SetProperty(ref _dismembermentChance, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("effectorRecord")] 
+		public CHandle<gamedataForceDismembermentEffector_Record> EffectorRecord
+		{
+			get => GetProperty(ref _effectorRecord);
+			set => SetProperty(ref _effectorRecord, value);
+		}
 
 		public ForceDismembermentEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkanimSetVisibilityEvent : inkanimEvent
 	{
-		[Ordinal(1)] [RED("isVisible")] public CBool IsVisible { get; set; }
+		private CBool _isVisible;
+
+		[Ordinal(1)] 
+		[RED("isVisible")] 
+		public CBool IsVisible
+		{
+			get => GetProperty(ref _isVisible);
+			set => SetProperty(ref _isVisible, value);
+		}
 
 		public inkanimSetVisibilityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

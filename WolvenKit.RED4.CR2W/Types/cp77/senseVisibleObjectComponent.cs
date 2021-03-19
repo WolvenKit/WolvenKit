@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class senseVisibleObjectComponent : entIPlacedComponent
 	{
-		[Ordinal(5)] [RED("visibleObject")] public CHandle<senseVisibleObject> VisibleObject { get; set; }
+		private CHandle<senseVisibleObject> _visibleObject;
+
+		[Ordinal(5)] 
+		[RED("visibleObject")] 
+		public CHandle<senseVisibleObject> VisibleObject
+		{
+			get => GetProperty(ref _visibleObject);
+			set => SetProperty(ref _visibleObject, value);
+		}
 
 		public senseVisibleObjectComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

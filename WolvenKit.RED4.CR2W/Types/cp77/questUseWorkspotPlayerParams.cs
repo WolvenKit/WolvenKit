@@ -7,14 +7,78 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questUseWorkspotPlayerParams : CVariable
 	{
-		[Ordinal(0)] [RED("tier")] public CEnum<questUseWorkspotTier> Tier { get; set; }
-		[Ordinal(1)] [RED("cameraSettings")] public gameTier3CameraSettings CameraSettings { get; set; }
-		[Ordinal(2)] [RED("emptyHands")] public CBool EmptyHands { get; set; }
-		[Ordinal(3)] [RED("cameraUseTrajectorySpace")] public CBool CameraUseTrajectorySpace { get; set; }
-		[Ordinal(4)] [RED("applyCameraParams")] public CBool ApplyCameraParams { get; set; }
-		[Ordinal(5)] [RED("vehicleProceduralCameraWeight")] public CFloat VehicleProceduralCameraWeight { get; set; }
-		[Ordinal(6)] [RED("parallaxWeight")] public CFloat ParallaxWeight { get; set; }
-		[Ordinal(7)] [RED("parallaxSpace")] public CEnum<questCameraParallaxSpace> ParallaxSpace { get; set; }
+		private CEnum<questUseWorkspotTier> _tier;
+		private gameTier3CameraSettings _cameraSettings;
+		private CBool _emptyHands;
+		private CBool _cameraUseTrajectorySpace;
+		private CBool _applyCameraParams;
+		private CFloat _vehicleProceduralCameraWeight;
+		private CFloat _parallaxWeight;
+		private CEnum<questCameraParallaxSpace> _parallaxSpace;
+
+		[Ordinal(0)] 
+		[RED("tier")] 
+		public CEnum<questUseWorkspotTier> Tier
+		{
+			get => GetProperty(ref _tier);
+			set => SetProperty(ref _tier, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("cameraSettings")] 
+		public gameTier3CameraSettings CameraSettings
+		{
+			get => GetProperty(ref _cameraSettings);
+			set => SetProperty(ref _cameraSettings, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("emptyHands")] 
+		public CBool EmptyHands
+		{
+			get => GetProperty(ref _emptyHands);
+			set => SetProperty(ref _emptyHands, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("cameraUseTrajectorySpace")] 
+		public CBool CameraUseTrajectorySpace
+		{
+			get => GetProperty(ref _cameraUseTrajectorySpace);
+			set => SetProperty(ref _cameraUseTrajectorySpace, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("applyCameraParams")] 
+		public CBool ApplyCameraParams
+		{
+			get => GetProperty(ref _applyCameraParams);
+			set => SetProperty(ref _applyCameraParams, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("vehicleProceduralCameraWeight")] 
+		public CFloat VehicleProceduralCameraWeight
+		{
+			get => GetProperty(ref _vehicleProceduralCameraWeight);
+			set => SetProperty(ref _vehicleProceduralCameraWeight, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("parallaxWeight")] 
+		public CFloat ParallaxWeight
+		{
+			get => GetProperty(ref _parallaxWeight);
+			set => SetProperty(ref _parallaxWeight, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("parallaxSpace")] 
+		public CEnum<questCameraParallaxSpace> ParallaxSpace
+		{
+			get => GetProperty(ref _parallaxSpace);
+			set => SetProperty(ref _parallaxSpace, value);
+		}
 
 		public questUseWorkspotPlayerParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

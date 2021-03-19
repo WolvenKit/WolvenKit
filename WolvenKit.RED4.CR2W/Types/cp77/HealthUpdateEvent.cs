@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HealthUpdateEvent : redEvent
 	{
-		[Ordinal(0)] [RED("value")] public CFloat Value { get; set; }
-		[Ordinal(1)] [RED("healthDifference")] public CFloat HealthDifference { get; set; }
+		private CFloat _value;
+		private CFloat _healthDifference;
+
+		[Ordinal(0)] 
+		[RED("value")] 
+		public CFloat Value
+		{
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("healthDifference")] 
+		public CFloat HealthDifference
+		{
+			get => GetProperty(ref _healthDifference);
+			set => SetProperty(ref _healthDifference, value);
+		}
 
 		public HealthUpdateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questOpenBriefing_NodeType : questIUIManagerNodeType
 	{
-		[Ordinal(0)] [RED("briefingPath")] public CHandle<gameJournalPath> BriefingPath { get; set; }
+		private CHandle<gameJournalPath> _briefingPath;
+
+		[Ordinal(0)] 
+		[RED("briefingPath")] 
+		public CHandle<gameJournalPath> BriefingPath
+		{
+			get => GetProperty(ref _briefingPath);
+			set => SetProperty(ref _briefingPath, value);
+		}
 
 		public questOpenBriefing_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

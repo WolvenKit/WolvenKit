@@ -10,8 +10,24 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
     public class scnAnimName : scnAnimName_
     {
-        [Ordinal(1000)] [REDBuffer(true)] public CArrayCompressed<CName> Unk1 { get; set; }
-        [Ordinal(1001)] [REDBuffer(true)] public CUInt32 Unk2 { get; set; }
+        private CArrayCompressed<CName> _unk1;
+        private CUInt32 _unk2;
+
+        [Ordinal(1000)]
+        [REDBuffer(true)]
+        public CArrayCompressed<CName> Unk1
+        {
+            get => GetProperty(ref _unk1);
+            set => SetProperty(ref _unk1, value);
+        }
+
+        [Ordinal(1001)]
+        [REDBuffer(true)]
+        public CUInt32 Unk2
+        {
+            get => GetProperty(ref _unk2);
+            set => SetProperty(ref _unk2, value);
+        }
 
         public scnAnimName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 

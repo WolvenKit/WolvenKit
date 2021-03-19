@@ -6,7 +6,15 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
     public class animAnimNode_ConditionalSegmentEnd : animAnimNode_ConditionalSegmentEnd_
     {
-        [Ordinal(999)] [RED("segmentBeginNodeId")] public CUInt32 SegmentBeginNodeId { get; set; }
+        private CUInt32 _segmentBeginNodeId;
+
+        [Ordinal(999)]
+        [RED("segmentBeginNodeId")]
+        public CUInt32 SegmentBeginNodeId
+        {
+            get => GetProperty(ref _segmentBeginNodeId);
+            set => SetProperty(ref _segmentBeginNodeId, value);
+        }
 
         public animAnimNode_ConditionalSegmentEnd(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }

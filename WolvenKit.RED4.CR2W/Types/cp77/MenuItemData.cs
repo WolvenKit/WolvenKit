@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MenuItemData : IScriptable
 	{
-		[Ordinal(0)] [RED("menuData")] public MenuData MenuData { get; set; }
+		private MenuData _menuData;
+
+		[Ordinal(0)] 
+		[RED("menuData")] 
+		public MenuData MenuData
+		{
+			get => GetProperty(ref _menuData);
+			set => SetProperty(ref _menuData, value);
+		}
 
 		public MenuItemData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

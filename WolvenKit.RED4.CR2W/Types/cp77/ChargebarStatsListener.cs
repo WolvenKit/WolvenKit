@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ChargebarStatsListener : gameScriptStatsListener
 	{
-		[Ordinal(0)] [RED("controller")] public wCHandle<ChargebarController> Controller { get; set; }
+		private wCHandle<ChargebarController> _controller;
+
+		[Ordinal(0)] 
+		[RED("controller")] 
+		public wCHandle<ChargebarController> Controller
+		{
+			get => GetProperty(ref _controller);
+			set => SetProperty(ref _controller, value);
+		}
 
 		public ChargebarStatsListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class vehicleDriveToGameObjectEvent : redEvent
 	{
-		[Ordinal(0)] [RED("targetObjToReach")] public wCHandle<gameObject> TargetObjToReach { get; set; }
+		private wCHandle<gameObject> _targetObjToReach;
+
+		[Ordinal(0)] 
+		[RED("targetObjToReach")] 
+		public wCHandle<gameObject> TargetObjToReach
+		{
+			get => GetProperty(ref _targetObjToReach);
+			set => SetProperty(ref _targetObjToReach, value);
+		}
 
 		public vehicleDriveToGameObjectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

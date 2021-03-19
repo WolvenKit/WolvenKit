@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldAcousticsOutdoornessAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(6)] [RED("outdoor")] public CFloat Outdoor { get; set; }
+		private CFloat _outdoor;
+
+		[Ordinal(6)] 
+		[RED("outdoor")] 
+		public CFloat Outdoor
+		{
+			get => GetProperty(ref _outdoor);
+			set => SetProperty(ref _outdoor, value);
+		}
 
 		public worldAcousticsOutdoornessAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FullSystemRestart : ActionBool
 	{
-		[Ordinal(25)] [RED("restartDuration")] public CInt32 RestartDuration { get; set; }
+		private CInt32 _restartDuration;
+
+		[Ordinal(25)] 
+		[RED("restartDuration")] 
+		public CInt32 RestartDuration
+		{
+			get => GetProperty(ref _restartDuration);
+			set => SetProperty(ref _restartDuration, value);
+		}
 
 		public FullSystemRestart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

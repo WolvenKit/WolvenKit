@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimFeature_LadderEnterStyleData : animAnimFeature
 	{
-		[Ordinal(0)] [RED("enterStyle")] public CInt32 EnterStyle { get; set; }
+		private CInt32 _enterStyle;
+
+		[Ordinal(0)] 
+		[RED("enterStyle")] 
+		public CInt32 EnterStyle
+		{
+			get => GetProperty(ref _enterStyle);
+			set => SetProperty(ref _enterStyle, value);
+		}
 
 		public AnimFeature_LadderEnterStyleData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,11 +7,51 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_RotateBoneByQuaternion : animAnimNode_Base
 	{
-		[Ordinal(11)] [RED("inputNode")] public animPoseLink InputNode { get; set; }
-		[Ordinal(12)] [RED("quaternionNode")] public animQuaternionLink QuaternionNode { get; set; }
-		[Ordinal(13)] [RED("bone")] public animTransformIndex Bone { get; set; }
-		[Ordinal(14)] [RED("useIncrementalMode")] public CBool UseIncrementalMode { get; set; }
-		[Ordinal(15)] [RED("resetOnActivation")] public CBool ResetOnActivation { get; set; }
+		private animPoseLink _inputNode;
+		private animQuaternionLink _quaternionNode;
+		private animTransformIndex _bone;
+		private CBool _useIncrementalMode;
+		private CBool _resetOnActivation;
+
+		[Ordinal(11)] 
+		[RED("inputNode")] 
+		public animPoseLink InputNode
+		{
+			get => GetProperty(ref _inputNode);
+			set => SetProperty(ref _inputNode, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("quaternionNode")] 
+		public animQuaternionLink QuaternionNode
+		{
+			get => GetProperty(ref _quaternionNode);
+			set => SetProperty(ref _quaternionNode, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("bone")] 
+		public animTransformIndex Bone
+		{
+			get => GetProperty(ref _bone);
+			set => SetProperty(ref _bone, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("useIncrementalMode")] 
+		public CBool UseIncrementalMode
+		{
+			get => GetProperty(ref _useIncrementalMode);
+			set => SetProperty(ref _useIncrementalMode, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("resetOnActivation")] 
+		public CBool ResetOnActivation
+		{
+			get => GetProperty(ref _resetOnActivation);
+			set => SetProperty(ref _resetOnActivation, value);
+		}
 
 		public animAnimNode_RotateBoneByQuaternion(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

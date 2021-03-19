@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameSetLootInteractionAccessibilityEvent : redEvent
 	{
-		[Ordinal(0)] [RED("accessible")] public CBool Accessible { get; set; }
+		private CBool _accessible;
+
+		[Ordinal(0)] 
+		[RED("accessible")] 
+		public CBool Accessible
+		{
+			get => GetProperty(ref _accessible);
+			set => SetProperty(ref _accessible, value);
+		}
 
 		public gameSetLootInteractionAccessibilityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

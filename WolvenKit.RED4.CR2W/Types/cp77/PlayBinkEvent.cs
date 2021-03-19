@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PlayBinkEvent : redEvent
 	{
-		[Ordinal(0)] [RED("data")] public SBinkperationData Data { get; set; }
+		private SBinkperationData _data;
+
+		[Ordinal(0)] 
+		[RED("data")] 
+		public SBinkperationData Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
 
 		public PlayBinkEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

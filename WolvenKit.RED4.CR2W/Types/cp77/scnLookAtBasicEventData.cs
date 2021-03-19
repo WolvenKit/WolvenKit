@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnLookAtBasicEventData : CVariable
 	{
-		[Ordinal(0)] [RED("basic")] public scnAnimTargetBasicData Basic { get; set; }
-		[Ordinal(1)] [RED("removePreviousAdvancedLookAts")] public CBool RemovePreviousAdvancedLookAts { get; set; }
-		[Ordinal(2)] [RED("requests")] public CArray<animLookAtRequestForPart> Requests { get; set; }
+		private scnAnimTargetBasicData _basic;
+		private CBool _removePreviousAdvancedLookAts;
+		private CArray<animLookAtRequestForPart> _requests;
+
+		[Ordinal(0)] 
+		[RED("basic")] 
+		public scnAnimTargetBasicData Basic
+		{
+			get => GetProperty(ref _basic);
+			set => SetProperty(ref _basic, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("removePreviousAdvancedLookAts")] 
+		public CBool RemovePreviousAdvancedLookAts
+		{
+			get => GetProperty(ref _removePreviousAdvancedLookAts);
+			set => SetProperty(ref _removePreviousAdvancedLookAts, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("requests")] 
+		public CArray<animLookAtRequestForPart> Requests
+		{
+			get => GetProperty(ref _requests);
+			set => SetProperty(ref _requests, value);
+		}
 
 		public scnLookAtBasicEventData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

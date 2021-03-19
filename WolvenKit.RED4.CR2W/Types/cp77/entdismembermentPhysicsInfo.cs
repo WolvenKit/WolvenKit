@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entdismembermentPhysicsInfo : CVariable
 	{
-		[Ordinal(0)] [RED("DensityScale")] public CFloat DensityScale { get; set; }
+		private CFloat _densityScale;
+
+		[Ordinal(0)] 
+		[RED("DensityScale")] 
+		public CFloat DensityScale
+		{
+			get => GetProperty(ref _densityScale);
+			set => SetProperty(ref _densityScale, value);
+		}
 
 		public entdismembermentPhysicsInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

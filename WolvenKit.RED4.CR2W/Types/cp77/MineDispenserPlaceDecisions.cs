@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MineDispenserPlaceDecisions : MineDispenserTransition
 	{
-		[Ordinal(0)] [RED("spawnPosition")] public Vector4 SpawnPosition { get; set; }
-		[Ordinal(1)] [RED("spawnNormal")] public Vector4 SpawnNormal { get; set; }
+		private Vector4 _spawnPosition;
+		private Vector4 _spawnNormal;
+
+		[Ordinal(0)] 
+		[RED("spawnPosition")] 
+		public Vector4 SpawnPosition
+		{
+			get => GetProperty(ref _spawnPosition);
+			set => SetProperty(ref _spawnPosition, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("spawnNormal")] 
+		public Vector4 SpawnNormal
+		{
+			get => GetProperty(ref _spawnNormal);
+			set => SetProperty(ref _spawnNormal, value);
+		}
 
 		public MineDispenserPlaceDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

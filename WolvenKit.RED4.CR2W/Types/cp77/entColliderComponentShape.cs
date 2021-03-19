@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entColliderComponentShape : ISerializable
 	{
-		[Ordinal(0)] [RED("localToBody")] public Transform LocalToBody { get; set; }
+		private Transform _localToBody;
+
+		[Ordinal(0)] 
+		[RED("localToBody")] 
+		public Transform LocalToBody
+		{
+			get => GetProperty(ref _localToBody);
+			set => SetProperty(ref _localToBody, value);
+		}
 
 		public entColliderComponentShape(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

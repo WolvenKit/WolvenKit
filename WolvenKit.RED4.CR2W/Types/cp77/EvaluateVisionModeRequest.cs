@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EvaluateVisionModeRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("mode")] public CEnum<gameVisionModeType> Mode { get; set; }
+		private CEnum<gameVisionModeType> _mode;
+
+		[Ordinal(0)] 
+		[RED("mode")] 
+		public CEnum<gameVisionModeType> Mode
+		{
+			get => GetProperty(ref _mode);
+			set => SetProperty(ref _mode, value);
+		}
 
 		public EvaluateVisionModeRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

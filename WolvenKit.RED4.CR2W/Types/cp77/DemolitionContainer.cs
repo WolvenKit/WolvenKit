@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DemolitionContainer : BaseSkillCheckContainer
 	{
-		[Ordinal(3)] [RED("demolitionCheck")] public CHandle<DemolitionSkillCheck> DemolitionCheck { get; set; }
+		private CHandle<DemolitionSkillCheck> _demolitionCheck;
+
+		[Ordinal(3)] 
+		[RED("demolitionCheck")] 
+		public CHandle<DemolitionSkillCheck> DemolitionCheck
+		{
+			get => GetProperty(ref _demolitionCheck);
+			set => SetProperty(ref _demolitionCheck, value);
+		}
 
 		public DemolitionContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

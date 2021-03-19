@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EngineeringContainer : BaseSkillCheckContainer
 	{
-		[Ordinal(3)] [RED("engineeringCheck")] public CHandle<EngineeringSkillCheck> EngineeringCheck { get; set; }
+		private CHandle<EngineeringSkillCheck> _engineeringCheck;
+
+		[Ordinal(3)] 
+		[RED("engineeringCheck")] 
+		public CHandle<EngineeringSkillCheck> EngineeringCheck
+		{
+			get => GetProperty(ref _engineeringCheck);
+			set => SetProperty(ref _engineeringCheck, value);
+		}
 
 		public EngineeringContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

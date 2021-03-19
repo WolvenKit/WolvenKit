@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TerminalSetState : redEvent
 	{
-		[Ordinal(0)] [RED("state")] public CEnum<gameinteractionsReactionState> State { get; set; }
+		private CEnum<gameinteractionsReactionState> _state;
+
+		[Ordinal(0)] 
+		[RED("state")] 
+		public CEnum<gameinteractionsReactionState> State
+		{
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
+		}
 
 		public TerminalSetState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

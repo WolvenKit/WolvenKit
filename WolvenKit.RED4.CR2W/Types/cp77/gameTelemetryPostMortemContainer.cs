@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameTelemetryPostMortemContainer : ISerializable
 	{
-		[Ordinal(0)] [RED("postMortem")] public gameTelemetryPostMortem PostMortem { get; set; }
+		private gameTelemetryPostMortem _postMortem;
+
+		[Ordinal(0)] 
+		[RED("postMortem")] 
+		public gameTelemetryPostMortem PostMortem
+		{
+			get => GetProperty(ref _postMortem);
+			set => SetProperty(ref _postMortem, value);
+		}
 
 		public gameTelemetryPostMortemContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

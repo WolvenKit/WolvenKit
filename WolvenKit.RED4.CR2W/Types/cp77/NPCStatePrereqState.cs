@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class NPCStatePrereqState : gamePrereqState
 	{
-		[Ordinal(0)] [RED("owner")] public wCHandle<gameObject> Owner { get; set; }
-		[Ordinal(1)] [RED("listenerInt")] public CUInt32 ListenerInt { get; set; }
-		[Ordinal(2)] [RED("prevValue")] public CInt32 PrevValue { get; set; }
+		private wCHandle<gameObject> _owner;
+		private CUInt32 _listenerInt;
+		private CInt32 _prevValue;
+
+		[Ordinal(0)] 
+		[RED("owner")] 
+		public wCHandle<gameObject> Owner
+		{
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("listenerInt")] 
+		public CUInt32 ListenerInt
+		{
+			get => GetProperty(ref _listenerInt);
+			set => SetProperty(ref _listenerInt, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("prevValue")] 
+		public CInt32 PrevValue
+		{
+			get => GetProperty(ref _prevValue);
+			set => SetProperty(ref _prevValue, value);
+		}
 
 		public NPCStatePrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

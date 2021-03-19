@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioVoiceGruntVariations : CVariable
 	{
-		[Ordinal(0)] [RED("cachedVariations")] public CArray<CName> CachedVariations { get; set; }
+		private CArray<CName> _cachedVariations;
+
+		[Ordinal(0)] 
+		[RED("cachedVariations")] 
+		public CArray<CName> CachedVariations
+		{
+			get => GetProperty(ref _cachedVariations);
+			set => SetProperty(ref _cachedVariations, value);
+		}
 
 		public audioVoiceGruntVariations(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

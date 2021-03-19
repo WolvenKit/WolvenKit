@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_Dangle : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] [RED("dangleConstraint")] public CHandle<animDangleConstraint_Simulation> DangleConstraint { get; set; }
+		private CHandle<animDangleConstraint_Simulation> _dangleConstraint;
+
+		[Ordinal(12)] 
+		[RED("dangleConstraint")] 
+		public CHandle<animDangleConstraint_Simulation> DangleConstraint
+		{
+			get => GetProperty(ref _dangleConstraint);
+			set => SetProperty(ref _dangleConstraint, value);
+		}
 
 		public animAnimNode_Dangle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

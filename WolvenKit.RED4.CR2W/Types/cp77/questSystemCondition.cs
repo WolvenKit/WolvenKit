@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questSystemCondition : questTypedCondition
 	{
-		[Ordinal(0)] [RED("type")] public CHandle<questISystemConditionType> Type { get; set; }
+		private CHandle<questISystemConditionType> _type;
+
+		[Ordinal(0)] 
+		[RED("type")] 
+		public CHandle<questISystemConditionType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
 
 		public questSystemCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

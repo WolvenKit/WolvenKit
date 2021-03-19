@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animLipsyncMappingSceneEntry : CVariable
 	{
-		[Ordinal(0)] [RED("actorVoiceTags")] public CArray<CRUID> ActorVoiceTags { get; set; }
-		[Ordinal(1)] [RED("animSets")] public CArray<raRef<animAnimSet>> AnimSets { get; set; }
+		private CArray<CRUID> _actorVoiceTags;
+		private CArray<raRef<animAnimSet>> _animSets;
+
+		[Ordinal(0)] 
+		[RED("actorVoiceTags")] 
+		public CArray<CRUID> ActorVoiceTags
+		{
+			get => GetProperty(ref _actorVoiceTags);
+			set => SetProperty(ref _actorVoiceTags, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("animSets")] 
+		public CArray<raRef<animAnimSet>> AnimSets
+		{
+			get => GetProperty(ref _animSets);
+			set => SetProperty(ref _animSets, value);
+		}
 
 		public animLipsyncMappingSceneEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

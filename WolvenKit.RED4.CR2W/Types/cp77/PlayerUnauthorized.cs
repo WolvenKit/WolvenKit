@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PlayerUnauthorized : ActionBool
 	{
-		[Ordinal(25)] [RED("isLiftDoor")] public CBool IsLiftDoor { get; set; }
+		private CBool _isLiftDoor;
+
+		[Ordinal(25)] 
+		[RED("isLiftDoor")] 
+		public CBool IsLiftDoor
+		{
+			get => GetProperty(ref _isLiftDoor);
+			set => SetProperty(ref _isLiftDoor, value);
+		}
 
 		public PlayerUnauthorized(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

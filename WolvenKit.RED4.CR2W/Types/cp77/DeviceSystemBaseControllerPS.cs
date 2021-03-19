@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DeviceSystemBaseControllerPS : MasterControllerPS
 	{
-		[Ordinal(104)] [RED("quickHacksEnabled")] public CBool QuickHacksEnabled { get; set; }
+		private CBool _quickHacksEnabled;
+
+		[Ordinal(104)] 
+		[RED("quickHacksEnabled")] 
+		public CBool QuickHacksEnabled
+		{
+			get => GetProperty(ref _quickHacksEnabled);
+			set => SetProperty(ref _quickHacksEnabled, value);
+		}
 
 		public DeviceSystemBaseControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

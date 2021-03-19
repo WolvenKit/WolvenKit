@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectPostAction_Beam_RicochetPreview : gameEffectPostAction
 	{
-		[Ordinal(0)] [RED("ricocheted")] public gameEffectPostAction_Beam_RicochetPreviewPreviewEffect Ricocheted { get; set; }
-		[Ordinal(1)] [RED("fromMuzzle")] public gameEffectPostAction_Beam_RicochetPreviewPreviewEffect FromMuzzle { get; set; }
+		private gameEffectPostAction_Beam_RicochetPreviewPreviewEffect _ricocheted;
+		private gameEffectPostAction_Beam_RicochetPreviewPreviewEffect _fromMuzzle;
+
+		[Ordinal(0)] 
+		[RED("ricocheted")] 
+		public gameEffectPostAction_Beam_RicochetPreviewPreviewEffect Ricocheted
+		{
+			get => GetProperty(ref _ricocheted);
+			set => SetProperty(ref _ricocheted, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("fromMuzzle")] 
+		public gameEffectPostAction_Beam_RicochetPreviewPreviewEffect FromMuzzle
+		{
+			get => GetProperty(ref _fromMuzzle);
+			set => SetProperty(ref _fromMuzzle, value);
+		}
 
 		public gameEffectPostAction_Beam_RicochetPreview(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

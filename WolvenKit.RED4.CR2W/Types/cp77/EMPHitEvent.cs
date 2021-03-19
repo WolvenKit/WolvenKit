@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EMPHitEvent : redEvent
 	{
-		[Ordinal(0)] [RED("lifetime")] public CFloat Lifetime { get; set; }
+		private CFloat _lifetime;
+
+		[Ordinal(0)] 
+		[RED("lifetime")] 
+		public CFloat Lifetime
+		{
+			get => GetProperty(ref _lifetime);
+			set => SetProperty(ref _lifetime, value);
+		}
 
 		public EMPHitEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

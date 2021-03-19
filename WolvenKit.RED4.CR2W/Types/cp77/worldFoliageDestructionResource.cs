@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldFoliageDestructionResource : CResource
 	{
-		[Ordinal(1)] [RED("mappings")] public CArray<CHandle<worldFoliageDestructionMapping>> Mappings { get; set; }
+		private CArray<CHandle<worldFoliageDestructionMapping>> _mappings;
+
+		[Ordinal(1)] 
+		[RED("mappings")] 
+		public CArray<CHandle<worldFoliageDestructionMapping>> Mappings
+		{
+			get => GetProperty(ref _mappings);
+			set => SetProperty(ref _mappings, value);
+		}
 
 		public worldFoliageDestructionResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

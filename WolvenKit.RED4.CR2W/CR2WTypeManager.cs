@@ -88,7 +88,6 @@ namespace WolvenKit.RED4.CR2W.Types
                 var arrayacc = MakeArray(typeof(CArrayFixedSize<>), generictype);
                 var flagstr = typename[1..idx];
                 arrayacc.Flags = new List<int>() { int.Parse(flagstr) };
-                arrayacc.Elementtype = generictype;
                 return arrayacc as CVariable;
             }
             else if (typename.Contains(':'))
@@ -114,13 +113,11 @@ namespace WolvenKit.RED4.CR2W.Types
                     case "curveData":
                     {
                         var obj = MakeGenericType(typeof(curveData<>), innertype);
-                        (obj as ICurveDataAccessor).Elementtype = innertype;
                         return obj;
                     }
                     case "multiChannelCurve":
                     {
                         var obj = MakeGenericType(typeof(multiChannelCurve<>), innertype);
-                        (obj as ICurveDataAccessor).Elementtype = innertype;
                         return obj;
                     }
                     case "CrRef":
@@ -140,19 +137,16 @@ namespace WolvenKit.RED4.CR2W.Types
                         // array of array:   (array:)handle:meshMeshAppearance
 
                         var arrayacc = MakeArray(typeof(CArray<>), innertype);
-                        arrayacc.Elementtype = innertype;
                         return arrayacc as CVariable;
                     }
                     case "CArrayVLQInt32":
                     {
                         var arrayacc = MakeArray(typeof(CArrayVLQInt32<>), innertype);
-                        arrayacc.Elementtype = innertype;
                         return arrayacc as CVariable;
                     }
                     case "CArrayCompressed":
                     {
                         var arrayacc = MakeArray(typeof(CArrayCompressed<>), innertype);
-                        arrayacc.Elementtype = innertype;
                         return arrayacc as CVariable;
                     }
                     case "static":
@@ -167,7 +161,6 @@ namespace WolvenKit.RED4.CR2W.Types
                         {
                             var arrayacc = MakeArray(typeof(CStatic<>), matchArrayType.Groups[2].Value);
                             arrayacc.Flags = new List<int>() { int.Parse(matchArrayType.Groups[1].Value) };
-                            arrayacc.Elementtype = matchArrayType.Groups[2].Value;
                             return arrayacc as CVariable;
                         }
                         else

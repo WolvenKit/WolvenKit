@@ -7,11 +7,51 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questMountedObjectInfo : ISerializable
 	{
-		[Ordinal(0)] [RED("isFirst")] public CBool IsFirst { get; set; }
-		[Ordinal(1)] [RED("isPlayer")] public CBool IsPlayer { get; set; }
-		[Ordinal(2)] [RED("ref")] public gameEntityReference Ref { get; set; }
-		[Ordinal(3)] [RED("onMount")] public CBool OnMount { get; set; }
-		[Ordinal(4)] [RED("role")] public CEnum<gameMountingSlotRole> Role { get; set; }
+		private CBool _isFirst;
+		private CBool _isPlayer;
+		private gameEntityReference _ref;
+		private CBool _onMount;
+		private CEnum<gameMountingSlotRole> _role;
+
+		[Ordinal(0)] 
+		[RED("isFirst")] 
+		public CBool IsFirst
+		{
+			get => GetProperty(ref _isFirst);
+			set => SetProperty(ref _isFirst, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("isPlayer")] 
+		public CBool IsPlayer
+		{
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("ref")] 
+		public gameEntityReference Ref
+		{
+			get => GetProperty(ref _ref);
+			set => SetProperty(ref _ref, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("onMount")] 
+		public CBool OnMount
+		{
+			get => GetProperty(ref _onMount);
+			set => SetProperty(ref _onMount, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("role")] 
+		public CEnum<gameMountingSlotRole> Role
+		{
+			get => GetProperty(ref _role);
+			set => SetProperty(ref _role, value);
+		}
 
 		public questMountedObjectInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

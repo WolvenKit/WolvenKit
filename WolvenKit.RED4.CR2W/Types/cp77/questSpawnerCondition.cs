@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questSpawnerCondition : questTypedCondition
 	{
-		[Ordinal(0)] [RED("type")] public CHandle<questISpawnerConditionType> Type { get; set; }
+		private CHandle<questISpawnerConditionType> _type;
+
+		[Ordinal(0)] 
+		[RED("type")] 
+		public CHandle<questISpawnerConditionType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
 
 		public questSpawnerCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questSocketDefinition : graphGraphSocketDefinition
 	{
-		[Ordinal(2)] [RED("type")] public CEnum<questSocketType> Type { get; set; }
+		private CEnum<questSocketType> _type;
+
+		[Ordinal(2)] 
+		[RED("type")] 
+		public CEnum<questSocketType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
 
 		public questSocketDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

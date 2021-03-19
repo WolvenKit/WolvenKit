@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SlotReservationDecorator : AIVehicleTaskAbstract
 	{
-		[Ordinal(0)] [RED("mountData")] public CHandle<AIArgumentMapping> MountData { get; set; }
-		[Ordinal(1)] [RED("mountEventData")] public CHandle<gameMountEventData> MountEventData { get; set; }
+		private CHandle<AIArgumentMapping> _mountData;
+		private CHandle<gameMountEventData> _mountEventData;
+
+		[Ordinal(0)] 
+		[RED("mountData")] 
+		public CHandle<AIArgumentMapping> MountData
+		{
+			get => GetProperty(ref _mountData);
+			set => SetProperty(ref _mountData, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("mountEventData")] 
+		public CHandle<gameMountEventData> MountEventData
+		{
+			get => GetProperty(ref _mountEventData);
+			set => SetProperty(ref _mountEventData, value);
+		}
 
 		public SlotReservationDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

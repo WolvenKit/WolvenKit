@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiGPSGameController : gameuiHUDGameController
 	{
-		[Ordinal(9)] [RED("gpsSettings")] public gamegpsSettings GpsSettings { get; set; }
+		private gamegpsSettings _gpsSettings;
+
+		[Ordinal(9)] 
+		[RED("gpsSettings")] 
+		public gamegpsSettings GpsSettings
+		{
+			get => GetProperty(ref _gpsSettings);
+			set => SetProperty(ref _gpsSettings, value);
+		}
 
 		public gameuiGPSGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

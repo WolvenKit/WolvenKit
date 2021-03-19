@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameContainerObjectSingleItem : gameContainerObjectBase
 	{
-		[Ordinal(51)] [RED("itemTDBID")] public TweakDBID ItemTDBID { get; set; }
+		private TweakDBID _itemTDBID;
+
+		[Ordinal(51)] 
+		[RED("itemTDBID")] 
+		public TweakDBID ItemTDBID
+		{
+			get => GetProperty(ref _itemTDBID);
+			set => SetProperty(ref _itemTDBID, value);
+		}
 
 		public gameContainerObjectSingleItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

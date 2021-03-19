@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BonusCollisionLogic : gameuiSideScrollerMiniGameCollisionLogic
 	{
-		[Ordinal(3)] [RED("hasTriggered")] public CBool HasTriggered { get; set; }
+		private CBool _hasTriggered;
+
+		[Ordinal(3)] 
+		[RED("hasTriggered")] 
+		public CBool HasTriggered
+		{
+			get => GetProperty(ref _hasTriggered);
+			set => SetProperty(ref _hasTriggered, value);
+		}
 
 		public BonusCollisionLogic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

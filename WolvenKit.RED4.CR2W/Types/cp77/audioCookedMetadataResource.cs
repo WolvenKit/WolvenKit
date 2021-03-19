@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioCookedMetadataResource : CResource
 	{
-		[Ordinal(1)] [RED("entries")] public CArray<CHandle<audioAudioMetadata>> Entries { get; set; }
+		private CArray<CHandle<audioAudioMetadata>> _entries;
+
+		[Ordinal(1)] 
+		[RED("entries")] 
+		public CArray<CHandle<audioAudioMetadata>> Entries
+		{
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
+		}
 
 		public audioCookedMetadataResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

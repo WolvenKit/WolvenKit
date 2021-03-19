@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GeometryShape : ISerializable
 	{
-		[Ordinal(0)] [RED("vertices")] public CArray<Vector3> Vertices { get; set; }
-		[Ordinal(1)] [RED("indices")] public CArray<CUInt16> Indices { get; set; }
-		[Ordinal(2)] [RED("faces")] public CArray<GeometryShapeFace> Faces { get; set; }
+		private CArray<Vector3> _vertices;
+		private CArray<CUInt16> _indices;
+		private CArray<GeometryShapeFace> _faces;
+
+		[Ordinal(0)] 
+		[RED("vertices")] 
+		public CArray<Vector3> Vertices
+		{
+			get => GetProperty(ref _vertices);
+			set => SetProperty(ref _vertices, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("indices")] 
+		public CArray<CUInt16> Indices
+		{
+			get => GetProperty(ref _indices);
+			set => SetProperty(ref _indices, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("faces")] 
+		public CArray<GeometryShapeFace> Faces
+		{
+			get => GetProperty(ref _faces);
+			set => SetProperty(ref _faces, value);
+		}
 
 		public GeometryShape(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

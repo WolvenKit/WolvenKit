@@ -7,9 +7,33 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamedataDataNode : ISerializable
 	{
-		[Ordinal(0)] [RED("nodeType")] public CEnum<gamedataDataNodeType> NodeType { get; set; }
-		[Ordinal(1)] [RED("fileName")] public CString FileName { get; set; }
-		[Ordinal(2)] [RED("parent")] public wCHandle<gamedataDataNode> Parent { get; set; }
+		private CEnum<gamedataDataNodeType> _nodeType;
+		private CString _fileName;
+		private wCHandle<gamedataDataNode> _parent;
+
+		[Ordinal(0)] 
+		[RED("nodeType")] 
+		public CEnum<gamedataDataNodeType> NodeType
+		{
+			get => GetProperty(ref _nodeType);
+			set => SetProperty(ref _nodeType, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("fileName")] 
+		public CString FileName
+		{
+			get => GetProperty(ref _fileName);
+			set => SetProperty(ref _fileName, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("parent")] 
+		public wCHandle<gamedataDataNode> Parent
+		{
+			get => GetProperty(ref _parent);
+			set => SetProperty(ref _parent, value);
+		}
 
 		public gamedataDataNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class vgVectorGraphicShape_Circle : vgBaseVectorGraphicShape
 	{
-		[Ordinal(2)] [RED("dius")] public CFloat Dius { get; set; }
+		private CFloat _dius;
+
+		[Ordinal(2)] 
+		[RED("dius")] 
+		public CFloat Dius
+		{
+			get => GetProperty(ref _dius);
+			set => SetProperty(ref _dius, value);
+		}
 
 		public vgVectorGraphicShape_Circle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

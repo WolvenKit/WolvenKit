@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CarriedObjectData : IScriptable
 	{
-		[Ordinal(0)] [RED("instant")] public CBool Instant { get; set; }
+		private CBool _instant;
+
+		[Ordinal(0)] 
+		[RED("instant")] 
+		public CBool Instant
+		{
+			get => GetProperty(ref _instant);
+			set => SetProperty(ref _instant, value);
+		}
 
 		public CarriedObjectData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

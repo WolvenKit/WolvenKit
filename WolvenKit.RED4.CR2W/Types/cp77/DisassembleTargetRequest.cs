@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DisassembleTargetRequest : redEvent
 	{
-		[Ordinal(0)] [RED("requester")] public wCHandle<gameObject> Requester { get; set; }
+		private wCHandle<gameObject> _requester;
+
+		[Ordinal(0)] 
+		[RED("requester")] 
+		public wCHandle<gameObject> Requester
+		{
+			get => GetProperty(ref _requester);
+			set => SetProperty(ref _requester, value);
+		}
 
 		public DisassembleTargetRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

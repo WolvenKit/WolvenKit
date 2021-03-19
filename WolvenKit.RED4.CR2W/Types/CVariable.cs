@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -45,33 +46,6 @@ namespace WolvenKit.RED4.CR2W.Types
 
             
             accessor = TypeAccessor.Create(this.GetType());
-
-            // instantiate all REDproperties
-            InstantiateAllRedProps();
-        }
-
-        private void InstantiateAllRedProps()
-        {
-            foreach (var item in this.GetREDMembers(true))
-            {
-                var o = accessor[this, item.Name];
-                if (o is CVariable cvar)
-                {
-                }
-                else // is null
-                {
-                    var att = item.GetMemberAttribute<REDAttribute>();
-                    // instantiate
-                    var vartype = REDReflection.GetREDTypeString(item.Type, att.Flags);
-                    var varname = REDReflection.GetREDNameString(item);
-
-                    var newvar = CR2WTypeManager.Create(vartype, varname, this.cr2w, this);     // create new variable and parent to this 
-                    if (newvar != null)
-                    {
-                        accessor[this, item.Name] = newvar;
-                    }
-                }
-            }
         }
 
         #endregion
@@ -208,7 +182,7 @@ namespace WolvenKit.RED4.CR2W.Types
         /// e.g. Color from CColor, or Uint64 from CUInt64
         /// Can be overwritten (e.g. in Array, Ptr and other generic types)
         /// </summary>
-        [Browsable(false)] public virtual string REDType => REDReflection.GetREDTypeString(this.GetType());
+        [Browsable(false)] public virtual string REDType => REDReflection.GetREDTypeString(GetType());
 
         /// <summary>
         /// AspectName in frmChunkProperties
@@ -221,6 +195,61 @@ namespace WolvenKit.RED4.CR2W.Types
         #endregion
 
         #region Methods
+
+        internal T GetProperty<T>(ref T backingField, [CallerMemberName] string callerName = "") where T : class
+        {
+            if (backingField == null && cr2w.CreatePropertyOnAccess)
+            {
+                backingField = Create<T>(callerName);
+            }
+
+            return backingField;
+        }
+
+        internal void SetProperty<T>(ref T backingField, T value, [CallerMemberName] string callerName = "") where T : class
+        {
+            if (backingField == value)
+            {
+                return;
+            }
+            backingField = value;
+            PropertySet(callerName);
+        }
+
+        internal T Create<T>(string varName = null, params int[] flags)
+        {
+            var result = (T)System.Activator.CreateInstance(typeof(T), cr2w, this, varName);
+
+            if (result is IArrayAccessor arr)
+            {
+                arr.Flags = flags.ToList();
+            }
+
+            return result;
+        }
+
+        internal T Create<T>([CallerMemberName] string callerName = "")
+        {
+            var attr = (REDAttribute)GetType().GetProperty(callerName).GetCustomAttribute(typeof(REDAttribute));
+            if (attr == null)
+            {
+                throw new Exception("REDAttribute not defined!");
+            }
+
+            var varName = attr.Name;
+            if (string.IsNullOrWhiteSpace(varName) && attr is REDBufferAttribute {IsIgnored: true})
+            {
+                varName = callerName;
+            }
+
+            return Create<T>(varName, attr.Flags);
+        }
+
+        internal void PropertySet([CallerMemberName] string callerName = "")
+        {
+
+        }
+
         private string GetFullDependencyStringName()
         {
             var par = this.ParentVar;
@@ -382,7 +411,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 var members = this.GetREDMembers(true);
                 foreach (var item in members)
                 {
-                    var att = item.GetMemberAttribute<REDAttribute>();
+                    var att = REDReflection.GetREDAttribute(item);
                     // don't write ignored buffers, they get written in the class
                     if (att is REDBufferAttribute bufferAttribute && bufferAttribute.IsIgnored)
                     {
@@ -513,7 +542,12 @@ namespace WolvenKit.RED4.CR2W.Types
 
             foreach (Member item in redproperties)
             {
-                var att = item.GetMemberAttribute<T>();
+                var att = REDReflection.GetREDAttribute(item);
+                if (att is not T)
+                {
+                    continue;
+                }
+
                 if (att is REDBufferAttribute {IsIgnored: true})
                 {
                     // add IsSerialized?
@@ -544,7 +578,7 @@ namespace WolvenKit.RED4.CR2W.Types
         /// <param name="value"></param>
         private bool TrySettingFastMemberAccessor(IEditableVariable value)
         {
-            foreach (var member in this.accessor.GetMembers())
+            foreach (var member in REDReflection.GetMembers(this))
             {
                 try
                 {
@@ -592,7 +626,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 var members = this.GetREDMembers(true);
                 foreach (var item in members)
                 {
-                    var att = item.GetMemberAttribute<REDAttribute>();
+                    var att = REDReflection.GetREDAttribute(item);
                     // don't write ignored buffers, they get written in the class
                     if (att is REDBufferAttribute bufferAttribute && bufferAttribute.IsIgnored)
                     {
@@ -615,7 +649,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 var members = this.GetREDMembers(false);
                 foreach (var item in members)
                 {
-                    var att = item.GetMemberAttribute<REDAttribute>();
+                    var att = REDReflection.GetREDAttribute(item);
                     if (this.accessor[this, item.Name] is CVariable av)
                     {
                         if (av != null)
@@ -644,11 +678,17 @@ namespace WolvenKit.RED4.CR2W.Types
                 // write all Buffers
                 foreach (Member item in this.GetREDBuffers())
                 {
-                    var att = item.GetMemberAttribute<REDBufferAttribute>();
+                    var att = REDReflection.GetREDAttribute(item) as REDBufferAttribute;
+                    if (att == null)
+                    {
+                        continue;
+                    }
 
                     // ignore some RedBuffers (formerly unknown bytes)
                     if (att.IsIgnored)
+                    {
                         continue;
+                    }
                     else
                     {
                         var b = this.accessor[this, item.Name];
@@ -765,8 +805,8 @@ namespace WolvenKit.RED4.CR2W.Types
         public override string ToString()
         {
             // check first if there is a property called "Name"
-            var dbg = this.accessor.GetMembers();
-            foreach (var member in this.accessor.GetMembers())
+            var dbg = REDReflection.GetMembers(this);
+            foreach (var member in REDReflection.GetMembers(this))
             {
                 if (member.Name == "Name")
                 {

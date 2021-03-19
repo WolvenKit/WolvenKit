@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnVoicesetComponent : gameComponent
 	{
-		[Ordinal(4)] [RED("combatVoSettingsName")] public CName CombatVoSettingsName { get; set; }
+		private CName _combatVoSettingsName;
+
+		[Ordinal(4)] 
+		[RED("combatVoSettingsName")] 
+		public CName CombatVoSettingsName
+		{
+			get => GetProperty(ref _combatVoSettingsName);
+			set => SetProperty(ref _combatVoSettingsName, value);
+		}
 
 		public scnVoicesetComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

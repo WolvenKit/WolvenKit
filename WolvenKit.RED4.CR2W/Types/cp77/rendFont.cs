@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class rendFont : CResource
 	{
-		[Ordinal(1)] [RED("fontBuffer")] public DataBuffer FontBuffer { get; set; }
+		private DataBuffer _fontBuffer;
+
+		[Ordinal(1)] 
+		[RED("fontBuffer")] 
+		public DataBuffer FontBuffer
+		{
+			get => GetProperty(ref _fontBuffer);
+			set => SetProperty(ref _fontBuffer, value);
+		}
 
 		public rendFont(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

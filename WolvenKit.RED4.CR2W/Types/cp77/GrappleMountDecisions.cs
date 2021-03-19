@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GrappleMountDecisions : LocomotionTakedownDecisions
 	{
-		[Ordinal(0)] [RED("stateMachineInitData")] public wCHandle<LocomotionTakedownInitData> StateMachineInitData { get; set; }
+		private wCHandle<LocomotionTakedownInitData> _stateMachineInitData;
+
+		[Ordinal(0)] 
+		[RED("stateMachineInitData")] 
+		public wCHandle<LocomotionTakedownInitData> StateMachineInitData
+		{
+			get => GetProperty(ref _stateMachineInitData);
+			set => SetProperty(ref _stateMachineInitData, value);
+		}
 
 		public GrappleMountDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnCheckTriggerReturnCondition : scnIReturnCondition
 	{
-		[Ordinal(0)] [RED("params")] public scnCheckTriggerReturnConditionParams Params { get; set; }
+		private scnCheckTriggerReturnConditionParams _params;
+
+		[Ordinal(0)] 
+		[RED("params")] 
+		public scnCheckTriggerReturnConditionParams Params
+		{
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
+		}
 
 		public scnCheckTriggerReturnCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

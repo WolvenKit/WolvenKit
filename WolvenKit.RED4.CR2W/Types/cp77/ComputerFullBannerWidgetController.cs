@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ComputerFullBannerWidgetController : ComputerBannerWidgetController
 	{
-		[Ordinal(12)] [RED("closeButtonWidget")] public inkWidgetReference CloseButtonWidget { get; set; }
+		private inkWidgetReference _closeButtonWidget;
+
+		[Ordinal(12)] 
+		[RED("closeButtonWidget")] 
+		public inkWidgetReference CloseButtonWidget
+		{
+			get => GetProperty(ref _closeButtonWidget);
+			set => SetProperty(ref _closeButtonWidget, value);
+		}
 
 		public ComputerFullBannerWidgetController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

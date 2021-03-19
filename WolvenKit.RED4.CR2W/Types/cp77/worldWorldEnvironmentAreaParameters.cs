@@ -7,8 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldWorldEnvironmentAreaParameters : CVariable
 	{
-		[Ordinal(0)] [RED("enable")] public CBool Enable { get; set; }
-		[Ordinal(1)] [RED("globalLight")] public worldWorldGlobalLightParameters GlobalLight { get; set; }
+		private CBool _enable;
+		private worldWorldGlobalLightParameters _globalLight;
+
+		[Ordinal(0)] 
+		[RED("enable")] 
+		public CBool Enable
+		{
+			get => GetProperty(ref _enable);
+			set => SetProperty(ref _enable, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("globalLight")] 
+		public worldWorldGlobalLightParameters GlobalLight
+		{
+			get => GetProperty(ref _globalLight);
+			set => SetProperty(ref _globalLight, value);
+		}
 
 		public worldWorldEnvironmentAreaParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

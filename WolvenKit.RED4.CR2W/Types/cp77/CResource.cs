@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CResource : ISerializable
 	{
-		[Ordinal(0)] [RED("cookingPlatform")] public CEnum<ECookingPlatform> CookingPlatform { get; set; }
+		private CEnum<ECookingPlatform> _cookingPlatform;
+
+		[Ordinal(0)] 
+		[RED("cookingPlatform")] 
+		public CEnum<ECookingPlatform> CookingPlatform
+		{
+			get => GetProperty(ref _cookingPlatform);
+			set => SetProperty(ref _cookingPlatform, value);
+		}
 
 		public CResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

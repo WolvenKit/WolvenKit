@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UI_VendorDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("VendorData")] public gamebbScriptID_Variant VendorData { get; set; }
+		private gamebbScriptID_Variant _vendorData;
+
+		[Ordinal(0)] 
+		[RED("VendorData")] 
+		public gamebbScriptID_Variant VendorData
+		{
+			get => GetProperty(ref _vendorData);
+			set => SetProperty(ref _vendorData, value);
+		}
 
 		public UI_VendorDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

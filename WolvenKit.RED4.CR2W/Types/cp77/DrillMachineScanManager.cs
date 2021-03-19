@@ -7,12 +7,60 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DrillMachineScanManager : gameScriptableComponent
 	{
-		[Ordinal(5)] [RED("ppStarting")] public CBool PpStarting { get; set; }
-		[Ordinal(6)] [RED("ppEnding")] public CBool PpEnding { get; set; }
-		[Ordinal(7)] [RED("ppCurrentStartTime")] public CFloat PpCurrentStartTime { get; set; }
-		[Ordinal(8)] [RED("ppCurrentEndFrame")] public CInt32 PpCurrentEndFrame { get; set; }
-		[Ordinal(9)] [RED("idleToScanTime")] public CFloat IdleToScanTime { get; set; }
-		[Ordinal(10)] [RED("ppOffFrameDelay")] public CInt32 PpOffFrameDelay { get; set; }
+		private CBool _ppStarting;
+		private CBool _ppEnding;
+		private CFloat _ppCurrentStartTime;
+		private CInt32 _ppCurrentEndFrame;
+		private CFloat _idleToScanTime;
+		private CInt32 _ppOffFrameDelay;
+
+		[Ordinal(5)] 
+		[RED("ppStarting")] 
+		public CBool PpStarting
+		{
+			get => GetProperty(ref _ppStarting);
+			set => SetProperty(ref _ppStarting, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("ppEnding")] 
+		public CBool PpEnding
+		{
+			get => GetProperty(ref _ppEnding);
+			set => SetProperty(ref _ppEnding, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("ppCurrentStartTime")] 
+		public CFloat PpCurrentStartTime
+		{
+			get => GetProperty(ref _ppCurrentStartTime);
+			set => SetProperty(ref _ppCurrentStartTime, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("ppCurrentEndFrame")] 
+		public CInt32 PpCurrentEndFrame
+		{
+			get => GetProperty(ref _ppCurrentEndFrame);
+			set => SetProperty(ref _ppCurrentEndFrame, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("idleToScanTime")] 
+		public CFloat IdleToScanTime
+		{
+			get => GetProperty(ref _idleToScanTime);
+			set => SetProperty(ref _idleToScanTime, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("ppOffFrameDelay")] 
+		public CInt32 PpOffFrameDelay
+		{
+			get => GetProperty(ref _ppOffFrameDelay);
+			set => SetProperty(ref _ppOffFrameDelay, value);
+		}
 
 		public DrillMachineScanManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

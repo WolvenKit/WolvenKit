@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioConversationMetadata : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("conversations")] public CArray<audioConversationItemMetadata> Conversations { get; set; }
+		private CArray<audioConversationItemMetadata> _conversations;
+
+		[Ordinal(1)] 
+		[RED("conversations")] 
+		public CArray<audioConversationItemMetadata> Conversations
+		{
+			get => GetProperty(ref _conversations);
+			set => SetProperty(ref _conversations, value);
+		}
 
 		public audioConversationMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

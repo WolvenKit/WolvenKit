@@ -7,7 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PlaySoundEvent : MusicSettings
 	{
-		[Ordinal(1)] [RED("soundEvent")] public CName SoundEvent { get; set; }
+		private CName _soundEvent;
+
+		[Ordinal(1)] 
+		[RED("soundEvent")] 
+		public CName SoundEvent
+		{
+			get => GetProperty(ref _soundEvent);
+			set => SetProperty(ref _soundEvent, value);
+		}
 
 		public PlaySoundEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
