@@ -18,7 +18,11 @@ namespace WolvenKit.RED4.CR2W.Types
 
             // read additonal data but not expose it, it will be created on write
 
-            if (Parameters == null)
+            cr2w.CreatePropertyOnAccess = false;
+            var isNull = Parameters == null;
+            cr2w.CreatePropertyOnAccess = true;
+
+            if (isNull)
             {
                 var zero = file.ReadBytes(2);
                 return;

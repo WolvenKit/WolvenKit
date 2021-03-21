@@ -1087,7 +1087,7 @@ namespace WolvenKit.RED4.CR2W
                             returnedVariables.AddRange(cvar.UnknownCVariables.Select(_ => new SNameArg(EStringTableMod.None, _)));
                             foreach (var item in cvar.GetREDMembers(true))
                             {
-                                var o = cvar.GetProperty(item.Name);
+                                var o = cvar.accessor[cvar, item.Name];
                                 if (o is CVariable cvar2)
                                 {
                                     if (cvar2.IsSerialized)
