@@ -429,7 +429,72 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
         /// <summary>
-        /// Reads a CVariable from a binaryreader stream
+        /// Reads the <see cref="CVariable"/> and all his children as values only.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="size"></param>
+        public virtual void ReadWithoutMeta(BinaryReader file, uint size)
+        {
+            if (this is IREDPrimitive)
+            {
+                Read(file, size);
+            }
+            else
+            {
+                var members = this.GetREDMembers(true);
+                foreach (var item in members)
+                {
+                    var att = item.GetMemberAttribute<REDAttribute>();
+                    // don't write ignored buffers, they get written in the class
+                    if (att is REDBufferAttribute bufferAttribute && bufferAttribute.IsIgnored)
+                    {
+                        // add IsSerialized?
+                        continue;
+                    }
+
+                    // just write the RedBuffer without variable id
+                    if (this.accessor[this, item.Name] is CVariable av)
+                    {
+                        av.ReadWithoutMeta(file, size);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Write the <see cref="CVariable"/> and all his children as values only.
+        /// </summary>
+        /// <param name="file"></param>
+        public virtual void WriteWithoutMeta(BinaryWriter file)
+        {
+            if (this is IREDPrimitive)
+            {
+                Write(file);
+            }
+            else
+            {
+                var members = this.GetREDMembers(true);
+                foreach (var item in members)
+                {
+                    var att = item.GetMemberAttribute<REDAttribute>();
+                    // don't write ignored buffers, they get written in the class
+                    if (att is REDBufferAttribute bufferAttribute && bufferAttribute.IsIgnored)
+                    {
+                        // add IsSerialized?
+                        continue;
+                    }
+
+                    // just write the RedBuffer without variable id
+                    if (this.accessor[this, item.Name] is CVariable av)
+                    {
+                        av.WriteWithoutMeta(file);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reads a CVariable from a Binaryreader stream
         /// Can be overwritten by child classes
         /// </summary>
         /// <param name="file"></param>

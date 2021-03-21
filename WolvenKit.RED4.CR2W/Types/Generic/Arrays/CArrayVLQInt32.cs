@@ -16,6 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
         public CArrayVLQInt32(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size) => base.Read(file, size, (int)file.ReadVLQInt32());
+        public override void ReadWithoutMeta(BinaryReader file, uint size) => base.ReadWithoutMeta(file, size, (int)file.ReadVLQInt32());
 
         public override void Write(BinaryWriter file)
         {
@@ -28,7 +29,11 @@ namespace WolvenKit.RED4.CR2W.Types
 
             base.Write(file);
         }
-    }
 
-    
+        public override void WriteWithoutMeta(BinaryWriter file)
+        {
+            file.WriteVLQInt32(Count);
+            base.WriteWithoutMeta(file);
+        }
+    }
 }

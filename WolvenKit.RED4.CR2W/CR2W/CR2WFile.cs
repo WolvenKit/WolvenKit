@@ -1,6 +1,7 @@
 using Catel;
 using RED.CRC32;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -15,6 +16,7 @@ using WolvenKit.RED4.CR2W.Types;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using Catel.Data;
+using FastMember;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.FNV1A;
 using Newtonsoft.Json;
@@ -1082,27 +1084,27 @@ namespace WolvenKit.RED4.CR2W
                                 returnedVariables.Add(new SNameArg(EStringTableMod.None, cvar.ParentVar));
                             }
 
-                            // add all normal REDProperties
-                            var props = cvar.GetExistingVariables(false);
-                            returnedVariables.AddRange(props
-                                .Select(_ => new SNameArg(EStringTableMod.None, _)));
-
-                            // get buffers
-                            var buffers = cvar.GetExistingVariables(true).Except(props).ToList();
+                            returnedVariables.AddRange(cvar.UnknownCVariables.Select(_ => new SNameArg(EStringTableMod.None, _)));
+                            foreach (var item in cvar.GetREDMembers(true))
+                            {
+                                var o = cvar.GetProperty(item.Name);
+                                if (o is CVariable cvar2)
+                                {
+                                    if (cvar2.IsSerialized)
+                                    {
+                                        if (REDReflection.GetREDAttribute(item) is REDBufferAttribute)
+                                        {
+                                            returnedVariables.Add(new SNameArg(EStringTableMod.SkipNameAndType, cvar2));
+                                        }
+                                        else
+                                        {
+                                            returnedVariables.Add(new SNameArg(EStringTableMod.None, cvar2));
+                                        }
+                                    }
+                                }
+                            }
 
                             // custom serialization
-                            if (cvar is CMaterialInstance mi)
-                            {
-                                returnedVariables.AddRange(buffers
-                                    .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
-                            }
-
-                            if (cvar is physicsMaterialLibraryResource pmlr)
-                            {
-                                returnedVariables.AddRange(buffers
-                                    .Select(_ => new SNameArg(EStringTableMod.SkipNameAndType, _)));
-                            }
-
                             if (cvar is gameDeviceResourceData gdrd)
                             {
                                 returnedVariables.AddRange(gdrd.CookedDeviceData
