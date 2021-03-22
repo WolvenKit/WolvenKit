@@ -25,6 +25,12 @@
     <Version>0.8.0.1-Beta</Version>
     <Description>WPF</Description>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Views\Editor\Editors\Nodes\Audio\**" />
     <Compile Remove="Views\Editor\Editors\Nodes\Quest\**" />
@@ -52,6 +58,33 @@
     <Page Remove="Resources\Styles\Custom\**" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="FFME\avcodec-58.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\avdevice-58.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\avfilter-7.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\avformat-58.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\avutil-56.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\distraction_generic.bk2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\postproc-55.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\swresample-3.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\swscale-5.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Resources\Media\Images\Application\cloud.png" />
     <Resource Include="Resources\Media\Images\Application\cp77proj.png" />
     <Resource Include="Resources\Media\Images\Application\CpProj.png" />
@@ -78,6 +111,7 @@
     <PackageReference Include="DiscordRichPresence" Version="1.0.175" />
     <PackageReference Include="Feather.Controls" Version="1.0.1" />
     <PackageReference Include="Feather.Core" Version="1.0.0" />
+    <PackageReference Include="FFME.Windows" Version="4.3.340" />
     <PackageReference Include="Fody" Version="6.3.0" PrivateAssets="all" />
     <PackageReference Include="CsvHelper" Version="16.1.0" />
     <PackageReference Include="Dirkster.MLib" Version="1.3.1.2" />
@@ -619,6 +653,20 @@
     <Content Remove="C:\Users\cancerPC\.nuget\packages\microsoft.web.webview2\1.0.664.37\build\\..\runtimes\win-x64\native\WebView2Loader.dll" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="distraction_generic.bk2" />
+    <None Remove="FFME\avcodec-58.dll" />
+    <None Remove="FFME\avdevice-58.dll" />
+    <None Remove="FFME\avfilter-7.dll" />
+    <None Remove="FFME\avformat-58.dll" />
+    <None Remove="FFME\avutil-56.dll" />
+    <None Remove="FFME\distraction_generic.bk2" />
+    <None Remove="FFME\ffmpeg.exe" />
+    <None Remove="FFME\ffplay.exe" />
+    <None Remove="FFME\ffprobe.exe" />
+    <None Remove="FFME\postproc-55.dll" />
+    <None Remove="FFME\swresample-3.dll" />
+    <None Remove="FFME\swscale-5.dll" />
     <None Remove="Resources\Media\Images\Icons\Files\file.svg" />
+    <None Remove="sample.mp4" />
   </ItemGroup>
 </Project>

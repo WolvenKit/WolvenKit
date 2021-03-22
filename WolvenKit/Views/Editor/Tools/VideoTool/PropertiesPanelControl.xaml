@@ -1,0 +1,287 @@
+﻿<UserControl x:Class="WolvenKit.Views.Controls.PropertiesPanelControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:WolvenKit.Views.ViewModels"
+             xmlns:ffme="clr-namespace:Unosquare.FFME;assembly=ffme.win"
+             mc:Ignorable="d" d:DesignHeight="700"
+             d:DataContext="{d:DesignInstance vm:RootViewModel, IsDesignTimeCreatable=True}">
+    <Border Name="PropertyExplorerPanel" Width="280" Style="{StaticResource SidePanelContainerBorderStyle}">
+        <DockPanel LastChildFill="True">
+            <!-- The Content -->
+            <Grid x:Name="PropertyExplorerPanelContent"
+                  DataContext="{Binding MediaElement}"
+                  d:DataContext="{d:DesignInstance ffme:MediaElement, IsDesignTimeCreatable=True}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden"
+                            Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UIElement}}">
+                    <ItemsControl>
+                        <ItemsControl.Resources>
+                            <LinearGradientBrush x:Key="KeyHeader" StartPoint="0,0" EndPoint="0,1">
+                                <GradientStopCollection>
+                                    <GradientStop Offset="0.0" Color="#ffffffff" />
+                                    <GradientStop Offset="0.03" Color="#bb0c0c0b" />
+                                    <GradientStop Offset="1.0" Color="#880c0c0b" />
+                                </GradientStopCollection>
+                            </LinearGradientBrush>
+                            <Style TargetType="TextBlock" x:Key="Key">
+                                <Setter Property="DockPanel.Dock" Value="Left" />
+                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                                <Setter Property="FontSize" Value="10"></Setter>
+                                <Setter Property="TextAlignment" Value="Left" />
+                                <Setter Property="Foreground" Value="WhiteSmoke" />
+                                <Setter Property="Padding" Value="6,3,0,3" />
+                            </Style>
+                            <Style TargetType="TextBlock" x:Key="Value">
+                                <Setter Property="DockPanel.Dock" Value="Right" />
+                                <Setter Property="Width" Value="126" />
+                                <Setter Property="TextWrapping" Value="NoWrap" />
+                                <Setter Property="FontFamily" Value="Courier New" />
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="FontWeight" Value="Normal" />
+                                <Setter Property="FontSize" Value="12" />
+                                <Setter Property="Foreground" Value="WhiteSmoke" />
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                                <Setter Property="Padding" Value="0,3,2,0" />
+                            </Style>
+                            <Style TargetType="DockPanel">
+                                <Setter Property="LastChildFill" Value="False" />
+                            </Style>
+                        </ItemsControl.Resources>
+
+                        <DockPanel Background="{StaticResource KeyHeader}">
+                            <TextBlock Style="{StaticResource Key}">Media Format</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding MediaFormat, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Media Size</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding MediaStreamSize, Mode=OneWay, Converter={StaticResource ByteFormatter}}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Bit Rate</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding BitRate, Mode=OneWay, Converter={StaticResource BitFormatter}}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Duration</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding NaturalDuration, Mode=OneWay, Converter={StaticResource TimeSpanFormatter}}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Start Time</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding PlaybackStartTime, Mode=OneWay, Converter={StaticResource TimeSpanFormatter}}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">End Time</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding PlaybackEndTime, Mode=OneWay, Converter={StaticResource TimeSpanFormatter}}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Is Live Stream</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding IsLiveStream, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Is Network Stream</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding IsNetworkStream, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Can Stream Seek</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding IsSeekable, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Can Stream Pause</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding CanPause, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel Background="{StaticResource KeyHeader}">
+                            <TextBlock Style="{StaticResource Key}">State</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding MediaState, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Position</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding Position, Mode=OneWay, Converter={StaticResource TimeSpanFormatter}}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Frame Position</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding FramePosition, Mode=OneWay, Converter={StaticResource TimeSpanFormatter}}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Is Open</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding IsOpen, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Is Opening</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding IsOpening, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Is Changing</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding IsChanging, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Is Seeking</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding IsSeeking, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Is Playing</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding IsPlaying, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Has Ended</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding HasMediaEnded, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel Background="{StaticResource KeyHeader}">
+                            <TextBlock Style="{StaticResource Key}">Is Buffering</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding IsBuffering, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Decoding Bit Rate</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding DecodingBitRate, Mode=OneWay, Converter={StaticResource BitFormatter}}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Buffering Progress</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding BufferingProgress, Mode=OneWay, Converter={StaticResource PercentageFormatter}}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Download Progress</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding DownloadProgress, Mode=OneWay, Converter={StaticResource PercentageFormatter}}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Buffered Packets</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding PacketBufferCount, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Buffered Bytes</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding PacketBufferLength, Mode=OneWay, Converter={StaticResource ByteFormatter}}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Buffered Duration</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding PacketBufferDuration, Mode=OneWay, Converter={StaticResource TimeSpanFormatter}}" />
+                        </DockPanel>
+
+                        <DockPanel Background="{StaticResource KeyHeader}">
+                            <TextBlock Style="{StaticResource Key}">Has Video</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding HasVideo, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Video Stream Index</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding VideoStreamIndex, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Video Codec</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding VideoCodec, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Video Accelerator</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding VideoHardwareDecoder, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Video Bit Rate</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding VideoBitRate, Mode=OneWay, Converter={StaticResource BitFormatter}}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Video Rotation</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding VideoRotation, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Video Width</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding NaturalVideoWidth, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Video Height</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding NaturalVideoHeight, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Video FPS</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding VideoFrameRate, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Video SMTPE</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding VideoSmtpeTimeCode, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Video Aspect Ratio</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding VideoAspectRatio, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel Background="{StaticResource KeyHeader}">
+                            <TextBlock Style="{StaticResource Key}">Has Audio</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding HasAudio, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Audio Stream Index</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding AudioStreamIndex, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Audio Codec</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding AudioCodec, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Audio Bit Rate</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding AudioBitRate, Mode=OneWay, Converter={StaticResource BitFormatter}}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Audio Channels</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding AudioChannels, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Audio Sampling</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding AudioSampleRate, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Audio Bits/Sample</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding AudioBitsPerSample, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel Background="{StaticResource KeyHeader}">
+                            <TextBlock Style="{StaticResource Key}">Has Subtitles</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding HasSubtitles, Mode=OneWay}" />
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource Key}">Subtitle Stream Index</TextBlock>
+                            <TextBlock Style="{StaticResource Value}" Text="{Binding SubtitleStreamIndex, Mode=OneWay}" />
+                        </DockPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </DockPanel>
+    </Border>
+</UserControl>

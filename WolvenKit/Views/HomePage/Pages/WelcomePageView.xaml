@@ -3,6 +3,7 @@
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
+ xmlns:ffme="clr-namespace:Unosquare.FFME;assembly=ffme.win"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
@@ -895,5 +896,14 @@
              Text="{Binding VersionWkit}"
              />
         </Grid>
+
+     
+
+        <Grid x:Name="Fish" />
+        <Button
+         x:Name="Fuckoff"
+         Click="Fuckoff_Click"
+         Content="Clickme"
+         />
     </Grid>
 </catel:UserControl>

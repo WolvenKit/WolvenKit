@@ -36,8 +36,8 @@
                 <Setter Property="TimelineTickBrush" Value="{DynamicResource MahApps.Brushes.SemiTransparent}" />
                 <Setter Property="ProgressBarBrush" Value="{DynamicResource MahApps.Brushes.SemiTransparent}" />
                 <Setter Property="CenterLineBrush" Value="{DynamicResource MahApps.Brushes.SemiTransparent}" />
-                <Setter Property="RightLevelBrush" Value="{StaticResource WaveformRightLevelBrush}" />
-                <Setter Property="LeftLevelBrush" Value="{StaticResource WaveformLeftLevelBrush}" />
+                <Setter Property="RightLevelBrush" Value="{DynamicResource MahApps.Brushes.Accent3}" />
+                <Setter Property="LeftLevelBrush" Value="{DynamicResource MahApps.Brushes.AccentBase}" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type svl1:WaveformTimeline}">
