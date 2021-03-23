@@ -33,7 +33,7 @@ namespace WolvenKit
         {
             // Change the default location of the ffmpeg binaries (same directory as application)
             // You can get the 64-bit binaries here: https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z
-            Library.FFmpegDirectory = @"c:\ffmpeg";
+            // Library.FFmpegDirectory = @"c:\ffmpeg";
 
             // You can pick which FFmpeg binaries are loaded. See issue #28
             // For more specific control (issue #414) you can set Library.FFmpegLoadModeFlags to:
@@ -104,7 +104,7 @@ namespace WolvenKit
             NotificationHelper.InitializeNotificationHelper();
 
             string path = System.AppDomain.CurrentDomain.BaseDirectory;
-            Unosquare.FFME.Library.FFmpegDirectory = "FFME";
+            Unosquare.FFME.Library.FFmpegDirectory = path + "FFME";
             Library.FFmpegLoadModeFlags = FFmpegLoadMode.FullFeatures;
             Library.EnableWpfMultiThreadedVideo = false; // !
             // Temp Fix for MainViewModel.OnClosing
