@@ -42,6 +42,9 @@ namespace WolvenKit.ViewModels.Shell
             _serviceLocator = serviceLocator;
             _configurationService = configurationService;
             _updateService = updateService;
+            StaticReferencesVM.GlobalStatusBar = this;
+
+            CurrentProject = "-";
         }
 
         #endregion Constructors
@@ -57,6 +60,7 @@ namespace WolvenKit.ViewModels.Shell
         public string LoadingString { get; set; }
         public string ReceivingAutomaticUpdates { get; private set; }
         public string Version { get; private set; }
+        public string CurrentProject { get; set; }
 
         #endregion Properties
 

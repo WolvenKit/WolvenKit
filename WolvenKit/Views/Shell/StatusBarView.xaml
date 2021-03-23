@@ -40,7 +40,7 @@
          Margin="15,0,15,0"
          hc:TitleElement.Background="{DynamicResource RegionBrush}"
          Background="{DynamicResource GrayBrush10}"
-         Content="ProjectNameHere"
+         Content="{Binding CurrentProject}"
          FontSize="11"
          ShowCloseButton="False"
          >
@@ -55,7 +55,7 @@
          Margin="0"
          hc:TitleElement.Background="{DynamicResource RegionBrush}"
          Background="{DynamicResource GrayBrush10}"
-         Content="8.0.1"
+         Content="0.8.0.1-Beta"
          FontSize="11"
          ShowCloseButton="False"
          >

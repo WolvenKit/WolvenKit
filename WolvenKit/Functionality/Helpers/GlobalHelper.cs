@@ -20,6 +20,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
         public static MainView MainView;
         public static RibbonView RibbonViewInstance;
 
+        public static bool ShowGuidedTour { get; set; } = false;
         #endregion Fields
     }
 
