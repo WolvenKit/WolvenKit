@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Input;
 using Catel;
 using Catel.IoC;
+using Catel.Messaging;
 using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
@@ -1077,17 +1078,25 @@ namespace WolvenKit.ViewModels.Shell
                     ShellExecute(fullpath);
                     break;
 
-                case ".BNK":
-                case ".WEM":
-                {
-                    OpenAudioFile(fullpath);
-                    // TODO: port winforms
-                    //using (var sp = new frmAudioPlayer(fullpath))
-                    //{
-                    //    sp.ShowDialog();
-                    //}
+
+
+
+                // VIDEO
+                case ".BK2":
+                    OpenVideoFile(fullpath);
                     break;
-                }
+
+
+
+
+
+                // AUDIO
+
+                case ".BNK":
+                // TODO SPLIT WEMS TO PLAYLIST FROM BNK
+                case ".WEM":
+                    OpenAudioFile(fullpath);
+                    break;
                 case ".SUBS":
                     PolymorphExecute(fullpath, ".txt");
                     break;
@@ -1146,6 +1155,19 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
         }
+
+        private void OpenVideoFile(string fullpath)
+        {
+
+            var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
+            mediator.SendMessage<string>(fullpath);
+
+
+        }
+
+
+
+
 
         #endregion methods
     }

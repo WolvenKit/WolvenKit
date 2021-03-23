@@ -4,6 +4,14 @@
     <TargetFramework>net5.0-windows</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
@@ -13,6 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="Feather.Controls" Version="1.0.1" />
+    <PackageReference Include="FFME.Windows" Version="4.3.340" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
 
     <PackageReference Include="Catel.MVVM" Version="5.12.12" />

@@ -1,11 +1,10 @@
 namespace WolvenKit.Views.ViewModels
 {
-    using Foundation;
     using System;
-    using System.Diagnostics;
     using System.IO;
     using System.Windows;
     using System.Windows.Shell;
+    using Foundation;
     using Unosquare.FFME;
     using Unosquare.FFME.Common;
 
@@ -238,8 +237,7 @@ namespace WolvenKit.Views.ViewModels
                 state = "Ready";
             }
 
-            WindowTitle = $"{title} - {state} - FFME Player v{AppVersion} "
-                + $"FFmpeg {Library.FFmpegVersionInfo} ({(Debugger.IsAttached ? "Debug" : "Release")})";
+            WindowTitle = $" WolvenKit VideoPlayer v{AppVersion}  - {state} ";
         }
     }
 }

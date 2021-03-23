@@ -1,21 +1,21 @@
-﻿namespace WolvenKit.Views.Controls
+namespace WolvenKit.Views.Controls
 {
-    using Foundation;
     using System;
     using System.Windows;
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
+    using Foundation;
     using ViewModels;
 
     /// <summary>
     /// Interaction logic for PlaylistPanelControl.xaml.
     /// </summary>
-    public partial class PlaylistPanelControl
+    public partial class PlaylistView
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PlaylistPanelControl"/> class.
         /// </summary>
-        public PlaylistPanelControl()
+        public PlaylistView()
         {
             InitializeComponent();
 
@@ -26,7 +26,8 @@
             // Bind the Enter key to the command
             OpenFileTextBox.KeyDown += async (s, e) =>
             {
-                if (e.Key != Key.Enter) return;
+                if (e.Key != Key.Enter)
+                    return;
                 await App.ViewModel.Commands.OpenCommand.ExecuteAsync(OpenFileTextBox.Text);
                 e.Handled = true;
             };

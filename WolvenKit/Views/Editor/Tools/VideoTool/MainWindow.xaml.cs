@@ -9,6 +9,8 @@ namespace WolvenKit.Views
     using System.Windows.Media;
     using System.Windows.Media.Animation;
     using System.Windows.Threading;
+    using Catel.IoC;
+    using Catel.Messaging;
     using Foundation;
     using Unosquare.FFME;
     using Unosquare.FFME.ClosedCaptions;
@@ -43,6 +45,9 @@ namespace WolvenKit.Views
         /// </summary>
         public MainWindow()
         {
+
+
+
             // Set the ViewModel from the application resource
             ViewModel = App.ViewModel;
 
@@ -56,10 +61,21 @@ namespace WolvenKit.Views
 
             // Load up WPF resources
             InitializeComponent();
-
+            var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
+            mediator.Register<string>(this, OnMessage);
             // Setup the UI
             InitializeMainWindow();
             InitializeMediaEvents();
+        }
+
+        private void OnMessage(string obj)
+        {
+            this.Show();
+            this.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            this.SetCurrentValue(TopmostProperty, true);
+            this.SetCurrentValue(TopmostProperty, false);
+
+
         }
 
         #endregion

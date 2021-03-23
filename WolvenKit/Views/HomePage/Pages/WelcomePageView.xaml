@@ -899,11 +899,6 @@
 
      
 
-        <Grid x:Name="Fish" />
-        <Button
-         x:Name="Fuckoff"
-         Click="Fuckoff_Click"
-         Content="Clickme"
-         />
+        
     </Grid>
 </catel:UserControl>

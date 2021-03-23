@@ -539,6 +539,7 @@
          Name="guide"
          AllowDismiss="True"
          Animate="True"
+         Visibility="Hidden"
          />
 
         <Grid x:Name="Fgrid1" />

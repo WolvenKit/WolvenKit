@@ -1,11 +1,12 @@
 namespace WolvenKit.Views.ViewModels
 {
-    using Common;
-    using Foundation;
     using System;
     using System.ComponentModel;
     using System.IO;
     using System.Windows.Data;
+    using Catel.IoC;
+    using Catel.Messaging;
+    using Foundation;
     using Unosquare.FFME.Common;
 
     /// <summary>
@@ -40,7 +41,8 @@ namespace WolvenKit.Views.ViewModels
         public PlaylistViewModel(RootViewModel root)
             : base(root)
         {
-            if (root == null) throw new ArgumentNullException(nameof(root));
+            if (root == null)
+                throw new ArgumentNullException(nameof(root));
 
             // Set and create a thumbnails directory
             ThumbsDirectory = Path.Combine(root.AppDataDirectory, "Thumbnails");
@@ -74,8 +76,16 @@ namespace WolvenKit.Views.ViewModels
 
                 return false;
             };
-
+            var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
+            mediator.Register<string>(this, OnMessage);
             NotifyPropertyChanged(nameof(EntriesView));
+        }
+
+        private void OnMessage(string obj)
+        {
+            OpenMediaSource = obj;
+            App.ViewModel.Commands.OpenCommand.ExecuteAsync(obj);
+
         }
 
         /// <summary>
@@ -121,8 +131,10 @@ namespace WolvenKit.Views.ViewModels
                         var futureSearch = PlaylistSearchString ?? string.Empty;
                         var currentSearch = FilterString ?? string.Empty;
 
-                        if (currentSearch == futureSearch) return;
-                        if (futureSearch.Length < MinimumSearchLength && currentSearch.Length < MinimumSearchLength) return;
+                        if (currentSearch == futureSearch)
+                            return;
+                        if (futureSearch.Length < MinimumSearchLength && currentSearch.Length < MinimumSearchLength)
+                            return;
 
                         EntriesView.Refresh();
                         FilterString = new string(m_PlaylistSearchString.ToCharArray());
@@ -194,7 +206,8 @@ namespace WolvenKit.Views.ViewModels
         {
             const double snapshotPosition = 3;
 
-            if (HasTakenThumbnail) return;
+            if (HasTakenThumbnail)
+                return;
 
             var state = e.EngineState;
 

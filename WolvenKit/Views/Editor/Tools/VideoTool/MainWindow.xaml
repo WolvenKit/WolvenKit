@@ -14,9 +14,10 @@
  MinWidth="1280"
  MinHeight="720"
  Background="Black"
+ Closing="window_Closing"
  DataContext="{StaticResource ViewModel}"
  WindowStartupLocation="Manual"
- mc:Ignorable="d" Closing="window_Closing"
+ mc:Ignorable="d"
  >
     <mah:Window.Resources>
         <Storyboard x:Key="ShowControlOpacity" Storyboard.TargetProperty="(UIElement.Opacity)">
@@ -67,7 +68,7 @@
              Visibility="{Binding IsApplicationLoaded, Converter={StaticResource BooleanToVisibilityConverter}}"
              />
 
-            <controls:PlaylistPanelControl
+            <controls:PlaylistView
              x:Name="PlaylistPanel"
              DockPanel.Dock="Right"
              Visibility="{Binding IsPlaylistPanelOpen, Converter={StaticResource BooleanToVisibilityConverter}}"

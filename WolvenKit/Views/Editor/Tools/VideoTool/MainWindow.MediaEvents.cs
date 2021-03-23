@@ -1,7 +1,5 @@
 namespace WolvenKit.Views
 {
-    using Unosquare.FFME.ClosedCaptions;
-    using FFmpeg.AutoGen;
     using System;
     using System.Diagnostics;
     using System.IO;
@@ -9,7 +7,9 @@ namespace WolvenKit.Views
     using System.Text;
     using System.Windows;
     using System.Windows.Shell;
+    using FFmpeg.AutoGen;
     using Unosquare.FFME;
+    using Unosquare.FFME.ClosedCaptions;
     using Unosquare.FFME.Common;
 
     public partial class MainWindow
@@ -27,28 +27,40 @@ namespace WolvenKit.Views
         /// </returns>
         private static VideoSeekIndex LoadOrCreateVideoSeekIndex(string mediaFilePath, int streamIndex, double durationSeconds)
         {
-            var seekFileName = $"{Path.GetFileNameWithoutExtension(mediaFilePath)}.six";
-            var seekFilePath = Path.Combine(App.ViewModel.Playlist.IndexDirectory, seekFileName);
-            if (string.IsNullOrWhiteSpace(seekFilePath)) return null;
+            try
+            {
 
-            if (File.Exists(seekFilePath))
-            {
-                using var stream = File.OpenRead(seekFilePath);
-                return VideoSeekIndex.Load(stream);
-            }
-            else
-            {
-                if (!Debugger.IsAttached || durationSeconds <= 0 || durationSeconds >= 60)
+
+                var seekFileName = $"{Path.GetFileNameWithoutExtension(mediaFilePath)}.six";
+                var seekFilePath = Path.Combine(App.ViewModel.Playlist.IndexDirectory, seekFileName);
+                if (string.IsNullOrWhiteSpace(seekFilePath))
                     return null;
 
-                var seekIndex = Library.CreateVideoSeekIndex(mediaFilePath, streamIndex);
-                if (seekIndex.Entries.Count <= 0) return null;
+                if (File.Exists(seekFilePath))
+                {
+                    using var stream = File.OpenRead(seekFilePath);
+                    return VideoSeekIndex.Load(stream);
+                }
+                else
+                {
+                    if (!Debugger.IsAttached || durationSeconds <= 0 || durationSeconds >= 60)
+                        return null;
 
-                using (var stream = File.OpenWrite(seekFilePath))
-                    seekIndex.Save(stream);
+                    var seekIndex = Library.CreateVideoSeekIndex(mediaFilePath, streamIndex);
+                    if (seekIndex.Entries.Count <= 0)
+                        return null;
 
-                return seekIndex;
+                    using (var stream = File.OpenWrite(seekFilePath))
+                        seekIndex.Save(stream);
+
+                    return seekIndex;
+                }
             }
+            catch
+            {
+                return null;
+            }
+
         }
 
         #endregion
@@ -285,7 +297,8 @@ namespace WolvenKit.Views
                     foreach (var deviceType in deviceCandidates)
                     {
                         var accelerator = videoStream.HardwareDevices.FirstOrDefault(d => d.DeviceType == deviceType);
-                        if (accelerator == null) continue;
+                        if (accelerator == null)
+                            continue;
                         if (Debugger.IsAttached)
                             e.Options.VideoHardwareDevice = accelerator;
 
@@ -383,7 +396,8 @@ namespace WolvenKit.Views
                 .Select(x => x.Value)
                 .ToList();
 
-            if (availableStreams.Count <= 0) return;
+            if (availableStreams.Count <= 0)
+                return;
 
             // Allow cycling though a null stream (means removing the stream)
             // Except for video streams.

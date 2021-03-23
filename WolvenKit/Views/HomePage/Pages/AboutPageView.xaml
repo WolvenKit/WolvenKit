@@ -4,21 +4,32 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ >
+    <catel:UserControl.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources RequestedTheme="Dark" />
+                <hc:Theme />
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+    </catel:UserControl.Resources>
 
     <Grid
      MinWidth="300"
      MinHeight="300"
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
-     Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+     Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+     >
         <Grid Margin="3,75,3,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" MinWidth="300" />
                 <ColumnDefinition Width="1*" MinWidth="500" />
-                <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="2">
+            <Grid Grid.Column="2" Visibility="Collapsed">
                 <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
                     <Grid HorizontalAlignment="Right" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
@@ -28,7 +39,8 @@
                          Height="30"
                          Margin="0,690,0,0"
                          HorizontalAlignment="Center"
-                         VerticalAlignment="Bottom">
+                         VerticalAlignment="Bottom"
+                         >
                             <hc:AnimationPath
                              Margin="385,-2,0,2"
                              HorizontalAlignment="Left"
@@ -37,44 +49,51 @@
                              Stretch="Uniform"
                              Stroke="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
                              StrokeThickness="2"
-                             Duration="00:00:08" />
+                             Duration="00:00:08"
+                             />
 
                             <StackPanel
                              Margin="0,0,75,0"
                              HorizontalAlignment="Right"
                              FlowDirection="LeftToRight"
-                             Orientation="Horizontal">
+                             Orientation="Horizontal"
+                             >
                                 <hc:Shield
                                  x:Name="WatchShield"
                                  Margin="75,0,0,0"
                                  HorizontalAlignment="Right"
                                  Status="5.0"
                                  Subject="Watchers"
-                                 Color="{DynamicResource MahApps.Brushes.Accent4}" />
+                                 Color="{DynamicResource MahApps.Brushes.Accent4}"
+                                 />
                                 <hc:Divider
                                  MaxHeight="16"
                                  LineStroke="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
                                  LineStrokeThickness="2"
-                                 Orientation="Vertical" />
+                                 Orientation="Vertical"
+                                 />
                                 <hc:Shield
                                  x:Name="StarShield"
                                  Margin="0,0,0,0"
                                  HorizontalAlignment="Left"
                                  Status="5.0"
                                  Subject="Stars"
-                                 Color="{DynamicResource MahApps.Brushes.Accent4}" />
+                                 Color="{DynamicResource MahApps.Brushes.Accent4}"
+                                 />
                                 <hc:Divider
                                  MaxHeight="16"
                                  LineStroke="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
                                  LineStrokeThickness="2"
-                                 Orientation="Vertical" />
+                                 Orientation="Vertical"
+                                 />
                                 <hc:Shield
                                  x:Name="ForkShield"
                                  Margin="0,0,0,0"
                                  HorizontalAlignment="Left"
                                  Status="5.0"
                                  Subject="Forks"
-                                 Color="{DynamicResource MahApps.Brushes.Accent4}" />
+                                 Color="{DynamicResource MahApps.Brushes.Accent4}"
+                                 />
                             </StackPanel>
                         </Grid>
 
@@ -92,7 +111,8 @@
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
                          TitleInfo="Test"
-                         TitleLabel="Test">
+                         TitleLabel="Test"
+                         >
                             <hc:GithubTimeLine.Style>
                                 <Style BasedOn="{StaticResource TreeViewBaseStyle}" TargetType="{x:Type hc:GithubTimeLine}">
                                     <Setter Property="ItemContainerStyle" Value="{DynamicResource GithubTreeViewItemBaseStyle}" />
@@ -105,7 +125,8 @@
                                                      Margin="48,-25,0,-10"
                                                      HorizontalAlignment="Left"
                                                      BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
-                                                     BorderThickness="1,0,0,0" />
+                                                     BorderThickness="1,0,0,0"
+                                                     />
                                                     <ScrollViewer VerticalScrollBarVisibility="Hidden">
                                                         <ItemsPresenter x:Name="ItemPresent" />
                                                     </ScrollViewer>
@@ -128,14 +149,16 @@
                                                      FontSize="15"
                                                      FontWeight="DemiBold"
                                                      Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                                     Style="{Binding TitleStyle}" />
+                                                     Style="{Binding TitleStyle}"
+                                                     />
                                                     <TextBlock
                                                      Margin="5,0,0,0"
                                                      VerticalAlignment="Center"
                                                      FontSize="18"
                                                      FontWeight="Thin"
                                                      Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                                     Text="{Binding TitleInfo}" />
+                                                     Text="{Binding TitleInfo}"
+                                                     />
                                                 </StackPanel>
                                                 <HierarchicalDataTemplate.ItemTemplate>
                                                     <DataTemplate DataType="{x:Type hc:ContentMember}">
@@ -148,13 +171,15 @@
                                                              BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
                                                              BorderThickness="2"
                                                              Status="Dot"
-                                                             Style="{StaticResource BadgeDanger}" />
+                                                             Style="{StaticResource BadgeDanger}"
+                                                             />
 
                                                             <hc:Divider
                                                              Width="25"
                                                              VerticalAlignment="Center"
                                                              LineStroke="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
-                                                             LineStrokeThickness="3" />
+                                                             LineStrokeThickness="3"
+                                                             />
 
                                                             <Label
                                                              Width="80"
@@ -167,7 +192,8 @@
                                                              FontSize="10"
                                                              FontWeight="DemiBold"
                                                              Foreground="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                                                             Style="{Binding ContentStyle}" />
+                                                             Style="{Binding ContentStyle}"
+                                                             />
                                                             <Border Height="55" BorderBrush="{x:Null}">
                                                                 <TextBlock
                                                                  MaxWidth="275"
@@ -178,7 +204,8 @@
                                                                  Opacity="0.5"
                                                                  Text="{Binding ContentInfo}"
                                                                  TextAlignment="Center"
-                                                                 TextWrapping="Wrap" />
+                                                                 TextWrapping="Wrap"
+                                                                 />
                                                             </Border>
                                                         </StackPanel>
                                                     </DataTemplate>
@@ -209,13 +236,15 @@
                                                      Background="{TemplateBinding Background}"
                                                      BorderBrush="{TemplateBinding BorderBrush}"
                                                      BorderThickness="{TemplateBinding BorderThickness}"
-                                                     SnapsToDevicePixels="true">
+                                                     SnapsToDevicePixels="true"
+                                                     >
                                                         <StackPanel Margin="{Binding Converter={StaticResource TreeViewItemMarginConverter}, RelativeSource={RelativeSource TemplatedParent}}" Orientation="Horizontal">
                                                             <ContentPresenter
                                                              x:Name="PART_Header"
                                                              VerticalAlignment="Center"
                                                              ContentSource="Header"
-                                                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                             />
                                                         </StackPanel>
                                                     </Border>
                                                     <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" />
@@ -247,13 +276,15 @@
                              BorderBrush="{x:Null}"
                              Content="What's New?"
                              FontSize="20"
-                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                             />
                         </StackPanel>
                         <hc:Divider
                          Margin="0,40,0,0"
                          VerticalAlignment="Top"
                          LineStroke="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
-                         LineStrokeThickness="1" />
+                         LineStrokeThickness="1"
+                         />
                     </Grid>
                 </hc:TransitioningContentControl>
             </Grid>
@@ -275,7 +306,8 @@
                                      Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                      Kind="DebugBreakpointDataUnverified"
                                      Spin="False"
-                                     SpinAutoReverse="False" />
+                                     SpinAutoReverse="False"
+                                     />
 
                                     <TextBlock
                                      Grid.Row="0"
@@ -284,12 +316,14 @@
                                      VerticalAlignment="Center"
                                      FontSize="20"
                                      Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                     Text="About WolvenKit" />
+                                     Text="About WolvenKit"
+                                     />
                                 </StackPanel>
                                 <hc:Divider
                                  Margin="0,10,0,0"
                                  HorizontalAlignment="Stretch"
-                                 VerticalAlignment="Stretch" />
+                                 VerticalAlignment="Stretch"
+                                 />
                             </StackPanel>
 
                             <FlowDocumentPageViewer Margin="10,50,10,10">
@@ -298,7 +332,8 @@
                                  Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
                                  ColumnWidth="1000"
                                  IsHyphenationEnabled="True"
-                                 IsOptimalParagraphEnabled="True">
+                                 IsOptimalParagraphEnabled="True"
+                                 >
                                     <Paragraph FontFamily="Segoe UI">
                                         <Bold>WolvenKit</Bold>
                                         <LineBreak />
@@ -344,7 +379,8 @@
                                 <StackPanel
                                  HorizontalAlignment="Stretch"
                                  VerticalAlignment="Top"
-                                 Orientation="Vertical">
+                                 Orientation="Vertical"
+                                 >
                                     <StackPanel Orientation="Vertical">
                                         <StackPanel Orientation="Horizontal">
                                             <iconPacks:PackIconCodicons
@@ -357,7 +393,8 @@
                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                              Kind="DebugBreakpointDataUnverified"
                                              Spin="False"
-                                             SpinAutoReverse="False" />
+                                             SpinAutoReverse="False"
+                                             />
 
                                             <TextBlock
                                              Grid.Row="0"
@@ -366,36 +403,50 @@
                                              VerticalAlignment="Center"
                                              FontSize="20"
                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                             Text="WolvenKit" />
+                                             Text="WolvenKit"
+                                             />
                                         </StackPanel>
                                         <hc:Divider
                                          Margin="0,10,0,0"
                                          HorizontalAlignment="Stretch"
-                                         VerticalAlignment="Stretch" />
+                                         VerticalAlignment="Stretch"
+                                         />
                                     </StackPanel>
 
                                     <StackPanel Margin="15" Orientation="Horizontal">
                                         <hc:Shield
                                          Margin="5"
-                                         Status="VERSION"
+                                         Status="0.8.0.1-Beta"
                                          Subject="Version"
-                                         Color="{DynamicResource MahApps.Brushes.Accent}" />
+                                         Color="{DynamicResource MahApps.Brushes.Accent}"
+                                         />
                                         <hc:Shield
                                          Margin="5"
                                          Status="DATE"
                                          Subject="Last Update"
-                                         Color="{DynamicResource MahApps.Brushes.Accent}" />
+                                         Visibility="Collapsed"
+                                         Color="{DynamicResource MahApps.Brushes.Accent}"
+                                         />
+
+
                                         <hc:Shield
                                          Margin="5"
+                                         Command="hc:ControlCommands.OpenLink"
+                                         CommandParameter="https://github.com/WolvenKit/Wolven-kit"
                                          Status="Click me"
                                          Subject="GitHub"
-                                         Color="{DynamicResource MahApps.Brushes.Accent}" />
+                                         Color="{DynamicResource MahApps.Brushes.Accent}"
+                                         />
                                     </StackPanel>
                                 </StackPanel>
                             </Grid>
                         </Grid>
 
-                        <Grid Grid.Row="1" Grid.Column="1">
+                        <Grid
+                         Grid.Row="1"
+                         Grid.Column="1"
+                         Grid.ColumnSpan="2"
+                         >
                             <Grid Margin="0,5,20,25">
 
                                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top">
@@ -412,7 +463,8 @@
                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                              Kind="DebugBreakpointDataUnverified"
                                              Spin="False"
-                                             SpinAutoReverse="False" />
+                                             SpinAutoReverse="False"
+                                             />
 
                                             <TextBlock
                                              Grid.Row="0"
@@ -421,12 +473,14 @@
                                              VerticalAlignment="Center"
                                              FontSize="20"
                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                             Text="Development Team" />
+                                             Text="Development Team"
+                                             />
                                         </StackPanel>
                                         <hc:Divider
                                          Margin="0,10,0,0"
                                          HorizontalAlignment="Stretch"
-                                         VerticalAlignment="Stretch" />
+                                         VerticalAlignment="Stretch"
+                                         />
                                     </StackPanel>
 
                                     <hc:ScrollViewer Margin="0,50,0,0">
@@ -436,12 +490,15 @@
                                                 <TextBlock
                                                  Margin="0"
                                                  HorizontalAlignment="Left"
-                                                 Text="Core Development" />
+                                                 Text="Core Development"
+                                                 />
                                                 <hc:TagContainer Margin="11" Padding="5">
+
                                                     <hc:Tag
                                                      Margin="5"
                                                      Content="Traderain"
-                                                     ShowCloseButton="False">
+                                                     ShowCloseButton="False"
+                                                     >
                                                         <hc:Tag.Header>
                                                             <iconPacks:PackIconCodicons
                                                              Grid.Row="0"
@@ -453,32 +510,16 @@
                                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                                              Kind="Account"
                                                              Spin="False"
-                                                             SpinAutoReverse="False" />
-                                                        </hc:Tag.Header>
-                                                    </hc:Tag>
-                                                    <hc:Tag
-                                                     Margin="5"
-                                                     Content="Traderain"
-                                                     ShowCloseButton="False">
-                                                        <hc:Tag.Header>
-                                                            <iconPacks:PackIconCodicons
-                                                             Grid.Row="0"
-                                                             Width="15"
-                                                             Height="15"
-                                                             Margin="0,0,0,0"
-                                                             HorizontalAlignment="Center"
-                                                             VerticalAlignment="Top"
-                                                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                                             Kind="Account"
-                                                             Spin="False"
-                                                             SpinAutoReverse="False" />
+                                                             SpinAutoReverse="False"
+                                                             />
                                                         </hc:Tag.Header>
                                                     </hc:Tag>
 
                                                     <hc:Tag
                                                      Margin="5"
                                                      Content="rfuzzo"
-                                                     ShowCloseButton="False">
+                                                     ShowCloseButton="False"
+                                                     >
                                                         <hc:Tag.Header>
                                                             <iconPacks:PackIconCodicons
                                                              Grid.Row="0"
@@ -490,14 +531,16 @@
                                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                                              Kind="Account"
                                                              Spin="False"
-                                                             SpinAutoReverse="False" />
+                                                             SpinAutoReverse="False"
+                                                             />
                                                         </hc:Tag.Header>
                                                     </hc:Tag>
 
                                                     <hc:Tag
                                                      Margin="5"
                                                      Content="michaelpolakatwork"
-                                                     ShowCloseButton="False">
+                                                     ShowCloseButton="False"
+                                                     >
                                                         <hc:Tag.Header>
                                                             <iconPacks:PackIconCodicons
                                                              Grid.Row="0"
@@ -509,14 +552,16 @@
                                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                                              Kind="Account"
                                                              Spin="False"
-                                                             SpinAutoReverse="False" />
+                                                             SpinAutoReverse="False"
+                                                             />
                                                         </hc:Tag.Header>
                                                     </hc:Tag>
 
                                                     <hc:Tag
                                                      Margin="5"
                                                      Content="Nightmarae"
-                                                     ShowCloseButton="False">
+                                                     ShowCloseButton="False"
+                                                     >
                                                         <hc:Tag.Header>
                                                             <iconPacks:PackIconCodicons
                                                              Grid.Row="0"
@@ -528,14 +573,16 @@
                                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                                              Kind="Account"
                                                              Spin="False"
-                                                             SpinAutoReverse="False" />
+                                                             SpinAutoReverse="False"
+                                                             />
                                                         </hc:Tag.Header>
                                                     </hc:Tag>
 
                                                     <hc:Tag
                                                      Margin="5"
                                                      Content="Maxzor"
-                                                     ShowCloseButton="False">
+                                                     ShowCloseButton="False"
+                                                     >
                                                         <hc:Tag.Header>
                                                             <iconPacks:PackIconCodicons
                                                              Grid.Row="0"
@@ -547,14 +594,16 @@
                                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                                              Kind="Account"
                                                              Spin="False"
-                                                             SpinAutoReverse="False" />
+                                                             SpinAutoReverse="False"
+                                                             />
                                                         </hc:Tag.Header>
                                                     </hc:Tag>
 
                                                     <hc:Tag
                                                      Margin="5"
                                                      Content="Offline"
-                                                     ShowCloseButton="False">
+                                                     ShowCloseButton="False"
+                                                     >
                                                         <hc:Tag.Header>
                                                             <iconPacks:PackIconCodicons
                                                              Grid.Row="0"
@@ -566,7 +615,8 @@
                                                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                                              Kind="Account"
                                                              Spin="False"
-                                                             SpinAutoReverse="False" />
+                                                             SpinAutoReverse="False"
+                                                             />
                                                         </hc:Tag.Header>
                                                     </hc:Tag>
                                                 </hc:TagContainer>
@@ -576,7 +626,11 @@
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid Grid.Row="2" Grid.Column="1">
+                        <Grid
+                         Grid.Row="2"
+                         Grid.Column="1"
+                         Visibility="Collapsed"
+                         >
                             <Grid Margin="0,5,50,56">
                                 <StackPanel Orientation="Vertical">
                                     <StackPanel Orientation="Horizontal">
@@ -590,7 +644,8 @@
                                          Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                          Kind="DebugBreakpointDataUnverified"
                                          Spin="False"
-                                         SpinAutoReverse="False" />
+                                         SpinAutoReverse="False"
+                                         />
 
                                         <TextBlock
                                          Grid.Row="0"
@@ -599,115 +654,146 @@
                                          VerticalAlignment="Center"
                                          FontSize="20"
                                          Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                         Text="Special Thanks" />
+                                         Text="Special Thanks"
+                                         />
                                     </StackPanel>
                                     <hc:Divider
                                      Margin="0,10,0,0"
                                      HorizontalAlignment="Stretch"
-                                     VerticalAlignment="Stretch" />
+                                     VerticalAlignment="Stretch"
+                                     />
                                 </StackPanel>
                                 <hc:ScrollViewer Margin="0,50,0,0">
                                     <UniformGrid Margin="15">
                                         <StackPanel Orientation="Vertical">
+
                                             <hc:TagContainer
                                              Margin="0"
                                              Padding="5"
-                                             BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}">
+                                             BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                                             Visibility="Collapsed"
+                                             >
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="kote2ster"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="George Tziotis"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="Murzinio"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="vonLeebpl"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="ali-alidoust"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="Lim3zer0"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="sw3dg1n"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="robymontyz"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="philippTheCat"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="mattstates"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="dnandha"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="carlosproiete"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="Strahlemann83"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="Jicksaw"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="Anras573"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="rmemr"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="CAPA"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="DJ_Kovrik"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="KNG"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="SkacikPL"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="Mezziaz"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                                 <hc:Tag
                                                  Margin="5"
                                                  Content="The modding discord (https://discord.gg/tdSUQQe)"
-                                                 ShowCloseButton="False" />
+                                                 ShowCloseButton="False"
+                                                 />
                                             </hc:TagContainer>
                                         </StackPanel>
                                     </UniformGrid>
                                 </hc:ScrollViewer>
                             </Grid>
                         </Grid>
-                        <Grid Grid.Row="3" Grid.Column="1">
+                        <Grid
+                         Grid.Row="3"
+                         Grid.Column="1"
+                         Visibility="Collapsed"
+                         >
                             <Grid Margin="0,5,10,56">
                                 <StackPanel Orientation="Vertical">
                                     <StackPanel Orientation="Horizontal">
@@ -721,7 +807,8 @@
                                          Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                          Kind="DebugBreakpointDataUnverified"
                                          Spin="False"
-                                         SpinAutoReverse="False" />
+                                         SpinAutoReverse="False"
+                                         />
 
                                         <TextBlock
                                          Grid.Row="0"
@@ -730,12 +817,14 @@
                                          VerticalAlignment="Center"
                                          FontSize="20"
                                          Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                         Text="Licenses" />
+                                         Text="Licenses"
+                                         />
                                     </StackPanel>
                                     <hc:Divider
                                      Margin="0,10,0,0"
                                      HorizontalAlignment="Stretch"
-                                     VerticalAlignment="Stretch" />
+                                     VerticalAlignment="Stretch"
+                                     />
                                 </StackPanel>
                             </Grid>
                         </Grid>
@@ -750,19 +839,22 @@
              Margin="5"
              HorizontalAlignment="Right"
              VerticalAlignment="Top"
-             Orientation="Horizontal">
+             Orientation="Horizontal"
+             >
 
                 <TextBlock
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center "
                  FontSize="20"
-                 Text="About" />
+                 Text="About"
+                 />
                 <hc:Divider
                  Height="45"
                  Margin="15"
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center"
-                 Orientation="Vertical" />
+                 Orientation="Vertical"
+                 />
                 <hc:AnimationPath
                  Width="45"
                  Height="45"
@@ -774,7 +866,8 @@
                  Stretch="Uniform"
                  Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}"
                  StrokeThickness="1.5"
-                 Duration="00:00:08" />
+                 Duration="00:00:08"
+                 />
             </StackPanel>
         </hc:TransitioningContentControl>
     </Grid>

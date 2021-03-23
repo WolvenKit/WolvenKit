@@ -117,8 +117,9 @@ namespace WolvenKit
 
             Current.MainWindow = MainX;
             Current.MainWindow.Loaded += (snd, eva) => ViewModel.OnApplicationLoaded();
-            Current.MainWindow.Show();
+            Current.MainWindow.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Hidden);
 
+            Current.MainWindow.Show();
 
 
 

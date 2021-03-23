@@ -20,16 +20,8 @@
                     <Style x:Key="SidePanelContainerBorderStyle" TargetType="Border">
                         <Setter Property="Margin" Value="0,16,20,-106" />
                         <Setter Property="Padding" Value="16,10,6,16" />
-                        <Setter Property="Background">
-                            <Setter.Value>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                    <GradientStop Offset="0" Color="#bb222222" />
-                                    <GradientStop Offset="0.6" Color="#aa444444" />
-                                    <GradientStop Offset="1" Color="#99222222" />
-                                </LinearGradientBrush>
-                            </Setter.Value>
-                        </Setter>
-                        <Setter Property="BorderBrush" Value="#66444444" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray.SemiTransparent}" />
                         <Setter Property="BorderThickness" Value="1" />
                         <Setter Property="DockPanel.Dock" Value="Right" />
                     </Style>

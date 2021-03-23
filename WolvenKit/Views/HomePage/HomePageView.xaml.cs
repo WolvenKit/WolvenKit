@@ -44,10 +44,9 @@ namespace WolvenKit.Views.HomePage
                         new GuidedTourItem()
                 {
                     Target = WlcmPage.RecentProjectTour,
-                    Content = "Below you can find your recent projects. (If you are new this should be empty)\n\nClick on the background to continue",
+                    Content = "Below you can find your recent projects. (If you are new this should be empty)\n\nClick on the 'Recent Projects Text' to continue",
                     Placement = GuidedTourItem.ItemPlacement.Top,
                     Title = "Recent Projects Overview",
-                    AlternateTargets = new[] { FocusGrid }
                 },
                 new GuidedTourItem()
                 {
@@ -101,7 +100,7 @@ namespace WolvenKit.Views.HomePage
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-
+            guide.SetCurrentValue(VisibilityProperty, Visibility.Visible);
             guide.Reset();
 
 
