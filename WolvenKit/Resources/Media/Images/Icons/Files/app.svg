@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 24.3.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 25.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#FFFFFF;stroke:#000000;stroke-width:5;stroke-miterlimit:10;}
-	.st1{stroke:#000000;stroke-width:0.25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st0{fill:none;stroke:#29ABE2;stroke-width:5;stroke-miterlimit:10;}
+	.st1{fill:#29ABE2;}
 </style>
 <circle class="st0" cx="11" cy="11.3" r="5.5"/>
-<rect x="8.9" y="0.2" width="4.2" height="5.3"/>
-<rect x="1" y="8.6" transform="matrix(4.547480e-11 -1 1 4.547480e-11 -8.1375 14.3875)" width="4.2" height="5.3"/>
-<rect x="8.9" y="16.5" transform="matrix(-1 4.547461e-11 -4.547461e-11 -1 22 38.275)" width="4.2" height="5.3"/>
-<rect x="16.8" y="8.6" transform="matrix(-8.661577e-13 1 -1 -8.661577e-13 30.1375 -7.6125)" width="4.2" height="5.3"/>
-<rect x="3.1" y="2.6" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -2.1729 5.2459)" width="4.2" height="5.3"/>
-<rect x="3.5" y="14.1" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 -2.2579 32.5729)" width="4.2" height="5.3"/>
-<rect x="14.7" y="14.1" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 40.4479 16.7541)" width="4.2" height="5.3"/>
-<rect x="14.7" y="3" transform="matrix(0.7071 0.7071 -0.7071 0.7071 8.8791 -10.2017)" class="st1" width="4.2" height="5.3"/>
+<rect x="8.9" y="0.2" class="st1" width="4.2" height="5.2"/>
+<rect x="1" y="8.6" transform="matrix(4.547480e-11 -1 1 4.547480e-11 -8.1375 14.3875)" class="st1" width="4.2" height="5.2"/>
+<rect x="8.9" y="16.5" transform="matrix(-1 4.547461e-11 -4.547461e-11 -1 22 38.275)" class="st1" width="4.2" height="5.2"/>
+<rect x="16.8" y="8.6" transform="matrix(-8.661577e-13 1 -1 -8.661577e-13 30.1375 -7.6125)" class="st1" width="4.2" height="5.2"/>
+<rect x="3.1" y="2.6" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -2.1729 5.2459)" class="st1" width="4.2" height="5.2"/>
+<rect x="3.5" y="14.1" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 -2.2579 32.5729)" class="st1" width="4.2" height="5.2"/>
+<rect x="14.7" y="14.1" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 40.4479 16.7541)" class="st1" width="4.2" height="5.2"/>
+<rect x="14.7" y="3" transform="matrix(0.7071 0.7071 -0.7071 0.7071 8.8791 -10.2017)" class="st1" width="4.2" height="5.2"/>
 </svg>

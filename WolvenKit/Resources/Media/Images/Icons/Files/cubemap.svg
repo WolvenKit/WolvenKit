@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 24.3.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 25.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:#FF0000;}
-	.st1{fill:#CCCCCC;}
+	.st1{fill:#C69C6D;}
 	.st2{fill:#F15A24;}
 	.st3{fill:#0000FF;}
 	.st4{fill:#006837;}
+	.st5{fill:#FFFFFF;}
 </style>
 <g>
 	<rect x="0" y="7.3" class="st0" width="5.5" height="7.3"/>
@@ -25,7 +26,6 @@
 	<rect x="5.5" y="0" class="st4" width="5.5" height="7.3"/>
 </g>
 <g>
-	<rect x="6" y="15.2" width="4.5" height="6.3"/>
-	<path d="M10,15.7V21H6.5v-5.3H10 M11,14.7H5.5V22H11V14.7L11,14.7z"/>
+	<rect x="5.5" y="14.7" class="st5" width="5.5" height="7.3"/>
 </g>
 </svg>
