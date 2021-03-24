@@ -378,7 +378,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanShowCR2WToTextTool() => false;
 
-        private bool CanShowCsvEditor() => false;
+        private bool CanShowCsvEditor() => _projectManager.ActiveProject is EditorProject;
 
         private bool CanShowGameDebuggerTool() => false;
 
@@ -423,7 +423,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private void ExecuteCR2WToTextTool() => CR2WToTextToolVM.IsVisible = false;
 
-        private void ExecuteCsvEditor() => CsvEditorVM.IsVisible = false;
+        private void ExecuteCsvEditor() => CsvEditorVM.IsVisible = !CsvEditorVM.IsVisible;
 
         private void ExecuteGameDebuggerTool() => GameDebuggerToolVM.IsVisible = false;
 
@@ -1057,7 +1057,8 @@ namespace WolvenKit.ViewModels.Shell
                 case ".JPEG":
                 case ".DDS":
                 //text
-                case ".CSV":
+
+
                 case ".XML":
                 case ".TXT":
                 case ".WS":
