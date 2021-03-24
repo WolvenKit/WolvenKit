@@ -85,6 +85,9 @@
     <Content Include="FFME\swscale-5.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Media\Images\Icons\Files\default.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Application\cloud.png" />
     <Resource Include="Resources\Media\Images\Application\cp77proj.png" />
     <Resource Include="Resources\Media\Images\Application\CpProj.png" />
@@ -872,6 +875,7 @@
     <None Remove="Resources\Media\Images\Icons\Files\buffer.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\community.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\cooked_mlsetup.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\default.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\dtex.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\es.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\facialcustom.svg" />

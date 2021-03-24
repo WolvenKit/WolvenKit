@@ -1057,10 +1057,8 @@ namespace WolvenKit.ViewModels.Shell
                 case ".JPEG":
                 case ".DDS":
                 //text
-                case ".CSV":
-                    ExecuteCsvEditor();
 
-                    break;
+
                 case ".XML":
                 case ".TXT":
                 case ".WS":

@@ -213,6 +213,7 @@ namespace WolvenKit.Functionality.Converters
                 case "wizdef":
                 case "w2ragdoll":
                 case "app":
+                case "spatial_representation":
 
                     return $"Icons/Files/{extension}.svg";
 
@@ -248,7 +249,6 @@ namespace WolvenKit.Functionality.Converters
                 case "redicsv":
                 case "redswf":
                 case "redwpset":
-                case "spatial_representation":
                 case "tga":
                 case "vbrush":
                 case "w2anim":
@@ -280,7 +280,7 @@ namespace WolvenKit.Functionality.Converters
                 case "acousticdata":
 
                 default:
-                    return $"Icons/Files/file.svg";
+                    return $"Icons/Files/default.svg";
             }
         }
 
