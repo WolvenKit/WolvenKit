@@ -214,6 +214,9 @@ namespace WolvenKit.Functionality.Converters
                 case "w2ragdoll":
                 case "app":
                 case "spatial_representation":
+                case "mlsetup":
+                case "opusinfo":
+
 
                     return $"Icons/Files/{extension}.svg";
 
@@ -238,11 +241,9 @@ namespace WolvenKit.Functionality.Converters
                 case "jpg":
                 case "lipmap":
                 case "mlmask":
-                case "mlsetup":
                 case "mltemplate":
                 case "navgraph":
                 case "no":
-                case "opusinfo":
                 case "png":
                 case "psd":
                 case "reddest":

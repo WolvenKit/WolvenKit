@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <AssemblyName>WolvenKit</AssemblyName>
@@ -85,6 +85,15 @@
     <Content Include="FFME\swscale-5.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Media\Images\Icons\Files\cminimapedit.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\conversationsedit.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\datedit.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\default.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -381,7 +390,13 @@
     <Resource Include="Resources\Media\Images\Icons\Files\envprob a.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\envprob b.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\envprobe.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\envprob_b.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\es.svg">
@@ -546,6 +561,9 @@
     <Resource Include="Resources\Media\Images\Icons\Files\mi.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\mlsetup.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\morphtarget.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -570,6 +588,12 @@
     <Resource Include="Resources\Media\Images\Icons\Files\opuspak.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\opusinfo.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\osupak.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\particle.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -583,6 +607,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\poimappins.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\poimappinsedit.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\popup.svg">
@@ -873,10 +900,15 @@
     <None Remove="Resources\Media\Images\Icons\Files\areas.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\bikecurveset.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\buffer.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\cminimapedit.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\community.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\conversationsedit.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\cooked_mlsetup.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\datedit.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\default.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\dtex.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\envprob b.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\envprob_b.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\es.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\facialcustom.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\fb2tl.svg" />
@@ -897,15 +929,19 @@
     <None Remove="Resources\Media\Images\Icons\Files\locopaths.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\materialinstance2.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\menu.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\mlsetup.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\morphtarget.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\mt.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Navconfig.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Naviobstacles.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\navmesh.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Navtile.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\opusinfo.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\osupak.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\phys.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\physicalscene.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\physmatlib.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\poimappinsedit.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Popup.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\psrep.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\redapex.svg" />
