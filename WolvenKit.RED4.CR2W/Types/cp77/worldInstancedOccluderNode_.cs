@@ -5,7 +5,7 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class worldInstancedOccluderNode : worldNode
+	public class worldInstancedOccluderNode_ : worldNode
 	{
 		private Box _worldBounds;
 		private CEnum<visWorldOccluderType> _occluderType;
@@ -44,6 +44,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mesh, value);
 		}
 
-		public worldInstancedOccluderNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldInstancedOccluderNode_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }
