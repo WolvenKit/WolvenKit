@@ -48,6 +48,8 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
+            cr2w.UnknownVars.Add(this.UniqueIdentifier);
+
             Unknown1.Read(file, size);
             AnimationData.ReadWithoutMeta(file, size);
             BodyTypesData.ReadWithoutMeta(file, size);

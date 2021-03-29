@@ -108,6 +108,7 @@ namespace WolvenKit.RED4.CR2W
 
         public string FileName { get; set; }
         public readonly List<string> UnknownTypes = new();
+        public List<string> UnknownVars { get; internal set; } = new();
 
         public Dictionary<uint, string> StringDictionary { get; private set; }
 
@@ -119,7 +120,6 @@ namespace WolvenKit.RED4.CR2W
         public List<ICR2WExport> Chunks { get; private set; }
         public List<ICR2WBuffer> Buffers { get; private set; }
         public List<CR2WEmbeddedWrapper> Embedded { get; private set; }
-
 
         #endregion
 

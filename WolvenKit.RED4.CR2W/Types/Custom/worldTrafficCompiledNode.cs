@@ -31,6 +31,8 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
+            cr2w.UnknownVars.Add(this.UniqueIdentifier);
+
             base.Read(file, size);
 
             Unknown1.ReadWithoutMeta(file, size);
