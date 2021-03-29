@@ -7,11 +7,20 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entSimpleColliderComponent : entIPlacedComponent
 	{
+		private CBool _isEnabled;
 		private CArray<CHandle<physicsICollider>> _colliders;
 		private CHandle<physicsFilterData> _filter;
 		private DataBuffer _compiledBuffer;
 
 		[Ordinal(5)] 
+		[RED("isEnabled")] 
+		public CBool IsEnabled
+		{
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
+		}
+
+		[Ordinal(6)] 
 		[RED("colliders")] 
 		public CArray<CHandle<physicsICollider>> Colliders
 		{
@@ -19,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _colliders, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("filter")] 
 		public CHandle<physicsFilterData> Filter
 		{
@@ -27,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _filter, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("compiledBuffer")] 
 		public DataBuffer CompiledBuffer
 		{

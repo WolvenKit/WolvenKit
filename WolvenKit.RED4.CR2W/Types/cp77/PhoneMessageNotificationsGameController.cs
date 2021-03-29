@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _title;
 		private inkTextWidgetReference _text;
 		private inkTextWidgetReference _actionText;
-		private CHandle<inkWidget> _actionPanel;
+		private wCHandle<inkWidget> _actionPanel;
 		private wCHandle<PlayerPuppet> _player;
 		private CHandle<inkanimProxy> _animationProxy;
 		private wCHandle<JournalNotificationData> _data;
@@ -50,7 +50,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("actionPanel")] 
-		public CHandle<inkWidget> ActionPanel
+		public wCHandle<inkWidget> ActionPanel
 		{
 			get => GetProperty(ref _actionPanel);
 			set => SetProperty(ref _actionPanel, value);

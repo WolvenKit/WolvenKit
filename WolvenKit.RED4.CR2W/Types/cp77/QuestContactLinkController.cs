@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gameJournalManager> _journalMgr;
 		private wCHandle<PhoneSystem> _phoneSystem;
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("msgLabel")] 
 		public inkTextWidgetReference MsgLabel
 		{
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _msgLabel, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("msgContainer")] 
 		public inkWidgetReference MsgContainer
 		{
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _msgContainer, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("msgCounter")] 
 		public CInt32 MsgCounter
 		{
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _msgCounter, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("contactEntry")] 
 		public CHandle<gameJournalContact> ContactEntry
 		{
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _contactEntry, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("journalMgr")] 
 		public wCHandle<gameJournalManager> JournalMgr
 		{
@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _journalMgr, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("phoneSystem")] 
 		public wCHandle<PhoneSystem> PhoneSystem
 		{

@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _barSize;
 		private CFloat _braindanceDuration;
 		private CFloat _currentTime;
-		private CHandle<inkWidget> _rootWidget;
+		private wCHandle<inkWidget> _rootWidget;
 		private CEnum<gameuiEBraindanceLayer> _currentLayer;
 		private CEnum<scnPlaySpeed> _currentSpeed;
 		private CEnum<scnPlayDirection> _currentDirection;
@@ -184,7 +184,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(26)] 
 		[RED("rootWidget")] 
-		public CHandle<inkWidget> RootWidget
+		public wCHandle<inkWidget> RootWidget
 		{
 			get => GetProperty(ref _rootWidget);
 			set => SetProperty(ref _rootWidget, value);

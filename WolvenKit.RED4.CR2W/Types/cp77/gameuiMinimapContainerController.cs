@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkCacheWidgetReference _worldGeometryCache;
 		private CName _geometryLibraryID;
 		private inkCompoundWidgetReference _timeDisplayWidget;
-		private CHandle<inkWidget> _rootZoneSafety;
+		private wCHandle<inkWidget> _rootZoneSafety;
 		private inkTextWidgetReference _locationTextWidget;
 		private inkTextWidgetReference _fluffText1;
 		private inkWidgetReference _securityAreaVignetteWidget;
@@ -165,7 +165,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(31)] 
 		[RED("rootZoneSafety")] 
-		public CHandle<inkWidget> RootZoneSafety
+		public wCHandle<inkWidget> RootZoneSafety
 		{
 			get => GetProperty(ref _rootZoneSafety);
 			set => SetProperty(ref _rootZoneSafety, value);

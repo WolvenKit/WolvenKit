@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _currencyTotal;
 		private CHandle<inkTextValueProgressAnimationController> _diff_animator;
 		private CHandle<inkTextValueProgressAnimationController> _total_animator;
-		private CHandle<CurrencyUpdateNotificationViewData> _currencyData;
+		private CHandle<gameuiCurrencyUpdateNotificationViewData> _currencyData;
 		private CHandle<inkanimProxy> _animProxy;
 		private CHandle<gameIBlackboard> _blackboard;
 		private CHandle<UI_SystemDef> _uiSystemBB;
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("currencyData")] 
-		public CHandle<CurrencyUpdateNotificationViewData> CurrencyData
+		public CHandle<gameuiCurrencyUpdateNotificationViewData> CurrencyData
 		{
 			get => GetProperty(ref _currencyData);
 			set => SetProperty(ref _currencyData, value);

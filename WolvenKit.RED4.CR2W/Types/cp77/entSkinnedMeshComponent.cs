@@ -15,6 +15,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CUInt64 _chunkMask;
 		private CName _renderingPlaneAnimationParam;
 		private CName _visibilityAnimationParam;
+		private CUInt8 _order;
 		private CBool _isEnabled;
 		private CEnum<entMeshComponentLODMode> _lODMode;
 		private CBool _useProxyMeshAsShadowMesh;
@@ -84,6 +85,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(18)] 
+		[RED("order")] 
+		public CUInt8 Order
+		{
+			get => GetProperty(ref _order);
+			set => SetProperty(ref _order, value);
+		}
+
+		[Ordinal(19)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
@@ -91,7 +100,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isEnabled, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("LODMode")] 
 		public CEnum<entMeshComponentLODMode> LODMode
 		{
@@ -99,7 +108,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lODMode, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("useProxyMeshAsShadowMesh")] 
 		public CBool UseProxyMeshAsShadowMesh
 		{

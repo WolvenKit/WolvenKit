@@ -49,6 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _npcDefeated;
 		private CBool _isStealthMappinVisible;
 		private CEnum<gamePSMZones> _playerZone;
+		private CBool _npcNamesEnabled;
 		private wCHandle<NameplateBarLogicController> _healthController;
 		private CBool _hasCenterIcon;
 		private inkWidgetReference _animatingObject;
@@ -408,6 +409,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(43)] 
+		[RED("npcNamesEnabled")] 
+		public CBool NpcNamesEnabled
+		{
+			get => GetProperty(ref _npcNamesEnabled);
+			set => SetProperty(ref _npcNamesEnabled, value);
+		}
+
+		[Ordinal(44)] 
 		[RED("healthController")] 
 		public wCHandle<NameplateBarLogicController> HealthController
 		{
@@ -415,7 +424,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _healthController, value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("hasCenterIcon")] 
 		public CBool HasCenterIcon
 		{
@@ -423,7 +432,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasCenterIcon, value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(46)] 
 		[RED("animatingObject")] 
 		public inkWidgetReference AnimatingObject
 		{
@@ -431,7 +440,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animatingObject, value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(47)] 
 		[RED("isAnimating")] 
 		public CBool IsAnimating
 		{
@@ -439,7 +448,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isAnimating, value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(48)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
@@ -447,7 +456,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animProxy, value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(49)] 
 		[RED("alpha_fadein")] 
 		public CHandle<inkanimDefinition> Alpha_fadein
 		{
@@ -455,7 +464,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _alpha_fadein, value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(50)] 
 		[RED("preventionAnimProxy")] 
 		public CHandle<inkanimProxy> PreventionAnimProxy
 		{
@@ -463,7 +472,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _preventionAnimProxy, value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("damagePreviewAnimProxy")] 
 		public CHandle<inkanimProxy> DamagePreviewAnimProxy
 		{
@@ -471,7 +480,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _damagePreviewAnimProxy, value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("isQuestTarget")] 
 		public CBool IsQuestTarget
 		{
@@ -479,7 +488,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isQuestTarget, value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(53)] 
 		[RED("forceHide")] 
 		public CBool ForceHide
 		{
@@ -487,7 +496,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _forceHide, value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(54)] 
 		[RED("isHardEnemy")] 
 		public CBool IsHardEnemy
 		{
@@ -495,7 +504,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isHardEnemy, value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(55)] 
 		[RED("npcIsAggressive")] 
 		public CBool NpcIsAggressive
 		{
@@ -503,7 +512,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _npcIsAggressive, value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(56)] 
 		[RED("playerAimingDownSights")] 
 		public CBool PlayerAimingDownSights
 		{
@@ -511,7 +520,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerAimingDownSights, value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(57)] 
 		[RED("playerInCombat")] 
 		public CBool PlayerInCombat
 		{
@@ -519,7 +528,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerInCombat, value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(58)] 
 		[RED("playerInStealth")] 
 		public CBool PlayerInStealth
 		{
@@ -527,7 +536,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerInStealth, value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(59)] 
 		[RED("healthNotFull")] 
 		public CBool HealthNotFull
 		{
@@ -535,7 +544,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _healthNotFull, value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(60)] 
 		[RED("healthbarVisible")] 
 		public CBool HealthbarVisible
 		{
@@ -543,7 +552,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _healthbarVisible, value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(61)] 
 		[RED("levelContainerShouldBeVisible")] 
 		public CBool LevelContainerShouldBeVisible
 		{
@@ -551,7 +560,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _levelContainerShouldBeVisible, value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(62)] 
 		[RED("currentHealth")] 
 		public CInt32 CurrentHealth
 		{
@@ -559,7 +568,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentHealth, value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(63)] 
 		[RED("maximumHealth")] 
 		public CInt32 MaximumHealth
 		{
@@ -567,7 +576,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _maximumHealth, value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(64)] 
 		[RED("currentDamagePreviewValue")] 
 		public CInt32 CurrentDamagePreviewValue
 		{

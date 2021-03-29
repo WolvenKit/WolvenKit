@@ -7,10 +7,19 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UIVendorItemsBoughtEvent : redEvent
 	{
+		private CInt32 _requestID;
 		private CArray<gameItemID> _itemsID;
 		private CArray<CInt32> _quantity;
 
 		[Ordinal(0)] 
+		[RED("requestID")] 
+		public CInt32 RequestID
+		{
+			get => GetProperty(ref _requestID);
+			set => SetProperty(ref _requestID, value);
+		}
+
+		[Ordinal(1)] 
 		[RED("itemsID")] 
 		public CArray<gameItemID> ItemsID
 		{
@@ -18,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemsID, value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("quantity")] 
 		public CArray<CInt32> Quantity
 		{

@@ -8,6 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class IdentifiedWrappedTooltipData : ATooltipData
 	{
 		private CName _identifier;
+		private entEntityID _tooltipOwner;
 		private CHandle<ATooltipData> _data;
 
 		[Ordinal(0)] 
@@ -19,6 +20,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("tooltipOwner")] 
+		public entEntityID TooltipOwner
+		{
+			get => GetProperty(ref _tooltipOwner);
+			set => SetProperty(ref _tooltipOwner, value);
+		}
+
+		[Ordinal(2)] 
 		[RED("data")] 
 		public CHandle<ATooltipData> Data
 		{

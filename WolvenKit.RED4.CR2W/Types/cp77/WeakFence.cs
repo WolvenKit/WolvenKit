@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<AIOffMeshConnectionComponent> _offMeshConnectionComponent;
 		private CHandle<entIPlacedComponent> _physicalMesh;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("impulseForce")] 
 		public CFloat ImpulseForce
 		{
@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _impulseForce, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("impulseVector")] 
 		public Vector4 ImpulseVector
 		{
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _impulseVector, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("sideTriggerNames")] 
 		public CArray<CName> SideTriggerNames
 		{
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sideTriggerNames, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(99)] 
 		[RED("triggerComponents")] 
 		public CArray<CHandle<gameStaticTriggerAreaComponent>> TriggerComponents
 		{
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _triggerComponents, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(100)] 
 		[RED("currentWorkspotSuffix")] 
 		public CName CurrentWorkspotSuffix
 		{
@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentWorkspotSuffix, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(101)] 
 		[RED("offMeshConnectionComponent")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionComponent
 		{
@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _offMeshConnectionComponent, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(102)] 
 		[RED("physicalMesh")] 
 		public CHandle<entIPlacedComponent> PhysicalMesh
 		{

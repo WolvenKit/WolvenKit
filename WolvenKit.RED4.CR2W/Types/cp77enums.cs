@@ -11405,7 +11405,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			DisabledStrong = 1,
 			Disabled = 2
 		}
-		public enum physicsMaterialTagAIVisibility
+        // TODO: Check this, its new (1.2.0) and I only copied it from physicsMaterialTagAIVisibility (which was used before)
+        public enum physicsMaterialTagVisibility
+        {
+            None = 0,
+            SemiTransparent = 1,
+            Transparent = 2
+        }
+        public enum physicsMaterialTagAIVisibility
 		{
 			None = 0,
 			SemiTransparent = 1,

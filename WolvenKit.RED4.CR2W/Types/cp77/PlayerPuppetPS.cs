@@ -10,6 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private KeyBindings _keybindigs;
 		private CArray<gameuiMinigameProgramData> _availablePrograms;
 		private CBool _hasAutoReveal;
+		private CFloat _combatExitTimestamp;
 		private CHandle<gameIBlackboard> _minigameBB;
 
 		[Ordinal(26)] 
@@ -37,6 +38,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(29)] 
+		[RED("combatExitTimestamp")] 
+		public CFloat CombatExitTimestamp
+		{
+			get => GetProperty(ref _combatExitTimestamp);
+			set => SetProperty(ref _combatExitTimestamp, value);
+		}
+
+		[Ordinal(30)] 
 		[RED("minigameBB")] 
 		public CHandle<gameIBlackboard> MinigameBB
 		{

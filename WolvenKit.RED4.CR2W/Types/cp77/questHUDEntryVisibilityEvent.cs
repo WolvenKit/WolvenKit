@@ -5,7 +5,7 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class questHUDEntryVisibilityEvent : CVariable
+	public class questHUDEntryVisibilityEvent : redEvent
 	{
 		private CArray<questHUDEntryVisibilityData> _dataEntries;
 

@@ -12,6 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<worldStreamingSectorDescriptor> _interiorSectors;
 		private CArray<worldStreamingSectorDescriptor> _questSectors;
 		private CArray<worldStreamingSectorDescriptor> _alwaysLoadedSectors;
+		private CArray<worldStreamingSectorDescriptor> _navigationSectors;
 		private rRef<worldEnvironmentDefinition> _environmentDefinition;
 		private Box _worldBoundingBox;
 		private rRef<CResource> _persistentStateData;
@@ -77,6 +78,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("navigationSectors")] 
+		public CArray<worldStreamingSectorDescriptor> NavigationSectors
+		{
+			get => GetProperty(ref _navigationSectors);
+			set => SetProperty(ref _navigationSectors, value);
+		}
+
+		[Ordinal(7)] 
 		[RED("environmentDefinition")] 
 		public rRef<worldEnvironmentDefinition> EnvironmentDefinition
 		{
@@ -84,7 +93,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _environmentDefinition, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("worldBoundingBox")] 
 		public Box WorldBoundingBox
 		{
@@ -92,7 +101,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _worldBoundingBox, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("persistentStateData")] 
 		public rRef<CResource> PersistentStateData
 		{
@@ -100,7 +109,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _persistentStateData, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("deviceResource")] 
 		public rRef<CResource> DeviceResource
 		{
@@ -108,7 +117,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _deviceResource, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("deviceInitResource")] 
 		public rRef<CResource> DeviceInitResource
 		{
@@ -116,7 +125,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _deviceInitResource, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("mappinResource")] 
 		public rRef<CResource> MappinResource
 		{
@@ -124,7 +133,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mappinResource, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("poiMappinResource")] 
 		public rRef<CResource> PoiMappinResource
 		{
@@ -132,7 +141,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _poiMappinResource, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("areaResource")] 
 		public rRef<CResource> AreaResource
 		{
@@ -140,7 +149,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _areaResource, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("lootResource")] 
 		public rRef<CResource> LootResource
 		{
@@ -148,7 +157,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lootResource, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("locationResource")] 
 		public rRef<CResource> LocationResource
 		{
@@ -156,7 +165,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _locationResource, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("locomotionPathResource")] 
 		public raRef<CResource> LocomotionPathResource
 		{
@@ -164,7 +173,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _locomotionPathResource, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("autoFoliageMapping")] 
 		public raRef<worldAutoFoliageMapping> AutoFoliageMapping
 		{
@@ -172,7 +181,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _autoFoliageMapping, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("trafficPersistentResource")] 
 		public raRef<CResource> TrafficPersistentResource
 		{
@@ -180,7 +189,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _trafficPersistentResource, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("trafficLaneConnectivityResource")] 
 		public raRef<CResource> TrafficLaneConnectivityResource
 		{
@@ -188,7 +197,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _trafficLaneConnectivityResource, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("trafficLanePolygonsResource")] 
 		public raRef<CResource> TrafficLanePolygonsResource
 		{
@@ -196,7 +205,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _trafficLanePolygonsResource, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("trafficLaneSpotsResource")] 
 		public raRef<CResource> TrafficLaneSpotsResource
 		{
@@ -204,7 +213,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _trafficLaneSpotsResource, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("trafficSpatialRepresentationResource")] 
 		public raRef<CResource> TrafficSpatialRepresentationResource
 		{
@@ -212,7 +221,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _trafficSpatialRepresentationResource, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("trafficCollisionResource")] 
 		public raRef<CResource> TrafficCollisionResource
 		{
@@ -220,7 +229,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _trafficCollisionResource, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("trafficNullAreaCollisionResource")] 
 		public raRef<CResource> TrafficNullAreaCollisionResource
 		{
@@ -228,7 +237,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _trafficNullAreaCollisionResource, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("smartObjectCompiledRootResource")] 
 		public raRef<CResource> SmartObjectCompiledRootResource
 		{
@@ -236,7 +245,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _smartObjectCompiledRootResource, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("geometryCacheResource")] 
 		public rRef<CResource> GeometryCacheResource
 		{
@@ -244,7 +253,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _geometryCacheResource, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("wasBuiltForSceneRecording")] 
 		public CBool WasBuiltForSceneRecording
 		{
@@ -252,7 +261,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _wasBuiltForSceneRecording, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("streamingQueryDataResource")] 
 		public raRef<worldStreamingQueryDataResource> StreamingQueryDataResource
 		{

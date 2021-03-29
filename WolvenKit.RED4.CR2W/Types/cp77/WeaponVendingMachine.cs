@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private wCHandle<IWorldWidgetComponent> _bigAdScreen;
 
-		[Ordinal(97)] 
+		[Ordinal(100)] 
 		[RED("bigAdScreen")] 
 		public wCHandle<IWorldWidgetComponent> BigAdScreen
 		{

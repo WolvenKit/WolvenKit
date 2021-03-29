@@ -25,9 +25,13 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _scrollBarHandleRef;
 		private inkWidgetReference _scrollSlidingAreaRef;
 		private inkWidgetReference _holdProgressRef;
+		private inkWidgetReference _gridRoot;
+		private inkWidgetReference _gridTopRow;
+		private inkWidgetReference _gridBottomRow;
 		private wCHandle<inkSliderController> _scrollBar;
 		private wCHandle<inkSelectorController> _optionSelector;
 		private CArray<gameuiPhotoModeOptionSelectorData> _optionSelectorValues;
+		private wCHandle<PhotoModeGridList> _gridSelector;
 		private CFloat _sliderValue;
 		private CFloat _stepValue;
 		private CBool _sliderShowPercents;
@@ -190,6 +194,30 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(34)] 
+		[RED("GridRoot")] 
+		public inkWidgetReference GridRoot
+		{
+			get => GetProperty(ref _gridRoot);
+			set => SetProperty(ref _gridRoot, value);
+		}
+
+		[Ordinal(35)] 
+		[RED("GridTopRow")] 
+		public inkWidgetReference GridTopRow
+		{
+			get => GetProperty(ref _gridTopRow);
+			set => SetProperty(ref _gridTopRow, value);
+		}
+
+		[Ordinal(36)] 
+		[RED("GridBottomRow")] 
+		public inkWidgetReference GridBottomRow
+		{
+			get => GetProperty(ref _gridBottomRow);
+			set => SetProperty(ref _gridBottomRow, value);
+		}
+
+		[Ordinal(37)] 
 		[RED("ScrollBar")] 
 		public wCHandle<inkSliderController> ScrollBar
 		{
@@ -197,7 +225,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scrollBar, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(38)] 
 		[RED("OptionSelector")] 
 		public wCHandle<inkSelectorController> OptionSelector
 		{
@@ -205,7 +233,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _optionSelector, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(39)] 
 		[RED("OptionSelectorValues")] 
 		public CArray<gameuiPhotoModeOptionSelectorData> OptionSelectorValues
 		{
@@ -213,7 +241,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _optionSelectorValues, value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(40)] 
+		[RED("GridSelector")] 
+		public wCHandle<PhotoModeGridList> GridSelector
+		{
+			get => GetProperty(ref _gridSelector);
+			set => SetProperty(ref _gridSelector, value);
+		}
+
+		[Ordinal(41)] 
 		[RED("SliderValue")] 
 		public CFloat SliderValue
 		{
@@ -221,7 +257,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sliderValue, value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(42)] 
 		[RED("StepValue")] 
 		public CFloat StepValue
 		{
@@ -229,7 +265,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _stepValue, value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(43)] 
 		[RED("SliderShowPercents")] 
 		public CBool SliderShowPercents
 		{
@@ -237,7 +273,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sliderShowPercents, value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(44)] 
 		[RED("photoModeController")] 
 		public wCHandle<gameuiPhotoModeMenuController> PhotoModeController
 		{
@@ -245,7 +281,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _photoModeController, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(45)] 
 		[RED("holdBgInitMargin")] 
 		public inkMargin HoldBgInitMargin
 		{
@@ -253,7 +289,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _holdBgInitMargin, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(46)] 
 		[RED("allowHold")] 
 		public CBool AllowHold
 		{
@@ -261,7 +297,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _allowHold, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(47)] 
 		[RED("inputDirection")] 
 		public CInt32 InputDirection
 		{
@@ -269,7 +305,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inputDirection, value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(48)] 
 		[RED("inputStepTime")] 
 		public CFloat InputStepTime
 		{
@@ -277,7 +313,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inputStepTime, value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(49)] 
 		[RED("inputHoldTime")] 
 		public CFloat InputHoldTime
 		{
@@ -285,7 +321,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inputHoldTime, value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(50)] 
 		[RED("arrowClickedTime")] 
 		public CFloat ArrowClickedTime
 		{
@@ -293,7 +329,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _arrowClickedTime, value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(51)] 
 		[RED("isSelected")] 
 		public CBool IsSelected
 		{
@@ -301,7 +337,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isSelected, value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(52)] 
 		[RED("fadeAnim")] 
 		public CHandle<inkanimProxy> FadeAnim
 		{
@@ -309,7 +345,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _fadeAnim, value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(53)] 
 		[RED("RightArrowInitOpacity")] 
 		public CFloat RightArrowInitOpacity
 		{
@@ -317,7 +353,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rightArrowInitOpacity, value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(54)] 
 		[RED("LeftArrowInitOpacity")] 
 		public CFloat LeftArrowInitOpacity
 		{
@@ -325,7 +361,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _leftArrowInitOpacity, value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(55)] 
 		[RED("ScrollBarHandleInitOpacity")] 
 		public CFloat ScrollBarHandleInitOpacity
 		{
@@ -333,7 +369,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scrollBarHandleInitOpacity, value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(56)] 
 		[RED("ScrollBarLineInitOpacity")] 
 		public CFloat ScrollBarLineInitOpacity
 		{

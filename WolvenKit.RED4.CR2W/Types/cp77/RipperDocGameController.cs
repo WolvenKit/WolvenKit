@@ -90,6 +90,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isActivePanel;
 		private CBool _equiped;
 		private CInt32 _selectedPreviewSlot;
+		private CHandle<inkGameNotificationToken> _confirmationPopupToken;
 
 		[Ordinal(3)] 
 		[RED("TooltipsManagerRef")] 
@@ -753,6 +754,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _selectedPreviewSlot);
 			set => SetProperty(ref _selectedPreviewSlot, value);
+		}
+
+		[Ordinal(86)] 
+		[RED("confirmationPopupToken")] 
+		public CHandle<inkGameNotificationToken> ConfirmationPopupToken
+		{
+			get => GetProperty(ref _confirmationPopupToken);
+			set => SetProperty(ref _confirmationPopupToken, value);
 		}
 
 		public RipperDocGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -12,6 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkButtonController> _buttonController;
 		private wCHandle<ProgressBarsController> _progressController;
 		private CBool _available;
+		private CFloat _progress;
 
 		[Ordinal(1)] 
 		[RED("craftingFill")] 
@@ -51,6 +52,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _available);
 			set => SetProperty(ref _available, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("progress")] 
+		public CFloat Progress
+		{
+			get => GetProperty(ref _progress);
+			set => SetProperty(ref _progress, value);
 		}
 
 		public ProgressBarButton(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

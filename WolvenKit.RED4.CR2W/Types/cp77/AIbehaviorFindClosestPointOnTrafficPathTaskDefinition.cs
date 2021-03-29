@@ -12,6 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<AIArgumentMapping> _avoidedPositionDistance;
 		private CHandle<AIArgumentMapping> _usePreviousPosition;
 		private CHandle<AIArgumentMapping> _checkRoadIntersection;
+		private CHandle<AIArgumentMapping> _workspotData;
 		private CHandle<AIArgumentMapping> _positionOnPath;
 		private CHandle<AIArgumentMapping> _pathDirection;
 		private CHandle<AIArgumentMapping> _joinTrafficSettings;
@@ -57,6 +58,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("workspotData")] 
+		public CHandle<AIArgumentMapping> WorkspotData
+		{
+			get => GetProperty(ref _workspotData);
+			set => SetProperty(ref _workspotData, value);
+		}
+
+		[Ordinal(7)] 
 		[RED("positionOnPath")] 
 		public CHandle<AIArgumentMapping> PositionOnPath
 		{
@@ -64,7 +73,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _positionOnPath, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("pathDirection")] 
 		public CHandle<AIArgumentMapping> PathDirection
 		{
@@ -72,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _pathDirection, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("joinTrafficSettings")] 
 		public CHandle<AIArgumentMapping> JoinTrafficSettings
 		{

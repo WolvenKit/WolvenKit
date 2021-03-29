@@ -10,6 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CString _label;
 		private CInt32 _quantity;
 		private CInt32 _baseQuantity;
+		private CInt32 _itemAmount;
 		private CInt32 _inventoryQuantity;
 		private CHandle<gamedataItem_Record> _id;
 		private CString _icon;
@@ -43,6 +44,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("itemAmount")] 
+		public CInt32 ItemAmount
+		{
+			get => GetProperty(ref _itemAmount);
+			set => SetProperty(ref _itemAmount, value);
+		}
+
+		[Ordinal(4)] 
 		[RED("inventoryQuantity")] 
 		public CInt32 InventoryQuantity
 		{
@@ -50,7 +59,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inventoryQuantity, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("id")] 
 		public CHandle<gamedataItem_Record> Id
 		{
@@ -58,7 +67,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _id, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("icon")] 
 		public CString Icon
 		{
@@ -66,7 +75,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _icon, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("iconGender")] 
 		public CEnum<gameItemIconGender> IconGender
 		{
@@ -74,7 +83,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _iconGender, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("playerSelectableIngredient")] 
 		public CBool PlayerSelectableIngredient
 		{
@@ -82,7 +91,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerSelectableIngredient, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("buyableIngredient")] 
 		public CBool BuyableIngredient
 		{
@@ -90,7 +99,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _buyableIngredient, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("hasEnoughQuantity")] 
 		public CBool HasEnoughQuantity
 		{

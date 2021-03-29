@@ -45,10 +45,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _newItemsWrapper;
 		private inkTextWidgetReference _newItemsCounter;
 		private inkWidgetReference _lockIcon;
+		private inkWidgetReference _comparisionArrow;
 		private CHandle<InventoryDataManagerV2> _inventoryDataManager;
 		private wCHandle<UIScriptableSystem> _uiScriptableSystem;
 		private gameItemID _itemID;
-		private CBool _hasRecipe;
 		private InventoryItemData _itemData;
 		private CHandle<RecipeData> _recipeData;
 		private CEnum<gamedataEquipmentArea> _equipmentArea;
@@ -75,6 +75,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isBuybackStack;
 		private wCHandle<gameItemData> _parentItemData;
 		private CBool _isLocked;
+		private CBool _isUpgradable;
+		private CBool _hasAvailableItems;
 		private CBool _dEBUG_isIconError;
 		private CHandle<DEBUG_IconErrorInfo> _dEBUG_iconErrorInfo;
 		private CString _dEBUG_resolvedIconName;
@@ -389,6 +391,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(40)] 
+		[RED("comparisionArrow")] 
+		public inkWidgetReference ComparisionArrow
+		{
+			get => GetProperty(ref _comparisionArrow);
+			set => SetProperty(ref _comparisionArrow, value);
+		}
+
+		[Ordinal(41)] 
 		[RED("inventoryDataManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryDataManager
 		{
@@ -396,7 +406,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inventoryDataManager, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("uiScriptableSystem")] 
 		public wCHandle<UIScriptableSystem> UiScriptableSystem
 		{
@@ -404,20 +414,12 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uiScriptableSystem, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
 			get => GetProperty(ref _itemID);
 			set => SetProperty(ref _itemID, value);
-		}
-
-		[Ordinal(43)] 
-		[RED("hasRecipe")] 
-		public CBool HasRecipe
-		{
-			get => GetProperty(ref _hasRecipe);
-			set => SetProperty(ref _hasRecipe, value);
 		}
 
 		[Ordinal(44)] 
@@ -629,6 +631,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(70)] 
+		[RED("isUpgradable")] 
+		public CBool IsUpgradable
+		{
+			get => GetProperty(ref _isUpgradable);
+			set => SetProperty(ref _isUpgradable, value);
+		}
+
+		[Ordinal(71)] 
+		[RED("hasAvailableItems")] 
+		public CBool HasAvailableItems
+		{
+			get => GetProperty(ref _hasAvailableItems);
+			set => SetProperty(ref _hasAvailableItems, value);
+		}
+
+		[Ordinal(72)] 
 		[RED("DEBUG_isIconError")] 
 		public CBool DEBUG_isIconError
 		{
@@ -636,7 +654,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dEBUG_isIconError, value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(73)] 
 		[RED("DEBUG_iconErrorInfo")] 
 		public CHandle<DEBUG_IconErrorInfo> DEBUG_iconErrorInfo
 		{
@@ -644,7 +662,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dEBUG_iconErrorInfo, value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(74)] 
 		[RED("DEBUG_resolvedIconName")] 
 		public CString DEBUG_resolvedIconName
 		{
@@ -652,7 +670,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dEBUG_resolvedIconName, value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(75)] 
 		[RED("DEBUG_recordItemName")] 
 		public CString DEBUG_recordItemName
 		{
@@ -660,7 +678,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dEBUG_recordItemName, value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(76)] 
 		[RED("DEBUG_innerItemName")] 
 		public CString DEBUG_innerItemName
 		{
@@ -668,7 +686,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dEBUG_innerItemName, value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(77)] 
 		[RED("DEBUG_isIconManuallySet")] 
 		public CBool DEBUG_isIconManuallySet
 		{
@@ -676,7 +694,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dEBUG_isIconManuallySet, value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(78)] 
 		[RED("DEBUG_iconsNameResolverIsDebug")] 
 		public CBool DEBUG_iconsNameResolverIsDebug
 		{
@@ -684,7 +702,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dEBUG_iconsNameResolverIsDebug, value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(79)] 
 		[RED("parrentWrappedDataObject")] 
 		public wCHandle<WrappedInventoryItemData> ParrentWrappedDataObject
 		{

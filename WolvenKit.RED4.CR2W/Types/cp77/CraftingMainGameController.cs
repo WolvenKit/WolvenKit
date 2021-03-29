@@ -42,6 +42,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _perkNotificationContainer;
 		private inkTextWidgetReference _perkNotificationText;
 		private inkImageWidgetReference _perkIcon;
+		private CEnum<UIMenuNotificationType> _notificationType;
 		private wCHandle<ButtonHints> _buttonHintsController;
 		private wCHandle<PlayerPuppet> _player;
 		private wCHandle<inkMenuEventDispatcher> _menuEventDispatcher;
@@ -72,6 +73,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameItemData> _dryItemData;
 		private InventoryItemData _dryInventoryItemData;
 		private CBool _isInitializeOver;
+		private CBool _isCraftable;
 		private CArray<CInt32> _craftingFilters;
 		private CArray<CInt32> _upgradeFilters;
 		private CArray<wCHandle<AGenericTooltipController>> _itemTooltipControllers;
@@ -79,6 +81,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<ProgressBarButton> _progressButtonController;
 		private wCHandle<InventoryItemDisplayController> _itemWeaponController;
 		private wCHandle<InventoryItemDisplayController> _itemIngredientController;
+		private CArray<InventoryItemData> _inventoryQuickhacks;
+		private CBool _doPlayFilterSounds;
+		private CHandle<inkGameNotificationToken> _quantityPickerPopupToken;
 
 		[Ordinal(3)] 
 		[RED("tooltipsManagerRef")] 
@@ -361,6 +366,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(38)] 
+		[RED("notificationType")] 
+		public CEnum<UIMenuNotificationType> NotificationType
+		{
+			get => GetProperty(ref _notificationType);
+			set => SetProperty(ref _notificationType, value);
+		}
+
+		[Ordinal(39)] 
 		[RED("buttonHintsController")] 
 		public wCHandle<ButtonHints> ButtonHintsController
 		{
@@ -368,7 +381,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _buttonHintsController, value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("player")] 
 		public wCHandle<PlayerPuppet> Player
 		{
@@ -376,7 +389,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _player, value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("menuEventDispatcher")] 
 		public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -384,7 +397,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _menuEventDispatcher, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("craftingSystem")] 
 		public CHandle<CraftingSystem> CraftingSystem
 		{
@@ -392,7 +405,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _craftingSystem, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("playerCraftBook")] 
 		public CHandle<CraftBook> PlayerCraftBook
 		{
@@ -400,7 +413,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerCraftBook, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
 		[RED("VendorDataManager")] 
 		public CHandle<VendorDataManager> VendorDataManager
 		{
@@ -408,7 +421,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _vendorDataManager, value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
@@ -416,7 +429,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inventoryManager, value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(46)] 
 		[RED("uiScriptableSystem")] 
 		public wCHandle<UIScriptableSystem> UiScriptableSystem
 		{
@@ -424,7 +437,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uiScriptableSystem, value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(47)] 
 		[RED("WeaponAreas")] 
 		public CArray<CEnum<gamedataItemType>> WeaponAreas
 		{
@@ -432,7 +445,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _weaponAreas, value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(48)] 
 		[RED("EquipAreas")] 
 		public CArray<CEnum<gamedataEquipmentArea>> EquipAreas
 		{
@@ -440,7 +453,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _equipAreas, value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(49)] 
 		[RED("tooltipsManager")] 
 		public wCHandle<gameuiTooltipsManager> TooltipsManager
 		{
@@ -448,7 +461,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tooltipsManager, value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(50)] 
 		[RED("craftingClassifier")] 
 		public CHandle<CraftingItemTemplateClassifier> CraftingClassifier
 		{
@@ -456,7 +469,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _craftingClassifier, value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("craftingDataView")] 
 		public CHandle<CraftingDataView> CraftingDataView
 		{
@@ -464,7 +477,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _craftingDataView, value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("craftingDataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> CraftingDataSource
 		{
@@ -472,7 +485,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _craftingDataSource, value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(53)] 
 		[RED("virtualCraftingListController")] 
 		public CHandle<inkVirtualGridController> VirtualCraftingListController
 		{
@@ -480,7 +493,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _virtualCraftingListController, value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(54)] 
 		[RED("leftListScrollController")] 
 		public CHandle<inkScrollController> LeftListScrollController
 		{
@@ -488,7 +501,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _leftListScrollController, value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(55)] 
 		[RED("craftingDef")] 
 		public CHandle<UI_CraftingDef> CraftingDef
 		{
@@ -496,7 +509,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _craftingDef, value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(56)] 
 		[RED("craftingBlackboard")] 
 		public CHandle<gameIBlackboard> CraftingBlackboard
 		{
@@ -504,7 +517,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _craftingBlackboard, value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(57)] 
 		[RED("craftingBBID")] 
 		public CUInt32 CraftingBBID
 		{
@@ -512,7 +525,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _craftingBBID, value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(58)] 
 		[RED("ingredientsControllerList")] 
 		public CArray<wCHandle<IngredientListItemLogicController>> IngredientsControllerList
 		{
@@ -520,7 +533,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ingredientsControllerList, value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(59)] 
 		[RED("maxIngredientCraftingCount")] 
 		public CInt32 MaxIngredientCraftingCount
 		{
@@ -528,7 +541,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _maxIngredientCraftingCount, value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(60)] 
 		[RED("maxIngredientUpgradingCount")] 
 		public CInt32 MaxIngredientUpgradingCount
 		{
@@ -536,7 +549,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _maxIngredientUpgradingCount, value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(61)] 
 		[RED("mode")] 
 		public CEnum<CraftingMode> Mode
 		{
@@ -544,7 +557,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mode, value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(62)] 
 		[RED("selectedRecipe")] 
 		public CHandle<RecipeData> SelectedRecipe
 		{
@@ -552,7 +565,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _selectedRecipe, value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(63)] 
 		[RED("selectedItemData")] 
 		public InventoryItemData SelectedItemData
 		{
@@ -560,7 +573,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _selectedItemData, value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(64)] 
 		[RED("selectedListItem")] 
 		public CHandle<CraftableItemLogicController> SelectedListItem
 		{
@@ -568,7 +581,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _selectedListItem, value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(65)] 
 		[RED("selectedCategory")] 
 		public CEnum<ItemFilterType> SelectedCategory
 		{
@@ -576,7 +589,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _selectedCategory, value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(66)] 
 		[RED("dryItemData")] 
 		public CHandle<gameItemData> DryItemData
 		{
@@ -584,7 +597,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dryItemData, value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(67)] 
 		[RED("dryInventoryItemData")] 
 		public InventoryItemData DryInventoryItemData
 		{
@@ -592,7 +605,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dryInventoryItemData, value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(68)] 
 		[RED("isInitializeOver")] 
 		public CBool IsInitializeOver
 		{
@@ -600,7 +613,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isInitializeOver, value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(69)] 
+		[RED("isCraftable")] 
+		public CBool IsCraftable
+		{
+			get => GetProperty(ref _isCraftable);
+			set => SetProperty(ref _isCraftable, value);
+		}
+
+		[Ordinal(70)] 
 		[RED("craftingFilters")] 
 		public CArray<CInt32> CraftingFilters
 		{
@@ -608,7 +629,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _craftingFilters, value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(71)] 
 		[RED("upgradeFilters")] 
 		public CArray<CInt32> UpgradeFilters
 		{
@@ -616,7 +637,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _upgradeFilters, value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(72)] 
 		[RED("itemTooltipControllers")] 
 		public CArray<wCHandle<AGenericTooltipController>> ItemTooltipControllers
 		{
@@ -624,7 +645,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemTooltipControllers, value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(73)] 
 		[RED("tooltipType")] 
 		public CEnum<CraftingInfoType> TooltipType
 		{
@@ -632,7 +653,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tooltipType, value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(74)] 
 		[RED("progressButtonController")] 
 		public wCHandle<ProgressBarButton> ProgressButtonController
 		{
@@ -640,7 +661,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _progressButtonController, value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(75)] 
 		[RED("itemWeaponController")] 
 		public wCHandle<InventoryItemDisplayController> ItemWeaponController
 		{
@@ -648,12 +669,36 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemWeaponController, value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(76)] 
 		[RED("itemIngredientController")] 
 		public wCHandle<InventoryItemDisplayController> ItemIngredientController
 		{
 			get => GetProperty(ref _itemIngredientController);
 			set => SetProperty(ref _itemIngredientController, value);
+		}
+
+		[Ordinal(77)] 
+		[RED("inventoryQuickhacks")] 
+		public CArray<InventoryItemData> InventoryQuickhacks
+		{
+			get => GetProperty(ref _inventoryQuickhacks);
+			set => SetProperty(ref _inventoryQuickhacks, value);
+		}
+
+		[Ordinal(78)] 
+		[RED("doPlayFilterSounds")] 
+		public CBool DoPlayFilterSounds
+		{
+			get => GetProperty(ref _doPlayFilterSounds);
+			set => SetProperty(ref _doPlayFilterSounds, value);
+		}
+
+		[Ordinal(79)] 
+		[RED("quantityPickerPopupToken")] 
+		public CHandle<inkGameNotificationToken> QuantityPickerPopupToken
+		{
+			get => GetProperty(ref _quantityPickerPopupToken);
+			set => SetProperty(ref _quantityPickerPopupToken, value);
 		}
 
 		public CraftingMainGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

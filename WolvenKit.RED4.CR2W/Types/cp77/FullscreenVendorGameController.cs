@@ -66,15 +66,18 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<ItemCategoryFliterManager> _vendorFilterManager;
 		private CEnum<ItemFilterCategory> _lastPlayerFilter;
 		private CEnum<ItemFilterCategory> _lastVendorFilter;
-		private CHandle<UIScriptableSystem> _uiScriptableSystem;
+		private wCHandle<UIScriptableSystem> _uiScriptableSystem;
 		private CHandle<gameuiGameSystemUI> _uiSystem;
 		private CHandle<StorageBlackboardDef> _storageDef;
 		private CHandle<gameIBlackboard> _storageBlackboard;
 		private CArray<gameItemModParams> _itemDropQueue;
 		private CHandle<SoldItemsCache> _soldItems;
 		private CBool _isActivePanel;
-		private CArray<gameItemID> _sellQueue;
-		private CArray<gameItemID> _buyQueue;
+		private CHandle<ItemDisplayHoverOverEvent> _lastItemHoverOverEvent;
+		private CBool _isComparisionDisabled;
+		private CInt32 _lastRequestId;
+		private CArray<CHandle<VenodrRequestQueueEntry>> _sellQueue;
+		private CArray<CHandle<VenodrRequestQueueEntry>> _buyQueue;
 
 		[Ordinal(3)] 
 		[RED("TooltipsManagerRef")] 
@@ -550,7 +553,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(62)] 
 		[RED("uiScriptableSystem")] 
-		public CHandle<UIScriptableSystem> UiScriptableSystem
+		public wCHandle<UIScriptableSystem> UiScriptableSystem
 		{
 			get => GetProperty(ref _uiScriptableSystem);
 			set => SetProperty(ref _uiScriptableSystem, value);
@@ -605,16 +608,40 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(69)] 
+		[RED("lastItemHoverOverEvent")] 
+		public CHandle<ItemDisplayHoverOverEvent> LastItemHoverOverEvent
+		{
+			get => GetProperty(ref _lastItemHoverOverEvent);
+			set => SetProperty(ref _lastItemHoverOverEvent, value);
+		}
+
+		[Ordinal(70)] 
+		[RED("isComparisionDisabled")] 
+		public CBool IsComparisionDisabled
+		{
+			get => GetProperty(ref _isComparisionDisabled);
+			set => SetProperty(ref _isComparisionDisabled, value);
+		}
+
+		[Ordinal(71)] 
+		[RED("lastRequestId")] 
+		public CInt32 LastRequestId
+		{
+			get => GetProperty(ref _lastRequestId);
+			set => SetProperty(ref _lastRequestId, value);
+		}
+
+		[Ordinal(72)] 
 		[RED("sellQueue")] 
-		public CArray<gameItemID> SellQueue
+		public CArray<CHandle<VenodrRequestQueueEntry>> SellQueue
 		{
 			get => GetProperty(ref _sellQueue);
 			set => SetProperty(ref _sellQueue, value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(73)] 
 		[RED("buyQueue")] 
-		public CArray<gameItemID> BuyQueue
+		public CArray<CHandle<VenodrRequestQueueEntry>> BuyQueue
 		{
 			get => GetProperty(ref _buyQueue);
 			set => SetProperty(ref _buyQueue, value);

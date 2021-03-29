@@ -9,6 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private wCHandle<gameObject> _owner;
 		private wCHandle<gameObject> _executionOwner;
+		private wCHandle<gameIBlackboard> _localBlackboard;
 
 		[Ordinal(0)] 
 		[RED("owner")] 
@@ -24,6 +25,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _executionOwner);
 			set => SetProperty(ref _executionOwner, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("localBlackboard")] 
+		public wCHandle<gameIBlackboard> LocalBlackboard
+		{
+			get => GetProperty(ref _localBlackboard);
+			set => SetProperty(ref _localBlackboard, value);
 		}
 
 		public gamestateMachineScriptInterface(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

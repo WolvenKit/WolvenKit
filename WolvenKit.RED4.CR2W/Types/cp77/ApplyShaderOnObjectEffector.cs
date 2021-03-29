@@ -10,8 +10,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CString _applicationTargetString;
 		private wCHandle<gameObject> _applicationTarget;
 		private CArray<CHandle<gameEffectInstance>> _effects;
-		private CString _overrideMaterialName;
+		private CName _overrideMaterialName;
 		private CName _overrideMaterialTag;
+		private CBool _overrideMaterialClearOnDetach;
 		private CHandle<gameEffectInstance> _effectInstance;
 		private wCHandle<gameObject> _owner;
 		private CHandle<gameEffectInstance> _ownerEffect;
@@ -42,7 +43,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("overrideMaterialName")] 
-		public CString OverrideMaterialName
+		public CName OverrideMaterialName
 		{
 			get => GetProperty(ref _overrideMaterialName);
 			set => SetProperty(ref _overrideMaterialName, value);
@@ -57,6 +58,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("overrideMaterialClearOnDetach")] 
+		public CBool OverrideMaterialClearOnDetach
+		{
+			get => GetProperty(ref _overrideMaterialClearOnDetach);
+			set => SetProperty(ref _overrideMaterialClearOnDetach, value);
+		}
+
+		[Ordinal(6)] 
 		[RED("effectInstance")] 
 		public CHandle<gameEffectInstance> EffectInstance
 		{
@@ -64,7 +73,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _effectInstance, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
@@ -72,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _owner, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("ownerEffect")] 
 		public CHandle<gameEffectInstance> OwnerEffect
 		{

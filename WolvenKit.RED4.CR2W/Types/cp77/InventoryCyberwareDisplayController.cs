@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _amountPanel;
 		private inkTextWidgetReference _amount;
 
-		[Ordinal(78)] 
+		[Ordinal(80)] 
 		[RED("ownedFrame")] 
 		public inkWidgetReference OwnedFrame
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ownedFrame, value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(81)] 
 		[RED("selectedFrame")] 
 		public inkWidgetReference SelectedFrame
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _selectedFrame, value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(82)] 
 		[RED("amountPanel")] 
 		public inkWidgetReference AmountPanel
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _amountPanel, value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(83)] 
 		[RED("amount")] 
 		public inkTextWidgetReference Amount
 		{

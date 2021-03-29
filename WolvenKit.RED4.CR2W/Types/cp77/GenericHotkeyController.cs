@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _buttonHint;
 		private CEnum<gameEHotkey> _hotkey;
 		private CBool _pressStarted;
-		private CHandle<inkInputDisplayController> _buttonHintController;
+		private wCHandle<inkInputDisplayController> _buttonHintController;
 		private CName _questActivatingFact;
 		private CArray<CName> _restrictions;
 		private CHandle<HotkeyWidgetStatsListener> _statusEffectsListener;
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("buttonHintController")] 
-		public CHandle<inkInputDisplayController> ButtonHintController
+		public wCHandle<inkInputDisplayController> ButtonHintController
 		{
 			get => GetProperty(ref _buttonHintController);
 			set => SetProperty(ref _buttonHintController, value);

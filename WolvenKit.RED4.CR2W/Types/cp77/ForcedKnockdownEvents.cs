@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _firstUpdate;
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("firstUpdate")] 
 		public CBool FirstUpdate
 		{

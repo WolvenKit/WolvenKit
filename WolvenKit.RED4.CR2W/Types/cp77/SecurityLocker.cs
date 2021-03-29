@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameInventory> _inventory;
 		private CHandle<UseSecurityLocker> _cachedEvent;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("inventory")] 
 		public CHandle<gameInventory> Inventory
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inventory, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("cachedEvent")] 
 		public CHandle<UseSecurityLocker> CachedEvent
 		{

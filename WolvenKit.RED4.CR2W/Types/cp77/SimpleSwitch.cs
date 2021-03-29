@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<EAnimationType> _animationType;
 		private CFloat _animationSpeed;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("animationType")] 
 		public CEnum<EAnimationType> AnimationType
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animationType, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("animationSpeed")] 
 		public CFloat AnimationSpeed
 		{

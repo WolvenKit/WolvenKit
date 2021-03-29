@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _showAd;
 		private CBool _showVendor;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("triggerComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerComponent
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _triggerComponent, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("triggerExitComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerExitComponent
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _triggerExitComponent, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("aduiComponent")] 
 		public CHandle<WorldWidgetComponent> AduiComponent
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _aduiComponent, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(99)] 
 		[RED("showAd")] 
 		public CBool ShowAd
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _showAd, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(100)] 
 		[RED("showVendor")] 
 		public CBool ShowVendor
 		{

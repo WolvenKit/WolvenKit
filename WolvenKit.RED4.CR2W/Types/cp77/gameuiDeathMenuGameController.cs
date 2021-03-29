@@ -5,11 +5,10 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class DeathMenuGameController : gameuiMenuItemListGameController
+	public class gameuiDeathMenuGameController : gameuiMenuItemListGameController
 	{
 		private inkWidgetReference _buttonHintsManagerRef;
 		private wCHandle<ButtonHints> _buttonHintsController;
-		private CBool _loadComplete;
 		private CHandle<inkanimProxy> _animIntro;
 
 		[Ordinal(6)] 
@@ -29,14 +28,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(8)] 
-		[RED("loadComplete")] 
-		public CBool LoadComplete
-		{
-			get => GetProperty(ref _loadComplete);
-			set => SetProperty(ref _loadComplete, value);
-		}
-
-		[Ordinal(9)] 
 		[RED("animIntro")] 
 		public CHandle<inkanimProxy> AnimIntro
 		{
@@ -44,6 +35,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animIntro, value);
 		}
 
-		public DeathMenuGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameuiDeathMenuGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

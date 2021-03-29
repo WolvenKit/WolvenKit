@@ -34,6 +34,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isHacking;
 		private CBool _isSquadInCombat;
 		private CBool _wasSquadInCombat;
+		private CBool _clampingAvailable;
 		private CFloat _defaultOpacity;
 		private CFloat _adjustedOpacity;
 		private CFloat _defaultConeOpacity;
@@ -42,9 +43,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CUInt32 _highestLootQuality;
 		private CBool _lockLootQuality;
 		private CEnum<gamedataNPCHighLevelState> _highLevelState;
-		private CHandle<inkWidget> _iconWidgetGlitch;
-		private CHandle<inkWidget> _visionConeWidgetGlitch;
-		private CHandle<inkWidget> _clampArrowWidgetGlitch;
+		private wCHandle<inkWidget> _iconWidgetGlitch;
+		private wCHandle<inkWidget> _visionConeWidgetGlitch;
+		private wCHandle<inkWidget> _clampArrowWidgetGlitch;
 		private CHandle<inkanimProxy> _showAnim;
 		private CHandle<inkanimProxy> _alertedAnim;
 		private CHandle<inkanimProxy> _preventionAnimProxy;
@@ -266,6 +267,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(41)] 
+		[RED("clampingAvailable")] 
+		public CBool ClampingAvailable
+		{
+			get => GetProperty(ref _clampingAvailable);
+			set => SetProperty(ref _clampingAvailable, value);
+		}
+
+		[Ordinal(42)] 
 		[RED("defaultOpacity")] 
 		public CFloat DefaultOpacity
 		{
@@ -273,7 +282,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _defaultOpacity, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("adjustedOpacity")] 
 		public CFloat AdjustedOpacity
 		{
@@ -281,7 +290,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _adjustedOpacity, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
 		[RED("defaultConeOpacity")] 
 		public CFloat DefaultConeOpacity
 		{
@@ -289,7 +298,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _defaultConeOpacity, value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("detectingConeOpacity")] 
 		public CFloat DetectingConeOpacity
 		{
@@ -297,7 +306,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _detectingConeOpacity, value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(46)] 
 		[RED("numberOfShotAttempts")] 
 		public CUInt32 NumberOfShotAttempts
 		{
@@ -305,7 +314,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _numberOfShotAttempts, value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(47)] 
 		[RED("highestLootQuality")] 
 		public CUInt32 HighestLootQuality
 		{
@@ -313,7 +322,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _highestLootQuality, value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(48)] 
 		[RED("lockLootQuality")] 
 		public CBool LockLootQuality
 		{
@@ -321,7 +330,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lockLootQuality, value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(49)] 
 		[RED("highLevelState")] 
 		public CEnum<gamedataNPCHighLevelState> HighLevelState
 		{
@@ -329,31 +338,31 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _highLevelState, value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(50)] 
 		[RED("iconWidgetGlitch")] 
-		public CHandle<inkWidget> IconWidgetGlitch
+		public wCHandle<inkWidget> IconWidgetGlitch
 		{
 			get => GetProperty(ref _iconWidgetGlitch);
 			set => SetProperty(ref _iconWidgetGlitch, value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("visionConeWidgetGlitch")] 
-		public CHandle<inkWidget> VisionConeWidgetGlitch
+		public wCHandle<inkWidget> VisionConeWidgetGlitch
 		{
 			get => GetProperty(ref _visionConeWidgetGlitch);
 			set => SetProperty(ref _visionConeWidgetGlitch, value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("clampArrowWidgetGlitch")] 
-		public CHandle<inkWidget> ClampArrowWidgetGlitch
+		public wCHandle<inkWidget> ClampArrowWidgetGlitch
 		{
 			get => GetProperty(ref _clampArrowWidgetGlitch);
 			set => SetProperty(ref _clampArrowWidgetGlitch, value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(53)] 
 		[RED("showAnim")] 
 		public CHandle<inkanimProxy> ShowAnim
 		{
@@ -361,7 +370,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _showAnim, value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(54)] 
 		[RED("alertedAnim")] 
 		public CHandle<inkanimProxy> AlertedAnim
 		{
@@ -369,7 +378,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _alertedAnim, value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(55)] 
 		[RED("preventionAnimProxy")] 
 		public CHandle<inkanimProxy> PreventionAnimProxy
 		{

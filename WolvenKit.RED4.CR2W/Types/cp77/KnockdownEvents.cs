@@ -12,6 +12,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _secondaryKnockdownTimer;
 		private CBool _playedImpactAnim;
 		private CBool _frictionForceApplied;
+		private CBool _frictionForceAppliedLastFrame;
+		private CBool _delayDamageFrame;
 
 		[Ordinal(3)] 
 		[RED("cachedPlayerVelocity")] 
@@ -51,6 +53,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _frictionForceApplied);
 			set => SetProperty(ref _frictionForceApplied, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("frictionForceAppliedLastFrame")] 
+		public CBool FrictionForceAppliedLastFrame
+		{
+			get => GetProperty(ref _frictionForceAppliedLastFrame);
+			set => SetProperty(ref _frictionForceAppliedLastFrame, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("delayDamageFrame")] 
+		public CBool DelayDamageFrame
+		{
+			get => GetProperty(ref _delayDamageFrame);
+			set => SetProperty(ref _delayDamageFrame, value);
 		}
 
 		public KnockdownEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

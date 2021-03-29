@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<entMeshComponent> _destroyedAlarm;
 		private CBool _isGlitching;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("workingAlarm")] 
 		public CHandle<entMeshComponent> WorkingAlarm
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _workingAlarm, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("destroyedAlarm")] 
 		public CHandle<entMeshComponent> DestroyedAlarm
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _destroyedAlarm, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("isGlitching")] 
 		public CBool IsGlitching
 		{

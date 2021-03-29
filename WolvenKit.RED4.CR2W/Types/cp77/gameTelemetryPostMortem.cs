@@ -10,7 +10,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CString _crashVisitId;
 		private CString _playthroughId;
 		private CString _crashVersion;
+		private CString _crashPatch;
 		private CString _timeCrash;
+		private CString _district;
+		private CString _zoneType;
 		private gameTelemetryTrackedQuest _trackedQuest;
 		private Vector3 _location;
 		private CFloat _sessionLength;
@@ -41,6 +44,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("crashPatch")] 
+		public CString CrashPatch
+		{
+			get => GetProperty(ref _crashPatch);
+			set => SetProperty(ref _crashPatch, value);
+		}
+
+		[Ordinal(4)] 
 		[RED("timeCrash")] 
 		public CString TimeCrash
 		{
@@ -48,7 +59,23 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _timeCrash, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
+		[RED("district")] 
+		public CString District
+		{
+			get => GetProperty(ref _district);
+			set => SetProperty(ref _district, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("zoneType")] 
+		public CString ZoneType
+		{
+			get => GetProperty(ref _zoneType);
+			set => SetProperty(ref _zoneType, value);
+		}
+
+		[Ordinal(7)] 
 		[RED("trackedQuest")] 
 		public gameTelemetryTrackedQuest TrackedQuest
 		{
@@ -56,7 +83,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _trackedQuest, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("location")] 
 		public Vector3 Location
 		{
@@ -64,7 +91,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _location, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("sessionLength")] 
 		public CFloat SessionLength
 		{
@@ -72,7 +99,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sessionLength, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("isOom")] 
 		public CBool IsOom
 		{

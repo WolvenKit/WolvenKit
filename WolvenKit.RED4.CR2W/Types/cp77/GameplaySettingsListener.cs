@@ -11,12 +11,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<userSettingsUserSettings> _userSettings;
 		private CHandle<userSettingsGroup> _diffSettingsGroup;
 		private CHandle<userSettingsGroup> _miscSettingsGroup;
+		private CHandle<userSettingsGroup> _controlsGroup;
 		private CFloat _additiveCameraMovements;
 		private CBool _isFastForwardByLine;
+		private CBool _movementDodgeEnabled;
 		private CString _additiveCameraGroupName;
 		private CString _fastForwardGroupName;
+		private CString _movementDodgeGroupName;
 		private CString _difficultyPath;
 		private CString _miscPath;
+		private CString _controlsPath;
 
 		[Ordinal(0)] 
 		[RED("player")] 
@@ -51,6 +55,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("controlsGroup")] 
+		public CHandle<userSettingsGroup> ControlsGroup
+		{
+			get => GetProperty(ref _controlsGroup);
+			set => SetProperty(ref _controlsGroup, value);
+		}
+
+		[Ordinal(5)] 
 		[RED("additiveCameraMovements")] 
 		public CFloat AdditiveCameraMovements
 		{
@@ -58,7 +70,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _additiveCameraMovements, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("isFastForwardByLine")] 
 		public CBool IsFastForwardByLine
 		{
@@ -66,7 +78,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isFastForwardByLine, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
+		[RED("movementDodgeEnabled")] 
+		public CBool MovementDodgeEnabled
+		{
+			get => GetProperty(ref _movementDodgeEnabled);
+			set => SetProperty(ref _movementDodgeEnabled, value);
+		}
+
+		[Ordinal(8)] 
 		[RED("additiveCameraGroupName")] 
 		public CString AdditiveCameraGroupName
 		{
@@ -74,7 +94,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _additiveCameraGroupName, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("fastForwardGroupName")] 
 		public CString FastForwardGroupName
 		{
@@ -82,7 +102,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _fastForwardGroupName, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
+		[RED("movementDodgeGroupName")] 
+		public CString MovementDodgeGroupName
+		{
+			get => GetProperty(ref _movementDodgeGroupName);
+			set => SetProperty(ref _movementDodgeGroupName, value);
+		}
+
+		[Ordinal(11)] 
 		[RED("difficultyPath")] 
 		public CString DifficultyPath
 		{
@@ -90,12 +118,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _difficultyPath, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("miscPath")] 
 		public CString MiscPath
 		{
 			get => GetProperty(ref _miscPath);
 			set => SetProperty(ref _miscPath, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("controlsPath")] 
+		public CString ControlsPath
+		{
+			get => GetProperty(ref _controlsPath);
+			set => SetProperty(ref _controlsPath, value);
 		}
 
 		public GameplaySettingsListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

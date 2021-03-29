@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CInt32 _animationState;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("animationState")] 
 		public CInt32 AnimationState
 		{

@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameJournalQuestMapPinBase> _mappinEntry;
 		private Vector3 _jumpTo;
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("mappinEntry")] 
 		public CHandle<gameJournalQuestMapPinBase> MappinEntry
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mappinEntry, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("jumpTo")] 
 		public Vector3 JumpTo
 		{

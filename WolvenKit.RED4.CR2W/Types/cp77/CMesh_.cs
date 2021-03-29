@@ -16,6 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private meshMeshMaterialBuffer _localMaterialBuffer;
 		private CArray<rRef<IMaterial>> _preloadExternalMaterials;
 		private CArray<CHandle<IMaterial>> _preloadLocalMaterialInstances;
+		private CArray<rRef<CResource>> _inplaceResources;
 		private CArray<CHandle<meshMeshAppearance>> _appearances;
 		private CEnum<ERenderObjectType> _objectType;
 		private CHandle<IRenderResourceBlob> _renderResourceBlob;
@@ -103,6 +104,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(12)] 
+		[RED("inplaceResources")] 
+		public CArray<rRef<CResource>> InplaceResources
+		{
+			get => GetProperty(ref _inplaceResources);
+			set => SetProperty(ref _inplaceResources, value);
+		}
+
+		[Ordinal(13)] 
 		[RED("appearances")] 
 		public CArray<CHandle<meshMeshAppearance>> Appearances
 		{
@@ -110,7 +119,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _appearances, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("objectType")] 
 		public CEnum<ERenderObjectType> ObjectType
 		{
@@ -118,7 +127,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _objectType, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("renderResourceBlob")] 
 		public CHandle<IRenderResourceBlob> RenderResourceBlob
 		{
@@ -126,7 +135,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _renderResourceBlob, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("lodLevelInfo")] 
 		public CArray<CFloat> LodLevelInfo
 		{
@@ -134,7 +143,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lodLevelInfo, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("floatTrackNames")] 
 		public CArray<CName> FloatTrackNames
 		{
@@ -142,7 +151,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _floatTrackNames, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("boneNames")] 
 		public CArray<CName> BoneNames
 		{
@@ -150,7 +159,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _boneNames, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("boneRigMatrices")] 
 		public CArray<CMatrix> BoneRigMatrices
 		{
@@ -158,7 +167,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _boneRigMatrices, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("boneVertexEpsilons")] 
 		public CArray<CFloat> BoneVertexEpsilons
 		{
@@ -166,7 +175,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _boneVertexEpsilons, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("lodBoneMask")] 
 		public CArray<CUInt8> LodBoneMask
 		{
@@ -174,7 +183,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lodBoneMask, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("constrainAutoHideDistanceToTerrainHeightMap")] 
 		public CBool ConstrainAutoHideDistanceToTerrainHeightMap
 		{
@@ -182,7 +191,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _constrainAutoHideDistanceToTerrainHeightMap, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("forceLoadAllAppearances")] 
 		public CBool ForceLoadAllAppearances
 		{
@@ -190,7 +199,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _forceLoadAllAppearances, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("castGlobalShadowsCachedInCook")] 
 		public CBool CastGlobalShadowsCachedInCook
 		{
@@ -198,7 +207,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _castGlobalShadowsCachedInCook, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("castLocalShadowsCachedInCook")] 
 		public CBool CastLocalShadowsCachedInCook
 		{

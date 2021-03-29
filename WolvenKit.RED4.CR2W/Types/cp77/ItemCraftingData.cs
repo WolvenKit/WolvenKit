@@ -8,7 +8,8 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ItemCraftingData : IScriptable
 	{
 		private InventoryItemData _inventoryItem;
-		private CBool _isCraftable;
+		private CBool _isUpgradable;
+		private CBool _isNew;
 
 		[Ordinal(0)] 
 		[RED("inventoryItem")] 
@@ -19,11 +20,19 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("isCraftable")] 
-		public CBool IsCraftable
+		[RED("isUpgradable")] 
+		public CBool IsUpgradable
 		{
-			get => GetProperty(ref _isCraftable);
-			set => SetProperty(ref _isCraftable, value);
+			get => GetProperty(ref _isUpgradable);
+			set => SetProperty(ref _isUpgradable, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("isNew")] 
+		public CBool IsNew
+		{
+			get => GetProperty(ref _isNew);
+			set => SetProperty(ref _isNew, value);
 		}
 
 		public ItemCraftingData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

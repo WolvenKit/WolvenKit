@@ -9,10 +9,10 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private wCHandle<gameuiHUDGameController> _owner;
 		private wCHandle<PlayerPuppet> _player;
-		private CHandle<gameTransactionSystem> _transactionSystem;
-		private CHandle<EquipmentSystem> _equipmentSystem;
-		private CHandle<gameStatsSystem> _statsSystem;
-		private CHandle<ItemModificationSystem> _itemModificationSystem;
+		private wCHandle<gameTransactionSystem> _transactionSystem;
+		private wCHandle<EquipmentSystem> _equipmentSystem;
+		private wCHandle<gameStatsSystem> _statsSystem;
+		private wCHandle<ItemModificationSystem> _itemModificationSystem;
 		private CHandle<UILocalizationMap> _locMgr;
 		private CArray<InventoryItemData> _inventoryItemsData;
 		private CArray<InventoryItemData> _inventoryItemsDataWithoutEquipment;
@@ -58,7 +58,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(2)] 
 		[RED("TransactionSystem")] 
-		public CHandle<gameTransactionSystem> TransactionSystem
+		public wCHandle<gameTransactionSystem> TransactionSystem
 		{
 			get => GetProperty(ref _transactionSystem);
 			set => SetProperty(ref _transactionSystem, value);
@@ -66,7 +66,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("EquipmentSystem")] 
-		public CHandle<EquipmentSystem> EquipmentSystem
+		public wCHandle<EquipmentSystem> EquipmentSystem
 		{
 			get => GetProperty(ref _equipmentSystem);
 			set => SetProperty(ref _equipmentSystem, value);
@@ -74,7 +74,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("StatsSystem")] 
-		public CHandle<gameStatsSystem> StatsSystem
+		public wCHandle<gameStatsSystem> StatsSystem
 		{
 			get => GetProperty(ref _statsSystem);
 			set => SetProperty(ref _statsSystem, value);
@@ -82,7 +82,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("ItemModificationSystem")] 
-		public CHandle<ItemModificationSystem> ItemModificationSystem
+		public wCHandle<ItemModificationSystem> ItemModificationSystem
 		{
 			get => GetProperty(ref _itemModificationSystem);
 			set => SetProperty(ref _itemModificationSystem, value);

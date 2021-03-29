@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<CompanionHealthStatListener> _healthStatListener;
 		private CHandle<gameIBlackboard> _companionBlackboard;
 		private ScriptGameInstance _gameInstance;
-		private CHandle<gameStatPoolsSystem> _statSystem;
+		private CHandle<gameStatPoolsSystem> _statPoolsSystem;
 
 		[Ordinal(9)] 
 		[RED("healthbar")] 
@@ -82,11 +82,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(17)] 
-		[RED("statSystem")] 
-		public CHandle<gameStatPoolsSystem> StatSystem
+		[RED("statPoolsSystem")] 
+		public CHandle<gameStatPoolsSystem> StatPoolsSystem
 		{
-			get => GetProperty(ref _statSystem);
-			set => SetProperty(ref _statSystem, value);
+			get => GetProperty(ref _statPoolsSystem);
+			set => SetProperty(ref _statPoolsSystem, value);
 		}
 
 		public CompanionHealthBarGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

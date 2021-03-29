@@ -9,6 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private scnRidTag _tag;
 		private CHandle<animIAnimationBuffer> _animation;
+		private scnCameraAnimationLOD _cameraAnimationLOD;
 
 		[Ordinal(0)] 
 		[RED("tag")] 
@@ -24,6 +25,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _animation);
 			set => SetProperty(ref _animation, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("cameraAnimationLOD")] 
+		public scnCameraAnimationLOD CameraAnimationLOD
+		{
+			get => GetProperty(ref _cameraAnimationLOD);
+			set => SetProperty(ref _cameraAnimationLOD, value);
 		}
 
 		public scnCameraAnimationRid(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

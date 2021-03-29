@@ -9,9 +9,9 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private ScriptGameInstance _gameInstance;
 		private wCHandle<PlayerPuppet> _player;
-		private CHandle<gameTransactionSystem> _transactionSystem;
-		private CHandle<EquipmentSystem> _equipmentSystem;
-		private CHandle<gameStatsSystem> _statsSystem;
+		private wCHandle<gameTransactionSystem> _transactionSystem;
+		private wCHandle<EquipmentSystem> _equipmentSystem;
+		private wCHandle<gameStatsSystem> _statsSystem;
 		private CHandle<UILocalizationMap> _locMgr;
 
 		[Ordinal(0)] 
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(2)] 
 		[RED("transactionSystem")] 
-		public CHandle<gameTransactionSystem> TransactionSystem
+		public wCHandle<gameTransactionSystem> TransactionSystem
 		{
 			get => GetProperty(ref _transactionSystem);
 			set => SetProperty(ref _transactionSystem, value);
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("equipmentSystem")] 
-		public CHandle<EquipmentSystem> EquipmentSystem
+		public wCHandle<EquipmentSystem> EquipmentSystem
 		{
 			get => GetProperty(ref _equipmentSystem);
 			set => SetProperty(ref _equipmentSystem, value);
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("statsSystem")] 
-		public CHandle<gameStatsSystem> StatsSystem
+		public wCHandle<gameStatsSystem> StatsSystem
 		{
 			get => GetProperty(ref _statsSystem);
 			set => SetProperty(ref _statsSystem, value);
